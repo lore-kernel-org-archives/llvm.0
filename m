@@ -1,237 +1,132 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF9B3D62;
-	Wed, 14 Sep 2022 15:34:49 +0000 (UTC)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28EDYUHx008370;
-	Wed, 14 Sep 2022 15:34:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=Uysov38MsLQBOvd4ZG59VQb47rpPepw8DPxXB+H1H5Q=;
- b=rzlV6NE1sikItd9jBiYiIeX0RQKgqFqwf5vhlYAwK1qKGMQ5C7QOcoRrU1fpQyjZxwda
- pPfsv8WpDCTX0dPk+Y3o83T7XJEpB4GQNz76g2UUUnpyJWYSm3gDPHtAh4D7KzluBwIJ
- WLs0v95kz4XHhq4/RIQGad6r7lFTKn3OizY5lgcYSfE8w19oNUs9/sjNvQoHKGXhXP+b
- tgFPcLwVgtf7YS94ou4FttPtOBA5lHfdxbqU3ssqxjsQ5JGlmN6yarwRLR+XXNwbnt//
- i7RdJVADYZ2g1DC6X50AD4Vi1Tfaz5b43VT0JWqQI/apy2JaAPzHylK+tv7xPvOxkhmu kw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jjxycapyr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Sep 2022 15:34:43 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28EDZb3R035428;
-	Wed, 14 Sep 2022 15:34:42 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jjykysf88-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Sep 2022 15:34:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OJ4spBtVqu/548WQIoxXv9JA4EnbVQCoF+2H2dgOYqksCzVwlUkViAuCetn5kv8TE2Che9F6+tVKkN5fbB9adyvWpOfGJRtocvq1o1lsh+MgYKZ0B1Z0n8SSS8pbm48pFStzVEiQyX9n/xZmb90JrFIs6Q2qsvNQNlpCTF8YsxaW2BaZ5uJP/C0pfKxHCEMYD5ZOd/Q895xV0Uv28Xm77hFnYcHWkt1/lb4kNJuYyoVLLF0zv+AOe+7oA1TCYRY00OjrjytCigp/wGXWfjA+0fnJti8eEgoyBJVgprra7HwQx3lzNydo26mbaKtTecq8uPb0QqfDx4/GAauiKiPJeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uysov38MsLQBOvd4ZG59VQb47rpPepw8DPxXB+H1H5Q=;
- b=D7s1nK58hL8RGvHTRVJ+i7+50kJfr0Vs1znYf4xqdlR+Rtv1JiBYtM/9XsyWVP1KXD5HLdqIq86DT0uGmI19m4RIi2uVHgt8N6KVCRxqbq/C2iVQP0N1tLzfNc+NGoO3R9l18VXzRLx3+SVSNhj4aing9cH5m1ZMNOCFwHL0ECNp3t43ERIuK9yPH5C/Qg6q4tySbxjgyZfmaCCbwvLHXFDALggRgDvtKn/8YyzMX1ZIaht0B+NfMnkv2+XHFnL7LlLG1P2GluHo/MXDkGOCPVoC6T8AqMZhr6ubP8hjRXMacorDQrUU4NUmVtqaqrFSs9LvGQoxOVEAIZSEgBueqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59313FC2
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 15:49:37 +0000 (UTC)
+Received: by mail-ed1-f53.google.com with SMTP id m3so3068136eda.12
+        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 08:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uysov38MsLQBOvd4ZG59VQb47rpPepw8DPxXB+H1H5Q=;
- b=UEeSRddCYS8qC6Uv5qF3UW/3XRxnOaJd/0pLEajm00+DYo2ka4sa3+vaXeDeOYXHYgL5fqjEOJLWgmDtH7BT92bNwaTFpLncBVdb4hB1UbBi86Mdey1qe+d2Qfq1ntg+0SxWy4pvB/Fjs3cc9sZ7c824IX7SUB5/cGzfRQbtwcU=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by IA1PR10MB5969.namprd10.prod.outlook.com
- (2603:10b6:208:3ef::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.22; Wed, 14 Sep
- 2022 15:34:40 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5612.022; Wed, 14 Sep 2022
- 15:34:40 +0000
-Date: Wed, 14 Sep 2022 18:34:14 +0300
-From: Dan Carpenter <dan.carpenter@oracle.com>
-To: eadavis@sina.com
-Cc: syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com,
-        almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com
-Subject: Re: [PATCH v2] fs/netfs3: add a boundary check for EA_FULL
-Message-ID: <YyH0dkkuJnFNE9xT@kadam>
-References: <0000000000005af92105e80510f2@google.com>
- <20220912065431.3043731-1-eadavis@sina.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220912065431.3043731-1-eadavis@sina.com>
-X-ClientProxiedBy: MR1P264CA0086.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:3f::31) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=4dhFsHlPlvcgQnVjUa+mHnTzrJV68XTZuGnDxYxZSu4=;
+        b=IN4R36fVYPVs6/B3yawNpatvT0g56oTugoNv50vlbOXyXAsWcQoX74Glmu+xcRhOae
+         GvAaCg3MG/L8Q3tas9HwCOXN3WC128YoUW6cyI94sICqKBOFj+qu5Pqj+Xtjd7FCE/B9
+         KkxrkeW/KK4wmkj30T3mcNCqF/q+6LqDkPiPNAKPsxrctP5e4Kojgv2JnihFQoPjqdJ/
+         DM/T11hN+TzYjoppc5tkW7sVbID5LzLP59xDvMfco3TjvCbrG0Oq/OjRNaBHrGmkAU+U
+         11JcCqoTcYzdCIF31VPjJE7zXI8LZoG7BMP+YKmd9Nk/SlkVy6K+g49IFh1ZQOJfuSxr
+         8gXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=4dhFsHlPlvcgQnVjUa+mHnTzrJV68XTZuGnDxYxZSu4=;
+        b=tgYzic7nnlTjsm0ckj/Bzuesy/Eq2gzgYZV8fVEqiGlJ4sYreXN6Z7aY/rtc/cezGf
+         IdHcfl2cO7Y/4tEo4gu8KTJEATqRyUZeccHFew3RYv3f8pmVJDzdCznRxNh7ayWGgjA7
+         Vw9nFC7xjXeMhmyL4D9TyoZwWdHuYsxHrHXsNAO+F+NBUY4ygoCnVH4JRLH7YnVOaFgU
+         Cyj8wPf/P8Go/UdtAOToAUPd1fLm2Oa4wBcWks2q/HorBwPt5Is9FBG+hypHQyJLFPAK
+         TtHB8bVBaPNeksxAo5zabSv8AU3wRxYhu3ABu6TmjpWc34xKQM+TA7jtO7iK4CkXJksQ
+         11Dg==
+X-Gm-Message-State: ACgBeo0q5f7cRFoM5HaYe81828pJ68/XCYqTvev7qJoUg2T0HiJ9PjOq
+	lNS5i1HWpb4soFsAcvvsmwcW+48gXD9jgGAKD19+
+X-Google-Smtp-Source: AA6agR6Z4Bn46EoUvSA1obe0hHw0oo1/HH93DbRoRMf9w53XlRDeYqGX/S8m5ayEPeAxSsXgKiop3kZAgsLMXX0XPUY=
+X-Received: by 2002:a05:6402:274c:b0:44f:334e:1e11 with SMTP id
+ z12-20020a056402274c00b0044f334e1e11mr28344216edd.304.1663170575800; Wed, 14
+ Sep 2022 08:49:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|IA1PR10MB5969:EE_
-X-MS-Office365-Filtering-Correlation-Id: e56ee051-1a51-42ab-d830-08da9666a354
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	5UqcyD2xlBwOlPxLja2twBHTuZDL2YP6qtXJpSDYbyBq4A2nwLoonz/u4Kl5eQfqo06qv2fiaLS1/su3YZewNFVyJeuySq+Nf0DCVNPcgqL7FD4APfrIEY239HCwzwjwiisi/TaYkmAqOEgebXq8c1k9kRR8W/ON2zopIQ4wzscgaay8iiYolKQl6SzwsfULymKTmHmRlaEDd2jVeT21g1bY3NhXg1RK4y8+uzyZx5YM7ckQwnFzXK9Zs8eGy9eR9s+vMmXljtcACO+5Qcjz60qvD+/TaXxvqRL/hllecATcvARS0NmVrHfs1LmBoQ9k6Po8b2TCHM55SeJQG06utkW12fWr3Bdd0NOgT4CUWEUf9WS4dGiOICITAdsk8vSk5jhAVj1sXJUTYIyY2FTr10oNeaZkYiq0p3tI8sDQLmBg1nEprE445cHNYQM/SzgB73YJ7T6COKzrlKZW1rzv+J/vUFf+uyHA6sN0BA2wkqNvOzWky08MWMKx+FBMVzLbhfaIFdxddC6I8lmMbVA4JdIyFaJGbrAcRCbZU95ZXGjEw/liUT/X1RUu8PcUqI+XbWbkWWvvxekR3Kx8cPinmk9oWbJj75B9jeDhArZKcLDJLEs+hgVn7irpbh/Tpc485aZhjUpzmMtgkav3eXPYtbzB9OrlT6BOKged+lmr3y7WHFMtIQ31VE9j4GI32tB7lNUEz5wN2bdg/uXFeGM3wx1VjBEUcgW3V0aQPIIlDXxBpVPydv+sJDaYLY0VpYT1YEaLzJFxmw6K67COUYPtWw==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199015)(9686003)(8936002)(44832011)(6512007)(38100700002)(83380400001)(8676002)(6916009)(966005)(26005)(478600001)(66946007)(6506007)(4326008)(86362001)(7416002)(66476007)(186003)(66556008)(6486002)(5660300002)(6666004)(33716001)(2906002)(316002)(41300700001)(99710200001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?RM1u2Y5P1CJ2RGjo0DCIy43KZWn/yKLGCw42rH8Nkb89Bv0clVIxkcG+rq0E?=
- =?us-ascii?Q?blqjltVCuEFg4/nbGq7w17R76qXo41/Rt6r4+jHEa6x32XzBOxyihUZJVIHU?=
- =?us-ascii?Q?JrOCGRzbi/BAU4laLfSVqJuDcXBzRJ7Gh39d0l/QHYoW2EYdvjyxQZIoEJX2?=
- =?us-ascii?Q?unltSvsjtVdAWcJcKFjJcAGDgIyGzJqt0FeV+MFUOGqh/Dw+89imPvNxmEAG?=
- =?us-ascii?Q?nsL/Akm0OKu1UnK6NHN/yv8qedtKkNXw86zhO4t877zAiapFlDqDgN4/7jWs?=
- =?us-ascii?Q?lkHzfkIHdiHP0W85TDusFpkYk7rpRuo2hJLst7NgLAlPNeDR1xJel+k8cDz+?=
- =?us-ascii?Q?KjzX9GebQc3zlX1dI7cYABaVKR1mBkCvOqxnN51KS73YJ5LwKCC09BYq9CZ7?=
- =?us-ascii?Q?J9VqxyVK/aWRqBxuOFVjQoM0FGnxAwQHbMwzsXGIbovm8qo6PyWt6Qm42JSZ?=
- =?us-ascii?Q?p9ilvdGnH5OiZNrZkHqgYvfIhIF18GubD7ZZklGgjkJNag059ngc/xz7guNQ?=
- =?us-ascii?Q?aOvz1ViTWw+qGJOo/wqPJRsIKPR1Z+bvXbIQiMl4i4muNau8JJfHozvo541M?=
- =?us-ascii?Q?cNcNgE5/KXr5HKp5nUZj54uQ+DFvkDvhxu8cXzvXXz9HDxqGVQZ0mYDtNffh?=
- =?us-ascii?Q?rhUKIyxu6Bs4JuW5QpR2auA+AT/M3yI710fg6snn4FmtTSE/u3zNX2VnyuM5?=
- =?us-ascii?Q?xsbs9X9Ig4BFEHaxwWxQ4LYYs4Qn1CfhWMwFgiP4y73vHHeSskIBRX3EBMSB?=
- =?us-ascii?Q?GmsAENzjvdlN2OzkjLgd9qB3jziRfPyuW3YoMwyHfB1XyynSFKisHgEHVBTV?=
- =?us-ascii?Q?xQQ784AGVEkbN2euw4Rjn0fLthMe0+TDNHP5IR5SDeAzsbCP9KWBrSwqdrhQ?=
- =?us-ascii?Q?F6F+qUORkkQ07UTz03UH0sPS0OGoTyupcN+DPRsu1FfxI/cOsyAy9WXu4oy4?=
- =?us-ascii?Q?g4n8rg63d+rAWHW7RS0+2T7ylroTH4TOP/f44aWV0TG07Nx62sWiTE9v7WaC?=
- =?us-ascii?Q?7DhYkPdT0BMwsJ+HKPQHlvFA8q13E3WElWFfZmxVrlZ6Wnb0OUPyF2CupjIP?=
- =?us-ascii?Q?71viNnDzZvapEXdojpbHkZOulv9ijafVZzZLHvK1b48Wnub1MjEMvwk6RfcA?=
- =?us-ascii?Q?eGJWG2xWwXDn3777DZFgVZm8J0rhknwl/bW1sSPP+lLBkojZpYW6fXvvFz1n?=
- =?us-ascii?Q?htZR7ZfmrfV16IUfOwL/5+hnwwr1gRHVm8G7YUZSyWgZ0HIup6IiB5FUsEO2?=
- =?us-ascii?Q?2HL4SR72f5bX6mRv5f4e6fa2JMmMfGg8AnZFKiJ1V9I9+AfyLfx+7FO2Ey9I?=
- =?us-ascii?Q?cmJFVaEgL8Ch28fLnq9chp2SSCBcfTiBLL5hl6bexA/D+IKJvvDwMHLKBUz3?=
- =?us-ascii?Q?Hnoyy2OOW0tLpZck2ulglbEVl6mbtuw6V7v0LgFDl47Zgfewyl5N2wPnOAev?=
- =?us-ascii?Q?UsWyD8SlKPAUapSMQhrUnX/r1zo0YmeaAgYQffRcU8bvhiE52FEr0egMPSbd?=
- =?us-ascii?Q?7MPkhfIMllEqcpZmv1kXJcm+8x96tbcvf4bPsg+welxElcsvAVMA5h2d4ge6?=
- =?us-ascii?Q?IoxLPX37n+TpsxrmAJmz+ECIWZQ0OQxAH3V5Lzjn?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e56ee051-1a51-42ab-d830-08da9666a354
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2022 15:34:39.9767
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6VVDtFC45uJGyLfAD4RmofnryH8eOUOadit2lTVS2Bc6BIfgj6N4h0yF2IY0R9V4/NNKo7YQ10yvvxfthRkE+8QziPE6IGk8hw+WYqEsVdM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB5969
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-14_06,2022-09-14_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2208220000
- definitions=main-2209140075
-X-Proofpoint-ORIG-GUID: En9qTSrqw2eQe789Z0ohZbpn_fwjd0E6
-X-Proofpoint-GUID: En9qTSrqw2eQe789Z0ohZbpn_fwjd0E6
+References: <20220902213750.1124421-1-morbo@google.com> <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook> <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+ <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net> <YyHn+UbfC7e1XIT3@dev-arch.thelio-3990X>
+In-Reply-To: <YyHn+UbfC7e1XIT3@dev-arch.thelio-3990X>
+From: Bill Wendling <morbo@google.com>
+Date: Wed, 14 Sep 2022 16:49:19 +0100
+Message-ID: <CAGG=3QVCH+Cgki8_Jvsj3Jz3=4Tpot4aHN_obY7Hy3wAwEODhA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Kees Cook <keescook@chromium.org>, Juergen Gross <jgross@suse.com>, 
+	"Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>, Alexey Makhalov <amakhalov@vmware.com>, 
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
+	virtualization@lists.linux-foundation.org, 
+	LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 12, 2022 at 02:54:31PM +0800, eadavis@sina.com wrote:
-> From: Edward Adam Davis <eadavis@sina.com>
-> 
-> the root cause is: 
-> The remaining space after the offset is less than the space needed to 
-> accommodate the next EA_FULL struct.
-> 
+On Wed, Sep 14, 2022 at 3:41 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
+> > On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> > > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> > > >
+> > > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > > > >
+> > > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > > > [...]
+> > > > > >         callq   *pv_ops+536(%rip)
+> > > > >
+> > > > > Do you know which pv_ops function is this? I can't figure out where
+> > > > > pte_offset_kernel() gets converted into a pv_ops call....
+> > > > >
+> > > > This one is _paravirt_ident_64, I believe. I think that the original
+> > > > issue Nathan was seeing was with another seemingly innocuous function.
+> > >
+> > > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> > > really needs to not be touched at all by the compiler for
+> > > these...special features.
+> >
+> > My source tree sayeth:
+> >
+> >   u64 notrace _paravirt_ident_64(u64 x)
+> >
+> > And that function is only ever called at boot, after alternatives runs
+> > it's patched with:
+> >
+> >   mov %_ASM_ARG1, %_ASM_AX
+> >
+> > Anyway, if you want to take it away from the compiler, something like
+> > so should do.
+>
+> This appears to work fine for me in QEMU, as I can still boot with
+> CONFIG_ZERO_CALL_USED_REGS and spawn a nested guest without any issues.
+>
+Thanks, Nathan. I much prefer to use this patch then and file a
+separate issue to investigate the clobbers issue for later.
 
-This needs to be checked on the first iteration as well before calling
-unpacked_ea_size(ea).
+-bw
 
-	if (bytes - *off < sizeof(*ea))
-		return false;
-
-> Link: https://syzkaller.appspot.com/bug?extid=c4d950787fd5553287b7
-> Reported-by: syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com
-> Signed-off-by: Edward Adam Davis <eadavis@sina.com>
-> ---
->  fs/ntfs3/xattr.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
-> index 7de8718c68a9..c90cc453390d 100644
-> --- a/fs/ntfs3/xattr.c
-> +++ b/fs/ntfs3/xattr.c
-> @@ -52,6 +52,7 @@ static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
->  	for (;;) {
->  		const struct EA_FULL *ea = Add2Ptr(ea_all, *off);
->  		u32 next_off = *off + unpacked_ea_size(ea);
-> +		u32 next_len = 0;
->  
->  		if (next_off > bytes)
->  			return false;
-> @@ -63,6 +64,13 @@ static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
->  		*off = next_off;
->  		if (next_off >= bytes)
->  			return false;
-> +
-> +		next_len = next_off + 8;
-
-8 is a magic number.  Use sizeof(*ea).
-
-> +		if (next_len >= bytes ||
-> +		    ((!ea->size) &&
-> +		     (next_len + ea->name_len + 
-> +		      le16_to_cpu(ea->elength) >= bytes)))
-
-This is open coding unpacked_ea_size() but slightly different/incorrect.
-No need to check this anyway, because it gets checked at the start of
-the iteration.
-
-If we add the if (bytes - *off < sizeof(*ea)) check to the start of the
-iteration that means we can delete the "if (next_off == bytes)" check
-from the end.
-
-The second issue with this code is that unpacked_ea_size() is a user
-controlled u32.  We're adding it to "*off" which is also a u32 so that
-can have an integer overflow...
-
-See diff below.  (Untested).
-
-regards,
-dan carpenter
-
-diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
-index 7de8718c68a9..c3dbe06fb784 100644
---- a/fs/ntfs3/xattr.c
-+++ b/fs/ntfs3/xattr.c
-@@ -44,14 +44,20 @@ static inline size_t packed_ea_size(const struct EA_FULL *ea)
- static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
- 			   const char *name, u8 name_len, u32 *off)
- {
-+	const struct EA_FULL *ea;
-+	u32 next_off;
-+
- 	*off = 0;
- 
--	if (!ea_all || !bytes)
-+	if (!ea_all)
- 		return false;
- 
- 	for (;;) {
--		const struct EA_FULL *ea = Add2Ptr(ea_all, *off);
--		u32 next_off = *off + unpacked_ea_size(ea);
-+		if (bytes - *off < sizeof(*ea))
-+			return false;
-+
-+		ea = Add2Ptr(ea_all, *off);
-+		next_off = size_add(*off, unpacked_ea_size(ea));
- 
- 		if (next_off > bytes)
- 			return false;
-@@ -61,8 +67,6 @@ static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
- 			return true;
- 
- 		*off = next_off;
--		if (next_off >= bytes)
--			return false;
- 	}
- }
- 
+> > diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+> > index 7ca2d46c08cc..8922e2887779 100644
+> > --- a/arch/x86/kernel/paravirt.c
+> > +++ b/arch/x86/kernel/paravirt.c
+> > @@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+> >  }
+> >
+> >  #ifdef CONFIG_PARAVIRT_XXL
+> > -/* identity function, which can be inlined */
+> > -u64 notrace _paravirt_ident_64(u64 x)
+> > -{
+> > -     return x;
+> > -}
+> > +extern u64 _paravirt_ident_64(u64 x);
+> > +asm (".pushsection .entry.text, \"ax\"\n"
+> > +     ".global _paravirt_ident_64\n"
+> > +     "_paravirt_ident_64:\n\t"
+> > +     ASM_ENDBR
+> > +     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
+> > +     ASM_RET
+> > +     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
+> > +     ".type _paravirt_ident_64, @function\n\t"
+> > +     ".popsection");
+> >  #endif
+> >
+> >  DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
+> >
