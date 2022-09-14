@@ -1,104 +1,75 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FCA3C3D;
-	Wed, 14 Sep 2022 10:57:16 +0000 (UTC)
-Received: from mercury (unknown [185.122.133.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E0D9660201C;
-	Wed, 14 Sep 2022 11:57:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1663153029;
-	bh=eRW+oofSSgXLYsJ21Z1vqonSBjJ5bDGljpa+Xtah7mI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MGjdPu/r/JqY4+IPFdf2khVBPmETCsmIoqyKnCG7wYy6kK3Tik72pg3FsWeuVWqrG
-	 umwXCIXIu8Bh1hg1Q2jr4H9oFbY+DxXgWucIaileXyzkPB839VI8xWmijYysHvAF5m
-	 YxFHJ7juo2DOOoGshvsHJknTkJkaU9tETcr6ykGwUiLu9ezFN8GY4Zh+PKxqO7bjFq
-	 T/7SaAUsiOHwXOf8EYXkC5cIokPBwQbTw9Sk4LNPvFseQ0VX4eGKtAMdtAZOXxO3n0
-	 bROuABocer0NtvXZ/lzQ+fxBk+oJnE6nBou7Q3wIPTi1eswCxKrqGVHvnYu3LPKcWm
-	 STRrBhvkhoO9w==
-Received: by mercury (Postfix, from userid 1000)
-	id C6474106084A; Wed, 14 Sep 2022 12:56:59 +0200 (CEST)
-Date: Wed, 14 Sep 2022 12:56:59 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Marek Vasut <marex@denx.de>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH -next] power: supply: bq25890: Fix enum conversion in
- bq25890_power_supply_set_property()
-Message-ID: <20220914105659.ybfbcnrboahkkccm@mercury.elektranox.org>
-References: <20220912141553.1743568-1-nathan@kernel.org>
- <bde49ca9-6515-63c1-2161-66ab0443fc33@denx.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D61E3D61
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 11:13:17 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id q21so24698559lfo.0
+        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 04:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hynKxUpBmUZLP/FxLm3hy+mBVxBV89eC7WIYWyCM4RA=;
+        b=hZw5FTpSo/DvWzG5Z8akdgKlNmWcIBgk9FqFOjXpNCPbFWMeU9DHijYmxVQ9vrYa7B
+         lEIrqpitm5cSCpF4IzYUD2/a8r+TwA3d2wh/+zrJ7nDatXOINTlwIq645fxCvSM8uPay
+         kN3eEVOuAsX7uFZMy51wU5aXXsHqhI82pXonFguyOHp0X/otg7DIliqbx5HoQHaqmnt7
+         P/PHBLyf1ub5NsxkNAAIN5Q6UXSO0JIcUVCUHDvw83ss0+aeAul58s+U11XYePyJqLlx
+         /dM5jMxp2Dexplk3w1tOMf+Y0Pa9gBoGUhFHuoEUSw+ZNXFGZs9+BzS2W65b22DQWR4S
+         YeJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hynKxUpBmUZLP/FxLm3hy+mBVxBV89eC7WIYWyCM4RA=;
+        b=yI1scqXxqxTvpe6N0fzCSJPECApOMO7IvSolIGhUB/ZicXfwaKYFyDe5JwN2bXU6sZ
+         GPTVI4vzVMyMpYaYHl9Xf1eSjqq+FY1NDJxnuFr1V4XLghgD0wCqzQQyPilARCYKZBva
+         DwzhaZ6TZkRW1UWol+gSP6aVPGqRqEm3WWCv4KROiSYtUiGCZZUDZdJB7ugeMtZZaRJt
+         bm4keiEJOU/GwV8JsGnawMQl4a141cHNsrCEVoYkoQGeC/3Zad+UVbIGcDP4W5OHiMBA
+         mwQxqbcL4iosfspq8ZywjCsPrMSyP6PJdwZbZDGX0u/Ky+gTk8wfMqYLRtSkKtYTMjFp
+         Q+bQ==
+X-Gm-Message-State: ACgBeo0Wjd6aaYi4l7kvs/4hsfmOfL3Qchd0lF0oZC7ssQmVpoTj3Iom
+	evWIYhUtvsFS0rtHlqNyG5vOVM3GW7dLxYcha1M4kA==
+X-Google-Smtp-Source: AA6agR5eUjGtOI405CJb9XChyUwKm/4kQXMJttGfYrSvJ6A0BGMzTPRery1kUYItV6X7QUdtyypHG9wVI9IegfnCB0w=
+X-Received: by 2002:a05:6512:2382:b0:494:9d44:a5fd with SMTP id
+ c2-20020a056512238200b004949d44a5fdmr11814198lfv.494.1663153995919; Wed, 14
+ Sep 2022 04:13:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fhz7znvdp57m6wa6"
-Content-Disposition: inline
-In-Reply-To: <bde49ca9-6515-63c1-2161-66ab0443fc33@denx.de>
+References: <20220812183501.3555820-1-acdunlap@google.com> <20220908170456.3177635-1-acdunlap@google.com>
+In-Reply-To: <20220908170456.3177635-1-acdunlap@google.com>
+From: Peter Gonda <pgonda@google.com>
+Date: Wed, 14 Sep 2022 12:13:04 +0100
+Message-ID: <CAMkAt6qUs526FCq26Ht48c2KVZWe=QcNds6_LE6JJbs-7Hzk+g@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
+To: Adam Dunlap <acdunlap@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Sean Christopherson <seanjc@google.com>, 
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, 
+	Andi Kleen <ak@linux.intel.com>, Ben Dooks <ben-linux@fluff.org>, 
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>, Marc Orr <marcorr@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, Sep 8, 2022 at 6:05 PM Adam Dunlap <acdunlap@google.com> wrote:
+>
+> Previously, when compiled with clang, native_apic_mem_read gets inlined
+> into __xapic_wait_icr_idle and optimized to a testl instruction. When
+> run in a VM with SEV-ES enabled, it attempts to emulate this
+> instruction, but the emulator does not support it. Instead, use inline
+> assembly to force native_apic_mem_read to use the mov instruction which
+> is supported by the emulator.
 
---fhz7znvdp57m6wa6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This seems to be an issue with the SEV-ES in guest #VC handler's
+"emulator" right?
 
-Hi,
-
-On Mon, Sep 12, 2022 at 08:11:59PM +0200, Marek Vasut wrote:
-> On 9/12/22 16:15, Nathan Chancellor wrote:
-> > Clang warns:
-> >=20
-> >    drivers/power/supply/bq25890_charger.c:625:40: error: implicit conve=
-rsion from enumeration type 'enum bq25890_fields' to different enumeration =
-type 'enum bq25890_table_ids' [-Werror,-Wenum-conversion]
-> >                    lval =3D bq25890_find_idx(val->intval, F_IINLIM);
-> >                           ~~~~~~~~~~~~~~~~              ^~~~~~~~
-> >    1 error generated.
-> >=20
-> > Use the proper value from the right enumerated type, TBL_IINLIM, so
-> > there is no more implcit conversion. The numerical values of F_IINLIM
-> > and TBL_IINLIM happen to be the same so there is no change in behavior.
-> >=20
-> > Fixes: 4a4748f28b0b ("power: supply: bq25890: Add support for setting I=
-INLIM")
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1707
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->=20
-> Reviewed-by: Marek Vasut <marex@denx.de>
-
-Thanks, queued.
-
--- Sebastian
-
---fhz7znvdp57m6wa6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMhs3cACgkQ2O7X88g7
-+prgxQ//SY0hFyUVsTnca13f27t5ESE7O5TjsvWonq9LhJrgpYtYNG7yLI4hHkRt
-mTSCQbO/GFu8HHkEl9CnGCMVQWMVtNCD7scU/zXzmxRYFp6BAmPHtvLeyiHInpbk
-KUzZ3RG56ah/Vxe96sc80GbYInBGMxCTNSBFPMID1VQ45+0AmMoSbEKZ9oKQ5ClK
-VVORhI2xh3O6TqrVOh5WzeNfMGRqzlRlhT9eyP2ZniUtzySlAB8WxUqGvRecZBS5
-nSbuvCPuxVkTQm1C41Rn0l4SwSYdFD97JmqYDioaQfCLdFzXzFzciQwash0hKu/x
-S4FGlUIz/m2e8UA4DNMTBYBPypdHQPNLXQDl9pDr1wv5eEtPLuios1OQRsGlaqKp
-pSMtJlXbyaJZP1ca44IiXEWxBPFj6QR9PLP3m4Djxq/SWSJN0nW6cF305dUz80s+
-Wc1JDtcHGvoX59CCEM8PL0JcQ+nMO6Zb7Vr+y9lDfJYieOTNltC22MQL7xU/rLqR
-tnx7XoKTwlIaLgX5QryXtCTbP8omSg8RlbZt/+0zqR8AVmnuHhbxdMRdXO3xQ1zY
-8rtpeRT1LrlYlg7kvr0oJ6U+HBfD6Otkz9lBAacCEQAIW78RsRbEYuKHDVSoBCl0
-UzW0sZO4eJOkAk9vi7D15dfUqIRL4IDcbGvFec1mwcMtVhaArVQ=
-=kLpH
------END PGP SIGNATURE-----
-
---fhz7znvdp57m6wa6--
+If that's the case I think this should be fixed in the #VC handler
+instead of fixing the code that is failing to be emulated. What if
+there are other places where a testl is used and our tests have not
+caught them.
