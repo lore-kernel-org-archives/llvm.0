@@ -1,126 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B8E3C3D
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 10:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE30CC433D6;
-	Wed, 14 Sep 2022 10:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663152623;
-	bh=y+brdagQ8f0i6x6Zwye2E70Kd1BFauJHLCy98JbCWPg=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FCA3C3D;
+	Wed, 14 Sep 2022 10:57:16 +0000 (UTC)
+Received: from mercury (unknown [185.122.133.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E0D9660201C;
+	Wed, 14 Sep 2022 11:57:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1663153029;
+	bh=eRW+oofSSgXLYsJ21Z1vqonSBjJ5bDGljpa+Xtah7mI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PjFcFRGCbJHFw9jfG6rtZoLPTaUhxf9mClkwGt1tWWEOGF0ahfsogvDasJY9M92xE
-	 o+iHGu/wn9/Lp0ZHPVY+x6EynAnvDU1P380E5lgple4dxjNTFtLm2EgUBWwQ7PpBrR
-	 VxIvWHj6YZxf/JEpB0534o/86GuaCz5I0OSruKoLooHXpwS+dRr51CbQOUly0w8prk
-	 62xrjCifOORL+BBAma+OtT5du2vsUrEzKNIVUHUPpfarAkH/OsG0kmWPqODeFMtdZU
-	 RsrWLOsVlKRY5gHlJxPk1UYBsfjWXyxuEPzve1/zx7sn3VSepMN4qUNMbCc3RPDQ5m
-	 pk1syVer6v0eQ==
-Date: Wed, 14 Sep 2022 03:50:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, qemu-s390x <qemu-s390x@nongnu.org>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Richard Henderson <rth@twiddle.net>,
-	David Hildenbrand <david@redhat.com>
-Subject: Re: Illegal operation with clang + CONFIG_MARCH_Z13
-Message-ID: <YyGx7RYMYUAaMe45@dev-arch.thelio-3990X>
-References: <YyC/JvFONhtTYjM/@dev-arch.thelio-3990X>
- <ed01ea25-7abd-4564-0a9d-ad8b0cb9f1b4@linux.ibm.com>
- <YyGYO0mmNzMYgF9d@dev-arch.thelio-3990X>
- <ffeb23b0-f377-a40f-a6c1-3d14154713f3@linux.ibm.com>
+	b=MGjdPu/r/JqY4+IPFdf2khVBPmETCsmIoqyKnCG7wYy6kK3Tik72pg3FsWeuVWqrG
+	 umwXCIXIu8Bh1hg1Q2jr4H9oFbY+DxXgWucIaileXyzkPB839VI8xWmijYysHvAF5m
+	 YxFHJ7juo2DOOoGshvsHJknTkJkaU9tETcr6ykGwUiLu9ezFN8GY4Zh+PKxqO7bjFq
+	 T/7SaAUsiOHwXOf8EYXkC5cIokPBwQbTw9Sk4LNPvFseQ0VX4eGKtAMdtAZOXxO3n0
+	 bROuABocer0NtvXZ/lzQ+fxBk+oJnE6nBou7Q3wIPTi1eswCxKrqGVHvnYu3LPKcWm
+	 STRrBhvkhoO9w==
+Received: by mercury (Postfix, from userid 1000)
+	id C6474106084A; Wed, 14 Sep 2022 12:56:59 +0200 (CEST)
+Date: Wed, 14 Sep 2022 12:56:59 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Marek Vasut <marex@denx.de>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH -next] power: supply: bq25890: Fix enum conversion in
+ bq25890_power_supply_set_property()
+Message-ID: <20220914105659.ybfbcnrboahkkccm@mercury.elektranox.org>
+References: <20220912141553.1743568-1-nathan@kernel.org>
+ <bde49ca9-6515-63c1-2161-66ab0443fc33@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fhz7znvdp57m6wa6"
+Content-Disposition: inline
+In-Reply-To: <bde49ca9-6515-63c1-2161-66ab0443fc33@denx.de>
+
+
+--fhz7znvdp57m6wa6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ffeb23b0-f377-a40f-a6c1-3d14154713f3@linux.ibm.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 14, 2022 at 11:50:52AM +0200, Christian Borntraeger wrote:
-> Am 14.09.22 um 11:00 schrieb Nathan Chancellor:
-> > On Wed, Sep 14, 2022 at 08:03:47AM +0200, Christian Borntraeger wrote:
-> > > Am 13.09.22 um 19:34 schrieb Nathan Chancellor:
-> > > > Hi all,
-> > > > 
-> > > > Recently, Fedora moved their baseline from CONFIG_MARCH_ZEC12 to
-> > > > CONFIG_MARCH_Z13:
-> > > > 
-> > > > https://src.fedoraproject.org/rpms/kernel/c/aff6e8acdaa437e9f06ef4166ca2209071223f8d
-> > > > 
-> > > > Unfortunately, this causes clang built kernels to have an "illegal
-> > > > operation" panic when booting in QEMU. This is trivially reproducible on
-> > > > mainline with the versions of clang that s390 supports.
-> > > > 
-> > > > # Switch from CONFIG_MARCH_ZEC12 to CONFIG_MARCH_Z13
-> > > > $ make -skj"$(nproc)" ARCH=s390 CC=clang CROSS_COMPILE=s390x-linux-gnu- defconfig menuconfig bzImage
-> > > > 
-> > > > $ qemu-system-s390x \
-> > > > -M s390-ccw-virtio \
-> > > > -kernel arch/s390/boot/bzImage \
-> > > > -display none \
-> > > > -initrd .../boot-utils/images/s390/rootfs.cpio \
-> > > > -m 512m \
-> > > > -nodefaults \
-> > > > -no-reboot \
-> > > > -serial mon:stdio
-> > > > ...
-> > > > [    0.558817] Linux version 6.0.0-rc5-00017-gd1221cea11fc (nathan@distrobox-oTN5YGrt3J.thelio-3990X) (clang version 14.0.5 (Fedora 14.0.5-7.fc38), GNU ld version 2.38-4.fc37) #1 SMP Tue Sep 13 08:35:38 MST 2022
-> > > > ...
-> > > > [    1.675787] illegal operation: 0001 ilc:3 [#1] SMP
-> > > > [    1.675888] Modules linked in:
-> > > > [    1.676044] CPU: 0 PID: 59 Comm: modprobe Not tainted 6.0.0-rc5-00017-gd1221cea11fc #1
-> > > > [    1.676134] Hardware name: QEMU 8561 QEMU (KVM/Linux)
-> > > 
-> > > What qemu version is that and what command line did you use (any cpu model?)
-> > 
-> > I was able to reproduce this with QEMU 6.0.0 through 7.1.0, which are
-> > the versions that can boot a clang built kernel. I don't think we
-> > specify a cpu model, you can see the full command above. If there is
-> > something we should be doing differently, please let us know!
-> > 
-> > > > [    1.676202] Krnl PSW : 0704d00180000000 0000000000579fbc (load_elf_binary+0x31c/0x11c0)
-> > > > [    1.676459]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:1 PM:0 RI:0 EA:3
-> > > > [    1.676489] Krnl GPRS: 0000000000000001 00000000044f0000 0000000000000000 0000000000000000
-> > > > [    1.676506]            8000000000000080 0000000000000000 0000000000000000 00000000035fa900
-> > > > [    1.676522]            0000000000000001 000000000353ce00 0000000000000001 00000000044693c0
-> > > > [    1.676538]            000000000276fa00 000000000446a000 0000000000579f9e 00000380002ebc78
-> > > > [    1.677128] Krnl Code: 0000000000579fac: a7f405b8            brc     15,000000000057ab1c
-> > > > [    1.677128]            0000000000579fb0: e31003400004        lg      %r1,832
-> > > > [    1.677128]           #0000000000579fb6: e3001780003b        lzrf    %r0,1920(%r1)
-> > > 
-> > > QEMU does support lzrf as far asI can tell as soon as you have S390_FEAT_STFLE_53 which is part
-> > > of the qemu_V4_1 cpu model.
-> > > 
-> > > > [    1.677128]           >0000000000579fbc: 50001780            st      %r0,1920(%r1)
-> > > > [    1.677128]            0000000000579fc0: e31003400004        lg      %r1,832
-> > > > [    1.677128]            0000000000579fc6: c40800aa99a9        lgrl    %r0,0000000001acd318
-> > > > [    1.677128]            0000000000579fcc: e3001d400124        stg     %r0,7488(%r1)
-> > > > [    1.677128]            0000000000579fd2: e31003400004        lg      %r1,832
-> 
-> 
-> Can you check if the following qemu patch helps?
+Hi,
 
-Yes, that appears to work for me! If you send it along formally, feel
-free to include:
+On Mon, Sep 12, 2022 at 08:11:59PM +0200, Marek Vasut wrote:
+> On 9/12/22 16:15, Nathan Chancellor wrote:
+> > Clang warns:
+> >=20
+> >    drivers/power/supply/bq25890_charger.c:625:40: error: implicit conve=
+rsion from enumeration type 'enum bq25890_fields' to different enumeration =
+type 'enum bq25890_table_ids' [-Werror,-Wenum-conversion]
+> >                    lval =3D bq25890_find_idx(val->intval, F_IINLIM);
+> >                           ~~~~~~~~~~~~~~~~              ^~~~~~~~
+> >    1 error generated.
+> >=20
+> > Use the proper value from the right enumerated type, TBL_IINLIM, so
+> > there is no more implcit conversion. The numerical values of F_IINLIM
+> > and TBL_IINLIM happen to be the same so there is no change in behavior.
+> >=20
+> > Fixes: 4a4748f28b0b ("power: supply: bq25890: Add support for setting I=
+INLIM")
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1707
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>=20
+> Reviewed-by: Marek Vasut <marex@denx.de>
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Thanks, queued.
 
-> diff --git a/target/s390x/tcg/insn-data.def b/target/s390x/tcg/insn-data.def
-> index 5e448bb2c488..6bb479340a38 100644
-> --- a/target/s390x/tcg/insn-data.def
-> +++ b/target/s390x/tcg/insn-data.def
-> @@ -466,7 +466,7 @@
->      C(0xe39f, LAT,     RXY_a, LAT, 0, m2_32u, r1, 0, lat, 0)
->      C(0xe385, LGAT,    RXY_a, LAT, 0, a2, r1, 0, lgat, 0)
->  /* LOAD AND ZERO RIGHTMOST BYTE */
-> -    C(0xe3eb, LZRF,    RXY_a, LZRB, 0, m2_32u, new, r1_32, lzrb, 0)
-> +    C(0xe33b, LZRF,    RXY_a, LZRB, 0, m2_32u, new, r1_32, lzrb, 0)
->      C(0xe32a, LZRG,    RXY_a, LZRB, 0, m2_64, r1, 0, lzrb, 0)
->  /* LOAD LOGICAL AND ZERO RIGHTMOST BYTE */
->      C(0xe33a, LLZRGF,  RXY_a, LZRB, 0, m2_32u, r1, 0, lzrb, 0)
-> 
+-- Sebastian
+
+--fhz7znvdp57m6wa6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMhs3cACgkQ2O7X88g7
++prgxQ//SY0hFyUVsTnca13f27t5ESE7O5TjsvWonq9LhJrgpYtYNG7yLI4hHkRt
+mTSCQbO/GFu8HHkEl9CnGCMVQWMVtNCD7scU/zXzmxRYFp6BAmPHtvLeyiHInpbk
+KUzZ3RG56ah/Vxe96sc80GbYInBGMxCTNSBFPMID1VQ45+0AmMoSbEKZ9oKQ5ClK
+VVORhI2xh3O6TqrVOh5WzeNfMGRqzlRlhT9eyP2ZniUtzySlAB8WxUqGvRecZBS5
+nSbuvCPuxVkTQm1C41Rn0l4SwSYdFD97JmqYDioaQfCLdFzXzFzciQwash0hKu/x
+S4FGlUIz/m2e8UA4DNMTBYBPypdHQPNLXQDl9pDr1wv5eEtPLuios1OQRsGlaqKp
+pSMtJlXbyaJZP1ca44IiXEWxBPFj6QR9PLP3m4Djxq/SWSJN0nW6cF305dUz80s+
+Wc1JDtcHGvoX59CCEM8PL0JcQ+nMO6Zb7Vr+y9lDfJYieOTNltC22MQL7xU/rLqR
+tnx7XoKTwlIaLgX5QryXtCTbP8omSg8RlbZt/+0zqR8AVmnuHhbxdMRdXO3xQ1zY
+8rtpeRT1LrlYlg7kvr0oJ6U+HBfD6Otkz9lBAacCEQAIW78RsRbEYuKHDVSoBCl0
+UzW0sZO4eJOkAk9vi7D15dfUqIRL4IDcbGvFec1mwcMtVhaArVQ=
+=kLpH
+-----END PGP SIGNATURE-----
+
+--fhz7znvdp57m6wa6--
