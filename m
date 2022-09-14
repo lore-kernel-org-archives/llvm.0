@@ -1,96 +1,77 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E8A3D7C
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 13:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDE83D7C
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:23:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663163243; x=1694699243;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AbbpJQRoHzCPC9FuDp2OOdePPV7CP5RMw0+tM19yp94=;
-  b=fNoxgeZ3yh3Tjkofrq1Uac1pVZRyuEACPAygx84Bsdi+6Rqm9Mo7OGC4
-   56CjZ56kK84RkcjTlVY8p7Mxl5EQnlV4pEZShcJS5wCVJjKga+sYg0ZLI
-   ljWRP8n/j+lRFBi3y6+FBFSyiM90TMjiklHkL+FVCeJvOUv2TSSTRnnvE
-   168Z4P30dNBpi8dDhcAPTNxZM1yKDmGtCs4yvoVQAjK0bS7zCR1VFH1Jm
-   UBp1PWMqjy3vP/64frhSUqWwGgQY3kWG884Po/dUxPgWMOrgrou8Tq4+F
-   IyRuS5APsUL/k7jsQZMr8d0D64byXxLiEsPeAZfiBSO2F5QOO7HD8z+tE
+  t=1663165390; x=1694701390;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0NUMeSnZcrH2RLjXRHKd+H5cCfslIuvsLHQV1aQYYbs=;
+  b=MrgFL2gP62sy4j3hGt2rFovMCCuI5IU8TQdgNhfW2n5AY7q5cy7WYzED
+   6d7N9B0hTeJlx1eYBfA0iKKcE2OocrD26OpVX0VKIRJfw8DP20OY2nwLo
+   pGZz36aqqF1HklsvTxyl7CeMOEZPb9aCAT4CeMyCN/5aq4k6IfwiZEfgJ
+   Dt6pr6HmDBS2V2APvpLGtjWwOFSxmnYkUXppY+na+IJaYbR2zk5TxBus+
+   eKzGExVbTRKXev+TzjEj4tcF9bK088xV/jb77GKpMavu5NtE6kpiuY8ot
+   fP4zSRhuo6p9TGK70luDjCrPwnbRc2D3wb2PuFCBOfXX0SbwkP+t3u7uc
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="285472424"
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362403204"
 X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="285472424"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 06:47:22 -0700
+   d="scan'208";a="362403204"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 07:23:09 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="647396551"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.25.8]) ([10.213.25.8])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 06:47:19 -0700
-Message-ID: <acfbd345-e0e8-263c-ac7e-06d8419cdc90@intel.com>
-Date: Wed, 14 Sep 2022 15:47:16 +0200
+   d="scan'208";a="594401920"
+Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2022 07:23:08 -0700
+Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oYTIB-0000Hg-2k;
+	Wed, 14 Sep 2022 14:23:07 +0000
+Date: Wed, 14 Sep 2022 22:23:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	linux-kernel@vger.kernel.org
+Subject: [cilium:pr/bpf-tc-links 1/10] ld.lld: error: undefined symbol:
+ dev_sch_uninstall
+Message-ID: <202209142212.Rm27TU3m-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: Fix return type of mode_valid
- function hook
-Content-Language: en-US
-To: Nathan Huckleberry <nhuck@google.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>, llvm@lists.linux.dev,
- Dan Carpenter <error27@gmail.com>, David Airlie <airlied@linux.ie>,
- Tom Rix <trix@redhat.com>, intel-gfx@lists.freedesktop.org,
- Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>, dri-devel@lists.freedesktop.org,
- Daniel Vetter <daniel@ffwll.ch>, Rodrigo Vivi <rodrigo.vivi@intel.com>
-References: <20220913205531.155046-1-nhuck@google.com>
-From: Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20220913205531.155046-1-nhuck@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 13.09.2022 22:55, Nathan Huckleberry wrote:
-> All of the functions used for intel_dvo_dev_ops.mode_valid have a return
-> type of enum drm_mode_status, but the mode_valid field in the struct
-> definition has a return type of int.
-> 
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definitions do not match the function hook definition.
-> 
-> The return type of the mode_valid field should be changed from int to
-> enum drm_mode_status.
-> 
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+tree:   https://github.com/cilium/linux.git pr/bpf-tc-links
+head:   f9ab02443a6bd720c616b575437a851435c80c49
+commit: f182834c964343d39688f653f16bfee1f3ff39c2 [1/10] bpf: Add initial fd-based API to attach tc BPF programs
+config: x86_64-randconfig-a015-20220912 (https://download.01.org/0day-ci/archive/20220914/202209142212.Rm27TU3m-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/cilium/linux/commit/f182834c964343d39688f653f16bfee1f3ff39c2
+        git remote add cilium https://github.com/cilium/linux.git
+        git fetch --no-tags cilium pr/bpf-tc-links
+        git checkout f182834c964343d39688f653f16bfee1f3ff39c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards
-Andrzej
+All errors (new ones prefixed by >>):
 
-> ---
->   drivers/gpu/drm/i915/display/intel_dvo_dev.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> index d96c3cc46e50..50205f064d93 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> +++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
-> @@ -75,8 +75,8 @@ struct intel_dvo_dev_ops {
->   	 *
->   	 * \return MODE_OK if the mode is valid, or another MODE_* otherwise.
->   	 */
-> -	int (*mode_valid)(struct intel_dvo_device *dvo,
-> -			  struct drm_display_mode *mode);
-> +	enum drm_mode_status (*mode_valid)(struct intel_dvo_device *dvo,
-> +					   struct drm_display_mode *mode);
->   
->   	/*
->   	 * Callback for preparing mode changes on an output
+>> ld.lld: error: undefined symbol: dev_sch_uninstall
+   >>> referenced by dev.c
+   >>>               core/dev.o:(unregister_netdevice_many) in archive net/built-in.a
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
