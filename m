@@ -1,121 +1,161 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062A24423
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 19:15:08 +0000 (UTC)
-Received: by mail-qt1-f177.google.com with SMTP id ay9so1245575qtb.0
-        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 12:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=imU6N/sbMDNwpxG/ml2ujPHotZONSIOXltM3qdyiYEg=;
-        b=U/9GmOj+GfMD2TH7b2IpkKELRpqmUZkeeowz2SRbmL0+H33N8eIBdCjO6GVRzC4RWs
-         RM5ovijGZKdH676/OXn4ERY5DkZ5B11052NL2Yg5tSB72ujaPk2nG/GiuvuuV9lze7DW
-         1yQd3M7zdbC2InodbaDWm4SojuJ+6EegEtV5JrB2nvWqBtIh+s5RBl8ikaydAiyV5ylK
-         H8nWybPSTACWUlkQCsz3ylFyi6I+Zp2NrYd4hfzKeIYgUcRwEa2NOLnaLmPotcUoI4iO
-         //ram+OjsBORt9GKCVbhvW2nXwaiqsQU/uxqQdArJKgnpDJc+bdrT2MoPfMVXKZEUiWE
-         8PzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=imU6N/sbMDNwpxG/ml2ujPHotZONSIOXltM3qdyiYEg=;
-        b=LrkpQG12pLSXY+9k+xDHSq47zqwKWSrKakr/e0xTa9ZmFfaChjaZ3jwXXZ2cVSbOu7
-         ZQ7u18ZAKE7JJ0/UQnwBHlpQkMkRB2cg12t5SPtLUhKOXxKI8JQEX1oGw9CXqG/UIqxn
-         G8dahU8XjxI5jSf3DyE16N3iBlelW3dUeLz1HoLUmLnu9YC5+013+4ZA+ohjvQDQjqSC
-         ZGyrGOOTX7leL570FBgt5FS0uA3XFsPjKker6uXRmJ9VKuzAo/TiHeiKLeai7nNBRY+Q
-         LSwlFkfD1uRxjCjOcDCLXvameQ8vSkxilZ9DTv/6gfXybarBt1O/eAHz+nLZ3ORYhOLs
-         TARw==
-X-Gm-Message-State: ACgBeo0AAWwKfqwCQsIkQsTsXLzOWWNpxo/TaKsBsE1el4kVY8Gq67uG
-	/FVhVgGLVHuOAewg5NzL3/fljEl6IP2LrSDw7TNjCQ==
-X-Google-Smtp-Source: AA6agR7vZKjaZzM24rYovfFQyKuHAPFpHIzjRs5BIEUSYEB8YPicvGP6DCoHcRyQaHhwg57ssIZpTiuY6MFOUK+AAYs=
-X-Received: by 2002:ac8:7dca:0:b0:344:5679:2dbb with SMTP id
- c10-20020ac87dca000000b0034456792dbbmr34760646qte.245.1663182907940; Wed, 14
- Sep 2022 12:15:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E423D92
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 20:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663188807; x=1694724807;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7DBM3Yji4SL5idOfVZ3ewESqqXGWpH+jZ/P3/hL9KTc=;
+  b=NLJ6nzRN7B9/x10t9XW4HdMCcyYWCPov6nHuoPltNjJRzM1Y0e/DHr4t
+   Ikx4VIV3zVIBHKbfJt+fE5jugow2W1a21hnMlcekh3JwvwAfOf9fZgtBO
+   rTeSBcIVhM42vT/Dez7/OKoLRAW+ikHWOm6GMKvP0ToiDAzwi5YtjZrMs
+   FRVnWDrAlFu76mOBmkRbjnxrb2bL1iudy8No0U6aNXM0dDVlh9GIF7T4C
+   /uhqY6aPLyeRO95Y8jn7ewgqIEgm4KpF7Gi7Ny9Tg2F9HtuhG9ucK7RQv
+   7B2qfZy7yPG3YOO3ratxgKkphonMix0KScTZzs9SqDGofj2qt7MxdQGEg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="299351940"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="299351940"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 13:53:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="706088098"
+Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Sep 2022 13:53:02 -0700
+Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oYZNV-0000ZG-2o;
+	Wed, 14 Sep 2022 20:53:01 +0000
+Date: Thu, 15 Sep 2022 04:52:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Li Zhengyu <lizhengyu3@huawei.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: arch/riscv/kernel/elf_kexec.c:185:16: warning: variable
+ 'kernel_start' set but not used
+Message-ID: <202209150433.tPPMQhEf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220912214617.929240-1-nhuck@google.com> <YyEO01+suq0Wl/2F@dev-arch.thelio-3990X>
-In-Reply-To: <YyEO01+suq0Wl/2F@dev-arch.thelio-3990X>
-From: Nathan Huckleberry <nhuck@google.com>
-Date: Wed, 14 Sep 2022 12:14:00 -0700
-Message-ID: <CAJkfWY7SAOMgKH68ffVeQxd94BxnqnkYp3Q1oW7XLV3Zc=9K4Q@mail.gmail.com>
-Subject: Re: [PATCH] staging: rtl8723bs: Fix rtw_xmit_entry return type
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looks like this was already fixed in a90044ef5605bc0961356548526c44964bc819a7
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3245cb65fd91cd514801bf91f5a3066d562f0ac4
+commit: 838b3e28488f702e2b5477b393f009b2639d2b1a RISC-V: Load purgatory in kexec_file
+date:   4 months ago
+config: riscv-randconfig-r016-20220914 (https://download.01.org/0day-ci/archive/20220915/202209150433.tPPMQhEf-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=838b3e28488f702e2b5477b393f009b2639d2b1a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 838b3e28488f702e2b5477b393f009b2639d2b1a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-Ignore this patch.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/riscv/kernel/elf_kexec.c:185:16: warning: variable 'kernel_start' set but not used [-Wunused-but-set-variable]
+           unsigned long kernel_start;
+                         ^
+   1 warning generated.
 
 
-On Tue, Sep 13, 2022 at 4:14 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Sep 12, 2022 at 02:46:14PM -0700, Nathan Huckleberry wrote:
-> > The ndo_start_xmit field in net_device_ops is expected to be of type
-> > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
-> >
-> > The mismatched return type breaks forward edge kCFI since the underlying
-> > function definition does not match the function hook definition.
-> >
-> > The return type of rtw_xmit_entry should be changed from int to
-> > netdev_tx_t.
-> >
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
->
-> The prototype in drivers/staging/rtl8723bs/include/xmit_osdep.h should
-> be updated as well. With that:
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> > ---
-> >  drivers/staging/rtl8723bs/os_dep/xmit_linux.c | 13 +++++--------
-> >  1 file changed, 5 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8723bs/os_dep/xmit_linux.c b/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
-> > index 530e7a6c67c5..472d3ac0179b 100644
-> > --- a/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
-> > +++ b/drivers/staging/rtl8723bs/os_dep/xmit_linux.c
-> > @@ -181,7 +181,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
-> >       return true;
-> >  }
-> >
-> > -int _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-> > +netdev_tx_t _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-> >  {
-> >       struct adapter *padapter = rtw_netdev_priv(pnetdev);
-> >       struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-> > @@ -217,15 +217,12 @@ int _rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-> >       dev_kfree_skb_any(pkt);
-> >
-> >  exit:
-> > -     return 0;
-> > +     return NETDEV_TX_OK;
-> >  }
-> >
-> > -int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-> > +netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-> >  {
-> > -     int ret = 0;
-> > -
-> >       if (pkt)
-> > -             ret = _rtw_xmit_entry(pkt, pnetdev);
-> > -
-> > -     return ret;
-> > +             return _rtw_xmit_entry(pkt, pnetdev);
-> > +     return NETDEV_TX_OK;
-> >  }
-> > --
-> > 2.37.2.789.g6183377224-goog
-> >
+vim +/kernel_start +185 arch/riscv/kernel/elf_kexec.c
+
+   174	
+   175	static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+   176				    unsigned long kernel_len, char *initrd,
+   177				    unsigned long initrd_len, char *cmdline,
+   178				    unsigned long cmdline_len)
+   179	{
+   180		int ret;
+   181		unsigned long old_kernel_pbase = ULONG_MAX;
+   182		unsigned long new_kernel_pbase = 0UL;
+   183		unsigned long initrd_pbase = 0UL;
+   184		unsigned long headers_sz;
+ > 185		unsigned long kernel_start;
+   186		void *fdt, *headers;
+   187		struct elfhdr ehdr;
+   188		struct kexec_buf kbuf;
+   189		struct kexec_elf_info elf_info;
+   190		char *modified_cmdline = NULL;
+   191	
+   192		ret = kexec_build_elf_info(kernel_buf, kernel_len, &ehdr, &elf_info);
+   193		if (ret)
+   194			return ERR_PTR(ret);
+   195	
+   196		ret = elf_find_pbase(image, kernel_len, &ehdr, &elf_info,
+   197				     &old_kernel_pbase, &new_kernel_pbase);
+   198		if (ret)
+   199			goto out;
+   200		kernel_start = image->start;
+   201		pr_notice("The entry point of kernel at 0x%lx\n", image->start);
+   202	
+   203		/* Add the kernel binary to the image */
+   204		ret = riscv_kexec_elf_load(image, &ehdr, &elf_info,
+   205					   old_kernel_pbase, new_kernel_pbase);
+   206		if (ret)
+   207			goto out;
+   208	
+   209		kbuf.image = image;
+   210		kbuf.buf_min = new_kernel_pbase + kernel_len;
+   211		kbuf.buf_max = ULONG_MAX;
+   212	
+   213		/* Add elfcorehdr */
+   214		if (image->type == KEXEC_TYPE_CRASH) {
+   215			ret = prepare_elf_headers(&headers, &headers_sz);
+   216			if (ret) {
+   217				pr_err("Preparing elf core header failed\n");
+   218				goto out;
+   219			}
+   220	
+   221			kbuf.buffer = headers;
+   222			kbuf.bufsz = headers_sz;
+   223			kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+   224			kbuf.memsz = headers_sz;
+   225			kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+   226			kbuf.top_down = true;
+   227	
+   228			ret = kexec_add_buffer(&kbuf);
+   229			if (ret) {
+   230				vfree(headers);
+   231				goto out;
+   232			}
+   233			image->elf_headers = headers;
+   234			image->elf_load_addr = kbuf.mem;
+   235			image->elf_headers_sz = headers_sz;
+   236	
+   237			pr_debug("Loaded elf core header at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
+   238				 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
+   239	
+   240			/* Setup cmdline for kdump kernel case */
+   241			modified_cmdline = setup_kdump_cmdline(image, cmdline,
+   242							       cmdline_len);
+   243			if (!modified_cmdline) {
+   244				pr_err("Setting up cmdline for kdump kernel failed\n");
+   245				ret = -EINVAL;
+   246				goto out;
+   247			}
+   248			cmdline = modified_cmdline;
+   249		}
+   250	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
