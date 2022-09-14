@@ -1,124 +1,101 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E824688
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 21:11:43 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 66-20020a251145000000b006a7b4a27d04so14158723ybr.20
-        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=zaO32I0S7SQDvPMoMQFHJs6rEVWhhR1lhuEV3EVwoJQ=;
-        b=srJs7ojePy/2F+EGwVPFW2Xg0p2htwMb7M/FUOue3qyJ60PKNMhCYFIwHxlTIEpyuU
-         MQniu6tX64ZacV5YW8siBdEUSgNk9uHsN/mCsqQ7DXT1lXl7acz83KcBDlYuJYrVj1PN
-         /vLpcUjsxOlwLVuZU7TQ2jbueY3Q3q8nSQYy2kZi3OEmM8HtSImTM9l4STcDt5/VQGmb
-         i4pgFMexJqllHS2JkWrpYy8i3R7H7gXLlrzudNzpKGZEYoMPTKrZla+36YC+gPqbUrsT
-         9Do9oDt34in+jFy869xC+kMlRYXEk6CoMoSS7cnH31Z0hXKRemrZHxSusvMmRnzVF4KY
-         MZmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zaO32I0S7SQDvPMoMQFHJs6rEVWhhR1lhuEV3EVwoJQ=;
-        b=mDcSNjk5IQZvInWYZT1ygshohRs1HnZ2JuA6uIR5t4zhvLIQPkAlPzKL8SeYJLPaaQ
-         1/3vPkhyBsx3RusCkMTIHpiprHTlo7Vevp8nhWFvl5IE+lsP42U1wB2/AfIkH0pXXKCI
-         eynrhfR/GvS7i9UnoNdFF5hypwuELQT2otGa3+bzt+rkMhmhv4OKmMXmKGQPDeFKPo4l
-         kbu0bA31ajyHVq2SpY/ThK0iGflng5G5/zqsFAtqXL/vNzmiY2wj/8CV3sPrym1iFYbc
-         QFeme+4uXVmcNW/iyXol5lUCHcb0qR2Ybsy7bWDMI0alGKMjL6d5nPEe0HEpkTuccxSe
-         ZgJw==
-X-Gm-Message-State: ACgBeo2w7na4Eil/hTgf1wMnKKXUbvQncnCYCtoA837DwhGEQHyxPFWu
-	B9qbM9xhuSaqE5glEp+cYU8nZWkHEA==
-X-Google-Smtp-Source: AA6agR40trucsCxmeeqkHH598e41TopB2iE2aXOQN08JKcFE5YwuwOiaXPG/I/56gfefW7lNSGjICDPVyg==
-X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a25:da82:0:b0:6a9:27d8:a671 with SMTP id
- n124-20020a25da82000000b006a927d8a671mr30748921ybf.142.1663189902345; Wed, 14
- Sep 2022 14:11:42 -0700 (PDT)
-Date: Wed, 14 Sep 2022 14:10:57 -0700
-In-Reply-To: <YyEQr//Iq7bautrm@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B184685
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 21:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663189986; x=1694725986;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tNF5VMNITd4yfX3fKOm9kTIPe91lRZ0YOZ6C7sFSjiI=;
+  b=B52gfYUauxQg+ztJAtiyoOkPLley6mPlVaW1XG8VOdg1UrVlEmIwFDVo
+   K0KWowwtAQ8v+Ku1kbzeg0s/+2QXpedTku5TeVXD6vEZrRZmJb7MWlHy9
+   a2QW7RUTZ4tqkhjemEwEHjshDeD1C262ekLGGL9DKXIWFFhynKY7pI+O4
+   fmEt2THF0+XSf5thYEATZeKV9ruGmgIeBBA0pMoPaowYRE+O8nT8k1RuT
+   LR6AxgC6/fUs7YPEhFqy9/IsKn97h593GboZkohydJhZtcKdbaNeAcXPc
+   3YlSd3N9SHjV8UX0dqDjwMbK0/nnwEeOFNGAAJUAYpdL+iB2Gp/9n4PhQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="324801586"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="324801586"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 14:13:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="650220215"
+Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Sep 2022 14:13:02 -0700
+Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oYZgs-0000Zo-0Y;
+	Wed, 14 Sep 2022 21:13:02 +0000
+Date: Thu, 15 Sep 2022 05:12:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org, Steev Klimaszewski <steev@kali.org>
+Subject: [steev:c630-6.0.0-rc5-only-batt 2/15]
+ drivers/power/supply/yoga-c630-ec.c:225:24: error: implicit declaration of
+ function 'FIELD_GET' is invalid in C99
+Message-ID: <202209150504.Q9XVY3rZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <YyEQr//Iq7bautrm@dev-arch.thelio-3990X>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220914211057.423617-1-nhuck@google.com>
-Subject: [PATCH v3] staging: octeon: Fix return type of cvm_oct_xmit and cvm_oct_xmit_pow
-From: Nathan Huckleberry <nhuck@google.com>
-To: nathan@kernel.org
-Cc: error27@gmail.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev, 
-	llvm@lists.linux.dev, ndesaulniers@google.com, nhuck@google.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The ndo_start_xmit field in net_device_ops is expected to be of type
-netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+tree:   https://github.com/steev/linux c630-6.0.0-rc5-only-batt
+head:   f3c03af09a0ea482d28346e1aeb98de01632080c
+commit: cf2451d68e7599a6869e1a218a588811d94e4839 [2/15] power: supply: Add Lenovo Yoga C630 EC driver
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220915/202209150504.Q9XVY3rZ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/cf2451d68e7599a6869e1a218a588811d94e4839
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev c630-6.0.0-rc5-only-batt
+        git checkout cf2451d68e7599a6869e1a218a588811d94e4839
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
-from int to netdev_tx_t.
+All errors (new ones prefixed by >>):
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> drivers/power/supply/yoga-c630-ec.c:225:24: error: implicit declaration of function 'FIELD_GET' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ec->adapter_online = FIELD_GET(LENOVO_EC_ADPT_PRESENT, val);
+                                        ^
+   drivers/power/supply/yoga-c630-ec.c:391:6: error: implicit declaration of function 'FIELD_GET' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (FIELD_GET(LENOVO_EC_USB_EVENT_MUX, event))
+               ^
+   2 errors generated.
 
----
 
-Changes v1 -> v2:
-- Update function signatures in ethernet-tx.h.
+vim +/FIELD_GET +225 drivers/power/supply/yoga-c630-ec.c
 
-Changes v2 -> v3:
-- Move changes below the scissors --- so they don't show in commit msg
-- Add reviewed-by tag
+   216	
+   217	static int yoga_c630_ec_update_adapter_status(struct yoga_c630_ec *ec)
+   218	{
+   219		int val;
+   220	
+   221		mutex_lock(&ec->lock);
+   222	
+   223		val = yoga_c630_ec_read8(ec, LENOVO_EC_ADPT_STATUS);
+   224		if (val > 0)
+ > 225			ec->adapter_online = FIELD_GET(LENOVO_EC_ADPT_PRESENT, val);
+   226	
+   227		mutex_unlock(&ec->lock);
+   228	
+   229		return val;
+   230	}
+   231	
 
- drivers/staging/octeon/ethernet-tx.c | 4 ++--
- drivers/staging/octeon/ethernet-tx.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/staging/octeon/ethernet-tx.c b/drivers/staging/octeon/ethernet-tx.c
-index 1ad94c5060b5..a36e36701c74 100644
---- a/drivers/staging/octeon/ethernet-tx.c
-+++ b/drivers/staging/octeon/ethernet-tx.c
-@@ -125,7 +125,7 @@ static void cvm_oct_free_tx_skbs(struct net_device *dev)
-  *
-  * Returns Always returns NETDEV_TX_OK
-  */
--int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	union cvmx_pko_command_word0 pko_command;
- 	union cvmx_buf_ptr hw_buffer;
-@@ -506,7 +506,7 @@ int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
-  * @dev:    Device info structure
-  * Returns Always returns zero
-  */
--int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct octeon_ethernet *priv = netdev_priv(dev);
- 	void *packet_buffer;
-diff --git a/drivers/staging/octeon/ethernet-tx.h b/drivers/staging/octeon/ethernet-tx.h
-index 78936e9b33b0..6c524668f65a 100644
---- a/drivers/staging/octeon/ethernet-tx.h
-+++ b/drivers/staging/octeon/ethernet-tx.h
-@@ -5,8 +5,8 @@
-  * Copyright (c) 2003-2007 Cavium Networks
-  */
- 
--int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
--int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
- int cvm_oct_transmit_qos(struct net_device *dev, void *work_queue_entry,
- 			 int do_free, int qos);
- void cvm_oct_tx_initialize(void);
 -- 
-2.37.2.789.g6183377224-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
