@@ -1,176 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FE815B9
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 00:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1663113699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9hE4DTXUxj/3U4SEgDjzxgP368krf0gNEd2HlJIOqxQ=;
-	b=I+mjSpzkAUG68KX3HnNseDBzjMl0FF0uhZc10yQp59HndWrEqAb1RxWHLtTrHtw83IK6yJ
-	L8m4nCYTxL2YCw3cbs7s//1R48VcCkXbPZUErwApe5tRE6kHLiI/WEy8GdbzwHW7X2v8Q/
-	O1A+mYUzmBXO3Jh5bpKZWSTU/E5wCXk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-18-61ay56L-N3e4P7AWcFL2-A-1; Tue, 13 Sep 2022 20:01:38 -0400
-X-MC-Unique: 61ay56L-N3e4P7AWcFL2-A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3DD1B29DD988
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 00:01:38 +0000 (UTC)
-Received: from [172.64.3.86] (unknown [10.30.33.184])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2DDBD49BB60;
-	Wed, 14 Sep 2022 00:01:38 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc5,
- mainline.kernel.org-clang, d1221cea)
-Date: Wed, 14 Sep 2022 00:01:35 -0000
-CC: xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A4C15AC
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 01:45:33 +0000 (UTC)
+Received: by mail-qt1-f181.google.com with SMTP id c11so10156352qtw.8
+        for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 18:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=T56o2h08tk0PmW4ZLsH28b7hS5vDK+AW+si3O65+obo=;
+        b=Oe8JnBSVgSMmqPNFrZr6uzBF/MsmXi9Nee/enb8/xccCc7JVyURajg/V5pr9jjpDW7
+         RNCmRZLDsLReno9LXIN2zp/cqjkYRNiKkFHGUCvWRZQVuMInyHndbXOX6cDzDe7eizFF
+         ed0a5o28Y+QxB0B+wWFcbtsD0kr8Z1mgNfJMQV6W2pBlm8vVf+OqVpXuzLoQb9Awyn+Q
+         n848eZEUh9KivIQUP2Vbw4atlx7cGTXwu6KZaqbbfv06jDDBb6iGHWS2jMDIZ5mv9S4e
+         jtX1571mzSZ6cyd3EA6Gyb6LQSUlEV4ZJg7eeFWROk7kqZSd7HNQ1xcryQqfBbPBgbuI
+         izHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=T56o2h08tk0PmW4ZLsH28b7hS5vDK+AW+si3O65+obo=;
+        b=apOB3WoeSGgOsocB6Fi/Qgtv4smjGmj6uI5IG5XPp94iR89gKZH0KW/WiiZy7RmfW7
+         rMp9lS0TdIW5Gj2X96akQoIJalbp0DFPOdkNw6NvLF9xWzsha9HS8n1vO1kzl1/H7+0c
+         TUWXDGVnJjzhqSFCI+IEGFy38hV4uruXQc1epj3islxAdeiKTIRXpq/6Qg+pwbIJvVBR
+         1cDcmcFaTi7qq9bayu4LlPxvS4dwaEuTsoFzkQNZxNqWb03JNLxY2XpVWEFjbVI9ntGk
+         Mg3jhdgNiyh2HDbNe0BEFzJDCPoyYaGQGGQaeNlu6wG5z1zVMQ7klhjvE8z+xRs/Jpep
+         YuXg==
+X-Gm-Message-State: ACgBeo3zSvYqS0GkoEQGQPg+YZqMgzIu1DF8KfSRDhd7GoVJHzPUZFON
+	xdLqvKcH7PrFUl9Mb3EKlkO0hEMF9pax7SM5S/fJmDRAAsauOw==
+X-Google-Smtp-Source: AA6agR7ZlBYQI9ZokbyfOHpFIIymY6tIse9RDdoF3wV8R9iGFdrGtQG+znlmV9nlP4yNq9O+IMb6tRKwuFxFqM6bZKg=
+X-Received: by 2002:ac8:7dca:0:b0:344:5679:2dbb with SMTP id
+ c10-20020ac87dca000000b0034456792dbbmr31410571qte.245.1663119932138; Tue, 13
+ Sep 2022 18:45:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <98847.122091320013800483@us-mta-18.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20220912214559.929186-1-nhuck@google.com> <YyENqW9u3LxySbSk@dev-arch.thelio-3990X>
+In-Reply-To: <YyENqW9u3LxySbSk@dev-arch.thelio-3990X>
+From: Nathan Huckleberry <nhuck@google.com>
+Date: Tue, 13 Sep 2022 18:45:00 -0700
+Message-ID: <CAJkfWY6FYCNz_5+5cM2GoJdGLdBu7aPzs0e8uFmhgZRE_axLSQ@mail.gmail.com>
+Subject: Re: [PATCH] staging: rtl8192u: Fix return type of ieee80211_xmit
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hey Nathan,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Tue, Sep 13, 2022 at 4:09 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, Sep 12, 2022 at 02:45:56PM -0700, Nathan Huckleberry wrote:
+> > The ndo_start_xmit field in net_device_ops is expected to be of type
+> > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+> >
+> > The mismatched return type breaks forward edge kCFI since the underlying
+> > function definition does not match the function hook definition.
+> >
+> > The return type of ieee80211_xmit should be changed from int to
+> > netdev_tx_t.
+> >
+> > Reported-by: Dan Carpenter <error27@gmail.com>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+> > Cc: llvm@lists.linux.dev
+> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+>
+> The protoype in drivers/staging/rtl8192u/ieee80211/ieee80211.h should be
+> updated as well. With that:
 
+Nice catch, thanks.
 
-Kernel information:
-    Commit message: Merge tag 'pull-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/viro/vfs
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >  drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+> > index 8602e3a6c837..e4b6454809a0 100644
+> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+> > @@ -526,7 +526,7 @@ static void ieee80211_query_seqnum(struct ieee80211_device *ieee,
+> >       }
+> >  }
+> >
+> > -int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+> > +netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+> >  {
+> >       struct ieee80211_device *ieee = netdev_priv(dev);
+> >       struct ieee80211_txb *txb = NULL;
+> > @@ -822,13 +822,13 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+> >                       if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
+> >                               stats->tx_packets++;
+> >                               stats->tx_bytes += __le16_to_cpu(txb->payload_size);
+> > -                             return 0;
+> > +                             return NETDEV_TX_OK;
+> >                       }
+> >                       ieee80211_txb_free(txb);
+> >               }
+> >       }
+> >
+> > -     return 0;
+> > +     return NETDEV_TX_OK;
+> >
+> >   failed:
+> >       spin_unlock_irqrestore(&ieee->lock, flags);
+>
+> I see 'return 1' down here, that doesn't appear to be a valid
+> 'netdev_tx_t'. Should that be 'return NETDEV_TX_BUSY'? I guess that is
+> an outstanding issue though, just figured I would mention it.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/53230
+I'm not sure. As far as I can tell, the dev_xmit_complete function in
+include/linux/netdevice.h is used to determine whether an skb was
+consumed or not. It looks like a value of 1 (NET_XMIT_DROP) would
+signify that it was consumed, whereas NETDEV_TX_BUSY would not.
 
-One or more kernel tests failed:
+It's somewhat confusing that a function which returns an enum may also
+return values outside of that enum.
 
-    Unrecognized or new issues:
-         aarch64 - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5128801
-          x86_64 - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5129016
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5128200
-          x86_64 (debug) - xfstests - ext4
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5128712
+For more info see the foillowing commits:
+dc1f8bf68b311b1537cb65893430b6796118498a
+572a9d7b6fc7f20f573664063324c086be310c42
+7f2e870f2a48a0524a3b03b04fa019311d16a7f7
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+>
+> > --
+> > 2.37.2.789.g6183377224-goog
+> >
+>
+> Cheers,
+> Nathan
 
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Huck
