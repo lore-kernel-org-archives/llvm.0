@@ -1,65 +1,66 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9920E3FC2
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 16:22:17 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id v1so15639334plo.9
-        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 09:22:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=vSqGkij0iJ02LNmcxwO+X24LzA4vRR84QlahoRcoEUk=;
-        b=qDwmnr7yOYUEPiNILJjSYsaLa30cmMbxBEJSZzRMbMx5G0/4KajA69yKmAVfQp+Tmx
-         VEppdYXx2ij+1vOMreanK3SjSXs6Znqne8dN1Drd7f40qsSpbIoUpSNajl7FgM/vUrx+
-         /BMAHez+1J6GkqSA4A+glx2JfnNKOYvdls4OnCW1pBxYID09/vN7MHEasrQ2Q9BBPgf8
-         KSW+UC4hFxNSiy3o1hrOMYX6KbaLgtk+k/f5Y3AS4Nw3pCRncSeiBLo9ldFO50squcez
-         NYiDT5Ctf3kwOIVngBQKi8sqkXXWgULy6VGmlpHgIDtPQLa1oQCj1wdo/KZYilqpJaV6
-         ftoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=vSqGkij0iJ02LNmcxwO+X24LzA4vRR84QlahoRcoEUk=;
-        b=PGJveFzMaOypYBt0cGBFO4YCLXIQ3qhwh3ZFoJ0gjegfTRECOM3iOnsFxpF0dpvAFM
-         DHvJNF4yAJkbIykS3PoeRyIfwLwrlwCXx6iTPqH1SP4T0k4JcrUUz9ilXytDNojqAc1v
-         a/bHiw45cilc1sCHCR98eY4KMycUeodwwix22knqI5YqIrGsQCQHJGuJSpWKwxa/XVwd
-         wGApH8yM6llBcvzntv84DEkG1CMH3drnGGJzd4SIlphnBnZ/TnPxdvKsGwR/0sV+INJh
-         jNOuGlpwPU8VhlEvvIP0+q7YzuV5mbCAxt+f8kAsM9j803k+KSZ9lebNPF9xmnmsgYBm
-         yg1w==
-X-Gm-Message-State: ACgBeo260nTR6S0i8x2ze9TIOHIpuKYw1J0O7qyXf3pYtT+/5zD5yJA9
-	e4+f1AyY72u+F/Jbj8ElhaYKlQ==
-X-Google-Smtp-Source: AA6agR6rRu5Esr/QftLs4NgvC2oASCOgWLDyAbveVyj+N+p6xnapdY9Xw5HMK9dDqvSwfRgWL69VgQ==
-X-Received: by 2002:a17:902:8486:b0:171:48cd:1356 with SMTP id c6-20020a170902848600b0017148cd1356mr35858433plo.153.1663172536881;
-        Wed, 14 Sep 2022 09:22:16 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j8-20020a17090a318800b002005114fbf5sm5302312pjb.22.2022.09.14.09.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 09:22:16 -0700 (PDT)
-Date: Wed, 14 Sep 2022 16:22:12 +0000
-From: Sean Christopherson <seanjc@google.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Peter Gonda <pgonda@google.com>, Adam Dunlap <acdunlap@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Andi Kleen <ak@linux.intel.com>, Ben Dooks <ben-linux@fluff.org>,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-	Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>,
-	Marc Orr <marcorr@google.com>
-Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
-Message-ID: <YyH/tOqrl8pZmoub@google.com>
-References: <20220812183501.3555820-1-acdunlap@google.com>
- <20220908170456.3177635-1-acdunlap@google.com>
- <CAMkAt6qUs526FCq26Ht48c2KVZWe=QcNds6_LE6JJbs-7Hzk+g@mail.gmail.com>
- <2625dbfa-434c-7d55-6469-9d9e89397e8f@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6119F3FF9
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 17:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663175292; x=1694711292;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H3Q2dCshLHXiyNfBuzyi9AzD37fPh22mEf4ZIc/U4Oc=;
+  b=e39atokjhvmGl5BBN/vdY9VJGPnkpBoib7p0SRw/H+Xs4Cur0VlDjti8
+   A2NHhd5VsNTPlzRNXeStipQ+JLdYLqXZwItqM79rU7btwBIEb4QhV5pDx
+   ZwLyJ1FsM3tybhDY3amUzPo0YWRfjbDyWaU2FSjDL2tY5svKzeVhtJdGM
+   jLnUT06b0/1RQoSZcLaQgR3rN+ErcBmkExXSjKTGpR+R4QIru/xc1RUyH
+   u2DRlSAi0QAujjeelqcIu1XU54r7RjYdgcC1jxqSzdC1/ZVxg3+oqypP/
+   11fE8vAFdiDumlI5AD0Vn96fSyqaNQjqUkhKjSCrFBhXSyfKjE8UGhMkV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384779006"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="384779006"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 10:08:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="619384021"
+Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Sep 2022 10:08:04 -0700
+Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oYVrn-0000Pe-2J;
+	Wed, 14 Sep 2022 17:08:03 +0000
+Date: Thu, 15 Sep 2022 01:07:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Doug Berger <opendmb@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Muchun Song <songmuchun@bytedance.com>,
+	Mike Rapoport <rppt@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>, Borislav Petkov <bp@suse.de>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
+	Oscar Salvador <osalvador@suse.de>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Kees Cook <keescook@chromium.org>,
+	- <devicetree-spec@vger.kernel.org>,
+	KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+	Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 18/21] mm/cma: support CMA in Designated Movable Blocks
+Message-ID: <202209150009.PoWlLoNu-lkp@intel.com>
+References: <20220913195508.3511038-19-opendmb@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,36 +69,179 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2625dbfa-434c-7d55-6469-9d9e89397e8f@intel.com>
+In-Reply-To: <20220913195508.3511038-19-opendmb@gmail.com>
 
-On Wed, Sep 14, 2022, Dave Hansen wrote:
-> On 9/14/22 04:13, Peter Gonda wrote:
-> > On Thu, Sep 8, 2022 at 6:05 PM Adam Dunlap <acdunlap@google.com> wrote:
-> >> Previously, when compiled with clang, native_apic_mem_read gets inlined
-> >> into __xapic_wait_icr_idle and optimized to a testl instruction. When
-> >> run in a VM with SEV-ES enabled, it attempts to emulate this
-> >> instruction, but the emulator does not support it. Instead, use inline
-> >> assembly to force native_apic_mem_read to use the mov instruction which
-> >> is supported by the emulator.
-> > This seems to be an issue with the SEV-ES in guest #VC handler's
-> > "emulator" right?
-> 
-> No.
-> 
-> It's not just an SEV-ES thing.  It's a problem for TDX and _probably_ a
-> problem for normal virtualization where it's a host-side issue.  Kirill
-> wrote a lot of great background information in here:
-> 
-> > https://lore.kernel.org/all/164946765464.4207.3715751176055921036.tip-bot2@tip-bot2/
-> 
-> So, the question is not "should we extend the MMIO instruction decoders
-> to handle one more instruction?".  It is "should we extend the MMIO
-> decoders to handle *ALL* memory read instructions?"
-> 
-> That's an even more emphatic "NO".
+Hi Doug,
 
-+1, keep the guest-side decoding as simple as possible.
+I love your patch! Perhaps something to improve:
 
-> readl() seems to be the right thing to do.  Also, Dear TDX, SEV and virt
-> folks: please look for more of these.  They're going to bite you sooner
-> or later.  You should have caught this one before now.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.0-rc5]
+[cannot apply to akpm-mm/mm-everything next-20220914]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Doug-Berger/mm-introduce-Designated-Movable-Blocks/20220914-040216
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220915/202209150009.PoWlLoNu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/635e919c92ca242c4b900bdfc7e21529e76f2f8e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Doug-Berger/mm-introduce-Designated-Movable-Blocks/20220914-040216
+        git checkout 635e919c92ca242c4b900bdfc7e21529e76f2f8e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/page_alloc.c:9236:5: warning: no previous prototype for function '_alloc_contig_range' [-Wmissing-prototypes]
+   int _alloc_contig_range(unsigned long start, unsigned long end,
+       ^
+   mm/page_alloc.c:9236:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int _alloc_contig_range(unsigned long start, unsigned long end,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/_alloc_contig_range +9236 mm/page_alloc.c
+
+  9235	
+> 9236	int _alloc_contig_range(unsigned long start, unsigned long end,
+  9237				unsigned int migratetype, gfp_t gfp_mask)
+  9238	{
+  9239		unsigned long outer_start, outer_end;
+  9240		int order;
+  9241		int ret = 0;
+  9242	
+  9243		struct compact_control cc = {
+  9244			.nr_migratepages = 0,
+  9245			.order = -1,
+  9246			.zone = page_zone(pfn_to_page(start)),
+  9247			.mode = MIGRATE_SYNC,
+  9248			.ignore_skip_hint = true,
+  9249			.no_set_skip_hint = true,
+  9250			.gfp_mask = current_gfp_context(gfp_mask),
+  9251			.alloc_contig = true,
+  9252		};
+  9253		INIT_LIST_HEAD(&cc.migratepages);
+  9254	
+  9255		/*
+  9256		 * What we do here is we mark all pageblocks in range as
+  9257		 * MIGRATE_ISOLATE.  Because pageblock and max order pages may
+  9258		 * have different sizes, and due to the way page allocator
+  9259		 * work, start_isolate_page_range() has special handlings for this.
+  9260		 *
+  9261		 * Once the pageblocks are marked as MIGRATE_ISOLATE, we
+  9262		 * migrate the pages from an unaligned range (ie. pages that
+  9263		 * we are interested in). This will put all the pages in
+  9264		 * range back to page allocator as MIGRATE_ISOLATE.
+  9265		 *
+  9266		 * When this is done, we take the pages in range from page
+  9267		 * allocator removing them from the buddy system.  This way
+  9268		 * page allocator will never consider using them.
+  9269		 *
+  9270		 * This lets us mark the pageblocks back as
+  9271		 * MIGRATE_CMA/MIGRATE_MOVABLE so that free pages in the
+  9272		 * aligned range but not in the unaligned, original range are
+  9273		 * put back to page allocator so that buddy can use them.
+  9274		 */
+  9275	
+  9276		ret = start_isolate_page_range(start, end, migratetype, 0, gfp_mask);
+  9277		if (ret)
+  9278			goto done;
+  9279	
+  9280		drain_all_pages(cc.zone);
+  9281	
+  9282		/*
+  9283		 * In case of -EBUSY, we'd like to know which page causes problem.
+  9284		 * So, just fall through. test_pages_isolated() has a tracepoint
+  9285		 * which will report the busy page.
+  9286		 *
+  9287		 * It is possible that busy pages could become available before
+  9288		 * the call to test_pages_isolated, and the range will actually be
+  9289		 * allocated.  So, if we fall through be sure to clear ret so that
+  9290		 * -EBUSY is not accidentally used or returned to caller.
+  9291		 */
+  9292		ret = __alloc_contig_migrate_range(&cc, start, end);
+  9293		if (ret && ret != -EBUSY)
+  9294			goto done;
+  9295		ret = 0;
+  9296		sync_hugetlb_dissolve();
+  9297	
+  9298		/*
+  9299		 * Pages from [start, end) are within a pageblock_nr_pages
+  9300		 * aligned blocks that are marked as MIGRATE_ISOLATE.  What's
+  9301		 * more, all pages in [start, end) are free in page allocator.
+  9302		 * What we are going to do is to allocate all pages from
+  9303		 * [start, end) (that is remove them from page allocator).
+  9304		 *
+  9305		 * The only problem is that pages at the beginning and at the
+  9306		 * end of interesting range may be not aligned with pages that
+  9307		 * page allocator holds, ie. they can be part of higher order
+  9308		 * pages.  Because of this, we reserve the bigger range and
+  9309		 * once this is done free the pages we are not interested in.
+  9310		 *
+  9311		 * We don't have to hold zone->lock here because the pages are
+  9312		 * isolated thus they won't get removed from buddy.
+  9313		 */
+  9314	
+  9315		order = 0;
+  9316		outer_start = start;
+  9317		while (!PageBuddy(pfn_to_page(outer_start))) {
+  9318			if (++order >= MAX_ORDER) {
+  9319				outer_start = start;
+  9320				break;
+  9321			}
+  9322			outer_start &= ~0UL << order;
+  9323		}
+  9324	
+  9325		if (outer_start != start) {
+  9326			order = buddy_order(pfn_to_page(outer_start));
+  9327	
+  9328			/*
+  9329			 * outer_start page could be small order buddy page and
+  9330			 * it doesn't include start page. Adjust outer_start
+  9331			 * in this case to report failed page properly
+  9332			 * on tracepoint in test_pages_isolated()
+  9333			 */
+  9334			if (outer_start + (1UL << order) <= start)
+  9335				outer_start = start;
+  9336		}
+  9337	
+  9338		/* Make sure the range is really isolated. */
+  9339		if (test_pages_isolated(outer_start, end, 0)) {
+  9340			ret = -EBUSY;
+  9341			goto done;
+  9342		}
+  9343	
+  9344		/* Grab isolated pages from freelists. */
+  9345		outer_end = isolate_freepages_range(&cc, outer_start, end);
+  9346		if (!outer_end) {
+  9347			ret = -EBUSY;
+  9348			goto done;
+  9349		}
+  9350	
+  9351		/* Free head and tail (if any) */
+  9352		if (start != outer_start)
+  9353			free_contig_range(outer_start, start - outer_start);
+  9354		if (end != outer_end)
+  9355			free_contig_range(end, outer_end - end);
+  9356	
+  9357	done:
+  9358		undo_isolate_page_range(start, end, migratetype);
+  9359		return ret;
+  9360	}
+  9361	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
