@@ -1,105 +1,116 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB153D62
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:38:26 +0000 (UTC)
-Received: from [185.122.133.20] (helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1oYTWs-0006bn-QY; Wed, 14 Sep 2022 16:38:18 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: lkp@intel.com, palmer@rivosinc.com, Conor.Dooley@microchip.com
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-mm@kvack.org
-Subject: Re: [linux-next:master 6256/7172] arch/riscv/errata/thead/errata.c:40:2: error: use of undeclared identifier 'riscv_cbom_block_size'
-Date: Wed, 14 Sep 2022 16:38:17 +0200
-Message-ID: <2646330.mvXUDI8C0e@phil>
-In-Reply-To: <2d0d917d-9bc8-a1e4-1569-af3921a18139@microchip.com>
-References: <202209141913.Nxzv3hwM-lkp@intel.com> <2d0d917d-9bc8-a1e4-1569-af3921a18139@microchip.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6253D62
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD45C433C1;
+	Wed, 14 Sep 2022 14:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663166459;
+	bh=TWVD90t16Cl0movMc47E4a7VMRO0iib3j6mMZIPWEy4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hv6Q78z6Q2nIk33ayTd0SENgiMZAkQbK+662pi7q6PYJ8VAdnvxiPBuQJoLPM4vza
+	 PeabpbDqHjj23HH1SgLFUMgqpcPH6+1c2CQHFEQJ2rk96xaOpYUNxMp8quRBL8XB4V
+	 fEf2eJIcDr8S6vR8S0uXlQhnGzn4dEqgbMAPuDlxD80r0j46KnPmQ1XtCvKfvhu5vZ
+	 wnZBTD4gUhr5lCrWbEEwMb6gLgc/X2BTRQlnQmp1RKxJ9Go7eIhtSbqLWxmZLOyPEQ
+	 hV239TE/NRjWX7ttnxwkcO0pd7nbgPDdQMRoSqKXunH8gPzs99xgsywPRP6TSNFimC
+	 /vWGTtutWNVHA==
+Date: Wed, 14 Sep 2022 07:40:57 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Kees Cook <keescook@chromium.org>,
+	Juergen Gross <jgross@suse.com>,
+	"Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+	Alexey Makhalov <amakhalov@vmware.com>,
+	VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	virtualization@lists.linux-foundation.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/paravirt: add extra clobbers with
+ ZERO_CALL_USED_REGS enabled
+Message-ID: <YyHn+UbfC7e1XIT3@dev-arch.thelio-3990X>
+References: <20220902213750.1124421-1-morbo@google.com>
+ <20220902213750.1124421-3-morbo@google.com>
+ <202209022251.B14BD50B29@keescook>
+ <CAGG=3QXpK+bFOSYZkdNNFGzNfgJSSADGTRWYRv6z0vfBAgQvWQ@mail.gmail.com>
+ <CAKwvOdm+kVTrqMrSPHwTa0NrG9qwTcFkGnikjYjk0ctFGBfeRA@mail.gmail.com>
+ <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxhbO1YZPMHutw48@hirez.programming.kicks-ass.net>
 
-Hi Conor,
-
-Am Mittwoch, 14. September 2022, 14:27:19 CEST schrieb Conor.Dooley@microchip.com:
-> @Heiko is this the same issue that LKP previously complained about
-> that you have a fix for, or should I sent a fix for it tonight?
-
-this one is new, but the cause is similar (building t-head cache ops but not
-zicbom cache ops).
-
-I've just sent a patch to move the definition to the more generic block in
-cacheflush.h
-
-
-Heiko
-
-> On 14/09/2022 12:37, kernel test robot wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Wed, Sep 07, 2022 at 10:50:03AM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 06, 2022 at 11:00:07PM -0700, Nick Desaulniers wrote:
+> > On Sun, Sep 4, 2022 at 11:02 PM Bill Wendling <morbo@google.com> wrote:
+> > >
+> > > On Sat, Sep 3, 2022 at 12:18 AM Kees Cook <keescook@chromium.org> wrote:
+> > > >
+> > > > On Fri, Sep 02, 2022 at 09:37:50PM +0000, Bill Wendling wrote:
+> > > > > [...]
+> > > > >         callq   *pv_ops+536(%rip)
+> > > >
+> > > > Do you know which pv_ops function is this? I can't figure out where
+> > > > pte_offset_kernel() gets converted into a pv_ops call....
+> > > >
+> > > This one is _paravirt_ident_64, I believe. I think that the original
+> > > issue Nathan was seeing was with another seemingly innocuous function.
 > > 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   f117c01187301a087412bd6697fcf5463cb427d8
-> > commit: 8f7e001e0325de63a42f23342ac3b8139150c5cf [6256/7172] RISC-V: Clean up the Zicbom block size probing
-> > config: riscv-randconfig-r042-20220914 (https://download.01.org/0day-ci/archive/20220914/202209141913.Nxzv3hwM-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-> > reproduce (this is a W=1 build):
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # install riscv cross compiling tool for clang build
-> >          # apt-get install binutils-riscv64-linux-gnu
-> >          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8f7e001e0325de63a42f23342ac3b8139150c5cf
-> >          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> >          git fetch --no-tags linux-next master
-> >          git checkout 8f7e001e0325de63a42f23342ac3b8139150c5cf
-> >          # save the config file
-> >          mkdir build_dir && cp config build_dir/.config
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/errata/thead/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >>> arch/riscv/errata/thead/errata.c:40:2: error: use of undeclared identifier 'riscv_cbom_block_size'
-> >             riscv_cbom_block_size = L1_CACHE_BYTES;
-> >             ^
-> >     1 error generated.
-> > 
-> > 
-> > vim +/riscv_cbom_block_size +40 arch/riscv/errata/thead/errata.c
-> > 
-> >      29
-> >      30  static bool errata_probe_cmo(unsigned int stage,
-> >      31                               unsigned long arch_id, unsigned long impid)
-> >      32  {
-> >      33  #ifdef CONFIG_ERRATA_THEAD_CMO
-> >      34          if (arch_id != 0 || impid != 0)
-> >      35                  return false;
-> >      36
-> >      37          if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> >      38                  return false;
-> >      39
-> >    > 40          riscv_cbom_block_size = L1_CACHE_BYTES;
-> >      41          riscv_noncoherent_supported();
-> >      42          return true;
-> >      43  #else
-> >      44          return false;
-> >      45  #endif
-> >      46  }
-> >      47
-> > 
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+> > _paravirt_ident_64 is marked noinstr, which makes me suspect that it
+> > really needs to not be touched at all by the compiler for
+> > these...special features.
 > 
+> My source tree sayeth:
 > 
+>   u64 notrace _paravirt_ident_64(u64 x)
+> 
+> And that function is only ever called at boot, after alternatives runs
+> it's patched with:
+> 
+>   mov %_ASM_ARG1, %_ASM_AX
+> 
+> Anyway, if you want to take it away from the compiler, something like
+> so should do.
 
+This appears to work fine for me in QEMU, as I can still boot with
+CONFIG_ZERO_CALL_USED_REGS and spawn a nested guest without any issues.
 
-
-
+> diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+> index 7ca2d46c08cc..8922e2887779 100644
+> --- a/arch/x86/kernel/paravirt.c
+> +++ b/arch/x86/kernel/paravirt.c
+> @@ -80,11 +80,16 @@ static unsigned paravirt_patch_call(void *insn_buff, const void *target,
+>  }
+>  
+>  #ifdef CONFIG_PARAVIRT_XXL
+> -/* identity function, which can be inlined */
+> -u64 notrace _paravirt_ident_64(u64 x)
+> -{
+> -	return x;
+> -}
+> +extern u64 _paravirt_ident_64(u64 x);
+> +asm (".pushsection .entry.text, \"ax\"\n"
+> +     ".global _paravirt_ident_64\n"
+> +     "_paravirt_ident_64:\n\t"
+> +     ASM_ENDBR
+> +     "mov %" _ASM_ARG1 ", %" _ASM_AX "\n\t"
+> +     ASM_RET
+> +     ".size _paravirt_ident_64, . - _paravirt_ident_64\n\t"
+> +     ".type _paravirt_ident_64, @function\n\t"
+> +     ".popsection");
+>  #endif
+>  
+>  DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
+> 
