@@ -1,120 +1,152 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC4E4685
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 21:16:12 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-33dc888dc62so140884167b3.4
-        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 14:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=1qTbf9AeneJ+E0vsQj505sbaD/8VFWq9P44uV39tt6g=;
-        b=NaoShQX0xB6ZSD3s/l2l8lUJHV8OlhoUIRJXBx9XMzxO4ISYASBDDL+6bgaKRwxwGa
-         f0dKG1vN81GPaYIKzGTRwdvFnlg5Km7/n4zRahhCho5X3top90R1dU5MZW6Un6ipWHM6
-         yPTWv97B07QcOxRYuD26rtbqzGKOGjOpUYchjTCoQOY5zRGGVYsC0ElnKF9W+Y//wTda
-         eJcrs9jpvWVgK0EoHh0DjjUFjav87D7emCFvhb/qMorPp5CYB2HG4saqeQGxIAGjoqaj
-         wacEa68UMGcSfzwqlpDYx1CAE7j3D3HnwVqG9s0wfTS2LsqvzXjeaPZntWOJ6cKkg6cM
-         4MpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1qTbf9AeneJ+E0vsQj505sbaD/8VFWq9P44uV39tt6g=;
-        b=yBLS6YA72iCO5ocWPbvyhAOum88KKd6On4jm83DDu1VlKW/O3Rx3cAd+0krl/kdjaG
-         N0NT6EyXRnjdKe/jhgTmUPMptEMC7GEVcMpA5vfgSWwQwYg3wymuXWyUIpCNYM+ge3zb
-         Ckm0R+ys8/ChltAkM3TgRZEbWfApiZCp80jcaQSae3Zos7k+86h8DrggzGFKvZ4IY377
-         H1Nn+4k8e3geR2JpQqeQaSTNhhzN75zqPu2AG6iFrnUtctQRjoD9Ff6x48y+qYoKCSwQ
-         fBRbvBlZa+Ira4GZnMml6jj4J/xfHNyCjWjhjx5i7GRi6cf19QpZ/RXbojWgIRUSU12V
-         hQag==
-X-Gm-Message-State: ACgBeo2c6ujBEdJMHopA8bQfC47grUOmXCQVVvgxOSJEHtAbLM098wya
-	qvaKfsuucRPBZUzcKku3vYDFVwjbWg==
-X-Google-Smtp-Source: AA6agR5pVF5gnh786/PeSQ3ck24+Vs242wAhkbehmJZ5cq2FVthE4UT/MDUK6JyMV4YbdAVQHFSUIj6UHA==
-X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a05:6902:150d:b0:6ad:2399:eaa7 with SMTP id
- q13-20020a056902150d00b006ad2399eaa7mr32621218ybu.413.1663190171406; Wed, 14
- Sep 2022 14:16:11 -0700 (PDT)
-Date: Wed, 14 Sep 2022 14:16:06 -0700
-In-Reply-To: <YyEPaMVRmdGQdoql@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D98A4685
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 21:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1663191696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9MdjBrl1fBhXd3bKNLTwULYD7PWeZePK75cpQdeMGms=;
+	b=PV3597Y+GDjdNGvJA7A7kl8lLO+kW/7sqe1UUiHogefPi3/YbQsEh/jG5/0flyjihSdzmg
+	DZwfKlyvx+F31aBgsyf2MyW0bnCU/SMteiBBRuQbOK/4+0+0RUpdheZuxt6dIZ0MBMbKqs
+	dxSbPR0mSNz2EHMMIc67wQjeslgn/GI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-Mzem2nlTMOeYSSFw23jMOQ-1; Wed, 14 Sep 2022 17:41:35 -0400
+X-MC-Unique: Mzem2nlTMOeYSSFw23jMOQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB9A93C0258F
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 21:41:34 +0000 (UTC)
+Received: from [172.64.3.86] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B56AA40C2086;
+	Wed, 14 Sep 2022 21:41:34 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc5,
+ mainline.kernel.org-clang, 3245cb65)
+Date: Wed, 14 Sep 2022 21:41:34 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <YyEPaMVRmdGQdoql@dev-arch.thelio-3990X>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220914211606.423959-1-nhuck@google.com>
-Subject: [PATCH v3] staging: r8188eu: Fix return type of rtw_xmit_entry
-From: Nathan Huckleberry <nhuck@google.com>
-To: nathan@kernel.org
-Cc: Larry.Finger@lwfinger.net, error27@gmail.com, gregkh@linuxfoundation.org, 
-	insafonov@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-staging@lists.linux.dev, llvm@lists.linux.dev, makvihas@gmail.com, 
-	namcaov@gmail.com, ndesaulniers@google.com, nhuck@google.com, 
-	paskripkin@gmail.com, phil@philpotter.co.uk, saurav.girepunje@gmail.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <95382.122091417413500215@us-mta-518.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The ndo_start_xmit field in net_device_ops is expected to be of type
-netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+Hi, we tested your kernel and here are the results:
 
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-The return type of rtw_xmit_entry should be changed from int to
-netdev_tx_t.
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
----
+Kernel information:
+    Commit message: Merge tag 'devicetree-fixes-for-6.0-2' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/robh/linux
 
-Changes v1 -> v2:
-- Rebased onto linux-next/master
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/53312
 
-Changes v2 -> v3:
-- Updated header file
-- Add reviewed-by tag
+One or more kernel tests failed:
 
- drivers/staging/r8188eu/core/rtw_xmit.c    | 4 ++--
- drivers/staging/r8188eu/include/rtw_xmit.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5138652
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 98864fc55b25..ea13f11b231b 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -2289,7 +2289,7 @@ static int rtw_mlcst2unicst(struct adapter *padapter, struct sk_buff *skb)
- 	return true;
- }
- 
--int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
-+netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- {
- 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(pnetdev);
- 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-@@ -2323,5 +2323,5 @@ int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev)
- 	dev_kfree_skb_any(pkt);
- 
- exit:
--	return 0;
-+	return NETDEV_TX_OK;
- }
-diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
-index 8f54c41ba927..82efcd54af3f 100644
---- a/drivers/staging/r8188eu/include/rtw_xmit.h
-+++ b/drivers/staging/r8188eu/include/rtw_xmit.h
-@@ -368,6 +368,6 @@ int rtw_ack_tx_wait(struct xmit_priv *pxmitpriv, u32 timeout_ms);
- void rtw_ack_tx_done(struct xmit_priv *pxmitpriv, int status);
- 
- void rtw_xmit_complete(struct adapter *padapter, struct xmit_frame *pxframe);
--int rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev);
-+netdev_tx_t rtw_xmit_entry(struct sk_buff *pkt, struct net_device *pnetdev);
- 
- #endif	/* _RTL871X_XMIT_H_ */
--- 
-2.37.2.789.g6183377224-goog
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
