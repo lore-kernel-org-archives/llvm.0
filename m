@@ -1,134 +1,176 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0C8671B
-	for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 23:36:54 +0000 (UTC)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28DNMRi9016447;
-	Tue, 13 Sep 2022 23:36:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=QDluYs9EIrWXj5kwYq7EJZq+XOtXveaKEk1PTPlIhsk=;
- b=YcoCMWZS41WvZftzE7mBuQO6ToHgy1Rwn5kg2ijWizmAO2ITAC/CidkSztk4pXS28ZVk
- bD3PZsOFLt7xtNXLkMmme4Pr1V5YUO/r/AmMzocl79X/z9tWApjrxGHyrUO6SP/JhOgw
- Af2r7D6nmGY1pnUUawNVuFEnLnF+nSai5mebq+e4dK4bU4Ba9e86XRhH2LQ0v+oLJakL
- duwLajymcbq++xuULVoQ39z5eeTKKNBl2RhghmwMfDto+K0supA1dp/uwOiDSup8GHJH
- xDWCJTs0FzTL6r/uD5GMtwYGC9iLH8xAyqw1ri3cTLpwvTzKCG48DPX21Chbsz2p/B+1 +A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jjxymgn79-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Sep 2022 23:36:40 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 28DN1Onp000852;
-	Tue, 13 Sep 2022 23:01:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3jjqbt2j7n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Sep 2022 23:01:24 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28DN0TVc032424;
-	Tue, 13 Sep 2022 23:01:24 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 28DN1OxS000846
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Sep 2022 23:01:24 +0000
-Received: from [10.111.167.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 13 Sep
- 2022 16:01:21 -0700
-Message-ID: <2ce64f0a-8e31-4019-8d3e-49ca3ddd4766@quicinc.com>
-Date: Tue, 13 Sep 2022 16:01:19 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FE815B9
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 00:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1663113699;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9hE4DTXUxj/3U4SEgDjzxgP368krf0gNEd2HlJIOqxQ=;
+	b=I+mjSpzkAUG68KX3HnNseDBzjMl0FF0uhZc10yQp59HndWrEqAb1RxWHLtTrHtw83IK6yJ
+	L8m4nCYTxL2YCw3cbs7s//1R48VcCkXbPZUErwApe5tRE6kHLiI/WEy8GdbzwHW7X2v8Q/
+	O1A+mYUzmBXO3Jh5bpKZWSTU/E5wCXk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-18-61ay56L-N3e4P7AWcFL2-A-1; Tue, 13 Sep 2022 20:01:38 -0400
+X-MC-Unique: 61ay56L-N3e4P7AWcFL2-A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3DD1B29DD988
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 00:01:38 +0000 (UTC)
+Received: from [172.64.3.86] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2DDBD49BB60;
+	Wed, 14 Sep 2022 00:01:38 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc5,
+ mainline.kernel.org-clang, d1221cea)
+Date: Wed, 14 Sep 2022 00:01:35 -0000
+CC: xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH] drm/msm: Fix return type of
- mdp4_lvds_connector_mode_valid
-Content-Language: en-US
-To: Nathan Huckleberry <nhuck@google.com>
-CC: <freedreno@lists.freedesktop.org>, Dan Carpenter <error27@gmail.com>,
-        David Airlie <airlied@linux.ie>, Tom Rix <trix@redhat.com>,
-        <llvm@lists.linux.dev>, Nick Desaulniers <ndesaulniers@google.com>,
-        <dri-devel@lists.freedesktop.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Rob
- Clark <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
-References: <20220913205551.155128-1-nhuck@google.com>
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220913205551.155128-1-nhuck@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DpLLdyEnhGfPp-TYtzvZVzRkbO5p3Ffx
-X-Proofpoint-GUID: DpLLdyEnhGfPp-TYtzvZVzRkbO5p3Ffx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-13_10,2022-09-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2208220000 definitions=main-2209130109
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <98847.122091320013800483@us-mta-18.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nathan
+Hi, we tested your kernel and here are the results:
 
-Thanks for the patch.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-On 9/13/2022 1:55 PM, Nathan Huckleberry wrote:
-> The mode_valid field in drm_connector_helper_funcs is expected to be of
-> type:
-> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
->                                       struct drm_display_mode *mode);
-> 
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
-> 
-> The return type of mdp4_lvds_connector_mode_valid should be changed from
-> int to enum drm_mode_status.
-> 
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 
- From what I can see this one has been this way since lvds support was 
-added. Hence this should have
+Kernel information:
+    Commit message: Merge tag 'pull-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/viro/vfs
 
-Fixes: 3e87599b68e7 ("drm/msm/mdp4: add LVDS panel support")
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/53230
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
-> index 7288041dd86a..7444b75c4215 100644
-> --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
-> +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
-> @@ -56,8 +56,9 @@ static int mdp4_lvds_connector_get_modes(struct drm_connector *connector)
->   	return ret;
->   }
->   
-> -static int mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
-> -				 struct drm_display_mode *mode)
-> +static enum drm_mode_status
-> +mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
-> +			       struct drm_display_mode *mode)
->   {
->   	struct mdp4_lvds_connector *mdp4_lvds_connector =
->   			to_mdp4_lvds_connector(connector);
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+         aarch64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5128801
+          x86_64 - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5129016
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5128200
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5128712
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
