@@ -1,118 +1,83 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837433D6D
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 11:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663155482; x=1694691482;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dhlpitfb4lr0LNOa/3JulGS19oum15x9nPMye9eciFo=;
-  b=MMED0z6p81jF4rM4m2epQR9QRoD+PMMsu5iAQeZ0fAyC6Rd7V1xAuaw1
-   dT4PvvV7E3mVXjqoFBJ7dWxUnS3iICkIX1j6SD/iPCg1IBzSTRyoFxOQs
-   nUxk3VDRI0hcV+Xc0sBSkNtWcIU4zqyVRlEyX2/zOTRE5ogZz1GCL6xK/
-   sdodRYe1T/7OR7DUI5indOL/pd0n3JgA/lNqzf1j+q7hQrCBcMvtXZoeh
-   EaON5Rb6OY84sUZWFWc81wDFkr+Z7Y7PaOeVZtTgN1ZNCABSjy3KmTlAz
-   NDpSNEfH+BRdb8iuoG+b2WTbCYfEKltVNaaREOEspwaDu18GHbNWrKZhQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="299763599"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="299763599"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 04:38:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="594349591"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Sep 2022 04:37:59 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oYQiM-00009I-1d;
-	Wed, 14 Sep 2022 11:37:58 +0000
-Date: Wed, 14 Sep 2022 19:37:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [djbw-nvdimm:libnvdimm-pending 16/22] include/linux/dax.h:195:26:
- error: expected ';' after top level declarator
-Message-ID: <202209141902.w0oaRZqa-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A476C3D61
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 11:59:31 +0000 (UTC)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3378303138bso176890737b3.9
+        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 04:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Af0ZsDPyJgdTr/TUks7HMX0MOkiwdsdfC6dDsp+AdmY=;
+        b=caMfRnhMjAAcuWfqKzIREz06Y0ofv0vsUz0iAAkXwc/p27apoikQfCiZ//EqFBLCyX
+         6/LjkFijqkgoWK0xoBNs2ebOVJztDz+TGO8xbTtwJSWPdAhYNh8IhhcQOEyJlIoGv6bv
+         gb+uelQjQxKhROytfgCELdZFNmdk0RrV8Z13ONPYwLUuss1DpC7h21uqinTMHDRYnpIN
+         0m6Zix9kEZ8EttadiD/vvQj5iN4rzEAvZZuSNgK13bGVSk/BL/jH6CRn0Oii86AF1i8R
+         4d1bnqe3a9aD2QvDPPAgXSY/7QU5qG9mDzDjs6FLncaCfebKU0FIgGbC8C5Uw4uaOSVI
+         Zt0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Af0ZsDPyJgdTr/TUks7HMX0MOkiwdsdfC6dDsp+AdmY=;
+        b=rvUFb3fDbuEw3OFwtl11IrFy86Bl3EJcXT/4Q56FvZm7wunIPWzAm/Lpdq9iKthh27
+         sKUMFE6DeUll+imTM7ZkTJkmYwXEWHHPFnQS2aga+vaPwcfKLcOWRK3ZTFL5IX/o5E5o
+         B2eH7AoxCSsjSVGWooTA1yA7gpo8E3Uukl9MMuhJkLmjQvh111w4qKYn6NUUrgDmNgSc
+         af/rVDJiBeQweipPrldiyxG0nMnP6uUkDxMEGqQYtkGaB2k14H9/SO5uCD4QnY2ftONf
+         /vhNIYOQGq9HjRQeWIZWmng8/fxL2vGOmLInTyIcNG+OTpm1Z42xu/WdVb9Dlix2+G3y
+         4FQg==
+X-Gm-Message-State: ACgBeo1QFqcW2iEFBVLL/mN8iXAxdSOeC9urMaNSrlmtNH4qYiMn9hfg
+	dtDDEpmdnMUneUvjiXUzoWRAEYg37NCNe9m13IuBOA==
+X-Google-Smtp-Source: AA6agR7589auuQ/9iWjrUoQfLowfBPv7DFT0AZ2qXsKOLI1SemwwlWcZle4JKS6G0QRfZWzT/gD5XHG1TvCh4hzVF2s=
+X-Received: by 2002:a0d:de05:0:b0:345:4827:5029 with SMTP id
+ h5-20020a0dde05000000b0034548275029mr29700203ywe.385.1663156770383; Wed, 14
+ Sep 2022 04:59:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220812183501.3555820-1-acdunlap@google.com> <20220908170456.3177635-1-acdunlap@google.com>
+ <CAMkAt6qUs526FCq26Ht48c2KVZWe=QcNds6_LE6JJbs-7Hzk+g@mail.gmail.com>
+In-Reply-To: <CAMkAt6qUs526FCq26Ht48c2KVZWe=QcNds6_LE6JJbs-7Hzk+g@mail.gmail.com>
+From: Marc Orr <marcorr@google.com>
+Date: Wed, 14 Sep 2022 12:59:19 +0100
+Message-ID: <CAA03e5FLwODdqCpk4BGdxZBrOxQR7rfmrmQg6v5ckzEKuYUx2w@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] x86/asm: Force native_apic_mem_read to use mov
+To: Peter Gonda <pgonda@google.com>
+Cc: Adam Dunlap <acdunlap@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Sean Christopherson <seanjc@google.com>, 
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, 
+	Andi Kleen <ak@linux.intel.com>, Ben Dooks <ben-linux@fluff.org>, 
+	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
+	Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Dan,
+On Wed, Sep 14, 2022 at 12:13 PM Peter Gonda <pgonda@google.com> wrote:
+>
+> On Thu, Sep 8, 2022 at 6:05 PM Adam Dunlap <acdunlap@google.com> wrote:
+> >
+> > Previously, when compiled with clang, native_apic_mem_read gets inlined
+> > into __xapic_wait_icr_idle and optimized to a testl instruction. When
+> > run in a VM with SEV-ES enabled, it attempts to emulate this
+> > instruction, but the emulator does not support it. Instead, use inline
+> > assembly to force native_apic_mem_read to use the mov instruction which
+> > is supported by the emulator.
+>
+> This seems to be an issue with the SEV-ES in guest #VC handler's
+> "emulator" right?
+>
+> If that's the case I think this should be fixed in the #VC handler
+> instead of fixing the code that is failing to be emulated. What if
+> there are other places where a testl is used and our tests have not
+> caught them.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git libnvdimm-pending
-head:   e27a0356de15f16934325784c6b1d89cf0f13458
-commit: 155ac6b670cf6385f6dd14910560d569560af889 [16/22] devdax: Move address_space helpers to the DAX core
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220914/202209141902.w0oaRZqa-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git/commit/?id=155ac6b670cf6385f6dd14910560d569560af889
-        git remote add djbw-nvdimm https://git.kernel.org/pub/scm/linux/kernel/git/djbw/nvdimm.git
-        git fetch --no-tags djbw-nvdimm libnvdimm-pending
-        git checkout 155ac6b670cf6385f6dd14910560d569560af889
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/filemap.c:15:
->> include/linux/dax.h:195:26: error: expected ';' after top level declarator
-                                                     pgoff_t nr_pages)
-                                                                      ^
-                                                                      ;
-   In file included from mm/filemap.c:25:
-   include/linux/mman.h:154:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:132:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
---
-   In file included from mm/readahead.c:118:
->> include/linux/dax.h:195:26: error: expected ';' after top level declarator
-                                                     pgoff_t nr_pages)
-                                                                      ^
-                                                                      ;
-   1 error generated.
-
-
-vim +195 include/linux/dax.h
-
-5fac7408d82871 Dan Williams 2018-03-09  192  
-a55637f2b5002e Dan Williams 2022-09-07  193  static inline struct page *dax_zap_mappings_range(struct address_space *mapping,
-a55637f2b5002e Dan Williams 2022-09-07  194  						  pgoff_t start,
-a55637f2b5002e Dan Williams 2022-09-07 @195  						  pgoff_t nr_pages)
-155ac6b670cf63 Dan Williams 2022-09-03  196  static inline dax_entry_t dax_lock_page(struct page *page)
-6bbdd563ee9a60 Vivek Goyal  2020-03-03  197  {
-155ac6b670cf63 Dan Williams 2022-09-03  198  	if (IS_DAX(page->mapping->host))
-155ac6b670cf63 Dan Williams 2022-09-03  199  		return ~0UL;
-155ac6b670cf63 Dan Williams 2022-09-03  200  	return 0;
-6bbdd563ee9a60 Vivek Goyal  2020-03-03  201  }
-6bbdd563ee9a60 Vivek Goyal  2020-03-03  202  
-
-:::::: The code at line 195 was first introduced by commit
-:::::: a55637f2b5002e15813f88741e90ce6f463879e1 fsdax: Rework dax_layout_busy_page() to dax_zap_mappings()
-
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Dan Williams <dan.j.williams@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+That was my initial reaction too. But we spoke w/ Tom offline (before
+sending this) and my understanding was that we really should be using
+MOV for MMIO. I've cc'd Tom so he can speak to this directly though.
