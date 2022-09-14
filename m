@@ -1,142 +1,102 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A4C15AC
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 01:45:33 +0000 (UTC)
-Received: by mail-qt1-f181.google.com with SMTP id c11so10156352qtw.8
-        for <llvm@lists.linux.dev>; Tue, 13 Sep 2022 18:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=T56o2h08tk0PmW4ZLsH28b7hS5vDK+AW+si3O65+obo=;
-        b=Oe8JnBSVgSMmqPNFrZr6uzBF/MsmXi9Nee/enb8/xccCc7JVyURajg/V5pr9jjpDW7
-         RNCmRZLDsLReno9LXIN2zp/cqjkYRNiKkFHGUCvWRZQVuMInyHndbXOX6cDzDe7eizFF
-         ed0a5o28Y+QxB0B+wWFcbtsD0kr8Z1mgNfJMQV6W2pBlm8vVf+OqVpXuzLoQb9Awyn+Q
-         n848eZEUh9KivIQUP2Vbw4atlx7cGTXwu6KZaqbbfv06jDDBb6iGHWS2jMDIZ5mv9S4e
-         jtX1571mzSZ6cyd3EA6Gyb6LQSUlEV4ZJg7eeFWROk7kqZSd7HNQ1xcryQqfBbPBgbuI
-         izHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=T56o2h08tk0PmW4ZLsH28b7hS5vDK+AW+si3O65+obo=;
-        b=apOB3WoeSGgOsocB6Fi/Qgtv4smjGmj6uI5IG5XPp94iR89gKZH0KW/WiiZy7RmfW7
-         rMp9lS0TdIW5Gj2X96akQoIJalbp0DFPOdkNw6NvLF9xWzsha9HS8n1vO1kzl1/H7+0c
-         TUWXDGVnJjzhqSFCI+IEGFy38hV4uruXQc1epj3islxAdeiKTIRXpq/6Qg+pwbIJvVBR
-         1cDcmcFaTi7qq9bayu4LlPxvS4dwaEuTsoFzkQNZxNqWb03JNLxY2XpVWEFjbVI9ntGk
-         Mg3jhdgNiyh2HDbNe0BEFzJDCPoyYaGQGGQaeNlu6wG5z1zVMQ7klhjvE8z+xRs/Jpep
-         YuXg==
-X-Gm-Message-State: ACgBeo3zSvYqS0GkoEQGQPg+YZqMgzIu1DF8KfSRDhd7GoVJHzPUZFON
-	xdLqvKcH7PrFUl9Mb3EKlkO0hEMF9pax7SM5S/fJmDRAAsauOw==
-X-Google-Smtp-Source: AA6agR7ZlBYQI9ZokbyfOHpFIIymY6tIse9RDdoF3wV8R9iGFdrGtQG+znlmV9nlP4yNq9O+IMb6tRKwuFxFqM6bZKg=
-X-Received: by 2002:ac8:7dca:0:b0:344:5679:2dbb with SMTP id
- c10-20020ac87dca000000b0034456792dbbmr31410571qte.245.1663119932138; Tue, 13
- Sep 2022 18:45:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1602561
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 05:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663132751; x=1694668751;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zs/nU3jdhfF/Tuo2sh/sQZjk2vbK/z1YJgI0Nzv2KRQ=;
+  b=UhaO9Wlsl803BwSYaUqljI1BOdIEDs1Mavl7ycY/1Ih+h4mcbxc2gbHV
+   Birm8zxfzC5PSYvRXbtv0xgtKlQLhi0nioDifTTv9vg/9PHp2vhnpPHY3
+   C3LRGG/lwPLudYq/sm48Y+hAi7cWy0gferVR6WBEThkuwk7oZicSVo2Zz
+   oniFkkVTMG+IhSkrrr7lDqmdne0E6Gd8vRf6YgH8/nnypD67iYvKAFMyZ
+   Po6O1yD3N5cbGRP+Rdzdgk3DvrCRqak9SYer5jgIdZRxMaweEs9eRWbFR
+   Oy6MBEXZHK6VGqvEt9MhVwj+rWe2wPsKQ19KOVoBrZftUmNnTuf+OPv9J
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="299693467"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="299693467"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 22:19:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="594241604"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Sep 2022 22:19:09 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oYKnk-0004Ov-2n;
+	Wed, 14 Sep 2022 05:19:08 +0000
+Date: Wed, 14 Sep 2022 13:18:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: YunQiang Su <yunqiang.su@cipunited.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
+ prototype for function 'putc'
+Message-ID: <202209141345.SIXtlp0W-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220912214559.929186-1-nhuck@google.com> <YyENqW9u3LxySbSk@dev-arch.thelio-3990X>
-In-Reply-To: <YyENqW9u3LxySbSk@dev-arch.thelio-3990X>
-From: Nathan Huckleberry <nhuck@google.com>
-Date: Tue, 13 Sep 2022 18:45:00 -0700
-Message-ID: <CAJkfWY6FYCNz_5+5cM2GoJdGLdBu7aPzs0e8uFmhgZRE_axLSQ@mail.gmail.com>
-Subject: Re: [PATCH] staging: rtl8192u: Fix return type of ieee80211_xmit
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Tom Rix <trix@redhat.com>, linux-staging@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hey Nathan,
+Hi YunQiang,
 
-On Tue, Sep 13, 2022 at 4:09 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Mon, Sep 12, 2022 at 02:45:56PM -0700, Nathan Huckleberry wrote:
-> > The ndo_start_xmit field in net_device_ops is expected to be of type
-> > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
-> >
-> > The mismatched return type breaks forward edge kCFI since the underlying
-> > function definition does not match the function hook definition.
-> >
-> > The return type of ieee80211_xmit should be changed from int to
-> > netdev_tx_t.
-> >
-> > Reported-by: Dan Carpenter <error27@gmail.com>
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
->
-> The protoype in drivers/staging/rtl8192u/ieee80211/ieee80211.h should be
-> updated as well. With that:
+FYI, the error/warning still remains.
 
-Nice catch, thanks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d1221cea11fca0f6946bdd032a45b22cecfc0f99
+commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
+date:   9 months ago
+config: mips-buildonly-randconfig-r002-20220914 (https://download.01.org/0day-ci/archive/20220914/202209141345.SIXtlp0W-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> > ---
-> >  drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
-> > index 8602e3a6c837..e4b6454809a0 100644
-> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
-> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
-> > @@ -526,7 +526,7 @@ static void ieee80211_query_seqnum(struct ieee80211_device *ieee,
-> >       }
-> >  }
-> >
-> > -int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
-> > +netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
-> >  {
-> >       struct ieee80211_device *ieee = netdev_priv(dev);
-> >       struct ieee80211_txb *txb = NULL;
-> > @@ -822,13 +822,13 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
-> >                       if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
-> >                               stats->tx_packets++;
-> >                               stats->tx_bytes += __le16_to_cpu(txb->payload_size);
-> > -                             return 0;
-> > +                             return NETDEV_TX_OK;
-> >                       }
-> >                       ieee80211_txb_free(txb);
-> >               }
-> >       }
-> >
-> > -     return 0;
-> > +     return NETDEV_TX_OK;
-> >
-> >   failed:
-> >       spin_unlock_irqrestore(&ieee->lock, flags);
->
-> I see 'return 1' down here, that doesn't appear to be a valid
-> 'netdev_tx_t'. Should that be 'return NETDEV_TX_BUSY'? I guess that is
-> an outstanding issue though, just figured I would mention it.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm not sure. As far as I can tell, the dev_xmit_complete function in
-include/linux/netdevice.h is used to determine whether an skb was
-consumed or not. It looks like a value of 1 (NET_XMIT_DROP) would
-signify that it was consumed, whereas NETDEV_TX_BUSY would not.
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
 
-It's somewhat confusing that a function which returns an enum may also
-return values outside of that enum.
+>> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
+   void putc(char c)
+        ^
+   arch/mips/boot/compressed/uart-16550.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void putc(char c)
+   ^
+   static 
+   1 warning generated.
 
-For more info see the foillowing commits:
-dc1f8bf68b311b1537cb65893430b6796118498a
-572a9d7b6fc7f20f573664063324c086be310c42
-7f2e870f2a48a0524a3b03b04fa019311d16a7f7
 
->
-> > --
-> > 2.37.2.789.g6183377224-goog
-> >
->
-> Cheers,
-> Nathan
+vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
 
-Thanks,
-Huck
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+
+:::::: The code at line 44 was first introduced by commit
+:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
