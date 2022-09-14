@@ -1,247 +1,117 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6119F3FF9
-	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 17:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663175292; x=1694711292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H3Q2dCshLHXiyNfBuzyi9AzD37fPh22mEf4ZIc/U4Oc=;
-  b=e39atokjhvmGl5BBN/vdY9VJGPnkpBoib7p0SRw/H+Xs4Cur0VlDjti8
-   A2NHhd5VsNTPlzRNXeStipQ+JLdYLqXZwItqM79rU7btwBIEb4QhV5pDx
-   ZwLyJ1FsM3tybhDY3amUzPo0YWRfjbDyWaU2FSjDL2tY5svKzeVhtJdGM
-   jLnUT06b0/1RQoSZcLaQgR3rN+ErcBmkExXSjKTGpR+R4QIru/xc1RUyH
-   u2DRlSAi0QAujjeelqcIu1XU54r7RjYdgcC1jxqSzdC1/ZVxg3+oqypP/
-   11fE8vAFdiDumlI5AD0Vn96fSyqaNQjqUkhKjSCrFBhXSyfKjE8UGhMkV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="384779006"
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="384779006"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 10:08:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
-   d="scan'208";a="619384021"
-Received: from lkp-server01.sh.intel.com (HELO d6e6b7c4e5a2) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Sep 2022 10:08:04 -0700
-Received: from kbuild by d6e6b7c4e5a2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oYVrn-0000Pe-2J;
-	Wed, 14 Sep 2022 17:08:03 +0000
-Date: Thu, 15 Sep 2022 01:07:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Doug Berger <opendmb@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Muchun Song <songmuchun@bytedance.com>,
-	Mike Rapoport <rppt@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>, Borislav Petkov <bp@suse.de>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>,
-	Oscar Salvador <osalvador@suse.de>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Kees Cook <keescook@chromium.org>,
-	- <devicetree-spec@vger.kernel.org>,
-	KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-	Mel Gorman <mgorman@suse.de>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 18/21] mm/cma: support CMA in Designated Movable Blocks
-Message-ID: <202209150009.PoWlLoNu-lkp@intel.com>
-References: <20220913195508.3511038-19-opendmb@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420B83FF9
+	for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 17:14:35 +0000 (UTC)
+Received: by mail-io1-f72.google.com with SMTP id v20-20020a6b5b14000000b0069fee36308eso9029206ioh.10
+        for <llvm@lists.linux.dev>; Wed, 14 Sep 2022 10:14:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=yH99aNpoXPus2YSVzO88ftQqBGTGzN3j5UFnOiT8ikA=;
+        b=QWbH6UwdCcj8WO5P1ouL9pMm/ZzXznKsJpusa45OiUGlWw4/CUBn31nvPeIjXOnbeo
+         SwyHr2qM2E8WB9bqka5z/6ThI5yXUergK0/yLTbjW0KTo256yoA+vjQuG/YVMpiXlgxv
+         f9INjCmtSUgf2PTquRODvVQ504mjLIiFEMtbmcc8lJmSVpdEEF9Uykuu75MBicAEtVSS
+         y/qXW/Xd6GVn0MLBZBtVZMTB9DF/75Y3kuZpLfV+FzWdOXAq0qcqjHdZ+ynqsleqUMnb
+         VR236c8SqD958MxiWRhoVzWPuEpVA0jC1BHOZi1Zx1h2MHu4fw0iBEFkzL87i46oE/OU
+         2x5w==
+X-Gm-Message-State: ACgBeo3VA2vZpxgPI8nVQil3VXJRBK/amwnOav3DlfyvtK5lR6/ypIMy
+	1N+BYdLBG+kZ+Rm8GgfMvs9oa34YDoCU3h4zEgQaUYLOdfYj
+X-Google-Smtp-Source: AA6agR4aaLsjBm25jXwr5vcbxVekdLEqsBZskTYJjP1iud/yGdDv3CTAqBVXA8kNenQig2nwFA8BYorjBCAfVQcr30oaeaP9IziB
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913195508.3511038-19-opendmb@gmail.com>
+X-Received: by 2002:a92:6912:0:b0:2ea:fa2e:462d with SMTP id
+ e18-20020a926912000000b002eafa2e462dmr15025303ilc.155.1663175674437; Wed, 14
+ Sep 2022 10:14:34 -0700 (PDT)
+Date: Wed, 14 Sep 2022 10:14:34 -0700
+In-Reply-To: <0000000000000149eb05dd3de8cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000462c3d05e8a643e0@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_iget5
+From: syzbot <syzbot+b4084c18420f9fad0b4f@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Doug,
+syzbot has found a reproducer for the following issue on:
 
-I love your patch! Perhaps something to improve:
+HEAD commit:    a6b443748715 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15625dbf080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=14bf9ec0df433b27
+dashboard link: https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1482f778880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d9e35d080000
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.0-rc5]
-[cannot apply to akpm-mm/mm-everything next-20220914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b4084c18420f9fad0b4f@syzkaller.appspotmail.com
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Doug-Berger/mm-introduce-Designated-Movable-Blocks/20220914-040216
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220915/202209150009.PoWlLoNu-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/635e919c92ca242c4b900bdfc7e21529e76f2f8e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Doug-Berger/mm-introduce-Designated-Movable-Blocks/20220914-040216
-        git checkout 635e919c92ca242c4b900bdfc7e21529e76f2f8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+ntfs3: loop0: Different NTFS' sector size (4096) and media sector size (512)
+ntfs3: loop0: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
+Unable to handle kernel paging request at virtual address dead4ead00000010
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+[dead4ead00000010] address between user and kernel address ranges
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3051 Comm: syz-executor281 Not tainted 6.0.0-rc4-syzkaller-17255-ga6b443748715 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : ntfs_iget5+0x88/0x138c fs/ntfs3/inode.c:502
+lr : ntfs_iget5+0x78/0x138c fs/ntfs3/inode.c:500
+sp : ffff80001275ba40
+x29: ffff80001275bae0 x28: ffff0000cb374000 x27: ffff0000c90ce000
+x26: ffff80001275bb70 x25: 0000000000000024 x24: ffff80000c1300b4
+x23: ffff0000cb3761a8 x22: ffff0000ca8c8250 x21: ffff0000ca8c9708
+x20: 0000000000000002 x19: ffff0000ca8c1a30 x18: 00000000000000c0
+x17: ffff80000dd3a698 x16: ffff80000db78658 x15: ffff0000c71eb500
+x14: ffff80000dd3a698 x13: ffff80000db78658 x12: ffff0000c71eb500
+x11: ff80800008bf1798 x10: 0000000000000000 x9 : ffff0000c71eb500
+x8 : dead4ead00000000 x7 : ffff8000085eb4a0 x6 : 0000000000000000
+x5 : 0000000000000020 x4 : ffff80001275b690 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ ntfs_iget5+0x88/0x138c fs/ntfs3/inode.c:502
+ ntfs_fill_super+0xbe8/0x14a4 fs/ntfs/super.c:2902
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: 37180194 d108c268 f9400108 79400f54 (79402115) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	37180194 	tbnz	w20, #3, 0x30
+   4:	d108c268 	sub	x8, x19, #0x230
+   8:	f9400108 	ldr	x8, [x8]
+   c:	79400f54 	ldrh	w20, [x26, #6]
+* 10:	79402115 	ldrh	w21, [x8, #16] <-- trapping instruction
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> mm/page_alloc.c:9236:5: warning: no previous prototype for function '_alloc_contig_range' [-Wmissing-prototypes]
-   int _alloc_contig_range(unsigned long start, unsigned long end,
-       ^
-   mm/page_alloc.c:9236:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int _alloc_contig_range(unsigned long start, unsigned long end,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/_alloc_contig_range +9236 mm/page_alloc.c
-
-  9235	
-> 9236	int _alloc_contig_range(unsigned long start, unsigned long end,
-  9237				unsigned int migratetype, gfp_t gfp_mask)
-  9238	{
-  9239		unsigned long outer_start, outer_end;
-  9240		int order;
-  9241		int ret = 0;
-  9242	
-  9243		struct compact_control cc = {
-  9244			.nr_migratepages = 0,
-  9245			.order = -1,
-  9246			.zone = page_zone(pfn_to_page(start)),
-  9247			.mode = MIGRATE_SYNC,
-  9248			.ignore_skip_hint = true,
-  9249			.no_set_skip_hint = true,
-  9250			.gfp_mask = current_gfp_context(gfp_mask),
-  9251			.alloc_contig = true,
-  9252		};
-  9253		INIT_LIST_HEAD(&cc.migratepages);
-  9254	
-  9255		/*
-  9256		 * What we do here is we mark all pageblocks in range as
-  9257		 * MIGRATE_ISOLATE.  Because pageblock and max order pages may
-  9258		 * have different sizes, and due to the way page allocator
-  9259		 * work, start_isolate_page_range() has special handlings for this.
-  9260		 *
-  9261		 * Once the pageblocks are marked as MIGRATE_ISOLATE, we
-  9262		 * migrate the pages from an unaligned range (ie. pages that
-  9263		 * we are interested in). This will put all the pages in
-  9264		 * range back to page allocator as MIGRATE_ISOLATE.
-  9265		 *
-  9266		 * When this is done, we take the pages in range from page
-  9267		 * allocator removing them from the buddy system.  This way
-  9268		 * page allocator will never consider using them.
-  9269		 *
-  9270		 * This lets us mark the pageblocks back as
-  9271		 * MIGRATE_CMA/MIGRATE_MOVABLE so that free pages in the
-  9272		 * aligned range but not in the unaligned, original range are
-  9273		 * put back to page allocator so that buddy can use them.
-  9274		 */
-  9275	
-  9276		ret = start_isolate_page_range(start, end, migratetype, 0, gfp_mask);
-  9277		if (ret)
-  9278			goto done;
-  9279	
-  9280		drain_all_pages(cc.zone);
-  9281	
-  9282		/*
-  9283		 * In case of -EBUSY, we'd like to know which page causes problem.
-  9284		 * So, just fall through. test_pages_isolated() has a tracepoint
-  9285		 * which will report the busy page.
-  9286		 *
-  9287		 * It is possible that busy pages could become available before
-  9288		 * the call to test_pages_isolated, and the range will actually be
-  9289		 * allocated.  So, if we fall through be sure to clear ret so that
-  9290		 * -EBUSY is not accidentally used or returned to caller.
-  9291		 */
-  9292		ret = __alloc_contig_migrate_range(&cc, start, end);
-  9293		if (ret && ret != -EBUSY)
-  9294			goto done;
-  9295		ret = 0;
-  9296		sync_hugetlb_dissolve();
-  9297	
-  9298		/*
-  9299		 * Pages from [start, end) are within a pageblock_nr_pages
-  9300		 * aligned blocks that are marked as MIGRATE_ISOLATE.  What's
-  9301		 * more, all pages in [start, end) are free in page allocator.
-  9302		 * What we are going to do is to allocate all pages from
-  9303		 * [start, end) (that is remove them from page allocator).
-  9304		 *
-  9305		 * The only problem is that pages at the beginning and at the
-  9306		 * end of interesting range may be not aligned with pages that
-  9307		 * page allocator holds, ie. they can be part of higher order
-  9308		 * pages.  Because of this, we reserve the bigger range and
-  9309		 * once this is done free the pages we are not interested in.
-  9310		 *
-  9311		 * We don't have to hold zone->lock here because the pages are
-  9312		 * isolated thus they won't get removed from buddy.
-  9313		 */
-  9314	
-  9315		order = 0;
-  9316		outer_start = start;
-  9317		while (!PageBuddy(pfn_to_page(outer_start))) {
-  9318			if (++order >= MAX_ORDER) {
-  9319				outer_start = start;
-  9320				break;
-  9321			}
-  9322			outer_start &= ~0UL << order;
-  9323		}
-  9324	
-  9325		if (outer_start != start) {
-  9326			order = buddy_order(pfn_to_page(outer_start));
-  9327	
-  9328			/*
-  9329			 * outer_start page could be small order buddy page and
-  9330			 * it doesn't include start page. Adjust outer_start
-  9331			 * in this case to report failed page properly
-  9332			 * on tracepoint in test_pages_isolated()
-  9333			 */
-  9334			if (outer_start + (1UL << order) <= start)
-  9335				outer_start = start;
-  9336		}
-  9337	
-  9338		/* Make sure the range is really isolated. */
-  9339		if (test_pages_isolated(outer_start, end, 0)) {
-  9340			ret = -EBUSY;
-  9341			goto done;
-  9342		}
-  9343	
-  9344		/* Grab isolated pages from freelists. */
-  9345		outer_end = isolate_freepages_range(&cc, outer_start, end);
-  9346		if (!outer_end) {
-  9347			ret = -EBUSY;
-  9348			goto done;
-  9349		}
-  9350	
-  9351		/* Free head and tail (if any) */
-  9352		if (start != outer_start)
-  9353			free_contig_range(outer_start, start - outer_start);
-  9354		if (end != outer_end)
-  9355			free_contig_range(end, outer_end - end);
-  9356	
-  9357	done:
-  9358		undo_isolate_page_range(start, end, migratetype);
-  9359		return ret;
-  9360	}
-  9361	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
