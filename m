@@ -1,48 +1,45 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2F64C7F
-	for <llvm@lists.linux.dev>; Thu, 15 Sep 2022 20:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E06D4C91;
+	Thu, 15 Sep 2022 21:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663273315; x=1694809315;
+  t=1663278950; x=1694814950;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vtpUHguAKafT6MIJU3D9kCLnwfOZK7+XR5i4gGc43qk=;
-  b=Bb/pNxy2hFaCNwU5f1d76FAQ1jWftV7fdWuNrRTaZbibVfi4Iai80s+w
-   szx4RBrFjRVUVJul8pn1fiyp4xIAEWu+K1Y/tkoXosM0QY2E1726sxiXv
-   /WHmlO+krgCofagVgx0txeAEiRorbLCBEe7rsa+gll7OHf6wxidOraBXj
-   CpGsAl3pDiPXxEp0t98lbfAV1okzLOqQDZmK7kRE55pGuMNim3TmA4N73
-   fTFVlZwH7ZVepBa4+8kr9gFZOYtk9oePFplYhPrnmtWnuL0cxNOXfXaDy
-   e164id2r04ekKsfQXfuOHllNEq58+ASzbzGPmm/lpRJvQOTUCadzmZ7Jh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="325093722"
+  bh=PsazF88m8J9KxJRqmIFocp56MNGhfFqNtrzAxZb3oDw=;
+  b=GIg9p+ymG+iiLgkHtxN+vPxlBDhAgNRTeP518KueC0/v+8vHZqPxp4dc
+   JSlXge4waNP45/fVtCbkkW64VXee4vcirXuJv0g2QzaW+v8B1NYEmPhEW
+   invTCH5rOkH/+8Chhsf5DT6fUQpopO5I3I7FQsVIotYFU7ID3f1KCrd8V
+   o0pjDWdhjMSIxlCUG6gMmcijeXCv3gR8e+jeV9vGRx0DTFu78O22k3/Wp
+   WE8zn0StUh/2RAyKjdlQg8WO1iUVTaPWzvUKkh500qzc3ZxrgKCFh7M3Q
+   dK/CRBDJujQyjHXulw6+e8GneDuCeEuaSfhJZr3Znh+ezXbgIiOcv/SAb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="279229608"
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="325093722"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 13:21:47 -0700
+   d="scan'208";a="279229608"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 14:55:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="568576780"
+   d="scan'208";a="759812092"
 Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Sep 2022 13:21:44 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 15 Sep 2022 14:55:47 -0700
 Received: from kbuild by 41300c7200ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oYvMl-0000xf-1W;
-	Thu, 15 Sep 2022 20:21:43 +0000
-Date: Fri, 16 Sep 2022 04:21:00 +0800
+	id 1oYwpn-00013y-0J;
+	Thu, 15 Sep 2022 21:55:47 +0000
+Date: Fri, 16 Sep 2022 05:54:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Prathamesh Shete <pshete@nvidia.com>, adrian.hunter@intel.com,
-	ulf.hansson@linaro.org, thierry.reding@gmail.com,
-	jonathanh@nvidia.com, p.zabel@pengutronix.de,
-	linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, anrao@nvidia.com,
-	smangipudi@nvidia.com, pshete@nvidia.com, kyarlagadda@nvidia.com
-Subject: Re: [PATCH v2 2/4] mmc: sdhci-tegra: Add support to program MC
- streamID
-Message-ID: <202209160420.bcAdUgK2-lkp@intel.com>
-References: <20220914095628.26093-2-pshete@nvidia.com>
+To: Xin Hao <xhao@linux.alibaba.com>, sj@kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	akpm@linux-foundation.org, damon@lists.linux.dev,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	xhao@linux.alibaba.com
+Subject: Re: [PATCH V1 2/2] mm/damon/core: remove duplicate check about THP
+Message-ID: <202209160528.6z2rUbjZ-lkp@intel.com>
+References: <20220915142237.92529-2-xhao@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,227 +48,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914095628.26093-2-pshete@nvidia.com>
+In-Reply-To: <20220915142237.92529-2-xhao@linux.alibaba.com>
 
-Hi Prathamesh,
+Hi Xin,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on tegra/for-next]
-[also build test ERROR on linus/master v6.0-rc5 next-20220915]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prathamesh-Shete/mmc-sdhci-tegra-Separate-T19x-and-T23x-SoC-data/20220914-175832
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-config: hexagon-randconfig-r045-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160420.bcAdUgK2-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Hao/mm-damon-sysfs-avoid-call-damon_target_has_pid-repeatedly/20220915-230635
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-randconfig-r002-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160528.6z2rUbjZ-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9817941f43bffe4de367526928377b9723068fb5
+        # https://github.com/intel-lab-lkp/linux/commit/7902790b04d0eb74686b55218e8ead191ba5c003
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prathamesh-Shete/mmc-sdhci-tegra-Separate-T19x-and-T23x-SoC-data/20220914-175832
-        git checkout 9817941f43bffe4de367526928377b9723068fb5
+        git fetch --no-tags linux-review Xin-Hao/mm-damon-sysfs-avoid-call-damon_target_has_pid-repeatedly/20220915-230635
+        git checkout 7902790b04d0eb74686b55218e8ead191ba5c003
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash mm/damon/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/mmc/host/sdhci-tegra.c:1795:35: error: no member named 'ids' in 'struct iommu_fwspec'
-                           tegra_host->streamid = fwspec->ids[0] & 0xffff;
-                                                  ~~~~~~  ^
+>> mm/damon/vaddr.c:451:7: error: call to undeclared function 'pmd_young'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   if (pmd_young(*pmd) || !page_is_idle(page) ||
+                       ^
+   mm/damon/vaddr.c:451:7: note: did you mean 'pte_young'?
+   arch/hexagon/include/asm/pgtable.h:273:19: note: 'pte_young' declared here
+   static inline int pte_young(pte_t pte)
+                     ^
    1 error generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PROC_CHILDREN
+   Depends on [n]: PROC_FS [=n]
+   Selected by [y]:
+   - CHECKPOINT_RESTORE [=y]
 
-vim +1795 drivers/mmc/host/sdhci-tegra.c
 
-  1638	
-  1639	static int sdhci_tegra_probe(struct platform_device *pdev)
-  1640	{
-  1641		const struct sdhci_tegra_soc_data *soc_data;
-  1642		struct sdhci_host *host;
-  1643		struct sdhci_pltfm_host *pltfm_host;
-  1644		struct sdhci_tegra *tegra_host;
-  1645		struct clk *clk;
-  1646		struct iommu_fwspec *fwspec;
-  1647		int rc;
-  1648	
-  1649		soc_data = of_device_get_match_data(&pdev->dev);
-  1650		if (!soc_data)
-  1651			return -EINVAL;
-  1652	
-  1653		host = sdhci_pltfm_init(pdev, soc_data->pdata, sizeof(*tegra_host));
-  1654		if (IS_ERR(host))
-  1655			return PTR_ERR(host);
-  1656		pltfm_host = sdhci_priv(host);
-  1657	
-  1658		tegra_host = sdhci_pltfm_priv(pltfm_host);
-  1659		tegra_host->ddr_signaling = false;
-  1660		tegra_host->pad_calib_required = false;
-  1661		tegra_host->pad_control_available = false;
-  1662		tegra_host->soc_data = soc_data;
-  1663	
-  1664		if (soc_data->nvquirks & NVQUIRK_HAS_ANDROID_GPT_SECTOR)
-  1665			host->mmc->caps2 |= MMC_CAP2_ALT_GPT_TEGRA;
-  1666	
-  1667		if (soc_data->nvquirks & NVQUIRK_NEEDS_PAD_CONTROL) {
-  1668			rc = tegra_sdhci_init_pinctrl_info(&pdev->dev, tegra_host);
-  1669			if (rc == 0)
-  1670				host->mmc_host_ops.start_signal_voltage_switch =
-  1671					sdhci_tegra_start_signal_voltage_switch;
-  1672		}
-  1673	
-  1674		/* Hook to periodically rerun pad calibration */
-  1675		if (soc_data->nvquirks & NVQUIRK_HAS_PADCALIB)
-  1676			host->mmc_host_ops.request = tegra_sdhci_request;
-  1677	
-  1678		host->mmc_host_ops.hs400_enhanced_strobe =
-  1679				tegra_sdhci_hs400_enhanced_strobe;
-  1680	
-  1681		if (!host->ops->platform_execute_tuning)
-  1682			host->mmc_host_ops.execute_tuning =
-  1683					tegra_sdhci_execute_hw_tuning;
-  1684	
-  1685		rc = mmc_of_parse(host->mmc);
-  1686		if (rc)
-  1687			goto err_parse_dt;
-  1688	
-  1689		if (tegra_host->soc_data->nvquirks & NVQUIRK_ENABLE_DDR50)
-  1690			host->mmc->caps |= MMC_CAP_1_8V_DDR;
-  1691	
-  1692		/* HW busy detection is supported, but R1B responses are required. */
-  1693		host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY | MMC_CAP_NEED_RSP_BUSY;
-  1694	
-  1695		/* GPIO CD can be set as a wakeup source */
-  1696		host->mmc->caps |= MMC_CAP_CD_WAKE;
-  1697	
-  1698		tegra_sdhci_parse_dt(host);
-  1699	
-  1700		tegra_host->power_gpio = devm_gpiod_get_optional(&pdev->dev, "power",
-  1701								 GPIOD_OUT_HIGH);
-  1702		if (IS_ERR(tegra_host->power_gpio)) {
-  1703			rc = PTR_ERR(tegra_host->power_gpio);
-  1704			goto err_power_req;
-  1705		}
-  1706	
-  1707		/*
-  1708		 * Tegra210 has a separate SDMMC_LEGACY_TM clock used for host
-  1709		 * timeout clock and SW can choose TMCLK or SDCLK for hardware
-  1710		 * data timeout through the bit USE_TMCLK_FOR_DATA_TIMEOUT of
-  1711		 * the register SDHCI_TEGRA_VENDOR_SYS_SW_CTRL.
-  1712		 *
-  1713		 * USE_TMCLK_FOR_DATA_TIMEOUT bit default is set to 1 and SDMMC uses
-  1714		 * 12Mhz TMCLK which is advertised in host capability register.
-  1715		 * With TMCLK of 12Mhz provides maximum data timeout period that can
-  1716		 * be achieved is 11s better than using SDCLK for data timeout.
-  1717		 *
-  1718		 * So, TMCLK is set to 12Mhz and kept enabled all the time on SoC's
-  1719		 * supporting separate TMCLK.
-  1720		 */
-  1721	
-  1722		if (soc_data->nvquirks & NVQUIRK_HAS_TMCLK) {
-  1723			clk = devm_clk_get(&pdev->dev, "tmclk");
-  1724			if (IS_ERR(clk)) {
-  1725				rc = PTR_ERR(clk);
-  1726				if (rc == -EPROBE_DEFER)
-  1727					goto err_power_req;
-  1728	
-  1729				dev_warn(&pdev->dev, "failed to get tmclk: %d\n", rc);
-  1730				clk = NULL;
-  1731			}
-  1732	
-  1733			clk_set_rate(clk, 12000000);
-  1734			rc = clk_prepare_enable(clk);
-  1735			if (rc) {
-  1736				dev_err(&pdev->dev,
-  1737					"failed to enable tmclk: %d\n", rc);
-  1738				goto err_power_req;
-  1739			}
-  1740	
-  1741			tegra_host->tmclk = clk;
-  1742		}
-  1743	
-  1744		clk = devm_clk_get(mmc_dev(host->mmc), NULL);
-  1745		if (IS_ERR(clk)) {
-  1746			rc = dev_err_probe(&pdev->dev, PTR_ERR(clk),
-  1747					   "failed to get clock\n");
-  1748			goto err_clk_get;
-  1749		}
-  1750		pltfm_host->clk = clk;
-  1751	
-  1752		tegra_host->rst = devm_reset_control_get_exclusive(&pdev->dev,
-  1753								   "sdhci");
-  1754		if (IS_ERR(tegra_host->rst)) {
-  1755			rc = PTR_ERR(tegra_host->rst);
-  1756			dev_err(&pdev->dev, "failed to get reset control: %d\n", rc);
-  1757			goto err_rst_get;
-  1758		}
-  1759	
-  1760		rc = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
-  1761		if (rc)
-  1762			goto err_rst_get;
-  1763	
-  1764		pm_runtime_enable(&pdev->dev);
-  1765		rc = pm_runtime_resume_and_get(&pdev->dev);
-  1766		if (rc)
-  1767			goto err_pm_get;
-  1768	
-  1769		rc = reset_control_assert(tegra_host->rst);
-  1770		if (rc)
-  1771			goto err_rst_assert;
-  1772	
-  1773		usleep_range(2000, 4000);
-  1774	
-  1775		rc = reset_control_deassert(tegra_host->rst);
-  1776		if (rc)
-  1777			goto err_rst_assert;
-  1778	
-  1779		usleep_range(2000, 4000);
-  1780	
-  1781		rc = sdhci_tegra_add_host(host);
-  1782		if (rc)
-  1783			goto err_add_host;
-  1784	
-  1785		/* Program MC streamID for DMA transfers */
-  1786		if (soc_data->nvquirks & NVQUIRK_PROGRAM_MC_STREAMID) {
-  1787			fwspec = dev_iommu_fwspec_get(&pdev->dev);
-  1788			if (fwspec == NULL) {
-  1789				rc = -ENODEV;
-  1790				dev_err(mmc_dev(host->mmc),
-  1791					"failed to get MC streamid: %d\n",
-  1792					rc);
-  1793				goto err_rst_get;
-  1794			} else {
-> 1795				tegra_host->streamid = fwspec->ids[0] & 0xffff;
-  1796				tegra_sdhci_writel(host, tegra_host->streamid |
-  1797							(tegra_host->streamid << 8),
-  1798							SDHCI_TEGRA_CIF2AXI_CTRL_0);
-  1799			}
-  1800		}
-  1801	
-  1802		return 0;
-  1803	
-  1804	err_add_host:
-  1805		reset_control_assert(tegra_host->rst);
-  1806	err_rst_assert:
-  1807		pm_runtime_put_sync_suspend(&pdev->dev);
-  1808	err_pm_get:
-  1809		pm_runtime_disable(&pdev->dev);
-  1810	err_rst_get:
-  1811	err_clk_get:
-  1812		clk_disable_unprepare(tegra_host->tmclk);
-  1813	err_power_req:
-  1814	err_parse_dt:
-  1815		sdhci_pltfm_free(pdev);
-  1816		return rc;
-  1817	}
-  1818	
+vim +/pmd_young +451 mm/damon/vaddr.c
+
+3f49584b262cf8f SeongJae Park 2021-09-07  428  
+3f49584b262cf8f SeongJae Park 2021-09-07  429  static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+3f49584b262cf8f SeongJae Park 2021-09-07  430  		unsigned long next, struct mm_walk *walk)
+3f49584b262cf8f SeongJae Park 2021-09-07  431  {
+3f49584b262cf8f SeongJae Park 2021-09-07  432  	pte_t *pte;
+3f49584b262cf8f SeongJae Park 2021-09-07  433  	spinlock_t *ptl;
+3f49584b262cf8f SeongJae Park 2021-09-07  434  	struct page *page;
+3f49584b262cf8f SeongJae Park 2021-09-07  435  	struct damon_young_walk_private *priv = walk->private;
+3f49584b262cf8f SeongJae Park 2021-09-07  436  
+72c33ef4c02e32e Baolin Wang   2022-08-18  437  	if (pmd_trans_huge(*pmd)) {
+3f49584b262cf8f SeongJae Park 2021-09-07  438  		ptl = pmd_lock(walk->mm, pmd);
+c8b9aff419303e4 Baolin Wang   2022-08-18  439  		if (!pmd_present(*pmd)) {
+c8b9aff419303e4 Baolin Wang   2022-08-18  440  			spin_unlock(ptl);
+c8b9aff419303e4 Baolin Wang   2022-08-18  441  			return 0;
+c8b9aff419303e4 Baolin Wang   2022-08-18  442  		}
+c8b9aff419303e4 Baolin Wang   2022-08-18  443  
+72c33ef4c02e32e Baolin Wang   2022-08-18  444  		if (!pmd_trans_huge(*pmd)) {
+3f49584b262cf8f SeongJae Park 2021-09-07  445  			spin_unlock(ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  446  			goto regular_page;
+3f49584b262cf8f SeongJae Park 2021-09-07  447  		}
+3f49584b262cf8f SeongJae Park 2021-09-07  448  		page = damon_get_page(pmd_pfn(*pmd));
+3f49584b262cf8f SeongJae Park 2021-09-07  449  		if (!page)
+3f49584b262cf8f SeongJae Park 2021-09-07  450  			goto huge_out;
+3f49584b262cf8f SeongJae Park 2021-09-07 @451  		if (pmd_young(*pmd) || !page_is_idle(page) ||
+3f49584b262cf8f SeongJae Park 2021-09-07  452  					mmu_notifier_test_young(walk->mm,
+3f49584b262cf8f SeongJae Park 2021-09-07  453  						addr)) {
+02e34fff195d3a5 Kefeng Wang   2022-05-17  454  			*priv->page_sz = HPAGE_PMD_SIZE;
+3f49584b262cf8f SeongJae Park 2021-09-07  455  			priv->young = true;
+3f49584b262cf8f SeongJae Park 2021-09-07  456  		}
+3f49584b262cf8f SeongJae Park 2021-09-07  457  		put_page(page);
+3f49584b262cf8f SeongJae Park 2021-09-07  458  huge_out:
+3f49584b262cf8f SeongJae Park 2021-09-07  459  		spin_unlock(ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  460  		return 0;
+3f49584b262cf8f SeongJae Park 2021-09-07  461  	}
+3f49584b262cf8f SeongJae Park 2021-09-07  462  
+3f49584b262cf8f SeongJae Park 2021-09-07  463  regular_page:
+3f49584b262cf8f SeongJae Park 2021-09-07  464  
+3f49584b262cf8f SeongJae Park 2021-09-07  465  	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
+3f49584b262cf8f SeongJae Park 2021-09-07  466  		return -EINVAL;
+3f49584b262cf8f SeongJae Park 2021-09-07  467  	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  468  	if (!pte_present(*pte))
+3f49584b262cf8f SeongJae Park 2021-09-07  469  		goto out;
+3f49584b262cf8f SeongJae Park 2021-09-07  470  	page = damon_get_page(pte_pfn(*pte));
+3f49584b262cf8f SeongJae Park 2021-09-07  471  	if (!page)
+3f49584b262cf8f SeongJae Park 2021-09-07  472  		goto out;
+3f49584b262cf8f SeongJae Park 2021-09-07  473  	if (pte_young(*pte) || !page_is_idle(page) ||
+3f49584b262cf8f SeongJae Park 2021-09-07  474  			mmu_notifier_test_young(walk->mm, addr)) {
+3f49584b262cf8f SeongJae Park 2021-09-07  475  		*priv->page_sz = PAGE_SIZE;
+3f49584b262cf8f SeongJae Park 2021-09-07  476  		priv->young = true;
+3f49584b262cf8f SeongJae Park 2021-09-07  477  	}
+3f49584b262cf8f SeongJae Park 2021-09-07  478  	put_page(page);
+3f49584b262cf8f SeongJae Park 2021-09-07  479  out:
+3f49584b262cf8f SeongJae Park 2021-09-07  480  	pte_unmap_unlock(pte, ptl);
+3f49584b262cf8f SeongJae Park 2021-09-07  481  	return 0;
+3f49584b262cf8f SeongJae Park 2021-09-07  482  }
+3f49584b262cf8f SeongJae Park 2021-09-07  483  
 
 -- 
 0-DAY CI Kernel Test Service
