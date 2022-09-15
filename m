@@ -1,114 +1,443 @@
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF053291F;
-	Thu, 15 Sep 2022 08:22:54 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id 465702B05F8B;
-	Thu, 15 Sep 2022 04:22:53 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 15 Sep 2022 04:22:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1663230172; x=1663233772; bh=9mKn6blmYA
-	NFuaZ0dtOqisfOd8Rd6vzhg19KJ8Gas0w=; b=dkrfo0E65c8JJoicwHhtCyqEqn
-	YT0dufOKnphOC2mruIY0Kz6gecCS6aPSgDCZgJ2lsTrk26ZDmaNEmuWWn5kq0ng7
-	gB7/cv52eEujaA4q5hFiFrS1MQ9XA3vZzgZVfXVNLebKz+s77esbMuU5R2nQry3S
-	gTniSwul5hXnk0az9QzN10tzkrB/D5LN3xHcNj+AbAkxF9XcvWO+EILkMkH7wh0o
-	Gv33ba7NZRONh6Lp2kaVfDWq8NXpp3YciblIkbJSalMubRjLVhNiWLbcu2Vke1sN
-	lKLOVJMH/vsOfV7y4aCdyTsHrz1QNc/gQECipkXGyCf4yGDpQLEuc1ixTbbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1663230172; x=1663233772; bh=9mKn6blmYANFuaZ0dtOqisfOd8Rd
-	6vzhg19KJ8Gas0w=; b=b5KYyzw/+DD85iAltMyHonE25aj06cE00CMmDAPxOurs
-	a/95BYFawT3nExW/s8f1MtE+KAGK1PQ5jjnL+ghzpb2AtcnJKDJMZJ8cR7XfA350
-	ixLfi7T2+GOYxTWjKklX5sQNkwrdKf09tGWs2iAKxwhE423vXMdFVALEBL0P8yYO
-	AzAkNIRr9ilbcRPM0enDKQjzxDEEA/AeKxW31Gj7sAPjCWwvnPdp0cAmtSAtZtzt
-	QUfXP/kkYWdAan1j29e3tUDKg/1k8ph65DynFNbTo+l/Hc5nfaBYbsf9tzUH1dxF
-	LYVmqwYLjfl7uAhCg68obx1joWFOXjKtJKtb/NOnXg==
-X-ME-Sender: <xms:3OAiYySPNMKSYXvCYn0TCnaSKrHPnT4ktLl9nvUVInfBGVpaX_yRuA>
-    <xme:3OAiY3xmIV6quYyP88EM_eZ-wltM6yJSLRtzvn3RifHB9k8vfjU8qM-xlgx9DlnGU
-    jCiK9drjD098L39M0Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepjedvvddvudeludehjeeitdehheeivdejgfelleffiefgvefhhfeuudfhgeef
-    feehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:3OAiY_1i_A8Rd3fptBIsk42F3KxhhdZbYB9eY7OMq3dreoyZrStVDw>
-    <xmx:3OAiY-DfhHt1oyooXdM_vkHByJ-LrFP6u4jvjR_YC3OT1ckhMsE5QA>
-    <xmx:3OAiY7hWetdX_yG-F1ikv5nVUuuitiBOYnX1sJwIXh879KvAC9ippw>
-    <xmx:3OAiY2UFNMDExF4xlJNDTWFKPMVGPds_vT6O_1SGqGpootahV39reYvp-78>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6F2D9B60089; Thu, 15 Sep 2022 04:22:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADE7191
+	for <llvm@lists.linux.dev>; Thu, 15 Sep 2022 08:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663230767; x=1694766767;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yKpCtRI+05h6oOj99nvAvi26eHlk4Otmxs6a5EVTAnw=;
+  b=H0KspHyGSvA32ow3/0+bHoT/24MqNEQXU9eNXAR25odOILb63M9QdUrY
+   8q6UkSauCVZrvNk175PycB2RsztJi2fMPIGtiJabkKpT6Pa/ObdEePE6H
+   5QD1UBEXYsRxfqPC2Vxyx5JGtN0Jmht3tc+ZeW4mFDD84P15eHWjUannW
+   CWGbgNbHI8wJgxahFvFaw/lIqfAXpXl7+I/Zoub0zn3Zidsh4nQwC5UHt
+   eMFQ8oC4WP+b5vE8Pe7uVOHxul0YZGRLrikX1xh2RoE7YkxfTaLdfGScX
+   9PP7BQPaGv6+iwpGLrKgq1sblI5mDTUCf6bMUz2OY35zqkz9cBe7/YOOD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="360392165"
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="360392165"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 01:32:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="594732482"
+Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Sep 2022 01:32:44 -0700
+Received: from kbuild by 41300c7200ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oYkId-0000Dn-1u;
+	Thu, 15 Sep 2022 08:32:43 +0000
+Date: Thu, 15 Sep 2022 16:32:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:alt-ctrls 1/2]
+ drivers/media/common/cx2341x.c:141:11: error: use of undeclared identifier
+ 'V4L2_CTRL_TYPE_INTEGER'; did you mean 'V4L2_CTRL_TYPE_INTEGER_MENU'?
+Message-ID: <202209151604.w1IZY8bd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <b66ea89d-c62e-4772-b3d7-6e236da837af@www.fastmail.com>
-In-Reply-To: <20220914211057.423617-1-nhuck@google.com>
-References: <YyEQr//Iq7bautrm@dev-arch.thelio-3990X>
- <20220914211057.423617-1-nhuck@google.com>
-Date: Thu, 15 Sep 2022 10:21:47 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Huckleberry" <nhuck@google.com>, nathan@kernel.org
-Cc: error27@gmail.com, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
- llvm@lists.linux.dev, "Nick Desaulniers" <ndesaulniers@google.com>,
- trix@redhat.com
-Subject: Re: [PATCH v3] staging: octeon: Fix return type of cvm_oct_xmit and
- cvm_oct_xmit_pow
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Sep 14, 2022, at 11:10 PM, Nathan Huckleberry wrote:
-> The ndo_start_xmit field in net_device_ops is expected to be of type
-> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
->
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
->
-> The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
-> from int to netdev_tx_t.
->
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> ---
->
-> Changes v1 -> v2:
-> - Update function signatures in ethernet-tx.h.
->
-> Changes v2 -> v3:
-> - Move changes below the scissors --- so they don't show in commit msg
-> - Add reviewed-by tag
+tree:   git://linuxtv.org/hverkuil/media_tree.git alt-ctrls
+head:   c6e0e18a5be6b8a301595a30ba369cbee4a60807
+commit: b28feb32252c212b4d345f0da7ceb285d763e1b9 [1/2] wip
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220915/202209151604.w1IZY8bd-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree alt-ctrls
+        git checkout b28feb32252c212b4d345f0da7ceb285d763e1b9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/common/ drivers/media/i2c/ drivers/media/pci/bt8xx/ drivers/media/pci/saa7134/ drivers/media/usb/cx231xx/ drivers/media/usb/pvrusb2/ drivers/media/usb/pwc/ drivers/media/usb/uvc/
 
-The patch looks correct to me so
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+All error/warnings (new ones prefixed by >>):
 
-but I have two more general comments:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:703:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:173:10: note: expanded from macro '_SIG_SET_OP'
+           case 4: set->sig[3] = op(set->sig[3]);                          \
+                   ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/common/cx2341x.c:16:
+   In file included from include/media/tuner.h:14:
+   In file included from include/media/v4l2-mc.h:13:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:1530:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:703:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:20: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/common/cx2341x.c:16:
+   In file included from include/media/tuner.h:14:
+   In file included from include/media/v4l2-mc.h:13:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:1530:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:703:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:3: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                   ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/common/cx2341x.c:16:
+   In file included from include/media/tuner.h:14:
+   In file included from include/media/v4l2-mc.h:15:
+   In file included from include/media/v4l2-subdev.h:15:
+   include/media/v4l2-common.h:95:33: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+   int v4l2_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                   ^
+   In file included from drivers/media/common/cx2341x.c:17:
+   In file included from include/media/drv-intf/cx2341x.h:10:
+   include/media/v4l2-ctrls.h:58:7: error: redefinition of 'v4l2_ctrl_ptr'
+   union v4l2_ctrl_ptr {
+         ^
+   include/uapi/linux/videodev2.h:1797:7: note: previous definition is here
+   union v4l2_ctrl_ptr {
+         ^
+   In file included from drivers/media/common/cx2341x.c:17:
+   In file included from include/media/drv-intf/cx2341x.h:10:
+   include/media/v4l2-ctrls.h:1399:58: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+   int v4l2_queryctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_queryctrl *qc);
+                                                            ^
+   include/media/v4l2-ctrls.h:1433:55: warning: declaration of 'struct v4l2_control' will not be visible outside of this function [-Wvisibility]
+   int v4l2_g_ctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_control *ctrl);
+                                                         ^
+   include/media/v4l2-ctrls.h:1447:10: warning: declaration of 'struct v4l2_control' will not be visible outside of this function [-Wvisibility]
+                   struct v4l2_control *ctrl);
+                          ^
+   include/media/v4l2-ctrls.h:1461:42: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                        struct media_device *mdev, struct v4l2_ext_controls *c);
+                                                          ^
+   include/media/v4l2-ctrls.h:1477:17: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                          struct v4l2_ext_controls *c);
+                                 ^
+   include/media/v4l2-ctrls.h:1494:15: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                        struct v4l2_ext_controls *c);
+                               ^
+   In file included from drivers/media/common/cx2341x.c:17:
+>> include/media/drv-intf/cx2341x.h:85:10: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+                   struct v4l2_queryctrl *qctrl);
+                          ^
+>> include/media/drv-intf/cx2341x.h:88:10: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                   struct v4l2_ext_controls *ctrls, unsigned int cmd);
+                          ^
+>> drivers/media/common/cx2341x.c:141:11: error: use of undeclared identifier 'V4L2_CTRL_TYPE_INTEGER'; did you mean 'V4L2_CTRL_TYPE_INTEGER_MENU'?
+                   *type = V4L2_CTRL_TYPE_INTEGER;
+                           ^~~~~~~~~~~~~~~~~~~~~~
+                           V4L2_CTRL_TYPE_INTEGER_MENU
+   include/uapi/linux/videodev2.h:1908:2: note: 'V4L2_CTRL_TYPE_INTEGER_MENU' declared here
+           V4L2_CTRL_TYPE_INTEGER_MENU  = 9,
+           ^
+   drivers/media/common/cx2341x.c:537:43: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:542:15: error: incomplete definition of type 'struct v4l2_queryctrl'
+           switch (qctrl->id) {
+                   ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:556:26: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   cx2341x_ctrl_fill(qctrl->id, &name, &qctrl->type,
+                                     ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:556:45: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   cx2341x_ctrl_fill(qctrl->id, &name, &qctrl->type,
+                                                        ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:557:36: error: incomplete definition of type 'struct v4l2_queryctrl'
+                                   &min, &max, &step, &def, &qctrl->flags);
+                                                             ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:558:8: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   qctrl->minimum = min;
+                   ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:559:8: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   qctrl->maximum = max;
+                   ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:560:8: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   qctrl->step = step;
+                   ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:561:8: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   qctrl->default_value = def;
+                   ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:562:8: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   qctrl->reserved[0] = qctrl->reserved[1] = 0;
+                   ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:562:29: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   qctrl->reserved[0] = qctrl->reserved[1] = 0;
+                                        ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:563:16: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   strscpy(qctrl->name, name, sizeof(qctrl->name));
+                           ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:563:42: error: incomplete definition of type 'struct v4l2_queryctrl'
+                   strscpy(qctrl->name, name, sizeof(qctrl->name));
+                                                     ~~~~~^
+   drivers/media/common/cx2341x.c:537:43: note: forward declaration of 'struct v4l2_queryctrl'
+   static int cx2341x_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                             ^
+   drivers/media/common/cx2341x.c:567:31: error: incompatible pointer types passing 'struct v4l2_queryctrl *' to parameter of type 'struct v4l2_queryctrl *' [-Werror,-Wincompatible-pointer-types]
+                   return v4l2_ctrl_query_fill(qctrl, min, max, step, def);
+                                               ^~~~~
+   include/media/v4l2-common.h:95:49: note: passing argument to parameter 'qctrl' here
+   int v4l2_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                                   ^
+   drivers/media/common/cx2341x.c:572:17: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+                          struct v4l2_queryctrl *qctrl)
+                                 ^
+   drivers/media/common/cx2341x.c:571:5: error: conflicting types for 'cx2341x_ctrl_query'
+   int cx2341x_ctrl_query(const struct cx2341x_mpeg_params *params,
+       ^
+   include/media/drv-intf/cx2341x.h:84:5: note: previous declaration is here
+   int cx2341x_ctrl_query(const struct cx2341x_mpeg_params *params,
+       ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   39 warnings and 20 errors generated.
+--
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/i2c/mt9m111.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:173:10: note: expanded from macro '_SIG_SET_OP'
+           case 4: set->sig[3] = op(set->sig[3]);                          \
+                   ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/i2c/mt9m111.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:20: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                                    ^        ~
+   include/linux/signal.h:185:24: note: expanded from macro '_sig_not'
+   #define _sig_not(x)     (~(x))
+                              ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/i2c/mt9m111.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:186:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+   _SIG_SET_OP(signotset, _sig_not)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:3: note: expanded from macro '_SIG_SET_OP'
+                   set->sig[2] = op(set->sig[2]);                          \
+                   ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/media/i2c/mt9m111.c:19:
+   include/media/v4l2-common.h:95:33: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+   int v4l2_ctrl_query_fill(struct v4l2_queryctrl *qctrl,
+                                   ^
+   In file included from drivers/media/i2c/mt9m111.c:20:
+   include/media/v4l2-ctrls.h:58:7: error: redefinition of 'v4l2_ctrl_ptr'
+   union v4l2_ctrl_ptr {
+         ^
+   include/uapi/linux/videodev2.h:1797:7: note: previous definition is here
+   union v4l2_ctrl_ptr {
+         ^
+   In file included from drivers/media/i2c/mt9m111.c:20:
+   include/media/v4l2-ctrls.h:1399:58: warning: declaration of 'struct v4l2_queryctrl' will not be visible outside of this function [-Wvisibility]
+   int v4l2_queryctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_queryctrl *qc);
+                                                            ^
+   include/media/v4l2-ctrls.h:1433:55: warning: declaration of 'struct v4l2_control' will not be visible outside of this function [-Wvisibility]
+   int v4l2_g_ctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_control *ctrl);
+                                                         ^
+   include/media/v4l2-ctrls.h:1447:10: warning: declaration of 'struct v4l2_control' will not be visible outside of this function [-Wvisibility]
+                   struct v4l2_control *ctrl);
+                          ^
+   include/media/v4l2-ctrls.h:1461:42: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                        struct media_device *mdev, struct v4l2_ext_controls *c);
+                                                          ^
+   include/media/v4l2-ctrls.h:1477:17: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                          struct v4l2_ext_controls *c);
+                                 ^
+   include/media/v4l2-ctrls.h:1494:15: warning: declaration of 'struct v4l2_ext_controls' will not be visible outside of this function [-Wvisibility]
+                        struct v4l2_ext_controls *c);
+                               ^
+>> drivers/media/i2c/mt9m111.c:869:42: error: array has incomplete element type 'const struct v4l2_control'
+           static const struct v4l2_control colorfx[] = {
+                                                   ^
+   drivers/media/i2c/mt9m111.c:869:22: note: forward declaration of 'struct v4l2_control'
+           static const struct v4l2_control colorfx[] = {
+                               ^
+   35 warnings and 5 errors generated.
+..
 
-- For your changelogs, it would help to include the diagnostic message
-  from smatch that you link to.
 
-- This has probably been discussed before, but why is this only
-  reported by smatch but by clang itself when building with CFI
-  enabled? It appears that CFI enforces stricter C++ style type
-  compatibility on enums while the warnings only catch incompatible
-  types according to the normal C11 rules.
+vim +141 drivers/media/common/cx2341x.c
 
-     Arnd
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  118  
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  119  static void cx2341x_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  120  		    s32 *min, s32 *max, s32 *step, s32 *def, u32 *flags)
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  121  {
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  122  	*name = cx2341x_get_name(id);
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  123  	*flags = 0;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  124  
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  125  	switch (id) {
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  126  	case V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER_MODE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  127  	case V4L2_CID_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  128  	case V4L2_CID_MPEG_CX2341X_VIDEO_CHROMA_SPATIAL_FILTER_TYPE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  129  	case V4L2_CID_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER_MODE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  130  	case V4L2_CID_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  131  		*type = V4L2_CTRL_TYPE_MENU;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  132  		*min = 0;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  133  		*step = 0;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  134  		break;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  135  	case V4L2_CID_MPEG_CX2341X_STREAM_INSERT_NAV_PACKETS:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  136  		*type = V4L2_CTRL_TYPE_BOOLEAN;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  137  		*min = 0;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  138  		*max = *step = 1;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  139  		break;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  140  	default:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24 @141  		*type = V4L2_CTRL_TYPE_INTEGER;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  142  		break;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  143  	}
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  144  	switch (id) {
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  145  	case V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER_MODE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  146  	case V4L2_CID_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER_MODE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  147  	case V4L2_CID_MPEG_CX2341X_VIDEO_MEDIAN_FILTER_TYPE:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  148  		*flags |= V4L2_CTRL_FLAG_UPDATE;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  149  		break;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  150  	case V4L2_CID_MPEG_CX2341X_VIDEO_SPATIAL_FILTER:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  151  	case V4L2_CID_MPEG_CX2341X_VIDEO_TEMPORAL_FILTER:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  152  	case V4L2_CID_MPEG_CX2341X_VIDEO_LUMA_MEDIAN_FILTER_TOP:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  153  	case V4L2_CID_MPEG_CX2341X_VIDEO_LUMA_MEDIAN_FILTER_BOTTOM:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  154  	case V4L2_CID_MPEG_CX2341X_VIDEO_CHROMA_MEDIAN_FILTER_TOP:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  155  	case V4L2_CID_MPEG_CX2341X_VIDEO_CHROMA_MEDIAN_FILTER_BOTTOM:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  156  		*flags |= V4L2_CTRL_FLAG_SLIDER;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  157  		break;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  158  	case V4L2_CID_MPEG_VIDEO_ENCODING:
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  159  		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  160  		break;
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  161  	}
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  162  }
+f6e114eed0414f drivers/media/video/cx2341x.c Hans Verkuil 2010-05-24  163  
+
+:::::: The code at line 141 was first introduced by commit
+:::::: f6e114eed0414fbba9eb73480cd8efdaba96aaa7 V4L/DVB: cx2341x: convert to the control framework
+
+:::::: TO: Hans Verkuil <hverkuil@xs4all.nl>
+:::::: CC: Mauro Carvalho Chehab <mchehab@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
