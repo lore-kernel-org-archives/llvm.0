@@ -1,43 +1,48 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCE74C84
-	for <llvm@lists.linux.dev>; Thu, 15 Sep 2022 20:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2F64C7F
+	for <llvm@lists.linux.dev>; Thu, 15 Sep 2022 20:21:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663273306; x=1694809306;
+  t=1663273315; x=1694809315;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zGB4O8y2Kn3B1oD7+r9Z0eZwgWbllku8Rol6jHyBNQE=;
-  b=ZYwBM9M8JH98jhtLdcn98MyaFMdsizGgXK0NOzk2jOtzHMzUkJeipxuh
-   nZZH/8w2kcpNxcx0ZpG5b2IhijGgScSd+z/a7S6ui/Pc85xu9UZOcmEt4
-   AzwNpo+eB2kapVWT6yv6zT3VvN8vnALegOSc2AksSkDllpm+yDr6CWd5g
-   bN0XXOj5bw0L0+rwjUTsdJ89fJOeaTjm7069fepT4uh+Rd9SU8pSd+Oy6
-   gAsc05Em8BDIR53ww2YGiZ6GVNGeb3+AYCO+NVbIqPfTHz60BzqrmIKXx
-   kBMQdqf1r2Po6I8O8w81TfMWO0l4UndAbuXmIb0hp4aFJgptXMs6Vgnni
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="362795245"
+  bh=vtpUHguAKafT6MIJU3D9kCLnwfOZK7+XR5i4gGc43qk=;
+  b=Bb/pNxy2hFaCNwU5f1d76FAQ1jWftV7fdWuNrRTaZbibVfi4Iai80s+w
+   szx4RBrFjRVUVJul8pn1fiyp4xIAEWu+K1Y/tkoXosM0QY2E1726sxiXv
+   /WHmlO+krgCofagVgx0txeAEiRorbLCBEe7rsa+gll7OHf6wxidOraBXj
+   CpGsAl3pDiPXxEp0t98lbfAV1okzLOqQDZmK7kRE55pGuMNim3TmA4N73
+   fTFVlZwH7ZVepBa4+8kr9gFZOYtk9oePFplYhPrnmtWnuL0cxNOXfXaDy
+   e164id2r04ekKsfQXfuOHllNEq58+ASzbzGPmm/lpRJvQOTUCadzmZ7Jh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="325093722"
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="362795245"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 13:21:45 -0700
+   d="scan'208";a="325093722"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 13:21:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="650620907"
+   d="scan'208";a="568576780"
 Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Sep 2022 13:21:44 -0700
+  by orsmga003.jf.intel.com with ESMTP; 15 Sep 2022 13:21:44 -0700
 Received: from kbuild by 41300c7200ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oYvMl-0000xh-1Z;
+	id 1oYvMl-0000xf-1W;
 	Thu, 15 Sep 2022 20:21:43 +0000
-Date: Fri, 16 Sep 2022 04:21:02 +0800
+Date: Fri, 16 Sep 2022 04:21:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gianfranco <gianfranco.dutka@arista.com>, hirofumi@mail.parknet.co.jp
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	gianfranco.dutka@arista.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]     fat: device-level-flush-after-sync
-Message-ID: <202209160411.466veQ09-lkp@intel.com>
-References: <20220914174015.7158-1-gianfranco.dutka@arista.com>
+To: Prathamesh Shete <pshete@nvidia.com>, adrian.hunter@intel.com,
+	ulf.hansson@linaro.org, thierry.reding@gmail.com,
+	jonathanh@nvidia.com, p.zabel@pengutronix.de,
+	linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, anrao@nvidia.com,
+	smangipudi@nvidia.com, pshete@nvidia.com, kyarlagadda@nvidia.com
+Subject: Re: [PATCH v2 2/4] mmc: sdhci-tegra: Add support to program MC
+ streamID
+Message-ID: <202209160420.bcAdUgK2-lkp@intel.com>
+References: <20220914095628.26093-2-pshete@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,61 +51,227 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220914174015.7158-1-gianfranco.dutka@arista.com>
+In-Reply-To: <20220914095628.26093-2-pshete@nvidia.com>
 
-Hi Gianfranco,
+Hi Prathamesh,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.0-rc5 next-20220915]
+[auto build test ERROR on tegra/for-next]
+[also build test ERROR on linus/master v6.0-rc5 next-20220915]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gianfranco/fat-device-level-flush-after-sync/20220915-014337
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 3245cb65fd91cd514801bf91f5a3066d562f0ac4
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220916/202209160411.466veQ09-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Prathamesh-Shete/mmc-sdhci-tegra-Separate-T19x-and-T23x-SoC-data/20220914-175832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
+config: hexagon-randconfig-r045-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160420.bcAdUgK2-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b1130c74311f7b8c0713f373a8dc20b572883fca
+        # https://github.com/intel-lab-lkp/linux/commit/9817941f43bffe4de367526928377b9723068fb5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gianfranco/fat-device-level-flush-after-sync/20220915-014337
-        git checkout b1130c74311f7b8c0713f373a8dc20b572883fca
+        git fetch --no-tags linux-review Prathamesh-Shete/mmc-sdhci-tegra-Separate-T19x-and-T23x-SoC-data/20220914-175832
+        git checkout 9817941f43bffe4de367526928377b9723068fb5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/fat/inode.c:829:41: error: too many arguments to function call, expected single argument 'bdev', have 3 arguments
-                   return blkdev_issue_flush(sb->s_bdev, GFP_KERNEL, NULL);
-                          ~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/gfp_types.h:333:20: note: expanded from macro 'GFP_KERNEL'
-   #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
-                           ^
-   include/linux/blkdev.h:1031:5: note: 'blkdev_issue_flush' declared here
-   int blkdev_issue_flush(struct block_device *bdev);
-       ^
+>> drivers/mmc/host/sdhci-tegra.c:1795:35: error: no member named 'ids' in 'struct iommu_fwspec'
+                           tegra_host->streamid = fwspec->ids[0] & 0xffff;
+                                                  ~~~~~~  ^
    1 error generated.
 
 
-vim +/bdev +829 fs/fat/inode.c
+vim +1795 drivers/mmc/host/sdhci-tegra.c
 
-   825	
-   826	static int fat_sync_fs(struct super_block *sb, int wait)
-   827	{
-   828		if (wait)
- > 829			return blkdev_issue_flush(sb->s_bdev, GFP_KERNEL, NULL);
-   830		else
-   831			return 0;
-   832	}
-   833	
+  1638	
+  1639	static int sdhci_tegra_probe(struct platform_device *pdev)
+  1640	{
+  1641		const struct sdhci_tegra_soc_data *soc_data;
+  1642		struct sdhci_host *host;
+  1643		struct sdhci_pltfm_host *pltfm_host;
+  1644		struct sdhci_tegra *tegra_host;
+  1645		struct clk *clk;
+  1646		struct iommu_fwspec *fwspec;
+  1647		int rc;
+  1648	
+  1649		soc_data = of_device_get_match_data(&pdev->dev);
+  1650		if (!soc_data)
+  1651			return -EINVAL;
+  1652	
+  1653		host = sdhci_pltfm_init(pdev, soc_data->pdata, sizeof(*tegra_host));
+  1654		if (IS_ERR(host))
+  1655			return PTR_ERR(host);
+  1656		pltfm_host = sdhci_priv(host);
+  1657	
+  1658		tegra_host = sdhci_pltfm_priv(pltfm_host);
+  1659		tegra_host->ddr_signaling = false;
+  1660		tegra_host->pad_calib_required = false;
+  1661		tegra_host->pad_control_available = false;
+  1662		tegra_host->soc_data = soc_data;
+  1663	
+  1664		if (soc_data->nvquirks & NVQUIRK_HAS_ANDROID_GPT_SECTOR)
+  1665			host->mmc->caps2 |= MMC_CAP2_ALT_GPT_TEGRA;
+  1666	
+  1667		if (soc_data->nvquirks & NVQUIRK_NEEDS_PAD_CONTROL) {
+  1668			rc = tegra_sdhci_init_pinctrl_info(&pdev->dev, tegra_host);
+  1669			if (rc == 0)
+  1670				host->mmc_host_ops.start_signal_voltage_switch =
+  1671					sdhci_tegra_start_signal_voltage_switch;
+  1672		}
+  1673	
+  1674		/* Hook to periodically rerun pad calibration */
+  1675		if (soc_data->nvquirks & NVQUIRK_HAS_PADCALIB)
+  1676			host->mmc_host_ops.request = tegra_sdhci_request;
+  1677	
+  1678		host->mmc_host_ops.hs400_enhanced_strobe =
+  1679				tegra_sdhci_hs400_enhanced_strobe;
+  1680	
+  1681		if (!host->ops->platform_execute_tuning)
+  1682			host->mmc_host_ops.execute_tuning =
+  1683					tegra_sdhci_execute_hw_tuning;
+  1684	
+  1685		rc = mmc_of_parse(host->mmc);
+  1686		if (rc)
+  1687			goto err_parse_dt;
+  1688	
+  1689		if (tegra_host->soc_data->nvquirks & NVQUIRK_ENABLE_DDR50)
+  1690			host->mmc->caps |= MMC_CAP_1_8V_DDR;
+  1691	
+  1692		/* HW busy detection is supported, but R1B responses are required. */
+  1693		host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY | MMC_CAP_NEED_RSP_BUSY;
+  1694	
+  1695		/* GPIO CD can be set as a wakeup source */
+  1696		host->mmc->caps |= MMC_CAP_CD_WAKE;
+  1697	
+  1698		tegra_sdhci_parse_dt(host);
+  1699	
+  1700		tegra_host->power_gpio = devm_gpiod_get_optional(&pdev->dev, "power",
+  1701								 GPIOD_OUT_HIGH);
+  1702		if (IS_ERR(tegra_host->power_gpio)) {
+  1703			rc = PTR_ERR(tegra_host->power_gpio);
+  1704			goto err_power_req;
+  1705		}
+  1706	
+  1707		/*
+  1708		 * Tegra210 has a separate SDMMC_LEGACY_TM clock used for host
+  1709		 * timeout clock and SW can choose TMCLK or SDCLK for hardware
+  1710		 * data timeout through the bit USE_TMCLK_FOR_DATA_TIMEOUT of
+  1711		 * the register SDHCI_TEGRA_VENDOR_SYS_SW_CTRL.
+  1712		 *
+  1713		 * USE_TMCLK_FOR_DATA_TIMEOUT bit default is set to 1 and SDMMC uses
+  1714		 * 12Mhz TMCLK which is advertised in host capability register.
+  1715		 * With TMCLK of 12Mhz provides maximum data timeout period that can
+  1716		 * be achieved is 11s better than using SDCLK for data timeout.
+  1717		 *
+  1718		 * So, TMCLK is set to 12Mhz and kept enabled all the time on SoC's
+  1719		 * supporting separate TMCLK.
+  1720		 */
+  1721	
+  1722		if (soc_data->nvquirks & NVQUIRK_HAS_TMCLK) {
+  1723			clk = devm_clk_get(&pdev->dev, "tmclk");
+  1724			if (IS_ERR(clk)) {
+  1725				rc = PTR_ERR(clk);
+  1726				if (rc == -EPROBE_DEFER)
+  1727					goto err_power_req;
+  1728	
+  1729				dev_warn(&pdev->dev, "failed to get tmclk: %d\n", rc);
+  1730				clk = NULL;
+  1731			}
+  1732	
+  1733			clk_set_rate(clk, 12000000);
+  1734			rc = clk_prepare_enable(clk);
+  1735			if (rc) {
+  1736				dev_err(&pdev->dev,
+  1737					"failed to enable tmclk: %d\n", rc);
+  1738				goto err_power_req;
+  1739			}
+  1740	
+  1741			tegra_host->tmclk = clk;
+  1742		}
+  1743	
+  1744		clk = devm_clk_get(mmc_dev(host->mmc), NULL);
+  1745		if (IS_ERR(clk)) {
+  1746			rc = dev_err_probe(&pdev->dev, PTR_ERR(clk),
+  1747					   "failed to get clock\n");
+  1748			goto err_clk_get;
+  1749		}
+  1750		pltfm_host->clk = clk;
+  1751	
+  1752		tegra_host->rst = devm_reset_control_get_exclusive(&pdev->dev,
+  1753								   "sdhci");
+  1754		if (IS_ERR(tegra_host->rst)) {
+  1755			rc = PTR_ERR(tegra_host->rst);
+  1756			dev_err(&pdev->dev, "failed to get reset control: %d\n", rc);
+  1757			goto err_rst_get;
+  1758		}
+  1759	
+  1760		rc = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
+  1761		if (rc)
+  1762			goto err_rst_get;
+  1763	
+  1764		pm_runtime_enable(&pdev->dev);
+  1765		rc = pm_runtime_resume_and_get(&pdev->dev);
+  1766		if (rc)
+  1767			goto err_pm_get;
+  1768	
+  1769		rc = reset_control_assert(tegra_host->rst);
+  1770		if (rc)
+  1771			goto err_rst_assert;
+  1772	
+  1773		usleep_range(2000, 4000);
+  1774	
+  1775		rc = reset_control_deassert(tegra_host->rst);
+  1776		if (rc)
+  1777			goto err_rst_assert;
+  1778	
+  1779		usleep_range(2000, 4000);
+  1780	
+  1781		rc = sdhci_tegra_add_host(host);
+  1782		if (rc)
+  1783			goto err_add_host;
+  1784	
+  1785		/* Program MC streamID for DMA transfers */
+  1786		if (soc_data->nvquirks & NVQUIRK_PROGRAM_MC_STREAMID) {
+  1787			fwspec = dev_iommu_fwspec_get(&pdev->dev);
+  1788			if (fwspec == NULL) {
+  1789				rc = -ENODEV;
+  1790				dev_err(mmc_dev(host->mmc),
+  1791					"failed to get MC streamid: %d\n",
+  1792					rc);
+  1793				goto err_rst_get;
+  1794			} else {
+> 1795				tegra_host->streamid = fwspec->ids[0] & 0xffff;
+  1796				tegra_sdhci_writel(host, tegra_host->streamid |
+  1797							(tegra_host->streamid << 8),
+  1798							SDHCI_TEGRA_CIF2AXI_CTRL_0);
+  1799			}
+  1800		}
+  1801	
+  1802		return 0;
+  1803	
+  1804	err_add_host:
+  1805		reset_control_assert(tegra_host->rst);
+  1806	err_rst_assert:
+  1807		pm_runtime_put_sync_suspend(&pdev->dev);
+  1808	err_pm_get:
+  1809		pm_runtime_disable(&pdev->dev);
+  1810	err_rst_get:
+  1811	err_clk_get:
+  1812		clk_disable_unprepare(tegra_host->tmclk);
+  1813	err_power_req:
+  1814	err_parse_dt:
+  1815		sdhci_pltfm_free(pdev);
+  1816		return rc;
+  1817	}
+  1818	
 
 -- 
 0-DAY CI Kernel Test Service
