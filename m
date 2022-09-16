@@ -1,114 +1,188 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77167E
-	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 06:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663310247; x=1694846247;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Dm6j0K+r+AWswqX95zRx3GP14ivXJ3chFsRKEvv7R5M=;
-  b=cAiKqvcoGrTPwKZtiZ+Pxb0vlg9YSmLbOYEA1c4cBbyuEAVzgID6Zezz
-   WQ5WWJl7/I3J3rvXnUbopBXBoi6lcykNzZY0KKIAf966NsSXZ5z54QGeT
-   qVd6xetXghwunZTYvLCjLBa2HM043lM1946MKIQQk8RRIAHgwrUZ0aJC1
-   1OY/np5jbVF5wsJC3lD5uuQ1objWZEb6EMZuI1COVmNXCcnTW9YBZkz2b
-   lvM5BulVla1fVnsT13vLQlqPLf8B7/tkux1gmbdGUdlKnXX+X9CL43TDp
-   mqZgRa8Mco2b3OB/LpvdDHFjlwPrRjogS1Q4X/TsKR1D25r6wVyNYNV+N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="385216405"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="385216405"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 23:37:27 -0700
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="721313970"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.210.244]) ([10.254.210.244])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 23:37:25 -0700
-Subject: Re: [kbuild-all] Re: [linux-next:master 6296/7172] ERROR: modpost:
- "kvm_spurious_fault" [arch/x86/kvm/kvm-intel.ko] undefined!
-To: Masahiro Yamada <masahiroy@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
- Linux Memory Management List <linux-mm@kvack.org>
-References: <202209150959.hEWCNjXH-lkp@intel.com>
- <CAK7LNARnratU5EcWWEc7m-sxO3pyUJtO_zUhQ+7VF2Fy=au5PQ@mail.gmail.com>
-From: "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <97021145-ea61-197c-919e-4a3d606547cf@intel.com>
-Date: Fri, 16 Sep 2022 14:37:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019D32904
+	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 07:16:34 +0000 (UTC)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTQHs2JYnz14QVj;
+	Fri, 16 Sep 2022 15:12:25 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 16 Sep 2022 15:16:24 +0800
+From: Wang Yufen <wangyufen@huawei.com>
+To: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>, <paul.walmsley@sifive.com>,
+	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <trix@redhat.com>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v2 1/2] libbpf: Add pathname_concat() helper
+Date: Fri, 16 Sep 2022 15:36:59 +0800
+Message-ID: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNARnratU5EcWWEc7m-sxO3pyUJtO_zUhQ+7VF2Fy=au5PQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 
+Move snprintf and len check to common helper pathname_concat() to make the
+code simpler.
 
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+ 1 file changed, 29 insertions(+), 47 deletions(-)
 
-On 9/15/2022 11:39 AM, Masahiro Yamada wrote:
-> On Thu, Sep 15, 2022 at 10:37 AM kernel test robot <lkp@intel.com> wrote:
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> head:   f117c01187301a087412bd6697fcf5463cb427d8
->> commit: 6676e2cdd7c339dc40331faccbaac1112d2c1d78 [6296/7172] kbuild: use obj-y instead extra-y for objects placed at the head
->> config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220915/202209150959.hEWCNjXH-lkp@intel.com/config)
->> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6676e2cdd7c339dc40331faccbaac1112d2c1d78
->>          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->>          git fetch --no-tags linux-next master
->>          git checkout 6676e2cdd7c339dc40331faccbaac1112d2c1d78
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag where applicable
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>, old ones prefixed by <<):
->>
->>>> ERROR: modpost: "kvm_spurious_fault" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "___ratelimit" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "_printk" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "__warn_printk" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "kvm_find_user_return_msr" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "__ubsan_handle_out_of_bounds" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "smp_call_function_single" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "cpu_number" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "__per_cpu_offset" [arch/x86/kvm/kvm-intel.ko] undefined!
->>>> ERROR: modpost: "__phys_addr" [arch/x86/kvm/kvm-intel.ko] undefined!
->> WARNING: modpost: suppressed 34935 unresolved symbol warnings because there were too many)
-> 
-> 
-> 
-> 
-> 
-> Sorry, I cannot reproduce this.
-> Seeing the full log might be helpful.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3ad1392..7ab977c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2096,19 +2096,30 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
+ 	return true;
+ }
+ 
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
+ static int build_map_pin_path(struct bpf_map *map, const char *path)
+ {
+ 	char buf[PATH_MAX];
+-	int len;
++	int err;
+ 
+ 	if (!path)
+ 		path = "/sys/fs/bpf";
+ 
+-	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
+-	if (len < 0)
+-		return -EINVAL;
+-	else if (len >= PATH_MAX)
+-		return -ENAMETOOLONG;
++	err = pathname_concat(path, bpf_map__name(map), buf);
++	if (err)
++		return err;
+ 
+ 	return bpf_map__set_pin_path(map, buf);
+ }
+@@ -7961,17 +7972,9 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
+ 			continue;
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0) {
+-				err = -EINVAL;
+-				goto err_unpin_maps;
+-			} else if (len >= PATH_MAX) {
+-				err = -ENAMETOOLONG;
++			err = pathname_concat(path, bpf_map__name(map), buf);
++			if (err)
+ 				goto err_unpin_maps;
+-			}
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ 		char buf[PATH_MAX];
+ 
+ 		if (path) {
+-			int len;
+-
+-			len = snprintf(buf, PATH_MAX, "%s/%s", path,
+-				       bpf_map__name(map));
+-			if (len < 0)
+-				return libbpf_err(-EINVAL);
+-			else if (len >= PATH_MAX)
+-				return libbpf_err(-ENAMETOOLONG);
++			err = pathname_concat(path, bpf_map__name(map), buf);
++			if (err)
++				return err;
+ 			sanitize_pin_path(buf);
+ 			pin_path = buf;
+ 		} else if (!map->pin_path) {
+@@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ {
+ 	struct bpf_program *prog;
++	char buf[PATH_MAX];
+ 	int err;
+ 
+ 	if (!obj)
+@@ -8045,17 +8044,9 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 	}
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0) {
+-			err = -EINVAL;
+-			goto err_unpin_programs;
+-		} else if (len >= PATH_MAX) {
+-			err = -ENAMETOOLONG;
++		err = pathname_concat(path, prog->name, buf);
++		if (err)
+ 			goto err_unpin_programs;
+-		}
+ 
+ 		err = bpf_program__pin(prog, buf);
+ 		if (err)
+@@ -8066,13 +8057,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+ 
+ err_unpin_programs:
+ 	while ((prog = bpf_object__prev_program(obj, prog))) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			continue;
+-		else if (len >= PATH_MAX)
++		if (pathname_concat(path, prog->name, buf))
+ 			continue;
+ 
+ 		bpf_program__unpin(prog, buf);
+@@ -8091,13 +8076,10 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
+ 
+ 	bpf_object__for_each_program(prog, obj) {
+ 		char buf[PATH_MAX];
+-		int len;
+ 
+-		len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
+-		if (len < 0)
+-			return libbpf_err(-EINVAL);
+-		else if (len >= PATH_MAX)
+-			return libbpf_err(-ENAMETOOLONG);
++		err = pathname_concat(path, prog->name, buf);
++		if (err)
++			return libbpf_err(err);
+ 
+ 		err = bpf_program__unpin(prog, buf);
+ 		if (err)
+-- 
+1.8.3.1
 
-Hi Masahiro,
-
-Sorry for the inconvenience, the error can be found with clang-14,
-but no error with clang-15, it shouldn't be a kernel issue.
-
-Best Regards,
-Rong Chen
-
-> 
-> 
-> 
-> 
-> 
->> --
->> 0-DAY CI Kernel Test Service
->> https://01.org/lkp
-> 
-> 
-> 
