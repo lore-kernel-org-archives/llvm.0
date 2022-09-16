@@ -1,103 +1,97 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E84F53A7
-	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 14:22:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663338179; x=1694874179;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Uq8/Qm9rAnA0pwSxTizcf5pgMVHtsJ+n/ks5w9hDuc=;
-  b=Mcq6mbs+OcCFw5slon+nOwk9n85Q0K8pICsYlnjPGPMYx24DKGaWtzb3
-   d4DjdoiYWk/VPGXY87+gPxDmz7tP+YDdf/co24hEeYIXC5kwrZOQwIUtv
-   SyGqcYvaZdhPvvAul1AtmBeTQjJu0Krnp945Y1KVwbUhf8Gl1N0dXPZzf
-   nowyQ6L2/UatcDhauhdPcLpeUv4QxJrQVZqbLg/X6N0Dc2RJXzMuQqGYE
-   JwExagcbUfqxSfFYQyXRUTrHBda1q04VyTQ3iEdSItFQiKhM/dfcoy2/7
-   Wr17rru9Unq/k4v+ZY/FAk9sftwDaJlzoZ9wvA5FBm/FcW6IP6MWJ1WiP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="325275008"
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="325275008"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 07:22:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,320,1654585200"; 
-   d="scan'208";a="946389479"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Sep 2022 07:22:57 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oZCF6-0001q6-20;
-	Fri, 16 Sep 2022 14:22:56 +0000
-Date: Fri, 16 Sep 2022 22:22:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Palmer Dabbelt <palmer@rivosinc.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:palmer/linux/vdso-fix-v3 9/9]
- arch/riscv/kernel/vdso.c:26:27: warning: tentative definition of variable
- with internal linkage has incomplete non-array type 'struct __vdso_info'
-Message-ID: <202209162203.LQxeIrqT-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A935C81
+	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 16:22:49 +0000 (UTC)
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92.3)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1oZDf9-000Dui-3t; Fri, 16 Sep 2022 17:53:55 +0200
+Received: from [2a02:168:f656:0:d16a:7287:ccf0:4fff] (helo=localhost.localdomain)
+	by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1oZDf8-0008AZ-HO; Fri, 16 Sep 2022 17:53:54 +0200
+Subject: Re: [bpf-next v2 1/2] libbpf: Add pathname_concat() helper
+To: Wang Yufen <wangyufen@huawei.com>, andrii@kernel.org, ast@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <8011ae39-d6ba-3dfa-07f1-1a548fd24560@iogearbox.net>
+Date: Fri, 16 Sep 2022 17:53:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <1663313820-29918-1-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26660/Fri Sep 16 09:57:04 2022)
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/vdso-fix-v3
-head:   fcbe4db4bf998e22fc7a35a2e02f6ba3d5ffb5db
-commit: fcbe4db4bf998e22fc7a35a2e02f6ba3d5ffb5db [9/9] WIP: riscv: vdso: fix NULL deference in vdso_join_timens() when vfork
-config: riscv-randconfig-r022-20220916 (https://download.01.org/0day-ci/archive/20220916/202209162203.LQxeIrqT-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/fcbe4db4bf998e22fc7a35a2e02f6ba3d5ffb5db
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/vdso-fix-v3
-        git checkout fcbe4db4bf998e22fc7a35a2e02f6ba3d5ffb5db
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ drivers/char/pcmcia/
+On 9/16/22 9:36 AM, Wang Yufen wrote:
+> Move snprintf and len check to common helper pathname_concat() to make the
+> code simpler.
+> 
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+>   tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+>   1 file changed, 29 insertions(+), 47 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3ad1392..7ab977c 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -2096,19 +2096,30 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
+>   	return true;
+>   }
+>   
+> +static int pathname_concat(const char *path, const char *name, char *buf)
+> +{
+> +	int len;
+> +
+> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+> +	if (len < 0)
+> +		return -EINVAL;
+> +	if (len >= PATH_MAX)
+> +		return -ENAMETOOLONG;
+> +
+> +	return 0;
+> +}
+> +
+>   static int build_map_pin_path(struct bpf_map *map, const char *path)
+>   {
+>   	char buf[PATH_MAX];
+> -	int len;
+> +	int err;
+>   
+>   	if (!path)
+>   		path = "/sys/fs/bpf";
+>   
+> -	len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
+> -	if (len < 0)
+> -		return -EINVAL;
+> -	else if (len >= PATH_MAX)
+> -		return -ENAMETOOLONG;
+> +	err = pathname_concat(path, bpf_map__name(map), buf);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Small nit, but would be good to not make the assumption that buf is always
+PATH_MAX so lets add size_t len to pathname_concat().
 
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/kernel/vdso.c:26:27: warning: tentative definition of variable with internal linkage has incomplete non-array type 'struct __vdso_info' [-Wtentative-definition-incomplete-type]
-   static struct __vdso_info vdso_info;
-                             ^
-   arch/riscv/kernel/vdso.c:26:15: note: forward declaration of 'struct __vdso_info'
-   static struct __vdso_info vdso_info;
-                 ^
-   arch/riscv/kernel/vdso.c:29:27: warning: tentative definition of variable with internal linkage has incomplete non-array type 'struct __vdso_info' [-Wtentative-definition-incomplete-type]
-   static struct __vdso_info compat_vdso_info;
-                             ^
-   arch/riscv/kernel/vdso.c:26:15: note: forward declaration of 'struct __vdso_info'
-   static struct __vdso_info vdso_info;
-                 ^
-   2 warnings generated.
-
-
-vim +26 arch/riscv/kernel/vdso.c
-
-    24	
-    25	extern char vdso_start[], vdso_end[];
-  > 26	static struct __vdso_info vdso_info;
-    27	#ifdef CONFIG_COMPAT
-    28	extern char compat_vdso_start[], compat_vdso_end[];
-    29	static struct __vdso_info compat_vdso_info;
-    30	#endif
-    31	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +	if (err)
+> +		return err;
+>   
+>   	return bpf_map__set_pin_path(map, buf);
+>   }
