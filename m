@@ -1,45 +1,33 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDEC2F59
-	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 18:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663354280; x=1694890280;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=An2zso0Ry4s+z2vyFjJyS5fl3zC7siypLDshTVXPuvs=;
-  b=iMiEBJe+YdOeE6LUzS7ME0QNFa4d2HlsP13oEebby+IEaTX/aQWIEpAz
-   U81QT6Zfnnbl86BIaaJTy++zKQLQONNc7t5LsLkVMu0jfZsriL3yhndIx
-   Mi085WjFkPJ0vOVNVK1nr2g6ag9ZbbBDdD+oMw3D0q4x2r5xpQoURoK+x
-   FLvXpULoXh04dEf7Nb5RPywvjBQAfUNAd/1RBFDsj80RXX25fVxJUY/ud
-   lX72IWJDiGLh7SLokijM7fUJNBZIQ2IUoo0TWP5p6VECi/P7d6O5z4uXH
-   D8dncRy5/Po0ul/fqU5n3SnwQJJNHqxtEilojN7RKG2Fy9LzsbaxYLRsy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="363017680"
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="363017680"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 11:51:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="686234503"
-Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Sep 2022 11:51:17 -0700
-Received: from kbuild by 41300c7200ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oZGQm-00023k-1b;
-	Fri, 16 Sep 2022 18:51:16 +0000
-Date: Sat, 17 Sep 2022 02:50:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18926AB6
+	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 19:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B85AC433D7;
+	Fri, 16 Sep 2022 19:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663354854;
+	bh=IkXR7IGv7I9s0DfvbzgwBDNcq9kvhj0lBv1Me9tAL7A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nwXEJ+ktbEt4JQLhTupfT87a3PWPwAEwiepKV6hdj85uajV48jYfmxTP5JpuuJj9l
+	 S4CNBNbtezXZmHhUnzloNaRpAF+WuvWJAPoKJ6YMYmXy+LwSCJQMwcnbA4fEHTl6h4
+	 RVLPc8WCGmj8rZVaL1CjaFS87Ksj8lHnQ5UprpfgJtzeqmBIL/WuGkMAmfojJvXP6B
+	 ewY3tysb44uWA/AQmI8pGzo//l8l2YJrGlosWjsLiKt5byhnxZdHx7HaFdMV2KhzGh
+	 fPEYFML5HvTwkomL7+fUh4qyykALM4G+3ou6UZ4zuswBtHVmzy7dzsqQ+EbIhbHH1h
+	 HROHN4h47BPTw==
+Date: Fri, 16 Sep 2022 12:00:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Chen, Rong A" <rong.a.chen@intel.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
 	Linux Memory Management List <linux-mm@kvack.org>
-Subject: drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:967:12:
- warning: stack frame size (1040) exceeds limit (1024) in
- 'hclge_dbg_dump_tm_pri'
-Message-ID: <202209170244.YEyh6kEm-lkp@intel.com>
+Subject: Re: [kbuild-all] Re: [linux-next:master 6296/7172] ERROR: modpost:
+ "kvm_spurious_fault" [arch/x86/kvm/kvm-intel.ko] undefined!
+Message-ID: <YyTH5NpFvgGahlZk@dev-arch.thelio-3990X>
+References: <202209150959.hEWCNjXH-lkp@intel.com>
+ <CAK7LNARnratU5EcWWEc7m-sxO3pyUJtO_zUhQ+7VF2Fy=au5PQ@mail.gmail.com>
+ <97021145-ea61-197c-919e-4a3d606547cf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,112 +36,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <97021145-ea61-197c-919e-4a3d606547cf@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6879c2d3b96039ff1668b4328a4d0dd3ea952cff
-commit: 69d0db01e210e07fe915e5da91b54a867cda040f ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-date:   8 months ago
-config: powerpc-randconfig-r023-20220916 (https://download.01.org/0day-ci/archive/20220917/202209170244.YEyh6kEm-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d0db01e210e07fe915e5da91b54a867cda040f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 69d0db01e210e07fe915e5da91b54a867cda040f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/hns3pf/
+On Fri, Sep 16, 2022 at 02:37:23PM +0800, Chen, Rong A wrote:
+> 
+> 
+> On 9/15/2022 11:39 AM, Masahiro Yamada wrote:
+> > On Thu, Sep 15, 2022 at 10:37 AM kernel test robot <lkp@intel.com> wrote:
+> > > 
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > > head:   f117c01187301a087412bd6697fcf5463cb427d8
+> > > commit: 6676e2cdd7c339dc40331faccbaac1112d2c1d78 [6296/7172] kbuild: use obj-y instead extra-y for objects placed at the head
+> > > config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220915/202209150959.hEWCNjXH-lkp@intel.com/config)
+> > > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > > reproduce (this is a W=1 build):
+> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >          chmod +x ~/bin/make.cross
+> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6676e2cdd7c339dc40331faccbaac1112d2c1d78
+> > >          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > >          git fetch --no-tags linux-next master
+> > >          git checkout 6676e2cdd7c339dc40331faccbaac1112d2c1d78
+> > >          # save the config file
+> > >          mkdir build_dir && cp config build_dir/.config
+> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> > > 
+> > > > > ERROR: modpost: "kvm_spurious_fault" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "___ratelimit" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "_printk" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "__warn_printk" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "kvm_find_user_return_msr" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "__ubsan_handle_out_of_bounds" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "smp_call_function_single" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "cpu_number" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "__per_cpu_offset" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > ERROR: modpost: "__phys_addr" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > WARNING: modpost: suppressed 34935 unresolved symbol warnings because there were too many)
+> > 
+> > 
+> > 
+> > 
+> > 
+> > Sorry, I cannot reproduce this.
+> > Seeing the full log might be helpful.
+> 
+> Hi Masahiro,
+> 
+> Sorry for the inconvenience, the error can be found with clang-14,
+> but no error with clang-15, it shouldn't be a kernel issue.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+We do still want the kernel to build with clang-14 though so this will
+require some further investigation. I probably won't be able to get to
+it today but I can try to double back on Monday to see what is going on
+here unless Masahiro beats me to it.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c:967:12: warning: stack frame size (1040) exceeds limit (1024) in 'hclge_dbg_dump_tm_pri' [-Wframe-larger-than]
-   static int hclge_dbg_dump_tm_pri(struct hclge_dev *hdev, char *buf, int len)
-              ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
-
-
-vim +/hclge_dbg_dump_tm_pri +967 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
-
-04d96139ddb32d Guangbin Huang 2021-08-30   966  
-04987ca1b9b684 Guangbin Huang 2021-01-28  @967  static int hclge_dbg_dump_tm_pri(struct hclge_dev *hdev, char *buf, int len)
-04987ca1b9b684 Guangbin Huang 2021-01-28   968  {
-04d96139ddb32d Guangbin Huang 2021-08-30   969  	char data_str[ARRAY_SIZE(tm_pri_items)][HCLGE_DBG_DATA_STR_LEN];
-04d96139ddb32d Guangbin Huang 2021-08-30   970  	struct hclge_tm_shaper_para c_shaper_para, p_shaper_para;
-04d96139ddb32d Guangbin Huang 2021-08-30   971  	char *result[ARRAY_SIZE(tm_pri_items)], *sch_mode_str;
-04d96139ddb32d Guangbin Huang 2021-08-30   972  	char content[HCLGE_DBG_TM_INFO_LEN];
-04d96139ddb32d Guangbin Huang 2021-08-30   973  	u8 pri_num, sch_mode, weight, i, j;
-04d96139ddb32d Guangbin Huang 2021-08-30   974  	int pos, ret;
-04987ca1b9b684 Guangbin Huang 2021-01-28   975  
-04987ca1b9b684 Guangbin Huang 2021-01-28   976  	ret = hclge_tm_get_pri_num(hdev, &pri_num);
-04987ca1b9b684 Guangbin Huang 2021-01-28   977  	if (ret)
-04987ca1b9b684 Guangbin Huang 2021-01-28   978  		return ret;
-04987ca1b9b684 Guangbin Huang 2021-01-28   979  
-04d96139ddb32d Guangbin Huang 2021-08-30   980  	for (i = 0; i < ARRAY_SIZE(tm_pri_items); i++)
-04d96139ddb32d Guangbin Huang 2021-08-30   981  		result[i] = &data_str[i][0];
-04d96139ddb32d Guangbin Huang 2021-08-30   982  
-04d96139ddb32d Guangbin Huang 2021-08-30   983  	hclge_dbg_fill_content(content, sizeof(content), tm_pri_items,
-04d96139ddb32d Guangbin Huang 2021-08-30   984  			       NULL, ARRAY_SIZE(tm_pri_items));
-04d96139ddb32d Guangbin Huang 2021-08-30   985  	pos = scnprintf(buf, len, "%s", content);
-04987ca1b9b684 Guangbin Huang 2021-01-28   986  
-04987ca1b9b684 Guangbin Huang 2021-01-28   987  	for (i = 0; i < pri_num; i++) {
-04987ca1b9b684 Guangbin Huang 2021-01-28   988  		ret = hclge_tm_get_pri_sch_mode(hdev, i, &sch_mode);
-04987ca1b9b684 Guangbin Huang 2021-01-28   989  		if (ret)
-04987ca1b9b684 Guangbin Huang 2021-01-28   990  			return ret;
-04987ca1b9b684 Guangbin Huang 2021-01-28   991  
-04987ca1b9b684 Guangbin Huang 2021-01-28   992  		ret = hclge_tm_get_pri_weight(hdev, i, &weight);
-04987ca1b9b684 Guangbin Huang 2021-01-28   993  		if (ret)
-04987ca1b9b684 Guangbin Huang 2021-01-28   994  			return ret;
-04987ca1b9b684 Guangbin Huang 2021-01-28   995  
-04987ca1b9b684 Guangbin Huang 2021-01-28   996  		ret = hclge_tm_get_pri_shaper(hdev, i,
-04987ca1b9b684 Guangbin Huang 2021-01-28   997  					      HCLGE_OPC_TM_PRI_C_SHAPPING,
-04987ca1b9b684 Guangbin Huang 2021-01-28   998  					      &c_shaper_para);
-04987ca1b9b684 Guangbin Huang 2021-01-28   999  		if (ret)
-04987ca1b9b684 Guangbin Huang 2021-01-28  1000  			return ret;
-04987ca1b9b684 Guangbin Huang 2021-01-28  1001  
-04987ca1b9b684 Guangbin Huang 2021-01-28  1002  		ret = hclge_tm_get_pri_shaper(hdev, i,
-04987ca1b9b684 Guangbin Huang 2021-01-28  1003  					      HCLGE_OPC_TM_PRI_P_SHAPPING,
-04987ca1b9b684 Guangbin Huang 2021-01-28  1004  					      &p_shaper_para);
-04987ca1b9b684 Guangbin Huang 2021-01-28  1005  		if (ret)
-04987ca1b9b684 Guangbin Huang 2021-01-28  1006  			return ret;
-04987ca1b9b684 Guangbin Huang 2021-01-28  1007  
-04987ca1b9b684 Guangbin Huang 2021-01-28  1008  		sch_mode_str = sch_mode & HCLGE_TM_TX_SCHD_DWRR_MSK ? "dwrr" :
-04987ca1b9b684 Guangbin Huang 2021-01-28  1009  			       "sp";
-04987ca1b9b684 Guangbin Huang 2021-01-28  1010  
-04d96139ddb32d Guangbin Huang 2021-08-30  1011  		j = 0;
-04d96139ddb32d Guangbin Huang 2021-08-30  1012  		sprintf(result[j++], "%04u", i);
-04d96139ddb32d Guangbin Huang 2021-08-30  1013  		sprintf(result[j++], "%4s", sch_mode_str);
-04d96139ddb32d Guangbin Huang 2021-08-30  1014  		sprintf(result[j++], "%3u", weight);
-04d96139ddb32d Guangbin Huang 2021-08-30  1015  		hclge_dbg_fill_shaper_content(&c_shaper_para, result, &j);
-04d96139ddb32d Guangbin Huang 2021-08-30  1016  		hclge_dbg_fill_shaper_content(&p_shaper_para, result, &j);
-04d96139ddb32d Guangbin Huang 2021-08-30  1017  		hclge_dbg_fill_content(content, sizeof(content), tm_pri_items,
-04d96139ddb32d Guangbin Huang 2021-08-30  1018  				       (const char **)result,
-04d96139ddb32d Guangbin Huang 2021-08-30  1019  				       ARRAY_SIZE(tm_pri_items));
-04d96139ddb32d Guangbin Huang 2021-08-30  1020  		pos += scnprintf(buf + pos, len - pos, "%s", content);
-04987ca1b9b684 Guangbin Huang 2021-01-28  1021  	}
-04987ca1b9b684 Guangbin Huang 2021-01-28  1022  
-04987ca1b9b684 Guangbin Huang 2021-01-28  1023  	return 0;
-04987ca1b9b684 Guangbin Huang 2021-01-28  1024  }
-04987ca1b9b684 Guangbin Huang 2021-01-28  1025  
-
-:::::: The code at line 967 was first introduced by commit
-:::::: 04987ca1b9b6841cfa5f9b459c5a270b75c89345 net: hns3: add debugfs support for tm nodes, priority and qset info
-
-:::::: TO: Guangbin Huang <huangguangbin2@huawei.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Nathan
