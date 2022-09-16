@@ -1,45 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D11417EA
-	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 01:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B8F17EA
+	for <llvm@lists.linux.dev>; Fri, 16 Sep 2022 01:16:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663290303; x=1694826303;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r7VXKS4fwfCQfaLFydmq0GRUyL33h9ZGM1jdnNQEW38=;
-  b=mu19wRKXtTrK7WG0XbvwFfUp5aU+lDvvzX3AYTcXDw1M4PlSWBgAK+T8
-   GUVcyBNgjVRJhsbvVrQASzpafA+8gT37Gii+FRHVG42wQpyK/hE2rEXhx
-   QkBw40YGB87X2T1bnYOHFkY1ZPmRGKYtfiMEMwQzWDVCFVRRyiqGwaONc
-   vf4jqN+BKQ6DYvYL/zzI4FYZnyMhqmpTXzcwi4hk7TCfrprT5eubof/pH
-   VZEgsY6JAkG/jc6zrRH3SvyvaOZZYiT3ehfSU7kSrkZumRMvQFVU2p1y5
-   WFicxKgDVYh7wt7GHfqfDU9r4XY9oXI9XLZdQwf8xVPq1hx7oBxmRDfWV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="298874550"
+  t=1663290962; x=1694826962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PLOk1/LbtgFS9T66SzvZm4wtOUjH8fZf5AH4OM+Qzsc=;
+  b=VotfvBgnrYQV+IPtP3aykz5XQ4bSzBW51NSBVNNUD5t0sR9IY+Io+vXM
+   4VVYytRrWYFxdGihhS3j0g81bXDm6+PZfe8EsN9Feti0DtPhoERIt+/hm
+   69WJhZzQdubGfftxxyyQaZ/CuIQwmD8SW9dm4ze50gdkDENHlKF/vqnQg
+   Y8QPmmX9qq8F7TXszdl5prn8oRVocBHkS9nN4dK4MiQ+pYHasVqrDTXv0
+   NfLV1RKrgM1sZlXx51+3cnvNW51sTk1jmjjQvBwTdQGt9+gIZ1TdhGoVa
+   ntpPNOt5DaaNx2JmifPGKgj+EA5e9TvJUIb1dznjaBZdg3oaoE/8FhMyl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10471"; a="360624174"
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="298874550"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 18:05:02 -0700
+   d="scan'208";a="360624174"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2022 18:16:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,319,1654585200"; 
-   d="scan'208";a="946193501"
+   d="scan'208";a="685949044"
 Received: from lkp-server02.sh.intel.com (HELO 41300c7200ea) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Sep 2022 18:05:00 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 15 Sep 2022 18:16:00 -0700
 Received: from kbuild by 41300c7200ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oYzmt-0001GN-1d;
-	Fri, 16 Sep 2022 01:04:59 +0000
-Date: Fri, 16 Sep 2022 09:04:42 +0800
+	id 1oYzxX-0001Gn-2C;
+	Fri, 16 Sep 2022 01:15:59 +0000
+Date: Fri, 16 Sep 2022 09:15:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, tejas.upadhyay@intel.com,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v1 2/4] drm/i915: Add missing mask when
- reading GEN12_DSMBASE
-Message-ID: <202209160835.MMBeObmU-lkp@intel.com>
-References: <20220915-stolen-v1-2-117c5f295bb2@intel.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/vdso 3/3] <stdin>:1565:2: warning:
+ syscall vgetrandom_alloc not implemented
+Message-ID: <202209160907.jMubcK2i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,120 +47,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220915-stolen-v1-2-117c5f295bb2@intel.com>
 
-Hi Lucas,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on bb4f6b2281b11b009210f62eecd291f7b75c1e85]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-De-Marchi/drm-i915-Improvements-to-stolen-memory-setup/20220916-044155
-base:   bb4f6b2281b11b009210f62eecd291f7b75c1e85
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220916/202209160835.MMBeObmU-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
+head:   a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2
+commit: a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2 [3/3] random: implement getrandom() in vDSO
+config: arm-buildonly-randconfig-r006-20220915 (https://download.01.org/0day-ci/archive/20220916/202209160907.jMubcK2i-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b0c14c92efecabadc483675b606c1ce109cfa415
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lucas-De-Marchi/drm-i915-Improvements-to-stolen-memory-setup/20220916-044155
-        git checkout b0c14c92efecabadc483675b606c1ce109cfa415
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
+        git checkout a3cff810520ec7bb9afb9020a1cb7945e4bdb8b2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gem/i915_gem_stolen.c:817:58: warning: shift count is negative [-Wshift-count-negative]
-           dsm_base = intel_uncore_read64(uncore, GEN12_DSMBASE) & GEN12_BDSM_MASK;
-                                                                   ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_reg.h:7956:28: note: expanded from macro 'GEN12_BDSM_MASK'
-   #define   GEN12_BDSM_MASK               GENMASK(63, 20)
-                                           ^~~~~~~~~~~~~~~
-   include/linux/bits.h:38:31: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-                                        ^~~~~~~~~~~~~~~
-   include/linux/bits.h:36:11: note: expanded from macro '__GENMASK'
-            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+>> <stdin>:1565:2: warning: syscall vgetrandom_alloc not implemented [-W#warnings]
+   #warning syscall vgetrandom_alloc not implemented
+    ^
    1 warning generated.
-
-
-vim +817 drivers/gpu/drm/i915/gem/i915_gem_stolen.c
-
-   798	
-   799	struct intel_memory_region *
-   800	i915_gem_stolen_lmem_setup(struct drm_i915_private *i915, u16 type,
-   801				   u16 instance)
-   802	{
-   803		struct intel_uncore *uncore = &i915->uncore;
-   804		struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
-   805		resource_size_t dsm_size, dsm_base, lmem_size;
-   806		struct intel_memory_region *mem;
-   807		resource_size_t io_start, io_size;
-   808		resource_size_t min_page_size;
-   809	
-   810		if (WARN_ON_ONCE(instance))
-   811			return ERR_PTR(-ENODEV);
-   812	
-   813		if (!i915_pci_resource_valid(pdev, GEN12_LMEM_BAR))
-   814			return ERR_PTR(-ENXIO);
-   815	
-   816		/* Use DSM base address instead for stolen memory */
- > 817		dsm_base = intel_uncore_read64(uncore, GEN12_DSMBASE) & GEN12_BDSM_MASK;
-   818		if (IS_DG1(uncore->i915)) {
-   819			lmem_size = pci_resource_len(pdev, GEN12_LMEM_BAR);
-   820			if (WARN_ON(lmem_size < dsm_base))
-   821				return ERR_PTR(-ENODEV);
-   822		} else {
-   823			resource_size_t lmem_range;
-   824	
-   825			lmem_range = intel_gt_mcr_read_any(&i915->gt0, XEHP_TILE0_ADDR_RANGE) & 0xFFFF;
-   826			lmem_size = lmem_range >> XEHP_TILE_LMEM_RANGE_SHIFT;
-   827			lmem_size *= SZ_1G;
-   828		}
-   829	
-   830		dsm_size = lmem_size - dsm_base;
-   831		if (pci_resource_len(pdev, GEN12_LMEM_BAR) < lmem_size) {
-   832			io_start = 0;
-   833			io_size = 0;
-   834		} else {
-   835			io_start = pci_resource_start(pdev, GEN12_LMEM_BAR) + dsm_base;
-   836			io_size = dsm_size;
-   837		}
-   838	
-   839		min_page_size = HAS_64K_PAGES(i915) ? I915_GTT_PAGE_SIZE_64K :
-   840							I915_GTT_PAGE_SIZE_4K;
-   841	
-   842		mem = intel_memory_region_create(i915, dsm_base, dsm_size,
-   843						 min_page_size,
-   844						 io_start, io_size,
-   845						 type, instance,
-   846						 &i915_region_stolen_lmem_ops);
-   847		if (IS_ERR(mem))
-   848			return mem;
-   849	
-   850		/*
-   851		 * TODO: consider creating common helper to just print all the
-   852		 * interesting stuff from intel_memory_region, which we can use for all
-   853		 * our probed regions.
-   854		 */
-   855	
-   856		drm_dbg(&i915->drm, "Stolen Local memory IO start: %pa\n",
-   857			&mem->io_start);
-   858		drm_dbg(&i915->drm, "Stolen Local DSM base: %pa\n", &dsm_base);
-   859	
-   860		intel_memory_region_set_name(mem, "stolen-local");
-   861	
-   862		mem->private = true;
-   863	
-   864		return mem;
-   865	}
-   866	
+--
+>> <stdin>:1565:2: warning: syscall vgetrandom_alloc not implemented [-W#warnings]
+   #warning syscall vgetrandom_alloc not implemented
+    ^
+   1 warning generated.
+--
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+>> <stdin>:1565:2: warning: syscall vgetrandom_alloc not implemented [-W#warnings]
+   #warning syscall vgetrandom_alloc not implemented
+    ^
+   1 warning generated.
 
 -- 
 0-DAY CI Kernel Test Service
