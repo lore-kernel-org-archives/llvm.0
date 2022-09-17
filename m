@@ -1,46 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D77C46AA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B0F46B8
 	for <llvm@lists.linux.dev>; Sat, 17 Sep 2022 20:16:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1663445768; x=1694981768;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bfa9UvImNSYWty5auXAb32wOFF+iFjiOi2xLEC0h5Co=;
-  b=b3S9HQx7lvScClwN7LR5VBCH/BX4dQDEnezmTokTeqQhJGWHMFjz7e6w
-   l0aLfMOnLHgKLaVDuA5IJWX8Yt9ssUuWPBpeqSwYXtR1Z+I16SEN7MuJK
-   xc/l/0C3dcXDuxKYTtQKQNY0oSLIo9tmpsc8SFfLJ69Xp+ClgcqnnTRMk
-   FfiouSrRHPjjLp+S6Fqq2XvNJ6McF/44LVeluASInaytGPA+If7Mo4J7f
-   mDfGD+bRpP1xEFVCC8a/miRDpsTtToXLVUdEBw+6BmA3Gw93PEfliNsv5
-   GctVT/cC2//qXunpUK4QMCxj/Y9CPZ766UVGQdzST80vbvC57mvMwSrgI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="385469787"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QQ3xTSeoFf133+7XRyYGf6pwOTfZdW9EywVHSTYX/Mo=;
+  b=QkPiZnqN/1pCBU8bxkJ4sL3p1Zhqq2EB/mPggfa5ugxaitIy+fNwL+u/
+   hLdQvSlL+6neV/lCsJl6Hu881uMGLuZF4joprsekiYmPbKEwtxgQaEYL4
+   GLCtD+60suyt1I7rjlMoMA90wzFF7fPh7KQW5dDPqXnVY0pHIeMrlJaK4
+   vw/iPYzwALkfQiks6Q3LvA0gYXv5WcT+lUweQ9GuHYbQ8LICNc19eP0FE
+   R6Dh4ySClqdIKYC1n/5u1v/+b0J427M7J56PpAyH8rbRwBWXIKruRs9RC
+   tBqiudpfnsC5n+C1CX+RBe+5Y/4w4resF8sgTyUQAA/+N4MP/4/gcsB3K
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="363139430"
 X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="385469787"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 13:16:07 -0700
+   d="scan'208";a="363139430"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 13:16:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="651222694"
+   d="scan'208";a="569198742"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Sep 2022 13:16:06 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Sep 2022 13:16:06 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oZeEP-0000Zh-1R;
+	id 1oZeEP-0000Zf-1N;
 	Sat, 17 Sep 2022 20:16:05 +0000
-Date: Sun, 18 Sep 2022 04:15:20 +0800
+Date: Sun, 18 Sep 2022 04:15:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Lior Nahmanson <liorna@nvidia.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 3/7] powerpc/build: move got, toc, plt, branch_lt
- sections to read-only
-Message-ID: <202209180437.4U3soljK-lkp@intel.com>
-References: <20220916040755.2398112-4-npiggin@gmail.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Raed Salem <raeds@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
+Subject: [linux-next:master 4848/7639]
+ drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: warning:
+ variable 'macsec_rule' is used uninitialized whenever 'if' condition is true
+Message-ID: <202209180446.ALAcTaPL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,43 +47,160 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220916040755.2398112-4-npiggin@gmail.com>
 
-Hi Nicholas,
+Hi Lior,
 
-I love your patch! Yet something to improve:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on linus/master v6.0-rc5 next-20220916]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicholas-Piggin/powerpc-build-linker-improvements/20220916-121310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220918/202209180437.4U3soljK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d5538ab91d3a9a237805be6f8c6c272af2987995
+commit: 3b20949cb21bac26d50cdcc58896802a890cfe15 [4848/7639] net/mlx5e: Add MACsec RX steering rules
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220918/202209180446.ALAcTaPL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/6c034c08f8d0addb6fecba38c9c428b1c4df7c29
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nicholas-Piggin/powerpc-build-linker-improvements/20220916-121310
-        git checkout 6c034c08f8d0addb6fecba38c9c428b1c4df7c29
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3b20949cb21bac26d50cdcc58896802a890cfe15
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3b20949cb21bac26d50cdcc58896802a890cfe15
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: ./arch/powerpc/kernel/vmlinux.lds:46: { expected, but got SPECIAL
-   >>>  .got : AT(ADDR(.got) - (0xc0000000 -0x00000000)) SPECIAL {
-   >>>                                                   ^
+>> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: warning: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (err)
+               ^~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:598:9: note: uninitialized use occurs here
+           return macsec_rule;
+                  ^~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:2: note: remove the 'if' if its condition is always false
+           if (err)
+           ^~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: note: initialize the variable 'macsec_rule' to silence this warning
+           union mlx5e_macsec_rule *macsec_rule;
+                                               ^
+                                                = NULL
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: warning: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (err)
+               ^~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1215:9: note: uninitialized use occurs here
+           return macsec_rule;
+                  ^~~~~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:2: note: remove the 'if' if its condition is always false
+           if (err)
+           ^~~~~~~~
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: note: initialize the variable 'macsec_rule' to silence this warning
+           union mlx5e_macsec_rule *macsec_rule;
+                                               ^
+                                                = NULL
+   2 warnings generated.
+
+
+vim +539 drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
+
+e467b283ffd50c Lior Nahmanson 2022-09-05  510  
+3b20949cb21bac Lior Nahmanson 2022-09-05  511  static union mlx5e_macsec_rule *
+e467b283ffd50c Lior Nahmanson 2022-09-05  512  macsec_fs_tx_add_rule(struct mlx5e_macsec_fs *macsec_fs,
+e467b283ffd50c Lior Nahmanson 2022-09-05  513  		      const struct macsec_context *macsec_ctx,
+9515978eee0b93 Lior Nahmanson 2022-09-05  514  		      struct mlx5_macsec_rule_attrs *attrs,
+9515978eee0b93 Lior Nahmanson 2022-09-05  515  		      u32 *sa_fs_id)
+e467b283ffd50c Lior Nahmanson 2022-09-05  516  {
+e467b283ffd50c Lior Nahmanson 2022-09-05  517  	char reformatbf[MLX5_MACSEC_TAG_LEN + MACSEC_SCI_LEN];
+e467b283ffd50c Lior Nahmanson 2022-09-05  518  	struct mlx5_pkt_reformat_params reformat_params = {};
+e467b283ffd50c Lior Nahmanson 2022-09-05  519  	struct mlx5e_macsec_tx *tx_fs = macsec_fs->tx_fs;
+e467b283ffd50c Lior Nahmanson 2022-09-05  520  	struct net_device *netdev = macsec_fs->netdev;
+e467b283ffd50c Lior Nahmanson 2022-09-05  521  	struct mlx5_flow_destination dest = {};
+3b20949cb21bac Lior Nahmanson 2022-09-05  522  	struct mlx5e_macsec_tables *tx_tables;
+3b20949cb21bac Lior Nahmanson 2022-09-05  523  	union mlx5e_macsec_rule *macsec_rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  524  	struct mlx5e_macsec_tx_rule *tx_rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  525  	struct mlx5_flow_act flow_act = {};
+e467b283ffd50c Lior Nahmanson 2022-09-05  526  	struct mlx5_flow_handle *rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  527  	struct mlx5_flow_spec *spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  528  	size_t reformat_size;
+e467b283ffd50c Lior Nahmanson 2022-09-05  529  	int err = 0;
+e467b283ffd50c Lior Nahmanson 2022-09-05  530  	u32 fs_id;
+e467b283ffd50c Lior Nahmanson 2022-09-05  531  
+3b20949cb21bac Lior Nahmanson 2022-09-05  532  	tx_tables = &tx_fs->tables;
+3b20949cb21bac Lior Nahmanson 2022-09-05  533  
+e467b283ffd50c Lior Nahmanson 2022-09-05  534  	spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
+e467b283ffd50c Lior Nahmanson 2022-09-05  535  	if (!spec)
+e467b283ffd50c Lior Nahmanson 2022-09-05  536  		return NULL;
+e467b283ffd50c Lior Nahmanson 2022-09-05  537  
+e467b283ffd50c Lior Nahmanson 2022-09-05  538  	err = macsec_fs_tx_ft_get(macsec_fs);
+e467b283ffd50c Lior Nahmanson 2022-09-05 @539  	if (err)
+e467b283ffd50c Lior Nahmanson 2022-09-05  540  		goto out_spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  541  
+3b20949cb21bac Lior Nahmanson 2022-09-05  542  	macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
+3b20949cb21bac Lior Nahmanson 2022-09-05  543  	if (!macsec_rule) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  544  		macsec_fs_tx_ft_put(macsec_fs);
+e467b283ffd50c Lior Nahmanson 2022-09-05  545  		goto out_spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  546  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  547  
+3b20949cb21bac Lior Nahmanson 2022-09-05  548  	tx_rule = &macsec_rule->tx_rule;
+3b20949cb21bac Lior Nahmanson 2022-09-05  549  
+e467b283ffd50c Lior Nahmanson 2022-09-05  550  	/* Tx crypto table crypto rule */
+e467b283ffd50c Lior Nahmanson 2022-09-05  551  	macsec_fs_tx_create_sectag_header(macsec_ctx, reformatbf, &reformat_size);
+e467b283ffd50c Lior Nahmanson 2022-09-05  552  
+e467b283ffd50c Lior Nahmanson 2022-09-05  553  	reformat_params.type = MLX5_REFORMAT_TYPE_ADD_MACSEC;
+e467b283ffd50c Lior Nahmanson 2022-09-05  554  	reformat_params.size = reformat_size;
+e467b283ffd50c Lior Nahmanson 2022-09-05  555  	reformat_params.data = reformatbf;
+e467b283ffd50c Lior Nahmanson 2022-09-05  556  	flow_act.pkt_reformat = mlx5_packet_reformat_alloc(macsec_fs->mdev,
+e467b283ffd50c Lior Nahmanson 2022-09-05  557  							   &reformat_params,
+e467b283ffd50c Lior Nahmanson 2022-09-05  558  							   MLX5_FLOW_NAMESPACE_EGRESS_MACSEC);
+e467b283ffd50c Lior Nahmanson 2022-09-05  559  	if (IS_ERR(flow_act.pkt_reformat)) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  560  		err = PTR_ERR(flow_act.pkt_reformat);
+e467b283ffd50c Lior Nahmanson 2022-09-05  561  		netdev_err(netdev, "Failed to allocate MACsec Tx reformat context err=%d\n",  err);
+e467b283ffd50c Lior Nahmanson 2022-09-05  562  		goto err;
+e467b283ffd50c Lior Nahmanson 2022-09-05  563  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  564  	tx_rule->pkt_reformat = flow_act.pkt_reformat;
+e467b283ffd50c Lior Nahmanson 2022-09-05  565  
+e467b283ffd50c Lior Nahmanson 2022-09-05  566  	err = macsec_fs_tx_setup_fte(macsec_fs, spec, &flow_act, attrs->macsec_obj_id, &fs_id);
+e467b283ffd50c Lior Nahmanson 2022-09-05  567  	if (err) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  568  		netdev_err(netdev,
+e467b283ffd50c Lior Nahmanson 2022-09-05  569  			   "Failed to add packet reformat for MACsec TX crypto rule, err=%d\n",
+e467b283ffd50c Lior Nahmanson 2022-09-05  570  			   err);
+e467b283ffd50c Lior Nahmanson 2022-09-05  571  		goto err;
+e467b283ffd50c Lior Nahmanson 2022-09-05  572  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  573  
+e467b283ffd50c Lior Nahmanson 2022-09-05  574  	tx_rule->fs_id = fs_id;
+9515978eee0b93 Lior Nahmanson 2022-09-05  575  	*sa_fs_id = fs_id;
+e467b283ffd50c Lior Nahmanson 2022-09-05  576  
+e467b283ffd50c Lior Nahmanson 2022-09-05  577  	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
+e467b283ffd50c Lior Nahmanson 2022-09-05  578  			  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_ENCRYPT |
+e467b283ffd50c Lior Nahmanson 2022-09-05  579  			  MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT;
+e467b283ffd50c Lior Nahmanson 2022-09-05  580  	dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+3b20949cb21bac Lior Nahmanson 2022-09-05  581  	dest.ft = tx_tables->ft_check;
+3b20949cb21bac Lior Nahmanson 2022-09-05  582  	rule = mlx5_add_flow_rules(tx_tables->ft_crypto.t, spec, &flow_act, &dest, 1);
+e467b283ffd50c Lior Nahmanson 2022-09-05  583  	if (IS_ERR(rule)) {
+e467b283ffd50c Lior Nahmanson 2022-09-05  584  		err = PTR_ERR(rule);
+e467b283ffd50c Lior Nahmanson 2022-09-05  585  		netdev_err(netdev, "Failed to add MACsec TX crypto rule, err=%d\n", err);
+e467b283ffd50c Lior Nahmanson 2022-09-05  586  		goto err;
+e467b283ffd50c Lior Nahmanson 2022-09-05  587  	}
+e467b283ffd50c Lior Nahmanson 2022-09-05  588  	tx_rule->rule = rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  589  
+e467b283ffd50c Lior Nahmanson 2022-09-05  590  	goto out_spec;
+e467b283ffd50c Lior Nahmanson 2022-09-05  591  
+e467b283ffd50c Lior Nahmanson 2022-09-05  592  err:
+e467b283ffd50c Lior Nahmanson 2022-09-05  593  	macsec_fs_tx_del_rule(macsec_fs, tx_rule);
+3b20949cb21bac Lior Nahmanson 2022-09-05  594  	macsec_rule = NULL;
+e467b283ffd50c Lior Nahmanson 2022-09-05  595  out_spec:
+e467b283ffd50c Lior Nahmanson 2022-09-05  596  	kvfree(spec);
+e467b283ffd50c Lior Nahmanson 2022-09-05  597  
+3b20949cb21bac Lior Nahmanson 2022-09-05  598  	return macsec_rule;
+e467b283ffd50c Lior Nahmanson 2022-09-05  599  }
+e467b283ffd50c Lior Nahmanson 2022-09-05  600  
+
+:::::: The code at line 539 was first introduced by commit
+:::::: e467b283ffd50cf15b84c73eef68787e257eaed5 net/mlx5e: Add MACsec TX steering rules
+
+:::::: TO: Lior Nahmanson <liorna@nvidia.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
