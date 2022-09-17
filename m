@@ -1,50 +1,41 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4F42F21
-	for <llvm@lists.linux.dev>; Sat, 17 Sep 2022 13:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7D72F21
+	for <llvm@lists.linux.dev>; Sat, 17 Sep 2022 13:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663421882; x=1694957882;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tIryiFgQl9COzjEcEkX38EUN2UYw3EZiOxUHcq8DolY=;
-  b=eWkP615OSorqAQcCg4SIGjdkSTVGHR2Lfi9xF4c5gUCVbavMUtLXHygd
-   q9o9AkmRj+8Aw1z2ByKpGgchnBR6HuTikunPx9sG4axOSxVpFRafExFrq
-   dusIf+rTLWoVd/Asz8Culh6VjtftCFD2NddovdEzeUgDhJ58Y+51JOaiG
-   k4zOnCY0bBbvBT3mlEilD8BS00FISnEPpCtZQ4v6b/PhIgHPSFRyNFVUy
-   te5JpIG1/rs/y8cws476Om/egZrCO0FQQGZJdZuYPIOhLWKNhlHWYt0rr
-   Vn3YumniOitnO5PfxpJk7p72SW1NMrlzw0FGc1xldKr3xnH9aUxBECDsB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="385444643"
+  t=1663422541; x=1694958541;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UQEmgGFwCoDXb01xQxoEcXfEgVOV+wiQZrTXROGVeyg=;
+  b=Z4+gwGNwQ8ujIKHOTvRmVyAPIVnmF/ydVcIvs+yYUcQA0egVgyFIxWRZ
+   Js5W+e8OqtRCQOndyPkMiklidDMo4E9X1keYCJYG3Fpy9rh6ZYcTU9CUa
+   Ut4j00jgydV2MYQyhKn1ZBDtqtQSv47svpoxp6Rr0xJSUuQhWCfD/8YdJ
+   fJaU7f7H67LaUyR+pNmL3xfJvOyAY6RRjKrZ7owRQhx3PM+6mQLvwsDNg
+   eSYJiZFvfH+1QdO6N5JOD0UVsUErqItiH7mFy9DZjoI3+60t51aVfLZT8
+   6JS4q8iiS2t3/A+0KaiEvFiq3NlmQdXiUvYuRYglWU6SMGW7/Ux+6kL6A
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="325434028"
 X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="385444643"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 06:38:01 -0700
+   d="scan'208";a="325434028"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 06:49:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="760343021"
+   d="scan'208";a="595562658"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Sep 2022 06:37:58 -0700
+  by orsmga006.jf.intel.com with ESMTP; 17 Sep 2022 06:48:58 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oZY18-0000Ml-08;
-	Sat, 17 Sep 2022 13:37:58 +0000
-Date: Sat, 17 Sep 2022 21:37:43 +0800
+	id 1oZYBm-0000N9-0r;
+	Sat, 17 Sep 2022 13:48:58 +0000
+Date: Sat, 17 Sep 2022 21:48:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yongqiang Niu <yongqiang.niu@mediatek.com>, CK Hu <ck.hu@mediatek.com>
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Hsin-Yi Wang <hsinyi@chromium.org>,
-	Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>,
-	Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
-Subject: Re: [PATCH v2] mailbox: mtk-cmdq: fix gce timeout issue
-Message-ID: <202209172147.lNB8ZX1j-lkp@intel.com>
-References: <20220917090940.10088-1-yongqiang.niu@mediatek.com>
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: ld.lld: error: assignment to symbol __init_end does not converge
+Message-ID: <202209172159.AjlIRYQP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,57 +44,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220917090940.10088-1-yongqiang.niu@mediatek.com>
 
-Hi Yongqiang,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on fujitsu-integration/mailbox-for-next]
-[also build test ERROR on soc/for-next linus/master v6.0-rc5 next-20220916]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yongqiang-Niu/mailbox-mtk-cmdq-fix-gce-timeout-issue/20220917-171148
-base:   https://git.linaro.org/landing-teams/working/fujitsu/integration.git mailbox-for-next
-config: arm-randconfig-r033-20220916 (https://download.01.org/0day-ci/archive/20220917/202209172147.lNB8ZX1j-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a335366bad1364a07f49df9da1fdfa6d411a5f39
+commit: f70b3a23324a2d31efb83cc01302acb343e4ec1b arm64: head: create a temporary FDT mapping in the initial ID map
+date:   3 months ago
+config: arm64-randconfig-r006-20220917 (https://download.01.org/0day-ci/archive/20220917/202209172159.AjlIRYQP-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/044a12235901d40a3442fa5ab0c4b3233f370e22
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yongqiang-Niu/mailbox-mtk-cmdq-fix-gce-timeout-issue/20220917-171148
-        git checkout 044a12235901d40a3442fa5ab0c4b3233f370e22
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f70b3a23324a2d31efb83cc01302acb343e4ec1b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f70b3a23324a2d31efb83cc01302acb343e4ec1b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/mailbox/mtk-cmdq-mailbox.c:713:3: error: field designator 'sw_ddr_en' does not refer to any field in type 'const struct gce_plat'
-           .sw_ddr_en = true,
-            ^
-   1 error generated.
-
-
-vim +713 drivers/mailbox/mtk-cmdq-mailbox.c
-
-   708	
-   709	static const struct gce_plat gce_plat_v7 = {
-   710		.thread_nr = 24,
-   711		.shift = 3,
-   712		.control_by_sw = true,
- > 713		.sw_ddr_en = true,
-   714		.gce_num = 1
-   715	};
-   716	
+>> ld.lld: error: assignment to symbol __init_end does not converge
 
 -- 
 0-DAY CI Kernel Test Service
