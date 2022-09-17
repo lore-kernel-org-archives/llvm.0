@@ -1,47 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124F82F21
-	for <llvm@lists.linux.dev>; Sat, 17 Sep 2022 14:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF1C7C
+	for <llvm@lists.linux.dev>; Sat, 17 Sep 2022 14:50:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663423743; x=1694959743;
+  t=1663426202; x=1694962202;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yGIXuREaWoLe0WPT2nvuRiw9PSzoGU9WanFwfFa5ATk=;
-  b=OjJAEOPXnWbPuCf162YEOq9IjEA5pmMBVZmo7LvEEQ3DhGteIgHP+tOm
-   rOQaSWNR0BBIXDoJgwUz/g4QUnmiJk5AbjvmHTqqqkAIAnHTLP57xfzVq
-   FSnDplBV0RjRS4cEa8yKzzZ1qf8SSS4iozk11J4CTbTGsZTu8f2fAxxBs
-   xZ/2yU+1SL9eUMTFiF7CVQdqSaDlwgiegD5xcE/dQiM/iNHBoQ53QTKC3
-   KnHSaFjSY9T9Iweb63WnLvT6j3DwhkfIrgvZOEXKEy/kki4dMB88ZyUEk
-   SE2QYvUiZ+hRpr19iECX6qzQUwa9BfSBEEm+pz3GOlzr+XNOJ45vXP9JI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="279539467"
+  bh=Cr1wgj8QaEilsSF87VZTrjUdwycUY+q/4Sn13bLXrf4=;
+  b=gJzW3Ja4AF8eUvX/ORJBSl/mNz7jT/81hC26A4L6rH7+RNoW8Xn61nwC
+   Qt7L4IFwlEkgBNRrqY6lbRm5UhJ3TDeg17moXSm2nMg+d4rWKmzRRTx73
+   vEKXczESNTDDeNr4KhVqvyp+WRBN+IDJmfnbI1OP7Nqw56gl5YzJXbE32
+   Y4p8RjDqv1CoDyQgj1ZE1RMoqLyOPJ35isHTZXbWgD+h7I/AIZH5RkDw8
+   diJFrTpOamiJm8IpOCsqNOmgpx6MFgJpS1Zt/wlmjvWcyotsTT0E4QKqI
+   LW4pIMYvudHJk2mZfy2YzdFOyyp2TkQJhU2uWZq1WOFzS8kbl8SsaiG7j
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="299980600"
 X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="279539467"
+   d="scan'208";a="299980600"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 07:09:02 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 07:50:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
-   d="scan'208";a="569136903"
+   d="scan'208";a="569144060"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Sep 2022 07:08:59 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Sep 2022 07:50:00 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oZYV8-0000OF-2a;
-	Sat, 17 Sep 2022 14:08:58 +0000
-Date: Sat, 17 Sep 2022 22:08:29 +0800
+	id 1oZZ8p-0000PX-1f;
+	Sat, 17 Sep 2022 14:49:59 +0000
+Date: Sat, 17 Sep 2022 22:49:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	trix@redhat.com
+To: Jun Yu <junyuu@chromium.org>, ath11k@lists.infradead.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Lizhi Hou <lizhi.hou@amd.com>, max.zhen@amd.com,
-	sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com
-Subject: Re: [PATCH V2 XDMA 1/1] dmaengine: xilinx: xdma: add xilinx xdma
- driver
-Message-ID: <202209172136.OvN8TzRL-lkp@intel.com>
-References: <1663341985-65589-2-git-send-email-lizhi.hou@amd.com>
+	linux-wireless@vger.kernel.org, Jun Yu <junyuu@chromium.org>
+Subject: Re: [PATCH] wifi: ath11k: retrieve MAC address from system firmware
+ if provided
+Message-ID: <202209172236.KWe4R2Dm-lkp@intel.com>
+References: <20220914215408.372520-1-junyuu@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,136 +47,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1663341985-65589-2-git-send-email-lizhi.hou@amd.com>
+In-Reply-To: <20220914215408.372520-1-junyuu@chromium.org>
 
-Hi Lizhi,
+Hi Jun,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on linus/master v6.0-rc5 next-20220916]
-[cannot apply to xilinx-xlnx/master]
+[auto build test ERROR on kvalo-ath/ath-next]
+[also build test ERROR on wireless/main wireless-next/main linus/master v6.0-rc5 next-20220916]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/xilinx-XDMA-driver/20220916-232740
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: arm-randconfig-r003-20220918 (https://download.01.org/0day-ci/archive/20220917/202209172136.OvN8TzRL-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jun-Yu/wifi-ath11k-retrieve-MAC-address-from-system-firmware-if-provided/20220915-055714
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath-next
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220917/202209172236.KWe4R2Dm-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/f624c2f1706209a308a17cc8799995dc478c3d00
+        # https://github.com/intel-lab-lkp/linux/commit/7a1539aed9ed31bd3b93c177abda0a2f4fea3945
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lizhi-Hou/xilinx-XDMA-driver/20220916-232740
-        git checkout f624c2f1706209a308a17cc8799995dc478c3d00
+        git fetch --no-tags linux-review Jun-Yu/wifi-ath11k-retrieve-MAC-address-from-system-firmware-if-provided/20220915-055714
+        git checkout 7a1539aed9ed31bd3b93c177abda0a2f4fea3945
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/xilinx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/dma/xilinx/xdma.c:540:7: error: incompatible pointer types assigning to 'u64 *' (aka 'unsigned long long *') from 'dma_addr_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-                   src = &addr;
-                       ^ ~~~~~
-   drivers/dma/xilinx/xdma.c:545:7: error: incompatible pointer types assigning to 'u64 *' (aka 'unsigned long long *') from 'dma_addr_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-                   dst = &addr;
-                       ^ ~~~~~
-   2 errors generated.
+>> drivers/net/wireless/ath/ath11k/mac.c:8999:44: error: too many arguments to function call, expected 2, have 3
+           device_get_mac_address(ab->dev, mac_addr, sizeof(ab->mac_addr));
+           ~~~~~~~~~~~~~~~~~~~~~~                    ^~~~~~~~~~~~~~~~~~~~
+   include/linux/etherdevice.h:35:5: note: 'device_get_mac_address' declared here
+   int device_get_mac_address(struct device *dev, char *addr);
+       ^
+   1 error generated.
 
 
-vim +540 drivers/dma/xilinx/xdma.c
+vim +8999 drivers/net/wireless/ath/ath11k/mac.c
 
-   504	
-   505	/**
-   506	 * xdma_prep_device_sg - prepare a descriptor for a
-   507	 *	DMA transaction
-   508	 * @chan: DMA channel pointer
-   509	 * @sgl: Transfer scatter gather list
-   510	 * @sg_len: Length of scatter gather list
-   511	 * @dir: Transfer direction
-   512	 * @flags: transfer ack flags
-   513	 * @context: APP words of the descriptor
-   514	 */
-   515	static struct dma_async_tx_descriptor *
-   516	xdma_prep_device_sg(struct dma_chan *chan, struct scatterlist *sgl,
-   517			    unsigned int sg_len, enum dma_transfer_direction dir,
-   518			    unsigned long flags, void *context)
-   519	{
-   520		struct xdma_chan *xdma_chan = to_xdma_chan(chan);
-   521		struct dma_async_tx_descriptor *tx_desc;
-   522		u32 desc_num = 0, i, len, rest;
-   523		struct xdma_desc_block *dblk;
-   524		struct xdma_desc *sw_desc;
-   525		struct scatterlist *sg;
-   526		dma_addr_t addr;
-   527		u64 dev_addr, *src, *dst;
-   528		struct xdma_hw_desc *desc;
-   529	
-   530		for_each_sg(sgl, sg, sg_len, i)
-   531			desc_num += DIV_ROUND_UP(sg_dma_len(sg), XDMA_DESC_BLEN_MAX);
-   532	
-   533		sw_desc = xdma_alloc_desc(xdma_chan, desc_num);
-   534		if (!sw_desc)
-   535			return NULL;
-   536		sw_desc->dir = dir;
-   537	
-   538		if (dir == DMA_MEM_TO_DEV) {
-   539			dev_addr = xdma_chan->cfg.dst_addr;
- > 540			src = &addr;
-   541			dst = &dev_addr;
-   542		} else {
-   543			dev_addr = xdma_chan->cfg.src_addr;
-   544			src = &dev_addr;
-   545			dst = &addr;
-   546		}
-   547	
-   548		dblk = sw_desc->desc_blocks;
-   549		desc = dblk->virt_addr;
-   550		desc_num = 1;
-   551		for_each_sg(sgl, sg, sg_len, i) {
-   552			addr = sg_dma_address(sg);
-   553			rest = sg_dma_len(sg);
-   554	
-   555			do {
-   556				len = min_t(u32, rest, XDMA_DESC_BLEN_MAX);
-   557				/* set hardware descriptor */
-   558				desc->bytes = cpu_to_le32(len);
-   559				desc->src_addr = cpu_to_le64(*src);
-   560				desc->dst_addr = cpu_to_le64(*dst);
-   561	
-   562				if (!(desc_num & XDMA_DESC_ADJACENT_MASK)) {
-   563					dblk++;
-   564					desc = dblk->virt_addr;
-   565				} else {
-   566					desc++;
-   567				}
-   568	
-   569				desc_num++;
-   570				dev_addr += len;
-   571				addr += len;
-   572				rest -= len;
-   573			} while (rest);
-   574		}
-   575	
-   576		tx_desc = vchan_tx_prep(&xdma_chan->vchan, &sw_desc->vdesc, flags);
-   577		if (!tx_desc)
-   578			goto failed;
-   579	
-   580		return tx_desc;
-   581	
-   582	failed:
-   583		xdma_free_desc(&sw_desc->vdesc);
-   584	
-   585		return NULL;
-   586	}
-   587	
+  8979	
+  8980	int ath11k_mac_register(struct ath11k_base *ab)
+  8981	{
+  8982		struct ath11k *ar;
+  8983		struct ath11k_pdev *pdev;
+  8984		int i;
+  8985		int ret;
+  8986		u8 mac_addr[ETH_ALEN] = {0};
+  8987	
+  8988		if (test_bit(ATH11K_FLAG_REGISTERED, &ab->dev_flags))
+  8989			return 0;
+  8990	
+  8991		/* Initialize channel counters frequency value in hertz */
+  8992		ab->cc_freq_hz = IPQ8074_CC_FREQ_HERTZ;
+  8993		ab->free_vdev_map = (1LL << (ab->num_radios * TARGET_NUM_VDEVS(ab))) - 1;
+  8994	
+  8995		ret = ath11k_peer_rhash_tbl_init(ab);
+  8996		if (ret)
+  8997			return ret;
+  8998	
+> 8999		device_get_mac_address(ab->dev, mac_addr, sizeof(ab->mac_addr));
+  9000	
+  9001		for (i = 0; i < ab->num_radios; i++) {
+  9002			pdev = &ab->pdevs[i];
+  9003			ar = pdev->ar;
+  9004			if (ab->pdevs_macaddr_valid) {
+  9005				ether_addr_copy(ar->mac_addr, pdev->mac_addr);
+  9006			} else {
+  9007				if (is_zero_ether_addr(mac_addr))
+  9008					ether_addr_copy(ar->mac_addr, ab->mac_addr);
+  9009				else
+  9010					ether_addr_copy(ar->mac_addr, mac_addr);
+  9011				ar->mac_addr[4] += i;
+  9012			}
+  9013	
+  9014			idr_init(&ar->txmgmt_idr);
+  9015			spin_lock_init(&ar->txmgmt_idr_lock);
+  9016	
+  9017			ret = __ath11k_mac_register(ar);
+  9018			if (ret)
+  9019				goto err_cleanup;
+  9020	
+  9021			init_waitqueue_head(&ar->txmgmt_empty_waitq);
+  9022		}
+  9023	
+  9024		return 0;
+  9025	
+  9026	err_cleanup:
+  9027		for (i = i - 1; i >= 0; i--) {
+  9028			pdev = &ab->pdevs[i];
+  9029			ar = pdev->ar;
+  9030			__ath11k_mac_unregister(ar);
+  9031		}
+  9032	
+  9033		ath11k_peer_rhash_tbl_destroy(ab);
+  9034	
+  9035		return ret;
+  9036	}
+  9037	
 
 -- 
 0-DAY CI Kernel Test Service
