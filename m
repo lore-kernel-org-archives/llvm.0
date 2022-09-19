@@ -1,175 +1,179 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23887813
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 02:28:10 +0000 (UTC)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MW7ll2ZRDz14QMJ;
-	Mon, 19 Sep 2022 10:24:03 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 10:28:06 +0800
-From: Wang Yufen <wangyufen@huawei.com>
-To: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-	<haoluo@google.com>, <jolsa@kernel.org>, <paul.walmsley@sifive.com>,
-	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
-	<ndesaulniers@google.com>, <trix@redhat.com>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: [bpf-next v3 2/2] selftests/bpf: Add testcases for pinning to errpath
-Date: Mon, 19 Sep 2022 10:48:45 +0800
-Message-ID: <1663555725-17016-2-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
-References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A480C7C
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 04:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1663561309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WzDQLTVc7mrIiIUUNuyKcbtL9vAlxeAhfser72fSDII=;
+	b=Cbdo3gt2iV6qV7H79a4K7hTB9TiuP/l8Tgoh/uLNB523R7J3k5sJkGr+wsqdesthtCoGDJ
+	AXwy5/AQY9lfs2OGtU4KKS72TEGgSsZDbZLIemFMOxNBxXGNxhkLUaqv4w5HKOzr+K1Ndj
+	I0/WI9YeGmvh/5mXEGM36bl2zGS+844=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-wZhyPt62NfOyDtUXBIsvRg-1; Mon, 19 Sep 2022 00:21:47 -0400
+X-MC-Unique: wZhyPt62NfOyDtUXBIsvRg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A25A811726
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 04:21:47 +0000 (UTC)
+Received: from [172.64.3.86] (unknown [10.30.33.184])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4985CC15BA4;
+	Mon, 19 Sep 2022 04:21:47 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (53/371 SKIPPED): Test report for master
+ (6.0.0-rc5, mainline.kernel.org-clang, 38eddeed)
+Date: Mon, 19 Sep 2022 04:21:45 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <25193.122091900214700343@us-mta-145.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add testcases for map and prog pin to errpath.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/pinning.c   | 67 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_pinning_path.c        | 19 ++++++
- 2 files changed, 86 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_pinning_path.c
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-index d95cee5..ab7780f 100644
---- a/tools/testing/selftests/bpf/prog_tests/pinning.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -24,6 +24,61 @@ __u32 get_map_id(struct bpf_object *obj, const char *name)
- 	return map_info.id;
- }
- 
-+static void test_pin_path(void)
-+{
-+	const char *progfile = "./test_pinning_path.bpf.o";
-+	const char *progpinpath = "/sys/fs/bpf/test_pinpath";
-+	char errpath[PATH_MAX + 1];
-+	char command[64];
-+	int prog_fd, err;
-+	struct bpf_object *obj;
-+	__u32 duration = 0;
-+
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
-+	err = bpf_prog_test_load(progfile, BPF_PROG_TYPE_SOCK_OPS, &obj,
-+				 &prog_fd);
-+	CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno);
-+
-+	memset(&errpath, 't', PATH_MAX);
-+	err = bpf_object__pin_maps(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin maps errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_maps(obj, progpinpath);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_programs(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin progs errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__pin_programs(obj, progpinpath);
-+	if (CHECK(err, "pin prog", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_programs(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin progs errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_programs(obj, progpinpath);
-+	if (CHECK(err, "pin prog", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_maps(obj, errpath);
-+	if (CHECK(err != -ENAMETOOLONG, "pin maps errpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__unpin_maps(obj, progpinpath);
-+	if (CHECK(err, "pin maps", "err %d errno %d\n", err, errno))
-+		goto out;
-+out:
-+	bpf_object__close(obj);
-+	sprintf(command, "rm -r %s", progpinpath);
-+	system(command);
-+}
-+
- void test_pinning(void)
- {
- 	const char *file_invalid = "./test_pinning_invalid.bpf.o";
-@@ -32,6 +87,7 @@ void test_pinning(void)
- 	const char *nopinpath2 = "/sys/fs/bpf/nopinmap2";
- 	const char *custpath = "/sys/fs/bpf/custom";
- 	const char *pinpath = "/sys/fs/bpf/pinmap";
-+	char errpath[PATH_MAX + 1];
- 	const char *file = "./test_pinning.bpf.o";
- 	__u32 map_id, map_id2, duration = 0;
- 	struct stat statbuf = {};
-@@ -206,7 +262,17 @@ void test_pinning(void)
- 
- 	bpf_object__close(obj);
- 
-+	/* test auto-pinning at err path with open opt */
-+	memset(&errpath, 't', PATH_MAX);
-+	opts.pin_root_path = errpath;
-+	obj = bpf_object__open_file(file, &opts);
-+	if (CHECK_FAIL(libbpf_get_error(obj) != -ENAMETOOLONG)) {
-+		obj = NULL;
-+		goto out;
-+	}
-+
- 	/* test auto-pinning at custom path with open opt */
-+	opts.pin_root_path = custpath;
- 	obj = bpf_object__open_file(file, &opts);
- 	if (CHECK_FAIL(libbpf_get_error(obj))) {
- 		obj = NULL;
-@@ -277,4 +343,5 @@ void test_pinning(void)
- 	rmdir(custpath);
- 	if (obj)
- 		bpf_object__close(obj);
-+	test_pin_path();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_pinning_path.c b/tools/testing/selftests/bpf/progs/test_pinning_path.c
-new file mode 100644
-index 0000000..b4e2099
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_pinning_path.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 64);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sock_ops_map SEC(".maps");
-+
-+SEC("sockops")
-+int bpf_sockmap(struct bpf_sock_ops *skops)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-1.8.3.1
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'io_uring-6.0-2022-09-18' of git://git.kernel=
+.dk/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/53571
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 - Boot test
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
