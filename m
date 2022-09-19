@@ -1,44 +1,34 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413E7746D
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 21:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663622421; x=1695158421;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MbBH5QzULO+SVU7Lq5WeBggu3m7tEjg2IgYp0Qogenk=;
-  b=EttLlAdPxKMZooZLkJtDpBAgUvljMl3qzOPOiX2TdxARrS/R7sZROglj
-   wEua/i5ylPuZeXBR+I/zAs+068ktEkHnLxMSFZ5jbmUfZLkKz3bTV607C
-   mFkTFNREqXpo2DE8hFL3zXOtgl+0KpV+rIyNCJ6wc6J57Gxk27CxLFkXI
-   3YvHTNomADk+iR0Fdn9ppcTgo1ODGVjfFlmmL2hHe9ZI17QHooBInWBT0
-   cU/uWiyh85Y0YAqNGluIyESSd1rzY7UpZmT+iGiO2BBmGxSTCKiHFm4nW
-   2R0quQIarw/OiVBLAKdaxaHfdqr6qp7O5jR54fjWzsmk18QmuPQm/jiuV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="325821439"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="325821439"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 14:20:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="569810930"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Sep 2022 14:20:14 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oaOBZ-0002EH-1U;
-	Mon, 19 Sep 2022 21:20:13 +0000
-Date: Tue, 20 Sep 2022 05:19:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar
- within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed
- union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to
- 'struct dw_edma_v0_ch_regs' being packed, wh...
-Message-ID: <202209200522.1lOqXue9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68C2746D
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 21:46:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3591C433C1;
+	Mon, 19 Sep 2022 21:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663624017;
+	bh=zx/YQCTRM3ClJ79dYVZWfK5KQco7Ksm+9SI+gPA3WRs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qvxc7FCRya4tiSxFOLPR4Kit6Zr5L26ZC40oTvuqutnJOihpaLg+TXNhx4wUDAxdS
+	 LQjWN9pJM7HT5hdIPRgfHrQdhugFbuS2E2Lxy/M4Sn7c8wGLn/hNWmU0UM0N8kbC5i
+	 PaON6vUVG+aefe9KQevG/ceZ9as9H3y/I4iatLaVMKeHSXjWHigDOEo+rmaQrMlcer
+	 8NYg366HF64GD3nspGcLmLONYDRYzAxWGAZvwm+NhuhSKQR9+VIYLz2juKGHReAfTJ
+	 RHdxohxgiLneA4J8tKy3Lwnrwg3+kzo4l2ol6mSNtA97PTYH49R/GmVdpLQ5bcTm2I
+	 FZyhrrtoLNwzQ==
+Date: Mon, 19 Sep 2022 14:46:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: "Chen, Rong A" <rong.a.chen@intel.com>,
+	kernel test robot <lkp@intel.com>,
+	clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [kbuild-all] Re: [linux-next:master 6296/7172] ERROR: modpost:
+ "kvm_spurious_fault" [arch/x86/kvm/kvm-intel.ko] undefined!
+Message-ID: <YyjjT5gQ2hGMH0ni@dev-arch.thelio-3990X>
+References: <202209150959.hEWCNjXH-lkp@intel.com>
+ <CAK7LNARnratU5EcWWEc7m-sxO3pyUJtO_zUhQ+7VF2Fy=au5PQ@mail.gmail.com>
+ <97021145-ea61-197c-919e-4a3d606547cf@intel.com>
+ <YyTH5NpFvgGahlZk@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,242 +37,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YyTH5NpFvgGahlZk@dev-arch.thelio-3990X>
 
-Hi Gustavo,
+On Fri, Sep 16, 2022 at 12:00:52PM -0700, Nathan Chancellor wrote:
+> On Fri, Sep 16, 2022 at 02:37:23PM +0800, Chen, Rong A wrote:
+> > 
+> > 
+> > On 9/15/2022 11:39 AM, Masahiro Yamada wrote:
+> > > On Thu, Sep 15, 2022 at 10:37 AM kernel test robot <lkp@intel.com> wrote:
+> > > > 
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > > > head:   f117c01187301a087412bd6697fcf5463cb427d8
+> > > > commit: 6676e2cdd7c339dc40331faccbaac1112d2c1d78 [6296/7172] kbuild: use obj-y instead extra-y for objects placed at the head
+> > > > config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220915/202209150959.hEWCNjXH-lkp@intel.com/config)
+> > > > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > > > reproduce (this is a W=1 build):
+> > > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > >          chmod +x ~/bin/make.cross
+> > > >          # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=6676e2cdd7c339dc40331faccbaac1112d2c1d78
+> > > >          git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > > >          git fetch --no-tags linux-next master
+> > > >          git checkout 6676e2cdd7c339dc40331faccbaac1112d2c1d78
+> > > >          # save the config file
+> > > >          mkdir build_dir && cp config build_dir/.config
+> > > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> > > > 
+> > > > If you fix the issue, kindly add following tag where applicable
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > 
+> > > > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> > > > 
+> > > > > > ERROR: modpost: "kvm_spurious_fault" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "___ratelimit" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "_printk" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "__warn_printk" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "kvm_find_user_return_msr" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "__ubsan_handle_out_of_bounds" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "smp_call_function_single" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "cpu_number" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "__per_cpu_offset" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > > > ERROR: modpost: "__phys_addr" [arch/x86/kvm/kvm-intel.ko] undefined!
+> > > > WARNING: modpost: suppressed 34935 unresolved symbol warnings because there were too many)
+> > > 
+> > > 
+> > > 
+> > > 
+> > > 
+> > > Sorry, I cannot reproduce this.
+> > > Seeing the full log might be helpful.
+> > 
+> > Hi Masahiro,
+> > 
+> > Sorry for the inconvenience, the error can be found with clang-14,
+> > but no error with clang-15, it shouldn't be a kernel issue.
+> 
+> We do still want the kernel to build with clang-14 though so this will
+> require some further investigation. I probably won't be able to get to
+> it today but I can try to double back on Monday to see what is going on
+> here unless Masahiro beats me to it.
 
-FYI, the error/warning still remains.
+My reverse bisect tells me that LLVM commit d17c54d17de2 ("[llvm-ar]
+Prevent automatic conversion from thin to full archive") in LLVM 15
+resolves this problem. It appears that prior to that change, 'llvm-ar m'
+without 'T' will change the archive type to full.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   521a547ced6477c54b4b0cc206000406c221b4d6
-commit: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
-date:   1 year, 6 months ago
-config: arm-buildonly-randconfig-r006-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200522.1lOqXue9-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04e0a39fc10f82a71b84af73351333b184cee578
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 04e0a39fc10f82a71b84af73351333b184cee578
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/
+The following diff resolves this problem for me with no additional
+failures on LLVM 14 and 16. Masahiro, is this an acceptable change to
+squash in to 6676e2cdd7c339d?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Cheers,
+Nathan
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/dma/dw-edma/dw-edma-v0-core.c:13:
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } sar;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:44:4: warning: field dar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:38:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } dar;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:51:4: warning: field llp within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:45:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } llp;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:172:4: warning: field rd_err_status within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:166:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_err_status;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:182:4: warning: field rd_done_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:176:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_done_imwr;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:189:4: warning: field rd_abort_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:183:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_abort_imwr;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:71:4: warning: field wr_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:65:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } wr_engine_hshake_cnt;
-             ^
->> drivers/dma/dw-edma/dw-edma-v0-regs.h:79:4: warning: field rd_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:73:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rd_engine_hshake_cnt;
-             ^
-   8 warnings generated.
-
-
-vim +37 drivers/dma/dw-edma/dw-edma-v0-regs.h
-
-    26	
-    27	struct dw_edma_v0_ch_regs {
-    28		u32 ch_control1;				/* 0x000 */
-    29		u32 ch_control2;				/* 0x004 */
-    30		u32 transfer_size;				/* 0x008 */
-    31		union {
-    32			u64 reg;				/* 0x00c..0x010 */
-    33			struct {
-    34				u32 lsb;			/* 0x00c */
-    35				u32 msb;			/* 0x010 */
-    36			};
-  > 37		} sar;
-    38		union {
-    39			u64 reg;				/* 0x014..0x018 */
-    40			struct {
-    41				u32 lsb;			/* 0x014 */
-    42				u32 msb;			/* 0x018 */
-    43			};
-  > 44		} dar;
-    45		union {
-    46			u64 reg;				/* 0x01c..0x020 */
-    47			struct {
-    48				u32 lsb;			/* 0x01c */
-    49				u32 msb;			/* 0x020 */
-    50			};
-  > 51		} llp;
-    52	} __packed;
-    53	
-    54	struct dw_edma_v0_ch {
-    55		struct dw_edma_v0_ch_regs wr;			/* 0x200 */
-    56		u32 padding_1[55];				/* [0x224..0x2fc] */
-    57		struct dw_edma_v0_ch_regs rd;			/* 0x300 */
-    58		u32 padding_2[55];				/* [0x324..0x3fc] */
-    59	} __packed;
-    60	
-    61	struct dw_edma_v0_unroll {
-    62		u32 padding_1;					/* 0x0f8 */
-    63		u32 wr_engine_chgroup;				/* 0x100 */
-    64		u32 rd_engine_chgroup;				/* 0x104 */
-    65		union {
-    66			u64 reg;				/* 0x108..0x10c */
-    67			struct {
-    68				u32 lsb;			/* 0x108 */
-    69				u32 msb;			/* 0x10c */
-    70			};
-  > 71		} wr_engine_hshake_cnt;
-    72		u32 padding_2[2];				/* [0x110..0x114] */
-    73		union {
-    74			u64 reg;				/* 0x120..0x124 */
-    75			struct {
-    76				u32 lsb;			/* 0x120 */
-    77				u32 msb;			/* 0x124 */
-    78			};
-  > 79		} rd_engine_hshake_cnt;
-    80		u32 padding_3[2];				/* [0x120..0x124] */
-    81		u32 wr_ch0_pwr_en;				/* 0x128 */
-    82		u32 wr_ch1_pwr_en;				/* 0x12c */
-    83		u32 wr_ch2_pwr_en;				/* 0x130 */
-    84		u32 wr_ch3_pwr_en;				/* 0x134 */
-    85		u32 wr_ch4_pwr_en;				/* 0x138 */
-    86		u32 wr_ch5_pwr_en;				/* 0x13c */
-    87		u32 wr_ch6_pwr_en;				/* 0x140 */
-    88		u32 wr_ch7_pwr_en;				/* 0x144 */
-    89		u32 padding_4[8];				/* [0x148..0x164] */
-    90		u32 rd_ch0_pwr_en;				/* 0x168 */
-    91		u32 rd_ch1_pwr_en;				/* 0x16c */
-    92		u32 rd_ch2_pwr_en;				/* 0x170 */
-    93		u32 rd_ch3_pwr_en;				/* 0x174 */
-    94		u32 rd_ch4_pwr_en;				/* 0x178 */
-    95		u32 rd_ch5_pwr_en;				/* 0x18c */
-    96		u32 rd_ch6_pwr_en;				/* 0x180 */
-    97		u32 rd_ch7_pwr_en;				/* 0x184 */
-    98		u32 padding_5[30];				/* [0x188..0x1fc] */
-    99		struct dw_edma_v0_ch ch[EDMA_V0_MAX_NR_CH];	/* [0x200..0x1120] */
-   100	} __packed;
-   101	
-   102	struct dw_edma_v0_legacy {
-   103		u32 viewport_sel;				/* 0x0f8 */
-   104		struct dw_edma_v0_ch_regs ch;			/* [0x100..0x120] */
-   105	} __packed;
-   106	
-   107	struct dw_edma_v0_regs {
-   108		/* eDMA global registers */
-   109		u32 ctrl_data_arb_prior;			/* 0x000 */
-   110		u32 padding_1;					/* 0x004 */
-   111		u32 ctrl;					/* 0x008 */
-   112		u32 wr_engine_en;				/* 0x00c */
-   113		u32 wr_doorbell;				/* 0x010 */
-   114		u32 padding_2;					/* 0x014 */
-   115		union {
-   116			u64 reg;				/* 0x018..0x01c */
-   117			struct {
-   118				u32 lsb;			/* 0x018 */
-   119				u32 msb;			/* 0x01c */
-   120			};
-   121		} wr_ch_arb_weight;
-   122		u32 padding_3[3];				/* [0x020..0x028] */
-   123		u32 rd_engine_en;				/* 0x02c */
-   124		u32 rd_doorbell;				/* 0x030 */
-   125		u32 padding_4;					/* 0x034 */
-   126		union {
-   127			u64 reg;				/* 0x038..0x03c */
-   128			struct {
-   129				u32 lsb;			/* 0x038 */
-   130				u32 msb;			/* 0x03c */
-   131			};
-   132		} rd_ch_arb_weight;
-   133		u32 padding_5[3];				/* [0x040..0x048] */
-   134		/* eDMA interrupts registers */
-   135		u32 wr_int_status;				/* 0x04c */
-   136		u32 padding_6;					/* 0x050 */
-   137		u32 wr_int_mask;				/* 0x054 */
-   138		u32 wr_int_clear;				/* 0x058 */
-   139		u32 wr_err_status;				/* 0x05c */
-   140		union {
-   141			u64 reg;				/* 0x060..0x064 */
-   142			struct {
-   143				u32 lsb;			/* 0x060 */
-   144				u32 msb;			/* 0x064 */
-   145			};
-   146		} wr_done_imwr;
-   147		union {
-   148			u64 reg;				/* 0x068..0x06c */
-   149			struct {
-   150				u32 lsb;			/* 0x068 */
-   151				u32 msb;			/* 0x06c */
-   152			};
-   153		} wr_abort_imwr;
-   154		u32 wr_ch01_imwr_data;				/* 0x070 */
-   155		u32 wr_ch23_imwr_data;				/* 0x074 */
-   156		u32 wr_ch45_imwr_data;				/* 0x078 */
-   157		u32 wr_ch67_imwr_data;				/* 0x07c */
-   158		u32 padding_7[4];				/* [0x080..0x08c] */
-   159		u32 wr_linked_list_err_en;			/* 0x090 */
-   160		u32 padding_8[3];				/* [0x094..0x09c] */
-   161		u32 rd_int_status;				/* 0x0a0 */
-   162		u32 padding_9;					/* 0x0a4 */
-   163		u32 rd_int_mask;				/* 0x0a8 */
-   164		u32 rd_int_clear;				/* 0x0ac */
-   165		u32 padding_10;					/* 0x0b0 */
-   166		union {
-   167			u64 reg;				/* 0x0b4..0x0b8 */
-   168			struct {
-   169				u32 lsb;			/* 0x0b4 */
-   170				u32 msb;			/* 0x0b8 */
-   171			};
- > 172		} rd_err_status;
-   173		u32 padding_11[2];				/* [0x0bc..0x0c0] */
-   174		u32 rd_linked_list_err_en;			/* 0x0c4 */
-   175		u32 padding_12;					/* 0x0c8 */
-   176		union {
-   177			u64 reg;				/* 0x0cc..0x0d0 */
-   178			struct {
-   179				u32 lsb;			/* 0x0cc */
-   180				u32 msb;			/* 0x0d0 */
-   181			};
- > 182		} rd_done_imwr;
-   183		union {
-   184			u64 reg;				/* 0x0d4..0x0d8 */
-   185			struct {
-   186				u32 lsb;			/* 0x0d4 */
-   187				u32 msb;			/* 0x0d8 */
-   188			};
- > 189		} rd_abort_imwr;
-   190		u32 rd_ch01_imwr_data;				/* 0x0dc */
-   191		u32 rd_ch23_imwr_data;				/* 0x0e0 */
-   192		u32 rd_ch45_imwr_data;				/* 0x0e4 */
-   193		u32 rd_ch67_imwr_data;				/* 0x0e8 */
-   194		u32 padding_13[4];				/* [0x0ec..0x0f8] */
-   195		/* eDMA channel context grouping */
-   196		union dw_edma_v0_type {
-   197			struct dw_edma_v0_legacy legacy;	/* [0x0f8..0x120] */
-   198			struct dw_edma_v0_unroll unroll;	/* [0x0f8..0x1120] */
-   199		} type;
-   200	} __packed;
-   201	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/Makefile b/Makefile
+index ebd48fc956a3..f3c0ac66cf98 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1236,7 +1236,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
+       cmd_ar_vmlinux.a = \
+ 	rm -f $@; \
+ 	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
+-	$(AR) mPi $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
++	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
+ 
+ targets += vmlinux.a
+ vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
