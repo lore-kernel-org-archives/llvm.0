@@ -1,12 +1,12 @@
-Received: from r3-25.sinamail.sina.com.cn (r3-25.sinamail.sina.com.cn [202.108.3.25])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A16256F
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 13:22:04 +0000 (UTC)
+Received: from r3-22.sinamail.sina.com.cn (r3-22.sinamail.sina.com.cn [202.108.3.22])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1A85C92
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 13:32:42 +0000 (UTC)
 Received: from unknown (HELO pek-lxu-l1.corp.ad.wrs.com)([111.198.225.67])
-	by sina.com (172.16.97.23) with ESMTP
-	id 63286CB000019316; Mon, 19 Sep 2022 21:20:49 +0800 (CST)
+	by sina.com (172.16.97.32) with ESMTP
+	id 63286EFB00002595; Mon, 19 Sep 2022 21:30:37 +0800 (CST)
 X-Sender: eadavis@sina.com
 X-Auth-ID: eadavis@sina.com
-X-SMAIL-MID: 52840354919632
+X-SMAIL-MID: 175931628972
 From: eadavis@sina.com
 To: dan.carpenter@oracle.com
 Cc: almaz.alexandrovich@paragon-software.com,
@@ -22,8 +22,8 @@ Cc: almaz.alexandrovich@paragon-software.com,
 	trix@redhat.com,
 	eadaivs <eadaivs@sina.com>
 Subject: [PATCH v4] fs/ntfs3: Fix buffer overflow and integer overflow
-Date: Mon, 19 Sep 2022 21:21:59 +0800
-Message-Id: <20220919132159.307938-1-eadavis@sina.com>
+Date: Mon, 19 Sep 2022 21:32:02 +0800
+Message-Id: <20220919133202.308766-1-eadavis@sina.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <Yyhaw8iBPulIO0Pp@kadam>
 References: <Yyhaw8iBPulIO0Pp@kadam>
@@ -80,7 +80,7 @@ index afd0ddad826f..3cd1a24c7bcc 100644
 +		if (sizeof(*ea) + *off > bytes)
 +			return false;
 +
-+		next_off = size_add(*off + unpacked_ea_size(ea));
++		next_off = size_add(*off, unpacked_ea_size(ea));
  
  		if (next_off > bytes)
  			return false;
