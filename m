@@ -1,66 +1,87 @@
-Received: from r3-24.sinamail.sina.com.cn (r3-24.sinamail.sina.com.cn [202.108.3.24])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E53A3B
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 05:22:11 +0000 (UTC)
-Received: from unknown (HELO pek-lxu-l1.corp.ad.wrs.com)([111.198.225.67])
-	by sina.com (172.16.97.23) with ESMTP
-	id 6327FBA90002490D; Mon, 19 Sep 2022 13:18:34 +0800 (CST)
-X-Sender: eadavis@sina.com
-X-Auth-ID: eadavis@sina.com
-X-SMAIL-MID: 89834354920471
-From: eadavis@sina.com
-To: lkp@intel.com
-Cc: almaz.alexandrovich@paragon-software.com,
-	eadavis@sina.com,
-	eadvis@sina.com,
-	kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	ntfs3@lists.linux.dev,
-	syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	trix@redhat.com
-Subject: [PATCH] fs/ntfs3: "add a boundary check for EA_FULL" lose right parenthesis
-Date: Mon, 19 Sep 2022 13:19:43 +0800
-Message-Id: <20220919051943.184810-1-eadavis@sina.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <202209121421.hVaJ6pLd-lkp@intel.com>
-References: <202209121421.hVaJ6pLd-lkp@intel.com>
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D58A2C
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 05:39:11 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4MWD4l2T45z4xGZ;
+	Mon, 19 Sep 2022 15:39:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1663565943;
+	bh=BNw8Kj93vFdHtU4RDsx3vJD7dlfVJXP/v0QQYRC7Fdw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=eftX36TL5QnYlyLY/Zobc2FdKVoNox3a/JDQKQQNmwH6Qik7VwDlwBizRnCjxWJSZ
+	 2R6b9FCJMmoKMDgCSGcsP6KDtEFKNhRrNRGdxLVIlsFR4R6s1cTRlhQxH/Fn1505Ab
+	 xc7i5A+g2nnLKBBdtRo1kJEJkYY0z6fIbB5Ih2OaY1pBUqR9Jb7Dl0B9KLaIYLNA08
+	 x+1sS19mxTLFR2IHYD9z1xmAbn3L41QgNX+jfKP+gi1J+817wFbKVgtHvZvtm0PNMQ
+	 JtrRZyDUOtj3WgXmM4Md/eHfzhVJFRq79tCyWXbo7T0TNbJ4bAdckswDAxrpb6QzXe
+	 eUXKSFxerEcaA==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: kernel test robot <lkp@intel.com>, Nicholas Piggin <npiggin@gmail.com>,
+ linuxppc-dev@lists.ozlabs.org, Christophe Leroy
+ <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Nicholas Piggin
+ <npiggin@gmail.com>
+Subject: Re: [PATCH v2 3/7] powerpc/build: move got, toc, plt, branch_lt
+ sections to read-only
+In-Reply-To: <202209180437.4U3soljK-lkp@intel.com>
+References: <20220916040755.2398112-4-npiggin@gmail.com>
+ <202209180437.4U3soljK-lkp@intel.com>
+Date: Mon, 19 Sep 2022 15:39:02 +1000
+Message-ID: <87mtavly89.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Edward Adam Davis <eadavis@sina.com>
+kernel test robot <lkp@intel.com> writes:
+> Hi Nicholas,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on powerpc/next]
+> [also build test ERROR on linus/master v6.0-rc5 next-20220916]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Nicholas-Piggin/powerpc-build-linker-improvements/20220916-121310
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220918/202209180437.4U3soljK-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/6c034c08f8d0addb6fecba38c9c428b1c4df7c29
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Nicholas-Piggin/powerpc-build-linker-improvements/20220916-121310
+>         git checkout 6c034c08f8d0addb6fecba38c9c428b1c4df7c29
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+                                                    ^^^^^
 
-I have provided a new patch:
-https://lore.kernel.org/all/20220912065431.3043731-1-eadavis@sina.com
-It is a collection of the current patch and the previous one.
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>>> ld.lld: error: ./arch/powerpc/kernel/vmlinux.lds:46: { expected, but got SPECIAL
+>    >>>  .got : AT(ADDR(.got) - (0xc0000000 -0x00000000)) SPECIAL {
+>    >>>                                                   ^
 
-Signed-off-by: Edward Adam Davis <eadavis@sina.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com
----
- fs/ntfs3/xattr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I guess SPECIAL is a binutils ld ism?
 
-diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
-index c90cc453390d..4ec8f7e41b6d 100644
---- a/fs/ntfs3/xattr.c
-+++ b/fs/ntfs3/xattr.c
-@@ -69,7 +69,7 @@ static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
- 		if (next_len >= bytes ||
- 		    ((!ea->size) &&
- 		     (next_len + ea->name_len + 
--		      le16_to_cpu(ea->elength) >= bytes))
-+		      le16_to_cpu(ea->elength) >= bytes)))
- 			return false;
- 	}
- }
--- 
-2.37.2
+I can't find it documented anywhere.
 
+Presumably we can just not use it, given we never did before?
+
+cheers
