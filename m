@@ -1,87 +1,106 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D58A2C
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 05:39:11 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4MWD4l2T45z4xGZ;
-	Mon, 19 Sep 2022 15:39:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1663565943;
-	bh=BNw8Kj93vFdHtU4RDsx3vJD7dlfVJXP/v0QQYRC7Fdw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=eftX36TL5QnYlyLY/Zobc2FdKVoNox3a/JDQKQQNmwH6Qik7VwDlwBizRnCjxWJSZ
-	 2R6b9FCJMmoKMDgCSGcsP6KDtEFKNhRrNRGdxLVIlsFR4R6s1cTRlhQxH/Fn1505Ab
-	 xc7i5A+g2nnLKBBdtRo1kJEJkYY0z6fIbB5Ih2OaY1pBUqR9Jb7Dl0B9KLaIYLNA08
-	 x+1sS19mxTLFR2IHYD9z1xmAbn3L41QgNX+jfKP+gi1J+817wFbKVgtHvZvtm0PNMQ
-	 JtrRZyDUOtj3WgXmM4Md/eHfzhVJFRq79tCyWXbo7T0TNbJ4bAdckswDAxrpb6QzXe
-	 eUXKSFxerEcaA==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: kernel test robot <lkp@intel.com>, Nicholas Piggin <npiggin@gmail.com>,
- linuxppc-dev@lists.ozlabs.org, Christophe Leroy
- <christophe.leroy@csgroup.eu>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Nicholas Piggin
- <npiggin@gmail.com>
-Subject: Re: [PATCH v2 3/7] powerpc/build: move got, toc, plt, branch_lt
- sections to read-only
-In-Reply-To: <202209180437.4U3soljK-lkp@intel.com>
-References: <20220916040755.2398112-4-npiggin@gmail.com>
- <202209180437.4U3soljK-lkp@intel.com>
-Date: Mon, 19 Sep 2022 15:39:02 +1000
-Message-ID: <87mtavly89.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D46BA2C
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 05:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663566561; x=1695102561;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=herPt7lk9DdYodBrqmCQsFedxWRK6VJIeEv7qQ3JqNY=;
+  b=MfzjJa8YCaz/B/+hOFFXHx1QjHd2aarEEHsErGuyTKURM4i4anSlmcwz
+   FAV1Z3FS0WAQ5kpGMM4gF/GS/5ZkPd5esSaIeVgjzWwPxjUmL0dICK03g
+   iGMGdHa/ecqjwuLIs17YiP9sziOpUwx/5blVKoRBmT4CTM9LiagcpY90y
+   I2lnL5kzxsBrODfsmMMkn0pZg06NQQ9Drv0WtTjhzOoJcS9bezQciPurF
+   +cAIUVNH8T5P/V+KfVC0YkYrPPkcx3r4CZ5RxyAIc2vpVQCejb5qBe35Z
+   BTAT52xlzNpr6ni4F0ZbnjOhCAe5+46pXdvuCHqsTSPtOIkfnrhDM2RNS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10474"; a="298039033"
+X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
+   d="scan'208";a="298039033"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2022 22:49:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,325,1654585200"; 
+   d="scan'208";a="595944988"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 18 Sep 2022 22:49:16 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oa9ee-0001mX-0w;
+	Mon, 19 Sep 2022 05:49:16 +0000
+Date: Mon, 19 Sep 2022 13:49:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: Re: [PATCH -next 1/3] wbt: don't show valid wbt_lat_usec in sysfs
+ while wbt is disabled
+Message-ID: <202209191345.OaqfJF8y-lkp@intel.com>
+References: <20220919014939.175497-2-yukuai1@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919014939.175497-2-yukuai1@huaweicloud.com>
 
-kernel test robot <lkp@intel.com> writes:
-> Hi Nicholas,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on powerpc/next]
-> [also build test ERROR on linus/master v6.0-rc5 next-20220916]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Nicholas-Piggin/powerpc-build-linker-improvements/20220916-121310
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-> config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/archive/20220918/202209180437.4U3soljK-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/6c034c08f8d0addb6fecba38c9c428b1c4df7c29
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Nicholas-Piggin/powerpc-build-linker-improvements/20220916-121310
->         git checkout 6c034c08f8d0addb6fecba38c9c428b1c4df7c29
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-                                                    ^^^^^
+Hi Yu,
 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> ld.lld: error: ./arch/powerpc/kernel/vmlinux.lds:46: { expected, but got SPECIAL
->    >>>  .got : AT(ADDR(.got) - (0xc0000000 -0x00000000)) SPECIAL {
->    >>>                                                   ^
+Thank you for the patch! Yet something to improve:
 
-I guess SPECIAL is a binutils ld ism?
+[auto build test ERROR on next-20220916]
 
-I can't find it documented anywhere.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/blk-wbt-simple-improvment-to-enable-wbt-correctly/20220919-094019
+base:    d5538ab91d3a9a237805be6f8c6c272af2987995
+config: x86_64-randconfig-a001-20220919 (https://download.01.org/0day-ci/archive/20220919/202209191345.OaqfJF8y-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/dd5a7be692b8fc9794f29648d0805a2d65b9c4de
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yu-Kuai/blk-wbt-simple-improvment-to-enable-wbt-correctly/20220919-094019
+        git checkout dd5a7be692b8fc9794f29648d0805a2d65b9c4de
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Presumably we can just not use it, given we never did before?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-cheers
+All errors (new ones prefixed by >>):
+
+>> block/blk-sysfs.c:475:8: error: implicit declaration of function 'wbt_disabled' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
+                 ^
+   block/blk-sysfs.c:500:6: error: implicit declaration of function 'wbt_disabled' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (wbt_disabled(q))
+               ^
+   2 errors generated.
+
+
+vim +/wbt_disabled +475 block/blk-sysfs.c
+
+   467	
+   468	static ssize_t queue_wb_lat_show(struct request_queue *q, char *page)
+   469	{
+   470		u64 lat;
+   471	
+   472		if (!wbt_rq_qos(q))
+   473			return -EINVAL;
+   474	
+ > 475		lat = wbt_disabled(q) ? 0 : div_u64(wbt_get_min_lat(q), 1000);
+   476	
+   477		return sprintf(page, "%llu\n", lat);
+   478	}
+   479	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
