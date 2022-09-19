@@ -1,43 +1,31 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC89613A
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 16:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663606490; x=1695142490;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Zb/LvzkMEbecCuJqoYtnMcwZNvj6h7AGGaDv1wDqzzY=;
-  b=coEWxSU8xbkBTPr0SLizaxwJHzIyKBi9I2E9ireCBhh47tSGHLNotTJd
-   56Dm/vhpQ9gF/5zjQyX122GpDajg1OkqaZLf7P9qThKMKu194MHKY7W+v
-   n2/rI/W2EvWc9s6es1xFeLozE4pve4E/CUDtNS6MgT4fT6N8fnvjJXYHc
-   xhUPHsnsAJEl/ZeptzzJD6yVDpYV9sf7bOPOY+/oUoEx6IewkfNbfW3tE
-   RgYKlGAby9fukm6P28KZ6ZaGdo/gWqR8REuwQHEDXllcvNG39r2o5Wh46
-   S4rdtXl0yiWE+ghFq1YU4vjoVZM5DWcxziXoXtYK5GRXTswGHKGs3Wjye
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="299446326"
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="299446326"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 09:54:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="760941825"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Sep 2022 09:54:47 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oaK2h-000271-0H;
-	Mon, 19 Sep 2022 16:54:47 +0000
-Date: Tue, 20 Sep 2022 00:54:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Joerg Roedel <jroedel@suse.de>
-Subject: [linux-next:master 4740/7934] drivers/iommu/ipmmu-vmsa.c:946:34:
- warning: unused variable 'ipmmu_of_ids'
-Message-ID: <202209200834.EFwaTsIj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05376AA2
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 17:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161FEC433C1;
+	Mon, 19 Sep 2022 17:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663606864;
+	bh=ndqY5FLt8PS+6wqOA5dNQKv0CB8+ASxY+mAY38er7ek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iWf/P8b9Mdeo/cDhdxz0uuWA1HWslgr6fHTsyUwNN0vvtOI2hVPJZ+CaJ51B2fBLA
+	 RZiQfXvLrqws8kVAmMB2fg5+pPJ2fdJZy4lZl7B4KcNFiIXZfCFEyACB8i/sNoqVNR
+	 la83Ts7AdXs/yH2aCXwA+/ghWwo/SzKdLtXjD3CFV+7e3NPotq658ivALs6RAuOnIa
+	 eYoNjLu0tNb7Q8nQB6DDcFoXcIwNWILtTc6zkGA7aRdTemY+uiHZaYbDiBF9vWePs5
+	 40nwdy6CzJTn2HeFvlMUrC06pWhsM7trutltJ7Yk62pYgUpSYgoYyaYAiDC0ODdsRQ
+	 DDQxiqm8R0yRw==
+Date: Mon, 19 Sep 2022 10:01:02 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+	catalin.marinas@arm.com, james.morse@arm.com, joey.gouly@arm.com,
+	maz@kernel.org, will@kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 7/8] arm64: alternatives: add
+ alternative_has_feature_*()
+Message-ID: <YyigTrxhE3IRPzjs@dev-arch.thelio-3990X>
+References: <20220912162210.3626215-1-mark.rutland@arm.com>
+ <20220912162210.3626215-8-mark.rutland@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,157 +34,313 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220912162210.3626215-8-mark.rutland@arm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4c9ca5b1597e3222177ba2a94658f78fa5ef4f58
-commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 [4740/7934] iommu/ipmmu-vmsa: Clean up bus_set_iommu()
-config: s390-randconfig-r005-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200834.EFwaTsIj-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Hi Mark,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, Sep 12, 2022 at 05:22:09PM +0100, Mark Rutland wrote:
+> Currrently we use a mixture of alternative sequences and static branches
+> to handle features detected at boot time. For ease of maintenance we
+> generally prefer to use static branches in C code, but this has a few
+> downsides:
+> 
+> * Each static branch has metadata in the __jump_table section, which is
+>   not discarded after features are finalized. This wastes some space,
+>   and slows down the patching of other static branches.
+> 
+> * The static branches are patched at a different point in time from the
+>   alternatives, so changes are not atomic. This leaves a transient
+>   period where there could be a mismatch between the behaviour of
+>   alternatives and static branches, which could be problematic for some
+>   features (e.g. pseudo-NMI).
+> 
+> * More (instrumentable) kernel code is executed to patch each static
+>   branch, which can be risky when patching certain features (e.g.
+>   irqflags management for pseudo-NMI).
+> 
+> * When CONFIG_JUMP_LABEL=n, static branches are turned into a load of a
+>   flag and a conditional branch. This means it isn't safe to use such
+>   static branches in an alternative address space (e.g. the NVHE/PKVM
+>   hyp code), where the generated address isn't safe to acccess.
+> 
+> To deal with these issues, this patch introduces new
+> alternative_has_feature_*() helpers, which work like static branches but
+> are patched using alternatives. This ensures the patching is performed
+> at the same time as other alternative patching, allows the metadata to
+> be freed after patching, and is safe for use in alternative address
+> spaces.
+> 
+> Note that all supported toolchains have asm goto support, and since
+> commit:
+> 
+>   a0a12c3ed057af57 ("asm goto: eradicate CC_HAS_ASM_GOTO)"
+> 
+> ... the CC_HAS_ASM_GOTO Kconfig symbol has been removed, so no feature
+> check is necessary, and we can always make use of asm goto.
+> 
+> Additionally, note that:
+> 
+> * This has no impact on cpus_have_cap(), which is a dynamic check.
+> 
+> * This has no functional impact on cpus_have_const_cap(). The branches
+>   are patched slightly later than before this patch, but these branches
+>   are not reachable until caps have been finalised.
+> 
+> * It is now invalid to use cpus_have_final_cap() in the window between
+>   feature detection and patching. All existing uses are only expected
+>   after patching anyway, so this should not be a problem.
+> 
+> * The LSE atomics will now be enabled during alternatives patching
+>   rather than immediately before. As the LL/SC an LSE atomics are
+>   functionally equivalent this should not be problematic.
+> 
+> When building defconfig with GCC 12.1.0, the resulting Image is 64KiB
+> smaller:
+> 
+> | % ls -al Image-*
+> | -rw-r--r-- 1 mark mark 37108224 Aug 23 09:56 Image-after
+> | -rw-r--r-- 1 mark mark 37173760 Aug 23 09:54 Image-before
+> 
+> According to bloat-o-meter.pl:
+> 
+> | add/remove: 44/34 grow/shrink: 602/1294 up/down: 39692/-61108 (-21416)
+> | Function                                     old     new   delta
+> | [...]
+> | Total: Before=16618336, After=16596920, chg -0.13%
+> | add/remove: 0/2 grow/shrink: 0/0 up/down: 0/-1296 (-1296)
+> | Data                                         old     new   delta
+> | arm64_const_caps_ready                        16       -     -16
+> | cpu_hwcap_keys                              1280       -   -1280
+> | Total: Before=8987120, After=8985824, chg -0.01%
+> | add/remove: 0/0 grow/shrink: 0/0 up/down: 0/0 (0)
+> | RO Data                                      old     new   delta
+> | Total: Before=18408, After=18408, chg +0.00%
+> 
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> ---
+>  arch/arm64/include/asm/alternative-macros.h | 41 +++++++++++++++++++++
+>  arch/arm64/include/asm/cpufeature.h         |  7 ++--
+>  arch/arm64/include/asm/lse.h                |  5 +--
+>  arch/arm64/kernel/cpufeature.c              | 25 -------------
+>  arch/arm64/kernel/image-vars.h              |  4 --
+>  5 files changed, 46 insertions(+), 36 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/alternative-macros.h b/arch/arm64/include/asm/alternative-macros.h
+> index 189c31be163ce..eaba9ec127897 100644
+> --- a/arch/arm64/include/asm/alternative-macros.h
+> +++ b/arch/arm64/include/asm/alternative-macros.h
+> @@ -213,4 +213,45 @@ alternative_endif
+>  #define ALTERNATIVE(oldinstr, newinstr, ...)   \
+>  	_ALTERNATIVE_CFG(oldinstr, newinstr, __VA_ARGS__, 1)
+>  
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <linux/bug.h>
+> +#include <linux/types.h>
+> +
+> +static __always_inline bool
+> +alternative_has_feature_likely(unsigned long feature)
+> +{
+> +	BUILD_BUG_ON(feature >= ARM64_NCAPS);
+> +
+> +	asm_volatile_goto(
+> +	ALTERNATIVE("b	%l[l_no]", "nop", %[feature])
+> +	:
+> +	: [feature] "i" (feature)
+> +	:
+> +	: l_no);
+> +
+> +	return true;
+> +l_no:
+> +	return false;
+> +}
+> +
+> +static __always_inline bool
+> +alternative_has_feature_unlikely(unsigned long feature)
+> +{
+> +	BUILD_BUG_ON(feature >= ARM64_NCAPS);
+> +
+> +	asm_volatile_goto(
+> +	ALTERNATIVE("nop", "b	%l[l_yes]", %[feature])
+> +	:
+> +	: [feature] "i" (feature)
+> +	:
+> +	: l_yes);
+> +
+> +	return false;
+> +l_yes:
+> +	return true;
+> +}
+> +
+> +#endif /* __ASSEMBLY__ */
+> +
+>  #endif /* __ASM_ALTERNATIVE_MACROS_H */
 
-All warnings (new ones prefixed by >>):
+The addition of BUILD_BUG_ON() in these functions ends up blowing up
+when building with clang + CONFIG_LTO:
 
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
-   static const struct of_device_id ipmmu_of_ids[] = {
-                                    ^
-   13 warnings generated.
+  In file included from kernel/bounds.c:10:
+  In file included from ./include/linux/page-flags.h:10:
+  In file included from ./include/linux/bug.h:5:
+  In file included from ./arch/arm64/include/asm/bug.h:26:
+  In file included from ./include/asm-generic/bug.h:5:
+  In file included from ./include/linux/compiler.h:248:
+  In file included from ./arch/arm64/include/asm/rwonce.h:11:
+  ./arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+          BUILD_BUG_ON(feature >= ARM64_NCAPS);
+          ^
+  ./arch/arm64/include/asm/alternative-macros.h:241:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+          BUILD_BUG_ON(feature >= ARM64_NCAPS);
+          ^
+  2 errors generated.
 
+As you can see from the include chain, alternative-macros.h can end up
+being included from bug.h through compiler.h and rwonce.h, which will be
+before the definition of BUILD_BUG_ON() in build_bug.h, so it does not
+get expanded by the preprocessor. I could not come up with a clean
+solution other than moving these functions into their own header so that
+they do not appear in the alternative-macros.h include path (see below).
+Would that be acceptable (the file name is a placeholder, I could not
+come up with anything better) or do you have any other suggestions?
+Another solution that might work is open coding these BUILD_BUG_ON()
+calls with compiletime_assert() directly, as that should be available at
+this point.
 
-vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
+Cheers,
+Nathan
 
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
-33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
-33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
-33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
-33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
-60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
-60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
-60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
-757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
-757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
-757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
-b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
-b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
-b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
-58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
-58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
-0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
-0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
-0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
-0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
-98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
-98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
-98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
-3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
-b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
-b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
-b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
-3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
-9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
-33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
-33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
-33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
-33f3ac9b511612 Magnus Damm             2017-10-16  995  };
-33f3ac9b511612 Magnus Damm             2017-10-16  996  
-
-:::::: The code at line 946 was first introduced by commit
-:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
-
-:::::: TO: Magnus Damm <damm+renesas@opensource.se>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/arch/arm64/include/asm/alternative-likely.h b/arch/arm64/include/asm/alternative-likely.h
+new file mode 100644
+index 000000000000..f4e63d65e9eb
+--- /dev/null
++++ b/arch/arm64/include/asm/alternative-likely.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_ALTERNATIVE_LIKELY_H
++#define __ASM_ALTERNATIVE_LIKELY_H
++
++#ifndef __ASSEMBLY__
++
++#include <asm/alternative-macros.h>
++#include <linux/bug.h>
++#include <linux/types.h>
++
++static __always_inline bool
++alternative_has_feature_likely(unsigned long feature)
++{
++	BUILD_BUG_ON(feature >= ARM64_NCAPS);
++
++	asm_volatile_goto(
++	ALTERNATIVE_CB("b	%l[l_no]", %[feature], alt_cb_patch_nops)
++	:
++	: [feature] "i" (feature)
++	:
++	: l_no);
++
++	return true;
++l_no:
++	return false;
++}
++
++static __always_inline bool
++alternative_has_feature_unlikely(unsigned long feature)
++{
++	BUILD_BUG_ON(feature >= ARM64_NCAPS);
++
++	asm_volatile_goto(
++	ALTERNATIVE("nop", "b	%l[l_yes]", %[feature])
++	:
++	: [feature] "i" (feature)
++	:
++	: l_yes);
++
++	return false;
++l_yes:
++	return true;
++}
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* __ASM_ALTERNATIVE_LIKELY_H */
+diff --git a/arch/arm64/include/asm/alternative-macros.h b/arch/arm64/include/asm/alternative-macros.h
+index 4a2a98d6d222..189c31be163c 100644
+--- a/arch/arm64/include/asm/alternative-macros.h
++++ b/arch/arm64/include/asm/alternative-macros.h
+@@ -213,45 +213,4 @@ alternative_endif
+ #define ALTERNATIVE(oldinstr, newinstr, ...)   \
+ 	_ALTERNATIVE_CFG(oldinstr, newinstr, __VA_ARGS__, 1)
+ 
+-#ifndef __ASSEMBLY__
+-
+-#include <linux/bug.h>
+-#include <linux/types.h>
+-
+-static __always_inline bool
+-alternative_has_feature_likely(unsigned long feature)
+-{
+-	BUILD_BUG_ON(feature >= ARM64_NCAPS);
+-
+-	asm_volatile_goto(
+-	ALTERNATIVE_CB("b	%l[l_no]", %[feature], alt_cb_patch_nops)
+-	:
+-	: [feature] "i" (feature)
+-	:
+-	: l_no);
+-
+-	return true;
+-l_no:
+-	return false;
+-}
+-
+-static __always_inline bool
+-alternative_has_feature_unlikely(unsigned long feature)
+-{
+-	BUILD_BUG_ON(feature >= ARM64_NCAPS);
+-
+-	asm_volatile_goto(
+-	ALTERNATIVE("nop", "b	%l[l_yes]", %[feature])
+-	:
+-	: [feature] "i" (feature)
+-	:
+-	: l_yes);
+-
+-	return false;
+-l_yes:
+-	return true;
+-}
+-
+-#endif /* __ASSEMBLY__ */
+-
+ #endif /* __ASM_ALTERNATIVE_MACROS_H */
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index ba8a47433b5a..147d326c4439 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -6,7 +6,7 @@
+ #ifndef __ASM_CPUFEATURE_H
+ #define __ASM_CPUFEATURE_H
+ 
+-#include <asm/alternative-macros.h>
++#include <asm/alternative-likely.h>
+ #include <asm/cpucaps.h>
+ #include <asm/cputype.h>
+ #include <asm/hwcap.h>
+diff --git a/arch/arm64/include/asm/lse.h b/arch/arm64/include/asm/lse.h
+index c503db8e73b0..b28b5cb73387 100644
+--- a/arch/arm64/include/asm/lse.h
++++ b/arch/arm64/include/asm/lse.h
+@@ -13,7 +13,7 @@
+ #include <linux/jump_label.h>
+ #include <linux/stringify.h>
+ #include <asm/alternative.h>
+-#include <asm/alternative-macros.h>
++#include <asm/alternative-likely.h>
+ #include <asm/atomic_lse.h>
+ #include <asm/cpucaps.h>
+ 
