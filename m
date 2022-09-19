@@ -1,1761 +1,237 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3589D4A1F
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 11:49:17 +0000 (UTC)
-Received: by mail-pg1-f174.google.com with SMTP id t190so3473992pgd.9
-        for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 04:49:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE294A1F;
+	Mon, 19 Sep 2022 12:04:56 +0000 (UTC)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28JBx8So020158;
+	Mon, 19 Sep 2022 12:04:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=UVdVAsADEvNie8WiD1Ztu2tPcGfyUDYzBBIeKtHoh20=;
+ b=oVQyp+eW1ftDh+hvqVrHV13h1/H6ACJ92u1ekzxeV9Gu+fKd+O6rHYbRfGzsoQpnwqes
+ 98Gy6RzrQPzCjx07WVe+karYz84f3VeXYOvEZrAkZ/jaLUFDrJNBBEDf9NwUQWqs3tYV
+ v6MKFNx9PZe6omPfNemTphw8ONulnwiuC06wHVH+FDP0oXXqR55X1cbrMJz/dfGsiRsk
+ LqFbSXdXtgjjqqX2B+ovoIyfhczXa89/R/+SNY7uZBVw2+CppYrBQ3WyKhXMAXprmKfU
+ pm7+69Tbbetnrof8wr+M70ljvNi2fLpwfd9XbgLMe4HUcGvDF57wH7yXO4HediC0H1Ep pg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn6stbn62-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Sep 2022 12:04:47 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28JB8ufV009901;
+	Mon, 19 Sep 2022 12:04:46 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jp39p2b78-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Sep 2022 12:04:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iYN0SiETwl4KSB63L7tz/bydhnbVjuPaZOa9AA5GisRMesLaAiqtpnnugGQuMus2k2HulnM/f0Om7lU8eKm7XQ0hD0WRpnd5g3yG8JBM7UAKBeJpmALtX3ZTbl6GRJ6Cgi4UIzy2aMhYhAiyAMejJbczWUgQX1PV9xz05vDDnfOSlvUVpx/4Y4zXybfLicRkaZ00UPluHgmstr1yDdVTzbr6YEMLK6lT1h7Ra3Snk+kxA3XMSowhGnbDnkIGZX3Ze4jay2rlEftpBK0+cV268tjFE7E3bgM9e0arnX6ZpLPelmP9YAbw6E4O9K9MVtUgtIwWW9g6opSYSlLOhZr5+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UVdVAsADEvNie8WiD1Ztu2tPcGfyUDYzBBIeKtHoh20=;
+ b=Pe+sE8lfsGuH5O/G0+vEF4NU0w8w1GN4BopZ43Twd9se7fdbEGuEDOodS5SQO8OsSsKOsF9uFs5bMqu0OWZmXyrB3uPDhnwGk41UkLcWH/d/KK7767vhh8AMcKDjB9eUp4p0JKRRKrq9CgOGaVMu7u/l4dT//NHdiRMNt7NcQaNBQmLwaEkY6glfG5VlZcWFx1WMCT3jW0jSuIcjYWGEzHK2rRR5+HDpgZx/nrojl1J24Ngns9WaM7uQ97qv34xfDv8WsTrxNzd3F2xBZFnXGnU0wl7EmFbRKaeCh3oXqc8HCXIZOMaTt4QzCbJ8w0Nxur6CLMhz7xfYMg54aMGynA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=Kjh5IMzPvCTLLAK/RG2V7+ToYWxCXA5O3/PAXUGkakc=;
-        b=XNDSLa5RLJH26whs0+mhs8DITVwj34Z68/TN9RSRzrB6oNbmZfbfvxVo8lI1cM5dd9
-         fExz1D1jGgdYyC3ImeI5kFJ/zVH2LjarBuFPmIbrUEqkfJUNaImkVkUlopYjVIu6dzCr
-         m/TXJwhfPy6q1GkU2SFdblVDChiwRvY1tkB799976p91xdqc8ORJYvwX5p+RNTaZZHI4
-         4LCBZTDZJrCkoXKz6cuo+GqojbE2k+9kTMmBZ2ITWHVikPQQu1Q7ZwFQ+5fpH1OFBAp/
-         5egVwA9r7fgRth12+RXMIrKkHNkUQ03iJEayHe2EyAxQnwdsh2CsxmbUcefKbeP6CqHg
-         DkBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=Kjh5IMzPvCTLLAK/RG2V7+ToYWxCXA5O3/PAXUGkakc=;
-        b=gKajY3GyE82bm7Zx0l5h4FXA0Ht2srBzvZXD7LnkZt7Sik5JgqA2Q9ql3DfWuHPU9+
-         xfoBHEjuz7Z0LsXRzygxLmfQnZTz557h2PXYF6Q0E22AHAkYfkXC8M6PV948pPrT1XXH
-         +4OMEb0LQpOoR4IDROI1IveXva1goLHvBhyrasPO7KjmBochkFx18mQxBblzZxJyEXO6
-         fZ+0Px3GQs6w3KPEqGS4COShEO/3W8JvM8E/pWDBnFjXmqcBmZNsKuj4tBKwJbER+QBT
-         EEWVTxzGqpYAslRaKdbAfDAGdIzNDEGN4ZjJLUoDMkpzOZ7wgfyCaSfIjEnXhK7IT0Ka
-         2+/g==
-X-Gm-Message-State: ACrzQf0x8yhMCpmuqsOTszGF5CuYaQME6DXBa/kkjvs8qfaQKflQXvsu
-	PTCqAqb+hACwvKM+ejQgN1V9H4NedUNkF9vFeKc=
-X-Google-Smtp-Source: AMsMyM7Tt+geqO+LJNAJxrF0TLNrQSbktWVjE6JRZHKIpfTxPPkyjSs0ioTxpn23bZ8lP0MnfnBAKA==
-X-Received: by 2002:a63:91c3:0:b0:439:c38a:1a95 with SMTP id l186-20020a6391c3000000b00439c38a1a95mr11745783pge.568.1663588155149;
-        Mon, 19 Sep 2022 04:49:15 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d14-20020a170902654e00b0017541ecdcfesm20565529pln.229.2022.09.19.04.49.13
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 04:49:14 -0700 (PDT)
-Message-ID: <6328573a.170a0220.d5702.41ea@mx.google.com>
-Date: Mon, 19 Sep 2022 04:49:14 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UVdVAsADEvNie8WiD1Ztu2tPcGfyUDYzBBIeKtHoh20=;
+ b=uGMp6lJaEoq1TScFnu6wYVE6ifYEyT7s0I9cN8MMgEyXw/mop1n99+SXVnZqteqdnn/YoYrmSKkp4ynem0M50zBG7l5Yu0zBBc63e8AB0Jo//9Fzy5u/Gv+qF+Q9CJDs5J8jM8BFngcMmr/wrZx51o4x0VnK1C6dLKV5tNrvNr0=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY8PR10MB6826.namprd10.prod.outlook.com
+ (2603:10b6:930:9d::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.21; Mon, 19 Sep
+ 2022 12:04:44 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::a493:38d9:86ee:73d6%6]) with mapi id 15.20.5632.016; Mon, 19 Sep 2022
+ 12:04:44 +0000
+Date: Mon, 19 Sep 2022 15:04:19 +0300
+From: Dan Carpenter <dan.carpenter@oracle.com>
+To: eadavis@sina.com
+Cc: almaz.alexandrovich@paragon-software.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [PATCH v3] fs/ntfs3: add a boundary check for EA_FULL
+Message-ID: <Yyhaw8iBPulIO0Pp@kadam>
+References: <YyhHowvgEarPqONR@kadam>
+ <20220919111954.283125-1-eadavis@sina.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919111954.283125-1-eadavis@sina.com>
+X-ClientProxiedBy: MR2P264CA0009.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:1::21) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220919
-Subject: next/master build: 234 builds: 13 failed, 221 passed, 41 errors,
- 81 warnings (next-20220919)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 234 builds: 13 failed, 221 passed, 41 errors, 81 warning=
-s (next-20220919)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220919/
-
-Tree: next
-Branch: master
-Git Describe: next-20220919
-Git Commit: 4c9ca5b1597e3222177ba2a94658f78fa5ef4f58
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
-FAIL
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
-book: (clang-13) FAIL
-    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
-omebook: (clang-13) FAIL
-    allmodconfig: (clang-16) FAIL
-
-arm:
-    allmodconfig: (clang-16) FAIL
-    allmodconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
-
-mips:
-    32r2el_defconfig+kselftest: (gcc-10) FAIL
-    decstation_64_defconfig: (gcc-10) FAIL
-
-riscv:
-    allnoconfig: (clang-16) FAIL
-    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
-
-x86_64:
-    allmodconfig: (clang-16) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-    allmodconfig (clang-16): 6 errors, 2 warnings
-    allmodconfig (gcc-10): 3 errors
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
-2 errors
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
-book (clang-13): 2 errors
-    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
-omebook (clang-13): 2 errors
-    defconfig (clang-16): 1 error
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-16): 1 error
-
-arm:
-    allmodconfig (clang-16): 2 errors, 13 warnings
-    allmodconfig (gcc-10): 1 error, 1 warning
-    aspeed_g5_defconfig (clang-16): 1 error, 10 warnings
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
-    multi_v5_defconfig (clang-16): 1 error
-    multi_v7_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig (clang-16): 1 error, 12 warnings
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
-ng
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    rpc_defconfig (gcc-10): 2 errors
-
-i386:
-    allmodconfig (clang-16): 3 errors
-    allnoconfig (clang-16): 1 error
-    i386_defconfig (clang-16): 1 error
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 1 error
-    rb532_defconfig (gcc-10): 1 warning
-
-riscv:
-    allnoconfig (clang-16): 1 error
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    allmodconfig (clang-16): 4 errors, 9 warnings
-    allnoconfig (clang-16): 1 error
-    x86_64_defconfig (clang-16): 1 error
-
-Errors summary:
-
-    14   error: write on a pipe with no reader
-    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    3    drivers/hwtracing/coresight/coresight-etm4x-core.c:969:19: error: =
-use of undeclared identifier 'ID_AA64DFR0_TRACEVER_SHIFT'
-    3    drivers/hwtracing/coresight/coresight-etm4x-core.c:1057:50: error:=
- use of undeclared identifier 'ID_AA64DFR0_TRACE_FILT_SHIFT'
-    2    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6=
-: error: variable 'macsec_rule' is used uninitialized whenever 'if' conditi=
-on is true [-Werror,-Wsometimes-uninitialized]
-    2    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:=
-6: error: variable 'macsec_rule' is used uninitialized whenever 'if' condit=
-ion is true [-Werror,-Wsometimes-uninitialized]
-    1    ld.lld: error: undefined symbol: __aeabi_uldivmod
-    1    drivers/perf/arm_spe_pmu.c:963:10: error: use of undeclared identi=
-fier 'ID_AA64DFR0_PMSVER_SHIFT'
-    1    drivers/perf/arm_spe_pmu.c:681:7: error: use of undeclared identif=
-ier 'ID_AA64DFR0_PMSVER_8_3'
-    1    drivers/perf/arm_spe_pmu.c:679:7: error: use of undeclared identif=
-ier 'ID_AA64DFR0_PMSVER_8_2'
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3432:12: error: =
-stack frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-=
-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:143=
-5:12: error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_g=
-et_power_profile_mode' [-Werror,-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_v=
-ba_314.c:4020:6: error: stack frame size (2216) exceeds limit (2048) in 'dm=
-l314_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-    1    drivers/ata/ahci_st.c:147:17: error: unused variable =E2=80=98dev=
-=E2=80=99 [-Werror=3Dunused-variable]
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    23   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    22   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    6    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98de=
-v=E2=80=99 [-Wunused-variable]
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    2    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:3=
-8: note: initialize the variable 'macsec_rule' to silence this warning
-    2    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:=
-38: note: initialize the variable 'macsec_rule' to silence this warning
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
-y() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
-es .noinstr.text section
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to=
- !ENDBR: machine_kexec_prepare+0x487
-    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy()=
- leaves .noinstr.text section
-    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
-t() falls through to next function m5mols_set_frame_desc()
-    1    drivers/ata/ahci_st.c:147:17: warning: unused variable 'dev' [-Wun=
-used-variable]
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-    1    cc1: all warnings being treated as errors
-    1    1 warning generated.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-16) =E2=80=94 FAIL, 2 errors, 13 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    ld.lld: error: undefined symbol: __aeabi_uldivmod
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1435:12:=
- error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_get_po=
-wer_profile_mode' [-Werror,-Wframe-larger-than]
-    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3432:12: error: stack=
- frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wfram=
-e-larger-than]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-16) =E2=80=94 FAIL, 6 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    drivers/perf/arm_spe_pmu.c:679:7: error: use of undeclared identifier '=
-ID_AA64DFR0_PMSVER_8_2'
-    drivers/perf/arm_spe_pmu.c:681:7: error: use of undeclared identifier '=
-ID_AA64DFR0_PMSVER_8_3'
-    drivers/perf/arm_spe_pmu.c:963:10: error: use of undeclared identifier =
-'ID_AA64DFR0_PMSVER_SHIFT'
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: err=
-or: variable 'macsec_rule' is used uninitialized whenever 'if' condition is=
- true [-Werror,-Wsometimes-uninitialized]
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: er=
-ror: variable 'macsec_rule' is used uninitialized whenever 'if' condition i=
-s true [-Werror,-Wsometimes-uninitialized]
-
-Warnings:
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: no=
-te: initialize the variable 'macsec_rule' to silence this warning
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: n=
-ote: initialize the variable 'macsec_rule' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 4 errors, 9 warnings, 0 sec=
-tion mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: err=
-or: variable 'macsec_rule' is used uninitialized whenever 'if' condition is=
- true [-Werror,-Wsometimes-uninitialized]
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: er=
-ror: variable 'macsec_rule' is used uninitialized whenever 'if' condition i=
-s true [-Werror,-Wsometimes-uninitialized]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_31=
-4.c:4020:6: error: stack frame size (2216) exceeds limit (2048) in 'dml314_=
-ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-
-Warnings:
-    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
-oinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
-eaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to !END=
-BR: machine_kexec_prepare+0x487
-    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
-alls through to next function m5mols_set_frame_desc()
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: no=
-te: initialize the variable 'macsec_rule' to silence this warning
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: n=
-ote: initialize the variable 'macsec_rule' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
-smatches
-
-Errors:
-    drivers/ata/ahci_st.c:147:17: error: unused variable =E2=80=98dev=E2=80=
-=99 [-Werror=3Dunused-variable]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    drivers/perf/arm_spe_pmu.c:679:7: error: =E2=80=98ID_AA64DFR0_PMSVER_8_=
-2=E2=80=99 undeclared (first use in this function)
-    drivers/perf/arm_spe_pmu.c:681:7: error: =E2=80=98ID_AA64DFR0_PMSVER_8_=
-3=E2=80=99 undeclared (first use in this function)
-    drivers/perf/arm_spe_pmu.c:963:10: error: =E2=80=98ID_AA64DFR0_PMSVER_S=
-HIFT=E2=80=99 undeclared (first use in this function); did you mean =E2=80=
-=98ID_AA64PFR0_EL1_SVE_SHIFT=E2=80=99?
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 10 warnings, 0=
- section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section mismatches
-
-Errors:
-    drivers/hwtracing/coresight/coresight-etm4x-core.c:969:19: error: use o=
-f undeclared identifier 'ID_AA64DFR0_TRACEVER_SHIFT'
-    drivers/hwtracing/coresight/coresight-etm4x-core.c:1057:50: error: use =
-of undeclared identifier 'ID_AA64DFR0_TRACE_FILT_SHIFT'
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section mismatch=
-es
-
-Errors:
-    drivers/hwtracing/coresight/coresight-etm4x-core.c:969:19: error: use o=
-f undeclared identifier 'ID_AA64DFR0_TRACEVER_SHIFT'
-    drivers/hwtracing/coresight/coresight-etm4x-core.c:1057:50: error: use =
-of undeclared identifier 'ID_AA64DFR0_TRACE_FILT_SHIFT'
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section misma=
-tches
-
-Errors:
-    drivers/hwtracing/coresight/coresight-etm4x-core.c:969:19: error: use o=
-f undeclared identifier 'ID_AA64DFR0_TRACEVER_SHIFT'
-    drivers/hwtracing/coresight/coresight-etm4x-core.c:1057:50: error: use =
-of undeclared identifier 'ID_AA64DFR0_TRACE_FILT_SHIFT'
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 section =
-mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98dev=E2=
-=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 12 warnings, 0 =
-section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    drivers/ata/ahci_st.c:147:17: warning: unused variable 'dev' [-Wunused-=
-variable]
-    1 warning generated.
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98dev=E2=
-=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98dev=E2=
-=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98dev=E2=
-=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 1 warning, 0 section mismatches
-
-Warnings:
-    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98dev=E2=
-=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    drivers/ata/ahci_st.c:147:17: warning: unused variable =E2=80=98dev=E2=
-=80=99 [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----
-For more info write to <info@kernelci.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|CY8PR10MB6826:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6073fdd4-6066-41a4-f705-08da9a3723ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	uUWxDrKZoFeMU0yQ0UiC4bLx5npNTty+Ljb4ooAHX2/mKpfCUP/sQcn8PK+w9qb2LTdg1UxYwfTOqwz8zEGXrpGITRAplrEVnuLGXjQgMSYh4yDwLeUEzVbkHSADQRpH7p6iAVxXKyfuojx3kqFdktZt4SqPMWcdgBChzFmS0v+LkdAj5yocOn6iJrZWPC8vmmQIZfZrVZm+D+Hd7CwHbjsE16mw3FGXy5fA4vZjYCrmlHAHBaAvIdM+ywuFvWiuM/mIUY5EYYimzsQ4DDuKiBvFHt87jDT07+SlRt+LUDNhSAG7EzYxkkrkbA2rNHpkJUjCSBQMUaQK1soa+p+1xat5A4KxUDXgVfpZDqRfjef4uHddUDn0Riac9lioGuT9SbbXKVnY+N8rMppb9PL1XucMMkwIWuNnOmgcfku9rPI522gJOoOboz81hgeC6sQYcVdV5CPXI2i+rMUr6WcAYB2/yQjvIXoGBNMDIRZFEL9AzG5vdIDySkxQ4Wzpq9viJM46EtV2eWgvU0TMDP4DJDIXsTzzSNHZNZAB6qQzPWfEKFX0gV3fu7yjiu4E/zlT27U7aA2Sc8srA53ASx9TOEZ7MBY9pW3spxTLESfRHC8/2IVwyRf0sdKtqCGXagCL9labcjSFv1MeFwqI3ut2/dAPHFrY8Puc2wRjYMHxenq2hj2xuboRhtCtgzrNOZ1pYVqEkucKjC7QqDPsxMWE3CIrE3Gam+kjQ54w4w6HoIJx2Ob7kYEfP+rt1atnyMayVrUSkd9NJRdoHfn+pqEY1Q==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(39860400002)(346002)(376002)(396003)(136003)(451199015)(83380400001)(186003)(966005)(33716001)(2906002)(38100700002)(6486002)(6916009)(316002)(4326008)(86362001)(8936002)(6506007)(6666004)(41300700001)(478600001)(66476007)(66556008)(7416002)(66946007)(8676002)(6512007)(26005)(44832011)(9686003)(5660300002)(99710200001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?8XMOqpo0T/i0lDnhXzXUWYqW3N8Msx0D09BIi271Bw1HFyieOtpf3vr8Yq22?=
+ =?us-ascii?Q?JVV2ozoNA8zzO5fPWsjTWZozxKhODJ2Onj6AwFnyUEJroY45Us7yRZE3EGn3?=
+ =?us-ascii?Q?NEPIkoPERlqs2XNmrnJz+6bbOQQ87FUdM/EjGHR67UjjKGqwYK7iPlcELj9z?=
+ =?us-ascii?Q?+i/vNcgWBuLb+r9T4ZeHZ733o42pEn9bc7BFmumEtKCArEwQqquw+a42GlOP?=
+ =?us-ascii?Q?vw7LyqKxu8+NSsNjivhRcO6Yarxz7WF4M2P3IEOLGqlogSdK9DSvc6Q26xt3?=
+ =?us-ascii?Q?YkIpiCqERgf73Z/GLmdAVHs7A58wWGLV8HiNxGv15BC2U5f+H8/60Xfgu3M+?=
+ =?us-ascii?Q?sUlz2aHpj3DWkMci2wizjirf0bX2JgWL9HXZRT3YLKuyxGEcy2tmD48sleB0?=
+ =?us-ascii?Q?QS9lGqA45vn5eh0rWOcSPEHMsftTVrxh5A5kvALnJc5Qu25Y9GcMuiPgPuDq?=
+ =?us-ascii?Q?xJ9lHzg4WRDvjs0m5aXk61EVvPgU31ZaswNh+C4utRuSItAE4W4UBPmZ9u9I?=
+ =?us-ascii?Q?l4onsflfrVX4Xqu7ImSHUL/KfMadZuDEJItWpeRh6spTo6K36MpokijAjreY?=
+ =?us-ascii?Q?VYsEDEvboJUlylflom59Hmz4PmNSXIqRUbHRstnnQikyH9yEvQxDJqOu0BaB?=
+ =?us-ascii?Q?c5dPcbfxORxln8JFkdpMKKaH2ZUDqTMSjvqVSGhICqaOhx4wgaZQ6SuYTRtq?=
+ =?us-ascii?Q?etyw/T1DgiKg47xLW4ymLhLLna1w/P9lDxB68L7bDUQzfRfhbRXlBvogS/Bq?=
+ =?us-ascii?Q?f2Imyo20Rcp4oULLywmsAMnuXOFPjdEpC8BLsodf9ERsnocpfmaXuqj7NG6w?=
+ =?us-ascii?Q?r8upUulhNb4xSe+t/M54I2SQ8ju2xmaUy/MhnETHVfyiYBTsuV9AjZMQPych?=
+ =?us-ascii?Q?iFrbfKjI7W901sdI1zci7+XPf6J8So4GEHKYCgLdfH0PHLYFjMEPejkHCdEo?=
+ =?us-ascii?Q?B6lMTy10SA0YZ1H5idUQTwMe1byp3RHYCvj8DivB1cSMcCytC26fXDRXKhpT?=
+ =?us-ascii?Q?0r3OiDv8EDdE+zN658M9pN4TzYFYOkdL5HbbofdsCRL8obgu4ITb1QTj1tSg?=
+ =?us-ascii?Q?oUhSez7fwaTzOECUl3lbXXLJ6tWePecNsThpUZRtRscQegau2saz5iYcC3r/?=
+ =?us-ascii?Q?TFSYJrq5CpGqUfsy+5dDcQhK2XJFAV/rAs2ZEgh9yRusvjJ4mIe+QSxjcDCP?=
+ =?us-ascii?Q?Io9j76RZB0+7VuMM39S2lRcbYijztURySIbjJ5RPcIi2ss9jy2Ozvv/Fx2aL?=
+ =?us-ascii?Q?Sb3NUcJ7UkMx2+6TSLHHZpM6E5M0zlQvqdSBGyMKU4oGuEmH7HIaq36y+aJi?=
+ =?us-ascii?Q?V0wCf4mmhkPV3HmbMZhWwWqexG5XP5rLs5+edt0D16i19lXB5TMjuGJA53v1?=
+ =?us-ascii?Q?g1PuHE68kkXU77mneSFUCxhSjlrDzvJVL0Ylgjul/dFQjhclPpwdXsu3Nyuc?=
+ =?us-ascii?Q?hY69faU31Pj54+1+JotP7Te0KiSU0Vb1CURouyw5tA149uf8FsIb6UIw0T3k?=
+ =?us-ascii?Q?RelgmX+nEoZBgsT4tVDO5iTd141BiSreE69kvjR7qRVnj1FzJcQ/HkBpHUYL?=
+ =?us-ascii?Q?rrbSHqbW0NKoIWXsPgx4d4cNLAghUTeMIU+j2aRv2gh2EbM3JIsliQog/XrA?=
+ =?us-ascii?Q?cA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6073fdd4-6066-41a4-f705-08da9a3723ac
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2022 12:04:44.1731
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s2cDxR3Y5KyM5+EFSi1tFSECkE5BMIXdGg5RzQNkQ+he3AVawCaaT0q+LEvH01P5H/optDyYZ6CvIFxSJ9yEZp/nUjYcaWEXNLA7YU3v4ec=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6826
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-19_05,2022-09-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209190081
+X-Proofpoint-GUID: 4Rpih3-1iIM0uHw-JzpPw2MnaVqsSofh
+X-Proofpoint-ORIG-GUID: 4Rpih3-1iIM0uHw-JzpPw2MnaVqsSofh
+
+This patch is useful and shows what the bug is however the fix needs
+some additional work.
+
+On Mon, Sep 19, 2022 at 07:19:54PM +0800, eadavis@sina.com wrote:
+> From: Edward Adam Davis <eadavis@sina.com>
+> 
+> the root cause is: 
+> The remaining space after the offset is less than the space needed to 
+> accommodate the next EA_FULL struct.
+
+This commit message is not good and does not explain what how the
+problem appears to the user.  Don't start the commit message in the
+middle of a sentence.
+
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=c4d950787fd5553287b7  
+> Reported-by: syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Edward Adam Davis <eadavis@sina.com>
+> ---
+> Changes in v3:
+>   Add Suggested-by: and fix the syntax err.
+
+This is not what I suggested... There several problems with this patch.
+
+1) If we call find_ea() if "bytes" set to a number in 1-7 range then
+   then the unpacked_ea_size() is an out of bounds read.
+2) The *off + unpacked_ea_size() can have an integer overflow.
+3) The math in "next_len + ea->name_len + le16_to_cpu(ea->elength)" is
+   not correct.  It should use unpacked_ea_size() instead.  (The math
+   is different, this is a bug an not a style complaint).
+4) My one style complaint is that "8" in "next_off + 8" is a magic
+   number.
+
+So maybe we could separate out the issue with the buffer overflow from
+the integer overflow.
+
+Patch 1:  Fix buffer overflow:
+
+Add "if (bytes - *off < sizeof(*ea))" before the call to
+"ea = Add2Ptr(ea_all, *off);".  Then remove the "!bytes" test.  That
+test is wrong and useless.  Also remove the if (next_off >= bytes) test.
+That test is also insufficient and no longer required.
+
+Patch 2: Fix the integer overflow bug.
+
+-		next_off = *off + unpacked_ea_size(ea);
++		next_off = size_add(*off, unpacked_ea_size(ea));
+
+We also need to change the types of next_off and bytes to size_t for the
+size_add() to be useful.  I forgot about that last time I sent this.
+
+After both patches are applied the code will look like below.
+
+regards,
+dan carpenter
+
+
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index 7de8718c68a9..bf53ed96b03f 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -41,17 +41,24 @@ static inline size_t packed_ea_size(const struct EA_FULL *ea)
+  *
+  * Assume there is at least one xattr in the list.
+  */
+-static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
++static inline bool find_ea(const struct EA_FULL *ea_all, size_t bytes,
+ 			   const char *name, u8 name_len, u32 *off)
+ {
++	const struct EA_FULL *ea;
++	size_t next_off;
++
+ 	*off = 0;
+ 
+-	if (!ea_all || !bytes)
++	if (!ea_all)
+ 		return false;
+ 
++
+ 	for (;;) {
+-		const struct EA_FULL *ea = Add2Ptr(ea_all, *off);
+-		u32 next_off = *off + unpacked_ea_size(ea);
++		if (bytes - *off < sizeof(*ea))
++			return false;
++
++		ea = Add2Ptr(ea_all, *off);
++		next_off = size_add(*off, unpacked_ea_size(ea));
+ 
+ 		if (next_off > bytes)
+ 			return false;
+@@ -61,8 +68,6 @@ static inline bool find_ea(const struct EA_FULL *ea_all, u32 bytes,
+ 			return true;
+ 
+ 		*off = next_off;
+-		if (next_off >= bytes)
+-			return false;
+ 	}
+ }
+ 
