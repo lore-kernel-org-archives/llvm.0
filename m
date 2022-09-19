@@ -1,59 +1,46 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242E87C
-	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 16:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62259A48
+	for <llvm@lists.linux.dev>; Mon, 19 Sep 2022 16:44:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663604631; x=1695140631;
+  t=1663605891; x=1695141891;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=534SCdyVoi3Nta37uvVFYzfWLs7UOtcQZUJoddoJMi4=;
-  b=kX2t1GvDAtFNJDkGfFMgVo+lQ09041NK2Z0ZwOzxyhMtkw8NYBBhbw5x
-   SDbZ8KMRiCanm9W8MBdCUngzkS7j99YOYeBFx7Ww1mcDMxg+FmY1vrZkZ
-   lW8i7ZF7lMPnFRnSXoRcis1hLgjGIkEOtvP6OzJg02l7sCf4XPMAzBkRf
-   i9fYMjpmkaizuvtyyi6/qW/5XCvvEP9FUfWpHMPzxIvPHj02TlhjCL4QJ
-   aKMs0noQ+6Jcr36TJtTTI67EAairCkku4EZSAd4fN8AbaujCYOt0naDEY
-   jUIokWrC5FSxpvHDrLmr0ZPLslCPDyw9yijImz8jka3FoAOPxmc9jSQht
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="300264194"
+  bh=EZewErbpnJoVBfLJL/c/JW4xu0UtQOz7YRXGFLIeHj8=;
+  b=aGmwfTBJ4wq/hQmBeAZtDR4iuPRYf5YviL8prSQIeHxYTg5kwqo0VkrQ
+   /Av0eLtMo3UzHd0C6MCkNrqjXTRqBKHrgY0crZVweRJHIaKUDC4USe39i
+   Xvh/5IN8guHRDJcy9HwTzextOOOG7AgZvVac3VUfZHEv91cego3e65X3X
+   IRc1Y3HVODBBaeEaij6y6uvbYR6xG/EHxd74nT3jxt0DGDLO/XF/JWqD6
+   EP41a7HMp7Eb1A89EQpU534F+YnbaTdxlDtCvO8xb+NNrm7glW+mQAI6R
+   HN9JDuuywL022l4OV9Fr+QTATG5fvy6YcUsXK3dCQ+YZsfHj1L/kuX0lv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="361190747"
 X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="300264194"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 09:23:50 -0700
+   d="scan'208";a="361190747"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 09:44:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,328,1654585200"; 
-   d="scan'208";a="947285801"
+   d="scan'208";a="596154581"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Sep 2022 09:23:45 -0700
+  by orsmga006.jf.intel.com with ESMTP; 19 Sep 2022 09:44:46 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oaJYf-00025Z-03;
-	Mon, 19 Sep 2022 16:23:45 +0000
-Date: Tue, 20 Sep 2022 00:23:10 +0800
+	id 1oaJsz-00026H-2f;
+	Mon, 19 Sep 2022 16:44:45 +0000
+Date: Tue, 20 Sep 2022 00:43:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	helgaas@kernel.org
+To: Liu Shixin <liushixin2@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mka@chromium.org,
-	quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-	quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-	swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Stanimir Varbanov <svarbanov@mm-sol.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@somainline.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v6 2/5] PCI: qcom: Add retry logic for link to be stable
- in L1ss
-Message-ID: <202209200020.ASFgBZac-lkp@intel.com>
-References: <1662713084-8106-3-git-send-email-quic_krichai@quicinc.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH 4/9] mm/mmap: use hotplug_memory_notifier() directly
+Message-ID: <202209200009.uVNUOZp9-lkp@intel.com>
+References: <20220919083152.1824305-5-liushixin2@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,101 +49,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1662713084-8106-3-git-send-email-quic_krichai@quicinc.com>
+In-Reply-To: <20220919083152.1824305-5-liushixin2@huawei.com>
 
-Hi Krishna,
+Hi Liu,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on helgaas-pci/next]
-[also build test WARNING on next-20220919]
-[cannot apply to clk/clk-next linus/master v6.0-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/PCI-qcom-Add-system-suspend-resume-support/20220909-164906
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
-config: arm64-randconfig-r002-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200020.ASFgBZac-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Shixin/mm-Use-hotplug_memory_notifier-instead-of-register_hotmemory_notifier/20220919-160043
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: arm64-randconfig-r036-20220919 (https://download.01.org/0day-ci/archive/20220920/202209200009.uVNUOZp9-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/629a2c707a31ccfdf891d6b580cf3e8c62ab9169
+        # https://github.com/intel-lab-lkp/linux/commit/f147c36bfc42b2f7ee738305544169ddeae003e8
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-chaitanya-chundru/PCI-qcom-Add-system-suspend-resume-support/20220909-164906
-        git checkout 629a2c707a31ccfdf891d6b580cf3e8c62ab9169
+        git fetch --no-tags linux-review Liu-Shixin/mm-Use-hotplug_memory_notifier-instead-of-register_hotmemory_notifier/20220919-160043
+        git checkout f147c36bfc42b2f7ee738305544169ddeae003e8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/controller/dwc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pcie-qcom.c:1834:6: warning: format specifies type 'int' but the argument has type 's64' (aka 'long long') [-Wformat]
-                                           ktime_to_ms(ktime_get() - start));
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:158:46: note: expanded from macro 'dev_dbg'
-           dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                               ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   1 warning generated.
+>> mm/mmap.c:3749:30: error: expected identifier or '('
+           if (hotplug_memory_notifier(&reserve_mem_notifier, 0))
+                                       ^
+>> mm/mmap.c:3749:6: error: use of undeclared identifier 'reserve_mem_notifier_mem_nb'
+           if (hotplug_memory_notifier(&reserve_mem_notifier, 0))
+               ^
+   include/linux/memory.h:167:28: note: expanded from macro 'hotplug_memory_notifier'
+           register_memory_notifier(&fn##_mem_nb);                 \
+                                     ^
+   <scratch space>:58:1: note: expanded from here
+   reserve_mem_notifier_mem_nb
+   ^
+   2 errors generated.
 
 
-vim +1834 drivers/pci/controller/dwc/pcie-qcom.c
+vim +3749 mm/mmap.c
 
-  1808	
-  1809	static int __maybe_unused qcom_pcie_pm_suspend(struct qcom_pcie *pcie)
-  1810	{
-  1811		u32 val;
-  1812		ktime_t timeout, start;
-  1813		struct dw_pcie *pci = pcie->pci;
-  1814		struct device *dev = pci->dev;
-  1815	
-  1816		if (!pcie->cfg->supports_system_suspend)
-  1817			return 0;
-  1818	
-  1819		start = ktime_get();
-  1820		/* Wait max 200 ms */
-  1821		timeout = ktime_add_ms(start, 200);
-  1822	
-  1823		while (1) {
-  1824	
-  1825			if (!dw_pcie_link_up(pci)) {
-  1826				dev_warn(dev, "Link is not active\n");
-  1827				break;
-  1828			}
-  1829	
-  1830			/* if the link is not in l1ss don't turn off clocks */
-  1831			val = readl(pcie->parf + PCIE20_PARF_PM_STTS);
-  1832			if ((val & PCIE20_PARF_PM_STTS_LINKST_IN_L1SUB)) {
-  1833				dev_dbg(dev, "Link enters L1ss after %d  ms\n",
-> 1834						ktime_to_ms(ktime_get() - start));
-  1835				break;
-  1836			}
-  1837	
-  1838			if (ktime_after(ktime_get(), timeout)) {
-  1839				dev_warn(dev, "Link is not in L1ss\n");
-  1840				return 0;
-  1841			}
-  1842	
-  1843			udelay(1000);
-  1844		}
-  1845	
-  1846		if (pcie->cfg->ops->suspend)
-  1847			pcie->cfg->ops->suspend(pcie);
-  1848	
-  1849		pcie->is_suspended = true;
-  1850	
-  1851		return 0;
-  1852	}
-  1853	
+  3746	
+  3747	static int __meminit init_reserve_notifier(void)
+  3748	{
+> 3749		if (hotplug_memory_notifier(&reserve_mem_notifier, 0))
 
 -- 
 0-DAY CI Kernel Test Service
