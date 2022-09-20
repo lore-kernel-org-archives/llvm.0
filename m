@@ -1,128 +1,113 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FD810EB
-	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 06:13:41 +0000 (UTC)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWrjK1gR6z14QkD;
-	Tue, 20 Sep 2022 14:09:25 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 14:13:30 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 14:13:29 +0800
-Subject: Re: [PATCH v3 8/8] kallsyms: Add self-test facility
-To: kernel test robot <lkp@intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek
-	<pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
-	<live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Masahiro
- Yamada" <masahiroy@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>, Andrew Morton
-	<akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	<linux-modules@vger.kernel.org>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>, "Linux Memory
- Management List" <linux-mm@kvack.org>
-References: <20220919151533.1734-9-thunder.leizhen@huawei.com>
- <202209201123.hihIfjo1-lkp@intel.com>
-From: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <6c02ff59-99f9-5a4b-9bf2-ab0ea12de2c8@huawei.com>
-Date: Tue, 20 Sep 2022 14:13:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F47B10F9
+	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 07:09:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663657749; x=1695193749;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AYbJhqpDswFyR40UwHPuNlV8GKZGdh6k6I4XklvFh2c=;
+  b=Hs1pH99c46H0qkmn54bra2P7/gUohC2QgcFm32VuIlWzQTh9IKXMBiB4
+   Nm6lLLRnwd+1lZnH7FE4bywmg7jvjspNq+gcA1L+xRDPdsl9hzqp4JZAe
+   J9+ThKmcZ+jPlXjV/M5SGnCHkL9ODf0UGB/B6mHbKDAw+HFYA3/jXcMNE
+   BdVbvCBBR92dcmDWJBswF6BGfod5NW2YMQLS75eEHfK0DzOcGVa+QVC3w
+   vGNXPt/Y6YnLxinqp6tINXvmMuUGihhIJzL3oNfOwOwvvDmZSqWCuzSyl
+   8e7TuAwwzyaMdkW9Bfvmgq76ZgrfcgaxT25RvRw42eT5Y4Vh2xKCNZuKZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279345641"
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="279345641"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 00:09:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
+   d="scan'208";a="947547727"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Sep 2022 00:09:06 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oaXNR-0002Yv-33;
+	Tue, 20 Sep 2022 07:09:05 +0000
+Date: Tue, 20 Sep 2022 15:08:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: [linux-next:master 6855/7934] drivers/perf/arm_spe_pmu.c:677:7:
+ error: use of undeclared identifier 'ID_AA64DFR0_PMSVER_8_2'
+Message-ID: <202209201518.HcP4DoUZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202209201123.hihIfjo1-lkp@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Mark,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   4c9ca5b1597e3222177ba2a94658f78fa5ef4f58
+commit: c0357a73fa4a96d8ed9ee46e9927d9fcbc9d0828 [6855/7934] arm64/sysreg: Align field names in ID_AA64DFR0_EL1 with architecture
+config: arm64-randconfig-r036-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201518.HcP4DoUZ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c0357a73fa4a96d8ed9ee46e9927d9fcbc9d0828
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout c0357a73fa4a96d8ed9ee46e9927d9fcbc9d0828
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/rockchip/ drivers/perf/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/perf/arm_spe_pmu.c:677:7: error: use of undeclared identifier 'ID_AA64DFR0_PMSVER_8_2'
+           case ID_AA64DFR0_PMSVER_8_2:
+                ^
+>> drivers/perf/arm_spe_pmu.c:679:7: error: use of undeclared identifier 'ID_AA64DFR0_PMSVER_8_3'
+           case ID_AA64DFR0_PMSVER_8_3:
+                ^
+>> drivers/perf/arm_spe_pmu.c:961:10: error: use of undeclared identifier 'ID_AA64DFR0_PMSVER_SHIFT'
+                                                      ID_AA64DFR0_PMSVER_SHIFT);
+                                                      ^
+   3 errors generated.
 
 
+vim +/ID_AA64DFR0_PMSVER_8_2 +677 drivers/perf/arm_spe_pmu.c
 
-On 2022/9/20 11:14, kernel test robot wrote:
-> Hi Zhen,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on mcgrof/modules-next]
-> [also build test WARNING on linus/master v6.0-rc6 next-20220919]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-> config: i386-randconfig-a001-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201123.hihIfjo1-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
->         git checkout 26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> kernel/kallsyms.c:196:15: warning: no previous prototype for function 'kallsyms_sym_address' [-Wmissing-prototypes]
->    unsigned long kallsyms_sym_address(int idx)
->                  ^
->    kernel/kallsyms.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    unsigned long kallsyms_sym_address(int idx)
->    ^
+d5d9696b03808b Will Deacon 2016-09-22  673  
+4a669e2432fce9 Wei Li      2020-12-03  674  static u64 arm_spe_pmsevfr_res0(u16 pmsver)
+4a669e2432fce9 Wei Li      2020-12-03  675  {
+4a669e2432fce9 Wei Li      2020-12-03  676  	switch (pmsver) {
+4a669e2432fce9 Wei Li      2020-12-03 @677  	case ID_AA64DFR0_PMSVER_8_2:
+4a669e2432fce9 Wei Li      2020-12-03  678  		return SYS_PMSEVFR_EL1_RES0_8_2;
+4a669e2432fce9 Wei Li      2020-12-03 @679  	case ID_AA64DFR0_PMSVER_8_3:
+4a669e2432fce9 Wei Li      2020-12-03  680  	/* Return the highest version we support in default */
+4a669e2432fce9 Wei Li      2020-12-03  681  	default:
+4a669e2432fce9 Wei Li      2020-12-03  682  		return SYS_PMSEVFR_EL1_RES0_8_3;
+4a669e2432fce9 Wei Li      2020-12-03  683  	}
+4a669e2432fce9 Wei Li      2020-12-03  684  }
+4a669e2432fce9 Wei Li      2020-12-03  685  
 
-Well, thanks. Because it's just for testing code, I'm thinking about not
-changing the header file, but it looks like I'll have to change it.
+:::::: The code at line 677 was first introduced by commit
+:::::: 4a669e2432fce9c01522a8453460e89f877dccd4 drivers/perf: Add support for ARMv8.3-SPE
 
->    static 
->    kernel/kallsyms.c:668:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
->    int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
->               ^
->    kernel/kallsyms.c:668:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
->    ^
->    static 
->    2 warnings generated.
-> 
-> 
-> vim +/kallsyms_sym_address +196 kernel/kallsyms.c
-> 
->    195	
->  > 196	unsigned long kallsyms_sym_address(int idx)
->    197	{
->    198		if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
->    199			return kallsyms_addresses[idx];
->    200	
->    201		/* values are unsigned offsets if --absolute-percpu is not in effect */
->    202		if (!IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU))
->    203			return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
->    204	
->    205		/* ...otherwise, positive offsets are absolute values */
->    206		if (kallsyms_offsets[idx] >= 0)
->    207			return kallsyms_offsets[idx];
->    208	
->    209		/* ...and negative offsets are relative to kallsyms_relative_base - 1 */
->    210		return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
->    211	}
->    212	
-> 
+:::::: TO: Wei Li <liwei391@huawei.com>
+:::::: CC: Will Deacon <will@kernel.org>
 
 -- 
-Regards,
-  Zhen Lei
+0-DAY CI Kernel Test Service
+https://01.org/lkp
