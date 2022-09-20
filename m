@@ -1,22 +1,22 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753727C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAC1EC7
 	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 01:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C30FC433D7;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 325A9C4347C;
 	Tue, 20 Sep 2022 01:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1663638017;
-	bh=rwLvn3VkBU5KV5IslYbkFXJLACc79KCCalOdlifBzR8=;
+	bh=DzmFGWy8YdufwwD1+tSAExu34U8/TaxP+VhEqkfvVMU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qWCklRA1NXon8XI6F+w6RN2hGAwQ/uecsnaJGZoA2mvngswqjo80p/hqh9QuDfCkr
-	 4BjpGJ9Z82nI4+cy+46j+wvGEypmz2d5YQ9AKVAUdH1yVcg26MpaktNdq8s36LD7FP
-	 UUfePb4dRTUaq2gzOaPgylgkLKFl0sp+Lde0w6dzRwDnlYeMKAM0UZH+PUZ+gtyXD/
-	 OkI4IqorWvOcfo2zkipxyT45/ShQoyT2ftzBgl+4hpZLrfetL8tltAsJnt5PLGTmqL
-	 uy0eFDXzSifPj1C1w2elmZSZM5TAkBmZYt/AG+YSmniFRLWXlghS3tGMDDT88ZQGfi
-	 gdI6sqQe8FlWA==
+	b=QHrNdTu1dFpu8GiRABsyktCQj7wt3Za5INPGrMnWui5fXCb8w1aVa8pqaDnASkRD5
+	 nmEAZbShuStUAG7fPlIUUAsA7UOzSSHHR0wNW8TQyxxEd8sUs0GQEyrgkGRF0iZpbO
+	 VsHeWNEcg84v9mD8z+rm5S+ygxg1bMOpsdUYXtErWzRbrqjQxEM00p84dQ+UFEoRdz
+	 xjzhxA0ZPQXS0RuiuWViVWQujzKewEF/XDsa/M0NQga/STmzkMca4pYkkU9CiQ4lpC
+	 Z8tmYZy4PPSAaNGTuJx1a2U4Zh75IM5EHGRlGq1nQwt2VR1g4kYmkzskstyxHvBgw/
+	 3YXDlh6XpzvDg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 06B19C43141;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 16D26E52537;
 	Tue, 20 Sep 2022 01:40:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -26,13 +26,13 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: korina: Fix return type of korina_send_packet
+Subject: Re: [PATCH] net: davicom: Fix return type of dm9000_start_xmit
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <166363801702.6857.15735774566278514927.git-patchwork-notify@kernel.org>
+ <166363801708.6857.15887073480116722163.git-patchwork-notify@kernel.org>
 Date: Tue, 20 Sep 2022 01:40:17 +0000
-References: <20220912214344.928925-1-nhuck@google.com>
-In-Reply-To: <20220912214344.928925-1-nhuck@google.com>
+References: <20220912194722.809525-1-nhuck@google.com>
+In-Reply-To: <20220912194722.809525-1-nhuck@google.com>
 To: Nathan Huckleberry <nhuck@google.com>
 Cc: , error27@gmail.com, llvm@lists.linux.dev, davem@davemloft.net,
  edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
@@ -44,21 +44,21 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 12 Sep 2022 14:43:40 -0700 you wrote:
+On Mon, 12 Sep 2022 12:47:19 -0700 you wrote:
 > The ndo_start_xmit field in net_device_ops is expected to be of type
 > netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 > 
 > The mismatched return type breaks forward edge kCFI since the underlying
 > function definition does not match the function hook definition.
 > 
-> The return type of korina_send_packet should be changed from int to
+> The return type of dm9000_start_xmit should be changed from int to
 > netdev_tx_t.
 > 
 > [...]
 
 Here is the summary with links:
-  - net: korina: Fix return type of korina_send_packet
-    https://git.kernel.org/netdev/net-next/c/106c67ce46f3
+  - net: davicom: Fix return type of dm9000_start_xmit
+    https://git.kernel.org/netdev/net-next/c/0191580b000d
 
 You are awesome, thank you!
 -- 
