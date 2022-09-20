@@ -1,87 +1,289 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF387E0D
-	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 19:22:10 +0000 (UTC)
-Received: by mail-pj1-f42.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so11815407pja.5
-        for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 12:22:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56ECD7E0C
+	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 19:22:12 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id y11so4112290pjv.4
+        for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 12:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Y1Vq3TVJb/VWSLfO0Rb19+4XJtG6XYStvEWudetclg0=;
-        b=VfqVLJ45y647x0gXwo2gQ+z8ehdPiGmN765iLaQZImjK9/W6CfiT4udXBkZJQS5RWi
-         5YUKsiZRaPGTmFqgMg0S6JrUAb3QT+mxnm8vI0rl1t7Uz1P0at2DCiu6MyDDIRqDVqp5
-         mkNGp3A0YtuQgcMH37ZLEU/iA03FJATEvCmKM=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=b7FvkRf/XameI3tAxI0qKDnPDgul0cfpqZiW5Ih+TfY=;
+        b=G0yzd3YQmRHSm8hygGaJN23uIfHcIPVonGOjkqyNWhgM4CENWufgxK3rc2ksXWFaq5
+         W1pvS4BzvsxlUiZWzbHjFUgvT7hopNCjL7/IfebtaUkJyqFyjRtP+IPnqn4y0na+dKs7
+         J0wWa6WM4Qv2DbhPAozS3qg50xwRRqP+oeG5E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Y1Vq3TVJb/VWSLfO0Rb19+4XJtG6XYStvEWudetclg0=;
-        b=zfbFTFQpO9L0NNyKYaPci3rAemyTKQaV+yudEIGdHWLWhNTIngXXFJO9Y1c4LOJVxE
-         +DG9gTTMCcXaFehEHB9mV+Tz7lGzNOXjASoZzA6X4scU4Z2ynEEoIKHUk2J+9ouOwg3o
-         CpAvB5PQFBpiOb8Jo6C6KJjZxUuyUezitmpxllISE2DoR3WkFbcv91QipKU59rQkpr2L
-         3NrzwYMRAdJUDxoKM1CcH+yh2BT4yZQBrXbS/2x9Sk4TLmpMrgF0//p+X2X4tawePzdA
-         GUZEyn6bFZSSlC6SQiSNYyX+9l04tYsXA05CbAo7gqrUjKbbbV3xl0Ukhj76O/LbUDlE
-         xr+w==
-X-Gm-Message-State: ACrzQf0mer2ZzJg3ge1ARqM/5aMpHr/Mx00e1XoJZq1/xbUJK5ONBqRt
-	SqA5Ke45LET36bzKsoqiaJkQdA==
-X-Google-Smtp-Source: AMsMyM7UlJUymG96TUt4dcAXXoMYIq3o2jMOjyUAGOo5qGscwQPpXzcr9kpEC2WhUoygo4z9X6EyFg==
-X-Received: by 2002:a17:902:8307:b0:172:e611:491f with SMTP id bd7-20020a170902830700b00172e611491fmr1079757plb.111.1663701730500;
-        Tue, 20 Sep 2022 12:22:10 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=b7FvkRf/XameI3tAxI0qKDnPDgul0cfpqZiW5Ih+TfY=;
+        b=AICFqur6otDFY3HBoflrddfVk/ZRHYtqxwQ1yeW9ahCfi6CATbgIRhyN/qxxcgAS7E
+         nDUuhc8ZpEn6X4Dcs8rKtFiZL3678BTpaLL3n1xbmcZ7srWqPtP9XwupO2O6jZjy22hQ
+         ouBPvD5UhStPWOHJfjrIl1zB61CXxnLrnAJ54sF5o/Cn8ND8gnFW8sXK2fAWccOhVxLV
+         KEFyjQYL9BUDl2LM4SLsOC2dQElSpztF6ryub7DLobotP1fDLNQYjuWrCnmFuXHBhxS/
+         VSh/LUlr7mTfp35Fq5OpGLdyQIhHxm8kZwAiJ/Y4Ps4HCfnpoulZcxprE4S5VPhmHb+0
+         AfwQ==
+X-Gm-Message-State: ACrzQf1WEcNma7f/nnvegMQq273aa4g5Bnpw5J2oZC0mLavf03GfTQju
+	Xyf8/qn76nqGFrxEShnsmtd5Vg==
+X-Google-Smtp-Source: AMsMyM4MlWS2VfZxaUxG/J/yjFdlpSdd1ttEqoJXydSzcYurOBNsEyN3/lJvRpJhe6BzL1xIb54Ykg==
+X-Received: by 2002:a17:902:dac7:b0:178:b5e0:3627 with SMTP id q7-20020a170902dac700b00178b5e03627mr1050536plx.147.1663701732000;
+        Tue, 20 Sep 2022 12:22:12 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y23-20020aa79af7000000b00536aa488062sm249174pfp.163.2022.09.20.12.22.07
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902ceca00b0017732e4003bsm262226plg.141.2022.09.20.12.22.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 20 Sep 2022 12:22:08 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: linux-hardening@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>,
-	Siddhesh Poyarekar <siddhesh@gotplt.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev,
+	Siddhesh Poyarekar <siddhesh@gotplt.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Juergen Gross <jgross@suse.com>,
 	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Tom Rix <trix@redhat.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 0/4] fortify: Use __builtin_dynamic_object_size() when available
-Date: Tue, 20 Sep 2022 12:21:58 -0700
-Message-Id: <20220920192202.190793-1-keescook@chromium.org>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 3/4] fortify: Convert to struct vs member helpers
+Date: Tue, 20 Sep 2022 12:22:01 -0700
+Message-Id: <20220920192202.190793-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220920192202.190793-1-keescook@chromium.org>
+References: <20220920192202.190793-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=772; h=from:subject; bh=J1jKJHEXW6fuYZp0bwrwLqGsXtJ2fCfxnhbkDPep9j4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjKhLY5BfaUkXVQJ7vCxL3yWuutd9/BjsHihL3Ygj4 bXMlY6aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyoS2AAKCRCJcvTf3G3AJoxoEA CNWvotJduQ1+tj7cnZlwvQosnG4/aa+Tua7+dPMGebxam64/SsgNEoEDE+iYOFec1iIT+TWr8DmBMs EMbqXsh+5rZssPPBiIy/lKv6+nO58viHWBPTOrFOxjJezOdqzX5hdK95NTYC6eyawrsUC7KnHrfVyv 8uBqte82ZYL5hfRgO1u02u8C5Bf6vtyatkJ2a5nZLLcpnur5eQLS1TX6/TsVUqcbNF6RYURASxZYxq lNcTVV+DgbsaId76L8ljOwV7Dz08ykjlIWsJYinvKgJWtHh3Ya/FIg6Fg0wsSnoRpdKL2pEBS+mjw8 scvWa4vMb/CTqwBfYwJRi1l4lScrE/BeIUVBtCu+xcGpc+gp1l4FTKTxoTMk45DT0CXAWU9xxTqc6c gSsZV2A0ZaxVRmLjiXIVZBZyjq6GQ2v89cwHB25GBATaN7EksK82VcoD9hAPrZcOauqYKDNVOXZqcv PpO5iSx1rbRkKKc25kGoYIrCrM5qRXyBEQK/TJcmBLXtaqCGukGx0OBRVuBhi/+PKBc1unOPjp5s39 fBtan6hdZ+J2bxFNBlDxauaECtMUzhFuGY+UDK278LYJq5ucd/NRTst6+Tn32tg7T5c+nM37eKAa/C y46/iBV/2fCPGMCZHrv1f27M6fd0S4sj9JrAy2oCimhN5Gm+bmpFdDiS46lw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9864; h=from:subject; bh=BqQbiGaquIsbcMOqf8A6fSRC6Vfu8ZKyxxnc+qe3hgU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjKhLZ0Oxez6IX/gcUwsIFv3+tMCVKvwgPQj27qPt8 VXbpHlqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyoS2QAKCRCJcvTf3G3AJkDdD/ 4q2zvDS9l/L4s2sAzrxtBwCZUnHjkBHzcdbXLIMLWrIepT/FQAM3Kk2z7w84mjlNBeiW0infuj23MH o1u1RPvNkHf9A/+vRJfGs21mJA+0+Fav4YMboXMqbp1hpIx9YxW9JJ7dJrkRGNpfLXY8n8t3jCRi7n FEUyBKp81hcgHgWxILxQ8mIqLf75AZxwCUyrTAcu8LyNbCR9O+buVloQ8tKdiGsET+3CYTF5KbLYhb PJeWtRKVBFO8QAOIWoWwkdCTn0mgfIKMzevZ3SZd7vuIF28ExS9VX9Oh+BSrYWN5SKR2+5VFypcVyM ln6dH04dg2abuCq7Dvft9pCN2OjVZZjmMU3qoVx69WaD4hViFuGBRXfS+PUAUtWOHwNPlrHkedlukV KkHl1OLS0ueDpoNZ2MkiKtuKGyxPs3lwC06Tp/uPgdzmCJbdwQzzS2MoZx3bXLRcfvr7jhUJmtSrD0 CpwYhQzocUF7Qz0exEUjIgOZwzkx/BgRoMxGD8aftpAzOCjXb95k3wQJDgSIspogue2cLDWwg1EP28 o9opm3tYeLVcIM89XXxu1rGM0jA8ZkfQAdK3ZFmCaB93ai7/BZOAdlB+ElB/7qtXaUgLZpaKmV0XBj wSrPBqjrKEijV2hEVqi7xjlhTwUdHp9HrHTrE7G1vvC0P0Q3TTyMo/sDet/A==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Hi,
+In preparation for adding support for __builtin_dynamic_object_size(),
+wrap each instance of __builtin_object_size(p, N) with either the new
+__struct_size(p) as __bos(p, 0), or __member_size(p) as __bos(p, 1).
+This will allow us to replace the definitions with __bdos() next.
+There are no binary differences from this change.
 
-This adjusts CONFIG_FORTIFY_SOURCE's coverage to include greater runtime
-size checking from GCC and Clang's __builtin_dynamic_object_size(), which
-the compilers can track either via code flow or from __alloc_size() hints.
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: linux-hardening@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/fortify-string.h | 68 +++++++++++++++++-----------------
+ 1 file changed, 35 insertions(+), 33 deletions(-)
 
-Thanks,
-
--Kees
-
-Kees Cook (4):
-  x86/entry: Work around Clang __bdos() bug
-  fortify: Explicitly check bounds are compile-time constants
-  fortify: Convert to struct vs member helpers
-  fortify: Use __builtin_dynamic_object_size() when available
-
- arch/x86/xen/enlighten_pv.c         |   3 +-
- drivers/misc/lkdtm/heap.c           |   1 +
- include/linux/compiler_attributes.h |   5 ++
- include/linux/fortify-string.h      | 125 ++++++++++++++++------------
- 4 files changed, 81 insertions(+), 53 deletions(-)
-
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index 71c0a432c638..3f1178584d7b 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -20,7 +20,7 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
+ ({								\
+ 	unsigned char *__p = (unsigned char *)(p);		\
+ 	size_t __ret = SIZE_MAX;				\
+-	size_t __p_size = __builtin_object_size(p, 1);		\
++	size_t __p_size = __member_size(p);			\
+ 	if (__p_size != SIZE_MAX &&				\
+ 	    __builtin_constant_p(*__p)) {			\
+ 		size_t __p_len = __p_size - 1;			\
+@@ -72,13 +72,15 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+ 	__underlying_memcpy(dst, src, bytes)
+ 
+ /*
+- * Clang's use of __builtin_object_size() within inlines needs hinting via
+- * __pass_object_size(). The preference is to only ever use type 1 (member
++ * Clang's use of __builtin_*object_size() within inlines needs hinting via
++ * __pass_*object_size(). The preference is to only ever use type 1 (member
+  * size, rather than struct size), but there remain some stragglers using
+  * type 0 that will be converted in the future.
+  */
+-#define POS	__pass_object_size(1)
+-#define POS0	__pass_object_size(0)
++#define POS			__pass_object_size(1)
++#define POS0			__pass_object_size(0)
++#define __struct_size(p)	__builtin_object_size(p, 0)
++#define __member_size(p)	__builtin_object_size(p, 1)
+ 
+ #define __compiletime_lessthan(bounds, length)	(	\
+ 	__builtin_constant_p(length) &&			\
+@@ -121,7 +123,7 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+ __FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
+ char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
+ {
+-	size_t p_size = __builtin_object_size(p, 1);
++	size_t p_size = __member_size(p);
+ 
+ 	if (__compiletime_lessthan(p_size, size))
+ 		__write_overflow();
+@@ -133,7 +135,7 @@ char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
+ __FORTIFY_INLINE __diagnose_as(__builtin_strcat, 1, 2)
+ char *strcat(char * const POS p, const char *q)
+ {
+-	size_t p_size = __builtin_object_size(p, 1);
++	size_t p_size = __member_size(p);
+ 
+ 	if (p_size == SIZE_MAX)
+ 		return __underlying_strcat(p, q);
+@@ -145,7 +147,7 @@ char *strcat(char * const POS p, const char *q)
+ extern __kernel_size_t __real_strnlen(const char *, __kernel_size_t) __RENAME(strnlen);
+ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size_t maxlen)
+ {
+-	size_t p_size = __builtin_object_size(p, 1);
++	size_t p_size = __member_size(p);
+ 	size_t p_len = __compiletime_strlen(p);
+ 	size_t ret;
+ 
+@@ -175,7 +177,7 @@ __FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
+ __kernel_size_t __fortify_strlen(const char * const POS p)
+ {
+ 	__kernel_size_t ret;
+-	size_t p_size = __builtin_object_size(p, 1);
++	size_t p_size = __member_size(p);
+ 
+ 	/* Give up if we don't know how large p is. */
+ 	if (p_size == SIZE_MAX)
+@@ -190,8 +192,8 @@ __kernel_size_t __fortify_strlen(const char * const POS p)
+ extern size_t __real_strlcpy(char *, const char *, size_t) __RENAME(strlcpy);
+ __FORTIFY_INLINE size_t strlcpy(char * const POS p, const char * const POS q, size_t size)
+ {
+-	size_t p_size = __builtin_object_size(p, 1);
+-	size_t q_size = __builtin_object_size(q, 1);
++	size_t p_size = __member_size(p);
++	size_t q_size = __member_size(q);
+ 	size_t q_len;	/* Full count of source string length. */
+ 	size_t len;	/* Count of characters going into destination. */
+ 
+@@ -219,8 +221,8 @@ __FORTIFY_INLINE ssize_t strscpy(char * const POS p, const char * const POS q, s
+ {
+ 	size_t len;
+ 	/* Use string size rather than possible enclosing struct size. */
+-	size_t p_size = __builtin_object_size(p, 1);
+-	size_t q_size = __builtin_object_size(q, 1);
++	size_t p_size = __member_size(p);
++	size_t q_size = __member_size(q);
+ 
+ 	/* If we cannot get size of p and q default to call strscpy. */
+ 	if (p_size == SIZE_MAX && q_size == SIZE_MAX)
+@@ -265,8 +267,8 @@ __FORTIFY_INLINE __diagnose_as(__builtin_strncat, 1, 2, 3)
+ char *strncat(char * const POS p, const char * const POS q, __kernel_size_t count)
+ {
+ 	size_t p_len, copy_len;
+-	size_t p_size = __builtin_object_size(p, 1);
+-	size_t q_size = __builtin_object_size(q, 1);
++	size_t p_size = __member_size(p);
++	size_t q_size = __member_size(q);
+ 
+ 	if (p_size == SIZE_MAX && q_size == SIZE_MAX)
+ 		return __underlying_strncat(p, q, count);
+@@ -324,11 +326,11 @@ __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
+ })
+ 
+ /*
+- * __builtin_object_size() must be captured here to avoid evaluating argument
+- * side-effects further into the macro layers.
++ * __struct_size() vs __member_size() must be captured here to avoid
++ * evaluating argument side-effects further into the macro layers.
+  */
+ #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+-		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
++		__struct_size(p), __member_size(p))
+ 
+ /*
+  * To make sure the compiler can enforce protection against buffer overflows,
+@@ -421,7 +423,7 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+ 	 * fake flexible arrays, until they are all converted to
+ 	 * proper flexible arrays.
+ 	 *
+-	 * The implementation of __builtin_object_size() behaves
++	 * The implementation of __builtin_*object_size() behaves
+ 	 * like sizeof() when not directly referencing a flexible
+ 	 * array member, which means there will be many bounds checks
+ 	 * that will appear at run-time, without a way for them to be
+@@ -487,22 +489,22 @@ __FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+  */
+ 
+ /*
+- * __builtin_object_size() must be captured here to avoid evaluating argument
+- * side-effects further into the macro layers.
++ * __struct_size() vs __member_size() must be captured here to avoid
++ * evaluating argument side-effects further into the macro layers.
+  */
+ #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,			\
+-		__builtin_object_size(p, 0), __builtin_object_size(q, 0), \
+-		__builtin_object_size(p, 1), __builtin_object_size(q, 1), \
++		__struct_size(p), __struct_size(q),			\
++		__member_size(p), __member_size(q),			\
+ 		memcpy)
+ #define memmove(p, q, s)  __fortify_memcpy_chk(p, q, s,			\
+-		__builtin_object_size(p, 0), __builtin_object_size(q, 0), \
+-		__builtin_object_size(p, 1), __builtin_object_size(q, 1), \
++		__struct_size(p), __struct_size(q),			\
++		__member_size(p), __member_size(q),			\
+ 		memmove)
+ 
+ extern void *__real_memscan(void *, int, __kernel_size_t) __RENAME(memscan);
+ __FORTIFY_INLINE void *memscan(void * const POS0 p, int c, __kernel_size_t size)
+ {
+-	size_t p_size = __builtin_object_size(p, 0);
++	size_t p_size = __struct_size(p);
+ 
+ 	if (__compiletime_lessthan(p_size, size))
+ 		__read_overflow();
+@@ -514,8 +516,8 @@ __FORTIFY_INLINE void *memscan(void * const POS0 p, int c, __kernel_size_t size)
+ __FORTIFY_INLINE __diagnose_as(__builtin_memcmp, 1, 2, 3)
+ int memcmp(const void * const POS0 p, const void * const POS0 q, __kernel_size_t size)
+ {
+-	size_t p_size = __builtin_object_size(p, 0);
+-	size_t q_size = __builtin_object_size(q, 0);
++	size_t p_size = __struct_size(p);
++	size_t q_size = __struct_size(q);
+ 
+ 	if (__builtin_constant_p(size)) {
+ 		if (__compiletime_lessthan(p_size, size))
+@@ -531,7 +533,7 @@ int memcmp(const void * const POS0 p, const void * const POS0 q, __kernel_size_t
+ __FORTIFY_INLINE __diagnose_as(__builtin_memchr, 1, 2, 3)
+ void *memchr(const void * const POS0 p, int c, __kernel_size_t size)
+ {
+-	size_t p_size = __builtin_object_size(p, 0);
++	size_t p_size = __struct_size(p);
+ 
+ 	if (__compiletime_lessthan(p_size, size))
+ 		__read_overflow();
+@@ -543,7 +545,7 @@ void *memchr(const void * const POS0 p, int c, __kernel_size_t size)
+ void *__real_memchr_inv(const void *s, int c, size_t n) __RENAME(memchr_inv);
+ __FORTIFY_INLINE void *memchr_inv(const void * const POS0 p, int c, size_t size)
+ {
+-	size_t p_size = __builtin_object_size(p, 0);
++	size_t p_size = __struct_size(p);
+ 
+ 	if (__compiletime_lessthan(p_size, size))
+ 		__read_overflow();
+@@ -555,7 +557,7 @@ __FORTIFY_INLINE void *memchr_inv(const void * const POS0 p, int c, size_t size)
+ extern void *__real_kmemdup(const void *src, size_t len, gfp_t gfp) __RENAME(kmemdup);
+ __FORTIFY_INLINE void *kmemdup(const void * const POS0 p, size_t size, gfp_t gfp)
+ {
+-	size_t p_size = __builtin_object_size(p, 0);
++	size_t p_size = __struct_size(p);
+ 
+ 	if (__compiletime_lessthan(p_size, size))
+ 		__read_overflow();
+@@ -568,8 +570,8 @@ __FORTIFY_INLINE void *kmemdup(const void * const POS0 p, size_t size, gfp_t gfp
+ __FORTIFY_INLINE __diagnose_as(__builtin_strcpy, 1, 2)
+ char *strcpy(char * const POS p, const char * const POS q)
+ {
+-	size_t p_size = __builtin_object_size(p, 1);
+-	size_t q_size = __builtin_object_size(q, 1);
++	size_t p_size = __member_size(p);
++	size_t q_size = __member_size(q);
+ 	size_t size;
+ 
+ 	/* If neither buffer size is known, immediately give up. */
 -- 
 2.34.1
 
