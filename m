@@ -1,45 +1,56 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9991872
-	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 11:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663672242; x=1695208242;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6xRufgAOPeHl07DR4DHjGbYt8F/8YiY/XrFzHNzT8FQ=;
-  b=ba+E7Fa26NnoK48mGApGJUPYMgo24il+7HM1qDHkVsXKdwjBqiS3nBcl
-   KKdq0B6OWWuyk9JFr8zB2s+HRODcLOB0swLoqCXnuU7BVSwpP2shmIWEQ
-   OuhViDUXHMIrX0+6aqo+q/JKCQaTsMKbhoJ2Qslwyw3ReizaXivsSdewT
-   4qnx6pNhdFDy1RQXskopQRhmFhOxUGFL9qdKifjwnopzJABtIf1/3wiff
-   cVo7p3kcvyNzmmvoZ5TKz8pgoO3wDlvJnzOyGQYvYmxGCEIlUGXqLWes/
-   4IDqr1GUtSvDSv9K6zoa0XatbO5pvnYf9+6r5nXcv42KSQaMqmRE7A+XS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="282694178"
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="282694178"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 04:10:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
-   d="scan'208";a="618873529"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Sep 2022 04:10:36 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1oab99-0002iB-0T;
-	Tue, 20 Sep 2022 11:10:35 +0000
-Date: Tue, 20 Sep 2022 19:09:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/vdso 3/3]
- include/vdso/processor.h:10:10: fatal error: 'asm/vdso/processor.h' file not
- found
-Message-ID: <202209201951.cz31hRjJ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CED81C03
+	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 11:47:54 +0000 (UTC)
+Received: by mail-wm1-f45.google.com with SMTP id r133-20020a1c448b000000b003b494ffc00bso6132519wma.0
+        for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 04:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=Uzqu4x3ReJl2swGfEJj67Pd2unDJ3Dv2X7PfUeAMFlU=;
+        b=CmXkA8qIbaFNouX5UDIP2EtzvEpNmgRhb/8rznaJhGMNUuwBOFHghs3gJQS4uomnZr
+         YDcqkjuEvJ4vCka5cONnCHVRV6iQInH+8o7Zq6VeC/3C8HUmiQ31Tc1D7RqHoZMY0+gl
+         DpJVgqTY9VSsYXVMFHySjCx4npqW7qGsRD7k6vyHOfIxIklfFsHo9utUqClMbHOH7nzv
+         xKq4OLNK7WWtv23lHrNAz+KZYWDVjodkcEtoVo4NkPp0a/0giowcL+JsMfRSnh9PfBq2
+         GPBjK8DY/TfnAMRV+kChdRhMBeamsBENpwI9RfDCDpHENBnE3x1TJgyEn6gEeFu9Vrxg
+         wbYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Uzqu4x3ReJl2swGfEJj67Pd2unDJ3Dv2X7PfUeAMFlU=;
+        b=GukTSw5gTBO+cC+//JL/iXa6OXHfR7+2eJXa25i89Gw87ko8bhQeB4lQD0xNhUqg7I
+         2AC+Z62zkdlNCwuF3F7dl2L6NHymcJWMQxy9N12hrrBvFkxvZBqxEzZzunGikBCZv0ls
+         irctgKTujhjVWBGqkD48y1PWGq9ndpZyvHsak/6hGBnqIIHxAylMTtSf4R8Zy7c7ZTvQ
+         YnqEc6bfGnHnTD+vr98eiVSWofElYlYmuDWvw6MuiPzAQ7JnNV1nshIpnxuaN8u3RBvo
+         M5wMoMx/QdntDdiOPe8qf6tvpDyynZ/+rEC5i9bkl5uIsr2wxCmHm44sINBJH3s2dO4+
+         1InQ==
+X-Gm-Message-State: ACrzQf3sUPc5A9Yi/6sr/FfJax5bPL9uSosBE5rNyrrwPQgiU2vWsaIA
+	vSoZmf0XvY+pQ8jBv+Ya5XA=
+X-Google-Smtp-Source: AMsMyM4aBYcaHzJkBzdvhpxsTIJL1CmLJ4dHjh82nS5T2kmR/xQCQfB8ki9IGbZoXjIWTpnN0yGzMA==
+X-Received: by 2002:a1c:f009:0:b0:3b4:9398:49c9 with SMTP id a9-20020a1cf009000000b003b4939849c9mr2085385wmb.174.1663674472131;
+        Tue, 20 Sep 2022 04:47:52 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id b20-20020a05600c4e1400b003b33de17577sm2254667wmq.13.2022.09.20.04.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 04:47:51 -0700 (PDT)
+Date: Tue, 20 Sep 2022 12:47:49 +0100
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>
+Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Philip Yang <Philip.Yang@amd.com>, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-next@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev
+Subject: build failure of next-20220920 due to c2b08e7a6d27 ("drm/amdgpu:
+ move entity selection and job init earlier during CS")
+Message-ID: <YymoZR0jHR7seGyU@debian>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,47 +60,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/vdso
-head:   a7b31acb923dbd25e7bf030ca209f131c31f5288
-commit: a7b31acb923dbd25e7bf030ca209f131c31f5288 [3/3] random: implement getrandom() in vDSO
-config: hexagon-randconfig-r045-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201951.cz31hRjJ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/a7b31acb923dbd25e7bf030ca209f131c31f5288
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/vdso
-        git checkout a7b31acb923dbd25e7bf030ca209f131c31f5288
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/char/ drivers/iommu/ mm/
+Hi All,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The builds of arm64 allmodconfig with clang failed to build next-20220920
+with the error:
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/char/random.c:64:
-   In file included from include/vdso/datapage.h:17:
->> include/vdso/processor.h:10:10: fatal error: 'asm/vdso/processor.h' file not found
-   #include <asm/vdso/processor.h>
-            ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1190:3: error: variable 'r' is uninitialized when used here [-Werror,-Wuninitialized]
+                r |= !amdgpu_ttm_tt_get_user_pages_done(bo->tbo.ttm);
+                ^
+drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1171:7: note: initialize the variable 'r' to silence this warning
+        int r;
+             ^
+              = 0
+1 error generated.
 
 
-vim +10 include/vdso/processor.h
+git bisect pointed to c2b08e7a6d27 ("drm/amdgpu: move entity selection and job init earlier during CS")
 
-d8bb6993d871f5 Vincenzo Frascino 2020-03-20   9  
-d8bb6993d871f5 Vincenzo Frascino 2020-03-20 @10  #include <asm/vdso/processor.h>
-d8bb6993d871f5 Vincenzo Frascino 2020-03-20  11  
+I will be happy to test any patch or provide any extra log if needed.
 
-:::::: The code at line 10 was first introduced by commit
-:::::: d8bb6993d871f5d3cd6d65d3772e4b1f4ef17380 common: Introduce processor.h
-
-:::::: TO: Vincenzo Frascino <vincenzo.frascino@arm.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Sudip
