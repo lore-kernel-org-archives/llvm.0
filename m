@@ -1,126 +1,111 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1221872
-	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 10:50:36 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id b75so2362977pfb.7
-        for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 03:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date;
-        bh=HUkaSAo1IOya4d3G9FGaOCxDJgEIAR+69OEJGr38Qv4=;
-        b=lS3GgcAsa8leQ5Eu/gRsAwvX6RGOCXTqjk+gdslL4wHU2H02QXBITBuR/2QPjeR/59
-         gT580JPk6dsFQLT4N3mkFH/fzNzKDok9oTa2frhwGm5yLmRWEp2k1x6wJHfOGdibxsrr
-         nX0eON7rUtxL1C90gwb3qic2OWV4MehjrSUKi9+1QVuYa3dJkgHbxhY332FsP5onQ7rt
-         2yNG6tgywdKhUYubPrCFIkyUxK7kKfx0y9VjX4X+rGJdm2n5lmhp8aXJ3GuS1Q+W2pZf
-         tsS4uSn4uu0JF8qMJ/1mqe6BZpxSwy+/P7zlmCJJE3CGREl4o3HLFvufKTsRydZsuVuG
-         7wbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=HUkaSAo1IOya4d3G9FGaOCxDJgEIAR+69OEJGr38Qv4=;
-        b=bBQLVi4gNPK/m2rD7K5dvMAbnhzAVUHlb7TquE4xjZAa+v1Llv5IE8uUPK1A249M3d
-         FMu2KShw4221VXGqDWe72BoAbJMfG5Cz09ZZlQuEmJdKdtHrzAget9FkIxEXbYT2UaDi
-         DUorXGg7gj5pnNQMZW/7uUjambRWTVVMlh2AUVllktDUrx3anPMa2ZJ16eA0NttHTFFA
-         18BHKFa/5Stdjz1JVShn6T4GlhdmCf3On9iS2Nv5b2TfME0AvP7oRgNMiOSi5POpsoQH
-         gMVSd/AVlApdQC1+p9kYSd2KbNAu0ajcAhj6KG48EhMPazYBBhi45KevKmg87iPS3cAP
-         CDjw==
-X-Gm-Message-State: ACrzQf0y6h6N4Lqr8M1KFqINwwOzw4PBBPKWn3VNUD82l1BYcJoiMdUM
-	2NjN0Wf1GVscRTK9GI8aZqQ=
-X-Google-Smtp-Source: AMsMyM6PSDM8zqBavSIxknz7nTi4i25IiINMsUGzoFoc9Qv3bV++N9hjffneKGZnizCU2te8KuzwvQ==
-X-Received: by 2002:a63:3381:0:b0:439:ef53:fedc with SMTP id z123-20020a633381000000b00439ef53fedcmr11725414pgz.140.1663671036041;
-        Tue, 20 Sep 2022 03:50:36 -0700 (PDT)
-Received: from localhost ([203.219.227.147])
-        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b0017839e5abfasm1105772plc.263.2022.09.20.03.50.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 03:50:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D5E1872
+	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 11:09:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663672177; x=1695208177;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nqeGfwzE3RvraBj8s5VXbFNjcB2Hwa1a72V7QrPqjnw=;
+  b=IJDqd7h7SVCtDuXPIZm7op0jzuuGsEix/D+Jy1hf9gs3XZ+ZQeAIBLZ0
+   CvKz3OA5te1xQzUDV+FlUEXidh1lddYW7s6PSYFKO9ZJGac8p4SYlwArq
+   sraR/QVrM87B2qjH20OWqtCf5jVy4qu5KB4hrxHdYyjGRoCpiIaJ2j242
+   5wahlYEfG7FqjxW8etprp6HUXXZXnLH6vQXer4Nn3wurtuMM5/Tz6AJkk
+   bhnoAwzN5oQ3TrF1FBNK9rWaqsbWh6S6Ick39TPnGZ5RCzqWGPc/HYEVQ
+   EhzOC4VYD/UBBKc1BX3vU2tmptnzFZO5kGO5TwIylNSPmUeGKnWcK4uKq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="279390818"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="279390818"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 04:09:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="652055159"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Sep 2022 04:09:35 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oab8B-0002hz-01;
+	Tue, 20 Sep 2022 11:09:35 +0000
+Date: Tue, 20 Sep 2022 19:09:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame
+ size (1344) exceeds limit (1280) in 'atags_to_fdt'
+Message-ID: <202209201858.YLTXHqey-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 20 Sep 2022 20:50:28 +1000
-Message-Id: <CN165RJCKFUQ.1ZE3WP9S8Q5FF@bobo>
-To: "Michael Ellerman" <mpe@ellerman.id.au>, "kernel test robot"
- <lkp@intel.com>, <linuxppc-dev@lists.ozlabs.org>, "Christophe Leroy"
- <christophe.leroy@csgroup.eu>
-Cc: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
-Subject: Re: [PATCH v2 3/7] powerpc/build: move got, toc, plt, branch_lt
- sections to read-only
-From: "Nicholas Piggin" <npiggin@gmail.com>
-X-Mailer: aerc 0.11.0
-References: <20220916040755.2398112-4-npiggin@gmail.com>
- <202209180437.4U3soljK-lkp@intel.com> <87mtavly89.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87mtavly89.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon Sep 19, 2022 at 3:39 PM AEST, Michael Ellerman wrote:
-> kernel test robot <lkp@intel.com> writes:
-> > Hi Nicholas,
-> >
-> > I love your patch! Yet something to improve:
-> >
-> > [auto build test ERROR on powerpc/next]
-> > [also build test ERROR on linus/master v6.0-rc5 next-20220916]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Nicholas-Piggin/=
-powerpc-build-linker-improvements/20220916-121310
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.g=
-it next
-> > config: powerpc-microwatt_defconfig (https://download.01.org/0day-ci/ar=
-chive/20220918/202209180437.4U3soljK-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 79=
-1a7ae1ba3efd6bca96338e10ffde557ba83920)
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install powerpc cross compiling tool for clang build
-> >         # apt-get install binutils-powerpc-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/6c034c08f8d0add=
-b6fecba38c9c428b1c4df7c29
-> >         git remote add linux-review https://github.com/intel-lab-lkp/li=
-nux
-> >         git fetch --no-tags linux-review Nicholas-Piggin/powerpc-build-=
-linker-improvements/20220916-121310
-> >         git checkout 6c034c08f8d0addb6fecba38c9c428b1c4df7c29
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash
->                                                     ^^^^^
->
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >>> ld.lld: error: ./arch/powerpc/kernel/vmlinux.lds:46: { expected, but =
-got SPECIAL
-> >    >>>  .got : AT(ADDR(.got) - (0xc0000000 -0x00000000)) SPECIAL {
-> >    >>>                                                   ^
->
-> I guess SPECIAL is a binutils ld ism?
->
-> I can't find it documented anywhere.
->
-> Presumably we can just not use it, given we never did before?
+Hi Ard,
 
-Yeah that's what it is, oops I just took it from the linker script.
+FYI, the error/warning still remains.
 
-I think we can drop it, I think it selects either old or new plt
-sections that are created with --secure-plt, I guess depending on
-some link options and copmatibility concerns. Doesn't look like
-ppc32 uses --secure-plt.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   521a547ced6477c54b4b0cc206000406c221b4d6
+commit: 672513bf583157cc088a32e75bd850dd9f81564c ARM: decompressor: disable stack protector
+date:   10 months ago
+config: arm-randconfig-r004-20220920 (https://download.01.org/0day-ci/archive/20220920/202209201858.YLTXHqey-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=672513bf583157cc088a32e75bd850dd9f81564c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 672513bf583157cc088a32e75bd850dd9f81564c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Thanks,
-Nick
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+   arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: no previous prototype for function 'atags_to_fdt' [-Wmissing-prototypes]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   arch/arm/boot/compressed/atags_to_fdt.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+   ^
+   static 
+>> arch/arm/boot/compressed/atags_to_fdt.c:129:5: warning: stack frame size (1344) exceeds limit (1280) in 'atags_to_fdt' [-Wframe-larger-than]
+   int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+       ^
+   2 warnings generated.
+
+
+vim +/atags_to_fdt +129 arch/arm/boot/compressed/atags_to_fdt.c
+
+31d0b9f9982f8e Ben Dooks          2018-10-12  120  
+b90b9a38251e9c Nicolas Pitre      2011-09-13  121  /*
+b90b9a38251e9c Nicolas Pitre      2011-09-13  122   * Convert and fold provided ATAGs into the provided FDT.
+b90b9a38251e9c Nicolas Pitre      2011-09-13  123   *
+4716e2e34a22a8 Geert Uytterhoeven 2021-05-19  124   * Return values:
+b90b9a38251e9c Nicolas Pitre      2011-09-13  125   *    = 0 -> pretend success
+b90b9a38251e9c Nicolas Pitre      2011-09-13  126   *    = 1 -> bad ATAG (may retry with another possible ATAG pointer)
+b90b9a38251e9c Nicolas Pitre      2011-09-13  127   *    < 0 -> error from libfdt
+b90b9a38251e9c Nicolas Pitre      2011-09-13  128   */
+b90b9a38251e9c Nicolas Pitre      2011-09-13 @129  int atags_to_fdt(void *atag_list, void *fdt, int total_space)
+
+:::::: The code at line 129 was first introduced by commit
+:::::: b90b9a38251e9c89c34179eccde57411ceb5f1aa ARM: zImage: allow supplementing appended DTB with traditional ATAG data
+
+:::::: TO: Nicolas Pitre <nicolas.pitre@linaro.org>
+:::::: CC: Nicolas Pitre <nico@fluxnic.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
