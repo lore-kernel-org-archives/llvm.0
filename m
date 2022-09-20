@@ -1,1243 +1,711 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75EF7462
-	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 15:18:56 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id b75so3054195pfb.7
-        for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 08:18:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275DB7462;
+	Tue, 20 Sep 2022 16:06:59 +0000 (UTC)
+Received: by mail-ot1-f48.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so2038701oti.9;
+        Tue, 20 Sep 2022 09:06:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=aGKkKZZ99GTwgWqU3mDSFzEvQdXJtaeA0zs0KYphOvk=;
-        b=2TYFamE2ANd2sp16gMvhB1pf0UMJFL7Po+C0PyXu6ZPaFbkkcjr0CUVNko35C2svTn
-         EOy+bTDUooXE+glKPby2Yen4XKkHtDHKBWrtgvigolfkaKSS//qlgDLn1xV48KJeyT/N
-         sqHD0lw1TJerXrMImQomBAH+ksw74S8iddNkCdYugTAKWL6Q+oN4zfY5IxYl6suq1o+1
-         F0CtnHwVLwKCHKUZBE8sEzaN0lWlN6lQytygNDz4sy9TZzJzCq7hlfSEwdcrnftEhrjh
-         Jo+TK6lYFoG4XrMaSTg/V+CD7NOyCrMP+RLcQjp4mMyM8I7ZHbziFbPacu7oJUlJU9v1
-         zPEQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=fPO3niesXLPuIBvl16MuqansIpb5OJYa66EGif/RAEY=;
+        b=XyKUHVw6BseG+DMb/7f31+sxqL8zVw4TCrFbiW5GsuVjhCYhKeZM4vbOzFSiiLWlbf
+         MA0QKS3ar2TEuCXEM8QMbFo5Rkd1k6HIeJVTP65Y3s5VR836st1/cpECfLVjYBc6OPXk
+         6b8k3Gwyok2UYAixrt767gDsQPj8/zQ70xHRDFa7IvSO8toZDSFxBJclu0ujQb91Sna7
+         2c0egx+D6Ejc6eF2qwB4i99o/5bIf2xFHmNZxzdCeSUSZvU8YKnCpb0JEvob6YXgOR4B
+         7oTvuCv7t5pMbJJKfW205bTwDHf4MaIvRyxaW+EkndvqeOQGSWhYVnllWtUdDfv8HMNL
+         cEsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=aGKkKZZ99GTwgWqU3mDSFzEvQdXJtaeA0zs0KYphOvk=;
-        b=rRwtLrSxa3lqfoPN22TMUKd364k8w8WjalSIM25UZ1BAwVt+k6IivU7Bin+nXiqxkj
-         LkjhQXJnYPHxNRIxOThCfw+pNfRdav6TUvP+iSiXoo0Itmrz9NYms0V1IMqcOBwXYJhm
-         irddvBcNH4LvRMv9YB0dWjz30Oz9Y+o3K86wEgWYDQIZRSZ0UbP0hgNytJJKfBPdZIrr
-         iRwTqTTwovO6VQ6oxWKdQa3vAzT/OGpNpqJCapIPX3a/EhDgR2W8bXmVSXl1kfUTZr19
-         jihvg9QU8pb0m/QJHLZ63kqSGEi3cuwmL8TkOh/LV4eFkPGDR2mxZv9jGugnVEYQzSem
-         4ebQ==
-X-Gm-Message-State: ACrzQf0kFzk06SzDtHLxBl0JZsfmRbEQYeBatATlf2K1eDK49+GNzn+Y
-	xxntmVzKqrpertSW9/4fUJNn/aHrlTDp/O6yW7s=
-X-Google-Smtp-Source: AMsMyM5swGFCrKAQaOmAAc2NWZfyX0C2Z1QPjWtAnqSV5l0HilDa6Cl+/iyU3KPMMtVxPNPH6RKV/A==
-X-Received: by 2002:a62:1a8d:0:b0:544:1309:19f3 with SMTP id a135-20020a621a8d000000b00544130919f3mr24381450pfa.37.1663687135348;
-        Tue, 20 Sep 2022 08:18:55 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 207-20020a6214d8000000b0053dfef91b0bsm1873178pfu.205.2022.09.20.08.18.54
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:18:54 -0700 (PDT)
-Message-ID: <6329d9de.620a0220.24c0c.33c4@mx.google.com>
-Date: Tue, 20 Sep 2022 08:18:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=fPO3niesXLPuIBvl16MuqansIpb5OJYa66EGif/RAEY=;
+        b=1gzEHgQyvEl3gYbhpAL1o/SQmy43yF7t2WoMaVyzD0550DUFKnomgcTsCBZwAxujR3
+         XVSglFqNbLfABOwuL9JRNMcB7ClQNGx80xo+QzyTl8aQYlAi5j23ZK5Flfs8H5BDuHU/
+         JTRKmLYquCgg5+ufaDWu2QuWSaVj9dIb5C/tOtueksY4G+Ndz62WsCrWzEM0NNnJx4OF
+         Su09PS4H8XLIEqD8F8lCxS9I6TillS2YTlypjKmXEMBFm+R786m2uGPrL5w2y3kMl6Ww
+         6Ri6JDq4V24j3cssQCVx4s1RAdvIgU2X6ugB79CCb5UyndOWGKowD8rrzCtmYrYnsr69
+         CToQ==
+X-Gm-Message-State: ACrzQf3Y8Nok160ISdkNOPRoMn/sCPVndfbXBfDIROBDgnlmoRW9FtT+
+	SHkQK+0/JV2eA1rnN7yB/LGGWI5xoMFvbUSj5m0=
+X-Google-Smtp-Source: AMsMyM7DtCVNxcR1OM6/Z1J2KmxjZ2uIkWWKYOipntM5aa6+Ussk9x9mTPkTjU+4Q3vmhtyDuIkCHaT33oylRVo4oWA=
+X-Received: by 2002:a9d:376:0:b0:655:b4bc:fd6e with SMTP id
+ 109-20020a9d0376000000b00655b4bcfd6emr10659708otv.233.1663690017993; Tue, 20
+ Sep 2022 09:06:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+References: <20220916210658.3412450-1-nathan@kernel.org> <5e0b4692-b3ac-20ce-bd0b-65f52804601b@riseup.net>
+In-Reply-To: <5e0b4692-b3ac-20ce-bd0b-65f52804601b@riseup.net>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Tue, 20 Sep 2022 12:06:46 -0400
+Message-ID: <CADnq5_O67aFW95nNbgPJipypnpzAC-HO=FYkdxOMpOJQXF+CKw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/amd/display: Reduce number of arguments of
+ dml314's CalculateWatermarksAndDRAMSpeedChangeSupport()
+To: =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Harry Wentland <harry.wentland@amd.com>, 
+	Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, "kernelci.org bot" <bot@kernelci.org>, Tom Rix <trix@redhat.com>, 
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev, 
+	dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20220920
-Subject: next/master build: 168 builds: 7 failed, 161 passed, 19 errors,
- 51 warnings (next-20220920)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master build: 168 builds: 7 failed, 161 passed, 19 errors, 51 warnings=
- (next-20220920)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20220920/
-
-Tree: next
-Branch: master
-Git Describe: next-20220920
-Git Commit: ef08d387bbbc20df740ced8caee0ffac835869ac
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
-
-mips:
-    32r2el_defconfig+kselftest: (gcc-10) FAIL
-    decstation_64_defconfig: (gcc-10) FAIL
-
-riscv:
-    allnoconfig: (clang-16) FAIL
-    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
-
-x86_64:
-    allmodconfig: (clang-16) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-    allmodconfig (gcc-10): 3 errors
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-16): 1 error
-
-arm:
-    aspeed_g5_defconfig (clang-16): 1 error, 10 warnings
-    multi_v5_defconfig (clang-16): 1 error
-
-i386:
-    allmodconfig (clang-16): 3 errors, 1 warning
-    allnoconfig (clang-16): 1 error
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    bmips_be_defconfig (gcc-10): 8 warnings
-    bmips_stb_defconfig (gcc-10): 8 warnings
-    fuloong2e_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-
-riscv:
-    allnoconfig (clang-16): 1 error
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    allmodconfig (clang-16): 4 errors, 10 warnings
-    allnoconfig (clang-16): 1 error
-    x86_64_defconfig (clang-16): 1 error
-
-Errors summary:
-
-    9    error: write on a pipe with no reader
-    2    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1190:3: error: variable 'r'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    1    drivers/perf/arm_spe_pmu.c:963:10: error: =E2=80=98ID_AA64DFR0_PMS=
-VER_SHIFT=E2=80=99 undeclared (first use in this function); did you mean =
-=E2=80=98ID_AA64PFR0_EL1_SVE_SHIFT=E2=80=99?
-    1    drivers/perf/arm_spe_pmu.c:681:7: error: =E2=80=98ID_AA64DFR0_PMSV=
-ER_8_3=E2=80=99 undeclared (first use in this function)
-    1    drivers/perf/arm_spe_pmu.c:679:7: error: =E2=80=98ID_AA64DFR0_PMSV=
-ER_8_2=E2=80=99 undeclared (first use in this function)
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3432:12: error: =
-stack frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-=
-Wframe-larger-than]
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6=
-: error: variable 'macsec_rule' is used uninitialized whenever 'if' conditi=
-on is true [-Werror,-Wsometimes-uninitialized]
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:=
-6: error: variable 'macsec_rule' is used uninitialized whenever 'if' condit=
-ion is true [-Werror,-Wsometimes-uninitialized]
-
-Warnings summary:
-
-    10   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1171:7: note: initialize th=
-e variable 'r' to silence this warning
-    2    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_forma=
-t): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (=
-8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid=
-_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
-lt #size-cells value
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid=
-_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
-lt #address-cells value
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_fo=
-rmat): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid lengt=
-h (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2=
-, #size-cells =3D=3D 1)
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (s=
-pi_bus_reg): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
-ci_device_reg): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
-ci_device_bus_num): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i=
-2c_bus_reg): Failed prerequisite 'reg_format'
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
-y() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
-es .noinstr.text section
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to=
- !ENDBR: machine_kexec_prepare+0x487
-    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy()=
- leaves .noinstr.text section
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:=
-38: note: initialize the variable 'macsec_rule' to silence this warning
-    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
-t() falls through to next function m5mols_set_frame_desc()
-    1    :523:38: note: initialize the variable 'macsec_rule' to silence th=
-is warning
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    drivers/perf/arm_spe_pmu.c:679:7: error: =E2=80=98ID_AA64DFR0_PMSVER_8_=
-2=E2=80=99 undeclared (first use in this function)
-    drivers/perf/arm_spe_pmu.c:681:7: error: =E2=80=98ID_AA64DFR0_PMSVER_8_=
-3=E2=80=99 undeclared (first use in this function)
-    drivers/perf/arm_spe_pmu.c:963:10: error: =E2=80=98ID_AA64DFR0_PMSVER_S=
-HIFT=E2=80=99 undeclared (first use in this function); did you mean =E2=80=
-=98ID_AA64PFR0_EL1_SVE_SHIFT=E2=80=99?
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 3 errors, 1 warning, 0 sectio=
-n mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1190:3: error: variable 'r' is u=
-ninitialized when used here [-Werror,-Wuninitialized]
-    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3432:12: error: stack=
- frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wfram=
-e-larger-than]
-
-Warnings:
-    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1171:7: note: initialize the var=
-iable 'r' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 4 errors, 10 warnings, 0 se=
-ction mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1190:3: error: variable 'r' is u=
-ninitialized when used here [-Werror,-Wuninitialized]
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: err=
-or: variable 'macsec_rule' is used uninitialized whenever 'if' condition is=
- true [-Werror,-Wsometimes-uninitialized]
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: er=
-ror: variable 'macsec_rule' is used uninitialized whenever 'if' condition i=
-s true [-Werror,-Wsometimes-uninitialized]
-
-Warnings:
-    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
-oinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
-eaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb+0xaa: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x31: relocation to !END=
-BR: machine_kexec_prepare+0x487
-    drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c:1171:7: note: initialize the var=
-iable 'r' to silence this warning
-    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
-alls through to next function m5mols_set_frame_desc()
-    :523:38: note: initialize the variable 'macsec_rule' to silence this wa=
-rning
-    drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: n=
-ote: initialize the variable 'macsec_rule' to silence this warning
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 10 warnings, 0=
- section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
-ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
-es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
-: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
- bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
-ze-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_bus_num): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
-ddress-cells value
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
-ize-cells value
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
-ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
-es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
-: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
- bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
-ze-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_bus_num): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
-ddress-cells value
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
-ize-cells value
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----
-For more info write to <info@kernelci.org>
+Applied the series.  Thanks!
+
+Alex
+
+On Sat, Sep 17, 2022 at 8:38 AM Ma=C3=ADra Canal <mairacanal@riseup.net> wr=
+ote:
+>
+> Hi Nathan,
+>
+> On 9/16/22 18:06, Nathan Chancellor wrote:
+> > Most of the arguments are identical between the two call sites and they
+> > can be accessed through the 'struct vba_vars_st' pointer. This reduces
+> > the total amount of stack space that
+> > dml314_ModeSupportAndSystemConfigurationFull() uses by 240 bytes with
+> > LLVM 16 (2216 -> 1976), helping clear up the following clang warning:
+> >
+> >   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_=
+314.c:4020:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31=
+4_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+> >   void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode=
+_lib *mode_lib)
+> >        ^
+> >   1 error generated.
+> >
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1710
+> > Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>
+> I have built-tested the whole series with clang 14.0.5 (Fedora
+> 14.0.5-1.fc36), using:
+>
+> $ make -kj"$(nproc)" ARCH=3Dx86_64 LLVM=3D1 mrproper allmodconfig
+> drivers/gpu/drm/amd/amdgpu/
+>
+> Another great patch to the DML! As Tom, I also would like to see this
+> expand to all display_mode_vba files, but so far this is great to
+> unbreak the build.
+>
+> To the whole series:
+>
+> Tested-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+>
+> Best Regards,
+> - Ma=C3=ADra Canal
+>
+> > ---
+> >
+> > This is just commit ab2ac59c32db ("drm/amd/display: Reduce number of
+> > arguments of dml31's CalculateWatermarksAndDRAMSpeedChangeSupport()")
+> > applied to dml314.
+> >
+> >  .../dc/dml/dcn314/display_mode_vba_314.c      | 248 ++++--------------
+> >  1 file changed, 52 insertions(+), 196 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba=
+_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> > index 2829f179f982..32ceb72f7a14 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> > @@ -325,64 +325,28 @@ static void CalculateVupdateAndDynamicMetadataPar=
+ameters(
+> >  static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+> >               struct display_mode_lib *mode_lib,
+> >               unsigned int PrefetchMode,
+> > -             unsigned int NumberOfActivePlanes,
+> > -             unsigned int MaxLineBufferLines,
+> > -             unsigned int LineBufferSize,
+> > -             unsigned int WritebackInterfaceBufferSize,
+> >               double DCFCLK,
+> >               double ReturnBW,
+> > -             bool SynchronizedVBlank,
+> > -             unsigned int dpte_group_bytes[],
+> > -             unsigned int MetaChunkSize,
+> >               double UrgentLatency,
+> >               double ExtraLatency,
+> > -             double WritebackLatency,
+> > -             double WritebackChunkSize,
+> >               double SOCCLK,
+> > -             double DRAMClockChangeLatency,
+> > -             double SRExitTime,
+> > -             double SREnterPlusExitTime,
+> > -             double SRExitZ8Time,
+> > -             double SREnterPlusExitZ8Time,
+> >               double DCFCLKDeepSleep,
+> >               unsigned int DETBufferSizeY[],
+> >               unsigned int DETBufferSizeC[],
+> >               unsigned int SwathHeightY[],
+> >               unsigned int SwathHeightC[],
+> > -             unsigned int LBBitPerPixel[],
+> >               double SwathWidthY[],
+> >               double SwathWidthC[],
+> > -             double HRatio[],
+> > -             double HRatioChroma[],
+> > -             unsigned int vtaps[],
+> > -             unsigned int VTAPsChroma[],
+> > -             double VRatio[],
+> > -             double VRatioChroma[],
+> > -             unsigned int HTotal[],
+> > -             double PixelClock[],
+> > -             unsigned int BlendingAndTiming[],
+> >               unsigned int DPPPerPlane[],
+> >               double BytePerPixelDETY[],
+> >               double BytePerPixelDETC[],
+> > -             double DSTXAfterScaler[],
+> > -             double DSTYAfterScaler[],
+> > -             bool WritebackEnable[],
+> > -             enum source_format_class WritebackPixelFormat[],
+> > -             double WritebackDestinationWidth[],
+> > -             double WritebackDestinationHeight[],
+> > -             double WritebackSourceHeight[],
+> >               bool UnboundedRequestEnabled,
+> >               unsigned int CompressedBufferSizeInkByte,
+> >               enum clock_change_support *DRAMClockChangeSupport,
+> > -             double *UrgentWatermark,
+> > -             double *WritebackUrgentWatermark,
+> > -             double *DRAMClockChangeWatermark,
+> > -             double *WritebackDRAMClockChangeWatermark,
+> >               double *StutterExitWatermark,
+> >               double *StutterEnterPlusExitWatermark,
+> >               double *Z8StutterExitWatermark,
+> > -             double *Z8StutterEnterPlusExitWatermark,
+> > -             double *MinActiveDRAMClockChangeLatencySupported);
+> > +             double *Z8StutterEnterPlusExitWatermark);
+> >
+> >  static void CalculateDCFCLKDeepSleep(
+> >               struct display_mode_lib *mode_lib,
+> > @@ -3041,64 +3005,28 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetc=
+hParametersWatermarksAndPerforman
+> >               CalculateWatermarksAndDRAMSpeedChangeSupport(
+> >                               mode_lib,
+> >                               PrefetchMode,
+> > -                             v->NumberOfActivePlanes,
+> > -                             v->MaxLineBufferLines,
+> > -                             v->LineBufferSize,
+> > -                             v->WritebackInterfaceBufferSize,
+> >                               v->DCFCLK,
+> >                               v->ReturnBW,
+> > -                             v->SynchronizedVBlank,
+> > -                             v->dpte_group_bytes,
+> > -                             v->MetaChunkSize,
+> >                               v->UrgentLatency,
+> >                               v->UrgentExtraLatency,
+> > -                             v->WritebackLatency,
+> > -                             v->WritebackChunkSize,
+> >                               v->SOCCLK,
+> > -                             v->DRAMClockChangeLatency,
+> > -                             v->SRExitTime,
+> > -                             v->SREnterPlusExitTime,
+> > -                             v->SRExitZ8Time,
+> > -                             v->SREnterPlusExitZ8Time,
+> >                               v->DCFCLKDeepSleep,
+> >                               v->DETBufferSizeY,
+> >                               v->DETBufferSizeC,
+> >                               v->SwathHeightY,
+> >                               v->SwathHeightC,
+> > -                             v->LBBitPerPixel,
+> >                               v->SwathWidthY,
+> >                               v->SwathWidthC,
+> > -                             v->HRatio,
+> > -                             v->HRatioChroma,
+> > -                             v->vtaps,
+> > -                             v->VTAPsChroma,
+> > -                             v->VRatio,
+> > -                             v->VRatioChroma,
+> > -                             v->HTotal,
+> > -                             v->PixelClock,
+> > -                             v->BlendingAndTiming,
+> >                               v->DPPPerPlane,
+> >                               v->BytePerPixelDETY,
+> >                               v->BytePerPixelDETC,
+> > -                             v->DSTXAfterScaler,
+> > -                             v->DSTYAfterScaler,
+> > -                             v->WritebackEnable,
+> > -                             v->WritebackPixelFormat,
+> > -                             v->WritebackDestinationWidth,
+> > -                             v->WritebackDestinationHeight,
+> > -                             v->WritebackSourceHeight,
+> >                               v->UnboundedRequestEnabled,
+> >                               v->CompressedBufferSizeInkByte,
+> >                               &DRAMClockChangeSupport,
+> > -                             &v->UrgentWatermark,
+> > -                             &v->WritebackUrgentWatermark,
+> > -                             &v->DRAMClockChangeWatermark,
+> > -                             &v->WritebackDRAMClockChangeWatermark,
+> >                               &v->StutterExitWatermark,
+> >                               &v->StutterEnterPlusExitWatermark,
+> >                               &v->Z8StutterExitWatermark,
+> > -                             &v->Z8StutterEnterPlusExitWatermark,
+> > -                             &v->MinActiveDRAMClockChangeLatencySuppor=
+ted);
+> > +                             &v->Z8StutterEnterPlusExitWatermark);
+> >
+> >               for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> >                       if (v->WritebackEnable[k] =3D=3D true) {
+> > @@ -5496,64 +5424,28 @@ void dml314_ModeSupportAndSystemConfigurationFu=
+ll(struct display_mode_lib *mode_
+> >                       CalculateWatermarksAndDRAMSpeedChangeSupport(
+> >                                       mode_lib,
+> >                                       v->PrefetchModePerState[i][j],
+> > -                                     v->NumberOfActivePlanes,
+> > -                                     v->MaxLineBufferLines,
+> > -                                     v->LineBufferSize,
+> > -                                     v->WritebackInterfaceBufferSize,
+> >                                       v->DCFCLKState[i][j],
+> >                                       v->ReturnBWPerState[i][j],
+> > -                                     v->SynchronizedVBlank,
+> > -                                     v->dpte_group_bytes,
+> > -                                     v->MetaChunkSize,
+> >                                       v->UrgLatency[i],
+> >                                       v->ExtraLatency,
+> > -                                     v->WritebackLatency,
+> > -                                     v->WritebackChunkSize,
+> >                                       v->SOCCLKPerState[i],
+> > -                                     v->DRAMClockChangeLatency,
+> > -                                     v->SRExitTime,
+> > -                                     v->SREnterPlusExitTime,
+> > -                                     v->SRExitZ8Time,
+> > -                                     v->SREnterPlusExitZ8Time,
+> >                                       v->ProjectedDCFCLKDeepSleep[i][j]=
+,
+> >                                       v->DETBufferSizeYThisState,
+> >                                       v->DETBufferSizeCThisState,
+> >                                       v->SwathHeightYThisState,
+> >                                       v->SwathHeightCThisState,
+> > -                                     v->LBBitPerPixel,
+> >                                       v->SwathWidthYThisState,
+> >                                       v->SwathWidthCThisState,
+> > -                                     v->HRatio,
+> > -                                     v->HRatioChroma,
+> > -                                     v->vtaps,
+> > -                                     v->VTAPsChroma,
+> > -                                     v->VRatio,
+> > -                                     v->VRatioChroma,
+> > -                                     v->HTotal,
+> > -                                     v->PixelClock,
+> > -                                     v->BlendingAndTiming,
+> >                                       v->NoOfDPPThisState,
+> >                                       v->BytePerPixelInDETY,
+> >                                       v->BytePerPixelInDETC,
+> > -                                     v->DSTXAfterScaler,
+> > -                                     v->DSTYAfterScaler,
+> > -                                     v->WritebackEnable,
+> > -                                     v->WritebackPixelFormat,
+> > -                                     v->WritebackDestinationWidth,
+> > -                                     v->WritebackDestinationHeight,
+> > -                                     v->WritebackSourceHeight,
+> >                                       UnboundedRequestEnabledThisState,
+> >                                       CompressedBufferSizeInkByteThisSt=
+ate,
+> >                                       &v->DRAMClockChangeSupport[i][j],
+> > -                                     &v->UrgentWatermark,
+> > -                                     &v->WritebackUrgentWatermark,
+> > -                                     &v->DRAMClockChangeWatermark,
+> > -                                     &v->WritebackDRAMClockChangeWater=
+mark,
+> > -                                     &dummy,
+> >                                       &dummy,
+> >                                       &dummy,
+> >                                       &dummy,
+> > -                                     &v->MinActiveDRAMClockChangeLaten=
+cySupported);
+> > +                                     &dummy);
+> >               }
+> >       }
+> >
+> > @@ -5679,64 +5571,28 @@ void dml314_ModeSupportAndSystemConfigurationFu=
+ll(struct display_mode_lib *mode_
+> >  static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+> >               struct display_mode_lib *mode_lib,
+> >               unsigned int PrefetchMode,
+> > -             unsigned int NumberOfActivePlanes,
+> > -             unsigned int MaxLineBufferLines,
+> > -             unsigned int LineBufferSize,
+> > -             unsigned int WritebackInterfaceBufferSize,
+> >               double DCFCLK,
+> >               double ReturnBW,
+> > -             bool SynchronizedVBlank,
+> > -             unsigned int dpte_group_bytes[],
+> > -             unsigned int MetaChunkSize,
+> >               double UrgentLatency,
+> >               double ExtraLatency,
+> > -             double WritebackLatency,
+> > -             double WritebackChunkSize,
+> >               double SOCCLK,
+> > -             double DRAMClockChangeLatency,
+> > -             double SRExitTime,
+> > -             double SREnterPlusExitTime,
+> > -             double SRExitZ8Time,
+> > -             double SREnterPlusExitZ8Time,
+> >               double DCFCLKDeepSleep,
+> >               unsigned int DETBufferSizeY[],
+> >               unsigned int DETBufferSizeC[],
+> >               unsigned int SwathHeightY[],
+> >               unsigned int SwathHeightC[],
+> > -             unsigned int LBBitPerPixel[],
+> >               double SwathWidthY[],
+> >               double SwathWidthC[],
+> > -             double HRatio[],
+> > -             double HRatioChroma[],
+> > -             unsigned int vtaps[],
+> > -             unsigned int VTAPsChroma[],
+> > -             double VRatio[],
+> > -             double VRatioChroma[],
+> > -             unsigned int HTotal[],
+> > -             double PixelClock[],
+> > -             unsigned int BlendingAndTiming[],
+> >               unsigned int DPPPerPlane[],
+> >               double BytePerPixelDETY[],
+> >               double BytePerPixelDETC[],
+> > -             double DSTXAfterScaler[],
+> > -             double DSTYAfterScaler[],
+> > -             bool WritebackEnable[],
+> > -             enum source_format_class WritebackPixelFormat[],
+> > -             double WritebackDestinationWidth[],
+> > -             double WritebackDestinationHeight[],
+> > -             double WritebackSourceHeight[],
+> >               bool UnboundedRequestEnabled,
+> >               unsigned int CompressedBufferSizeInkByte,
+> >               enum clock_change_support *DRAMClockChangeSupport,
+> > -             double *UrgentWatermark,
+> > -             double *WritebackUrgentWatermark,
+> > -             double *DRAMClockChangeWatermark,
+> > -             double *WritebackDRAMClockChangeWatermark,
+> >               double *StutterExitWatermark,
+> >               double *StutterEnterPlusExitWatermark,
+> >               double *Z8StutterExitWatermark,
+> > -             double *Z8StutterEnterPlusExitWatermark,
+> > -             double *MinActiveDRAMClockChangeLatencySupported)
+> > +             double *Z8StutterEnterPlusExitWatermark)
+> >  {
+> >       struct vba_vars_st *v =3D &mode_lib->vba;
+> >       double EffectiveLBLatencyHidingY;
+> > @@ -5756,103 +5612,103 @@ static void CalculateWatermarksAndDRAMSpeedCh=
+angeSupport(
+> >       double TotalPixelBW =3D 0.0;
+> >       int k, j;
+> >
+> > -     *UrgentWatermark =3D UrgentLatency + ExtraLatency;
+> > +     v->UrgentWatermark =3D UrgentLatency + ExtraLatency;
+> >
+> >  #ifdef __DML_VBA_DEBUG__
+> >       dml_print("DML::%s: UrgentLatency =3D %f\n", __func__, UrgentLate=
+ncy);
+> >       dml_print("DML::%s: ExtraLatency =3D %f\n", __func__, ExtraLatenc=
+y);
+> > -     dml_print("DML::%s: UrgentWatermark =3D %f\n", __func__, *UrgentW=
+atermark);
+> > +     dml_print("DML::%s: UrgentWatermark =3D %f\n", __func__, v->Urgen=
+tWatermark);
+> >  #endif
+> >
+> > -     *DRAMClockChangeWatermark =3D DRAMClockChangeLatency + *UrgentWat=
+ermark;
+> > +     v->DRAMClockChangeWatermark =3D v->DRAMClockChangeLatency + v->Ur=
+gentWatermark;
+> >
+> >  #ifdef __DML_VBA_DEBUG__
+> > -     dml_print("DML::%s: DRAMClockChangeLatency =3D %f\n", __func__, D=
+RAMClockChangeLatency);
+> > -     dml_print("DML::%s: DRAMClockChangeWatermark =3D %f\n", __func__,=
+ *DRAMClockChangeWatermark);
+> > +     dml_print("DML::%s: v->DRAMClockChangeLatency =3D %f\n", __func__=
+, v->DRAMClockChangeLatency);
+> > +     dml_print("DML::%s: DRAMClockChangeWatermark =3D %f\n", __func__,=
+ v->DRAMClockChangeWatermark);
+> >  #endif
+> >
+> >       v->TotalActiveWriteback =3D 0;
+> > -     for (k =3D 0; k < NumberOfActivePlanes; ++k) {
+> > -             if (WritebackEnable[k] =3D=3D true) {
+> > +     for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> > +             if (v->WritebackEnable[k] =3D=3D true) {
+> >                       v->TotalActiveWriteback =3D v->TotalActiveWriteba=
+ck + 1;
+> >               }
+> >       }
+> >
+> >       if (v->TotalActiveWriteback <=3D 1) {
+> > -             *WritebackUrgentWatermark =3D WritebackLatency;
+> > +             v->WritebackUrgentWatermark =3D v->WritebackLatency;
+> >       } else {
+> > -             *WritebackUrgentWatermark =3D WritebackLatency + Writebac=
+kChunkSize * 1024.0 / 32.0 / SOCCLK;
+> > +             v->WritebackUrgentWatermark =3D v->WritebackLatency + v->=
+WritebackChunkSize * 1024.0 / 32.0 / SOCCLK;
+> >       }
+> >
+> >       if (v->TotalActiveWriteback <=3D 1) {
+> > -             *WritebackDRAMClockChangeWatermark =3D DRAMClockChangeLat=
+ency + WritebackLatency;
+> > +             v->WritebackDRAMClockChangeWatermark =3D v->DRAMClockChan=
+geLatency + v->WritebackLatency;
+> >       } else {
+> > -             *WritebackDRAMClockChangeWatermark =3D DRAMClockChangeLat=
+ency + WritebackLatency + WritebackChunkSize * 1024.0 / 32.0 / SOCCLK;
+> > +             v->WritebackDRAMClockChangeWatermark =3D v->DRAMClockChan=
+geLatency + v->WritebackLatency + v->WritebackChunkSize * 1024.0 / 32.0 / S=
+OCCLK;
+> >       }
+> >
+> > -     for (k =3D 0; k < NumberOfActivePlanes; ++k) {
+> > +     for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> >               TotalPixelBW =3D TotalPixelBW
+> > -                             + DPPPerPlane[k] * (SwathWidthY[k] * Byte=
+PerPixelDETY[k] * VRatio[k] + SwathWidthC[k] * BytePerPixelDETC[k] * VRatio=
+Chroma[k])
+> > -                                             / (HTotal[k] / PixelClock=
+[k]);
+> > +                             + DPPPerPlane[k] * (SwathWidthY[k] * Byte=
+PerPixelDETY[k] * v->VRatio[k] + SwathWidthC[k] * BytePerPixelDETC[k] * v->=
+VRatioChroma[k])
+> > +                                             / (v->HTotal[k] / v->Pixe=
+lClock[k]);
+> >       }
+> >
+> > -     for (k =3D 0; k < NumberOfActivePlanes; ++k) {
+> > +     for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> >               double EffectiveDETBufferSizeY =3D DETBufferSizeY[k];
+> >
+> >               v->LBLatencyHidingSourceLinesY =3D dml_min(
+> > -                             (double) MaxLineBufferLines,
+> > -                             dml_floor(LineBufferSize / LBBitPerPixel[=
+k] / (SwathWidthY[k] / dml_max(HRatio[k], 1.0)), 1)) - (vtaps[k] - 1);
+> > +                             (double) v->MaxLineBufferLines,
+> > +                             dml_floor(v->LineBufferSize / v->LBBitPer=
+Pixel[k] / (SwathWidthY[k] / dml_max(v->HRatio[k], 1.0)), 1)) - (v->vtaps[k=
+] - 1);
+> >
+> >               v->LBLatencyHidingSourceLinesC =3D dml_min(
+> > -                             (double) MaxLineBufferLines,
+> > -                             dml_floor(LineBufferSize / LBBitPerPixel[=
+k] / (SwathWidthC[k] / dml_max(HRatioChroma[k], 1.0)), 1)) - (VTAPsChroma[k=
+] - 1);
+> > +                             (double) v->MaxLineBufferLines,
+> > +                             dml_floor(v->LineBufferSize / v->LBBitPer=
+Pixel[k] / (SwathWidthC[k] / dml_max(v->HRatioChroma[k], 1.0)), 1)) - (v->V=
+TAPsChroma[k] - 1);
+> >
+> > -             EffectiveLBLatencyHidingY =3D v->LBLatencyHidingSourceLin=
+esY / VRatio[k] * (HTotal[k] / PixelClock[k]);
+> > +             EffectiveLBLatencyHidingY =3D v->LBLatencyHidingSourceLin=
+esY / v->VRatio[k] * (v->HTotal[k] / v->PixelClock[k]);
+> >
+> > -             EffectiveLBLatencyHidingC =3D v->LBLatencyHidingSourceLin=
+esC / VRatioChroma[k] * (HTotal[k] / PixelClock[k]);
+> > +             EffectiveLBLatencyHidingC =3D v->LBLatencyHidingSourceLin=
+esC / v->VRatioChroma[k] * (v->HTotal[k] / v->PixelClock[k]);
+> >
+> >               if (UnboundedRequestEnabled) {
+> >                       EffectiveDETBufferSizeY =3D EffectiveDETBufferSiz=
+eY
+> > -                                     + CompressedBufferSizeInkByte * 1=
+024 * SwathWidthY[k] * BytePerPixelDETY[k] * VRatio[k] / (HTotal[k] / Pixel=
+Clock[k]) / TotalPixelBW;
+> > +                                     + CompressedBufferSizeInkByte * 1=
+024 * SwathWidthY[k] * BytePerPixelDETY[k] * v->VRatio[k] / (v->HTotal[k] /=
+ v->PixelClock[k]) / TotalPixelBW;
+> >               }
+> >
+> >               LinesInDETY[k] =3D (double) EffectiveDETBufferSizeY / Byt=
+ePerPixelDETY[k] / SwathWidthY[k];
+> >               LinesInDETYRoundedDownToSwath[k] =3D dml_floor(LinesInDET=
+Y[k], SwathHeightY[k]);
+> > -             FullDETBufferingTimeY =3D LinesInDETYRoundedDownToSwath[k=
+] * (HTotal[k] / PixelClock[k]) / VRatio[k];
+> > +             FullDETBufferingTimeY =3D LinesInDETYRoundedDownToSwath[k=
+] * (v->HTotal[k] / v->PixelClock[k]) / v->VRatio[k];
+> >               if (BytePerPixelDETC[k] > 0) {
+> >                       LinesInDETC =3D v->DETBufferSizeC[k] / BytePerPix=
+elDETC[k] / SwathWidthC[k];
+> >                       LinesInDETCRoundedDownToSwath =3D dml_floor(Lines=
+InDETC, SwathHeightC[k]);
+> > -                     FullDETBufferingTimeC =3D LinesInDETCRoundedDownT=
+oSwath * (HTotal[k] / PixelClock[k]) / VRatioChroma[k];
+> > +                     FullDETBufferingTimeC =3D LinesInDETCRoundedDownT=
+oSwath * (v->HTotal[k] / v->PixelClock[k]) / v->VRatioChroma[k];
+> >               } else {
+> >                       LinesInDETC =3D 0;
+> >                       FullDETBufferingTimeC =3D 999999;
+> >               }
+> >
+> >               ActiveDRAMClockChangeLatencyMarginY =3D EffectiveLBLatenc=
+yHidingY + FullDETBufferingTimeY
+> > -                             - ((double) DSTXAfterScaler[k] / HTotal[k=
+] + DSTYAfterScaler[k]) * HTotal[k] / PixelClock[k] - *UrgentWatermark - *D=
+RAMClockChangeWatermark;
+> > +                             - ((double) v->DSTXAfterScaler[k] / v->HT=
+otal[k] + v->DSTYAfterScaler[k]) * v->HTotal[k] / v->PixelClock[k] - v->Urg=
+entWatermark - v->DRAMClockChangeWatermark;
+> >
+> > -             if (NumberOfActivePlanes > 1) {
+> > +             if (v->NumberOfActivePlanes > 1) {
+> >                       ActiveDRAMClockChangeLatencyMarginY =3D ActiveDRA=
+MClockChangeLatencyMarginY
+> > -                                     - (1 - 1.0 / NumberOfActivePlanes=
+) * SwathHeightY[k] * HTotal[k] / PixelClock[k] / VRatio[k];
+> > +                                     - (1 - 1.0 / v->NumberOfActivePla=
+nes) * SwathHeightY[k] * v->HTotal[k] / v->PixelClock[k] / v->VRatio[k];
+> >               }
+> >
+> >               if (BytePerPixelDETC[k] > 0) {
+> >                       ActiveDRAMClockChangeLatencyMarginC =3D Effective=
+LBLatencyHidingC + FullDETBufferingTimeC
+> > -                                     - ((double) DSTXAfterScaler[k] / =
+HTotal[k] + DSTYAfterScaler[k]) * HTotal[k] / PixelClock[k] - *UrgentWaterm=
+ark - *DRAMClockChangeWatermark;
+> > +                                     - ((double) v->DSTXAfterScaler[k]=
+ / v->HTotal[k] + v->DSTYAfterScaler[k]) * v->HTotal[k] / v->PixelClock[k] =
+- v->UrgentWatermark - v->DRAMClockChangeWatermark;
+> >
+> > -                     if (NumberOfActivePlanes > 1) {
+> > +                     if (v->NumberOfActivePlanes > 1) {
+> >                               ActiveDRAMClockChangeLatencyMarginC =3D A=
+ctiveDRAMClockChangeLatencyMarginC
+> > -                                             - (1 - 1.0 / NumberOfActi=
+vePlanes) * SwathHeightC[k] * HTotal[k] / PixelClock[k] / VRatioChroma[k];
+> > +                                             - (1 - 1.0 / v->NumberOfA=
+ctivePlanes) * SwathHeightC[k] * v->HTotal[k] / v->PixelClock[k] / v->VRati=
+oChroma[k];
+> >                       }
+> >                       v->ActiveDRAMClockChangeLatencyMargin[k] =3D dml_=
+min(ActiveDRAMClockChangeLatencyMarginY, ActiveDRAMClockChangeLatencyMargin=
+C);
+> >               } else {
+> >                       v->ActiveDRAMClockChangeLatencyMargin[k] =3D Acti=
+veDRAMClockChangeLatencyMarginY;
+> >               }
+> >
+> > -             if (WritebackEnable[k] =3D=3D true) {
+> > -                     WritebackDRAMClockChangeLatencyHiding =3D Writeba=
+ckInterfaceBufferSize * 1024
+> > -                                     / (WritebackDestinationWidth[k] *=
+ WritebackDestinationHeight[k] / (WritebackSourceHeight[k] * HTotal[k] / Pi=
+xelClock[k]) * 4);
+> > -                     if (WritebackPixelFormat[k] =3D=3D dm_444_64) {
+> > +             if (v->WritebackEnable[k] =3D=3D true) {
+> > +                     WritebackDRAMClockChangeLatencyHiding =3D v->Writ=
+ebackInterfaceBufferSize * 1024
+> > +                                     / (v->WritebackDestinationWidth[k=
+] * v->WritebackDestinationHeight[k] / (v->WritebackSourceHeight[k] * v->HT=
+otal[k] / v->PixelClock[k]) * 4);
+> > +                     if (v->WritebackPixelFormat[k] =3D=3D dm_444_64) =
+{
+> >                               WritebackDRAMClockChangeLatencyHiding =3D=
+ WritebackDRAMClockChangeLatencyHiding / 2;
+> >                       }
+> >                       WritebackDRAMClockChangeLatencyMargin =3D Writeba=
+ckDRAMClockChangeLatencyHiding - v->WritebackDRAMClockChangeWatermark;
+> > @@ -5862,14 +5718,14 @@ static void CalculateWatermarksAndDRAMSpeedChan=
+geSupport(
+> >
+> >       v->MinActiveDRAMClockChangeMargin =3D 999999;
+> >       PlaneWithMinActiveDRAMClockChangeMargin =3D 0;
+> > -     for (k =3D 0; k < NumberOfActivePlanes; ++k) {
+> > +     for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> >               if (v->ActiveDRAMClockChangeLatencyMargin[k] < v->MinActi=
+veDRAMClockChangeMargin) {
+> >                       v->MinActiveDRAMClockChangeMargin =3D v->ActiveDR=
+AMClockChangeLatencyMargin[k];
+> > -                     if (BlendingAndTiming[k] =3D=3D k) {
+> > +                     if (v->BlendingAndTiming[k] =3D=3D k) {
+> >                               PlaneWithMinActiveDRAMClockChangeMargin =
+=3D k;
+> >                       } else {
+> > -                             for (j =3D 0; j < NumberOfActivePlanes; +=
++j) {
+> > -                                     if (BlendingAndTiming[k] =3D=3D j=
+) {
+> > +                             for (j =3D 0; j < v->NumberOfActivePlanes=
+; ++j) {
+> > +                                     if (v->BlendingAndTiming[k] =3D=
+=3D j) {
+> >                                               PlaneWithMinActiveDRAMClo=
+ckChangeMargin =3D j;
+> >                                       }
+> >                               }
+> > @@ -5877,11 +5733,11 @@ static void CalculateWatermarksAndDRAMSpeedChan=
+geSupport(
+> >               }
+> >       }
+> >
+> > -     *MinActiveDRAMClockChangeLatencySupported =3D v->MinActiveDRAMClo=
+ckChangeMargin + DRAMClockChangeLatency;
+> > +     v->MinActiveDRAMClockChangeLatencySupported =3D v->MinActiveDRAMC=
+lockChangeMargin + v->DRAMClockChangeLatency ;
+> >
+> >       SecondMinActiveDRAMClockChangeMarginOneDisplayInVBLank =3D 999999=
+;
+> > -     for (k =3D 0; k < NumberOfActivePlanes; ++k) {
+> > -             if (!((k =3D=3D PlaneWithMinActiveDRAMClockChangeMargin) =
+&& (BlendingAndTiming[k] =3D=3D k)) && !(BlendingAndTiming[k] =3D=3D PlaneW=
+ithMinActiveDRAMClockChangeMargin)
+> > +     for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> > +             if (!((k =3D=3D PlaneWithMinActiveDRAMClockChangeMargin) =
+&& (v->BlendingAndTiming[k] =3D=3D k)) && !(v->BlendingAndTiming[k] =3D=3D =
+PlaneWithMinActiveDRAMClockChangeMargin)
+> >                               && v->ActiveDRAMClockChangeLatencyMargin[=
+k] < SecondMinActiveDRAMClockChangeMarginOneDisplayInVBLank) {
+> >                       SecondMinActiveDRAMClockChangeMarginOneDisplayInV=
+BLank =3D v->ActiveDRAMClockChangeLatencyMargin[k];
+> >               }
+> > @@ -5889,25 +5745,25 @@ static void CalculateWatermarksAndDRAMSpeedChan=
+geSupport(
+> >
+> >       v->TotalNumberOfActiveOTG =3D 0;
+> >
+> > -     for (k =3D 0; k < NumberOfActivePlanes; ++k) {
+> > -             if (BlendingAndTiming[k] =3D=3D k) {
+> > +     for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> > +             if (v->BlendingAndTiming[k] =3D=3D k) {
+> >                       v->TotalNumberOfActiveOTG =3D v->TotalNumberOfAct=
+iveOTG + 1;
+> >               }
+> >       }
+> >
+> >       if (v->MinActiveDRAMClockChangeMargin > 0 && PrefetchMode =3D=3D =
+0) {
+> >               *DRAMClockChangeSupport =3D dm_dram_clock_change_vactive;
+> > -     } else if ((SynchronizedVBlank =3D=3D true || v->TotalNumberOfAct=
+iveOTG =3D=3D 1
+> > +     } else if ((v->SynchronizedVBlank =3D=3D true || v->TotalNumberOf=
+ActiveOTG =3D=3D 1
+> >                       || SecondMinActiveDRAMClockChangeMarginOneDisplay=
+InVBLank > 0) && PrefetchMode =3D=3D 0) {
+> >               *DRAMClockChangeSupport =3D dm_dram_clock_change_vblank;
+> >       } else {
+> >               *DRAMClockChangeSupport =3D dm_dram_clock_change_unsuppor=
+ted;
+> >       }
+> >
+> > -     *StutterExitWatermark =3D SRExitTime + ExtraLatency + 10 / DCFCLK=
+DeepSleep;
+> > -     *StutterEnterPlusExitWatermark =3D (SREnterPlusExitTime + ExtraLa=
+tency + 10 / DCFCLKDeepSleep);
+> > -     *Z8StutterExitWatermark =3D SRExitZ8Time + ExtraLatency + 10 / DC=
+FCLKDeepSleep;
+> > -     *Z8StutterEnterPlusExitWatermark =3D SREnterPlusExitZ8Time + Extr=
+aLatency + 10 / DCFCLKDeepSleep;
+> > +     *StutterExitWatermark =3D v->SRExitTime + ExtraLatency + 10 / DCF=
+CLKDeepSleep;
+> > +     *StutterEnterPlusExitWatermark =3D (v->SREnterPlusExitTime + Extr=
+aLatency + 10 / DCFCLKDeepSleep);
+> > +     *Z8StutterExitWatermark =3D v->SRExitZ8Time + ExtraLatency + 10 /=
+ DCFCLKDeepSleep;
+> > +     *Z8StutterEnterPlusExitWatermark =3D v->SREnterPlusExitZ8Time + E=
+xtraLatency + 10 / DCFCLKDeepSleep;
+> >
+> >  #ifdef __DML_VBA_DEBUG__
+> >       dml_print("DML::%s: StutterExitWatermark =3D %f\n", __func__, *St=
+utterExitWatermark);
+> >
+> > base-commit: dacd2d2d9d800b7ab2ee2734578112532cba8105
