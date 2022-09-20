@@ -1,92 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64FF7C;
-	Tue, 20 Sep 2022 09:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4FD20C433D7;
-	Tue, 20 Sep 2022 09:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663667414;
-	bh=kX2EBvWZ7BlQJA8Sgf4mtTIkaLClscQRwqoplzn8F+w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=iGLipXrYNs2g8myoZN31AF5AMVDi9F7fpr2rQbYV9xIkXKvb5U5f9OmhsyoUXxxma
-	 TK7TZCi5lUTncUgdCTP0k0a/7gb+JCEFUrokJrVKSqJo3LAA/O4TBp3nIbgOz+PdEZ
-	 B5sq27tZD50rlW6Dgl5bSEePtETNennnxGl7LeDvXHqbiKGMLq1SJT4iyHqSepLoyl
-	 dGUyZDZNc4VRweknhSSq74Ui9ZnnJBH+dP/5We0Kx1zpPwJlSiObzQW8NwZgFnM2n7
-	 Vz6VYdmMXf1KKap52E2b8UQ9COnXhdLwZz8G/CtP/qko1QCpoSvLjHG/5a1n/QnScV
-	 eZajxpUjQH9nQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36080E21EE2;
-	Tue, 20 Sep 2022 09:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053F2A5C
+	for <llvm@lists.linux.dev>; Tue, 20 Sep 2022 10:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663670970; x=1695206970;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=/hvMYd6QrKtJlvCKUCW5sEWI2I4/UBZdupD6MeYnTh0=;
+  b=ZX4n1dhKNimXoZV1Kj/OKVMvxg6u8MU0mk5b+u39grSyQfUKj459jWYc
+   z3nte49IQOTrMJaHxu24o0qw/LIRlFf8nJlap900HiyY2wHL6cmhbi9pk
+   Ro/6mykiW8Qghheg5RlBI+MCHR+T9TfVFUmCoCqOizLl37BjqdvhXYzxY
+   kp5k7iHnKZpCH1qyZRw2xp1/qbtSYFF3bJy5QGNasTqObW2BzRlmXmUWO
+   sTKjF7Efh5907HB547x2NnrrTs2CONgZTLDCCyriAhbVHMKUnLkQVQzKn
+   KhMfzVNB9S3E2Q5a0KQzb6MsX8iOOMgoFVHgV9CfjHe0Xeuz7ZzP/FQrH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="286710477"
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="286710477"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2022 03:49:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,330,1654585200"; 
+   d="scan'208";a="649538977"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Sep 2022 03:49:28 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1oaaoi-0002gf-0f;
+	Tue, 20 Sep 2022 10:49:28 +0000
+Date: Tue, 20 Sep 2022 18:48:37 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 7601/8235] ld.lld: error:
+ vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4): relocation
+ R_HEX_B22_PCREL out of range: 2112040 is not in [-2097152, 2097151];
+ references __vmnewmap
+Message-ID: <202209201854.m9MhIzpX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] net/mlx5e: Ensure macsec_rule is always
- initiailized in macsec_fs_{r,t}x_add_rule()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <166366741421.25964.18299631498168125673.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Sep 2022 09:50:14 +0000
-References: <20220911085748.461033-1-nathan@kernel.org>
-In-Reply-To: <20220911085748.461033-1-nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- ndesaulniers@google.com, trix@redhat.com, borisp@nvidia.com,
- raeds@nvidia.com, liorna@nvidia.com, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Masahiro Yamada <masahiroy@kernel.org>
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Hi Masahiro,
 
-On Sun, 11 Sep 2022 01:57:50 -0700 you wrote:
-> Clang warns:
-> 
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:6: error: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->           if (err)
->               ^~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:598:9: note: uninitialized use occurs here
->           return macsec_rule;
->                 ^~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:539:2: note: remove the 'if' if its condition is always false
->           if (err)
->           ^~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:523:38: note: initialize the variable 'macsec_rule' to silence this warning
->           union mlx5e_macsec_rule *macsec_rule;
->                                               ^
->                                               = NULL
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:6: error: variable 'macsec_rule' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->           if (err)
->               ^~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1215:9: note: uninitialized use occurs here
->           return macsec_rule;
->                 ^~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1131:2: note: remove the 'if' if its condition is always false
->           if (err)
->           ^~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1118:38: note: initialize the variable 'macsec_rule' to silence this warning
->           union mlx5e_macsec_rule *macsec_rule;
->                                               ^
->                                               = NULL
->   2 errors generated.
-> 
-> [...]
+First bad commit (maybe != root cause):
 
-Here is the summary with links:
-  - [net-next,v2] net/mlx5e: Ensure macsec_rule is always initiailized in macsec_fs_{r,t}x_add_rule()
-    https://git.kernel.org/netdev/net-next/c/2e50e9bf328f
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ef08d387bbbc20df740ced8caee0ffac835869ac
+commit: 48f513e2b9304affc43dcdf95a150ad02d70f9fd [7601/8235] kbuild: use obj-y instead extra-y for objects placed at the head
+config: hexagon-randconfig-r014-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201854.m9MhIzpX-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=48f513e2b9304affc43dcdf95a150ad02d70f9fd
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 48f513e2b9304affc43dcdf95a150ad02d70f9fd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-You are awesome, thank you!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0xd4): relocation R_HEX_B22_PCREL out of range: 2112040 is not in [-2097152, 2097151]; references __vmnewmap
+   >>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
+--
+>> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x12c): relocation R_HEX_B22_PCREL out of range: 2111912 is not in [-2097152, 2097151]; references __vmsetvec
+   >>> defined in vmlinux.a(arch/hexagon/kernel/vm_ops.o)
+--
+>> ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x160): relocation R_HEX_B22_PCREL out of range: 2123760 is not in [-2097152, 2097151]; references memset
+   >>> defined in vmlinux.a(arch/hexagon/lib/memset.o)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
