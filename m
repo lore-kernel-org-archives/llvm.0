@@ -1,96 +1,166 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745E47C
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 20:57:04 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so42149pjh.3
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 13:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=hZuBe6GfUXO3sH61bLS+0hwu/6UtFNGfIgP8JjtlsCc=;
-        b=W3NWZOwXYBdW4vnCLVHBwJ4vVYQ+OVRwc6tWgtAyq+kT3N1swA5/29Pp4xH/Izfh7l
-         5JXl0qfxS+HyW7ETxgnwa+RLcAI6NgYo5xFRYZCGEfXqPQ6q4db1qtzZRsmFT/Mh56bZ
-         YWMIIVwx+TxUcDqD48t2RimOsa988Pax/sZCq9D+Rl+avkA2HlU+quvqnhKM23R2oImV
-         Rb7aT+gWASQr7L+pj9IpTUi34McSPwn07j2F22dIvnDqtHFzbNk+/LJuiKPlMHkbX2S+
-         YBP9u7rFevUPuMo8fSrl3wREj3hkzkj/Bm2j19h/yb6dgppbHP9UzZ2PE2o71llEcLAG
-         sDAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=hZuBe6GfUXO3sH61bLS+0hwu/6UtFNGfIgP8JjtlsCc=;
-        b=kVaGREiWZyWR+EtEbnev6m0dPr9nXR5IFe07Ro2igKbghMwwmvX1eLkOnrJjET+6Sf
-         8gKRSlXjj/3Xbwts/7UMFhd4rQ9NN3Ou1F26n7PzdM6R2kJVnSt6pK2OXOqeOjde7hZJ
-         lim4lPozFMlsyocUnQk5+XdG3LNuyrw6fuiSS+1j4SX0Vxdn2FFZRXlhEVdRF2sR3Qfe
-         QpCH+kfQ0+JjTzFk8MZ6FnuY5TsYwZTOxaNLxUuxP0lD1EZmUvfXJiWUH0KHOawlXIhk
-         N1ZQPVf5g2cc4CoDdwsK5qaKZ5lIvCy78ds5d8UQWtTVM/Mcri61pmxbOBclP6+sE8H3
-         U+QA==
-X-Gm-Message-State: ACrzQf1bjjL4McNAE90i2vImn6PXa5vs0NOohe2OFync2uBeHEttFRiO
-	MIvXfuMqf9E6eG9WsbTdmoU+d3xfn5HlYWHN/Eil+gVEoqE=
-X-Google-Smtp-Source: AMsMyM4d5CUBUfw3wceeA2FvIK8RKRQO1ZQA65R1sjH0f9DunVq4thAS63+gsZGYXJ0tUyzEfThqrcwxNKD61k1M9c8=
-X-Received: by 2002:a17:90a:74c4:b0:203:336d:dd36 with SMTP id
- p4-20020a17090a74c400b00203336ddd36mr11343898pjl.107.1663793823770; Wed, 21
- Sep 2022 13:57:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E92F7C
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 20:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663793865; x=1695329865;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KYNMEDQg5iJU1NijMu9qBx+OZB+wuVO10rhA/f+8AQg=;
+  b=PPHDEANT9lcSeUm/D97gfwl7RUIgJyaaaPyJcdwwXR3FjNaT2g8KcO6f
+   MLZB59POMEHzBRkslfgpGU61u7tdQOdbkLa9EK8rshIjC1KMKV2sWHm8Z
+   6N9yfLa2KuqyHZKgu8VvdNLWqclOqKciViQRThVfrxdSorMbY3p7KlYLO
+   TfH2r+cH4LE0zHr7O7a1LAcvD+AB9CDi4lIGx1tjAw8ZPAokTPah/Ny8e
+   DCwu6VMTWv1VBnqerkCXG341zCzPRaWI111yyB73Dgfy5cNsx8kS4HxKh
+   PBrobxZFDec20yMjM5GHdeYWhtu7zWyIrNBnozF9OyyWnS03j3A9+Mx7V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="386412416"
+X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
+   d="scan'208";a="386412416"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 13:57:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
+   d="scan'208";a="794830307"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Sep 2022 13:57:42 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ob6mr-0003yN-2o;
+	Wed, 21 Sep 2022 20:57:41 +0000
+Date: Thu, 22 Sep 2022 04:56:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bernardo Rodrigues <bernardocrodrigues@live.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>
+Subject: [pavel-leds:for-next 1/2] drivers/leds/leds-pca963x.c:357:4:
+ warning: misleading indentation; statement is not part of the previous 'if'
+Message-ID: <202209220459.9iyIqtgv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAB8jPhfj0ubtcr6XuotCVc9J+uqbZ-2QhnbUMWmge2ZGJ3xtvg@mail.gmail.com>
-In-Reply-To: <CAB8jPhfj0ubtcr6XuotCVc9J+uqbZ-2QhnbUMWmge2ZGJ3xtvg@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 21 Sep 2022 13:56:52 -0700
-Message-ID: <CAKwvOdmgiUNzi7Y984zVVWH+QAjPqQHK9XcNP4rBajGZibEFYA@mail.gmail.com>
-Subject: Re: Chromium's #include analysis
-To: Hans Wennborg <hwennborg@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>, Arnd Bergmann <arnd@kernel.org>, 
-	Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-+ external mailing lists
-+ external folks (sorry the internal intranet go/ links won't work)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git for-next
+head:   31fd7108302388d732973c58470d4be559d352ec
+commit: fd6dd9584ed3ee6debf2e7f9c9e69ef09b368277 [1/2] leds: pca963x: fix blink with hw acceleration
+config: hexagon-randconfig-r041-20220921 (https://download.01.org/0day-ci/archive/20220922/202209220459.9iyIqtgv-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/commit/?id=fd6dd9584ed3ee6debf2e7f9c9e69ef09b368277
+        git remote add pavel-leds git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git
+        git fetch --no-tags pavel-leds for-next
+        git checkout fd6dd9584ed3ee6debf2e7f9c9e69ef09b368277
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/leds/
 
-On Wed, Sep 21, 2022 at 11:59 AM Hans Wennborg <hwennborg@google.com> wrote=
-:
->
-> It's probably not useful in the context of Linux, but since it came up at=
- the social the other day, I figured I'd share a few things we did with inc=
-ludes in Chromium.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for following up!
+All warnings (new ones prefixed by >>):
 
->
-> http://go/chrome-includes shows stats and allows exploring the include gr=
-aph. I particularly like the "Per-Edge" analysis which shows what include e=
-dges would be most beneficial to cut.
+>> drivers/leds/leds-pca963x.c:357:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+                           led->blinking = false;
+                           ^
+   drivers/leds/leds-pca963x.c:355:3: note: previous statement is here
+                   if (hw_blink)
+                   ^
+   1 warning generated.
 
-Interesting! Do you have a link to (public) CLs that made such cuts as
-a result of these measurements? I'd be curious to see examples.
 
->
-> We also track the "total compiler input size" number over time:
-> http://go/chrome-includes-archive
-> As you can see, the trend is positive, and not in a good way :-p
->
-> We used this to do a lot of cleanup and keep build times in check for a w=
-hile, but as you mentioned backsliding is a very real problem.
->
-> For a while we used https://chromium.googlesource.com/chromium/src/+/main=
-/docs/wmax_tokens.md to prevent backsliding in certain files, but it got to=
-o annoying in the end, especially since updating libc++ meant we had to go =
-raising the limits all the time.
->
-> Again, probably not useful for Linux, but I'd be interested to hear if th=
-ey ever figure something out that works for them.
+vim +/if +357 drivers/leds/leds-pca963x.c
 
-Still, it's useful to get folks interested in the problem space
-together in the same room (or mail thread).
+   301	
+   302	static int pca963x_register_leds(struct i2c_client *client,
+   303					 struct pca963x *chip)
+   304	{
+   305		struct pca963x_chipdef *chipdef = chip->chipdef;
+   306		struct pca963x_led *led = chip->leds;
+   307		struct device *dev = &client->dev;
+   308		struct fwnode_handle *child;
+   309		bool hw_blink;
+   310		s32 mode2;
+   311		u32 reg;
+   312		int ret;
+   313	
+   314		if (device_property_read_u32(dev, "nxp,period-scale",
+   315					     &chipdef->scaling))
+   316			chipdef->scaling = 1000;
+   317	
+   318		hw_blink = device_property_read_bool(dev, "nxp,hw-blink");
+   319	
+   320		mode2 = i2c_smbus_read_byte_data(client, PCA963X_MODE2);
+   321		if (mode2 < 0)
+   322			return mode2;
+   323	
+   324		/* default to open-drain unless totem pole (push-pull) is specified */
+   325		if (device_property_read_bool(dev, "nxp,totem-pole"))
+   326			mode2 |= PCA963X_MODE2_OUTDRV;
+   327		else
+   328			mode2 &= ~PCA963X_MODE2_OUTDRV;
+   329	
+   330		/* default to non-inverted output, unless inverted is specified */
+   331		if (device_property_read_bool(dev, "nxp,inverted-out"))
+   332			mode2 |= PCA963X_MODE2_INVRT;
+   333		else
+   334			mode2 &= ~PCA963X_MODE2_INVRT;
+   335	
+   336		ret = i2c_smbus_write_byte_data(client, PCA963X_MODE2, mode2);
+   337		if (ret < 0)
+   338			return ret;
+   339	
+   340		device_for_each_child_node(dev, child) {
+   341			struct led_init_data init_data = {};
+   342			char default_label[32];
+   343	
+   344			ret = fwnode_property_read_u32(child, "reg", &reg);
+   345			if (ret || reg >= chipdef->n_leds) {
+   346				dev_err(dev, "Invalid 'reg' property for node %pfw\n",
+   347					child);
+   348				ret = -EINVAL;
+   349				goto err;
+   350			}
+   351	
+   352			led->led_num = reg;
+   353			led->chip = chip;
+   354			led->led_cdev.brightness_set_blocking = pca963x_led_set;
+   355			if (hw_blink)
+   356				led->led_cdev.blink_set = pca963x_blink_set;
+ > 357				led->blinking = false;
+   358	
+   359			init_data.fwnode = child;
+   360			/* for backwards compatibility */
+   361			init_data.devicename = "pca963x";
+   362			snprintf(default_label, sizeof(default_label), "%d:%.2x:%u",
+   363				 client->adapter->nr, client->addr, reg);
+   364			init_data.default_label = default_label;
+   365	
+   366			ret = devm_led_classdev_register_ext(dev, &led->led_cdev,
+   367							     &init_data);
+   368			if (ret) {
+   369				dev_err(dev, "Failed to register LED for node %pfw\n",
+   370					child);
+   371				goto err;
+   372			}
+   373	
+   374			++led;
+   375		}
+   376	
+   377		return 0;
+   378	err:
+   379		fwnode_handle_put(child);
+   380		return ret;
+   381	}
+   382	
 
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
