@@ -1,273 +1,563 @@
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730A54C6D
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:52:17 +0000 (UTC)
-Received: by mail-io1-f45.google.com with SMTP id h194so5387171iof.4
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 08:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8SWWrxYwFzT3rlQY2tEnjMDGqA2G3cQlA3Qe4PADSpg=;
-        b=krNNpBUQ+zshH2wIuYM4KZH6sXHGRjFHgerTjhkPI5y6m5+actHf3iHYU4FOGat9yg
-         F+t48u9GsyfyhtNoYTMH9LBPztNxurtwJPXJ0RxttmqZJV+jMaKUoX717dwrvSBa8kIi
-         +O4ThsnmhMu29iWLrzJe5Fgq14jrvdYTy7MoY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=8SWWrxYwFzT3rlQY2tEnjMDGqA2G3cQlA3Qe4PADSpg=;
-        b=65Q2pT/+etNwQr7NNSqL7amU/I/Hy68XR88IEjv/RbsTJfhwE8huqXZPB8qQCuhtzC
-         IFLV7GtY5aRARC1azMwLQyfuQsjPO8L12rfCDug4JVCM9hynotVerW2oIaXZCPyiNfpk
-         Zsw3R5Edei2eWuip+fwvGn8gtmGKQF2gDGQVpA5vCjg7yzDGA2cpsu8kNxGXLJWFcQxc
-         HVN+irkhMpG71VVndxSyePb/qa0plb9h3IqjJRloXpM1ZTx5hsvRGNnDzImWcwPAA0Qb
-         oSIAwNjOhCjhHeJ3ARQFNnvUPSSEkjlgq9IwW93zApen1VsojJkxmqfm5TH2kQ79vKFf
-         aWDg==
-X-Gm-Message-State: ACrzQf0+iQ59DZKnl1KMLKVDImueMqoPlRI/00VR1B0mxOMsycTNA7Ym
-	oorQKpl76mkY+KTeOfprAnGV6w==
-X-Google-Smtp-Source: AMsMyM7redZhuVtpcYd2TZE/aPDfUxbcgrXh6kfST+9BEzt3KOSN1uLWbXpVZ4NYE1fd2HaibPwgtg==
-X-Received: by 2002:a05:6638:370d:b0:35a:91f0:e358 with SMTP id k13-20020a056638370d00b0035a91f0e358mr12483069jav.84.1663775536531;
-        Wed, 21 Sep 2022 08:52:16 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id c14-20020a023b0e000000b0035a8d644a31sm1148061jaa.117.2022.09.21.08.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 08:52:16 -0700 (PDT)
-From: Raul E Rangel <rrangel@chromium.org>
-To: linux-acpi@vger.kernel.org,
-	linux-input@vger.kernel.org
-Cc: rafael@kernel.org,
-	timvp@google.com,
-	mika.westerberg@linux.intel.com,
-	andriy.shevchenko@linux.intel.com,
-	dmitry.torokhov@gmail.com,
-	jingle.wu@emc.com.tw,
-	hdegoede@redhat.com,
-	mario.limonciello@amd.com,
-	linus.walleij@linaro.org,
-	Raul E Rangel <rrangel@chromium.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Len Brown <lenb@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Terry Bowman <terry.bowman@amd.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6C84C6D
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:54:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3759FC433D6;
+	Wed, 21 Sep 2022 15:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663775640;
+	bh=oYdRjpsQ0y7Yda6NsSDe3hEm5WkcByYSTqzOz7KnoXE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MLuya6kjwfrbaktPFi50jgBbbqPqxZEE2inRLm9YEctAFOuzP2V5ZEFTv0dsZeihA
+	 /zqqwOpSXMtD0l1hkvDX5kjrSuyXaHpeLsDGKHzQ/lv/msoHfQ5ZXgEYxY3ItwSp9b
+	 e7yDuJMBOFJeLrOXNJ9HJPADjXUQOgdNOuBEYac+8Aj+stHY03ESlS91Q07lQmxVE/
+	 kDv8WlsNcnVWoiXnLSG/MD9ZxN5ErvuCNfit/qw1yqxJPhSk+CpOx1TzFhTXpE4DFO
+	 RJ7k395mXjK/S+8Ut84EPXOUc/Acgn3YurRQo7TOqWA4ug6SSbRLxHik5wdl1yPEjq
+	 w4sQWkBJl9R8g==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Sasha Levin <sashal@kernel.org>,
+	harry.wentland@amd.com,
+	sunpeng.li@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@linux.ie,
+	daniel@ffwll.ch,
+	ndesaulniers@google.com,
+	nicholas.kazlauskas@amd.com,
+	Dmytro.Laktyushkin@amd.com,
+	aurabindo.pillai@amd.com,
+	mdaenzer@redhat.com,
+	chaitanya.dhere@amd.com,
+	Bing.Guo@amd.com,
+	Charlene.Liu@amd.com,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v5 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-Date: Wed, 21 Sep 2022 09:51:58 -0600
-Message-Id: <20220921094736.v5.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
-In-Reply-To: <20220921155205.1332614-1-rrangel@chromium.org>
-References: <20220921155205.1332614-1-rrangel@chromium.org>
+Subject: [PATCH AUTOSEL 5.19 12/16] drm/amd/display: Reduce number of arguments of dml31's CalculateWatermarksAndDRAMSpeedChangeSupport()
+Date: Wed, 21 Sep 2022 11:53:28 -0400
+Message-Id: <20220921155332.234913-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220921155332.234913-1-sashal@kernel.org>
+References: <20220921155332.234913-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-ACPI IRQ/Interrupt resources contain a bit that describes if the
-interrupt should wake the system. This change exposes that bit via
-a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
-before arming an IRQ to wake the system.
+From: Nathan Chancellor <nathan@kernel.org>
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+[ Upstream commit 37934d4118e22bceb80141804391975078f31734 ]
 
+Most of the arguments are identical between the two call sites and they
+can be accessed through the 'struct vba_vars_st' pointer. This reduces
+the total amount of stack space that
+dml31_ModeSupportAndSystemConfigurationFull() uses by 240 bytes with
+LLVM 16 (2216 -> 1976), helping clear up the following clang warning:
+
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3908:6: error: stack frame size (2216) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
+  void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+      ^
+  1 error generated.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1681
+Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Tested-by: Maíra Canal <mairacanal@riseup.net>
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ .../dc/dml/dcn31/display_mode_vba_31.c        | 248 ++++--------------
+ 1 file changed, 52 insertions(+), 196 deletions(-)
 
-Changes in v5:
-- Removed clang-format white space changes
-
-Changes in v4:
-- Added Reviewed-by
-- Reformatted with 96 char limit
-
-Changes in v3:
-- Fixed bad indent
-
-Changes in v2:
-- Added ability to extract wake bit from Interrupt/IRQ resources
-
- drivers/acpi/irq.c             |  8 +++++---
- drivers/acpi/resource.c        | 16 +++++++++++-----
- drivers/pnp/pnpacpi/rsparser.c |  7 ++++---
- include/linux/acpi.h           |  2 +-
- include/linux/ioport.h         |  3 ++-
- 5 files changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
-index dabe45eba055d1..4bb5ab33a5ceb1 100644
---- a/drivers/acpi/irq.c
-+++ b/drivers/acpi/irq.c
-@@ -147,6 +147,7 @@ struct acpi_irq_parse_one_ctx {
-  * @polarity: polarity attributes of hwirq
-  * @polarity: polarity attributes of hwirq
-  * @shareable: shareable attributes of hwirq
-+ * @wake_capable: wake capable attribute of hwirq
-  * @ctx: acpi_irq_parse_one_ctx updated by this function
-  *
-  * Description:
-@@ -156,12 +157,13 @@ struct acpi_irq_parse_one_ctx {
- static inline void acpi_irq_parse_one_match(struct fwnode_handle *fwnode,
- 					    u32 hwirq, u8 triggering,
- 					    u8 polarity, u8 shareable,
-+					    u8 wake_capable,
- 					    struct acpi_irq_parse_one_ctx *ctx)
- {
- 	if (!fwnode)
- 		return;
- 	ctx->rc = 0;
--	*ctx->res_flags = acpi_dev_irq_flags(triggering, polarity, shareable);
-+	*ctx->res_flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
- 	ctx->fwspec->fwnode = fwnode;
- 	ctx->fwspec->param[0] = hwirq;
- 	ctx->fwspec->param[1] = acpi_dev_get_irq_type(triggering, polarity);
-@@ -204,7 +206,7 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_resource *ares,
- 		fwnode = acpi_get_gsi_domain_id(irq->interrupts[ctx->index]);
- 		acpi_irq_parse_one_match(fwnode, irq->interrupts[ctx->index],
- 					 irq->triggering, irq->polarity,
--					 irq->shareable, ctx);
-+					 irq->shareable, irq->wake_capable, ctx);
- 		return AE_CTRL_TERMINATE;
- 	case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
- 		eirq = &ares->data.extended_irq;
-@@ -218,7 +220,7 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_resource *ares,
- 						      eirq->interrupts[ctx->index]);
- 		acpi_irq_parse_one_match(fwnode, eirq->interrupts[ctx->index],
- 					 eirq->triggering, eirq->polarity,
--					 eirq->shareable, ctx);
-+					 eirq->shareable, eirq->wake_capable, ctx);
- 		return AE_CTRL_TERMINATE;
- 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+index e4b9fd31223c..586825d85d66 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+@@ -321,64 +321,28 @@ static void CalculateVupdateAndDynamicMetadataParameters(
+ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 		struct display_mode_lib *mode_lib,
+ 		unsigned int PrefetchMode,
+-		unsigned int NumberOfActivePlanes,
+-		unsigned int MaxLineBufferLines,
+-		unsigned int LineBufferSize,
+-		unsigned int WritebackInterfaceBufferSize,
+ 		double DCFCLK,
+ 		double ReturnBW,
+-		bool SynchronizedVBlank,
+-		unsigned int dpte_group_bytes[],
+-		unsigned int MetaChunkSize,
+ 		double UrgentLatency,
+ 		double ExtraLatency,
+-		double WritebackLatency,
+-		double WritebackChunkSize,
+ 		double SOCCLK,
+-		double DRAMClockChangeLatency,
+-		double SRExitTime,
+-		double SREnterPlusExitTime,
+-		double SRExitZ8Time,
+-		double SREnterPlusExitZ8Time,
+ 		double DCFCLKDeepSleep,
+ 		unsigned int DETBufferSizeY[],
+ 		unsigned int DETBufferSizeC[],
+ 		unsigned int SwathHeightY[],
+ 		unsigned int SwathHeightC[],
+-		unsigned int LBBitPerPixel[],
+ 		double SwathWidthY[],
+ 		double SwathWidthC[],
+-		double HRatio[],
+-		double HRatioChroma[],
+-		unsigned int vtaps[],
+-		unsigned int VTAPsChroma[],
+-		double VRatio[],
+-		double VRatioChroma[],
+-		unsigned int HTotal[],
+-		double PixelClock[],
+-		unsigned int BlendingAndTiming[],
+ 		unsigned int DPPPerPlane[],
+ 		double BytePerPixelDETY[],
+ 		double BytePerPixelDETC[],
+-		double DSTXAfterScaler[],
+-		double DSTYAfterScaler[],
+-		bool WritebackEnable[],
+-		enum source_format_class WritebackPixelFormat[],
+-		double WritebackDestinationWidth[],
+-		double WritebackDestinationHeight[],
+-		double WritebackSourceHeight[],
+ 		bool UnboundedRequestEnabled,
+ 		int unsigned CompressedBufferSizeInkByte,
+ 		enum clock_change_support *DRAMClockChangeSupport,
+-		double *UrgentWatermark,
+-		double *WritebackUrgentWatermark,
+-		double *DRAMClockChangeWatermark,
+-		double *WritebackDRAMClockChangeWatermark,
+ 		double *StutterExitWatermark,
+ 		double *StutterEnterPlusExitWatermark,
+ 		double *Z8StutterExitWatermark,
+-		double *Z8StutterEnterPlusExitWatermark,
+-		double *MinActiveDRAMClockChangeLatencySupported);
++		double *Z8StutterEnterPlusExitWatermark);
  
-diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-index 510cdec375c4d8..81733369f4c1de 100644
---- a/drivers/acpi/resource.c
-+++ b/drivers/acpi/resource.c
-@@ -336,8 +336,9 @@ EXPORT_SYMBOL_GPL(acpi_dev_resource_ext_address_space);
-  * @triggering: Triggering type as provided by ACPI.
-  * @polarity: Interrupt polarity as provided by ACPI.
-  * @shareable: Whether or not the interrupt is shareable.
-+ * @wake_capable: Wake capability as provided by ACPI.
-  */
--unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable)
-+unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable, u8 wake_capable)
- {
- 	unsigned long flags;
+ static void CalculateDCFCLKDeepSleep(
+ 		struct display_mode_lib *mode_lib,
+@@ -3027,64 +2991,28 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 				mode_lib,
+ 				PrefetchMode,
+-				v->NumberOfActivePlanes,
+-				v->MaxLineBufferLines,
+-				v->LineBufferSize,
+-				v->WritebackInterfaceBufferSize,
+ 				v->DCFCLK,
+ 				v->ReturnBW,
+-				v->SynchronizedVBlank,
+-				v->dpte_group_bytes,
+-				v->MetaChunkSize,
+ 				v->UrgentLatency,
+ 				v->UrgentExtraLatency,
+-				v->WritebackLatency,
+-				v->WritebackChunkSize,
+ 				v->SOCCLK,
+-				v->DRAMClockChangeLatency,
+-				v->SRExitTime,
+-				v->SREnterPlusExitTime,
+-				v->SRExitZ8Time,
+-				v->SREnterPlusExitZ8Time,
+ 				v->DCFCLKDeepSleep,
+ 				v->DETBufferSizeY,
+ 				v->DETBufferSizeC,
+ 				v->SwathHeightY,
+ 				v->SwathHeightC,
+-				v->LBBitPerPixel,
+ 				v->SwathWidthY,
+ 				v->SwathWidthC,
+-				v->HRatio,
+-				v->HRatioChroma,
+-				v->vtaps,
+-				v->VTAPsChroma,
+-				v->VRatio,
+-				v->VRatioChroma,
+-				v->HTotal,
+-				v->PixelClock,
+-				v->BlendingAndTiming,
+ 				v->DPPPerPlane,
+ 				v->BytePerPixelDETY,
+ 				v->BytePerPixelDETC,
+-				v->DSTXAfterScaler,
+-				v->DSTYAfterScaler,
+-				v->WritebackEnable,
+-				v->WritebackPixelFormat,
+-				v->WritebackDestinationWidth,
+-				v->WritebackDestinationHeight,
+-				v->WritebackSourceHeight,
+ 				v->UnboundedRequestEnabled,
+ 				v->CompressedBufferSizeInkByte,
+ 				&DRAMClockChangeSupport,
+-				&v->UrgentWatermark,
+-				&v->WritebackUrgentWatermark,
+-				&v->DRAMClockChangeWatermark,
+-				&v->WritebackDRAMClockChangeWatermark,
+ 				&v->StutterExitWatermark,
+ 				&v->StutterEnterPlusExitWatermark,
+ 				&v->Z8StutterExitWatermark,
+-				&v->Z8StutterEnterPlusExitWatermark,
+-				&v->MinActiveDRAMClockChangeLatencySupported);
++				&v->Z8StutterEnterPlusExitWatermark);
  
-@@ -351,6 +352,9 @@ unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable)
- 	if (shareable == ACPI_SHARED)
- 		flags |= IORESOURCE_IRQ_SHAREABLE;
- 
-+	if (wake_capable == ACPI_WAKE_CAPABLE)
-+		flags |= IORESOURCE_IRQ_WAKECAPABLE;
-+
- 	return flags | IORESOURCE_IRQ;
- }
- EXPORT_SYMBOL_GPL(acpi_dev_irq_flags);
-@@ -442,7 +446,7 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
- 
- static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
- 				     u8 triggering, u8 polarity, u8 shareable,
--				     bool check_override)
-+				     u8 wake_capable, bool check_override)
- {
- 	int irq, p, t;
- 
-@@ -475,7 +479,7 @@ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
+ 		for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+ 			if (v->WritebackEnable[k] == true) {
+@@ -5481,64 +5409,28 @@ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 			CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 					mode_lib,
+ 					v->PrefetchModePerState[i][j],
+-					v->NumberOfActivePlanes,
+-					v->MaxLineBufferLines,
+-					v->LineBufferSize,
+-					v->WritebackInterfaceBufferSize,
+ 					v->DCFCLKState[i][j],
+ 					v->ReturnBWPerState[i][j],
+-					v->SynchronizedVBlank,
+-					v->dpte_group_bytes,
+-					v->MetaChunkSize,
+ 					v->UrgLatency[i],
+ 					v->ExtraLatency,
+-					v->WritebackLatency,
+-					v->WritebackChunkSize,
+ 					v->SOCCLKPerState[i],
+-					v->DRAMClockChangeLatency,
+-					v->SRExitTime,
+-					v->SREnterPlusExitTime,
+-					v->SRExitZ8Time,
+-					v->SREnterPlusExitZ8Time,
+ 					v->ProjectedDCFCLKDeepSleep[i][j],
+ 					v->DETBufferSizeYThisState,
+ 					v->DETBufferSizeCThisState,
+ 					v->SwathHeightYThisState,
+ 					v->SwathHeightCThisState,
+-					v->LBBitPerPixel,
+ 					v->SwathWidthYThisState,
+ 					v->SwathWidthCThisState,
+-					v->HRatio,
+-					v->HRatioChroma,
+-					v->vtaps,
+-					v->VTAPsChroma,
+-					v->VRatio,
+-					v->VRatioChroma,
+-					v->HTotal,
+-					v->PixelClock,
+-					v->BlendingAndTiming,
+ 					v->NoOfDPPThisState,
+ 					v->BytePerPixelInDETY,
+ 					v->BytePerPixelInDETC,
+-					v->DSTXAfterScaler,
+-					v->DSTYAfterScaler,
+-					v->WritebackEnable,
+-					v->WritebackPixelFormat,
+-					v->WritebackDestinationWidth,
+-					v->WritebackDestinationHeight,
+-					v->WritebackSourceHeight,
+ 					UnboundedRequestEnabledThisState,
+ 					CompressedBufferSizeInkByteThisState,
+ 					&v->DRAMClockChangeSupport[i][j],
+-					&v->UrgentWatermark,
+-					&v->WritebackUrgentWatermark,
+-					&v->DRAMClockChangeWatermark,
+-					&v->WritebackDRAMClockChangeWatermark,
+-					&dummy,
+ 					&dummy,
+ 					&dummy,
+ 					&dummy,
+-					&v->MinActiveDRAMClockChangeLatencySupported);
++					&dummy);
  		}
  	}
  
--	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable);
-+	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
- 	irq = acpi_register_gsi(NULL, gsi, triggering, polarity);
- 	if (irq >= 0) {
- 		res->start = irq;
-@@ -523,7 +527,8 @@ bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
+@@ -5663,64 +5555,28 @@ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 		struct display_mode_lib *mode_lib,
+ 		unsigned int PrefetchMode,
+-		unsigned int NumberOfActivePlanes,
+-		unsigned int MaxLineBufferLines,
+-		unsigned int LineBufferSize,
+-		unsigned int WritebackInterfaceBufferSize,
+ 		double DCFCLK,
+ 		double ReturnBW,
+-		bool SynchronizedVBlank,
+-		unsigned int dpte_group_bytes[],
+-		unsigned int MetaChunkSize,
+ 		double UrgentLatency,
+ 		double ExtraLatency,
+-		double WritebackLatency,
+-		double WritebackChunkSize,
+ 		double SOCCLK,
+-		double DRAMClockChangeLatency,
+-		double SRExitTime,
+-		double SREnterPlusExitTime,
+-		double SRExitZ8Time,
+-		double SREnterPlusExitZ8Time,
+ 		double DCFCLKDeepSleep,
+ 		unsigned int DETBufferSizeY[],
+ 		unsigned int DETBufferSizeC[],
+ 		unsigned int SwathHeightY[],
+ 		unsigned int SwathHeightC[],
+-		unsigned int LBBitPerPixel[],
+ 		double SwathWidthY[],
+ 		double SwathWidthC[],
+-		double HRatio[],
+-		double HRatioChroma[],
+-		unsigned int vtaps[],
+-		unsigned int VTAPsChroma[],
+-		double VRatio[],
+-		double VRatioChroma[],
+-		unsigned int HTotal[],
+-		double PixelClock[],
+-		unsigned int BlendingAndTiming[],
+ 		unsigned int DPPPerPlane[],
+ 		double BytePerPixelDETY[],
+ 		double BytePerPixelDETC[],
+-		double DSTXAfterScaler[],
+-		double DSTYAfterScaler[],
+-		bool WritebackEnable[],
+-		enum source_format_class WritebackPixelFormat[],
+-		double WritebackDestinationWidth[],
+-		double WritebackDestinationHeight[],
+-		double WritebackSourceHeight[],
+ 		bool UnboundedRequestEnabled,
+ 		int unsigned CompressedBufferSizeInkByte,
+ 		enum clock_change_support *DRAMClockChangeSupport,
+-		double *UrgentWatermark,
+-		double *WritebackUrgentWatermark,
+-		double *DRAMClockChangeWatermark,
+-		double *WritebackDRAMClockChangeWatermark,
+ 		double *StutterExitWatermark,
+ 		double *StutterEnterPlusExitWatermark,
+ 		double *Z8StutterExitWatermark,
+-		double *Z8StutterEnterPlusExitWatermark,
+-		double *MinActiveDRAMClockChangeLatencySupported)
++		double *Z8StutterEnterPlusExitWatermark)
+ {
+ 	struct vba_vars_st *v = &mode_lib->vba;
+ 	double EffectiveLBLatencyHidingY;
+@@ -5740,103 +5596,103 @@ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 	double TotalPixelBW = 0.0;
+ 	int k, j;
+ 
+-	*UrgentWatermark = UrgentLatency + ExtraLatency;
++	v->UrgentWatermark = UrgentLatency + ExtraLatency;
+ 
+ #ifdef __DML_VBA_DEBUG__
+ 	dml_print("DML::%s: UrgentLatency = %f\n", __func__, UrgentLatency);
+ 	dml_print("DML::%s: ExtraLatency = %f\n", __func__, ExtraLatency);
+-	dml_print("DML::%s: UrgentWatermark = %f\n", __func__, *UrgentWatermark);
++	dml_print("DML::%s: UrgentWatermark = %f\n", __func__, v->UrgentWatermark);
+ #endif
+ 
+-	*DRAMClockChangeWatermark = DRAMClockChangeLatency + *UrgentWatermark;
++	v->DRAMClockChangeWatermark = v->DRAMClockChangeLatency + v->UrgentWatermark;
+ 
+ #ifdef __DML_VBA_DEBUG__
+-	dml_print("DML::%s: DRAMClockChangeLatency = %f\n", __func__, DRAMClockChangeLatency);
+-	dml_print("DML::%s: DRAMClockChangeWatermark = %f\n", __func__, *DRAMClockChangeWatermark);
++	dml_print("DML::%s: v->DRAMClockChangeLatency = %f\n", __func__, v->DRAMClockChangeLatency);
++	dml_print("DML::%s: DRAMClockChangeWatermark = %f\n", __func__, v->DRAMClockChangeWatermark);
+ #endif
+ 
+ 	v->TotalActiveWriteback = 0;
+-	for (k = 0; k < NumberOfActivePlanes; ++k) {
+-		if (WritebackEnable[k] == true) {
++	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
++		if (v->WritebackEnable[k] == true) {
+ 			v->TotalActiveWriteback = v->TotalActiveWriteback + 1;
  		}
- 		acpi_dev_get_irqresource(res, irq->interrupts[index],
- 					 irq->triggering, irq->polarity,
--					 irq->shareable, true);
-+					 irq->shareable, irq->wake_capable,
-+					 true);
- 		break;
- 	case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
- 		ext_irq = &ares->data.extended_irq;
-@@ -534,7 +539,8 @@ bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
- 		if (is_gsi(ext_irq))
- 			acpi_dev_get_irqresource(res, ext_irq->interrupts[index],
- 					 ext_irq->triggering, ext_irq->polarity,
--					 ext_irq->shareable, false);
-+					 ext_irq->shareable, ext_irq->wake_capable,
-+					 false);
- 		else
- 			irqresource_disabled(res, 0);
- 		break;
-diff --git a/drivers/pnp/pnpacpi/rsparser.c b/drivers/pnp/pnpacpi/rsparser.c
-index da78dc77aed32e..4f05f610391b00 100644
---- a/drivers/pnp/pnpacpi/rsparser.c
-+++ b/drivers/pnp/pnpacpi/rsparser.c
-@@ -206,7 +206,8 @@ static acpi_status pnpacpi_allocated_resource(struct acpi_resource *res,
- 		if (i >= 0) {
- 			flags = acpi_dev_irq_flags(gpio->triggering,
- 						   gpio->polarity,
--						   gpio->shareable);
-+						   gpio->shareable,
-+						   gpio->wake_capable);
+ 	}
+ 
+ 	if (v->TotalActiveWriteback <= 1) {
+-		*WritebackUrgentWatermark = WritebackLatency;
++		v->WritebackUrgentWatermark = v->WritebackLatency;
+ 	} else {
+-		*WritebackUrgentWatermark = WritebackLatency + WritebackChunkSize * 1024.0 / 32.0 / SOCCLK;
++		v->WritebackUrgentWatermark = v->WritebackLatency + v->WritebackChunkSize * 1024.0 / 32.0 / SOCCLK;
+ 	}
+ 
+ 	if (v->TotalActiveWriteback <= 1) {
+-		*WritebackDRAMClockChangeWatermark = DRAMClockChangeLatency + WritebackLatency;
++		v->WritebackDRAMClockChangeWatermark = v->DRAMClockChangeLatency + v->WritebackLatency;
+ 	} else {
+-		*WritebackDRAMClockChangeWatermark = DRAMClockChangeLatency + WritebackLatency + WritebackChunkSize * 1024.0 / 32.0 / SOCCLK;
++		v->WritebackDRAMClockChangeWatermark = v->DRAMClockChangeLatency + v->WritebackLatency + v->WritebackChunkSize * 1024.0 / 32.0 / SOCCLK;
+ 	}
+ 
+-	for (k = 0; k < NumberOfActivePlanes; ++k) {
++	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+ 		TotalPixelBW = TotalPixelBW
+-				+ DPPPerPlane[k] * (SwathWidthY[k] * BytePerPixelDETY[k] * VRatio[k] + SwathWidthC[k] * BytePerPixelDETC[k] * VRatioChroma[k])
+-						/ (HTotal[k] / PixelClock[k]);
++				+ DPPPerPlane[k] * (SwathWidthY[k] * BytePerPixelDETY[k] * v->VRatio[k] + SwathWidthC[k] * BytePerPixelDETC[k] * v->VRatioChroma[k])
++						/ (v->HTotal[k] / v->PixelClock[k]);
+ 	}
+ 
+-	for (k = 0; k < NumberOfActivePlanes; ++k) {
++	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+ 		double EffectiveDETBufferSizeY = DETBufferSizeY[k];
+ 
+ 		v->LBLatencyHidingSourceLinesY = dml_min(
+-				(double) MaxLineBufferLines,
+-				dml_floor(LineBufferSize / LBBitPerPixel[k] / (SwathWidthY[k] / dml_max(HRatio[k], 1.0)), 1)) - (vtaps[k] - 1);
++				(double) v->MaxLineBufferLines,
++				dml_floor(v->LineBufferSize / v->LBBitPerPixel[k] / (SwathWidthY[k] / dml_max(v->HRatio[k], 1.0)), 1)) - (v->vtaps[k] - 1);
+ 
+ 		v->LBLatencyHidingSourceLinesC = dml_min(
+-				(double) MaxLineBufferLines,
+-				dml_floor(LineBufferSize / LBBitPerPixel[k] / (SwathWidthC[k] / dml_max(HRatioChroma[k], 1.0)), 1)) - (VTAPsChroma[k] - 1);
++				(double) v->MaxLineBufferLines,
++				dml_floor(v->LineBufferSize / v->LBBitPerPixel[k] / (SwathWidthC[k] / dml_max(v->HRatioChroma[k], 1.0)), 1)) - (v->VTAPsChroma[k] - 1);
+ 
+-		EffectiveLBLatencyHidingY = v->LBLatencyHidingSourceLinesY / VRatio[k] * (HTotal[k] / PixelClock[k]);
++		EffectiveLBLatencyHidingY = v->LBLatencyHidingSourceLinesY / v->VRatio[k] * (v->HTotal[k] / v->PixelClock[k]);
+ 
+-		EffectiveLBLatencyHidingC = v->LBLatencyHidingSourceLinesC / VRatioChroma[k] * (HTotal[k] / PixelClock[k]);
++		EffectiveLBLatencyHidingC = v->LBLatencyHidingSourceLinesC / v->VRatioChroma[k] * (v->HTotal[k] / v->PixelClock[k]);
+ 
+ 		if (UnboundedRequestEnabled) {
+ 			EffectiveDETBufferSizeY = EffectiveDETBufferSizeY
+-					+ CompressedBufferSizeInkByte * 1024 * SwathWidthY[k] * BytePerPixelDETY[k] * VRatio[k] / (HTotal[k] / PixelClock[k]) / TotalPixelBW;
++					+ CompressedBufferSizeInkByte * 1024 * SwathWidthY[k] * BytePerPixelDETY[k] * v->VRatio[k] / (v->HTotal[k] / v->PixelClock[k]) / TotalPixelBW;
+ 		}
+ 
+ 		LinesInDETY[k] = (double) EffectiveDETBufferSizeY / BytePerPixelDETY[k] / SwathWidthY[k];
+ 		LinesInDETYRoundedDownToSwath[k] = dml_floor(LinesInDETY[k], SwathHeightY[k]);
+-		FullDETBufferingTimeY = LinesInDETYRoundedDownToSwath[k] * (HTotal[k] / PixelClock[k]) / VRatio[k];
++		FullDETBufferingTimeY = LinesInDETYRoundedDownToSwath[k] * (v->HTotal[k] / v->PixelClock[k]) / v->VRatio[k];
+ 		if (BytePerPixelDETC[k] > 0) {
+ 			LinesInDETC = v->DETBufferSizeC[k] / BytePerPixelDETC[k] / SwathWidthC[k];
+ 			LinesInDETCRoundedDownToSwath = dml_floor(LinesInDETC, SwathHeightC[k]);
+-			FullDETBufferingTimeC = LinesInDETCRoundedDownToSwath * (HTotal[k] / PixelClock[k]) / VRatioChroma[k];
++			FullDETBufferingTimeC = LinesInDETCRoundedDownToSwath * (v->HTotal[k] / v->PixelClock[k]) / v->VRatioChroma[k];
  		} else {
- 			flags = IORESOURCE_DISABLED;
+ 			LinesInDETC = 0;
+ 			FullDETBufferingTimeC = 999999;
  		}
-@@ -315,7 +316,7 @@ static __init void pnpacpi_parse_irq_option(struct pnp_dev *dev,
- 		if (p->interrupts[i])
- 			__set_bit(p->interrupts[i], map.bits);
  
--	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable);
-+	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable, p->wake_capable);
- 	pnp_register_irq_resource(dev, option_flags, &map, flags);
- }
+ 		ActiveDRAMClockChangeLatencyMarginY = EffectiveLBLatencyHidingY + FullDETBufferingTimeY
+-				- ((double) DSTXAfterScaler[k] / HTotal[k] + DSTYAfterScaler[k]) * HTotal[k] / PixelClock[k] - *UrgentWatermark - *DRAMClockChangeWatermark;
++				- ((double) v->DSTXAfterScaler[k] / v->HTotal[k] + v->DSTYAfterScaler[k]) * v->HTotal[k] / v->PixelClock[k] - v->UrgentWatermark - v->DRAMClockChangeWatermark;
  
-@@ -339,7 +340,7 @@ static __init void pnpacpi_parse_ext_irq_option(struct pnp_dev *dev,
+-		if (NumberOfActivePlanes > 1) {
++		if (v->NumberOfActivePlanes > 1) {
+ 			ActiveDRAMClockChangeLatencyMarginY = ActiveDRAMClockChangeLatencyMarginY
+-					- (1 - 1.0 / NumberOfActivePlanes) * SwathHeightY[k] * HTotal[k] / PixelClock[k] / VRatio[k];
++					- (1 - 1.0 / v->NumberOfActivePlanes) * SwathHeightY[k] * v->HTotal[k] / v->PixelClock[k] / v->VRatio[k];
+ 		}
+ 
+ 		if (BytePerPixelDETC[k] > 0) {
+ 			ActiveDRAMClockChangeLatencyMarginC = EffectiveLBLatencyHidingC + FullDETBufferingTimeC
+-					- ((double) DSTXAfterScaler[k] / HTotal[k] + DSTYAfterScaler[k]) * HTotal[k] / PixelClock[k] - *UrgentWatermark - *DRAMClockChangeWatermark;
++					- ((double) v->DSTXAfterScaler[k] / v->HTotal[k] + v->DSTYAfterScaler[k]) * v->HTotal[k] / v->PixelClock[k] - v->UrgentWatermark - v->DRAMClockChangeWatermark;
+ 
+-			if (NumberOfActivePlanes > 1) {
++			if (v->NumberOfActivePlanes > 1) {
+ 				ActiveDRAMClockChangeLatencyMarginC = ActiveDRAMClockChangeLatencyMarginC
+-						- (1 - 1.0 / NumberOfActivePlanes) * SwathHeightC[k] * HTotal[k] / PixelClock[k] / VRatioChroma[k];
++						- (1 - 1.0 / v->NumberOfActivePlanes) * SwathHeightC[k] * v->HTotal[k] / v->PixelClock[k] / v->VRatioChroma[k];
+ 			}
+ 			v->ActiveDRAMClockChangeLatencyMargin[k] = dml_min(ActiveDRAMClockChangeLatencyMarginY, ActiveDRAMClockChangeLatencyMarginC);
+ 		} else {
+ 			v->ActiveDRAMClockChangeLatencyMargin[k] = ActiveDRAMClockChangeLatencyMarginY;
+ 		}
+ 
+-		if (WritebackEnable[k] == true) {
+-			WritebackDRAMClockChangeLatencyHiding = WritebackInterfaceBufferSize * 1024
+-					/ (WritebackDestinationWidth[k] * WritebackDestinationHeight[k] / (WritebackSourceHeight[k] * HTotal[k] / PixelClock[k]) * 4);
+-			if (WritebackPixelFormat[k] == dm_444_64) {
++		if (v->WritebackEnable[k] == true) {
++			WritebackDRAMClockChangeLatencyHiding = v->WritebackInterfaceBufferSize * 1024
++					/ (v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k] / (v->WritebackSourceHeight[k] * v->HTotal[k] / v->PixelClock[k]) * 4);
++			if (v->WritebackPixelFormat[k] == dm_444_64) {
+ 				WritebackDRAMClockChangeLatencyHiding = WritebackDRAMClockChangeLatencyHiding / 2;
+ 			}
+ 			WritebackDRAMClockChangeLatencyMargin = WritebackDRAMClockChangeLatencyHiding - v->WritebackDRAMClockChangeWatermark;
+@@ -5846,14 +5702,14 @@ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
+ 
+ 	v->MinActiveDRAMClockChangeMargin = 999999;
+ 	PlaneWithMinActiveDRAMClockChangeMargin = 0;
+-	for (k = 0; k < NumberOfActivePlanes; ++k) {
++	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+ 		if (v->ActiveDRAMClockChangeLatencyMargin[k] < v->MinActiveDRAMClockChangeMargin) {
+ 			v->MinActiveDRAMClockChangeMargin = v->ActiveDRAMClockChangeLatencyMargin[k];
+-			if (BlendingAndTiming[k] == k) {
++			if (v->BlendingAndTiming[k] == k) {
+ 				PlaneWithMinActiveDRAMClockChangeMargin = k;
+ 			} else {
+-				for (j = 0; j < NumberOfActivePlanes; ++j) {
+-					if (BlendingAndTiming[k] == j) {
++				for (j = 0; j < v->NumberOfActivePlanes; ++j) {
++					if (v->BlendingAndTiming[k] == j) {
+ 						PlaneWithMinActiveDRAMClockChangeMargin = j;
+ 					}
+ 				}
+@@ -5861,11 +5717,11 @@ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
  		}
  	}
  
--	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable);
-+	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable, p->wake_capable);
- 	pnp_register_irq_resource(dev, option_flags, &map, flags);
- }
+-	*MinActiveDRAMClockChangeLatencySupported = v->MinActiveDRAMClockChangeMargin + DRAMClockChangeLatency;
++	v->MinActiveDRAMClockChangeLatencySupported = v->MinActiveDRAMClockChangeMargin + v->DRAMClockChangeLatency ;
  
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index cd7371a5f2839b..ea2efbdbeee511 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -495,7 +495,7 @@ bool acpi_dev_resource_address_space(struct acpi_resource *ares,
- 				     struct resource_win *win);
- bool acpi_dev_resource_ext_address_space(struct acpi_resource *ares,
- 					 struct resource_win *win);
--unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable);
-+unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable, u8 wake_capable);
- unsigned int acpi_dev_get_irq_type(int triggering, int polarity);
- bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
- 				 struct resource *res);
-diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-index 616b683563a970..3baeea4d903bfd 100644
---- a/include/linux/ioport.h
-+++ b/include/linux/ioport.h
-@@ -79,7 +79,8 @@ struct resource {
- #define IORESOURCE_IRQ_HIGHLEVEL	(1<<2)
- #define IORESOURCE_IRQ_LOWLEVEL		(1<<3)
- #define IORESOURCE_IRQ_SHAREABLE	(1<<4)
--#define IORESOURCE_IRQ_OPTIONAL 	(1<<5)
-+#define IORESOURCE_IRQ_OPTIONAL		(1<<5)
-+#define IORESOURCE_IRQ_WAKECAPABLE	(1<<6)
+ 	SecondMinActiveDRAMClockChangeMarginOneDisplayInVBLank = 999999;
+-	for (k = 0; k < NumberOfActivePlanes; ++k) {
+-		if (!((k == PlaneWithMinActiveDRAMClockChangeMargin) && (BlendingAndTiming[k] == k)) && !(BlendingAndTiming[k] == PlaneWithMinActiveDRAMClockChangeMargin)
++	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
++		if (!((k == PlaneWithMinActiveDRAMClockChangeMargin) && (v->BlendingAndTiming[k] == k)) && !(v->BlendingAndTiming[k] == PlaneWithMinActiveDRAMClockChangeMargin)
+ 				&& v->ActiveDRAMClockChangeLatencyMargin[k] < SecondMinActiveDRAMClockChangeMarginOneDisplayInVBLank) {
+ 			SecondMinActiveDRAMClockChangeMarginOneDisplayInVBLank = v->ActiveDRAMClockChangeLatencyMargin[k];
+ 		}
+@@ -5873,25 +5729,25 @@ static void CalculateWatermarksAndDRAMSpeedChangeSupport(
  
- /* PnP DMA specific bits (IORESOURCE_BITS) */
- #define IORESOURCE_DMA_TYPE_MASK	(3<<0)
+ 	v->TotalNumberOfActiveOTG = 0;
+ 
+-	for (k = 0; k < NumberOfActivePlanes; ++k) {
+-		if (BlendingAndTiming[k] == k) {
++	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
++		if (v->BlendingAndTiming[k] == k) {
+ 			v->TotalNumberOfActiveOTG = v->TotalNumberOfActiveOTG + 1;
+ 		}
+ 	}
+ 
+ 	if (v->MinActiveDRAMClockChangeMargin > 0 && PrefetchMode == 0) {
+ 		*DRAMClockChangeSupport = dm_dram_clock_change_vactive;
+-	} else if ((SynchronizedVBlank == true || v->TotalNumberOfActiveOTG == 1
++	} else if ((v->SynchronizedVBlank == true || v->TotalNumberOfActiveOTG == 1
+ 			|| SecondMinActiveDRAMClockChangeMarginOneDisplayInVBLank > 0) && PrefetchMode == 0) {
+ 		*DRAMClockChangeSupport = dm_dram_clock_change_vblank;
+ 	} else {
+ 		*DRAMClockChangeSupport = dm_dram_clock_change_unsupported;
+ 	}
+ 
+-	*StutterExitWatermark = SRExitTime + ExtraLatency + 10 / DCFCLKDeepSleep;
+-	*StutterEnterPlusExitWatermark = (SREnterPlusExitTime + ExtraLatency + 10 / DCFCLKDeepSleep);
+-	*Z8StutterExitWatermark = SRExitZ8Time + ExtraLatency + 10 / DCFCLKDeepSleep;
+-	*Z8StutterEnterPlusExitWatermark = SREnterPlusExitZ8Time + ExtraLatency + 10 / DCFCLKDeepSleep;
++	*StutterExitWatermark = v->SRExitTime + ExtraLatency + 10 / DCFCLKDeepSleep;
++	*StutterEnterPlusExitWatermark = (v->SREnterPlusExitTime + ExtraLatency + 10 / DCFCLKDeepSleep);
++	*Z8StutterExitWatermark = v->SRExitZ8Time + ExtraLatency + 10 / DCFCLKDeepSleep;
++	*Z8StutterEnterPlusExitWatermark = v->SREnterPlusExitZ8Time + ExtraLatency + 10 / DCFCLKDeepSleep;
+ 
+ #ifdef __DML_VBA_DEBUG__
+ 	dml_print("DML::%s: StutterExitWatermark = %f\n", __func__, *StutterExitWatermark);
 -- 
-2.37.3.968.ga6b4b080e4-goog
+2.35.1
 
