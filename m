@@ -1,103 +1,202 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E051C27
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 07:15:11 +0000 (UTC)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXV1r50cKz14RVq;
-	Wed, 21 Sep 2022 15:10:56 +0800 (CST)
-Received: from [10.174.179.191] (10.174.179.191) by
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723641FA2
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 07:40:01 +0000 (UTC)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MXVcs0hlGzHpmT;
+	Wed, 21 Sep 2022 15:37:49 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 21 Sep 2022 15:15:02 +0800
-Message-ID: <d937796a-48da-50b1-52ce-23aa3d022bf2@huawei.com>
-Date: Wed, 21 Sep 2022 15:15:01 +0800
+ 15.1.2375.31; Wed, 21 Sep 2022 15:39:57 +0800
+From: Wang Yufen <wangyufen@huawei.com>
+To: <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <trix@redhat.com>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [bpf-next v5 1/3] bpftool: Add auto_attach for bpf prog load|loadall
+Date: Wed, 21 Sep 2022 16:00:38 +0800
+Message-ID: <1663747240-31210-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [bpf-next v4 2/3] bpftool: Update doc (add auto_attach to prog
- load)
-To: Quentin Monnet <quentin@isovalent.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yhs@fb.com>, <john.fastabend@gmail.com>,
-	<kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
-	<jolsa@kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
-	<hawk@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
-	<trix@redhat.com>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <1663037687-26006-1-git-send-email-wangyufen@huawei.com>
- <1663037687-26006-2-git-send-email-wangyufen@huawei.com>
- <6bed1b34-3e92-2deb-94b5-9c194c6c7e6c@isovalent.com>
-From: wangyufen <wangyufen@huawei.com>
-In-Reply-To: <6bed1b34-3e92-2deb-94b5-9c194c6c7e6c@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.191]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 
+Add auto_attach optional to support one-step load-attach-pin_link.
 
-在 2022/9/20 23:12, Quentin Monnet 写道:
-> Tue Sep 13 2022 03:54:46 GMT+0100 (British Summer Time) ~ Wang Yufen
-> <wangyufen@huawei.com>
->> Add auto_attach optional to prog load|loadall for supporting
->> one-step load-attach-pin_link.
->>
->> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->> ---
->>   tools/bpf/bpftool/Documentation/bpftool-prog.rst | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
->> index eb1b2a2..463f895 100644
->> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
->> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
->> @@ -31,7 +31,7 @@ PROG COMMANDS
->>   |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
->>   |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
->>   |	**bpftool** **prog pin** *PROG* *FILE*
->> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
->> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
->>   |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
->>   |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
->>   |	**bpftool** **prog tracelog**
->> @@ -131,7 +131,7 @@ DESCRIPTION
->>   		  contain a dot character ('.'), which is reserved for future
->>   		  extensions of *bpffs*.
->>   
->> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
->> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**auto_attach**]
->>   		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
->>   		  **bpftool prog load** pins only the first program from the
->>   		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
->> @@ -150,6 +150,14 @@ DESCRIPTION
->>   		  Optional **pinmaps** argument can be provided to pin all
->>   		  maps under *MAP_DIR* directory.
->>   
->> +		  If **auto_attach** is specified program will be attached
->> +		  before pin. 1)in that case, only the link (representing the program
-> "1)in" -> "In"
->
->> +		  attached to its hook) is pinned, not the program as such, so the
->> +		  path won't show in "bpftool prog show -f", only show in
-> Let's use markup instead of quotes around the commands please, **bpftool
-> prog show -f** and **bpftool link show -f** (below).
->
->> +		  "bpftool link show -f", and 2)this only works when bpftool (libbpf)
-> ", and 2)this..." -> ". Also, this..."
->
->> +		  is able to infer all necessary information from the object file,
->> +		  in particular, it's not supported for all program types.
->> +
->>   		  Note: *PATH* must be located in *bpffs* mount. It must not
->>   		  contain a dot character ('.'), which is reserved for future
->>   		  extensions of *bpffs*.
-> Apart from the formatting nits above, looks good, thank you.
-Thanks， will send v5
+For example,
+   $ bpftool prog loadall test.o /sys/fs/bpf/test auto_attach
+
+   $ bpftool link
+   26: tracing  name test1  tag f0da7d0058c00236  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+   	btf_id 55
+   28: kprobe  name test3  tag 002ef1bef0723833  gpl
+   	loaded_at 2022-09-09T21:39:49+0800  uid 0
+   	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+   	btf_id 55
+   57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+   	loaded_at 2022-09-09T21:41:32+0800  uid 0
+   	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+   	btf_id 82
+
+   $ bpftool link
+   1: tracing  prog 26
+   	prog_type tracing  attach_type trace_fentry
+   3: perf_event  prog 28
+   10: perf_event  prog 57
+
+The auto_attach optional can support tracepoints, k(ret)probes,
+u(ret)probes.
+
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+---
+v4 -> v5: some formatting nits of doc
+v3 -> v4: rename functions, update doc, bash and do_help()
+v2 -> v3: switch to extend prog load command instead of extend perf
+v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+ tools/bpf/bpftool/prog.c | 77 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
+
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index c81362a..aea0b57 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1453,6 +1453,68 @@ static int do_run(int argc, char **argv)
+ 	return ret;
+ }
+ 
++static int
++auto_attach_program(struct bpf_program *prog, const char *path)
++{
++	struct bpf_link *link;
++	int err;
++
++	link = bpf_program__attach(prog);
++	err = libbpf_get_error(link);
++	if (err)
++		return err;
++
++	err = bpf_link__pin(link, path);
++	if (err) {
++		bpf_link__destroy(link);
++		return err;
++	}
++	return 0;
++}
++
++static int pathname_concat(const char *path, const char *name, char *buf)
++{
++	int len;
++
++	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
++	if (len < 0)
++		return -EINVAL;
++	if (len >= PATH_MAX)
++		return -ENAMETOOLONG;
++
++	return 0;
++}
++
++static int
++auto_attach_programs(struct bpf_object *obj, const char *path)
++{
++	struct bpf_program *prog;
++	char buf[PATH_MAX];
++	int err;
++
++	bpf_object__for_each_program(prog, obj) {
++		err = pathname_concat(path, bpf_program__name(prog), buf);
++		if (err)
++			goto err_unpin_programs;
++
++		err = auto_attach_program(prog, buf);
++		if (err)
++			goto err_unpin_programs;
++	}
++
++	return 0;
++
++err_unpin_programs:
++	while ((prog = bpf_object__prev_program(obj, prog))) {
++		if (pathname_concat(path, bpf_program__name(prog), buf))
++			continue;
++
++		bpf_program__unpin(prog, buf);
++	}
++
++	return err;
++}
++
+ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ {
+ 	enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
+@@ -1464,6 +1526,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 	struct bpf_program *prog = NULL, *pos;
+ 	unsigned int old_map_fds = 0;
+ 	const char *pinmaps = NULL;
++	bool auto_attach = false;
+ 	struct bpf_object *obj;
+ 	struct bpf_map *map;
+ 	const char *pinfile;
+@@ -1583,6 +1646,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 				goto err_free_reuse_maps;
+ 
+ 			pinmaps = GET_ARG();
++		} else if (is_prefix(*argv, "auto_attach")) {
++			auto_attach = true;
++			NEXT_ARG();
+ 		} else {
+ 			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+ 			      *argv);
+@@ -1692,14 +1758,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 			goto err_close_obj;
+ 		}
+ 
+-		err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
++		if (auto_attach)
++			err = auto_attach_program(prog, pinfile);
++		else
++			err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+ 		if (err) {
+ 			p_err("failed to pin program %s",
+ 			      bpf_program__section_name(prog));
+ 			goto err_close_obj;
+ 		}
+ 	} else {
+-		err = bpf_object__pin_programs(obj, pinfile);
++		if (auto_attach)
++			err = auto_attach_programs(obj, pinfile);
++		else
++			err = bpf_object__pin_programs(obj, pinfile);
+ 		if (err) {
+ 			p_err("failed to pin all programs");
+ 			goto err_close_obj;
+@@ -2338,6 +2410,7 @@ static int do_help(int argc, char **argv)
+ 		"                         [type TYPE] [dev NAME] \\\n"
+ 		"                         [map { idx IDX | name NAME } MAP]\\\n"
+ 		"                         [pinmaps MAP_DIR]\n"
++		"                         [auto_attach]\n"
+ 		"       %1$s %2$s attach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s detach PROG ATTACH_TYPE [MAP]\n"
+ 		"       %1$s %2$s run PROG \\\n"
+-- 
+1.8.3.1
+
