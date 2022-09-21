@@ -1,166 +1,198 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048EE66E4
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 17:47:29 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id x1so6400475plv.5
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 10:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ILSktUPhRtygadO3mX2WIdesu+9ATPxlEft+pugio2Q=;
-        b=dIj2p5onSFh4ES5KN1JGCp53Up0q1dNdiapiiaO5QSt3Gs+Q1ifYBgha1wML+sn8S8
-         Znegl9GL79Z9MBTX+/i3u/bWsBWHFL+b6MSeuGRNyWw4v/FF4ptRgk3u2xOm5AxUNCMV
-         Ar0UWhRj5MDEaZTHXqBY+Eb4HoD3OEbC5C7grADuo6YJBFmK5tZ2XqN1DegKylKZd1WD
-         GPacLUxEptaESO6PEly7V9h03UjL9KEcYHgUHRHCvrHlry8fjYtkbsVtKKEnRDMyBMR3
-         BFj01EREDio7XXXtawp4ojyT1FF4HRNgd19SXAXLwGC6Bg7adQs+rKVxQOfX/QBl3CI0
-         2OTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ILSktUPhRtygadO3mX2WIdesu+9ATPxlEft+pugio2Q=;
-        b=St6WT+NY79kwmWR3bH0fU2wbjsv4MTtFWDEKXCamLVcJ3HvbfoGElo1ovgBAEN2iAf
-         WC1Tf0MhNnP56yDVizazcvO6dMW95IDLvq85u/9pCbWspGipjCRC2KTknuIhpdi230S/
-         hep1fdNkiPBQQ2Sapw0+m133LrjhaJu/t9hmqNh7E4xNCbm68B/rKHSDjQ52DwgfRdwi
-         De0RVOkhAbC+0XWhPinbK2FKuH7i8k7eJRsdRUX51nAnEMSJNiB82KSWa1WD4fdOLF4q
-         9e8QVGBUbOP38l363HeLDAdxjAFBsxFzsRP8HxbrjeD/NYVGfu69GItBGZ3Brz3JafXk
-         +moA==
-X-Gm-Message-State: ACrzQf09XK/LwhcsZOn3C4BVIbH0k00p9LlsQlJfJ4rPyx1Tc2yz0pf9
-	oGulImzJyg/qz9uNh2LFVHFc3RjNm8EDt36KCHh6Dg==
-X-Google-Smtp-Source: AMsMyM7Q3WVPJ/GxxcQYCAnz5FiWC2cq4UhUGCIwASTcM0s85s5ifrGW1IEqYSXW8F8nkKkYK0InMc3gZ3UuleL0OL4=
-X-Received: by 2002:a17:902:a411:b0:178:9e4c:2ef8 with SMTP id
- p17-20020a170902a41100b001789e4c2ef8mr5929684plq.95.1663782449080; Wed, 21
- Sep 2022 10:47:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B8866E4
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 18:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663783245; x=1695319245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yRaNPSAwxXaizcKOMDlb/9gVSVlSgq/dgeL+d1kFBNM=;
+  b=UVszkw8zi3XG+mB+9P5ghqLV7aDh13OLNX8+pr+kbYV8zxHiD9tB2rhP
+   H6Ey3ur/WIYvSzGSSL0k2Y1nO0B0m+0NqTU7U4MKztM/xZMpnrFweaYRF
+   xZg6pS7lKrsh9jQky6dVhXbDJ7ZCjRdtlQQ+WqUkq2o6SHFdD0v0yDJVM
+   T70D65NuTZ+HqLs1wRg7frebXgTsN+mpkesLUuf7CBmVDRK+i0Pbn2hmT
+   rick/Iom6CICQ4J8T/8ziTuORdShi4WzLBcZmL/9i234DK9/DLBxnbgql
+   UxOVUTbCIu76jn1O2/T4Eo+e9bE2f1hSvgGELNHFvHQvaTuCWECPFOBSL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300923435"
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="300923435"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 11:00:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
+   d="scan'208";a="570646482"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Sep 2022 11:00:32 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ob41P-0003pc-13;
+	Wed, 21 Sep 2022 18:00:31 +0000
+Date: Thu, 22 Sep 2022 02:00:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jianqun Xu <jay.xu@rock-chips.com>, jbx6244@gmail.com, heiko@sntech.de,
+	linus.walleij@linaro.org, andriy.shevchenko@linux.intel.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, brgl@bgdev.pl,
+	linux-gpio@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	Jianqun Xu <jay.xu@rock-chips.com>
+Subject: Re: [PATCH v3 1/2] pinctrl: rockchip: find gpiochip by gpio label
+Message-ID: <202209220126.z3IFhBHk-lkp@intel.com>
+References: <20220920033404.885527-2-jay.xu@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220921064855.2841607-1-davidgow@google.com>
-In-Reply-To: <20220921064855.2841607-1-davidgow@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 21 Sep 2022 10:47:17 -0700
-Message-ID: <CAKwvOdnLaDn=EfGFhjhcZe4EzvjU7Cws3z3KjLGwW=xnqnmHyw@mail.gmail.com>
-Subject: Re: [PATCH v2] arch: um: Mark the stack non-executable to fix a
- binutils warning
-To: David Gow <davidgow@google.com>
-Cc: Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Daniel Latypov <dlatypov@google.com>, linux-um@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com, x86@kernel.org, 
-	Lukas Straub <lukasstraub2@web.de>, Randy Dunlap <rdunlap@infradead.org>, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920033404.885527-2-jay.xu@rock-chips.com>
 
-On Tue, Sep 20, 2022 at 11:49 PM David Gow <davidgow@google.com> wrote:
->
-> Since binutils 2.39, ld will print a warning if any stack section is
-> executable, which is the default for stack sections on files without a
-> .note.GNU-stack section.
->
-> This was fixed for x86 in commit ffcf9c5700e4 ("x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments"),
-> but remained broken for UML, resulting in several warnings:
->
-> /usr/bin/ld: warning: arch/x86/um/vdso/vdso.o: missing .note.GNU-stack section implies executable stack
-> /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1.o: missing .note.GNU-stack section implies executable stack
-> /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
-> /usr/bin/ld: warning: .tmp_vmlinux.kallsyms2.o: missing .note.GNU-stack section implies executable stack
-> /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> /usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
->
-> Link both the VDSO and vmlinux with -z noexecstack, fixing the warnings
-> about .note.GNU-stack sections. In addition, pass --no-warn-rwx-segments
-> to dodge the remaining warnings about LOAD segments with RWX permissions
-> in the kallsyms objects. (Note that this flag is apparently not
-> available on lld, so hide it behind a test for BFD, which is what the
-> x86 patch does.)
->
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcf9c5700e49c0aee42dcba9a12ba21338e8136
-> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Lukas Straub <lukasstraub2@web.de>
-> Tested-by: Lukas Straub <lukasstraub2@web.de>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> ---
->
-> Note that this still doesn't seem to be working properly with make
-> LLVM=1. It doesn't appear to break anything, and still is an improvement
-> for gcc, so seems worthwhile anyway...
+Hi Jianqun,
 
-Hi David,
-Do you have more info about this comment?  Perhaps there's more
-hermiticity issues with ARCH=um when a linker is explicitly specified
-via LD= or HOSTLD=, or implied via LLVM=1.
+Thank you for the patch! Yet something to improve:
 
-Looking at our CI for ARCH=um builds...
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/3095779516/jobs/5012260390
-warnings from /usr/bin/ld. That's...unexpected.
-I've filed https://github.com/ClangBuiltLinux/linux/issues/1715 to
-follow up on this.
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> Changes since v1:
-> http://lists.infradead.org/pipermail/linux-um/2022-August/004234.html
-> - Pass the -z noexecstack and --no-warn-rwx-segments flags as LDFLAGS,
->   rather than as CFLAGS via -Wl
-> - Check that --no-warn-rwx-segments exists with the ld-option function
->   (Thanks Richard)
-> - Add Lukas and Randy's tags.
->
->
->  arch/um/Makefile          | 8 ++++++++
->  arch/x86/um/vdso/Makefile | 2 +-
->  2 files changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/um/Makefile b/arch/um/Makefile
-> index f2fe63bfd819..f1d4d67157be 100644
-> --- a/arch/um/Makefile
-> +++ b/arch/um/Makefile
-> @@ -132,10 +132,18 @@ export LDS_ELF_FORMAT := $(ELF_FORMAT)
->  # The wrappers will select whether using "malloc" or the kernel allocator.
->  LINK_WRAPS = -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
->
-> +# Avoid binutils 2.39+ warnings by marking the stack non-executable and
-> +# ignorning warnings for the kallsyms sections.
-> +LDFLAGS_EXECSTACK = -z noexecstack
-> +ifeq ($(CONFIG_LD_IS_BFD),y)
-> +LDFLAGS_EXECSTACK += $(call ld-option,--no-warn-rwx-segments)
-> +endif
-> +
->  LD_FLAGS_CMDLINE = $(foreach opt,$(KBUILD_LDFLAGS),-Wl,$(opt))
->
->  # Used by link-vmlinux.sh which has special support for um link
->  export CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE)
-> +export LDFLAGS_vmlinux := $(LDFLAGS_EXECSTACK)
->
->  # When cleaning we don't include .config, so we don't include
->  # TT or skas makefiles and don't clean skas_ptregs.h.
-> diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
-> index 8c0396fd0e6f..6fbe97c52c99 100644
-> --- a/arch/x86/um/vdso/Makefile
-> +++ b/arch/x86/um/vdso/Makefile
-> @@ -65,7 +65,7 @@ quiet_cmd_vdso = VDSO    $@
->                        -Wl,-T,$(filter %.lds,$^) $(filter %.o,$^) && \
->                  sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
->
-> -VDSO_LDFLAGS = -fPIC -shared -Wl,--hash-style=sysv
-> +VDSO_LDFLAGS = -fPIC -shared -Wl,--hash-style=sysv -z noexecstack
->  GCOV_PROFILE := n
->
->  #
-> --
-> 2.37.3.968.ga6b4b080e4-goog
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianqun-Xu/rockchip-pinctrl-for-acpi/20220920-113519
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+config: hexagon-randconfig-r031-20220920 (https://download.01.org/0day-ci/archive/20220922/202209220126.z3IFhBHk-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/576939e7212366aa2cc7f5bb44f4f70bad577b4d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianqun-Xu/rockchip-pinctrl-for-acpi/20220920-113519
+        git checkout 576939e7212366aa2cc7f5bb44f4f70bad577b4d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/pinctrl/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pinctrl/pinctrl-rockchip.c:3094:8: error: call to undeclared function 'gpiochip_find_by_name'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   gc = gpiochip_find_by_name((void *)ctrl->pin_banks[i].name);
+                        ^
+>> drivers/pinctrl/pinctrl-rockchip.c:3094:6: error: incompatible integer to pointer conversion assigning to 'struct gpio_chip *' from 'int' [-Wint-conversion]
+                   gc = gpiochip_find_by_name((void *)ctrl->pin_banks[i].name);
+                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/gpiochip_find_by_name +3094 drivers/pinctrl/pinctrl-rockchip.c
+
+  3013	
+  3014	static SIMPLE_DEV_PM_OPS(rockchip_pinctrl_dev_pm_ops, rockchip_pinctrl_suspend,
+  3015				 rockchip_pinctrl_resume);
+  3016	
+  3017	static int rockchip_pinctrl_probe(struct platform_device *pdev)
+  3018	{
+  3019		struct device *dev = &pdev->dev;
+  3020		struct fwnode_handle *fwnode = dev_fwnode(dev);
+  3021		struct rockchip_pinctrl *info;
+  3022		struct rockchip_pin_ctrl *ctrl;
+  3023		struct device_node *np, *node;
+  3024		struct resource *res;
+  3025		void __iomem *base;
+  3026		int ret, i;
+  3027	
+  3028		if (is_of_node(fwnode)) {
+  3029			ret = of_platform_populate(to_of_node(fwnode), NULL, NULL, NULL);
+  3030			if (ret)
+  3031				return dev_err_probe(dev, ret, "failed to register gpio device\n");
+  3032		}
+  3033	
+  3034		info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+  3035		if (!info)
+  3036			return -ENOMEM;
+  3037	
+  3038		info->dev = dev;
+  3039	
+  3040		ctrl = rockchip_pinctrl_get_soc_data(info, pdev);
+  3041		if (!ctrl)
+  3042			return dev_err_probe(dev, -EINVAL, "driver data not available\n");
+  3043		info->ctrl = ctrl;
+  3044	
+  3045		node = of_parse_phandle(np, "rockchip,grf", 0);
+  3046		if (node) {
+  3047			info->regmap_base = syscon_node_to_regmap(node);
+  3048			of_node_put(node);
+  3049			if (IS_ERR(info->regmap_base))
+  3050				return PTR_ERR(info->regmap_base);
+  3051		} else {
+  3052			base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+  3053			if (IS_ERR(base))
+  3054				return PTR_ERR(base);
+  3055	
+  3056			rockchip_regmap_config.max_register = resource_size(res) - 4;
+  3057			rockchip_regmap_config.name = "rockchip,pinctrl";
+  3058			info->regmap_base =
+  3059				devm_regmap_init_mmio(dev, base, &rockchip_regmap_config);
+  3060	
+  3061			/* to check for the old dt-bindings */
+  3062			info->reg_size = resource_size(res);
+  3063	
+  3064			/* Honor the old binding, with pull registers as 2nd resource */
+  3065			if (ctrl->type == RK3188 && info->reg_size < 0x200) {
+  3066				base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+  3067				if (IS_ERR(base))
+  3068					return PTR_ERR(base);
+  3069	
+  3070				rockchip_regmap_config.max_register = resource_size(res) - 4;
+  3071				rockchip_regmap_config.name = "rockchip,pinctrl-pull";
+  3072				info->regmap_pull =
+  3073					devm_regmap_init_mmio(dev, base, &rockchip_regmap_config);
+  3074			}
+  3075		}
+  3076	
+  3077		/* try to find the optional reference to the pmu syscon */
+  3078		node = of_parse_phandle(np, "rockchip,pmu", 0);
+  3079		if (node) {
+  3080			info->regmap_pmu = syscon_node_to_regmap(node);
+  3081			of_node_put(node);
+  3082			if (IS_ERR(info->regmap_pmu))
+  3083				return PTR_ERR(info->regmap_pmu);
+  3084		}
+  3085	
+  3086		ret = rockchip_pinctrl_register(pdev, info);
+  3087		if (ret)
+  3088			return ret;
+  3089	
+  3090		for (i = 0; i < ctrl->nr_banks; i++) {
+  3091			struct gpio_chip *gc;
+  3092			struct rockchip_pin_bank *bank = &ctrl->pin_banks[i];
+  3093	
+> 3094			gc = gpiochip_find_by_name((void *)ctrl->pin_banks[i].name);
+  3095			if (!gc) {
+  3096				dev_err(dev, "fail to find gpiochip\n");
+  3097				return ret;
+  3098			}
+  3099	
+  3100			ret = gpiochip_add_pin_range(gc, dev_name(dev), 0, gc->base, gc->ngpio);
+  3101			if (ret) {
+  3102				dev_err(dev, "fail to add pin range\n");
+  3103				return ret;
+  3104			}
+  3105			bank->gpio_chip = gc;
+  3106		}
+  3107	
+  3108		platform_set_drvdata(pdev, info);
+  3109		dev_info(dev, "probed %pfw\n", fwnode);
+  3110	
+  3111		return 0;
+  3112	}
+  3113	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://01.org/lkp
