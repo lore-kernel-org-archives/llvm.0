@@ -1,84 +1,158 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0BD7C
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 19:23:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663788224; x=1695324224;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tb1ZJFyVkMzNDTfhmTI0cGITVZVMhs9seI71Wf28Xig=;
-  b=Hg6zKgytWWYqS2obSZR1/EwH/Cc6PfP1HCiuaea09SZk3ImoSeos+ASa
-   lXRym0ATP3u8ayERNmiyyj2wxLl4gPHchtDP19lYrHjm6c/1nJT2+uPU7
-   zsweIM1l3viEYmwLKbQr6QCwV99LqCOUelT/ZL6jAAOaPqhP5kcl6Hb56
-   lwfDSK5pLWxXKRfKmioUFR+U3Z44eVmg2Y7dHCOF1bHsF/jAIou3ziR45
-   w9dpxZYDOaVUKpNtHD9/HxktrA5w1rpSVQRemd/kLE+M1Djv8CAb02pK6
-   h5TMxmH/idY7rNrUfjGzzkxWr1ztv7LXju7kXvrJI08MCcyyxf4oZeZ0V
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="326418972"
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="326418972"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 12:23:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,334,1654585200"; 
-   d="scan'208";a="688001705"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Sep 2022 12:23:34 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ob5Jm-0003sw-0H;
-	Wed, 21 Sep 2022 19:23:34 +0000
-Date: Thu, 22 Sep 2022 03:23:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eliav Farber <farbere@amazon.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [groeck-staging:hwmon-next 36/55] ld.lld: error: undefined symbol:
- __aeabi_ldivmod
-Message-ID: <202209220303.tyh2lOm9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2834D7C
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 20:02:06 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 15531580ED1;
+	Wed, 21 Sep 2022 16:02:05 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 21 Sep 2022 16:02:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1663790525; x=1663794125; bh=oGGXYEkeSg
+	3udg+6b8awJgLxB8TPBETarCs6k+G1+dE=; b=o68in3Kjh7MI13xwjSJzVX2N1H
+	nus8OAK2keiPAYRkx5f4wPJ5Ntw4T2JQJyukk6nsk9sav7wAcx3TR/jRoThLzl8q
+	rQOBjU5wDKFignAbp/J0ZzW0B+wgSGSFP+QtMmzsVcy5kSc3NNoCQABegIFrQ8FW
+	2R+xhGDIdxnG9YvJqpviSBEk9Op3qmPdQWF5OyvmnkTLhKaCNB46VC/3AlWIUrq+
+	8jPhIYMzd7vuBQ2+VnUceZiC0DzLHaUV+dBWSuTXjC1r7fNHuIP1XCsV6/qOBuvB
+	BkpUeLFAAI8ON9lODjtuBN6cggSn4BgBjU1L/hKMSmw0lmzwCyBRb1KDjmqA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1663790525; x=1663794125; bh=oGGXYEkeSg3udg+6b8awJgLxB8TP
+	BETarCs6k+G1+dE=; b=W17627AYzgkG2rEklMQXw26R9M9DFKT66rBhBVyNS9qb
+	QwWzMmYGezQJwv9rSSbRIL+hKmVMI/OBApy9SyUwigizS3CMoF06lSoSuX09UMZp
+	hOnTGmuuWanIB6UA8Kq+NiXTTiPx4xudx8U78m5ihKMLIVv4uCOa9F02K9rLbxpw
+	BmeaY8iS81Yr1PqFXsTNbP1TqHzhgsj1APjzEAJGR3N3bJAaenncQUFrcrgtJOsL
+	ogElERsIvTnbXJV8AuA0MuFftWBkY4UUD128slNhqQmY7M+AjDoQ3UxWD13FO60/
+	uMI8k1YiDbIkSqjXZj4oLcUOSeE4IIW1ek+O9fiWgA==
+X-ME-Sender: <xms:u20rYyEptQqZlODHJrBemwVZNCEeRzTYLkZ2R0-tDecJcRmdgIp-Rg>
+    <xme:u20rYzVFeCLLTxz_UTtjtI-by0Vm_lU9wJo_I3b32eYVV6edQtd23ZDkx9qRflbY-
+    QmCkp9it_QyelsaCH0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgudegiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:u20rY8Jtn3Waw3Hn9zNNTRHDGOfli8_RDQJ565DK-xCk-vLDmi95qQ>
+    <xmx:u20rY8FzOQFioJyCGOVTGsmRHnTIyjYcJqD5BTy8QX-GeHwhqj9QLw>
+    <xmx:u20rY4VzpXNN2kZFwU2NRUBF2Ukqg15v-0ex4nPColwA9uJghBxTDA>
+    <xmx:vG0rY_TaPAPa3vGrf73xn9NrsfBHKgz9uKLB3MS6JTowu4qUt_-XPQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id A8F19B60086; Wed, 21 Sep 2022 16:02:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Message-Id: <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+In-Reply-To: <20220921183807.241e2518@xps-13>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+ <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+ <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+ <20220921164720.6bbc56d5@xps-13>
+ <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+ <20220921183807.241e2518@xps-13>
+Date: Wed, 21 Sep 2022 22:01:43 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Miquel Raynal" <miquel.raynal@bootlin.com>
+Cc: "Valentin Korenblit" <vkorenblit@sequans.com>,
+ "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   103974b1117651a5884e2bc7832d7b02990e0232
-commit: 3b12ca798e022192fb451e9e5ef1bb147f21c413 [36/55] hwmon: (mr75203) add support for series 6 temperature equation
-config: arm-randconfig-r012-20220921 (https://download.01.org/0day-ci/archive/20220922/202209220303.tyh2lOm9-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=3b12ca798e022192fb451e9e5ef1bb147f21c413
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging hwmon-next
-        git checkout 3b12ca798e022192fb451e9e5ef1bb147f21c413
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Wed, Sep 21, 2022, at 6:38 PM, Miquel Raynal wrote:
+> arnd@arndb.de wrote on Wed, 21 Sep 2022 17:49:11 +0200:
+>> On Wed, Sep 21, 2022, at 4:47 PM, Miquel Raynal wrote:
+>
+>> - every architecture should provide readsq()/readsl()/readsw()/readsb()
+>>   these days, regardless of CONFIG_GENERIC_IOMAP. If x86 does
+>>   not have that, we should fix asm-generic/io.h.
+>
+> ARM does not seem to define readsq/writesq. Should it be fixed?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+64-bit Arm should get it from include/asm-generic/io.h. If it does
+not, this should be fixed. 32-bit Arm obviously cannot define them
+in a generic way.
 
-Note: the groeck-staging/hwmon-next HEAD 103974b1117651a5884e2bc7832d7b02990e0232 builds fine.
-      It only hurts bisectability.
+>> - CONFIG_GENERIC_IOMAP just means an architecture uses the generic
+>>   ioread32_rep() style wrapper around readsl()/insl(). On most
+>>   architectures (not x86), insl() is implemented as a wrapper around
+>>   readsl() itself, so readsl() and ioread32_rep() should be identical.
+>
+> Ok. But if CONFIG_GENERIC_IOMAP=n (ARM, aarch64, x86_64),
 
-All errors (new ones prefixed by >>):
+x86_64 has GENERIC_IOMAP=y
 
->> ld.lld: error: undefined symbol: __aeabi_ldivmod
-   >>> referenced by mr75203.c
-   >>>               hwmon/mr75203.o:(pvt_read) in archive drivers/built-in.a
-   >>> did you mean: __aeabi_idivmod
-   >>> defined in: arch/arm/lib/lib.a(lib1funcs.o)
+> ioread64_rep is then only defined if CONFIG_64BIT. As it is based
+> on readsq/writesq() and those must be defined (as you said), I don't get
+> why the *64_rep() helpers are not defined in all cases. Maybe because no
+> 32-bit system _should_ need them? But then compile testing gets more
+> difficult.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Both readsq/writesq and ioread64_rep/iowrite64_rep must be defined
+for 64-bit architectures and cannot be defined for 32-bit ones.
+
+>> - For a FIFO, you cannot use readq() but have to use __raw_readq()
+>>   to get the correct endianness. You cannot use this for an
+>>   MMIO register with side-effects though, as this needs the byteswap
+>>   and the barrier in readsl().
+>
+> I'm not sure about the true definition of "FIFO" as you say. I guess
+> you just mean reading from a BE device?
+>
+> In this case I guess we need the barrier+byteswap helpers.
+
+The difference is that a register has a fixed length, and gets
+accessed with a device specific endianness, which may have to
+be swapped if the device and the CPU disagree.
+
+A FIFO register is what you use for transferring a stream of
+bytes, such as reading a file system block from disk. The
+first byte in the register corresponds to the first byte in
+memory later, so there must not be any byteswap while copying
+to/from memory. If the data itself is structured (i.e. an
+on-disk inode or a network packet), then the byteswap will
+happen if necessary while interpreting the data.
+
+> I don't think this is actually what we want. My understanding is
+> (Valentin, please correct me if I'm wrong):
+> - on ARM: we will always use 32-bit accesses
+> - on aarch64: we may use either 32-bit or 64-bit accesses
+> - on other architectures: we only want to compile test
+>
+> I believe what Valentin wanted to achieve in the first place, was to
+> use 64-bit accesses when relevant (otherwise it does not work).
+
+The width is read from a device specific register at
+runtime, it is not related to the architecture you are
+running on, presumably this is hardwired during the
+design of an SoC, based on the capabilities of the DMA
+engine:
+
+        reg = readl_relaxed(cdns_ctrl->reg + CTRL_FEATURES);
+        if (FIELD_GET(CTRL_FEATURES_DMA_DWITH64, reg))
+                cdns_ctrl->caps2.data_dma_width = 8;
+        else
+                cdns_ctrl->caps2.data_dma_width = 4;
+
+This usually means the largest access that is valid for
+reading from the FIFO, but usually smaller accesses work
+as well, just slower.
+
+     Arnd
