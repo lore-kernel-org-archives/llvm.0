@@ -1,180 +1,221 @@
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA7A4C6D
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:49:55 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id 486A12B05927;
-	Wed, 21 Sep 2022 11:49:54 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 21 Sep 2022 11:49:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1663775393; x=1663778993; bh=ZUdMdpnOR+
-	H/XlChteHcAuStJhMtVvaLi2st4KpsvfM=; b=ODvEgHZSllsMKOHRlFpNTlLENR
-	nkaqWr/NYiTtBlAd86He3HECPLY2S77BOxI8+4XWYdPSm6ut2P7qYSFfzZb6ygaS
-	469kj559eP6TuTHmrzvv7PJ9i3+BFBW/+xn/iXdALYPBhBToo0xCPJ0v0CBdJtsw
-	dGqmZutL+3dgime5EFdv6Nu+EZh+IO02gIUqGG6VLmXCMSakqWwBtQPoDGssVmCX
-	EevyAKVHC6Yn1LwYPGh9cxjqDJLP5/oor/EIljKOmAfpZc6AuAz4oZGiQePXT12y
-	pOR+d4fISmNX9UeGsHmG0EgJaPOTAtuFPj8y+BOcfxAQTmN2U0D6TdSzsd5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1663775393; x=1663778993; bh=ZUdMdpnOR+H/XlChteHcAuStJhMt
-	VvaLi2st4KpsvfM=; b=qab1EJdeFpWQVm8O39GURAACXhRmUR6elSO3awQaFh4s
-	rgJc203sYybM9IXKqHA4qRSUWMM3QasISyf7KvzoINllwKZBKZT5j46xwM+CzAvm
-	tu43x7qsf3G7jVXhCuM0LT9FkIiRFwm7qYEgNMq6PVKDFIU6y1wbXE3ojaGUh/kB
-	kTPdX770hjUjz46T0yKDRhwk3xaGYGgitGDTyXmZtrinOs/4MGIQ/DyUXIscJMDo
-	waDCr9JT5EcsirYH01ACAQmnVkFQqMdNhlOSi+x0F66F7aWbCH9anIPvGKK7507V
-	y6gbTSBm3cDSxfFtD/XJMD9kqZH8OiJOUYo1QU4P4g==
-X-ME-Sender: <xms:oTIrYx0_6P_zF8IVDN8QBCVfPWhkzX8yUGgzXflJRpSO5Ix2SIqa7A>
-    <xme:oTIrY4EJSTuH0GX1jP91V2PNJNXVXLn6a1TE3WCokS2xvDxf4BSY4kNgs32_Z6rst
-    XuhQWtiyxhtqtktXlE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgleegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:oTIrYx5K73Q6BoU8LQRpJ-MQCKSVk4dlAhFSEufwb06xAu-MdtZaug>
-    <xmx:oTIrY-3uBGNvlc4p5WDNpgIkZJ3gZorjbQA2xMVKjZbZPFWtoj1iug>
-    <xmx:oTIrY0FtgpynCJGvUH0lmWaDuBHv3ORWNsu9LeMH8naJBfO3tiYYXQ>
-    <xmx:oTIrY4AtUPPxtSbDQ_Rts9whdZBi_O7-KOfz4W9YC7wlVZMySxIW40gOGpY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 096A7B60086; Wed, 21 Sep 2022 11:49:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4464C6D
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:52:09 +0000 (UTC)
+Received: by mail-io1-f44.google.com with SMTP id q83so5380875iod.7
+        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 08:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=vFfZ46BAlS2mrmHtxO9f2+ksmeW+dh4CW9ZrkmAoMVE=;
+        b=J5/8BzJUlnacb2H1rFZLj2klzGFpS6qJKCKVKP/i6jvw7xmTCQJOr/1aFThUVVavfp
+         Q8LStW9lN5fL/vgVVyznP2h5ZgBtxJMUJazImGQSqJzR3+SfDGGdlz3+zMUv7QEDIhad
+         dn0a9v48vi1yxoO4YupuYlq5PBGzfjLbQEqmY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=vFfZ46BAlS2mrmHtxO9f2+ksmeW+dh4CW9ZrkmAoMVE=;
+        b=vYHYWxILVSQ6OOhdSX77IoW4Kd5az/jgxAyFKIglpVby4LMtqTWyBAa0DJ8S3R8ps1
+         VpAIPffRekU4o3ZUYXFekS/lqV2ngwi8rlhGqj+9TCLpWxC/eskTZ3G3qPRBFnPPyPtT
+         38CqmDt/RdbngwjhcqMDUJNK96Ca6R4+yGeK+muaS1BZ5Mmr9JOP/PxCTSn0ZB0k5SB3
+         CmcNB03cs84jEstN4lBbC1qGHlyoKKYmnwIzBTvwVr3czWL632wP26sR7gwfno+cSbcx
+         1KCByDvuw6GdRL0WiO4xy2+idesX3d/9u6Acx+gLQBH3v1zMo3Zi+q9QgNE7eL5L/1tg
+         VTog==
+X-Gm-Message-State: ACrzQf0Nn6uDqrN8foL5l7i1B3svO+5Oh1hG21vu1MDJPKyXmYC2aXqf
+	RNGYntORuuJVzrhEbJDc8xwM9g==
+X-Google-Smtp-Source: AMsMyM4ISli9TA3C7UOIK0GjjNAWrdkb983+P541Y7CYiZUG6lQazCLOX49TxNI1VLG+x9KN4b2uWQ==
+X-Received: by 2002:a05:6638:3821:b0:35a:1973:ae9 with SMTP id i33-20020a056638382100b0035a19730ae9mr12758575jav.313.1663775529063;
+        Wed, 21 Sep 2022 08:52:09 -0700 (PDT)
+Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
+        by smtp.gmail.com with ESMTPSA id c14-20020a023b0e000000b0035a8d644a31sm1148061jaa.117.2022.09.21.08.52.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 08:52:08 -0700 (PDT)
+From: Raul E Rangel <rrangel@chromium.org>
+To: linux-acpi@vger.kernel.org,
+	linux-input@vger.kernel.org
+Cc: rafael@kernel.org,
+	timvp@google.com,
+	mika.westerberg@linux.intel.com,
+	andriy.shevchenko@linux.intel.com,
+	dmitry.torokhov@gmail.com,
+	jingle.wu@emc.com.tw,
+	hdegoede@redhat.com,
+	mario.limonciello@amd.com,
+	linus.walleij@linaro.org,
+	Raul E Rangel <rrangel@chromium.org>,
+	Alistair Francis <alistair@alistair23.me>,
+	Angela Czubak <acz@semihalf.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Bartosz Szczepanek <bsz@semihalf.com>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Cai Huoqing <cai.huoqing@linux.dev>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Johnny Chuang <johnny.chuang.emc@gmail.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Rob Herring <robh@kernel.org>,
+	Terry Bowman <terry.bowman@amd.com>,
+	Tom Rix <trix@redhat.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Yang Li <yang.lee@linux.alibaba.com>,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 00/13] acpi: i2c: Use SharedAndWake and ExclusiveAndWake to enable wake irq
+Date: Wed, 21 Sep 2022 09:51:52 -0600
+Message-Id: <20220921155205.1332614-1-rrangel@chromium.org>
+X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
-In-Reply-To: <20220921164720.6bbc56d5@xps-13>
-References: <202209210641.MziHAbW7-lkp@intel.com>
- <20220921104002.226ff3f6@xps-13>
- <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
- <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
- <20220921164720.6bbc56d5@xps-13>
-Date: Wed, 21 Sep 2022 17:49:11 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Miquel Raynal" <miquel.raynal@bootlin.com>,
- "Valentin Korenblit" <vkorenblit@sequans.com>
-Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 21, 2022, at 4:47 PM, Miquel Raynal wrote:
->
-> The (erased) context of this thread:
-> https://lore.kernel.org/llvm/202209210641.MziHAbW7-lkp@intel.com/
->
-> vkorenblit@sequans.com wrote on Wed, 21 Sep 2022 14:27:47 +0200:
->
->> Hi Miquel,
->> 
->> I see that x86_64 doesn't support readsq/writesq because of
->> CONFIG_GENERIC_IOMAP (I was building for arm64). However,
->> __raw_readq/writeq are available and there are a few drivers
->> using them.
->
-> I would suggest to rather try using [read|write]sq() to get rid
-> of the CONFIG_GENERIC_IOMAP dependency. But it looks like those
-> functions are not defined on 32-bit architectures anyway. So if we want
-> the driver to compile on both arm and aarch64, it will not be enough.
->
-> In practice, I guess we should never have the 64-bit accessor executed
-> when running on a 32-bit platform thanks to the following conditions:
->
->   1885			u8 data_dma_width = cdns_ctrl->caps2.data_dma_width;
->   1886	
->   1887			int len_in_words = (data_dma_width == 4) ? len >> 2 : len >> 3;
->   1888	
->   1889			/* read alingment data */
->   1890			if (data_dma_width == 4)
->   1891				ioread32_rep(cdns_ctrl->io.virt, buf, len_in_words);
->   1892			else
->> 1893				ioread64_rep(cdns_ctrl->io.virt, buf, len_in_words);
->
-> So maybe we could have something awful yet simple, like the following
-> within the Cadence driver:
->
-> #if !CONFIG_64BIT
-> readsq(...) { BUG()? }
-> #endif
->
-> Arnd, I've seen a couple of similar issues on the mailing lists in the
-> past 5 years but I could not find any working solution, I don't know
-> how all these threads have settled in the end. I thought maybe you
-> would have a better idea than the above hack :)
+Today, i2c drivers are making the assumption that their IRQs can also
+be used as wake IRQs. This isn't always the case and it can lead to
+spurious wakes. This has recently started to affect AMD Chromebooks.
+With the introduction of
+d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
+controller gained the capability to set the wake bit on each GPIO. The
+ACPI specification defines two ways to inform the system if a device is
+wake capable:
+1) The _PRW object defines the GPE that can be used to wake the system.
+2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
 
-There are a lot of different things going on here, so I need
-to unwind a bit:
+Currently only the first method is supported. The i2c drivers don't have
+any indication that the IRQ is wake capable, so they guess. This causes
+spurious interrupts, for example:
+* We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
+  `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
+  system.
+* The IRQ line is active level low for this device and is pulled up by
+  the power resource defined in `_PR0`/`_PR3`.
+* The i2c driver will (incorrectly) arm the GPIO for wake by calling
+  `enable_irq_wake` as part of its suspend hook.
+* ACPI will power down the device since it doesn't have a wake GPE
+  associated with it.
+* When the device is powered down, the IRQ line will drop, and it will
+  trigger a wake event.
 
-- every architecture should provide readsq()/readsl()/readsw()/readsb()
-  these days, regardless of CONFIG_GENERIC_IOMAP. If x86 does
-  not have that, we should fix asm-generic/io.h.
+See the following debug log:
+[   42.335804] PM: Suspending system (s2idle)
+[   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
+[   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
+[   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
+[   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
+[   42.535293] PM: Wakeup unrelated to ACPI SCI
+[   42.535294] PM: resume from suspend-to-idle
 
-- CONFIG_GENERIC_IOMAP just means an architecture uses the generic
-  ioread32_rep() style wrapper around readsl()/insl(). On most
-  architectures (not x86), insl() is implemented as a wrapper around
-  readsl() itself, so readsl() and ioread32_rep() should be identical.
+In order to fix this, we need to take into account the wake capable bit
+defined on the Interrupt/GpioInt. This is accomplished by:
+* Migrating some of the i2c drivers over to using the PM subsystem to
+  manage the wake IRQ.
+* Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
+  to the  i2c core.
+* Use the wake_capable bit in the i2c core to call
+  `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
+* Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
+  handled by the i2c core.
+* Make the ACPI device PM system aware of the wake_irq. This is
+  necessary so the device doesn't incorrectly get powered down when a
+  wake_irq is enabled.
 
-- For a FIFO, you cannot use readq() but have to use __raw_readq()
-  to get the correct endianness. You cannot use this for an
-  MMIO register with side-effects though, as this needs the byteswap
-  and the barrier in readsl().
+I've tested this code with various combinations of having _PRW,
+ExclusiveAndWake and power resources all defined or not defined, but it
+would be great if others could test this out on their hardware.
 
-- On 32-bit architectures, there is no generic way to access a 64-bit
-  MMIO location as you say. However, depending on the device you are
-  accessing, you can replace __raw_readq() with a pair of
-  __raw_readl(), along the lines of
-  include/linux/io-64-nonatomic-{lo-hi,hi-lo}.h
- 
->> Do you want me to re-implement readsq and writesq in Cadence
->> driver privately or do you suggest a different (cleaner) approach?
->
-> I would rather prefer to avoid this solution, as anyway I believe there
-> is no "generic" implementation working in all cases, there were a
-> couple of attempts IIRC to bring generic helpers like the above for all
-> architectures, but none of them landed in Linus' tree, probably because
-> it just cannot be made...
+I'm sure this will surface some devices where the IRQs were not
+correctly marked as wake capable. Ideally the firmware can be fixed, but
+if not we can work around this in the kernel by providing a board
+specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
+See `chromeos_laptop.c` for an example of matching DMI properties and
+setting the `I2C_CLIENT_WAKE` override.
 
-If anyone has a datasheet for the cadence driver, they should be
-able to look up how one can access the FIFO in 8-byte mode using
-32-bit accesses. I think it's something like
+Thanks,
+Raul
 
-static inline void cadence_nand_readsq(const volatile void __iomem *addr,
-               void *buffer, unsigned int count)
-{
-        if (count) {
-                u64 *buf = buffer;
+Changes in v5:
+- Added Acked-by: Benjamin Tissoires
+- Removed clang-format white space changes
+- Check irq return value before updating wake_capable pointer
+- Go back to using adev->wakeup.flags.valid to keep the diff cleaner
+- Fix a typo in comment
 
-                do {
-#ifdef __raw_readq
-                        u64 x = __raw_readq(addr);
-                        *buf++ = x;
-#else
-                        u32 *buf32 = (void *)buf;
-                        buf32[0] = __raw_readl(addr + OFF0);
-                        buf32[1] = __raw_readl(addr + OFF1);
-                        buf++;
-#endif
-                } while (--count);
-        }
-}
+Changes in v4:
+- Added Reviewed-by
+- Reformatted with 96 char limit
+- Added Reviewed-by
+- Reformatted with 96 char limit
+- Removed unnecessary !!
+- Removed unrelated whitespace change
+- Added Reviewed-by
+- Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
+- Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
 
-Most likely, OFF0 is zero, while OFF1 is 4 here, but that
-depends on how the FIFO register is implemented.
+Changes in v3:
+- Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+  unrelated drivers.
+- Converted wake_capable parameter to bool.
+- Fixed bad indent
+- Convert wake_capable to bool
+- Only update wake_capable pointer once
+- Move wake_capable local into local block
 
-     Arnd
+Changes in v2:
+- Added elants_i2c to series
+- Added raydium_ts_i2c to series
+- Fixed call site in mlxbf_gige_probe
+- Added ability to extract wake bit from Interrupt/IRQ resources
+- Look at wake_cabple bit for IRQ/Interrupt resources
+- I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
+
+Raul E Rangel (13):
+  HID: i2c-hid: Use PM subsystem to manage wake irq
+  Input: elan_i2c - Use PM subsystem to manage wake irq
+  Input: elants_i2c - Use PM subsystem to manage wake irq
+  Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+  gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
+  ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+  i2c: acpi: Use ACPI wake capability bit to set wake_irq
+  ACPI: PM: Take wake IRQ into consideration when entering
+    suspend-to-idle
+  HID: i2c-hid: acpi: Stop setting wakeup_capable
+  HID: i2c-hid: Don't set wake_capable and wake_irq
+  Input: elan_i2c - Don't set wake_capable and wake_irq
+  Input: elants_i2c - Don't set wake_capable and wake_irq
+  Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+
+ drivers/acpi/device_pm.c                   | 19 +++++++++--
+ drivers/acpi/irq.c                         |  8 +++--
+ drivers/acpi/resource.c                    | 16 +++++++---
+ drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
+ drivers/gpio/gpiolib-acpi.h                |  2 ++
+ drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
+ drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
+ drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
+ drivers/i2c/i2c-core-base.c                |  6 +++-
+ drivers/i2c/i2c-core.h                     |  4 +--
+ drivers/input/mouse/elan_i2c_core.c        | 15 +--------
+ drivers/input/touchscreen/elants_i2c.c     | 13 ++------
+ drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
+ drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
+ include/linux/acpi.h                       | 23 +++++++++++---
+ include/linux/ioport.h                     |  3 +-
+ 16 files changed, 112 insertions(+), 92 deletions(-)
+
+-- 
+2.37.3.968.ga6b4b080e4-goog
+
