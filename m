@@ -1,95 +1,207 @@
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from esa2.hc353-39.eu.iphmx.com (esa2.hc353-39.eu.iphmx.com [207.54.65.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4797C
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 08:40:15 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 92580FF808;
-	Wed, 21 Sep 2022 08:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1663749607;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oH68prWr+K6M/+VJN9mzBk6EPAXOvKLVuiYE0zxGZhw=;
-	b=Y/YVy0AYv5xSD1rLRsws62bKktXHFgH5j56412XfcXvwjPG+kKQGANrM/mpAYWax33jv2S
-	vZzKtPKH1DKS811KpQ7LvZW+sO5WIuAp/JgtRkF1Orq00jY70w17oH9k8NT327PMHKLA0j
-	1zPqh/K56pYtNqn0uaOOywpbBcTXbYam11imD4zg8DuRHTuPv8ZcSchelLO0MnkjrTwhgk
-	5ewiaDtCC67j0mVFvU/LUhVqOAC851zBtzT1+IzluBFwpXbrNqZMaoE4iUZwI7z6IZBESm
-	UCCyrMrOGXzC0KDXzr42t4rsLd0h3G9FAflmPwHC0xAMU9KdPmpGWGbovQINhA==
-Date: Wed, 21 Sep 2022 10:40:02 +0200
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Valentin Korenblit <vkorenblit@sequans.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Message-ID: <20220921104002.226ff3f6@xps-13>
-In-Reply-To: <202209210641.MziHAbW7-lkp@intel.com>
-References: <202209210641.MziHAbW7-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B671F7C
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 08:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=sequans.com; i=@sequans.com; l=7858; q=dns/txt;
+  s=corp; t=1663749975; x=1695285975;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7sI0bK0Uik8Q0EifSq+urV7lPUg1NRSirxwJIUilZ6I=;
+  b=Qa/+RHuS6uGWnoOOETYyV4ffTjq1oz35CUBrFwAIwjOE50qEwCXnG98x
+   2kGXFHT1nxHJ5Q/pS0uCfB7Qw1MWPFNhHzBdQC1SEdjb+cJSJMFafpjZN
+   hiWSdsodnahDXR9SU7Zu7PoFIBWcZbLvfA5gqaRT3RummL2OVLuAeKdU/
+   8=;
+X-IPAS-Result: =?us-ascii?q?A2EaAAC+zSpjf5bSIB9aHAEBAQEBAQcBARIBAQQEAQFAg?=
+ =?us-ascii?q?TsHAQELAYMkgViET4gfiEcuA4QmmGuBfAsBAQEBAQEBAQEJQgSFBwKEbCc0C?=
+ =?us-ascii?q?Q4BAgQBAQEBAwIDAQEBAQEBAwEBAQUBAQEBAQEGAgEBAQECEAEBPEqFL0aCN?=
+ =?us-ascii?q?SkBg20BAQEDIwQLAQVBEAsYAgIfBwICVwYBDAYCAQGCeQGDIKBDAYsafzOBA?=
+ =?us-ascii?q?YgdgV8GgREsAYtqhDxDgUlEgRUnDIJ3PogagmYEgQmTd4QVJgQOAxkrHUECA?=
+ =?us-ascii?q?QtCNAMVAxQDBSQHAxkPIw0NBBYHDAMDBSUDAgIbBwICAwIGEwUCAk04CAQIB?=
+ =?us-ascii?q?CskDwUCBy8FBC8CHgQFBhEIAhYCBgQEBAQVAhAIAggmFwcTGBsZAQVZEAkhH?=
+ =?us-ascii?q?AoEGg0FBhMDIG8FCjsPKDJrKx0bCoEMKigVAwQEAwIGEwMDIgIQKjEUBCkTE?=
+ =?us-ascii?q?i0HK3MJAgMiZwUDAwQoLAMJIR8HKCY8B1g7BAMDECI9BgMJAwIkW3cCNxMVB?=
+ =?us-ascii?q?QMNGSYIBSMXHgQIPAIFBlmaVnoTLBcJEIF3CwuTFJtQkG+CNINgoB0GEy6Wc?=
+ =?us-ascii?q?wiSCS2WXSCiHIR6MIE/IoIWTSODN1EZD45XjhtzOwIGAQoBAQMJhkeEEwEB?=
+IronPort-PHdr: A9a23:96t4txLLdAy7RA0cJ9mcuEBgWUAX0o4c3iYr45Yqw4hDbr6kt8y7e
+ hCFvrM21waCBdqTwskHotKei7rnV20E7MTJm1E5W7sIaSU4j94LlRcrGs+PBB6zBvfraysnA
+ JYKDwc9rDm0PkdPBcnxeUDZrGGs4j4OABX/Mhd+KvjoFoLIgMm7ye6/94fdbghGmTaxbq9+I
+ RerpgjNq8cahpdvJLwswRXTuHtIfOpWxWJsJV2Nmhv3+9m98p1+/SlOovwt78FPX7n0cKQ+V
+ rxYES8pM3sp683xtBnMVhWA630BWWgLiBVIAgzF7BbnXpfttybxq+Rw1DWGMcDwULs5Qiqp4
+ bt1RxD0iScHLz85/3/Risxsl6JQvRatqwViz4LIfI2ZMfxzdb7fc9wHX2pMRsVfWSJODYyyc
+ oUBEfQMPehYoYb/u1QAogCzBRWvCe711jNEmnH70K883u88EQ/GxgsgH9cWvXvbttr1MLkdU
+ eapzKnJyzXIcvZY2TDn6IfWdBAuuvWMXbNsccHMzkQvCQDFjlKKqYP7OTOazeANs2mH7+d7T
+ uKglXcnqxxrrTip3ccgkJXGhoUQyl3d8yhy3Yk6K8GiRkFhfd6kDIVftzucN4ZuXs4vX2Flt
+ Skkx7AYpJO2YDQHxpo5yxLDdvGJfZSE7g/sWuueIzp1gHBodb2hihu97EStyO7xWMmw3VtLo
+ CRLkt/BvW0D2RzU78iIUPp9/kG51DmT1gDT8f1LIUcumaXHLJ4hx6Y8lpkNvkTZGC/5hkH2g
+ LWRdkU+9eik8/jrbqj8qp+bLY90hRnyMqsvmsyjAeQ4LxMBU3KH9uS70b3v5UL5QLRWjv02j
+ 6nWq43aJd8Fqa6jHwBV1YAj6wqhADegzNQUh2UILFVAeB+BkoPnOEnOLej2APuimVihnilny
+ +rYMrH8HpnBNGXPnbf9cbt79kVS0hA8zcpF6JJRErwBJfXzVVLvu9HAFR85NhC0w/7gCNVgy
+ oMSQWKPDbGdMKPVqVKJ5+MvI+yXa48PojnxMeMl6OD3jX8kg1Ade7Kp0YELZ3C/G/RqO0SZY
+ XzyjdcdCWoHsBcyQPbkhVGcSzJfeWu+U74m6j0mCI+qEZ/PRoW3j7yA2Ce7EIdWZmdDCl2UD
+ 3fodIKEW+0SZyKUOcBhlj0EVaS6Ro86yx6urRL6xKBhLurP4CEXqZXj1N1t6+3Vjh497SZ0A
+ NiF02GRU2F0mXsFSj8u0KBlvUN90kuD0bR/g/FAENxT5upJUhokOp7Y1eB6Ecr9WwLHftiTT
+ FarWc6pATY2TtItx98OYkB9F8++gRDE2iqmG6UVmKCTBJwo7qLc2GD8J8J+y3bez6Qhjl8mQ
+ tdROm2inKJw6w/TB4vRn0WDi6mqbbgc3DLK9GqbzmqBp1xYUA90UarYRHwQfE/WrdDi60PGT
+ r+uEqgnMhBbxcKeN6dGcNrpjU9JRPv7ItTRf3qxm3usBRaP3r6MaI7qe3sY3CjGDEgEkhsT/
+ WqdNQQkAiehomTeDCFhFF71fkzj7/d+pGuhTkAo1wGKc1Fh172t9x4RhPycTe4T370dtCcit
+ Tp0BlC90MzSC9ebuQphc7tTYckn7FdEy23ZrQp9MYKkL6x4gV4eaQt37AvS0EBSC5xdnMxil
+ no7ygN2Yfad0Upcejfex5nhPLTTAmP1+wyraqiQ0VbbhpLe+aoV7vk840nupx3hDE0o9Gkvh
+ 91Wy1Od4InHCEwZVpenAWgt8B0vmbjeby8h5oWc9np2PK++tj7ek4Y3B+w/xxCqe9ZDGLiJD
+ RL7FdZcDM+rfr9502O1Zw4JabgBvJU/ONmrIr7fgPbDAQ==
+IronPort-Data: A9a23:w+2gfqAeSXzZrRVW/9jjw5YqxClBgxIJ4kV8jS/XYbTApGh00z0Dz
+ mQXWWuGM/eOZWuge4hzbIu/pxsEvsfRzodgTANkpHpgZkwTlceUXt7xwmUcns+xBp2YHBI5t
+ 5V2hv3odp1coqr0/0/1WlTHhSckjfngqp3UV7KfZUidfSc9FGF7z0oLd9cR2uZAmcK+Dx6Gp
+ eT8qsjePE7N8zNvOycf5rnrRClH5ZwegxtF+A1lDRx3lAWGzSNNXchGffjZw0bQG+G4IMbrH
+ 44v85nkpgs1zz91Yvu5n7DydFE9Q7K6FWBiXVIPBsBOKjAbzsAD+v5T2Mg0MC+7uB3Q9zxF8
+ +ihgLTpIesfFvOTwbxNA0cEe81JFfQuFLfveRBTuOTJnx2eKxMAyd03ZK09FdRwFupfXjsWr
+ ZT0gd3CB/yOr7ve/V61dgVjruhkAsjSA7oSg34jyzbaMcQ7fszHTJyfsLe03B9o7ixPNeTfY
+ sADYHx0YQ3dahtUfFwQDfrSns/z3z+kKXsC8QrT/Pdvi4TQ5FUZPLzFLtnSYNGMT8FUgm6Dq
+ 3vb9mLiRBodMbRzzBLZqyvy3rSU9c/9cI4RJeaV7dphvFiKzTEaGD0oRHTmjPbs3yZSXPoFc
+ RVOoULCt5Ma8U2yU9T5GQexsXiNujYWXN1MF+w8rgqKz8L85wWBLmkCUjNFLtchsaceRjY31
+ 1uF2trtARRrsaaJUjTFr/GTtzzaESwRM2oqYS4fURBD59jlvZF1gh/RJv5nEaionpj2FCv2z
+ jSisicznfMQgNQN2qH9+krI6w9AvbDbTws//AyRRW+88wp/f8iuYInABUXnAehoAMG3T2C+h
+ XU9lIuY6+MyP4yyyCiCebBYdF223MppIAEwkHY2Qcd6qWjxoCX/FWxDyG0udBY0bq7obRezO
+ hKM5Wu98bcJZBOXgblLj5WZJf5CIULIPtP4TPrZcN1Pb/CdnyfWpn02PSZ8M0hGdkwh1K0yf
+ LmBeMCnAB4n5UVbINmeHrZ1PUcDnHxW+I8qbcmTI+6b+bSffmWJbrwOLUGDaOs0hIvd/luOr
+ YcPaZHUm04DOAEbXsUx2dBKRbztBSVqba0aV+QOL4Zv3yI5QDB6VqeNqV/fU9U5xfsK/gs3w
+ p1NchUCkQCk7ZE2AQ+Nd2Fsdb70FYpyqX8wOilEALpb8yZLXGpb149GLsNfQFXS3LY8pRKCZ
+ 6VaJp7o7zUmYmivxgnxmrGk9dcyL0vz31nSV8dnCRBmF6Ndq8Xy0oeMVmPSGOMmVUJbaeNWT
+ 2Wc6z7m
+IronPort-HdrOrdr: A9a23:fyAQj6HdeUimLVdrpLqE1ceALOsnbusQ8zAXPo5KOHhom7+j5q
+ KTdZMgpGTJYVcqKQkdcL+7VpVoLUmsk6KdpLNhRItKPzOGhILLFu5fBOLZqlWKdkHDH6xmpM
+ BdmsNFeb7N5DZB/KPHCUWDc+rIH+PszJyV
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.93,332,1654552800"; 
+   d="scan'208";a="4116033"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+X-Virus-Scanned: amavisd-new at sequans.com
+Message-ID: <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+Date: Wed, 21 Sep 2022 10:45:03 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Language: en-US
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+ kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+From: Valentin Korenblit <vkorenblit@sequans.com>
+In-Reply-To: <20220921104002.226ff3f6@xps-13>
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
 
-Hi Valentin,
+SGkgTWlxdWVsLAoKSSB3aWxsIHRha2UgYSBsb29rIGF0IGl0IHRvZGF5LgoKQmVzdCByZWdhcmRz
+LAoKVmFsZW50aW4KCk9uIDkvMjEvMjIgMTA6NDAsIE1pcXVlbCBSYXluYWwgd3JvdGU6Cj4gSGkg
+VmFsZW50aW4sCj4KPiBsa3BAaW50ZWwuY29tIHdyb3RlIG9uIFdlZCwgMjEgU2VwIDIwMjIgMDY6
+MzE6MjMgKzA4MDA6Cj4KPj4gdHJlZTogICBodHRwczovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFa
+N29sS1NKal9GV2IzMzVtbWpITmlETTRGT2JoMm0yS3I0Q1ZtelJEWDctd1o5SHpTVXZ4TE5fT3lG
+M05XUzF2cGxGN3F1aWhLbzk3b2NLcXNwU0hTX3hTVWNCcTdTb1l5VDRhaVAwQlZKdEFHbTU1UDFr
+OU1zc2E3N0tLUE5VYkFNeXE0TXpENGQ5MzY3SUhTbFUtOF9ZbWExeHN3eUs3MnBCeXFvalREUmFH
+ZVNMTWNkM0VmcDlKQi03ZXRCTk9aME1xXzdkcU15S3VVd2JaVThXSW5hLVp3SFdfQ0N2UzdESFhw
+ODZaRlVvUlhQc3p0M3N6WWVSYThxUkNHY25mNUhfTG1aWFVVNDZPY3dFMU1PODVxd3pZbi0wanJT
+QkswWjBMbkw2M0R4TWNncExCa0lVQnRUZ1B0cUZpNGVITFdJNnUyQlRkYWRMUWRmUXJrVDdVY3Js
+MVViR2htZm5pWlI3R3ZwUWNwQ3NseVBWYkVQalFNOTRjeWdUbWZuUmZDUWVFc0lrQjJTeElCUjdE
+X1hLcV84VkRsbVhCVjFQdWllbE1qcU1MN0NidFRpV1VaOFVRQmNhSHBybWxLRFloL2h0dHBzJTNB
+JTJGJTJGZ2l0Lmtlcm5lbC5vcmclMkZwdWIlMkZzY20lMkZsaW51eCUyRmtlcm5lbCUyRmdpdCUy
+Rm10ZCUyRmxpbnV4LmdpdCBuYW5kL25leHQKPj4gaGVhZDogICA2M2RlMjRmY2NiNmI4MzFiZTFh
+YmZlMDcyOTI0NDkxMDViNDY3NzMxCj4+IGNvbW1pdDogN2U3ZGMwNDc3NGIxOGMwZTQyY2U3NGFh
+MzM1NzAyMWNkYTk3OTY3NCBbMTEvMzFdIG10ZDogcmF3bmFuZDogY2FkZW5jZTogc3VwcG9ydCA2
+NC1iaXQgc2xhdmUgZG1hIGludGVyZmFjZQo+PiBjb25maWc6IHg4Nl82NC1yYW5kY29uZmlnLWEw
+MDEgKGh0dHBzOi8vc2VjdXJlLXdlYi5jaXNjby5jb20vMTBsc0hxazIzcDR2aklJNGhkd3lEVktq
+STVyVmtXd3l4MWpJN2YxUWZ0RERSdi1DaEQ3aEdqdlR0QU96S0RjQzVXTlZKemdJT0hfSDVpWDE0
+ampOWFJabUhueEFsTnNjalRielNRNlhGZ0FfX0drLXVaQTIxZFd1UC1rLXhTT1FtYWdXNk9ubnN2
+bGJOdmFqNHozQjMtSzEwTWlvN1poYUhtS3B2WGt1Rm5Ua29wREVGQl8xOGpZd0tCenFGSDRIcUs3
+T1FzOHoybGRBRkFQeWVTNHBmMlFCNmdXdFU3dXczX0RNMEZmbjIyRjdlNkVyWjVUQVJXUk9YSEVy
+YTNxOEhUTEw4WXV1QnRnLW85OEx0X3VvLXAwbHBfQjUwbEdQUmIxYW90ejczVEd0Y01QcWFjY3Rf
+Z3dlb29wUnRoMTM4aXFjcWhvS1ZVdHdEbXZpMENxN01ORVVXMkkxU25sQjdqbDdtTE5icDY2c3cy
+Y0NkcXRfOTd0aW9LNkkxTmF6c05VWjVnVzRrdUtGZXZjZ25hclY0WjhLT1F0UFh5eUM2RFJlUUo5
+dEJDSDR5V0M4SXlZVVFOMDI0NnoyczFsY2IvaHR0cHMlM0ElMkYlMkZkb3dubG9hZC4wMS5vcmcl
+MkYwZGF5LWNpJTJGYXJjaGl2ZSUyRjIwMjIwOTIxJTJGMjAyMjA5MjEwNjQxLk16aUhBYlc3LWxr
+cCU0MGludGVsLmNvbSUyRmNvbmZpZykKPj4gY29tcGlsZXI6IGNsYW5nIHZlcnNpb24gMTQuMC42
+IChodHRwczovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFoRlE2YjlJNXJFYmdKVEJyU05ZUTk2TkIy
+SEJabC12Rm4wNGZBenp4OVRnVnItWkkyWWg3OGVKU0h1VklYWFV0N1kwRkFRZDVIYzVXYmZoQTNm
+QnY5Q1pnaVIxdFNGU0VrLVRsUThmSHFFelVzTzZwS1Z4VmJxOU53RnYzeklJQ3Q3TTBLanRfeHlG
+WkZEX3BMcmwtSWxna2RkZHZXV0drcnM2QVVYd0xLcWZDUktyYjRkM3RHc2ZETk1ONVBUajJTRGp3
+blhCckZGQzkyTEJ4ak5VMWNLM1ZhanFEeEo5OW9WZ05EbGhhSlRsbXN2NDhUY3BPVnVnbllUZjlx
+cFFoMmd4b1FqNlJxam9ZLWE5WWxNWUt0R2p1YllHZ1Z5djB0OWJlZ2FsRGdFZUhVLVlZT2dMUk5D
+aGRZWm41X0Rjb2pnWXhqZ1NWcjY1UnpCRHQ3ODJKbms5NFNTTWNJNFJWOXlFVG1Sd3BTNmh5aVFL
+WHhXMmlpZ3hsaXNvZDROcVUzNGN0TzN4VUVDU3N4UUVuSGprb2RwNzJhTVdXRjJJRVVwbm5uWjlr
+UUhIbGRCNV9xUU5aMGpHeU0yTi1ZcmdtL2h0dHBzJTNBJTJGJTJGZ2l0aHViLmNvbSUyRmxsdm0l
+MkZsbHZtLXByb2plY3QgZjI4YzAwNmE1ODk1ZmMwZTMyOWZlMTVmZWFkODFlMzc0NTdjYjFkMSkK
+Pj4gcmVwcm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1aWxkKToKPj4gICAgICAgICAgd2dldCBodHRw
+czovL3NlY3VyZS13ZWIuY2lzY28uY29tLzFOaXhSOHlNNmNJUVM3bmNwMjM1NW5fODVEalE3UHdR
+OExKNEF0UVJaNXZWQUtzWlVlMlVEWlc3NXRXazZuU290QlpoNHhYQTRIbGFCV2NfWFhpRDVXTndF
+UEVHNlJJYUZEWnc3dnBOU0VPNVVjcm1uanFsZWpIOGFKNnFCc05MR1NpLTlOeHpCYm9IM3RYMlBG
+am5kNzUxQ1A3WFpOYXl5LWpRZWFvZHdrUlMzcVdhR2R3blFJNzV1Nl9FMlQ0emhOVUN3UzVueG1o
+NUdrVE43Z2s3N2xRb0g4OV9FeXB0RmJHdlUxemsxY2JDZE1WX1hTOWFEZmpIMFN5bG9PX0plMzhp
+cmVfY2FRc25aYlJpNWxHUmpjemJoYmh2bGJnbnNINWpTNHE4a05neE1RY2FZWHhyNTd1LVlodFg5
+RnFyM3ZKaW5mdHNZVHQwMHd0ZXhjNGtkeDJuVUR1WTFGMU5OVV93VDBPaUgwTXh1dXp2QW1henox
+dGpnd0V4aTlEX0tuSER1NGNYbmJmT3lTX2FFcjNGUFpJVXZnSktiZUp5dkRwRTZGMXNSWTRxclNP
+NGRtdUJSVFFPM1lhNFQteFRKL2h0dHBzJTNBJTJGJTJGcmF3LmdpdGh1YnVzZXJjb250ZW50LmNv
+bSUyRmludGVsJTJGbGtwLXRlc3RzJTJGbWFzdGVyJTJGc2JpbiUyRm1ha2UuY3Jvc3MgLU8gfi9i
+aW4vbWFrZS5jcm9zcwo+PiAgICAgICAgICBjaG1vZCAreCB+L2Jpbi9tYWtlLmNyb3NzCj4+ICAg
+ICAgICAgICMgaHR0cHM6Ly9zZWN1cmUtd2ViLmNpc2NvLmNvbS8xR2JWMFdHRDA1M2Z6Z1h3YWZO
+YjlnSXo2bF9hVktkYXZaOWhCaUdyeExRNEZ1RkdsZnBySFNrZXhOVElpUlNmN1dNUlMybjBZRU1O
+a3NicnF6YWpRcmU0VWRrYUdQcmgtbVVHWkRXUFdURDVYOTB5cFZBazdMdDl0XzVrMldCWVBFQ0d6
+VzlVMEhOTURnWnFIdXhNUFoxUG5BZ3VVTm13N1R0dE5ENTZIdnc2YWdRZDBOekFib2UxYmNTZzUx
+SUdZeExaWHFEYjFTU2RfXzJXQ2tyQWI1a05FY3hNUzhuS05yQjU1WkQxMTEtVVYza1prenZFd2VT
+c2NpUzBMT1RhLU9xWURVRWVBMHk5NERoU09takdxWnBaWElVMVpBNG1aMF82aFNrZG1jMURGMXNQ
+ckIyUWlRX0U2M0NZOUMtOTA4R0NtSUdtckJaaXZ5dVJ1eHN1UjB5OWFsMzhmS1g4WnZtazlzenk4
+YWZlMzZzR1VwTW9YaWpyUExVblBLbWRWLTJPQ1ZqMjZzU2FYS1J0a3RyT3NPSTBiOGVzZ0VIdUIx
+RnhCSFpqS3hMQ0hPTlplY0lkTk81QjltQVVUdTNVVi9odHRwcyUzQSUyRiUyRmdpdC5rZXJuZWwu
+b3JnJTJGcHViJTJGc2NtJTJGbGludXglMkZrZXJuZWwlMkZnaXQlMkZtdGQlMkZsaW51eC5naXQl
+MkZjb21taXQlMkYlM0ZpZCUzRDdlN2RjMDQ3NzRiMThjMGU0MmNlNzRhYTMzNTcwMjFjZGE5Nzk2
+NzQKPj4gICAgICAgICAgZ2l0IHJlbW90ZSBhZGQgbXRkIGh0dHBzOi8vc2VjdXJlLXdlYi5jaXNj
+by5jb20vMVo3b2xLU0pqX0ZXYjMzNW1takhOaURNNEZPYmgybTJLcjRDVm16UkRYNy13WjlIelNV
+dnhMTl9PeUYzTldTMXZwbEY3cXVpaEtvOTdvY0txc3BTSFNfeFNVY0JxN1NvWXlUNGFpUDBCVkp0
+QUdtNTVQMWs5TXNzYTc3S0tQTlViQU15cTRNekQ0ZDkzNjdJSFNsVS04X1ltYTF4c3d5SzcycEJ5
+cW9qVERSYUdlU0xNY2QzRWZwOUpCLTdldEJOT1owTXFfN2RxTXlLdVV3YlpVOFdJbmEtWndIV19D
+Q3ZTN0RIWHA4NlpGVW9SWFBzenQzc3pZZVJhOHFSQ0djbmY1SF9MbVpYVVU0Nk9jd0UxTU84NXF3
+elluLTBqclNCSzBaMExuTDYzRHhNY2dwTEJrSVVCdFRnUHRxRmk0ZUhMV0k2dTJCVGRhZExRZGZR
+cmtUN1VjcmwxVWJHaG1mbmlaUjdHdnBRY3BDc2x5UFZiRVBqUU05NGN5Z1RtZm5SZkNRZUVzSWtC
+MlN4SUJSN0RfWEtxXzhWRGxtWEJWMVB1aWVsTWpxTUw3Q2J0VGlXVVo4VVFCY2FIcHJtbEtEWWgv
+aHR0cHMlM0ElMkYlMkZnaXQua2VybmVsLm9yZyUyRnB1YiUyRnNjbSUyRmxpbnV4JTJGa2VybmVs
+JTJGZ2l0JTJGbXRkJTJGbGludXguZ2l0Cj4+ICAgICAgICAgIGdpdCBmZXRjaCAtLW5vLXRhZ3Mg
+bXRkIG5hbmQvbmV4dAo+PiAgICAgICAgICBnaXQgY2hlY2tvdXQgN2U3ZGMwNDc3NGIxOGMwZTQy
+Y2U3NGFhMzM1NzAyMWNkYTk3OTY3NAo+PiAgICAgICAgICAjIHNhdmUgdGhlIGNvbmZpZyBmaWxl
+Cj4+ICAgICAgICAgIG1rZGlyIGJ1aWxkX2RpciAmJiBjcCBjb25maWcgYnVpbGRfZGlyLy5jb25m
+aWcKPj4gICAgICAgICAgQ09NUElMRVJfSU5TVEFMTF9QQVRIPSRIT01FLzBkYXkgQ09NUElMRVI9
+Y2xhbmcgbWFrZS5jcm9zcyBXPTEgTz1idWlsZF9kaXIgQVJDSD14ODZfNjQgU0hFTEw9L2Jpbi9i
+YXNoIGRyaXZlcnMvbXRkL25hbmQvcmF3Lwo+Pgo+PiBJZiB5b3UgZml4IHRoZSBpc3N1ZSwga2lu
+ZGx5IGFkZCBmb2xsb3dpbmcgdGFnIHdoZXJlIGFwcGxpY2FibGUKPj4gfCBSZXBvcnRlZC1ieTog
+a2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+Cj4+Cj4+IEFsbCBlcnJvcnMgKG5ldyBv
+bmVzIHByZWZpeGVkIGJ5ID4+KToKPj4KPj4+PiBkcml2ZXJzL210ZC9uYW5kL3Jhdy9jYWRlbmNl
+LW5hbmQtY29udHJvbGxlci5jOjE4OTM6NDogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9m
+IGZ1bmN0aW9uICdpb3JlYWQ2NF9yZXAnIGlzIGludmFsaWQgaW4gQzk5IFstV2Vycm9yLC1XaW1w
+bGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBpb3JlYWQ2NF9yZXAoY2Ruc19jdHJsLT5pby52aXJ0LCBidWYsIGxlbl9pbl93b3Jkcyk7Cj4+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+Pj4gZHJpdmVycy9tdGQvbmFuZC9yYXcv
+Y2FkZW5jZS1uYW5kLWNvbnRyb2xsZXIuYzoxOTYyOjQ6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJh
+dGlvbiBvZiBmdW5jdGlvbiAnaW93cml0ZTY0X3JlcCcgaXMgaW52YWxpZCBpbiBDOTkgWy1XZXJy
+b3IsLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KPj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGlvd3JpdGU2NF9yZXAoY2Ruc19jdHJsLT5pby52aXJ0LCBidWYsIGxlbl9pbl93
+b3Jkcyk7Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+ICAgICAyIGVycm9ycyBn
+ZW5lcmF0ZWQuCj4gSSd2ZSBkcm9wcGVkIHlvdXIgcGF0Y2ggZnJvbSBuYW5kL25leHQsIGhlcmUg
+eW91IGNhbiBjaGVjayB3aGF0J3MKPiBtaXNzaW5nIGluIHRoZSBjb25maWd1cmF0aW9uLCBzaG91
+bGQgbm90IGJlIHRvbyBoYXJkIHRvIHNvbHZlLiBPbmNlCj4gZG9uZSwgeW91IGNhbiBzZW5kIGEg
+bmV3IHZlcnNpb24gb2YgdGhlIHBhdGNoLgo+Cj4gVGhhbmtzLAo+IE1pcXXDqGwKPgotLSBJTVBP
+UlRBTlQgTk9USUNFOgoKCgpUaGUgY29udGVudHMgb2YgdGhpcyBlbWFpbCBhbmQgYW55IGF0dGFj
+aG1lbnRzIGFyZSBjb25maWRlbnRpYWwgYW5kIG1heSBhbHNvIGJlIHByaXZpbGVnZWQuIElmIHlv
+dSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRl
+ciBpbW1lZGlhdGVseSBhbmQgZG8gbm90IGRpc2Nsb3NlIHRoZSBjb250ZW50cyB0byBhbnkgb3Ro
+ZXIgcGVyc29uLCB1c2UgaXQgZm9yIGFueSBwdXJwb3NlLCBvciBzdG9yZSBvciBjb3B5IHRoZSBp
+bmZvcm1hdGlvbiBpbiBhbnkgbWVkaXVtLgoKCgpUaGFuayB5b3UuCg==
 
-lkp@intel.com wrote on Wed, 21 Sep 2022 06:31:23 +0800:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nan=
-d/next
-> head:   63de24fccb6b831be1abfe07292449105b467731
-> commit: 7e7dc04774b18c0e42ce74aa3357021cda979674 [11/31] mtd: rawnand: ca=
-dence: support 64-bit slave dma interface
-> config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/2=
-0220921/202209210641.MziHAbW7-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/c=
-ommit/?id=3D7e7dc04774b18c0e42ce74aa3357021cda979674
->         git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/gi=
-t/mtd/linux.git
->         git fetch --no-tags mtd nand/next
->         git checkout 7e7dc04774b18c0e42ce74aa3357021cda979674
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/mtd/nand/raw/
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
-> >> drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit=
- declaration of function 'ioread64_rep' is invalid in C99 [-Werror,-Wimplic=
-it-function-declaration] =20
->                            ioread64_rep(cdns_ctrl->io.virt, buf, len_in_w=
-ords);
->                            ^
-> >> drivers/mtd/nand/raw/cadence-nand-controller.c:1962:4: error: implicit=
- declaration of function 'iowrite64_rep' is invalid in C99 [-Werror,-Wimpli=
-cit-function-declaration] =20
->                            iowrite64_rep(cdns_ctrl->io.virt, buf, len_in_=
-words);
->                            ^
->    2 errors generated.
-
-I've dropped your patch from nand/next, here you can check what's
-missing in the configuration, should not be too hard to solve. Once
-done, you can send a new version of the patch.
-
-Thanks,
-Miqu=C3=A8l
