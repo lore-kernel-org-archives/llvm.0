@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41F45C9C
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:54:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F4BC43470;
-	Wed, 21 Sep 2022 15:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB9D5C9C
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4FFC43140;
+	Wed, 21 Sep 2022 15:54:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663775683;
-	bh=EHC/n7xhzmgYc8Q35mSJNr/a7I3lBZt9N0cpfuYwGaI=;
+	s=k20201202; t=1663775688;
+	bh=VwNcnLR2/LA/fz5sKeoJt9Vzelm+E+Rs4audF7yv7p4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LmqcQD/TR65Jb7bEkXZNafZLsz0HvMq87GLcEurQQO/tVOa8AA9Bzs+UkhEu0ui+j
-	 ddTVNV0/QnnE+PTS3dSAWCaA8tBdJw4oB8C2UMe7CN18Q2DT4ZE51P/3dFzkNPg0Cj
-	 aMwaMEt2H6JHbYJz86jBCDOX7oWkTAhcd44Mpo0Ba55kfWDb8g93LfmD0biVtyVJB1
-	 O67NREeThZm299vLZodUpXZTcuw46V9Z4byHSOtiAcfQ6qBfhOHaXEwKux/u9JNMck
-	 o9M2rzHzi/hlJJdy/EGxujcnCkgq0E6YoKdLmSOp7nQX9I0b8rpEN0Gs7wjGuMgWwa
-	 Z4rhyPBEMxvAQ==
+	b=Z1+yq/aofyxj8frjclUkVBNyjhJcUqhnKroNAlsY8Sf7VEGFkC4m6kPyeB83hOiQl
+	 zhywn4TAzCJCS7KyMH3QvsC+YAloyXL46gtAb5uGDVE3Knq3gQLyr3Ve5oM8DVAdbM
+	 3Rh74WhjpQHyyPY2H69VIb8Ex+7ONTD0zdikhqv3qvHCqmCyzl0kDOhFm9ZJh/52MO
+	 OxzAob9OYqSwJw1ge8th/JBlviEiGh87GBVZ+56Zw0UdzAji3oPgr//C+aO14sstCn
+	 cKvr7TxKqnWzA8V6FfQjcj5fkX37DDtysL1EGKZTsTk9/yVm1rv8MNF50rVioPXgmA
+	 aPxMxn3wEWsYQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -31,12 +31,12 @@ Cc: Nathan Huckleberry <nhuck@google.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 5/5] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
-Date: Wed, 21 Sep 2022 11:54:36 -0400
-Message-Id: <20220921155436.235371-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 3/3] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
+Date: Wed, 21 Sep 2022 11:54:43 -0400
+Message-Id: <20220921155444.235446-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220921155436.235371-1-sashal@kernel.org>
-References: <20220921155436.235371-1-sashal@kernel.org>
+In-Reply-To: <20220921155444.235446-1-sashal@kernel.org>
+References: <20220921155444.235446-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index 8f299d76b69b..67dae1354aa6 100644
+index 3feab563e50a..3f992e5a75c9 100644
 --- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
 +++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -275,8 +275,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
+@@ -284,8 +284,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
  	return ret;
  }
  
