@@ -1,122 +1,180 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BAD4A2F
-	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663773993; x=1695309993;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rqJUOoVj5mAMGy2f3TCSteYp6PBvRaljpl/4msFKkoI=;
-  b=TnCWv8l6Ma7vJinwAKwOqYPbTioZ6HC2VN+whIS63UnDBvex+V5y9bzI
-   +dUNZ8+k5HglGxezeSCdlgC5t/b/6veqlOUig+MnAg3QwLKbjpfNbYDfq
-   8Pk1IoG/5oa0bEnwxhmALDJl6/7NwIDeOqO2WNwXQV8beXIgVbtKzS2VR
-   eCjo7DyayiKZgHsu9edWoPgXCDejUlg0FiMZ0mVIdNsoVcK3AmNABSbcC
-   +d4C5YQ/OuSM7Hid+tkN1MeAKAurKuBB+/tWrqQSfoZXnLvo39ns7QzaA
-   gEqbNxbiSwcZ6EXRrP/CkPotOBFyNBo1CDRn0/mXCmL9Wcuv5Tx5DqtgS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="386320790"
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="386320790"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 08:26:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,333,1654585200"; 
-   d="scan'208";a="948199885"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Sep 2022 08:26:26 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ob1cH-0003ib-1W;
-	Wed, 21 Sep 2022 15:26:25 +0000
-Date: Wed, 21 Sep 2022 23:26:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Max Filippov <jcmvbkbc@gmail.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org
-Subject: [jcmvbkbc-xtensa:xtensa-6.0-esp32 7/12]
- drivers/tty/serial/esp32_uart.c:33:6: warning: no previous prototype for
- function 'dbg_echo'
-Message-ID: <202209212350.zedDtGpw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA7A4C6D
+	for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 15:49:55 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.west.internal (Postfix) with ESMTP id 486A12B05927;
+	Wed, 21 Sep 2022 11:49:54 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 21 Sep 2022 11:49:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1663775393; x=1663778993; bh=ZUdMdpnOR+
+	H/XlChteHcAuStJhMtVvaLi2st4KpsvfM=; b=ODvEgHZSllsMKOHRlFpNTlLENR
+	nkaqWr/NYiTtBlAd86He3HECPLY2S77BOxI8+4XWYdPSm6ut2P7qYSFfzZb6ygaS
+	469kj559eP6TuTHmrzvv7PJ9i3+BFBW/+xn/iXdALYPBhBToo0xCPJ0v0CBdJtsw
+	dGqmZutL+3dgime5EFdv6Nu+EZh+IO02gIUqGG6VLmXCMSakqWwBtQPoDGssVmCX
+	EevyAKVHC6Yn1LwYPGh9cxjqDJLP5/oor/EIljKOmAfpZc6AuAz4oZGiQePXT12y
+	pOR+d4fISmNX9UeGsHmG0EgJaPOTAtuFPj8y+BOcfxAQTmN2U0D6TdSzsd5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1663775393; x=1663778993; bh=ZUdMdpnOR+H/XlChteHcAuStJhMt
+	VvaLi2st4KpsvfM=; b=qab1EJdeFpWQVm8O39GURAACXhRmUR6elSO3awQaFh4s
+	rgJc203sYybM9IXKqHA4qRSUWMM3QasISyf7KvzoINllwKZBKZT5j46xwM+CzAvm
+	tu43x7qsf3G7jVXhCuM0LT9FkIiRFwm7qYEgNMq6PVKDFIU6y1wbXE3ojaGUh/kB
+	kTPdX770hjUjz46T0yKDRhwk3xaGYGgitGDTyXmZtrinOs/4MGIQ/DyUXIscJMDo
+	waDCr9JT5EcsirYH01ACAQmnVkFQqMdNhlOSi+x0F66F7aWbCH9anIPvGKK7507V
+	y6gbTSBm3cDSxfFtD/XJMD9kqZH8OiJOUYo1QU4P4g==
+X-ME-Sender: <xms:oTIrYx0_6P_zF8IVDN8QBCVfPWhkzX8yUGgzXflJRpSO5Ix2SIqa7A>
+    <xme:oTIrY4EJSTuH0GX1jP91V2PNJNXVXLn6a1TE3WCokS2xvDxf4BSY4kNgs32_Z6rst
+    XuhQWtiyxhtqtktXlE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeefuddgleegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:oTIrYx5K73Q6BoU8LQRpJ-MQCKSVk4dlAhFSEufwb06xAu-MdtZaug>
+    <xmx:oTIrY-3uBGNvlc4p5WDNpgIkZJ3gZorjbQA2xMVKjZbZPFWtoj1iug>
+    <xmx:oTIrY0FtgpynCJGvUH0lmWaDuBHv3ORWNsu9LeMH8naJBfO3tiYYXQ>
+    <xmx:oTIrY4AtUPPxtSbDQ_Rts9whdZBi_O7-KOfz4W9YC7wlVZMySxIW40gOGpY>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 096A7B60086; Wed, 21 Sep 2022 11:49:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Message-Id: <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+In-Reply-To: <20220921164720.6bbc56d5@xps-13>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+ <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+ <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+ <20220921164720.6bbc56d5@xps-13>
+Date: Wed, 21 Sep 2022 17:49:11 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Valentin Korenblit" <vkorenblit@sequans.com>
+Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Type: text/plain
 
-tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.0-esp32
-head:   513fb5af258c5311c5e0684c21db9aeb48e981e8
-commit: a17e7b31fc865c922149feb5c560bc4c497b8c34 [7/12] WIP: drivers/tty/serial: add driver for ESP32 UART
-config: riscv-randconfig-r032-20220921 (https://download.01.org/0day-ci/archive/20220921/202209212350.zedDtGpw-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/jcmvbkbc/linux-xtensa/commit/a17e7b31fc865c922149feb5c560bc4c497b8c34
-        git remote add jcmvbkbc-xtensa https://github.com/jcmvbkbc/linux-xtensa
-        git fetch --no-tags jcmvbkbc-xtensa xtensa-6.0-esp32
-        git checkout a17e7b31fc865c922149feb5c560bc4c497b8c34
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/ drivers/misc/ drivers/net/wireless/ralink/rt2x00/ drivers/pinctrl/ drivers/tty/serial/
+On Wed, Sep 21, 2022, at 4:47 PM, Miquel Raynal wrote:
+>
+> The (erased) context of this thread:
+> https://lore.kernel.org/llvm/202209210641.MziHAbW7-lkp@intel.com/
+>
+> vkorenblit@sequans.com wrote on Wed, 21 Sep 2022 14:27:47 +0200:
+>
+>> Hi Miquel,
+>> 
+>> I see that x86_64 doesn't support readsq/writesq because of
+>> CONFIG_GENERIC_IOMAP (I was building for arm64). However,
+>> __raw_readq/writeq are available and there are a few drivers
+>> using them.
+>
+> I would suggest to rather try using [read|write]sq() to get rid
+> of the CONFIG_GENERIC_IOMAP dependency. But it looks like those
+> functions are not defined on 32-bit architectures anyway. So if we want
+> the driver to compile on both arm and aarch64, it will not be enough.
+>
+> In practice, I guess we should never have the 64-bit accessor executed
+> when running on a 32-bit platform thanks to the following conditions:
+>
+>   1885			u8 data_dma_width = cdns_ctrl->caps2.data_dma_width;
+>   1886	
+>   1887			int len_in_words = (data_dma_width == 4) ? len >> 2 : len >> 3;
+>   1888	
+>   1889			/* read alingment data */
+>   1890			if (data_dma_width == 4)
+>   1891				ioread32_rep(cdns_ctrl->io.virt, buf, len_in_words);
+>   1892			else
+>> 1893				ioread64_rep(cdns_ctrl->io.virt, buf, len_in_words);
+>
+> So maybe we could have something awful yet simple, like the following
+> within the Cadence driver:
+>
+> #if !CONFIG_64BIT
+> readsq(...) { BUG()? }
+> #endif
+>
+> Arnd, I've seen a couple of similar issues on the mailing lists in the
+> past 5 years but I could not find any working solution, I don't know
+> how all these threads have settled in the end. I thought maybe you
+> would have a better idea than the above hack :)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+There are a lot of different things going on here, so I need
+to unwind a bit:
 
-All warnings (new ones prefixed by >>):
+- every architecture should provide readsq()/readsl()/readsw()/readsb()
+  these days, regardless of CONFIG_GENERIC_IOMAP. If x86 does
+  not have that, we should fix asm-generic/io.h.
 
->> drivers/tty/serial/esp32_uart.c:33:6: warning: no previous prototype for function 'dbg_echo' [-Wmissing-prototypes]
-   void dbg_echo(const char *s)
-        ^
-   drivers/tty/serial/esp32_uart.c:33:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dbg_echo(const char *s)
-   ^
-   static 
->> drivers/tty/serial/esp32_uart.c:48:6: warning: no previous prototype for function 'dbg_printf' [-Wmissing-prototypes]
-   void dbg_printf(const char *fmt, ...)
-        ^
-   drivers/tty/serial/esp32_uart.c:48:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dbg_printf(const char *fmt, ...)
-   ^
-   static 
-   2 warnings generated.
+- CONFIG_GENERIC_IOMAP just means an architecture uses the generic
+  ioread32_rep() style wrapper around readsl()/insl(). On most
+  architectures (not x86), insl() is implemented as a wrapper around
+  readsl() itself, so readsl() and ioread32_rep() should be identical.
 
+- For a FIFO, you cannot use readq() but have to use __raw_readq()
+  to get the correct endianness. You cannot use this for an
+  MMIO register with side-effects though, as this needs the byteswap
+  and the barrier in readsl().
 
-vim +/dbg_echo +33 drivers/tty/serial/esp32_uart.c
+- On 32-bit architectures, there is no generic way to access a 64-bit
+  MMIO location as you say. However, depending on the device you are
+  accessing, you can replace __raw_readq() with a pair of
+  __raw_readl(), along the lines of
+  include/linux/io-64-nonatomic-{lo-hi,hi-lo}.h
+ 
+>> Do you want me to re-implement readsq and writesq in Cadence
+>> driver privately or do you suggest a different (cleaner) approach?
+>
+> I would rather prefer to avoid this solution, as anyway I believe there
+> is no "generic" implementation working in all cases, there were a
+> couple of attempts IIRC to bring generic helpers like the above for all
+> architectures, but none of them landed in Linus' tree, probably because
+> it just cannot be made...
 
-    32	
-  > 33	void dbg_echo(const char *s)
-    34	{
-    35		volatile void __iomem *base = (volatile void __iomem *)0x3ff40000;
-    36	
-    37		while ((readl(base + UART_STATUS_REG) & UART_TXFIFO_CNT_MASK) != 0)
-    38			;
-    39	
-    40		while (*s) {
-    41			if (*s == '\n')
-    42				writel('\r', base + UART_FIFO_REG);
-    43			writel(*s, base + UART_FIFO_REG);
-    44			++s;
-    45		}
-    46	}
-    47	
-  > 48	void dbg_printf(const char *fmt, ...)
-    49	{
-    50		va_list ap;
-    51		char buf[256];
-    52	
-    53		va_start(ap, fmt);
-    54		vsnprintf(buf, sizeof(buf), fmt, ap);
-    55		va_end(ap);
-    56		dbg_echo(buf);
-    57	}
-    58	
+If anyone has a datasheet for the cadence driver, they should be
+able to look up how one can access the FIFO in 8-byte mode using
+32-bit accesses. I think it's something like
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+static inline void cadence_nand_readsq(const volatile void __iomem *addr,
+               void *buffer, unsigned int count)
+{
+        if (count) {
+                u64 *buf = buffer;
+
+                do {
+#ifdef __raw_readq
+                        u64 x = __raw_readq(addr);
+                        *buf++ = x;
+#else
+                        u32 *buf32 = (void *)buf;
+                        buf32[0] = __raw_readl(addr + OFF0);
+                        buf32[1] = __raw_readl(addr + OFF1);
+                        buf++;
+#endif
+                } while (--count);
+        }
+}
+
+Most likely, OFF0 is zero, while OFF1 is 4 here, but that
+depends on how the FIFO register is implemented.
+
+     Arnd
