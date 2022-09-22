@@ -1,188 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B687C
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 16:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D66C433C1;
-	Thu, 22 Sep 2022 16:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663864825;
-	bh=YBELpWVHNAtQyyL198ts2WEhOetkzdKh6aKEzSXm2Tc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qEORs6KIK6u3IiFl870v4jo3NdE7SB9eOQ91PRHanxYmienBDcAJeZuSWKdIzJWL/
-	 M/WSnXP8sPw+klJUW3MI1oHuEAzcW3fCtMhnTwTlgTMRX0oDCAdY8VCFei7i9Os5xP
-	 IxmBBNeF2lJaXJ3Qtf2zZY2MaOREgLyDM9y2ZLgzAehgV41Rf5GSD9s/7WU/GtmJkt
-	 lI6QrymuoEOc/HKpeZ135FkqMi3aFl1HL7+ZNOCD7jUqcEqkRlmTjdASI/AeC9StD3
-	 OLmW14l0z8qNEtz+oanV3XbkE9GIT/UBU9nypz7l39fuOkRM0OXo4B+kqSUMspbZjE
-	 llnrmxaRuMx1g==
-Date: Thu, 22 Sep 2022 17:40:31 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>, kernel test robot
- <lkp@intel.com>, <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
- <linux-kernel@vger.kernel.org>, Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [jic23-iio:testing 58/58] drivers/iio/adc/mcp3911.c:274:6:
- warning: variable 'tmp0' set but not used
-Message-ID: <20220922174031.7e8345e8@jic23-huawei>
-In-Reply-To: <20220922172909.00005beb@huawei.com>
-References: <202209220845.GmS9zryR-lkp@intel.com>
-	<20220922115925.00004ec9@huawei.com>
-	<YyyCJX374uWYrPTN@gmail.com>
-	<20220922172909.00005beb@huawei.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817647C
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 17:41:19 +0000 (UTC)
+Received: by mail-il1-f181.google.com with SMTP id h14so1481182ila.12
+        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 10:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=AsxpWsr5dzcIncNfx/+Sw1HyEwfMiBKVAKBEW7wNeQA=;
+        b=HG1BCa9aD7EruuXSP8vfBpl2xSAcB9NgvDE4n3t4WegezK8iPhrhfTbs3Xxfdxp/aP
+         0j4XfOQ90rYJJLxvR5Fxutq+CKSR+3NwG5g3gHNWC0rGeSJkCPwM1qeiyt5MoX9kie1E
+         Ogc+09wvN660uSYqTrtW/DY7BHEKikOuBqjuMNkdFuICid58Qmi9sfyROy/V1LgkIpE7
+         e2Nv1gEo4Vp0GQpWl3bRqM1059jceqcIcZbW6os/ZnPJ8J1PnWKNgSi8e2+WYP/WJpYk
+         +8abyMsCFGIX1fgDuD8Pv5kCGUDjVFxUFNtnD5auEWqa0LNmLWv9bnrrUipYT443cCtB
+         +LNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=AsxpWsr5dzcIncNfx/+Sw1HyEwfMiBKVAKBEW7wNeQA=;
+        b=TlgS69TgPkMajflY7P4PCr12a7vJJfBDjObqnvA6vW43vBIo53a3fSHF3rkucP/1bN
+         3FVnySiq4BRO1VRZ6jLyeR5yYIaAiE13XD1rKMnlqzceZHzDVEHXwxs4bIrQZ/Nbc6ac
+         MqR8yeFC2pIexUXu9NnoQtXzmHiQPoANmZscxmjhgONTC7sT2/3Xw7cSBA1yLcCV2TCI
+         w6quowiV5o+u9Bx8lyJT23cUog8+utYFPf+Vq42lpPvrQ1HD7cn52krajcfFjFPt1++R
+         Kkb5XOZSWXT7LkCMrbejpkfu5X3oex0e9oK8bF6lhKu6+/aHnMPOjNjzy3rjYZHQd/Ls
+         bi5w==
+X-Gm-Message-State: ACrzQf0vsjh1eIXifJxYhyMcwXD/TwCZ3vzniBkFpmoOqSjZm5wGiOvp
+	yZDmYLUTVue1P8OsSW03Hgj815NS5aY+bDGkldc=
+X-Google-Smtp-Source: AMsMyM5Iawxjt3SoOGTNllk8NVk3tyvcsl1U/lS7sz1j/GB7JoPgBuMEGvT0T6zJ1tbupUccXP7nLvzrv1dgRwQijjQ=
+X-Received: by 2002:a05:6e02:152a:b0:2f6:58ae:ff0c with SMTP id
+ i10-20020a056e02152a00b002f658aeff0cmr2429401ilu.237.1663868478589; Thu, 22
+ Sep 2022 10:41:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <20220922031013.2150682-12-keescook@chromium.org> <CANiq72=m9VngFH9jE3s0RV7MpjX0a=ekJN4pZwcDksBkSRR_1w@mail.gmail.com>
+ <202209220855.B8DA16E@keescook>
+In-Reply-To: <202209220855.B8DA16E@keescook>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 22 Sep 2022 19:41:07 +0200
+Message-ID: <CANiq72=unhDJOGTg+ja4UdVRp8sG7Wc+_rqQhvJideA=WNjbFA@mail.gmail.com>
+Subject: Re: [PATCH 11/12] slab: Remove __malloc attribute from realloc functions
+To: Kees Cook <keescook@chromium.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Pekka Enberg <penberg@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Hao Luo <haoluo@google.com>, Marco Elver <elver@google.com>, linux-mm@kvack.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alex Elder <elder@kernel.org>, 
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Jesse Brandeburg <jesse.brandeburg@intel.com>, Daniel Micay <danielmicay@gmail.com>, 
+	Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>, Feng Tang <feng.tang@intel.com>, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+	dev@openvswitch.org, x86@kernel.org, linux-wireless@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 22 Sep 2022 17:29:09 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+On Thu, Sep 22, 2022 at 5:56 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> I wasn't sure if this "composite macro" was sane there, especially since
+> it would be using __malloc before it was defined, etc. Would you prefer
+> I move it?
 
-> On Thu, 22 Sep 2022 17:41:25 +0200
-> Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
-> 
-> > On Thu, Sep 22, 2022 at 11:59:25AM +0100, Jonathan Cameron wrote:  
-> > > On Thu, 22 Sep 2022 08:50:17 +0800
-> > > kernel test robot <lkp@intel.com> wrote:
-> > >     
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-> > > > head:   d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
-> > > > commit: d4e1a549566b9ea8b96e80f0cdcbe99714ac256e [58/58] iio: adc: mcp3911: add support to set PGA
-> > > > config: x86_64-randconfig-a012
-> > > > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
-> > > >         git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
-> > > >         git fetch --no-tags jic23-iio testing
-> > > >         git checkout d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/adc/
-> > > > 
-> > > > If you fix the issue, kindly add following tag where applicable
-> > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > 
-> > > > All warnings (new ones prefixed by >>):
-> > > >     
-> > > > >> drivers/iio/adc/mcp3911.c:274:6: warning: variable 'tmp0' set but not used [-Wunused-but-set-variable]      
-> > > >            int tmp0, tmp1;
-> > > >                ^
-> > > >    1 warning generated.
-> > > > 
-> > > > 
-> > > > vim +/tmp0 +274 drivers/iio/adc/mcp3911.c
-> > > > 
-> > > >    268	
-> > > >    269	static int mcp3911_calc_scale_table(struct mcp3911 *adc)
-> > > >    270	{
-> > > >    271		u32 ref = MCP3911_INT_VREF_MV;
-> > > >    272		u32 div;
-> > > >    273		int ret;    
-> > > >  > 274		int tmp0, tmp1;      
-> > > >    275		s64 tmp2;
-> > > >    276	
-> > > >    277		if (adc->vref) {
-> > > >    278			ret = regulator_get_voltage(adc->vref);
-> > > >    279			if (ret < 0) {
-> > > >    280				dev_err(&adc->spi->dev,
-> > > >    281					"failed to get vref voltage: %d\n",
-> > > >    282				       ret);
-> > > >    283				return ret;
-> > > >    284			}
-> > > >    285	
-> > > >    286			ref = ret / 1000;
-> > > >    287		}
-> > > >    288	
-> > > >    289		/*
-> > > >    290		 * For 24-bit Conversion
-> > > >    291		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
-> > > >    292		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
-> > > >    293		 *
-> > > >    294		 * ref = Reference voltage
-> > > >    295		 * div = (2^23 * 1.5 * gain) = 12582912 * gain
-> > > >    296		 */
-> > > >    297		for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
-> > > >    298			div = 12582912 * BIT(i);
-> > > >    299			tmp2 = div_s64((s64)ref * 1000000000LL, div);
-> > > >    300			tmp1 = div;
-> > > >    301			tmp0 = (int)div_s64_rem(tmp2, 1000000000, &tmp1);    
-> > > 
-> > > Marcus, 
-> > > I'm guessing the intent here is just to get the remainder.  
-> > > Hence fix is probably just to drop tmp0?
-> > > 
-> > > If you confirm that I'll tweak the commit to do that.
-> > > 
-> > > Jonathan    
-> > 
-> > 
-> > Hum, Yes. I actually think we can drop div, tmp0, tmp1 and tmp2.
-> > I think they are remnats for when I did the calculation differently.
-> > 
-> > Do you want me to update the patchset?  
-> 
-> No I'll roll this in a few minutes.
+Hmm... On one hand, they end up being attributes, so it could make
+sense to have them there (after all, the big advantage of that header
+is that there is no `#ifdef` nest like in others, and that it is only
+for attributes).
 
-Actually I'll leave it to you to post a fixed version I can apply.
-ref isn't used either in current code and nor is the regulator voltage.
-That doesn't feel right...
+On the other hand, you are right that the file so far is intended to
+be as simple as possible (`__always_inline` having an extra `inline`
+and `fallthrough` would be closest outliers), so if we do it, I would
+prefer to do so in an independent series that carries its own rationale.
 
-Please send a fix asap.  For now I'm dropping the PGA patch
-that introduces this.  If you can send an update of just that patch
-that would be great.
+So I would leave the patch as it is here.
 
-Thanks,
-
-Jonathan
-
-
-> 
-> > 
-> >  static int mcp3911_calc_scale_table(struct mcp3911 *adc)
-> >  {
-> >         u32 ref = MCP3911_INT_VREF_MV;
-> > -       u32 div;
-> >         int ret;
-> > -       int tmp0, tmp1;
-> > -       s64 tmp2;
-> > 
-> > 
-> > ....
-> > 
-> > 
-> > 
-> >         for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
-> > -               div = 12582912 * BIT(i);
-> > -               tmp2 = div_s64((s64)ref * 1000000000LL, div);
-> > -               tmp1 = div;
-> > -               tmp0 = (int)div_s64_rem(tmp2, 1000000000, &tmp1);
-> > -
-> >                 mcp3911_scale_table[i][0] = 0;
-> > -               mcp3911_scale_table[i][1] = tmp1;
-> > +               mcp3911_scale_table[i][1] = 12582912 * BIT(i);
-> >         }
-> > 
-> > 
-> > /Marcus
-> >   
-> > > 
-> > >     
-> > > >    302	
-> > > >    303			mcp3911_scale_table[i][0] = 0;
-> > > >    304			mcp3911_scale_table[i][1] = tmp1;
-> > > >    305		}
-> > > >    306	
-> > > >    307		return 0;
-> > > >    308	}
-> > > >    309	
-> > > >     
-> > >     
-> >   
-> 
-
+Cheers,
+Miguel
