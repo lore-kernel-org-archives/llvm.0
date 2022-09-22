@@ -1,128 +1,127 @@
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21066291D
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 10:53:01 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id C28772B059A3;
-	Thu, 22 Sep 2022 06:52:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 22 Sep 2022 06:53:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1663843979; x=1663847579; bh=cSRj8m6//S
-	4nzmuhOOEsOKmR8Il0fc1BoRQKLeM0xek=; b=dz6wqdl4kZMoMtAMLClFD0INx0
-	7BAEmvn72swpQTyghCbvkZB4LYJNkruxi/ppf7Lrwgm8vb1W4+LbllC1KGbzaWY2
-	PE86tTzsN1ewHNSHAymcLdhaw+XwGN7gTNvXvjN87lYMHQ1DemnYCPdWivehLCbz
-	87RaN5hSObbN1oarfbyiJS8/4NxFy1MrrtZ0T12r3H5x8TRNGZzOIh5rnp1xat+G
-	Xl3FCpDrl5swixCJG1iWh23LQPyurL9bPPo2xbFHYN6VdrC7euXNngVQ7jrNBYoP
-	e927ZI2w4ox5WspWtg5lSPjMKWzIoeP18UMNfiDGldIIU7MswNZN8xo7tqlQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1663843979; x=1663847579; bh=cSRj8m6//S4nzmuhOOEsOKmR8Il0
-	fc1BoRQKLeM0xek=; b=R3d+pTy37CMSCYZ3dpdDqVRJxPO0PC54qMOr35F2FIbl
-	yPTw1pLoLZn57bz9vTy2+rpBenU3LvxYfvL/Ve8fNz1nEosK0wBntg0XNS9/V/6d
-	uhxPOBJv8IMxSArMS2SB+uhTbaulBzhAOKo1t7D4L6KgP1+aKRI6kh80zamNE4s4
-	saBPddd42SmNnq+FrpLbPGaeA/IoPgXHMI5u+ThXFeOjKMRBezQ2htdUNDyiYLal
-	BLq1ZSJwtzwoh/uDUCy2wU0Wi8pOZT9mRP3EUspE/AS13Igz3EzpDD+tQIriHk4x
-	uLSHCIEwIYDbf1dUxsOM1Ert01YC5XFJn0dDyvSCBQ==
-X-ME-Sender: <xms:ij4sY1qlCUU4DRf2BNE8Nfb4CfJrmnGtkLLOQmD_8jZPX_xYl0bioQ>
-    <xme:ij4sY3pfmNILoMPn1zUPGDBJ0lPbQ0KnBB_XTd8ggJ6iX_8c9PFN054hNDIeDAPRY
-    307bxklvBewlk_faVE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeffedgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ij4sYyObgFgEWFxQGj8z7jtbkPn5IY458-A4LuIWaoBfeWv-RksRlQ>
-    <xmx:ij4sYw7sSt3sRE4VFq-kJO3H1CDrIj4hyhj6zBkA3LxrauWIUDpT-A>
-    <xmx:ij4sY07aJoYTu8ZfC-269EayKROvMw7PH1y6Js9s-0bS1rsOoHhDDA>
-    <xmx:iz4sYyny0aUeTm686xh9w0JAkjcbGN2VDR3Gos9uDYNVIkMn_sLLNGYJVX4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 68050B60086; Thu, 22 Sep 2022 06:52:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB012F33
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 10:59:36 +0000 (UTC)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYC1p5Ywlz6889W;
+	Thu, 22 Sep 2022 18:58:22 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 12:59:28 +0200
+Received: from localhost (10.81.208.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 11:59:26 +0100
+Date: Thu, 22 Sep 2022 11:59:25 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: kernel test robot <lkp@intel.com>
+CC: Marcus Folkesson <marcus.folkesson@gmail.com>, <llvm@lists.linux.dev>,
+	<kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>, Andy Shevchenko
+	<andy.shevchenko@gmail.com>
+Subject: Re: [jic23-iio:testing 58/58] drivers/iio/adc/mcp3911.c:274:6:
+ warning: variable 'tmp0' set but not used
+Message-ID: <20220922115925.00004ec9@huawei.com>
+In-Reply-To: <202209220845.GmS9zryR-lkp@intel.com>
+References: <202209220845.GmS9zryR-lkp@intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
-In-Reply-To: <20220922113613.4d7273c8@xps-13>
-References: <202209210641.MziHAbW7-lkp@intel.com>
- <20220921104002.226ff3f6@xps-13>
- <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
- <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
- <20220921164720.6bbc56d5@xps-13>
- <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
- <20220921183807.241e2518@xps-13>
- <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
- <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
- <20220922113613.4d7273c8@xps-13>
-Date: Thu, 22 Sep 2022 12:52:36 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Miquel Raynal" <miquel.raynal@bootlin.com>,
- "Valentin Korenblit" <vkorenblit@sequans.com>
-Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.208.231]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 
-On Thu, Sep 22, 2022, at 11:36 AM, Miquel Raynal wrote:
-> vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200:
->> 
->> Correct, this was my initial idea. However, this driver should work
->> with every architecture or do we limit the scope to arm/arm64/x86_64?
->
-> The driver should work on ARM and aarch64, I'm not aware of other
-> architectures with this IP.
->
-> The driver should compile when COMPILE_TEST=y.
+On Thu, 22 Sep 2022 08:50:17 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-It should also be written in a way that makes it plausible to
-use elsewhere. Since this is just a licensed IP core, there is
-a good chance that someone reused it on mips or riscv, or
-anything else.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+> head:   d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
+> commit: d4e1a549566b9ea8b96e80f0cdcbe99714ac256e [58/58] iio: adc: mcp3911: add support to set PGA
+> config: x86_64-randconfig-a012
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
+>         git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+>         git fetch --no-tags jic23-iio testing
+>         git checkout d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/adc/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/iio/adc/mcp3911.c:274:6: warning: variable 'tmp0' set but not used [-Wunused-but-set-variable]  
+>            int tmp0, tmp1;
+>                ^
+>    1 warning generated.
+> 
+> 
+> vim +/tmp0 +274 drivers/iio/adc/mcp3911.c
+> 
+>    268	
+>    269	static int mcp3911_calc_scale_table(struct mcp3911 *adc)
+>    270	{
+>    271		u32 ref = MCP3911_INT_VREF_MV;
+>    272		u32 div;
+>    273		int ret;
+>  > 274		int tmp0, tmp1;  
+>    275		s64 tmp2;
+>    276	
+>    277		if (adc->vref) {
+>    278			ret = regulator_get_voltage(adc->vref);
+>    279			if (ret < 0) {
+>    280				dev_err(&adc->spi->dev,
+>    281					"failed to get vref voltage: %d\n",
+>    282				       ret);
+>    283				return ret;
+>    284			}
+>    285	
+>    286			ref = ret / 1000;
+>    287		}
+>    288	
+>    289		/*
+>    290		 * For 24-bit Conversion
+>    291		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+>    292		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+>    293		 *
+>    294		 * ref = Reference voltage
+>    295		 * div = (2^23 * 1.5 * gain) = 12582912 * gain
+>    296		 */
+>    297		for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
+>    298			div = 12582912 * BIT(i);
+>    299			tmp2 = div_s64((s64)ref * 1000000000LL, div);
+>    300			tmp1 = div;
+>    301			tmp0 = (int)div_s64_rem(tmp2, 1000000000, &tmp1);
 
->> >> I believe what Valentin wanted to achieve in the first place, was to
->> >> use 64-bit accesses when relevant (otherwise it does not work).  
->> > The width is read from a device specific register at
->> > runtime, it is not related to the architecture you are
->> > running on, presumably this is hardwired during the
->> > design of an SoC, based on the capabilities of the DMA
->> > engine:
->
-> Well, yes, but in the mean time 64-bit DMA width will never be
-> used on 32-bit platforms.
+Marcus, 
+I'm guessing the intent here is just to get the remainder.  
+Hence fix is probably just to drop tmp0?
 
-Why? Most architectures (including x86 and arm) allow you to
-run a 32-bit kernel on a 64-bit SoC. While this is almost always
-a bad idea to actually do, a driver should be written to
-work correctly in this setup.
+If you confirm that I'll tweak the commit to do that.
 
->> > This usually means the largest access that is valid for
->> > reading from the FIFO, but usually smaller accesses work
->> > as well, just slower.  
->
-> Mmh, ok, that's interesting, thanks for the pointer.
->
-> But in the mean time I am only half satisfied, because we plan to do
-> twice more accesses than needed _just_ because of a the COMPILE_TEST
-> constraint.
+Jonathan
 
-In my example, I had an #ifdef so it would only fall back
-to 32-bit accesses on the 64-bit register when running an
-actual 32-bit kernel, but leaving the 64-bit case efficient.
 
-    Arnd
+>    302	
+>    303			mcp3911_scale_table[i][0] = 0;
+>    304			mcp3911_scale_table[i][1] = tmp1;
+>    305		}
+>    306	
+>    307		return 0;
+>    308	}
+>    309	
+> 
+
