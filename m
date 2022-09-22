@@ -1,171 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010DC23AD
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 07:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1663833101;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dQXWgObTT/8n8iIm+0QI0jVoS1IqyFJbQiieT9FgfEk=;
-	b=QJ78R9AhT6fSRkAexVOJPrS+e9T3hFN29alkFha7iOGtRVqFQcNrIJlXy20oULO0wfiU09
-	0Y1LTQpys/xkqyEobnO4GyTxpPYXhBU612HY5oDJf54ucXd7MbqZl6cTP2jF1PHI08fA3n
-	S3UK69SMafK4EtL6PASl0i0jWFSm/ko=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-358-9pGHdETQNXWV4T3ew0I7cQ-1; Thu, 22 Sep 2022 03:51:40 -0400
-X-MC-Unique: 9pGHdETQNXWV4T3ew0I7cQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FEA7882825
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 07:51:40 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1055E492B0E;
-	Thu, 22 Sep 2022 07:51:40 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (53/371 SKIPPED): Test report for master
- (6.0.0-rc6, mainline.kernel.org-clang, 26c95642)
-Date: Thu, 22 Sep 2022 07:51:35 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0F22580
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:20:59 +0000 (UTC)
+Received: by mail-yb1-f169.google.com with SMTP id s14so11841624ybe.7
+        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 02:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=2+S7HlEBuVCJM6F80dB4f4rhA0eBwB5EJEsljjj7oEQ=;
+        b=R61FC6aLSg96pCV7GEgkVJaRSMSzV4HdLoxaGeQqb6KMHlOElwQFntvX2tiU8aHuSr
+         kuY33t90hDFNARwlj4HAGOOK/Ragw8GM1WaZ63Y/q213syPamW2RSRhyJ0uSIw2kzXPp
+         r7AshXemKH5rGdmvklR/pmijvIjz/3i1eE4EkfaPDBPQVEww4AJMw9tLMJ/7oWHs/70u
+         6JnJzh2bcBv2FFftlv2rhJfFM0G4ZsYjf0+I6q7anQT3JW6tEYYCtLcrM2do2JT2tknk
+         23glncEimVMOmnZmFtNlprQj2K/M+2dMZUf2NmXO59pcScVGS+YobiNU9Q4xL9Q00V4q
+         KVIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=2+S7HlEBuVCJM6F80dB4f4rhA0eBwB5EJEsljjj7oEQ=;
+        b=hPUclENUjn/xixWJ0oPmmyGVtnLPkzf77ecXvoBbwuP8Xbej60DFwDxlCgHRNnQh0h
+         pUohDlA0yL5Ua3w/f5MDzEFUlG3Zu4eZccj+LT3g2o8QlInMNSqxgIj/FmjNpkecI6wh
+         MvSVI8c5b41eyqyRly2C5hvaNYqpCxMV59xnsKUiuLWhcnnZ0pjs5lW+WHpzfm5q+G1O
+         O/RdXIZHJ/YHapAQWxmuQDlMuldqI9cXonHSG/4qe/Rba6tnBHvANLjwAef6yRqkv0Ar
+         QeJ5CWSBZ93VnpvF6c1FNi3fJmAiPYjCTOLmK+nm1I0HBo7MdqlAp4FReKbadRXwYZHs
+         Erpw==
+X-Gm-Message-State: ACrzQf2rIa1igsrfGnpcLMXEQO/gQXmmwtcQa1Eq+G5z95iGDXiHyoY3
+	ddgs2z32461qZbcyJG6eLVJouUUh35d3SCx6Fo4=
+X-Google-Smtp-Source: AMsMyM5EyN7u4n8EdbXrBjCRzmUqkG32AKx0gm9gp4ayEyX1apBgRrSArCx2QDVBntwIADukECOsIoP/EiUdHpNR/MM=
+X-Received: by 2002:a25:bd52:0:b0:6b4:22fa:8226 with SMTP id
+ p18-20020a25bd52000000b006b422fa8226mr2621525ybm.31.1663838457943; Thu, 22
+ Sep 2022 02:20:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <22350.122092203514000517@us-mta-358.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20220919060342.26400-1-lukas.bulwahn@gmail.com> <202209192252.T6IGLNqC-lkp@intel.com>
+In-Reply-To: <202209192252.T6IGLNqC-lkp@intel.com>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date: Thu, 22 Sep 2022 11:20:47 +0200
+Message-ID: <CAKXUXMy=1_AvqwhjEzaov5jj4sCiB5vB67QsXA395-J7N2Vtqg@mail.gmail.com>
+Subject: Re: [PATCH] crypto: add rsize config to .config only if lib_poly1305
+ is set
+To: kernel test robot <lkp@intel.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemloft.net>, 
+	linux-crypto@vger.kernel.org, llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Mon, Sep 19, 2022 at 5:10 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Lukas,
+>
+> I love your patch! Yet something to improve:
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thanks, kernel test robot ;)
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Okay, I see that I need to reiterate on this patch. The crypto caam
+driver pulls in a number of headers without a dependency with Kconfig
+on the corresponding config symbol here. I will check if I find a good
+solution for that.
 
-Kernel information:
-    Commit message: Merge tag 'mips-fixes_6.0_2' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/mips/linux
+For now, this patch can be ignored until I find time to send out a patch v2.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/53920
+Lukas
 
-One or more kernel tests failed:
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>
+> [auto build test ERROR on herbert-cryptodev-2.6/master]
+> [also build test ERROR on herbert-crypto-2.6/master linus/master v6.0-rc6 next-20220919]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Lukas-Bulwahn/crypto-add-rsize-config-to-config-only-if-lib_poly1305-is-set/20220919-140531
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20220919/202209192252.T6IGLNqC-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://github.com/intel-lab-lkp/linux/commit/c1954797e493eabf02f354e290fe380ace0633e4
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Lukas-Bulwahn/crypto-add-rsize-config-to-config-only-if-lib_poly1305-is-set/20220919-140531
+>         git checkout c1954797e493eabf02f354e290fe380ace0633e4
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/crypto/caam/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from drivers/crypto/caam/ctrl.c:15:
+>    In file included from drivers/crypto/caam/compat.h:41:
+> >> include/crypto/poly1305.h:56:32: error: use of undeclared identifier 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
+>                    struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+>                                                 ^
+>    1 error generated.
+>
+>
+> vim +/CONFIG_CRYPTO_LIB_POLY1305_RSIZE +56 include/crypto/poly1305.h
+>
+> 878afc35cd28bc Eric Biggers       2018-11-16  40
+> 2546f811ef45fc Martin Willi       2015-07-16  41  struct poly1305_desc_ctx {
+> 2546f811ef45fc Martin Willi       2015-07-16  42        /* partial buffer */
+> 2546f811ef45fc Martin Willi       2015-07-16  43        u8 buf[POLY1305_BLOCK_SIZE];
+> 2546f811ef45fc Martin Willi       2015-07-16  44        /* bytes used in partial buffer */
+> 2546f811ef45fc Martin Willi       2015-07-16  45        unsigned int buflen;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  46        /* how many keys have been set in r[] */
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  47        unsigned short rset;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  48        /* whether s[] has been set */
+> 2546f811ef45fc Martin Willi       2015-07-16  49        bool sset;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  50        /* finalize key */
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  51        u32 s[4];
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  52        /* accumulator */
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  53        struct poly1305_state h;
+> ad8f5b88383ea6 Ard Biesheuvel     2019-11-08  54        /* key */
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05  55        union {
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05 @56                struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05  57                struct poly1305_core_key core_r;
+> 1c08a104360f3e Jason A. Donenfeld 2020-01-05  58        };
+> 2546f811ef45fc Martin Willi       2015-07-16  59  };
+> 2546f811ef45fc Martin Willi       2015-07-16  60
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
