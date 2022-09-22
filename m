@@ -1,50 +1,50 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7561851
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 00:35:45 +0000 (UTC)
-Received: by mail-ej1-f53.google.com with SMTP id a26so17524976ejc.4
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 17:35:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658581851
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 00:38:23 +0000 (UTC)
+Received: by mail-ej1-f44.google.com with SMTP id lh5so17465588ejb.10
+        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 17:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=KtrIxxFWIWlTHEDNVczK3cnXH5wRZy8qQW+YtDSSF5E=;
-        b=NAe9dIZVRdlklxh5ZK4x/4YkIB+/0GwVxhJiQ8FU5pkj8LFwFVKu68mQBG4uv1IMBv
-         jfwahuyb2YUIX0AJGcrLLmMVeMrvvc0LfeclwUN0QrNSWsC2G2gwdzgd70lJFOpfhq6O
-         O4cJ2LucRw35NHIcCZXfR6n0j0SlbyIRSK3APfAbkpdV6ZM/OELTucsIMIbsaSBPQMN+
-         Q/GCjujeEiR7FG7jIe+BSUOPBlfEzm9R8CtIDau5gkfyTOdFk2gfGnbSydvCanGGLIfP
-         m9nzaTHelBryF+uPENQx9eqvXh0HiJ3T8D4nCV1RokGWlHYnc4efYf3Uay4DrShndWEN
-         XZTg==
+        bh=36Uxd9fzOtQXdUTgT2x6xrnFj/OP6ll4rq+xlPqT6zs=;
+        b=I5VK0kFYpdJq7uuW/my6/s1qq5Iyk5Bid9V1MLGMfcqCQWztkAuk9NwGH236IdPw0t
+         aSpjgBiqC/nGZwjYEvfyXWTdEcKTcw0+alOVgKlPJp0QxZ51FAjaVDzR72eVHRH3bbvy
+         gvkVll0e0g0VmQ4F+5N6/s2DIzf/I27kP/bz1CeUqjpjHLzE3nXgrjkQ/KYJ7YpMHAkl
+         X4LL9WElTtiK3lEKN88AvhLMEYbUQuFbdHgajFCsib9S8OAsKjAJ2hwQaDr7Ll+KkdP+
+         xKM1XMVuJO2zuGtJCha8Q5jPSh1fIwYoh4vH+EI9GVYm3sM0OCx6oEhE0nGmVgeLFMUN
+         dZzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KtrIxxFWIWlTHEDNVczK3cnXH5wRZy8qQW+YtDSSF5E=;
-        b=cj9XSuNWWZYcIKRxBYFegj22YFatK/G4AuMYQRgQGb3zRpyYrxQTXNCJRdorndCWlw
-         vRAHB9P7WmCFZNzBBi++TxBAyO4oOiC9SXfG6t+gX8hpTqbSA07Q32PsT6BLYK+yODR9
-         DHt8R9EvWfgITwZQKmJrDLu6Grs/XFOUrGIctUQJZYdqMYPlC8mRJOBoIAbl7O5HutYR
-         yZnzqx5+gYKQP2FlRUbAjJ+duvvbRxAieyf8k6Fbr94wQNfrtJt8vcUck/hhJNW3/EzM
-         +Zwfh+TDT+IR9evK4CI/hYWcQYZP8514E1ETaBvjeFp+fF6/PiZHSofbr4XiLYM64An4
-         N9MQ==
-X-Gm-Message-State: ACrzQf1CqDxBSdaA3rO6GfcyGr25Nz/TC2FtczbRbbrEArX+gz3Bbsxh
-	FdZ1V8jHm6YKFsZ5ETV39uch80SV5+p4aCcTMl4=
-X-Google-Smtp-Source: AMsMyM7wMH+u3GXKRVEHVtr9dRdGUlQLCdJ/vWKn1499LPQMHv2GcR2CRr22jquS5oJu7DNeyUpkx9eY14knp1zHJiY=
-X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
- s5-20020a17090699c500b0073d70c51a4fmr662585ejn.302.1663806943354; Wed, 21 Sep
- 2022 17:35:43 -0700 (PDT)
+        bh=36Uxd9fzOtQXdUTgT2x6xrnFj/OP6ll4rq+xlPqT6zs=;
+        b=FGYIfNUbpSND9MiuxDwaNjhNm0Nj6NpN5ctgAapW2OOL4+jZGs5aTCRzY3peGF0JIA
+         TdrhuWOwnPlQEWMjkyzCPu/UUwZKh9u72wsZRyNTfEV2bDQLFonLOT7HemObPs5bVYuD
+         u5cIkQ8YETmpF685IaBFQJaCJvXvWrLfOFOTqESIgol5bQBEyZjHZuDttGwbHkMNzB3j
+         zF5WZ0OpjaAbLm54Q3ygDUPiw+dsHlFuhlE+DBdbxHsJu5gnxEtokkOK3+BG1IbWexT5
+         CTAkWOxPtv6t1wXM8amCbSMbuOizEG9bnKHS9Cr8qwkTfpQemQ7jUEBbpebCdIvUEZ1f
+         UpXA==
+X-Gm-Message-State: ACrzQf1+qXVGXExJZIYiaPwbxcDPzxJbi+7rj+eHQkpMDLyoW2jbjM7c
+	LXBG26rTkMMY+4kmML+NHiyfy10GvMF1HXBIke8=
+X-Google-Smtp-Source: AMsMyM6Ry07M/XiRvs8DE4XwyxTLWwVw+IwMzGuWJO2lBy5NVGAojN78DUAFSefFqfeYCg1fyKNfsWUJO9lS/CKlptk=
+X-Received: by 2002:a17:907:3d86:b0:782:1175:153f with SMTP id
+ he6-20020a1709073d8600b007821175153fmr692120ejc.226.1663807101634; Wed, 21
+ Sep 2022 17:38:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
-In-Reply-To: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
+References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com> <1663555725-17016-2-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1663555725-17016-2-git-send-email-wangyufen@huawei.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 21 Sep 2022 17:35:32 -0700
-Message-ID: <CAEf4BzZ_KXymmLviTud1WoSwpPk49XZe9ZKQsbqzHxSpx2etKg@mail.gmail.com>
-Subject: Re: [bpf-next v3 1/2] libbpf: Add pathname_concat() helper
+Date: Wed, 21 Sep 2022 17:38:10 -0700
+Message-ID: <CAEf4BzabFB-__1bcYTb8E0ixS0dNZNcp9XNB-McWvQQ98sBR-Q@mail.gmail.com>
+Subject: Re: [bpf-next v3 2/2] selftests/bpf: Add testcases for pinning to errpath
 To: Wang Yufen <wangyufen@huawei.com>
 Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
 	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
@@ -57,163 +57,23 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Sun, Sep 18, 2022 at 7:28 PM Wang Yufen <wangyufen@huawei.com> wrote:
 >
-> Move snprintf and len check to common helper pathname_concat() to make the
-> code simpler.
+> Add testcases for map and prog pin to errpath.
 >
 > Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 > ---
->  tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
->  1 file changed, 29 insertions(+), 47 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 3ad1392..43a530d 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -2096,19 +2096,30 @@ static bool get_map_field_int(const char *map_name, const struct btf *btf,
->         return true;
->  }
->
-> +static int pathname_concat(const char *path, const char *name, char *buf, size_t buflen)
-> +{
-> +       int len;
-> +
-> +       len = snprintf(buf, buflen, "%s/%s", path, name);
-> +       if (len < 0)
-> +               return -EINVAL;
-> +       if (len >= buflen)
-> +               return -ENAMETOOLONG;
-> +
-> +       return 0;
-> +}
-> +
->  static int build_map_pin_path(struct bpf_map *map, const char *path)
->  {
->         char buf[PATH_MAX];
-> -       int len;
-> +       int err;
->
->         if (!path)
->                 path = "/sys/fs/bpf";
->
-> -       len = snprintf(buf, PATH_MAX, "%s/%s", path, bpf_map__name(map));
-> -       if (len < 0)
-> -               return -EINVAL;
-> -       else if (len >= PATH_MAX)
-> -               return -ENAMETOOLONG;
-> +       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
 
-sizeof(buf) instead of PATH_MAX?
+let's drop this selftest, it does global system manipulations just to
+check those two if conditions inside pathname_concat(), probably not
+worth it.
 
-> +       if (err)
-> +               return err;
->
->         return bpf_map__set_pin_path(map, buf);
->  }
-> @@ -7961,17 +7972,9 @@ int bpf_object__pin_maps(struct bpf_object *obj, const char *path)
->                         continue;
->
->                 if (path) {
-> -                       int len;
-> -
-> -                       len = snprintf(buf, PATH_MAX, "%s/%s", path,
-> -                                      bpf_map__name(map));
-> -                       if (len < 0) {
-> -                               err = -EINVAL;
-> -                               goto err_unpin_maps;
-> -                       } else if (len >= PATH_MAX) {
-> -                               err = -ENAMETOOLONG;
-> +                       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
+Also for the future, we shouldn't use CHECK() in new selftests (we
+still have CHECK()s because there are like 2 thousand of them in old
+selftest, so clean up is not trivial).
 
-same, let's not hardcode constants we don't need to hardcode, just do
-sizeof(buf)
+>  tools/testing/selftests/bpf/prog_tests/pinning.c   | 67 ++++++++++++++++++++++
+>  .../selftests/bpf/progs/test_pinning_path.c        | 19 ++++++
+>  2 files changed, 86 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_pinning_path.c
+>
 
-> +                       if (err)
->                                 goto err_unpin_maps;
-> -                       }
->                         sanitize_pin_path(buf);
->                         pin_path = buf;
->                 } else if (!map->pin_path) {
-> @@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
->                 char buf[PATH_MAX];
->
->                 if (path) {
-> -                       int len;
-> -
-> -                       len = snprintf(buf, PATH_MAX, "%s/%s", path,
-> -                                      bpf_map__name(map));
-> -                       if (len < 0)
-> -                               return libbpf_err(-EINVAL);
-> -                       else if (len >= PATH_MAX)
-> -                               return libbpf_err(-ENAMETOOLONG);
-> +                       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
-
-ditto here and all the cases below
-
-> +                       if (err)
-> +                               return err;
->                         sanitize_pin_path(buf);
->                         pin_path = buf;
->                 } else if (!map->pin_path) {
-> @@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
->  int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
->  {
->         struct bpf_program *prog;
-> +       char buf[PATH_MAX];
->         int err;
->
->         if (!obj)
-> @@ -8045,17 +8044,9 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
->         }
->
->         bpf_object__for_each_program(prog, obj) {
-> -               char buf[PATH_MAX];
-> -               int len;
-> -
-> -               len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
-> -               if (len < 0) {
-> -                       err = -EINVAL;
-> -                       goto err_unpin_programs;
-> -               } else if (len >= PATH_MAX) {
-> -                       err = -ENAMETOOLONG;
-> +               err = pathname_concat(path, prog->name, buf, PATH_MAX);
-> +               if (err)
->                         goto err_unpin_programs;
-> -               }
->
->                 err = bpf_program__pin(prog, buf);
->                 if (err)
-> @@ -8066,13 +8057,7 @@ int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
->
->  err_unpin_programs:
->         while ((prog = bpf_object__prev_program(obj, prog))) {
-> -               char buf[PATH_MAX];
-> -               int len;
-> -
-> -               len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
-> -               if (len < 0)
-> -                       continue;
-> -               else if (len >= PATH_MAX)
-> +               if (pathname_concat(path, prog->name, buf, PATH_MAX))
->                         continue;
->
->                 bpf_program__unpin(prog, buf);
-> @@ -8091,13 +8076,10 @@ int bpf_object__unpin_programs(struct bpf_object *obj, const char *path)
->
->         bpf_object__for_each_program(prog, obj) {
->                 char buf[PATH_MAX];
-> -               int len;
->
-> -               len = snprintf(buf, PATH_MAX, "%s/%s", path, prog->name);
-> -               if (len < 0)
-> -                       return libbpf_err(-EINVAL);
-> -               else if (len >= PATH_MAX)
-> -                       return libbpf_err(-ENAMETOOLONG);
-> +               err = pathname_concat(path, prog->name, buf, PATH_MAX);
-> +               if (err)
-> +                       return libbpf_err(err);
->
->                 err = bpf_program__unpin(prog, buf);
->                 if (err)
-> --
-> 1.8.3.1
->
+[...]
