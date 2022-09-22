@@ -1,48 +1,49 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68267C
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 18:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0075E2CA2;
+	Thu, 22 Sep 2022 18:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663870119; x=1695406119;
+  t=1663873188; x=1695409188;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XWTPtcPwd9kNlzOtTTr/5rIXRMrAohKWyfVZj2wcdLc=;
-  b=kn5ZpbXBjelyLfgjut4bOIFECL4EtPM61py/EA48irKg9MAeQacpA5CJ
-   5q0xcMmAvLN996aZctC8O2Lb7N9peP01U78teMrKgl/uv3wSSpCPtxqGp
-   jICgIn0+qTpUTSNx/YCr0a/YKG1MUO5TPM2MyY8vUNgfy+DRQ2Pf7D39t
-   EKyx6OYbQLio8GsvP3TQ/4Jp7PNwXesfJs1vByZAftgefHjyqL+GMBlNG
-   l0KOtfBg2lMzk/icklMkYK+KQq9NDuaihidYVIW/cWNL+9SSb3y1LyPH4
-   WKLA09T5a3j4pjTsrviav+sk4aD5MPWoXavyw134ALUHtvqifkcOeLNSY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="299099399"
+  bh=9hTR12KVYSG4WSUvy2XMfzfpJCVSwEHiEJ4NpOyo/so=;
+  b=PlJbaHRq3VOC5WZIGVdzPkd8dgO0WFH9pY0K6x35us+NDPkoWPQepQNX
+   kvHzqIKrMk5klrYIhoYVrCcbwEpaN8CgVZIG4iuq0GRQSCUHIDtzpVt3g
+   8n4X4102jGxDRRADvj+o1+jj2eg3DywEh/0ttOkaWjDrLzVJmRgghdI1q
+   Ygm3cZ5LU1aPRPHjnQcp6e5MTAkzx0dtRxsrSO/5z7UMHVWNZWQMMGfXl
+   +SLINNPma1vDr2O7WSne3CUMcSWITau6uerVpmj/DN7KSdDc2VMp40Owl
+   mZR93P5xYbeDAay08UzzlVYPzs0fYgTWHe27acHVgq4D8YTje+dxAM6dz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="386687387"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="299099399"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:08:38 -0700
+   d="scan'208";a="386687387"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:59:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="571069511"
+   d="scan'208";a="597568053"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Sep 2022 11:08:35 -0700
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 11:59:36 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1obQck-0004r1-2W;
-	Thu, 22 Sep 2022 18:08:34 +0000
-Date: Fri, 23 Sep 2022 02:08:02 +0800
+	id 1obRQ7-0004sq-2c;
+	Thu, 22 Sep 2022 18:59:35 +0000
+Date: Fri, 23 Sep 2022 02:58:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>
+To: Binbin Zhou <zhoubinbin@loongson.cn>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	linux-i2c@vger.kernel.org
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	dri-devel@lists.freedesktop.org, Stephen Boyd <swboyd@chromium.org>,
-	freedreno@lists.freedesktop.org
-Subject: Re: [PATCH 4/5] drm/msm/dpu: add support for SM8450
-Message-ID: <202209230114.2apdPcjg-lkp@intel.com>
-References: <20220922113016.355188-5-dmitry.baryshkov@linaro.org>
+	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+	WANG Xuerui <kernel@xen0n.name>, Jianmin Lv <lvjianmin@loongson.cn>,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 1/5] i2c: core: Pick i2c bus number from ACPI if present
+Message-ID: <202209230228.LIiHRmuw-lkp@intel.com>
+References: <be5cd69c7c58d44ca119d4ca692d95a2ae924533.1663835855.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,118 +52,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922113016.355188-5-dmitry.baryshkov@linaro.org>
+In-Reply-To: <be5cd69c7c58d44ca119d4ca692d95a2ae924533.1663835855.git.zhoubinbin@loongson.cn>
 
-Hi Dmitry,
+Hi Binbin,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on next-20220921]
-[also build test WARNING on linus/master v6.0-rc6]
-[cannot apply to drm-misc/drm-misc-next v6.0-rc6 v6.0-rc5 v6.0-rc4]
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v6.0-rc6 next-20220921]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-msm-add-support-for-SM8450/20220922-193223
-base:    483fed3b5dc8ce3644c83d24240cf5756fb0993e
-config: s390-randconfig-r044-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230114.2apdPcjg-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+config: hexagon-randconfig-r041-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230228.LIiHRmuw-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/b25f303f8c65c2776a67e8c6ac66c379d74170ce
+        # https://github.com/intel-lab-lkp/linux/commit/749fc796eb66dc42c209c6a5808c6b2a5e47fbb6
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Baryshkov/drm-msm-add-support-for-SM8450/20220922-193223
-        git checkout b25f303f8c65c2776a67e8c6ac66c379d74170ce
+        git fetch --no-tags linux-review Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
+        git checkout 749fc796eb66dc42c209c6a5808c6b2a5e47fbb6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/msm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i2c/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:8:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:8:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:8:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1559:37: warning: unused variable 'sm8450_regdma' [-Wunused-const-variable]
-   static const struct dpu_reg_dma_cfg sm8450_regdma = {
-                                       ^
-   13 warnings generated.
+>> drivers/i2c/i2c-core-base.c:1568:12: error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   status = acpi_evaluate_integer(ACPI_HANDLE(dev->parent),
+                            ^
+   drivers/i2c/i2c-core-base.c:1568:12: note: did you mean 'acpi_evaluate_object'?
+   include/acpi/acpixf.h:550:8: note: 'acpi_evaluate_object' declared here
+                               acpi_evaluate_object(acpi_handle object,
+                               ^
+   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
+           static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
+                              ^
+   1 error generated.
 
 
-vim +/sm8450_regdma +1559 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+vim +/acpi_evaluate_integer +1568 drivers/i2c/i2c-core-base.c
 
-  1558	
-> 1559	static const struct dpu_reg_dma_cfg sm8450_regdma = {
-  1560		.base = 0x0,
-  1561		.version = 0x00020000,
-  1562		.trigger_sel_off = 0x119c,
-  1563		.xin_id = 7,
-  1564		.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-  1565	};
-  1566	
+  1540	
+  1541	/**
+  1542	 * i2c_add_adapter - declare i2c adapter, use dynamic bus number
+  1543	 * @adapter: the adapter to add
+  1544	 * Context: can sleep
+  1545	 *
+  1546	 * This routine is used to declare an I2C adapter when its bus number
+  1547	 * doesn't matter or when its bus number is specified by an dt alias.
+  1548	 * Examples of bases when the bus number doesn't matter: I2C adapters
+  1549	 * dynamically added by USB links or PCI plugin cards.
+  1550	 *
+  1551	 * When this returns zero, a new bus number was allocated and stored
+  1552	 * in adap->nr, and the specified adapter became available for clients.
+  1553	 * Otherwise, a negative errno value is returned.
+  1554	 */
+  1555	int i2c_add_adapter(struct i2c_adapter *adapter)
+  1556	{
+  1557		struct device *dev = &adapter->dev;
+  1558		acpi_status status;
+  1559		unsigned long long id;
+  1560	
+  1561		if (dev->of_node) {
+  1562			id = of_alias_get_id(dev->of_node, "i2c");
+  1563			if (id >= 0) {
+  1564				adapter->nr = id;
+  1565				return __i2c_add_numbered_adapter(adapter);
+  1566			}
+  1567		} else if (dev->parent->fwnode) {
+> 1568			status = acpi_evaluate_integer(ACPI_HANDLE(dev->parent),
+  1569							"_UID", NULL, &id);
+  1570			if (ACPI_SUCCESS(status) && (id >= 0)) {
+  1571				adapter->nr = id;
+  1572				return __i2c_add_numbered_adapter(adapter);
+  1573			}
+  1574		}
+  1575	
+  1576		mutex_lock(&core_lock);
+  1577		id = idr_alloc(&i2c_adapter_idr, adapter,
+  1578			       __i2c_first_dynamic_bus_num, 0, GFP_KERNEL);
+  1579		mutex_unlock(&core_lock);
+  1580		if (WARN(id < 0, "couldn't get idr"))
+  1581			return id;
+  1582	
+  1583		adapter->nr = id;
+  1584	
+  1585		return i2c_register_adapter(adapter);
+  1586	}
+  1587	EXPORT_SYMBOL(i2c_add_adapter);
+  1588	
 
 -- 
 0-DAY CI Kernel Test Service
