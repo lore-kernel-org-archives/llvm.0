@@ -1,108 +1,101 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840E02F2E
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 21:49:11 +0000 (UTC)
-Received: by mail-pj1-f50.google.com with SMTP id y11so11118512pjv.4
-        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 14:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date;
-        bh=HR7XDnra6aPtamhjv2ZebPHNXJTov7JqNOvsimryjio=;
-        b=SzXIxv6C1tCw5E3cmrWDJ/hT6jlBfbW+dFuRj81LBsGuMMA1AsgUJRpxwVsVSvwR2s
-         HjojE3kOc43go5tDIXGrMTl5j+2eCPTyOeyLkDKEdQ6zWs58EaHgr7cs3m2ezx/7gyPH
-         QYSAs2hvSa7UX6V/rYFn8OuKvubD7Tx83ZZcc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=HR7XDnra6aPtamhjv2ZebPHNXJTov7JqNOvsimryjio=;
-        b=RomQ1iUXKJRbpNSxRAPPQm5HHwJ4fA3jRYi/lF9kcV8iPcW2uwGdNfUVUVYTXJrAKZ
-         nXBExIAJhf6kx/+xvPskYP2HlriZMJoGp7W9XYzWUTZFvYYhp5KuCmzcFg2Q1tuBuHh7
-         TsMgTJ1ypJ7AGNIZJUeUIbC0bSKuFNIj3sjqCfjSay0PEJBX/GhVFdCTj6YBhnSZSjtt
-         lTU4hVSqVyQvUF3Cr9AtNcStXMNFg+zFqSlKnpUyW1bn71Bu1n1HWDm/5/w1Yxz4bDFj
-         UwFpzrmx8JAxcB6eV3prqMI8vGiUARakTieLBLxncKiPgTRkEBG6GpCsV2f4t38O7Md3
-         hRSA==
-X-Gm-Message-State: ACrzQf3dG6Gi48ou/AJ0gJR6WpIj/5jYzm8guJ1vB2UYc/hk1TEHnSP3
-	FhC+3tS56vR8FTQ/dY0bJo+8Rw==
-X-Google-Smtp-Source: AMsMyM7EVCvewBY8ReI9lCX0qEaIkOeoxfNJfZf95NgQUB74fHJwtUZioqBUOFwe31SWjNTGJEPjqg==
-X-Received: by 2002:a17:902:d2d2:b0:177:4940:cc0f with SMTP id n18-20020a170902d2d200b001774940cc0fmr5257349plc.4.1663883350927;
-        Thu, 22 Sep 2022 14:49:10 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902da8600b00176acc23a73sm4597636plx.281.2022.09.22.14.49.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 14:49:10 -0700 (PDT)
-Date: Thu, 22 Sep 2022 14:49:08 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pekka Enberg <penberg@kernel.org>, Feng Tang <feng.tang@intel.com>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-	x86@kernel.org, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH 00/12] slab: Introduce kmalloc_size_roundup()
-Message-ID: <202209221446.5E90AEED@keescook>
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <673e425d-1692-ef47-052b-0ff2de0d9c1d@amd.com>
- <202209220845.2F7A050@keescook>
- <cb38655c-2107-bda6-2fa8-f5e1e97eab14@suse.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE46A7B
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 23:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663887827; x=1695423827;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=cyy/Gh9e+eJgOv3wmhUgtQgxkoNMiwuxtcILvKWEy28=;
+  b=f3EJk4G/z9e82VV1/2CbkphMkI3uba4YAv0YB17hMcWm/rqi4exqUglx
+   Wyuca/titE0VjJePVeArH4SJteP6mVvIO1GxxfU3qh36mLeyyCwPV/SGH
+   mSTIY5lEgGKjKqLFij4xpqJwQ7A/gWe2ZGbkxDYl7x+HlkfD8ct+FVaxf
+   tBv4/4vqfua+Ro55SsYGyRij11uEHGK5UWALa0elMeGdjN4UO6nJrQzSa
+   9Wft4ACuLsiZ+1K/T90p6hJwPVPsYJbwujrr83QVyBZvd86nJf++Ntxfz
+   oO4UWimizrBqhIcFP9LX7v24WmlL48uxl1ytCzJr/EbwOba4r30VCjYGB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="299179275"
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="299179275"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 16:03:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
+   d="scan'208";a="650732529"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Sep 2022 16:03:46 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1obVEP-00053o-1H;
+	Thu, 22 Sep 2022 23:03:45 +0000
+Date: Fri, 23 Sep 2022 07:03:21 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, llvm@lists.linux.dev
+Subject: [linux-next:master 8660/8813] ld.lld: error:
+ vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init:
+ .init.text+0x67c): relocation R_RISCV_PCREL_HI20 out of range: -526499 is
+ not in [-524288, 524287]; references kallsyms_names
+Message-ID: <202209230603.Y1zKLGtz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cb38655c-2107-bda6-2fa8-f5e1e97eab14@suse.cz>
 
-On Thu, Sep 22, 2022 at 11:05:47PM +0200, Vlastimil Babka wrote:
-> On 9/22/22 17:55, Kees Cook wrote:
-> > On Thu, Sep 22, 2022 at 09:10:56AM +0200, Christian König wrote:
-> > [...]
-> > > So when this patch set is about to clean up this use case it should probably
-> > > also take care to remove ksize() or at least limit it so that it won't be
-> > > used for this use case in the future.
-> > 
-> > Yeah, my goal would be to eliminate ksize(), and it seems possible if
-> > other cases are satisfied with tracking their allocation sizes directly.
-> 
-> I think we could leave ksize() to determine the size without a need for
-> external tracking, but from now on forbid callers from using that hint to
-> overflow the allocation size they actually requested? Once we remove the
-> kasan/kfence hooks in ksize() that make the current kinds of usage possible,
-> we should be able to catch any offenders of the new semantics that would appear?
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Vignesh Raghavendra <vigneshr@ti.com>
 
-That's correct. I spent the morning working my way through the rest of
-the ksize() users I didn't clean up yesterday, and in several places I
-just swapped in __ksize(). But that wouldn't even be needed if we just
-removed the kasan unpoisoning from ksize(), etc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   483fed3b5dc8ce3644c83d24240cf5756fb0993e
+commit: a7c350a0e522caa4fb89ca3f28ab18091c75c419 [8660/8813] Merge branch 'ti-next' of git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+config: riscv-buildonly-randconfig-r002-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230603.Y1zKLGtz-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a7c350a0e522caa4fb89ca3f28ab18091c75c419
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout a7c350a0e522caa4fb89ca3f28ab18091c75c419
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-I am tempted to leave it __ksize(), though, just to reinforce that it's
-not supposed to be used "normally". What do you think?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init: .init.text+0x67c): relocation R_RISCV_PCREL_HI20 out of range: -526499 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by crash_core.c:260 (kernel/crash_core.c:260)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init: .init.text+0x696): relocation R_RISCV_PCREL_HI20 out of range: -526499 is not in [-524288, 524287]; references kallsyms_num_syms
+   >>> referenced by crash_core.c:267 (kernel/crash_core.c:267)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init: .init.text+0x6b0): relocation R_RISCV_PCREL_HI20 out of range: -526499 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by crash_core.c:267 (kernel/crash_core.c:267)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init: .init.text+0x6ca): relocation R_RISCV_PCREL_HI20 out of range: -526499 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by crash_core.c:267 (kernel/crash_core.c:267)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init: .init.text+0x6e4): relocation R_RISCV_PCREL_HI20 out of range: -526499 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by crash_core.c:267 (kernel/crash_core.c:267)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/crash_core.o):(function crash_save_vmcoreinfo_init: .init.text+0x6fe): relocation R_RISCV_PCREL_HI20 out of range: -526499 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by crash_core.c:267 (kernel/crash_core.c:267)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
