@@ -1,154 +1,83 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0075E2CA2;
-	Thu, 22 Sep 2022 18:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663873188; x=1695409188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9hTR12KVYSG4WSUvy2XMfzfpJCVSwEHiEJ4NpOyo/so=;
-  b=PlJbaHRq3VOC5WZIGVdzPkd8dgO0WFH9pY0K6x35us+NDPkoWPQepQNX
-   kvHzqIKrMk5klrYIhoYVrCcbwEpaN8CgVZIG4iuq0GRQSCUHIDtzpVt3g
-   8n4X4102jGxDRRADvj+o1+jj2eg3DywEh/0ttOkaWjDrLzVJmRgghdI1q
-   Ygm3cZ5LU1aPRPHjnQcp6e5MTAkzx0dtRxsrSO/5z7UMHVWNZWQMMGfXl
-   +SLINNPma1vDr2O7WSne3CUMcSWITau6uerVpmj/DN7KSdDc2VMp40Owl
-   mZR93P5xYbeDAay08UzzlVYPzs0fYgTWHe27acHVgq4D8YTje+dxAM6dz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="386687387"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="386687387"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 11:59:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="597568053"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 11:59:36 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1obRQ7-0004sq-2c;
-	Thu, 22 Sep 2022 18:59:35 +0000
-Date: Fri, 23 Sep 2022 02:58:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Binbin Zhou <zhoubinbin@loongson.cn>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	linux-i2c@vger.kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-	WANG Xuerui <kernel@xen0n.name>, Jianmin Lv <lvjianmin@loongson.cn>,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH 1/5] i2c: core: Pick i2c bus number from ACPI if present
-Message-ID: <202209230228.LIiHRmuw-lkp@intel.com>
-References: <be5cd69c7c58d44ca119d4ca692d95a2ae924533.1663835855.git.zhoubinbin@loongson.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216152CA2
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 19:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45829C433C1;
+	Thu, 22 Sep 2022 19:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663875641;
+	bh=Iu+ioVZAl++oTxE1oI47t/6oQuwifWn8lmpY1yCr8J4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YC8ixN8EP0aZI0e+nDZs91siEij37VrKEmFWG3Ty2t8usgwjVxksauo5Og7qifkq5
+	 ESf2BqmXtU9USNgh+H2YKJEXRWpyu7EDcgicu3AJOn2B/4WayyL94dp8xbokjZvmw2
+	 M56qmrIx+uvo2sUUrQmzfQ5/ucT/pOiWMPHGNcLJ6IIzRCYzVRcutddcWgSvzdbhZM
+	 fcZkJSFboZpZl7fu6RLNBgaLlv3gbFkR4ETLqK750bOZ4J5pst6/eAIZH31PhhVZLn
+	 QMHkEcQOXS8pXwYt/LtILex4KMGS/VXDhD7XC9erQbOO/ciNySxRd4PP7XyTR4i5Zs
+	 1sdrT7lGqR5Mw==
+Date: Thu, 22 Sep 2022 12:40:39 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, netdev@vger.kernel.org, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ David Rientjes <rientjes@google.com>, Pekka Enberg <penberg@kernel.org>,
+ Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Alex Elder <elder@kernel.org>, Josef Bacik
+ <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, Sumit Semwal
+ <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Jesse Brandeburg <jesse.brandeburg@intel.com>,
+ Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>, Marco
+ Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>, Jacob Shin
+ <jacob.shin@amd.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+ linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ dev@openvswitch.org, x86@kernel.org, linux-wireless@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 02/12] skbuff: Proactively round up to kmalloc bucket
+ size
+Message-ID: <20220922124039.688be0b8@kernel.org>
+In-Reply-To: <20220922031013.2150682-3-keescook@chromium.org>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+	<20220922031013.2150682-3-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be5cd69c7c58d44ca119d4ca692d95a2ae924533.1663835855.git.zhoubinbin@loongson.cn>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Binbin,
+On Wed, 21 Sep 2022 20:10:03 -0700 Kees Cook wrote:
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 974bbbbe7138..4fe4c7544c1d 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -427,14 +427,15 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
+>  	 */
+>  	size = SKB_DATA_ALIGN(size);
+>  	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> -	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
+> -	if (unlikely(!data))
+> -		goto nodata;
+> -	/* kmalloc(size) might give us more room than requested.
+> +	/* kmalloc(size) might give us more room than requested, so
+> +	 * allocate the true bucket size up front.
+>  	 * Put skb_shared_info exactly at the end of allocated zone,
+>  	 * to allow max possible filling before reallocation.
+>  	 */
+> -	osize = ksize(data);
+> +	osize = kmalloc_size_roundup(size);
+> +	data = kmalloc_reserve(osize, gfp_mask, node, &pfmemalloc);
+> +	if (unlikely(!data))
+> +		goto nodata;
+>  	size = SKB_WITH_OVERHEAD(osize);
+>  	prefetchw(data + size);
 
-Thank you for the patch! Yet something to improve:
+I'd rename osize here to alloc_size for consistency but one could 
+argue either way :)
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v6.0-rc6 next-20220921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-config: hexagon-randconfig-r041-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230228.LIiHRmuw-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/749fc796eb66dc42c209c6a5808c6b2a5e47fbb6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Binbin-Zhou/i2c-ls2x-Add-support-for-the-Loongson-2K-LS7A-I2C/20220922-194252
-        git checkout 749fc796eb66dc42c209c6a5808c6b2a5e47fbb6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/i2c/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/i2c/i2c-core-base.c:1568:12: error: call to undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   status = acpi_evaluate_integer(ACPI_HANDLE(dev->parent),
-                            ^
-   drivers/i2c/i2c-core-base.c:1568:12: note: did you mean 'acpi_evaluate_object'?
-   include/acpi/acpixf.h:550:8: note: 'acpi_evaluate_object' declared here
-                               acpi_evaluate_object(acpi_handle object,
-                               ^
-   include/acpi/platform/aclinux.h:93:21: note: expanded from macro 'ACPI_EXTERNAL_RETURN_STATUS'
-           static ACPI_INLINE prototype {return(AE_NOT_CONFIGURED);}
-                              ^
-   1 error generated.
-
-
-vim +/acpi_evaluate_integer +1568 drivers/i2c/i2c-core-base.c
-
-  1540	
-  1541	/**
-  1542	 * i2c_add_adapter - declare i2c adapter, use dynamic bus number
-  1543	 * @adapter: the adapter to add
-  1544	 * Context: can sleep
-  1545	 *
-  1546	 * This routine is used to declare an I2C adapter when its bus number
-  1547	 * doesn't matter or when its bus number is specified by an dt alias.
-  1548	 * Examples of bases when the bus number doesn't matter: I2C adapters
-  1549	 * dynamically added by USB links or PCI plugin cards.
-  1550	 *
-  1551	 * When this returns zero, a new bus number was allocated and stored
-  1552	 * in adap->nr, and the specified adapter became available for clients.
-  1553	 * Otherwise, a negative errno value is returned.
-  1554	 */
-  1555	int i2c_add_adapter(struct i2c_adapter *adapter)
-  1556	{
-  1557		struct device *dev = &adapter->dev;
-  1558		acpi_status status;
-  1559		unsigned long long id;
-  1560	
-  1561		if (dev->of_node) {
-  1562			id = of_alias_get_id(dev->of_node, "i2c");
-  1563			if (id >= 0) {
-  1564				adapter->nr = id;
-  1565				return __i2c_add_numbered_adapter(adapter);
-  1566			}
-  1567		} else if (dev->parent->fwnode) {
-> 1568			status = acpi_evaluate_integer(ACPI_HANDLE(dev->parent),
-  1569							"_UID", NULL, &id);
-  1570			if (ACPI_SUCCESS(status) && (id >= 0)) {
-  1571				adapter->nr = id;
-  1572				return __i2c_add_numbered_adapter(adapter);
-  1573			}
-  1574		}
-  1575	
-  1576		mutex_lock(&core_lock);
-  1577		id = idr_alloc(&i2c_adapter_idr, adapter,
-  1578			       __i2c_first_dynamic_bus_num, 0, GFP_KERNEL);
-  1579		mutex_unlock(&core_lock);
-  1580		if (WARN(id < 0, "couldn't get idr"))
-  1581			return id;
-  1582	
-  1583		adapter->nr = id;
-  1584	
-  1585		return i2c_register_adapter(adapter);
-  1586	}
-  1587	EXPORT_SYMBOL(i2c_add_adapter);
-  1588	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Jakub Kicinski <kuba@kernel.org>
