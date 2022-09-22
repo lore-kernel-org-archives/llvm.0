@@ -1,192 +1,118 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bumble.maple.relay.mailchannels.net (bumble.maple.relay.mailchannels.net [23.83.214.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2E52CA2
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 19:55:54 +0000 (UTC)
-Received: by mail-lf1-f46.google.com with SMTP id m22so1731713lfg.0
-        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 12:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=xIPmujiyfWOajBJjBvgxKpjBtB45GgxFhMLGKXXMv8c=;
-        b=ltfdWf65dwpZLGG8ThMq+jdLgqvJdSowvT+mlXGI3G6MEqQch/I/r90ti2743IU4kd
-         qmarAkEahCduHlz00QlQjcwKbyGjJWNlgOKZ+PoDtbnY0cDunikVJNz5sNfF/+KytXtp
-         AU4B+XbZVAE2qWWf0NAtE1K780ooN2MtnPFZFhmxCg6g3CcTuYUkqApdrewX+b4bT41D
-         xW1PB4j0z4Y4vAs5m8MEmGM7KqfDgV15GXtNQNu5N+QEXIAu13IZIlsgsOP+0KWbBlVW
-         gpstIYxmNdV0CqXLgHAyvGzue/HQoExCm3gZmWNR2RBb3Ms80k48nPZfgc/bXv4aouwm
-         A+8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=xIPmujiyfWOajBJjBvgxKpjBtB45GgxFhMLGKXXMv8c=;
-        b=3PKuuOkWioCRHXoywm8jDvJSDMhqSh31LXtYUWH70KI7SPngTwQ8dzN/VOMysKySBM
-         wUzBAtUrVEVz4fW3TmAbna5BHZwU940lqptXtBwjT3mvhs2dqYp7vibgbk5wxmXxVpvW
-         FQyo2wVRe4b4/SfUP1MsUBaaYEU3PFxIIUpFHPjQY0e3+N+uJ6AJPrEi3AFcrNRvDYil
-         8hRyuTDV3LcJA/yCqYFkhCOINYWrHJ3Mwm6Ij9B2G2gF2zF0jWHkSshz0MZ9KPURLuHs
-         0pSvvyNKAKlC5l3gp7Awt+T+0cvt9Y8PU+w3Tmzt7n3VO09ysZ5hn3p39YCdzEeupDKX
-         8Tyg==
-X-Gm-Message-State: ACrzQf0NtsjX43UDrP0eACBqH2utcF+3S61LpnDHPuf9JtmFzeaMo7Ec
-	MkZ/oBP7FRTzN9xpjWRq1cg=
-X-Google-Smtp-Source: AMsMyM5+J1LnuXaYj4dCuhVDmlbLEtQBfPA/XoqcT7tSpbnJlBpNwD2Ce58qJvoW4OlXJ2LNgjccog==
-X-Received: by 2002:ac2:4a61:0:b0:497:ae0c:4f66 with SMTP id q1-20020ac24a61000000b00497ae0c4f66mr1786866lfp.660.1663876552908;
-        Thu, 22 Sep 2022 12:55:52 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id y18-20020a197512000000b004946aef1814sm1082016lfe.137.2022.09.22.12.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 12:55:51 -0700 (PDT)
-Date: Thu, 22 Sep 2022 22:01:57 +0200
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [jic23-iio:testing 58/58] drivers/iio/adc/mcp3911.c:274:6:
- warning: variable 'tmp0' set but not used
-Message-ID: <Yyy/NXG61IjpHvxU@gmail.com>
-References: <202209220845.GmS9zryR-lkp@intel.com>
- <20220922115925.00004ec9@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE578B08
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 20:27:00 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id E3806E0D0F;
+	Thu, 22 Sep 2022 20:26:58 +0000 (UTC)
+Received: from pdx1-sub0-mail-a304 (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 91923E0969;
+	Thu, 22 Sep 2022 20:26:57 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663878417; a=rsa-sha256;
+	cv=none;
+	b=0N1xJPA19d3g/7XSq1TDi5gK5QkWtsFzlBoGXCXaKgvnAMRo/aSKLz+LvTEZEBb91IUhf4
+	kePAdZk1WSHWmBChXjjLfneLYErYDG7l707iyxxT9Q+NlBChNSwRdsVaZh4ea885qCx0lT
+	q1eNyzjob9xfRw62+BzzGjxZarqwQKN/EtDk3yAoa4ALlYec5eKKzNoLroq8qxNZihM/gf
+	feaR4VUdhOZZcIhJSRfZPGcVLIUgZQac9BEEyclNcpANzLyijIpmSbs3AI34JWKYwxkxbo
+	tJqlOJ4s1Cpb4H6D5U/r+sXpx5St1GWwLOaqhjvVpb843hyVGtGTHiuNOyintQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1663878417;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=GWlJfwNbM+RBUcr+LC1OwrrEPQoaeo4v3LxR/u+AkoU=;
+	b=MB6IEeJu1fY5/1eQHZb+Y7vQ4KLTdYk7bRAA8r7kxsAMXldDv1OlbcNuO/qcqEWpKHkioV
+	mJ3h4b6vxxM5dhbhz6Tp0fGpblIM1Ni3S7AIKVP9XSCvinWb5Uo4X83maamXYrOxnNGwSm
+	UFb1oLXnhp/SeqKJRfkQAOV5iNeCAaaBfdyILhCn43N7U5VSoZAc7/wUfzhn0AJ6UzNDos
+	Hl3cAjFepbh020PIYMvl9cuhDnZSYtEThzOnQjcHX63u2BncXHH+SbgYuRYlut7bE8aN7J
+	U1DPXE5xf9kfcgIhvue2lOb541KMjuwXxHkEaALBVV6g8Lk+g2QIkWU4TloPgA==
+ARC-Authentication-Results: i=1;
+	rspamd-64f49dbfc4-tqm99;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=siddhesh@gotplt.org
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MailChannels-Auth-Id: dreamhost
+X-Robust-Thread: 549f3fc70ee53b42_1663878418000_474975912
+X-MC-Loop-Signature: 1663878418000:1607438317
+X-MC-Ingress-Time: 1663878417999
+Received: from pdx1-sub0-mail-a304 (pop.dreamhost.com [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.126.240.206 (trex/6.7.1);
+	Thu, 22 Sep 2022 20:26:57 +0000
+Received: from [192.168.0.182] (bras-vprn-toroon4834w-lp130-16-184-147-84-238.dsl.bell.ca [184.147.84.238])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: siddhesh@gotplt.org)
+	by pdx1-sub0-mail-a304 (Postfix) with ESMTPSA id 4MYRdr0XNtzB3;
+	Thu, 22 Sep 2022 13:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gotplt.org;
+	s=dreamhost; t=1663878417;
+	bh=GWlJfwNbM+RBUcr+LC1OwrrEPQoaeo4v3LxR/u+AkoU=;
+	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+	b=xynVUy7ve+n+dzMALyLMksOuiXJZJBKdcBotnnpAEYjBA0eEOEW31TrSR/TOQ3Me1
+	 Idbmw035xgwwfeD89ROdj5SufEP1T6T11GpAmmilp5GKItiERD4BLjBQbWEUbI2g8k
+	 528SFXG8Q3LY4HWedXr4OnJfBlUKqmoMqIGr+qu1jMNYQv+GYJIjd8xSSIVYKYONcY
+	 XQBnIpy2Fp4prAcCHlAiMDanzr4Kxa0h2D6VWpNzvElOmi0dJLdwadkahoUQN6C8pj
+	 whWl6WxIy7PjzKHNYjEOIFleuISRwo9hsQk0tpsLAGewfk93wAOD7HkJOG2oqb00F/
+	 nBSY8IBdQ5Otg==
+Message-ID: <e2a0debe-e99f-2259-1cb9-35193c387c82@gotplt.org>
+Date: Thu, 22 Sep 2022 16:26:54 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="cabgzS1QBwGhtYbU"
-Content-Disposition: inline
-In-Reply-To: <20220922115925.00004ec9@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/4] fortify: Use __builtin_dynamic_object_size() when
+ available
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Arnd Bergmann <arnd@arndb.de>,
+ Juergen Gross <jgross@suse.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Tom Rix <trix@redhat.com>,
+ Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20220920192202.190793-1-keescook@chromium.org>
+From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+In-Reply-To: <20220920192202.190793-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2022-09-20 15:21, Kees Cook wrote:
+> Hi,
+> 
+> This adjusts CONFIG_FORTIFY_SOURCE's coverage to include greater runtime
+> size checking from GCC and Clang's __builtin_dynamic_object_size(), which
+> the compilers can track either via code flow or from __alloc_size() hints.
+> 
 
---cabgzS1QBwGhtYbU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FTR, I ran a linux build using gcc with allyesconfig and 
+fortify-metrics[1] to get a sense of how much object size coverage would 
+improve with __builtin_dynamic_object_size.  With a total of 3,877 
+__builtin_object_size calls, about 11.37% succeed in getting a result 
+that is not (size_t)-1.  If they were replaced by 
+__builtin_dynamic_object_size as this patch proposes, the success rate 
+improves to 16.25%, which is a ~1.4x improvement.
 
-On Thu, Sep 22, 2022 at 11:59:25AM +0100, Jonathan Cameron wrote:
-> On Thu, 22 Sep 2022 08:50:17 +0800
-> kernel test robot <lkp@intel.com> wrote:
->=20
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git t=
-esting
-> > head:   d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
-> > commit: d4e1a549566b9ea8b96e80f0cdcbe99714ac256e [58/58] iio: adc: mcp3=
-911: add support to set PGA
-> > config: x86_64-randconfig-a012
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f2=
-8c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git=
-/commit/?id=3Dd4e1a549566b9ea8b96e80f0cdcbe99714ac256e
-> >         git remote add jic23-iio https://git.kernel.org/pub/scm/linux/k=
-ernel/git/jic23/iio.git
-> >         git fetch --no-tags jic23-iio testing
-> >         git checkout d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash drivers/iio/adc/
-> >=20
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >=20
-> > All warnings (new ones prefixed by >>):
-> >=20
-> > >> drivers/iio/adc/mcp3911.c:274:6: warning: variable 'tmp0' set but no=
-t used [-Wunused-but-set-variable] =20
-> >            int tmp0, tmp1;
-> >                ^
-> >    1 warning generated.
-> >=20
-> >=20
-> > vim +/tmp0 +274 drivers/iio/adc/mcp3911.c
-> >=20
-> >    268=09
-> >    269	static int mcp3911_calc_scale_table(struct mcp3911 *adc)
-> >    270	{
-> >    271		u32 ref =3D MCP3911_INT_VREF_MV;
-> >    272		u32 div;
-> >    273		int ret;
-> >  > 274		int tmp0, tmp1; =20
-> >    275		s64 tmp2;
-> >    276=09
-> >    277		if (adc->vref) {
-> >    278			ret =3D regulator_get_voltage(adc->vref);
-> >    279			if (ret < 0) {
-> >    280				dev_err(&adc->spi->dev,
-> >    281					"failed to get vref voltage: %d\n",
-> >    282				       ret);
-> >    283				return ret;
-> >    284			}
-> >    285=09
-> >    286			ref =3D ret / 1000;
-> >    287		}
-> >    288=09
-> >    289		/*
-> >    290		 * For 24-bit Conversion
-> >    291		 * Raw =3D ((Voltage)/(Vref) * 2^23 * Gain * 1.5
-> >    292		 * Voltage =3D Raw * (Vref)/(2^23 * Gain * 1.5)
-> >    293		 *
-> >    294		 * ref =3D Reference voltage
-> >    295		 * div =3D (2^23 * 1.5 * gain) =3D 12582912 * gain
-> >    296		 */
-> >    297		for (int i =3D 0; i < MCP3911_NUM_SCALES; i++) {
-> >    298			div =3D 12582912 * BIT(i);
-> >    299			tmp2 =3D div_s64((s64)ref * 1000000000LL, div);
-> >    300			tmp1 =3D div;
-> >    301			tmp0 =3D (int)div_s64_rem(tmp2, 1000000000, &tmp1);
->=20
-> Marcus,=20
-> I'm guessing the intent here is just to get the remainder. =20
-> Hence fix is probably just to drop tmp0?
+This is a decent improvement by itself but it can be amplified further 
+by adding __attribute__((access (...)))[2] to function prototypes and 
+definitions, especially for functions that take in buffers and their 
+sizes as arguments since __builtin_dynamic_object_size in gcc is capable 
+of recognizing that and using it for object size determination (and 
+hence to fortify calls) within those functions.
 
-Yes, the intention was to keep the remainder.
-When I looked at the code a second time, tmp2 will have the
-same value as the reminder as the division does not make sense.
+Thanks,
+Sid
 
-So tmp1 and tmp0 is removed in the v7 patch.
-
-/Marcus=20
-
->=20
-> If you confirm that I'll tweak the commit to do that.
->=20
-> Jonathan
->=20
->=20
-> >    302=09
-> >    303			mcp3911_scale_table[i][0] =3D 0;
-> >    304			mcp3911_scale_table[i][1] =3D tmp1;
-> >    305		}
-> >    306=09
-> >    307		return 0;
-> >    308	}
-> >    309=09
-> >=20
->=20
-
---cabgzS1QBwGhtYbU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmMsvzAACgkQiIBOb1ld
-UjIhMg//fY1JE1gXpqqZMVu6OH/FV2bbm3KH1KSSqrBNURwXLpuoeXn76VW54KL+
-oXE8/+XV70w3asz6zJW6Jg2JIi4B8MPloc5b1CA+LQgUjjvgNd7xsNd0XjkOMcQJ
-UECmIT3PabdCJM5WMaJnASjh3ULilgmFc3gho7eJ3Q4ZpUIg8hMqc9rD3I5BH9EH
-c0qkR+mfjSKVlnxMKUsayPF39UDRvMOM8wqCNaca7V9+9IjmndV6NhiGtw36KIj6
-4ZeynNmL1+t3AaJHYWCunSjMRje2AMk9NNwd3/hkGTOcfBaKKoR9medSVH0FJtKB
-rLPiT7IgKGmJRifAoHGX97JuSI/MmzyGdVM7HC3NSMe66IIllcCKdLejJtYERM6A
-y6TrtugmRtZhfGLQ7o8cBowS4XkP/GVdeXODFOg+xKK8msUqojPcuVX+LSkAz7Yu
-vseyvLSdHnNFC8eVZJv8vW+KIpv1GPAcTe6IgrvR/WPNVSBCDafwyFvGlA8ujSTb
-xsnMCH0WPW3uDIC42otbT6tignprcCYMu2hISp22gXYZ8miDacAPu0Jw+6JsZme+
-8nLjMIllpL3MYyfE5zLHmSKLXjQKzF2/mSg6wa/VOD0SlTXJf7W6diVW4mxSBs7Q
-pvFP2Hw0pIKsM9KVGP4tbqL9XmAuaWvi1ZPAnYSmJHwMgcv94ac=
-=u9Lw
------END PGP SIGNATURE-----
-
---cabgzS1QBwGhtYbU--
+[1] https://github.com/siddhesh/fortify-metrics
+[2] https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html
