@@ -1,54 +1,131 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from bumble.maple.relay.mailchannels.net (bumble.maple.relay.mailchannels.net [23.83.214.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A283C26
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 14:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=aBYt055UUb+wOT56a3sdr9XVeyIyRkejUmbCDc/HXxg=; b=DpBfyDE6gE7AgC2KPFHBpJ1mVC
-	wZZBmX7IqjyQTk8DC+j36L39onORsqtHEWUdOHVPCXLPMNjg3Zb1qym0yGMmdwj1PcuvR4M0z1lZh
-	ZLwt4MW4GR/6STPP/ccvugTnPnhjd6+iCw6Sa4K3u5ffPp6mx1I9FzBn5S47H01iYqT11q8UtDD8b
-	CM7dbEKh7VVgbyaSNA6M4xyPZdF/J4ogcXMUh9/8ynakeX3k5lf42XN59FxlHm8tdHvkNOa0DwZfH
-	eS5ZzF7HNWhiRXJiO0raB6NiscsZivORxJO1/p2ZcLss5TGAX00xgv93sEmZIL5I2dDd8NVFHhH4T
-	YxauYXzg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1obMx9-00EyWa-5c; Thu, 22 Sep 2022 14:13:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 727FE300169;
-	Thu, 22 Sep 2022 16:13:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 598772BBFE78A; Thu, 22 Sep 2022 16:13:22 +0200 (CEST)
-Date: Thu, 22 Sep 2022 16:13:22 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-kernel@vger.kernel.org, ndesaulniers@google.com
-Subject: Re: [peterz-queue:sched/idle 45/48] vmlinux.o: warning: objtool:
- enter_s2idle_proper+0x78: call to ct_cpuidle_exit() leaves .noinstr.text
- section
-Message-ID: <Yyxtgs/jRYcyH43f@hirez.programming.kicks-ass.net>
-References: <202209220456.cXRrGXs7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C245A90
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 15:02:04 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 6E14F42137;
+	Thu, 22 Sep 2022 14:45:10 +0000 (UTC)
+Received: from pdx1-sub0-mail-a304 (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 4990E41FEE;
+	Thu, 22 Sep 2022 14:45:09 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1663857909; a=rsa-sha256;
+	cv=none;
+	b=0LmZkMVID3cHw88umcSwqyfbTs9dctjU5meekkjxzhu396zqRZWmIVWll6DLCFmzMLK/YW
+	lhNuOAg8Msfgu8/QMivqD4UNAL6/hWqFu3zI+9NjObyJbIvws/bzIg5e1ekCQDqS6VAA+M
+	rkmYDf/sh2guVYn5na9BCpu61Nw0de7HDGGChBgt3ngqQvpMV+1nRla1dWhJMZW884ynif
+	iIyphQNFCZPTDZNuNcMis6FA+O1jYpK1D6RoGqD1c7mQiGOkH1eMmRUY5PHC1VSFsS7lLU
+	SrYqU1LQdDnwOKYJNCWAsCbZY/jB2pqAQ9LSF2Lf59REB8aEkQ4n7JOTjxyMaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1663857909;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=xghhsyINLuqLaVcS7ccFn+Lr2S2KTsZvKraPs0CAUyo=;
+	b=L/PRgfU5hubvi8kLooeywHrVVWr/2x/cQnzQprVES98eilwHA1mW+SbCiqGZia3dyoYq8+
+	8gz2xClRnlSlW5eSnZwMt0Y8uQM57qg4bmdP//q8HX4KKUDu7FOTHzHCoXDyE1oe20yjVv
+	wwNzWmjZqOfi8ikgHjra3ImTKZ6Zn49W7e6UkqAcDUoMnVEkXr6BYFtfKzJZcYe9LsOSf/
+	sP9pY2CK4L3lPnYjIG2VPqupdnVc2ZYbtITZQOAyuZZUXrcQncfLjeiUATPdx/9GrweWJL
+	fzkwkdBxIH8lJCjssz3i/d2FrwB6WmqcITt4sHTu3MSLB9CB2L8RguObMfD6jQ==
+ARC-Authentication-Results: i=1;
+	rspamd-f776c45b8-n6pdg;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=siddhesh@gotplt.org
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MailChannels-Auth-Id: dreamhost
+X-Wiry-Versed: 583809950bb2ad8d_1663857909818_554295810
+X-MC-Loop-Signature: 1663857909818:4056437340
+X-MC-Ingress-Time: 1663857909818
+Received: from pdx1-sub0-mail-a304 (pop.dreamhost.com [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.120.183.79 (trex/6.7.1);
+	Thu, 22 Sep 2022 14:45:09 +0000
+Received: from [192.168.0.182] (bras-vprn-toroon4834w-lp130-16-184-147-84-238.dsl.bell.ca [184.147.84.238])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: siddhesh@gotplt.org)
+	by pdx1-sub0-mail-a304 (Postfix) with ESMTPSA id 4MYJ3Q3x1Zz3m;
+	Thu, 22 Sep 2022 07:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gotplt.org;
+	s=dreamhost; t=1663857908;
+	bh=xghhsyINLuqLaVcS7ccFn+Lr2S2KTsZvKraPs0CAUyo=;
+	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+	b=sDuand+a/XJS5s78apGW69loriemQlZJQ7rpOUgRf24nsWGEKRpES6+MRu23z28g9
+	 bKACu3T0LzFp3cVqyL+qnrcVMgit+Fo3mE5cxMwb0vxpP3y9I50ub3lmeC9etjP7sE
+	 0ximi6cWqSLtvkGdwQwEavRdrkcGSnrSx8SNAAgcEAQLdiJ+sOdvkjzWcGZ26jlP3a
+	 hEqFXgfYLOC0knlo2rtskNHSwm8bhU/Bc/RWt5A3Ts0Sdn5c2Nxi0SQLAkQXjC2fjG
+	 ccmOVzTQAWodpCYvzVC2p5PPPpSmhmTzc7Q82Yrg06dgO9X3XECC0k+4g5OPaMAASe
+	 w3YkuN+avYk9Q==
+Message-ID: <450c41a1-9713-0928-338a-3f3d659b9894@gotplt.org>
+Date: Thu, 22 Sep 2022 10:45:05 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209220456.cXRrGXs7-lkp@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 4/4] fortify: Use __builtin_dynamic_object_size() when
+ available
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-hardening@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ llvm@lists.linux.dev, Juergen Gross <jgross@suse.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, linux-kernel@vger.kernel.org
+References: <20220920192202.190793-1-keescook@chromium.org>
+ <20220920192202.190793-5-keescook@chromium.org>
+ <9d80e0a3-3fcc-0676-4529-79743f418557@gotplt.org>
+ <202209212032.5F392F42@keescook>
+From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+In-Reply-To: <202209212032.5F392F42@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 22, 2022 at 04:34:47AM +0800, kernel test robot wrote:
+On 2022-09-21 23:33, Kees Cook wrote:
+> On Wed, Sep 21, 2022 at 07:43:17AM -0400, Siddhesh Poyarekar wrote:
+>> On 2022-09-20 15:22, Kees Cook wrote:
+>>> Since the commits starting with c37495d6254c ("slab: add __alloc_size
+>>> attributes for better bounds checking"), the compilers have runtime
+>>> allocation size hints available in some places. This was immediately
+>>> available to CONFIG_UBSAN_BOUNDS, but CONFIG_FORTIFY_SOURCE needed
+>>> updating to explicitly make use the hints via the associated
+>>> __builtin_dynamic_object_size() helper. Detect and use the builtin when
+>>> it is available, increasing the accuracy of the mitigation. When runtime
+>>> sizes are not available, __builtin_dynamic_object_size() falls back to
+>>> __builtin_object_size(), leaving the existing bounds checking unchanged.
+>>
+>> I don't know yet what the overhead is for __builtin_dynamic_object_size vs
+>> __builtin_object_size, were you able to measure it somehow for the kernel?
+>> If there's a significant tradeoff, it may make sense to provide a user
+>> override.
+> 
+> So far I've not seen any measurable performance difference, but I just
+> may not be creative enough yet.
+> 
+> So far, the tunable is building a kernel with or without FORTIFY_SOURCE
+> and UBSAN_BOUNDS. :)
+> 
 
-> >> vmlinux.o: warning: objtool: enter_s2idle_proper+0x78: call to ct_cpuidle_exit() leaves .noinstr.text section
-> >> vmlinux.o: warning: objtool: cpuidle_enter_state+0x111: call to ct_cpuidle_exit() leaves .noinstr.text section
+The overhead should only be noticeable in, e.g. fortified calls inside a 
+hot loop.  In theory expressions to compute sizes could be arbitrarily 
+complex, but I haven't seen any cases yet that were large enough to be a 
+bother.  I reckon if we find such use cases, it'll be in the kernel but 
+even then it may not be worth downgrading fortification across all 
+sources just for those specific hot paths.  So I agree, the user 
+override isn't critically necessary.
 
-include/linux/cpuidle.h:static __always_inline void ct_cpuidle_exit(void)
+FWIW,
 
-Dear LLVM folks, ... WTF ?!?
+Reviewed-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
+
+Thanks,
+Sid
