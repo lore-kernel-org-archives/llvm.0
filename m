@@ -1,33 +1,37 @@
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E51128F5
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:36:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E9A28F5
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:43:33 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id D0D00C0B61
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:38:18 +0000 (UTC)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 237324000A;
-	Thu, 22 Sep 2022 09:36:14 +0000 (UTC)
+	by mail.gandi.net (Postfix) with ESMTPSA id 520B7E000D;
+	Thu, 22 Sep 2022 09:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1663839376;
+	t=1663839491;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3UZbUFLMgSY77Odqcq2d806tX5yHgFe2O1KsF+0D9E8=;
-	b=m0WkdLUM8KvCsVpgsSZlDTQXT1zLGABp4WPf/YdvMmR/eeHsKkBj5cIQLRPeQS0fml+9rK
-	XdDWQb2yZGWSV0+BqMdCuNc5JQlZenWVw2PAOfdKF/mIllYOG2OaeDhqwBkJILuPEwi7W7
-	6HXIYBbg0TyUYSl/YV2XWgNLfSivL+bRNpGZzNfKyAyzcOF8//vn95hMIWy09EvONl3tww
-	9z/3ikC4Gd2IzYQVVkcM2ABX2lrIcgQ5vfF3g7NSUSYD6sIjFdT9pGsjrfVCotSobDN2M7
-	oqX2kqGyj+Yj6JKj1Jd9TsH6OKF/8fzsY/y8ilppCY5vvXPIm3dmuBUnignObw==
-Date: Thu, 22 Sep 2022 11:36:13 +0200
+	bh=R0xAyR/z9kzEyc6l4rQYrC2hkKALiKd5mU2hx/nI+Uk=;
+	b=mvM1T46YqDoRduskd3WW4ydTPEiu+tRk5QHmT2YgEMf6m2zHsANT2rbNiOI6pOoi62SZpo
+	MLD6aeFF2ag2jC8LHR+cSotskK3Ms3Or7YBBj/dUCa/P/VUMI65O5khV4J2Vh2GdtJYrx7
+	WHR8aYYeJ7FxAsIm7oHf4/m1/TS9DIW+lVIsnscD1E9TricLminKpeYDO8dbATfXLeybUd
+	Y42swM5TVprnhsiSZmqNe2UY6N8TW227V+16VxfI4Yrw9FGEYRGwvSh9aK2l71RxSzkhdn
+	uR9E/vkW0hyU9guFbME31iR0bW85xmlL9UQZQPhIuQbF/Jg/2BucZEIopPu0Lg==
+Date: Thu, 22 Sep 2022 11:38:09 +0200
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Valentin Korenblit <vkorenblit@sequans.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Valentin Korenblit" <vkorenblit@sequans.com>, "kernel test robot"
+ <lkp@intel.com>, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+ linux-kernel@vger.kernel.org
 Subject: Re: [mtd:nand/next 11/31]
  drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
  declaration of function 'ioread64_rep' is invalid in C99
-Message-ID: <20220922113613.4d7273c8@xps-13>
-In-Reply-To: <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+Message-ID: <20220922113809.0a4d3d35@xps-13>
+In-Reply-To: <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
 References: <202209210641.MziHAbW7-lkp@intel.com>
 	<20220921104002.226ff3f6@xps-13>
 	<ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
@@ -36,7 +40,6 @@ References: <202209210641.MziHAbW7-lkp@intel.com>
 	<ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
 	<20220921183807.241e2518@xps-13>
 	<b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
-	<6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
@@ -48,120 +51,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Valentin,
+Hi Arnd,
 
-vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200:
+> > ioread64_rep is then only defined if CONFIG_64BIT. As it is based
+> > on readsq/writesq() and those must be defined (as you said), I don't get
+> > why the *64_rep() helpers are not defined in all cases. Maybe because no
+> > 32-bit system _should_ need them? But then compile testing gets more
+> > difficult. =20
+>=20
+> Both readsq/writesq and ioread64_rep/iowrite64_rep must be defined
+> for 64-bit architectures and cannot be defined for 32-bit ones.
 
-> Hi Arnd, Miquel,
->=20
-> On 9/21/22 22:01, Arnd Bergmann wrote:
-> > On Wed, Sep 21, 2022, at 6:38 PM, Miquel Raynal wrote: =20
-> >> arnd@arndb.de  wrote on Wed, 21 Sep 2022 17:49:11 +0200: =20
-> >>> On Wed, Sep 21, 2022, at 4:47 PM, Miquel Raynal wrote:
-> >>> - every architecture should provide readsq()/readsl()/readsw()/readsb=
-()
-> >>>    these days, regardless of CONFIG_GENERIC_IOMAP. If x86 does
-> >>>    not have that, we should fix asm-generic/io.h. =20
-> >> ARM does not seem to define readsq/writesq. Should it be fixed? =20
-> > 64-bit Arm should get it from include/asm-generic/io.h. If it does
-> > not, this should be fixed. 32-bit Arm obviously cannot define them
-> > in a generic way. =20
->=20
-> This is ok for 64-bit arm.
->=20
-> > =20
-> >>> - CONFIG_GENERIC_IOMAP just means an architecture uses the generic
-> >>>    ioread32_rep() style wrapper around readsl()/insl(). On most
-> >>>    architectures (not x86), insl() is implemented as a wrapper around
-> >>>    readsl() itself, so readsl() and ioread32_rep() should be identica=
-l. =20
-> >> Ok. But if CONFIG_GENERIC_IOMAP=3Dn (ARM, aarch64, x86_64), =20
-> > x86_64 has GENERIC_IOMAP=3Dy
-> > =20
-> >> ioread64_rep is then only defined if CONFIG_64BIT. As it is based
-> >> on readsq/writesq() and those must be defined (as you said), I don't g=
-et
-> >> why the *64_rep() helpers are not defined in all cases. Maybe because =
-no
-> >> 32-bit system _should_ need them? But then compile testing gets more
-> >> difficult. =20
-> > Both readsq/writesq and ioread64_rep/iowrite64_rep must be defined
-> > for 64-bit architectures and cannot be defined for 32-bit ones. =20
->=20
-> So the first issue here is that they are not defined for x86_64
-> (CONFIG_64BIT=3Dy).
+Yeah, ok.
 
-I would say this is not very important as long as we could use
-readsq/writesq() for the same purpose.
-
-> >>> - For a FIFO, you cannot use readq() but have to use __raw_readq()
-> >>>    to get the correct endianness. You cannot use this for an
-> >>>    MMIO register with side-effects though, as this needs the byteswap
-> >>>    and the barrier in readsl(). =20
-> >> I'm not sure about the true definition of "FIFO" as you say. I guess
-> >> you just mean reading from a BE device?
-> >>
-> >> In this case I guess we need the barrier+byteswap helpers. =20
-> > The difference is that a register has a fixed length, and gets
-> > accessed with a device specific endianness, which may have to
-> > be swapped if the device and the CPU disagree.
+> >> - For a FIFO, you cannot use readq() but have to use __raw_readq()
+> >>   to get the correct endianness. You cannot use this for an
+> >>   MMIO register with side-effects though, as this needs the byteswap
+> >>   and the barrier in readsl(). =20
 > >
-> > A FIFO register is what you use for transferring a stream of
-> > bytes, such as reading a file system block from disk. The
-> > first byte in the register corresponds to the first byte in
-> > memory later, so there must not be any byteswap while copying
-> > to/from memory. If the data itself is structured (i.e. an
-> > on-disk inode or a network packet), then the byteswap will
-> > happen if necessary while interpreting the data.
-> > =20
-> >> I don't think this is actually what we want. My understanding is
-> >> (Valentin, please correct me if I'm wrong):
-> >> - on ARM: we will always use 32-bit accesses
-> >> - on aarch64: we may use either 32-bit or 64-bit accesses
-> >> - on other architectures: we only want to compile test =20
->=20
-> Correct, this was my initial idea. However, this driver should work
-> with every architecture or do we limit the scope to arm/arm64/x86_64?
-
-The driver should work on ARM and aarch64, I'm not aware of other
-architectures with this IP.
-
-The driver should compile when COMPILE_TEST=3Dy.
-
-> >> I believe what Valentin wanted to achieve in the first place, was to
-> >> use 64-bit accesses when relevant (otherwise it does not work). =20
-> > The width is read from a device specific register at
-> > runtime, it is not related to the architecture you are
-> > running on, presumably this is hardwired during the
-> > design of an SoC, based on the capabilities of the DMA
-> > engine:
-
-Well, yes, but in the mean time 64-bit DMA width will never be
-used on 32-bit platforms.
-
-> >          reg =3D readl_relaxed(cdns_ctrl->reg + CTRL_FEATURES);
-> >          if (FIELD_GET(CTRL_FEATURES_DMA_DWITH64, reg))
-> >                  cdns_ctrl->caps2.data_dma_width =3D 8;
-> >          else
-> >                  cdns_ctrl->caps2.data_dma_width =3D 4;
+> > I'm not sure about the true definition of "FIFO" as you say. I guess
+> > you just mean reading from a BE device?
 > >
-> > This usually means the largest access that is valid for
-> > reading from the FIFO, but usually smaller accesses work
-> > as well, just slower. =20
-
-Mmh, ok, that's interesting, thanks for the pointer.
-
-But in the mean time I am only half satisfied, because we plan to do
-twice more accesses than needed _just_ because of a the COMPILE_TEST
-constraint.
-
-> Thanks for all the info. I can check if consecutive smaller accesses
-> trigger sdma_err interrupt. The datasheet only specifies: "if host sends =
-an
-> unsupported transaction to slave interface, the slave dma ignores
-> this access and sets sdma_err flag in intr_status register.
+> > In this case I guess we need the barrier+byteswap helpers. =20
 >=20
-> Valentin
+> The difference is that a register has a fixed length, and gets
+> accessed with a device specific endianness, which may have to
+> be swapped if the device and the CPU disagree.
+>=20
+> A FIFO register is what you use for transferring a stream of
+> bytes, such as reading a file system block from disk. The
+> first byte in the register corresponds to the first byte in
+> memory later, so there must not be any byteswap while copying
+> to/from memory. If the data itself is structured (i.e. an
+> on-disk inode or a network packet), then the byteswap will
+> happen if necessary while interpreting the data.
+
+Ok, I fully get what you mean, I was just not used to the word FIFO for
+this definition as I use it as a more generic term, but it completely
+makes sense. Thanks for taking the time to explain.
 
 Thanks,
 Miqu=C3=A8l
