@@ -1,103 +1,91 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F56C1851
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 01:31:49 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id b21so7366546plz.7
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 18:31:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Md4huhpYv1cDGpWpaL4nk6AFG7O8XO2LLDYE/HfBOfQ=;
-        b=GtXQcOEaSjiHypAGEQP3Oaz4i1QxNHIr/TOWCmkPQwiSlanvLq2mWufPtg1UKhNiN8
-         Nz6Qf+4Kzd0oBRkceGQHmeeoj9heetXuSkukKCYCKL57iOmxv0SkAixm+wDJndp/UWsu
-         0/nPvNsKTqulkjxjaeT65hlo0iW83UMDv6UCt0lRn+5GYMNWRTr8QD8szKivfBW0T+l/
-         UPx56CLpnGDFu+KXqsyK5kjoZkshlqUf/LB/w3MwRZsSPRL9iCFUA028/fRjtdn63U05
-         c2k+w92WEYy1ENrWiUJx1Xj4cBVm+GMMouL52RPRnjNJbCKompK9t+XiqsLchnCsVBGu
-         wQ/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Md4huhpYv1cDGpWpaL4nk6AFG7O8XO2LLDYE/HfBOfQ=;
-        b=xoeN1zRogyo7oHHeMlRQGj9fIZaJ7S7K0/i8JPsXNEgzI1Cz210v078iw92bXpsabH
-         7fDKVbM+npQWcTfcbMn+YmmpLZM4AA9JblV8c5dfjQGODv0NKfGwobyqmPYU1sjb1uBq
-         kuV4OCKgLBds02wfcRugn1yI1AOyZT0PiAqD4lvyqOJEk1p9zftMQPbC7hxC4ppcaGdP
-         43XZD/y2KSsnumIZFFqZE9PmsRiZpdrIq0D7iCHxb0Flncckf+b6+xmOaODaTakPLftf
-         hKHnKAnjD7V63xSzqzP+W7mBVupDzsp1aDWDXDZGON9Jhh87LCkj4ZQf/FY1HKCskb+P
-         T9HA==
-X-Gm-Message-State: ACrzQf3a/NILXt2fhUkRV+dPP1KQ0Nn1yLpBdb7BIaMqvKyKdlwgSJLH
-	JUE3mI/fYRK6DzBifUjUtwQ=
-X-Google-Smtp-Source: AMsMyM4TId2/V19iHXuApj/eDS6jK5Ogd41FeWKLsKitiJifNKgGeREKbjG9L+xMlSw6eu2WcgF3TA==
-X-Received: by 2002:a17:90b:3b50:b0:202:9e4a:2fdf with SMTP id ot16-20020a17090b3b5000b002029e4a2fdfmr1049333pjb.240.1663810308870;
-        Wed, 21 Sep 2022 18:31:48 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id u1-20020a626001000000b0053b9e5d365bsm2804315pfb.216.2022.09.21.18.31.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 18:31:48 -0700 (PDT)
-From: cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To: acme@kernel.org
-Cc: mingo@redhat.com,
-	mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	namhyung@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	andrii@kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	ye xingchen <ye.xingchen@zte.com.cn>,
-	Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] perf llvm: use strscpy() is more robust and safer
-Date: Thu, 22 Sep 2022 01:31:43 +0000
-Message-Id: <20220922013143.232870-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE641C28
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 01:50:58 +0000 (UTC)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXynM6xDyz14QPC;
+	Thu, 22 Sep 2022 09:46:47 +0800 (CST)
+Received: from [10.174.179.191] (10.174.179.191) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 09:50:54 +0800
+Message-ID: <e5a553e3-4138-f8a0-c4d7-ec3d9d46732e@huawei.com>
+Date: Thu, 22 Sep 2022 09:50:54 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [bpf-next v3 1/2] libbpf: Add pathname_concat() helper
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>, <paul.walmsley@sifive.com>,
+	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <trix@redhat.com>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
+ <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
+From: wangyufen <wangyufen@huawei.com>
+In-Reply-To: <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.191]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-The implementation of strscpy() is more robust and safer.
+在 2022/9/22 8:41, Andrii Nakryiko 写道:
+> On Sun, Sep 18, 2022 at 7:28 PM Wang Yufen <wangyufen@huawei.com> wrote:
+>> Move snprintf and len check to common helper pathname_concat() to make the
+>> code simpler.
+>>
+>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+>> ---
+>>   tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+>>   1 file changed, 29 insertions(+), 47 deletions(-)
+>>
+> [...]
+>
+>> @@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+>>                  char buf[PATH_MAX];
+>>
+>>                  if (path) {
+>> -                       int len;
+>> -
+>> -                       len = snprintf(buf, PATH_MAX, "%s/%s", path,
+>> -                                      bpf_map__name(map));
+>> -                       if (len < 0)
+>> -                               return libbpf_err(-EINVAL);
+>> -                       else if (len >= PATH_MAX)
+>> -                               return libbpf_err(-ENAMETOOLONG);
+>> +                       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
+>> +                       if (err)
+>> +                               return err;
+> also keep libbpf_err() as well, it sets errno properly
+>
+>>                          sanitize_pin_path(buf);
+>>                          pin_path = buf;
+>>                  } else if (!map->pin_path) {
+>> @@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+>>   int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+>>   {
+>>          struct bpf_program *prog;
+>> +       char buf[PATH_MAX];
+>>          int err;
+>>
+>>          if (!obj)
+> [...]
 
-That's now the recommended way to copy NUL terminated strings.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- tools/perf/util/llvm-utils.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for your comments， will send v4.
 
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index 2dc797007419..3e218cb8f0ae 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -80,7 +80,7 @@ search_program(const char *def, const char *name,
- 	if (def && def[0] != '\0') {
- 		if (def[0] == '/') {
- 			if (access(def, F_OK) == 0) {
--				strlcpy(output, def, PATH_MAX);
-+				strscpy(output, def, PATH_MAX);
- 				return 0;
- 			}
- 		} else if (def[0] != '\0')
-@@ -99,7 +99,7 @@ search_program(const char *def, const char *name,
- 	while (path) {
- 		scnprintf(buf, sizeof(buf), "%s/%s", path, name);
- 		if (access(buf, F_OK) == 0) {
--			strlcpy(output, buf, PATH_MAX);
-+			strscpy(output, buf, PATH_MAX);
- 			ret = 0;
- 			break;
- 		}
--- 
-2.25.1
+
