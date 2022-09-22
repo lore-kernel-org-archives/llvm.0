@@ -1,70 +1,79 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CE166E8
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 15:57:48 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so2831979pjk.4
-        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 08:57:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779D566E8
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 16:00:29 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id v1so9181595plo.9
+        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=DFca6W2geua6z8QZaei3L7obYL69ycUV+0eXMSxJFmM=;
-        b=jvl2IXIRx3EhOhhqaTOf5Lt+fk9xx9Irq6xcu/7k7oCaAudZivnlCg4zfyCIBsgQa9
-         qBtVWGjfuRNfAqWNaj6IsSNxrO0lvCUNMMis5T9m3env78npe1AQYwW4n7mGlSRQHwQP
-         cG9vbxRd7c25yIHtYw1xafxyLneU1vdiRP2x0=
+        bh=e+3VYhs+DuwH7bu+QHtV1rjWq3mJNnHisCvMMFS3bAw=;
+        b=XxhEWZKeaIg8g+YPuHc57mvNIPPhpigg738nM9wsLJjiUYpKwjJNzBKKGjefZOhAzi
+         0KqHQ1P/cHiMmQgsO3z2jt2+D0oCcG8Ck+pj5sopXZOTE33QKhSQ8Lb6DWDYvG77ZJIc
+         GQLx6jVnYAJuMY3HV3uGUN51p3PNgpWkx9A1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DFca6W2geua6z8QZaei3L7obYL69ycUV+0eXMSxJFmM=;
-        b=64uO/mTLV/ilb0Y1cnaIBMZxdW3uGwl5jPZG3rtevzcC2PIDN2ykPxEw9S/F5kj6qV
-         hNm/YQYdIy1qgBUF0NmyFK4Q200tsz7jCGqbCj/E7mptvkjDCwdtSjqqfUnq7BCkMxKu
-         PiUtHvfNuhZ5Ctyssok7yA4IQGIgFxJQd47r9tBa0poyfsFDeAu61XS1/NLXb7nhh2cW
-         h35TI6/F7VsbkbvwbHBZSE528IqFEBOvv5mqLQ1zzW299x4ZxlAU3nBhulWamR0R4QxU
-         16Q9LJh8KX2rxWEjnQzlX17ZH7/NIuAhOfFz3CTmi9VL9Bh8j79EzIfe4eKWMixC0UAa
-         yIHA==
-X-Gm-Message-State: ACrzQf2Ds1eMGqtSmd3QOfrR3YvHglK3zABRfZHYpc+sPDQLHQWOQONY
-	xPxgEW6XSbEt9RvgwmPwjGV0sQ==
-X-Google-Smtp-Source: AMsMyM4DbOcH8T52s44Y0t4Ur0sebk5QTw9RJNQKJ+FFAkxJV0gLFIOVmBX/n1oFJJpAp4+llFExqQ==
-X-Received: by 2002:a17:902:e848:b0:176:c746:1f69 with SMTP id t8-20020a170902e84800b00176c7461f69mr3892270plg.125.1663862268452;
-        Thu, 22 Sep 2022 08:57:48 -0700 (PDT)
+        bh=e+3VYhs+DuwH7bu+QHtV1rjWq3mJNnHisCvMMFS3bAw=;
+        b=zNBGscmmW3nHVWiHkp0FMeG/GkjMcHCe/2q5oZLYhPMIV3fvX0hrDM01X/h01uSfil
+         f4GX2c7IOPzD1EnkBVmllVt2BlB+rNZLEhZmVzuilzcG8cxGNnnoFQQxoHcYZqKLgzwD
+         Ec0L8zPME2JvtQGSsayIaPx3GFJT+pHkK8sRBKLYeR8zelrlbFs/dKlIf8bS1pwdfILG
+         UbCH1M5GMUbAFRO1r0lWXvRRTBkdsN/y6oYjjO5oRCf8uNT+frHMfhNX4YcYaGoISbRD
+         Cny4aDFEX9ajkOBtfoYwymMzH2BeRB5YceWMfY/0XrcJVP3yskn6Hjai3lJqQ7hI7K2n
+         Eb6g==
+X-Gm-Message-State: ACrzQf1iKVklK2y2MIVkBM8Wro9lDyepy2/ANj9syRmh/Is+ktLc2SwD
+	Pejvj8/2NawG3hL6SHiRX5UfmA==
+X-Google-Smtp-Source: AMsMyM6q4mhFYq39gGoVyx6Hnh47y8QFV1PKitfWXVTUQGpGwPy/JbIncPBlq3WqciXD78b9y3HP3A==
+X-Received: by 2002:a17:90b:164d:b0:202:69b3:1002 with SMTP id il13-20020a17090b164d00b0020269b31002mr4362502pjb.86.1663862428935;
+        Thu, 22 Sep 2022 09:00:28 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p63-20020a625b42000000b005367c28fd32sm4575617pfb.185.2022.09.22.08.57.47
+        by smtp.gmail.com with ESMTPSA id ms3-20020a17090b234300b002005c3d4d4fsm4007085pjb.19.2022.09.22.09.00.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:57:47 -0700 (PDT)
-Date: Thu, 22 Sep 2022 08:57:46 -0700
+        Thu, 22 Sep 2022 09:00:28 -0700 (PDT)
+Date: Thu, 22 Sep 2022 09:00:26 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Alex Elder <elder@ieee.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Alex Elder <elder@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
+To: "Ruhl, Michael J" <michael.j.ruhl@intel.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+	Feng Tang <feng.tang@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
+	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	"dev@openvswitch.org" <dev@openvswitch.org>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
 	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Yonghong Song <yhs@fb.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	Marco Elver <elver@google.com>, Josef Bacik <josef@toxicpanda.com>,
+	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>, David Sterba <dsterba@suse.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Alex Elder <elder@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Pekka Enberg <penberg@kernel.org>,
+	Daniel Micay <danielmicay@gmail.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-	x86@kernel.org, linux-wireless@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 03/12] net: ipa: Proactively round up to kmalloc bucket
- size
-Message-ID: <202209220857.A6EBCF031E@keescook>
+	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
+Subject: Re: [PATCH 07/12] igb: Proactively round up to kmalloc bucket size
+Message-ID: <202209220859.DA21F91EAE@keescook>
 References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-4-keescook@chromium.org>
- <4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org>
+ <20220922031013.2150682-8-keescook@chromium.org>
+ <DM5PR11MB13241226F3AACC81398F7E8EC14E9@DM5PR11MB1324.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,43 +82,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org>
+In-Reply-To: <DM5PR11MB13241226F3AACC81398F7E8EC14E9@DM5PR11MB1324.namprd11.prod.outlook.com>
 
-On Thu, Sep 22, 2022 at 08:45:19AM -0500, Alex Elder wrote:
-> On 9/21/22 10:10 PM, Kees Cook wrote:
-> > Instead of discovering the kmalloc bucket size _after_ allocation, round
-> > up proactively so the allocation is explicitly made for the full size,
-> > allowing the compiler to correctly reason about the resulting size of
-> > the buffer through the existing __alloc_size() hint.
-> > 
-> > Cc: Alex Elder <elder@kernel.org>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >   drivers/net/ipa/gsi_trans.c | 7 +++++--
-> >   1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-> > index 18e7e8c405be..cec968854dcf 100644
-> > --- a/drivers/net/ipa/gsi_trans.c
-> > +++ b/drivers/net/ipa/gsi_trans.c
-> > @@ -89,6 +89,7 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
-> >   			u32 max_alloc)
-> >   {
-> >   	void *virt;
-> > +	size_t allocate;
+On Thu, Sep 22, 2022 at 03:56:54PM +0000, Ruhl, Michael J wrote:
+> >From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On Behalf Of Kees Cook
+> [...]
+> >diff --git a/drivers/net/ethernet/intel/igb/igb_main.c
+> >b/drivers/net/ethernet/intel/igb/igb_main.c
+> >index 2796e81d2726..4d70ee5b0f79 100644
+> >--- a/drivers/net/ethernet/intel/igb/igb_main.c
+> >+++ b/drivers/net/ethernet/intel/igb/igb_main.c
+> >@@ -1196,6 +1196,7 @@ static int igb_alloc_q_vector(struct igb_adapter
+> >*adapter,
+> >
+> > 	ring_count = txr_count + rxr_count;
+> > 	size = struct_size(q_vector, ring, ring_count);
+> >+	size = kmalloc_size_roundup(size);
 > 
-> I don't care about this but the reverse Christmas tree
-> convention would put the "allocate" variable definition
-> above "virt".
+> why not:
+> 
+> 	size = kmalloc_size_roundup(struct_size(q_vector, ring, ring_count));
+> 
+> ?
 
-Oops, yes; thank you!
-
--Kees
+Sure! I though it might be more readable split up. I will change it. :)
 
 -- 
 Kees Cook
