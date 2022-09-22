@@ -1,291 +1,128 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED3A2902
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 10:24:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663842263; x=1695378263;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CGzsM7ZIh9Wlo6rJSidN+iAjfrDp9etHXsQ9S5OUSUo=;
-  b=eES0A6JXjPNFKgqimOgaEqYRiYI5C6CGjJPHSsJsiN8YjMfCGFIbVPbD
-   +UZlzGQY+sCKoqUhi5LELwEavLI2i92Pqe0tPFp0+GSO02Hfz8Z0/10yd
-   VMOlGt8Fv0kOmyAi280Sv95Hx186BeuP2sslYzyeyBIjChp6JY0HRVb1Y
-   klQIGLGtw44FpiuNjYbuS9HjJUAr4Duk2y2n45o83oMPd8bhmeqB0AWl7
-   3qv04lf5gOKdDq+TiC/4Akpfcqu8vZOiAmzmwPzXaF/8ehJBz5qgDyOZl
-   nS5ldFSdenSyxxQ/KsD124XErNIGfXBD8Jb0Rc+zD0K+oRefH6QfAbnRM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="300244716"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="300244716"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 03:24:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="688244436"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 03:24:20 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1obJNT-0004b6-29;
-	Thu, 22 Sep 2022 10:24:19 +0000
-Date: Thu, 22 Sep 2022 18:23:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matt Ranostay <matt.ranostay@konsulko.com>, gupt21@gmail.com,
-	jic23@kernel.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	Matt Ranostay <matt.ranostay@konsulko.com>
-Subject: Re: [PATCH v4 5/5] HID: mcp2221: add ADC/DAC support via iio
- subsystem
-Message-ID: <202209221851.IOfsmA0z-lkp@intel.com>
-References: <20220921063026.89619-6-matt.ranostay@konsulko.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21066291D
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 10:53:01 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.west.internal (Postfix) with ESMTP id C28772B059A3;
+	Thu, 22 Sep 2022 06:52:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 22 Sep 2022 06:53:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1663843979; x=1663847579; bh=cSRj8m6//S
+	4nzmuhOOEsOKmR8Il0fc1BoRQKLeM0xek=; b=dz6wqdl4kZMoMtAMLClFD0INx0
+	7BAEmvn72swpQTyghCbvkZB4LYJNkruxi/ppf7Lrwgm8vb1W4+LbllC1KGbzaWY2
+	PE86tTzsN1ewHNSHAymcLdhaw+XwGN7gTNvXvjN87lYMHQ1DemnYCPdWivehLCbz
+	87RaN5hSObbN1oarfbyiJS8/4NxFy1MrrtZ0T12r3H5x8TRNGZzOIh5rnp1xat+G
+	Xl3FCpDrl5swixCJG1iWh23LQPyurL9bPPo2xbFHYN6VdrC7euXNngVQ7jrNBYoP
+	e927ZI2w4ox5WspWtg5lSPjMKWzIoeP18UMNfiDGldIIU7MswNZN8xo7tqlQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1663843979; x=1663847579; bh=cSRj8m6//S4nzmuhOOEsOKmR8Il0
+	fc1BoRQKLeM0xek=; b=R3d+pTy37CMSCYZ3dpdDqVRJxPO0PC54qMOr35F2FIbl
+	yPTw1pLoLZn57bz9vTy2+rpBenU3LvxYfvL/Ve8fNz1nEosK0wBntg0XNS9/V/6d
+	uhxPOBJv8IMxSArMS2SB+uhTbaulBzhAOKo1t7D4L6KgP1+aKRI6kh80zamNE4s4
+	saBPddd42SmNnq+FrpLbPGaeA/IoPgXHMI5u+ThXFeOjKMRBezQ2htdUNDyiYLal
+	BLq1ZSJwtzwoh/uDUCy2wU0Wi8pOZT9mRP3EUspE/AS13Igz3EzpDD+tQIriHk4x
+	uLSHCIEwIYDbf1dUxsOM1Ert01YC5XFJn0dDyvSCBQ==
+X-ME-Sender: <xms:ij4sY1qlCUU4DRf2BNE8Nfb4CfJrmnGtkLLOQmD_8jZPX_xYl0bioQ>
+    <xme:ij4sY3pfmNILoMPn1zUPGDBJ0lPbQ0KnBB_XTd8ggJ6iX_8c9PFN054hNDIeDAPRY
+    307bxklvBewlk_faVE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeffedgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ij4sYyObgFgEWFxQGj8z7jtbkPn5IY458-A4LuIWaoBfeWv-RksRlQ>
+    <xmx:ij4sYw7sSt3sRE4VFq-kJO3H1CDrIj4hyhj6zBkA3LxrauWIUDpT-A>
+    <xmx:ij4sY07aJoYTu8ZfC-269EayKROvMw7PH1y6Js9s-0bS1rsOoHhDDA>
+    <xmx:iz4sYyny0aUeTm686xh9w0JAkjcbGN2VDR3Gos9uDYNVIkMn_sLLNGYJVX4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 68050B60086; Thu, 22 Sep 2022 06:52:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921063026.89619-6-matt.ranostay@konsulko.com>
+Mime-Version: 1.0
+Message-Id: <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
+In-Reply-To: <20220922113613.4d7273c8@xps-13>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+ <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+ <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+ <20220921164720.6bbc56d5@xps-13>
+ <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+ <20220921183807.241e2518@xps-13>
+ <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+ <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+ <20220922113613.4d7273c8@xps-13>
+Date: Thu, 22 Sep 2022 12:52:36 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Valentin Korenblit" <vkorenblit@sequans.com>
+Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Type: text/plain
 
-Hi Matt,
+On Thu, Sep 22, 2022, at 11:36 AM, Miquel Raynal wrote:
+> vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200:
+>> 
+>> Correct, this was my initial idea. However, this driver should work
+>> with every architecture or do we limit the scope to arm/arm64/x86_64?
+>
+> The driver should work on ARM and aarch64, I'm not aware of other
+> architectures with this IP.
+>
+> The driver should compile when COMPILE_TEST=y.
 
-I love your patch! Yet something to improve:
+It should also be written in a way that makes it plausible to
+use elsewhere. Since this is just a licensed IP core, there is
+a good chance that someone reused it on mips or riscv, or
+anything else.
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on next-20220921]
-[cannot apply to hid/for-next wsa/i2c/for-next linus/master v6.0-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>> >> I believe what Valentin wanted to achieve in the first place, was to
+>> >> use 64-bit accesses when relevant (otherwise it does not work).  
+>> > The width is read from a device specific register at
+>> > runtime, it is not related to the architecture you are
+>> > running on, presumably this is hardwired during the
+>> > design of an SoC, based on the capabilities of the DMA
+>> > engine:
+>
+> Well, yes, but in the mean time 64-bit DMA width will never be
+> used on 32-bit platforms.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Ranostay/HID-mcp2221-iio-support-and-device-resource-management/20220921-143207
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: hexagon-randconfig-r023-20220921 (https://download.01.org/0day-ci/archive/20220922/202209221851.IOfsmA0z-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9576b88476cb586e6d9f8ef77969f1acd5e4a241
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matt-Ranostay/HID-mcp2221-iio-support-and-device-resource-management/20220921-143207
-        git checkout 9576b88476cb586e6d9f8ef77969f1acd5e4a241
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hid/
+Why? Most architectures (including x86 and arm) allow you to
+run a 32-bit kernel on a 64-bit SoC. While this is almost always
+a bad idea to actually do, a driver should be written to
+work correctly in this setup.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+>> > This usually means the largest access that is valid for
+>> > reading from the FIFO, but usually smaller accesses work
+>> > as well, just slower.  
+>
+> Mmh, ok, that's interesting, thanks for the pointer.
+>
+> But in the mean time I am only half satisfied, because we plan to do
+> twice more accesses than needed _just_ because of a the COMPILE_TEST
+> constraint.
 
-All errors (new ones prefixed by >>):
+In my example, I had an #ifdef so it would only fall back
+to 32-bit accesses on the 64-bit register when running an
+actual 32-bit kernel, but leaving the 64-bit case efficient.
 
->> drivers/hid/hid-mcp2221.c:879:10: error: no member named 'dac_scale' in 'struct mcp2221'
-                                   mcp->dac_scale = tmp + 4;
-                                   ~~~  ^
-   drivers/hid/hid-mcp2221.c:881:10: error: no member named 'dac_scale' in 'struct mcp2221'
-                                   mcp->dac_scale = 5;
-                                   ~~~  ^
->> drivers/hid/hid-mcp2221.c:886:10: error: no member named 'adc_scale' in 'struct mcp2221'
-                                   mcp->adc_scale = tmp - 1;
-                                   ~~~  ^
-   drivers/hid/hid-mcp2221.c:888:10: error: no member named 'adc_scale' in 'struct mcp2221'
-                                   mcp->adc_scale = 0;
-                                   ~~~  ^
-   4 errors generated.
-
-
-vim +879 drivers/hid/hid-mcp2221.c
-
-   720	
-   721	/*
-   722	 * MCP2221 uses interrupt endpoint for input reports. This function
-   723	 * is called by HID layer when it receives i/p report from mcp2221,
-   724	 * which is actually a response to the previously sent command.
-   725	 *
-   726	 * MCP2221A firmware specific return codes are parsed and 0 or
-   727	 * appropriate negative error code is returned. Delayed response
-   728	 * results in timeout error and stray reponses results in -EIO.
-   729	 */
-   730	static int mcp2221_raw_event(struct hid_device *hdev,
-   731					struct hid_report *report, u8 *data, int size)
-   732	{
-   733		u8 *buf, tmp;
-   734		struct mcp2221 *mcp = hid_get_drvdata(hdev);
-   735	
-   736		switch (data[0]) {
-   737	
-   738		case MCP2221_I2C_WR_DATA:
-   739		case MCP2221_I2C_WR_NO_STOP:
-   740		case MCP2221_I2C_RD_DATA:
-   741		case MCP2221_I2C_RD_RPT_START:
-   742			switch (data[1]) {
-   743			case MCP2221_SUCCESS:
-   744				mcp->status = 0;
-   745				break;
-   746			default:
-   747				mcp->status = mcp_get_i2c_eng_state(mcp, data, 2);
-   748			}
-   749			complete(&mcp->wait_in_report);
-   750			break;
-   751	
-   752		case MCP2221_I2C_PARAM_OR_STATUS:
-   753			switch (data[1]) {
-   754			case MCP2221_SUCCESS:
-   755				if ((mcp->txbuf[3] == MCP2221_I2C_SET_SPEED) &&
-   756					(data[3] != MCP2221_I2C_SET_SPEED)) {
-   757					mcp->status = -EAGAIN;
-   758					break;
-   759				}
-   760				if (data[20] & MCP2221_I2C_MASK_ADDR_NACK) {
-   761					mcp->status = -ENXIO;
-   762					break;
-   763				}
-   764				mcp->status = mcp_get_i2c_eng_state(mcp, data, 8);
-   765	#if IS_REACHABLE(CONFIG_IIO)
-   766				memcpy(&mcp->adc_values, &data[50], sizeof(mcp->adc_values));
-   767	#endif
-   768				break;
-   769			default:
-   770				mcp->status = -EIO;
-   771			}
-   772			complete(&mcp->wait_in_report);
-   773			break;
-   774	
-   775		case MCP2221_I2C_GET_DATA:
-   776			switch (data[1]) {
-   777			case MCP2221_SUCCESS:
-   778				if (data[2] == MCP2221_I2C_ADDR_NACK) {
-   779					mcp->status = -ENXIO;
-   780					break;
-   781				}
-   782				if (!mcp_get_i2c_eng_state(mcp, data, 2)
-   783					&& (data[3] == 0)) {
-   784					mcp->status = 0;
-   785					break;
-   786				}
-   787				if (data[3] == 127) {
-   788					mcp->status = -EIO;
-   789					break;
-   790				}
-   791				if (data[2] == MCP2221_I2C_READ_COMPL) {
-   792					buf = mcp->rxbuf;
-   793					memcpy(&buf[mcp->rxbuf_idx], &data[4], data[3]);
-   794					mcp->rxbuf_idx = mcp->rxbuf_idx + data[3];
-   795					mcp->status = 0;
-   796					break;
-   797				}
-   798				mcp->status = -EIO;
-   799				break;
-   800			default:
-   801				mcp->status = -EIO;
-   802			}
-   803			complete(&mcp->wait_in_report);
-   804			break;
-   805	
-   806		case MCP2221_GPIO_GET:
-   807			switch (data[1]) {
-   808			case MCP2221_SUCCESS:
-   809				if ((data[mcp->gp_idx] == MCP2221_ALT_F_NOT_GPIOV) ||
-   810					(data[mcp->gp_idx + 1] == MCP2221_ALT_F_NOT_GPIOD)) {
-   811					mcp->status = -ENOENT;
-   812				} else {
-   813					mcp->status = !!data[mcp->gp_idx];
-   814					mcp->gpio_dir = data[mcp->gp_idx + 1];
-   815				}
-   816				break;
-   817			default:
-   818				mcp->status = -EAGAIN;
-   819			}
-   820			complete(&mcp->wait_in_report);
-   821			break;
-   822	
-   823		case MCP2221_GPIO_SET:
-   824			switch (data[1]) {
-   825			case MCP2221_SUCCESS:
-   826				if ((data[mcp->gp_idx] == MCP2221_ALT_F_NOT_GPIOV) ||
-   827					(data[mcp->gp_idx - 1] == MCP2221_ALT_F_NOT_GPIOV)) {
-   828					mcp->status = -ENOENT;
-   829				} else {
-   830					mcp->status = 0;
-   831				}
-   832				break;
-   833			default:
-   834				mcp->status = -EAGAIN;
-   835			}
-   836			complete(&mcp->wait_in_report);
-   837			break;
-   838	
-   839		case MCP2221_SET_SRAM_SETTINGS:
-   840			switch (data[1]) {
-   841			case MCP2221_SUCCESS:
-   842				mcp->status = 0;
-   843				break;
-   844			default:
-   845				mcp->status = -EAGAIN;
-   846			}
-   847			complete(&mcp->wait_in_report);
-   848			break;
-   849	
-   850		case MCP2221_GET_SRAM_SETTINGS:
-   851			switch (data[1]) {
-   852			case MCP2221_SUCCESS:
-   853				memcpy(&mcp->mode, &data[22], 4);
-   854	#if IS_REACHABLE(CONFIG_IIO)
-   855				mcp->dac_value = data[6] & GENMASK(4, 0);
-   856	#endif
-   857				mcp->status = 0;
-   858				break;
-   859			default:
-   860				mcp->status = -EAGAIN;
-   861			}
-   862			complete(&mcp->wait_in_report);
-   863			break;
-   864	
-   865		case MCP2221_READ_FLASH_DATA:
-   866			switch (data[1]) {
-   867			case MCP2221_SUCCESS:
-   868				mcp->status = 0;
-   869	
-   870				/* Only handles CHIP SETTINGS subpage currently */
-   871				if (mcp->txbuf[1] != 0) {
-   872					mcp->status = -EIO;
-   873					break;
-   874				}
-   875	
-   876				/* DAC scale value */
-   877				tmp = (data[6] >> 6) & 0x3;
-   878				if ((data[6] & BIT(5)) && tmp)
- > 879					mcp->dac_scale = tmp + 4;
-   880				else
-   881					mcp->dac_scale = 5;
-   882	
-   883				/* ADC scale value */
-   884				tmp = (data[7] >> 3) & 0x3;
-   885				if ((data[7] & BIT(2)) && tmp)
- > 886					mcp->adc_scale = tmp - 1;
-   887				else
-   888					mcp->adc_scale = 0;
-   889	
-   890				break;
-   891			default:
-   892				mcp->status = -EAGAIN;
-   893			}
-   894			complete(&mcp->wait_in_report);
-   895			break;
-   896	
-   897		default:
-   898			mcp->status = -EIO;
-   899			complete(&mcp->wait_in_report);
-   900		}
-   901	
-   902		return 1;
-   903	}
-   904	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+    Arnd
