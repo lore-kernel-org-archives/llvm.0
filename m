@@ -1,82 +1,167 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7277B28F5
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:23:58 +0000 (UTC)
-Received: by mail-io1-f52.google.com with SMTP id p3so7155489iof.13
-        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 02:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=eq1ulTtXYhBmIV3Hec+MzaFRLDXw1vSRF6+bOMmPhJ4=;
-        b=bE2W6qfxPeZ5hG8th9HBte8uWTQjYuCcr36yI1hhiheOM64/zofTi1amyoUC/YRb+J
-         NgesQGAjTL00GMSehk4Np33KVgoKvpm/Mh3RSzMdF+EkL5Y4k9K6GB3q17DXyKsUm/6E
-         tSUleWEaIUryrEiqLEE56d9SYCS/YFMrs6gU37f7Pqu7tr26K2zmBNy6tAGoGVxQ5f+n
-         DlMD1/oSQBrQp/QHyG7CgFktY+50H+Wm33tTFaH8FxMf0iDQdWTe9OU6Ok7FDH/xYrVm
-         +Y17qm2jbLBl43Ckz4h9g/NlAB7oNcZMDPJUHArvKPR8Jrr0Y7Jjk4kBCdA2lo60DN3B
-         Aphg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=eq1ulTtXYhBmIV3Hec+MzaFRLDXw1vSRF6+bOMmPhJ4=;
-        b=B9lxAZJPwskSwYyS77BQXwVPpwU7K4GpzByXvuc5zQA6pceLaw1B8FkKqKkogQAjck
-         NqUBnIHO/hNzuqLLcEUHsCdyj+IbBqCEDRLpl9hf4bWwJTisjtgs/w9AUfQG58Ealwqp
-         puuufbOq2qTCM4RM2VtFvoe2xZZCmDQSwY8V/1jw/datwpVyaxt7L0sEyAlekTXjtNEx
-         LgkkFtWbrdb4oHvLegqmCElJi+DzXr3tS2dSo86GmxJiJz5LRCttsCqJJejGtlZUNfVr
-         gPlbVGoqgtXSkoQsDteMUM3mQ5pc3+qqXEURplZZ++A478U1NBrJryWX3dQh9hiLWo2b
-         YRsw==
-X-Gm-Message-State: ACrzQf1gY1Caq4XdFkLnyTbwyQfDYu/2qwbQuM52jmD6t76XMCrjZYGf
-	A/PORNpa99Bw9DfxIEOY/ohJMLYPaIlOhverplk=
-X-Google-Smtp-Source: AMsMyM4VmAwcaT5Lc+Ww++2Y7GpjHXOf8JO1cC9hLR1vHps4lN+vAXggqFNSedolxw1DncuzKFlDGIHvcmXTBzRY/kM=
-X-Received: by 2002:a05:6638:dcc:b0:35a:7ba6:ad51 with SMTP id
- m12-20020a0566380dcc00b0035a7ba6ad51mr1404409jaj.256.1663838637536; Thu, 22
- Sep 2022 02:23:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E51128F5
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:36:19 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+	by mail.gandi.net (Postfix) with ESMTPSA id 237324000A;
+	Thu, 22 Sep 2022 09:36:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1663839376;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3UZbUFLMgSY77Odqcq2d806tX5yHgFe2O1KsF+0D9E8=;
+	b=m0WkdLUM8KvCsVpgsSZlDTQXT1zLGABp4WPf/YdvMmR/eeHsKkBj5cIQLRPeQS0fml+9rK
+	XdDWQb2yZGWSV0+BqMdCuNc5JQlZenWVw2PAOfdKF/mIllYOG2OaeDhqwBkJILuPEwi7W7
+	6HXIYBbg0TyUYSl/YV2XWgNLfSivL+bRNpGZzNfKyAyzcOF8//vn95hMIWy09EvONl3tww
+	9z/3ikC4Gd2IzYQVVkcM2ABX2lrIcgQ5vfF3g7NSUSYD6sIjFdT9pGsjrfVCotSobDN2M7
+	oqX2kqGyj+Yj6JKj1Jd9TsH6OKF/8fzsY/y8ilppCY5vvXPIm3dmuBUnignObw==
+Date: Thu, 22 Sep 2022 11:36:13 +0200
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Valentin Korenblit <vkorenblit@sequans.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+ llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Message-ID: <20220922113613.4d7273c8@xps-13>
+In-Reply-To: <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+	<20220921104002.226ff3f6@xps-13>
+	<ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+	<7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+	<20220921164720.6bbc56d5@xps-13>
+	<ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+	<20220921183807.241e2518@xps-13>
+	<b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+	<6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220922031013.2150682-1-keescook@chromium.org> <20220922031013.2150682-12-keescook@chromium.org>
-In-Reply-To: <20220922031013.2150682-12-keescook@chromium.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 22 Sep 2022 11:23:46 +0200
-Message-ID: <CANiq72=m9VngFH9jE3s0RV7MpjX0a=ekJN4pZwcDksBkSRR_1w@mail.gmail.com>
-Subject: Re: [PATCH 11/12] slab: Remove __malloc attribute from realloc functions
-To: Kees Cook <keescook@chromium.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Pekka Enberg <penberg@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Hao Luo <haoluo@google.com>, Marco Elver <elver@google.com>, linux-mm@kvack.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alex Elder <elder@kernel.org>, 
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Jesse Brandeburg <jesse.brandeburg@intel.com>, Daniel Micay <danielmicay@gmail.com>, 
-	Yonghong Song <yhs@fb.com>, Miguel Ojeda <ojeda@kernel.org>, Jacob Shin <jacob.shin@amd.com>, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	dev@openvswitch.org, x86@kernel.org, linux-wireless@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 22, 2022 at 5:10 AM Kees Cook <keescook@chromium.org> wrote:
->
-> -#ifdef __alloc_size__
-> -# define __alloc_size(x, ...)  __alloc_size__(x, ## __VA_ARGS__) __malloc
-> -#else
-> -# define __alloc_size(x, ...)  __malloc
-> -#endif
-> +#define __alloc_size(x, ...)   __alloc_size__(x, ## __VA_ARGS__) __malloc
-> +#define __realloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__)
+Hi Valentin,
 
-These look unconditional now, so we could move it to
-`compiler_attributes.h` in a later patch (or an independent series).
+vkorenblit@sequans.com wrote on Thu, 22 Sep 2022 10:18:46 +0200:
 
-Cheers,
-Miguel
+> Hi Arnd, Miquel,
+>=20
+> On 9/21/22 22:01, Arnd Bergmann wrote:
+> > On Wed, Sep 21, 2022, at 6:38 PM, Miquel Raynal wrote: =20
+> >> arnd@arndb.de  wrote on Wed, 21 Sep 2022 17:49:11 +0200: =20
+> >>> On Wed, Sep 21, 2022, at 4:47 PM, Miquel Raynal wrote:
+> >>> - every architecture should provide readsq()/readsl()/readsw()/readsb=
+()
+> >>>    these days, regardless of CONFIG_GENERIC_IOMAP. If x86 does
+> >>>    not have that, we should fix asm-generic/io.h. =20
+> >> ARM does not seem to define readsq/writesq. Should it be fixed? =20
+> > 64-bit Arm should get it from include/asm-generic/io.h. If it does
+> > not, this should be fixed. 32-bit Arm obviously cannot define them
+> > in a generic way. =20
+>=20
+> This is ok for 64-bit arm.
+>=20
+> > =20
+> >>> - CONFIG_GENERIC_IOMAP just means an architecture uses the generic
+> >>>    ioread32_rep() style wrapper around readsl()/insl(). On most
+> >>>    architectures (not x86), insl() is implemented as a wrapper around
+> >>>    readsl() itself, so readsl() and ioread32_rep() should be identica=
+l. =20
+> >> Ok. But if CONFIG_GENERIC_IOMAP=3Dn (ARM, aarch64, x86_64), =20
+> > x86_64 has GENERIC_IOMAP=3Dy
+> > =20
+> >> ioread64_rep is then only defined if CONFIG_64BIT. As it is based
+> >> on readsq/writesq() and those must be defined (as you said), I don't g=
+et
+> >> why the *64_rep() helpers are not defined in all cases. Maybe because =
+no
+> >> 32-bit system _should_ need them? But then compile testing gets more
+> >> difficult. =20
+> > Both readsq/writesq and ioread64_rep/iowrite64_rep must be defined
+> > for 64-bit architectures and cannot be defined for 32-bit ones. =20
+>=20
+> So the first issue here is that they are not defined for x86_64
+> (CONFIG_64BIT=3Dy).
+
+I would say this is not very important as long as we could use
+readsq/writesq() for the same purpose.
+
+> >>> - For a FIFO, you cannot use readq() but have to use __raw_readq()
+> >>>    to get the correct endianness. You cannot use this for an
+> >>>    MMIO register with side-effects though, as this needs the byteswap
+> >>>    and the barrier in readsl(). =20
+> >> I'm not sure about the true definition of "FIFO" as you say. I guess
+> >> you just mean reading from a BE device?
+> >>
+> >> In this case I guess we need the barrier+byteswap helpers. =20
+> > The difference is that a register has a fixed length, and gets
+> > accessed with a device specific endianness, which may have to
+> > be swapped if the device and the CPU disagree.
+> >
+> > A FIFO register is what you use for transferring a stream of
+> > bytes, such as reading a file system block from disk. The
+> > first byte in the register corresponds to the first byte in
+> > memory later, so there must not be any byteswap while copying
+> > to/from memory. If the data itself is structured (i.e. an
+> > on-disk inode or a network packet), then the byteswap will
+> > happen if necessary while interpreting the data.
+> > =20
+> >> I don't think this is actually what we want. My understanding is
+> >> (Valentin, please correct me if I'm wrong):
+> >> - on ARM: we will always use 32-bit accesses
+> >> - on aarch64: we may use either 32-bit or 64-bit accesses
+> >> - on other architectures: we only want to compile test =20
+>=20
+> Correct, this was my initial idea. However, this driver should work
+> with every architecture or do we limit the scope to arm/arm64/x86_64?
+
+The driver should work on ARM and aarch64, I'm not aware of other
+architectures with this IP.
+
+The driver should compile when COMPILE_TEST=3Dy.
+
+> >> I believe what Valentin wanted to achieve in the first place, was to
+> >> use 64-bit accesses when relevant (otherwise it does not work). =20
+> > The width is read from a device specific register at
+> > runtime, it is not related to the architecture you are
+> > running on, presumably this is hardwired during the
+> > design of an SoC, based on the capabilities of the DMA
+> > engine:
+
+Well, yes, but in the mean time 64-bit DMA width will never be
+used on 32-bit platforms.
+
+> >          reg =3D readl_relaxed(cdns_ctrl->reg + CTRL_FEATURES);
+> >          if (FIELD_GET(CTRL_FEATURES_DMA_DWITH64, reg))
+> >                  cdns_ctrl->caps2.data_dma_width =3D 8;
+> >          else
+> >                  cdns_ctrl->caps2.data_dma_width =3D 4;
+> >
+> > This usually means the largest access that is valid for
+> > reading from the FIFO, but usually smaller accesses work
+> > as well, just slower. =20
+
+Mmh, ok, that's interesting, thanks for the pointer.
+
+But in the mean time I am only half satisfied, because we plan to do
+twice more accesses than needed _just_ because of a the COMPILE_TEST
+constraint.
+
+> Thanks for all the info. I can check if consecutive smaller accesses
+> trigger sdma_err interrupt. The datasheet only specifies: "if host sends =
+an
+> unsupported transaction to slave interface, the slave dma ignores
+> this access and sets sdma_err flag in intr_status register.
+>=20
+> Valentin
+
+Thanks,
+Miqu=C3=A8l
