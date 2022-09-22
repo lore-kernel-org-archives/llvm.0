@@ -1,111 +1,172 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779D566E8
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 16:00:29 +0000 (UTC)
-Received: by mail-pl1-f178.google.com with SMTP id v1so9181595plo.9
-        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 09:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=e+3VYhs+DuwH7bu+QHtV1rjWq3mJNnHisCvMMFS3bAw=;
-        b=XxhEWZKeaIg8g+YPuHc57mvNIPPhpigg738nM9wsLJjiUYpKwjJNzBKKGjefZOhAzi
-         0KqHQ1P/cHiMmQgsO3z2jt2+D0oCcG8Ck+pj5sopXZOTE33QKhSQ8Lb6DWDYvG77ZJIc
-         GQLx6jVnYAJuMY3HV3uGUN51p3PNgpWkx9A1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=e+3VYhs+DuwH7bu+QHtV1rjWq3mJNnHisCvMMFS3bAw=;
-        b=zNBGscmmW3nHVWiHkp0FMeG/GkjMcHCe/2q5oZLYhPMIV3fvX0hrDM01X/h01uSfil
-         f4GX2c7IOPzD1EnkBVmllVt2BlB+rNZLEhZmVzuilzcG8cxGNnnoFQQxoHcYZqKLgzwD
-         Ec0L8zPME2JvtQGSsayIaPx3GFJT+pHkK8sRBKLYeR8zelrlbFs/dKlIf8bS1pwdfILG
-         UbCH1M5GMUbAFRO1r0lWXvRRTBkdsN/y6oYjjO5oRCf8uNT+frHMfhNX4YcYaGoISbRD
-         Cny4aDFEX9ajkOBtfoYwymMzH2BeRB5YceWMfY/0XrcJVP3yskn6Hjai3lJqQ7hI7K2n
-         Eb6g==
-X-Gm-Message-State: ACrzQf1iKVklK2y2MIVkBM8Wro9lDyepy2/ANj9syRmh/Is+ktLc2SwD
-	Pejvj8/2NawG3hL6SHiRX5UfmA==
-X-Google-Smtp-Source: AMsMyM6q4mhFYq39gGoVyx6Hnh47y8QFV1PKitfWXVTUQGpGwPy/JbIncPBlq3WqciXD78b9y3HP3A==
-X-Received: by 2002:a17:90b:164d:b0:202:69b3:1002 with SMTP id il13-20020a17090b164d00b0020269b31002mr4362502pjb.86.1663862428935;
-        Thu, 22 Sep 2022 09:00:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ms3-20020a17090b234300b002005c3d4d4fsm4007085pjb.19.2022.09.22.09.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 09:00:28 -0700 (PDT)
-Date: Thu, 22 Sep 2022 09:00:26 -0700
-From: Kees Cook <keescook@chromium.org>
-To: "Ruhl, Michael J" <michael.j.ruhl@intel.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-	Feng Tang <feng.tang@intel.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	"dev@openvswitch.org" <dev@openvswitch.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	David Rientjes <rientjes@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Yonghong Song <yhs@fb.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	Marco Elver <elver@google.com>, Josef Bacik <josef@toxicpanda.com>,
-	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-	Jakub Kicinski <kuba@kernel.org>, David Sterba <dsterba@suse.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Pekka Enberg <penberg@kernel.org>,
-	Daniel Micay <danielmicay@gmail.com>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>
-Subject: Re: [PATCH 07/12] igb: Proactively round up to kmalloc bucket size
-Message-ID: <202209220859.DA21F91EAE@keescook>
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-8-keescook@chromium.org>
- <DM5PR11MB13241226F3AACC81398F7E8EC14E9@DM5PR11MB1324.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED1D66E8
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 16:29:14 +0000 (UTC)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.207])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYLG02zHlz67VyR;
+	Fri, 23 Sep 2022 00:24:24 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 22 Sep 2022 18:29:11 +0200
+Received: from localhost (10.81.208.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
+ 2022 17:29:11 +0100
+Date: Thu, 22 Sep 2022 17:29:09 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+CC: kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
+	<kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>, Andy Shevchenko
+	<andy.shevchenko@gmail.com>, <jic23@kernel.org>
+Subject: Re: [jic23-iio:testing 58/58] drivers/iio/adc/mcp3911.c:274:6:
+ warning: variable 'tmp0' set but not used
+Message-ID: <20220922172909.00005beb@huawei.com>
+In-Reply-To: <YyyCJX374uWYrPTN@gmail.com>
+References: <202209220845.GmS9zryR-lkp@intel.com>
+	<20220922115925.00004ec9@huawei.com>
+	<YyyCJX374uWYrPTN@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM5PR11MB13241226F3AACC81398F7E8EC14E9@DM5PR11MB1324.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.208.231]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 
-On Thu, Sep 22, 2022 at 03:56:54PM +0000, Ruhl, Michael J wrote:
-> >From: dri-devel <dri-devel-bounces@lists.freedesktop.org> On Behalf Of Kees Cook
-> [...]
-> >diff --git a/drivers/net/ethernet/intel/igb/igb_main.c
-> >b/drivers/net/ethernet/intel/igb/igb_main.c
-> >index 2796e81d2726..4d70ee5b0f79 100644
-> >--- a/drivers/net/ethernet/intel/igb/igb_main.c
-> >+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> >@@ -1196,6 +1196,7 @@ static int igb_alloc_q_vector(struct igb_adapter
-> >*adapter,
-> >
-> > 	ring_count = txr_count + rxr_count;
-> > 	size = struct_size(q_vector, ring, ring_count);
-> >+	size = kmalloc_size_roundup(size);
-> 
-> why not:
-> 
-> 	size = kmalloc_size_roundup(struct_size(q_vector, ring, ring_count));
-> 
-> ?
+On Thu, 22 Sep 2022 17:41:25 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Sure! I though it might be more readable split up. I will change it. :)
+> On Thu, Sep 22, 2022 at 11:59:25AM +0100, Jonathan Cameron wrote:
+> > On Thu, 22 Sep 2022 08:50:17 +0800
+> > kernel test robot <lkp@intel.com> wrote:
+> >   
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+> > > head:   d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
+> > > commit: d4e1a549566b9ea8b96e80f0cdcbe99714ac256e [58/58] iio: adc: mcp3911: add support to set PGA
+> > > config: x86_64-randconfig-a012
+> > > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
+> > >         git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+> > >         git fetch --no-tags jic23-iio testing
+> > >         git checkout d4e1a549566b9ea8b96e80f0cdcbe99714ac256e
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/adc/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > >   
+> > > >> drivers/iio/adc/mcp3911.c:274:6: warning: variable 'tmp0' set but not used [-Wunused-but-set-variable]    
+> > >            int tmp0, tmp1;
+> > >                ^
+> > >    1 warning generated.
+> > > 
+> > > 
+> > > vim +/tmp0 +274 drivers/iio/adc/mcp3911.c
+> > > 
+> > >    268	
+> > >    269	static int mcp3911_calc_scale_table(struct mcp3911 *adc)
+> > >    270	{
+> > >    271		u32 ref = MCP3911_INT_VREF_MV;
+> > >    272		u32 div;
+> > >    273		int ret;  
+> > >  > 274		int tmp0, tmp1;    
+> > >    275		s64 tmp2;
+> > >    276	
+> > >    277		if (adc->vref) {
+> > >    278			ret = regulator_get_voltage(adc->vref);
+> > >    279			if (ret < 0) {
+> > >    280				dev_err(&adc->spi->dev,
+> > >    281					"failed to get vref voltage: %d\n",
+> > >    282				       ret);
+> > >    283				return ret;
+> > >    284			}
+> > >    285	
+> > >    286			ref = ret / 1000;
+> > >    287		}
+> > >    288	
+> > >    289		/*
+> > >    290		 * For 24-bit Conversion
+> > >    291		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+> > >    292		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+> > >    293		 *
+> > >    294		 * ref = Reference voltage
+> > >    295		 * div = (2^23 * 1.5 * gain) = 12582912 * gain
+> > >    296		 */
+> > >    297		for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
+> > >    298			div = 12582912 * BIT(i);
+> > >    299			tmp2 = div_s64((s64)ref * 1000000000LL, div);
+> > >    300			tmp1 = div;
+> > >    301			tmp0 = (int)div_s64_rem(tmp2, 1000000000, &tmp1);  
+> > 
+> > Marcus, 
+> > I'm guessing the intent here is just to get the remainder.  
+> > Hence fix is probably just to drop tmp0?
+> > 
+> > If you confirm that I'll tweak the commit to do that.
+> > 
+> > Jonathan  
+> 
+> 
+> Hum, Yes. I actually think we can drop div, tmp0, tmp1 and tmp2.
+> I think they are remnats for when I did the calculation differently.
+> 
+> Do you want me to update the patchset?
 
--- 
-Kees Cook
+No I'll roll this in a few minutes.
+
+> 
+>  static int mcp3911_calc_scale_table(struct mcp3911 *adc)
+>  {
+>         u32 ref = MCP3911_INT_VREF_MV;
+> -       u32 div;
+>         int ret;
+> -       int tmp0, tmp1;
+> -       s64 tmp2;
+> 
+> 
+> ....
+> 
+> 
+> 
+>         for (int i = 0; i < MCP3911_NUM_SCALES; i++) {
+> -               div = 12582912 * BIT(i);
+> -               tmp2 = div_s64((s64)ref * 1000000000LL, div);
+> -               tmp1 = div;
+> -               tmp0 = (int)div_s64_rem(tmp2, 1000000000, &tmp1);
+> -
+>                 mcp3911_scale_table[i][0] = 0;
+> -               mcp3911_scale_table[i][1] = tmp1;
+> +               mcp3911_scale_table[i][1] = 12582912 * BIT(i);
+>         }
+> 
+> 
+> /Marcus
+> 
+> > 
+> >   
+> > >    302	
+> > >    303			mcp3911_scale_table[i][0] = 0;
+> > >    304			mcp3911_scale_table[i][1] = tmp1;
+> > >    305		}
+> > >    306	
+> > >    307		return 0;
+> > >    308	}
+> > >    309	
+> > >   
+> >   
+> 
+
