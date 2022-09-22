@@ -1,48 +1,74 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1242F2D
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 11:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663846046; x=1695382046;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FgJ9nNz/vzLaS4WX2fhDFxkYknwbFT4sEjE+pFd9WeI=;
-  b=TZMZm/rWA5F7VPrQ+Mddjl/EPakB/T3A6x7AMFXtao9ft2G145QhEkf8
-   ylVJDAHFI49k01x8VZbsdIML/XK8g9IWrjRdCJ7xpIX3fCxJ8EffoU3Y1
-   XP+KaZRRl0inD9bK1sxTQxIqwKHP+0YW83ekf9HQAU8FKzpau+/X3tF6z
-   0ebtAKtZS2QPShhyMvtFJDo5c7XMR+eHcs9xeqN0YA3DB7ZYwio4Sff0N
-   7fJUI/7Fw4g5W0c7LyJlEdxjD1fggmh7Fh/4EGG4WNOueTdGsb7XyL0Tx
-   hVaNusajC/5sNL7cKJJ8bSXPqcMyZ5KTfsvRsI5obKYTBdhJD2LeVyjbE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="386558775"
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="386558775"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 04:27:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
-   d="scan'208";a="652932094"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Sep 2022 04:27:22 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1obKMU-0004eg-09;
-	Thu, 22 Sep 2022 11:27:22 +0000
-Date: Thu, 22 Sep 2022 19:26:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [ammarfaizi2-block:arm64/linux/for-next/alternatives 7/9]
- arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared
- function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202209221916.DuPaZviq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB511854
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 13:35:54 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 312D81F8F8;
+	Thu, 22 Sep 2022 13:35:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1663853747;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IwL9ZLjfbaspCU82c8med1UAPhmCPx1OWhj8R1+9qNM=;
+	b=XihVZkR0NFlKaTEY2REooJ4nnysnnfLcvjy51KzgHbSW+oLtMuf9IonwLm/KkASRNsstRo
+	s4Dx+Q4cpaICoaXsH0DUfapvCIci0Ubcv9A9s0vR8XX8+NUFKAnyoOuIT9zDwNjs4dr4X/
+	qezh4tAzHSN1OltdzTUMbRixdeL8EVg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1663853747;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IwL9ZLjfbaspCU82c8med1UAPhmCPx1OWhj8R1+9qNM=;
+	b=D4SrbPeIUjJXDbzN3l/v7S9Ic5eD5VW9j9nh63nD86Qj+hCZa1n0PAF8TSLqyf+7TdxxOs
+	g6cysoCnwD04I3Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C8F513AA5;
+	Thu, 22 Sep 2022 13:35:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id RvYRFbJkLGM6egAAMHmgww
+	(envelope-from <dsterba@suse.cz>); Thu, 22 Sep 2022 13:35:46 +0000
+Date: Thu, 22 Sep 2022 15:30:14 +0200
+From: David Sterba <dsterba@suse.cz>
+To: Kees Cook <keescook@chromium.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, linux-btrfs@vger.kernel.org,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
+	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, netdev@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
+	x86@kernel.org, linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 04/12] btrfs: send: Proactively round up to kmalloc
+ bucket size
+Message-ID: <20220922133014.GI32411@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <20220922031013.2150682-5-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,76 +77,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220922031013.2150682-5-keescook@chromium.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 
-tree:   https://github.com/ammarfaizi2/linux-block arm64/linux/for-next/alternatives
-head:   0072dc1b53c39fb7c4cfc5c9e5d5a30622198613
-commit: 21fb26bfb01ffe0d9a9a967ffe061092128bbffe [7/9] arm64: alternatives: add alternative_has_feature_*()
-config: arm64-buildonly-randconfig-r006-20220921 (https://download.01.org/0day-ci/archive/20220922/202209221916.DuPaZviq-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/21fb26bfb01ffe0d9a9a967ffe061092128bbffe
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block arm64/linux/for-next/alternatives
-        git checkout 21fb26bfb01ffe0d9a9a967ffe061092128bbffe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+On Wed, Sep 21, 2022 at 08:10:05PM -0700, Kees Cook wrote:
+> Instead of discovering the kmalloc bucket size _after_ allocation, round
+> up proactively so the allocation is explicitly made for the full size,
+> allowing the compiler to correctly reason about the resulting size of
+> the buffer through the existing __alloc_size() hint.
+> 
+> Cc: linux-btrfs@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the ammarfaizi2-block/arm64/linux/for-next/alternatives HEAD 0072dc1b53c39fb7c4cfc5c9e5d5a30622198613 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/bounds.c:10:
-   In file included from include/linux/page-flags.h:10:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/arm64/include/asm/bug.h:26:
-   In file included from include/asm-generic/bug.h:5:
-   In file included from include/linux/compiler.h:248:
-   In file included from arch/arm64/include/asm/rwonce.h:11:
->> arch/arm64/include/asm/alternative-macros.h:224:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           BUILD_BUG_ON(feature >= ARM64_NCAPS);
-           ^
-   arch/arm64/include/asm/alternative-macros.h:241:2: error: call to undeclared function 'BUILD_BUG_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           BUILD_BUG_ON(feature >= ARM64_NCAPS);
-           ^
-   2 errors generated.
-   make[2]: *** [scripts/Makefile.build:117: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1205: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/BUILD_BUG_ON +224 arch/arm64/include/asm/alternative-macros.h
-
-   220	
-   221	static __always_inline bool
-   222	alternative_has_feature_likely(unsigned long feature)
-   223	{
- > 224		BUILD_BUG_ON(feature >= ARM64_NCAPS);
-   225	
-   226		asm_volatile_goto(
-   227		ALTERNATIVE("b	%l[l_no]", "nop", %[feature])
-   228		:
-   229		: [feature] "i" (feature)
-   230		:
-   231		: l_no);
-   232	
-   233		return true;
-   234	l_no:
-   235		return false;
-   236	}
-   237	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: David Sterba <dsterba@suse.com>
