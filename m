@@ -1,135 +1,214 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C083C26
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 13:45:23 +0000 (UTC)
-Received: by mail-qk1-f171.google.com with SMTP id u28so6170848qku.2
-        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 06:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=lTLxj593wgb0rSkyx/kVpkcZN0XitEmW0vMjErWHotA=;
-        b=FyJaKv2cOaRg6P7yvu8zs1jVRm/8RMTbc6dfECJ+ZO5o/HmyZWXx30/9G58nVbrc5b
-         uilHyUda0dD/kYG1qtguthEwDaL9y8JeP+HPCBHfMWclRlKZoOK/NXZxzGUfoaxervvy
-         D0TcePhLr6rEHe3E5Hlf5A5QN/T9th71F+ymU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=lTLxj593wgb0rSkyx/kVpkcZN0XitEmW0vMjErWHotA=;
-        b=AlHXOrG9w/OGW9erju11/g3+s+m5tXzbLlh44HuSZT5rCF44DxQacucNaGmEDr3Pti
-         jjzKmr5ga6Rw7tpsAnHzVCX3gbVaaDRP3PFPwfMZSUebccKZz2Ty5ZvfOjtludHMxBcM
-         ehV8HihfeBoXNb1Q006mvFjosRBKeir0RIrh82otqFWzI8g2MN/x9+TMQDk4c7dIIoFh
-         ENCXIdjh56gNWNnF5F+re5kf+TwhcHl7bv7CGsovzX2uNxzcWfNqqLUPMZX1CewrfaKx
-         EWGvs+zoRnzKcEOxFslQlrrM5wM2p+wwIQwf8kFE9z4RF/oE+Txsu5km60vwOSbTeQxu
-         aOJw==
-X-Gm-Message-State: ACrzQf0ffI8NfrHxlFquoLDWAbYPgp0754wpRWqI25BD0hHhrZRzVN1u
-	dXfEQt8cTGpSkbnRgxnFDI48YA==
-X-Google-Smtp-Source: AMsMyM6DBqbYqDsHBnddfGDZuwycGpoIY7LinhBIG4+l+K0bdEu/uf1UKptO3KnL1trAn9LU6bZY/Q==
-X-Received: by 2002:a05:620a:f15:b0:6cf:2130:88e3 with SMTP id v21-20020a05620a0f1500b006cf213088e3mr2093263qkl.519.1663854322211;
-        Thu, 22 Sep 2022 06:45:22 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id w7-20020ac857c7000000b0035bbb6268e2sm3902332qta.67.2022.09.22.06.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 06:45:21 -0700 (PDT)
-Message-ID: <4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org>
-Date: Thu, 22 Sep 2022 08:45:19 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0E63C26
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 14:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663855428; x=1695391428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aiNo3fDk7Qzo4gXy82kK0oPrvMA0769iOvCNTZRXQM4=;
+  b=J8asdUDBeNhWbfoqbHP5qJHOBKzasidrDDJSVzIMJfFHkNFvHlVZToHy
+   C/lxUjX6xzdrwKC/TECl2xvKgWWoJDFco4ad9Ilcpc/21LPakgGmyFwxH
+   grKMwpR7xdleukF7niP9/elA2zCrbupiKMnR4r2kLTYSGBgYllNRBLMBy
+   S1KaeW6d9cMJ2iDM57V4jl/9eeI5GvzHmr6PjVU01O4jzHa+JmvsN96rE
+   MBMJyiNJ1ct5NzeDDd8Mf2jTIltgzBRRecvl++ZWpne0pH4cm9ZalDLyt
+   PPf0XSiivX6mzGtnVzMEIfT2cGrFaAc4uUMCxtdDCw/RlW6jsvLWvKSxM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283356014"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="283356014"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 07:03:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="762193923"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Sep 2022 07:03:26 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1obMnV-0004iS-2Q;
+	Thu, 22 Sep 2022 14:03:25 +0000
+Date: Thu, 22 Sep 2022 22:02:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: allison.henderson@oracle.com
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [PATCH v3 24/26] xfs: Add parent pointer ioctl
+Message-ID: <202209222130.jwQOkbWn-lkp@intel.com>
+References: <20220922054458.40826-25-allison.henderson@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 03/12] net: ipa: Proactively round up to kmalloc bucket
- size
-Content-Language: en-US
-To: Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>
-Cc: Alex Elder <elder@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>,
- Joonsoo Kim <iamjoonsoo.kim@lge.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
- Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, dev@openvswitch.org, x86@kernel.org,
- linux-wireless@vger.kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-4-keescook@chromium.org>
-From: Alex Elder <elder@ieee.org>
-In-Reply-To: <20220922031013.2150682-4-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922054458.40826-25-allison.henderson@oracle.com>
 
-On 9/21/22 10:10 PM, Kees Cook wrote:
-> Instead of discovering the kmalloc bucket size _after_ allocation, round
-> up proactively so the allocation is explicitly made for the full size,
-> allowing the compiler to correctly reason about the resulting size of
-> the buffer through the existing __alloc_size() hint.
-> 
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   drivers/net/ipa/gsi_trans.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-> index 18e7e8c405be..cec968854dcf 100644
-> --- a/drivers/net/ipa/gsi_trans.c
-> +++ b/drivers/net/ipa/gsi_trans.c
-> @@ -89,6 +89,7 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
->   			u32 max_alloc)
->   {
->   	void *virt;
-> +	size_t allocate;
+Hi,
 
-I don't care about this but the reverse Christmas tree
-convention would put the "allocate" variable definition
-above "virt".
+Thank you for the patch! Perhaps something to improve:
 
-Whether you fix that or not, this patch looks good to me.
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on next-20220921]
+[cannot apply to linus/master v6.0-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Alex Elder <elder@linaro.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/allison-henderson-oracle-com/Parent-Pointers/20220922-134750
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+config: s390-randconfig-r044-20220922 (https://download.01.org/0day-ci/archive/20220922/202209222130.jwQOkbWn-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/68cfc39e9d3f8a2a85b516d7c9c8491a2333820f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review allison-henderson-oracle-com/Parent-Pointers/20220922-134750
+        git checkout 68cfc39e9d3f8a2a85b516d7c9c8491a2333820f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/xfs/
 
->   	if (!size)
->   		return -EINVAL;
-> @@ -104,13 +105,15 @@ int gsi_trans_pool_init(struct gsi_trans_pool *pool, size_t size, u32 count,
->   	 * If there aren't enough entries starting at the free index,
->   	 * we just allocate free entries from the beginning of the pool.
->   	 */
-> -	virt = kcalloc(count + max_alloc - 1, size, GFP_KERNEL);
-> +	allocate = size_mul(count + max_alloc - 1, size);
-> +	allocate = kmalloc_size_roundup(allocate);
-> +	virt = kzalloc(allocate, GFP_KERNEL);
->   	if (!virt)
->   		return -ENOMEM;
->   
->   	pool->base = virt;
->   	/* If the allocator gave us any extra memory, use it */
-> -	pool->count = ksize(pool->base) / size;
-> +	pool->count = allocate / size;
->   	pool->free = 0;
->   	pool->max_alloc = max_alloc;
->   	pool->size = size;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> fs/xfs/xfs_parent_utils.c:31:1: warning: no previous prototype for function 'xfs_attr_get_parent_pointer' [-Wmissing-prototypes]
+   xfs_attr_get_parent_pointer(
+   ^
+   fs/xfs/xfs_parent_utils.c:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+>> fs/xfs/xfs_parent_utils.c:57:6: warning: variable 'lock_mode' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (error)
+               ^~~~~
+   fs/xfs/xfs_parent_utils.c:121:18: note: uninitialized use occurs here
+           xfs_iunlock(ip, lock_mode);
+                           ^~~~~~~~~
+   fs/xfs/xfs_parent_utils.c:57:2: note: remove the 'if' if its condition is always false
+           if (error)
+           ^~~~~~~~~~
+   fs/xfs/xfs_parent_utils.c:44:26: note: initialize the variable 'lock_mode' to silence this warning
+           unsigned int                    lock_mode, flags = XFS_ATTR_PARENT;
+                                                    ^
+                                                     = 0
+   2 warnings generated.
+
+
+vim +/xfs_attr_get_parent_pointer +31 fs/xfs/xfs_parent_utils.c
+
+    24	
+    25	/*
+    26	 * Get the parent pointers for a given inode
+    27	 *
+    28	 * Returns 0 on success and non zero on error
+    29	 */
+    30	int
+  > 31	xfs_attr_get_parent_pointer(
+    32		struct xfs_inode		*ip,
+    33		struct xfs_pptr_info		*ppi)
+    34	{
+    35	
+    36		struct xfs_attrlist		*alist;
+    37		struct xfs_attrlist_ent		*aent;
+    38		struct xfs_parent_ptr		*xpp;
+    39		struct xfs_parent_name_rec	*xpnr;
+    40		char				*namebuf;
+    41		unsigned int			namebuf_size;
+    42		int				name_len, i, error = 0;
+    43		unsigned int			ioc_flags = XFS_IOC_ATTR_PARENT;
+    44		unsigned int			lock_mode, flags = XFS_ATTR_PARENT;
+    45		struct xfs_attr_list_context	context;
+    46	
+    47		/* Allocate a buffer to store the attribute names */
+    48		namebuf_size = sizeof(struct xfs_attrlist) +
+    49			       (ppi->pi_ptrs_size) * sizeof(struct xfs_attrlist_ent);
+    50		namebuf = kvzalloc(namebuf_size, GFP_KERNEL);
+    51		if (!namebuf)
+    52			return -ENOMEM;
+    53	
+    54		memset(&context, 0, sizeof(struct xfs_attr_list_context));
+    55		error = xfs_ioc_attr_list_context_init(ip, namebuf, namebuf_size,
+    56				ioc_flags, &context);
+  > 57		if (error)
+    58			goto out_kfree;
+    59	
+    60		/* Copy the cursor provided by caller */
+    61		memcpy(&context.cursor, &ppi->pi_cursor,
+    62			sizeof(struct xfs_attrlist_cursor));
+    63		context.attr_filter = XFS_ATTR_PARENT;
+    64	
+    65		lock_mode = xfs_ilock_attr_map_shared(ip);
+    66	
+    67		error = xfs_attr_list_ilocked(&context);
+    68		if (error)
+    69			goto out_kfree;
+    70	
+    71		alist = (struct xfs_attrlist *)namebuf;
+    72		for (i = 0; i < alist->al_count; i++) {
+    73			struct xfs_da_args args = {
+    74				.geo = ip->i_mount->m_attr_geo,
+    75				.whichfork = XFS_ATTR_FORK,
+    76				.dp = ip,
+    77				.namelen = sizeof(struct xfs_parent_name_rec),
+    78				.attr_filter = flags,
+    79				.op_flags = XFS_DA_OP_OKNOENT,
+    80			};
+    81	
+    82			xpp = xfs_ppinfo_to_pp(ppi, i);
+    83			memset(xpp, 0, sizeof(struct xfs_parent_ptr));
+    84			aent = (struct xfs_attrlist_ent *)
+    85				&namebuf[alist->al_offset[i]];
+    86			xpnr = (struct xfs_parent_name_rec *)(aent->a_name);
+    87	
+    88			if (aent->a_valuelen > XFS_PPTR_MAXNAMELEN) {
+    89				error = -EFSCORRUPTED;
+    90				goto out_kfree;
+    91			}
+    92			name_len = aent->a_valuelen;
+    93	
+    94			args.name = (char *)xpnr;
+    95			args.hashval = xfs_da_hashname(args.name, args.namelen),
+    96			args.value = (unsigned char *)(xpp->xpp_name);
+    97			args.valuelen = name_len;
+    98	
+    99			error = xfs_attr_get_ilocked(&args);
+   100			error = (error == -EEXIST ? 0 : error);
+   101			if (error) {
+   102				error = -EFSCORRUPTED;
+   103				goto out_kfree;
+   104			}
+   105	
+   106			xfs_init_parent_ptr(xpp, xpnr);
+   107			if(!xfs_verify_ino(args.dp->i_mount, xpp->xpp_ino)) {
+   108				error = -EFSCORRUPTED;
+   109				goto out_kfree;
+   110			}
+   111		}
+   112		ppi->pi_ptrs_used = alist->al_count;
+   113		if (!alist->al_more)
+   114			ppi->pi_flags |= XFS_PPTR_OFLAG_DONE;
+   115	
+   116		/* Update the caller with the current cursor position */
+   117		memcpy(&ppi->pi_cursor, &context.cursor,
+   118			sizeof(struct xfs_attrlist_cursor));
+   119	
+   120	out_kfree:
+   121		xfs_iunlock(ip, lock_mode);
+   122		kvfree(namebuf);
+   123	
+   124		return error;
+   125	}
+   126	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
