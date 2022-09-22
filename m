@@ -1,43 +1,45 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F831FC6
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 03:10:28 +0000 (UTC)
-Received: by mail-pf1-f179.google.com with SMTP id l65so7937721pfl.8
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 20:10:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AA11FD3
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 03:10:29 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id b21so7533988plz.7
+        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 20:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=8ihjvmU6X32IA3g0n6Ob0CbMhk1X+mcnfaE/5Wfmhd8=;
-        b=YKrPYMNBSJFFHg571lPm5+W8CN7DnIcMIRdXREqQlAZ+eLEk9A8maJxy/vrjrQP/eu
-         TYffJ29H5vDdp6sidFBvQbhMXABopPXRk6i9GT1lOsVVh5dTUpn3JKlyT+VRKM4PpYM3
-         aDSZJo/bWB/q00QaHXbLQBN7xuQW5YNdYkiuA=
+        bh=nllmYacJVnWYWyMDuOWg+UhFJID/1u9fgEUSXV9a/I0=;
+        b=ObVBgj10USdxX2qau03B/fvKSrj9pfzNX++HX3pR1Ku6Ct/c+Mn8B6TC2gGByEksOv
+         ftM/dSMzexkJk0pSadbJzyromjdrIDks1988E0vt92N7zZIkoEa3uLvIJsqtFfZmvRDx
+         8dl5wBNFG6y2ajB8JRxgoslRMstHrNUREimgg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=8ihjvmU6X32IA3g0n6Ob0CbMhk1X+mcnfaE/5Wfmhd8=;
-        b=UtNwKdekwdzx+GYKYr8JC+P4Dkfb2j9vq10oqTD0AjSiBeCIwZWxN6KaejbDGm2eI8
-         6vU1BfwFyjVKDSsnQAaKj8Ffbqg4T6YF71EDNDQqq5jmWyi4nPojGvOOd9IEh8YVwQZ2
-         iufpXfMxnMhdls/7hEsWN4D5xENMdCIz8YnXNHM4gp4wgyq58MMpgm1cXJ0AJcjnwFA/
-         0hkCoVSmjP+LW9jVW5CLxpXTHZl3DktHzMo5UXyBvOJTCIqg9F0cjmRiMXdoDRkTahE3
-         1uos4yVdjmGgqgj+GBGDXBLuloBcTtDWDMu1pW996DUoRYuQ0FCA1W2CN5rSsaw1bOZ7
-         7oHw==
-X-Gm-Message-State: ACrzQf0hy5nAHvVPIJMjbRv3WLQZaUztTyBr70cDQS4fFRpgK3se6xbI
-	NE1HrR7WSj7lC1JqG/wxwUdu3w==
-X-Google-Smtp-Source: AMsMyM76eF8+VNznj7IzekXG0QSV+my0aV1DgaIJkS6htzHMwsh1R3Wrb+39lk5TYLYW7ESUsWFZBQ==
-X-Received: by 2002:a63:e305:0:b0:439:6e0c:f81e with SMTP id f5-20020a63e305000000b004396e0cf81emr1277721pgh.50.1663816228246;
+        bh=nllmYacJVnWYWyMDuOWg+UhFJID/1u9fgEUSXV9a/I0=;
+        b=kCJ9B8bhzxbbA5eqjQWSHTdqUgpdzRr2wsdQ5f2s/lvCvVb4OaLDmTSDP+XlIXqcZP
+         dxKoiT5GtqYbkqDdp3dTDGiZSb+ubolH2SM1rnrCsaAXyalBQnNNDkaVc1gSwVVkBISP
+         qs+9Xh7BUA6dnUrEfpelaxdZUQB9WhLiFdVVEHGym0zSyfIA0XUlYyAwsId2nnepe64Q
+         M/LwxeDlgb7uZBPNAdH6/l/fcjsIM7Rn4y9c8zLhpo9CnTDVzZ/oGOLxrq+PIu/orMwv
+         mePzC3hh4yD6SVj1B2WuiNE1gyItbA8teDfpTdOpmAlrUS0kmKRBT1UqGD1ugNpZAwV0
+         GzQw==
+X-Gm-Message-State: ACrzQf2rH8s42kMYhUwz40j7PFte8+vyjgkg5d/hAN4K9t32hG18fx2q
+	gdE5B8/oZ/b90IfZqaxXXXkpYw==
+X-Google-Smtp-Source: AMsMyM49XhohtYBkjYXAytE2XFYLdWSstHIvAKOydHl9P7CLdwWaHlEa/nts1aXdGwMJ6p2JjPZrLw==
+X-Received: by 2002:a17:90b:180a:b0:202:ae1f:328a with SMTP id lw10-20020a17090b180a00b00202ae1f328amr13239578pjb.78.1663816228865;
         Wed, 21 Sep 2022 20:10:28 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i62-20020a17090a3dc400b001facf455c91sm2649631pjc.21.2022.09.21.20.10.24
+        by smtp.gmail.com with ESMTPSA id d18-20020a170902ced200b001783f964fe3sm2766723plg.113.2022.09.21.20.10.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 21 Sep 2022 20:10:26 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: Kees Cook <keescook@chromium.org>,
-	linux-fsdevel@vger.kernel.org,
+	Daniel Micay <danielmicay@gmail.com>,
+	Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org,
 	Pekka Enberg <penberg@kernel.org>,
 	David Rientjes <rientjes@google.com>,
 	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
@@ -54,7 +56,6 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Sumit Semwal <sumit.semwal@linaro.org>,
 	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
 	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>,
 	Yonghong Song <yhs@fb.com>,
 	Marco Elver <elver@google.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
@@ -66,15 +67,15 @@ Cc: Kees Cook <keescook@chromium.org>,
 	linux-media@vger.kernel.org,
 	dri-devel@lists.freedesktop.org,
 	linaro-mm-sig@lists.linaro.org,
+	linux-fsdevel@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org,
 	dev@openvswitch.org,
-	x86@kernel.org,
 	linux-wireless@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH 06/12] coredump: Proactively round up to kmalloc bucket size
-Date: Wed, 21 Sep 2022 20:10:07 -0700
-Message-Id: <20220922031013.2150682-7-keescook@chromium.org>
+Subject: [PATCH 09/12] x86/microcode/AMD: Track patch allocation size explicitly
+Date: Wed, 21 Sep 2022 20:10:10 -0700
+Message-Id: <20220922031013.2150682-10-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220922031013.2150682-1-keescook@chromium.org>
 References: <20220922031013.2150682-1-keescook@chromium.org>
@@ -84,45 +85,60 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1167; h=from:subject; bh=pDNvsGLyQA8RpBfkkqJxHruRXSdA8gdZalovRqbX85w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjK9IT/n4E1MQAIRbO7TQnliesxT9vRRUjnB997VqU NfNmMx2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyvSEwAKCRCJcvTf3G3AJv1uD/ 0UeTRzC7PYbrNFpo0erBLhfyq0OXI7KWJPUznMmMf+cAop1hoIyAS6RCvOy3P43EFrYY2LvmcGU3Aj SICc7baXEFvYdMhDJ8d101AolLKruLzinzUGntwccPS2dZe2w/x8T733W5uMnEOoDIW14/zr4IUtRh Vlx7PoTaeYeaEQPZwbWSdxU7qtxeqxD9LsQu+HlBYfR1k5rQ/OwJUa0VLmxQS3VuLxNzcqUFIRrz3E N9wSWjXJ1fpBM5rUyeWWd8dLef4aKwvQUrxvsQ2VWqLB5t57NofX/QpwkS3ypabCJnUg2eUl37eba5 OV6vc8FtBSMSsXXhnZ0qRfqcqAOpIlqc5fvFIq+bl3f4xCiJNeEM7atqS3LN6ZEK9rF9EWiIyjfIU1 rFgqaXZ47QKcNt6D+tThDEVTDgBDzW+/xD6gFm/gAUYLMU55Xrc41oHohWX310hGuJ4uQfMnkpzfJD l7QDNBoaF6Eo/aHjjnO/L/2LHxrNen15gNgss8f3Pbl5cYUEIwKYQTUHz4t+WuflfhJ72ydBaVxPhi nvK5XI8oXLZUTCjvvJ0NvdCQbKmYhFiTddotTbfTvs9VyXcsa4oRA58e65OY4nlgV9+2HJHYaTy3u4 CX+OyRwkHX1tSGbw74SSBv0sSXX5LiEItWNDNN9XJyygxijXQxQ7uWbdLfNg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2149; h=from:subject; bh=LRLPHeutQvsvCqROzEs3/rr/P6uPQnPuMyr/7IE9r2g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjK9IUgfEF5Q67qoI3XgFPEX8J4smU+peBuyPzdpCc nIEpFpaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyvSFAAKCRCJcvTf3G3AJsUGD/ 4jiZQIVRjbRNvUVUl7QhNkO/5LbO1QHELDOu9VeAlksbBy6XuO+qlBw7CoqEHO44r9YLdeZFAssNud wYDnzHSwrmpVT9VOZKujYIXUu4jVQeSmpRL+/zi2WAX5dpAscIDYzhoFkFQuW/aQn9nvVlwwWv2G5A GfumYAURZ8BP94NLhlaTRLKHc10AEhWJ08FZCbBy/NXE7LT5VZa1H9zYppFy1ulRzYa4xiX1Weubkg o7PsRtqxx2jPKi9ywlm4JL33MLhQ7Hl1dObUN2bhp8DRTalPx6Bc6SUbteYJPbwKYEr7+5pD3iT+ek 78esKD6WsOGfBLAZ8pf8lCldD0XPYRApJVGasz+zBeg9LCqumUaDwNzE9GNpHfaorgWXNBuXeuKFif 5rYMN95t+ygRdOvQdNJlCJ0JlPfMcJajLzKyYKCvSlICPcTlaGpjjCGXtVFMSUZgvkbvhOZnwoRTfP LCMqYLu+xX8m1YKOnipcqlhorAe+A8u41dR2tlI0HUW4UYrUIZQ5O+CQqG80Ge713Eg5bk43crrhKD YsmBHTsJ/g7EuL/mG/+BltzwRQSF9KUT12J1eO+hSib+I+7XiE4mW8dN4M4JLJmSxvAa5G/pJSmhKH 6ZKIBAfSeBqo6VbAeV28Lkl0KnRiBwVDbQ08NwltR1YuONRBkYjOqYRx4S+w==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+In preparation for reducing the use of ksize(), record the actual
+allocation size for later memcpy(). This avoids copying extra
+(uninitialized!) bytes into the patch buffer when the requested allocation
+size isn't exactly the size of a kmalloc bucket. Additionally fixes
+potential future issues where runtime bounds checking will notice that
+the buffer was allocated to a smaller value than returned by ksize().
 
-Cc: linux-fsdevel@vger.kernel.org
+Suggested-by: Daniel Micay <danielmicay@gmail.com>
+Link: https://lore.kernel.org/lkml/CA+DvKQ+bp7Y7gmaVhacjv9uF6Ar-o4tet872h4Q8RPYPJjcJQA@mail.gmail.com/
+Fixes: 757885e94a22 ("x86, microcode, amd: Early microcode patch loading support for AMD")
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- fs/coredump.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/microcode.h    | 1 +
+ arch/x86/kernel/cpu/microcode/amd.c | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 9f4aae202109..0894b2c35d98 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -68,7 +68,10 @@ struct core_name {
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index 0c3d3440fe27..aa675783412f 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -9,6 +9,7 @@
+ struct ucode_patch {
+ 	struct list_head plist;
+ 	void *data;		/* Intel uses only this one */
++	unsigned int size;
+ 	u32 patch_id;
+ 	u16 equiv_cpu;
+ };
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 8b2fcdfa6d31..615bc6efa1dd 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -788,6 +788,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
+ 		kfree(patch);
+ 		return -EINVAL;
+ 	}
++	patch->size = *patch_size;
  
- static int expand_corename(struct core_name *cn, int size)
- {
--	char *corename = krealloc(cn->corename, size, GFP_KERNEL);
-+	char *corename;
-+
-+	size = kmalloc_size_roundup(size);
-+	corename = krealloc(cn->corename, size, GFP_KERNEL);
+ 	mc_hdr      = (struct microcode_header_amd *)(fw + SECTION_HDR_SIZE);
+ 	proc_id     = mc_hdr->processor_rev_id;
+@@ -869,7 +870,7 @@ load_microcode_amd(bool save, u8 family, const u8 *data, size_t size)
+ 		return ret;
  
- 	if (!corename)
- 		return -ENOMEM;
-@@ -76,7 +79,7 @@ static int expand_corename(struct core_name *cn, int size)
- 	if (size > core_name_size) /* racy but harmless */
- 		core_name_size = size;
+ 	memset(amd_ucode_patch, 0, PATCH_MAX_SIZE);
+-	memcpy(amd_ucode_patch, p->data, min_t(u32, ksize(p->data), PATCH_MAX_SIZE));
++	memcpy(amd_ucode_patch, p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
  
--	cn->size = ksize(corename);
-+	cn->size = size;
- 	cn->corename = corename;
- 	return 0;
+ 	return ret;
  }
 -- 
 2.34.1
