@@ -1,50 +1,50 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658581851
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 00:38:23 +0000 (UTC)
-Received: by mail-ej1-f44.google.com with SMTP id lh5so17465588ejb.10
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 17:38:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50641851
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 00:41:27 +0000 (UTC)
+Received: by mail-ej1-f49.google.com with SMTP id lh5so17479009ejb.10
+        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 17:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=36Uxd9fzOtQXdUTgT2x6xrnFj/OP6ll4rq+xlPqT6zs=;
-        b=I5VK0kFYpdJq7uuW/my6/s1qq5Iyk5Bid9V1MLGMfcqCQWztkAuk9NwGH236IdPw0t
-         aSpjgBiqC/nGZwjYEvfyXWTdEcKTcw0+alOVgKlPJp0QxZ51FAjaVDzR72eVHRH3bbvy
-         gvkVll0e0g0VmQ4F+5N6/s2DIzf/I27kP/bz1CeUqjpjHLzE3nXgrjkQ/KYJ7YpMHAkl
-         X4LL9WElTtiK3lEKN88AvhLMEYbUQuFbdHgajFCsib9S8OAsKjAJ2hwQaDr7Ll+KkdP+
-         xKM1XMVuJO2zuGtJCha8Q5jPSh1fIwYoh4vH+EI9GVYm3sM0OCx6oEhE0nGmVgeLFMUN
-         dZzw==
+        bh=QgBu6l3SOQc9v277Gy+0Dwk3UC62V2zlMgK2CDkHwM4=;
+        b=evWhPjTnvCy2qAfvOEtKk2l0OGVkU2o2R2FS/FnIRHwNJ4RJi55GI9l1rQhKnoHAJq
+         yIPrmO0om61wS84O1OzQY4gvy3jTS7htSRrI7Blr3KMWS9++OI7wmcAXfwAWCIKf5Hd5
+         +N3C++zPmH2J2GRnkbRar+gPoceIrNKgBV4oR6P26xre0P72Lnw9AlcOSgiox7pDQBUQ
+         gLESxmJxKegpP73XCknbuQgBlgM/9b9BsUWjP5lDYFbLTwPpYfvec9MS5eQSB0xnap3F
+         +vD6WdMc4b3xiliDjCfOY7avSuS3sxQX1CiPsZjAPAwoO7Mj5KRJyID4pMuc0yZ/Cysx
+         IENw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=36Uxd9fzOtQXdUTgT2x6xrnFj/OP6ll4rq+xlPqT6zs=;
-        b=FGYIfNUbpSND9MiuxDwaNjhNm0Nj6NpN5ctgAapW2OOL4+jZGs5aTCRzY3peGF0JIA
-         TdrhuWOwnPlQEWMjkyzCPu/UUwZKh9u72wsZRyNTfEV2bDQLFonLOT7HemObPs5bVYuD
-         u5cIkQ8YETmpF685IaBFQJaCJvXvWrLfOFOTqESIgol5bQBEyZjHZuDttGwbHkMNzB3j
-         zF5WZ0OpjaAbLm54Q3ygDUPiw+dsHlFuhlE+DBdbxHsJu5gnxEtokkOK3+BG1IbWexT5
-         CTAkWOxPtv6t1wXM8amCbSMbuOizEG9bnKHS9Cr8qwkTfpQemQ7jUEBbpebCdIvUEZ1f
-         UpXA==
-X-Gm-Message-State: ACrzQf1+qXVGXExJZIYiaPwbxcDPzxJbi+7rj+eHQkpMDLyoW2jbjM7c
-	LXBG26rTkMMY+4kmML+NHiyfy10GvMF1HXBIke8=
-X-Google-Smtp-Source: AMsMyM6Ry07M/XiRvs8DE4XwyxTLWwVw+IwMzGuWJO2lBy5NVGAojN78DUAFSefFqfeYCg1fyKNfsWUJO9lS/CKlptk=
-X-Received: by 2002:a17:907:3d86:b0:782:1175:153f with SMTP id
- he6-20020a1709073d8600b007821175153fmr692120ejc.226.1663807101634; Wed, 21
- Sep 2022 17:38:21 -0700 (PDT)
+        bh=QgBu6l3SOQc9v277Gy+0Dwk3UC62V2zlMgK2CDkHwM4=;
+        b=FMLJqjpaHHFJx3a2XNrT7z8OHHjajYT0DxLLp9U7CPynyxXtI8k49tF1oFH4VygaOV
+         Nu9seM15TiBNAl8S4pw1l0Rr+jXkjvRoQu3upJxY5G7Sc4+22qM/VlvFL0AWmhrF1SBj
+         o/yTkk8YNN09T9Bd9vlfeq5J0vEHRR/SLJ2aB5rHkxDQAxKo93dkebyLIIL+0RRq58dQ
+         8/M90D76zd9ycdNy8I/9rf2EQ/fXcjWnavQXy9Rke4U/VCkD+Wc7NppPGA0u+cVMzShC
+         6802J/oQr7euUi13iISCNqLyqObQj7PC2YAor/M8Gxe2PTYlNm49+BfeK8Ytbk1oKaYU
+         HX7g==
+X-Gm-Message-State: ACrzQf2lnwSNEjlVNSm7xfRwRe5kwWMRMLJUxEo4phb0k7R0ZV1N/8Xr
+	l/B1gyD8Lf9Khgp0oLyN06Ay9eFxO65C7Z+FfqQ=
+X-Google-Smtp-Source: AMsMyM5fEHkkqOS+igET9j4G33WfnWE/gcXQj0zep94rSz1jU3juUCEoiKzsEe45QEMXXXoP+aemleY+1utr67FCMhg=
+X-Received: by 2002:a17:907:96a3:b0:780:633:2304 with SMTP id
+ hd35-20020a17090796a300b0078006332304mr694171ejc.115.1663807285946; Wed, 21
+ Sep 2022 17:41:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com> <1663555725-17016-2-git-send-email-wangyufen@huawei.com>
-In-Reply-To: <1663555725-17016-2-git-send-email-wangyufen@huawei.com>
+References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 21 Sep 2022 17:38:10 -0700
-Message-ID: <CAEf4BzabFB-__1bcYTb8E0ixS0dNZNcp9XNB-McWvQQ98sBR-Q@mail.gmail.com>
-Subject: Re: [bpf-next v3 2/2] selftests/bpf: Add testcases for pinning to errpath
+Date: Wed, 21 Sep 2022 17:41:14 -0700
+Message-ID: <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
+Subject: Re: [bpf-next v3 1/2] libbpf: Add pathname_concat() helper
 To: Wang Yufen <wangyufen@huawei.com>
 Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
 	martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
@@ -57,23 +57,45 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Sun, Sep 18, 2022 at 7:28 PM Wang Yufen <wangyufen@huawei.com> wrote:
 >
-> Add testcases for map and prog pin to errpath.
+> Move snprintf and len check to common helper pathname_concat() to make the
+> code simpler.
 >
 > Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 > ---
-
-let's drop this selftest, it does global system manipulations just to
-check those two if conditions inside pathname_concat(), probably not
-worth it.
-
-Also for the future, we shouldn't use CHECK() in new selftests (we
-still have CHECK()s because there are like 2 thousand of them in old
-selftest, so clean up is not trivial).
-
->  tools/testing/selftests/bpf/prog_tests/pinning.c   | 67 ++++++++++++++++++++++
->  .../selftests/bpf/progs/test_pinning_path.c        | 19 ++++++
->  2 files changed, 86 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/test_pinning_path.c
+>  tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
+>  1 file changed, 29 insertions(+), 47 deletions(-)
 >
+
+[...]
+
+> @@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+>                 char buf[PATH_MAX];
+>
+>                 if (path) {
+> -                       int len;
+> -
+> -                       len = snprintf(buf, PATH_MAX, "%s/%s", path,
+> -                                      bpf_map__name(map));
+> -                       if (len < 0)
+> -                               return libbpf_err(-EINVAL);
+> -                       else if (len >= PATH_MAX)
+> -                               return libbpf_err(-ENAMETOOLONG);
+> +                       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
+> +                       if (err)
+> +                               return err;
+
+also keep libbpf_err() as well, it sets errno properly
+
+>                         sanitize_pin_path(buf);
+>                         pin_path = buf;
+>                 } else if (!map->pin_path) {
+> @@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
+>  int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
+>  {
+>         struct bpf_program *prog;
+> +       char buf[PATH_MAX];
+>         int err;
+>
+>         if (!obj)
 
 [...]
