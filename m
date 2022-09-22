@@ -1,91 +1,212 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE641C28
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 01:50:58 +0000 (UTC)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXynM6xDyz14QPC;
-	Thu, 22 Sep 2022 09:46:47 +0800 (CST)
-Received: from [10.174.179.191] (10.174.179.191) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 09:50:54 +0800
-Message-ID: <e5a553e3-4138-f8a0-c4d7-ec3d9d46732e@huawei.com>
-Date: Thu, 22 Sep 2022 09:50:54 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A2F1FC4
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 03:10:24 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id y11so8415853pjv.4
+        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 20:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=e/QakfBu8OdcLOaNtNAlOZZbARPmNgFJAYuG6V5fVNI=;
+        b=KID4+fNPZ/+EeETfIhlZodisrk94VxxslzZcsqTK2+SnDvmzAz6LYMBzVDpytU/nEq
+         EIXxg57qTfuTgbSUKdc6GxhGn+QXLKP5XVcWuZOc8i9lduGT5GmK9QPkOg0atE9jam9x
+         IA1gpnZyHuwdwIlZEHKE4Y17orFlGUFf4xU0Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=e/QakfBu8OdcLOaNtNAlOZZbARPmNgFJAYuG6V5fVNI=;
+        b=wbmKUieHWADZwQ/RssudDRwIXH4dMk9AnK7CfdPrdyWhp42BAW+mcJSVT+wrVwaxKO
+         j+WQqOsetxWdlFZGdYSr57zj0BOuijqKK6yRnaaOhTbN9MSdgya0vuMFT0cSlhDwtAnA
+         TvlOBWw5vWTnywyOn+u4InEk8kA9HLbcEL/A97evWwbxDYN5icSRW9AXvfvlWOIvMdY5
+         sn0jahn2uAsuOmYLxU7agqp1vdnuWRyup+l7K0GZG124/chNnQSMK8noLmsMyKuVWCBk
+         qdrV8Yi8KS02jsnyuHUGG1i6YDqjx740FebNJOJVfPcTVcXlTCHM+3eRMyRd3Sg12fW2
+         swyQ==
+X-Gm-Message-State: ACrzQf3/VPQDvkLSVse5cVhV0HeWDwfnhxylpnz7AkZTNLRvNht+mSz9
+	GTNTlg7j4TtujNuERa2Djvc2eQ==
+X-Google-Smtp-Source: AMsMyM40uPN5zeKYkv78Anmrprlj6jSzqrJtHp0Hc07l03jt/qUE59pMSphisPX0a2uGMaa6VRKIFQ==
+X-Received: by 2002:a17:90b:3809:b0:202:b482:b7d6 with SMTP id mq9-20020a17090b380900b00202b482b7d6mr12697142pjb.209.1663816223696;
+        Wed, 21 Sep 2022 20:10:23 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z19-20020a17090abd9300b001fab208523esm2641836pjr.3.2022.09.21.20.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Sep 2022 20:10:22 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Kees Cook <keescook@chromium.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alex Elder <elder@kernel.org>,
+	Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Daniel Micay <danielmicay@gmail.com>,
+	Yonghong Song <yhs@fb.com>,
+	Marco Elver <elver@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Jacob Shin <jacob.shin@amd.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-btrfs@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-fsdevel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	dev@openvswitch.org,
+	x86@kernel.org,
+	linux-wireless@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 02/12] skbuff: Proactively round up to kmalloc bucket size
+Date: Wed, 21 Sep 2022 20:10:03 -0700
+Message-Id: <20220922031013.2150682-3-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220922031013.2150682-1-keescook@chromium.org>
+References: <20220922031013.2150682-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [bpf-next v3 1/2] libbpf: Add pathname_concat() helper
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-	<haoluo@google.com>, <jolsa@kernel.org>, <paul.walmsley@sifive.com>,
-	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
-	<ndesaulniers@google.com>, <trix@redhat.com>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <1663555725-17016-1-git-send-email-wangyufen@huawei.com>
- <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
-From: wangyufen <wangyufen@huawei.com>
-In-Reply-To: <CAEf4BzbacgBeBrJcutGrpMceD2ipYyvRgrwyKdATN0K39adg5Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4645; h=from:subject; bh=3WJZlXdhsWxnvdirTV8FcTTBEg/t69yXm1UnFNwV9iU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjK9ISG+mldB4B+ZQUmvF386D3yd+qSk6StyPf1824 8ETszD+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYyvSEgAKCRCJcvTf3G3AJs8VD/ 9DiU++7/Ux07qrQmKcm2ezAAgh30rdqxKBsQKDrEL5EOX43CK7LgkmIf5KQ4kOjg1Ex2RxD6Yv+Dfu IDElH/EKSC/tRs1m4xC3h+q+7SbPjgQtmT9a1i7nnOlBSJqcbBqgQZ+Hespu169Fv7Hx8O+weK7bWC muvsyI9vTnW0JpI1rPfLOOuKjJ9sJYhk/W394UUvBZ4qMgXFE8aIbG8xv2R7+NixPSkSyQ6b4Is/W/ uWoVPoWJ3Ls+LdnmTnJk6b/E3AYpCLPbBzVShs8FTktYCaTY3VT44AcqfR9kRa2oc56ACWEfbkOpGV 9Gdqub12EZ8F5YMvtWlggw8p51Y10wSTZMspf3mp9LrJ+nx5uZjuzI1PVjfwxQXMRJgEhTkhCDDSuv m+dzcrKowiJxgMAkwOeKwQ8qujiIBEiZUXYyh+XMBd6lv3eqaKtmbfVjheVmcOKPdIHpDXFeAi2TKg 8ifxHByFdWEpvyMobgH17zpUhVJO9SadJqpr6eeqxOjE1ZoxhVgQ9O5qvP+z593Jj9IcW1wAszLbTk gH9xXpGnAHbvxSgL9fcZE1eSRiJ5TlYNZ/k5Pg37qUzVRuuybsmEFKzLhX1Uy/JT/L3Q8EfXaLuynn pjk6/2IqlrRV1hBXe63De0ndNRPpfun/+iA/10deHRQwZNQRHdL3HARlGZMA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.191]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
 
+Instead of discovering the kmalloc bucket size _after_ allocation, round
+up proactively so the allocation is explicitly made for the full size,
+allowing the compiler to correctly reason about the resulting size of
+the buffer through the existing __alloc_size() hint.
 
-在 2022/9/22 8:41, Andrii Nakryiko 写道:
-> On Sun, Sep 18, 2022 at 7:28 PM Wang Yufen <wangyufen@huawei.com> wrote:
->> Move snprintf and len check to common helper pathname_concat() to make the
->> code simpler.
->>
->> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->> ---
->>   tools/lib/bpf/libbpf.c | 76 +++++++++++++++++++-------------------------------
->>   1 file changed, 29 insertions(+), 47 deletions(-)
->>
-> [...]
->
->> @@ -8009,14 +8012,9 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
->>                  char buf[PATH_MAX];
->>
->>                  if (path) {
->> -                       int len;
->> -
->> -                       len = snprintf(buf, PATH_MAX, "%s/%s", path,
->> -                                      bpf_map__name(map));
->> -                       if (len < 0)
->> -                               return libbpf_err(-EINVAL);
->> -                       else if (len >= PATH_MAX)
->> -                               return libbpf_err(-ENAMETOOLONG);
->> +                       err = pathname_concat(path, bpf_map__name(map), buf, PATH_MAX);
->> +                       if (err)
->> +                               return err;
-> also keep libbpf_err() as well, it sets errno properly
->
->>                          sanitize_pin_path(buf);
->>                          pin_path = buf;
->>                  } else if (!map->pin_path) {
->> @@ -8034,6 +8032,7 @@ int bpf_object__unpin_maps(struct bpf_object *obj, const char *path)
->>   int bpf_object__pin_programs(struct bpf_object *obj, const char *path)
->>   {
->>          struct bpf_program *prog;
->> +       char buf[PATH_MAX];
->>          int err;
->>
->>          if (!obj)
-> [...]
+This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
+coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
+back the __alloc_size() hints that were temporarily reverted in commit
+93dd04ab0b2b ("slab: remove __alloc_size attribute from __kmalloc_track_caller")
 
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ net/core/skbuff.c | 34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
-Thanks for your comments， will send v4.
-
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 974bbbbe7138..4fe4c7544c1d 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -427,14 +427,15 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
+ 	 */
+ 	size = SKB_DATA_ALIGN(size);
+ 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+-	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
+-	if (unlikely(!data))
+-		goto nodata;
+-	/* kmalloc(size) might give us more room than requested.
++	/* kmalloc(size) might give us more room than requested, so
++	 * allocate the true bucket size up front.
+ 	 * Put skb_shared_info exactly at the end of allocated zone,
+ 	 * to allow max possible filling before reallocation.
+ 	 */
+-	osize = ksize(data);
++	osize = kmalloc_size_roundup(size);
++	data = kmalloc_reserve(osize, gfp_mask, node, &pfmemalloc);
++	if (unlikely(!data))
++		goto nodata;
+ 	size = SKB_WITH_OVERHEAD(osize);
+ 	prefetchw(data + size);
+ 
+@@ -1709,6 +1710,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
+ {
+ 	int i, osize = skb_end_offset(skb);
+ 	int size = osize + nhead + ntail;
++	int alloc_size;
+ 	long off;
+ 	u8 *data;
+ 
+@@ -1722,11 +1724,11 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
+ 
+ 	if (skb_pfmemalloc(skb))
+ 		gfp_mask |= __GFP_MEMALLOC;
+-	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+-			       gfp_mask, NUMA_NO_NODE, NULL);
++	alloc_size = kmalloc_size_roundup(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
++	data = kmalloc_reserve(alloc_size, gfp_mask, NUMA_NO_NODE, NULL);
+ 	if (!data)
+ 		goto nodata;
+-	size = SKB_WITH_OVERHEAD(ksize(data));
++	size = SKB_WITH_OVERHEAD(alloc_size);
+ 
+ 	/* Copy only real data... and, alas, header. This should be
+ 	 * optimized for the cases when header is void.
+@@ -6063,19 +6065,19 @@ static int pskb_carve_inside_header(struct sk_buff *skb, const u32 off,
+ 	int i;
+ 	int size = skb_end_offset(skb);
+ 	int new_hlen = headlen - off;
++	int alloc_size;
+ 	u8 *data;
+ 
+ 	size = SKB_DATA_ALIGN(size);
+ 
+ 	if (skb_pfmemalloc(skb))
+ 		gfp_mask |= __GFP_MEMALLOC;
+-	data = kmalloc_reserve(size +
+-			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+-			       gfp_mask, NUMA_NO_NODE, NULL);
++	alloc_size = kmalloc_size_roundup(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
++	data = kmalloc_reserve(alloc_size, gfp_mask, NUMA_NO_NODE, NULL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	size = SKB_WITH_OVERHEAD(ksize(data));
++	size = SKB_WITH_OVERHEAD(alloc_size);
+ 
+ 	/* Copy real data, and all frags */
+ 	skb_copy_from_linear_data_offset(skb, off, data, new_hlen);
+@@ -6184,18 +6186,18 @@ static int pskb_carve_inside_nonlinear(struct sk_buff *skb, const u32 off,
+ 	u8 *data;
+ 	const int nfrags = skb_shinfo(skb)->nr_frags;
+ 	struct skb_shared_info *shinfo;
++	int alloc_size;
+ 
+ 	size = SKB_DATA_ALIGN(size);
+ 
+ 	if (skb_pfmemalloc(skb))
+ 		gfp_mask |= __GFP_MEMALLOC;
+-	data = kmalloc_reserve(size +
+-			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+-			       gfp_mask, NUMA_NO_NODE, NULL);
++	alloc_size = kmalloc_size_roundup(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
++	data = kmalloc_reserve(alloc_size, gfp_mask, NUMA_NO_NODE, NULL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	size = SKB_WITH_OVERHEAD(ksize(data));
++	size = SKB_WITH_OVERHEAD(alloc_size);
+ 
+ 	memcpy((struct skb_shared_info *)(data + size),
+ 	       skb_shinfo(skb), offsetof(struct skb_shared_info, frags[0]));
+-- 
+2.34.1
 
