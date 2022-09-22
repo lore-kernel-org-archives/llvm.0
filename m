@@ -1,73 +1,43 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7956E23A0
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 05:26:29 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id a80so8191193pfa.4
-        for <llvm@lists.linux.dev>; Wed, 21 Sep 2022 22:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=1AAj0jz/3WOf/ZinmBg4e5WZyKIExnDIP+4ApRXDWXk=;
-        b=E6vw8sjIHY/i68R43dGnMLa/5LLUaNZd7XsoFQWcc3w5wUJdtXNsxsEfsPht7kxdNG
-         JJ1tXBTf3XQqnlgOex/RZ+o0XMhSMgfcjsVoIr6koV6H3KyiaZ1lUXPNyODzP4yferwZ
-         bLRSqfuB8yrx2QNr5YGtL8EgG0hPZHJq7V7xk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=1AAj0jz/3WOf/ZinmBg4e5WZyKIExnDIP+4ApRXDWXk=;
-        b=34zElnCEhSuq5eX5gOiZGrG8+YImPe3Oyu4pX20NzaOw2WQ0f2TrMNfg5fDLG/yMJ/
-         sXJ++saiG5ZUfVhD2540ZdabgIajDywlq7e6VNRREyRO7L0dQsW8O28OehLnZITBfnah
-         7G9iy4xnnEXkQP5t5nhTx4ADxCyLyf1fMqS0abn9NIgRm23M9IBGiSOuo5iXBlavzYww
-         mMrCewF0224pdf9DlqJz0MVwudbVY+YcoWNuaul/K6bxi8wIQOgbCA6xvk5gXQQADK3Q
-         b/USQjGj1ByAQhih9xERT+lVNxFJrfzhpdAqAzNa/fe+edK/hjLLKBtYj1vgBA0KUwNk
-         HDzw==
-X-Gm-Message-State: ACrzQf2XBuZTgT2uJzgomb8MVuIA+TqzISlhtkJQs9KOocBKZt9nmUqG
-	ARFzRHiqoKsAjH0K2n2K6UM6Tw==
-X-Google-Smtp-Source: AMsMyM4a+GHcnQt0UeqKstHRefYZ2pfi5aegxBG+GRLeLtm77LwF22DDWI605QZJjTDKHxZFsdcd6w==
-X-Received: by 2002:a63:cf56:0:b0:439:41ed:78fc with SMTP id b22-20020a63cf56000000b0043941ed78fcmr1597609pgj.419.1663824388949;
-        Wed, 21 Sep 2022 22:26:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170903120a00b0016f196209c9sm3102876plh.123.2022.09.21.22.26.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 22:26:28 -0700 (PDT)
-Date: Wed, 21 Sep 2022 22:26:27 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Kalle Valo <kvalo@kernel.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>,
-	Gregory Greenman <gregory.greenman@intel.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Jacob Shin <jacob.shin@amd.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, dev@openvswitch.org,
-	x86@kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 10/12] iwlwifi: Track scan_cmd allocation size explicitly
-Message-ID: <202209212224.A2F1DB798@keescook>
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-11-keescook@chromium.org>
- <87fsgk6nys.fsf@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E82523A0
+	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 05:35:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663824905; x=1695360905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6BvrxDfYRvUIToUMMdHXnInRWosnpIic7xYP73pfU5g=;
+  b=i4wjJlWqRN19zqXoJwefSZCc3gyk2M6dvrph5otpmJt0lLXpU8mgBfj/
+   m31eik/60U62EUyoHcu+r7K13tSxrkRDIYZMWukVF2huxdAkaMxE2KzkN
+   0lNj9FUwa76DUHEDAZoS2NmtaXQNxknckTLUNvcaTC42kCmu96XE7Yj6X
+   sowVHvNBSWWIzoJw61DEanjvA7FRAdJD9yFijjkY+np/kFAnimmRtJHJG
+   +toizKa3kcHXImGj2KYoUh72P8D36uhM6tO2eiJmrm9Y+lw68X93PAvgB
+   WQP+vjcPq1YfOgQswaraPk9RTnChjUP4257owTPsPVvkoQHJOyHABlN1V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10477"; a="279924379"
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="279924379"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2022 22:35:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,335,1654585200"; 
+   d="scan'208";a="570828745"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Sep 2022 22:35:02 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1obErW-0004Lw-0z;
+	Thu, 22 Sep 2022 05:35:02 +0000
+Date: Thu, 22 Sep 2022 13:34:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
+	linux-kernel@vger.kernel.org,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [intel-tdx:guest 2/4] arch/x86/kernel/tdx-tests.c:66:12: warning: no
+ previous prototype for function 'kvm_unit_test_debug_init'
+Message-ID: <202209221348.2nPiKzy0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,33 +46,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87fsgk6nys.fsf@kernel.org>
 
-On Thu, Sep 22, 2022 at 07:18:51AM +0300, Kalle Valo wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> 
-> > In preparation for reducing the use of ksize(), explicitly track the
-> > size of scan_cmd allocations. This also allows for noticing if the scan
-> > size changes unexpectedly. Note that using ksize() was already incorrect
-> > here, in the sense that ksize() would not match the actual allocation
-> > size, which would trigger future run-time allocation bounds checking.
-> > (In other words, memset() may know how large scan_cmd was allocated for,
-> > but ksize() will return the upper bounds of the actually allocated memory,
-> > causing a run-time warning about an overflow.)
-> >
-> > Cc: Gregory Greenman <gregory.greenman@intel.com>
-> > Cc: Kalle Valo <kvalo@kernel.org>
-> > Cc: Johannes Berg <johannes.berg@intel.com>
-> > Cc: linux-wireless@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Via which tree is this iwlwifi patch going? Normally via wireless-next
-> or something else?
+tree:   https://github.com/intel/tdx.git guest
+head:   f3d7a7e86bf2f0d5ce629f2fb7be11dca88ac06d
+commit: 4cd6be90a565d847e1d7ccfe28264a1610a02a34 [2/4] x86/tdx-tests: Add a port of a kvm unit test
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220922/202209221348.2nPiKzy0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/4cd6be90a565d847e1d7ccfe28264a1610a02a34
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest
+        git checkout 4cd6be90a565d847e1d7ccfe28264a1610a02a34
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ arch/x86/kvm/
 
-This doesn't depend on the kmalloc_size_roundup() helper at all, so I
-would be happy for it to go via wireless-next if the patch seems
-reasonable.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/tdx-tests.c:66:12: warning: no previous prototype for function 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
+   int __init kvm_unit_test_debug_init(void)
+              ^
+   arch/x86/kernel/tdx-tests.c:66:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init kvm_unit_test_debug_init(void)
+   ^
+   static 
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+   Depends on [n]: EFI [=n] && EFI_STUB [=n]
+   Selected by [y]:
+   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && PARAVIRT [=y] && SECURITY [=y] && X86_X2APIC [=y]
+
+
+vim +/kvm_unit_test_debug_init +66 arch/x86/kernel/tdx-tests.c
+
+    65	
+  > 66	int __init kvm_unit_test_debug_init(void)
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://01.org/lkp
