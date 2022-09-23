@@ -1,526 +1,105 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98AE163
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 17:02:28 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-33dc888dc62so4521817b3.4
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 10:02:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A033D4409
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 17:30:22 +0000 (UTC)
+Received: by mail-oi1-f177.google.com with SMTP id m81so700955oia.1
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 10:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=eWO8y7IKJvgsgCw3MooGox+2jloLd9sOwVdTlC0FzfU=;
-        b=U+v5byszcMTyPi65DUXHeq40T/mw22xnhn5c41jsyqLtnpMcHCOhlhhKJ+xkoOrog1
-         3hi0uECQu8KQtfpRA589NNvijvs1/gplYT/RMxLPITNX++Z3s5l0TC2AYVnnVCbk18uP
-         62bHxuxAKnC1a/8AhC5rikjlwGWB22WiSOyqzdnjowlsS5mz7T6imC5srj6avskWva6v
-         35So0jUnoYKLMjO7cOOo1Fv577wyFoLbu5ZSll9RHK04bKvjhPqRDEYCGaMWUSlvHK9j
-         6+gJuaZRmx2I6K/U/FQnroypMCtqfKmuuGgEWK9p41Tvu69C8oHieT4G7pwPbvLaDu59
-         qMwA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+N5oyJcUF3g1nnHU8kFVJBXuR6Tvqo+haLUBkWOmg1k=;
+        b=cbYNEyjgOIPQtU2o5K7hMM8JO4382oIKH0Sk7l/bQecXKjHVzblInrltQc1kaeTuL3
+         nUlEg/vcaK+KRt+6Xh/j9ty9gXqxBfDu+ftIF6MhLUv5lsOGNYU9kwinFlAC6AgadvAx
+         N9+AWcNagwT31KeH1mluHfkjjceYjzf3hdiB0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=eWO8y7IKJvgsgCw3MooGox+2jloLd9sOwVdTlC0FzfU=;
-        b=ZX8tAsGBvpTmn8XI4bX7IoY4Z7zNi+X8g4IS+rJM1Mly3Ndqxohk49GvHRo2hXP2A8
-         qKM9PJYvB8kb/MU5cTmj03EMm5TsRPrKU6NgRGHtE1LwJrPRudiuuYDb5YAWBxT2DlLZ
-         MNXrcv2m4viQ5Z7cAhBUUrxJI2wgWvFMomNZ6hRPqNJjZL2z18oH6WbBj/PWGXNpoiQW
-         3s4kI/tI/Q7vAKPrGR1SYDHiiVZ495gWX5kFcvISccrV8jtSglMBSqIrAbImlVysqQWZ
-         zX4rCVzcrrHOQFuH2bi3xoOv4gWwDfPzXACpFRrckwOYpCqlogDv2CcmJNBHIsc6n6fc
-         EMMw==
-X-Gm-Message-State: ACrzQf0sbcqw+7v4e5cENMEsR9irwrbpyFSbBm9Xi83dYqjl/wRFlkpY
-	+CAvmQU453f3bytrQ14z7xotlxglUuuBTDJSEtc=
-X-Google-Smtp-Source: AMsMyM44OXM8tFuGIBxRH9dw0jYFykZH+CPWi03i8pexNTsHPOf+sq+k0ZIi/v8gupViH8zFr/scaHoCrYcpjXaMfYI=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:fce1:be5b:26d5:2809])
- (user=ndesaulniers job=sendgmr) by 2002:a25:e60d:0:b0:6b0:cd5:f346 with SMTP
- id d13-20020a25e60d000000b006b00cd5f346mr10428011ybh.233.1663952547659; Fri,
- 23 Sep 2022 10:02:27 -0700 (PDT)
-Date: Fri, 23 Sep 2022 10:02:18 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+N5oyJcUF3g1nnHU8kFVJBXuR6Tvqo+haLUBkWOmg1k=;
+        b=3u21Ti1lEZFfWVC4zWRVwNF3xEDvcHrxBPsqtOP/77TWx+jFesRI1MHgOcHdtWm94m
+         QAq8p5Ixw2J4gkSAW8UQbB4QtIpS4QLvTyOcWGZ/WDmwS6YHZIrftETMH0cfJXzT6B/H
+         G607qnhZh5E03wZ/qS8pspzdMo7UTfyyESxqULwb0rwFc8BEsF6CbPwlJWusBfvCxlSa
+         EEdSDoXyFbGOYa9yoIApNyshJVBqDo3AqN58MzPtoqmvUlAGykbJU/pz3aBhtTZ8FlaN
+         +6rZs3F8XndlqZuXtNQH19rLYmeL7ayUDqKkVmzY7kkzk770qO43EhZzcq/DcOb6iwfX
+         24Jg==
+X-Gm-Message-State: ACrzQf2iAzFXpKmiPVSVzJNl1XUeMaSnTH/VOYr5AnKIWMxvALFO3RWh
+	d7WDZ8kziCTDnKPt32qXudy9VhMelJ/ZAA==
+X-Google-Smtp-Source: AMsMyM75Bm5uk2Wsg7/K1E8hGUpekVnTW5A1H84ASl/xbWyGHGkfAnQCuwBroSFQF0bmHEj3KtPjoA==
+X-Received: by 2002:a05:6808:1246:b0:34d:8c6d:b189 with SMTP id o6-20020a056808124600b0034d8c6db189mr4412626oiv.208.1663954221067;
+        Fri, 23 Sep 2022 10:30:21 -0700 (PDT)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
+        by smtp.gmail.com with ESMTPSA id r21-20020a05687032d500b0010e20d0b2e3sm5078356oac.44.2022.09.23.10.30.15
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 10:30:15 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id r22-20020a9d7516000000b00659ef017e34so437514otk.13
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 10:30:15 -0700 (PDT)
+X-Received: by 2002:a9d:3623:0:b0:655:dae2:6852 with SMTP id
+ w32-20020a9d3623000000b00655dae26852mr4667060otb.176.1663954214778; Fri, 23
+ Sep 2022 10:30:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1663952537; l=10714;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=X+Sz5mnlbfuGx0ZV1RzX3j/4mMe5t8IGTWpvHEdspIA=;
- b=NYAIzrW7uSLATRSqa7MCTP7kjK0zKn0RsvPjLxsW9sZGtM4j/BJHNeJPG96gykjo4xEK/gIHmtCX
- i/lB5Fi2DcOiBVjC24K4ZyKJtVkInO+VNqDV9mmx3yYonb4EmnrH
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220923170218.1188423-1-ndesaulniers@google.com>
-Subject: [PATCH] x86, mem: move memmove to out of line assembler
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev, 
-	Andy Lutomirski <luto@kernel.org>, Ma Ling <ling.ma@intel.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>
+MIME-Version: 1.0
+References: <20220923170218.1188423-1-ndesaulniers@google.com>
+In-Reply-To: <20220923170218.1188423-1-ndesaulniers@google.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 23 Sep 2022 10:29:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiAwEA5KekL4+t+v6qAdKLSOQvBkGbumvk+Rxhaay8aFg@mail.gmail.com>
+Message-ID: <CAHk-=wiAwEA5KekL4+t+v6qAdKLSOQvBkGbumvk+Rxhaay8aFg@mail.gmail.com>
+Subject: Re: [PATCH] x86, mem: move memmove to out of line assembler
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <keescook@chromium.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Andy Lutomirski <luto@kernel.org>, Ma Ling <ling.ma@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
-(depending on additional configs which I have not been able to isolate)
-to observe a failure during register allocation:
+On Fri, Sep 23, 2022 at 10:02 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> memmove is quite large and probably shouldn't be inlined due to size
+> alone. A noinline function attribute would be the simplest fix, but
+> there's a few things that stand out with the current definition:
 
-  error: inline assembly requires more registers than available
+I don't think your patch is wrong, and it's not that different from
+what the x86-64 code did long ago back in 2011 in commit 9599ec0471de
+("x86-64, mem: Convert memmove() to assembly file and fix return value
+bug")
 
-when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+But I wonder if we might be better off getting rid of that horrid
+memmove thing entirely. The original thing seems to be from 2010,
+where commit 3b4b682becdf ("x86, mem: Optimize memmove for small size
+and unaligned cases") did this thing for both 32-bit and 64-bit code.
 
-memmove is quite large and probably shouldn't be inlined due to size
-alone. A noinline function attribute would be the simplest fix, but
-there's a few things that stand out with the current definition:
+And it's really not likely used all that much - memcpy is the *much*
+more important function, and that's the one that has actually been
+updated for modern CPU's instead of looking like it's some copy from
+glibc or whatever.
 
-In addition to having complex constraints that can't always be resolved,
-the clobber list seems to be missing %bx and %dx, and possibly %cl. By
-using numbered operands rather than symbolic operands, the constraints
-are quite obnoxious to refactor.
+To make things even stranger, on the x86-64 side, we actually have
+*two* copies of 'memmove()' - it looks like memcpy_orig() is already a
+memmove, in that it does that
 
-Having a large function be 99% inline asm is a code smell that this
-function should simply be written in stand-alone out-of-line assembler.
-That gives the opportunity for other cleanups like fixing the
-inconsistent use of tabs vs spaces and instruction suffixes, and the
-label 3 appearing twice.  Symbolic operands and local labels would
-provide this code with a fresh coat of paint.
+        cmp  %dil, %sil
+        jl .Lcopy_backward
 
-Moving this to out of line assembler guarantees that the
-compiler cannot inline calls to memmove.
+thing that seems to mean that it already handles the overlapping case.
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-An alternative, lower risk approach:
-Rather than do all of the above, we could simply provide a macro in the
-vain of noinline_for_stack to document that we don't want LTO to inline
-a particular function across translation unit boundaries, then apply
-that to memmove. Up to the x86 maintainers' risk tolerances.
+Anyway, that 32-bit memmove() implemented (badly) as inline asm does
+need to go. As you point out, it seems to get the clobbers wrong too,
+so it's actively buggy and just happens to work because there's
+nothing else in that function, and it clobbers %bx that is supposed to
+be callee-saved, but *presumably* the compile has to allocate %bx one
+of the other registers, so it will save and restore %bx anyway.
 
-Also, this leaves arch/x86/lib/memcpy_32.c pretty sparse/nearly empty.
-Perhaps I should clean that up here, too? Perhaps in
-arch/x86/include/asm/string_32.h? That would probably allow for inlining
-calls to memcpy and memset.
+So that current memmove() seems to be truly horrendously buggy, but in
+a "it happens to work" way. Your patch seems an improvement, but I get
+the feeling that it could be improved a lot more...
 
-
- arch/x86/lib/Makefile     |   1 +
- arch/x86/lib/memcpy_32.c  | 187 -----------------------------------
- arch/x86/lib/memmove_32.S | 202 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 203 insertions(+), 187 deletions(-)
- create mode 100644 arch/x86/lib/memmove_32.S
-
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index f76747862bd2..9a0b8ed782e2 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -60,6 +60,7 @@ ifeq ($(CONFIG_X86_32),y)
-         lib-y += checksum_32.o
-         lib-y += strstr_32.o
-         lib-y += string_32.o
-+        lib-y += memmove_32.o
- ifneq ($(CONFIG_X86_CMPXCHG64),y)
-         lib-y += cmpxchg8b_emu.o atomic64_386_32.o
- endif
-diff --git a/arch/x86/lib/memcpy_32.c b/arch/x86/lib/memcpy_32.c
-index ef3af7ff2c8a..a29b64befb93 100644
---- a/arch/x86/lib/memcpy_32.c
-+++ b/arch/x86/lib/memcpy_32.c
-@@ -17,190 +17,3 @@ __visible void *memset(void *s, int c, size_t count)
- 	return __memset(s, c, count);
- }
- EXPORT_SYMBOL(memset);
--
--__visible void *memmove(void *dest, const void *src, size_t n)
--{
--	int d0,d1,d2,d3,d4,d5;
--	char *ret = dest;
--
--	__asm__ __volatile__(
--		/* Handle more 16 bytes in loop */
--		"cmp $0x10, %0\n\t"
--		"jb	1f\n\t"
--
--		/* Decide forward/backward copy mode */
--		"cmp %2, %1\n\t"
--		"jb	2f\n\t"
--
--		/*
--		 * movs instruction have many startup latency
--		 * so we handle small size by general register.
--		 */
--		"cmp  $680, %0\n\t"
--		"jb 3f\n\t"
--		/*
--		 * movs instruction is only good for aligned case.
--		 */
--		"mov %1, %3\n\t"
--		"xor %2, %3\n\t"
--		"and $0xff, %3\n\t"
--		"jz 4f\n\t"
--		"3:\n\t"
--		"sub $0x10, %0\n\t"
--
--		/*
--		 * We gobble 16 bytes forward in each loop.
--		 */
--		"3:\n\t"
--		"sub $0x10, %0\n\t"
--		"mov 0*4(%1), %3\n\t"
--		"mov 1*4(%1), %4\n\t"
--		"mov  %3, 0*4(%2)\n\t"
--		"mov  %4, 1*4(%2)\n\t"
--		"mov 2*4(%1), %3\n\t"
--		"mov 3*4(%1), %4\n\t"
--		"mov  %3, 2*4(%2)\n\t"
--		"mov  %4, 3*4(%2)\n\t"
--		"lea  0x10(%1), %1\n\t"
--		"lea  0x10(%2), %2\n\t"
--		"jae 3b\n\t"
--		"add $0x10, %0\n\t"
--		"jmp 1f\n\t"
--
--		/*
--		 * Handle data forward by movs.
--		 */
--		".p2align 4\n\t"
--		"4:\n\t"
--		"mov -4(%1, %0), %3\n\t"
--		"lea -4(%2, %0), %4\n\t"
--		"shr $2, %0\n\t"
--		"rep movsl\n\t"
--		"mov %3, (%4)\n\t"
--		"jmp 11f\n\t"
--		/*
--		 * Handle data backward by movs.
--		 */
--		".p2align 4\n\t"
--		"6:\n\t"
--		"mov (%1), %3\n\t"
--		"mov %2, %4\n\t"
--		"lea -4(%1, %0), %1\n\t"
--		"lea -4(%2, %0), %2\n\t"
--		"shr $2, %0\n\t"
--		"std\n\t"
--		"rep movsl\n\t"
--		"mov %3,(%4)\n\t"
--		"cld\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Start to prepare for backward copy.
--		 */
--		".p2align 4\n\t"
--		"2:\n\t"
--		"cmp  $680, %0\n\t"
--		"jb 5f\n\t"
--		"mov %1, %3\n\t"
--		"xor %2, %3\n\t"
--		"and $0xff, %3\n\t"
--		"jz 6b\n\t"
--
--		/*
--		 * Calculate copy position to tail.
--		 */
--		"5:\n\t"
--		"add %0, %1\n\t"
--		"add %0, %2\n\t"
--		"sub $0x10, %0\n\t"
--
--		/*
--		 * We gobble 16 bytes backward in each loop.
--		 */
--		"7:\n\t"
--		"sub $0x10, %0\n\t"
--
--		"mov -1*4(%1), %3\n\t"
--		"mov -2*4(%1), %4\n\t"
--		"mov  %3, -1*4(%2)\n\t"
--		"mov  %4, -2*4(%2)\n\t"
--		"mov -3*4(%1), %3\n\t"
--		"mov -4*4(%1), %4\n\t"
--		"mov  %3, -3*4(%2)\n\t"
--		"mov  %4, -4*4(%2)\n\t"
--		"lea  -0x10(%1), %1\n\t"
--		"lea  -0x10(%2), %2\n\t"
--		"jae 7b\n\t"
--		/*
--		 * Calculate copy position to head.
--		 */
--		"add $0x10, %0\n\t"
--		"sub %0, %1\n\t"
--		"sub %0, %2\n\t"
--
--		/*
--		 * Move data from 8 bytes to 15 bytes.
--		 */
--		".p2align 4\n\t"
--		"1:\n\t"
--		"cmp $8, %0\n\t"
--		"jb 8f\n\t"
--		"mov 0*4(%1), %3\n\t"
--		"mov 1*4(%1), %4\n\t"
--		"mov -2*4(%1, %0), %5\n\t"
--		"mov -1*4(%1, %0), %1\n\t"
--
--		"mov  %3, 0*4(%2)\n\t"
--		"mov  %4, 1*4(%2)\n\t"
--		"mov  %5, -2*4(%2, %0)\n\t"
--		"mov  %1, -1*4(%2, %0)\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Move data from 4 bytes to 7 bytes.
--		 */
--		".p2align 4\n\t"
--		"8:\n\t"
--		"cmp $4, %0\n\t"
--		"jb 9f\n\t"
--		"mov 0*4(%1), %3\n\t"
--		"mov -1*4(%1, %0), %4\n\t"
--		"mov  %3, 0*4(%2)\n\t"
--		"mov  %4, -1*4(%2, %0)\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Move data from 2 bytes to 3 bytes.
--		 */
--		".p2align 4\n\t"
--		"9:\n\t"
--		"cmp $2, %0\n\t"
--		"jb 10f\n\t"
--		"movw 0*2(%1), %%dx\n\t"
--		"movw -1*2(%1, %0), %%bx\n\t"
--		"movw %%dx, 0*2(%2)\n\t"
--		"movw %%bx, -1*2(%2, %0)\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Move data for 1 byte.
--		 */
--		".p2align 4\n\t"
--		"10:\n\t"
--		"cmp $1, %0\n\t"
--		"jb 11f\n\t"
--		"movb (%1), %%cl\n\t"
--		"movb %%cl, (%2)\n\t"
--		".p2align 4\n\t"
--		"11:"
--		: "=&c" (d0), "=&S" (d1), "=&D" (d2),
--		  "=r" (d3),"=r" (d4), "=r"(d5)
--		:"0" (n),
--		 "1" (src),
--		 "2" (dest)
--		:"memory");
--
--	return ret;
--
--}
--EXPORT_SYMBOL(memmove);
-diff --git a/arch/x86/lib/memmove_32.S b/arch/x86/lib/memmove_32.S
-new file mode 100644
-index 000000000000..096feb154f64
---- /dev/null
-+++ b/arch/x86/lib/memmove_32.S
-@@ -0,0 +1,202 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/linkage.h>
-+
-+SYM_FUNC_START(memmove)
-+/*
-+ * void *memmove(void *dest, const void *src, size_t n)
-+ * -mregparm=3 passes these in registers:
-+ */
-+.set dest, %eax
-+.set src, %edx
-+.set n, %ecx
-+
-+/* Need 3 scratch registers. These need to be saved+restored. */
-+.set tmp0, %edi
-+.set tmp1, %ebx
-+.set tmp2, %esi
-+
-+	pushl	%ebp
-+	movl	%esp, %ebp
-+
-+	pushl	dest
-+	pushl	tmp0
-+	pushl	tmp1
-+	pushl	tmp2
-+
-+	/* Handle more 16 bytes in loop */
-+	cmpl	$0x10, n
-+	jb	.L16_byteswap
-+
-+	/* Decide forward/backward copy mode */
-+	cmpl	dest, src
-+	jb	.Lbackwards_header
-+
-+	/*
-+	 * movs instruction have many startup latency
-+	 * so we handle small size by general register.
-+	 */
-+	cmpl	$680, n
-+	jb	.Ltoo_small_forwards
-+	/*
-+	 * movs instruction is only good for aligned case.
-+	 */
-+	movl	src, tmp0
-+	xorl	dest, tmp0
-+	andl	$0xff, tmp0
-+	jz	.Lforward_movs
-+.Ltoo_small_forwards:
-+	subl	$0x10, n
-+
-+	/*
-+	 * We gobble 16 bytes forward in each loop.
-+	 */
-+.L16_byteswap_forwards_loop:
-+	subl	$0x10, n
-+	movl	0*4(src), tmp0
-+	movl	1*4(src), tmp1
-+	movl	tmp0, 0*4(dest)
-+	movl	tmp1, 1*4(dest)
-+	movl	2*4(src), tmp0
-+	movl	3*4(src), tmp1
-+	movl	tmp0, 2*4(dest)
-+	movl	tmp1, 3*4(dest)
-+	leal	0x10(src), src
-+	leal	0x10(dest), dest
-+	jae	.L16_byteswap_forwards_loop
-+	addl	$0x10, n
-+	jmp	.L16_byteswap
-+
-+	/*
-+	 * Handle data forward by movs.
-+	 */
-+.p2align 4
-+.Lforward_movs:
-+	movl	-4(src, n), tmp0
-+	leal	-4(dest, n), tmp1
-+	shrl	$2, n
-+	rep	movsl
-+	movl	tmp0, (tmp1)
-+	jmp	.Ldone
-+	/*
-+	 * Handle data backward by movs.
-+	 */
-+.p2align 4
-+.Lbackwards_movs:
-+	movl	(src), tmp0
-+	movl	dest, tmp1
-+	leal	-4(src, n), src
-+	leal	-4(dest, n), dest
-+	shrl	$2, n
-+	std
-+	rep	movsl
-+	movl	tmp0,(tmp1)
-+	cld
-+	jmp	.Ldone
-+
-+	/*
-+	 * Start to prepare for backward copy.
-+	 */
-+.p2align 4
-+.Lbackwards_header:
-+	cmpl	$680, n
-+	jb	.Ltoo_small_backwards
-+	movl	src, tmp0
-+	xorl	dest, tmp0
-+	andl	$0xff, tmp0
-+	jz	.Lbackwards_movs
-+
-+	/*
-+	 * Calculate copy position to tail.
-+	 */
-+.Ltoo_small_backwards:
-+	addl	n, src
-+	addl	n, dest
-+	subl	$0x10, n
-+
-+	/*
-+	 * We gobble 16 bytes backward in each loop.
-+	 */
-+.L16_byteswap_backwards_loop:
-+	subl	$0x10, n
-+
-+	movl	-1*4(src), tmp0
-+	movl	-2*4(src), tmp1
-+	movl	tmp0, -1*4(dest)
-+	movl	tmp1, -2*4(dest)
-+	movl	-3*4(src), tmp0
-+	movl	-4*4(src), tmp1
-+	movl	tmp0, -3*4(dest)
-+	movl	tmp1, -4*4(dest)
-+	leal	-0x10(src), src
-+	leal	-0x10(dest), dest
-+	jae	.L16_byteswap_backwards_loop
-+	/*
-+	 * Calculate copy position to head.
-+	 */
-+	addl	$0x10, n
-+	subl	n, src
-+	subl	n, dest
-+
-+	/*
-+	 * Move data from 8 bytes to 15 bytes.
-+	 */
-+.p2align 4
-+.L16_byteswap:
-+	cmpl	$8, n
-+	jb	.L8_byteswap
-+	movl	0*4(src), tmp0
-+	movl	1*4(src), tmp1
-+	movl	-2*4(src, n), tmp2
-+	movl	-1*4(src, n), src
-+
-+	movl	tmp0, 0*4(dest)
-+	movl	tmp1, 1*4(dest)
-+	movl	tmp2, -2*4(dest, n)
-+	movl	src, -1*4(dest, n)
-+	jmp	.Ldone
-+
-+	/*
-+	 * Move data from 4 bytes to 7 bytes.
-+	 */
-+.p2align 4
-+.L8_byteswap:
-+	cmpl	$4, n
-+	jb	.L4_byteswap
-+	movl	0*4(src), tmp0
-+	movl	-1*4(src, n), tmp1
-+	movl	tmp0, 0*4(dest)
-+	movl	tmp1, -1*4(dest, n)
-+	jmp	.Ldone
-+
-+	/*
-+	 * Move data from 2 bytes to 3 bytes.
-+	 */
-+.p2align 4
-+.L4_byteswap:
-+	cmpl	$2, n
-+	jb	.Lbyteswap
-+	movw	0*2(src), %di
-+	movw	-1*2(src, n), %bx
-+	movw	%dx, 0*2(dest)
-+	movw	%bx, -1*2(dest, n)
-+	jmp	.Ldone
-+
-+	/*
-+	 * Move data for 1 byte.
-+	 */
-+.p2align 4
-+.Lbyteswap:
-+	cmpl	$1, n
-+	jb	.Ldone
-+	movb	(src), %cl
-+	movb	%cl, (dest)
-+.p2align 4
-+.Ldone:
-+	popl	tmp2
-+	popl	tmp1
-+	popl	tmp0
-+	popl	%eax
-+	popl	%ebp
-+	RET
-+SYM_FUNC_END(memmove)
--- 
-2.37.3.998.g577e59143f-goog
-
+              Linus
