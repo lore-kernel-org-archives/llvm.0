@@ -1,86 +1,111 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B33E4409
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 18:06:19 +0000 (UTC)
-Received: by mail-ot1-f44.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso524522otb.6
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 11:06:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D002F23
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 18:50:39 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id b5so1043689pgb.6
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7MxhNKa1pvBKJp28Xv5e7IbSBJSuN9UMxkwoiOtIFKY=;
-        b=Uus7wQdUDWk44FDSQwJEpQB43nLtULU3gyubvF9ig6sLMhsYrBW/fT2eLkiDXP/j6F
-         P8xdVmW3N/dGsk8WF9zq/xPDaInuSjL/UbWGHKH4lK2Gs07qj03YePC6fPmCyOZPJojh
-         hz5XN5aYK3eXpYOOVGRIC5XgtO0t1EVMFkDuA=
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=soz+B5vr0YawBrGLCJUIfst1rVPegj/kO945i6tNuu4=;
+        b=OTfy5Nwpn08IcUaVlU1KJ27X+N3yWZ/VpCrAZjSpjUbsjTe/slddbrLCSNWyrUEUf+
+         hKFo3f2nFf90BAG6jEHb+7lo8EJfEwNPirhgwBNLji96jC6KqEyl6t0+uMZVhfPqRt/6
+         nRku1i36Slqm6llnH2++9t4exlSoETdRFUkh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7MxhNKa1pvBKJp28Xv5e7IbSBJSuN9UMxkwoiOtIFKY=;
-        b=dFThp9DV1HWfzommv5+Mz5+MqbVPAjJxrVsz43IPs2S4k1/PFty3Rprh4iw/1dyk/o
-         m4ORLKCpbyXsH/hJfZC8dk5SFlI+2DBVtHq9q6uZma89S71OaFkpDAv93tu1M77n/D06
-         ozaXxLmHHvDjId6ef2Vjl6REcp1MvyH/vKEQCxMTGEPl39XViuvYdFPWI9Ppk2XUSFr4
-         870NlAmw9mei4mSw+slsjAUvTvmugv3EthPUiFKCEh5vyiPA8zKb99SdpEuOndIffwgO
-         kF9XQvTfX8oYxCSaWYTSN/J8TMZmxVbTlI49TxGXjBIvWNL1AzobPz/gE3V5JUbs1n9Q
-         8L2w==
-X-Gm-Message-State: ACrzQf3kTuDyN6fBSNBNYo9m67LXsujOpuukOffMaBYhXoIX1S+J9qnM
-	Do6xv0rxl+a9qRsgBwYjXl6E0RGG1HDTbg==
-X-Google-Smtp-Source: AMsMyM5T1mR7rEPxddbeRGBp17Uz2V3mIqKkDVgWBsOI1GXyzFxlRcBJOubYjSSHyttEeEpM/VQxCw==
-X-Received: by 2002:a9d:6c58:0:b0:65b:e62a:cdcf with SMTP id g24-20020a9d6c58000000b0065be62acdcfmr3820700otq.331.1663956377653;
-        Fri, 23 Sep 2022 11:06:17 -0700 (PDT)
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com. [209.85.160.45])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05683014c600b00655bc7c4522sm4462848otq.81.2022.09.23.11.06.15
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 11:06:16 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1278a61bd57so1320060fac.7
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 11:06:15 -0700 (PDT)
-X-Received: by 2002:a05:6870:c0c9:b0:127:c4df:5b50 with SMTP id
- e9-20020a056870c0c900b00127c4df5b50mr5725740oad.126.1663956375518; Fri, 23
- Sep 2022 11:06:15 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=soz+B5vr0YawBrGLCJUIfst1rVPegj/kO945i6tNuu4=;
+        b=TFnpC1Nmt8JEQDSIRHgt0OZdjg6auX7wGb/QYZ6SqdjDXI9EWKHvj5Xmsx0IAkhSa8
+         +GEoWKS+SJXevixYWweU9lTfagVTWuwoMZXlOFpSyk4bytKZ9e3DYP6/0HxSM5WLwgoN
+         2o3pQ/+6NJRzATon327GxozpD2t1ZAUPEhUcMRk0gvQ4RqwF7K9AjuyN9y9RP5S/r0NJ
+         AyPoHbx3B2zMlRBF3TeNA9QH1JEGfQ2/RiGbqPF9IpD48rzQiOBTrQCyxcPEQz2SgSO3
+         fpyjRCcnhCkL+2pv2+EoY/9s/Kx8Nv/DfBJVYhlEJeWQfhI9QwdJoEkucjpbaLFyhfxw
+         pHyw==
+X-Gm-Message-State: ACrzQf3gmbvYoEbms2hukCu3qzwofrSdqf44ykCYWcHpgC75B04n+JXi
+	Lg/VPhQH1tkcWfEg6j69rNyD5w==
+X-Google-Smtp-Source: AMsMyM5BOkxT7dmLhP+9f8RXqZTh1AjF61zhu3wqGKFHMmPuMGgEdboAX7cqSq5H5AVVbN7wJUrI2g==
+X-Received: by 2002:a63:6a47:0:b0:439:be00:7607 with SMTP id f68-20020a636a47000000b00439be007607mr8719395pgc.301.1663959039042;
+        Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b0016dc6279ab7sm6423837plg.149.2022.09.23.11.50.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 11:50:38 -0700 (PDT)
+Date: Fri, 23 Sep 2022 11:50:37 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Feng Tang <feng.tang@intel.com>, Vlastimil Babka <vbabka@suse.cz>
+Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>, Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian K??nig <christian.koenig@amd.com>,
+	"Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
+	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"dev@openvswitch.org" <dev@openvswitch.org>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 01/12] slab: Introduce kmalloc_size_roundup()
+Message-ID: <202209231145.7654767ED5@keescook>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <20220922031013.2150682-2-keescook@chromium.org>
+ <YyxDFfKmSNNkHBFi@hyeyoo>
+ <Yy0JJV4c3DffCF+4@feng-clx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220923170218.1188423-1-ndesaulniers@google.com>
- <CAHk-=wiAwEA5KekL4+t+v6qAdKLSOQvBkGbumvk+Rxhaay8aFg@mail.gmail.com> <CAKwvOd=r+9X6JkikpuTvjdTn7DXusevoJBFjXtGQ1SZYCZ6f6g@mail.gmail.com>
-In-Reply-To: <CAKwvOd=r+9X6JkikpuTvjdTn7DXusevoJBFjXtGQ1SZYCZ6f6g@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 23 Sep 2022 11:05:59 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whknQuJCqbzjtBrkjGOPrZPX6fjv8HSms2p0kw-NTdMZA@mail.gmail.com>
-Message-ID: <CAHk-=whknQuJCqbzjtBrkjGOPrZPX6fjv8HSms2p0kw-NTdMZA@mail.gmail.com>
-Subject: Re: [PATCH] x86, mem: move memmove to out of line assembler
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <keescook@chromium.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yy0JJV4c3DffCF+4@feng-clx>
 
-On Fri, Sep 23, 2022 at 10:55 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> We could remove __HAVE_ARCH_MEMMOVE from
-> arch/x86/include/asm/string_32.h for ARCH=i386 then rip this
-> arch-specific definition of memmove out.
->
-> Might performance regressions be a concern with that approach?
+On Fri, Sep 23, 2022 at 09:17:25AM +0800, Feng Tang wrote:
+> On Thu, Sep 22, 2022 at 07:12:21PM +0800, Hyeonggon Yoo wrote:
+> > On Wed, Sep 21, 2022 at 08:10:02PM -0700, Kees Cook wrote:
+> > > [...]
+> > > Introduce kmalloc_size_roundup(), to serve this function so we can start
+> > > replacing the "anticipatory resizing" uses of ksize().
+> > [...]
+> >
+> > This looks okay.
+> > [...]
+> > Cc-ing Feng Tang who may welcome this series ;)
+>  
+> Indeed! This will help our work of extending slub redzone check,
+> as we also ran into some trouble with ksize() users when extending
+> the redzone support to this extra allocated space than requested
+> size [1], and have to disable the redzone sanity for all ksize()
+> users [2].
+> 
+> [1]. https://lore.kernel.org/lkml/20220719134503.GA56558@shbuild999.sh.intel.com/
+> [2]. https://lore.kernel.org/lkml/20220913065423.520159-5-feng.tang@intel.com/
 
-memmove() isn't particularly common, but it does happen for some paths
-that can be hot - the usual case of moving parts of an array around. I
-see filesystems and networking paths doing that.
+Thanks for the feedback! I'll send my v2 series -- I'm hoping at least
+this patch can land in v6.1 so the various other patches would be clear
+to land via their separate trees, etc.
 
-The generic memmove() is a horrendous byte-at-a-time thing and only
-good for bring-up of new architectures. That's not an option.
-
-But I'm looking at that x86-64 memcpy_orig, and I think it looks
-fairly good as a template for doing the same on x86-32. And we could
-get rid of the duplication on the x86-64 side.
-
-That said, your patch looks fine too, as a "minimal changes" thing.
-
-                Linus
+-- 
+Kees Cook
