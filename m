@@ -1,249 +1,252 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22784434
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 21:11:52 +0000 (UTC)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NJEg3S023690;
-	Fri, 23 Sep 2022 21:11:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=0f5ll7nqXc7SD8+E1UwUgBJ+rl90tWz5TGK9gdu5+Qk=;
- b=OP91LUGKDLWSWjTzySokgAjvrheY2jJQPds3I69bmOVI6PfZSk2aQyjQ8siWFMob7yLZ
- UgmuvhaVuzNEt7Mq03y3CKgNzNXHo5PCqp/FEO9hgPh5Js17YilSMhe7fnjqxOwwiDZa
- 0Zqe3rQRJF3YZdGSyHsuTq9/nVFwwp7YtyphGTXgucWy/E+5ypBgc5Y7uIpJFsLls0Sr
- fcqaVgiad8K+sM+rXghkLbk4kBPJVAROib1s5FN3p171INQiVdsjrZASegO1OqHv5GXl
- wQOHuwi8c1sn79c1keeS05nsZ6+pOtC85ueXOAjtsX0iU9yPCMndCuDTtmcN8f5iQ/eL Uw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jn68rsknk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Sep 2022 21:11:31 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28NKMdDN031394;
-	Fri, 23 Sep 2022 21:11:30 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3jp39q41xj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Sep 2022 21:11:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GyJYenNxDV23Nqd1XoB8MTv7h4V1XX6roV8YIz4mQKJ2NO6cz9Qq/HsapM0ksHTUF4/z9maMPoAKUBonRTtpMbXYbmD0SuvpQTsa5MGaAp+/Mu7BJ12cPgzzacAUtfVwOb62U0PdC8x96gq18Gs2kVf+FdrusrJF+hPwOm/dWM6cpl2v764k6BDi3gVeVtKLturUWE+ylxFMfnJUsGicLDRx0O/M0waIWx495s3qu3qoQpKyavPjIc0GNx/ZtmNjS1v6Wv8et5EIkE38ilVUXzE+EivDYyQ/hrVeanhzACA9GgEP1AGKftB3MPCjJyo/9HbmM8LnMQy/3VqrSxAo6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0f5ll7nqXc7SD8+E1UwUgBJ+rl90tWz5TGK9gdu5+Qk=;
- b=U5vlAYzAOPoQBQEzM4SMpiCLFTNp+/ZONbQINUi/pghZKS5dGVDP5UDCFnXDZ3hddcbJn2guvAn3DrfNzskynnUPELmltvxzeeAVGfo8+5xTEDX62vPQX6ZPK3yzONeF0g8wH6DFZJjSVnPExLqOzmMjeIV4g4GNr6iOEkYjfBgAfW0atV5Tvs+LiCdbTZ2LIAhgjjBeeo/JPuPKJGmUMwlciBDY2SpnWvPu8n9COWJh7YpqTmYrKFq/Tu/eyZuR2ITV0xY43GXHeAgYeYXaVuy3Ph9EBpIi6+ZMKFKMZa4VsAgI//0xBFZO0UvvKhgURUSsZIABavzuD/uVlSvP0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772894434
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 21:30:09 +0000 (UTC)
+Received: by mail-ej1-f43.google.com with SMTP id sb3so3176133ejb.9
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 14:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0f5ll7nqXc7SD8+E1UwUgBJ+rl90tWz5TGK9gdu5+Qk=;
- b=Tiq1I6L4YQGW3A/rntlEYM+sYVPS+dfqGCw2TYKFcqq5vkoQAZWrqKgz8+jeP9rIE2J5oQ2nRWkpWG6g9IbiRxNgohtxajT0qxojbHieef2PVFNcnNxY9YLfAaei35tXaz/COuoU7o/bxQpTj9I2LYbWoXRZLYaFmkafSyXmMAE=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by BN0PR10MB5096.namprd10.prod.outlook.com (2603:10b6:408:117::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
- 2022 21:11:28 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::dfde:308:42fe:6c5a]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::dfde:308:42fe:6c5a%3]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
- 21:11:27 +0000
-Date: Fri, 23 Sep 2022 14:11:24 -0700
-From: Mike Kravetz <mike.kravetz@oracle.com>
-To: Matthew Wilcox <willy@infradead.org>,
-        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>
-Cc: Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] general protection fault in PageHeadHuge
-Message-ID: <Yy4g/BKpnJga1toG@monkey>
-References: <0000000000006c300705e95a59db@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000006c300705e95a59db@google.com>
-X-ClientProxiedBy: MW4PR03CA0260.namprd03.prod.outlook.com
- (2603:10b6:303:b4::25) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Ww+rniqhu9NFGDOvfC2Yy/m/fFm7UdkBwQIJUqQ5qmM=;
+        b=jtBwsA0aXXgjW9H5yKVw0u7FPvlQKv4SEs3GfZ/vNdSZU7rIl5UJc12xFGDdhxKxXZ
+         9WOnWQ9XNHZCOEisBNKoVOxOQRBf3BtrDz1hPXjf9sAMsW31ZmJ/1td8yuaKYMMZIkaT
+         ZJsOTtcEuD7FxevXLj2HdEgLI9RqpDSQtUsTcy9H5ma2BZZwNmqCfcptVo0hxqCHQuFV
+         qskagxH5dMlzv0FUaoDSDzsI4y9SL8JapzTNuDMr2o8zpIV9jEo7j+cyHKEBbgt0kc6e
+         eOIQXoWZdM7qVomOXDEQWjHMw5DxOeuBQBEnHcKFcT+isHx0MGmdTWqIPUcQJSLC3mR3
+         KRZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Ww+rniqhu9NFGDOvfC2Yy/m/fFm7UdkBwQIJUqQ5qmM=;
+        b=cVgz2pvrCz8wodXu0c7HwVR79z9QE2gP8FPeQx7/MUVrbOARvoHMgDwUh991j3bCuy
+         CxQ2wcNlFFwQmwqGyb3jKODlXaNCipye1yGCz0pSRyRc8jYO5DmWTjViYvRLOmkIjHPD
+         gTXq8Tn6ZUwJFAMYOaLcV6z9qlL/KmmYgeRW9XUg/O8L6au1qVUYujlagn7N/zPLsNw9
+         i0ICtiL1N2QRPT9HK1saBoAclqQ+U+orpfTF8pzDIZ21gbUiCQriyyHLgyangw6MdBB+
+         NhD65CPpRyLT1/fbDR9+SLaVzHfG2f3PmNKyLWcL1pnLDgKENJWdIBTsTypDueTQTwS4
+         e91Q==
+X-Gm-Message-State: ACrzQf2yJ0ryguVNEUfVxzh0ssRKEEOY9FqhMHFT6y8T63OqOfZtcHiA
+	FHr/dLTmBIx+Y/hWoS6mbkMFPxkTScv7uDOJzDs=
+X-Google-Smtp-Source: AMsMyM7wbUGGCdyhs/80nM8dSUGFoHeIlKdp58rzR0+BXa0pRZNFVgZ8YOo+ZRr8tHq0Cv8I/O56WLqPGcN8N6lh/HM=
+X-Received: by 2002:a17:907:984:b0:77f:4d95:9e2f with SMTP id
+ bf4-20020a170907098400b0077f4d959e2fmr9070827ejc.176.1663968607591; Fri, 23
+ Sep 2022 14:30:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BN0PR10MB5096:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14e182a4-23b8-4efb-6ec4-08da9da82dca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	d78QvvOBtQg15CGpC9LKNb2G+7JmTZsKnLmwKngJo6A1slfmHDmfQZUBPmvKf7rI/pZLWHcervC2l3Ks+hX6bAhWBiKf+bw4NLYzFTuXEQt/lyLwYoqIBq8J3ZU4QzYnxePw1ZWrBDYw9JP8Y6KJGLS1J39Q7X/l56skMENNmKnZJPjTTy566kEhQhulh+5dyzL6/zZauKUL7JHn9ZBAqzg8aqGcMOm4iJZo5fNYrQTErm+mzrNs4pwvUtf2jW8+E2SCmlh0fKYcRanYaxkBu7WVt7lgdudl1dRYhgRdgqc6zRAkG7ykk/hiR08aJ02EKHi09uUSnTpcfuGmXZ+eVsl6XO1BWtqCKdi8Rusyt5jCd4ch1gwM1GGH54pnQ7dVuq8UrLNxykrrQG+p2XVFjy3waLQiE1QFtM28KJ1mEJNLQl7W1CdhdIzrRbNwx/uAOtffw2IvRuC+ooYyGPWEMBuCoGS0VOFVEoQgBMKcisv7deDW5bDnk37Vl3PBNPCVdU8BxgVSZjuRAbREBoWQmsJSciFsTeoMa6FVhp6+Qi1dZSeqYJnLgPRcIwGI/2Bdw47MH3tVXX4wAK8azMiZyvKqxKGkSIlwK7EOOrLLRrirskaaTsEwsuTrueB7Xfr2CQdAlAuOod0SVsy4KRRihhRzAN6s1Muvkxj7a6ERorSz7ijbE9Zg8iJBFENwlq+pUUkJ4uHPJWBUEV9ZQbFjNV6D9IitK1g9ZVbFQ4sIGIwv9jW+fIbg23cCKtEW2p1zE9dmfpZknuPMjW2JT6voq0XpohcA9aVPmkulZE68+SKS7HPqiBORcjtq8eC9awd/
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(346002)(366004)(396003)(376002)(39860400002)(451199015)(2906002)(6666004)(9686003)(6512007)(45080400002)(26005)(8676002)(83380400001)(4326008)(6506007)(44832011)(186003)(6486002)(966005)(33716001)(478600001)(41300700001)(38100700002)(5660300002)(110136005)(316002)(8936002)(7416002)(66946007)(53546011)(66556008)(66476007)(86362001)(99710200001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?dM9eTMwpo3CzGrL6Bf8Q/AqoUhzH9eJ3ByMidx5E+E6IrgT8EUoQjXm8vSM6?=
- =?us-ascii?Q?mpySOxj6wz9l0eXWbE1fHEucXldeEXgaEu/i2+qYfQe4fB+mw6P+vpbU0sc/?=
- =?us-ascii?Q?Jz95Zyuyw+c6o2aHm6m36fzzvfHxyfaVoGu/cUVwY2lFE6UwqkDtcClpPA4g?=
- =?us-ascii?Q?LyhFlacuSGpg+R5vJ+OKq8liHcXcCS/Z64Di9iS1/t5Pmw14ywnX2loyJE7t?=
- =?us-ascii?Q?B769Pro1tvI2O8N6PIfGlhhWM4CcHrGRhGU1Cv+iBjIJAZqfYvYTaSXiMfSy?=
- =?us-ascii?Q?mn+qOxtHGqNkxbG4J2HoxcfIkPgYVGRY/O3yLI3gOymvFfMb6mhbXsIgfL0h?=
- =?us-ascii?Q?olhZbA1xD4KnP5ssaGMeL0uBtWgY5UMMG0CMT70Vq4ZV3Cd/2owjZdMNIQph?=
- =?us-ascii?Q?41qCSM6ByvOOxhslFYSMmHen4cAdoLMSDxFboPMpsdORKp0mtNes3XKAIN33?=
- =?us-ascii?Q?SlYyL5ZmdF0B5kERWwxYmGrdyysIctWncokgp3MqYUX4R6OwdvrzKrvDIYs9?=
- =?us-ascii?Q?CMOb1BRsWS/bjCnRBHDC0v55ARWvYWeHM5EUcArLJg3N2gaYqaO6QxOgcZKg?=
- =?us-ascii?Q?yj0TIHFcPoT1zGeLse0pPA9IYg846z0uu8E0oII5c/DZ8jd/fpgu6GIhI+hP?=
- =?us-ascii?Q?AyNmvzKQbUP8NXMDWCXUN0VQL2KXwd6RjpgLTfm+xNwcKCf2fLxMNAvMsome?=
- =?us-ascii?Q?cr+IAca409kZjA8VRY5ji+8Kf9Qf3EQG6/oTcdkBUZ6h6M1XV573dEglnqOX?=
- =?us-ascii?Q?o/vEdkvXs6MO2P81RqlTcEa5w9KzksV4s2a4LHS/0TAcLOTedKwh1bZJqy4D?=
- =?us-ascii?Q?3AvvdpT1xMhT+wxyMLmCZpYfxmWC6ds0zm2/oMf3bUa+SsuWQU+3+3AMtHqo?=
- =?us-ascii?Q?BIHA7oFNGBiQP4vlcxmGHM//BsPqlnWKclhzwSe9tAkPP21yr/3of64ckmjO?=
- =?us-ascii?Q?bgICX4sAD+nDz9AWLrItOHOii/ZCUWvA2f4ovjGnH0g/PFwF6HxCLfM6moWv?=
- =?us-ascii?Q?bdX7aLsGrt7Uk6/VRLVXpBCkALZ/VsL8x2bk8OEumSfSdB3z5h6qxeHqHvfE?=
- =?us-ascii?Q?GNQqItc/PuRtuSbjn9uohTeVwMEHwfxa5oIXYVRG3h3dHoGHZeRkGckeNhGO?=
- =?us-ascii?Q?P/OBGiBAhNJ2a4A75drWf6wgjIPrsZqVNRAUDs+RPsVLjf4jl787KEChsTxs?=
- =?us-ascii?Q?Ap3UKCcCZARYEyjD9CZePAEp7pIVDOLMirMaiUEgRe2yhH3PPoTDq9XQtBmz?=
- =?us-ascii?Q?xVWD9VvlkmQpYwx/ZMtgh6p2Kqy+ZqS6K6YR8icw44owkqhV5tkn1RQyApwu?=
- =?us-ascii?Q?7Wy2YG2RfIO/s4Lma3UyGz8IdggfiYVSvXnNaTShpUTZMynWSmyliK9tBuY0?=
- =?us-ascii?Q?KY/7RRX550TyEz+ko0HL53lH62DLYjG+vxC7dUfVeCeXtRVoWDbXuuPyCOdf?=
- =?us-ascii?Q?JxBYYW7BmI1AEi7yjFKyrsQehyo0/Tf0G8rifqxGzoL37+/iS2xDqJ1AKMwL?=
- =?us-ascii?Q?6nBIidonXJI1mNvkXqtoW8JFsnHIIxcY+nq0IeS87ovh0BxqAljyy8fRqV3V?=
- =?us-ascii?Q?c7Oco79qmFaWz1ISQy/I7qGBlppNmWgfbVtIKYdVjaT4FCl2l0qgJaIsWvDp?=
- =?us-ascii?Q?Qw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14e182a4-23b8-4efb-6ec4-08da9da82dca
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 21:11:27.9028
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JHGnInmKABlB16DEyJ0fkl690ID1UMA+meoF+NlxOH3GAfcdizWL+w1bdnWMHtypN1Ja8a/ORb79khqf3w5pNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5096
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-23_10,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
- spamscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209230137
-X-Proofpoint-GUID: hPW_CT7yt6ghMcQDm5qMTw0ZxtnuOOgJ
-X-Proofpoint-ORIG-GUID: hPW_CT7yt6ghMcQDm5qMTw0ZxtnuOOgJ
+References: <1663747240-31210-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1663747240-31210-1-git-send-email-wangyufen@huawei.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 23 Sep 2022 14:29:56 -0700
+Message-ID: <CAEf4Bzaskw74UeufRgKSbGtk5eybD9J+4keAPYb-u=jb5myLjw@mail.gmail.com>
+Subject: Re: [bpf-next v5 1/3] bpftool: Add auto_attach for bpf prog load|loadall
+To: Wang Yufen <wangyufen@huawei.com>
+Cc: quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org, 
+	hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 09/23/22 09:05, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16f0a418880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-> dashboard link: https://syzkaller.appspot.com/bug?extid=152d76c44ba142f8992b
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b97b64880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fb9040880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> CPU: 1 PID: 3617 Comm: syz-executor722 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-> RIP: 0010:PagePoisoned include/linux/page-flags.h:304 [inline]
-> RIP: 0010:PageHead include/linux/page-flags.h:787 [inline]
-> RIP: 0010:PageHeadHuge+0x1d/0x200 mm/hugetlb.c:1892
-> Code: ff 66 66 2e 0f 1f 84 00 00 00 00 00 90 41 54 55 48 89 fd 53 e8 54 c9 b9 ff 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 a2 01 00 00 48 8b 5d 00 48 c7 c7 ff ff ff ff 48
-> RSP: 0018:ffffc90003e7f5a0 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffffc90003e7f788 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff81c2cb2c RDI: 0000000000000000
-> RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003e7f798
-> R13: 0000000000000000 R14: 0000000000000000 R15: 00000000000003f4
-> FS:  00007f5642262700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00000000203f4ef0 CR3: 000000007adcc000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  folio_test_hugetlb include/linux/page-flags.h:831 [inline]
->  folio_file_page include/linux/pagemap.h:683 [inline]
->  shmem_fault+0x27c/0x8a0 mm/shmem.c:2130
->  __do_fault+0x107/0x600 mm/memory.c:4191
->  do_shared_fault mm/memory.c:4597 [inline]
->  do_fault mm/memory.c:4675 [inline]
->  handle_pte_fault mm/memory.c:4943 [inline]
->  __handle_mm_fault+0x2200/0x3a40 mm/memory.c:5085
->  handle_mm_fault+0x1c8/0x780 mm/memory.c:5206
->  do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1428
->  handle_page_fault arch/x86/mm/fault.c:1519 [inline]
->  exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1575
->  asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-> RIP: 0010:__put_user_nocheck_4+0x3/0x11
-> Code: 00 00 48 39 d9 73 54 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 44 00 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 34 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 48 bb f9 ef ff ff ff 7f
-> RSP: 0018:ffffc90003e7fa00 EFLAGS: 00050293
-> RAX: 0000000000000000 RBX: ffffc90003e7fdf4 RCX: 00000000203f4ef0
-> RDX: ffff888020c51d40 RSI: ffffffff8726d52f RDI: 0000000000000005
-> RBP: ffffc90003e7fdb0 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000002 R11: 0000000000000001 R12: 0000000000000000
-> R13: 0000000000000002 R14: 00000000203f4ef0 R15: 0000000000000000
->  ____sys_recvmsg+0x3ba/0x610 net/socket.c:2714
->  ___sys_recvmsg+0xf2/0x180 net/socket.c:2743
->  do_recvmmsg+0x25e/0x6e0 net/socket.c:2837
->  __sys_recvmmsg net/socket.c:2916 [inline]
->  __do_sys_recvmmsg net/socket.c:2939 [inline]
->  __se_sys_recvmmsg net/socket.c:2932 [inline]
->  __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2932
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f56422dabb9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f5642262208 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
-> RAX: ffffffffffffffda RBX: 00007f564235c4b8 RCX: 00007f56422dabb9
-> RDX: 0000000000010106 RSI: 00000000200000c0 RDI: 0000000000000003
-> RBP: 00007f564235c4b0 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000002 R11: 0000000000000246 R12: 00007f564235c4bc
-> R13: 00007fffbde3618f R14: 00007f5642262300 R15: 0000000000022000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
+On Wed, Sep 21, 2022 at 12:40 AM Wang Yufen <wangyufen@huawei.com> wrote:
+>
+> Add auto_attach optional to support one-step load-attach-pin_link.
+>
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test auto_attach
+>
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>         loaded_at 2022-09-09T21:39:49+0800  uid 0
+>         xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>         btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>         loaded_at 2022-09-09T21:39:49+0800  uid 0
+>         xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>         btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>         loaded_at 2022-09-09T21:41:32+0800  uid 0
+>         xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>         btf_id 82
+>
+>    $ bpftool link
+>    1: tracing  prog 26
+>         prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+>
+> The auto_attach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+> ---
+> v4 -> v5: some formatting nits of doc
+> v3 -> v4: rename functions, update doc, bash and do_help()
+> v2 -> v3: switch to extend prog load command instead of extend perf
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>  tools/bpf/bpftool/prog.c | 77 ++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 75 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index c81362a..aea0b57 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1453,6 +1453,68 @@ static int do_run(int argc, char **argv)
+>         return ret;
+>  }
+>
+> +static int
+> +auto_attach_program(struct bpf_program *prog, const char *path)
+> +{
+> +       struct bpf_link *link;
+> +       int err;
+> +
+> +       link = bpf_program__attach(prog);
+> +       err = libbpf_get_error(link);
 
-While it is true that the addressing exception is happening in the hugetlb
-routine PageHeadHuge(), the reason is because it is passed a NULL page
-pointer.  This is via the call to folio_file_page() at the end of shmem_fault.
+nit: bpftool uses libbpf 1.0, so no need to use libbpf_get_error()
+anymore, you can just check link for NULL and then look at errno
 
-	err = shmem_get_folio_gfp(inode, vmf->pgoff, &folio, SGP_CACHE,
-				  gfp, vma, vmf, &ret);
-	if (err)
-		return vmf_error(err);
 
-	vmf->page = folio_file_page(folio, vmf->pgoff);
-	return ret;
+but I wanted to check on desired behavior here. BPF skeleton will skip
+programs that can't be auto-attached because they are of the type that
+can't be declaratively specified to be auto-attachable. For such
+programs bpf_program__attach() will return -EOPNOTSUPP and libbpf's
+skeleton_attach API will silently skip them. Should bpftool be
+stricter about such programs here or should it follow BPF skeleton
+approach?
 
-The code assumes that if a non-zero value is returned from shmem_get_folio_gfp,
-then folio pointer will be set to a folio.  However, it looks like there are
-a few places in shmem_get_folio_gfp where it will return zero and not set
-folio.
+> +       if (err)
+> +               return err;
+> +
+> +       err = bpf_link__pin(link, path);
+> +       if (err) {
+> +               bpf_link__destroy(link);
+> +               return err;
+> +       }
+> +       return 0;
+> +}
+> +
+> +static int pathname_concat(const char *path, const char *name, char *buf)
 
-In this specific case, it is the code block:
+you added buffer size in libbpf version of this function, maybe match
+the same signature (I also moved buf and buf_sz to be first two args).
 
-        if (vma && userfaultfd_missing(vma)) {
-                *fault_type = handle_userfault(vmf, VM_UFFD_MISSING);
-                return 0;
-        }
+> +{
+> +       int len;
+> +
+> +       len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+> +       if (len < 0)
+> +               return -EINVAL;
+> +       if (len >= PATH_MAX)
+> +               return -ENAMETOOLONG;
+> +
+> +       return 0;
+> +}
+> +
+> +static int
+> +auto_attach_programs(struct bpf_object *obj, const char *path)
+> +{
+> +       struct bpf_program *prog;
+> +       char buf[PATH_MAX];
+> +       int err;
+> +
+> +       bpf_object__for_each_program(prog, obj) {
+> +               err = pathname_concat(path, bpf_program__name(prog), buf);
+> +               if (err)
+> +                       goto err_unpin_programs;
+> +
+> +               err = auto_attach_program(prog, buf);
+> +               if (err)
+> +                       goto err_unpin_programs;
+> +       }
+> +
 
-I could try to sort this out, but I believe Matthew has the most context as
-he has been changing this code recently.
--- 
-Mike Kravetz
+would it be safer to first make sure that all programs are
+auto-attached and then pin links?
+
+also note that not all bpf_links returned by libbpf are actual links
+in kernel (e.g., kprobe/tp bpf_link on older kernels).
+
+> +       return 0;
+> +
+> +err_unpin_programs:
+> +       while ((prog = bpf_object__prev_program(obj, prog))) {
+> +               if (pathname_concat(path, bpf_program__name(prog), buf))
+> +                       continue;
+> +
+> +               bpf_program__unpin(prog, buf);
+> +       }
+> +
+> +       return err;
+> +}
+> +
+>  static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  {
+>         enum bpf_prog_type common_prog_type = BPF_PROG_TYPE_UNSPEC;
+> @@ -1464,6 +1526,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>         struct bpf_program *prog = NULL, *pos;
+>         unsigned int old_map_fds = 0;
+>         const char *pinmaps = NULL;
+> +       bool auto_attach = false;
+>         struct bpf_object *obj;
+>         struct bpf_map *map;
+>         const char *pinfile;
+> @@ -1583,6 +1646,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>                                 goto err_free_reuse_maps;
+>
+>                         pinmaps = GET_ARG();
+> +               } else if (is_prefix(*argv, "auto_attach")) {
+> +                       auto_attach = true;
+> +                       NEXT_ARG();
+>                 } else {
+>                         p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
+>                               *argv);
+> @@ -1692,14 +1758,20 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>                         goto err_close_obj;
+>                 }
+>
+> -               err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+> +               if (auto_attach)
+> +                       err = auto_attach_program(prog, pinfile);
+> +               else
+> +                       err = bpf_obj_pin(bpf_program__fd(prog), pinfile);
+>                 if (err) {
+>                         p_err("failed to pin program %s",
+>                               bpf_program__section_name(prog));
+>                         goto err_close_obj;
+>                 }
+>         } else {
+> -               err = bpf_object__pin_programs(obj, pinfile);
+> +               if (auto_attach)
+> +                       err = auto_attach_programs(obj, pinfile);
+> +               else
+> +                       err = bpf_object__pin_programs(obj, pinfile);
+>                 if (err) {
+>                         p_err("failed to pin all programs");
+>                         goto err_close_obj;
+> @@ -2338,6 +2410,7 @@ static int do_help(int argc, char **argv)
+>                 "                         [type TYPE] [dev NAME] \\\n"
+>                 "                         [map { idx IDX | name NAME } MAP]\\\n"
+>                 "                         [pinmaps MAP_DIR]\n"
+> +               "                         [auto_attach]\n"
+
+looking at "pinmaps" seems like "autoattach" would be more consistent
+naming? Or just "attach"?
+
+>                 "       %1$s %2$s attach PROG ATTACH_TYPE [MAP]\n"
+>                 "       %1$s %2$s detach PROG ATTACH_TYPE [MAP]\n"
+>                 "       %1$s %2$s run PROG \\\n"
+> --
+> 1.8.3.1
+>
