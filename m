@@ -1,50 +1,46 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE5E4436
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 20:28:29 +0000 (UTC)
-Received: by mail-pj1-f41.google.com with SMTP id fs14so1052428pjb.5
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 13:28:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39866442D
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 20:28:30 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id u69so1278057pgd.2
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 13:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=G7kCAYdmee+RZ/2FVUhmFmKba16DTFtB/qncTXfqL0g=;
-        b=Y6E7L9J9UR374oBO9JTlj0UyLXz47O6O/vrwsT4xNx7MOToGuF3Haek94epLF2gKFc
-         YHBgJXmOtfririgUsUdUJ7cJUEJhj34PvSPp7NewDy4HIxUbfstnz0HwtTKsvV+jUdM9
-         ewYTBmIsL92mb0z3umh2K5ZPB3wBhsrYJr07w=
+        bh=lIp3Rau3XN5DhulJvqmP3ROLBDtGBYLacs8yQVXUsIc=;
+        b=ayrELvkz6RCr+VJ5YTbdaI+C+7T6BGsJEAguxUgCPIN9LMOSG1cQ+4QSxLfuYecJ7g
+         rEkt3pKt8Q3IXycqxre3TSAUHzDDJJG0qs2FtZn9cMqz4CShi0DQb1RnbrzDmC1TGFDB
+         UCnS6y6zB4oIa+C342OBOENRxbAzNtGyV/eDA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=G7kCAYdmee+RZ/2FVUhmFmKba16DTFtB/qncTXfqL0g=;
-        b=2b5FYGDiQjndwdAWQI5FZiGoIOLvLo2kwEM9WTYPjQP8mijJcD2/TL46FTLWh3fGGf
-         NZuQuD6qa/o8ooRlWfqO37uY+SUZ+Sg+5Lxu/ZjoToeA5Zmektff291pGA3W+hJB5FK2
-         TkTd67y3t8EPN+yfQgcSGocnyC8HSWuNVeQmnu8JXqe0J3WoIH13xFRzc/M10DmSwXO9
-         5crqN1GrTl1ylE8ltgoDWX69WmD8j1XDMKBVMVH5QTexhihdKXnIzQgeSQrBWUj8HQLe
-         VRPf0m3tPwPBgDRThmOBo5mdf3bqr+KX9ZZayplT7RHoALa+ZE0cKPgo4rkvgjfifzTk
-         Mtxg==
-X-Gm-Message-State: ACrzQf3/bMGbyPI88gBQHBOJkc1sKETIW9PcJtpn0djBth+vFiz+WjuK
-	rtIodQy6exdpb5nUpTpDtuoTRA==
-X-Google-Smtp-Source: AMsMyM4OIH2Kbz3W/dS5nJOpu2wzufZOda+7SbBQGOF/tLPl7Mw1AUJglcwrNduXNP5ZLvyQaDEecg==
-X-Received: by 2002:a17:90b:1942:b0:202:cf66:f37f with SMTP id nk2-20020a17090b194200b00202cf66f37fmr22638049pjb.15.1663964909318;
+        bh=lIp3Rau3XN5DhulJvqmP3ROLBDtGBYLacs8yQVXUsIc=;
+        b=J+QNi8BrZGIMAaY9AGrTueXad5qcaw4LkVFFn6YLELcNcyszjs8DDAaBBMribww6HF
+         VZGMvwIBMErnD3CHvBWIzPpWTedHqvqKS1/zqSHLX++JdfEIFGAGoEp6n4muTbROyVNl
+         IQb+5ZOfQthiGwBdtId2K6VxwXpeBckVVjW2lJ7YnZ0vSEpKvXkLzNyBxqP+f0+XP1rT
+         arExNzq24QA0G+ino7gqGmvLzfdgU/7SD550WjGE1Cf+ACU0pCMLQGMfYUhjvzlNMtWC
+         TUnkomFC1/9Xn3WsE+ZnlU+/vcQ7X1jSYxxrPDdoBCIyd3JZd34LtnkXC8viKdUAQllv
+         gqLw==
+X-Gm-Message-State: ACrzQf38lsZpPPa6o7z9WVE8XTmnpjZiiKUB+G3lYrNaxpObIq2TBcZS
+	+HXjAyGYLtqDcnDdld7U18Bkiw==
+X-Google-Smtp-Source: AMsMyM6/T55zDNr2wZmPqXofdZ9R/U3i46Zn4bR+d3pjEfZ773lmSd+dIb1qk1eRO6CnC5XeCBBzng==
+X-Received: by 2002:a63:2221:0:b0:43b:f4a3:80cc with SMTP id i33-20020a632221000000b0043bf4a380ccmr9160031pgi.367.1663964909744;
         Fri, 23 Sep 2022 13:28:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z12-20020a6553cc000000b0041d6d37deb5sm6016364pgr.81.2022.09.23.13.28.26
+        by smtp.gmail.com with ESMTPSA id a5-20020aa795a5000000b0054095e1b2e5sm6854521pfk.215.2022.09.23.13.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 23 Sep 2022 13:28:28 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: Kees Cook <keescook@chromium.org>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	intel-wired-lan@lists.osuosl.org,
-	netdev@vger.kernel.org,
+	Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	linux-btrfs@vger.kernel.org,
+	David Sterba <dsterba@suse.com>,
 	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
 	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
 	Christoph Lameter <cl@linux.com>,
@@ -52,31 +48,35 @@ Cc: Kees Cook <keescook@chromium.org>,
 	David Rientjes <rientjes@google.com>,
 	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Alex Elder <elder@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
 	Sumit Semwal <sumit.semwal@linaro.org>,
 	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
 	Daniel Micay <danielmicay@gmail.com>,
 	Yonghong Song <yhs@fb.com>,
 	Marco Elver <elver@google.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
-	linux-btrfs@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	dri-devel@lists.freedesktop.org,
 	linaro-mm-sig@lists.linaro.org,
 	linux-fsdevel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
 	dev@openvswitch.org,
 	x86@kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 06/16] igb: Proactively round up to kmalloc bucket size
-Date: Fri, 23 Sep 2022 13:28:12 -0700
-Message-Id: <20220923202822.2667581-7-keescook@chromium.org>
+Subject: [PATCH v2 07/16] btrfs: send: Proactively round up to kmalloc bucket size
+Date: Fri, 23 Sep 2022 13:28:13 -0700
+Message-Id: <20220923202822.2667581-8-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
 References: <20220923202822.2667581-1-keescook@chromium.org>
@@ -86,53 +86,54 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1691; h=from:subject; bh=laYkgTmsp2Dcg0WHHOT6ZPL9V6mSc2dOwctf45ZQYvY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbkDJzHnX+sI3Vo1Qv14V482wiYBuOHMxTmnIBU huucnceJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJiyLEA CGMES+fC6ye1bGeS3O38IPkN3IQzERShfic80XY4a30XyimxkLkJSmvXpj+ewPNbHKoiUJTxKgZb/K XnxJDpvuDtFtz8bmbN5m2Yd+S7u9U0FJix4D0Bjc65bO2BLZ1p4skZ00ujWbdyLS1BgmyosrJ9xVP9 Jeb1iFSNfgRZVKqrPKkicjNZr+6mjZxTYoH7c+LPVPfoyyMsulrIGhvF9VSVGvkUMxknLO8TmnWGGL YXw+DzIp3KOAD7McaSE+ctkuIt/4FqAoG9rJOaNF0THgqKo9qaiN3ta16/oNWQocOWuZiKKVTKaDQl ec8EwXmI83Hw0xcmg1Pk7Nyaa5u6CNYuOr6/QPIyHM/G9zTOgaQKJDjVdTfOWZueQU0z56sMQd76h2 EgoHovJDkExXKzaR3tSExdysEeji5cAz5MTF6B5PhevY//J2SrfmsF3Umuqd3PdQ8Z+4FkekBNeaIt Wpzdj496etMeazF2E/aottRll8HUp1QXtMIraqM7WAgkIUg557ze4RTKXXeQvpWrgT6a464S9QSBKF D28gqdBRRs+c1X8XxNNTSpIWgjw0U1bUDku7eV4GRnqprMwn16uXdgttSoB7bVSJibtA6uv2jYfhpW HJE8ECmRl+W/2kM5Fz/2+NW1rofopoBc5f5LUPED2ZPHjOI5nqOO7GaJaF1w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1522; h=from:subject; bh=B3w/yPcNxrDzZTqNaOBRmqqUYMKjQkfGlvei/e1+oVk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbkv/6yf2iFhq9YdN0Aj+2wDjdTaVU6RYLE7C1a mKAEuIiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJuZJEA CsVm4vzR8guJhS9ev8gPlqvsMaYX7r8aLG4A2NyUhHtbSYNZT7nhbnknnZom1pWNwXgl8qpCTbd6+f vjFzrrIjZtd4D+mSEQPZbx+7rT8VpT3Gtb3/D2nYYDaxLdL/DH99n2c2cbhe8zTWcTnyynJYvES2KC EyHjGO9+9QBzmAOfL6UqxFPxgSN6Mwe3il8Jqb4M5is1whaTpYWBL5PS8pHVDzWbA0hBRdEd/F7aPw o3KlBtzCSp4XR1hHtVT8NWbMPwch83XMmXdi0o6/GubfCfksfBTpaXo7dIG+SMZZQWfgCIvRni8oUC qF3eZ2rfkK2BLw1wcdknu/z43jqhoPV5OtU9fgboiNn0cRbYZC7GmCUWAST/dEfoMQx73mUpyFKCbB QKgl1tbq34QTMFjDcV6u59zyZLRrnP18YpxwCaUglLSod93wDcCin1+C5OXvXtCxNg3CAAlxDJHTVx 0pTds4BRbXQj2/4i4Hb/jcctaZnAs0UoMTTcW+BrbOixx0+CrzBJ0vNQMZh5Hs2WYucbihNX7w0sum 2KnTPVVPKpteClxy32zMqoJRvgjzvqik9+nj4bHX5wgV6aVi+dbQdRPezJyGYxH+GkBtsj0h3BjaPk k/mBMntGy8FlUD9pzWHKmr5gF7fYzXCDe75VLz+YEUGvOyBawRkvwMlkpY3w==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-In preparation for removing the "silently change allocation size"
-users of ksize(), explicitly round up all q_vector allocations so that
-allocations can be correctly compared to ksize().
+Instead of discovering the kmalloc bucket size _after_ allocation, round
+up proactively so the allocation is explicitly made for the full size,
+allowing the compiler to correctly reason about the resulting size of
+the buffer through the existing __alloc_size() hint.
 
-Additionally fix potential use-after-free in the case of new allocation
-failure: only free memory if the replacement allocation succeeds.
-
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: netdev@vger.kernel.org
+Cc: Chris Mason <clm@fb.com>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: linux-btrfs@vger.kernel.org
+Acked-by: David Sterba <dsterba@suse.com>
+Link: https://lore.kernel.org/lkml/20220922133014.GI32411@suse.cz
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/btrfs/send.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 2796e81d2726..eb51e531c096 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -1195,15 +1195,16 @@ static int igb_alloc_q_vector(struct igb_adapter *adapter,
+diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+index e7671afcee4f..d40d65598e8f 100644
+--- a/fs/btrfs/send.c
++++ b/fs/btrfs/send.c
+@@ -435,6 +435,11 @@ static int fs_path_ensure_buf(struct fs_path *p, int len)
+ 	path_len = p->end - p->start;
+ 	old_buf_len = p->buf_len;
+ 
++	/*
++	 * Allocate to the next largest kmalloc bucket size, to let
++	 * the fast path happen most of the time.
++	 */
++	len = kmalloc_size_roundup(len);
+ 	/*
+ 	 * First time the inline_buf does not suffice
+ 	 */
+@@ -448,11 +453,7 @@ static int fs_path_ensure_buf(struct fs_path *p, int len)
+ 	if (!tmp_buf)
  		return -ENOMEM;
+ 	p->buf = tmp_buf;
+-	/*
+-	 * The real size of the buffer is bigger, this will let the fast path
+-	 * happen most of the time
+-	 */
+-	p->buf_len = ksize(p->buf);
++	p->buf_len = len;
  
- 	ring_count = txr_count + rxr_count;
--	size = struct_size(q_vector, ring, ring_count);
-+	size = kmalloc_size_roundup(struct_size(q_vector, ring, ring_count));
- 
- 	/* allocate q_vector and rings */
- 	q_vector = adapter->q_vector[v_idx];
- 	if (!q_vector) {
- 		q_vector = kzalloc(size, GFP_KERNEL);
- 	} else if (size > ksize(q_vector)) {
--		kfree_rcu(q_vector, rcu);
- 		q_vector = kzalloc(size, GFP_KERNEL);
-+		if (q_vector)
-+			kfree_rcu(q_vector, rcu);
- 	} else {
- 		memset(q_vector, 0, size);
- 	}
+ 	if (p->reversed) {
+ 		tmp_buf = p->buf + old_buf_len - path_len - 1;
 -- 
 2.34.1
 
