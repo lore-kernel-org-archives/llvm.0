@@ -1,52 +1,45 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0211F15B0
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 01:36:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A7C15A3
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 02:48:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663897015; x=1695433015;
+  t=1663901312; x=1695437312;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WZdTk9T1PthgIdg0kjCHkHEqJf2vaI7cgaqZMy5Jl2E=;
-  b=gAXMpo1eKRZ623vwlpbYf+IoV+W4lExb3iMgw2PUpZWJokoMTcX+O+6k
-   TnFAj6tjM9SGAtNtnQcDk65/Wzydm4yTMuJIpVffMsdmx2XMnadf52xYT
-   D0Xkrfwqh3+HsxKmGlJsda6NqlAxyZBUcdBemx0bdVNvH9ZxrIRwxew/S
-   HDDtPGdZMRcGXdL5UzwZb/c7w1EqdpqfS8NUNEmQyUUiNQybQeCDRK9Li
-   x6Lk+k6U3VTcXNHSe0SMazyjT21WPTWYuAvWDoFqbWUeWeaQ7O3WeUiId
-   W0bFx5OYQjo4QYlNlLOdL8pz/3uoY4h7YNDqF8dxUa3nJnYXBFq0wm78f
+  bh=Mm73VADdXudNH6khsnK+7I6Kj3wxgXnc+uPIkxAy91E=;
+  b=eUYtRXh5nTq6oaiYKz1rK4yG4t4Un1Tk2a0ZbeIfzwrgebjIgcMVLv1U
+   ndJmn8Lk1fPDEHetuQ3JfQev34LHQp+4tM/UxTxGof94mDg9gXpIV8Lxb
+   yvCXRjLXNK9SXLkrOfd44jweSbGG/j3bvzwlLBoyqfOHKrmpwYP5KO807
+   fl9Q22wxnhRiBkXINV411T1W8nhc/TKYEzfQ/HR9/IyyStf4fyXY2skEg
+   +GFctIAYDU0bopFoehXZqm6hi77UNszRg6aloMGic/OD+/101PLYciGU8
+   27wdm6tg6k7njuQUmolYhoQBt0lJUhiCE7TPNXrAdn05orlyxC5A1n83X
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300467880"
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="283587293"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="300467880"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 18:36:55 -0700
+   d="scan'208";a="283587293"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 19:48:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="688545613"
+   d="scan'208";a="615462147"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Sep 2022 18:36:51 -0700
+  by orsmga007.jf.intel.com with ESMTP; 22 Sep 2022 19:48:28 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1obXcY-00059w-2U;
-	Fri, 23 Sep 2022 01:36:50 +0000
-Date: Fri, 23 Sep 2022 09:36:16 +0800
+	id 1obYjr-0005F1-1y;
+	Fri, 23 Sep 2022 02:48:27 +0000
+Date: Fri, 23 Sep 2022 10:48:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bo-Chen Chen <rex-bc.chen@mediatek.com>, sboyd@kernel.org,
-	mturquette@baylibre.com, matthias.bgg@gmail.com,
-	p.zabel@pengutronix.de
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	runyang.chen@mediatek.com, miles.chen@mediatek.com,
-	wenst@chromium.org, angelogioacchino.delregno@collabora.com,
-	nfraprado@collabora.com, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH] reset: mediatek: Move mediatek system clock reset to
- reset folder
-Message-ID: <202209230910.DSbTCgBL-lkp@intel.com>
-References: <20220922141107.10203-1-rex-bc.chen@mediatek.com>
+To: hildawu@realtek.com, marcel@holtmann.org
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, johan.hedberg@gmail.com,
+	luiz.dentz@gmail.com, linux-bluetooth@vger.kernel.org,
+	linux-kernel@vger.kernel.org, mmandlik@google.com,
+	max.chou@realtek.com, alex_lu@realsil.com.cn, kidman@realtek.com
+Subject: Re: [PATCH] Bluetooth: btusb: Add Realtek devcoredump support
+Message-ID: <202209231041.TfIbIGWJ-lkp@intel.com>
+References: <20220922103337.26167-1-hildawu@realtek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,146 +48,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922141107.10203-1-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220922103337.26167-1-hildawu@realtek.com>
 
-Hi Bo-Chen,
+Hi,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on v6.0-rc6]
-[also build test WARNING on linus/master]
-[cannot apply to clk/clk-next pza/reset/next mbgg-mediatek/for-next next-20220921]
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.0-rc6 next-20220921]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Chen-Chen/reset-mediatek-Move-mediatek-system-clock-reset-to-reset-folder/20220922-221303
-base:    521a547ced6477c54b4b0cc206000406c221b4d6
-config: s390-randconfig-r044-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230910.DSbTCgBL-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-btusb-Add-Realtek-devcoredump-support/20220922-183533
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220923/202209231041.TfIbIGWJ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/69ce72445492a02115b1e7c7527a8a107f48aab8
+        # https://github.com/intel-lab-lkp/linux/commit/b896c161a197fbcb019f6e4f890b667bb9d6f15e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bo-Chen-Chen/reset-mediatek-Move-mediatek-system-clock-reset-to-reset-folder/20220922-221303
-        git checkout 69ce72445492a02115b1e7c7527a8a107f48aab8
+        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-btusb-Add-Realtek-devcoredump-support/20220922-183533
+        git checkout b896c161a197fbcb019f6e4f890b667bb9d6f15e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/reset/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/reset/reset-mediatek-sysclk.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/reset/reset-mediatek-sysclk.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/reset/reset-mediatek-sysclk.c:11:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/reset/reset-mediatek-sysclk.c:539:5: warning: no previous prototype for function 'mtk_reset_init_with_node' [-Wmissing-prototypes]
-   int mtk_reset_init_with_node(struct device_node *np, const char *name)
-       ^
-   drivers/reset/reset-mediatek-sysclk.c:539:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int mtk_reset_init_with_node(struct device_node *np, const char *name)
-   ^
-   static 
->> drivers/reset/reset-mediatek-sysclk.c:550:6: warning: no previous prototype for function 'mtk_rst_remove_with_node' [-Wmissing-prototypes]
-   void mtk_rst_remove_with_node(struct device_node *np, const char *name)
-        ^
-   drivers/reset/reset-mediatek-sysclk.c:550:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mtk_rst_remove_with_node(struct device_node *np, const char *name)
-   ^
-   static 
-   14 warnings generated.
+>> drivers/bluetooth/btusb.c:731:7: error: implicit declaration of function 'hci_devcoredump_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!hci_devcoredump_init(hdev, skb->len)) {
+                ^
+>> drivers/bluetooth/btusb.c:732:3: error: implicit declaration of function 'hci_devcoredump_append' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   hci_devcoredump_append(hdev, skb);
+                   ^
+   drivers/bluetooth/btusb.c:732:3: note: did you mean 'hci_devcoredump_init'?
+   drivers/bluetooth/btusb.c:731:7: note: 'hci_devcoredump_init' declared here
+           if (!hci_devcoredump_init(hdev, skb->len)) {
+                ^
+>> drivers/bluetooth/btusb.c:733:3: error: implicit declaration of function 'hci_devcoredump_complete' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   hci_devcoredump_complete(hdev);
+                   ^
+   drivers/bluetooth/btusb.c:733:3: note: did you mean 'hci_devcoredump_append'?
+   drivers/bluetooth/btusb.c:732:3: note: 'hci_devcoredump_append' declared here
+                   hci_devcoredump_append(hdev, skb);
+                   ^
+   drivers/bluetooth/btusb.c:776:7: error: implicit declaration of function 'hci_devcoredump_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (!hci_devcoredump_init(hdev, skb->len)) {
+                ^
+   drivers/bluetooth/btusb.c:777:3: error: implicit declaration of function 'hci_devcoredump_append' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   hci_devcoredump_append(hdev, skb);
+                   ^
+   drivers/bluetooth/btusb.c:778:3: error: implicit declaration of function 'hci_devcoredump_complete' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   hci_devcoredump_complete(hdev);
+                   ^
+   drivers/bluetooth/btusb.c:2361:8: error: implicit declaration of function 'hci_devcoredump_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (!hci_devcoredump_init(hdev, nskb->len)) {
+                        ^
+   drivers/bluetooth/btusb.c:2362:4: error: implicit declaration of function 'hci_devcoredump_append' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           hci_devcoredump_append(hdev, nskb);
+                           ^
+   drivers/bluetooth/btusb.c:2363:4: error: implicit declaration of function 'hci_devcoredump_complete' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           hci_devcoredump_complete(hdev);
+                           ^
+   9 errors generated.
+--
+>> drivers/bluetooth/btrtl.c:657:8: error: implicit declaration of function 'hci_devcoredump_register' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           err = hci_devcoredump_register(hdev, btrtl_coredump, btrtl_dmp_hdr,
+                 ^
+   1 error generated.
 
 
-vim +/mtk_reset_init_with_node +539 drivers/reset/reset-mediatek-sysclk.c
+vim +/hci_devcoredump_init +731 drivers/bluetooth/btusb.c
 
-   538	
- > 539	int mtk_reset_init_with_node(struct device_node *np, const char *name)
-   540	{
-   541		struct mtk_clk_rst_data *data = find_rst_data(name);
-   542	
-   543		if (!np || !data)
-   544			return -EINVAL;
-   545	
-   546		return register_rst_ctrl_with_node(np, data);
-   547	}
-   548	EXPORT_SYMBOL_GPL(mtk_reset_init_with_node);
-   549	
- > 550	void mtk_rst_remove_with_node(struct device_node *np, const char *name)
-   551	{
-   552		struct mtk_clk_rst_data *data = find_rst_data(name);
-   553	
-   554		if (!np || !data)
-   555			return;
-   556	
-   557		reset_controller_unregister(&data->rcdev);
-   558	}
-   559	EXPORT_SYMBOL_GPL(mtk_rst_remove_with_node);
-   560	
+   719	
+   720	static void btusb_rtl_cmd_timeout(struct hci_dev *hdev)
+   721	{
+   722		struct btusb_data *data = hci_get_drvdata(hdev);
+   723		struct gpio_desc *reset_gpio = data->reset_gpio;
+   724		struct sk_buff *skb;
+   725		u8 code[4] = { DEVCOREDUMP_CODE_CMD_TIMEOUT, 0, 0, 0 };
+   726	
+   727		skb = alloc_skb(sizeof(code), GFP_ATOMIC);
+   728		if (!skb)
+   729			goto timeout_check;
+   730		skb_put_data(skb, code, sizeof(code));
+ > 731		if (!hci_devcoredump_init(hdev, skb->len)) {
+ > 732			hci_devcoredump_append(hdev, skb);
+ > 733			hci_devcoredump_complete(hdev);
+   734		} else {
+   735			bt_dev_err(hdev, "RTL: cmd timeout, failed to devcoredump");
+   736			kfree_skb(skb);
+   737		}
+   738	
+   739	timeout_check:
+   740		if (++data->cmd_timeout_cnt < 5)
+   741			return;
+   742	
+   743		if (!reset_gpio) {
+   744			bt_dev_err(hdev, "No gpio to reset Realtek device, ignoring");
+   745			return;
+   746		}
+   747	
+   748		/* Toggle the hard reset line. The Realtek device is going to
+   749		 * yank itself off the USB and then replug. The cleanup is handled
+   750		 * correctly on the way out (standard USB disconnect), and the new
+   751		 * device is detected cleanly and bound to the driver again like
+   752		 * it should be.
+   753		 */
+   754		if (test_and_set_bit(BTUSB_HW_RESET_ACTIVE, &data->flags)) {
+   755			bt_dev_err(hdev, "last reset failed? Not resetting again");
+   756			return;
+   757		}
+   758	
+   759		bt_dev_err(hdev, "Reset Realtek device via gpio");
+   760		gpiod_set_value_cansleep(reset_gpio, 1);
+   761		msleep(200);
+   762		gpiod_set_value_cansleep(reset_gpio, 0);
+   763	}
+   764	
 
 -- 
 0-DAY CI Kernel Test Service
