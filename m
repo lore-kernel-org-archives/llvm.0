@@ -1,174 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9260815A9
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 08:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1663923045;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0jdpDIkdAkSfaJQoe9m/kYEl//tA0mgj98XCWdNIjYc=;
-	b=bg/6ojFtuz+Iy7efAvyQzIfK7eI1j3T1aKu/duGHMCObOXJELA/HHgd2sX9GAvNlBVipMv
-	mWQ7d8UuHM4Ar5Wq9z7zCi1uo8sfqoa6W7Q0BHLfIR9P6bvHdnm7FglI+8WnZaAmh267yZ
-	c5yRAqR9esX0xA/WQbTtDRsDLR/GiLs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665--d_v52MeMomnKuBTJ6oXUQ-1; Fri, 23 Sep 2022 04:50:44 -0400
-X-MC-Unique: -d_v52MeMomnKuBTJ6oXUQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC3529AB
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 09:08:02 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1EFF6855315
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 08:50:44 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0CF15C569AC;
-	Fri, 23 Sep 2022 08:50:44 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
- mainline.kernel.org-clang, c69cf88c)
-Date: Fri, 23 Sep 2022 08:50:39 -0000
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A0F1B219BA;
+	Fri, 23 Sep 2022 09:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1663924080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3NmV8dBleohq19FUTGjShv3qNCUcjTHlt1m0s7sWLVk=;
+	b=V6wEuumqUBqjySkow4NVfoPBdDcct+QY2sSnA92ZeyPwH38i0NPhxZ2JBFN/nzoZI0qJDc
+	KkeFL/D96aoTs49QcLygaGlMNADNI8AXG8StgjNUceGaiafR2+x2Vnsi6pDhmZ07qrK3n8
+	Inta8iq5GzYLsx9ExrSXKnUXYR9y3Io=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1663924080;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3NmV8dBleohq19FUTGjShv3qNCUcjTHlt1m0s7sWLVk=;
+	b=U7EHAzZMP7bk2R61PfblSG7IYbc4Ddv8PLRV2h2xeqC20gD9ZFpGn6nKi00zf3zaGPeOWS
+	aSCwMvZR9gmTbODQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19F9B13AA5;
+	Fri, 23 Sep 2022 09:08:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id e5i3BXB3LWM6HAAAMHmgww
+	(envelope-from <vbabka@suse.cz>); Fri, 23 Sep 2022 09:08:00 +0000
+Message-ID: <6e6a5f86-3080-54ed-82ea-80e57e184fd0@suse.cz>
+Date: Fri, 23 Sep 2022 11:07:59 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <84494.122092304504400356@us-mta-665.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 00/12] slab: Introduce kmalloc_size_roundup()
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>
+Cc: =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Pekka Enberg <penberg@kernel.org>, Feng Tang <feng.tang@intel.com>,
+ David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Alex Elder <elder@kernel.org>,
+ Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ Jesse Brandeburg <jesse.brandeburg@intel.com>,
+ Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
+ Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+ linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ dev@openvswitch.org, x86@kernel.org, linux-wireless@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20220922031013.2150682-1-keescook@chromium.org>
+ <673e425d-1692-ef47-052b-0ff2de0d9c1d@amd.com>
+ <202209220845.2F7A050@keescook>
+ <cb38655c-2107-bda6-2fa8-f5e1e97eab14@suse.cz>
+ <202209221446.5E90AEED@keescook>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202209221446.5E90AEED@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 9/22/22 23:49, Kees Cook wrote:
+> On Thu, Sep 22, 2022 at 11:05:47PM +0200, Vlastimil Babka wrote:
+>> On 9/22/22 17:55, Kees Cook wrote:
+>> > On Thu, Sep 22, 2022 at 09:10:56AM +0200, Christian König wrote:
+>> > [...]
+>> > > So when this patch set is about to clean up this use case it should probably
+>> > > also take care to remove ksize() or at least limit it so that it won't be
+>> > > used for this use case in the future.
+>> > 
+>> > Yeah, my goal would be to eliminate ksize(), and it seems possible if
+>> > other cases are satisfied with tracking their allocation sizes directly.
+>> 
+>> I think we could leave ksize() to determine the size without a need for
+>> external tracking, but from now on forbid callers from using that hint to
+>> overflow the allocation size they actually requested? Once we remove the
+>> kasan/kfence hooks in ksize() that make the current kinds of usage possible,
+>> we should be able to catch any offenders of the new semantics that would appear?
+> 
+> That's correct. I spent the morning working my way through the rest of
+> the ksize() users I didn't clean up yesterday, and in several places I
+> just swapped in __ksize(). But that wouldn't even be needed if we just
+> removed the kasan unpoisoning from ksize(), etc.
+> 
+> I am tempted to leave it __ksize(), though, just to reinforce that it's
+> not supposed to be used "normally". What do you think?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.0-rc6' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54050
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5227793
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Sounds good. Note in linux-next there's now a series in slab.git planned for
+6.1 that moves __ksize() declaration to mm/slab.h to make it more private.
+But we don't want random users outside mm and related kasan/kfence
+subsystems to include mm/slab.h, so we'll have to expose it again instead of
+ksize().
