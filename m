@@ -1,111 +1,79 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D002F23
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 18:50:39 +0000 (UTC)
-Received: by mail-pg1-f179.google.com with SMTP id b5so1043689pgb.6
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=soz+B5vr0YawBrGLCJUIfst1rVPegj/kO945i6tNuu4=;
-        b=OTfy5Nwpn08IcUaVlU1KJ27X+N3yWZ/VpCrAZjSpjUbsjTe/slddbrLCSNWyrUEUf+
-         hKFo3f2nFf90BAG6jEHb+7lo8EJfEwNPirhgwBNLji96jC6KqEyl6t0+uMZVhfPqRt/6
-         nRku1i36Slqm6llnH2++9t4exlSoETdRFUkh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=soz+B5vr0YawBrGLCJUIfst1rVPegj/kO945i6tNuu4=;
-        b=TFnpC1Nmt8JEQDSIRHgt0OZdjg6auX7wGb/QYZ6SqdjDXI9EWKHvj5Xmsx0IAkhSa8
-         +GEoWKS+SJXevixYWweU9lTfagVTWuwoMZXlOFpSyk4bytKZ9e3DYP6/0HxSM5WLwgoN
-         2o3pQ/+6NJRzATon327GxozpD2t1ZAUPEhUcMRk0gvQ4RqwF7K9AjuyN9y9RP5S/r0NJ
-         AyPoHbx3B2zMlRBF3TeNA9QH1JEGfQ2/RiGbqPF9IpD48rzQiOBTrQCyxcPEQz2SgSO3
-         fpyjRCcnhCkL+2pv2+EoY/9s/Kx8Nv/DfBJVYhlEJeWQfhI9QwdJoEkucjpbaLFyhfxw
-         pHyw==
-X-Gm-Message-State: ACrzQf3gmbvYoEbms2hukCu3qzwofrSdqf44ykCYWcHpgC75B04n+JXi
-	Lg/VPhQH1tkcWfEg6j69rNyD5w==
-X-Google-Smtp-Source: AMsMyM5BOkxT7dmLhP+9f8RXqZTh1AjF61zhu3wqGKFHMmPuMGgEdboAX7cqSq5H5AVVbN7wJUrI2g==
-X-Received: by 2002:a63:6a47:0:b0:439:be00:7607 with SMTP id f68-20020a636a47000000b00439be007607mr8719395pgc.301.1663959039042;
-        Fri, 23 Sep 2022 11:50:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b0016dc6279ab7sm6423837plg.149.2022.09.23.11.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 11:50:38 -0700 (PDT)
-Date: Fri, 23 Sep 2022 11:50:37 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Feng Tang <feng.tang@intel.com>, Vlastimil Babka <vbabka@suse.cz>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>, Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian K??nig <christian.koenig@amd.com>,
-	"Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-	"dev@openvswitch.org" <dev@openvswitch.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH 01/12] slab: Introduce kmalloc_size_roundup()
-Message-ID: <202209231145.7654767ED5@keescook>
-References: <20220922031013.2150682-1-keescook@chromium.org>
- <20220922031013.2150682-2-keescook@chromium.org>
- <YyxDFfKmSNNkHBFi@hyeyoo>
- <Yy0JJV4c3DffCF+4@feng-clx>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8121A441A
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 19:51:04 +0000 (UTC)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-03.nifty.com with ESMTP id 28NJj3xT006036
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 04:45:03 +0900
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 28NJigt2019816
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 04:44:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 28NJigt2019816
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1663962283;
+	bh=NbCGtSdbG3oqkI66EnHd+jvnGku05D5DfnQbs9zZVLQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=x3AlN+6O4X9CLT/N/7ZyrW06jeAzLkdBWhD7QRycVtcysFmSD0ITESQgBNVO6rD0h
+	 JYui6PIm3GqoAhIOaxxrcYdHfjc6SQQuYjx2GEq5T9r/ivNcnCilFYSxHPliFgpxSw
+	 w7z+Cd8FNL2AJFGyzDC27uIZ3H3JN1Bm+GPPu5hJbBVvt85X2MPxEzyOv320oIbpQL
+	 7txS0Sof7x64RslwTy8YpPGGVIRMnxXtIdlUIuOJG2/9nv4uP0k62QY/7mA+115kGd
+	 knpH0CD/9NlMOExcZvpW8+rzCHItIuRv5nt24y/pqDHgxFZv7JmsBPHgAGBx9yx9IW
+	 r0uX9yaeC9cZw==
+X-Nifty-SrcIP: [209.85.167.170]
+Received: by mail-oi1-f170.google.com with SMTP id s125so1084578oie.4
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 12:44:42 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3qnEAEOC8/w69nxEaoLt+X9eYrHGxtaqxE9VFMOgAqoPuLJkVo
+	sTalAPHjgJBLo5Gn+E9Gqi4oZvDCF07nhv1gQ3E=
+X-Google-Smtp-Source: AMsMyM4vcr/Sug/Gk/8SieMnzcAA6gpJvAs6fyFex07yhjwvQa+N4xU9WsDe4RAkBzwftz4MHWUhlgA3q0Zd//wh+AY=
+X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
+ cj5-20020a0568081b8500b0034d8ce1d5b0mr9560936oib.194.1663962281705; Fri, 23
+ Sep 2022 12:44:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yy0JJV4c3DffCF+4@feng-clx>
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+In-Reply-To: <20220919170828.3718437-1-ndesaulniers@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 24 Sep 2022 04:44:05 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
+Message-ID: <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 23, 2022 at 09:17:25AM +0800, Feng Tang wrote:
-> On Thu, Sep 22, 2022 at 07:12:21PM +0800, Hyeonggon Yoo wrote:
-> > On Wed, Sep 21, 2022 at 08:10:02PM -0700, Kees Cook wrote:
-> > > [...]
-> > > Introduce kmalloc_size_roundup(), to serve this function so we can start
-> > > replacing the "anticipatory resizing" uses of ksize().
-> > [...]
-> >
-> > This looks okay.
-> > [...]
-> > Cc-ing Feng Tang who may welcome this series ;)
->  
-> Indeed! This will help our work of extending slub redzone check,
-> as we also ran into some trouble with ksize() users when extending
-> the redzone support to this extra allocated space than requested
-> size [1], and have to disable the redzone sanity for all ksize()
-> users [2].
-> 
-> [1]. https://lore.kernel.org/lkml/20220719134503.GA56558@shbuild999.sh.intel.com/
-> [2]. https://lore.kernel.org/lkml/20220913065423.520159-5-feng.tang@intel.com/
+On Tue, Sep 20, 2022 at 2:08 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> cc-ifversion is GCC specific. Replace it with compiler specific
+> variants. Update the users of cc-ifversion to use these new macros.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/350
+> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+> Suggested-by: Bill Wendling <morbo@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Changes v3 -> v4:
+> * Split into its own patch again from series, as per Masahiro.
+> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+>   clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
 
-Thanks for the feedback! I'll send my v2 series -- I'm hoping at least
-this patch can land in v6.1 so the various other patches would be clear
-to land via their separate trees, etc.
+
+Applied to linux-kbuild.
+Thanks.
+
+
 
 -- 
-Kees Cook
+Best Regards
+Masahiro Yamada
