@@ -1,58 +1,92 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1053C3D63
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 14:18:23 +0000 (UTC)
-Received: from p508fdb48.dip0.t-ipconnect.de ([80.143.219.72] helo=phil.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1obiqX-00075M-QP; Fri, 23 Sep 2022 15:36:01 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Jagan Teki <jagan@edgeble.ai>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>, Finley Xiao <finley.xiao@rock-chips.com>
-Subject: Re: [linux-next:master 7127/7934] drivers/clk/rockchip/clk-rv1126.c:178:7: warning: unused variable 'mux_cpll_hpll_gpll_p'
-Date: Fri, 23 Sep 2022 15:36:01 +0200
-Message-ID: <15020006.tv2OnDr8pf@phil>
-In-Reply-To: <202209192243.d80zUWVW-lkp@intel.com>
-References: <202209192243.d80zUWVW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF173D90
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 15:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B72C43142;
+	Fri, 23 Sep 2022 15:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1663946426;
+	bh=zo7rFZiPS4WyTBZk4VHnI8cDdMwygNZyE43ol0e2o2A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=h5A9XThDA/5s0nOAX9forsdLayrzgXUza7l79K6258CeVyLTGUt6X96ZBEPlttNp5
+	 ElY629wCutz4/DSMBngmRLN37ymIDXCrKV/Z2J6jov2aGTDZS4bkyZbVrUsPgnnbig
+	 yqDUPOVPVI82nAtprBZMueiVWOHOBWkCOsQi3r/9/PBuhqMgwsKjbhOa0KFz5Ia5ga
+	 FesASNFIjqev89LM8TbV6f0uz9NdHPJ6XfW7MlY5FZbM7WXYQZK/8HegplFfsL3tOO
+	 9djqqHdCD9lVmJpKW6oZAbuByK69CJ3xUbSxMjXmvykRA9FiAOhnIFGmLKDGuYyXRw
+	 uNUmczkVos0qg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	"kernelci.org bot" <bot@kernelci.org>,
+	"Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Subject: [PATCH -next] thermal/intel/int340x: Initialized ret in error path in int340x_thermal_zone_add()
+Date: Fri, 23 Sep 2022 08:20:09 -0700
+Message-Id: <20220923152009.1721739-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 
-Am Montag, 19. September 2022, 16:37:25 CEST schrieb kernel test robot:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   4c9ca5b1597e3222177ba2a94658f78fa5ef4f58
-> commit: 7f2f620daa88e72b04efd2f3da84abea0b5ca1c7 [7127/7934] clk: rockchip: Add clock controller support for RV1126 SoC
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20220919/202209192243.d80zUWVW-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=7f2f620daa88e72b04efd2f3da84abea0b5ca1c7
->         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->         git fetch --no-tags linux-next master
->         git checkout 7f2f620daa88e72b04efd2f3da84abea0b5ca1c7
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/rockchip/ drivers/irqchip/ drivers/net/wireless/ralink/rt2x00/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
+Clang warns:
 
-I've dropped the relevant unused definitions now.
-If they come up later again, someone can re-add them.
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+          if (!int34x_thermal_zone->ops)
+              ^~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
+          return ERR_PTR(ret);
+                        ^~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
+          if (!int34x_thermal_zone->ops)
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
+          int ret;
+                ^
+                  = 0
+  1 error generated.
 
+If kmemdup() fails, -ENOMEM should be returned.
 
-Heiko
+Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1717
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index ea05be8c2834..228f44260b27 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -219,8 +219,10 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ 
+ 	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+ 					   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
+-	if (!int34x_thermal_zone->ops)
++	if (!int34x_thermal_zone->ops) {
++		ret = -ENOMEM;
+ 		goto err_ops_alloc;
++	}
+ 
+ 	if (get_temp)
+ 		int34x_thermal_zone->ops->get_temp = get_temp;
+
+base-commit: 2b109cffe6836f0bb464639cdcc59fc537e3ba41
+-- 
+2.37.3
 
