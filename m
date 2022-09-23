@@ -1,49 +1,47 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2DF443E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D794439
 	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 20:28:32 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id s206so1274814pgs.3
+Received: by mail-pl1-f174.google.com with SMTP id w20so1143877ply.12
         for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=X/Yo0q+LJh3/rts6UXiCkFsErG60vpqgZ/L53wodJpE=;
-        b=ZUb4dJcl9kyY0JCMIbSxhNelqg+q4A2wjd4CgDikdt5aQnXIoCAm64UQW+1n3wlzIC
-         pAnpD7T83tfvNJ+uFbkJeFi1y8cQ0gxyzoEmIemLuV7nFZspJ2KQU5mmAB4gcKBwfFdP
-         Er1yFNuC2cHt2der8y8JOYqcnXvTsxoObkuAY=
+        bh=9WHW9dcNJ7USo93XbepCTz52gEB8RJhZFTCAgOxjaWE=;
+        b=MCrThrcpHBXTtrPTMUDahiOxJ8D8ml0adnc2b/ZnUpLhKCWbzkicjK7DVQ0Out5WOD
+         FREFmdsJO4H0m9nZW5aGp3kZr8NyuDEg+cjmHSd2PFaU5B93FD7J4xKRdTkOt4VgUbKn
+         UMInxMGoGT3uNhBnpORcuWbRNV0aijKsC637c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=X/Yo0q+LJh3/rts6UXiCkFsErG60vpqgZ/L53wodJpE=;
-        b=14nasfcD4+RX+gDjlvxIwXdNyZ3LwRTghd6hYo2PAKNDpc55wREGVN2JCU9ZmCk+WS
-         +gF7mQgqSc2ulwzPnrJ9YYu9Zoe/x/PCCyPpusCvx4xfFpJGzAW7FFZPXbK0mtNUZLSU
-         yBwFh0huA2tJn2bj35Tbse5Ru8ef38F2NVG1mnvV/G3lj8M27M1UQMXI7oxRQgyppr73
-         F54F62DTogNKGWDe9r2sO8zKL2/kqyWGCecHLGsoILCw4XqM5A8GnvRCLdHAaArNc9jd
-         VHJjWRPi+L2ww7f3VBCEyRxG1unr91By+2SWA6sD95XXaMX05G4B2TT5RN5vH5ZePc2x
-         D5lQ==
-X-Gm-Message-State: ACrzQf0wydfoZMR5bfSZaxFRZBov2dPa2Ym86JzMtMy/aOhK8jEATfND
-	tefynP+7gEH+oPkZhbt2aUolAg==
-X-Google-Smtp-Source: AMsMyM56PrOnj3O75SoOzdxaUyKZ0YbIXH0yPGDqg6UOnADEm1wpBRmS/rl1dQfty4+94PufpVyEyg==
-X-Received: by 2002:a63:4b1d:0:b0:439:e6a4:e902 with SMTP id y29-20020a634b1d000000b00439e6a4e902mr9335669pga.212.1663964911544;
-        Fri, 23 Sep 2022 13:28:31 -0700 (PDT)
+        bh=9WHW9dcNJ7USo93XbepCTz52gEB8RJhZFTCAgOxjaWE=;
+        b=kXJ6YC8k68O8hOIParBH98DxKpsyBOdeeSQlAbOn1IBGYwU+r2EBaibNDI5xXiz0uC
+         m0Wb8JU7f4bDibxqEMOwttr5pzSan0ZQ92vZeSVJ7GC65aARPdtV+dm3DH9Eu2rRJnSl
+         2eE7PKYwAPjhNsuGWDxZOwwZUHVESVOCe/ofOtYu3VAV6GZyvnigts0NF7sL7q+h7/No
+         +AXOKigCXIq99jJh41nHGQBBTb9hHVzfPkWrWk0yJ1WcfK8ul2oZtFibk/KPeTW4GaTw
+         X5N4TyHHtwT22mo6nfXxIDyFfZKSC/W3TfIp/L19Rf+qz/8keP7kGnvAb2zW1NtEtOm6
+         cVUA==
+X-Gm-Message-State: ACrzQf3EZURKafR/WYFJFUsWD2CMh7pzPO1VSjbB9yQXqG1bJ8ifjEWG
+	bRhhiGHWCW8ram5hYrr+hHLOHg==
+X-Google-Smtp-Source: AMsMyM5oK9MYI8mIo+EhF+H1NGRpmeDN3XTs1GMolX8M2ezSAV2Ua89sZ12ya0mBIXqqAy1a/ohl1A==
+X-Received: by 2002:a17:902:ce85:b0:178:2402:1f7d with SMTP id f5-20020a170902ce8500b0017824021f7dmr10208022plg.81.1663964912148;
+        Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 22-20020a17090a0d5600b001ef81574355sm2000341pju.12.2022.09.23.13.28.27
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902d2c800b00174d9bbeda4sm6514749plc.197.2022.09.23.13.28.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 23 Sep 2022 13:28:28 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: Kees Cook <keescook@chromium.org>,
-	Pravin B Shelar <pshelar@ovn.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	dev@openvswitch.org,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
 	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
 	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
 	Christoph Lameter <cl@linux.com>,
@@ -51,13 +49,15 @@ Cc: Kees Cook <keescook@chromium.org>,
 	David Rientjes <rientjes@google.com>,
 	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Alex Elder <elder@kernel.org>,
 	Josef Bacik <josef@toxicpanda.com>,
 	David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
 	Jesse Brandeburg <jesse.brandeburg@intel.com>,
 	Daniel Micay <danielmicay@gmail.com>,
 	Yonghong Song <yhs@fb.com>,
@@ -65,18 +65,17 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
 	linux-btrfs@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
 	linux-fsdevel@vger.kernel.org,
 	intel-wired-lan@lists.osuosl.org,
+	dev@openvswitch.org,
 	x86@kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 10/16] openvswitch: Use kmalloc_size_roundup() to match ksize() usage
-Date: Fri, 23 Sep 2022 13:28:16 -0700
-Message-Id: <20220923202822.2667581-11-keescook@chromium.org>
+Subject: [PATCH v2 08/16] dma-buf: Proactively round up to kmalloc bucket size
+Date: Fri, 23 Sep 2022 13:28:14 -0700
+Message-Id: <20220923202822.2667581-9-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
 References: <20220923202822.2667581-1-keescook@chromium.org>
@@ -86,39 +85,50 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1114; h=from:subject; bh=34QBkIPlID/8bnVmUZjxBAD5CQnxKEZULyryTOgjniU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhblCci+wGv8iOvuMA8kL10auMgCdSAnR8YUMoXu podrrfKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5QAKCRCJcvTf3G3AJqB8D/ 4wCq8GoLp593BnoMNdwJoYvf4etLZwZGsXZQsb2VBiy0skIZlwiVr3PlOgTBYZgIzLvlvUxdUJ5nlX Bi7PnNee9K0Li5LxtO1cZdKiafC2g2Bwno2il0Lo40rZNh8zuXtHkOL9Ch6MatzIqZvHirzYXgdFYa kL+5yKCw2OQwWbSzxN2JM/vbJJUQqWo3IuvGbHZNr3neCmsRvYQL9SENnZqNlmEN0oWzba5MOArXOo /gL8NjrYcXMqpUjBsVYY3y9nJYmkYPHuf/2GpJoU3H8aNnc9kL8Pnb6DwPQil/tk64OQkt0b7ZcjrC G0P1WN75ngaL4hyDGzvdTSyhbfeaPY233mJqTfNH5oCljXV1jN8j7JHWKIlijEpvh+rgmsD8oUU7cT LaZlaPifCbnZzop1KYF9cjTfQ6B1FwHfcaDukW/X9RDudAeKfjA6FDVNBvMvz6dQzkfSaJU4YlVLat mUOaeTfq4RLXR/1FfCnYLeQzvwlAmM6D2JIyw+FADeIZXNcc0kh8AWEtFVPrlaFoC7ofIyB/PaclI7 AeUp4jht1HTcepzxMUGZ3tJxRqUFmKdqW/dmu2F5hihUeoxfrDraNFqeBygde5JGfInhtRyFE314eo nj0zrS6Q1+iCwTFGvr/2/6qclufX48XSB7HUF/kPBPaTwX4S6IGvnRi92exg==
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1536; h=from:subject; bh=1k9cluqwH+m+5FA9iHjyZRl7ltBBZL1qz3WU+O4eJDg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbkkQMIyxW+p5Yq+8oZ2wcfayyBNx+y5dQbw2fi AE/i2oWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5AAKCRCJcvTf3G3AJs+QD/ sFhRuVLRx0nMn49LZ3LgzAUGJu/OCv8HKw/plbSsv+vpxeMZ5Y4Z2yz+8pOjvg3cX6lD5EGOFnhfDh AkybvgBPzOD3UBEmc2+orSVNWeDOnYXG/2dyEL7KYashVN5HVyJ+SxZeRk177uhTjBzjbNRkAQ/SVs Oxp1fa8tJlAzSNr4khPvRqKxudlyHIfws9eHam1m+xu9Yx4IaRjlpv73TPFSCF3B4R61s5d9qdqmI6 QtxsboSAw9VmMnwtQ92JY/zE3XF4HhRRzOwCGtrvQkJf7xWir9bHo5kODtv29MGnYSHOD7MNuLNHvy yT9yMlcMCSUI01Gqw83MyXuzCvvbGT8fRIxDuE0OLV8AuytMSMYtLLvmi8aqicaaH1P85zLrbxJ7VQ ibgpFBaDwYITAulUo26Uezs0cpbObE4vDsRPIMUwW8KNHI4PXEY3ej4CfYwEi05WAoQDnHjsKiI3mw NgRo1Knltm0LSiFomNDPAPC2bLhoNZ5ap0NV7jcfaCdq1s+e8i6UWoxTNuvUmvNZIO/WymKW5MaK0w VFLb8zJYoMtYLSQQRa1twKC/oiHyzfBWzmy0upGh1vD2LcXJMTsecq1f9iPUzq0AYRDLPe3zIIPTo5 8qm3uJJ1hdyE1VeTF4mKkOhP+oujwwLKoB9fQmxF1d5+YH73zekSnLGtymEw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Round up allocations with kmalloc_size_roundup() so that openvswitch's
-use of ksize() is always accurate and no special handling of the memory
-is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+Instead of discovering the kmalloc bucket size _after_ allocation, round
+up proactively so the allocation is explicitly made for the full size,
+allowing the compiler to correctly reason about the resulting size of
+the buffer through the existing __alloc_size() hint.
 
-Cc: Pravin B Shelar <pshelar@ovn.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: dev@openvswitch.org
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- net/openvswitch/flow_netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma-buf/dma-resv.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 4c09cf8a0ab2..6621873abde2 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -2309,7 +2309,7 @@ static struct sw_flow_actions *nla_alloc_flow_actions(int size)
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 205acb2c744d..5b0a4b8830ff 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -98,12 +98,17 @@ static void dma_resv_list_set(struct dma_resv_list *list,
+ static struct dma_resv_list *dma_resv_list_alloc(unsigned int max_fences)
+ {
+ 	struct dma_resv_list *list;
++	size_t size;
  
- 	WARN_ON_ONCE(size > MAX_ACTIONS_BUFSIZE);
+-	list = kmalloc(struct_size(list, table, max_fences), GFP_KERNEL);
++	/* Round up to the next kmalloc bucket size. */
++	size = kmalloc_size_roundup(struct_size(list, table, max_fences));
++
++	list = kmalloc(size, GFP_KERNEL);
+ 	if (!list)
+ 		return NULL;
  
--	sfa = kmalloc(sizeof(*sfa) + size, GFP_KERNEL);
-+	sfa = kmalloc(kmalloc_size_roundup(sizeof(*sfa) + size), GFP_KERNEL);
- 	if (!sfa)
- 		return ERR_PTR(-ENOMEM);
+-	list->max_fences = (ksize(list) - offsetof(typeof(*list), table)) /
++	/* Given the resulting bucket size, recalculated max_fences. */
++	list->max_fences = (size - offsetof(typeof(*list), table)) /
+ 		sizeof(*list->table);
  
+ 	return list;
 -- 
 2.34.1
 
