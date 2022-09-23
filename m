@@ -1,390 +1,230 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AE33D90
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 15:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663947104; x=1695483104;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=WR2ga+kxGkyj2AZa05LX2Bgu96b5WxaVuXse5rSdRUA=;
-  b=KtG5kbgwEs69kax4nHopI/fyfRJyaUBFIyPYq5u7kJsepxT++T8hmN26
-   ycBy56sJryOpDQWyVv/7ic/GgsL9JiU/PPHh0/pHQPKXkHutx3mvDMJT1
-   9Yx9cGT6PaAjR6bcQjmZLI72TYSvE3OhxfDzMP0REM0KknLkAFXqQ/wEt
-   AeL0sXJWuGqbHE5LvpZ++RZ4k4nmSiUIBSI6nbG8RFOsgCRllOAHXdxfC
-   TqJiFjZSbQSVx6Qh0uAjxUnERh6JAmxuq3BLZUoKRKZqrQu1b9Cje5eqo
-   j+A1FVTtKteppGLQdYC3qQauiqVD0fShFGhITqyORi4OAVqfvmWtbm3E2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10479"; a="280338197"
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="280338197"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2022 08:31:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,339,1654585200"; 
-   d="scan'208";a="795537772"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP; 23 Sep 2022 08:31:37 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 08:31:37 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 08:31:36 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 23 Sep 2022 08:31:36 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 23 Sep 2022 08:31:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PT7ef2g1dsYI1R3Tzuby0kMVYG/z4CbjXuwosdQUhfxqbQYOSg/X/CHdG2acjCVhmMgnTfOnE6ZyVcXqRdfcf90S77QdXJ8f2jGMHkr4934dPehbVXyzlIn0RhEGuMNDJfLFk/upCWZ8sxKIGwjAGtoOf16s9xYW25ZW2Lg1pnkHuVZDTOrFlXVq47kOLwPWGf+/AFmwGq6PMHOL07i384WBev9ynA9fJPf0O9tyUfmJcCf058Fmi8bcSNt5Ub+GQTcP9dvwM6UPtyntySfW6X4cHQq2xHVeffpA1KvnkwbXgzzY0wcRYUiV7FxgwJm0lAO1oRn96BUg8wZ7BpnHlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6+JEC1r+dlc2+SgNbOURZIR68eKyLEZ/+AA9ewCzNTo=;
- b=RTFMUJ2qpz9IHdU8SvJtxNydzKlz2yDTBrzSutpjMOZ9dkS3Ls7tWurDr9PNh+piy4Ql5YJKyIDhVaPHo7kSP6bLalcG+mUWormBzaQ07TfqcoEafQxhVZEYyqMmudxDda40MOvI/fmzySKwljRouf8TIbyJc1yfTTsvLikzY3FJovwc3byjGpF0xyFx/HwFiJdXXo2g5gJWpVwzr86rCn5OBg57gZeMl86fZD/GS8WQWnBHED8BSNJi7eYV3wDY+DzkO1Ot5ZFYnPt2VR7bSAcaaL9n0g+rgD1/C6G/1koBcqMjgHWGJUGs+aKq8uWeo3wbvcCpKnVgB1A9XkGYAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
- by IA1PR11MB7175.namprd11.prod.outlook.com (2603:10b6:208:419::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.17; Fri, 23 Sep
- 2022 15:31:32 +0000
-Received: from BL0PR11MB2995.namprd11.prod.outlook.com
- ([fe80::5482:e4d0:c7d9:e8be]) by BL0PR11MB2995.namprd11.prod.outlook.com
- ([fe80::5482:e4d0:c7d9:e8be%4]) with mapi id 15.20.5654.019; Fri, 23 Sep 2022
- 15:31:32 +0000
-Date: Fri, 23 Sep 2022 23:31:21 +0800
-From: Philip Li <philip.li@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-CC: kernel test robot <lkp@intel.com>, Alan Maguire <alan.maguire@oracle.com>,
-	<llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
-	<linux-kernel@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>
-Subject: Re: s390x-linux-ld: kallsyms.c:undefined reference to `__tsan_memcpy'
-Message-ID: <Yy3RSR9MTSXMoShd@rli9-MOBL1.ccr.corp.intel.com>
-References: <202209231726.eAy8Z0ZF-lkp@intel.com>
- <Yy3PxL973jtEtEUK@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yy3PxL973jtEtEUK@dev-arch.thelio-3990X>
-X-ClientProxiedBy: SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15)
- To BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9503D90
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 15:37:29 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id g20so482524ljg.7
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 08:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
+        b=U/jIWxOgoFz/4fL9IY1kUApVA9JT478amyvIMeWn+/9l5MAalm8L5UP7GL2AGnSeMl
+         7CBbhsMsGSptl1Oun9YGw0Zmrf99ZTtyT5p8SyCAZBw6AOWz30Jk92GSJSruLxlFcDdc
+         xUL80VdSuztcNx/54xsQrJ46sp580eOx6lIpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=OgoaLpQ3yLM8sL8g85b58XwiPLmA9EGQIhDG7GYJi/Y=;
+        b=P4TlwHUIsNpdEHVuPfBJIEtEpqvdUSiRqO2IQMbXP3zie7MTDsmA+N5GDRLsG22SQp
+         GDKMKTzY425JvQjokc5/wdQtoeICyZ1ryhRgWZvKIn26bvYr1uphsR8KwLjnE8MUUvYv
+         YTSQ9o0vtmJyBLAZOCM/p/nC3yeieRCSH0b87o1b1Z3gnwXB27ToqCOXzUsgNLmidOn6
+         CGFLc7XPwIG/llQHOqakzaE1yae3triBRheE/W3a2esDJcU6cw9IWE7vQ5IWN5qyFtkD
+         AvIuBJtm4VG27gTeO3SxdGWX5YWQWKg/3cXA+CzA1Z+BbSNAgia7f/F21kiP1F5GDTMG
+         b4fw==
+X-Gm-Message-State: ACrzQf1LzPhWHTRV9cEqh9DMZZpmKIKDAAiZ3XT02+k7F4+cxMMXiLqU
+	HYeKZt+BUA1KcHut499d/Tqi9p55KWUzwNpAyLk=
+X-Google-Smtp-Source: AMsMyM6kGt0T68s4LjjLBPYoT4Hd5qx66PFdoqr2FEQ16bej+JUI9sWrdnqyMBh2GSkYcwKFvUIGrQ==
+X-Received: by 2002:a2e:978f:0:b0:26a:a62e:8f2c with SMTP id y15-20020a2e978f000000b0026aa62e8f2cmr3108104lji.153.1663947447167;
+        Fri, 23 Sep 2022 08:37:27 -0700 (PDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id x27-20020a2ea99b000000b0026c46788fa3sm1374931ljq.104.2022.09.23.08.37.25
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 08:37:26 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id b6so467109ljr.10
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 08:37:25 -0700 (PDT)
+X-Received: by 2002:a05:6512:ba1:b0:498:9890:1bb4 with SMTP id
+ b33-20020a0565120ba100b0049898901bb4mr3294634lfv.122.1663947434871; Fri, 23
+ Sep 2022 08:37:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR11MB2995:EE_|IA1PR11MB7175:EE_
-X-MS-Office365-Filtering-Correlation-Id: 899efdd7-71be-4afa-3dde-08da9d78b14c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IOlGrdRfMbKLHXUyfUY/ntjHkV/wWzokV3bLWmguY3qHviSyuBZxfrhQxDFapRamn6yk6/lgFjgnSEf7NluT0sDaL4kL9jiCSwrLPnMEXBPvptTuliCVKnpp7lhgSYXUhPCJKqzE/OmXig1nhMwRR1/bzAUX1oTDqhSgYC2cVqb5qf8t6gvHchv+dygClwptD3XS76Nld/qMXpLNexHKvXxpsmQZb/nY1+PbT0q3h9a1l1wgzyf3YQW7joJdr4uK9jBBShm6xJ78LpxSR3iKsW6Itp42xJVvz2jOZ9w+5fuuFSFyUGxNjgUF3pwpFIpUX4lrbwY/+8+qVDSpemOL/LIMQiusTinrIVtHbqs9QX/Pil66lm1fFtExGmt9szzW2RmHn5yYm1oig7tXStj3SuaPFSQPpeKyVffOIspaaQFqkST8g9FvCini+eu3ee+CdfbYoZSju4tfvLkwzWyeUo8fewg03L6TK54ahLAH17oftzexdsvmh0jjjnOSWdRZCPbJnOhCzE2L5/9t9PIMTWuMlUG731DkvPgkzwRRDHXeuddo5lGujjAad7+HeLFdC8fAQ4HES/jnmkTyhQO0P565Qon56bc/22raYP6SSKAzF55hYbIm5kkwj9ZRt8zmu9cZQY0+zIrPn70wXZQytiru3uGqDFiQ7Uz7C/0YvK3pjWVTwuHvyo4jvHR4G+bsiBA3H0uinGd4fJOMun4FLLoCtwco0X3cAFQ2TPQ3ziKXDNYBYu2BG6meEzUWWg5KCOmGmFB4JZgetRzNKpnNbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB2995.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(376002)(396003)(366004)(346002)(136003)(451199015)(966005)(6512007)(26005)(8676002)(6666004)(6486002)(41300700001)(316002)(6506007)(6916009)(186003)(54906003)(2906002)(5660300002)(83380400001)(44832011)(38100700002)(66556008)(66476007)(30864003)(66946007)(86362001)(4326008)(478600001)(82960400001)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0s4PUzhpOKxdSWBBHpaKJKp+qILYJAfG2TNLc3Iz4tgKWSNTDNcYXrUqaeO9?=
- =?us-ascii?Q?Y/b1NM2OY6AFMco0j+c2v/p4k5NCFUawf0b4drUd4KB3E5mSJPSFno2Rn+SL?=
- =?us-ascii?Q?500Mcxvgz1TZtj08tTUScosX+D2jGceAI+1LWhLnI37DWMwb/tniYpqpXalC?=
- =?us-ascii?Q?7J8f/805dEkzkQNG2NFzzOIWms3HIR+NEzAvW/Bt6Rf1bow+kaCNLs4sl07q?=
- =?us-ascii?Q?dcxgeMCFilLqxMFRyDjx75TjTTTf2Na3/ChKV4gQe2gJlaLK3J6kaW2TWCZM?=
- =?us-ascii?Q?sFehR728ZOuHZ/YSSxYgDE1XgNFK2Yqmy/R9FhWhzObt4XRrmo1z+d3gQCkt?=
- =?us-ascii?Q?Pj7Oh2ub1r7mMRfw/mmtYEbEmaW87NoyRD08fEMMNrYo9iCByTO4p33+hd4n?=
- =?us-ascii?Q?w+QGOTNM1KB+CYGHLj0c2P1VCXhtHreQ2ljIAnhMtZwgOIgB1Rxea/cIJjZi?=
- =?us-ascii?Q?82iOupFphOoPcrCFdhDeuPfuxEnO8i4Li5Sd8SCPbZScRo2ZLkEs7LnNla68?=
- =?us-ascii?Q?m98j7VdLBd4a7e1uhA8bLPTIKgPFO5QN+2a1qk1edzQ1TyQVHAqxi21vCzSc?=
- =?us-ascii?Q?+A6T5VTBoXTgSL13KYgyTHES06I8g1j2h8JGENYoCIw5yC9L0x5CPCeg6HZX?=
- =?us-ascii?Q?0l7IRRK8TlKKYbrAufKKkkGwLlC621iJDx3onvczmfpBCHP1kS2zgyYzVGaT?=
- =?us-ascii?Q?T3azOKFZRZX5B1OTk/TnYqgNfddtBW+QpTKfLkEGXHG/kOA6CjgqLLS+r6Hw?=
- =?us-ascii?Q?YZXF3yhV+qbEr1GPRNsaIx2fY+TEHmUGrX7Wj+4WFOKr0/pGpujoQFTfakil?=
- =?us-ascii?Q?vsQJz9tnPWLVGegCQX1xWJTuh+dmVlh065hMmMpGipCu/HbEhuM3R2v8niON?=
- =?us-ascii?Q?MEb1wRMLGZQrokk7k47vM7RnUa538zn/HqpXmJn5a/TYwSDCjn8YlGFni//F?=
- =?us-ascii?Q?JgFOg/aLmGODqlZlc33nt2o5G1nXCmjjLYHJYsmzkKeUfW714Tu2Ql38IVKs?=
- =?us-ascii?Q?kZPGd0RNfVcEqszFkMwQTa9WiMi0bXFuQUQyftmjp/vC/wMhAG9NyMJJMMz6?=
- =?us-ascii?Q?KyGjRfeAf5cmyfELZQNZM2ckrKZNJXLMqQwsxzh/7Whng93IKbBGUaC/c8WJ?=
- =?us-ascii?Q?2vzfhYBTUAFReMmoByD2drd3n7RKHRnYsQW+1MHILgvpazaBzZv+c5Dv+DTU?=
- =?us-ascii?Q?v9T6CJFx4Q7BOqNmzKibBDahf1RjfAqPI4NpNm1QYNLFv4rK9DCTc06TtHhg?=
- =?us-ascii?Q?qNBLyuXAW9rTRSWF9z10sW6MRdoVLf2SmR8nKjnFFKtj3D6e3yUletJauxej?=
- =?us-ascii?Q?fEnIOkzm9H+SK5Xxda4mzyzoqA2t1Zzu8sKzxHePNaba20F8FNQg9+S0d9FG?=
- =?us-ascii?Q?FC3ULUipLzVNLetCU3+Eeu2c32zJpdP2bQshNTT482nCQGhMVBjtoWP0Z7mG?=
- =?us-ascii?Q?U2knPDElfXxQFjjbWOXaZdRXWjkFX1FJBBpobCxpHVZcNDWO9NLeAvTBWJ6q?=
- =?us-ascii?Q?HIITZe9KcON2dAwrrGzzatc30Z5b7UAMzXcW05+GfAB5Qb3vO7+Scmo+zXSL?=
- =?us-ascii?Q?em96qU8T5eHfhjxy9v3+AOKqINpbrdsdNn18qbM04aED+GdD8DxlHi9xe8xl?=
- =?us-ascii?Q?dQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 899efdd7-71be-4afa-3dde-08da9d78b14c
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB2995.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2022 15:31:32.6140
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rZEOfXMR9Hw52w1nGHpAcbg2hekfs4sloxVjcP92pA2u1vIZvMVfT9Ex5CqqMKub+vS47wGiLK9qGN8bhJV47A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7175
-X-OriginatorOrg: intel.com
+References: <20220921155205.1332614-1-rrangel@chromium.org> <Yyw12S3pstNrbGFO@smile.fi.intel.com>
+In-Reply-To: <Yyw12S3pstNrbGFO@smile.fi.intel.com>
+From: Raul Rangel <rrangel@chromium.org>
+Date: Fri, 23 Sep 2022 09:37:03 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
+Message-ID: <CAHQZ30BpkQ4R-Wh_9zaUeFWVSJm79ebu5Lp4Xx=R6RUx_KYrrg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/13] acpi: i2c: Use SharedAndWake and
+ ExclusiveAndWake to enable wake irq
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>, linux-input <linux-input@vger.kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Tim Van Patten <timvp@google.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, "jingle.wu" <jingle.wu@emc.com.tw>, 
+	Hans de Goede <hdegoede@redhat.com>, "Limonciello, Mario" <mario.limonciello@amd.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Alistair Francis <alistair@alistair23.me>, 
+	Angela Czubak <acz@semihalf.com>, Bartosz Golaszewski <brgl@bgdev.pl>, Bartosz Szczepanek <bsz@semihalf.com>, 
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
+	Dan Williams <dan.j.williams@intel.com>, Douglas Anderson <dianders@chromium.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <groeck@chromium.org>, 
+	Jiri Kosina <jikos@kernel.org>, Johnny Chuang <johnny.chuang.emc@gmail.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Len Brown <lenb@kernel.org>, 
+	Matthias Kaehlcke <mka@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Rob Herring <robh@kernel.org>, 
+	Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>, Wolfram Sang <wsa@kernel.org>, 
+	Yang Li <yang.lee@linux.alibaba.com>, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, 
+	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 23, 2022 at 08:24:52AM -0700, Nathan Chancellor wrote:
-> Intel folks,
-> 
-> I thought these reports were not going to be delivered to kernel
-> developers?
-> 
-> https://lore.kernel.org/Yx3HnuEDyFG0+G62@dev-arch.thelio-3990X/
+On Thu, Sep 22, 2022 at 4:16 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Wed, Sep 21, 2022 at 09:51:52AM -0600, Raul E Rangel wrote:
+> > Today, i2c drivers are making the assumption that their IRQs can also
+> > be used as wake IRQs. This isn't always the case and it can lead to
+> > spurious wakes. This has recently started to affect AMD Chromebooks.
+> > With the introduction of
+> > d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
+> > controller gained the capability to set the wake bit on each GPIO. The
+> > ACPI specification defines two ways to inform the system if a device is
+> > wake capable:
+> > 1) The _PRW object defines the GPE that can be used to wake the system.
+> > 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
+> >
+> > Currently only the first method is supported. The i2c drivers don't have
+> > any indication that the IRQ is wake capable, so they guess. This causes
+> > spurious interrupts, for example:
+> > * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
+> >   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
+> >   system.
+> > * The IRQ line is active level low for this device and is pulled up by
+> >   the power resource defined in `_PR0`/`_PR3`.
+> > * The i2c driver will (incorrectly) arm the GPIO for wake by calling
+> >   `enable_irq_wake` as part of its suspend hook.
+> > * ACPI will power down the device since it doesn't have a wake GPE
+> >   associated with it.
+> > * When the device is powered down, the IRQ line will drop, and it will
+> >   trigger a wake event.
+> >
+> > See the following debug log:
+> > [   42.335804] PM: Suspending system (s2idle)
+> > [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
+> > [   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
+> > [   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
+> > [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
+> > [   42.535293] PM: Wakeup unrelated to ACPI SCI
+> > [   42.535294] PM: resume from suspend-to-idle
+> >
+> > In order to fix this, we need to take into account the wake capable bit
+> > defined on the Interrupt/GpioInt. This is accomplished by:
+> > * Migrating some of the i2c drivers over to using the PM subsystem to
+> >   manage the wake IRQ.
+> > * Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
+> >   to the  i2c core.
+> > * Use the wake_capable bit in the i2c core to call
+> >   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
+> > * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
+> >   handled by the i2c core.
+> > * Make the ACPI device PM system aware of the wake_irq. This is
+> >   necessary so the device doesn't incorrectly get powered down when a
+> >   wake_irq is enabled.
+> >
+> > I've tested this code with various combinations of having _PRW,
+> > ExclusiveAndWake and power resources all defined or not defined, but it
+> > would be great if others could test this out on their hardware.
+> >
+> > I'm sure this will surface some devices where the IRQs were not
+> > correctly marked as wake capable. Ideally the firmware can be fixed, but
+> > if not we can work around this in the kernel by providing a board
+> > specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
+> > See `chromeos_laptop.c` for an example of matching DMI properties and
+> > setting the `I2C_CLIENT_WAKE` override.
+> >
+> > Thanks,
+> > Raul
+> >
+> > Changes in v5:
+> > - Added Acked-by: Benjamin Tissoires
+> > - Removed clang-format white space changes
+> > - Check irq return value before updating wake_capable pointer
+>
 
-Sorry about this Nathan, we will fix this asap. The configuration is
-wrongly set for objtool related pattern.
+> You are too fast with a new versions... I have comment on the v4 and I believe
+> it applicable here (not settled yet).
+>
 
-> 
-> Cheers,
-> Nathan
-> 
-> On Fri, Sep 23, 2022 at 05:44:55PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   bf682942cd26ce9cd5e87f73ae099b383041e782
-> > commit: 647cafa22349026a8435030e9157074ab7fe5710 bpf: add a ksym BPF iterator
-> > date:   2 months ago
-> > config: s390-buildonly-randconfig-r001-20220922 (https://download.01.org/0day-ci/archive/20220923/202209231726.eAy8Z0ZF-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install s390 cross compiling tool for clang build
-> >         # apt-get install binutils-s390x-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=647cafa22349026a8435030e9157074ab7fe5710
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 647cafa22349026a8435030e9157074ab7fe5710
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    hrtimer.c:(.text+0x1e92): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/hrtimer.o: in function `hrtimer_nanosleep':
-> >    hrtimer.c:(.text+0x332c): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/hrtimer.o: in function `__se_sys_nanosleep':
-> >    hrtimer.c:(.text+0x350a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/hrtimer.o:hrtimer.c:(.text+0x36be): more undefined references to `__tsan_memset' follow
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `tk_set_wall_to_mono':
-> >    timekeeping.c:(.text+0x3a7e): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_update':
-> >    timekeeping.c:(.text+0x3d64): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_inject_offset':
-> >    timekeeping.c:(.text+0x3f64): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x417a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `read_persistent_clock64':
-> >    timekeeping.c:(.text+0x4de2): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_resume':
-> >    timekeeping.c:(.text+0x517e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x5190): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/timekeeping.o:timekeeping.c:(.text+0x5432): more undefined references to `__tsan_memset' follow
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_resume':
-> >    timekeeping.c:(.text+0x54c8): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x55fc): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x5620): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_suspend':
-> >    timekeeping.c:(.text+0x584e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x58c0): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x5956): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x597c): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x59b0): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x5a5a): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_advance':
-> >    timekeeping.c:(.text+0x5f92): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x6572): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x66f2): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `getboottime64':
-> >    timekeeping.c:(.text+0x67b4): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `do_adjtimex':
-> >    timekeeping.c:(.text+0x7382): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `update_fast_timekeeper':
-> >    timekeeping.c:(.text+0x794c): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: timekeeping.c:(.text+0x7970): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `read_persistent_wall_and_boot_offset':
-> >    timekeeping.c:(.init.text+0x46): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/timekeeping.o: in function `timekeeping_init':
-> >    timekeeping.c:(.init.text+0x7e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.init.text+0x90): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.init.text+0x146): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.init.text+0x198): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.init.text+0x1b6): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: timekeeping.c:(.init.text+0x1da): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: timekeeping.c:(.init.text+0x34a): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/ntp.o: in function `__do_adjtimex':
-> >    ntp.c:(.text+0xf8c): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: ntp.c:(.text+0xf9e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/clocksource.o: in function `sysfs_get_uname':
-> >    clocksource.c:(.text+0xdd0): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/clocksource.o: in function `current_clocksource_store':
-> >    clocksource.c:(.text+0x10d0): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/clocksource.o: in function `unbind_clocksource_store':
-> >    clocksource.c:(.text+0x1142): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: clocksource.c:(.text+0x118c): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/clocksource.o: in function `boot_override_clocksource':
-> >    clocksource.c:(.init.text+0x128): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/jiffies.o: in function `register_refined_jiffies':
-> >    jiffies.c:(.text+0x36): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/alarmtimer.o: in function `trace_event_raw_event_alarmtimer_suspend':
-> >    alarmtimer.c:(.text+0x26a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/alarmtimer.o: in function `trace_event_raw_event_alarm_class':
-> >    alarmtimer.c:(.text+0x35a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/alarmtimer.o: in function `get_boottime_timespec':
-> >    alarmtimer.c:(.text+0x149e): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/alarmtimer.o: in function `alarmtimer_init':
-> >    alarmtimer.c:(.init.text+0xaa): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: alarmtimer.c:(.init.text+0xd8): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_settime':
-> >    posix-stubs.c:(.text+0x56): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/posix-stubs.o: in function `do_clock_gettime':
-> >    posix-stubs.c:(.text+0xfe): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_gettime':
-> >    posix-stubs.c:(.text+0x16c): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/posix-stubs.o: in function `__se_sys_clock_nanosleep':
-> >    posix-stubs.c:(.text+0x2c4): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/clockevents.o: in function `unbind_device_store':
-> >    clockevents.c:(.text+0x1808): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/tick-sched.o: in function `tick_cancel_sched_timer':
-> >    tick-sched.c:(.text+0x1f62): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/test_udelay.o: in function `udelay_test_write':
-> >    test_udelay.c:(.text+0x30): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/time/test_udelay.o:test_udelay.c:(.text+0x15c): more undefined references to `__tsan_memset' follow
-> >    s390x-linux-ld: kernel/smp.o: in function `smp_call_function_single':
-> >    smp.c:(.text+0x1084): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: smp.c:(.text+0x167a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: smp.c:(.text+0x1bf0): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/smp.o: in function `smp_call_function_many_cond':
-> >    smp.c:(.text+0x295e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: smp.c:(.text+0x30b6): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: smp.c:(.text+0x395a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/smp.o:smp.c:(.text+0x3fae): more undefined references to `__tsan_memset' follow
-> >    s390x-linux-ld: kernel/kallsyms.o: in function `update_iter':
-> >    kallsyms.c:(.text+0x1370): undefined reference to `__tsan_memcpy'
-> > >> s390x-linux-ld: kallsyms.c:(.text+0x13a2): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kallsyms.c:(.text+0x148c): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/acct.o: in function `__se_sys_acct':
-> >    acct.c:(.text+0x390): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/acct.o: in function `do_acct_process':
-> >    acct.c:(.text+0xf50): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: acct.c:(.text+0xfd6): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: acct.c:(.text+0x10ee): undefined reference to `__tsan_memset'
-> > >> s390x-linux-ld: acct.c:(.text+0x112c): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/crash_core.o: in function `append_elf_note':
-> >    crash_core.c:(.text+0x72): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: crash_core.c:(.text+0xa2): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/crash_core.o: in function `final_note':
-> >    crash_core.c:(.text+0xde): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/crash_core.o: in function `crash_update_vmcoreinfo_safecopy':
-> >    crash_core.c:(.text+0x13a): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/crash_core.o: in function `crash_save_vmcoreinfo':
-> >    crash_core.c:(.text+0x228): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/crash_core.o: in function `vmcoreinfo_append_str':
-> >    crash_core.c:(.text+0x260): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: crash_core.c:(.text+0x272): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: crash_core.c:(.text+0x30c): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/crash_core.o: in function `crash_save_vmcoreinfo_init':
-> >    crash_core.c:(.init.text+0x9fa): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/kexec_core.o: in function `kimage_load_segment':
-> >    kexec_core.c:(.text+0x1126): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kexec_core.c:(.text+0x1272): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kexec_core.c:(.text+0x1290): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kexec_core.c:(.text+0x13bc): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kexec_core.c:(.text+0x14d6): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kexec_core.c:(.text+0x14f2): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/kexec_core.o: in function `__crash_kexec':
-> >    kexec_core.c:(.text+0x15b4): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/kexec_core.o: in function `kimage_alloc_pages':
-> >    kexec_core.c:(.text+0x1ca2): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/kexec.o: in function `__se_sys_kexec_load':
-> >    kexec.c:(.text+0x240): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/backtracetest.o: in function `backtrace_regression_test':
-> >    backtracetest.c:(.text+0x9e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_root':
-> >    cgroup.c:(.text+0x778): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup':
-> >    cgroup.c:(.text+0x8ca): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_migrate':
-> >    cgroup.c:(.text+0xa60): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `trace_event_raw_event_cgroup_event':
-> >    cgroup.c:(.text+0xc7a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o:cgroup.c:(.text+0x1c5c): more undefined references to `__tsan_memset' follow
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `task_cgroup_path':
-> >    cgroup.c:(.text+0x61b0): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_migrate_finish':
-> >    cgroup.c:(.text+0x67ee): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_migrate_prepare_dst':
-> >    cgroup.c:(.text+0x6d76): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `find_css_set':
-> >    cgroup.c:(.text+0x6f8c): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup.c:(.text+0x6f9e): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup.c:(.text+0x7676): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup.c:(.text+0x76f4): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_attach_task':
-> >    cgroup.c:(.text+0x8ad2): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `css_task_iter_start':
-> >    cgroup.c:(.text+0x9f76): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_mkdir':
-> >    cgroup.c:(.text+0xa992): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_addrm_files':
-> >    cgroup.c:(.text+0x103aa): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup.c:(.text+0x1048a): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o:cgroup.c:(.text+0x10654): more undefined references to `__tsan_memset' follow
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `features_show':
-> >    cgroup.c:(.text+0x17c54): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_init_subsys':
-> >    cgroup.c:(.init.text+0x246): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup.o: in function `cgroup_init':
-> >    cgroup.c:(.init.text+0xc48): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_transfer_tasks':
-> >    cgroup-v1.c:(.text+0x1c4): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup-v1.c:(.text+0x1d6): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_pidlist_start':
-> >    cgroup-v1.c:(.text+0x930): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup_release_agent_write':
-> >    cgroup-v1.c:(.text+0x142a): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroupstats_build':
-> >    cgroup-v1.c:(.text+0x1588): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_release_agent':
-> >    cgroup-v1.c:(.text+0x1d60): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup-v1.c:(.text+0x1d72): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: cgroup-v1.c:(.text+0x1e7a): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_parse_param':
-> >    cgroup-v1.c:(.text+0x1fa0): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/cgroup-v1.o: in function `cgroup1_reconfigure':
-> >    cgroup-v1.c:(.text+0x2640): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/cgroup/freezer.o: in function `cgroup_freeze':
-> >    freezer.c:(.text+0x123c): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/legacy_freezer.o: in function `freezer_read':
-> >    legacy_freezer.c:(.text+0x956): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/cgroup/legacy_freezer.o: in function `freezer_apply_state':
-> >    legacy_freezer.c:(.text+0x1834): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: legacy_freezer.c:(.text+0x18da): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/kheaders.o: in function `ikheaders_read':
-> >    kheaders.c:(.text+0x3a): undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/stop_machine.o: in function `stop_one_cpu':
-> >    stop_machine.c:(.text+0x70): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: stop_machine.c:(.text+0x82): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/stop_machine.o: in function `cpu_stop_init_done':
-> >    stop_machine.c:(.text+0x110): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: kernel/stop_machine.o: in function `stop_two_cpus':
-> >    stop_machine.c:(.text+0x334): undefined reference to `__tsan_memset'
-> >    s390x-linux-ld: stop_machine.c:(.text+0x3b8): undefined reference to `__tsan_memset'
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
-> > 
+I'll send out a new series with the change.
+
+> > - Go back to using adev->wakeup.flags.valid to keep the diff cleaner
+> > - Fix a typo in comment
+> >
+> > Changes in v4:
+> > - Added Reviewed-by
+> > - Reformatted with 96 char limit
+> > - Added Reviewed-by
+> > - Reformatted with 96 char limit
+> > - Removed unnecessary !!
+> > - Removed unrelated whitespace change
+> > - Added Reviewed-by
+> > - Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
+> > - Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
+> >
+> > Changes in v3:
+> > - Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+> >   unrelated drivers.
+> > - Converted wake_capable parameter to bool.
+> > - Fixed bad indent
+> > - Convert wake_capable to bool
+> > - Only update wake_capable pointer once
+> > - Move wake_capable local into local block
+> >
+> > Changes in v2:
+> > - Added elants_i2c to series
+> > - Added raydium_ts_i2c to series
+> > - Fixed call site in mlxbf_gige_probe
+> > - Added ability to extract wake bit from Interrupt/IRQ resources
+> > - Look at wake_cabple bit for IRQ/Interrupt resources
+> > - I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
+> >
+> > Raul E Rangel (13):
+> >   HID: i2c-hid: Use PM subsystem to manage wake irq
+> >   Input: elan_i2c - Use PM subsystem to manage wake irq
+> >   Input: elants_i2c - Use PM subsystem to manage wake irq
+> >   Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+> >   gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
+> >   ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+> >   i2c: acpi: Use ACPI wake capability bit to set wake_irq
+> >   ACPI: PM: Take wake IRQ into consideration when entering
+> >     suspend-to-idle
+> >   HID: i2c-hid: acpi: Stop setting wakeup_capable
+> >   HID: i2c-hid: Don't set wake_capable and wake_irq
+> >   Input: elan_i2c - Don't set wake_capable and wake_irq
+> >   Input: elants_i2c - Don't set wake_capable and wake_irq
+> >   Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+> >
+> >  drivers/acpi/device_pm.c                   | 19 +++++++++--
+> >  drivers/acpi/irq.c                         |  8 +++--
+> >  drivers/acpi/resource.c                    | 16 +++++++---
+> >  drivers/gpio/gpiolib-acpi.c                | 15 +++++++--
+> >  drivers/gpio/gpiolib-acpi.h                |  2 ++
+> >  drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
+> >  drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++------------
+> >  drivers/i2c/i2c-core-acpi.c                | 37 ++++++++++++++++------
+> >  drivers/i2c/i2c-core-base.c                |  6 +++-
+> >  drivers/i2c/i2c-core.h                     |  4 +--
+> >  drivers/input/mouse/elan_i2c_core.c        | 15 +--------
+> >  drivers/input/touchscreen/elants_i2c.c     | 13 ++------
+> >  drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
+> >  drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
+> >  include/linux/acpi.h                       | 23 +++++++++++---
+> >  include/linux/ioport.h                     |  3 +-
+> >  16 files changed, 112 insertions(+), 92 deletions(-)
+> >
+> > --
+> > 2.37.3.968.ga6b4b080e4-goog
+> >
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
