@@ -1,45 +1,52 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B167B
-	for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 23:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663890891; x=1695426891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c2Fh1kRyIqO7dwRAaAYPKGtKnMyK0YH7bX5IoC7jEd0=;
-  b=jOnZZiQqXFFEJr0dKmKkdfztJMkCZE2N505n2rN4k359A8QRNQtaiJqA
-   Ybq7K+GoKBNVNgHJ8bcn57hv3SxaTkMo8QiuQa5BkET/A+QW+cPZeIC+r
-   5jEThgK6cDLgGqxwNoWATsGmPmer0Ss7P0GqFwIlBQMzYz7YAhESZVaZ5
-   2smqGSHYc/enryq6fmzOJgLG08ITnljfK2UcRSZ9UYFBWC5f+KTpXprf0
-   3trVmJQP/LZIt4Th2Z6+el9s/uoJoUNnuut513FvH06QIyYTgSIrHr4vT
-   aVVAgJyy1OEhVCjn4zJHZUAkHYi6nDB+3XKNcRgqfD+N6nOdhwcFgid1I
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="362270274"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="362270274"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 16:54:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="571180350"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Sep 2022 16:54:48 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1obW1n-00056G-1I;
-	Thu, 22 Sep 2022 23:54:47 +0000
-Date: Fri, 23 Sep 2022 07:54:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: hildawu@realtek.com, marcel@holtmann.org
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, johan.hedberg@gmail.com,
-	luiz.dentz@gmail.com, linux-bluetooth@vger.kernel.org,
-	linux-kernel@vger.kernel.org, mmandlik@google.com,
-	max.chou@realtek.com, alex_lu@realsil.com.cn, kidman@realtek.com
-Subject: Re: [PATCH] Bluetooth: btusb: Add Realtek devcoredump support
-Message-ID: <202209230749.lLf1xA67-lkp@intel.com>
-References: <20220922103337.26167-1-hildawu@realtek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278B415A3
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 00:20:54 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id fv3so11444363pjb.0
+        for <llvm@lists.linux.dev>; Thu, 22 Sep 2022 17:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=fE8nCD0AAGL6m11CnMBfi2PNly3cqHNqiT4DGj6b5Gc=;
+        b=ZcgEPa5GX4lJbCqdaQIoVzgDaAGB2ncYfRY5U+Q2yAy9IywhwFoEoy1uuMIfswt3ny
+         794u3NbJDIPlXO3iAM9o8Z2XldjYuBr70GXIXXMpFKlmSoVyLitAOvWbioDxzj83ipsx
+         dnX65KS5JpCN9hZliXHZZTTpOarXoM17UEoGc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=fE8nCD0AAGL6m11CnMBfi2PNly3cqHNqiT4DGj6b5Gc=;
+        b=FmcjRe+j8WWakeca5hBxEgCzG2gHnC6pVmKJ85YyPNPIHQ+l8v3VEWLgdEeCL3MSg7
+         MvkNYkBjTMLthgJj+mt8nVvo+g6Wb/Lc7f0pH8nkMjiDYGEHcNzgYgH5fi9r2xXnuhKJ
+         asYXC1+OyRo9rclYTc58Qu0ZW0ykIRAj3XNTwJQutFJ3CtDoEoq9/4zEvdE+FbEBfWLH
+         tdydv2Yrx45I938/nSllbg1G3LDmVVdI29ErKSWz+aDmV4g48CPenoq2RItDjRwalD6W
+         XcZWeHpIegnAIFNklQDCa5WOHDHqI7eB3YvohI1B6nltsKNxXi1ZHR+G5RCgPHhMCpj+
+         7OwA==
+X-Gm-Message-State: ACrzQf3+bBwjzVlrIzh2ol3AU8EdOfRwEkx2YuM5kGufcATFBYO/FYgs
+	S4hw8Dwjult2PFih5/IRw+iryQ==
+X-Google-Smtp-Source: AMsMyM7i+eNakcX48qpc7Mn5PvOUozzI8YxksEJeQObNVkyr/89+42nVUtZy0igEPuZyD7dfedjxXw==
+X-Received: by 2002:a17:90b:4a85:b0:202:4f3f:1f65 with SMTP id lp5-20020a17090b4a8500b002024f3f1f65mr6397691pjb.241.1663892453590;
+        Thu, 22 Sep 2022 17:20:53 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k60-20020a17090a4cc200b002006f15ad4fsm378261pjh.10.2022.09.22.17.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Sep 2022 17:20:52 -0700 (PDT)
+Date: Thu, 22 Sep 2022 17:20:51 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Siddhesh Poyarekar <siddhesh@gotplt.org>
+Cc: linux-hardening@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Juergen Gross <jgross@suse.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Tom Rix <trix@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/4] fortify: Use __builtin_dynamic_object_size() when
+ available
+Message-ID: <202209221714.1D792FE6@keescook>
+References: <20220920192202.190793-1-keescook@chromium.org>
+ <e2a0debe-e99f-2259-1cb9-35193c387c82@gotplt.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,58 +55,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220922103337.26167-1-hildawu@realtek.com>
+In-Reply-To: <e2a0debe-e99f-2259-1cb9-35193c387c82@gotplt.org>
 
-Hi,
+On Thu, Sep 22, 2022 at 04:26:54PM -0400, Siddhesh Poyarekar wrote:
+> On 2022-09-20 15:21, Kees Cook wrote:
+> > Hi,
+> > 
+> > This adjusts CONFIG_FORTIFY_SOURCE's coverage to include greater runtime
+> > size checking from GCC and Clang's __builtin_dynamic_object_size(), which
+> > the compilers can track either via code flow or from __alloc_size() hints.
+> > 
+> 
+> FTR, I ran a linux build using gcc with allyesconfig and fortify-metrics[1]
+> to get a sense of how much object size coverage would improve with
+> __builtin_dynamic_object_size.  With a total of 3,877 __builtin_object_size
+> calls, about 11.37% succeed in getting a result that is not (size_t)-1.  If
+> they were replaced by __builtin_dynamic_object_size as this patch proposes,
+> the success rate improves to 16.25%, which is a ~1.4x improvement.
 
-Thank you for the patch! Yet something to improve:
+Thanks for check that! Yeah, a 40% increase in coverage is nice. :0
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.0-rc6 next-20220921]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> This is a decent improvement by itself but it can be amplified further by
+> adding __attribute__((access (...)))[2] to function prototypes and
+> definitions, especially for functions that take in buffers and their sizes
+> as arguments since __builtin_dynamic_object_size in gcc is capable of
+> recognizing that and using it for object size determination (and hence to
+> fortify calls) within those functions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-btusb-Add-Realtek-devcoredump-support/20220922-183533
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-config: hexagon-randconfig-r023-20220922 (https://download.01.org/0day-ci/archive/20220923/202209230749.lLf1xA67-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b896c161a197fbcb019f6e4f890b667bb9d6f15e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-btusb-Add-Realtek-devcoredump-support/20220922-183533
-        git checkout b896c161a197fbcb019f6e4f890b667bb9d6f15e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/
+Yeah, this could be another interest set of additions. It seems like it
+might be more "coder friendly" if, in the future that has the
+__element_count__ attribute, it could be used in function parameters
+too, like:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+If we had:
 
-All errors (new ones prefixed by >>):
+int do_something(struct context *ctx, u32 *data, int count)
 
->> drivers/bluetooth/btrtl.c:657:8: error: call to undeclared function 'hci_devcoredump_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           err = hci_devcoredump_register(hdev, btrtl_coredump, btrtl_dmp_hdr,
-                 ^
-   1 error generated.
+this seems less easy to read to me:
 
+int __access(read_write, 2, 3) do_something(struct context *ctx, u32 *data, int count)
 
-vim +/hci_devcoredump_register +657 drivers/bluetooth/btrtl.c
+as this seems more readable to me, though I guess the access-mode
+information is lost:
 
-   652	
-   653	static int btrtl_register_devcoredump_support(struct hci_dev *hdev)
-   654	{
-   655		int err;
-   656	
- > 657		err = hci_devcoredump_register(hdev, btrtl_coredump, btrtl_dmp_hdr,
-   658					       NULL);
-   659	
-   660		return err;
-   661	}
-   662	
+int do_something(struct context *ctx, u32 * __element_count(count) data, int count)
+
+But yes, this would be excellent to start adding!
+
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook
