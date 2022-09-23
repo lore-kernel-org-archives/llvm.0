@@ -1,47 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16A615AD
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 04:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D1A8B38
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 05:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663908768; x=1695444768;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FkK4LgAPuTiz2ulFOO0KZI/5av2zSYi5/kTy4XL0vJc=;
-  b=BS4OZiv+Rn7EVWe8RTANPjjVLrjSbIcSZzu9HNu585qQl6XMR7MQIwhT
-   ZLHEdP4mF2mRygWZjEcbmwV6u2Pqo0alYPYVzTm4/AgGg76Agv4wzso07
-   T4AqfckzmiSYn5hm/AaFtObHudIvVfpSNFiA5Ku3Nl1WZiRBa5xcPSuBi
-   I6RuWClk0dWebUOgHQPI/YFLWxpw2x0gifFwsccZCOnw1FNhn7sAPV3ZQ
-   G4r3GOyjnMPrX+lGp3hEmTGHXOnnECgQqU0W3kvZ8ASIXkVWUaiw8JyrP
-   CYkyugZEFcRNQicr9jauYUad7RE7DsjLa58C76x0GYHUeGav/KXnfehqS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="301389878"
+  t=1663912477; x=1695448477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=os529bABlBN1DPv4hdu+aGyIl/MufDs/f+1+kdb4zOE=;
+  b=KmCjFPqg82TukYgd8xfLVMOr4EECO/HSyUJsIHpTMIbfoEvj5p2bCCJ8
+   AzDY1ZkV+POmUCysCHl55udYw+AubDFuORaQxkNTdATrQBPykKLWu7DfV
+   nsk3dJqxJEbn9GIhuVauTy9tSJ/l8K7a46taVlFnRjqgwtmNN2eQ45bD/
+   1XsaWaM3g431DoiESHQA5LYurYq0vX5OW5VytJQBKdObh0qnCGjJGpDXM
+   ujzcdYKr88TeFv1OxUXi6qj+8HKmRib+wr7D9TbJYAjDULSR5rLcWirr0
+   XLUSrNdkSttz6IL3PKOB+1b/Vrd41tWnyoLfFZhp5aB6xK1DEJPVkZ4Uf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="298117581"
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="301389878"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 21:52:35 -0700
+   d="scan'208";a="298117581"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 22:54:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="762485535"
+   d="scan'208";a="597753257"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Sep 2022 21:52:33 -0700
+  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 22:54:35 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1obafw-0005Jk-2o;
-	Fri, 23 Sep 2022 04:52:32 +0000
-Date: Fri, 23 Sep 2022 12:52:14 +0800
+	id 1obbdy-0005MW-2V;
+	Fri, 23 Sep 2022 05:54:34 +0000
+Date: Fri, 23 Sep 2022 13:53:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 480/484]
- drivers/base/memory.c:186:29: error: no member named 'nr_hwpoison' in
- 'struct memory_block'
-Message-ID: <202209231253.y7FHIu3q-lkp@intel.com>
+To: Douglas Anderson <dianders@chromium.org>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org
+Subject: Re: [RFC PATCH] PM: clk: Avoid lockdep warning between prepare lock
+ and &psd->lock
+Message-ID: <202209231304.p14ZsMhw-lkp@intel.com>
+References: <20220922084941.RFC.1.I206ec946a190e3de9fd13be806498821e9a6612d@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,87 +46,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220922084941.RFC.1.I206ec946a190e3de9fd13be806498821e9a6612d@changeid>
 
-tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-head:   1dee68cfead9a3a85e244a274b4e85620abd5331
-commit: 69b496f03bb46c7ce743aff0d976c078d753d6d6 [480/484] mm/hwpoison: introduce per-memory_block hwpoison counter
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220923/202209231253.y7FHIu3q-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Douglas,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on clk/clk-next pavel-leds/for-next linus/master v6.0-rc6 next-20220921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/PM-clk-Avoid-lockdep-warning-between-prepare-lock-and-psd-lock/20220922-235116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: hexagon-randconfig-r045-20220922 (https://download.01.org/0day-ci/archive/20220923/202209231304.p14ZsMhw-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/69b496f03bb46c7ce743aff0d976c078d753d6d6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
-        git checkout 69b496f03bb46c7ce743aff0d976c078d753d6d6
+        # https://github.com/intel-lab-lkp/linux/commit/ca0a9a41d27b3cabb3a7f6f4300011844aea2a68
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Douglas-Anderson/PM-clk-Avoid-lockdep-warning-between-prepare-lock-and-psd-lock/20220922-235116
+        git checkout ca0a9a41d27b3cabb3a7f6f4300011844aea2a68
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/base/memory.c:186:29: error: no member named 'nr_hwpoison' in 'struct memory_block'
-           if (atomic_long_read(&mem->nr_hwpoison))
-                                 ~~~  ^
-   drivers/base/memory.c:870:49: error: no member named 'nr_hwpoison' in 'struct memory_block'
-                   clear_hwpoisoned_pages(atomic_long_read(&mem->nr_hwpoison));
-                                                            ~~~  ^
-   2 errors generated.
+>> drivers/clk/clk.c:153:6: warning: no previous prototype for function '__clk_prepare_lock' [-Wmissing-prototypes]
+   void __clk_prepare_lock(void)
+        ^
+   drivers/clk/clk.c:153:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __clk_prepare_lock(void)
+   ^
+   static 
+>> drivers/clk/clk.c:159:6: warning: no previous prototype for function '__clk_prepare_unlock' [-Wmissing-prototypes]
+   void __clk_prepare_unlock(void)
+        ^
+   drivers/clk/clk.c:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __clk_prepare_unlock(void)
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +186 drivers/base/memory.c
+vim +/__clk_prepare_lock +153 drivers/clk/clk.c
 
-   177	
-   178	static int memory_block_online(struct memory_block *mem)
-   179	{
-   180		unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
-   181		unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
-   182		unsigned long nr_vmemmap_pages = mem->nr_vmemmap_pages;
-   183		struct zone *zone;
-   184		int ret;
-   185	
- > 186		if (atomic_long_read(&mem->nr_hwpoison))
-   187			return -EHWPOISON;
-   188	
-   189		zone = zone_for_pfn_range(mem->online_type, mem->nid, mem->group,
-   190					  start_pfn, nr_pages);
-   191	
-   192		/*
-   193		 * Although vmemmap pages have a different lifecycle than the pages
-   194		 * they describe (they remain until the memory is unplugged), doing
-   195		 * their initialization and accounting at memory onlining/offlining
-   196		 * stage helps to keep accounting easier to follow - e.g vmemmaps
-   197		 * belong to the same zone as the memory they backed.
-   198		 */
-   199		if (nr_vmemmap_pages) {
-   200			ret = mhp_init_memmap_on_memory(start_pfn, nr_vmemmap_pages, zone);
-   201			if (ret)
-   202				return ret;
-   203		}
-   204	
-   205		ret = online_pages(start_pfn + nr_vmemmap_pages,
-   206				   nr_pages - nr_vmemmap_pages, zone, mem->group);
-   207		if (ret) {
-   208			if (nr_vmemmap_pages)
-   209				mhp_deinit_memmap_on_memory(start_pfn, nr_vmemmap_pages);
-   210			return ret;
-   211		}
-   212	
-   213		/*
-   214		 * Account once onlining succeeded. If the zone was unpopulated, it is
-   215		 * now already properly populated.
-   216		 */
-   217		if (nr_vmemmap_pages)
-   218			adjust_present_page_count(pfn_to_page(start_pfn), mem->group,
-   219						  nr_vmemmap_pages);
-   220	
-   221		mem->zone = zone;
-   222		return ret;
-   223	}
-   224	
+   151	
+   152	/* Non-static wrapper of lock function for drivers/base/power/clock_ops.c */
+ > 153	void __clk_prepare_lock(void)
+   154	{
+   155		clk_prepare_lock();
+   156	}
+   157	
+   158	/* Non-static wrapper of unlock function for drivers/base/power/clock_ops.c */
+ > 159	void __clk_prepare_unlock(void)
+   160	{
+   161		clk_prepare_unlock();
+   162	}
+   163	
 
 -- 
 0-DAY CI Kernel Test Service
