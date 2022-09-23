@@ -1,55 +1,62 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C94695
-	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 20:28:35 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d11so1160959pll.8
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 13:28:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1399D3D91
+	for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 20:35:30 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so1329433pjl.0
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 13:35:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=1MqQrxnQnbWg62GSxHH0OEF1q347X/m+4lnjB2flQT0=;
-        b=Sm/M1aPSgGxkRY3LHKu9WT6VO0RigAcBGr0kTvvwRsO2yiPnlyPOycSqBm+Mx8oFi3
-         bspsiUMbtKdtztOA4+TN8PPA5DxAgy5IBcQaq/1bn/CTLSI6xp/mM0sWTL+QnjiHRtQm
-         hkYMCwfmO+zSjZYsUL+mFvQC8TlG50HBWaABQ=
+        bh=KTqecIsN+rZ/r5vRTPXwhG2Fjp/tipSlLDdfMKYcgLM=;
+        b=f94Wfd7xAB1tMy6calf6l5p3x+2in7DyzsV50yDKB7taURdsPaCM2OydY1fFaru/ZW
+         GjJIt1JF0yieLkvcBlF4pMte8sdTYkDdvEAsIZ7RUdwd9PufKMe5RpGZe3MTKJDT6pI8
+         HpvD4dvO90+mj+6aFpo4NQqtgUTesDjf+bmbw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=1MqQrxnQnbWg62GSxHH0OEF1q347X/m+4lnjB2flQT0=;
-        b=iLJtX3rVHWI56Mx8qzBMHndJoKNc1FDrzI0y0HBsvzR+Uh6piYDzeGirst8AkRUS3F
-         x6+KBVcicRoIYq3Jf1laIqKzDFj4kvuj9lJZXE/hUfZrnpUW/BMK8XPza333/w1YFE0Y
-         ylTW2OiW1fY+7iGvtjVDQm9lML40SvM+GXd+9ehZxXF28cqHXtW9sG7uwANizPFEI7V9
-         Wj0DdAF41kjdedfU/yJtQQCU5VRkDAhxFA9r5N9ydFuxCXlBxYD40nFoLygbOmg32L/K
-         rWhAGsXrct0YuSS/O/TbU16xTsqyf6PnLYWPDXVerTNNq42tKxuWOB4PG4Pm10bejSxo
-         FlAg==
-X-Gm-Message-State: ACrzQf3StZh7Eg150xkPLUqbF2LGp0WST7+l/ZynX2DML6WhjM3is8Nr
-	2f9f6xS2nmDUIbY8Vo1T0DlV5g==
-X-Google-Smtp-Source: AMsMyM6DPO4r131p/AkrnBJsIg/pPdpNgGZzqHysb3GkGzz8lYKLY18dMnHntypNM/af/tAornEd+g==
-X-Received: by 2002:a17:90b:3e8d:b0:203:1b6d:2112 with SMTP id rj13-20020a17090b3e8d00b002031b6d2112mr23327438pjb.6.1663964915447;
-        Fri, 23 Sep 2022 13:28:35 -0700 (PDT)
+        bh=KTqecIsN+rZ/r5vRTPXwhG2Fjp/tipSlLDdfMKYcgLM=;
+        b=D+Wn/Pmu9LkMQ4GFK+Gvm/mBxZmuL7SGJ8fMa7Op2B9tXideowu0fZEE30JjDAb+wa
+         lTmcZUvx/ley8UhNK2HHGyfSHjaOu5e5WRXKGp75H42hn5QbX50c/dYEi1++mqyScCjg
+         Ek9GaY+0+fvJA0hITZd5mOk6liArTpoRFTD5a6gl2UCJo1vR8JknbXYeLH+e8uL5gaga
+         Hq06mCY5gG59H8qJICwGu5BX4UR0DUdmEHNZo6pyuwvF3LvSLJoTlyKgAIc8zRluLmiD
+         HYfE6pBWpBU6AdoDopj9YbsQGqRkGMI+1sku9SKzCQqego+Zrhw7oo0kDcdpPVKrZUGR
+         p/qw==
+X-Gm-Message-State: ACrzQf2ABXD90pI6LEslg4cyDJkrsQDFTPtEIb89xGLmAqSmyeTf+LgW
+	Dri8reWH4lR5X77/iDqDZa1+1Q==
+X-Google-Smtp-Source: AMsMyM7vRbdvmLwAu4r0h4O20VFgjtnhlCkk0pZbrUyBGB40i196nKU6gbtNpTH2GFxoX0kIPq3SIA==
+X-Received: by 2002:a17:903:244d:b0:178:a0eb:d4bc with SMTP id l13-20020a170903244d00b00178a0ebd4bcmr10401235pls.33.1663965329543;
+        Fri, 23 Sep 2022 13:35:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa796ad000000b0053ae018a91esm7005618pfk.173.2022.09.23.13.28.28
+        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b001715a939ac5sm6372093plc.295.2022.09.23.13.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 13:28:32 -0700 (PDT)
+        Fri, 23 Sep 2022 13:35:28 -0700 (PDT)
 From: Kees Cook <keescook@chromium.org>
 To: Vlastimil Babka <vbabka@suse.cz>
 Cc: Kees Cook <keescook@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
 	Christoph Lameter <cl@linux.com>,
 	Pekka Enberg <penberg@kernel.org>,
 	David Rientjes <rientjes@google.com>,
 	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	linux-mm@kvack.org,
+	kasan-dev@googlegroups.com,
+	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Alex Elder <elder@kernel.org>,
 	Josef Bacik <josef@toxicpanda.com>,
@@ -62,7 +69,6 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Marco Elver <elver@google.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
 	netdev@vger.kernel.org,
 	linux-btrfs@vger.kernel.org,
 	linux-media@vger.kernel.org,
@@ -74,9 +80,9 @@ Cc: Kees Cook <keescook@chromium.org>,
 	x86@kernel.org,
 	llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 12/16] devres: Use kmalloc_size_roundup() to match ksize() usage
-Date: Fri, 23 Sep 2022 13:28:18 -0700
-Message-Id: <20220923202822.2667581-13-keescook@chromium.org>
+Subject: [PATCH v2 15/16] mm: Make ksize() a reporting-only function
+Date: Fri, 23 Sep 2022 13:28:21 -0700
+Message-Id: <20220923202822.2667581-16-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220923202822.2667581-1-keescook@chromium.org>
 References: <20220923202822.2667581-1-keescook@chromium.org>
@@ -86,34 +92,119 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=845; h=from:subject; bh=p9b8wNdLQUTcKVpskeYovP9HfQefiLH6cTy/WYiH/34=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhblaNBFxJTohammexHC6CbeJ0+h67dRN4PBtvwk 5JonPTWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5QAKCRCJcvTf3G3AJv3zD/ 9LAMXluSBHTtqxb1umMTVE5i5sD3JCHrbpRq7+nm/ihvkEJ1pnKlLOmxomGKq8yeaSA69bZA8KfZSc CR5xfaDsFWx4j9MHisTXdoYIizPEmbqQRRqOxkcdkdBTXGB4/9y7dICzF8nG/wZnRE5cg43nOsJxA/ hh08sM/Jc50zsKD8NK3U423EdCAh5Mur1N+IQdBrcIDvnYzrV9ox60ZBhTx1GxtTQH29f1M7tkTsxb CVJH0I7rS5lLvIDvLckMlcpX75U4M6OfFXPwwIxp8zwb/SpdErJg9OQ0Bc5aPbHKg5h0mzeyjxITo4 Z8ePU5LP/HNZ40tbLl/4YQUWf9RwhgxmPxlaMerypnyhhY7RPOqjaEt4QjEp435c3lkzt/jPKVyQ00 /BWZWjk3oYQBVD1YkNvQadr0W7iugWkFBmy0TMQKbpGlH/9UDUI6ZWX0cskd2A9Vm/9DXzxZlWfb5T 46CEGwe6OTc72/fqVunf113g0JP/k16VF9IW4+cBz7fPkxp8MWBVHYsuByyGXMUPaQPem/RWWPBSdo m2SZX1ZgW/fXrsnRcDrhQ1bd8TrDPmojcGJefLK+ix//dr8fGR/Mmu8QlKJ5P4e96wfEoqQZTf9cys itlMdKLXQRmGqut8owpdZR9a0jlrGiYaoK47SOl258qhzKf6gWj/fY7i/IJw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4409; h=from:subject; bh=eTOvroLnBC5lEfD5J+pHwkaq4l0Z2pdeLmvVu9h6d+U=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjLhbmYN/aRzOKQ1vH75NEteIR/Vhz22yGW0UEIcgR Yp367AqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYy4W5gAKCRCJcvTf3G3AJiNkD/ 92DJis5bkVWVuBFAf6aPfGIKZn18fqqWhgDNIB1gL3+/JoYlzCund6gFEcY8zTobmS/RbZGu3aZ6aG eGxVM7yZ+jxRPM4eiG3l1HwhmL3cHQjHtqkRmDgIyPZ9xwxYKivuUOcVZws84e+7hawBwlAhMt8li+ bgO93T234fS5FLzN/RobhSkg6ISNsI03S8QmlYHytLaSLXUZwSR0/mPUZnFFUrJZk61wAHwMxs68nu PInfWb4QkBwNwAwxJn7jG6OEI5/PSX0n80TMD9CEDNK8sroaMS2C4k5gxVvI8qQZGlT6YpdDGy5BFI oEYbO9baL9bYedtNrwWblW1L3ZmdrGVL1MbXkb3ToBxpDPvQrgQHkNTDqQsY4nttLsp3PP7SZolYSA EuyQgZv8SE2uzK0Y60dBBdrNDexKK0+R5g1mk0Fk/fCLG+1/b859Ulh7OdVyoMlBRQRnPMPCaAyju1 28AEPnC9DBu3Gim8BVHKN3GTgZ0QlUPONvmBGSbAWx359vzIQcmmHIqEMaug8yVrFqRB+cIVXcvtuT EI3ZSAAQpODVZpTsW0ZJatcd0IVMg0oWKcDLxZqolmsP3Ns+cC1eix7TMk2B/1g377zgGeJaByDfib tGymOAoaYv3yr/v92FdCHUFaW37DaZ7ARFElDKWqSBGJtj//OOcTik6X79dA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-Round up allocations with kmalloc_size_roundup() so that devres's use
-of ksize() is always accurate and no special handling of the memory is
-needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+With all "silently resizing" callers of ksize() refactored, remove the
+logic in ksize() that would allow it to be used to effectively change
+the size of an allocation (bypassing __alloc_size hints, etc). Users
+wanting this feature need to either use kmalloc_size_roundup() before an
+allocation, or call krealloc() directly.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+For kfree_sensitive(), move the unpoisoning logic inline. Replace the
+open-coded ksize() in __do_krealloc with ksize() now that it doesn't
+perform unpoisoning.
+
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: linux-mm@kvack.org
+Cc: kasan-dev@googlegroups.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/base/devres.c | 3 +++
- 1 file changed, 3 insertions(+)
+ mm/slab_common.c | 38 ++++++++++++++------------------------
+ 1 file changed, 14 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-index 864d0b3f566e..7db20ce7ea8a 100644
---- a/drivers/base/devres.c
-+++ b/drivers/base/devres.c
-@@ -101,6 +101,9 @@ static bool check_dr_size(size_t size, size_t *tot_size)
- 					size, tot_size)))
- 		return false;
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index d7420cf649f8..60b77bcdc2e3 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -1160,13 +1160,8 @@ __do_krealloc(const void *p, size_t new_size, gfp_t flags)
+ 	void *ret;
+ 	size_t ks;
  
-+	/* Actually allocate the full kmalloc bucket size. */
-+	*tot_size = kmalloc_size_roundup(*tot_size);
-+
- 	return true;
+-	/* Don't use instrumented ksize to allow precise KASAN poisoning. */
+-	if (likely(!ZERO_OR_NULL_PTR(p))) {
+-		if (!kasan_check_byte(p))
+-			return NULL;
+-		ks = kfence_ksize(p) ?: __ksize(p);
+-	} else
+-		ks = 0;
++	/* How large is the allocation actually? */
++	ks = ksize(p);
+ 
+ 	/* If the object still fits, repoison it precisely. */
+ 	if (ks >= new_size) {
+@@ -1232,8 +1227,10 @@ void kfree_sensitive(const void *p)
+ 	void *mem = (void *)p;
+ 
+ 	ks = ksize(mem);
+-	if (ks)
++	if (ks) {
++		kasan_unpoison_range(mem, ks);
+ 		memzero_explicit(mem, ks);
++	}
+ 	kfree(mem);
  }
+ EXPORT_SYMBOL(kfree_sensitive);
+@@ -1242,10 +1239,11 @@ EXPORT_SYMBOL(kfree_sensitive);
+  * ksize - get the actual amount of memory allocated for a given object
+  * @objp: Pointer to the object
+  *
+- * kmalloc may internally round up allocations and return more memory
++ * kmalloc() may internally round up allocations and return more memory
+  * than requested. ksize() can be used to determine the actual amount of
+- * memory allocated. The caller may use this additional memory, even though
+- * a smaller amount of memory was initially specified with the kmalloc call.
++ * allocated memory. The caller may NOT use this additional memory, unless
++ * it calls krealloc(). To avoid an alloc/realloc cycle, callers can use
++ * kmalloc_size_roundup() to find the size of the associated kmalloc bucket.
+  * The caller must guarantee that objp points to a valid object previously
+  * allocated with either kmalloc() or kmem_cache_alloc(). The object
+  * must not be freed during the duration of the call.
+@@ -1254,13 +1252,11 @@ EXPORT_SYMBOL(kfree_sensitive);
+  */
+ size_t ksize(const void *objp)
+ {
+-	size_t size;
+-
+ 	/*
+-	 * We need to first check that the pointer to the object is valid, and
+-	 * only then unpoison the memory. The report printed from ksize() is
+-	 * more useful, then when it's printed later when the behaviour could
+-	 * be undefined due to a potential use-after-free or double-free.
++	 * We need to first check that the pointer to the object is valid.
++	 * The KASAN report printed from ksize() is more useful, then when
++	 * it's printed later when the behaviour could be undefined due to
++	 * a potential use-after-free or double-free.
+ 	 *
+ 	 * We use kasan_check_byte(), which is supported for the hardware
+ 	 * tag-based KASAN mode, unlike kasan_check_read/write().
+@@ -1274,13 +1270,7 @@ size_t ksize(const void *objp)
+ 	if (unlikely(ZERO_OR_NULL_PTR(objp)) || !kasan_check_byte(objp))
+ 		return 0;
+ 
+-	size = kfence_ksize(objp) ?: __ksize(objp);
+-	/*
+-	 * We assume that ksize callers could use whole allocated area,
+-	 * so we need to unpoison this area.
+-	 */
+-	kasan_unpoison_range(objp, size);
+-	return size;
++	return kfence_ksize(objp) ?: __ksize(objp);
+ }
+ EXPORT_SYMBOL(ksize);
  
 -- 
 2.34.1
