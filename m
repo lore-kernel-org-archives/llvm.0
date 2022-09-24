@@ -1,79 +1,162 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DB58F54
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 04:57:49 +0000 (UTC)
-Received: by mail-pf1-f171.google.com with SMTP id 9so1875841pfz.12
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 21:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=v7kWrPbPEQnUozxdNS5JdmbVNWJ4CHYPrZUZ4V2zRBs=;
-        b=enyqEF6ygA7V87gDWotsh10kd6fPVz5rTFRXsc8xm7ENhXrESwtah2QDneBSLsG1Ix
-         KzZUA+2b81cD+ep20K1LmiSzAQxvp65GCkZaCzRv6RENRU5LRCtVo+aecNTwn/7ZguoZ
-         z4ogI8vGaQeq1Bk+y2dUEOMuIwJpIpR7h4BSM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=v7kWrPbPEQnUozxdNS5JdmbVNWJ4CHYPrZUZ4V2zRBs=;
-        b=mQ3Byno5wUm+/PuvzrHrfUobO+B0oS7+FLkPF6sNdcBrFxHsTQ5yw72vY2JfBQm8fW
-         JR4TSp05icWVJ2PzQkfSfXqTdW3FsZNO6s2YU1t1cQG/OoqNKKGHhC8cRSsgzCD9jk6L
-         Xq/tCuOIYtA7Nx0YGWpU4oGWV8bWNEpwdllzdBaswP3TctU1R+Hy60kB7TqTytLVhlZZ
-         kVgWlFDuJZL3GE+mEpcNjz6+XcHPMsJVk2khStA2Ckmjmw60uzFupVanCyLE5tJu8ML4
-         AqwBu+sWboascGtBL/9UZQb6oqhQx8okrfoi2gh5diJqYA5Z28G9GufNmVjWMQ7OocD+
-         +Sxg==
-X-Gm-Message-State: ACrzQf1sjr6ZODJKOGcASd0pHRAF6N1VRABz4Gm//bv1LlcAT5ac4f+F
-	ssjKgpzWKfUOGdtASAAnU7+hhw==
-X-Google-Smtp-Source: AMsMyM5ALGEW52BP/WsgdiSVqzxe8HxFAHDE8Rb8WicdYa03ISm4MLjN1PxlV8W1MXz8rEfQ7pygUw==
-X-Received: by 2002:a63:1546:0:b0:42c:50dc:2115 with SMTP id 6-20020a631546000000b0042c50dc2115mr10662678pgv.613.1663995469373;
-        Fri, 23 Sep 2022 21:57:49 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z8-20020a62d108000000b0053e984a887csm7497176pfg.96.2022.09.23.21.57.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 21:57:48 -0700 (PDT)
-Date: Fri, 23 Sep 2022 21:57:47 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] drm/i915: Fix CFI violations in gt_sysfs
-Message-ID: <202209232143.172BCCDC4@keescook>
-References: <20220922195127.2607496-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC207F
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 06:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664001107;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eWEpPMA625Ey92co78X23E0lneULc3qN0mEKO7jU4a8=;
+	b=JAgGybnPb1OdhwI0VBUEQdyoOeLu+nilHdL03Yxh9ioFwJy2srFtDb+zOyfWIQQIOd5ZCE
+	8TzwPc6qUGmQdaNDjIojqBPJrbzQicZQ3ixS7LFCNtJ9u693BhgTtuxsp3Hp+aANxT7/ye
+	/wK1ToWZ3TT4T02vnwEEwC4b4zXvyxc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-zHoGg66UPwKRU7wXvEKm0Q-1; Sat, 24 Sep 2022 02:31:45 -0400
+X-MC-Unique: zHoGg66UPwKRU7wXvEKm0Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 28F39101A52A
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 06:31:45 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1864040C2064;
+	Sat, 24 Sep 2022 06:31:45 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
+ mainline.kernel.org-clang, 1707c39a)
+Date: Sat, 24 Sep 2022 06:31:41 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922195127.2607496-1-nathan@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <62959.122092402314500503@us-mta-648.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 22, 2022 at 12:51:27PM -0700, Nathan Chancellor wrote:
-> [...]
-> To make everything work properly, adjust certain functions to match the
-> type of the ->show() and ->store() members in 'struct kobj_attribute'.
-> Add a macro to generate functions for that can be called via both
-> dev_attr_{show,store}() or kobj_attr_{show,store}() so that they can be
-> called through both kobject locations without violating kCFI and adjust
-> the attribute groups to account for this.
+Hi, we tested your kernel and here are the results:
 
-This was quite a roller coaster! I think the solution looks good, even
-if I'm suspicious of the original design that has the same stuff
-available twice in different places. (I have a dim memory of rdma
-needing a refactoring like this too?)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
 
--Kees
+Kernel information:
+    Commit message: Merge tag 'driver-core-6.0-rc7' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/gregkh/driver-core
 
--- 
-Kees Cook
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54126
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5240352
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - software RAID testing: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1382
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
