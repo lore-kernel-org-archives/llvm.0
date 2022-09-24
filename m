@@ -1,90 +1,149 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEC27F;
-	Sat, 24 Sep 2022 06:34:14 +0000 (UTC)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MZK1N0ZPVzHpc2;
-	Sat, 24 Sep 2022 14:31:52 +0800 (CST)
-Received: from [10.174.178.41] (10.174.178.41) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 24 Sep 2022 14:34:04 +0800
-Message-ID: <6adf3447-8c28-85a3-7211-32e7672fa41f@huawei.com>
-Date: Sat, 24 Sep 2022 14:34:03 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910087F
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 06:49:46 +0000 (UTC)
+Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-02.nifty.com with ESMTP id 28O6iGJt008875
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 15:44:16 +0900
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44]) (authenticated)
+	by conssluserg-03.nifty.com with ESMTP id 28O6hxD5012703
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 15:43:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28O6hxD5012703
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1664001840;
+	bh=BrB/d9GLo7Y+hIxSma9xiwLjfmTb240J0ExFJfaukvc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jA3Bs6pYeQ4B0Y2UNfTeO4t0CbQWWtApoDi6B3PKQbNNamW+uI11jKaYEDJeG7L/A
+	 duEoBMFdDwYagjXGH9OSoRC4td0JOh3VBj2QPjmUBU6T4D/DvI7z2t6q+SMGLINZzW
+	 fRHj6JdqXBiVp6d4LDMwFPkwpXp57y0S5ujtmJy2dVbEOMY38FIfzBQ/UtVWURJIp+
+	 ALzaoi/uaCExLe+CxZ5maHWB0uhZKq/MBroL8E2HGfgM9ijOYab8APcqKHnOEvMSzQ
+	 vBJ6aWMY/3IbmeNa+/763oyfv9vvZE28QjQrPoP3OxQGoyLDKIXK40dosc3b23i8m1
+	 hzZ1jY9eXyF+A==
+X-Nifty-SrcIP: [209.85.210.44]
+Received: by mail-ot1-f44.google.com with SMTP id r22-20020a9d7516000000b00659ef017e34so1291956otk.13
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 23:43:59 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1aEF+USYqgY9ZTRqFo8ojiMUjzVXPweV4gz1sxc8S7xsg2rW6/
+	0FaErg1bzu6AZVZP/gWZpV21Cvo+58b9ctw4Jyk=
+X-Google-Smtp-Source: AMsMyM5uHnH+GtLwvwpxHGwGqJliKbqPhsHZxCRP03wo/6E3AokdAm0Mto/u5ftDq0kJAladauu2e6jL4Ed8TI598Z8=
+X-Received: by 2002:a05:6830:3115:b0:658:ea61:249c with SMTP id
+ b21-20020a056830311500b00658ea61249cmr5736448ots.225.1664001838616; Fri, 23
+ Sep 2022 23:43:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] fs/ntfs3: use strcmp to determin attribute type
-To: kernel test robot <lkp@intel.com>,
-	<almaz.alexandrovich@paragon-software.com>, <ntfs3@lists.linux.dev>
-CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
-References: <20220913064728.79092-1-yuancan@huawei.com>
- <202209132249.HHQnBWE6-lkp@intel.com>
-From: Yuan Can <yuancan@huawei.com>
-In-Reply-To: <202209132249.HHQnBWE6-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.41]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500024.china.huawei.com (7.185.36.10)
-X-CFilter-Loop: Reflected
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919174547.3730737-1-ndesaulniers@google.com> <CAK7LNAS5xSQTjDuu+dsNW2fOz1-s7x0gsCLmfQOnGpb5CY06KA@mail.gmail.com>
+ <CAKwvOdk-oj24MQs-W0Xs6p33f+Ei7Wu3wwCX+d34T=xoOPxOiw@mail.gmail.com>
+In-Reply-To: <CAKwvOdk-oj24MQs-W0Xs6p33f+Ei7Wu3wwCX+d34T=xoOPxOiw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 24 Sep 2022 15:43:22 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARfiq4fONgRKpO-FOAUNitVwmr=if+04pJfa62aamjSOw@mail.gmail.com>
+Message-ID: <CAK7LNARfiq4fONgRKpO-FOAUNitVwmr=if+04pJfa62aamjSOw@mail.gmail.com>
+Subject: Re: [PATCH v4] Makefile.debug: re-enable debug info for .S files
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+
+On Sat, Sep 24, 2022 at 11:20 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Fri, Sep 23, 2022 at 7:12 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > This patch still misses the debug info for *.S files
+> > for the combination of LLVM_IAS=0 and
+> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> > because, as the comment says, Clang does not pass -g down to GAS.
+> >
+> >
+> > With "[v4] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT"
+> > and this one applied,
+> >
+> >
+> >
+> > $ grep CONFIG_DEBUG_INFO_DWARF .config
+> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> > # CONFIG_DEBUG_INFO_DWARF4 is not set
+> > # CONFIG_DEBUG_INFO_DWARF5 is not set
+> > $ make LLVM=1 LLVM_IAS=0 arch/x86/kernel/irqflags.o
+> >   SYNC    include/config/auto.conf.cmd
+> >   SYSHDR  arch/x86/include/generated/asm/unistd_32_ia32.h
+> >   SYSHDR  arch/x86/include/generated/asm/unistd_64_x32.h
+> >   SYSTBL  arch/x86/include/generated/asm/syscalls_64.h
+> >   HOSTCC  arch/x86/tools/relocs_32.o
+> >   [snip]
+> >   AS      arch/x86/kernel/irqflags.o
+> > $ objdump  -h arch/x86/kernel/irqflags.o | grep debug
+> > $
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> > I think the following fix-up is needed on top.
+> >
+> >
+> >
+> >
+> > diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+> > index d6aecd78b942..8cf1cb22dd93 100644
+> > --- a/scripts/Makefile.debug
+> > +++ b/scripts/Makefile.debug
+> > @@ -1,4 +1,5 @@
+> > -DEBUG_CFLAGS   := -g
+> > +DEBUG_CFLAGS   :=
+> > +debug-flags-y  := -g
+> >
+> >  ifdef CONFIG_DEBUG_INFO_SPLIT
+> >  DEBUG_CFLAGS   += -gsplit-dwarf
+> >
+> >
+> >
+> >
+> > Then, I can see the debug sections.
+> >
+> >
+> >
+> > $ make LLVM=1 LLVM_IAS=0 arch/x86/kernel/irqflags.o
+> >   CALL    scripts/checksyscalls.sh
+> >   DESCEND objtool
+> >   AS      arch/x86/kernel/irqflags.o
+> > $ objdump -h arch/x86/kernel/irqflags.o | grep debug
+> >   6 .debug_line   00000050  0000000000000000  0000000000000000  0000008f  2**0
+> >   7 .debug_info   0000002e  0000000000000000  0000000000000000  000000f8  2**0
+> >   8 .debug_abbrev 00000014  0000000000000000  0000000000000000  000001d0  2**0
+> >   9 .debug_aranges 00000030  0000000000000000  0000000000000000  000001f0  2**4
+> >  10 .debug_str    0000004d  0000000000000000  0000000000000000  00000250  2**0
+> >
+> >
+> >
+> >
+> >
+> > If you agree, I can locally fix it up as such.
+>
+> Ah, sorry I missed testing that combination. Thanks for your
+> thoroughness. Yes please apply that diff on top.
+> --
+> Thanks,
+> ~Nick Desaulniers
 
 
-在 2022/9/13 22:29, kernel test robot 写道:
-> Hi Yuan,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.0-rc5 next-20220913]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yuan-Can/fs-ntfs3-use-strcmp-to-determin-attribute-type/20220913-145102
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e839a756012b6cad7a4eeb67b0598ac3f349f863
-> config: hexagon-randconfig-r041-20220912 (https://download.01.org/0day-ci/archive/20220913/202209132249.HHQnBWE6-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/a3c3b0ca90ba6141ef6b740a3c1189277e49b0ae
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Yuan-Can/fs-ntfs3-use-strcmp-to-determin-attribute-type/20220913-145102
->          git checkout a3c3b0ca90ba6141ef6b740a3c1189277e49b0ae
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/core/ fs/f2fs/ fs/ntfs3/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> fs/ntfs3/xattr.c:869:33: error: use of undeclared identifier 'name_len'; did you mean 'range_len'?
->             err = ntfs_get_ea(inode, name, name_len, buffer, size, NULL);
->                                            ^~~~~~~~
->                                            range_len
->     include/linux/range.h:11:19: note: 'range_len' declared here
->     static inline u64 range_len(const struct range *range)
->                       ^
->     fs/ntfs3/xattr.c:993:33: error: use of undeclared identifier 'name_len'; did you mean 'range_len'?
->             err = ntfs_set_ea(inode, name, name_len, value, size, flags, 0);
->                                            ^~~~~~~~
->                                            range_len
->     include/linux/range.h:11:19: note: 'range_len' declared here
->     static inline u64 range_len(const struct range *range)
->                       ^
->     2 errors generated.
 
-Thanks for the report, the error related problems are fix in the v2 patch.
+Applied to linux-kbuild with the fixup.
 
-Best regards,
-Yuan Can
 
+
+-- 
+Best Regards
+Masahiro Yamada
