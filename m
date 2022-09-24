@@ -1,60 +1,61 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607982915
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 19:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4B87B
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 21:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664046653; x=1695582653;
+  t=1664055065; x=1695591065;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8kdFmvQ6uz3y2SAAl6bt/0nEBoG2LJA324WQV5sgFvI=;
-  b=LpLWqXgomEPayo/CrL5N2wsf0bCwEgfi7V93gjo2RY32H1UfEsLia9hv
-   Nbh+OssHV+sV8iOQ+l3PDCp+iE6cP1JUhmBMFr9z+ssq8istvO5JEBckn
-   NALyDwVtcgORbJbpjsEWKtzEkH/TBSKOFhl/FRlrWEUbw497+WtWhOvhw
-   Kd+lpae5PCMbzQM7bbkJrMpaZm0cYi8ugxRU7hbBf108n2xobWqIUgFOz
-   H7pTLIvcMV7eYIHBuUL3UVL0vczBltDiXs2Xcaypfzc6tAJhAVDTHqCx+
-   Nfkjfp7Uk4UHILl42ZvJ8ptrPz9fxHUxzxKTtWYB5AXlqXBhwQg9rRb0c
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="364833311"
-X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
-   d="scan'208";a="364833311"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 12:10:52 -0700
+  bh=A70i9tOf+qbWmCBoH5hZJ+be06sdJumyYkEJREqYcNU=;
+  b=ExH2eutM5Tu8jdUI62K+zqkFvkKjHKjJvKl+N3Aj8ZqSfB8/+6lAzEHJ
+   PspOOia+MKvkN4A4dEc9VgmYcARTS6lMiIBxz/qbhJ+5YNTbsMOfcBvz6
+   NfbgJTY+opdAil17M2EYHZ9nnhF38rioMJL2PkwD7pQbo3oQ5YIh2A7eg
+   PRTYQUXWMD6DC9Z9g4S8B7cMtBaJmSBbYOfqip3y7Cvb7r/p94Ncpvfby
+   3TnRQKUzK8rNPsanJH3cc1vinZGeq7PbwI82Hj8kYjJcfR7ZFJtTifrpi
+   Sut3e6z3r0Jlv0A6NaGAHo+HrAmkHiz8L3eaT1hjJX0BMor+46Nux+YFL
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="362635081"
+X-IronPort-AV: E=Sophos;i="5.93,343,1654585200"; 
+   d="scan'208";a="362635081"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 14:31:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
-   d="scan'208";a="949399318"
+X-IronPort-AV: E=Sophos;i="5.93,343,1654585200"; 
+   d="scan'208";a="763008294"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Sep 2022 12:10:50 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 24 Sep 2022 14:31:02 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ocAY6-0006ti-16;
-	Sat, 24 Sep 2022 19:10:50 +0000
-Date: Sun, 25 Sep 2022 03:10:29 +0800
+	id 1ocCjm-00071e-0C;
+	Sat, 24 Sep 2022 21:31:02 +0000
+Date: Sun, 25 Sep 2022 05:30:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: John Johansen <john.johansen@canonical.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-kernel@vger.kernel.org
-Subject: [jj-apparmor:apparmor-next 24/41]
- security/apparmor/policy_compat.c:150: warning: expecting prototype for
- aa_compute_fperms(). Prototype was for compute_fperms() instead
-Message-ID: <202209250216.mPLcusnu-lkp@intel.com>
+Subject: [jj-apparmor:apparmor-next 30/41]
+ security/apparmor/policy_unpack.c:489:12: warning: result of comparison of
+ constant 16777216 with expression of type 'u16' (aka 'unsigned short') is
+ always false
+Message-ID: <202209250427.oQBVmS50-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="qFZ2Bsh/9XWx92IS"
+Content-Type: multipart/mixed; boundary="xXgXCZVlEnTjgF2F"
 Content-Disposition: inline
 
 
---qFZ2Bsh/9XWx92IS
+--xXgXCZVlEnTjgF2F
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor.git apparmor-next
 head:   97b7371922d82e5841281d3f8575243a55f8f0bd
-commit: ef43d624ed6316f3e5e45f8f26356818f1356ad1 [24/41] apparmor: isolate policy backwards compatibility to its own file
+commit: 995a5b64620e24e689a2014af46fa98d62fb2045 [30/41] apparmor: make unpack_array return a trianary value
 config: s390-randconfig-c005-20220923
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
@@ -62,10 +63,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor.git/commit/?id=ef43d624ed6316f3e5e45f8f26356818f1356ad1
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor.git/commit/?id=995a5b64620e24e689a2014af46fa98d62fb2045
         git remote add jj-apparmor https://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor.git
         git fetch --no-tags jj-apparmor apparmor-next
-        git checkout ef43d624ed6316f3e5e45f8f26356818f1356ad1
+        git checkout 995a5b64620e24e689a2014af46fa98d62fb2045
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash security/apparmor/
@@ -75,48 +76,169 @@ If you fix the issue, kindly add following tag where applicable
 
 All warnings (new ones prefixed by >>):
 
->> security/apparmor/policy_compat.c:150: warning: expecting prototype for aa_compute_fperms(). Prototype was for compute_fperms() instead
+   In file included from security/apparmor/policy_unpack.c:22:
+   In file included from security/apparmor/include/audit.h:16:
+   In file included from include/linux/lsm_audit.h:24:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from security/apparmor/policy_unpack.c:22:
+   In file included from security/apparmor/include/audit.h:16:
+   In file included from include/linux/lsm_audit.h:24:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from security/apparmor/policy_unpack.c:22:
+   In file included from security/apparmor/include/audit.h:16:
+   In file included from include/linux/lsm_audit.h:24:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> security/apparmor/policy_unpack.c:489:12: warning: result of comparison of constant 16777216 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
+                       size > (1 << 24))
+                       ~~~~ ^ ~~~~~~~~~
+   13 warnings generated.
 
 
-vim +150 security/apparmor/policy_compat.c
+vim +489 security/apparmor/policy_unpack.c
 
-   141	
-   142	/**
-   143	 * aa_compute_fperms - convert dfa compressed perms to internal perms and store
-   144	 *		       them so they can be retrieved later.
-   145	 * @dfa: a dfa using fperms to remap to internal permissions
-   146	 *
-   147	 * Returns: remapped perm table
-   148	 */
-   149	static struct aa_perms *compute_fperms(struct aa_dfa *dfa)
- > 150	{
-   151		aa_state_t state;
-   152		unsigned int state_count;
-   153		struct aa_perms *table;
-   154	
-   155		AA_BUG(!dfa);
-   156	
-   157		state_count = dfa->tables[YYTD_ID_BASE]->td_lolen;
-   158		/* DFAs are restricted from having a state_count of less than 2 */
-   159		table = kvcalloc(state_count * 2, sizeof(struct aa_perms), GFP_KERNEL);
-   160		if (!table)
-   161			return NULL;
-   162	
-   163		/* zero init so skip the trap state (state == 0) */
-   164		for (state = 1; state < state_count; state++) {
-   165			table[state * 2] = compute_fperms_user(dfa, state);
-   166			table[state * 2 + 1] = compute_fperms_other(dfa, state);
-   167		}
-   168	
-   169		return table;
-   170	}
-   171	
+   470	
+   471	/**
+   472	 * unpack_trans_table - unpack a profile transition table
+   473	 * @e: serialized data extent information  (NOT NULL)
+   474	 * @table: str table to unpack to (NOT NULL)
+   475	 *
+   476	 * Returns: true if table successfully unpacked or not present
+   477	 */
+   478	static bool unpack_trans_table(struct aa_ext *e, struct aa_str_table *strs)
+   479	{
+   480		void *saved_pos = e->pos;
+   481		char **table;
+   482	
+   483		/* exec table is optional */
+   484		if (unpack_nameX(e, AA_STRUCT, "xtable")) {
+   485			u16 size;
+   486			int i;
+   487	
+   488			if (unpack_array(e, NULL, &size) != TRI_TRUE ||
+ > 489			    size > (1 << 24))
+   490			  /* currently 2^24 bits entries 0-3 */
+   491				goto fail;
+   492			table = kcalloc(size, sizeof(char *), GFP_KERNEL);
+   493			if (!table)
+   494				goto fail;
+   495	
+   496			for (i = 0; i < size; i++) {
+   497				char *str;
+   498				int c, j, pos, size2 = unpack_strdup(e, &str, NULL);
+   499				/* unpack_strdup verifies that the last character is
+   500				 * null termination byte.
+   501				 */
+   502				if (!size2)
+   503					goto fail;
+   504				table[i] = str;
+   505				/* verify that name doesn't start with space */
+   506				if (isspace(*str))
+   507					goto fail;
+   508	
+   509				/* count internal #  of internal \0 */
+   510				for (c = j = 0; j < size2 - 1; j++) {
+   511					if (!str[j]) {
+   512						pos = j;
+   513						c++;
+   514					}
+   515				}
+   516				if (*str == ':') {
+   517					/* first character after : must be valid */
+   518					if (!str[1])
+   519						goto fail;
+   520					/* beginning with : requires an embedded \0,
+   521					 * verify that exactly 1 internal \0 exists
+   522					 * trailing \0 already verified by unpack_strdup
+   523					 *
+   524					 * convert \0 back to : for label_parse
+   525					 */
+   526					if (c == 1)
+   527						str[pos] = ':';
+   528					else if (c > 1)
+   529						goto fail;
+   530				} else if (c)
+   531					/* fail - all other cases with embedded \0 */
+   532					goto fail;
+   533			}
+   534			if (!unpack_nameX(e, AA_ARRAYEND, NULL))
+   535				goto fail;
+   536			if (!unpack_nameX(e, AA_STRUCTEND, NULL))
+   537				goto fail;
+   538	
+   539			strs->table = table;
+   540			strs->size = size;
+   541		}
+   542		return true;
+   543	
+   544	fail:
+   545		kfree_sensitive(table);
+   546		e->pos = saved_pos;
+   547		return false;
+   548	}
+   549	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---qFZ2Bsh/9XWx92IS
+--xXgXCZVlEnTjgF2F
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -6250,4 +6372,4 @@ CONFIG_TEST_MEMINIT=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---qFZ2Bsh/9XWx92IS--
+--xXgXCZVlEnTjgF2F--
