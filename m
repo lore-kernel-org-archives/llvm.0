@@ -1,243 +1,174 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D0C8F67
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 09:11:31 +0000 (UTC)
-Received: by mail-pj1-f42.google.com with SMTP id q35-20020a17090a752600b002038d8a68fbso8052651pjk.0
-        for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 02:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=i+DbZ92rhFWH/0UDN/zG8OtvV+E4X59I6BjaPOZbEQQ=;
-        b=E5bOhboA/+6BWRDx1UWFFrMvOXvKoaBtGsWYlDmuj8X7rAkhnZpWRHTQ3LNDz7+mZj
-         DgCRrEBR3MyfN1vHwttkAVt9C+sNXNl8rbk7MHBer0lal296QvNAuoGU6ltJiVjNpwJw
-         ZbeC7n9zGD6mKw33TGHmgsxJslMQNugj0HBL4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=i+DbZ92rhFWH/0UDN/zG8OtvV+E4X59I6BjaPOZbEQQ=;
-        b=eO370yN/nJS/CbasGIyHEMuQWFPz8zJD1cEQsGLWplVkWpmvl5/RxUvtS3CDR1utfg
-         q4QORpdd37RRB4tgyRVqOYXFE8+XnK60Smp66MSeXwGKg88LyRC9sgRvUbja7CvG0pU+
-         VkgrJm5sLfKTK7JcHhfE3Dcpoysfn5U2HkEuZOZpnU+oSKoZ7VKMvk9JCPHGw2VRID1m
-         EohMZA+nI6X3YdlUlfE4FNvqpmmTTrUvNY2SpdhXlOQUyPHolKHgJrRh2kOAPm9heikU
-         VwyIOtM59pcPcT8lmQ3UlgLNMr6QMMEQitoEF2P3jtQTWaIbOocVthAPLkUBVwpIpn0X
-         B8pQ==
-X-Gm-Message-State: ACrzQf2GyAgk/adCZi41BU7kevx0YxbCeD1Xgi7SfHrORXs38XMZQNnH
-	+9l88uEJgMD4zbbx+Jz7SDyO5Q==
-X-Google-Smtp-Source: AMsMyM7r8bq+DxJ2Zg4nmPe+hShYURXJSZpppn8rw6aZz5OkkmasnCi/hTE7Baskd4vD2R6zimHrAA==
-X-Received: by 2002:a17:902:d4c9:b0:178:6d7b:c36f with SMTP id o9-20020a170902d4c900b001786d7bc36fmr12510856plg.19.1664010691458;
-        Sat, 24 Sep 2022 02:11:31 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b13-20020aa7950d000000b005546fe4b127sm5590232pfp.78.2022.09.24.02.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Sep 2022 02:11:30 -0700 (PDT)
-Date: Sat, 24 Sep 2022 02:11:29 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	David Rientjes <rientjes@google.com>,
-	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 03/16] skbuff: Proactively round up to kmalloc bucket
- size
-Message-ID: <202209240208.84F847F3B@keescook>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-4-keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914B78F69
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 09:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664011300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5nyGaenD7FszEFMOxyxlebsv5631JSWThZYV3z7oEXM=;
+	b=h5Rlnb2OS3I8bx8PhGWfnyO+hF4siZ3OxPwp66XlFh87Tka9jajc/8gu9+oM+k5ar1hnG1
+	DfkiNnkcABSnRVkvQ6UcOfB0S6VF0G5owO7AB0w9mhtNqw3Zhzucf3BQ3olVB+DV3WvB14
+	zvutvCt/8ubljiUkGyVtNE9vwneSvlQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-356-EQeNCnVPPFyIY6xgrd9qeQ-1; Sat, 24 Sep 2022 05:21:38 -0400
+X-MC-Unique: EQeNCnVPPFyIY6xgrd9qeQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BBFA1C05140
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 09:21:38 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 77B70207B34A;
+	Sat, 24 Sep 2022 09:21:38 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
+ mainline.kernel.org-clang, a63f2e7c)
+Date: Sat, 24 Sep 2022 09:21:38 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923202822.2667581-4-keescook@chromium.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <09613.122092405213800111@us-mta-356.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 23, 2022 at 01:28:09PM -0700, Kees Cook wrote:
-> Instead of discovering the kmalloc bucket size _after_ allocation, round
-> up proactively so the allocation is explicitly made for the full size,
-> allowing the compiler to correctly reason about the resulting size of
-> the buffer through the existing __alloc_size() hint.
-> 
-> This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
-> coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
-> back the __alloc_size() hints that were temporarily reverted in commit
-> 93dd04ab0b2b ("slab: remove __alloc_size attribute from __kmalloc_track_caller")
-> 
-> Additionally tries to normalize size variables to u32 from int. Most
-> interfaces are using "int", but notably __alloc_skb uses unsigned int.
-> 
-> Also fix some reverse Christmas tree and comments while touching nearby
-> code.
+Hi, we tested your kernel and here are the results:
 
-Something in this patch is breaking things -- I've refactored it again
-to avoid overwriting the incoming size argument, and instead add a
-dedicated outgoing size variable. Here's what will be v3 ...
-
----
- net/core/skbuff.c | 41 ++++++++++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 19 deletions(-)
-
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 974bbbbe7138..9b5a9fb69d9d 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -346,11 +346,12 @@ EXPORT_SYMBOL(napi_build_skb);
-  * memory is free
-  */
- static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
--			     bool *pfmemalloc)
-+			     bool *pfmemalloc, size_t *alloc_size)
- {
- 	void *obj;
- 	bool ret_pfmemalloc = false;
- 
-+	size = kmalloc_size_roundup(size);
- 	/*
- 	 * Try a regular allocation, when that fails and we're not entitled
- 	 * to the reserves, fail.
-@@ -369,6 +370,7 @@ static void *kmalloc_reserve(size_t size, gfp_t flags, int node,
- 	if (pfmemalloc)
- 		*pfmemalloc = ret_pfmemalloc;
- 
-+	*alloc_size = size;
- 	return obj;
- }
- 
-@@ -400,7 +402,7 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- {
- 	struct kmem_cache *cache;
- 	struct sk_buff *skb;
--	unsigned int osize;
-+	size_t alloc_size;
- 	bool pfmemalloc;
- 	u8 *data;
- 
-@@ -427,15 +429,15 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 */
- 	size = SKB_DATA_ALIGN(size);
- 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
--	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
--	if (unlikely(!data))
--		goto nodata;
--	/* kmalloc(size) might give us more room than requested.
-+	/* kmalloc(size) might give us more room than requested, so
-+	 * allocate the true bucket size up front.
- 	 * Put skb_shared_info exactly at the end of allocated zone,
- 	 * to allow max possible filling before reallocation.
- 	 */
--	osize = ksize(data);
--	size = SKB_WITH_OVERHEAD(osize);
-+	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc, &alloc_size);
-+	if (unlikely(!data))
-+		goto nodata;
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 	prefetchw(data + size);
- 
- 	/*
-@@ -444,7 +446,7 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 * the tail pointer in struct sk_buff!
- 	 */
- 	memset(skb, 0, offsetof(struct sk_buff, tail));
--	__build_skb_around(skb, data, osize);
-+	__build_skb_around(skb, data, alloc_size);
- 	skb->pfmemalloc = pfmemalloc;
- 
- 	if (flags & SKB_ALLOC_FCLONE) {
-@@ -1709,6 +1711,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- {
- 	int i, osize = skb_end_offset(skb);
- 	int size = osize + nhead + ntail;
-+	size_t alloc_size;
- 	long off;
- 	u8 *data;
- 
-@@ -1723,10 +1726,10 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
- 	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+			       gfp_mask, NUMA_NO_NODE, NULL, &alloc_size);
- 	if (!data)
- 		goto nodata;
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 
- 	/* Copy only real data... and, alas, header. This should be
- 	 * optimized for the cases when header is void.
-@@ -6063,19 +6066,19 @@ static int pskb_carve_inside_header(struct sk_buff *skb, const u32 off,
- 	int i;
- 	int size = skb_end_offset(skb);
- 	int new_hlen = headlen - off;
-+	size_t alloc_size;
- 	u8 *data;
- 
- 	size = SKB_DATA_ALIGN(size);
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
-+			       gfp_mask, NUMA_NO_NODE, NULL, &alloc_size);
- 	if (!data)
- 		return -ENOMEM;
- 
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 
- 	/* Copy real data, and all frags */
- 	skb_copy_from_linear_data_offset(skb, off, data, new_hlen);
-@@ -6184,18 +6187,18 @@ static int pskb_carve_inside_nonlinear(struct sk_buff *skb, const u32 off,
- 	u8 *data;
- 	const int nfrags = skb_shinfo(skb)->nr_frags;
- 	struct skb_shared_info *shinfo;
-+	size_t alloc_size;
- 
- 	size = SKB_DATA_ALIGN(size);
- 
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
-+			       gfp_mask, NUMA_NO_NODE, NULL, &alloc_size);
- 	if (!data)
- 		return -ENOMEM;
- 
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(alloc_size);
- 
- 	memcpy((struct skb_shared_info *)(data + size),
- 	       skb_shinfo(skb), offsetof(struct skb_shared_info, frags[0]));
--- 
-2.34.1
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
--- 
-Kees Cook
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54164
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5243924
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Storage blktests - nvmeof-mp: Timeout
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2014813
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+        Issue: Storage blktests - nvmeof-mp: nvmeof-mp/010 with use_siw=3D1=
+ timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1106
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
