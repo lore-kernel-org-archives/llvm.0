@@ -1,33 +1,38 @@
-Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD59F7B
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 02:13:56 +0000 (UTC)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-03.nifty.com with ESMTP id 28O2Bx2i012869
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 11:11:59 +0900
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 28O2BfEG011729
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 11:11:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28O2BfEG011729
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1663985502;
-	bh=6Hlf2BvYbfxejRTXIBzKxD5+iCaELXc5Klin1gIOowA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=0FxiNVchwhMG7OoeeuUC4sjth4/B8/53u9Ta0LjiAnXtnajvaH+wRBXoGeZbVoz08
-	 xrcEPa4vdfGOQ5k/6LY7/rHLO277jwqWt3KwRAC/ucwgboie8Bw5O3eSoa+ngC2XlA
-	 ZFX3wNYtmGTLqPyBvMOoSZYq2jUt/32/O0TtQ1kFdq+S/aDBGZDzeMP5Q3iMNHLBD/
-	 1yEudmXreQLBI7UpH+PpNUOUjZJOD4gdlM/FcthSTshf1BZt8k0TERkkBYyn+pDJfC
-	 rSDH/+M2GmX0sfNlFvmHSE8wVcSjqtfCOC5qMui4ju5pt+pRdUlyhQxOdpmdnnpDKo
-	 goMZN+iTxVtPA==
-X-Nifty-SrcIP: [209.85.210.42]
-Received: by mail-ot1-f42.google.com with SMTP id w22-20020a056830061600b006546deda3f9so1120950oti.4
-        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 19:11:41 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0IqalrlSHBhbhOoTIq+We/t9dLjJuR7nvQ74MiZuBHVldmp30z
-	/Zb7z9aQlQYOwZvm2OvAvTM0zKyvMz4rW6PXuQI=
-X-Google-Smtp-Source: AMsMyM4fQFXNfqWNA0dWKe0+VAyxV57dVXqCA0y7qQ45RqDQPhjwPVUwoNjHtHoP6cJpgKdvxXJS6ymTPe05QlOFasQ=
-X-Received: by 2002:a05:6830:658b:b0:63b:3501:7167 with SMTP id
- cn11-20020a056830658b00b0063b35017167mr5425169otb.343.1663985500605; Fri, 23
- Sep 2022 19:11:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEAE57B
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 02:20:15 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id t190so1776766pgd.9
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 19:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=OqGIr83avsKieKKHgb8l4/PvPv6lvnyXb0Oxt5Keb0M=;
+        b=QQ2mfUv7p7UJJ/wu8hdvLQLwax8cFTF5n3JslE8afwFsUqYiwWTNLPOeahX66KI2xU
+         pDfYguqdCC25fWFqX2NyI3GapDMuvIx7JnjqNeg5p7nERCDN8qqACmMANbPZvfLbno6d
+         Mv0d3NK+8Rfsq2ZbmkjIAB8CdE5ZKYkis64UD7ZU05IeWUCpOE0LmsJWNC7hxvOnsdiE
+         /79BRdEO43VapKsi/VjSkpTtPEWap2sP+h/UjmdXxhZ8bwpswhbzCPh1cBSfXew0yzZm
+         gIiYt10YcviacZxs3sT+HrJNhaypCeeqjN2z6FpaAfXnvaL7YtYTk1SgGadaY7NGE8YG
+         Tyiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=OqGIr83avsKieKKHgb8l4/PvPv6lvnyXb0Oxt5Keb0M=;
+        b=caw5Fj6Z/1jR8kexzvmICU97wYHe4NTkn7Jf28W7HCPuhTxQNgryiMXzYsdpvUwYz4
+         Gan1PbNcgeT/isz2gIgvGFf0omVjXir+ZefXlPaBs9rcRL01WFDIvzifFfFrXaAKJdZS
+         YKwlCDjZT+jDjPVfb4gAE7vbzgG4tbaZ3Zawongyx0IOAh6WEwMG7hfLNXY7avJZj+eY
+         VULknvj3otWIqdVjXdfXRQBNY69wYtA0WNuAnYJA45BxBBsif3IkeURoJWgqSxvEWkuS
+         0bQJ9f3a+WPihqGpk9S2EkgfNX7jsxDP1xURNxRUOOH+sE1fEbJVMQsM+IqWQ4jGOTl4
+         uoMg==
+X-Gm-Message-State: ACrzQf35ruZbgh61pp3e/uh48lKpi2WdxNDN8i3aUsss8b9693vS1lzR
+	TlwRgauIcKT7P+F31ylgiluR58piftumM3qkR2Gv4Q==
+X-Google-Smtp-Source: AMsMyM47XGX6nnzq5zmVPJ7WKLYQDZAJKqYRNc7f22QCqvjJW0pgWzz/uaUULwJ59wBC0CNTwE+37EAtcRnqsyT4LFw=
+X-Received: by 2002:a63:e709:0:b0:438:98e8:d1c with SMTP id
+ b9-20020a63e709000000b0043898e80d1cmr10283997pgi.403.1663986014944; Fri, 23
+ Sep 2022 19:20:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,173 +40,98 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919174547.3730737-1-ndesaulniers@google.com>
-In-Reply-To: <20220919174547.3730737-1-ndesaulniers@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 24 Sep 2022 11:11:04 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS5xSQTjDuu+dsNW2fOz1-s7x0gsCLmfQOnGpb5CY06KA@mail.gmail.com>
-Message-ID: <CAK7LNAS5xSQTjDuu+dsNW2fOz1-s7x0gsCLmfQOnGpb5CY06KA@mail.gmail.com>
+ <20220919174547.3730737-1-ndesaulniers@google.com> <CAK7LNAS5xSQTjDuu+dsNW2fOz1-s7x0gsCLmfQOnGpb5CY06KA@mail.gmail.com>
+In-Reply-To: <CAK7LNAS5xSQTjDuu+dsNW2fOz1-s7x0gsCLmfQOnGpb5CY06KA@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 23 Sep 2022 19:20:03 -0700
+Message-ID: <CAKwvOdk-oj24MQs-W0Xs6p33f+Ei7Wu3wwCX+d34T=xoOPxOiw@mail.gmail.com>
 Subject: Re: [PATCH v4] Makefile.debug: re-enable debug info for .S files
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	Bill Wendling <morbo@google.com>, Greg Thelen <gthelen@google.com>, 
+	Alexey Alexandrov <aalexand@google.com>, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 20, 2022 at 2:45 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Fri, Sep 23, 2022 at 7:12 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Alexey reported that the fraction of unknown filename instances in
-> kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
-> to assembler defined symbols, which regressed as a result of:
+> This patch still misses the debug info for *.S files
+> for the combination of LLVM_IAS=0 and
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> because, as the comment says, Clang does not pass -g down to GAS.
 >
-> commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
 >
-> In that commit, I allude to restoring debug info for assembler defined
-> symbols in a follow up patch, but it seems I forgot to do so in
+> With "[v4] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT"
+> and this one applied,
 >
-> commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
 >
-> Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
-> Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
-> Reported-by: Alexey Alexandrov <aalexand@google.com>
-> Reported-by: Bill Wendling <morbo@google.com>
-> Reported-by: Greg Thelen <gthelen@google.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Changes v3 -> v4:
-> * Break out into its own patch.
-> * Move addition of debug-flags-y to DEBUG_CFLAGS and KBUILD_AFLAGS up
->   grouping the -gdwarf-* handling together.
 >
->  lib/Kconfig.debug      |  4 +++-
->  scripts/Makefile.debug | 18 +++++++++---------
->  2 files changed, 12 insertions(+), 10 deletions(-)
+> $ grep CONFIG_DEBUG_INFO_DWARF .config
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+> # CONFIG_DEBUG_INFO_DWARF4 is not set
+> # CONFIG_DEBUG_INFO_DWARF5 is not set
+> $ make LLVM=1 LLVM_IAS=0 arch/x86/kernel/irqflags.o
+>   SYNC    include/config/auto.conf.cmd
+>   SYSHDR  arch/x86/include/generated/asm/unistd_32_ia32.h
+>   SYSHDR  arch/x86/include/generated/asm/unistd_64_x32.h
+>   SYSTBL  arch/x86/include/generated/asm/syscalls_64.h
+>   HOSTCC  arch/x86/tools/relocs_32.o
+>   [snip]
+>   AS      arch/x86/kernel/irqflags.o
+> $ objdump  -h arch/x86/kernel/irqflags.o | grep debug
+> $
 >
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index bcbe60d6c80c..d3e5f36bb01e 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -264,8 +264,10 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->  config DEBUG_INFO_DWARF4
->         bool "Generate DWARF Version 4 debuginfo"
->         select DEBUG_INFO
-> +       depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
->         help
-> -         Generate DWARF v4 debug info. This requires gcc 4.5+ and gdb 7.0+.
-> +         Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
-> +         if using clang without clang's integrated assembler, and gdb 7.0+.
 >
->           If you have consumers of DWARF debug info that are not ready for
->           newer revisions of DWARF, you may wish to choose this or have your
+>
+>
+>
+>
+>
+>
+> I think the following fix-up is needed on top.
+>
+>
+>
+>
 > diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> index 26d6a9d97a20..d6aecd78b942 100644
+> index d6aecd78b942..8cf1cb22dd93 100644
 > --- a/scripts/Makefile.debug
 > +++ b/scripts/Makefile.debug
-> @@ -4,15 +4,15 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
->  DEBUG_CFLAGS   += -gsplit-dwarf
->  endif
+> @@ -1,4 +1,5 @@
+> -DEBUG_CFLAGS   := -g
+> +DEBUG_CFLAGS   :=
+> +debug-flags-y  := -g
 >
-> -ifndef CONFIG_AS_IS_LLVM
-> -KBUILD_AFLAGS  += -Wa,-gdwarf-2
-> -endif
-> -
-> -ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> -dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
-> -dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
-> -DEBUG_CFLAGS   += -gdwarf-$(dwarf-version-y)
-> +debug-flags-$(CONFIG_DEBUG_INFO_DWARF4)        += -gdwarf-4
-> +debug-flags-$(CONFIG_DEBUG_INFO_DWARF5)        += -gdwarf-5
-> +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_AS_IS_GNU),yy)
-> +# Clang does not pass -g or -gdwarf-* option down to GAS.
+>  ifdef CONFIG_DEBUG_INFO_SPLIT
+>  DEBUG_CFLAGS   += -gsplit-dwarf
+>
+>
+>
+>
+> Then, I can see the debug sections.
+>
+>
+>
+> $ make LLVM=1 LLVM_IAS=0 arch/x86/kernel/irqflags.o
+>   CALL    scripts/checksyscalls.sh
+>   DESCEND objtool
+>   AS      arch/x86/kernel/irqflags.o
+> $ objdump -h arch/x86/kernel/irqflags.o | grep debug
+>   6 .debug_line   00000050  0000000000000000  0000000000000000  0000008f  2**0
+>   7 .debug_info   0000002e  0000000000000000  0000000000000000  000000f8  2**0
+>   8 .debug_abbrev 00000014  0000000000000000  0000000000000000  000001d0  2**0
+>   9 .debug_aranges 00000030  0000000000000000  0000000000000000  000001f0  2**4
+>  10 .debug_str    0000004d  0000000000000000  0000000000000000  00000250  2**0
+>
+>
+>
+>
+>
+> If you agree, I can locally fix it up as such.
 
-
-
-
-This patch still misses the debug info for *.S files
-for the combination of LLVM_IAS=0 and
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-because, as the comment says, Clang does not pass -g down to GAS.
-
-
-With "[v4] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT"
-and this one applied,
-
-
-
-$ grep CONFIG_DEBUG_INFO_DWARF .config
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-# CONFIG_DEBUG_INFO_DWARF4 is not set
-# CONFIG_DEBUG_INFO_DWARF5 is not set
-$ make LLVM=1 LLVM_IAS=0 arch/x86/kernel/irqflags.o
-  SYNC    include/config/auto.conf.cmd
-  SYSHDR  arch/x86/include/generated/asm/unistd_32_ia32.h
-  SYSHDR  arch/x86/include/generated/asm/unistd_64_x32.h
-  SYSTBL  arch/x86/include/generated/asm/syscalls_64.h
-  HOSTCC  arch/x86/tools/relocs_32.o
-  [snip]
-  AS      arch/x86/kernel/irqflags.o
-$ objdump  -h arch/x86/kernel/irqflags.o | grep debug
-$
-
-
-
-
-
-
-
-
-I think the following fix-up is needed on top.
-
-
-
-
-diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-index d6aecd78b942..8cf1cb22dd93 100644
---- a/scripts/Makefile.debug
-+++ b/scripts/Makefile.debug
-@@ -1,4 +1,5 @@
--DEBUG_CFLAGS   := -g
-+DEBUG_CFLAGS   :=
-+debug-flags-y  := -g
-
- ifdef CONFIG_DEBUG_INFO_SPLIT
- DEBUG_CFLAGS   += -gsplit-dwarf
-
-
-
-
-Then, I can see the debug sections.
-
-
-
-$ make LLVM=1 LLVM_IAS=0 arch/x86/kernel/irqflags.o
-  CALL    scripts/checksyscalls.sh
-  DESCEND objtool
-  AS      arch/x86/kernel/irqflags.o
-$ objdump -h arch/x86/kernel/irqflags.o | grep debug
-  6 .debug_line   00000050  0000000000000000  0000000000000000  0000008f  2**0
-  7 .debug_info   0000002e  0000000000000000  0000000000000000  000000f8  2**0
-  8 .debug_abbrev 00000014  0000000000000000  0000000000000000  000001d0  2**0
-  9 .debug_aranges 00000030  0000000000000000  0000000000000000  000001f0  2**4
- 10 .debug_str    0000004d  0000000000000000  0000000000000000  00000250  2**0
-
-
-
-
-
-If you agree, I can locally fix it up as such.
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+Ah, sorry I missed testing that combination. Thanks for your
+thoroughness. Yes please apply that diff on top.
+-- 
+Thanks,
+~Nick Desaulniers
