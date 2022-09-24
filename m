@@ -1,162 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC207F
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 06:31:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664001107;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eWEpPMA625Ey92co78X23E0lneULc3qN0mEKO7jU4a8=;
-	b=JAgGybnPb1OdhwI0VBUEQdyoOeLu+nilHdL03Yxh9ioFwJy2srFtDb+zOyfWIQQIOd5ZCE
-	8TzwPc6qUGmQdaNDjIojqBPJrbzQicZQ3ixS7LFCNtJ9u693BhgTtuxsp3Hp+aANxT7/ye
-	/wK1ToWZ3TT4T02vnwEEwC4b4zXvyxc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-zHoGg66UPwKRU7wXvEKm0Q-1; Sat, 24 Sep 2022 02:31:45 -0400
-X-MC-Unique: zHoGg66UPwKRU7wXvEKm0Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 28F39101A52A
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 06:31:45 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1864040C2064;
-	Sat, 24 Sep 2022 06:31:45 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
- mainline.kernel.org-clang, 1707c39a)
-Date: Sat, 24 Sep 2022 06:31:41 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEC27F;
+	Sat, 24 Sep 2022 06:34:14 +0000 (UTC)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MZK1N0ZPVzHpc2;
+	Sat, 24 Sep 2022 14:31:52 +0800 (CST)
+Received: from [10.174.178.41] (10.174.178.41) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 14:34:04 +0800
+Message-ID: <6adf3447-8c28-85a3-7211-32e7672fa41f@huawei.com>
+Date: Sat, 24 Sep 2022 14:34:03 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <62959.122092402314500503@us-mta-648.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'driver-core-6.0-rc7' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/gregkh/driver-core
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54126
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5240352
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] fs/ntfs3: use strcmp to determin attribute type
+To: kernel test robot <lkp@intel.com>,
+	<almaz.alexandrovich@paragon-software.com>, <ntfs3@lists.linux.dev>
+CC: <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
+References: <20220913064728.79092-1-yuancan@huawei.com>
+ <202209132249.HHQnBWE6-lkp@intel.com>
+From: Yuan Can <yuancan@huawei.com>
+In-Reply-To: <202209132249.HHQnBWE6-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.41]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+在 2022/9/13 22:29, kernel test robot 写道:
+> Hi Yuan,
+>
+> Thank you for the patch! Yet something to improve:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.0-rc5 next-20220913]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yuan-Can/fs-ntfs3-use-strcmp-to-determin-attribute-type/20220913-145102
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git e839a756012b6cad7a4eeb67b0598ac3f349f863
+> config: hexagon-randconfig-r041-20220912 (https://download.01.org/0day-ci/archive/20220913/202209132249.HHQnBWE6-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1546df49f5a6d09df78f569e4137ddb365a3e827)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/a3c3b0ca90ba6141ef6b740a3c1189277e49b0ae
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Yuan-Can/fs-ntfs3-use-strcmp-to-determin-attribute-type/20220913-145102
+>          git checkout a3c3b0ca90ba6141ef6b740a3c1189277e49b0ae
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/core/ fs/f2fs/ fs/ntfs3/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>>> fs/ntfs3/xattr.c:869:33: error: use of undeclared identifier 'name_len'; did you mean 'range_len'?
+>             err = ntfs_get_ea(inode, name, name_len, buffer, size, NULL);
+>                                            ^~~~~~~~
+>                                            range_len
+>     include/linux/range.h:11:19: note: 'range_len' declared here
+>     static inline u64 range_len(const struct range *range)
+>                       ^
+>     fs/ntfs3/xattr.c:993:33: error: use of undeclared identifier 'name_len'; did you mean 'range_len'?
+>             err = ntfs_set_ea(inode, name, name_len, value, size, flags, 0);
+>                                            ^~~~~~~~
+>                                            range_len
+>     include/linux/range.h:11:19: note: 'range_len' declared here
+>     static inline u64 range_len(const struct range *range)
+>                       ^
+>     2 errors generated.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Thanks for the report, the error related problems are fix in the v2 patch.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+Yuan Can
 
