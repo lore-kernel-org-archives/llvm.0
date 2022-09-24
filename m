@@ -1,34 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB6F184
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 00:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51EF4C433D6;
-	Sat, 24 Sep 2022 00:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1663978707;
-	bh=UklZFcFoFn+drVuf9lRrmV2GfRKkOxCNiCo/IhprNOM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yp54PPTjL2hQ5Px1LkAwJQ3J9ZpmScfB2hgRGyr5t3+4KI8rdCDD+zlkWqb3Lo3Ve
-	 stC5w1kVnkEFtzECTqm74K+4VNKQeW0tMBGjMIMDHgfCOqmB9GZsHi9iO09Yuur3eF
-	 l/pcLur6GSYzmQg5A76W/Ry+ny+YG7N1FoE2yI3fhXIAd2OSnMDygVZ9s9URqfmnjD
-	 5gnBajghcXdHtDdFPqFNp1iQlrO8IcaNLLJ751Om7Oz9Ds+xedMFfRDAHppmhHQo2h
-	 xPGLmEYqP9S5Q//0eyojUm14hhVSQX+xbnZGO8NGzuAwmY0RyzJWfZ0Ob721xzI0sx
-	 GBYprOSVqhOdg==
-Date: Fri, 23 Sep 2022 17:18:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D83C7B
+	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 00:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1663981092;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LXS8AXAm70UR1+lqvfWA9CpMJuVPfWH77f8iEGHbcYU=;
+	b=WEvvjX6/G+oLrmRZ+EwAVyJywlCnzsQlbxGtlCTqyHf29NpRZdtxDHGTdG4qpzY6YuCXVd
+	jK2pouZM9RTB1neG8TxSkc9i6m+phqCLkbhttEpAb6V1AOfHkOKhVfYRJZ5ce1hwGl+fyC
+	rVBegsRo+yADzzB2iMMvDqu1dmez7Is=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-B3RyhtAtNyWnVrzhdCNmKQ-1; Fri, 23 Sep 2022 20:58:11 -0400
+X-MC-Unique: B3RyhtAtNyWnVrzhdCNmKQ-1
+Received: by mail-qk1-f198.google.com with SMTP id bi3-20020a05620a318300b006cf2d389cdaso1167820qkb.8
+        for <llvm@lists.linux.dev>; Fri, 23 Sep 2022 17:58:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=LXS8AXAm70UR1+lqvfWA9CpMJuVPfWH77f8iEGHbcYU=;
+        b=WPlTm1yTamC4mIp/UdsAhQ5NzDpv8Ehlvy/Czujfhmq7gO6XJDUTkAB2dBHL1Huiwj
+         zxQJZAtfQWNtJd+dBcvxJiCf/RO8BD+WqWgDSzh2RcfYrnTz+V9YPgUqg/UDDVmN/vdk
+         FbgCunErb6HhKp9qHpjVa/Mfxio7LpUrJoIDHMUXnWEu8/xMC/CycJEByF3NPb5R6mVu
+         io+YoVon16AYczfArVr0xm/pygCN2gbETfDrJrpUjNrbn4vZCOOpbsVST7Uxg2wUZS7x
+         OF460MkXOtG6kiwOjlI7cJhTAFJsuT8gMySxRzUvW2lmkhPBzSG0OCpQghh39BO1dsLn
+         sx/w==
+X-Gm-Message-State: ACrzQf2iEPkEnRQTKXdLQuEI4cldtsntzWBOXsT3vZVuDevoMUSut9GW
+	LnPynXLB/MY4fjJQulJ8MXA7dC0ndKYtR5DofKEb/DuzgKkgrsSlBDKXI7c7mhNo3rKeYUtMb21
+	bNuSQOZIwfNtQ5A==
+X-Received: by 2002:ac8:5ac1:0:b0:35b:bb64:b3c6 with SMTP id d1-20020ac85ac1000000b0035bbb64b3c6mr9251272qtd.119.1663981089413;
+        Fri, 23 Sep 2022 17:58:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7rKrZOS2HXeamXk7XMBxU/F6ql1HdkediOxsopPNKkUNQyYuuwz296uSEgyBtcgrnVTUogZA==
+X-Received: by 2002:ac8:5ac1:0:b0:35b:bb64:b3c6 with SMTP id d1-20020ac85ac1000000b0035bbb64b3c6mr9251261qtd.119.1663981089154;
+        Fri, 23 Sep 2022 17:58:09 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05620a424f00b006af0ce13499sm6833555qko.115.2022.09.23.17.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 17:58:08 -0700 (PDT)
+Date: Fri, 23 Sep 2022 20:58:06 -0400
+From: Peter Xu <peterx@redhat.com>
 To: Hugh Dickins <hughd@google.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>, Peter Xu <peterx@redhat.com>,
+Cc: Mike Kravetz <mike.kravetz@oracle.com>,
 	Axel Rasmussen <axelrasmussen@google.com>,
 	Yang Shi <shy828301@gmail.com>,
 	Matthew Wilcox <willy@infradead.org>,
 	syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
 	akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, llvm@lists.linux.dev, ndesaulniers@google.com,
-	songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-	trix@redhat.com
+	linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+	ndesaulniers@google.com, songmuchun@bytedance.com,
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
 Subject: Re: [syzbot] general protection fault in PageHeadHuge
-Message-ID: <Yy5M0Ht6X3hFuq/S@dev-arch.thelio-3990X>
+Message-ID: <Yy5WHvioerD2Sev1@x1n>
 References: <0000000000006c300705e95a59db@google.com>
  <Yy4g/BKpnJga1toG@monkey>
  <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com>
@@ -38,9 +65,13 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com>
+X-Mimecast-Spam-Score: 1
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hi, Hugh, Mike,
 
 On Fri, Sep 23, 2022 at 05:14:38PM -0700, Hugh Dickins wrote:
 > On Fri, 23 Sep 2022, Mike Kravetz wrote:
@@ -158,6 +189,11 @@ On Fri, Sep 23, 2022 at 05:14:38PM -0700, Hugh Dickins wrote:
 > 
 > Thanks Mike.  Yes, it looks like userfaultfd's successful returns from
 > shmem_get_folio_gfp() have (correctly?) filled in vmf->page directly,
+
+AFAICT handle_userfault() doens't set vmf->page; it relies on returning
+"*fault_type" to be VM_FAULT_RETRY so the fault will be retried assuming
+the pgtable has been installed properly when it returns.
+
 > and are not setting *foliop at all.  So this would affect any
 > userfaultfd usage of shmem, not just an odd syzbot corner case.
 > 
@@ -175,11 +211,7 @@ On Fri, Sep 23, 2022 at 05:14:38PM -0700, Hugh Dickins wrote:
 > linux-next, so whether vmf->page is then set correctly we're not sure.
 > 
 > But me, I cannot even get the latest linux-next to boot: next job.
-
-Maybe I can save you a bisect:
-
-https://lore.kernel.org/all/Yy4GoMMwiBaq3oJf@dev-arch.thelio-3990X/
-
+> 
 > Hugh
 > 
 > --- a/mm/shmem.c
@@ -202,4 +234,13 @@ https://lore.kernel.org/all/Yy4GoMMwiBaq3oJf@dev-arch.thelio-3990X/
 > +		vmf->page = folio_file_page(folio, vmf->pgoff);
 >  	return ret;
 >  }
->  
+
+The patch itself looks correct to me.  Thanks.
+
+Reviewed-by: Peter Xu <peterx@redhat.com>
+
+Not sure whether it can be directly squashed into 371133f76a6d.
+
+-- 
+Peter Xu
+
