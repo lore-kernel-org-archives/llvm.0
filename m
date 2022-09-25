@@ -1,144 +1,168 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E789C7E
-	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 07:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F3E7E
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 08:01:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664090269;
+	s=mimecast20190719; t=1664092901;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FnuW0+nquE7jeCs1wGd25t/HgD5sAtMc07QK9kih2sQ=;
-	b=B97KTn2dpYAt61kIInCLOK/2Ro6Wst4uMijGFSzgHYRdcZYdeHN2Z3ugLtJoUKxafz8yNC
-	sWsj/xIEwaV1yrv9Q1SsmiCxhVHRLyjrG7MDBtCipNp9CsQ1df0T63dAJdIXFk2HpFvimj
-	SNz8dinnXFQVzc5AwMsgibAO84z47E8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-196-7nFoMco5NfiSWhiUbHz0GQ-1; Sun, 25 Sep 2022 03:17:48 -0400
-X-MC-Unique: 7nFoMco5NfiSWhiUbHz0GQ-1
-Received: by mail-qt1-f198.google.com with SMTP id fz10-20020a05622a5a8a00b0035ce18717daso2685921qtb.11
-        for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 00:17:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=FnuW0+nquE7jeCs1wGd25t/HgD5sAtMc07QK9kih2sQ=;
-        b=5LgL+c7xuNIuFoh6Vb7GFEGEM1bMAYN0OqHH3fQu0O7WwXWBIDidgTmAlc9/e6UPli
-         eCc/eGYt6HybZS/DNCjcc/OgTuZFIpqZ4lTF1gHScqCZylg5xQqNu6B2u1RV6U5wqNY+
-         n/GhO9h2HlJpEZI79KGTetURfR7YUTav2sgYh1Yy2z2rdq1K4IS/08lFPQ/bteAwpznL
-         AtvnCBIDCh57MhroyEIOG7x4Zif7YLtdfcdzgOziUkIj/9991N/tXvyM89kZYIqF1Ym4
-         g688H+n18RWfMd3XdSe49GBUw1HiOqycQHGxjXY5UVl+T/yuNwdINpkSIDTIHZLmKhPY
-         p/Wg==
-X-Gm-Message-State: ACrzQf2BO7drkAfemPglEkynQBZ2hLGA5TylQLduC+Vl4moTgD5TxA4d
-	d0mdTx8tzijG4LOi1tvkmYiig9BSOnlTxbGuRw4QvutH6cIDBpMvi6vN6NfCEi6Tsoa+/sbxqHP
-	pjWAVJm3OnzVfdQ==
-X-Received: by 2002:a05:620a:c8f:b0:6cb:e329:b5b9 with SMTP id q15-20020a05620a0c8f00b006cbe329b5b9mr10667188qki.95.1664090268096;
-        Sun, 25 Sep 2022 00:17:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4u6YF4dJIrwAN1QRZGgvTOpwH6qKYsc23O//LxYiiudu83+P6fv+LpA21i63RBBqqlayo//g==
-X-Received: by 2002:a05:620a:c8f:b0:6cb:e329:b5b9 with SMTP id q15-20020a05620a0c8f00b006cbe329b5b9mr10667159qki.95.1664090267816;
-        Sun, 25 Sep 2022 00:17:47 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-97-96.dyn.eolo.it. [146.241.97.96])
-        by smtp.gmail.com with ESMTPSA id bp30-20020a05620a459e00b006c479acd82fsm10375465qkb.7.2022.09.25.00.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 00:17:47 -0700 (PDT)
-Message-ID: <e340d993bce8e1b2742fba52ac6383771cfaddae.camel@redhat.com>
-Subject: Re: [PATCH v2 04/16] skbuff: Phase out ksize() fallback for
- frag_size
-From: Paolo Abeni <pabeni@redhat.com>
-To: Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,
- netdev@vger.kernel.org, "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>, Christoph Lameter <cl@linux.com>,
- Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
- Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton
- <akpm@linux-foundation.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Nick Desaulniers <ndesaulniers@google.com>, 
- Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>, David
- Sterba <dsterba@suse.com>,  Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,  Jesse
- Brandeburg <jesse.brandeburg@intel.com>, Daniel Micay
- <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,  Marco Elver
- <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- linux-kernel@vger.kernel.org,  linux-mm@kvack.org,
- linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
- linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
- dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev, 
- linux-hardening@vger.kernel.org
-Date: Sun, 25 Sep 2022 09:17:40 +0200
-In-Reply-To: <20220923202822.2667581-5-keescook@chromium.org>
-References: <20220923202822.2667581-1-keescook@chromium.org>
-	 <20220923202822.2667581-5-keescook@chromium.org>
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35)
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Qw9N0hrMS20LyLqp3YX6UAqK8ToZwOdx20EcVo2FSpo=;
+	b=OkVMhUDRPR+jvObi2EVJbT8nuQvlA1e90ZgchSxumTOOFR7GpYYKQiDWZB2pN4ZB7SiwUJ
+	I/YRFUQhB/rSRQG9kSPY0EESD8EYasZ384dzWmdtuPOCvFDfMfK6Ic8hlKPJkoBEDWF4du
+	vYFjfAf2f03qpwcK6ewhc/s/ahao5H0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-536-TOWkTs_MN2WcXOSPbuLNuQ-1; Sun, 25 Sep 2022 04:01:40 -0400
+X-MC-Unique: TOWkTs_MN2WcXOSPbuLNuQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 10923101A528
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 08:01:40 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F1A682166B26;
+	Sun, 25 Sep 2022 08:01:39 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
+ mainline.kernel.org-clang, 1a61b828)
+Date: Sun, 25 Sep 2022 08:01:37 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <12115.122092504014003702@us-mta-536.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2022-09-23 at 13:28 -0700, Kees Cook wrote:
-> All callers of APIs that allowed a 0-sized frag_size appear to be
-> passing actual size information already
+Hi, we tested your kernel and here are the results:
 
-AFAICS, not yet:
-
-drivers/net/ethernet/qlogic/qed/qed_ll2.c:
-	skb = build_skb(buffer->data, 0); // -> __build_skb(..., 0) 
-		// ->  __build_skb_around()
-
-drivers/net/ethernet/broadcom/bnx2.c:
-	skb = build_skb(data, 0);
-
-I guess some more drivers have calls leading to 
-
-	__build_skb_around(...,  0)
-
-there are several call path to checks...
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-> , so this use of ksize() can
-> be removed. However, just in case there is something still depending
-> on this behavior, issue a WARN and fall back to as before to ksize()
-> which means we'll also potentially get KASAN warnings.
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  net/core/skbuff.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
-> 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 0b30fbdbd0d0..84ca89c781cd 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -195,7 +195,11 @@ static void __build_skb_around(struct sk_buff *skb, void *data,
->  			       unsigned int frag_size)
->  {
->  	struct skb_shared_info *shinfo;
-> -	unsigned int size = frag_size ? : ksize(data);
-> +	unsigned int size = frag_size;
-> +
-> +	/* All callers should be setting frag size now? */
-> +	if (WARN_ON_ONCE(size == 0))
-> +		size = ksize(data);
+Kernel information:
+    Commit message: Merge tag 'char-misc-6.0-rc7' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/gregkh/char-misc
 
-At some point in the future, I guess we could even drop this check,
-right?
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54184
 
-Thanks!
+One or more kernel tests failed:
 
-Paolo
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5251684
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Storage blktests - nvmeof-mp: Timeout
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2014813
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
