@@ -1,108 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDA320EB
-	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 04:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A1CC433C1;
-	Sun, 25 Sep 2022 04:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664081200;
-	bh=srWY5Gkt9C75yfEBhkuv5mWJQUWlfvKd/f76X9C1/68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AuJf8VcG/Uolx+EZczJ8fB3iiivW2xR+T95k0Q6CqtxM1VB/A0j6vh16boZrRtdgo
-	 ncumpPXypzDmHiTlvjFmYzinzle6BkT8BPYlXOnGQ9/h9Q79J6LcVXVQT6mNgO8B2c
-	 yTUBPeWl4kzL0pOJFtwm4QyktTZ8fC633H9Hfl4Zf+OgVCvQpoqxyoN6KSC62M32Uq
-	 vbl7UtkDZ0gU6v5Cn+LSdqkz/tEb5ORJl6GqwXzT2gwZz7o6fYMh7qmo3TLud60nzH
-	 427ofDx7b13oarIRKhMV2cj3rS6C4DbbStTngezRFCtm1zJlWvAHyF0RpJD3JpPVMJ
-	 8k361kOKd03+Q==
-Date: Sat, 24 Sep 2022 21:46:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] Compiler Attributes: Introduce __access_*() function
- attribute
-Message-ID: <Yy/dLihBWSFzZdyq@dev-arch.thelio-3990X>
-References: <20220924150715.247417-1-keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665C620EB
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 04:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664081446;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MYXUiKu9KHbiYogQccj6pd7SnG5+7iF26wADjIl6VIg=;
+	b=UN43liDfzLHNUWnYdOy+X7d+wBCycTJgW3nlAvA+svFarhJfYVtaf6YQO+llXhrldR33oY
+	6Zhplb31+Lqvi13RiDmNqBtLNDY8sC4vHCEE157ljv0BNzvdyTYZew8Jk1OFD0j4tTVljt
+	i2GZFszeDWhye0EoggzGE1lB8EFmBnI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-pxuD6e5SOHOpoZs32GIUXQ-1; Sun, 25 Sep 2022 00:50:43 -0400
+X-MC-Unique: pxuD6e5SOHOpoZs32GIUXQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FE92811E81
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 04:50:43 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8F83440C2064;
+	Sun, 25 Sep 2022 04:50:43 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
+ mainline.kernel.org-clang, 3db61221)
+Date: Sun, 25 Sep 2022 04:50:43 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924150715.247417-1-keescook@chromium.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <58236.122092500504400167@us-mta-283.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 24, 2022 at 08:07:15AM -0700, Kees Cook wrote:
-> Added in GCC 10.1, the "access" function attribute is used to mark pointer
-> arguments for how they are expected to be accessed in a given function.
-> Both their access type (read/write, read-only, or write-only) and bounds
-> are specified.
-> 
-> These can improve GCC's compile-time diagnostics including -Warray-bounds,
-> -Wstringop-overflow, etc, and can affect __builtin_dynamic_object_size()
-> results.
-> 
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Hi, we tested your kernel and here are the results:
 
-The GCC docs say it is 'access', instead of '__access__'. I assume it is
-probably okay so:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> ---
->  include/linux/compiler_attributes.h | 30 +++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 9a9907fad6fd..465be5f072ff 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -20,6 +20,36 @@
->   * Provide links to the documentation of each supported compiler, if it exists.
->   */
->  
-> +/*
-> + * Optional: only supported since gcc >= 10
-> + * Optional: not supported by Clang
-> + *
-> + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-access-function-attribute
-> + *
-> + * While it is legal to provide only the pointer argument position and
-> + * access type, the kernel macros are designed to require also the bounds
-> + * (element count) argument position; if a function has no bounds argument,
-> + * refactor the code to include one.
-> + *
-> + * These can be used multiple times. For example:
-> + *
-> + * __access_wo(2, 3) __access_ro(4, 5)
-> + * int copy_something(struct context *ctx, u32 *dst, size_t dst_count,
-> + *		      const u8 *src, int src_len);
-> + *
-> + * If "dst" will also be read from, it could use __access_rw(2, 3) instead.
-> + *
-> + */
-> +#if __has_attribute(__access__)
-> +# define __access_rw(ptr, count)	__attribute__((__access__(read_write, ptr, count)))
-> +# define __access_ro(ptr, count)	__attribute__((__access__(read_only,  ptr, count)))
-> +# define __access_wo(ptr, count)	__attribute__((__access__(write_only, ptr, count)))
-> +#else
-> +# define __access_rw(ptr, count)
-> +# define __access_ro(ptr, count)
-> +# define __access_wo(ptr, count)
-> +#endif
-> +
->  /*
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-alias-function-attribute
->   */
-> -- 
-> 2.34.1
-> 
+Kernel information:
+    Commit message: Merge tag 'io_uring-6.0-2022-09-23' of git://git.kernel=
+.dk/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54179
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5248970
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
