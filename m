@@ -1,203 +1,187 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1733C7B
-	for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 21:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HV0XloX+fJraKkTj2vYnKif0z498Rfvh53PK6HowpLE=; b=tWDedWfAAVnxzbACB+2XQ92k6p
-	3ttiQVIp9is6b8zc6t3X92iZKHRtg+Fg+4H0m2k0bHKtEegoGs9CdgGSQdskBqnlVsWdN7drgMeBI
-	/Kz+iaB1rTEmvpU5J4noyZy/k600ibZqlA01lNJIfAMVfQjjyTu6byOt9VwBhxTQgUjX3H2t6kmkv
-	rBL0S0RRMu/QzvPQ2vIP7T+xYGRy0ojZOJ8UOT+NpwFL4IwkIngXDSVzrOzD6FgMHOYrrTU/7olLz
-	R2wTi5iBA0Zhyq1WhUIA8b2dyeUFS32L/Xc67UTKmf3qG88OQPs9qQne6y3EcLqwTDs5Xdh2VFoQ1
-	d1DPh/vA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1ocD7w-0093iW-M1; Sat, 24 Sep 2022 21:56:00 +0000
-Date: Sat, 24 Sep 2022 22:56:00 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
-	Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-	songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-	trix@redhat.com, vishal.moola@gmail.com
-Subject: Re: [syzbot] general protection fault in PageHeadHuge
-Message-ID: <Yy988Jv7/28k8l5x@casper.infradead.org>
-References: <0000000000006c300705e95a59db@google.com>
- <Yy4g/BKpnJga1toG@monkey>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF6917C9
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 01:23:17 +0000 (UTC)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175]) (authenticated)
+	by conssluserg-02.nifty.com with ESMTP id 28P1NFpN014759
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 10:23:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28P1NFpN014759
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1664068995;
+	bh=wcy17lhVeaFvvhqspD1VtBx9l8ybKL1EsOARSQKPsAA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ezESg2phz67myHt1bc99AS5anJgOYB5MXNC1EYM6fSMxeVvKu9pKfMZcrNDMg2fb8
+	 t9p8vSHWo+dG3ocoS5j44CtV7z5Oeg+Uw2a7Q78E/z2e2e+jNXrRj42sloa7poXeem
+	 6y6e6xurOs3X2bxkkn00l/CnsE8c6UHYjVuqG42VHmjmMUhZ2JApyQ3Mq6hlxdB4O0
+	 Q2ff+MQ7mU51AoxFZjMXdk4z+o7TRKZ8rbctWk1uRK8LfbqPYqm76nXy+DI24jbJ79
+	 GprtVL7gCcx5mheDZfBCaQ2ZhyjpGlVO1P+gsHMYtNfU+1hS2jp9BoDOHIafwSdAdf
+	 FkgCcIiyPQmRA==
+X-Nifty-SrcIP: [209.85.167.175]
+Received: by mail-oi1-f175.google.com with SMTP id c81so4396307oif.3
+        for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 18:23:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2+VFlBb4GeGGf89sM0V9kwHdIYDuWHk/i/XAWsG35RCMMdJpyS
+	XbncxAhnUqqqzuRuiqiER1KmldYChxNxs9I/Cd0=
+X-Google-Smtp-Source: AMsMyM78F9oRvL/JaZHExdRddIxrTZMIBVAq1fKW09ZWD2NQwNhABlAWFfCsQTOhhxVykQSMpBJaowS/3AsoKQXv62g=
+X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
+ cj5-20020a0568081b8500b0034d8ce1d5b0mr11934584oib.194.1664068994564; Sat, 24
+ Sep 2022 18:23:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yy4g/BKpnJga1toG@monkey>
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com> <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
+ <CAK7LNAQRV_Z+0V9gB0=KWKpQE=sH-Y4QVhgSjxc==412U=_LBw@mail.gmail.com>
+In-Reply-To: <CAK7LNAQRV_Z+0V9gB0=KWKpQE=sH-Y4QVhgSjxc==412U=_LBw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 25 Sep 2022 10:22:38 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATqGJCKRmL=vhH1_Ms--7QYTT8YTFxExejDs0_bQD4Ptg@mail.gmail.com>
+Message-ID: <CAK7LNATqGJCKRmL=vhH1_Ms--7QYTT8YTFxExejDs0_bQD4Ptg@mail.gmail.com>
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 23, 2022 at 02:11:24PM -0700, Mike Kravetz wrote:
-> On 09/23/22 09:05, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    483fed3b5dc8 Add linux-next specific files for 20220921
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16f0a418880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=849cb9f70f15b1ba
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=152d76c44ba142f8992b
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b97b64880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11fb9040880000
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/1cb3f4618323/disk-483fed3b.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/cc02cb30b495/vmlinux-483fed3b.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com
-> > 
-> > general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> > CPU: 1 PID: 3617 Comm: syz-executor722 Not tainted 6.0.0-rc6-next-20220921-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/16/2022
-> > RIP: 0010:PagePoisoned include/linux/page-flags.h:304 [inline]
-> > RIP: 0010:PageHead include/linux/page-flags.h:787 [inline]
-> > RIP: 0010:PageHeadHuge+0x1d/0x200 mm/hugetlb.c:1892
-> > Code: ff 66 66 2e 0f 1f 84 00 00 00 00 00 90 41 54 55 48 89 fd 53 e8 54 c9 b9 ff 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f 85 a2 01 00 00 48 8b 5d 00 48 c7 c7 ff ff ff ff 48
-> > RSP: 0018:ffffc90003e7f5a0 EFLAGS: 00010246
-> > RAX: dffffc0000000000 RBX: ffffc90003e7f788 RCX: 0000000000000000
-> > RDX: 0000000000000000 RSI: ffffffff81c2cb2c RDI: 0000000000000000
-> > RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000001 R12: ffffc90003e7f798
-> > R13: 0000000000000000 R14: 0000000000000000 R15: 00000000000003f4
-> > FS:  00007f5642262700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00000000203f4ef0 CR3: 000000007adcc000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  folio_test_hugetlb include/linux/page-flags.h:831 [inline]
-> >  folio_file_page include/linux/pagemap.h:683 [inline]
-> >  shmem_fault+0x27c/0x8a0 mm/shmem.c:2130
-> >  __do_fault+0x107/0x600 mm/memory.c:4191
-> >  do_shared_fault mm/memory.c:4597 [inline]
-> >  do_fault mm/memory.c:4675 [inline]
-> >  handle_pte_fault mm/memory.c:4943 [inline]
-> >  __handle_mm_fault+0x2200/0x3a40 mm/memory.c:5085
-> >  handle_mm_fault+0x1c8/0x780 mm/memory.c:5206
-> >  do_user_addr_fault+0x475/0x1210 arch/x86/mm/fault.c:1428
-> >  handle_page_fault arch/x86/mm/fault.c:1519 [inline]
-> >  exc_page_fault+0x94/0x170 arch/x86/mm/fault.c:1575
-> >  asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-> > RIP: 0010:__put_user_nocheck_4+0x3/0x11
-> > Code: 00 00 48 39 d9 73 54 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 44 00 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 34 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 48 bb f9 ef ff ff ff 7f
-> > RSP: 0018:ffffc90003e7fa00 EFLAGS: 00050293
-> > RAX: 0000000000000000 RBX: ffffc90003e7fdf4 RCX: 00000000203f4ef0
-> > RDX: ffff888020c51d40 RSI: ffffffff8726d52f RDI: 0000000000000005
-> > RBP: ffffc90003e7fdb0 R08: 0000000000000005 R09: 0000000000000000
-> > R10: 0000000000000002 R11: 0000000000000001 R12: 0000000000000000
-> > R13: 0000000000000002 R14: 00000000203f4ef0 R15: 0000000000000000
-> >  ____sys_recvmsg+0x3ba/0x610 net/socket.c:2714
-> >  ___sys_recvmsg+0xf2/0x180 net/socket.c:2743
-> >  do_recvmmsg+0x25e/0x6e0 net/socket.c:2837
-> >  __sys_recvmmsg net/socket.c:2916 [inline]
-> >  __do_sys_recvmmsg net/socket.c:2939 [inline]
-> >  __se_sys_recvmmsg net/socket.c:2932 [inline]
-> >  __x64_sys_recvmmsg+0x20b/0x260 net/socket.c:2932
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f56422dabb9
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f5642262208 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
-> > RAX: ffffffffffffffda RBX: 00007f564235c4b8 RCX: 00007f56422dabb9
-> > RDX: 0000000000010106 RSI: 00000000200000c0 RDI: 0000000000000003
-> > RBP: 00007f564235c4b0 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000002 R11: 0000000000000246 R12: 00007f564235c4bc
-> > R13: 00007fffbde3618f R14: 00007f5642262300 R15: 0000000000022000
-> >  </TASK>
-> > Modules linked in:
-> > ---[ end trace 0000000000000000 ]---
-> 
-> While it is true that the addressing exception is happening in the hugetlb
-> routine PageHeadHuge(), the reason is because it is passed a NULL page
-> pointer.  This is via the call to folio_file_page() at the end of shmem_fault.
-> 
-> 	err = shmem_get_folio_gfp(inode, vmf->pgoff, &folio, SGP_CACHE,
-> 				  gfp, vma, vmf, &ret);
-> 	if (err)
-> 		return vmf_error(err);
-> 
-> 	vmf->page = folio_file_page(folio, vmf->pgoff);
-> 	return ret;
-> 
-> The code assumes that if a non-zero value is returned from shmem_get_folio_gfp,
-> then folio pointer will be set to a folio.  However, it looks like there are
-> a few places in shmem_get_folio_gfp where it will return zero and not set
-> folio.
-> 
-> In this specific case, it is the code block:
-> 
->         if (vma && userfaultfd_missing(vma)) {
->                 *fault_type = handle_userfault(vmf, VM_UFFD_MISSING);
->                 return 0;
->         }
-> 
-> I could try to sort this out, but I believe Matthew has the most context as
-> he has been changing this code recently.
+On Sat, Sep 24, 2022 at 11:28 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Sat, Sep 24, 2022 at 4:44 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Tue, Sep 20, 2022 at 2:08 AM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > cc-ifversion is GCC specific. Replace it with compiler specific
+> > > variants. Update the users of cc-ifversion to use these new macros.
+> > >
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/350
+> > > Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+> > > Suggested-by: Bill Wendling <morbo@google.com>
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > ---
+> > > Changes v3 -> v4:
+> > > * Split into its own patch again from series, as per Masahiro.
+> > > * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+> > >   clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
+> >
+> >
+> > Applied to linux-kbuild.
+> > Thanks.
+> >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+>
+>
+>
+>
+>
+>
+> I noticed a small flaw now.
+>
+>
+>
+> $ make mrproper; make
+> /bin/sh: 1: [: -ge: unexpected operator
+> ***
+> *** Configuration file ".config" not found!
+> ***
+> *** Please run some configurator (e.g. "make oldconfig" or
+> *** "make menuconfig" or "make xconfig").
+> ***
+> Makefile:711: include/config/auto.conf.cmd: No such file or directory
+> make: *** [Makefile:720: .config] Error 1
+>
+>
+>
+>
+>
+>
+>
+>
+> This fails anyway, but it shows annoying
+>
+>    /bin/sh: 1: [: -ge: unexpected operator
+>
+>
+>
+> It is emit by this line:
+>
+>   KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
+>
+>
+>
+>
+> When $(CONFIG_GCC_VERSION) is empty, it becomes invalid shell code:
+>
+>      [ -ge $(1) ] && echo y
+>
+>
+>
+>
+>
+> Now I just recalled why I wrote the original code like this:
+>
+>
+>   cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ]  ...
+>
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
 
-Vishal sent me a patch a few days ago, but I was on holiday so haven't
-seen it until now.
 
-From: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To: willy@infradead.org
-Cc: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH 1/1] Fix an issue in shmem_fault()
-Date: Wed, 21 Sep 2022 17:38:56 -0700
-Message-Id: <20220922003855.23411-2-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220922003855.23411-1-vishal.moola@gmail.com>
-References: <20220922003855.23411-1-vishal.moola@gmail.com>
 
-If shmem_get_folio_gfp returns 0 AND does not assign folio,
-folio_file_page() runs into issues. Make sure to assign vmf->page only
-if a folio is assigned, otherwise set it to NULL.
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- mm/shmem.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index d6921b8e2cb5..986c07362eab 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2060,7 +2060,7 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct inode *inode = file_inode(vma->vm_file);
- 	gfp_t gfp = mapping_gfp_mask(inode->i_mapping);
--	struct folio *folio;
-+	struct folio *folio = NULL;
- 	int err;
- 	vm_fault_t ret = VM_FAULT_LOCKED;
- 
-@@ -2127,7 +2127,10 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
- 				  gfp, vma, vmf, &ret);
- 	if (err)
- 		return vmf_error(err);
--	vmf->page = folio_file_page(folio, vmf->pgoff);
-+	if (folio)
-+		vmf->page = folio_file_page(folio, vmf->pgoff);
-+	else
-+		vmf->page = NULL;
- 	return ret;
- }
- 
+
+
+I squashed the following code diff.
+Please let me know if there is a problem.
+
+
+
+
+
+
+
+
+
+diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+index 9d18fb91890e..20d353dcabfb 100644
+--- a/scripts/Makefile.compiler
++++ b/scripts/Makefile.compiler
+@@ -63,11 +63,11 @@ cc-disable-warning = $(call try-run,\
+
+ # gcc-min-version
+ # Usage: cflags-$(call gcc-min-version, 70100) += -foo
+-gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
++gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
+
+ # clang-min-version
+ # Usage: cflags-$(call clang-min-version, 110000) += -foo
+-clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
++clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && echo y)
+
+ # ld-option
+ # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+
+
+
+
+
+
 -- 
-2.36.1
-
+Best Regards
+Masahiro Yamada
