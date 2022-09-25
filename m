@@ -1,187 +1,163 @@
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF6917C9
-	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 01:23:17 +0000 (UTC)
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 28P1NFpN014759
-	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 10:23:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 28P1NFpN014759
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1664068995;
-	bh=wcy17lhVeaFvvhqspD1VtBx9l8ybKL1EsOARSQKPsAA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ezESg2phz67myHt1bc99AS5anJgOYB5MXNC1EYM6fSMxeVvKu9pKfMZcrNDMg2fb8
-	 t9p8vSHWo+dG3ocoS5j44CtV7z5Oeg+Uw2a7Q78E/z2e2e+jNXrRj42sloa7poXeem
-	 6y6e6xurOs3X2bxkkn00l/CnsE8c6UHYjVuqG42VHmjmMUhZ2JApyQ3Mq6hlxdB4O0
-	 Q2ff+MQ7mU51AoxFZjMXdk4z+o7TRKZ8rbctWk1uRK8LfbqPYqm76nXy+DI24jbJ79
-	 GprtVL7gCcx5mheDZfBCaQ2ZhyjpGlVO1P+gsHMYtNfU+1hS2jp9BoDOHIafwSdAdf
-	 FkgCcIiyPQmRA==
-X-Nifty-SrcIP: [209.85.167.175]
-Received: by mail-oi1-f175.google.com with SMTP id c81so4396307oif.3
-        for <llvm@lists.linux.dev>; Sat, 24 Sep 2022 18:23:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2+VFlBb4GeGGf89sM0V9kwHdIYDuWHk/i/XAWsG35RCMMdJpyS
-	XbncxAhnUqqqzuRuiqiER1KmldYChxNxs9I/Cd0=
-X-Google-Smtp-Source: AMsMyM78F9oRvL/JaZHExdRddIxrTZMIBVAq1fKW09ZWD2NQwNhABlAWFfCsQTOhhxVykQSMpBJaowS/3AsoKQXv62g=
-X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
- cj5-20020a0568081b8500b0034d8ce1d5b0mr11934584oib.194.1664068994564; Sat, 24
- Sep 2022 18:23:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B697F
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 03:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664075445;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yDTtUbn3kSmZ1ZmF7B/AOBnq0rkJvhdIiEtMQNXz1wM=;
+	b=JKeI7yA9BmxMZzQP16xOfvEyfjLZaqbESVwDpJVjKGIGTuvIrr6ICAmfLsaMdUT2NwfUwR
+	iq5lsSUCalO/YBeNJrW0YKx5jWZWra2WLENU4aTyHgkal3aZkKUh87H8Db48g3SSKfGNUy
+	j8C0hHTCFEnyRTwQrlSJqsM7KDQrey4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-106-0oTYGxJ6PRirpOMjBETBdQ-1; Sat, 24 Sep 2022 23:10:44 -0400
+X-MC-Unique: 0oTYGxJ6PRirpOMjBETBdQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EAFA3805C3B
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 03:10:43 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D5ACF2166B26;
+	Sun, 25 Sep 2022 03:10:43 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc6,
+ mainline.kernel.org-clang, 1772094f)
+Date: Sun, 25 Sep 2022 03:10:43 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com> <CAK7LNARk74U8AWzOVHP1pPVy2PNSMsNiyPL8bmFcYs6DkheorA@mail.gmail.com>
- <CAK7LNAQRV_Z+0V9gB0=KWKpQE=sH-Y4QVhgSjxc==412U=_LBw@mail.gmail.com>
-In-Reply-To: <CAK7LNAQRV_Z+0V9gB0=KWKpQE=sH-Y4QVhgSjxc==412U=_LBw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 25 Sep 2022 10:22:38 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATqGJCKRmL=vhH1_Ms--7QYTT8YTFxExejDs0_bQD4Ptg@mail.gmail.com>
-Message-ID: <CAK7LNATqGJCKRmL=vhH1_Ms--7QYTT8YTFxExejDs0_bQD4Ptg@mail.gmail.com>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Michal Marek <michal.lkml@markovi.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <25463.122092423104400343@us-mta-106.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 24, 2022 at 11:28 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Sat, Sep 24, 2022 at 4:44 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Tue, Sep 20, 2022 at 2:08 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > cc-ifversion is GCC specific. Replace it with compiler specific
-> > > variants. Update the users of cc-ifversion to use these new macros.
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/350
-> > > Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
-> > > Suggested-by: Bill Wendling <morbo@google.com>
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > ---
-> > > Changes v3 -> v4:
-> > > * Split into its own patch again from series, as per Masahiro.
-> > > * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
-> > >   clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
-> >
-> >
-> > Applied to linux-kbuild.
-> > Thanks.
-> >
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
->
->
->
->
->
->
-> I noticed a small flaw now.
->
->
->
-> $ make mrproper; make
-> /bin/sh: 1: [: -ge: unexpected operator
-> ***
-> *** Configuration file ".config" not found!
-> ***
-> *** Please run some configurator (e.g. "make oldconfig" or
-> *** "make menuconfig" or "make xconfig").
-> ***
-> Makefile:711: include/config/auto.conf.cmd: No such file or directory
-> make: *** [Makefile:720: .config] Error 1
->
->
->
->
->
->
->
->
-> This fails anyway, but it shows annoying
->
->    /bin/sh: 1: [: -ge: unexpected operator
->
->
->
-> It is emit by this line:
->
->   KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
->
->
->
->
-> When $(CONFIG_GCC_VERSION) is empty, it becomes invalid shell code:
->
->      [ -ge $(1) ] && echo y
->
->
->
->
->
-> Now I just recalled why I wrote the original code like this:
->
->
->   cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ]  ...
->
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.0-rc6-fixes' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tj/cgroup
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54182
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5247879
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
+ing with the "irqpoll" option)
+            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-I squashed the following code diff.
-Please let me know if there is a problem.
-
-
-
-
-
-
-
-
-
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 9d18fb91890e..20d353dcabfb 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -63,11 +63,11 @@ cc-disable-warning = $(call try-run,\
-
- # gcc-min-version
- # Usage: cflags-$(call gcc-min-version, 70100) += -foo
--gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
-+gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
-
- # clang-min-version
- # Usage: cflags-$(call clang-min-version, 110000) += -foo
--clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
-+clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && echo y)
-
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
