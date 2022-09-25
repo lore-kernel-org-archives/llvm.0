@@ -1,119 +1,74 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479F53D80
-	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 17:19:35 +0000 (UTC)
-Received: by mail-io1-f70.google.com with SMTP id n16-20020a6b5910000000b006a3570db9a5so2609417iob.23
-        for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 10:19:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=PsXujgeal9wQJe4mJZK5lU6/DKbFJBuwezONBEQonpI=;
-        b=1caJPVRPFDLK5HEyke+Kxe6COiaDRLOQUIUsHv/B0Mw5lU00ve20rgRfmO3X/8vIn9
-         ctzBDPar9oIexRbW6ntRP8BnBiovDHQeUznhxcBmkHdZBUAB+N9RZenW2R3F+7XjKP3d
-         +BHr3p0VbcbhxjqETvtjwWKbxulC333Ynjh8+pd7nrNif1u1vPrDsEZxyhpythGt2E3S
-         SKZid7GWPHyGyEXEI6arq7kuseZ2PZV7r63z97ZmquK51rUUccfTN6RZo4FrTvgoejKx
-         QIkqL+bjJiDA24hFX4EtXRVr57BgOtW72lRA2TWRJc99tCgu31ZqfSbDFDhBOZLnjRiO
-         VXJg==
-X-Gm-Message-State: ACrzQf2QA15jOtIClg7x83PNhFaWZd4Sl/keIFI8fYkOjDPFLIGZ3Vvm
-	UQ//Walfry8rBdVmGFMiY0TSE+EJX67NpzlwbpUX/lf7dJtk
-X-Google-Smtp-Source: AMsMyM7069qTVbupernHxdT4XXjI4Q8RUU1QVOflKJDDM3SGa18vFDi2+V8otOAakax0XDDeOF+24cOX4QLZfjqbwh3/mLY2WFu7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693733FE4
+	for <llvm@lists.linux.dev>; Sun, 25 Sep 2022 18:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D8B5C433D6;
+	Sun, 25 Sep 2022 18:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664129004;
+	bh=9FET3PaCzmyIcog+YS95QW0L9d7rytIwKw9jtfpwb4U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CEU7VzfkgrOaJ8jntLWEZhx3p7CfpfWBnyichsUQeZ+6Iyx44/MGdUnawm3X/oorS
+	 HQIOuF2DqdwZl/keRDcd8uJXm+lc9qw26HhD6HJEWmRRvr76v1mjYkqrl4RKeBUNsT
+	 vyE+pxJmPKazxajf8teshPpsT/N0QcHTrPbBIshdEGb+wTLYiTGEvIgTgXlL3tSeQ/
+	 sLvRq7m1GvbFIGw18b7cKoaBJXnGTzOtges/EucnEbwWVpOzDnFonhM15A86u3+DOO
+	 YxwQueNESlDvbKskYuEcDUGjleWf5TmqvojTF73KozxjxpWenhYZR27o5GL4X7UQ7Y
+	 pOM1QlSEBe8bw==
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Guo Ren <guoren@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/4] riscv: entry: further clean up and VMAP_STACK fix
+Date: Mon, 26 Sep 2022 01:53:52 +0800
+Message-Id: <20220925175356.681-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:388a:b0:35a:e02d:ca1e with SMTP id
- b10-20020a056638388a00b0035ae02dca1emr9750526jav.133.1664126374463; Sun, 25
- Sep 2022 10:19:34 -0700 (PDT)
-Date: Sun, 25 Sep 2022 10:19:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000694eea05e9839d2d@google.com>
-Subject: [syzbot] KASAN: null-ptr-deref Write in alloc_buddy_huge_page
-From: syzbot <syzbot+db491b09f5907cdb5984@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+I planed to do similar generic entry transaction as Guo Ren did[1], and
+I have some commits in local. Since Guo has sent out the series, so I
+dropped my version and just provide those in my local repo but missing
+in Guo's series. However, this doesn't mean this series depends on
+Guo's series, in fact except the first one, the remaining three patches
+are independent on generic entry.
 
-syzbot found the following issue on:
+NOTE: patch4 can also clean up arch/riscv/kernel/mcount-dyn.S as well
+but there's a trivial difference in the context saving, I dunno whether
+is it better to clean up mcount-dyn.S too, any suggestions are welcome.
 
-HEAD commit:    aaa11ce2ffc8 Add linux-next specific files for 20220923
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16ea4288880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=186d1ff305f10294
-dashboard link: https://syzkaller.appspot.com/bug?extid=db491b09f5907cdb5984
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=134606ef080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c83cff080000
+[1]https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/T/#t
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+db491b09f5907cdb5984@syzkaller.appspotmail.com
+Jisheng Zhang (4):
+  riscv: remove extra level wrappers of trace_hardirqs_{on,off}
+  riscv: consolidate ret_from_kernel_thread into ret_from_fork
+  riscv: fix race when vmap stack overflow and remove shadow_stack
+  riscv: entry: consolidate general regs saving into save_gp
 
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-BUG: KASAN: null-ptr-deref in atomic_cmpxchg include/linux/atomic/atomic-instrumented.h:503 [inline]
-BUG: KASAN: null-ptr-deref in page_ref_freeze include/linux/page_ref.h:318 [inline]
-BUG: KASAN: null-ptr-deref in alloc_buddy_huge_page.isra.0+0x103/0x230 mm/hugetlb.c:1960
-Write of size 4 at addr 0000000000000034 by task syz-executor107/3608
+ arch/riscv/include/asm/asm-prototypes.h |   1 -
+ arch/riscv/include/asm/thread_info.h    |   4 +-
+ arch/riscv/kernel/Makefile              |   2 -
+ arch/riscv/kernel/asm-offsets.c         |   1 +
+ arch/riscv/kernel/entry.S               | 150 +++++++-----------------
+ arch/riscv/kernel/process.c             |   5 +-
+ arch/riscv/kernel/trace_irq.c           |  27 -----
+ arch/riscv/kernel/trace_irq.h           |  11 --
+ arch/riscv/kernel/traps.c               |  15 +--
+ 9 files changed, 47 insertions(+), 169 deletions(-)
+ delete mode 100644 arch/riscv/kernel/trace_irq.c
+ delete mode 100644 arch/riscv/kernel/trace_irq.h
 
-CPU: 0 PID: 3608 Comm: syz-executor107 Not tainted 6.0.0-rc6-next-20220923-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
- atomic_cmpxchg include/linux/atomic/atomic-instrumented.h:503 [inline]
- page_ref_freeze include/linux/page_ref.h:318 [inline]
- alloc_buddy_huge_page.isra.0+0x103/0x230 mm/hugetlb.c:1960
- alloc_fresh_huge_page+0x395/0x530 mm/hugetlb.c:2013
- alloc_surplus_huge_page+0x139/0x2f0 mm/hugetlb.c:2227
- alloc_buddy_huge_page_with_mpol mm/hugetlb.c:2304 [inline]
- alloc_huge_page+0xbf6/0x1180 mm/hugetlb.c:2919
- hugetlb_no_page mm/hugetlb.c:5571 [inline]
- hugetlb_fault+0x1056/0x1e60 mm/hugetlb.c:5796
- follow_hugetlb_page+0x3f3/0x1850 mm/hugetlb.c:6291
- __get_user_pages+0x2cb/0xf10 mm/gup.c:1146
- __get_user_pages_locked mm/gup.c:1378 [inline]
- __get_user_pages_remote+0x18f/0x830 mm/gup.c:2131
- pin_user_pages_remote+0x6c/0xb0 mm/gup.c:3189
- process_vm_rw_single_vec mm/process_vm_access.c:105 [inline]
- process_vm_rw_core.constprop.0+0x43b/0x980 mm/process_vm_access.c:215
- process_vm_rw+0x29c/0x300 mm/process_vm_access.c:283
- __do_sys_process_vm_writev mm/process_vm_access.c:303 [inline]
- __se_sys_process_vm_writev mm/process_vm_access.c:298 [inline]
- __x64_sys_process_vm_writev+0xdf/0x1b0 mm/process_vm_access.c:298
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff4166016c9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff99de70c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000137
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007ff4166016c9
-RDX: 0000000000000001 RSI: 0000000020000000 RDI: 0000000000000e18
-RBP: 00007fff99de70e0 R08: 000000000000023a R09: 0000000000000000
-R10: 0000000020121000 R11: 0000000000000246 R12: 0000000000000003
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-==================================================================
+-- 
+2.34.1
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
