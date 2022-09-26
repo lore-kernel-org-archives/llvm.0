@@ -1,102 +1,101 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA57468D
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 20:17:30 +0000 (UTC)
-Received: by mail-pg1-f181.google.com with SMTP id q9so7533880pgq.8
-        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 13:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=LBF//pAX5WHcz7xdaQr4Nf4d4GrRr37crvjLDzbblIk=;
-        b=Bji77umcsdJeihjx85Wx1yJAb732Oz1ZA1q21x7/tJcnTUW/8fZte+SBOWKRr2y2X4
-         t7UYhPhE3DC/SUmvxlRXNayEpDUn6fkDZy7UDvvNDbtu4owhre655mCikZL0f8jsHtqv
-         cGn9ctLsI5otDOKjNY0EQMprAXB1loNeikeBDNXuhf21Gc6YNSGymHqhwg97uF5tGFMe
-         IZ94nsGJZnj+0Ru0uhnDDrRz3FETUQWktqxCIkpnHZcyY5l8qG/NsoDS/+XHrgbZsJr4
-         SbniuV3EE/E7bFBu3CiLO4p6FpJn/FlCsxGzzDKgRIkz5AdRBT3N+leywHBff6krEQW8
-         RNBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LBF//pAX5WHcz7xdaQr4Nf4d4GrRr37crvjLDzbblIk=;
-        b=gW4/WF0n51vj8Za7HUS2eC7pcBFHQDbTkylA1qztHMuTai0ImeTs5B3TbHey9qaW34
-         LBXwMDU/1HOrlzurzMxWgNJCVyodIFGLoSWzK9KiHldjqgX66n58xTQiUpCqoF99oSoC
-         SWdXT4fNGHwJDFqnMNJg8yuo8lXcoS+jhafpwDzJ+Z0hoqmUH4rf8w7XGOZRogh7rqft
-         ubOAjL6+olZPbYm12PQ1e/+lBoYYRK0kIW02ft7CicpZ7Uh0x7bGCOoj/zAZzSorwmFO
-         Cvr/B8Ep+XzuqsqAMysMlixQA+EXNirJLAJzbMM3uJweJTq+K4dOND3vyxskt6sDBMLC
-         dzZw==
-X-Gm-Message-State: ACrzQf2H381R45r1AiiRVeOFRbxaiPyI5FXmTjIQ1vvyJ+/Wl0hmNIL8
-	3AEm0eC9oU78t+3J5LprDPzkOT5mRibwbHMm6bh4ww==
-X-Google-Smtp-Source: AMsMyM5Uwpd0MxiH9sRDQzapR2kQfL6PV2oxZumBsqYgeO5TWDHdWVPWGZZxNuX11VhdUYgOQnkrigoKWNVoBnjDEtY=
-X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id
- s201-20020a632cd2000000b0041c590167d8mr21300624pgs.365.1664223450163; Mon, 26
- Sep 2022 13:17:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016BA3D65
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 20:40:43 +0000 (UTC)
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-03.nifty.com with ESMTP id 28QKbh0M030098
+	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 05:37:44 +0900
+Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
+	by conuserg-10.nifty.com with ESMTP id 28QKaWu0018737;
+	Tue, 27 Sep 2022 05:36:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28QKaWu0018737
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1664224593;
+	bh=lb3a5drEKLdeXLqemWkYG7kTPErJKgT8MUmB5b6StBw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=a0YahL0BCSGVdAPKTAvRLbUz1CEmuSqTisgJkZhpPdf5aOB/6N3O7lfN8i6WkILYH
+	 /tMFaRU/7p5oMro4eu7J3wmU/ugb8CldXDvypeUz8UwVQQzTotVmzHrejPOpnd8coZ
+	 weoiQBHgYWpZuSAIsxGidIM6A0+mD1hPpTcRdEx4Lsd+AiLcuDayy6f1AdWh/qKve7
+	 HSO3sHYh67nj4r+EIC1g7lookLFpd/TILUGwwzUxMLy0q+nCDMz84bv7Jd/XXVpai8
+	 jDQhhALoBKsisEs8gB/2qRd6VSdDcA/ItUPryjxJNBtZHDeBJj18XQajVT4ZPZEJAn
+	 lkX62AmoE/DfA==
+X-Nifty-SrcIP: [133.32.182.133]
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>, Nicolas Pitre <npitre@baylibre.com>,
+        Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH v2 0/7] Unify <linux/export.h> and <asm/export.h>, remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
+Date: Tue, 27 Sep 2022 05:36:18 +0900
+Message-Id: <20220926203625.1117261-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220926191109.1803094-1-keescook@chromium.org>
-In-Reply-To: <20220926191109.1803094-1-keescook@chromium.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 26 Sep 2022 13:17:18 -0700
-Message-ID: <CAKwvOdmCjAQpaF40VStbFNf1ZqmTxTTZzy2v4TwSF0LVO08GYw@mail.gmail.com>
-Subject: Re: [PATCH v2] overflow: Introduce overflows_type() and castable_to_type()
-To: Kees Cook <keescook@chromium.org>
-Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, Daniel Latypov <dlatypov@google.com>, 
-	Vitor Massaru Iha <vitor@massaru.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, David Airlie <airlied@linux.ie>, 
-	Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-sparse@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-+ Arnd
+This patch set refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
+Also, re-implement TRIM_UNUSED_KSYMS in one-pass.
 
-On Mon, Sep 26, 2022 at 12:11 PM Kees Cook <keescook@chromium.org> wrote:
-> ---
-> v2:
->  - fix comment typo
->  - wrap clang pragma to avoid GCC warnings
->  - style nit cleanups
->  - rename __castable_to_type() to castable_to_type()
->  - remove prior overflows_type() definition
-> v1: https://lore.kernel.org/lkml/20220926003743.409911-1-keescook@chromium.org
-> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> index f385ca652b74..fffc3f86181d 100644
-> --- a/lib/overflow_kunit.c
-> +++ b/lib/overflow_kunit.c
-> @@ -16,6 +16,11 @@
->  #include <linux/types.h>
->  #include <linux/vmalloc.h>
->
-> +/* We're expecting to do a lot of "always true" or "always false" tests. */
-> +#ifdef CONFIG_CC_IS_CLANG
-> +#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
-> +#endif
+You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
+but you do not need to care about whether it is a function or a data.
+Remove EXPORT_DATA_SYMBOL().
 
-Any chance we can reuse parts of __diag_ignore or __diag_clang from
-include/linux/compiler_types.h or include/linux/compiler-clang.h
-respectively?
+In v1, I broke ia64 because of missing distinction between functions and data.
 
-Those are needed for pragmas within preprocessor macros, which we
-don't have here, but I suspect they may be more concise to use here.
+V2 handles it correctly.
+If the exported symbols is a function, KSYMTAB_FUNC is output.
+Otherwise, KSYMTAB_DATA is output.
 
-> +#define TEST_SAME_TYPE(t1, t2, same)                   do {    \
-> +       typeof(t1) __t1h = type_max(t1);                        \
-> +       typeof(t1) __t1l = type_min(t1);                        \
-> +       typeof(t2) __t2h = type_max(t2);                        \
-> +       typeof(t2) __t2l = type_min(t2);                        \
 
-Can we use __auto_type here rather than typeof(macro expansion)?
+
+Masahiro Yamada (7):
+  kbuild: generate KSYMTAB entries by modpost
+  ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
+  modpost: merge sym_update_namespace() into sym_add_exported()
+  modpost: use null string instead of NULL pointer for default namespace
+  modpost: squash report_sec_mismatch() and remove enum mismatch
+  kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
+  kbuild: move modules.builtin(.modinfo) rules to Makefile.vmlinux_o
+
+ .gitignore                      |   1 -
+ Makefile                        |  24 +---
+ arch/ia64/include/asm/Kbuild    |   1 +
+ arch/ia64/include/asm/export.h  |   3 -
+ arch/ia64/kernel/head.S         |   2 +-
+ arch/ia64/kernel/ivt.S          |   2 +-
+ include/asm-generic/export.h    |  83 +-----------
+ include/linux/export-internal.h |  67 +++++++++-
+ include/linux/export.h          | 114 +++-------------
+ kernel/module/internal.h        |   1 +
+ kernel/module/main.c            |   1 -
+ scripts/Makefile.build          |  15 +--
+ scripts/Makefile.modpost        |   8 +-
+ scripts/Makefile.vmlinux_o      |  26 +++-
+ scripts/adjust_autoksyms.sh     |  73 ----------
+ scripts/basic/fixdep.c          |   3 +-
+ scripts/check-local-export      |   4 +-
+ scripts/gen_autoksyms.sh        |  62 ---------
+ scripts/gen_ksymdeps.sh         |  30 -----
+ scripts/link-vmlinux.sh         |  12 +-
+ scripts/mod/modpost.c           | 228 ++++++++++++++++----------------
+ scripts/mod/modpost.h           |   1 +
+ scripts/remove-stale-files      |   2 +
+ 23 files changed, 258 insertions(+), 505 deletions(-)
+ delete mode 100644 arch/ia64/include/asm/export.h
+ delete mode 100755 scripts/adjust_autoksyms.sh
+ delete mode 100755 scripts/gen_autoksyms.sh
+ delete mode 100755 scripts/gen_ksymdeps.sh
+
 -- 
-Thanks,
-~Nick Desaulniers
+2.34.1
+
