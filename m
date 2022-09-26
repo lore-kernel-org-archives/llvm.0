@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D027B
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 10:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FABAC433D7;
-	Mon, 26 Sep 2022 10:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80ED7B
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 10:40:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0484AC433C1;
+	Mon, 26 Sep 2022 10:40:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1664188382;
-	bh=xFoYiczSMpmkPDUMzBxSpprsVJENIuKg5r3Cj61wDmo=;
+	s=korg; t=1664188822;
+	bh=ayO3WIFiJihs2MM+opQbImdBIj0AnX09GvLi7XT6pkk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jmvijt10cXDgAkxRkhgjQV+G4nsQoETi4+kV8AXerElR4w0ezxTCoXaw3RjD4uHAF
-	 Qmdktf/nHs+8Y9lF9fKxbUqn4BKARubzQb1oXTHDGv9bwGNwNfIXtkYrLkRHzlFELa
-	 CL7nswClRrBTvE2wwPlg/d3Uo34M1pOp1fhvnXJs=
+	b=scEmFJqAcLIYWsS2SCHfhUVuH8Z+ct9Ip+VRYhr2XB4aaLWrXIk7CQrAhFlGJkVtj
+	 os6EQtah027ZAvpyTer3EKwdv18kxViPJCbS4pJytcc0Argr/sL8+C4EuYBqpQbQSk
+	 VV+/vwYfMzw7lo90RhFLghJokJBb6Ouxj79EkunA=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -22,12 +22,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Heiko Stuebner <heiko@sntech.de>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 132/141] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
-Date: Mon, 26 Sep 2022 12:12:38 +0200
-Message-Id: <20220926100759.231016122@linuxfoundation.org>
+Subject: [PATCH 5.15 133/148] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
+Date: Mon, 26 Sep 2022 12:12:47 +0200
+Message-Id: <20220926100801.201481338@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100754.639112000@linuxfoundation.org>
-References: <20220926100754.639112000@linuxfoundation.org>
+In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
+References: <20220926100756.074519146@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -66,10 +66,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index dec54c70e008..857c47c69ef1 100644
+index 13c6b857158f..6b5d0722afa6 100644
 --- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
 +++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -276,8 +276,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
+@@ -277,8 +277,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
  	return ret;
  }
  
