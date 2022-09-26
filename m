@@ -1,11 +1,11 @@
-Received: from mail-m118204.qiye.163.com (mail-m118204.qiye.163.com [115.236.118.204])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6ED33CF
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 13:58:15 +0000 (UTC)
+Received: from mail-m118207.qiye.163.com (mail-m118207.qiye.163.com [115.236.118.207])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A1833CF
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 14:02:15 +0000 (UTC)
 Received: from lyc-workstation.. (unknown [221.212.176.62])
-	by mail-m118204.qiye.163.com (HMail) with ESMTPA id D7842A2044F;
-	Mon, 26 Sep 2022 21:48:38 +0800 (CST)
+	by mail-m118207.qiye.163.com (HMail) with ESMTPA id 43C32900A47;
+	Mon, 26 Sep 2022 21:51:58 +0800 (CST)
 From: YingChi Long <me@inclyc.cn>
-To: 
+To: peterz@infradead.org
 Cc: me@inclyc.cn,
 	ndesaulniers@google.com,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -21,11 +21,11 @@ Cc: me@inclyc.cn,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
 Subject: [PATCH] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
-Date: Mon, 26 Sep 2022 21:48:28 +0800
-Message-Id: <20220926134829.891084-1-me@inclyc.cn>
+Date: Mon, 26 Sep 2022 21:51:24 +0800
+Message-Id: <20220926135125.891584-1-me@inclyc.cn>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <Peter Zijlstra <peterz@infradead.org>
-References: <Peter Zijlstra <peterz@infradead.org>
+In-Reply-To: <peterz@infradead.org>
+References: <peterz@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,12 +34,12 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWRpIHU5WQxpLSUkZSUkeHkxLVQIWExYaEhckFA4PWV
+	tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWRoeHUpWHRkaSR4YSB0fTx5DVQIWExYaEhckFA4PWV
 	dZGBILWUFZSUlKVUlKSVVKTE1VTUlZV1kWGg8SFR0UWUFZS1VLVUtVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NBw6GAw6CTlIPzcDGBE#CwIP
-	LEoaChBVSlVKTU1PSUtLSklLSkNNVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
-	SkxNVU1JWVdZCAFZQUhOT083Bg++
-X-HM-Tid: 0a837a0e94d12d26kusnd7842a2044f
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PiI6OSo5CzlNFTcBCBJWFhkv
+	MToKFA9VSlVKTU1PSUtLSEpCTkJNVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+	SkxNVU1JWVdZCAFZQUhOSUs3Bg++
+X-HM-Tid: 0a837a119ffc2d29kusn43c32900a47
 
 WG14 N2350 made very clear that it is an UB having type definitions
 within "offsetof". This patch changes the implementation of macro
