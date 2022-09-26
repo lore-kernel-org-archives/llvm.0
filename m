@@ -1,88 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80ED7B
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 10:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0484AC433C1;
-	Mon, 26 Sep 2022 10:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1664188822;
-	bh=ayO3WIFiJihs2MM+opQbImdBIj0AnX09GvLi7XT6pkk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=scEmFJqAcLIYWsS2SCHfhUVuH8Z+ct9Ip+VRYhr2XB4aaLWrXIk7CQrAhFlGJkVtj
-	 os6EQtah027ZAvpyTer3EKwdv18kxViPJCbS4pJytcc0Argr/sL8+C4EuYBqpQbQSk
-	 VV+/vwYfMzw7lo90RhFLghJokJBb6Ouxj79EkunA=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Dan Carpenter <error27@gmail.com>,
-	llvm@lists.linux.dev,
-	Nathan Huckleberry <nhuck@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 133/148] drm/rockchip: Fix return type of cdn_dp_connector_mode_valid
-Date: Mon, 26 Sep 2022 12:12:47 +0200
-Message-Id: <20220926100801.201481338@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220926100756.074519146@linuxfoundation.org>
-References: <20220926100756.074519146@linuxfoundation.org>
-User-Agent: quilt/0.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C557B
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 10:46:33 +0000 (UTC)
+Received: by mail-wr1-f49.google.com with SMTP id t7so9520407wrm.10
+        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 03:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=TkeJ6Fx1YX+DJ9RAwA8Kk9or3Gugtl5q1hK17knU0BA=;
+        b=B9y43+TNPHZ/59uqH8nEbojremxQKTaJQoSInS8tVxC5USe5fb7hsS6Fmf7GLEGT9/
+         NyXf6VhkDRrA2UJtKiQhl8Ohykck1m3tVA1GPk/7225r4haIcXNCsqRsPo4aagC270aZ
+         dbxRA+/qHW9FQo6YhvNoVVYTjDwHIyKc3S5+p3tA5q1T57CpRhEmUiPEbUFnloMvqsVl
+         iB8o0kiYLyA006xg3KXZK1hg73bLmKKZXqbG/w7vFrFAn9Fjwvxz2K3EowWuxfISeh0x
+         LMYNZLRN11tRP0zy2n3Xt69VIHZCigxfqusfn+MUmdzreBZM5ZT81rNRcZY6w9typ4Rx
+         v2OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=TkeJ6Fx1YX+DJ9RAwA8Kk9or3Gugtl5q1hK17knU0BA=;
+        b=1xbCQah+/5sDoS4upH/mcwNJPVmte1YWe6PZgNwT4oBTgPR0D4yPO3vM4p14HThogJ
+         AQWjOfjHyQpIxKvQboS72yW18bDtjrE4DXEticP9OvR9/jecU+CTqWkpKQlhh2ie27It
+         jTDMByNc6241AJkDJ72eqf3s+MLQCAhGuEY3IblwjBdiHaz/uB/qDMlqb3Wxwf1oB/mU
+         Ontz2WPHxzp7LIj3tF0nOMoeEK6xu3lbIP5PHpVigFWpLkNNWfdQvD6cnSib+A9ENcnD
+         9aAohtP6NRiqkl2cmfGngQdNrF+SgOBtPSANcRlL1t/JmrGlMbso7qPTOk/M/o7I+kpK
+         g5bw==
+X-Gm-Message-State: ACrzQf2KgzxRikAr8qartwCefUKt9gS+e+sJGP5hzYFyQGZfzc5wcv1C
+	GWlvpGMcA5FkSHwXHXL+hUEx0w==
+X-Google-Smtp-Source: AMsMyM4rI/LVbjbcwOi+ZBasDlj+u6afWRFcKSFN0LE8DC93MLu9289n4JIYLawB9nsOT0+CPltxSA==
+X-Received: by 2002:a05:6000:1887:b0:22a:3c3d:75ea with SMTP id a7-20020a056000188700b0022a3c3d75eamr12324657wri.669.1664189191814;
+        Mon, 26 Sep 2022 03:46:31 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id x8-20020adfdcc8000000b0022a2dbc80fdsm13971613wrm.10.2022.09.26.03.46.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 03:46:31 -0700 (PDT)
+Message-ID: <2f670f3f-4d91-9b74-4fbe-8ea1351444cb@isovalent.com>
+Date: Mon, 26 Sep 2022 11:46:29 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [bpf-next v6 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+Content-Language: en-GB
+To: Wang Yufen <wangyufen@huawei.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+ hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
+From: Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-From: Nathan Huckleberry <nhuck@google.com>
+Sat Sep 24 2022 11:13:48 GMT+0100 (British Summer Time) ~ Wang Yufen
+<wangyufen@huawei.com>
+> Add auto_attach optional to support one-step load-attach-pin_link.
+> 
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+> 
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>    	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>    	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>    	btf_id 82
+> 
+>    $ bpftool link
+>    1: tracing  prog 26
+>    	prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+> 
+> The autoattach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
+> v5 -> v6: skip the programs not supporting auto-attach,
+> 	  and change optional name from "auto_attach" to "autoattach"
+> v4 -> v5: some formatting nits of doc
+> v3 -> v4: rename functions, update doc, bash and do_help()
+> v2 -> v3: switch to extend prog load command instead of extend perf
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>  tools/bpf/bpftool/prog.c | 76 ++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 74 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index c81362a001ba..b1cbd06dee19 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1453,6 +1453,67 @@ get_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
+>  	return ret;
+>  }
+>  
+> +static int
+> +auto_attach_program(struct bpf_program *prog, const char *path)
+> +{
+> +	struct bpf_link *link;
+> +	int err;
+> +
+> +	link = bpf_program__attach(prog);
+> +	if (!link)
+> +		return -1;
+> +
+> +	err = bpf_link__pin(link, path);
+> +	if (err) {
+> +		bpf_link__destroy(link);
+> +		return err;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int pathname_concat(const char *path, const char *name, char *buf)
+> +{
+> +	int len;
+> +
+> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+> +	if (len < 0)
+> +		return -EINVAL;
+> +	if (len >= PATH_MAX)
+> +		return -ENAMETOOLONG;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +auto_attach_programs(struct bpf_object *obj, const char *path)
+> +{
+> +	struct bpf_program *prog;
+> +	char buf[PATH_MAX];
+> +	int err;
+> +
+> +	bpf_object__for_each_program(prog, obj) {
+> +		err = pathname_concat(path, bpf_program__name(prog), buf);
+> +		if (err)
+> +			goto err_unpin_programs;
+> +
+> +		err = auto_attach_program(prog, buf);
+> +		if (err && errno != EOPNOTSUPP)
+> +			goto err_unpin_programs;
 
-[ Upstream commit b0b9408f132623dc88e78adb5282f74e4b64bb57 ]
+If I read the above correctly, we skip entirely programs that couldn't
+be auto-attached. I'm not sure what Andrii had in mind exactly, but it
+would make sense to me to fallback to regular program pinning if the
+program couldn't be attached/linked, so we still keep it loaded in the
+kernel after bpftool exits. Probably with a p_info() message to let
+users know?
 
-The mode_valid field in drm_connector_helper_funcs is expected to be of
-type:
-enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
-				     struct drm_display_mode *mode);
-
-The mismatched return type breaks forward edge kCFI since the underlying
-function definition does not match the function hook definition.
-
-The return type of cdn_dp_connector_mode_valid should be changed from
-int to enum drm_mode_status.
-
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-Cc: llvm@lists.linux.dev
-Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220913205555.155149-1-nhuck@google.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/rockchip/cdn-dp-core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/rockchip/cdn-dp-core.c b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-index 13c6b857158f..6b5d0722afa6 100644
---- a/drivers/gpu/drm/rockchip/cdn-dp-core.c
-+++ b/drivers/gpu/drm/rockchip/cdn-dp-core.c
-@@ -277,8 +277,9 @@ static int cdn_dp_connector_get_modes(struct drm_connector *connector)
- 	return ret;
- }
- 
--static int cdn_dp_connector_mode_valid(struct drm_connector *connector,
--				       struct drm_display_mode *mode)
-+static enum drm_mode_status
-+cdn_dp_connector_mode_valid(struct drm_connector *connector,
-+			    struct drm_display_mode *mode)
- {
- 	struct cdn_dp_device *dp = connector_to_dp(connector);
- 	struct drm_display_info *display_info = &dp->connector.display_info;
--- 
-2.35.1
-
-
-
+> +	}
+> +
+> +	return 0;
+> +
+> +err_unpin_programs:
+> +	while ((prog = bpf_object__prev_program(obj, prog))) {
+> +		if (pathname_concat(path, bpf_program__name(prog), buf))
+> +			continue;
+> +
+> +		bpf_program__unpin(prog, buf);
+> +	}
+> +
+> +	return err;
+> +}
