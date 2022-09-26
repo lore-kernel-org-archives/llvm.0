@@ -1,173 +1,65 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1085365
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 07:40:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664178045;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ToX4G36VxLbi1v72iIO/BAhzbXx8JQlWEYyp+SC2obc=;
-	b=G6UKNrpp8/A8/iUAshkysSMzfuV7/1G/4YkfHZjQlWU60jkgPpWs/tVEU+q2zxugJC5vfx
-	B51r3i+BWb0It1rhPXtP+IPrI5m2j+UQiHvvuLqGxDHDVGrecyRPjYnxUFvEE6cxaGArLw
-	zRQ/UK/n4PTQF3waJOCy/4zub2A24Po=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-H1BqstH-Pg-rH6g6D-rjlw-1; Mon, 26 Sep 2022 03:40:44 -0400
-X-MC-Unique: H1BqstH-Pg-rH6g6D-rjlw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0BEC8872841
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 07:40:44 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E42F31121314;
-	Mon, 26 Sep 2022 07:40:43 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
- mainline.kernel.org-clang, f76349cf)
-Date: Mon, 26 Sep 2022 07:40:41 -0000
-CC: mmalik@redhat.com, omosnace@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC113626;
+	Mon, 26 Sep 2022 07:51:32 +0000 (UTC)
+Received: by mail-ej1-f44.google.com with SMTP id lh5so12202963ejb.10;
+        Mon, 26 Sep 2022 00:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=JTLxaDlZ0s+4KzzKxJ2iMAsNQ8edLuUfFix3kOf4hxE=;
+        b=IUYcYkeAKAq3Z9pkfcGCw7GFVb5ytx/L103zWixWaVGGHUW4qaqsi7qFcQb8U9ylb+
+         ZH86Rft2dsUKJJPRUWtJ5SbNWB4vsOoMJNFE+RdK2CQvW8sUrWj7ZCHcXFtyYAbTbzre
+         05ZZb0uTlCJrtnHgUYE3Xmren2i+EwAw2RU0lcC0cs3q9HG0Ad8Uv35WTJuvWm79HW5P
+         K9F9i3i+Ol/SXFaX85xP+/7swtxTbQVL4rKPAMc8iyX8adFMUbWloN1UPCTGZq2Il07D
+         +TiUZOOKWEghMgGbQMmJULxQ0z/4vUcpXar06SX6FjLR2L+k5eC9evSI2aDdcl09Dz7X
+         ZLQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=JTLxaDlZ0s+4KzzKxJ2iMAsNQ8edLuUfFix3kOf4hxE=;
+        b=UErJWY1OoU+JYWEnlp57akqOaSuH1Wmj5rFs2sOTC8Uk1IZZwa+56LqRiEKzELsHPX
+         S41/ui7hzKLXl4c7TBQKdefAyqCnEaOnAaSqqml8CrTqigaPgmH5wbXYFTxKAf8yEkrd
+         zNPuHvOnVuSlGOeb1p/yhL/dgsCMJPYqc9ye5WqTyudC6jJWCHEM+O8AfVQnasrPLkYK
+         RUm0Mm9VVxYX6YYVMMaqQc/Buix0tYJX9BvDenWztRUNeoAshDTdzIEZRHBlKa1muo69
+         bZUQp4AqxJdLj5UsE58KDP4XTADUKrnX1a8Qx02l5PKOwkarLPErkHmMOgn7UnKQmpZs
+         z7Rg==
+X-Gm-Message-State: ACrzQf0uZB6vcavmVS3nV37eT2MkNAZx994ExHidB9uM0d41ZcgwNQlh
+	HAhSjQyX/6L7HT3G/dHEoV9QaQ3xC6gjZYY7NqY=
+X-Google-Smtp-Source: AMsMyM54PjI7r9RBNywo7Vr4XI825HD15QzPS4xTM54XWF4bEobGfMMFwon7099h/YE9taKhiPm8G8gbvIN0ntLE4AA=
+X-Received: by 2002:a17:906:9c83:b0:779:c14c:55e4 with SMTP id
+ fj3-20020a1709069c8300b00779c14c55e4mr16698857ejc.619.1664178690895; Mon, 26
+ Sep 2022 00:51:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <84869.122092603404400244@us-mta-541.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+From: Nick Desaulniers <nick.desaulniers@gmail.com>
+Date: Mon, 26 Sep 2022 00:51:19 -0700
+Message-ID: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+Subject: Any interest in building the Linux kernel from a MacOS host?
+To: torvalds@linux-foundation.org, Masahiro Yamada <masahiroy@kernel.org>, 
+	"marcan@marcan.st" <marcan@marcan.st>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Not sure if this is potentially interesting to anyone but I was able
+to get the kernel building from MacOS my M2 Air with a small amount of
+effort (read: duct tape and bailing wire).  If this might seem helpful
+to anyone's workflow, I wouldn't mind pursuing this (with some
+cleanup, sending a more formal patch set).  Maybe this helps us
+bootstrap or get Linux up and running sooner on these machines?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Take a look at the commit message linked below for the trials & tribulations:
+https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
 
-
-Kernel information:
-    Commit message: Linux 6.0-rc7
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54205
-
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-         aarch64 - selinux-policy: serge-testsuite
-                   Issue: selinux-policy: serge-testsuite: inet_socket/test=
- FAIL L412
-                          https://bugzilla.redhat.com/show_bug.cgi?id=3D207=
-1969
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5256144
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5255844
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+~Nick Desaulniers
