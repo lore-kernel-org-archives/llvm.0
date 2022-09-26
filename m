@@ -1,129 +1,94 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF3563A
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 08:55:31 +0000 (UTC)
-Received: by mail-wr1-f52.google.com with SMTP id x18so9078458wrm.7
-        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 01:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=RPGb704O3Bne5Y0UDhxFzj56eq4BOkDrW8rdj0cFxk4=;
-        b=CqX+VBGfBXp/8y3OsL5mmBRTzQ/gqge2jlgfxI2WfNDlKUfLT7hzoHcGhmHU4nXHkD
-         eE96W4LQwIHsBEOUEIWcPhnDNGnhSwtx6HOUYuizQi6ags76Yb5V7lprDlCqV1SX0oLT
-         wSQTfHyFbzZblumxxOLIzJMIjneffXwS7i5rJZ4x9sunKDuWYEj9AKai6t0JHwD058CE
-         vz0GQI7U/Hz7HkODfhSH4DvyzLQDSeBBLJQTf2UBKefsS03onvcbVIHRJvyLR9zUNCRW
-         Ih+vXFlcp/QqhI1t91XcpJQEu6QZdgEdoEiDZgzH7ua6VxCAKEqpM7t0a8YFKe2d6kpZ
-         vrlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=RPGb704O3Bne5Y0UDhxFzj56eq4BOkDrW8rdj0cFxk4=;
-        b=SFNsN17YM4/odjgmxenr3ERmx46k4ms3dCccUHrcUsJyTUVKl+v5MWI4yOJkKW66HV
-         U861vXn7p4IQk/LKmmXfLQo2AZ5huOUlOw+yTbAOLyKTOw6M9sl9V5ulbtlvmm4dEw+P
-         Tzgxf2qUfNdLisdIuucYUAPAtzwn0QLOxvUy/yJZpMFPL/cNMTNGSDk+3smcTgcDp0PL
-         6LmWl5lzvKMRUgkseEUHk/LVVLlCaWQUZnfngPv3kVW3KR07ujwE+F+fm2+uIqju1gvk
-         QH0NS4aw+0hM/Q3M3tfxa3zi2aZ6ZkIEgHj7m/5iyYxWvPk2zqIYt9zlATbVSAzoPSRe
-         Vjlg==
-X-Gm-Message-State: ACrzQf0rThXgAVhJN9xFVyX5G+8dtIIejxfQEVI4oqIEx2N936VVa261
-	Xv+Uug8jEpzDCRbiLqDHIvE=
-X-Google-Smtp-Source: AMsMyM7Q6ghS34g3/envwAUDHV+tFvaUN83njjBhlCE46x9SHw6GkbOe0qXVnHV/iIwgbBV03o9AdQ==
-X-Received: by 2002:adf:fe08:0:b0:22b:311:afcd with SMTP id n8-20020adffe08000000b0022b0311afcdmr12704761wrr.629.1664182529596;
-        Mon, 26 Sep 2022 01:55:29 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id c3-20020a5d63c3000000b0021e51c039c5sm13606592wrw.80.2022.09.26.01.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 01:55:28 -0700 (PDT)
-Date: Mon, 26 Sep 2022 09:55:27 +0100
-From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To: nathan@kernel.org, ndesaulniers@google.com
-Cc: torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: mainline build failure for x86_64 and arm64 with clang
-Message-ID: <YzFo/+uF1jJ7gMIN@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EC863A;
+	Mon, 26 Sep 2022 09:03:16 +0000 (UTC)
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 28Q8vT7j007487;
+	Mon, 26 Sep 2022 17:57:29 +0900
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 28Q8vH89029116;
+	Mon, 26 Sep 2022 17:57:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 28Q8vH89029116
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1664182637;
+	bh=vlkbVUYC6luO+m9Ikti3NG43M3VtHm2puQBFVEFsQrY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KY7QXY1dq9zl60QZkjgo2j9B17vAiVIW7LuJ9oTkHb2YImiFCF3pUsOaFC5NNc0YU
+	 rIBfQqtacpcxFCU2AihjOyIpNClPgY0ixCMdL4JV1r2gIc18T/zxhdckbLfZwFZmVD
+	 dPNpZ/rRZLu4oMo1/oxJxo0yeOqowKjAJZpvrTizOex74idCZZpEYrHOxl6j/2x2dU
+	 iiieZbX50Ca58ivODWDy8rU9iRsHXb4OzJX7QSkZTEaGTq5RUdFxe/9o2d6O0a1zyz
+	 QP9yMVerbJWlQfT60eRsCf65o4wcc43oXSeFQ+tLGVdRFJJ69OQaZool3qV+t08Yuk
+	 Uj7klbYVvXR6g==
+X-Nifty-SrcIP: [209.85.167.172]
+Received: by mail-oi1-f172.google.com with SMTP id j188so7527663oih.0;
+        Mon, 26 Sep 2022 01:57:17 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2t62ei4AORRcvxtKN93oLi/RVdonwk5MiGYo2eLLhBX0zD3hsE
+	lGy75Xl7vhgk5L8JuNLWLDnDBByfzFaI4uHXfgQ=
+X-Google-Smtp-Source: AMsMyM5lTuCqBocFYoR82VLsqcYSHYEXb4vwAWkRiOaytmxxtyxns+2TLiPuEomBdT8w0SIPiBJSgUYqG6rIWeplWQ0=
+X-Received: by 2002:a54:400c:0:b0:34f:9913:262 with SMTP id
+ x12-20020a54400c000000b0034f99130262mr9358774oie.287.1664182636355; Mon, 26
+ Sep 2022 01:57:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+In-Reply-To: <CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 26 Sep 2022 17:56:40 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS_vgMXAVdmSBV=nrXL5Covd2tMX0weXtst3WoL_JGwsw@mail.gmail.com>
+Message-ID: <CAK7LNAS_vgMXAVdmSBV=nrXL5Covd2tMX0weXtst3WoL_JGwsw@mail.gmail.com>
+Subject: Re: Any interest in building the Linux kernel from a MacOS host?
+To: Nick Desaulniers <nick.desaulniers@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        asahi@lists.linux.dev,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi All,
-
-Yesterday I updated my clang to:
-clang version 16.0.0 (https://github.com/llvm/llvm-project.git bcb1397bda667e75200ae0be9a65fd17dd0763d4)
-
-And with that I see new build failures of mainline.
-
-I am not copying all the errors but others look similar to these.
-From x86_64 almodconfig:
-
-In file included from scripts/mod/devicetable-offsets.c:3:
-In file included from ./include/linux/mod_devicetable.h:13:
-In file included from ./include/linux/uuid.h:12:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
-        q_len = strlen(q);
-                ^~~~~~~~~
-
-From x86_64 defconfig:
-
-In file included from arch/x86/kernel/asm-offsets.c:9:
-In file included from ./include/linux/crypto.h:20:
-In file included from ./include/linux/slab.h:15:
-In file included from ./include/linux/gfp.h:7:
-In file included from ./include/linux/mmzone.h:8:
-In file included from ./include/linux/spinlock.h:55:
-In file included from ./include/linux/preempt.h:78:
-In file included from ./arch/x86/include/asm/preempt.h:7:
-In file included from ./include/linux/thread_info.h:60:
-In file included from ./arch/x86/include/asm/thread_info.h:53:
-In file included from ./arch/x86/include/asm/cpufeature.h:5:
-In file included from ./arch/x86/include/asm/processor.h:22:
-In file included from ./arch/x86/include/asm/msr.h:11:
-In file included from ./arch/x86/include/asm/cpumask.h:5:
-In file included from ./include/linux/cpumask.h:12:
-In file included from ./include/linux/bitmap.h:9:
-./include/linux/find.h:119:31: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
-                unsigned long val = *addr & GENMASK(size - 1, 0);
-                                            ^~~~~~~~~~~~~~~~~~~~
-./include/linux/bits.h:38:3: note: expanded from macro 'GENMASK'
-        (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/bits.h:25:3: note: expanded from macro 'GENMASK_INPUT_CHECK'
-                __is_constexpr((l) > (h)), (l) > (h), 0)))
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
-        (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-                               ^
-./include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-#define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+On Mon, Sep 26, 2022 at 4:51 PM Nick Desaulniers
+<nick.desaulniers@gmail.com> wrote:
+>
+> Not sure if this is potentially interesting to anyone but I was able
+> to get the kernel building from MacOS my M2 Air with a small amount of
+> effort (read: duct tape and bailing wire).  If this might seem helpful
+> to anyone's workflow, I wouldn't mind pursuing this (with some
+> cleanup, sending a more formal patch set).  Maybe this helps us
+> bootstrap or get Linux up and running sooner on these machines?
+>
+> Take a look at the commit message linked below for the trials & tribulati=
+ons:
+> https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340=
+355f471c1dfe95a
+>
+> Thanks,
+> ~Nick Desaulniers
 
 
-From arm64 allmodconfig:
 
-In file included from scripts/mod/devicetable-offsets.c:3:
-In file included from ./include/linux/mod_devicetable.h:13:
-In file included from ./include/linux/uuid.h:12:
-In file included from ./include/linux/string.h:253:
-./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
-        q_len = strlen(q);
-                ^~~~~~~~~
-./include/linux/fortify-string.h:131:24: note: expanded from macro 'strlen'
-        __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
-        (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I see some efforts in this direction, for example,
 
-I dont know if its some regression introduced in clang, or really a kernel issue.
 
-I will go back to my previous clang version (329b972d416a) for now untill I know more.
+commit dd2a3acaecd7abb2d43b09a823cf2e4c967fa2ac
+Author: Andreas Bie=C3=9Fmann <andreas@biessmann.de>
+Date:   Fri Feb 24 08:23:53 2012 +0100
 
--- 
-Regards
-Sudip
+    mod/file2alias: make modpost compile on darwin again
+
+
+
+I do not mind a small amount of code addition.
+It may be broken from time to time because there are less number of
+developers testing kernel builds on macOS.
+
+
+--=20
+Best Regards
+Masahiro Yamada
