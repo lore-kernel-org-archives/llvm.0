@@ -1,107 +1,102 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E5D468D
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 20:16:41 +0000 (UTC)
-Received: by mail-qv1-f46.google.com with SMTP id d1so5066985qvs.0
-        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 13:16:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA57468D
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 20:17:30 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id q9so7533880pgq.8
+        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 13:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=1Moyt/DbH/5iuPJVPo0l2zngLADkERtzxSHb4NVriH8=;
-        b=HBpzIKbJYJ+oekfthYe9ri/AoeyGwsq1SMaCghcPawpU5GXiK9OGFo9vCGYe7wpmMO
-         8hqU4Gn6qQVNVUb7tzambM46pngSPbV3qSl50fx70TjEstH2g0NHCbT2Zw5H/0DKXDCr
-         1jw+8GCSZQrUIdslPbpk3DFQURycnqylkzFe0EnrZc+V/EPxxjFi/uyNCnMQbnUb/NIE
-         FQ1Vy/QI8WmgtjLk0ftVrLQIKhEszGmHSr2D4Nfn3I58qjLvXlG6GqnrZiva99qILvue
-         wEyQ0ziHPTSa7NuF615NDX6NymIQMS1EYj5nWoLyYrl24QqrdbcdlguOxNSSS73Q7v8a
-         HLXQ==
+        bh=LBF//pAX5WHcz7xdaQr4Nf4d4GrRr37crvjLDzbblIk=;
+        b=Bji77umcsdJeihjx85Wx1yJAb732Oz1ZA1q21x7/tJcnTUW/8fZte+SBOWKRr2y2X4
+         t7UYhPhE3DC/SUmvxlRXNayEpDUn6fkDZy7UDvvNDbtu4owhre655mCikZL0f8jsHtqv
+         cGn9ctLsI5otDOKjNY0EQMprAXB1loNeikeBDNXuhf21Gc6YNSGymHqhwg97uF5tGFMe
+         IZ94nsGJZnj+0Ru0uhnDDrRz3FETUQWktqxCIkpnHZcyY5l8qG/NsoDS/+XHrgbZsJr4
+         SbniuV3EE/E7bFBu3CiLO4p6FpJn/FlCsxGzzDKgRIkz5AdRBT3N+leywHBff6krEQW8
+         RNBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1Moyt/DbH/5iuPJVPo0l2zngLADkERtzxSHb4NVriH8=;
-        b=S0IgatlAwxAOvRAOWoVrjuxqisi9kaiuSU1o4VVhQlpBHGx5i9GxMU2IdCjuZv3PmK
-         I7bk3O1o05bg67i7b1Twqryo+YbX8Ohlf4K24MvqQp2dEaLYfGS4fAN+BJNJM3gHj2y/
-         wLtrYLWV9ND2CJ/ZKAbonGhf9+sRZgsoQCFmAQiulMijEh4jY3LrZdEtoUMCOB0MJmUM
-         WEMvwc/80De0ET+WtLA8c9U4l9/hiUB6Ltc+V2P9C6PbArYW7sx9kvSvfR5R0XtS/xtc
-         TJxonbO62Ku7cMjSC3xS8C9bjEWKdPQEWXxtKr6vssR5k+w54BUaj/zOOHawYVj8yxr4
-         u1BA==
-X-Gm-Message-State: ACrzQf1Cse1pMYQ7jcHFEWwgSXKx5bzNsKMm4OQqe6ViCioY/WkJvf5B
-	r4GEtkXdKtzg4YTT3epmHCGWdqv+6dxZN2i7hwg=
-X-Google-Smtp-Source: AMsMyM6DhG4RasO1+FbqYOQ1CqhS3aV4iMooc3GPKm2Hvn7tZ5OppInt59qu+j3AxY1JJT9ta+O3XQ31vXsABDXUtDA=
-X-Received: by 2002:a05:6214:d0e:b0:4ad:5e35:329a with SMTP id
- 14-20020a0562140d0e00b004ad5e35329amr18560172qvh.28.1664223400300; Mon, 26
- Sep 2022 13:16:40 -0700 (PDT)
+        bh=LBF//pAX5WHcz7xdaQr4Nf4d4GrRr37crvjLDzbblIk=;
+        b=gW4/WF0n51vj8Za7HUS2eC7pcBFHQDbTkylA1qztHMuTai0ImeTs5B3TbHey9qaW34
+         LBXwMDU/1HOrlzurzMxWgNJCVyodIFGLoSWzK9KiHldjqgX66n58xTQiUpCqoF99oSoC
+         SWdXT4fNGHwJDFqnMNJg8yuo8lXcoS+jhafpwDzJ+Z0hoqmUH4rf8w7XGOZRogh7rqft
+         ubOAjL6+olZPbYm12PQ1e/+lBoYYRK0kIW02ft7CicpZ7Uh0x7bGCOoj/zAZzSorwmFO
+         Cvr/B8Ep+XzuqsqAMysMlixQA+EXNirJLAJzbMM3uJweJTq+K4dOND3vyxskt6sDBMLC
+         dzZw==
+X-Gm-Message-State: ACrzQf2H381R45r1AiiRVeOFRbxaiPyI5FXmTjIQ1vvyJ+/Wl0hmNIL8
+	3AEm0eC9oU78t+3J5LprDPzkOT5mRibwbHMm6bh4ww==
+X-Google-Smtp-Source: AMsMyM5Uwpd0MxiH9sRDQzapR2kQfL6PV2oxZumBsqYgeO5TWDHdWVPWGZZxNuX11VhdUYgOQnkrigoKWNVoBnjDEtY=
+X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id
+ s201-20020a632cd2000000b0041c590167d8mr21300624pgs.365.1664223450163; Mon, 26
+ Sep 2022 13:17:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220908215504.3686827-1-samitolvanen@google.com> <YzGdeYzoZ1uC1CO/@hirez.programming.kicks-ass.net>
-In-Reply-To: <YzGdeYzoZ1uC1CO/@hirez.programming.kicks-ass.net>
-From: "H.J. Lu" <hjl.tools@gmail.com>
-Date: Mon, 26 Sep 2022 13:16:04 -0700
-Message-ID: <CAMe9rOrHe9XD2D+pZJrKo1DxkLMQggDOFXQJfTgEO+xp0dybdw@mail.gmail.com>
-Subject: Re: [PATCH v5 00/22] KCFI support
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org, 
-	Kees Cook <keescook@chromium.org>, Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Joao Moreira <joao@overdrivepizza.com>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	linux-hardening@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev
+References: <20220926191109.1803094-1-keescook@chromium.org>
+In-Reply-To: <20220926191109.1803094-1-keescook@chromium.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 26 Sep 2022 13:17:18 -0700
+Message-ID: <CAKwvOdmCjAQpaF40VStbFNf1ZqmTxTTZzy2v4TwSF0LVO08GYw@mail.gmail.com>
+Subject: Re: [PATCH v2] overflow: Introduce overflows_type() and castable_to_type()
+To: Kees Cook <keescook@chromium.org>
+Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Daniel Latypov <dlatypov@google.com>, 
+	Vitor Massaru Iha <vitor@massaru.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, David Airlie <airlied@linux.ie>, 
+	Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-sparse@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 26, 2022 at 5:39 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Sep 08, 2022 at 02:54:42PM -0700, Sami Tolvanen wrote:
-> > KCFI is a forward-edge control-flow integrity scheme in the upcoming
-> > Clang 16 release, which is more suitable for kernel use than the
-> > existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
-> > LTO, doesn't alter function references to point to a jump table, and
-> > won't break function address equality.
-> >
-> > This series replaces the current arm64 CFI implementation with KCFI
-> > and adds support for x86_64.
-> >
-> > KCFI requires assembly functions that are indirectly called from C
-> > code to be annotated with type identifiers. As type information is
-> > only available in C, the compiler emits expected type identifiers
-> > into the symbol table, so they can be referenced from assembly
-> > without having to hardcode type hashes. Patch 6 adds helper macros
-> > for annotating functions, and patches 9 and 20 add annotations.
-> >
-> > In case of a type mismatch, KCFI always traps. To support error
-> > handling, the compiler generates a .kcfi_traps section for x86_64,
-> > which contains the locations of each trap, and for arm64, encodes
-> > the necessary register information to the ESR. Patches 10 and 22 add
-> > arch-specific error handlers.
-> >
-> > To test this series, you'll need a ToT Clang toolchain. The series
-> > is also available pn GitHub:
-> >
-> >   https://github.com/samitolvanen/linux/commits/kcfi-v5
->
-> As mentioned at plumbers, my only concern is somewhat excessive use of
-> CFI_CLANG as oposed to something more compiler neutral. But I suppose
-> that's something we can cleanup/fix when GCC grows support for this.
->
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Tested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->
-> (as in I ran kCFI + call-depth-tracking + FineIBT on a bunch of
-> hardware)
->
-> HJL, can you look at adding kCFI support to GCC ?
++ Arnd
 
-Adding -fsanitize=kcfi to GCC is a big effort.  Please open a
-GCC bug:
+On Mon, Sep 26, 2022 at 12:11 PM Kees Cook <keescook@chromium.org> wrote:
+> ---
+> v2:
+>  - fix comment typo
+>  - wrap clang pragma to avoid GCC warnings
+>  - style nit cleanups
+>  - rename __castable_to_type() to castable_to_type()
+>  - remove prior overflows_type() definition
+> v1: https://lore.kernel.org/lkml/20220926003743.409911-1-keescook@chromium.org
+> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> index f385ca652b74..fffc3f86181d 100644
+> --- a/lib/overflow_kunit.c
+> +++ b/lib/overflow_kunit.c
+> @@ -16,6 +16,11 @@
+>  #include <linux/types.h>
+>  #include <linux/vmalloc.h>
+>
+> +/* We're expecting to do a lot of "always true" or "always false" tests. */
+> +#ifdef CONFIG_CC_IS_CLANG
+> +#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+> +#endif
 
-https://gcc.gnu.org/bugzilla/enter_bug.cgi?product=gcc
+Any chance we can reuse parts of __diag_ignore or __diag_clang from
+include/linux/compiler_types.h or include/linux/compiler-clang.h
+respectively?
 
+Those are needed for pragmas within preprocessor macros, which we
+don't have here, but I suspect they may be more concise to use here.
+
+> +#define TEST_SAME_TYPE(t1, t2, same)                   do {    \
+> +       typeof(t1) __t1h = type_max(t1);                        \
+> +       typeof(t1) __t1l = type_min(t1);                        \
+> +       typeof(t2) __t2h = type_max(t2);                        \
+> +       typeof(t2) __t2l = type_min(t2);                        \
+
+Can we use __auto_type here rather than typeof(macro expansion)?
 -- 
-H.J.
+Thanks,
+~Nick Desaulniers
