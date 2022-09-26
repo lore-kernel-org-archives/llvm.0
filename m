@@ -1,83 +1,116 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6657E4682
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 18:17:12 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id iw17so7029471plb.0
-        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 11:17:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C168C4682
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 18:24:39 +0000 (UTC)
+Received: by mail-pf1-f179.google.com with SMTP id 9so7492188pfz.12
+        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 11:24:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Il0vkOLUU8Wr/hKXeWfSAnVT8noJuQa95krgaKi1p4s=;
-        b=ndO8+/R02S9Z+MftcCPkoi50pEbp5cagm+Obh6sygHFMVdgUXeF5PNyfPJt6YEvCYt
-         7RdkC9KxTEQ1Fv/6bZMFZkGIr9/TUJh/Dn0IquOtJBsG2IK16fFoMTYGcZh2H8d8P2Lv
-         E0BL7I628eb7+l3xct+uiGuiEncpwJ/CGtXsOiVIS4zoIaaY54OEdOK3WFHmS14qRzp2
-         0Ty0K9rYGGS0QkRH54SSZ8pTvZ8nhEavH4e/sfuRnTYiClyswgBgufRD61NvhQumJNje
-         eV1nrk8nwKijMExrhQbqdT0tI2hk4ZcnTxN4TKSFoN6qylvUs4R0SxSojqwRZok22yWi
-         sWRw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=4OBTQRXHJygCpY/2rBSvNKQlNNozBBa3mtJlOeJ/EyY=;
+        b=cSzvTXKu85TucB7q+g9CQdjC/FdnYJW7ESEBDVMDQZhpqkoHzMT6tB5vmqaaVmtq+c
+         HBo/BI5kdAn7jf+xxq5MiOLWI7cJumnHX29hS+SWLXo9wgZxYqgGZ4IjXwCG6/+UPFiS
+         mSjP6/8kEubWj+KXOsoeUGGJwGHBMRMvzL4Ek=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Il0vkOLUU8Wr/hKXeWfSAnVT8noJuQa95krgaKi1p4s=;
-        b=d8oJ1LeHXUAIrCkqMM2B9RhC4HF3RD1KE1EoufVdXVTdq/pnyB0pe6UPdLDF33UfRZ
-         3rp0TE+A7NtN8QuukzXqIdEMVDfQKufS7WZErw3xZHMWYwibW2Eyg3tgQrwYxl6PL2Be
-         BWTc6ypVwtvGKi1cMUjJiBD6MjVQSTz5QDXbj9+g7Lfdb9x97Fj18Y5iWzs9frUTgmuA
-         jo5c7+eVcRSHGR+59DoZamqxuU763MCskcYwo+JAJrnXYfaA08PDhKR5QBv71uGFgpJl
-         OFVZ1h22aKNOYXTk5GwOy5KU0TvtXfvYIqffzZCdDOp2xZUqkspg8SUq+fSx0IslB6P3
-         YiLQ==
-X-Gm-Message-State: ACrzQf1KPZYgrcRiHVUkvnx9x4SBgtr04l2yK8+EaS6uWW1iCdSmr5Jc
-	xOZc3/Cnp0rMJGvgLBZJiSFhBnsYQx6hfbZQkaUyag==
-X-Google-Smtp-Source: AMsMyM7HLUfbdMpdW3guEO/IoUjYq2oQz+OyMDkq7nLclHX/EA7jhIcMm5L/Nfwp+rvUkCew0JIURYshd4k1BklGYCE=
-X-Received: by 2002:a17:90b:1d0f:b0:202:be3e:a14a with SMTP id
- on15-20020a17090b1d0f00b00202be3ea14amr49839pjb.102.1664216231609; Mon, 26
- Sep 2022 11:17:11 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=4OBTQRXHJygCpY/2rBSvNKQlNNozBBa3mtJlOeJ/EyY=;
+        b=L8S5EcGqsb5sJFX+NYDt+1bA/mHyX3ON2HirfbH4htgw30rwRVd2WEnpAL9wCTqIfe
+         y2tbmOzEqvZL+zp11GWxLTNeKwtnRIjMKyQY1jIBwU3ZHc8U6BOBP7T8FtN4HwasIxtn
+         PIurYe+mY97prF9ae+w4X1wErsuEliZQaGRQgX++qeoRyv2F0hzoRSxFNVt5RHUQfuHD
+         WBs/M6U1r6gS4ZO2CCQckHjGzF8ZM2U1y+Jjmz+7PXd8EDRGliW/6xHbFeJAGM5IMLZs
+         hUITl4W6swWa8BllIH2cdQ4VynC0gKFFwoepsRT8h0pvxmfrGVL7/IiNwDXFKb1n7bjg
+         NZQg==
+X-Gm-Message-State: ACrzQf1SDjzzTLbVlfOdEtONkoB/aiJkEEd5voi1xjceIJSAVZgkTREQ
+	Npp2qW/FjRay2BMxqFGuW3x8Uw==
+X-Google-Smtp-Source: AMsMyM6gzz3RlLPDBF6eEAacYBSNNxOrYYdXLeQNzcYYWROPiLY1NScn4aUnW3BZuZbnjPt9v5tgLQ==
+X-Received: by 2002:a63:4750:0:b0:43c:dac:9e4b with SMTP id w16-20020a634750000000b0043c0dac9e4bmr21137736pgk.300.1664216679159;
+        Mon, 26 Sep 2022 11:24:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902c70200b0016f85feae65sm11305644plp.87.2022.09.26.11.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Sep 2022 11:24:38 -0700 (PDT)
+Date: Mon, 26 Sep 2022 11:24:37 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
+	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 13/16] mempool: Use kmalloc_size_roundup() to match
+ ksize() usage
+Message-ID: <202209261123.B2CBAE87E0@keescook>
+References: <20220923202822.2667581-1-keescook@chromium.org>
+ <20220923202822.2667581-14-keescook@chromium.org>
+ <f4fc52c4-7c18-1d76-0c7a-4058ea2486b9@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYvyD9OWF53ua2EZmyf+=YTx4f1mezDNkVLMxf3BKXW=_w@mail.gmail.com>
- <YzHIwvzhM9DSW9cF@dev-arch.thelio-3990X> <YzHJRH9hO1lfjSPp@dev-arch.thelio-3990X>
- <CAKwvOdkYr-Nv6PowyJ10DuP-uFLcvH1oGWSeQH3Dz_JM8vwp2w@mail.gmail.com> <YzHpT7t+9uSIYm0k@shell.armlinux.org.uk>
-In-Reply-To: <YzHpT7t+9uSIYm0k@shell.armlinux.org.uk>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 26 Sep 2022 11:17:00 -0700
-Message-ID: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
-Subject: Re: arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must
- precede .save or .vsave directives
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Nathan Chancellor <nathan@kernel.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, regressions@lists.linux.dev, 
-	lkft-triage@lists.linaro.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f4fc52c4-7c18-1d76-0c7a-4058ea2486b9@suse.cz>
 
-On Mon, Sep 26, 2022 at 11:02 AM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Sep 26, 2022 at 10:42:45AM -0700, Nick Desaulniers wrote:
-> > > On Mon, Sep 26, 2022 at 08:44:05AM -0700, Nathan Chancellor wrote:
-> > > > Thank you for the testing and report! I brought this up on GitHub on
-> > > > Friday as I noticed this as well:
-> > > >
-> > > > https://github.com/ClangBuiltLinux/linux/issues/1718
-> >
-> > Thanks for the reports. I'll take a look at filing additional bug
-> > reports against clang, then moving the definition of
-> > __kretprobe_trampoline to out of line assembler.
->
-> Are you saying that .save should be accepted without a .fnstart?
+On Mon, Sep 26, 2022 at 03:50:43PM +0200, Vlastimil Babka wrote:
+> On 9/23/22 22:28, Kees Cook wrote:
+> > Round up allocations with kmalloc_size_roundup() so that mempool's use
+> > of ksize() is always accurate and no special handling of the memory is
+> > needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+> > 
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: linux-mm@kvack.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >   mm/mempool.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/mm/mempool.c b/mm/mempool.c
+> > index 96488b13a1ef..0f3107b28e6b 100644
+> > --- a/mm/mempool.c
+> > +++ b/mm/mempool.c
+> > @@ -526,7 +526,7 @@ EXPORT_SYMBOL(mempool_free_slab);
+> >    */
+> >   void *mempool_kmalloc(gfp_t gfp_mask, void *pool_data)
+> >   {
+> > -	size_t size = (size_t)pool_data;
+> > +	size_t size = kmalloc_size_roundup((size_t)pool_data);
+> 
+> Hm it is kinda wasteful to call into kmalloc_size_roundup for every
+> allocation that has the same input. We could do it just once in
+> mempool_init_node() for adjusting pool->pool_data ?
+> 
+> But looking more closely, I wonder why poison_element() and
+> kasan_unpoison_element() in mm/mempool.c even have to use ksize()/__ksize()
+> and not just operate on the requested size (again, pool->pool_data). If no
+> kmalloc mempool's users use ksize() to write beyond requested size, then we
+> don't have to unpoison/poison that area either?
 
-No. It's just a bug in clang's inline assembler. But it does make
-sense to just move it to out of line assembler anyways; having it be
-inline provides little to no benefit.
+Yeah, I think that's a fair point. I will adjust this.
 
-Should I be using UNWIND from arch/arm/include/asm/unwind.h on these
-.fnstart/.save/.pad/.fnend directives?
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
