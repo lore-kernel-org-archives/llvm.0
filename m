@@ -1,149 +1,209 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D9E3D70
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 15:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2279C433D7;
-	Mon, 26 Sep 2022 15:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664206801;
-	bh=jIcb5daet5kGSuxWvbwSe3MVMh+FF012cin0rfSzRQE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C92xsykG6Tpu3Vok/h7HInPhm1iJNg5+5HttGpEYss7rVBWZjqI7SabQDa/hQw1Hn
-	 wz1e+I8euq2Zs3Qnd7Ng9I7w840CiRBhRzJBk+qjp5+VPaqfPnOk5EObdQ2rUM2SYw
-	 vxuoZqSxxdltZfM8JZgZzysOQLK6OtMfmGn730kVYuwypeJJUM3xCnZTQ0NM9SQKVy
-	 qPMZbw9D6niSPXB6uoGLFH7F2aLlsMsHD6st2BJ21GShzEUwvl5iYFX5rsHlPzU8Av
-	 hVWxRdQkEgUevHGsJ3oBxOPkU9WcsMgIQCI0IQ4ndJc+VpgPAmZDBM127eoluhMnlp
-	 8jpKytWt7HpXQ==
-Date: Mon, 26 Sep 2022 08:39:59 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc: ndesaulniers@google.com, torvalds@linux-foundation.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: mainline build failure for x86_64 and arm64 with clang
-Message-ID: <YzHHz0S8/Nq1QivU@dev-arch.thelio-3990X>
-References: <YzFo/+uF1jJ7gMIN@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BCD3D70
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 15:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664206822; x=1695742822;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4XhPcRJh4ka65SQONH+kTJV7Dl3Cx9q/CZr71E/oqUk=;
+  b=PK4IEjYNkL+p3seKQzQOhxFxt2TDvDRiTqJh3q92x2qnZqvPTey16oMU
+   u/AWDZUj4oXaDa0wSASUr5F8NMx85Wo0R4ZIWdA4MaFK+tmJtkWBCV/yt
+   AA1WpNcfTjO89m7xHN7tgh1CEO9RELeMBcEXr68cuCO9IrWRkunazPN0G
+   tBox34PCiVoeqQxwLcqTglkqAkVKwG2TdwiQipUFYHsmeQvHIwujFd/G4
+   T2Iu+VlEwJ6B7RtT5B2Qcs4bHxPSn1pM9UkPAObKmhjWNwO2nEPKJHQ1r
+   vD37hKUanxw7yqy0GidaJo5dhaCaQYXF0MmVVn1DHs4VPBJk24Tm593Vf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="387352276"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="387352276"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 08:40:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10482"; a="763480818"
+X-IronPort-AV: E=Sophos;i="5.93,346,1654585200"; 
+   d="scan'208";a="763480818"
+Received: from bsochack-mobl2.ger.corp.intel.com (HELO paris.ger.corp.intel.com) ([10.249.128.215])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2022 08:40:07 -0700
+From: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+To: intel-gfx@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	mchehab@kernel.org,
+	chris@chris-wilson.co.uk,
+	matthew.auld@intel.com,
+	thomas.hellstrom@linux.intel.com,
+	jani.nikula@intel.com,
+	nirmoy.das@intel.com,
+	airlied@redhat.com,
+	daniel@ffwll.ch,
+	andi.shyti@linux.intel.com,
+	andrzej.hajda@intel.com,
+	keescook@chromium.org,
+	mauro.chehab@linux.intel.com,
+	linux@rasmusvillemoes.dk,
+	vitor@massaru.org,
+	dlatypov@google.com,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org,
+	linux-sparse@vger.kernel.org,
+	nathan@kernel.org,
+	gustavoars@kernel.org,
+	luc.vanoostenryck@gmail.com
+Subject: [PATCH v12 0/9] Fixes integer overflow or integer truncation issues in page lookups, ttm place configuration and scatterlist creation
+Date: Mon, 26 Sep 2022 18:39:44 +0300
+Message-Id: <20220926153953.3836470-1-gwan-gyeong.mun@intel.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzFo/+uF1jJ7gMIN@debian>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Sudip,
+This patch series fixes integer overflow or integer truncation issues in
+page lookups, ttm place configuration and scatterlist creation, etc.
+We need to check that we avoid integer overflows when looking up a page,
+and so fix all the instances where we have mistakenly used a plain integer
+instead of a more suitable long.
+And there is an impedance mismatch between the scatterlist API using
+unsigned int and our memory/page accounting in unsigned long. That is we
+may try to create a scatterlist for a large object that overflows returning
+a small table into which we try to fit very many pages. As the object size
+is under the control of userspace, we have to be prudent and catch the
+conversion errors. To catch the implicit truncation as we switch from
+unsigned long into the scatterlist's unsigned int, we use improved
+overflows_type check and report E2BIG prior to the operation. This is
+already used in our create ioctls to indicate if the uABI request is simply
+too large for the backing store. 
+And ttm place also has the same problem with scatterlist creation,
+and we fix the integer truncation problem with the way approached by
+scatterlist creation.
+And It corrects the error code to return -E2BIG when creating gem objects
+using ttm or shmem, if the size is too large in each case.
+In order to provide a common macro, it moves and adds a few utility macros
+into overflow/compiler header.
+Introduces overflows_type() and __castable_to_type(). overflows_type()
+tests if a variable or constant value would  overflow another variable or
+type. This can be used as a constant expression for static_assert() (which
+requires a constant expression[2][3]) when used on constant values. This
+must be constructed manually, since __builtin_add_overflow() does not
+produce a constant expression[4]. Additionally adds __castable_to_type(),
+similar to __same_type(), for checking if a constant value will fit in a
+given type (i.e. it could be cast to the type without overflow). Add unit
+tests for overflows_type(), __same_type(), and __castable_to_type() to the
+existing KUnit "overflow" test. And Introduce check_assign() and
+check_assign_user_ptr(). the check_assign() macro which performs an
+assigning source value into destination pointer along with an overflow
+check and check_assign_user_ptr() macro which performs an assigning source
+value into destination pointer type variable along with an overflow check.
+If an explicit overflow check is required while assigning to a user-space
+ptr, assign_user_ptr() can be used instead of u64_to_user_ptr() to assign
+integers into __user pointers along with an overflow check.
+In order to implement check_assign(), overflows_type() on top of updated
+check_add_overflow() macro, this series include the patch which came from
+Kees [1] (this patch is under reviewing from other patch mail). 
 
-On Mon, Sep 26, 2022 at 09:55:27AM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
-> 
-> Yesterday I updated my clang to:
-> clang version 16.0.0 (https://github.com/llvm/llvm-project.git bcb1397bda667e75200ae0be9a65fd17dd0763d4)
-> 
-> And with that I see new build failures of mainline.
-> 
-> I am not copying all the errors but others look similar to these.
-> From x86_64 almodconfig:
-> 
-> In file included from scripts/mod/devicetable-offsets.c:3:
-> In file included from ./include/linux/mod_devicetable.h:13:
-> In file included from ./include/linux/uuid.h:12:
-> In file included from ./include/linux/string.h:253:
-> ./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
->         q_len = strlen(q);
->                 ^~~~~~~~~
-> 
-> From x86_64 defconfig:
-> 
-> In file included from arch/x86/kernel/asm-offsets.c:9:
-> In file included from ./include/linux/crypto.h:20:
-> In file included from ./include/linux/slab.h:15:
-> In file included from ./include/linux/gfp.h:7:
-> In file included from ./include/linux/mmzone.h:8:
-> In file included from ./include/linux/spinlock.h:55:
-> In file included from ./include/linux/preempt.h:78:
-> In file included from ./arch/x86/include/asm/preempt.h:7:
-> In file included from ./include/linux/thread_info.h:60:
-> In file included from ./arch/x86/include/asm/thread_info.h:53:
-> In file included from ./arch/x86/include/asm/cpufeature.h:5:
-> In file included from ./arch/x86/include/asm/processor.h:22:
-> In file included from ./arch/x86/include/asm/msr.h:11:
-> In file included from ./arch/x86/include/asm/cpumask.h:5:
-> In file included from ./include/linux/cpumask.h:12:
-> In file included from ./include/linux/bitmap.h:9:
-> ./include/linux/find.h:119:31: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
->                 unsigned long val = *addr & GENMASK(size - 1, 0);
->                                             ^~~~~~~~~~~~~~~~~~~~
-> ./include/linux/bits.h:38:3: note: expanded from macro 'GENMASK'
->         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
->          ^~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/bits.h:25:3: note: expanded from macro 'GENMASK_INPUT_CHECK'
->                 __is_constexpr((l) > (h)), (l) > (h), 0)))
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
->         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
->                                ^
-> ./include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-> #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-> 
-> 
-> From arm64 allmodconfig:
-> 
-> In file included from scripts/mod/devicetable-offsets.c:3:
-> In file included from ./include/linux/mod_devicetable.h:13:
-> In file included from ./include/linux/uuid.h:12:
-> In file included from ./include/linux/string.h:253:
-> ./include/linux/fortify-string.h:159:10: error: ISO C does not allow indirection on operand of type 'void *' [-Werror,-Wvoid-ptr-dereference]
->         q_len = strlen(q);
->                 ^~~~~~~~~
-> ./include/linux/fortify-string.h:131:24: note: expanded from macro 'strlen'
->         __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/const.h:12:25: note: expanded from macro '__is_constexpr'
->         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
->                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> I dont know if its some regression introduced in clang, or really a kernel issue.
-> 
-> I will go back to my previous clang version (329b972d416a) for now untill I know more.
+[1] https://lore.kernel.org/all/202208311040.C6CA8253@keescook/
+[2] https://en.cppreference.com/w/c/language/_Static_assert
+[3] C11 standard (ISO/IEC 9899:2011): 6.7.10 Static assertions
+[4] https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
+    6.56 Built-in Functions to Perform Arithmetic with Overflow Checking
+    Built-in Function: bool __builtin_add_overflow (type1 a, type2 b,
+                                                    type3 *res)
 
-Thanks for testing and the report! I noticed this over the weekend, it
-comes from a new warning in clang:
+v12: Introduce updated overflows_type() and __castable_to_type() (Kees)
+     Change to use static_assert(__castable_to_type(n ,T)) style since the
+     assert_same_typable() macro has been dropped. (G.G)
+v11: Update macro description (Andi)
+     Change _Static_assert to static_assert (Rasmus)
+     Rename assert_type to assert_same_type and  assert_typable to
+     assert_same_typable (Rasmus)
+     Update assert_same_typable macro to handle an overflow check on the
+     target type when a constant value is used. (Kees)
+     Add overflows_type_ret_const_expr which returns constant-expression
+     value (G.G)
+     Add is_unsigned_type (G.G)
+     Add unit tests for overflows_type, overflows_type_ret_const_expr,
+     assert_same_type and assert_same_typable. (Kees)
+     Fix incorrect type assignment between different address spaces caused
+     by the wrong use of __user macro. (kernel test robot)
+v10: Add check_assign_user_ptr() macro and drop overflows_ptr() macro(Kees) 
+     Use assert_typable instead of exactly_pgoff_t() macro (Kees)
+     Remove a redundant type checking for a pointer. (Andrzej)
+     Add patch "compiler_types.h: Add assert_type to catch type mis-match while compiling" and
+     drop patch "util_macros: Add exact_type macro to catch type mis-match while compiling" from patch series (G.G.)
+     (adding of assert_type(t1, t2) and assert_typable(t, n) were suggested by Kees v9's comments)
+v9: Fix overflows_type() to use __builtin_add_overflow() instead of
+    __builtin_add_overflow_p() (Andrzej)
+    Fix overflows_ptr() to use overflows_type() with the unsigned long type (Andrzej)
+v8: Add check_assign() and remove safe_conversion() (Kees)
+    Replace safe_conversion() with check_assign() (Kees)
+    Fix overflows_type() to use gcc's built-in overflow function (Andrzej)
+    Add overflows_ptr() to allow overflow checking when assigning a value
+    into a pointer variable (G.G.)
+v7: Fix to use WARN_ON() macro where GEM_BUG_ON() macro was used. (Jani)
+v6: Move macro addition location so that it can be used by other than drm subsystem (Jani, Mauro, Andi)
+    Fix to follow general use case for GEM_BUG_ON(). (Jani)
+v5: Fix an alignment to match open parenthesis
+    Fix macros to be enclosed in parentheses for complex values
+    Fix too long line warning
+v4: Fix build warnins that reported by kernel test robot. (kernel test robot <lkp@intel.com>)
+    Add kernel-doc markups to the kAPI functions and macros (Mauoro)
+v3: Modify overflows_type() macro to consider signed data types and
+	add is_type_unsigned() macro (Mauro)
+    Make not use the same macro name on a function. (Mauro)
+    For kernel-doc, macros and functions are handled in the same namespace,
+    the same macro name on a function prevents ever adding documentation for it.
+    Not to change execution inside a macro. (Mauro)
+    Fix the problem that safe_conversion() macro always returns true (G.G)
+    Add safe_conversion_gem_bug_on() macro and remove temporal SAFE_CONVERSION() macro. (G.G.)
 
-https://github.com/llvm/llvm-project/commit/e07ead85a368173a56e96a21d6841aa497ad80f8
+Chris Wilson (3):
+  drm/i915/gem: Typecheck page lookups
+  drm/i915: Check for integer truncation on scatterlist creation
+  drm/i915: Remove truncation warning for large objects
 
-It was brought up on GitHub as well:
+Gwan-gyeong Mun (4):
+  overflow: Introduce check_assign() and check_assign_user_ptr()
+  drm/i915: Check for integer truncation on the configuration of ttm
+    place
+  drm/i915: Check if the size is too big while creating shmem file
+  drm/i915: Use error code as -E2BIG when the size of gem ttm object is
+    too large
 
-https://github.com/ClangBuiltLinux/linux/issues/1720
+Kees Cook (2):
+  overflow: Allow mixed type arguments
+  overflow: Introduce overflows_type() and __castable_to_type()
 
-I have reported this to the clang developers upstream to see if there is
-any way that the diagnostic could be improved:
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c  |   6 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c    |   7 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.h    | 303 +++++++++--
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  27 +-
+ drivers/gpu/drm/i915/gem/i915_gem_phys.c      |   4 +
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c     |  19 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c       |  23 +-
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |   5 +-
+ .../drm/i915/gem/selftests/i915_gem_context.c |  12 +-
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_object.c  |   8 +-
+ drivers/gpu/drm/i915/gvt/dmabuf.c             |   9 +-
+ drivers/gpu/drm/i915/i915_gem.c               |  18 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h       |  11 +
+ drivers/gpu/drm/i915/i915_user_extensions.c   |   6 +-
+ drivers/gpu/drm/i915/i915_utils.h             |   6 +-
+ drivers/gpu/drm/i915/i915_vma.c               |   8 +-
+ drivers/gpu/drm/i915/intel_region_ttm.c       |  17 +-
+ include/linux/compiler.h                      |   1 +
+ include/linux/overflow.h                      | 166 ++++--
+ lib/overflow_kunit.c                          | 494 ++++++++++++++++--
+ 21 files changed, 1000 insertions(+), 158 deletions(-)
 
-https://reviews.llvm.org/D134461#3815298
+-- 
+2.37.1
 
-Otherwise, we will just have to disable it, which I will send a patch
-for later if the warning is not going to be adjusted in any way.
-
-If you wanted to continue testing with upstream LLVM, you can either
-just revert that commit or explicitly disable -Wvoid-ptr-dereference in
-the main Makefile like so, which is ultimately what I will send if I
-need to.
-
-Cheers,
-Nathan
-
-diff --git a/Makefile b/Makefile
-index 647a42a1f800..0bf60134f13c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -967,6 +967,9 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
- # Another good warning that we'll want to enable eventually
- KBUILD_CFLAGS += $(call cc-disable-warning, restrict)
- 
-+# New warning from clang that is quite noisy due to '__is_constexpr'
-+KBUILD_CFLAGS += $(call cc-disable-warning, void-ptr-dereference)
-+
- # Enabled with W=2, disabled by default as noisy
- ifdef CONFIG_CC_IS_GCC
- KBUILD_CFLAGS += -Wno-maybe-uninitialized
