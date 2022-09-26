@@ -1,133 +1,142 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816FE441E
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 17:21:37 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id w13so6869164plp.1
-        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 10:21:37 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBD1441E
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 17:42:57 +0000 (UTC)
+Received: by mail-pf1-f181.google.com with SMTP id a29so7428387pfk.5
+        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 10:42:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=2CJsPJIcF/q9pqyQSpQuHmSgCKTw7oUJXNHq7eoyKcc=;
-        b=e3wYABcOj+RAraSEfu1QgnIP34RJFOGWgA0ym+WGJ1XI86WsvtMUaFSMSTdjbsVAlL
-         F511Dqld206SUDR32cLXZhMbc10BlQI8eFIc429dNGvxQwuAhar9v/RttRdOBX8JxxJb
-         mlEwZoODLkO693BQG+mvCXquhER7IFVHbH4/c=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=dS2HoVEP/IautLBa+8qjMYG0nRQ2M4jtBQk6ChJqH7I=;
+        b=bAPW/KQifoIiaAr7aTQb7E1W+gHBX4gkyOf0mhug6/5qSA5e6+RT1utLKF1Grf/yrI
+         lRxDJamz19OWlOLaYDtNyBhGyOMXBHitneyFKKPaEL4WF13U9NV0zOIhK5y9/VYoRz0W
+         t4um/JMxQaFZTn55cMHGCOxy8EdIemWo6x/Y46X+lUC5pbXRgV5AB4NOkU2k8muDc8j6
+         fpxUnY1EPQnuTbAiBYG1JZjUANUFyV6GRNvXKeK1CmD/eNylgphstLqV1dLfr/0vd/6Q
+         ENH1X0i7W9uoRtB4dS4vtPhvaez3BtB/RZycDtQIOFJ4wR5Ssq5ikstYqnAlw91X7sVY
+         WHbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=2CJsPJIcF/q9pqyQSpQuHmSgCKTw7oUJXNHq7eoyKcc=;
-        b=CykelrrruajbLIU/UjAfNZzZ8w3Q5d+Cf11NydiGwrp8l1Ql8vCqVS01qpqRY0YUc4
-         vwBqw5/1qZm2+Ql5H+a9yXmaC51BtT9Zk75YNkMx9vYRWjK4RCdBV9aaChEfpal2YkgR
-         x2+iXXkN/Y+CS8Oq+0B3y0W6NKDMqcZDu9ic3LvjOQn2Qj3V+cIQz90Mj+KBumfeWyUf
-         IEz3mhamI7lEawxtCBDf4hszu96zBed8XjAN36rdtz/dmlfMYg1poFz/Mt0SDvjMmiQb
-         2X+Zq6rVOk9/Zwve4+sdSsrY771PzfgnFbg5AL7vaqXO7ChKbY9GvS17t5dSOn9Vo6wx
-         mk4A==
-X-Gm-Message-State: ACrzQf29EFBWSGjScMs/91gpKlBf+6kM2TzuJ/JcDsshLAbpHcsCs48q
-	75CZYLQLaIUVnE/agLqWTeU3BA==
-X-Google-Smtp-Source: AMsMyM6MNzJnJDFcVo7NAG20x6qNWKBZZfRWFcTAI8Fj9D7jTdDe6fGKZ8OBE2Okxjc91RIlf96HMA==
-X-Received: by 2002:a17:902:7c11:b0:178:a6ca:4850 with SMTP id x17-20020a1709027c1100b00178a6ca4850mr23963352pll.111.1664212896926;
-        Mon, 26 Sep 2022 10:21:36 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ik27-20020a170902ab1b00b001732a019dddsm11484682plb.174.2022.09.26.10.21.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 10:21:36 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: samitolvanen@google.com,
-	peterz@infradead.org
-Cc: Kees Cook <keescook@chromium.org>,
-	ndesaulniers@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	will@kernel.org,
-	joao@overdrivepizza.com,
-	nathan@kernel.org,
-	sedat.dilek@gmail.com,
-	llvm@lists.linux.dev,
-	mark.rutland@arm.com,
-	linux-hardening@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	catalin.marinas@arm.com,
-	rostedt@goodmis.org,
-	x86@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 00/22] KCFI support
-Date: Mon, 26 Sep 2022 10:20:30 -0700
-Message-Id: <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220908215504.3686827-1-samitolvanen@google.com>
-References: <20220908215504.3686827-1-samitolvanen@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dS2HoVEP/IautLBa+8qjMYG0nRQ2M4jtBQk6ChJqH7I=;
+        b=kzTSEdnypZ/TKL82wL4v7CoyCnpVZV9YcVvTK6gPKEgHIG83ikX/kxx3OD4pTWFR1e
+         /2jAUaMEguYJ8h6iKbRzEjlshbdBdlthuwUTp0u+lTzrf62Q6o385WY+DiCLx0Lk2QWs
+         bHjVVJ5+4LOJpOf5rwwtopNMoJl1erBHM4xiz2S0oUCHbquXtCP8Z8LH2UOUUdeQJHDp
+         A1fabOVHSxPq5juyomsPI+Sv7rxUfYibCplEWsKNVrlyaJyMoPhgTyddzE3Ibs6YpT6l
+         2yBtDsqsJowzAB8plOM7NWKf/zfy9AYaTD6tdSrHaGHQKeKBTDDh/mlMQFSuPR6xm32r
+         x+Og==
+X-Gm-Message-State: ACrzQf3qQnwHEbUreMwvdFp5deRmLYX7yOYcekG6GUH8PGPLl6qPNlGq
+	MmPxxtdTNjEE6F967bIeqExMRgkFjZjibx918jQn4A==
+X-Google-Smtp-Source: AMsMyM6Vv2uNa7xefX210Pq1S8XTsUHUD60VHmcuHWAngAccJ8DimC1Tre7VFweksZ/drlsLy3ksJ1fFhBUn768E7WQ=
+X-Received: by 2002:a05:6a00:4c11:b0:53e:4f07:fce9 with SMTP id
+ ea17-20020a056a004c1100b0053e4f07fce9mr25491371pfb.66.1664214177034; Mon, 26
+ Sep 2022 10:42:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYvyD9OWF53ua2EZmyf+=YTx4f1mezDNkVLMxf3BKXW=_w@mail.gmail.com>
+ <YzHIwvzhM9DSW9cF@dev-arch.thelio-3990X> <YzHJRH9hO1lfjSPp@dev-arch.thelio-3990X>
+In-Reply-To: <YzHJRH9hO1lfjSPp@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 26 Sep 2022 10:42:45 -0700
+Message-ID: <CAKwvOdkYr-Nv6PowyJ10DuP-uFLcvH1oGWSeQH3Dz_JM8vwp2w@mail.gmail.com>
+Subject: Re: arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must
+ precede .save or .vsave directives
+To: Nathan Chancellor <nathan@kernel.org>, Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	regressions@lists.linux.dev, lkft-triage@lists.linaro.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 8 Sep 2022 14:54:42 -0700, Sami Tolvanen wrote:
-> KCFI is a forward-edge control-flow integrity scheme in the upcoming
-> Clang 16 release, which is more suitable for kernel use than the
-> existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
-> LTO, doesn't alter function references to point to a jump table, and
-> won't break function address equality.
-> 
-> This series replaces the current arm64 CFI implementation with KCFI
-> and adds support for x86_64.
-> 
-> [...]
+On Mon, Sep 26, 2022 at 8:46 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> + our mailing list, I should have added it with that message.
+>
+> On Mon, Sep 26, 2022 at 08:44:05AM -0700, Nathan Chancellor wrote:
+> > Hi Naresh,
+> >
+> > On Mon, Sep 26, 2022 at 06:57:00PM +0530, Naresh Kamboju wrote:
+> > > Following build warnings / errors noticed on arm with clang-13 / 14
+> > > on Linux next-20220923.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > Regressions found on arm:
+> > >
+> > >    - build-clang-13-bcm2835_defconfig
+> > >    - build-clang-nightly-imx_v6_v7_defconfig
+> > >    - build-clang-nightly-orion5x_defconfig
+> > >    - build-clang-13-keystone_defconfig
+> > >    - build-clang-13-omap2plus_defconfig
+> > >    - build-clang-14-imx_v6_v7_defconfig
+> > >    - build-clang-nightly-omap2plus_defconfig
+> > >    - build-clang-nightly-multi_v5_defconfig
+> > >    - build-clang-nightly-bcm2835_defconfig
+> > >    - build-clang-13-imx_v6_v7_defconfig
+> > >    - build-clang-13-imx_v4_v5_defconfig
+> > >    - build-clang-14-imx_v4_v5_defconfig
+> > >    - build-clang-13-orion5x_defconfig
+> > >    - build-clang-14-multi_v5_defconfig-65236a87
+> > >    - build-clang-14-lkftconfig
+> > >    - build-clang-nightly-imx_v4_v5_defconfig
+> > >    - build-clang-13-multi_v5_defconfig
+> > >    - build-clang-13-lkftconfig
+> > >    - build-clang-nightly-keystone_defconfig
+> > >    - build-clang-14-multi_v5_defconfig
+> > >    - build-clang-14-orion5x_defconfig
+> > >    - build-clang-14-omap2plus_defconfig
+> > >    - build-clang-nightly-multi_v5_defconfig-65236a87
+> > >    - build-clang-14-bcm2835_defconfig
+> > >    - build-clang-14-keystone_defconfig
+> > >    - build-clang-nightly-lkftconfig
+> > >
+> > > arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+> > > .save or .vsave directives
+> > >                 "stmdb  sp, {sp, lr, pc}        \n\t"
+> > >                                                   ^
+> > > <inline asm>:3:2: note: instantiated into assembly here
+> > >         .save   {sp, lr, pc}
+> > >         ^
+> > > /builds/linux/arch/arm/probes/kprobes/core.c:412:29: error: .fnstart
+> > > must precede .pad directive
+> > >                 "stmdb  sp!, {r0 - r11}         \n\t"
+> > >                                                   ^
+> > > <inline asm>:6:2: note: instantiated into assembly here
+> > >         .pad    #52
+> > >         ^
+> > > 2 errors generated.
+> > > make[5]: *** [/builds/linux/scripts/Makefile.build:250:
+> > > arch/arm/probes/kprobes/core.o] Error 1
+> > >
+> > > build log:
+> > > https://builds.tuxbuild.com/2FAyD1qcTlzjIYE7mjrugjCsxu1/
+> >
+> > Thank you for the testing and report! I brought this up on GitHub on
+> > Friday as I noticed this as well:
+> >
+> > https://github.com/ClangBuiltLinux/linux/issues/1718
 
-I assume that Peter's Ack means I should carry the tree, so, to that end:
+Thanks for the reports. I'll take a look at filing additional bug
+reports against clang, then moving the definition of
+__kretprobe_trampoline to out of line assembler.
 
-Applied to for-next/kcfi, thanks!
+> >
+> > It sounds like we can avoid this by rewriting __kretprobe_trampoline()
+> > in out of line assembly but I have not had a chance to sit down and try
+> > it.
+> >
+> > Cheers,
+> > Nathan
+>
 
-[01/22] treewide: Filter out CC_FLAGS_CFI
-        https://git.kernel.org/kees/c/f143ff397a3f
-[02/22] scripts/kallsyms: Ignore __kcfi_typeid_
-        https://git.kernel.org/kees/c/d0f9562ee43a
-[03/22] cfi: Remove CONFIG_CFI_CLANG_SHADOW
-        https://git.kernel.org/kees/c/9fca7115827b
-[04/22] cfi: Drop __CFI_ADDRESSABLE
-        https://git.kernel.org/kees/c/92efda8eb152
-[05/22] cfi: Switch to -fsanitize=kcfi
-        https://git.kernel.org/kees/c/89245600941e
-[06/22] cfi: Add type helper macros
-        https://git.kernel.org/kees/c/e84e008e7b02
-[07/22] lkdtm: Emit an indirect call for CFI tests
-        https://git.kernel.org/kees/c/cf90d0383560
-[08/22] psci: Fix the function type for psci_initcall_t
-        https://git.kernel.org/kees/c/44f665b69c67
-[09/22] arm64: Add types to indirect called assembly functions
-        https://git.kernel.org/kees/c/c50d32859e70
-[10/22] arm64: Add CFI error handling
-        https://git.kernel.org/kees/c/b26e484b8bb3
-[11/22] arm64: Drop unneeded __nocfi attributes
-        https://git.kernel.org/kees/c/5f20997c194e
-[12/22] init: Drop __nocfi from __init
-        https://git.kernel.org/kees/c/5dbbb3eaa2a7
-[13/22] treewide: Drop function_nocfi
-        https://git.kernel.org/kees/c/607289a7cd7a
-[14/22] treewide: Drop WARN_ON_FUNCTION_MISMATCH
-        https://git.kernel.org/kees/c/4b24356312fb
-[15/22] treewide: Drop __cficanonical
-        https://git.kernel.org/kees/c/5659b598b4dc
-[16/22] objtool: Preserve special st_shndx indexes in elf_update_symbol
-        https://git.kernel.org/kees/c/5141d3a06b2d
-[17/22] objtool: Disable CFI warnings
-        https://git.kernel.org/kees/c/3c68a92d17ad
-[18/22] kallsyms: Drop CONFIG_CFI_CLANG workarounds
-        https://git.kernel.org/kees/c/dfb352ab1162
-[19/22] x86/tools/relocs: Ignore __kcfi_typeid_ relocations
-        https://git.kernel.org/kees/c/ca7e10bff196
-[20/22] x86: Add types to indirectly called assembly functions
-        https://git.kernel.org/kees/c/ccace936eec7
-[21/22] x86/purgatory: Disable CFI
-        https://git.kernel.org/kees/c/a4b7a12c5594
-[22/22] x86: Add support for CONFIG_CFI_CLANG
-        https://git.kernel.org/kees/c/3c516f89e17e
 
 -- 
-Kees Cook
-
+Thanks,
+~Nick Desaulniers
