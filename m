@@ -1,98 +1,108 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B79441A
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 16:37:50 +0000 (UTC)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92.3)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ocqqT-0003m5-43; Mon, 26 Sep 2022 18:20:37 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-	by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ocqqS-0002Aw-J8; Mon, 26 Sep 2022 18:20:36 +0200
-Subject: Re: [bpf-next v6 2/3] bpftool: Update doc (add autoattach to prog
- load)
-To: Wang Yufen <wangyufen@huawei.com>, quentin@isovalent.com, ast@kernel.org,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
- hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <1664014430-5286-1-git-send-email-wangyufen@huawei.com>
- <1664014430-5286-2-git-send-email-wangyufen@huawei.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2b001fcb-4340-e1ba-4b84-a69c670cf09a@iogearbox.net>
-Date: Mon, 26 Sep 2022 18:20:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683D22FAF
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 16:50:57 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d11so6762772pll.8
+        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 09:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Bl87DRbRfnOrhkUE5L4BbxEL4c2GAjYQ7M0EHLwAVuA=;
+        b=k/Pf0oq2RVLH59XKlNnE8OZcXuU2wB6wDhvFwqWSj3y9rA+jlLYk4QbMK/tPTWbvO1
+         0d5A4HA9wdnUH5Ev0SEIYfZkGYq/BljVAO8dkLzDDNsKZGUVLO3lviV0bNiMy0LJMLd1
+         veNpu+I4hph+ffxou0iC4hyD0ERsBh+zhJNw4FGd+pX+k+X0d/xV3ivVgZpCfjX1r032
+         +uHPc8WH/6FSve1xuIUM08I6J5yNtwJh6aHAFjaBVmR04nmf2/HUmWgA17QOJlnNA4Qe
+         dQTic43Y6j4XcePNeZcE+8JeOm4B3Gi80vSVMdQ5nOYDXbmejsOOUh8lrrwvwI1apwnG
+         QB+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Bl87DRbRfnOrhkUE5L4BbxEL4c2GAjYQ7M0EHLwAVuA=;
+        b=wFGqWwV+LdYqQtJxyCNs26ocpjBzQGpHh/EMqO+h67AThblVHlbXmc+JDIbDtClFg0
+         CsfiAbhwXLKr7+aZEq3FN4juXaZleXLHZEOdEcL7eb+25N6UOQuZQSrDKlmOF2CMMNm2
+         Fng4UFaSXQnpd8HH8BkIWcNgaf4tkncQD7mIAZZ1f0tnNQ9laKZNNNzr6o/W3NRckcpv
+         QVlphcFf9+FdG88/cFlrXnZ5WhI6cR5TWU6ukutnKs3JZYm0NHnIgtAtDxTr9v5UnxM0
+         zQDko2BkNjKu1IiEo5ggi9pnkv5PtmoYZF9MRnZLhUHabpIVD2zekin2YR8qSVpnFXpu
+         +ubA==
+X-Gm-Message-State: ACrzQf26hJ7oHAKG/hCTCo//otztPOUPbzTQY/0Xa+GQ3VwJTc6lUnyM
+	LCHEawfRkwmZuonpO72HwZL0DBx3/Ucioe7H3m3w1A==
+X-Google-Smtp-Source: AMsMyM6UtWDkGZCZhsx0tR8KOdU6VH24mPotdsbYjkmgnCJx3SgsEdxYwV7yH+J2PwjnOeIoSN/qmkoCqhJi30Jpci0=
+X-Received: by 2002:a17:902:a411:b0:178:9e4c:2ef8 with SMTP id
+ p17-20020a170902a41100b001789e4c2ef8mr22896380plq.95.1664211056559; Mon, 26
+ Sep 2022 09:50:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <1664014430-5286-2-git-send-email-wangyufen@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26670/Mon Sep 26 10:00:52 2022)
+References: <YzFo/+uF1jJ7gMIN@debian> <YzHHz0S8/Nq1QivU@dev-arch.thelio-3990X>
+In-Reply-To: <YzHHz0S8/Nq1QivU@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 26 Sep 2022 09:50:44 -0700
+Message-ID: <CAKwvOd=rLna-=3eR=6WMTnVHaBiBR4+Gc99oHOHUEvY34e0hhg@mail.gmail.com>
+Subject: Re: mainline build failure for x86_64 and arm64 with clang
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>, torvalds@linux-foundation.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/24/22 12:13 PM, Wang Yufen wrote:
-> Add autoattach optional to prog load|loadall for supporting
-> one-step load-attach-pin_link.
-> 
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> ---
->   tools/bpf/bpftool/Documentation/bpftool-prog.rst | 13 +++++++++++--
->   1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index eb1b2a254eb1..2d9f27a0120f 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> @@ -31,7 +31,7 @@ PROG COMMANDS
->   |	**bpftool** **prog dump xlated** *PROG* [{**file** *FILE* | **opcodes** | **visual** | **linum**}]
->   |	**bpftool** **prog dump jited**  *PROG* [{**file** *FILE* | **opcodes** | **linum**}]
->   |	**bpftool** **prog pin** *PROG* *FILE*
-> -|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-> +|	**bpftool** **prog** { **load** | **loadall** } *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
->   |	**bpftool** **prog attach** *PROG* *ATTACH_TYPE* [*MAP*]
->   |	**bpftool** **prog detach** *PROG* *ATTACH_TYPE* [*MAP*]
->   |	**bpftool** **prog tracelog**
-> @@ -131,7 +131,7 @@ DESCRIPTION
->   		  contain a dot character ('.'), which is reserved for future
->   		  extensions of *bpffs*.
->   
-> -	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*]
-> +	**bpftool prog { load | loadall }** *OBJ* *PATH* [**type** *TYPE*] [**map** {**idx** *IDX* | **name** *NAME*} *MAP*] [**dev** *NAME*] [**pinmaps** *MAP_DIR*] [**autoattach**]
->   		  Load bpf program(s) from binary *OBJ* and pin as *PATH*.
->   		  **bpftool prog load** pins only the first program from the
->   		  *OBJ* as *PATH*. **bpftool prog loadall** pins all programs
-> @@ -150,6 +150,15 @@ DESCRIPTION
->   		  Optional **pinmaps** argument can be provided to pin all
->   		  maps under *MAP_DIR* directory.
->   
-> +		  If **autoattach** is specified program will be attached
-> +		  before pin. In that case, only the link (representing the
-> +		  program attached to its hook) is pinned, not the program as
-> +		  such, so the path won't show in "**bpftool prog show -f**",
-> +		  only show in "**bpftool link show -f**". Also, this only works
-> +		  when bpftool (libbpf) is able to infer all necessary information
-> +		  from the objectfile, in particular, it's not supported for all
-> +		  program types.
+On Mon, Sep 26, 2022 at 8:40 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Thanks for testing and the report! I noticed this over the weekend, it
+> comes from a new warning in clang:
+>
+> https://github.com/llvm/llvm-project/commit/e07ead85a368173a56e96a21d6841aa497ad80f8
+>
+> It was brought up on GitHub as well:
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1720
+>
+> I have reported this to the clang developers upstream to see if there is
+> any way that the diagnostic could be improved:
+>
+> https://reviews.llvm.org/D134461#3815298
+>
+> Otherwise, we will just have to disable it, which I will send a patch
+> for later if the warning is not going to be adjusted in any way.
+>
+> If you wanted to continue testing with upstream LLVM, you can either
+> just revert that commit or explicitly disable -Wvoid-ptr-dereference in
+> the main Makefile like so, which is ultimately what I will send if I
+> need to.
+>
+> Cheers,
+> Nathan
 
-Related to Quentin's comment, the documentation should also describe clear semantics
-on what happens in failure case. I presume the use case you have in mind is to use
-this facility for scripts e.g. to run/load some tests objs? Thus would be good to describe
-to users what they need to do/clean up when things only partially succeed etc..
+Thanks for the reports.  It sounds like the Clang developers will pare
+back the warning for unevaluated contexts (sizeof, typeof).  If it
+takes longer than a few days for that to land, let's send your below
+patch to help keep CI systems green.
 
->   		  Note: *PATH* must be located in *bpffs* mount. It must not
->   		  contain a dot character ('.'), which is reserved for future
->   		  extensions of *bpffs*.
-> 
+Consider putting the below into
+scripts/Makefile.extrawarn
 
+>
+> diff --git a/Makefile b/Makefile
+> index 647a42a1f800..0bf60134f13c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -967,6 +967,9 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+>  # Another good warning that we'll want to enable eventually
+>  KBUILD_CFLAGS += $(call cc-disable-warning, restrict)
+>
+> +# New warning from clang that is quite noisy due to '__is_constexpr'
+> +KBUILD_CFLAGS += $(call cc-disable-warning, void-ptr-dereference)
+> +
+>  # Enabled with W=2, disabled by default as noisy
+>  ifdef CONFIG_CC_IS_GCC
+>  KBUILD_CFLAGS += -Wno-maybe-uninitialized
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
