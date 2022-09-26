@@ -1,116 +1,290 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C168C4682
-	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 18:24:39 +0000 (UTC)
-Received: by mail-pf1-f179.google.com with SMTP id 9so7492188pfz.12
-        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 11:24:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A82F468D
+	for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 18:37:50 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-35153b4b756so8305007b3.9
+        for <llvm@lists.linux.dev>; Mon, 26 Sep 2022 11:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4OBTQRXHJygCpY/2rBSvNKQlNNozBBa3mtJlOeJ/EyY=;
-        b=cSzvTXKu85TucB7q+g9CQdjC/FdnYJW7ESEBDVMDQZhpqkoHzMT6tB5vmqaaVmtq+c
-         HBo/BI5kdAn7jf+xxq5MiOLWI7cJumnHX29hS+SWLXo9wgZxYqgGZ4IjXwCG6/+UPFiS
-         mSjP6/8kEubWj+KXOsoeUGGJwGHBMRMvzL4Ek=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=znhGVGmm6TLIt/hCvZyRbrWMCYyq9RR6vI5Xw2wMKC4=;
+        b=d68/aWCLPiIhe6kggZL49/Bh7V4/p14HgIMbRCvVM2NXYFgGVn+Xq9brpRwfNhGn1c
+         bzJwZSeSD28a7Y9C2q6pU7Ns5YVEFTZe/NUDWalKdLmiDD2Ycu38MkayfNaqystb+Yqe
+         2uitdjgk1pKgDrhsqNj5Zi+us9bovm9f4gWEJiOjaim9mYiKX/XM3sYD5w/R4o2mb4mZ
+         CFQt2YiJ+JQ5f5ciYi+1HTq4fleAv03ZClh98oFN7wKat0tgF+afcbUELEguex2NqQsj
+         ebHSIrxp17+FxDtmN9isOGdXvSr28CY+GxWqR7nRTLSnzGkZucq1jvCcRo3Cov2rfSOI
+         8Xfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4OBTQRXHJygCpY/2rBSvNKQlNNozBBa3mtJlOeJ/EyY=;
-        b=L8S5EcGqsb5sJFX+NYDt+1bA/mHyX3ON2HirfbH4htgw30rwRVd2WEnpAL9wCTqIfe
-         y2tbmOzEqvZL+zp11GWxLTNeKwtnRIjMKyQY1jIBwU3ZHc8U6BOBP7T8FtN4HwasIxtn
-         PIurYe+mY97prF9ae+w4X1wErsuEliZQaGRQgX++qeoRyv2F0hzoRSxFNVt5RHUQfuHD
-         WBs/M6U1r6gS4ZO2CCQckHjGzF8ZM2U1y+Jjmz+7PXd8EDRGliW/6xHbFeJAGM5IMLZs
-         hUITl4W6swWa8BllIH2cdQ4VynC0gKFFwoepsRT8h0pvxmfrGVL7/IiNwDXFKb1n7bjg
-         NZQg==
-X-Gm-Message-State: ACrzQf1SDjzzTLbVlfOdEtONkoB/aiJkEEd5voi1xjceIJSAVZgkTREQ
-	Npp2qW/FjRay2BMxqFGuW3x8Uw==
-X-Google-Smtp-Source: AMsMyM6gzz3RlLPDBF6eEAacYBSNNxOrYYdXLeQNzcYYWROPiLY1NScn4aUnW3BZuZbnjPt9v5tgLQ==
-X-Received: by 2002:a63:4750:0:b0:43c:dac:9e4b with SMTP id w16-20020a634750000000b0043c0dac9e4bmr21137736pgk.300.1664216679159;
-        Mon, 26 Sep 2022 11:24:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902c70200b0016f85feae65sm11305644plp.87.2022.09.26.11.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 11:24:38 -0700 (PDT)
-Date: Mon, 26 Sep 2022 11:24:37 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	"Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Alex Elder <elder@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>,
-	Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
-	Marco Elver <elver@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 13/16] mempool: Use kmalloc_size_roundup() to match
- ksize() usage
-Message-ID: <202209261123.B2CBAE87E0@keescook>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-14-keescook@chromium.org>
- <f4fc52c4-7c18-1d76-0c7a-4058ea2486b9@suse.cz>
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=znhGVGmm6TLIt/hCvZyRbrWMCYyq9RR6vI5Xw2wMKC4=;
+        b=xxCXebGlLulfvCDScvqRfLFumpEZuy/MVdVBaLfdzM9kEgSbCBZgmXvqT4OCviDA5E
+         hDOg88NMl8IeHmV7QRSfh14b839WWrKOM1iTn5ejnwyjdMHAcr/l9dvBSRJ5QmcPq2Yw
+         mslhT5+SCBjd1C6R8ELxh5E1hpOsIkGq7CTjuQgeVXH4ceHkKMqv32T1mgZtfEgtcReq
+         /vsnrXOZJ9c9q7o88nHsL3la7JEE39I9B9O2qgvv3ZxpmbWTxRjt+lZxOpcPKOimu5d5
+         j26Vul5L9EQq90y/uopmQg3vU0e3aJmrEwb2x0aDUUog0Z6lW6dr8wektJwBNw6ALjMj
+         yd1A==
+X-Gm-Message-State: ACrzQf0OVEspqdqigVtUD5Y2AAY53en4gtFxB71CBemfW7D3KlanZ4px
+	UzRrJu06zLLC7KDpgfUvur7fMU+v5SKldxIDkEs=
+X-Google-Smtp-Source: AMsMyM4bDMVt1tdnaBnUxux6UCle3vtahK9wHgCGdwWVS1dv1pQjCOyBISO8bmwfU2AlX2gfDPcGjZtYrAVWpRrRAUc=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:8fb4:fe0d:d74c:5bcb])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:f628:0:b0:6bc:bb6:aec5 with SMTP
+ id t40-20020a25f628000000b006bc0bb6aec5mr929868ybd.139.1664217469129; Mon, 26
+ Sep 2022 11:37:49 -0700 (PDT)
+Date: Mon, 26 Sep 2022 11:37:25 -0700
+In-Reply-To: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4fc52c4-7c18-1d76-0c7a-4058ea2486b9@suse.cz>
+Mime-Version: 1.0
+References: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1664217445; l=7895;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=x0RwTwO74GUfeRgTrJP+F6BnwHVqyXRlkCvRcvW1NlM=;
+ b=aATOabxLSS9znVNtm6L5GIkLiNWqOo9CDSaqmGgfeElYHBzA7DRPuBx916vBrYh+uPU8ccbHNwUy
+ 5wYW/6BNB3vDlr9XOrgMb7SvlKfMG6oNcMPwlge2WJWmJuq1ioxM
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220926183725.1112298-1-ndesaulniers@google.com>
+Subject: [PATCH] ARM: kprobes: move __kretprobe_trampoline to out of line assembler
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Russell King <rmk+kernel@armlinux.org.uk>, Masami Hiramatsu <mhiramat@kernel.org>
+Cc: "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	sparkhuang <huangshaobo6@huawei.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Chen Zhongjin <chenzhongjin@huawei.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	regressions@lists.linux.dev, lkft-triage@lists.linaro.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Linux Kernel Functional Testing <lkft@linaro.org>, 
+	Logan Chien <loganchien@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 26, 2022 at 03:50:43PM +0200, Vlastimil Babka wrote:
-> On 9/23/22 22:28, Kees Cook wrote:
-> > Round up allocations with kmalloc_size_roundup() so that mempool's use
-> > of ksize() is always accurate and no special handling of the memory is
-> > needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
-> > 
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: linux-mm@kvack.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >   mm/mempool.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/mm/mempool.c b/mm/mempool.c
-> > index 96488b13a1ef..0f3107b28e6b 100644
-> > --- a/mm/mempool.c
-> > +++ b/mm/mempool.c
-> > @@ -526,7 +526,7 @@ EXPORT_SYMBOL(mempool_free_slab);
-> >    */
-> >   void *mempool_kmalloc(gfp_t gfp_mask, void *pool_data)
-> >   {
-> > -	size_t size = (size_t)pool_data;
-> > +	size_t size = kmalloc_size_roundup((size_t)pool_data);
-> 
-> Hm it is kinda wasteful to call into kmalloc_size_roundup for every
-> allocation that has the same input. We could do it just once in
-> mempool_init_node() for adjusting pool->pool_data ?
-> 
-> But looking more closely, I wonder why poison_element() and
-> kasan_unpoison_element() in mm/mempool.c even have to use ksize()/__ksize()
-> and not just operate on the requested size (again, pool->pool_data). If no
-> kmalloc mempool's users use ksize() to write beyond requested size, then we
-> don't have to unpoison/poison that area either?
+commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+EABI stack unwinder")
+tickled a bug in clang's integrated assembler where the .save and .pad
+directives must have corresponding .fnstart directives. The integrated
+assembler is unaware that the compiler will be generating the .fnstart
+directive.
 
-Yeah, I think that's a fair point. I will adjust this.
+  arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+  .save or .vsave directives
+  <inline asm>:3:2: note: instantiated into assembly here
+  .save   {sp, lr, pc}
+  ^
+  arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+  .pad directive
+  <inline asm>:6:2: note: instantiated into assembly here
+  .pad    #52
+  ^
 
+__kretprobe_trampoline's definition is already entirely inline asm. Move
+it to out-of-line asm to avoid breaking the build.
+
+Link: https://github.com/llvm/llvm-project/issues/57993
+Link: https://github.com/ClangBuiltLinux/linux/issues/1718
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Suggested-by: Logan Chien <loganchien@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Note: I wasn't quite sure if a Fixes tag against 1069c1dd20a3 was
+appropriate here? Either way, if 1069c1dd20a3 gets picked up for stable
+without this, it will break clang builds.
+
+ arch/arm/probes/kprobes/Makefile              |  1 +
+ arch/arm/probes/kprobes/core.c                | 54 ++----------------
+ .../arm/probes/kprobes/kretprobe-trampoline.S | 55 +++++++++++++++++++
+ include/asm-generic/kprobes.h                 | 13 +++--
+ 4 files changed, 69 insertions(+), 54 deletions(-)
+ create mode 100644 arch/arm/probes/kprobes/kretprobe-trampoline.S
+
+diff --git a/arch/arm/probes/kprobes/Makefile b/arch/arm/probes/kprobes/Makefile
+index 6159010dac4a..cdbe9dd99e28 100644
+--- a/arch/arm/probes/kprobes/Makefile
++++ b/arch/arm/probes/kprobes/Makefile
+@@ -3,6 +3,7 @@ KASAN_SANITIZE_actions-common.o := n
+ KASAN_SANITIZE_actions-arm.o := n
+ KASAN_SANITIZE_actions-thumb.o := n
+ obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
++obj-$(CONFIG_KPROBES)		+= kretprobe-trampoline.o
+ obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
+ test-kprobes-objs		:= test-core.o
+ 
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 1435b508aa36..17d7e0259e63 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -375,58 +375,10 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ 	return NOTIFY_DONE;
+ }
+ 
+-/*
+- * When a retprobed function returns, trampoline_handler() is called,
+- * calling the kretprobe's handler. We construct a struct pt_regs to
+- * give a view of registers r0-r11, sp, lr, and pc to the user
+- * return-handler. This is not a complete pt_regs structure, but that
+- * should be enough for stacktrace from the return handler with or
+- * without pt_regs.
+- */
+-void __naked __kprobes __kretprobe_trampoline(void)
+-{
+-	__asm__ __volatile__ (
+-		"ldr	lr, =__kretprobe_trampoline	\n\t"
+-#ifdef CONFIG_FRAME_POINTER
+-	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+-#ifdef CONFIG_CC_IS_CLANG
+-		"stmdb	sp, {sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #12		\n\t"
+-		/* In clang case, pt_regs->ip = lr. */
+-		"stmdb	sp!, {r0 - r11, lr}	\n\t"
+-		/* fp points regs->r11 (fp) */
+-		"add	fp, sp,	#44		\n\t"
+-#else /* !CONFIG_CC_IS_CLANG */
+-		/* In gcc case, pt_regs->ip = fp. */
+-		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		/* fp points regs->r15 (pc) */
+-		"add	fp, sp, #60		\n\t"
+-#endif /* CONFIG_CC_IS_CLANG */
+-#else /* !CONFIG_FRAME_POINTER */
+-		/* store SP, LR on stack and add EABI unwind hint */
+-		"stmdb  sp, {sp, lr, pc}	\n\t"
+-		".save	{sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		".pad	#52				\n\t"
+-#endif /* CONFIG_FRAME_POINTER */
+-		"mov	r0, sp			\n\t"
+-		"bl	trampoline_handler	\n\t"
+-		"mov	lr, r0			\n\t"
+-		"ldmia	sp!, {r0 - r11}		\n\t"
+-		"add	sp, sp, #16		\n\t"
+-#ifdef CONFIG_THUMB2_KERNEL
+-		"bx	lr			\n\t"
+-#else
+-		"mov	pc, lr			\n\t"
+-#endif
+-		: : : "memory");
+-}
++/*void __kretprobe_trampoline(void);*/
+ 
+ /* Called from __kretprobe_trampoline */
+-static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
++__kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+ 	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->TRAMP_FP);
+ }
+@@ -434,6 +386,8 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
++	extern void __kretprobe_trampoline(void);
++
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+ 	ri->fp = (void *)regs->TRAMP_FP;
+ 
+diff --git a/arch/arm/probes/kprobes/kretprobe-trampoline.S b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+new file mode 100644
+index 000000000000..261c99b8c17f
+--- /dev/null
++++ b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <linux/linkage.h>
++#include <asm/unwind.h>
++#include <asm-generic/kprobes.h>
++
++/*
++ * When a retprobed function returns, trampoline_handler() is called,
++ * calling the kretprobe's handler. We construct a struct pt_regs to
++ * give a view of registers r0-r11, sp, lr, and pc to the user
++ * return-handler. This is not a complete pt_regs structure, but that
++ * should be enough for stacktrace from the return handler with or
++ * without pt_regs.
++ */
++__KPROBE
++SYM_FUNC_START(__kretprobe_trampoline)
++UNWIND(.fnstart)
++	ldr	lr, =__kretprobe_trampoline
++#ifdef CONFIG_FRAME_POINTER
++	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
++#ifdef CONFIG_CC_IS_CLANG
++	stmdb	sp, {sp, lr, pc}
++	sub	sp, sp, #12
++	/* In clang case, pt_regs->ip = lr. */
++	stmdb	sp!, {r0 - r11, lr}
++	/* fp points regs->r11 (fp) */
++	add	fp, sp, #44
++#else /* !CONFIG_CC_IS_CLANG */
++	/* In gcc case, pt_regs->ip = fp. */
++	stmdb	sp, {fp, sp, lr, pc}
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++	/* fp points regs->r15 (pc) */
++	add	fp, sp, #60
++#endif /* CONFIG_CC_IS_CLANG */
++#else /* !CONFIG_FRAME_POINTER */
++	/* store SP, LR on stack and add EABI unwind hint */
++	stmdb	sp, {sp, lr, pc}
++UNWIND(.save	{sp, lr, pc})
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++UNWIND(.pad	#52)
++#endif /* CONFIG_FRAME_POINTER */
++	mov	r0, sp
++	bl	trampoline_handler
++	mov	lr, r0
++	ldmia	sp!, {r0 - r11}
++	add	sp, sp, #16
++#ifdef CONFIG_THUMB2_KERNEL
++	bx	lr
++#else
++	mov	pc, lr
++#endif
++UNWIND(.fnend)
++SYM_FUNC_END(__kretprobe_trampoline)
+diff --git a/include/asm-generic/kprobes.h b/include/asm-generic/kprobes.h
+index 060eab094e5a..1509daa281b8 100644
+--- a/include/asm-generic/kprobes.h
++++ b/include/asm-generic/kprobes.h
+@@ -2,7 +2,11 @@
+ #ifndef _ASM_GENERIC_KPROBES_H
+ #define _ASM_GENERIC_KPROBES_H
+ 
+-#if defined(__KERNEL__) && !defined(__ASSEMBLY__)
++#ifdef __KERNEL__
++
++#ifdef __ASSEMBLY__
++# define __KPROBE .section ".kprobes.text", "ax"
++#else
+ #ifdef CONFIG_KPROBES
+ /*
+  * Blacklist ganerating macro. Specify functions which is not probed
+@@ -16,11 +20,12 @@ static unsigned long __used					\
+ /* Use this to forbid a kprobes attach on very low level functions */
+ # define __kprobes	__section(".kprobes.text")
+ # define nokprobe_inline	__always_inline
+-#else
++#else /* !defined(CONFIG_KPROBES) */
+ # define NOKPROBE_SYMBOL(fname)
+ # define __kprobes
+ # define nokprobe_inline	inline
+-#endif
+-#endif /* defined(__KERNEL__) && !defined(__ASSEMBLY__) */
++#endif /* defined(CONFIG_KPROBES) */
++#endif /* defined(__ASSEMBLY__) */
++#endif /* defined(__KERNEL__) */
+ 
+ #endif /* _ASM_GENERIC_KPROBES_H */
 -- 
-Kees Cook
+2.37.3.998.g577e59143f-goog
+
