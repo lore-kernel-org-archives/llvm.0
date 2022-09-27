@@ -1,137 +1,285 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B524C86
-	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 21:53:05 +0000 (UTC)
-Received: by mail-qv1-f52.google.com with SMTP id l14so7066607qvq.8
-        for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 14:53:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93F24682
+	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 22:28:56 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-349423f04dbso105155717b3.13
+        for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 15:28:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=CNKYzF9I2YeaRkrIIwLDheAxIzD3Zi4Vv2DTzJLGgC4=;
-        b=UjXxJ7hqnfs5LWBwU6bEJtVaB6IMJjv2C3Q7CnqHdQXyrQl91wIAs04byCTvAd+PiY
-         uUCX/3R9PAik6ZuNV5EHt2vSksJxuobZ8whkTsRm41xNHkuQ1pebDWpgFKhM9aglzjU1
-         mudTkiAe55dfLrOh1LKV+efzBONM3bB1XrTbFPNKFZUg4L90qEMOgGnHFoU1YMsIOmA5
-         7H0WIM2WCgiGmsLpjZ6MD8BRxRjo55WcCIWUGLUnL/rRWplt1IW3+AgsUoMjI+GO3r48
-         p3uKPepGDNsYbyZLKUD1/Fwh4sN6VBaLiGfppeKM+dH/PYyA4Mxjpi6VcYG43fi1CZIT
-         Tk0g==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=5j26k1RGiLW8Uo7IC6/3OcmNOF3gkmfBt6Q6TAoi2Kg=;
+        b=eTS62RFlLiYCwo0bfgrnrZ1Bv/rYVcKToDsEPknTdQ4tOdafMyvJsFt+BqAgtPYc9b
+         kBHlAlp0QrtVRA0pCmC/mNrX/hEUBzzA6u/8UlMROXlHhvO3ublVSioFzQRaj2vmU/wy
+         wyUG79hGZGNs+hB5WjPZAzwy71tX3kYxXoTPzX3iPOGhvxBYcKejY43tJX/I0aurw6+v
+         Cnt2sLOSRE183PzmrLIaksWD9L9zzuUABYwnFMSJRgobaBMNVaLZtm0s/54JcoAo3+c3
+         5+F7HfdbtzNe6japhDwRg0GJ3kiL4bE5Xw5C943QmPJa/QGUboc/z9QiezVOpRzo4d0s
+         H0Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=CNKYzF9I2YeaRkrIIwLDheAxIzD3Zi4Vv2DTzJLGgC4=;
-        b=HT0d9Eyes0NTiq5ohxazjlpAcbKBGf729g+NRFdKS44a8dAyBhTmaHFdMG8sbdy/Qp
-         f0TKE4J6Shz2jmyWCeIOxICKA6QfT/5ng3pblQb5CHuXAlDRqNBkhgqzmBEoVo7c/dpt
-         /yOWXfiIj0knQasG8v9SWPgEoYJ+et7kNi7lrpnO8NG7FkHaDJOAmVMd8SrOz2agbghn
-         wuxwWBbNczaqy406Cb1JjHJHqw2kAQOvxJZyrkxMk8Pc3T/yhH1EbqJKkZxw1hiRkU7d
-         T90+ktSWuj90rhh454Z3CMUviwDQbvCo+O9UD3SHif+898bjdoUrlPuORNJ5oidPrnE/
-         Y7+w==
-X-Gm-Message-State: ACrzQf3AF9LGWH9acd5WmD141qi98MARUa4EfqGA0V6TVClIkZcZsPhO
-	+uGfGC/oVplCwWABs2gcyGU=
-X-Google-Smtp-Source: AMsMyM5MEUij1YHZqqzw2bIbbCwcB7/8XJEbwR5NpAgy3+ac7Sq6BIOhXVkUQypecRCPWdd/9sUSjg==
-X-Received: by 2002:a05:6214:29e3:b0:4ad:5de4:accd with SMTP id jv3-20020a05621429e300b004ad5de4accdmr23214994qvb.60.1664315584032;
-        Tue, 27 Sep 2022 14:53:04 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k13-20020a05620a414d00b006ce1bfbd603sm1850805qko.124.2022.09.27.14.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 14:53:03 -0700 (PDT)
-From: Florian Fainelli <f.fainelli@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: Matt Redfearn <matt.redfearn@mips.com>,
-	=?UTF-8?q?Petr=20Van=C4=9Bk?= <arkamar@atlas.cz>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Justin Stitt <jstitt007@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Denys Vlasenko <dvlasenk@redhat.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT),
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
-	mmayer@broadcom.com,
-	Khem Raj <raj.khem@gmail.com>,
-	Philippe Ombredanne <pombredanne@nexb.com>,
-	Kate Stewart <kstewart@linuxfoundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH] include/uapi/linux/swab: Fix potentially missing __always_inline
-Date: Tue, 27 Sep 2022 14:52:56 -0700
-Message-Id: <20220927215256.528619-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=5j26k1RGiLW8Uo7IC6/3OcmNOF3gkmfBt6Q6TAoi2Kg=;
+        b=vfI133po3cHxsBo3gp0qpCymWb41iNilM2mAYvP7BY3UiPivbBoTZ06weJ+TErrYrW
+         SFoVkOxwg75O7wahcixxlXoCFwul4tMbL3phuM0Vet2NMQ7mhfVEx1YM4ThTW7q2B0FJ
+         G36v3VpCTIGtnz/P5VB998MurVUTjFbNWfm+lX5Bxkd0qy0k7YmIeAFu96ZZkd663qO8
+         iYl1rNNSLNNSF4DwbPOUbVoBO63KVCqoZoBez1sH7YtWIrcY9pa4HFXnubmfdSNoI83f
+         LPVov+cceOmcMjg2ylzPw14ncZP6z2swY3jhsOqctxyPzZvp9AxvFKkuHk5ZkiuuBrst
+         1a9Q==
+X-Gm-Message-State: ACrzQf08K5ctnzGE/JZAVxPr9+P06RQPmHvXB+xr+BF4Bo82Cs1jTSR7
+	Up9Vo2wySYCqFSM5Kl+ya6NqyCFpsqUGwB7hXc8=
+X-Google-Smtp-Source: AMsMyM60ZIOlgv0PrY0oMbc25dEzaRc1LSNuTavk8kcVFGWzbMliM8AFc3YFMNfUSy2bGF5YOCX7T8pSWU+AXFy0IXg=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:5d88:f716:dcf7:513])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:20d5:0:b0:6bb:7593:21a2 with SMTP
+ id g204-20020a2520d5000000b006bb759321a2mr12398904ybg.634.1664317735924; Tue,
+ 27 Sep 2022 15:28:55 -0700 (PDT)
+Date: Tue, 27 Sep 2022 15:28:51 -0700
+In-Reply-To: <CAKwvOdnQ4tb7auWqUoF_Mm-F9hiJotaQnP75ZDd6oPJ_1Z4qXg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <CAKwvOdnQ4tb7auWqUoF_Mm-F9hiJotaQnP75ZDd6oPJ_1Z4qXg@mail.gmail.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1664317731; l=7639;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=7ljV5O3Ap6RBvMjpLNXnocrDpcDmzzVqDCFOYQu6Rmw=;
+ b=cJ85ndrhcQE+tZSRc1g7hiFqbLYIxBNn/D0xJqazvVvr89fgsZkALE+RRpVvt2Z+nxXYKgrZrMTR
+ xd+S0D/KC7yGuCnyFNDn9/vMijdu98epuO4xeizXMm+LaLb/PllX
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220927222851.37550-1-ndesaulniers@google.com>
+Subject: [PATCH v2] ARM: kprobes: move __kretprobe_trampoline to out of line assembler
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Russell King <rmk+kernel@armlinux.org.uk>, Masami Hiramatsu <mhiramat@kernel.org>
+Cc: "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	sparkhuang <huangshaobo6@huawei.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Chen Zhongjin <chenzhongjin@huawei.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	regressions@lists.linux.dev, lkft-triage@lists.linaro.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Linux Kernel Functional Testing <lkft@linaro.org>, 
+	Logan Chien <loganchien@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Matt Redfearn <matt.redfearn@mips.com>
+commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+EABI stack unwinder")
+tickled a bug in clang's integrated assembler where the .save and .pad
+directives must have corresponding .fnstart directives. The integrated
+assembler is unaware that the compiler will be generating the .fnstart
+directive.
 
-Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
-of some byteswap operations") added __always_inline to swab functions
-and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
-userspace headers") added a definition of __always_inline for use in
-exported headers when the kernel's compiler.h is not available.
+  arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+  .save or .vsave directives
+  <inline asm>:3:2: note: instantiated into assembly here
+  .save   {sp, lr, pc}
+  ^
+  arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+  .pad directive
+  <inline asm>:6:2: note: instantiated into assembly here
+  .pad    #52
+  ^
 
-However, since swab.h does not include stddef.h, if the header soup does
-not indirectly include it, the definition of __always_inline is missing,
-resulting in a compilation failure, which was observed compiling the
-perf tool using exported headers containing this commit:
+__kretprobe_trampoline's definition is already entirely inline asm. Move
+it to out-of-line asm to avoid breaking the build.
 
-In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
-                 from /usr/include/asm/byteorder.h:14,
-                 from tools/include/uapi/linux/perf_event.h:20,
-                 from perf.h:8,
-                 from builtin-bench.c:18:
-/usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
- static __always_inline __u16 __swab16p(const __u16 *p)
-
-Fix this by replacing the inclusion of linux/compiler.h with
-linux/stddef.h to ensure that we pick up that definition if required,
-without relying on it's indirect inclusion. compiler.h is then included
-indirectly, via stddef.h.
-
-Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
-Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
-Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://github.com/llvm/llvm-project/issues/57993
+Link: https://github.com/ClangBuiltLinux/linux/issues/1718
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Suggested-by: Logan Chien <loganchien@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Apologies for the insanely long CC list. I encountered this problem
-again while attempting to build perf with a LLVM 13 toolchain using
-musl-libc. Not sure why it did not get picked up last time?
+Changes v1 -> v2:
+* rebase on linux-next again.
+* drop commented out declaration of __kretprobe_trampoline from v1.
 
-Khem did submit an alternative patch a few years ago, too which also did
-not get picked up:
+ arch/arm/probes/kprobes/Makefile              |  1 +
+ arch/arm/probes/kprobes/core.c                | 50 +----------------
+ .../arm/probes/kprobes/kretprobe-trampoline.S | 55 +++++++++++++++++++
+ include/asm-generic/kprobes.h                 | 13 +++--
+ 4 files changed, 68 insertions(+), 51 deletions(-)
+ create mode 100644 arch/arm/probes/kprobes/kretprobe-trampoline.S
 
-https://lore.kernel.org/lkml/20180913005654.39976-1-raj.khem@gmail.com/
-
- include/uapi/linux/swab.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
-index 0723a9cce747..01717181339e 100644
---- a/include/uapi/linux/swab.h
-+++ b/include/uapi/linux/swab.h
-@@ -3,7 +3,7 @@
- #define _UAPI_LINUX_SWAB_H
+diff --git a/arch/arm/probes/kprobes/Makefile b/arch/arm/probes/kprobes/Makefile
+index 6159010dac4a..cdbe9dd99e28 100644
+--- a/arch/arm/probes/kprobes/Makefile
++++ b/arch/arm/probes/kprobes/Makefile
+@@ -3,6 +3,7 @@ KASAN_SANITIZE_actions-common.o := n
+ KASAN_SANITIZE_actions-arm.o := n
+ KASAN_SANITIZE_actions-thumb.o := n
+ obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
++obj-$(CONFIG_KPROBES)		+= kretprobe-trampoline.o
+ obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
+ test-kprobes-objs		:= test-core.o
  
- #include <linux/types.h>
--#include <linux/compiler.h>
-+#include <linux/stddef.h>
- #include <asm/bitsperlong.h>
- #include <asm/swab.h>
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 9090c3a74dcc..53f17529d2cb 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -365,54 +365,8 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ 	return NOTIFY_DONE;
+ }
  
+-/*
+- * When a retprobed function returns, trampoline_handler() is called,
+- * calling the kretprobe's handler. We construct a struct pt_regs to
+- * give a view of registers r0-r11, sp, lr, and pc to the user
+- * return-handler. This is not a complete pt_regs structure, but that
+- * should be enough for stacktrace from the return handler with or
+- * without pt_regs.
+- */
+-void __naked __kprobes __kretprobe_trampoline(void)
+-{
+-	__asm__ __volatile__ (
+-#ifdef CONFIG_FRAME_POINTER
+-		"ldr	lr, =__kretprobe_trampoline	\n\t"
+-	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+-#ifdef CONFIG_CC_IS_CLANG
+-		"stmdb	sp, {sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #12		\n\t"
+-		/* In clang case, pt_regs->ip = lr. */
+-		"stmdb	sp!, {r0 - r11, lr}	\n\t"
+-		/* fp points regs->r11 (fp) */
+-		"add	fp, sp,	#44		\n\t"
+-#else /* !CONFIG_CC_IS_CLANG */
+-		/* In gcc case, pt_regs->ip = fp. */
+-		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		/* fp points regs->r15 (pc) */
+-		"add	fp, sp, #60		\n\t"
+-#endif /* CONFIG_CC_IS_CLANG */
+-#else /* !CONFIG_FRAME_POINTER */
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-#endif /* CONFIG_FRAME_POINTER */
+-		"mov	r0, sp			\n\t"
+-		"bl	trampoline_handler	\n\t"
+-		"mov	lr, r0			\n\t"
+-		"ldmia	sp!, {r0 - r11}		\n\t"
+-		"add	sp, sp, #16		\n\t"
+-#ifdef CONFIG_THUMB2_KERNEL
+-		"bx	lr			\n\t"
+-#else
+-		"mov	pc, lr			\n\t"
+-#endif
+-		: : : "memory");
+-}
+-
+ /* Called from __kretprobe_trampoline */
+-static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
++__kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+ 	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->ARM_fp);
+ }
+@@ -420,6 +374,8 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
++	extern void __kretprobe_trampoline(void);
++
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+ 	ri->fp = (void *)regs->ARM_fp;
+ 
+diff --git a/arch/arm/probes/kprobes/kretprobe-trampoline.S b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+new file mode 100644
+index 000000000000..261c99b8c17f
+--- /dev/null
++++ b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <linux/linkage.h>
++#include <asm/unwind.h>
++#include <asm-generic/kprobes.h>
++
++/*
++ * When a retprobed function returns, trampoline_handler() is called,
++ * calling the kretprobe's handler. We construct a struct pt_regs to
++ * give a view of registers r0-r11, sp, lr, and pc to the user
++ * return-handler. This is not a complete pt_regs structure, but that
++ * should be enough for stacktrace from the return handler with or
++ * without pt_regs.
++ */
++__KPROBE
++SYM_FUNC_START(__kretprobe_trampoline)
++UNWIND(.fnstart)
++	ldr	lr, =__kretprobe_trampoline
++#ifdef CONFIG_FRAME_POINTER
++	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
++#ifdef CONFIG_CC_IS_CLANG
++	stmdb	sp, {sp, lr, pc}
++	sub	sp, sp, #12
++	/* In clang case, pt_regs->ip = lr. */
++	stmdb	sp!, {r0 - r11, lr}
++	/* fp points regs->r11 (fp) */
++	add	fp, sp, #44
++#else /* !CONFIG_CC_IS_CLANG */
++	/* In gcc case, pt_regs->ip = fp. */
++	stmdb	sp, {fp, sp, lr, pc}
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++	/* fp points regs->r15 (pc) */
++	add	fp, sp, #60
++#endif /* CONFIG_CC_IS_CLANG */
++#else /* !CONFIG_FRAME_POINTER */
++	/* store SP, LR on stack and add EABI unwind hint */
++	stmdb	sp, {sp, lr, pc}
++UNWIND(.save	{sp, lr, pc})
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++UNWIND(.pad	#52)
++#endif /* CONFIG_FRAME_POINTER */
++	mov	r0, sp
++	bl	trampoline_handler
++	mov	lr, r0
++	ldmia	sp!, {r0 - r11}
++	add	sp, sp, #16
++#ifdef CONFIG_THUMB2_KERNEL
++	bx	lr
++#else
++	mov	pc, lr
++#endif
++UNWIND(.fnend)
++SYM_FUNC_END(__kretprobe_trampoline)
+diff --git a/include/asm-generic/kprobes.h b/include/asm-generic/kprobes.h
+index 060eab094e5a..1509daa281b8 100644
+--- a/include/asm-generic/kprobes.h
++++ b/include/asm-generic/kprobes.h
+@@ -2,7 +2,11 @@
+ #ifndef _ASM_GENERIC_KPROBES_H
+ #define _ASM_GENERIC_KPROBES_H
+ 
+-#if defined(__KERNEL__) && !defined(__ASSEMBLY__)
++#ifdef __KERNEL__
++
++#ifdef __ASSEMBLY__
++# define __KPROBE .section ".kprobes.text", "ax"
++#else
+ #ifdef CONFIG_KPROBES
+ /*
+  * Blacklist ganerating macro. Specify functions which is not probed
+@@ -16,11 +20,12 @@ static unsigned long __used					\
+ /* Use this to forbid a kprobes attach on very low level functions */
+ # define __kprobes	__section(".kprobes.text")
+ # define nokprobe_inline	__always_inline
+-#else
++#else /* !defined(CONFIG_KPROBES) */
+ # define NOKPROBE_SYMBOL(fname)
+ # define __kprobes
+ # define nokprobe_inline	inline
+-#endif
+-#endif /* defined(__KERNEL__) && !defined(__ASSEMBLY__) */
++#endif /* defined(CONFIG_KPROBES) */
++#endif /* defined(__ASSEMBLY__) */
++#endif /* defined(__KERNEL__) */
+ 
+ #endif /* _ASM_GENERIC_KPROBES_H */
 -- 
-2.25.1
+2.37.3.998.g577e59143f-goog
 
