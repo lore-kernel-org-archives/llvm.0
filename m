@@ -1,174 +1,105 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1C065E
-	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 08:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664267455;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JxKJS21TDrwdyy4MGHGyIrimAAKIFiltCCQfobYQ4RY=;
-	b=ihIIsSA879PV57sThqVaIrisDVF1Q+YKLmRZGtmiKxyYxzZCa/UbAzb00pymNL+ioT+G6Q
-	JNMEHm0Azha7PlApLZMo8Ov7zBbKL1ptcUXUw0UuEzG9lXHggpaAJtB2incVuqEf+z1CRd
-	45wH/wmrMHQU3TxDOkSAIr6Wcfwco2Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-175-XUkjtyJ2N02eSEIoFk65oQ-1; Tue, 27 Sep 2022 04:30:54 -0400
-X-MC-Unique: XUkjtyJ2N02eSEIoFk65oQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 47709382C965
-	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 08:30:54 +0000 (UTC)
-Received: from [172.64.5.45] (unknown [10.30.33.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3237585796;
-	Tue, 27 Sep 2022 08:30:54 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
- mainline.kernel.org-clang, a1375562)
-Date: Tue, 27 Sep 2022 08:30:52 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10A67E1
+	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 09:36:19 +0000 (UTC)
+Received: by mail-wr1-f46.google.com with SMTP id l18so2081575wrw.9
+        for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 02:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=/PlTLjGPSzswYlkSsTRBa4iX8iTXJTu7JK2WCLTfMVI=;
+        b=zwOCiH829H9W0MajrUip+/i4V00nILbmKLrgsGXRXIs/H3acOnp1T8Retrgw/XuQnk
+         WGAUlUaNiAHW0q1vdy31YzcqavfVoEH4yRocF2uitfJcL3lHXsl6m5keoyqFr3wFIYKb
+         4quqBuNZGY8cNnRoPJLx9VgOXPvXosnH/zEQSyQpsXODFOaqfIKqOZRdKXqbZBmyEG4R
+         PqeXHMNqDpdjlWJN9tKSDwfcpXT1A9b4mzMpHEdDyTVoVAGBHlc0ILCKTdSQ9yapXD2f
+         mTdkn6fVZZcWCWX1hhr0I6Xz6EaaADoMqimQJNW+VoZvzJ0xZyBtnNKYnpeAddTHF2ct
+         jplg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/PlTLjGPSzswYlkSsTRBa4iX8iTXJTu7JK2WCLTfMVI=;
+        b=YV6+CVK3pQnbW8a61sz6gKbhik0e7WjdVQhqBHGifRi/NgIF78vulw3zeeTVEuway0
+         eR4p4TjHk/F3IcVNhjqNUxnJJjLEWqBJyCNdo3lwEbtcMAsMMY0DDO7MIs6uXJy1Rv+x
+         fOf8RFoVKrU0IR0TuMpzNf7UBoU4biYVQPu4ZD15hggWzPNAztEGJQdby7WKxYN7FP3M
+         YT3P8ocdgp2dgjRafH1WVnhY80k7ffwRxMpspaPHxs5Vb6TFydt/IviLJQOiZDoJ4dO2
+         wyDOLLaSz1CBsTaElpw7reailVM8Tv3xkXBn/w3Y35sFa4brxWw/8v9I4pAnUAvR8dpL
+         NoOA==
+X-Gm-Message-State: ACrzQf3AkF/CZ9OYvV8i6aP7yfp5sGRExIdr1DSmMzd2dSIEjy19xEIq
+	N3j9pLnhjauRemMsuH+pw3K2LQ==
+X-Google-Smtp-Source: AMsMyM7Sbp3KGS9RYk/ygpLZfdjsNmCuCMpLpfCLcKHXR7Gpm06yHTH40B2WCmC9hs7behpb1hhprA==
+X-Received: by 2002:adf:de11:0:b0:22c:b5f0:272e with SMTP id b17-20020adfde11000000b0022cb5f0272emr2003308wrm.224.1664271377909;
+        Tue, 27 Sep 2022 02:36:17 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 14-20020a05600c028e00b003b3307fb98fsm1180132wmk.24.2022.09.27.02.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 02:36:17 -0700 (PDT)
+Message-ID: <29cc25fb-0196-d80d-e3c7-b6aa22d32b1b@linaro.org>
+Date: Tue, 27 Sep 2022 11:36:16 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <92588.122092704305400285@us-mta-175.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next] thermal/intel/int340x: Initialized ret in error
+ path in int340x_thermal_zone_add()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "kernelci.org bot" <bot@kernelci.org>,
+ "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+References: <20220923152009.1721739-1-nathan@kernel.org>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220923152009.1721739-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 23/09/2022 17:20, Nathan Chancellor wrote:
+> Clang warns:
+> 
+>    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>            if (!int34x_thermal_zone->ops)
+>                ^~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:279:17: note: uninitialized use occurs here
+>            return ERR_PTR(ret);
+>                          ^~~
+>    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:222:2: note: remove the 'if' if its condition is always false
+>            if (!int34x_thermal_zone->ops)
+>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c:211:9: note: initialize the variable 'ret' to silence this warning
+>            int ret;
+>                  ^
+>                    = 0
+>    1 error generated.
+> 
+> If kmemdup() fails, -ENOMEM should be returned.
+> 
+> Fixes: f6f6f9a01374 ("thermal/intel/int340x: Replace parameter to simplify")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1717
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I've folded this patch with the changes introducing the issue
 
-
-Kernel information:
-    Commit message: Merge tag 'x86_urgent_for_v6.0-rc8' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54356
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5270853
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+Thanks for the fix
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
