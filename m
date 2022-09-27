@@ -1,525 +1,128 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C84846B4
-	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 17:28:59 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id a10-20020a5b0aca000000b006b05bfb6ab0so9047566ybr.9
-        for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 10:28:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD3D29A8
+	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 18:41:04 +0000 (UTC)
+Received: by mail-pl1-f175.google.com with SMTP id d24so9870288pls.4
+        for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 11:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=L0W2YbdGelpLBBhnQ093QmU58Jj5BkI2M5+XUp6L86g=;
-        b=saMO7FlJV4bJZe6KIHgzw9X3kBi3Qmhyv0A+06hXmeSn5Up0RUC/lRtKkZJa1NI0xr
-         H95arRp2Hv4jpEt73Q95LhlPylZmt8AlKD4BYm3iVWce3YzUALhi34WMyky7rlmhsev5
-         WfEVZA2jPVj7ZUJfp62CxPR+XbQcgrwgsjQ5AfEyTlRPJCsCP17OsrEllcYhSsE0Ylb7
-         mrBSv5Mu3nNHvnedj3qbiJG/hFL+CqXyP+MNlEHDICVpuzJcHNRd5O00qzQIoqa9spSG
-         z9s1ipM/sJ8o0j15+u+HC6xVQNB3d36ktszYM/IyhkSppJZimI5S1zP0RCBBNKwOOchf
-         AtPg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=e7R+mDLju2JroAcNFMiEg35mWzGVebbcux9nnUdL0+s=;
+        b=XP3ei/YY35BS6LARIxHchz6xoHvIGGmZNaPaqubd/9AtflMvF6FPymZ23lgOvUUlX9
+         fq2g0GoJgzf55NsbkZ1ITvHY3yZW0lBZgRmpmhyDYqu0+Ww8kXYgc0kcf8ND0KfCFdu8
+         q6xmnfVySqteH9LyV2p4GPqh3RYh2csuyU7HY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=L0W2YbdGelpLBBhnQ093QmU58Jj5BkI2M5+XUp6L86g=;
-        b=fk8IUtVWxAqJb3R53b66LEJwb1M16DQZu/B4k8W/ixbhRBJZiiOpzEXCItFQ9OCzei
-         FZWUZEIUzGbjHjxhB0OateDFuGeOxrpZB8bERM20YtzZYgGPOW/CoFuO3zGBRZykIpw2
-         XKpaPkFuXSAgdJcgchwoo1hSR13V5Dq2jY6SpGPF9xb52bmIKUZlCQXD+IdHecqgN+kg
-         mVzLVXl7lCTN4RjtVIvKjC102jIjeQpQH3nxKU/Q5q7vbkUTfa3z/T9CAWKenbHX0NUg
-         hFkru20U5vYeHgqS4NFRob7cuzD+sdpdZfaLPp8KYtyEzLhYhzBbun7DibIXnvncGSFG
-         RFMg==
-X-Gm-Message-State: ACrzQf2Z6Eph0F3LygXxO9KkvA/qkhErucneWVjr4m05qJ0R+ty28IcD
-	/T+cgBGnVtLHqJtfH6xgPMhJ7RJAxZRRAMMLXWM=
-X-Google-Smtp-Source: AMsMyM4lIwKFaub7SyBpj6x9nikreyg0KK1RlF57anzPWbtQiI1mx8wQp/DQDgdhTEA6ossH3UPPncNGolRZG4HtZ2o=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:5d88:f716:dcf7:513])
- (user=ndesaulniers job=sendgmr) by 2002:a25:be8a:0:b0:6a7:3314:52c8 with SMTP
- id i10-20020a25be8a000000b006a7331452c8mr27045309ybk.210.1664299738216; Tue,
- 27 Sep 2022 10:28:58 -0700 (PDT)
-Date: Tue, 27 Sep 2022 10:28:39 -0700
-In-Reply-To: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=e7R+mDLju2JroAcNFMiEg35mWzGVebbcux9nnUdL0+s=;
+        b=QYlX1qQAWJotQwFf6qIPKPT2K7vGLC/ax84Umhw1j8hpnAZPMdQdWU3Vt7nRtLttBv
+         L4urCchKVCxGB/TiT0PSgw2wRQ4McPSPkgCUMcd4bHyHzYfmOgh0Z8UzcVNhhNniHva2
+         K+dy73N9Ts5j+RVcteji0IMAND1MeJV0/UNP4GFhespTvOtRZywo1XnlCIjjdwWNTAZW
+         WJMVyHVFYhjgngLNjtlo5t1OWCNsZCZrG2cJo3v/VqysFt71kInC7U522cdYijcf83aP
+         Y23fPPQv/LWMRB+lqhGbUdeEZMBAVaulOVvbcwfJPnsdmO91alYANHcTE+ZgOyvVkA5U
+         DDUA==
+X-Gm-Message-State: ACrzQf1y7g+bKNhdciqMF3vY1J+sSYYDGZdHXQkOO6Tc/YQzmGNCU6ci
+	fR0+oq5nn+C3ETyTlPf1d2Awzw==
+X-Google-Smtp-Source: AMsMyM6mgGHLlGWhcrVcjuLvxN36jGAc0ixW3+4jzpS7y1F8Pj0NInwGA78MT8xniWkhPWHkmePT2w==
+X-Received: by 2002:a17:90b:380d:b0:202:56b2:4ef8 with SMTP id mq13-20020a17090b380d00b0020256b24ef8mr6134704pjb.2.1664304064224;
+        Tue, 27 Sep 2022 11:41:04 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h15-20020a170902f70f00b00173411a4385sm1912789plo.43.2022.09.27.11.41.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Sep 2022 11:41:03 -0700 (PDT)
+Date: Tue, 27 Sep 2022 11:41:02 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2] x86, mem: move memmove to out of line assembler
+Message-ID: <202209271126.605B4FF@keescook>
+References: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
+ <20220927172839.3708280-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1664299719; l=10493;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=cbaacreCpwr160wOAaY8kRcfVzHpmLtmXY/T/uOwcto=;
- b=fshInz2dJdq4lJ08zZrtt3Fa3LucaxopqnO2iBFyLpiBlgd8wY5pwaDdSqxJS+BaCuu6s2A0nvoS
- fGuiaBU4BxfS8WTf+EwcoPEfwncRDF5afMnZg1RPu1bvACoVHRWX
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-Message-ID: <20220927172839.3708280-1-ndesaulniers@google.com>
-Subject: [PATCH v2] x86, mem: move memmove to out of line assembler
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev, 
-	Andy Lutomirski <luto@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927172839.3708280-1-ndesaulniers@google.com>
 
-When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
-(depending on additional configs which I have not been able to isolate)
-to observe a failure during register allocation:
+On Tue, Sep 27, 2022 at 10:28:39AM -0700, Nick Desaulniers wrote:
+> When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
+> (depending on additional configs which I have not been able to isolate)
+> to observe a failure during register allocation:
+>
+>   error: inline assembly requires more registers than available
+>
+> when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+>
+> memmove is quite large and probably shouldn't be inlined due to size
+> alone. A noinline function attribute would be the simplest fix, but
+> there's a few things that stand out with the current definition:
+>
+> In addition to having complex constraints that can't always be resolved,
+> the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+> using numbered operands rather than symbolic operands, the constraints
+> are quite obnoxious to refactor.
+>
+> Having a large function be 99% inline asm is a code smell that this
+> function should simply be written in stand-alone out-of-line assembler.
+> That gives the opportunity for other cleanups like fixing the
+> inconsistent use of tabs vs spaces and instruction suffixes, and the
+> label 3 appearing twice.  Symbolic operands and local labels would
+> provide this code with a fresh coat of paint.
+>
+> Moving this to out of line assembler guarantees that the compiler cannot
+> inline calls to memmove.
+>
+> This has been done previously for 64b:
+> commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
+> and fix return value bug")
+>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-  error: inline assembly requires more registers than available
+Unfortunately, it seems something has gone wrong with this
+implementation. Before the patch:
 
-when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+$ ./tools/testing/kunit/kunit.py run --arch=i386 memcpy
+...
+[11:26:24] [PASSED] memmove_test
+...
 
-memmove is quite large and probably shouldn't be inlined due to size
-alone. A noinline function attribute would be the simplest fix, but
-there's a few things that stand out with the current definition:
+After the patch:
 
-In addition to having complex constraints that can't always be resolved,
-the clobber list seems to be missing %bx and %dx, and possibly %cl. By
-using numbered operands rather than symbolic operands, the constraints
-are quite obnoxious to refactor.
+$ ./tools/testing/kunit/kunit.py run --arch=i386 memcpy
+...
+[11:25:59] # memmove_test: ok: memmove() static initializers
+[11:25:59] # memmove_test: ok: memmove() direct assignment
+[11:25:59] # memmove_test: ok: memmove() complete overwrite
+[11:25:59] # memmove_test: ok: memmove() middle overwrite
+[11:25:59] # memmove_test: EXPECTATION FAILED at lib/memcpy_kunit.c:176
+[11:25:59] Expected dest.data[i] == five.data[i], but
+[11:25:59] dest.data[i] == 136
+[11:25:59] five.data[i] == 0
+[11:25:59] line 176: dest.data[10] (0x88) != five.data[10] (0x00)
+[11:25:59] # memmove_test: ok: memmove() argument side-effects
+[11:25:59] # memmove_test: ok: memmove() overlapping wr\xf0te
+[11:25:59] not ok 3 - memmove_test
+[11:25:59] [FAILED] memmove_test
+...
 
-Having a large function be 99% inline asm is a code smell that this
-function should simply be written in stand-alone out-of-line assembler.
-That gives the opportunity for other cleanups like fixing the
-inconsistent use of tabs vs spaces and instruction suffixes, and the
-label 3 appearing twice.  Symbolic operands and local labels would
-provide this code with a fresh coat of paint.
+data[10] starts set as 0x99, and in theory gets 0x0 written to it, but
+the self-test sees 0x88 there. (?!) It seems the macro side-effect test
+caught something else entirely?
 
-Moving this to out of line assembler guarantees that the compiler cannot
-inline calls to memmove.
+-Kees
 
-This has been done previously for 64b:
-commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
-and fix return value bug")
-
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes v1 -> v2:
-* Add reference to 9599ec0471de in commit message.
-* Include asm/export.h then make sure to EXPORT_SYMBOL(memmove).
-
- arch/x86/lib/Makefile     |   1 +
- arch/x86/lib/memcpy_32.c  | 187 ----------------------------------
- arch/x86/lib/memmove_32.S | 204 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 205 insertions(+), 187 deletions(-)
- create mode 100644 arch/x86/lib/memmove_32.S
-
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index f76747862bd2..9a0b8ed782e2 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -60,6 +60,7 @@ ifeq ($(CONFIG_X86_32),y)
-         lib-y += checksum_32.o
-         lib-y += strstr_32.o
-         lib-y += string_32.o
-+        lib-y += memmove_32.o
- ifneq ($(CONFIG_X86_CMPXCHG64),y)
-         lib-y += cmpxchg8b_emu.o atomic64_386_32.o
- endif
-diff --git a/arch/x86/lib/memcpy_32.c b/arch/x86/lib/memcpy_32.c
-index ef3af7ff2c8a..a29b64befb93 100644
---- a/arch/x86/lib/memcpy_32.c
-+++ b/arch/x86/lib/memcpy_32.c
-@@ -17,190 +17,3 @@ __visible void *memset(void *s, int c, size_t count)
- 	return __memset(s, c, count);
- }
- EXPORT_SYMBOL(memset);
--
--__visible void *memmove(void *dest, const void *src, size_t n)
--{
--	int d0,d1,d2,d3,d4,d5;
--	char *ret = dest;
--
--	__asm__ __volatile__(
--		/* Handle more 16 bytes in loop */
--		"cmp $0x10, %0\n\t"
--		"jb	1f\n\t"
--
--		/* Decide forward/backward copy mode */
--		"cmp %2, %1\n\t"
--		"jb	2f\n\t"
--
--		/*
--		 * movs instruction have many startup latency
--		 * so we handle small size by general register.
--		 */
--		"cmp  $680, %0\n\t"
--		"jb 3f\n\t"
--		/*
--		 * movs instruction is only good for aligned case.
--		 */
--		"mov %1, %3\n\t"
--		"xor %2, %3\n\t"
--		"and $0xff, %3\n\t"
--		"jz 4f\n\t"
--		"3:\n\t"
--		"sub $0x10, %0\n\t"
--
--		/*
--		 * We gobble 16 bytes forward in each loop.
--		 */
--		"3:\n\t"
--		"sub $0x10, %0\n\t"
--		"mov 0*4(%1), %3\n\t"
--		"mov 1*4(%1), %4\n\t"
--		"mov  %3, 0*4(%2)\n\t"
--		"mov  %4, 1*4(%2)\n\t"
--		"mov 2*4(%1), %3\n\t"
--		"mov 3*4(%1), %4\n\t"
--		"mov  %3, 2*4(%2)\n\t"
--		"mov  %4, 3*4(%2)\n\t"
--		"lea  0x10(%1), %1\n\t"
--		"lea  0x10(%2), %2\n\t"
--		"jae 3b\n\t"
--		"add $0x10, %0\n\t"
--		"jmp 1f\n\t"
--
--		/*
--		 * Handle data forward by movs.
--		 */
--		".p2align 4\n\t"
--		"4:\n\t"
--		"mov -4(%1, %0), %3\n\t"
--		"lea -4(%2, %0), %4\n\t"
--		"shr $2, %0\n\t"
--		"rep movsl\n\t"
--		"mov %3, (%4)\n\t"
--		"jmp 11f\n\t"
--		/*
--		 * Handle data backward by movs.
--		 */
--		".p2align 4\n\t"
--		"6:\n\t"
--		"mov (%1), %3\n\t"
--		"mov %2, %4\n\t"
--		"lea -4(%1, %0), %1\n\t"
--		"lea -4(%2, %0), %2\n\t"
--		"shr $2, %0\n\t"
--		"std\n\t"
--		"rep movsl\n\t"
--		"mov %3,(%4)\n\t"
--		"cld\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Start to prepare for backward copy.
--		 */
--		".p2align 4\n\t"
--		"2:\n\t"
--		"cmp  $680, %0\n\t"
--		"jb 5f\n\t"
--		"mov %1, %3\n\t"
--		"xor %2, %3\n\t"
--		"and $0xff, %3\n\t"
--		"jz 6b\n\t"
--
--		/*
--		 * Calculate copy position to tail.
--		 */
--		"5:\n\t"
--		"add %0, %1\n\t"
--		"add %0, %2\n\t"
--		"sub $0x10, %0\n\t"
--
--		/*
--		 * We gobble 16 bytes backward in each loop.
--		 */
--		"7:\n\t"
--		"sub $0x10, %0\n\t"
--
--		"mov -1*4(%1), %3\n\t"
--		"mov -2*4(%1), %4\n\t"
--		"mov  %3, -1*4(%2)\n\t"
--		"mov  %4, -2*4(%2)\n\t"
--		"mov -3*4(%1), %3\n\t"
--		"mov -4*4(%1), %4\n\t"
--		"mov  %3, -3*4(%2)\n\t"
--		"mov  %4, -4*4(%2)\n\t"
--		"lea  -0x10(%1), %1\n\t"
--		"lea  -0x10(%2), %2\n\t"
--		"jae 7b\n\t"
--		/*
--		 * Calculate copy position to head.
--		 */
--		"add $0x10, %0\n\t"
--		"sub %0, %1\n\t"
--		"sub %0, %2\n\t"
--
--		/*
--		 * Move data from 8 bytes to 15 bytes.
--		 */
--		".p2align 4\n\t"
--		"1:\n\t"
--		"cmp $8, %0\n\t"
--		"jb 8f\n\t"
--		"mov 0*4(%1), %3\n\t"
--		"mov 1*4(%1), %4\n\t"
--		"mov -2*4(%1, %0), %5\n\t"
--		"mov -1*4(%1, %0), %1\n\t"
--
--		"mov  %3, 0*4(%2)\n\t"
--		"mov  %4, 1*4(%2)\n\t"
--		"mov  %5, -2*4(%2, %0)\n\t"
--		"mov  %1, -1*4(%2, %0)\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Move data from 4 bytes to 7 bytes.
--		 */
--		".p2align 4\n\t"
--		"8:\n\t"
--		"cmp $4, %0\n\t"
--		"jb 9f\n\t"
--		"mov 0*4(%1), %3\n\t"
--		"mov -1*4(%1, %0), %4\n\t"
--		"mov  %3, 0*4(%2)\n\t"
--		"mov  %4, -1*4(%2, %0)\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Move data from 2 bytes to 3 bytes.
--		 */
--		".p2align 4\n\t"
--		"9:\n\t"
--		"cmp $2, %0\n\t"
--		"jb 10f\n\t"
--		"movw 0*2(%1), %%dx\n\t"
--		"movw -1*2(%1, %0), %%bx\n\t"
--		"movw %%dx, 0*2(%2)\n\t"
--		"movw %%bx, -1*2(%2, %0)\n\t"
--		"jmp 11f\n\t"
--
--		/*
--		 * Move data for 1 byte.
--		 */
--		".p2align 4\n\t"
--		"10:\n\t"
--		"cmp $1, %0\n\t"
--		"jb 11f\n\t"
--		"movb (%1), %%cl\n\t"
--		"movb %%cl, (%2)\n\t"
--		".p2align 4\n\t"
--		"11:"
--		: "=&c" (d0), "=&S" (d1), "=&D" (d2),
--		  "=r" (d3),"=r" (d4), "=r"(d5)
--		:"0" (n),
--		 "1" (src),
--		 "2" (dest)
--		:"memory");
--
--	return ret;
--
--}
--EXPORT_SYMBOL(memmove);
-diff --git a/arch/x86/lib/memmove_32.S b/arch/x86/lib/memmove_32.S
-new file mode 100644
-index 000000000000..73314a391a72
---- /dev/null
-+++ b/arch/x86/lib/memmove_32.S
-@@ -0,0 +1,204 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/linkage.h>
-+#include <asm/export.h>
-+
-+SYM_FUNC_START(memmove)
-+/*
-+ * void *memmove(void *dest, const void *src, size_t n)
-+ * -mregparm=3 passes these in registers:
-+ */
-+.set dest, %eax
-+.set src, %edx
-+.set n, %ecx
-+
-+/* Need 3 scratch registers. These need to be saved+restored. */
-+.set tmp0, %edi
-+.set tmp1, %ebx
-+.set tmp2, %esi
-+
-+	pushl	%ebp
-+	movl	%esp, %ebp
-+
-+	pushl	dest
-+	pushl	tmp0
-+	pushl	tmp1
-+	pushl	tmp2
-+
-+	/* Handle more 16 bytes in loop */
-+	cmpl	$0x10, n
-+	jb	.L16_byteswap
-+
-+	/* Decide forward/backward copy mode */
-+	cmpl	dest, src
-+	jb	.Lbackwards_header
-+
-+	/*
-+	 * movs instruction have many startup latency
-+	 * so we handle small size by general register.
-+	 */
-+	cmpl	$680, n
-+	jb	.Ltoo_small_forwards
-+	/*
-+	 * movs instruction is only good for aligned case.
-+	 */
-+	movl	src, tmp0
-+	xorl	dest, tmp0
-+	andl	$0xff, tmp0
-+	jz	.Lforward_movs
-+.Ltoo_small_forwards:
-+	subl	$0x10, n
-+
-+	/*
-+	 * We gobble 16 bytes forward in each loop.
-+	 */
-+.L16_byteswap_forwards_loop:
-+	subl	$0x10, n
-+	movl	0*4(src), tmp0
-+	movl	1*4(src), tmp1
-+	movl	tmp0, 0*4(dest)
-+	movl	tmp1, 1*4(dest)
-+	movl	2*4(src), tmp0
-+	movl	3*4(src), tmp1
-+	movl	tmp0, 2*4(dest)
-+	movl	tmp1, 3*4(dest)
-+	leal	0x10(src), src
-+	leal	0x10(dest), dest
-+	jae	.L16_byteswap_forwards_loop
-+	addl	$0x10, n
-+	jmp	.L16_byteswap
-+
-+	/*
-+	 * Handle data forward by movs.
-+	 */
-+.p2align 4
-+.Lforward_movs:
-+	movl	-4(src, n), tmp0
-+	leal	-4(dest, n), tmp1
-+	shrl	$2, n
-+	rep	movsl
-+	movl	tmp0, (tmp1)
-+	jmp	.Ldone
-+	/*
-+	 * Handle data backward by movs.
-+	 */
-+.p2align 4
-+.Lbackwards_movs:
-+	movl	(src), tmp0
-+	movl	dest, tmp1
-+	leal	-4(src, n), src
-+	leal	-4(dest, n), dest
-+	shrl	$2, n
-+	std
-+	rep	movsl
-+	movl	tmp0,(tmp1)
-+	cld
-+	jmp	.Ldone
-+
-+	/*
-+	 * Start to prepare for backward copy.
-+	 */
-+.p2align 4
-+.Lbackwards_header:
-+	cmpl	$680, n
-+	jb	.Ltoo_small_backwards
-+	movl	src, tmp0
-+	xorl	dest, tmp0
-+	andl	$0xff, tmp0
-+	jz	.Lbackwards_movs
-+
-+	/*
-+	 * Calculate copy position to tail.
-+	 */
-+.Ltoo_small_backwards:
-+	addl	n, src
-+	addl	n, dest
-+	subl	$0x10, n
-+
-+	/*
-+	 * We gobble 16 bytes backward in each loop.
-+	 */
-+.L16_byteswap_backwards_loop:
-+	subl	$0x10, n
-+
-+	movl	-1*4(src), tmp0
-+	movl	-2*4(src), tmp1
-+	movl	tmp0, -1*4(dest)
-+	movl	tmp1, -2*4(dest)
-+	movl	-3*4(src), tmp0
-+	movl	-4*4(src), tmp1
-+	movl	tmp0, -3*4(dest)
-+	movl	tmp1, -4*4(dest)
-+	leal	-0x10(src), src
-+	leal	-0x10(dest), dest
-+	jae	.L16_byteswap_backwards_loop
-+	/*
-+	 * Calculate copy position to head.
-+	 */
-+	addl	$0x10, n
-+	subl	n, src
-+	subl	n, dest
-+
-+	/*
-+	 * Move data from 8 bytes to 15 bytes.
-+	 */
-+.p2align 4
-+.L16_byteswap:
-+	cmpl	$8, n
-+	jb	.L8_byteswap
-+	movl	0*4(src), tmp0
-+	movl	1*4(src), tmp1
-+	movl	-2*4(src, n), tmp2
-+	movl	-1*4(src, n), src
-+
-+	movl	tmp0, 0*4(dest)
-+	movl	tmp1, 1*4(dest)
-+	movl	tmp2, -2*4(dest, n)
-+	movl	src, -1*4(dest, n)
-+	jmp	.Ldone
-+
-+	/*
-+	 * Move data from 4 bytes to 7 bytes.
-+	 */
-+.p2align 4
-+.L8_byteswap:
-+	cmpl	$4, n
-+	jb	.L4_byteswap
-+	movl	0*4(src), tmp0
-+	movl	-1*4(src, n), tmp1
-+	movl	tmp0, 0*4(dest)
-+	movl	tmp1, -1*4(dest, n)
-+	jmp	.Ldone
-+
-+	/*
-+	 * Move data from 2 bytes to 3 bytes.
-+	 */
-+.p2align 4
-+.L4_byteswap:
-+	cmpl	$2, n
-+	jb	.Lbyteswap
-+	movw	0*2(src), %di
-+	movw	-1*2(src, n), %bx
-+	movw	%dx, 0*2(dest)
-+	movw	%bx, -1*2(dest, n)
-+	jmp	.Ldone
-+
-+	/*
-+	 * Move data for 1 byte.
-+	 */
-+.p2align 4
-+.Lbyteswap:
-+	cmpl	$1, n
-+	jb	.Ldone
-+	movb	(src), %cl
-+	movb	%cl, (dest)
-+.p2align 4
-+.Ldone:
-+	popl	tmp2
-+	popl	tmp1
-+	popl	tmp0
-+	popl	%eax
-+	popl	%ebp
-+	RET
-+SYM_FUNC_END(memmove)
-+EXPORT_SYMBOL(memmove)
--- 
-2.37.3.998.g577e59143f-goog
-
+--
+Kees Cook
