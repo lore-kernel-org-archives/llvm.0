@@ -1,95 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9F64C64
-	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 19:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 799C2C433B5;
-	Tue, 27 Sep 2022 19:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664308745;
-	bh=2My9ZCXmRnqUQ6cz3tMnkACjBt4qb/TqPciRMjsGEac=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YmYGksXqc8Q3XdJdh6EvAX5XdlYduq0bWrFarDxaPgxjFVwzqO3PgFrsZJM57Iyjk
-	 qPnNjWYhp5kgM1VsR2jkagEGA/CWfgZ5nSouH0i5slmex0dIeO7lQK77gDTTIxos3e
-	 ClYCTOI3zqTLp82tL/gwSOq4fOF87Y8tEdeR7ofto+1/cGjP0D38GJhjXiFqVEITjh
-	 tajyhCk7uFynoLb/AZI058lm2ZduhX7IW+8V1WDw18aUWka2MCP5zjHzAacA3tQYes
-	 jakrt45RSQVhiZM8RmHKC8g2Mxby3dpdd0bYW/UP+W+C18bzRZrzci/SJ/BQOJu9i5
-	 MoO1FWd3GXWuw==
-Date: Tue, 27 Sep 2022 12:59:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, dwarves@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: die__process_unit: DW_TAG_label (0xa) @ <0x7b> not handled!
-Message-ID: <YzNWBxJTKDRBNNDa@dev-arch.thelio-3990X>
-References: <YzNHYoI4EZOQdCQ0@dev-arch.thelio-3990X>
- <YzNKEhM+H/X0xUK3@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13194C64
+	for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 20:01:47 +0000 (UTC)
+Received: by mail-pf1-f180.google.com with SMTP id b23so10607088pfp.9
+        for <llvm@lists.linux.dev>; Tue, 27 Sep 2022 13:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SNLo4c9BXtM0z8UOQgf5tFMG8y138Obd6dyre72qoDc=;
+        b=YGNnK0RD7gMznPaSdiz+8/9d+mAhbgcMjrKjGfS4Ua0g7pNb438g/v79EXPXkPfnuH
+         a5DqrcBgZSyqMknfCCnZfSt2baOkOFcOiroT+L7+Mns7eHGbtweRaw5F1DOX7AN7wicX
+         Llm+dO8eq5ifmRMGFFRawrgjjoHFYDxkKzBKoKZZLmxGEmWFUV1/a8n+k5wS8imXAVaC
+         QKINXr+UsuuOyH/ho3RNnrdCHxmI6WQ55Ed+OZmL5HR6b/jHFxAjSrzKSRocPL7eQ1j7
+         xZ2jVnhxMjMrRnbdIDcBPxHFcgCbvdKyHpNkMiCFxOe57ZZhYrE40AIhvoC15AQYbOOy
+         MxIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SNLo4c9BXtM0z8UOQgf5tFMG8y138Obd6dyre72qoDc=;
+        b=bpj0QhICStBmx2Iyy7W7CGqvWrIIwRHpCD5DZL4GwNgXlCZfUrh2oelWzBD5KdKNop
+         OnZ1pndrsd+G2wav2SG3BMXrZeyFZoy1SpZRXV5g8C7FVvX7HJaNVRV40PHe5YXypmOe
+         b5GsxLTerjra74Dla5ChziRXOTOXkJMm5nghgOfaPi+C7j1K++/EuXWxsEAvcVrMsyom
+         n3oSQG4cOYxMBBLEqvR3AfVeWYVCAaJ/owvyg6hTQMgxj30Kxz2lKW1WjIHwl3usH+vT
+         oMsnyr2q/psrLbWgRbgj83Kc9gWV0uX7G5hgJ4KJv36NsjR3d7XU1QW45ipIQQMrnBnR
+         N6Dg==
+X-Gm-Message-State: ACrzQf3dtNw0Ozyall50qCCyUdhf+lFFV494wjzbov2+Q357Hk9VRXFS
+	EbVYnolr52x03pWGM1ZuHpIb7+4s7qRdmMEtKCakFw==
+X-Google-Smtp-Source: AMsMyM5nUZ7pJPZM0NapVjvtCoXp0CCfy1zzFCgNJOsgpQxvYoYW8apQuNO9SAObnHlget6TUmiX9lei/L0iloYqEGQ=
+X-Received: by 2002:a62:1ad5:0:b0:540:4830:7df6 with SMTP id
+ a204-20020a621ad5000000b0054048307df6mr30046652pfa.37.1664308907250; Tue, 27
+ Sep 2022 13:01:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzNKEhM+H/X0xUK3@kernel.org>
+References: <CAKwvOd=a+0VNP-d=mHnbM4ujdtPrujru4dxHtfDo+EEM+b6deg@mail.gmail.com>
+ <20220927172839.3708280-1-ndesaulniers@google.com> <202209271143.7B7D15D@keescook>
+In-Reply-To: <202209271143.7B7D15D@keescook>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 27 Sep 2022 13:01:35 -0700
+Message-ID: <CAKwvOdk1QM4iZqEVj5MzTW3jMr1FiD_0C065Kub=EHKnH+xNaw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86, mem: move memmove to out of line assembler
+To: Kees Cook <keescook@chromium.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, llvm@lists.linux.dev, 
+	Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 27, 2022 at 04:08:02PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Tue, Sep 27, 2022 at 11:56:34AM -0700, Nathan Chancellor escreveu:
-> > Hi Arnaldo,
-> > 
-> > When building a kernel with LLVM and CONFIG_DEBUG_INFO_BTF after commit
-> > 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files") in
-> > the kernel, I see the following spew of warnings, which appear to come
-> > from pahole:
-> > 
-> > $ clang --version
-> > clang version 15.0.0 (Fedora 15.0.0-3.fc38)
-> > Target: x86_64-redhat-linux-gnu
-> > Thread model: posix
-> > InstalledDir: /usr/bin
-> > 
-> > $ pahole --version
-> > v1.24
-> > 
-> > $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
-> > 
-> > $ scripts/config \
-> >     -d DEBUG_INFO_NONE \
-> >     -e BPF_SYSCALL \
-> >     -e DEBUG_INFO_BTF \
-> >     -e DEBUG_INFO_DWARF5
-> > 
-> > $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 olddefconfig all
-> > ...
-> > die__process_unit: DW_TAG_label (0xa) @ <0x7b> not handled!
-> > die__process_unit: tag not supported 0xa (label)!
-> > die__process_unit: DW_TAG_label (0xa) @ <0x97> not handled!
-> > die__process_unit: DW_TAG_label (0xa) @ <0xbd> not handled!
-> > die__process_unit: DW_TAG_label (0xa) @ <0xed> not handled!
-> > die__process_unit: DW_TAG_label (0xa) @ <0x109> not handled!
-> > die__process_unit: DW_TAG_label (0xa) @ <0x12a> not handled!
-> > die__process_unit: DW_TAG_label (0xa) @ <0x146> not handled!
-> > die__process_unit: DW_TAG_label (0xa) @ <0x16f> not handled!
-> > ...
-> > 
-> > Is this a problem with LLVM or pahole? I do not see this when building
-> > with GCC + GNU as but that could just be a red herring. I assume that
-> > there could be something missing for processing debug info from
-> > assembly, perhaps? If there is any further information I can provide or
-> > anything I can test, I am more than happy to do so.
-> 
-> I'll try to repro, but at first sight it looks like a label in a
+On Tue, Sep 27, 2022 at 12:24 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 10:28:39AM -0700, Nick Desaulniers wrote:
+> > In addition to having complex constraints that can't always be resolved,
+> > the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+> > using numbered operands rather than symbolic operands, the constraints
+> > are quite obnoxious to refactor.
+> > [...]
+> > -             /*
+> > -              * Move data from 2 bytes to 3 bytes.
+> > -              */
+> > -             ".p2align 4\n\t"
+> > -             "9:\n\t"
+> > -             "cmp $2, %0\n\t"
+> > -             "jb 10f\n\t"
+> > -             "movw 0*2(%1), %%dx\n\t"
+> > -             "movw -1*2(%1, %0), %%bx\n\t"
+> > -             "movw %%dx, 0*2(%2)\n\t"
+> > -             "movw %%bx, -1*2(%2, %0)\n\t"
+> > -             "jmp 11f\n\t"
+> > [...]
+> > +.set tmp0, %edi
+> > [...]
+> > +     /*
+> > +      * Move data from 2 bytes to 3 bytes.
+> > +      */
+> > +.p2align 4
+> > +.L4_byteswap:
+> > +     cmpl    $2, n
+> > +     jb      .Lbyteswap
+> > +     movw    0*2(src), %di
+> > +     movw    -1*2(src, n), %bx
+> > +     movw    %dx, 0*2(dest)
+> > +     movw    %bx, -1*2(dest, n)
+> > +     jmp     .Ldone
+>
+> Found it (need to use %di instead of %dx). With this changed, the kunit
+> test passes again:
+>
+> diff --git a/arch/x86/lib/memmove_32.S b/arch/x86/lib/memmove_32.S
+> index 73314a391a72..9e33c9a1c595 100644
+> --- a/arch/x86/lib/memmove_32.S
+> +++ b/arch/x86/lib/memmove_32.S
+> @@ -179,7 +179,7 @@ SYM_FUNC_START(memmove)
+>         jb      .Lbyteswap
+>         movw    0*2(src), %di
+>         movw    -1*2(src, n), %bx
+> -       movw    %dx, 0*2(dest)
+> +       movw    %di, 0*2(dest)
+>         movw    %bx, -1*2(dest, n)
+>         jmp     .Ldone
 
-If you need help reproducing this locally, feel free to reach out
-through this thread or #clangbuiltlinux on Libera.
+That was stupid of me, I updated the scratch register operand in the
+instruction 2 before the one at issue and forgot to update the operand
+for the register in question, breaking the swap.
 
-> DW_TAG_compile_unit/like level, I have to check what that means, but
-> seems to be just a warning, did the end result made sense?
+I'll use .set directives to give these more descriptive names to avoid
+such a mistake.
 
-Right, this appears to just be a warning, the build still completes
-successfully (I did not check much else). I only noticed this by
-scrolling back in my build logs.
+.set tmp0w %di
 
-Cheers,
-Nathan
+then use tmp0w everywhere.  I will give names to the remaining
+register operands, too.
+
+Off thread, can you show me how to run the kunit tests, please?
+
+Will send a v3 shortly.
+
+>
+> -Kees
+>
+> --
+> Kees Cook
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
