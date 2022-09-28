@@ -1,96 +1,182 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A195A51
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664355070; x=1695891070;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=eltQSsd00+eTulXtPk3YMa9SYpcWVAR8VjdLyZ6mqho=;
-  b=g+PbDW6SKZlFByra2hY2STr3Dutu5gFwIa3DIE7xLwV/0xWpQwANVJl1
-   MOGF1ienEmCI0MaRg3kii0Y7hAac2FOZFYEdc+Ozso1bXsh8fkfCHzR1k
-   DuIzL5kqSS+fIBQwKCXpw2vFb7Ifx0kdBTXvJp8RDOMhDfCwC7oqDlZme
-   IfWaRz4rQTtQ1S5jPSlUOE6z62QGWEVFr+gcCcImh3vklp9MtsPitnBdt
-   KWa4S83H3uJcMa6R98SrAO//o/7Yq+42tlSW8lN55skq6JuMoiF7B7n7D
-   0tQmTjdY+byTqaj06CJUaDb3u5zllaMwaoeFIY3SEhfbYrBtKlK2pyuaS
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="302457850"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="302457850"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:51:09 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10483"; a="866895387"
-X-IronPort-AV: E=Sophos;i="5.93,351,1654585200"; 
-   d="scan'208";a="866895387"
-Received: from novermar-mobl.ger.corp.intel.com (HELO localhost) ([10.252.61.30])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 01:51:03 -0700
-From: Jani Nikula <jani.nikula@intel.com>
-To: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
- intel-gfx@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- mchehab@kernel.org, chris@chris-wilson.co.uk, matthew.auld@intel.com,
- thomas.hellstrom@linux.intel.com, nirmoy.das@intel.com,
- airlied@redhat.com, daniel@ffwll.ch, andi.shyti@linux.intel.com,
- andrzej.hajda@intel.com, keescook@chromium.org,
- mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk, vitor@massaru.org,
- dlatypov@google.com, ndesaulniers@google.com, trix@redhat.com,
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
- linux-sparse@vger.kernel.org, nathan@kernel.org, gustavoars@kernel.org,
- luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v13 5/9] drm/i915: Check for integer truncation on
- scatterlist creation
-In-Reply-To: <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220928081300.101516-1-gwan-gyeong.mun@intel.com>
- <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
-Date: Wed, 28 Sep 2022 11:51:00 +0300
-Message-ID: <87edvvzxu3.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746BCA51
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664355102;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4RGe4SSzQFqqcKkfiZEX3SSpWUyb70RSL2DB9epHE1U=;
+	b=R3ZYc0yExCXawrbs99CYlgYP5sdCu5ag8dxCvqDEB11+q+UKzyHFpm3vb4BCrT9zH8/CRT
+	nLRzzCRsDL6gZHYH6FvoTpT69ZTM3oOCPuXzBnF18Cxoo/mzTMHK2FU4DFUcFyoyVD3/Yy
+	Xp8dMhzy6iRYaKPcyGMaB1f5muUw55c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-592-TnlaH_2VPYuYsX47pwH-0g-1; Wed, 28 Sep 2022 04:51:40 -0400
+X-MC-Unique: TnlaH_2VPYuYsX47pwH-0g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DC01101E14E
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:51:40 +0000 (UTC)
+Received: from [172.64.5.45] (unknown [10.30.33.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 763B4477F55;
+	Wed, 28 Sep 2022 08:51:40 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
+ mainline.kernel.org-clang, 49c13ed0)
+Date: Wed, 28 Sep 2022 08:51:40 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <10500.122092804514000600@us-mta-592.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 28 Sep 2022, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com> wrote:
-> diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
-> index 9ddb3e743a3e..1d1802beb42b 100644
-> --- a/drivers/gpu/drm/i915/i915_scatterlist.h
-> +++ b/drivers/gpu/drm/i915/i915_scatterlist.h
-> @@ -220,4 +220,15 @@ struct i915_refct_sgt *i915_rsgt_from_buddy_resource(struct ttm_resource *res,
->  						     u64 region_start,
->  						     u32 page_alignment);
->  
-> +/* Wrap scatterlist.h to sanity check for integer truncation */
-> +typedef unsigned int __sg_size_t; /* see linux/scatterlist.h */
-> +#define sg_alloc_table(sgt, nents, gfp) \
-> +	overflows_type(nents, __sg_size_t) ? -E2BIG \
-> +		: ((sg_alloc_table)(sgt, (__sg_size_t)(nents), gfp))
-> +
-> +#define sg_alloc_table_from_pages_segment(sgt, pages, npages, offset, size, max_segment, gfp) \
-> +	overflows_type(npages, __sg_size_t) ? -E2BIG \
-> +		: ((sg_alloc_table_from_pages_segment)(sgt, pages, (__sg_size_t)(npages), offset, \
-> +						       size, max_segment, gfp))
-> +
->  #endif
+Hi, we tested your kernel and here are the results:
 
-No. I don't think we should shadow sg_alloc_table() and
-sg_alloc_table_from_pages_segment().
-
-Either get this in scatterlist.h (preferred) or prefix with i915_ or
-whatever to indicate it's our local thing.
-
-i915_scatterlist.h already has too much scatterlist "namespace" abuse
-that I'd rather see gone than violated more.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-BR,
-Jani.
+Kernel information:
+    Commit message: Merge tag 'soc-fixes-6.0-rc7' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/soc/soc
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54482
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5285536
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5285603
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5285610
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5285651
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5285656
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - software RAID testing: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1382
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+                  x86_64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                   s390x - Storage - swraid simple_reshape
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
