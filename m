@@ -1,78 +1,115 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365D14A11
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 18:06:10 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id c198so13166996pfc.13
-        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 11:06:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=lg8DJ4PVGf/UE/b9agj2E3jF0biYJ2TzSjDWoqo1nWk=;
-        b=kX6MiQJJ++GzWgnGDgSHhlrCPXkUnTfSWuw5a1vTXKi13Y13VyCmf0QKz9GO79Hl9h
-         lytSSUqbfN/S/Ah/mnF4XU0V59XNaRA/1kXJDF/OU4N76i45SgkcHk4RiaBdM3X11q3P
-         ngv3+AbyQkBAOyZ4Efs1UnxU8fMOnw5TwIofU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=lg8DJ4PVGf/UE/b9agj2E3jF0biYJ2TzSjDWoqo1nWk=;
-        b=Wy/DMbpIc/ETCtKqWM5/vJyw5WJlHYbKqs4FJ8GwOk8jObNMoNoA++k8AlfUdUCwau
-         uffxFrXc9g8oYZVI0yx2Wfoe7klU9gIsDw08xf3pRBie0EVVmNsmf6Fgi4y/SqWiiFLE
-         U1u9m98IZqcZ2Dsf+EXzf2OODA5vvFUTT8NzV5V00boD5D5rxzAL4Xh9BTuboqMCnOyl
-         LSSb1JGgkpOf15JAriEhXCN/oIGcOkya20yksZK5FVlEJFg/jk57vI7bDg6UZ7+mmCn7
-         TAqLw+RvOrz8O+dVaE59B7koseYr6YmASlNfYfD2W9dKDPhggI6TEaFN2uNnXtkd/C7e
-         dNpQ==
-X-Gm-Message-State: ACrzQf2G4OcyxhcUlH6oV33qbWKm8Ve7eh6f1Fx3Ay1ERUXLI9JSFo5k
-	T9iicEJE8wK1GAA85utO/AWn0g==
-X-Google-Smtp-Source: AMsMyM5YqTL3LfyC56o9MrGg1TzPcXSkd4eESKCY3Dzo1hitrUn0UwkQLKFW1M9B3lIoMGRQbkcRdw==
-X-Received: by 2002:a65:4609:0:b0:434:8f0b:5d05 with SMTP id v9-20020a654609000000b004348f0b5d05mr29993911pgq.606.1664388369685;
-        Wed, 28 Sep 2022 11:06:09 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mt10-20020a17090b230a00b00203059fc75bsm1706643pjb.5.2022.09.28.11.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 11:06:09 -0700 (PDT)
-Date: Wed, 28 Sep 2022 11:06:07 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-	intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, mchehab@kernel.org,
-	chris@chris-wilson.co.uk, matthew.auld@intel.com,
-	thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
-	nirmoy.das@intel.com, airlied@redhat.com, daniel@ffwll.ch,
-	andi.shyti@linux.intel.com, andrzej.hajda@intel.com,
-	mauro.chehab@linux.intel.com, linux@rasmusvillemoes.dk,
-	vitor@massaru.org, dlatypov@google.com, ndesaulniers@google.com,
-	trix@redhat.com, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org, linux-sparse@vger.kernel.org,
-	nathan@kernel.org, gustavoars@kernel.org,
-	luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v13 5/9] drm/i915: Check for integer truncation on
- scatterlist creation
-Message-ID: <202209281102.A86D736@keescook>
-References: <20220928081300.101516-1-gwan-gyeong.mun@intel.com>
- <20220928081300.101516-6-gwan-gyeong.mun@intel.com>
- <CAHk-=wivJwvVbMUKma8600F6qaVLZHT=BY90SEnjiHWw2ZUVEg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0324A11;
+	Wed, 28 Sep 2022 18:25:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C3FC433C1;
+	Wed, 28 Sep 2022 18:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664389539;
+	bh=D/ciu09dBj727+i/dCSd2okVI+OFeY1RXfqr8ayPQyw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ja6+Evw8ILUOwbp8ir0QYyANu1iVEBthMSfaxun0Lb1Z7HXRXkyImBlrl+ltFBUrF
+	 eAMXcxvhVmWoDu1tW62IsiCoSD0/u/enlyeHty+82QWL/lOovW2BKZswp7TVKGdnYr
+	 CxvmilxfPN0J24dSXYOXDU73LklcP8en1J3GxyTPI/q6VnoQpODjY0Ycguwx9QHe6u
+	 vTPVSS3qyGka3AE6skbCRr7gz1e0XNS7LlJPHs1s7t1z/PmNzD6kaO3sRm92Y+bzxT
+	 kywBAOh42GsixzjdjXP0gy6AsJ1kzt9MfBgbw9s4g6+SHLO0be9CDALFWnof0deesq
+	 9nBuhnGMxt6Aw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-kbuild@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH] lib/Kconfig.debug: Add check for non-constant .{s,u}leb128 support to DWARF5
+Date: Wed, 28 Sep 2022 11:25:23 -0700
+Message-Id: <20220928182523.3105953-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wivJwvVbMUKma8600F6qaVLZHT=BY90SEnjiHWw2ZUVEg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 28, 2022 at 10:09:04AM -0700, Linus Torvalds wrote:
-> Kees, you need to reign in the craziness in overflow.h.
+When building with a RISC-V kernel with DWARF5 debug info using clang
+and the GNU assembler, several instances of the following error appear:
 
-Understood. I've been trying to help the drm folks walk a line between
-having a bunch of custom macros hidden away in the drm includes and
-building up generalized versions that are actually helpful beyond drm.
-But I can see that it doesn't help to have a "do two things at the same
-time" macro for the assignment checking.
+  /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
 
+Dumping the .s file reveals these .uleb128 directives come from
+.debug_loc and .debug_ranges:
+
+  .Ldebug_loc0:
+          .byte   4                               # DW_LLE_offset_pair
+          .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
+          .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
+          .byte   1                               # Loc expr size
+          .byte   90                              # DW_OP_reg10
+          .byte   0                               # DW_LLE_end_of_list
+
+  .Ldebug_ranges0:
+          .byte   4                               # DW_RLE_offset_pair
+          .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
+          .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
+          .byte   4                               # DW_RLE_offset_pair
+          .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
+          .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
+          .byte   0                               # DW_RLE_end_of_list
+
+There is an outstanding binutils issue to support a non-constant operand
+to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
+be any movement on it, due to concerns over how it would work with
+linker relaxation.
+
+To avoid these build errors, prevent DWARF5 from being selected when
+using clang and an assembler that does not have support for these symbol
+deltas, which can be easily checked in Kconfig with as-instr plus the
+small test program from the dwz test suite from the binutils issue.
+
+Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+Link: https://github.com/ClangBuiltLinux/linux/issues/1719
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ lib/Kconfig.debug | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index d3e5f36bb01e..19de03ead2ed 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -231,6 +231,9 @@ config DEBUG_INFO
+ 	  in the "Debug information" choice below, indicating that debug
+ 	  information will be generated for build targets.
+ 
++config AS_HAS_NON_CONST_LEB128
++	def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
++
+ choice
+ 	prompt "Debug information"
+ 	depends on DEBUG_KERNEL
+@@ -277,6 +280,10 @@ config DEBUG_INFO_DWARF5
+ 	bool "Generate DWARF Version 5 debuginfo"
+ 	select DEBUG_INFO
+ 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
++	# Clang is known to generate .{s,u}leb128 with symbol deltas with
++	# DWARF5, which some targets may not support.
++	# https://sourceware.org/bugzilla/show_bug.cgi?id=27215
++	depends on !CC_IS_CLANG || AS_HAS_NON_CONST_LEB128
+ 	help
+ 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+ 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
 -- 
-Kees Cook
+2.37.3
+
