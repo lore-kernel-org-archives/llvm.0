@@ -1,89 +1,121 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059EE5381
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 21:53:50 +0000 (UTC)
-Received: by mail-pj1-f45.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so2790167pjh.3
-        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 14:53:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E895381
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 22:03:45 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id 78so13380432pgb.13
+        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Ay3drFi6JCOWyd7mwYuzVhdDqZJYtGvjCnOOuic4lIQ=;
-        b=d8AWbiSBxXrgrvwAoskxcicNPYKtAtvQ8eTNvx31A5tDj05HG3JYRAX8qf2vlcBFux
-         Q1KTlPLAgoTxKVWu/nVzVOf7AiT7GTQhdNsUYqMxZ71hoxMdvb5Q9qsvn3yjzUg5VS4Z
-         AeFBZtfNn12MoU7iIzQGkn5wjz+gaTpfVO1hEeE57+wJ12W7ze2a3aRKpnA8Lx9MTtIJ
-         grbEUQMs3nxDSYRKy9B5Ov4jaMGgXhqeyepODAApSSchrz1BCHHbq4bwQtIzq5YjUq/5
-         KGRlA9uTZis4skTF0coWa95GNfO6iWQbU6avtKMDiR8zb+dfBnXP+edrsxPOv/ezAxb2
-         ZDIw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ERLuTlisgIR2n9tXC1fe0GP37JKycUgxAwJd1Ig7q9Q=;
+        b=DxAWIhOWGcHpcmmOwlPYx3KHgn35bBdjd63eqQb/+4KWhI74WgEDeYIWrdXpGU0bj5
+         hRhgnnLilYW3EAaA5y3NOPl4/XRJP9c72OiZVjNRml5lpRx3+jQcBi0aSfwOhLi9e/HX
+         l8oY4DBT7jivOUW62K516ODwZI2vEfEC8kI8c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ay3drFi6JCOWyd7mwYuzVhdDqZJYtGvjCnOOuic4lIQ=;
-        b=ae4bY9bzwbMh+L93T3yWzk69hkga/jbfcRQC2jcGkdqmEq0tLsj7/TmJjOPQfzThGr
-         FIG0A0HX8srNnBcbCd0PAZmrZaiYWiHTcmcOHxC4aNYwpWuImUQ9cozIfY0ZZWcQ7bLQ
-         l0yDOswYUx4Vx4UvWufZEZwodbrHP2ezYODLq2ET7UA4MTz9S++ZJZ1q6goZGiRayT4e
-         SUrtLc7NYcI3XFXURPkNS7GDBjqRcUhmZ1u5FsbyMGI/EHUL7P9c4mJnuezh4XQOOjrL
-         C4H4YjJXSNfNRS2uBjnZkvfaDZHn+Yn1N/0ULz97cQIYKdf+VdXNkdqeJm+4CzR5cFva
-         mvFQ==
-X-Gm-Message-State: ACrzQf1tpSVWQZaFKBp+H9siOGVMELR/08pwmxjrn6C55wG5pXyQOCxu
-	kyN+Fu0IYg9Oy3DxI62dyzLdbxq0mg8AEdqqqscYbA==
-X-Google-Smtp-Source: AMsMyM6+V0RnFW83E4Yey5hPTG/WNDzcVaQZ9uZmK44iTcOwLQ3OpYQRTfUlegcvBrQLEHiPkA+P6skieEZazNbCnnA=
-X-Received: by 2002:a17:90a:74c4:b0:203:336d:dd36 with SMTP id
- p4-20020a17090a74c400b00203336ddd36mr12421313pjl.107.1664402030259; Wed, 28
- Sep 2022 14:53:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ERLuTlisgIR2n9tXC1fe0GP37JKycUgxAwJd1Ig7q9Q=;
+        b=7VaV2YWXXO58RJ4FemBP58nnJZKB0MIxGwmzTnzhRLT34xiEyPjc7sr7UfNHGreKDV
+         8pKHB3LXrfnGHOB+xu1tLZUTLc5sYfyUS7GYts5dGbnUHMUCcmWVSKRzUGX2v2+cmyws
+         G4oWh9cdwCPLOC5aK412xbaU9MSmZRLrfahnPbHOmX+K83OG3j3e1iKgqQ3YMKtfaz+o
+         iUhbkHTsnl+kQ6bcLVOVjscR12VmHjlzbTQz7Van/ht7oWuWxxkcqUi981hzEGbkbe1z
+         WoAYQw7ApSdc5ni/WCbJnFwxAhKW290/HATLNnxtwevs5f/Fhff8Te68p6t1JvfW3yUL
+         oi6Q==
+X-Gm-Message-State: ACrzQf03KoC6R2QuEadjT0KB+nUQZoJG+oDPhcr35rDuDRL2cKYsp4xU
+	TZU89511SrzD5t0V65K4rGTaVA==
+X-Google-Smtp-Source: AMsMyM4SBD1FlI/Uz4/bWjuAArTJ4XDxSG+Kh04joDyyUmbFtNP5JhczPQMy+VzxQT6s1FBs+mgQvw==
+X-Received: by 2002:a65:5886:0:b0:439:8dd3:18d4 with SMTP id d6-20020a655886000000b004398dd318d4mr30891351pgu.430.1664402625067;
+        Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f22-20020a63f116000000b0042a713dd68csm4194606pgi.53.2022.09.28.15.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 15:03:44 -0700 (PDT)
+Date: Wed, 28 Sep 2022 15:03:43 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v4] x86, mem: move memmove to out of line assembler
+Message-ID: <202209281431.C5EF6C32A@keescook>
+References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
+ <20220928210512.642594-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220928182523.3105953-1-nathan@kernel.org> <CAKwvOdmPLqX=oCwg43TYHj=tdoaU5OYc=bO906u=LeqcSrx+Dw@mail.gmail.com>
- <YzS+bQT1zJAUpp/6@dev-arch.thelio-3990X>
-In-Reply-To: <YzS+bQT1zJAUpp/6@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 28 Sep 2022 14:53:38 -0700
-Message-ID: <CAKwvOdk87wRWoiVjswZPwoLbSm+sYsMW6FHZv+r6MHxLHn0Trw@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: Add check for non-constant
- .{s,u}leb128 support to DWARF5
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>, linux-kbuild@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, llvm@lists.linux.dev, 
-	Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928210512.642594-1-ndesaulniers@google.com>
 
-On Wed, Sep 28, 2022 at 2:36 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Wed, Sep 28, 2022 at 02:13:47PM -0700, Nick Desaulniers wrote:
-> > Reraising my concern from
-> > https://github.com/ClangBuiltLinux/linux/issues/1719#issuecomment-1258678969
->
-> Sorry, I thought I addressed your concern with my comment right below it
-> but I probably should have worded it better.
+On Wed, Sep 28, 2022 at 02:05:12PM -0700, Nick Desaulniers wrote:
+> When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
+> (depending on additional configs which I have not been able to isolate)
+> to observe a failure during register allocation:
+> 
+>   error: inline assembly requires more registers than available
+> 
+> when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+> 
+> memmove is quite large and probably shouldn't be inlined due to size
+> alone. A noinline function attribute would be the simplest fix, but
+> there's a few things that stand out with the current definition:
+> 
+> In addition to having complex constraints that can't always be resolved,
+> the clobber list seems to be missing %bx and %dx, and possibly %cl. By
+> using numbered operands rather than symbolic operands, the constraints
+> are quite obnoxious to refactor.
+> 
+> Having a large function be 99% inline asm is a code smell that this
+> function should simply be written in stand-alone out-of-line assembler.
+> That gives the opportunity for other cleanups like fixing the
+> inconsistent use of tabs vs spaces and instruction suffixes, and the
+> label 3 appearing twice.  Symbolic operands and local labels would
+> provide this code with a fresh coat of paint.
+> 
+> Moving this to out of line assembler guarantees that the
+> compiler cannot inline calls to memmove.
+> 
+> This has been done previously for 64b:
+> commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
+> and fix return value bug")
+> 
+> Also, add a test that tickles the `rep movsl` implementation to test it
+> for correctness, since it has implicit operands.
 
-No, I just missed your point about other architectures.
+Yeah, thanks for poking this in particular. I was bothered that the
+side-effect test caught a corner case and was planning to expand the
+memcpy tests even more; thank you for doing that! I've got some more
+coming and can confirm they tickled the same bug.
 
-> > We've put a fair amount of work into getting CC=clang LLVM_IAS=0 to
-> > work for DWARF v5 (both on the GNU binutils side, and Kbuild), I'd
-> > hate to see that effectively knee-capped because of an issue in GNU
-> > binutils that is only relevant for one architecture.
->
-> Sure, that is a completely reasonable concern. However...
->
-> > I'd concede support for ARCH=riscv, but not for all other
-> > architectures, which this effectively does.
->
-> No, it does not, CONFIG_AS_HAS_NON_CONST_LEB128 can still be enabled
-> when GNU as supports this construct for a particular architecture; as
-> far as I can tell, RISC-V is the only one that doesn't. See the tests
-> with ARCH=arm64 and ARCH=x86_64 compared with ARCH=riscv below.
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Ah, sorry for the noise then. Thanks for the patch.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+This time I've looked at the binary differences between the functions
+generated by both GCC[1] and Clang[2]. GCC is a little more difficult to
+compare, since it does some register swaps, but the Clang output is same
+excepting the order of push/pop, and different nops.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Nick's tests pass, and my newly written tests also pass; I'll send those
+as a follow-up.
+
+Tested-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+[1] https://paste.debian.net/hidden/b6298e62/
+[2] https://paste.debian.net/hidden/d8343143/
 
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
