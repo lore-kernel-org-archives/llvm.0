@@ -1,121 +1,127 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E895381
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 22:03:45 +0000 (UTC)
-Received: by mail-pg1-f172.google.com with SMTP id 78so13380432pgb.13
-        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ERLuTlisgIR2n9tXC1fe0GP37JKycUgxAwJd1Ig7q9Q=;
-        b=DxAWIhOWGcHpcmmOwlPYx3KHgn35bBdjd63eqQb/+4KWhI74WgEDeYIWrdXpGU0bj5
-         hRhgnnLilYW3EAaA5y3NOPl4/XRJP9c72OiZVjNRml5lpRx3+jQcBi0aSfwOhLi9e/HX
-         l8oY4DBT7jivOUW62K516ODwZI2vEfEC8kI8c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ERLuTlisgIR2n9tXC1fe0GP37JKycUgxAwJd1Ig7q9Q=;
-        b=7VaV2YWXXO58RJ4FemBP58nnJZKB0MIxGwmzTnzhRLT34xiEyPjc7sr7UfNHGreKDV
-         8pKHB3LXrfnGHOB+xu1tLZUTLc5sYfyUS7GYts5dGbnUHMUCcmWVSKRzUGX2v2+cmyws
-         G4oWh9cdwCPLOC5aK412xbaU9MSmZRLrfahnPbHOmX+K83OG3j3e1iKgqQ3YMKtfaz+o
-         iUhbkHTsnl+kQ6bcLVOVjscR12VmHjlzbTQz7Van/ht7oWuWxxkcqUi981hzEGbkbe1z
-         WoAYQw7ApSdc5ni/WCbJnFwxAhKW290/HATLNnxtwevs5f/Fhff8Te68p6t1JvfW3yUL
-         oi6Q==
-X-Gm-Message-State: ACrzQf03KoC6R2QuEadjT0KB+nUQZoJG+oDPhcr35rDuDRL2cKYsp4xU
-	TZU89511SrzD5t0V65K4rGTaVA==
-X-Google-Smtp-Source: AMsMyM4SBD1FlI/Uz4/bWjuAArTJ4XDxSG+Kh04joDyyUmbFtNP5JhczPQMy+VzxQT6s1FBs+mgQvw==
-X-Received: by 2002:a65:5886:0:b0:439:8dd3:18d4 with SMTP id d6-20020a655886000000b004398dd318d4mr30891351pgu.430.1664402625067;
-        Wed, 28 Sep 2022 15:03:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f22-20020a63f116000000b0042a713dd68csm4194606pgi.53.2022.09.28.15.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 15:03:44 -0700 (PDT)
-Date: Wed, 28 Sep 2022 15:03:43 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v4] x86, mem: move memmove to out of line assembler
-Message-ID: <202209281431.C5EF6C32A@keescook>
-References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
- <20220928210512.642594-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F027E
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 22:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F51C433C1;
+	Wed, 28 Sep 2022 22:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664404565;
+	bh=3ZkYJjVGuAToHzBzl/eiZQGP9nl9Lz8aoqrcQ6zQ2uM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qtKvpq/MUwe5t3E4qnfpcWmZ+pcS4X4n2SsF/DqlSmrRrDWMnk/FLftXgyTKLbd3m
+	 vf5onz4ySjHSRPWg90lJAptiotaelTd1i/CYikPGvR6S3fjnLg44rhwRDmZhL8vWft
+	 8fgBaB/JZ0fJBXAIQAphj/RKrXXvh8tAme/Te94gYrUrSm+2/10sIdAi1sGA/GoFb+
+	 w+E0XnEn4LevLs1JvLEaqDFEflvwhWNXQTRpQn++dtp5R3F4x8n3l6DyEkl79MWEOr
+	 fcM/sZ3XXaO2EUoP/Kkt8FDn9nNMAUDD7J0uENSVy0/jAtD0M4sYt0aC3VwCNTKLHB
+	 y8OuB2Bu+VdNw==
+Date: Wed, 28 Sep 2022 15:36:02 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Matt Redfearn <matt.redfearn@mips.com>,
+	Petr =?utf-8?B?VmFuxJtr?= <arkamar@atlas.cz>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Justin Stitt <jstitt007@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Denys Vlasenko <dvlasenk@redhat.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	"open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
+	mmayer@broadcom.com, Khem Raj <raj.khem@gmail.com>,
+	Philippe Ombredanne <pombredanne@nexb.com>,
+	Kate Stewart <kstewart@linuxfoundation.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] include/uapi/linux/swab: Fix potentially missing
+ __always_inline
+Message-ID: <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
+References: <20220927215256.528619-1-f.fainelli@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220928210512.642594-1-ndesaulniers@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220927215256.528619-1-f.fainelli@gmail.com>
 
-On Wed, Sep 28, 2022 at 02:05:12PM -0700, Nick Desaulniers wrote:
-> When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
-> (depending on additional configs which I have not been able to isolate)
-> to observe a failure during register allocation:
+Hi Florian,
+
+On Tue, Sep 27, 2022 at 02:52:56PM -0700, Florian Fainelli wrote:
+> From: Matt Redfearn <matt.redfearn@mips.com>
 > 
->   error: inline assembly requires more registers than available
+> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
+> of some byteswap operations") added __always_inline to swab functions
+> and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
+> userspace headers") added a definition of __always_inline for use in
+> exported headers when the kernel's compiler.h is not available.
 > 
-> when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
+> However, since swab.h does not include stddef.h, if the header soup does
+> not indirectly include it, the definition of __always_inline is missing,
+> resulting in a compilation failure, which was observed compiling the
+> perf tool using exported headers containing this commit:
 > 
-> memmove is quite large and probably shouldn't be inlined due to size
-> alone. A noinline function attribute would be the simplest fix, but
-> there's a few things that stand out with the current definition:
+> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
+>                  from /usr/include/asm/byteorder.h:14,
+>                  from tools/include/uapi/linux/perf_event.h:20,
+>                  from perf.h:8,
+>                  from builtin-bench.c:18:
+> /usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
+>  static __always_inline __u16 __swab16p(const __u16 *p)
 > 
-> In addition to having complex constraints that can't always be resolved,
-> the clobber list seems to be missing %bx and %dx, and possibly %cl. By
-> using numbered operands rather than symbolic operands, the constraints
-> are quite obnoxious to refactor.
+> Fix this by replacing the inclusion of linux/compiler.h with
+> linux/stddef.h to ensure that we pick up that definition if required,
+> without relying on it's indirect inclusion. compiler.h is then included
+> indirectly, via stddef.h.
 > 
-> Having a large function be 99% inline asm is a code smell that this
-> function should simply be written in stand-alone out-of-line assembler.
-> That gives the opportunity for other cleanups like fixing the
-> inconsistent use of tabs vs spaces and instruction suffixes, and the
-> label 3 appearing twice.  Symbolic operands and local labels would
-> provide this code with a fresh coat of paint.
+> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
+> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
+> Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+
+I took this through my kernel build matrix and did not see any new
+issues.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+Cheers,
+Nathan
+
+> ---
+> Apologies for the insanely long CC list. I encountered this problem
+> again while attempting to build perf with a LLVM 13 toolchain using
+> musl-libc. Not sure why it did not get picked up last time?
 > 
-> Moving this to out of line assembler guarantees that the
-> compiler cannot inline calls to memmove.
+> Khem did submit an alternative patch a few years ago, too which also did
+> not get picked up:
 > 
-> This has been done previously for 64b:
-> commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
-> and fix return value bug")
+> https://lore.kernel.org/lkml/20180913005654.39976-1-raj.khem@gmail.com/
 > 
-> Also, add a test that tickles the `rep movsl` implementation to test it
-> for correctness, since it has implicit operands.
-
-Yeah, thanks for poking this in particular. I was bothered that the
-side-effect test caught a corner case and was planning to expand the
-memcpy tests even more; thank you for doing that! I've got some more
-coming and can confirm they tickled the same bug.
-
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-
-This time I've looked at the binary differences between the functions
-generated by both GCC[1] and Clang[2]. GCC is a little more difficult to
-compare, since it does some register swaps, but the Clang output is same
-excepting the order of push/pop, and different nops.
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
-Nick's tests pass, and my newly written tests also pass; I'll send those
-as a follow-up.
-
-Tested-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
-[1] https://paste.debian.net/hidden/b6298e62/
-[2] https://paste.debian.net/hidden/d8343143/
-
--- 
-Kees Cook
+>  include/uapi/linux/swab.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
+> index 0723a9cce747..01717181339e 100644
+> --- a/include/uapi/linux/swab.h
+> +++ b/include/uapi/linux/swab.h
+> @@ -3,7 +3,7 @@
+>  #define _UAPI_LINUX_SWAB_H
+>  
+>  #include <linux/types.h>
+> -#include <linux/compiler.h>
+> +#include <linux/stddef.h>
+>  #include <asm/bitsperlong.h>
+>  #include <asm/swab.h>
+>  
+> -- 
+> 2.25.1
+> 
+> 
