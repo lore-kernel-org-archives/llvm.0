@@ -1,152 +1,158 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4CBA51
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 09:02:21 +0000 (UTC)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-131a7bce1acso1066093fac.7
-        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 02:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=UD/bWW+0wk4E9lEqOO5K0o6p06TOy6G7+0fEDj4qYW0=;
-        b=qjE+g0WJ+O6OJPoUPIflSlEuB+MqVoceg7Ja+WcNRQUk7OHgS0AbOuQcpF/sNhWH3B
-         Lgnj8+2dA7AETcw1J1bB9rR58nnABnh6jaM2aq6/EksGdoiG9822CkeDcLGPipE3kSO7
-         YpSANJuKK3XWKV70xh8YlvQb1ZvH/q3iYKPxgyJfI5MOLvlMyNhODmVqTiwDpC82S1A1
-         AbU7uGYML+/gAh0oRf3aqAPUx6BI0qneafHJtGwj1IA8/WBapms3qsXHg9kL6XcL/MKG
-         4V3B7qNJ2l/f6XuK0tFjdHVx0UuKa1CIREe4XWyuZj9utwnljVvsWK2l6GCVsO4UdJF+
-         ByFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=UD/bWW+0wk4E9lEqOO5K0o6p06TOy6G7+0fEDj4qYW0=;
-        b=n4MPeRFuA6F858g2c/6AO5ZByWIaCpqp+FHeLZuI/7+6od1k1eDVboHOsZeTBt6KZe
-         k3ESzSCDnNRt3fowYx/HVnN2rzxJwBIsh7mRUYAvl7rpmmHQpK9+Ep/CNN4EEcZ48iC8
-         WsYJZlysRuaQaCWo4YxmsPU+1A5Avr5e0aMx/SVleXvpL56KVl4mBXOGpR0N/nrYoQWX
-         kjHNcMp/X56qA/45K/671pSnek5Pz+apmX0SaGgG3OBgUu4vCmTRZYuXiKRGkbSbk5cz
-         U6siQgcXEXuSPBOqhvcRdy/a6nW2p+bjm+H5EWvSuxB+F7NsnERTHknRv3Fqs33pCA7H
-         foZA==
-X-Gm-Message-State: ACrzQf0KWd3LjLK8jguPhSPlDM6xcoK+eNe70t37Swp+p0xAUpsSVhtR
-	UE2rFW449SntvSrYH8t7L3mZ3nz5XDMJYWqmlDM=
-X-Google-Smtp-Source: AMsMyM5ujk+Oc81+S+ewdw/Ez4+jZI0RZxdZDv4LAzGgfXYpMXmjOK0UXxMKyUnobDtlYUDZAdDMBEgl68vhlfn3Rgk=
-X-Received: by 2002:a05:6870:461a:b0:12a:e54e:c8a2 with SMTP id
- z26-20020a056870461a00b0012ae54ec8a2mr4780900oao.252.1664355740443; Wed, 28
- Sep 2022 02:02:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6A3EA2
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 09:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664357498;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yb7qcICDQ9Lo0UaTY8rgSiAxzkp1NFMhXZlwjp8R6lA=;
+	b=ScJu29PQZ10HRW6r1sOLpdG4ZjMrw1wjOJqKPxXvIUnQvW7CULsYsTF75wv5XG4C3jb4Ci
+	XVKlBIw1bQv1DM8C4HxewT1cYAho1VH2G+IsCT3GeDaBv4WJASNzkcVLQmvREckDPDAH+d
+	r+SZS/XI4QNZ/D8OOTb96TPvf/bkSjE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-n3E7oGC_P5mP81vAi7BU7Q-1; Wed, 28 Sep 2022 05:31:36 -0400
+X-MC-Unique: n3E7oGC_P5mP81vAi7BU7Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A910B185A7AB
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 09:31:36 +0000 (UTC)
+Received: from [172.64.5.45] (unknown [10.30.33.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9487440CA40C;
+	Wed, 28 Sep 2022 09:31:36 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
+ mainline.kernel.org-clang, 46452d37)
+Date: Wed, 28 Sep 2022 09:31:36 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220908215504.3686827-1-samitolvanen@google.com> <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
-In-Reply-To: <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Wed, 28 Sep 2022 11:01:44 +0200
-Message-ID: <CA+icZUUjy7HFQVZ0iUDmGxfazobow1iwcagWX_Opht-7F+BRrg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/22] KCFI support
-To: Kees Cook <keescook@chromium.org>
-Cc: samitolvanen@google.com, peterz@infradead.org, ndesaulniers@google.com, 
-	linux-arm-kernel@lists.infradead.org, will@kernel.org, 
-	joao@overdrivepizza.com, nathan@kernel.org, llvm@lists.linux.dev, 
-	mark.rutland@arm.com, linux-hardening@vger.kernel.org, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, catalin.marinas@arm.com, rostedt@goodmis.org, 
-	x86@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <50347.122092805313601114@us-mta-520.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 26, 2022 at 7:21 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, 8 Sep 2022 14:54:42 -0700, Sami Tolvanen wrote:
-> > KCFI is a forward-edge control-flow integrity scheme in the upcoming
-> > Clang 16 release, which is more suitable for kernel use than the
-> > existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
-> > LTO, doesn't alter function references to point to a jump table, and
-> > won't break function address equality.
-> >
-> > This series replaces the current arm64 CFI implementation with KCFI
-> > and adds support for x86_64.
-> >
-> > [...]
->
-> I assume that Peter's Ack means I should carry the tree, so, to that end:
->
-> Applied to for-next/kcfi, thanks!
->
+Hi, we tested your kernel and here are the results:
 
-Hi,
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-I did regularly KCFI testing.
 
-1. Used Sami's samitolvanen.github#linux/kcfi Git on the Linux side.
+Kernel information:
+    Commit message: Merge tag 'sound-6.0-rc8' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/tiwai/sound
 
-2. Used *not* LLVM-16 (including KCFI) but with LLVM-15 from
-samitolvanen.github#llvm-project/15.x/kcfi Git on the toolchain side.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54409
 
-My last testing was with [1] (Linux v6.0-rc7 + KCFI) and [2] (LLVM
-v15.0.1 + KCFI) plus drm-i915-gt/KCFI for Linux v6.0-rc7 patch from
-Nathan (see [3]).
-Thanks Sami for updating 15.x/kcfi on LLVM side on my request.
+One or more kernel tests failed:
 
-So, feel free to add my:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5277798
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5279000
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5279007
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5279048
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5279053
 
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-15 (with KCFI
-support) on x86-64
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                   s390x - Storage - swraid simple_reshape
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-Thanks to all involved people!
 
-Best regards,
--Sedat-
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-[1] https://github.com/samitolvanen/linux/commits/kcfi
-[2] https://github.com/samitolvanen/llvm-project/commits/15.x/kcfi
-[3] https://github.com/ClangBuiltLinux/linux/issues/1716#issuecomment-1257311327
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-> [01/22] treewide: Filter out CC_FLAGS_CFI
->         https://git.kernel.org/kees/c/f143ff397a3f
-> [02/22] scripts/kallsyms: Ignore __kcfi_typeid_
->         https://git.kernel.org/kees/c/d0f9562ee43a
-> [03/22] cfi: Remove CONFIG_CFI_CLANG_SHADOW
->         https://git.kernel.org/kees/c/9fca7115827b
-> [04/22] cfi: Drop __CFI_ADDRESSABLE
->         https://git.kernel.org/kees/c/92efda8eb152
-> [05/22] cfi: Switch to -fsanitize=kcfi
->         https://git.kernel.org/kees/c/89245600941e
-> [06/22] cfi: Add type helper macros
->         https://git.kernel.org/kees/c/e84e008e7b02
-> [07/22] lkdtm: Emit an indirect call for CFI tests
->         https://git.kernel.org/kees/c/cf90d0383560
-> [08/22] psci: Fix the function type for psci_initcall_t
->         https://git.kernel.org/kees/c/44f665b69c67
-> [09/22] arm64: Add types to indirect called assembly functions
->         https://git.kernel.org/kees/c/c50d32859e70
-> [10/22] arm64: Add CFI error handling
->         https://git.kernel.org/kees/c/b26e484b8bb3
-> [11/22] arm64: Drop unneeded __nocfi attributes
->         https://git.kernel.org/kees/c/5f20997c194e
-> [12/22] init: Drop __nocfi from __init
->         https://git.kernel.org/kees/c/5dbbb3eaa2a7
-> [13/22] treewide: Drop function_nocfi
->         https://git.kernel.org/kees/c/607289a7cd7a
-> [14/22] treewide: Drop WARN_ON_FUNCTION_MISMATCH
->         https://git.kernel.org/kees/c/4b24356312fb
-> [15/22] treewide: Drop __cficanonical
->         https://git.kernel.org/kees/c/5659b598b4dc
-> [16/22] objtool: Preserve special st_shndx indexes in elf_update_symbol
->         https://git.kernel.org/kees/c/5141d3a06b2d
-> [17/22] objtool: Disable CFI warnings
->         https://git.kernel.org/kees/c/3c68a92d17ad
-> [18/22] kallsyms: Drop CONFIG_CFI_CLANG workarounds
->         https://git.kernel.org/kees/c/dfb352ab1162
-> [19/22] x86/tools/relocs: Ignore __kcfi_typeid_ relocations
->         https://git.kernel.org/kees/c/ca7e10bff196
-> [20/22] x86: Add types to indirectly called assembly functions
->         https://git.kernel.org/kees/c/ccace936eec7
-> [21/22] x86/purgatory: Disable CFI
->         https://git.kernel.org/kees/c/a4b7a12c5594
-> [22/22] x86: Add support for CONFIG_CFI_CLANG
->         https://git.kernel.org/kees/c/3c516f89e17e
->
-> --
-> Kees Cook
->
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
