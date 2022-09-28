@@ -1,127 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F027E
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 22:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F51C433C1;
-	Wed, 28 Sep 2022 22:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664404565;
-	bh=3ZkYJjVGuAToHzBzl/eiZQGP9nl9Lz8aoqrcQ6zQ2uM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qtKvpq/MUwe5t3E4qnfpcWmZ+pcS4X4n2SsF/DqlSmrRrDWMnk/FLftXgyTKLbd3m
-	 vf5onz4ySjHSRPWg90lJAptiotaelTd1i/CYikPGvR6S3fjnLg44rhwRDmZhL8vWft
-	 8fgBaB/JZ0fJBXAIQAphj/RKrXXvh8tAme/Te94gYrUrSm+2/10sIdAi1sGA/GoFb+
-	 w+E0XnEn4LevLs1JvLEaqDFEflvwhWNXQTRpQn++dtp5R3F4x8n3l6DyEkl79MWEOr
-	 fcM/sZ3XXaO2EUoP/Kkt8FDn9nNMAUDD7J0uENSVy0/jAtD0M4sYt0aC3VwCNTKLHB
-	 y8OuB2Bu+VdNw==
-Date: Wed, 28 Sep 2022 15:36:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Matt Redfearn <matt.redfearn@mips.com>,
-	Petr =?utf-8?B?VmFuxJtr?= <arkamar@atlas.cz>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Justin Stitt <jstitt007@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Denys Vlasenko <dvlasenk@redhat.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	"open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
-	mmayer@broadcom.com, Khem Raj <raj.khem@gmail.com>,
-	Philippe Ombredanne <pombredanne@nexb.com>,
-	Kate Stewart <kstewart@linuxfoundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] include/uapi/linux/swab: Fix potentially missing
- __always_inline
-Message-ID: <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
-References: <20220927215256.528619-1-f.fainelli@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B5C7E
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 22:39:46 +0000 (UTC)
+Received: by mail-pl1-f182.google.com with SMTP id w10so12899869pll.11
+        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 15:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=U0PyleBjz1Jd5oWUVZio6RUWGLxtohOKB6h6C5whrdY=;
+        b=FjIbeX43tiptrH0Dr3dc75iC1tt7oXAfXIstBI80FnGmWp1ORJkehJGzSTT6SOxgPs
+         CfYlydYWcZyc/xSBKkXbOHqcjFerz2d783+2qukPaMYgkcPnb+wvGwpdZQrb90U9kS2I
+         WzOEc6JqdYgpwU8FKblT+Q+blxem0o1hERn/F8xRO2C710/10GHeoRDY6uNiwRxgTnIh
+         sZP3vNDBASkXEwI5HuHSYj2XEiwHZHRxm8WNKmxYVOCc7QzYxML2V72eswabils1EJmI
+         t2/P7ueyUd6TP+jRualGT07tRB34UL2IuW+XsGz+oN4RDS1aemZ2D3s3aqQLf0PHEPru
+         85Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=U0PyleBjz1Jd5oWUVZio6RUWGLxtohOKB6h6C5whrdY=;
+        b=Fl2Z69u1j2FtQLDPRT28lupjVDkulZ1oSgvnccnoAFP82kbzdut5OgLHmaNJDn189w
+         0KiHaXX/uGOc7FREBOYmpXZShGeCvOz0J+dZi63HtP0AZ0zI2z9QyjyBO1NNVxMe02Ms
+         3tPVVK+vcaYeRNPQrjpj67n3ibrYBS3KGCp27peabEBbuPn8DoDq/imzKrcJA+GIFhDK
+         A1cAH+hEafGV+ERn41Nw3W4qIPxCLNYI7yqzHRs80t132J+0264k36IPewWmx51q05tY
+         zUA85pGXNWm0KpDQRV5Oxbd7vbSWqDOZftbU5H+vPNXziaUNtKPRoUEREk5wl59ZZhrp
+         DYTQ==
+X-Gm-Message-State: ACrzQf1kUgQ5Yweehwbxf10iOAPFiNRIOeNt1mdlpN07NwkbptbTTi0Z
+	40bQm7nNB6bmJQIKKXfxB8k1sXnOzjHa08Rrq2EVmx611RjygQ==
+X-Google-Smtp-Source: AMsMyM7gHI9qtd1dV4zaGyG2/uPfo5up9SPUScYgtXtVVoRNHXTPbWq8WE3JF3JPg/eFwHgasgE2WloIEikMQ2kc6tY=
+X-Received: by 2002:a17:90b:1d0f:b0:202:be3e:a14a with SMTP id
+ on15-20020a17090b1d0f00b00202be3ea14amr12812214pjb.102.1664404785758; Wed, 28
+ Sep 2022 15:39:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927215256.528619-1-f.fainelli@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 28 Sep 2022 15:39:34 -0700
+Message-ID: <CAKwvOd=vyPExviYodAR91HO-V64NU8-7jW=KP3C7C7AA8=LjYQ@mail.gmail.com>
+Subject: DFSAN & linux
+To: "Moreira, Joao" <joao.moreira@intel.com>
+Cc: "Koschel, J. (Jakob)" <j.koschel@vu.nl>, clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Florian,
-
-On Tue, Sep 27, 2022 at 02:52:56PM -0700, Florian Fainelli wrote:
-> From: Matt Redfearn <matt.redfearn@mips.com>
-> 
-> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
-> of some byteswap operations") added __always_inline to swab functions
-> and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
-> userspace headers") added a definition of __always_inline for use in
-> exported headers when the kernel's compiler.h is not available.
-> 
-> However, since swab.h does not include stddef.h, if the header soup does
-> not indirectly include it, the definition of __always_inline is missing,
-> resulting in a compilation failure, which was observed compiling the
-> perf tool using exported headers containing this commit:
-> 
-> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
->                  from /usr/include/asm/byteorder.h:14,
->                  from tools/include/uapi/linux/perf_event.h:20,
->                  from perf.h:8,
->                  from builtin-bench.c:18:
-> /usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
->  static __always_inline __u16 __swab16p(const __u16 *p)
-> 
-> Fix this by replacing the inclusion of linux/compiler.h with
-> linux/stddef.h to ensure that we pick up that definition if required,
-> without relying on it's indirect inclusion. compiler.h is then included
-> indirectly, via stddef.h.
-> 
-> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
-> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
-> Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-I took this through my kernel build matrix and did not see any new
-issues.
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Cheers,
-Nathan
-
-> ---
-> Apologies for the insanely long CC list. I encountered this problem
-> again while attempting to build perf with a LLVM 13 toolchain using
-> musl-libc. Not sure why it did not get picked up last time?
-> 
-> Khem did submit an alternative patch a few years ago, too which also did
-> not get picked up:
-> 
-> https://lore.kernel.org/lkml/20180913005654.39976-1-raj.khem@gmail.com/
-> 
->  include/uapi/linux/swab.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
-> index 0723a9cce747..01717181339e 100644
-> --- a/include/uapi/linux/swab.h
-> +++ b/include/uapi/linux/swab.h
-> @@ -3,7 +3,7 @@
->  #define _UAPI_LINUX_SWAB_H
->  
->  #include <linux/types.h>
-> -#include <linux/compiler.h>
-> +#include <linux/stddef.h>
->  #include <asm/bitsperlong.h>
->  #include <asm/swab.h>
->  
-> -- 
-> 2.25.1
-> 
-> 
+Hi Joao,
+Here's a link to that talk from plumbers I mentioned yesterday.
+https://youtu.be/KkOdMwZRpYY?t=2771
+https://lpc.events/event/16/contributions/1211/attachments/979/1981/LPC2022_slides_Jakob_Koschel.pdf
+Check it out!
+-- 
+Thanks,
+~Nick Desaulniers
