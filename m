@@ -1,158 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from esa1.hc353-39.eu.iphmx.com (esa1.hc353-39.eu.iphmx.com [207.54.70.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6A3EA2
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 09:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664357498;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yb7qcICDQ9Lo0UaTY8rgSiAxzkp1NFMhXZlwjp8R6lA=;
-	b=ScJu29PQZ10HRW6r1sOLpdG4ZjMrw1wjOJqKPxXvIUnQvW7CULsYsTF75wv5XG4C3jb4Ci
-	XVKlBIw1bQv1DM8C4HxewT1cYAho1VH2G+IsCT3GeDaBv4WJASNzkcVLQmvREckDPDAH+d
-	r+SZS/XI4QNZ/D8OOTb96TPvf/bkSjE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-n3E7oGC_P5mP81vAi7BU7Q-1; Wed, 28 Sep 2022 05:31:36 -0400
-X-MC-Unique: n3E7oGC_P5mP81vAi7BU7Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A910B185A7AB
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 09:31:36 +0000 (UTC)
-Received: from [172.64.5.45] (unknown [10.30.33.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9487440CA40C;
-	Wed, 28 Sep 2022 09:31:36 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
- mainline.kernel.org-clang, 46452d37)
-Date: Wed, 28 Sep 2022 09:31:36 -0000
-CC: bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC92EA2
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 10:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=sequans.com; i=@sequans.com; l=2276; q=dns/txt;
+  s=corp; t=1664359482; x=1695895482;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bpdRzLVCWWYk4BBy803hxX2xqiCJilbJdeh5X6y/oLg=;
+  b=YMcY4EGCGc/xIcJnfw4tBER+4TPOmErb8iMhH2FSrTrCjznU/y/o5TPq
+   v1Je8dJGqcikrFnXvfmw+KZxRFTYtDfG2ZjROj6wWKo4xq1/J4FiMpuNK
+   83+BlODhLg/aAlFUvERLwlTwJI2XSaXQGX/95xJtNbEXAOIi9VwGUhaHl
+   I=;
+X-IPAS-Result: =?us-ascii?q?A2GrAABkGzRjf5bSIB9aGwEBAQEBAQEBBQEBARIBAQEDA?=
+ =?us-ascii?q?wEBAUCBT4lMkReEJ5cWg1ILAQEBAQEBAQEBCUIEhQcChG0nOBMBAgQBAQEBA?=
+ =?us-ascii?q?wIDAQEBAQEBAwEBAQUBAQEBAQEGAgEBAQECEAEBPEqFL0aCNSkBg20BAQEDI?=
+ =?us-ascii?q?xVBEAsYAgIfBwICVwYBDAgBAXCCCYMhoGsBixqBMoEBiB2BZYERLIwBhChDg?=
+ =?us-ascii?q?UlEgTyDAz6IGoJmBJk5JgQOAxkrHUECAQtyAxUDFAMFJAcDGQ8jDQ0EFgcMA?=
+ =?us-ascii?q?wMFJQMCAhsHAgIDAgYTBQICTTYIBAgEKyQPBQIHLwUELwIeBAUGEQgCFgIGB?=
+ =?us-ascii?q?AQEBBUCEAgCCCYXBxMYGxkBBVkQCSEcCgQaDQUGEwMgbwUKOg8oMWsrHRsKg?=
+ =?us-ascii?q?QwqKBUDBAQDAgYTAwMiAhAqMRQEKRMSLQcrcwkCAyJnBQMDBCgsAwkhHwcoJ?=
+ =?us-ascii?q?jwHWDsEAwIQIj0GAwkDAiJadQI3ExUFAw0ZJggFIxcdBAg8AgUGVxMCChIDE?=
+ =?us-ascii?q?w8GLpsKBiBcVqRxn0ODZ6AjBhMug3aSfQgwkVotlmAgoWGFODCBPzmBf00jg?=
+ =?us-ascii?q?zhQGQ+OV44bgS4CBgsBAQMJiBGCNwEB?=
+IronPort-PHdr: A9a23:h7aePhedNtgcCcseSSmCoJAQlGM+MNnLVj580XLHo4xHfqnrxZn+J
+ kuXvawr0AWSG96Hu7ke0KL/iOPJYSQ4+5GPsXQPItRndiQuroEopTEmG9OPEkbhLfTnPGQQF
+ cVGU0J5rTngaRAGUMnxaEfPrXKs8DUcBgvwNRZvJuTyB4Xek9m72/q99pHNbQhEnjSwbLxxI
+ Rm5swncuNQdjJd/JKo21hbHuGZDdf5MxWNvK1KTnhL86dm18ZV+7SleuO8v+tBZX6nicKs2U
+ bJXDDI9M2Ao/8LrrgXMTRGO5nQHTGoblAdDDhXf4xH7WpfxtTb6tvZ41SKHM8D6Uaw4VDK/5
+ KpwVhTmlDkIOCI48GHPi8x/kqRboA66pxdix4LYeZyZOOZicq/Ye94RWGhPUdtLVyFZAY2yY
+ YQAAOQcM+hGsYT9qVsAohmiCgejH+7v1j1Fi2Xq0aEm3eksEwfL1xEgEdIUt3TUqc34O6gIX
+ uCx0qbIyynDb/JQ2Tzg7YbIdQohru+KXb1rdcrRyFUvHB7Cg1WOqozlOCmV2foLs2eA6+pgV
+ P6vhnU8qw5vuziv290jio/Sho4P1l/E8iB5zZ8zKNalR0F1fcSqH4FMtyGGKYR2WMUiTnlnt
+ ion17EKpZq2cTYKxpko2hPSaeCKf5SH7x/sV+ucPSp0iXZldr+/hhu+71Wsx+3/W8Wq01tHs
+ ypIn9fCuH0J0RHY98uJSuNl80qvxDqDzQ7e5v9eLUwqiKbXN4QtzqMwm5YPt0nIAzX4l1/sj
+ KCMc0Up4u2o6+P6bbr4vpKcLIp0ih3mMqQph8y/Hfw0MggQUGif/uSxzLzi/Uz8QLpRlP05i
+ LPVsIvEKsQCu662GQlV0p055xmjCDem1cwUnXgBLF1bZBKKl4bkN0zULP32E/uzmUqgnCp3y
+ /zcI7HsAonBImDGkLj7fLZ970BcyBA0zdBa/59UFLIBIPXpWkDvstzXFRs5Mw2ow+v8E9Vyy
+ JoeWX+VDa+fK6Peq0OH5uUqI+WUYo8aoy7yK+I56P72kX85hVgdcLGo0JcPcnC3AuxmI1mFY
+ XrrmtoOC30KvgwjQ+HxklKCSzhTaGupUK4m+z40FpqqDZ3fSYC1nLyBwCC7E4VTZmBHE1CMD
+ Gnnd4GeV/cWci2TIslhnSYAVbW6UIAh0hautBP+y7pmKOrY4DEXtZXm1NRt/e3ciQky9SBoD
+ 8Say2yNS2J0nnsTSj832qB/vVJyylOZ3adkhPxYEMRf5+lVXQciKZ7c0+t6BsjxWg3aY9eJS
+ VKmTci/DT4rStIxx8QDY0J8G9W5khDDxDCmD6MIm7CRA5w06K3c02DrJ8lh03bGyLUhj14+T
+ 8tLMW2mmKt/+hPXB47IiEWZi72qeb4Y3C7M8meD0GWPsFtFXwFuT6XJRWofaVfOrdTl+kPCS
+ KejCbAmMgtH1M6DJbJGat73glVcQvfsJtDebnmvm2e/GxmI3KmAbIn0dGUH2iXSFkwEnxoU/
+ XacOghtThum9kvECjAmP1/1bEbl9+82/HqhSEMcxhuMY0cn27fjvlYwhOWBRvdb5LsVvi4l4
+ 2FxHU+g0taQEdORoQNlVK9bZs854VEB3mXc4V9TJJulep5rglMYbwVx92DpzRhxAIFBjYB+s
+ nAt1gd0I6aZzHtaeiqF1JbrfLbQLz+hr1iUd6fK1wSGg56t8aAV5aF98g271Dw=
+IronPort-Data: A9a23:7EKNHqhh763KIxWLi7Mvm26gX1615hAKZh0ujC45NGQN5FlHY01je
+ htvXmqBP/jfNDejKItwaty3oBsGv8DQnd5hTAo4ri9gQnsW8JqUDtmwEB7MMnLJJKUvbq7GA
+ +Y2OoKQfJ5sHhcwgj/3b9ANeFEljfngqpzUVracYkidYic7FHx+4f5bs7dlxNQu2bBVOivV0
+ fvqucrTJVS57DB9N2MQ+sqrpQhm+f//o1v0hHRnDRxwlAKYxiJ94K43f/nrdSOpGNkMR4ZWe
+ s6apF2H1jKBl/sSIo79+lrLWhViaqLfOwGIlk1XV8CK6vSVjnVvukqTHKN0hXZ/011lrfgoo
+ Dl+ncXYpTMSA0H5sL11vy9wTX4nZf0WpuOvzU+X6KR/x2WeG5fl668+XBluVWES0r8f7Wpmr
+ JT0JBhSNEjb7w4fLX3SpuRE36wewMfX0Iw3gCxn5i+EV/0acb/7frX32tJAzDozr5UbdRreT
+ 5JxhTtHfhXFaQdGfEwaEY83mvzujX76G9FagAnM4/FtpTKKlEoojeCF3Nn9I7RmQe1LnUGCq
+ 2TM+2XlKgoXLcGWzyHD+XWp7gPKtX+nCNxKSePQGvhCggTN1GgtEzYqaVaSq6e5lkKRd8JmJ
+ BlBksYphfJorRbwJjXnZDWxuniIlhcGXdZaVeE3gCmIy7PJ7gLfHGEVSDdFQNYhs9MyRDps3
+ ViM9/vtBiRHsbuJRHbb/bCRxRuxMzUUKWNHbCsAZQ8E+MX45tlqyBXVQb5LFKqri/XxGCrs2
+ HaOrS4jl/MfgNBj/6G6+03XxjGhvJ7ESiYr6QjNGGGo9AV0YMiifYPA1LTAxeRBKYyDRx+as
+ WEZks6FqusJCPlhiRBhXs03QbaC+avfOwHsrmZSD6Qe+iy99n2KKNU4DC5FGKt5DioVUWa3P
+ hOI4lsOvcA70GiCMf8nMt/tYyg+5fK6SIu5PhzBRoMWCqWdYjNr6wlAXyZ8NUjGl1U2m6whP
+ paWGSpHJSdAVfw/pNZab0z71bJuyi1763naQ5v2pylLMIZyh1bMGN/pyHPUMogEAFqs+W05C
+ ep3OcqQ0Al4W+bjeCTR+oN7BQlUcyRgXcuq8JYHJr/rzu9a9IcJVq65LVQJJdQNokipvr6Rl
+ p1AchAAmQGi3SGvxfuiMyo5OOiHsWlDQYITZ3Z1Zw3AN4kLa4Gy/agCeoB/YbQj+edkyJZJo
+ wotJa297gB0Ym2eo1wggWzV9tMKmOKD2V3TZEJIoVEXI/ZdeuA+0oW8JVO1pXFXUHbfWAlXi
+ +TI6z43iKErH2xKZPs6otr2p79tlRDxQN5PYnY=
+IronPort-HdrOrdr: A9a23:ac9xlal+j2k33CAVVCVNDy9AJdHpDfIR3DAbv31ZSRFFG/FwWf
+ re+MjzpiWE6gr5P0tQ4uxoWZPwOU80mqQa3WB8B8bFYOCighrQEGgA1+rfKl/bdBEWn9Q1vc
+ wMH5SWSueAamSS5vyKgzVQfexQpeVvvJrJuQ4A9R1QcT0=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.93,351,1654552800"; 
+   d="scan'208";a="4486056"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+X-Virus-Scanned: amavisd-new at sequans.com
+Message-ID: <a20dc3ff-58e3-2fe2-f531-a2f55db35d4d@sequans.com>
+Date: Wed, 28 Sep 2022 12:04:38 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <50347.122092805313601114@us-mta-520.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Language: en-US
+To: Arnd Bergmann <arnd@arndb.de>, Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+ <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+ <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+ <20220921164720.6bbc56d5@xps-13>
+ <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+ <20220921183807.241e2518@xps-13>
+ <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+ <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+ <20220922113613.4d7273c8@xps-13>
+ <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
+ <da19f271-6ad6-7158-2ebe-e54fa5c91f6b@sequans.com>
+ <e0a3bc54-a1be-4e10-afcb-bee1888c4066@www.fastmail.com>
+ <6fe0fecc-0636-67be-c5c9-ebd5aacc3f0e@sequans.com>
+ <16c470b0-0a69-4182-9676-2367a7fd831d@www.fastmail.com>
+From: Valentin Korenblit <vkorenblit@sequans.com>
+In-Reply-To: <16c470b0-0a69-4182-9676-2367a7fd831d@www.fastmail.com>
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'sound-6.0-rc8' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/tiwai/sound
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54409
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5277798
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5279000
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5279007
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5279048
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5279053
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
-Objects remaining in bio-152 on __kmem_cache_shutdown()
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1255
-            Affected tests:
-                   s390x - Storage - swraid simple_reshape
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Ck9uIDkvMjgvMjIgMTA6NTYsIEFybmQgQmVyZ21hbm4gd3JvdGU6Cj4gT24gV2VkLCBTZXAgMjgs
+IDIwMjIsIGF0IDEwOjQxIEFNLCBWYWxlbnRpbiBLb3JlbmJsaXQgd3JvdGU6Cj4+IE9uIDkvMjcv
+MjIgMjI6MDIsIEFybmQgQmVyZ21hbm4gd3JvdGU6Cj4+PiBPbiBUdWUsIFNlcCAyNywgMjAyMiwg
+YXQgNDo1NiBQTSwgVmFsZW50aW4gS29yZW5ibGl0IHdyb3RlOgo+Pj4+Pj4gQnV0IGluIHRoZSBt
+ZWFuIHRpbWUgSSBhbSBvbmx5IGhhbGYgc2F0aXNmaWVkLCBiZWNhdXNlIHdlIHBsYW4gdG8gZG8K
+Pj4+Pj4+IHR3aWNlIG1vcmUgYWNjZXNzZXMgdGhhbiBuZWVkZWQgX2p1c3RfIGJlY2F1c2Ugb2Yg
+YSB0aGUgQ09NUElMRV9URVNUCj4+Pj4+PiBjb25zdHJhaW50Lgo+Pj4gSXQncyBhbHNvIHBvc3Np
+YmxlIHlvdSBoYXZlIHRvIHJlYWQgZnJvbSB0aGUgc2Vjb25kIHdvcmQgZmlyc3QsCj4+PiBsaWtl
+Cj4+Pgo+Pj4gICAgIHUzMiAqYnVmOwo+Pj4gICAgIGRvIHsKPj4+ICAgICAgICBidWZbMV0gPSBf
+X3Jhd19yZWFkbChyZWcgKyA0KTsKPj4+ICAgICAgICBidWZbMF0gPSBfX3Jhd19yZWFkbChyZWcp
+Owo+Pj4gICAgICAgIGJ1ZiArPSAyOwo+Pj4gICAgIH0gIHdoaWxlIChidWYgPCBlbmQpOwo+PiBT
+YW1lIHJlc3VsdCB3aXRoIHBhaXJzIG9mIHJlYWRsIGF0IE9GRjAgYW5kIHdoZW4gcmVhZGluZyBh
+dCBPRkYxIGZpcnN0IHRvbywKPj4gSSBzdGlsbCBzZWUgc2RtYV9lcnIuIEkndmUganVzdCBvcGVu
+ZWQgYSBjYXNlIHRvIENhZGVuY2UgdG8gc2VlIGlmIHRoZXJlCj4+IGlzIGFueSB3b3JrYXJvdW5k
+IGZvciB0aGlzIG9yIGlmIGl0IGlzIGp1c3Qgbm90IHBvc3NpYmxlLgo+IEkgdGhpbmsgdGhpcyBq
+dXN0IG1lYW5zIHRoYXQgdGhlIGFjY2VzcyBoYXMgdG8gYmUgZG9uZSB3aXRoIHRoZSBleGFjdAo+
+IHdpZHRoIHRoYXQgaXMgY29uZmlndXJlZCwgYW5kIHlvdSBjYW5ub3QgaW1wbGVtZW50IHRoZSBh
+Y2Nlc3Mgb24KPiAzMi1iaXQgYXJjaGl0ZWN0dXJlcy4gVGhlIG9ubHkgcG9zc2liaWxpdHkgaXMg
+dGhhdCB5b3UgY2FuIHJlY29uZmlndXJlCj4gdGhlIG5hbmQgY29udHJvbGxlciB0byAzMi1iaXQg
+bW9kZSBhdCBydW50aW1lLCB3aGljaCBpcyB3aGF0IENhZGVuY2UKPiBzaG91bGQgYmUgYWJsZSB0
+byB0ZWxsIHlvdS4KPgo+ICAgICAgQXJuZAoKSSd2ZSBqdXN0IGNvbmZpcm1lZCB0aGF0IHdlIGNh
+bm5vdCBjaGFuZ2Ugc2RtYSB3aWR0aCBpbiBydW50aW1lIGFuZAp0aGF0IHNkbWEgZXhwZWN0cyB0
+byBiZSBhZGRyZXNzZWQgaW4gYnVyc3Qgd2lkdGgsIHdoaWNoIGlzIHRoZSBidXMKd2lkdGggKDY0
+LWJpdCkuCgpWYWxlbnRpbgoKLS0gSU1QT1JUQU5UIE5PVElDRToKCgoKVGhlIGNvbnRlbnRzIG9m
+IHRoaXMgZW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBhcmUgY29uZmlkZW50aWFsIGFuZCBtYXkg
+YWxzbyBiZSBwcml2aWxlZ2VkLiBJZiB5b3UgYXJlIG5vdCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50
+LCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgaW1tZWRpYXRlbHkgYW5kIGRvIG5vdCBkaXNjbG9z
+ZSB0aGUgY29udGVudHMgdG8gYW55IG90aGVyIHBlcnNvbiwgdXNlIGl0IGZvciBhbnkgcHVycG9z
+ZSwgb3Igc3RvcmUgb3IgY29weSB0aGUgaW5mb3JtYXRpb24gaW4gYW55IG1lZGl1bS4KCgoKVGhh
+bmsgeW91Lgo=
 
