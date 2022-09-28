@@ -1,182 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746BCA51
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664355102;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4RGe4SSzQFqqcKkfiZEX3SSpWUyb70RSL2DB9epHE1U=;
-	b=R3ZYc0yExCXawrbs99CYlgYP5sdCu5ag8dxCvqDEB11+q+UKzyHFpm3vb4BCrT9zH8/CRT
-	nLRzzCRsDL6gZHYH6FvoTpT69ZTM3oOCPuXzBnF18Cxoo/mzTMHK2FU4DFUcFyoyVD3/Yy
-	Xp8dMhzy6iRYaKPcyGMaB1f5muUw55c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-TnlaH_2VPYuYsX47pwH-0g-1; Wed, 28 Sep 2022 04:51:40 -0400
-X-MC-Unique: TnlaH_2VPYuYsX47pwH-0g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DC01101E14E
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:51:40 +0000 (UTC)
-Received: from [172.64.5.45] (unknown [10.30.33.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 763B4477F55;
-	Wed, 28 Sep 2022 08:51:40 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
- mainline.kernel.org-clang, 49c13ed0)
-Date: Wed, 28 Sep 2022 08:51:40 -0000
-CC: bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB52A51
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:57:26 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 95CD25804D1;
+	Wed, 28 Sep 2022 04:57:25 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 28 Sep 2022 04:57:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1664355445; x=1664359045; bh=vqR5+C+Tzk
+	aoeHdqD765eNkb3ETfrMpccjTI4Cwg6kc=; b=mB6doVpcuceD/WYjeftxIZqcRG
+	xbp3ZVGh1r06xbK8sFBXNTc1Xa0HhNMUoQmIBnDcFQCwmBYVP0BTtYhyw6MtmvZK
+	DFkZcJEgOFDO83cm/mtbOHBemJTkDGHBiOQ/4a1D1GNM7vi7cfO+T7DD3DKgehyB
+	dgpi98xzgSXGGWWVMiXb/k01mfs6uJ8KvVi28pBsAYaASxPoZFQ03ogxKFcECK/U
+	16MXzS3ZdMDQtSG/Y6ppeMy/4wBxyPrssLGj0AzkUVAEPAQc4R0qPPvpltJMCKhY
+	PffeHzK3mkBkYZ6Q8xZlDT+aAps1/hIZPMX+0Vyx/vo/s+rWGKFGJ5tJNo/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1664355445; x=1664359045; bh=vqR5+C+TzkaoeHdqD765eNkb3ETf
+	rMpccjTI4Cwg6kc=; b=XgRyCA68Ja0Rm87PxBmA9CqavmhjUokdaqcinu1bqMZ/
+	pQy13rSSqOOSwybx7x5p8j3GIlKCiwLVtcyQ7JNhmlvCCXWWIFmY11EBgXwv5Ixv
+	ZKBCACcAJoz3BUuKjnvKlGMq4qz580/GM0QqMKBqDyFizcssgT7MJETr9mlN4a0o
+	7tsKvvblC5oB2rRurYYfPG6OMF7snj7+GBCldHC3Xvql2xjqiZJMJ1VHiBjZcubs
+	MXyyX203suS2qeKljR6DSSusMTKygq19ADgdcFbU82vO3oakbSSeMP1H8qF6jCrB
+	9wVBOhPwmGg3EKAYY+jL7O3s31F6j7A4LtA4H+hnAA==
+X-ME-Sender: <xms:dQw0YyVm-RI7dDf6k2feIGVLucL8cIp6qRGzVuaU-mr2fQG379g4Iw>
+    <xme:dQw0Y-nXB67D8_sPoUu8o6dGsK0OUWfkjdvhmqWSNbR6LdyKYoXMmWhIdEAF0plWa
+    5kU4sK2CfMxyKIpBls>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegkedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:dQw0Y2acfjUTsr_FzbXBKng-XX0knC8B_fwbn44qH1nL9E8Q1xGxuQ>
+    <xmx:dQw0Y5WnV24iAj5fDAbzCDXJ4Hgx6BN-XbVvpgvqGoBdXrCohwxIqw>
+    <xmx:dQw0Y8n8gatex3IH4cvcDQd20Id0yJYsKNK8uEMSI-bBm_FcmfGTmA>
+    <xmx:dQw0Y2gvStjpiHj4VBJAd6-8mEzo1inrJhmDLeVgseB6WSEGM5_lUw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 1FA9CB60086; Wed, 28 Sep 2022 04:57:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <10500.122092804514000600@us-mta-592.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Message-Id: <16c470b0-0a69-4182-9676-2367a7fd831d@www.fastmail.com>
+In-Reply-To: <6fe0fecc-0636-67be-c5c9-ebd5aacc3f0e@sequans.com>
+References: <202209210641.MziHAbW7-lkp@intel.com>
+ <20220921104002.226ff3f6@xps-13>
+ <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
+ <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
+ <20220921164720.6bbc56d5@xps-13>
+ <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
+ <20220921183807.241e2518@xps-13>
+ <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
+ <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
+ <20220922113613.4d7273c8@xps-13>
+ <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
+ <da19f271-6ad6-7158-2ebe-e54fa5c91f6b@sequans.com>
+ <e0a3bc54-a1be-4e10-afcb-bee1888c4066@www.fastmail.com>
+ <6fe0fecc-0636-67be-c5c9-ebd5aacc3f0e@sequans.com>
+Date: Wed, 28 Sep 2022 10:56:55 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Valentin Korenblit" <vkorenblit@sequans.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>
+Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+ kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mtd:nand/next 11/31]
+ drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
+ declaration of function 'ioread64_rep' is invalid in C99
+Content-Type: text/plain
 
-Hi, we tested your kernel and here are the results:
+On Wed, Sep 28, 2022, at 10:41 AM, Valentin Korenblit wrote:
+> On 9/27/22 22:02, Arnd Bergmann wrote:
+>> On Tue, Sep 27, 2022, at 4:56 PM, Valentin Korenblit wrote:
+>>>>> But in the mean time I am only half satisfied, because we plan to do
+>>>>> twice more accesses than needed _just_ because of a the COMPILE_TEST
+>>>>> constraint.
+>>
+>> It's also possible you have to read from the second word first,
+>> like
+>>
+>>    u32 *buf;
+>>    do {
+>>       buf[1] = __raw_readl(reg + 4);
+>>       buf[0] = __raw_readl(reg);
+>>       buf += 2;
+>>    }  while (buf < end);
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+>
+> Same result with pairs of readl at OFF0 and when reading at OFF1 first too,
+> I still see sdma_err. I've just opened a case to Cadence to see if there
+> is any workaround for this or if it is just not possible.
 
+I think this just means that the access has to be done with the exact
+width that is configured, and you cannot implement the access on
+32-bit architectures. The only possibility is that you can reconfigure
+the nand controller to 32-bit mode at runtime, which is what Cadence
+should be able to tell you.
 
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.0-rc7' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54482
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5285536
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5285603
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5285610
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5285651
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5285656
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
-Objects remaining in bio-152 on __kmem_cache_shutdown()
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1255
-            Affected tests:
-                   s390x - Storage - swraid simple_reshape
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+    Arnd
