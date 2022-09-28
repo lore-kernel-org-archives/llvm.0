@@ -1,38 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9094A11
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 16:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33033C433C1;
-	Wed, 28 Sep 2022 16:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27744A11
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 17:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8938BC433D6;
+	Wed, 28 Sep 2022 17:03:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664383784;
-	bh=vOLhBgQt+vaLJlNqqnT8uoBI6MeRvvklPMg+hiBKrBs=;
+	s=k20201202; t=1664384626;
+	bh=i61YhGkKwsV9Tssg75wgUN9ZGXdvkG3vHSk/TFi5Emk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r6jg3+OunAJ34WgPJe/zZ5zX7r4wF5VJEQH/lJaurg+GqP4NM7qn0evjeOZ7c2n6x
-	 Q+M/LoNhAGoDapUfiKvj0qMGV8Tno7tV3HT/vrzifWObbBjfQPF6gIeEV4yUHY2p+e
-	 2z4FFBnICv0Gt6fSZuY8f9l+p3Y+1aamAFNvC19UCXC2koUzeGuCRoKmgXsBAF/upB
-	 fIXPGl0m64PBrec6nHcsGqYTefCikLpQhaSVfwY6QtP/1Lz7v6s1Lgaz/hj+QKbXC6
-	 G8mrPU0wYraowqyH8frolZRGZ7P0UER13BP4+3PKbm29iH/hs9e7N6vshi0WM0qvfw
-	 xQm5UaD/ffzWg==
-Date: Thu, 29 Sep 2022 00:40:15 +0800
+	b=Oe3jMFLTKSgTqhuc9UDWC+r8HEkNIJt+FwMgcdX5Sne2QGqszsfulahqlp5iBrQWl
+	 ZFdvSyCGBdM2tZgGfz8GXbJQ3G0UmYTeoE7B3hEq+3B+UO4cjN5rmYRfvSVMtU+cAu
+	 60sbowpu9gpy+EgFsB5zxrGKbjqel/06vfY6PKpDykIHms9Ki1kuDsH/aV7EZuqt4x
+	 wWX2s4HCZfj8u8GwHlapyLkDjqkMtYS/voeokcGCOCmrAix4J6vNXNfi7s5MKY2egZ
+	 e3THszk37xiMpeNvEpd/+x03qFukzNxQ/JW+jey0Whr4j1hY02hpoOM2z6GUCfCOVt
+	 /9Y50/j6tbvPw==
+Date: Thu, 29 Sep 2022 00:54:17 +0800
 From: Jisheng Zhang <jszhang@kernel.org>
-To: Guo Ren <guoren@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+To: Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Guo Ren <guoren@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH 2/4] riscv: consolidate ret_from_kernel_thread into
- ret_from_fork
-Message-ID: <YzR471Zo4LbSCJoX@xhacker>
-References: <20220925175356.681-1-jszhang@kernel.org>
- <20220925175356.681-3-jszhang@kernel.org>
- <CAJF2gTTqup62EM9LZQ-9daKk11O0geax9Z3HmTMOxYy2mAwm=w@mail.gmail.com>
- <YzHNr13U+SdwJHo1@xhacker>
- <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
+ remove shadow_stack
+Message-ID: <YzR8OUFuV+R1i1Y6@xhacker>
+References: <20220928162007.3791-1-jszhang@kernel.org>
+ <20220928162007.3791-4-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,180 +38,209 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
+In-Reply-To: <20220928162007.3791-4-jszhang@kernel.org>
 
-On Tue, Sep 27, 2022 at 07:55:27AM +0800, Guo Ren wrote:
-> On Tue, Sep 27, 2022 at 12:14 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > On Mon, Sep 26, 2022 at 07:25:30AM +0800, Guo Ren wrote:
-> > > On Mon, Sep 26, 2022 at 2:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> > > >
-> > > > The ret_from_kernel_thread() behaves similarly with ret_from_fork(),
-> > > > the only difference is whether call the fn(arg) or not, this can be
-> > > > acchieved by testing fn is NULL or not, I.E s0 is 0 or not.
-> > > >
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > ---
-> > > >  arch/riscv/kernel/entry.S   | 11 +++--------
-> > > >  arch/riscv/kernel/process.c |  5 ++---
-> > > >  2 files changed, 5 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > > index 2207cf44a3bc..a3e1ed2fa2ac 100644
-> > > > --- a/arch/riscv/kernel/entry.S
-> > > > +++ b/arch/riscv/kernel/entry.S
-> > > > @@ -323,20 +323,15 @@ END(handle_kernel_stack_overflow)
-> > > >
-> > > >  ENTRY(ret_from_fork)
-> > > >         call schedule_tail
-> > > > -       move a0, sp /* pt_regs */
-> > > > -       la ra, ret_from_exception
-> > > > -       tail syscall_exit_to_user_mode
-> > > > -ENDPROC(ret_from_fork)
-> > > > -
-> > > > -ENTRY(ret_from_kernel_thread)
-> > > > -       call schedule_tail
-> > > > +       beqz s0, 1f     /* not from kernel thread */
-> >
-> > Hi Guo,
-> >
-> > > We can't use s0 as condition for ret_from_fork/ret_from_kernel_thread.
-> > > The s0=0 is also okay for ret_from_fork.
-> >
-> > IIUC, in ret_from_fork, the s0 comes p->thread.s[0] rather than s0 in
-> > pt_regs.
-> Yes, you are correct.
+On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
+> Currently, when detecting vmap stack overflow, riscv firstly switches
+> to the so called shadow stack, then use this shadow stack to call the
+> get_overflow_stack() to get the overflow stack. However, there's
+> a race here if two or more harts use the same shadow stack at the same
+> time.
 > 
-> >
-> > >
-> > >         /* p->thread holds context to be restored by __switch_to() */
-> > >         if (unlikely(args->fn)) {
-> > >                 /* Kernel thread */
-> > >                 memset(childregs, 0, sizeof(struct pt_regs));
-> > >                 childregs->gp = gp_in_global;
-> > >                 /* Supervisor/Machine, irqs on: */
-> > >                 childregs->status = SR_PP | SR_PIE;
-> > >
-> > >                 p->thread.ra = (unsigned long)ret_from_kernel_thread;
-> > >                 p->thread.s[0] = (unsigned long)args->fn;
-> > >                 p->thread.s[1] = (unsigned long)args->fn_arg;
-> > >         } else {
-> > >                 *childregs = *(current_pt_regs());
-> > >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> Oh, I'm wrong, It's switch_to_restore -> exception_restore.
+> To solve this race, we rely on two facts:
+> 1. the content of kernel thread pointer I.E "tp" register can still
+> be gotten from the the CSR_SCRATCH register, thus we can clobber tp
+> under the condtion that we restore tp from CSR_SCRATCH later.
 > 
-> > >                 if (usp) /* User fork */
-> > >                         childregs->sp = usp;
-> > >                 if (clone_flags & CLONE_SETTLS)
-> > >                         childregs->tp = tls;
-> > >                 childregs->a0 = 0; /* Return value of fork() */
-> > >                 p->thread.ra = (unsigned long)ret_from_fork;
-> > >         }
-> > >         p->thread.sp = (unsigned long)childregs; /* kernel sp */
-> > >
-> >
-> > <snip>
-> >
-> > > > @@ -182,8 +180,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
-> > > >                 if (clone_flags & CLONE_SETTLS)
-> > > >                         childregs->tp = tls;
-> > > >                 childregs->a0 = 0; /* Return value of fork() */
-> > > > -               p->thread.ra = (unsigned long)ret_from_fork;
-> > > > +               p->thread.s[0] = 0;
-> >
-> > Here we assign 0 to p->thread.s[0]
-> I missed that.
+> 2. Once vmap stack overflow happen, panic is comming soon, no
+> performance concern at all, so we don't need to define the overflow
+> stack as percpu var, we can simplify it into a pointer array which
+> points to allocated pages.
 > 
-> Merge thread & fork is not a good idea, and using fp as the flag is so implicit.
+> Thus we can use tp as a tmp register to get the cpu id to calculate
+> the offset of overflow stack pointer array for each cpu w/o shadow
+> stack any more. Thus the race condition is removed as a side effect.
 > 
-> ➜  linux git:(rv64sv32) grep ret_from_fork arch -r | grep entry.S
-> arch/arc/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/arc/kernel/entry.S:END(ret_from_fork)
-> arch/csky/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/x86/kernel/process_32.c: * the task-switch, and shows up in
-> ret_from_fork in entry.S,
-> arch/alpha/kernel/entry.S:      .globl  ret_from_fork
-> arch/alpha/kernel/entry.S:      .ent    ret_from_fork
-> arch/alpha/kernel/entry.S:ret_from_fork:
-> arch/alpha/kernel/entry.S:.end ret_from_fork
-> arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_fork)
-> arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_fork)
-> arch/hexagon/kernel/vm_entry.S: .globl ret_from_fork
-> arch/hexagon/kernel/vm_entry.S:ret_from_fork:
-> arch/microblaze/kernel/entry.S:   (copy_thread makes ret_from_fork the
-> return address in each new thread's
-> arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_fork):
-> arch/m68k/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/arm64/kernel/entry.S:SYM_CODE_START(ret_from_fork)
-> arch/arm64/kernel/entry.S:SYM_CODE_END(ret_from_fork)
-> arch/arm64/kernel/entry.S:NOKPROBE(ret_from_fork)
-> arch/riscv/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/riscv/kernel/entry.S:ENDPROC(ret_from_fork)
-> arch/s390/kernel/entry.S:# a new process exits the kernel with ret_from_fork
-> arch/s390/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/s390/kernel/entry.S:       brasl   %r14,__ret_from_fork
-> arch/s390/kernel/entry.S:ENDPROC(ret_from_fork)
-> arch/mips/kernel/entry.S:FEXPORT(ret_from_fork)
-> arch/openrisc/kernel/entry.S:   /* All syscalls return here... just
-> pay attention to ret_from_fork
-> arch/openrisc/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/openrisc/kernel/entry.S:    * that may be either schedule(),
-> ret_from_fork(), or
-> arch/nios2/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/xtensa/kernel/entry.S:ENTRY(ret_from_fork)
-> arch/xtensa/kernel/entry.S:ENDPROC(ret_from_fork)
-> arch/sparc/kernel/entry.S:      .globl  ret_from_fork
-> arch/sparc/kernel/entry.S:ret_from_fork:
-> ➜  linux git:(rv64sv32) grep ret_from_kernel_thread arch -r | grep entry.S
-> arch/csky/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/alpha/kernel/entry.S:      .globl  ret_from_kernel_thread
-> arch/alpha/kernel/entry.S:      .ent    ret_from_kernel_thread
-> arch/alpha/kernel/entry.S:ret_from_kernel_thread:
-> arch/alpha/kernel/entry.S:.end ret_from_kernel_thread
-> arch/parisc/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/parisc/kernel/entry.S:END(ret_from_kernel_thread)
-> arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_kernel_thread)
-> arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_kernel_thread)
-> arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_kernel_thread):
-> arch/m68k/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/riscv/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/riscv/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
-> arch/mips/kernel/entry.S:FEXPORT(ret_from_kernel_thread)
-> arch/openrisc/kernel/entry.S:    * ret_from_kernel_thread().  If we
-> are returning to a new thread,
-> arch/nios2/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/xtensa/kernel/entry.S:ENTRY(ret_from_kernel_thread)
-> arch/xtensa/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
-> arch/sparc/kernel/entry.S:      .globl  ret_from_kernel_thread
-> arch/sparc/kernel/entry.S:ret_from_kernel_thread:
+> NOTE: we can use similar mechanism to let each cpu use different shadow
+> stack to fix the race codition, but if we can remove shadow stack usage
+> totally, why not.
 > 
-> Many architectures use a similar style. If you want to continue the
-> patch, I think you should first rename ret_from_fork properly, and
-> give an explicit flag definition, not just setting fp = 0.
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> ---
+>  arch/riscv/include/asm/asm-prototypes.h |  1 -
+>  arch/riscv/include/asm/thread_info.h    |  4 +-
+>  arch/riscv/kernel/asm-offsets.c         |  1 +
+>  arch/riscv/kernel/entry.S               | 56 ++++---------------------
+>  arch/riscv/kernel/traps.c               | 31 ++++++++------
+>  5 files changed, 29 insertions(+), 64 deletions(-)
 > 
+> diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
+> index ef386fcf3939..4a06fa0f6493 100644
+> --- a/arch/riscv/include/asm/asm-prototypes.h
+> +++ b/arch/riscv/include/asm/asm-prototypes.h
+> @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+>  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+>  DECLARE_DO_ERROR_INFO(do_trap_break);
+>  
+> -asmlinkage unsigned long get_overflow_stack(void);
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+>  
+>  #endif /* _ASM_RISCV_PROTOTYPES_H */
+> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> index c970d41dc4c6..c604a5212a73 100644
+> --- a/arch/riscv/include/asm/thread_info.h
+> +++ b/arch/riscv/include/asm/thread_info.h
+> @@ -28,14 +28,12 @@
+>  
+>  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+>  #define OVERFLOW_STACK_SIZE     SZ_4K
+> -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
+> +#define OVERFLOW_STACK_SHIFT	12
 
-Above list also shows many architectures don't have a
-ret_from_kernel_thread, I think the reason is simple it behaves
-similarly as ret_from_fork.
-As for flag, IMHO, we may missed something as clearing the s[12]
-array in thread_struct when user fork, because s[12] may contain
-random kernel memory content, which may be finally leaked to
-userspace. This is a security hole.
+oops, this should be removed, will update it in a newer version after
+collecting review comments.
 
-A trivial patch of memset(0) can fix it, after this fix, checking the
-s[0] is straightforward.
+>  
+>  #define IRQ_STACK_SIZE		THREAD_SIZE
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+> -
+>  #include <asm/processor.h>
+>  #include <asm/csr.h>
+>  
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index df9444397908..62bf3bacc322 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -37,6 +37,7 @@ void asm_offsets(void)
+>  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+>  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+>  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> +	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+>  
+>  	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+>  	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index a3e1ed2fa2ac..5a6171a90d81 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -223,54 +223,16 @@ END(ret_from_exception)
+>  
+>  #ifdef CONFIG_VMAP_STACK
+>  ENTRY(handle_kernel_stack_overflow)
+> -	la sp, shadow_stack
+> -	addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> -
+> -	//save caller register to shadow stack
+> -	addi sp, sp, -(PT_SIZE_ON_STACK)
+> -	REG_S x1,  PT_RA(sp)
+> -	REG_S x5,  PT_T0(sp)
+> -	REG_S x6,  PT_T1(sp)
+> -	REG_S x7,  PT_T2(sp)
+> -	REG_S x10, PT_A0(sp)
+> -	REG_S x11, PT_A1(sp)
+> -	REG_S x12, PT_A2(sp)
+> -	REG_S x13, PT_A3(sp)
+> -	REG_S x14, PT_A4(sp)
+> -	REG_S x15, PT_A5(sp)
+> -	REG_S x16, PT_A6(sp)
+> -	REG_S x17, PT_A7(sp)
+> -	REG_S x28, PT_T3(sp)
+> -	REG_S x29, PT_T4(sp)
+> -	REG_S x30, PT_T5(sp)
+> -	REG_S x31, PT_T6(sp)
+> -
+> -	la ra, restore_caller_reg
+> -	tail get_overflow_stack
+> -
+> -restore_caller_reg:
+> -	//save per-cpu overflow stack
+> -	REG_S a0, -8(sp)
+> -	//restore caller register from shadow_stack
+> -	REG_L x1,  PT_RA(sp)
+> -	REG_L x5,  PT_T0(sp)
+> -	REG_L x6,  PT_T1(sp)
+> -	REG_L x7,  PT_T2(sp)
+> -	REG_L x10, PT_A0(sp)
+> -	REG_L x11, PT_A1(sp)
+> -	REG_L x12, PT_A2(sp)
+> -	REG_L x13, PT_A3(sp)
+> -	REG_L x14, PT_A4(sp)
+> -	REG_L x15, PT_A5(sp)
+> -	REG_L x16, PT_A6(sp)
+> -	REG_L x17, PT_A7(sp)
+> -	REG_L x28, PT_T3(sp)
+> -	REG_L x29, PT_T4(sp)
+> -	REG_L x30, PT_T5(sp)
+> -	REG_L x31, PT_T6(sp)
+> +	la sp, overflow_stack
+> +	/* use tp as tmp register since we can restore it from CSR_SCRATCH */
+> +	REG_L tp, TASK_TI_CPU(tp)
+> +	slli tp, tp, RISCV_LGPTR
+> +	add tp, sp, tp
+> +	REG_L sp, 0(tp)
+> +
+> +	/* restore tp */
+> +	csrr tp, CSR_SCRATCH
+>  
+> -	//load per-cpu overflow stack
+> -	REG_L sp, -8(sp)
+>  	addi sp, sp, -(PT_SIZE_ON_STACK)
+>  
+>  	//save context to overflow stack
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 73f06cd149d9..b6c64f0fb70f 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
+>  #endif /* CONFIG_GENERIC_BUG */
+>  
+>  #ifdef CONFIG_VMAP_STACK
+> -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+> -		overflow_stack)__aligned(16);
+> -/*
+> - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+> - * to get per-cpu overflow stack(get_overflow_stack).
+> - */
+> -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
+> -asmlinkage unsigned long get_overflow_stack(void)
+> -{
+> -	return (unsigned long)this_cpu_ptr(overflow_stack) +
+> -		OVERFLOW_STACK_SIZE;
+> -}
+> +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
+>  
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  {
+>  	unsigned long tsk_stk = (unsigned long)current->stack;
+> -	unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> +	unsigned long ovf_stk = (unsigned long)overflow_stack[raw_smp_processor_id()];
+>  
+>  	console_verbose();
+>  
+> @@ -248,4 +237,20 @@ asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  	for (;;)
+>  		wait_for_interrupt();
+>  }
+> +
+> +static int __init alloc_overflow_stacks(void)
+> +{
+> +	u8 *s;
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		s = (u8 *)__get_free_pages(GFP_KERNEL, get_order(OVERFLOW_STACK_SIZE));
+> +		if (WARN_ON(!s))
+> +			return -ENOMEM;
+> +		overflow_stack[cpu] = &s[OVERFLOW_STACK_SIZE];
 
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 67e7cd123ceb..50a0f7e4327c 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -174,6 +174,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
-                p->thread.s[0] = (unsigned long)args->fn;
-                p->thread.s[1] = (unsigned long)args->fn_arg;
-        } else {
-+               memset(&p->thread.s, 0, sizeof(p->thread.s));
-                *childregs = *(current_pt_regs());
-                if (usp) /* User fork */
-                        childregs->sp = usp;
+Since overflow_stack[cpu] points to the top of the slack, we need to
+update the ovf_stack dumping in handle_bad_stack(). will take care
+this in newer version.
 
+> +		printk("%px\n", overflow_stack[cpu]);
+
+forget to remove this printk :(
