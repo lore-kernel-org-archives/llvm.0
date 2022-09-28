@@ -1,114 +1,152 @@
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB52A51
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 08:57:26 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 95CD25804D1;
-	Wed, 28 Sep 2022 04:57:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 28 Sep 2022 04:57:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1664355445; x=1664359045; bh=vqR5+C+Tzk
-	aoeHdqD765eNkb3ETfrMpccjTI4Cwg6kc=; b=mB6doVpcuceD/WYjeftxIZqcRG
-	xbp3ZVGh1r06xbK8sFBXNTc1Xa0HhNMUoQmIBnDcFQCwmBYVP0BTtYhyw6MtmvZK
-	DFkZcJEgOFDO83cm/mtbOHBemJTkDGHBiOQ/4a1D1GNM7vi7cfO+T7DD3DKgehyB
-	dgpi98xzgSXGGWWVMiXb/k01mfs6uJ8KvVi28pBsAYaASxPoZFQ03ogxKFcECK/U
-	16MXzS3ZdMDQtSG/Y6ppeMy/4wBxyPrssLGj0AzkUVAEPAQc4R0qPPvpltJMCKhY
-	PffeHzK3mkBkYZ6Q8xZlDT+aAps1/hIZPMX+0Vyx/vo/s+rWGKFGJ5tJNo/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1664355445; x=1664359045; bh=vqR5+C+TzkaoeHdqD765eNkb3ETf
-	rMpccjTI4Cwg6kc=; b=XgRyCA68Ja0Rm87PxBmA9CqavmhjUokdaqcinu1bqMZ/
-	pQy13rSSqOOSwybx7x5p8j3GIlKCiwLVtcyQ7JNhmlvCCXWWIFmY11EBgXwv5Ixv
-	ZKBCACcAJoz3BUuKjnvKlGMq4qz580/GM0QqMKBqDyFizcssgT7MJETr9mlN4a0o
-	7tsKvvblC5oB2rRurYYfPG6OMF7snj7+GBCldHC3Xvql2xjqiZJMJ1VHiBjZcubs
-	MXyyX203suS2qeKljR6DSSusMTKygq19ADgdcFbU82vO3oakbSSeMP1H8qF6jCrB
-	9wVBOhPwmGg3EKAYY+jL7O3s31F6j7A4LtA4H+hnAA==
-X-ME-Sender: <xms:dQw0YyVm-RI7dDf6k2feIGVLucL8cIp6qRGzVuaU-mr2fQG379g4Iw>
-    <xme:dQw0Y-nXB67D8_sPoUu8o6dGsK0OUWfkjdvhmqWSNbR6LdyKYoXMmWhIdEAF0plWa
-    5kU4sK2CfMxyKIpBls>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeegkedguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:dQw0Y2acfjUTsr_FzbXBKng-XX0knC8B_fwbn44qH1nL9E8Q1xGxuQ>
-    <xmx:dQw0Y5WnV24iAj5fDAbzCDXJ4Hgx6BN-XbVvpgvqGoBdXrCohwxIqw>
-    <xmx:dQw0Y8n8gatex3IH4cvcDQd20Id0yJYsKNK8uEMSI-bBm_FcmfGTmA>
-    <xmx:dQw0Y2gvStjpiHj4VBJAd6-8mEzo1inrJhmDLeVgseB6WSEGM5_lUw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1FA9CB60086; Wed, 28 Sep 2022 04:57:25 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4CBA51
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 09:02:21 +0000 (UTC)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-131a7bce1acso1066093fac.7
+        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 02:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=UD/bWW+0wk4E9lEqOO5K0o6p06TOy6G7+0fEDj4qYW0=;
+        b=qjE+g0WJ+O6OJPoUPIflSlEuB+MqVoceg7Ja+WcNRQUk7OHgS0AbOuQcpF/sNhWH3B
+         Lgnj8+2dA7AETcw1J1bB9rR58nnABnh6jaM2aq6/EksGdoiG9822CkeDcLGPipE3kSO7
+         YpSANJuKK3XWKV70xh8YlvQb1ZvH/q3iYKPxgyJfI5MOLvlMyNhODmVqTiwDpC82S1A1
+         AbU7uGYML+/gAh0oRf3aqAPUx6BI0qneafHJtGwj1IA8/WBapms3qsXHg9kL6XcL/MKG
+         4V3B7qNJ2l/f6XuK0tFjdHVx0UuKa1CIREe4XWyuZj9utwnljVvsWK2l6GCVsO4UdJF+
+         ByFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=UD/bWW+0wk4E9lEqOO5K0o6p06TOy6G7+0fEDj4qYW0=;
+        b=n4MPeRFuA6F858g2c/6AO5ZByWIaCpqp+FHeLZuI/7+6od1k1eDVboHOsZeTBt6KZe
+         k3ESzSCDnNRt3fowYx/HVnN2rzxJwBIsh7mRUYAvl7rpmmHQpK9+Ep/CNN4EEcZ48iC8
+         WsYJZlysRuaQaCWo4YxmsPU+1A5Avr5e0aMx/SVleXvpL56KVl4mBXOGpR0N/nrYoQWX
+         kjHNcMp/X56qA/45K/671pSnek5Pz+apmX0SaGgG3OBgUu4vCmTRZYuXiKRGkbSbk5cz
+         U6siQgcXEXuSPBOqhvcRdy/a6nW2p+bjm+H5EWvSuxB+F7NsnERTHknRv3Fqs33pCA7H
+         foZA==
+X-Gm-Message-State: ACrzQf0KWd3LjLK8jguPhSPlDM6xcoK+eNe70t37Swp+p0xAUpsSVhtR
+	UE2rFW449SntvSrYH8t7L3mZ3nz5XDMJYWqmlDM=
+X-Google-Smtp-Source: AMsMyM5ujk+Oc81+S+ewdw/Ez4+jZI0RZxdZDv4LAzGgfXYpMXmjOK0UXxMKyUnobDtlYUDZAdDMBEgl68vhlfn3Rgk=
+X-Received: by 2002:a05:6870:461a:b0:12a:e54e:c8a2 with SMTP id
+ z26-20020a056870461a00b0012ae54ec8a2mr4780900oao.252.1664355740443; Wed, 28
+ Sep 2022 02:02:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <16c470b0-0a69-4182-9676-2367a7fd831d@www.fastmail.com>
-In-Reply-To: <6fe0fecc-0636-67be-c5c9-ebd5aacc3f0e@sequans.com>
-References: <202209210641.MziHAbW7-lkp@intel.com>
- <20220921104002.226ff3f6@xps-13>
- <ffde44bc-d4ae-4052-c60c-35c8775a5101@sequans.com>
- <7074197c-aa8d-f763-cb0f-03ea5335b923@sequans.com>
- <20220921164720.6bbc56d5@xps-13>
- <ef9a2618-2dd0-4d1b-b9d2-37d59506f004@www.fastmail.com>
- <20220921183807.241e2518@xps-13>
- <b7e5ebb4-0de8-4958-9bc4-fe06ec4c3635@www.fastmail.com>
- <6b5a2b19-39c6-5116-60c2-d292ae2e7bae@sequans.com>
- <20220922113613.4d7273c8@xps-13>
- <01210adb-ff77-4ec5-8d10-ab56ae986d58@www.fastmail.com>
- <da19f271-6ad6-7158-2ebe-e54fa5c91f6b@sequans.com>
- <e0a3bc54-a1be-4e10-afcb-bee1888c4066@www.fastmail.com>
- <6fe0fecc-0636-67be-c5c9-ebd5aacc3f0e@sequans.com>
-Date: Wed, 28 Sep 2022 10:56:55 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Valentin Korenblit" <vkorenblit@sequans.com>,
- "Miquel Raynal" <miquel.raynal@bootlin.com>
-Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
- kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:nand/next 11/31]
- drivers/mtd/nand/raw/cadence-nand-controller.c:1893:4: error: implicit
- declaration of function 'ioread64_rep' is invalid in C99
-Content-Type: text/plain
+MIME-Version: 1.0
+References: <20220908215504.3686827-1-samitolvanen@google.com> <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
+In-Reply-To: <166421282763.1683223.5035885857817205401.b4-ty@chromium.org>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Wed, 28 Sep 2022 11:01:44 +0200
+Message-ID: <CA+icZUUjy7HFQVZ0iUDmGxfazobow1iwcagWX_Opht-7F+BRrg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/22] KCFI support
+To: Kees Cook <keescook@chromium.org>
+Cc: samitolvanen@google.com, peterz@infradead.org, ndesaulniers@google.com, 
+	linux-arm-kernel@lists.infradead.org, will@kernel.org, 
+	joao@overdrivepizza.com, nathan@kernel.org, llvm@lists.linux.dev, 
+	mark.rutland@arm.com, linux-hardening@vger.kernel.org, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, catalin.marinas@arm.com, rostedt@goodmis.org, 
+	x86@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Sep 28, 2022, at 10:41 AM, Valentin Korenblit wrote:
-> On 9/27/22 22:02, Arnd Bergmann wrote:
->> On Tue, Sep 27, 2022, at 4:56 PM, Valentin Korenblit wrote:
->>>>> But in the mean time I am only half satisfied, because we plan to do
->>>>> twice more accesses than needed _just_ because of a the COMPILE_TEST
->>>>> constraint.
->>
->> It's also possible you have to read from the second word first,
->> like
->>
->>    u32 *buf;
->>    do {
->>       buf[1] = __raw_readl(reg + 4);
->>       buf[0] = __raw_readl(reg);
->>       buf += 2;
->>    }  while (buf < end);
-
+On Mon, Sep 26, 2022 at 7:21 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Same result with pairs of readl at OFF0 and when reading at OFF1 first too,
-> I still see sdma_err. I've just opened a case to Cadence to see if there
-> is any workaround for this or if it is just not possible.
+> On Thu, 8 Sep 2022 14:54:42 -0700, Sami Tolvanen wrote:
+> > KCFI is a forward-edge control-flow integrity scheme in the upcoming
+> > Clang 16 release, which is more suitable for kernel use than the
+> > existing CFI scheme used by CONFIG_CFI_CLANG. KCFI doesn't require
+> > LTO, doesn't alter function references to point to a jump table, and
+> > won't break function address equality.
+> >
+> > This series replaces the current arm64 CFI implementation with KCFI
+> > and adds support for x86_64.
+> >
+> > [...]
+>
+> I assume that Peter's Ack means I should carry the tree, so, to that end:
+>
+> Applied to for-next/kcfi, thanks!
+>
 
-I think this just means that the access has to be done with the exact
-width that is configured, and you cannot implement the access on
-32-bit architectures. The only possibility is that you can reconfigure
-the nand controller to 32-bit mode at runtime, which is what Cadence
-should be able to tell you.
+Hi,
 
-    Arnd
+I did regularly KCFI testing.
+
+1. Used Sami's samitolvanen.github#linux/kcfi Git on the Linux side.
+
+2. Used *not* LLVM-16 (including KCFI) but with LLVM-15 from
+samitolvanen.github#llvm-project/15.x/kcfi Git on the toolchain side.
+
+My last testing was with [1] (Linux v6.0-rc7 + KCFI) and [2] (LLVM
+v15.0.1 + KCFI) plus drm-i915-gt/KCFI for Linux v6.0-rc7 patch from
+Nathan (see [3]).
+Thanks Sami for updating 15.x/kcfi on LLVM side on my request.
+
+So, feel free to add my:
+
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-15 (with KCFI
+support) on x86-64
+
+Thanks to all involved people!
+
+Best regards,
+-Sedat-
+
+[1] https://github.com/samitolvanen/linux/commits/kcfi
+[2] https://github.com/samitolvanen/llvm-project/commits/15.x/kcfi
+[3] https://github.com/ClangBuiltLinux/linux/issues/1716#issuecomment-1257311327
+
+> [01/22] treewide: Filter out CC_FLAGS_CFI
+>         https://git.kernel.org/kees/c/f143ff397a3f
+> [02/22] scripts/kallsyms: Ignore __kcfi_typeid_
+>         https://git.kernel.org/kees/c/d0f9562ee43a
+> [03/22] cfi: Remove CONFIG_CFI_CLANG_SHADOW
+>         https://git.kernel.org/kees/c/9fca7115827b
+> [04/22] cfi: Drop __CFI_ADDRESSABLE
+>         https://git.kernel.org/kees/c/92efda8eb152
+> [05/22] cfi: Switch to -fsanitize=kcfi
+>         https://git.kernel.org/kees/c/89245600941e
+> [06/22] cfi: Add type helper macros
+>         https://git.kernel.org/kees/c/e84e008e7b02
+> [07/22] lkdtm: Emit an indirect call for CFI tests
+>         https://git.kernel.org/kees/c/cf90d0383560
+> [08/22] psci: Fix the function type for psci_initcall_t
+>         https://git.kernel.org/kees/c/44f665b69c67
+> [09/22] arm64: Add types to indirect called assembly functions
+>         https://git.kernel.org/kees/c/c50d32859e70
+> [10/22] arm64: Add CFI error handling
+>         https://git.kernel.org/kees/c/b26e484b8bb3
+> [11/22] arm64: Drop unneeded __nocfi attributes
+>         https://git.kernel.org/kees/c/5f20997c194e
+> [12/22] init: Drop __nocfi from __init
+>         https://git.kernel.org/kees/c/5dbbb3eaa2a7
+> [13/22] treewide: Drop function_nocfi
+>         https://git.kernel.org/kees/c/607289a7cd7a
+> [14/22] treewide: Drop WARN_ON_FUNCTION_MISMATCH
+>         https://git.kernel.org/kees/c/4b24356312fb
+> [15/22] treewide: Drop __cficanonical
+>         https://git.kernel.org/kees/c/5659b598b4dc
+> [16/22] objtool: Preserve special st_shndx indexes in elf_update_symbol
+>         https://git.kernel.org/kees/c/5141d3a06b2d
+> [17/22] objtool: Disable CFI warnings
+>         https://git.kernel.org/kees/c/3c68a92d17ad
+> [18/22] kallsyms: Drop CONFIG_CFI_CLANG workarounds
+>         https://git.kernel.org/kees/c/dfb352ab1162
+> [19/22] x86/tools/relocs: Ignore __kcfi_typeid_ relocations
+>         https://git.kernel.org/kees/c/ca7e10bff196
+> [20/22] x86: Add types to indirectly called assembly functions
+>         https://git.kernel.org/kees/c/ccace936eec7
+> [21/22] x86/purgatory: Disable CFI
+>         https://git.kernel.org/kees/c/a4b7a12c5594
+> [22/22] x86: Add support for CONFIG_CFI_CLANG
+>         https://git.kernel.org/kees/c/3c516f89e17e
+>
+> --
+> Kees Cook
+>
