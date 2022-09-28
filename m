@@ -1,161 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930CC5381;
-	Wed, 28 Sep 2022 21:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF29C433D6;
-	Wed, 28 Sep 2022 21:36:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664401008;
-	bh=aT8rvgKz7c6G4ZCSZioQYbTyzSYZAZy9hqJAzraHnDw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pyeKR7S/R81B3srxAHth1JOo3X7zSYqY8N6htG5l86xMIqsG+133M1R+lTz9khsSS
-	 g+FUDoxyGX0HE0mNKz9+ds4kQAtixk4nDn3iDmWRG7jiBT3sekVpZVvkZmfSVVRDhF
-	 SxGIMTuAOpgiBgUEm+h4UzLY0xiUnyGFsS+CH1f+xUPar9f/Eo+yRuNJBpX2cQvYAO
-	 +WiSn5R0QGqBCEb1N0eUlK9UBUYFbzn8Gca2h9jT2otSQKTjjrLExrmiHUn5laPk+Q
-	 hBWuum5xeZ05/rSYc0pb2i/m0JsadNWBx52uQgU6ZdG1nPNB5Z0BYT73pGo3ejVrs+
-	 07MSrfM+JiP9Q==
-Date: Wed, 28 Sep 2022 14:36:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>, Tom Rix <trix@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>, linux-kbuild@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev, llvm@lists.linux.dev,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: Add check for non-constant
- .{s,u}leb128 support to DWARF5
-Message-ID: <YzS+bQT1zJAUpp/6@dev-arch.thelio-3990X>
-References: <20220928182523.3105953-1-nathan@kernel.org>
- <CAKwvOdmPLqX=oCwg43TYHj=tdoaU5OYc=bO906u=LeqcSrx+Dw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5765381
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 21:40:49 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 19CC21F45F;
+	Wed, 28 Sep 2022 21:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1664401248; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C18vkSCkEp0R0j/E8doyhXlqBRc6MmmoczHaFz5Tq/o=;
+	b=O8ZKN2zJZST2anqWW6kCZ7PFlJtkR+DhFF/E1xFtpBjfMisY/NEE2VUHIT0ctG6+BRKpcm
+	TFzItcWnIOwSwp96McUWnDjo0baCWUX3p/6aNYk16N1G1gVpmFAU0HxXjLM93Ltz5am9pC
+	6mcBPOCE9PClr4mk2WyQ3I6f95q7OjY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1664401248;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C18vkSCkEp0R0j/E8doyhXlqBRc6MmmoczHaFz5Tq/o=;
+	b=QuVwGzEY77p785Z+8T99wXOp96mLv9PVymdpRO3H5bysX/SgsIeBkJWmKXpwJqWMN6hRxn
+	P80vd3XHeULykLAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA18F13A84;
+	Wed, 28 Sep 2022 21:40:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id pwxsNF6/NGNaHwAAMHmgww
+	(envelope-from <vbabka@suse.cz>); Wed, 28 Sep 2022 21:40:46 +0000
+Message-ID: <d5cb63f4-b1f5-9862-c31c-c8c6c4cb41df@suse.cz>
+Date: Wed, 28 Sep 2022 23:39:06 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmPLqX=oCwg43TYHj=tdoaU5OYc=bO906u=LeqcSrx+Dw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 01/16] slab: Remove __malloc attribute from realloc
+ functions
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
+ David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>, Marco Elver <elver@google.com>,
+ linux-mm@kvack.org, "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Alex Elder <elder@kernel.org>,
+ Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Jesse Brandeburg <jesse.brandeburg@intel.com>,
+ Daniel Micay <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>,
+ Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-fsdevel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, dev@openvswitch.org, x86@kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220923202822.2667581-1-keescook@chromium.org>
+ <20220923202822.2667581-2-keescook@chromium.org>
+ <CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com>
+ <202209281011.66DD717D@keescook>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <202209281011.66DD717D@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 28, 2022 at 02:13:47PM -0700, Nick Desaulniers wrote:
-> On Wed, Sep 28, 2022 at 11:25 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > When building with a RISC-V kernel with DWARF5 debug info using clang
-> > and the GNU assembler, several instances of the following error appear:
-> >
-> >   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
-> >
-> > Dumping the .s file reveals these .uleb128 directives come from
-> > .debug_loc and .debug_ranges:
-> >
-> >   .Ldebug_loc0:
-> >           .byte   4                               # DW_LLE_offset_pair
-> >           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
-> >           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
-> >           .byte   1                               # Loc expr size
-> >           .byte   90                              # DW_OP_reg10
-> >           .byte   0                               # DW_LLE_end_of_list
-> >
-> >   .Ldebug_ranges0:
-> >           .byte   4                               # DW_RLE_offset_pair
-> >           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
-> >           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
-> >           .byte   4                               # DW_RLE_offset_pair
-> >           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
-> >           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
-> >           .byte   0                               # DW_RLE_end_of_list
-> >
-> > There is an outstanding binutils issue to support a non-constant operand
-> > to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
-> > be any movement on it, due to concerns over how it would work with
-> > linker relaxation.
-> >
-> > To avoid these build errors, prevent DWARF5 from being selected when
-> > using clang and an assembler that does not have support for these symbol
-> > deltas, which can be easily checked in Kconfig with as-instr plus the
-> > small test program from the dwz test suite from the binutils issue.
-> >
-> > Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1719
-> > Tested-by: Conor Dooley <conor.dooley@microchip.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  lib/Kconfig.debug | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index d3e5f36bb01e..19de03ead2ed 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -231,6 +231,9 @@ config DEBUG_INFO
-> >           in the "Debug information" choice below, indicating that debug
-> >           information will be generated for build targets.
-> >
-> > +config AS_HAS_NON_CONST_LEB128
-> > +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
-> > +
-> >  choice
-> >         prompt "Debug information"
-> >         depends on DEBUG_KERNEL
-> > @@ -277,6 +280,10 @@ config DEBUG_INFO_DWARF5
-> >         bool "Generate DWARF Version 5 debuginfo"
-> >         select DEBUG_INFO
-> >         depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-> > +       # Clang is known to generate .{s,u}leb128 with symbol deltas with
-> > +       # DWARF5, which some targets may not support.
-> > +       # https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> > +       depends on !CC_IS_CLANG || AS_HAS_NON_CONST_LEB128
+On 9/28/22 19:13, Kees Cook wrote:
+> On Wed, Sep 28, 2022 at 09:26:15AM +0200, Geert Uytterhoeven wrote:
+>> Hi Kees,
+>>
+>> On Fri, Sep 23, 2022 at 10:35 PM Kees Cook <keescook@chromium.org> wrote:
+>>> The __malloc attribute should not be applied to "realloc" functions, as
+>>> the returned pointer may alias the storage of the prior pointer. Instead
+>>> of splitting __malloc from __alloc_size, which would be a huge amount of
+>>> churn, just create __realloc_size for the few cases where it is needed.
+>>>
+>>> Additionally removes the conditional test for __alloc_size__, which is
+>>> always defined now.
+>>>
+>>> Cc: Christoph Lameter <cl@linux.com>
+>>> Cc: Pekka Enberg <penberg@kernel.org>
+>>> Cc: David Rientjes <rientjes@google.com>
+>>> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>>> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+>>> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>>> Cc: Marco Elver <elver@google.com>
+>>> Cc: linux-mm@kvack.org
+>>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>
+>> Thanks for your patch, which is now commit 63caa04ec60583b1 ("slab:
+>> Remove __malloc attribute from realloc functions") in next-20220927.
+>>
+>> Noreply@ellerman.id.au reported all gcc8-based builds to fail
+>> (e.g. [1], more at [2]):
+>>
+>>      In file included from <command-line>:
+>>      ./include/linux/percpu.h: In function ‘__alloc_reserved_percpu’:
+>>      ././include/linux/compiler_types.h:279:30: error: expected
+>> declaration specifiers before ‘__alloc_size__’
+>>       #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __malloc
+>>                                    ^~~~~~~~~~~~~~
+>>      ./include/linux/percpu.h:120:74: note: in expansion of macro ‘__alloc_size’
+>>      [...]
+>>
+>> It's building fine with e.g. gcc-9 (which is my usual m68k cross-compiler).
+>> Reverting this commit on next-20220927 fixes the issue.
+>>
+>> [1] http://kisskb.ellerman.id.au/kisskb/buildresult/14803908/
+>> [2] http://kisskb.ellerman.id.au/kisskb/head/1bd8b75fe6adeaa89d02968bdd811ffe708cf839/
 > 
-> Reraising my concern from
-> https://github.com/ClangBuiltLinux/linux/issues/1719#issuecomment-1258678969
+> Eek! Thanks for letting me know. I'm confused about this --
+> __alloc_size__ wasn't optional in compiler_attributes.h -- but obviously
+> I broke something! I'll go figure this out.
 
-Sorry, I thought I addressed your concern with my comment right below it
-but I probably should have worded it better.
+Even in latest next I can see at the end of include/linux/compiler-gcc.h
 
-> We've put a fair amount of work into getting CC=clang LLVM_IAS=0 to
-> work for DWARF v5 (both on the GNU binutils side, and Kbuild), I'd
-> hate to see that effectively knee-capped because of an issue in GNU
-> binutils that is only relevant for one architecture.
+/*
+  * Prior to 9.1, -Wno-alloc-size-larger-than (and therefore the "alloc_size"
+  * attribute) do not work, and must be disabled.
+  */
+#if GCC_VERSION < 90100
+#undef __alloc_size__
+#endif
 
-Sure, that is a completely reasonable concern. However...
 
-> I'd concede support for ARCH=riscv, but not for all other
-> architectures, which this effectively does.
 
-No, it does not, CONFIG_AS_HAS_NON_CONST_LEB128 can still be enabled
-when GNU as supports this construct for a particular architecture; as
-far as I can tell, RISC-V is the only one that doesn't. See the tests
-with ARCH=arm64 and ARCH=x86_64 compared with ARCH=riscv below.
+> -Kees
+> 
 
-$ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 LLVM_IAS=0 defconfig
-
-$ rg "CONFIG_AS_(IS|VERSION|HAS)" .config
-9:CONFIG_AS_IS_GNU=y
-10:CONFIG_AS_VERSION=23950
-4750:CONFIG_AS_HAS_NON_CONST_LEB128=y
-
-$ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- LLVM=1 LLVM_IAS=0 defconfig
-
-$ rg "CONFIG_AS_(IS|VERSION|HAS)" .config
-9:CONFIG_AS_IS_GNU=y
-10:CONFIG_AS_VERSION=23950
-442:CONFIG_AS_HAS_LDAPR=y
-443:CONFIG_AS_HAS_LSE_ATOMICS=y
-451:CONFIG_AS_HAS_ARMV8_2=y
-452:CONFIG_AS_HAS_SHA3=y
-465:CONFIG_AS_HAS_PAC=y
-466:CONFIG_AS_HAS_CFI_NEGATE_RA_STATE=y
-473:CONFIG_AS_HAS_ARMV8_4=y
-480:CONFIG_AS_HAS_ARMV8_5=y
-9719:CONFIG_AS_HAS_NON_CONST_LEB128=y
-
-$ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- LLVM=1 LLVM_IAS=0 defconfig
-
-$ rg "CONFIG_AS_(IS|VERSION|HAS)" .config
-9:CONFIG_AS_IS_GNU=y
-10:CONFIG_AS_VERSION=23950
-
-Cheers,
-Nathan
