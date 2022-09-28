@@ -1,115 +1,193 @@
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B224A40
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 06:46:50 +0000 (UTC)
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-10.nifty.com with ESMTP id 28S6fFVF008087
-	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 15:41:15 +0900
-Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-	by conuserg-08.nifty.com with ESMTP id 28S6e0G1004120;
-	Wed, 28 Sep 2022 15:40:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 28S6e0G1004120
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1664347202;
-	bh=bMCdFStQWZxbQk1gnDYL3CYDG5GATkG7hQ6PvF/Ni/8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=zf8famM/zizOFxIt3oYqdutBJGCGMDtkJOGKUlSLT9VRrbo9zHExkpzA1iVxSLOh/
-	 Oyt8iYIg532sXu1vuU1NUJy+TmrspHKQa50z7G1Jl7qjk/pem8zJB3O1/lPEzKI4SS
-	 L8GwUNl26Vqk3PNauHk2YIv19nEf2yJJRCKrzqT6qxewU16Ddn4ZbpsSY+DxbguJF7
-	 yEAuEbH1vrMESkNhAnrfQdF33O0/BrtmuH07MPMaeIm4uwvLrPybNhgVvtYX274aPD
-	 rghIvbMv6VoszIUPOuddyty09b8Q3pHnJd95hTqhbWTgO520iTtQrI3oUlDbQBptbq
-	 yf0pYtaWX6FGw==
-X-Nifty-SrcIP: [133.32.182.133]
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, Nicolas Pitre <npitre@baylibre.com>,
-        Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        linux-modules@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v3 0/8] Unify <linux/export.h> and <asm/export.h>, remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
-Date: Wed, 28 Sep 2022 15:39:39 +0900
-Message-Id: <20220928063947.299333-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051EDA40
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 07:17:48 +0000 (UTC)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mcnlc1w6RzWgtp;
+	Wed, 28 Sep 2022 15:13:32 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 28 Sep 2022 15:17:37 +0800
+Message-ID: <27399204-e9c7-57f0-23dd-1eb420cc59dd@huawei.com>
+Date: Wed, 28 Sep 2022 15:17:36 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
+ compile build
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>
+CC: <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
+	<akpm@linux-foundation.org>, <peterz@infradead.org>, <keescook@chromium.org>,
+	<davidgow@google.com>, <jpoimboe@kernel.org>, <dan.j.williams@intel.com>,
+	<ojeda@kernel.org>, <isabbasso@riseup.net>, <dmitrii.bundin.a@gmail.com>,
+	<vbabka@suse.cz>, <linux@rasmusvillemoes.dk>, <linux-kbuild@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <liwei391@huawei.com>,
+	<weiyongjun1@huawei.com>, clang-built-linux <llvm@lists.linux.dev>,
+	linux-toolchains <linux-toolchains@vger.kernel.org>
+References: <20220927153125.811911-1-zengheng4@huawei.com>
+ <CAKwvOdm2r_PPogCecGL4TMeYLq3qNkCbt7zqYTLmQf-PAQMGMg@mail.gmail.com>
+ <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
+From: Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <YzMsmYTzX2Ni5zGP@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500022.china.huawei.com (7.185.36.162)
+X-CFilter-Loop: Reflected
 
 
-This patch set refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
-Also, re-implement TRIM_UNUSED_KSYMS in one-pass.
+On 2022/9/28 1:02, Nathan Chancellor wrote:
+> On Tue, Sep 27, 2022 at 09:45:17AM -0700, Nick Desaulniers wrote:
+>> On Tue, Sep 27, 2022 at 8:15 AM Zeng Heng <zengheng4@huawei.com> wrote:
+>>> Provide implicit enum-conversion warning option
+>>> in general build. When it set enabled, it can
+>>> detect implicit enum type conversion and find
+>>> potential conversion errors like below
+>>> (use "allmodconfig"):
+>>>
+>>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:3904:46:
+>>> error: implicit conversion from ‘enum <anonymous>’ to ‘enum odm_combine_mode’ [-Werror=enum-conversion]
+>>>   3904 |       locals->ODMCombineEnablePerState[i][k] = true;
+>>>        |                                              ^
+>>>
+>>> The '-Wenum-conversion' could be regarded as
+>>> effective check on compile runtime and
+>>> call attention on potential mistakes.
+>>>
+>>> Anothor practical example could be referred to:
+>>> https://lore.kernel.org/all/CADnq5_OE0yZvEYGu82QJHL9wvVcTFZrmeTgX7URgh7FVA=jqYg@mail.gmail.com
+>>>
+>>> "-Wenum-conversion" was firstly introduced from
+>>> GNU gcc-10.
+>> What about clang? ;)
+>>
+>>> Although "-Wenum-conversion" could be enabled
+>>> by "-Wextra" when compiling with 'W=1' option,
+>>> there are many warnings generated by '-Wextra'
+>>> that cause too much noise in a build.
+>> With clang, I believe that -Wenum-conversion is part of -Wall or
+>> -Wextra; so enabling this explicitly is only necessary for GCC.  I
+>> wonder why it's not part of -Wall or -Wextra for GCC?  Perhaps worth a
+>> bug report/feature request?
+> With clang, -Wenum-conversion is just default enabled, not even behind
+> -Wall:
+>
+> $ cat test.c
+> enum enum1 { A = 1 };
+> enum enum2 { B = 2 };
+>
+> enum enum1 foo(enum enum2 bar)
+> {
+>      return bar;
+> }
+>
+> $ clang -fsyntax-only test.c
+> test.c:11:9: warning: implicit conversion from enumeration type 'enum enum2' to different enumeration type 'enum enum1' [-Wenum-conversion]
+>          return bar;
+>          ~~~~~~ ^~~
+> 1 warning generated.
+>
+> On the other hand, GCC does have it under -Wextra:
+>
+> $ gcc -fsyntax-only test.c
+>
+> $ gcc -Wextra -fsyntax-only test.c
+> test.c: In function ‘foo’:
+> test.c:6:16: warning: implicit conversion from ‘enum enum2’ to ‘enum enum1’ [-Wenum-conversion]
+>      6 |         return bar;
+>        |                ^~~
+>
+> But the kernel does not build with -Wextra aside from W=[123], hence
+> this warning has to be explicitly requested for GCC.
 
-You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
-but you do not need to care about whether it is a function or a data.
-Remove EXPORT_DATA_SYMBOL().
-
-In v1, I broke ia64 because of missing distinction between functions and data.
-
-V2 handles it correctly.
-If the exported symbols is a function, KSYMTAB_FUNC is output.
-Otherwise, KSYMTAB_DATA is output.
+Thanks to your replenish about clang.
 
 
-Changes in v3:
-  - Move to the head of the series
-  - New patch
-  - Move struct kernel_symbol to kernel/module/internal.h
-  - Some cleanups
+>>> Seeing the details from the following link:
+>>> https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
+>>>
+>>> Because there are still some concerned warnings
+>>> exist, the patch marks the option disabled in default
+>>> for avoiding compile failed like using "allmodconfig".
+> But there is no dependency to avoid this getting enabled by allmodconfig
+> (such as 'depends on !COMPILE_TEST') so I don't see the point in the
+> current form; 'default n' does nothing to prevent it. Regardless, I
+> agree with Nick's sentiment below.
+>
+>>> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+>>> ---
+>>>   Makefile          | 5 +++++
+>>>   lib/Kconfig.debug | 7 +++++++
+>>>   2 files changed, 12 insertions(+)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index ebd48fc956a3..1790a3624358 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -880,6 +880,11 @@ endif
+>>>   KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
+>>>   KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+>>>
+>>> +# check implicit enum conversion
+>>> +ifdef CONFIG_ENUM_CONVERSION
+>>> +KBUILD_CFLAGS += -Wenum-conversion
+>>> +endif
+>> Having a kconfig for this is overkill.  cc-option with a comment about
+>> the compiler default versions is the way to go.
+Got it.
+> Agreed. If there is some reason -Wenum-conversion cannot be enabled for
+> GCC right now (such as existing warnings, which the commit message
+> appears to alude to), they should be cleaned up first then
+> -Wenum-conversion should just be unconditionally enabled for all
+> compilers that support it via cc-option, not half enabled via Kconfig so
+> that maybe people will clean up the warnings. That is not how enabling
+> warnings works:
+>
+> https://lore.kernel.org/CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com/
 
-Changes in v2:
-  - New patch
-  - Use KSYMTAB_FUNC and KSYMTAB_DATA for functions and data, respectively
-    This distinction is needed for ia64.
-  - New patch
-  - New patch
+Have sent the patches to fix the involving warnings.
 
-Masahiro Yamada (8):
-  kbuild: move modules.builtin(.modinfo) rules to Makefile.vmlinux_o
-  kbuild: rebuild .vmlinux.export.o when its prerequisite is updated
-  kbuild: generate KSYMTAB entries by modpost
-  ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-  modpost: squash sym_update_namespace() into sym_add_exported()
-  modpost: use null string instead of NULL pointer for default namespace
-  modpost: squash report_sec_mismatch() and remove enum mismatch
-  kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
+If all the concerned warnings were repaired, I would send the v2 again.
 
- .gitignore                      |   1 -
- Makefile                        |  37 ++----
- arch/ia64/include/asm/Kbuild    |   1 +
- arch/ia64/include/asm/export.h  |   3 -
- arch/ia64/kernel/head.S         |   2 +-
- arch/ia64/kernel/ivt.S          |   2 +-
- include/asm-generic/export.h    |  83 +-----------
- include/linux/export-internal.h |  49 +++++++
- include/linux/export.h          | 114 +++-------------
- kernel/module/internal.h        |  12 ++
- scripts/Makefile.build          |  15 +--
- scripts/Makefile.modpost        |   8 +-
- scripts/Makefile.vmlinux        |  21 ++-
- scripts/Makefile.vmlinux_o      |  26 +++-
- scripts/adjust_autoksyms.sh     |  73 ----------
- scripts/basic/fixdep.c          |   3 +-
- scripts/check-local-export      |   4 +-
- scripts/gen_autoksyms.sh        |  62 ---------
- scripts/gen_ksymdeps.sh         |  30 -----
- scripts/link-vmlinux.sh         |  12 --
- scripts/mod/modpost.c           | 228 ++++++++++++++++----------------
- scripts/mod/modpost.h           |   1 +
- scripts/remove-stale-files      |   2 +
- 23 files changed, 270 insertions(+), 519 deletions(-)
- delete mode 100644 arch/ia64/include/asm/export.h
- delete mode 100755 scripts/adjust_autoksyms.sh
- delete mode 100755 scripts/gen_autoksyms.sh
- delete mode 100755 scripts/gen_ksymdeps.sh
+Thanks all.
 
--- 
-2.34.1
-
+>>> +
+>>>   # These result in bogus false positives
+>>>   KBUILD_CFLAGS += $(call cc-disable-warning, dangling-pointer)
+>>>
+>>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>>> index 4f2b81229a2f..a64e06a747d8 100644
+>>> --- a/lib/Kconfig.debug
+>>> +++ b/lib/Kconfig.debug
+>>> @@ -417,6 +417,13 @@ config FRAME_WARN
+>>>            Setting this too low will cause a lot of warnings.
+>>>            Setting it to 0 disables the warning.
+>>>
+>>> +config ENUM_CONVERSION
+>>> +       bool "Warn for implicit enum conversion"
+>>> +       depends on GCC_VERSION >= 100300
+>>> +       default n
+>>> +       help
+>>> +         Tell gcc to warn at build time for implicit enum conversion.
+>>> +
+>>>   config STRIP_ASM_SYMS
+>>>          bool "Strip assembler-generated symbols during link"
+>>>          default n
+>>> --
+>>> 2.25.1
+>>>
+>>
+>> -- 
+>> Thanks,
+>> ~Nick Desaulniers
+>>
