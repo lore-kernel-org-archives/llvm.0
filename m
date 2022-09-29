@@ -1,80 +1,83 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91142579
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 15:21:35 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id i6so1751478pfb.2
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 08:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=+DNNP6SHxbQnNh6YvMOmq3FXeAXvMFe/ESayAoZ8RAc=;
-        b=QfjHyNuy9ubDPnO1F1EywSQRa43BRlBD1elemgCKhFUx95gJTgftGmM7zenvcr+vP2
-         NNPXYODaUrG6ZcL5ShCQGniRniwQ9Q0dgfD8Yc18qmR8S43eQn45iL5YamTQepz4Oe+z
-         5AvilvLcNkYHY1lg5izYSjO9yrnYsPRZhSJhgZBl30ETXDtv8N3ul4SM1BtZ/MZdqAj6
-         vgdHNj6co8pMsjnpJbwi6LZl2A9XlBzg3xkLAF1oXD4Z5UyzOMz8jEblFDXNT0MfpgQh
-         3iSAeaYikiItVFN4amJ5xmljriRfxGOWNZS7c4U/DHQGX7S/X0JQ9rZEqVZAoIuMVLHO
-         YUlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=+DNNP6SHxbQnNh6YvMOmq3FXeAXvMFe/ESayAoZ8RAc=;
-        b=PiDEMGoPXWkZf2aFIZNAeoMbNJ4wKFQ7BWKmV1IPFkX+L9Gob0ZrzEi8W53P6mesPK
-         KR9RtV36Gg61I5tHUQ6V20rEpml5kbPN6oejZUhfvQU1l+rA8PA2EQlw/pUctflI90Gr
-         BmBd1EO0kyS1jFGJVUDJQKKWuktjWL5qM4bhMPqduMIbe2lL+rdT+EUnMWsosJZB7zvU
-         h+wOKukvuzSn/sEY5rkNpniSbeHe7m24Am/eiukhm4FSKRfZXYyb7TjYr3XxJWM2BVRo
-         lKQ81DujhUklUFRyYh6PlVwlEX0yiSwgARSi3hB+fee9tTIlbUNbfoXKbRhtSaGXy1E3
-         e5Vg==
-X-Gm-Message-State: ACrzQf3Huq01PCc2rUwEd8y0pyVwoJHpwk7rUSn9c/q+z7icBjTaQ20G
-	AvPxd9rlofSqeXMhtguLdfUcmw==
-X-Google-Smtp-Source: AMsMyM7H917Sg+MttAyxwzaKo5iPEQjGqRIX6khDOT3zeXNheBMvFb18YVSJGNVn/GVF8iOJdQWNHw==
-X-Received: by 2002:a65:4508:0:b0:43c:e3c6:d1c2 with SMTP id n8-20020a654508000000b0043ce3c6d1c2mr3341488pgq.582.1664464895083;
-        Thu, 29 Sep 2022 08:21:35 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170902758300b001750b31faabsm5967160pll.262.2022.09.29.08.21.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 08:21:34 -0700 (PDT)
-Date: Thu, 29 Sep 2022 15:21:31 +0000
-From: Sean Christopherson <seanjc@google.com>
-To: Andrew Jones <andrew.jones@linux.dev>
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4565395
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 16:11:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6583C433D6;
+	Thu, 29 Sep 2022 16:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664467882;
+	bh=YQ2VBsdrbmdPy2lXy7ot5iuJYzQlEhfs7SsBIKRXys0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EIiXGJaWxiVEK7X2NAyW+d/K6UeALMRP5UlZu5D/jYoqbAmGXNDzv/Y20YziT2HIH
+	 VueM46Fqx1jwmmpB0RtTnFQXf54vSZf4HvO8hSpXJKylMbkhya2nJd3ceYoEwHrZ+b
+	 HRZcZlwA6YvAr8MTVFHSDZX25Q0JHnBXN8qGKSXnsIJp70DrelwBnXwyhPesBQ47gm
+	 YH7R5AFs5g8+tMucOIcfZ3NrS8Adnt1Kl6HMmkvlF0vM9daU5BzAT7jge2N8jcfL+Q
+	 Bx4xR5htE9VIukaJeLeN8dRKyCt0N7YSTrqHusSOYOutV3dB1idDjYbC6Ec1wfsamg
+	 UfTL446k0S+nw==
+Date: Fri, 30 Sep 2022 00:01:42 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Guo Ren <guoren@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 1/7] KVM: selftests: Implement memcmp(), memcpy(), and
- memset() for guest use
-Message-ID: <YzW3+0yIkMwi4YdT@google.com>
-References: <20220928233652.783504-1-seanjc@google.com>
- <20220928233652.783504-2-seanjc@google.com>
- <20220929084855.26t6r6aaurm2caum@kamzik>
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 4/4] riscv: entry: consolidate general regs saving
+ into save_gp
+Message-ID: <YzXBZnGXQdEGR1LW@xhacker>
+References: <20220928162007.3791-1-jszhang@kernel.org>
+ <20220928162007.3791-5-jszhang@kernel.org>
+ <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220929084855.26t6r6aaurm2caum@kamzik>
+In-Reply-To: <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com>
 
-On Thu, Sep 29, 2022, Andrew Jones wrote:
-> On Wed, Sep 28, 2022 at 11:36:46PM +0000, Sean Christopherson wrote:
-> > @@ -232,6 +235,12 @@ $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
-> >  $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S
-> >  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-> >  
-> > +# Compile the string overrides as freestanding to prevent the compiler from
-> > +# generating self-referential code, e.g. with "freestanding" the compiler may
->                                             ^ without
+On Thu, Sep 29, 2022 at 11:59:00AM +0800, Guo Ren wrote:
+> On Thu, Sep 29, 2022 at 12:29 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > Consolidate the saving/restoring GPs(except ra, sp and tp) into
+> > save_gp/restore_gp macro.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  arch/riscv/include/asm/asm.h   | 65 +++++++++++++++++++++++++
+> >  arch/riscv/kernel/entry.S      | 87 ++--------------------------------
+> >  arch/riscv/kernel/mcount-dyn.S | 58 +----------------------
+> >  3 files changed, 70 insertions(+), 140 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+> > index 1b471ff73178..2f3b49536e9d 100644
+> > --- a/arch/riscv/include/asm/asm.h
+> > +++ b/arch/riscv/include/asm/asm.h
+> > @@ -68,6 +68,7 @@
+> >  #endif
+> >
+> >  #ifdef __ASSEMBLY__
+> > +#include <asm/asm-offsets.h>
+> >
+> >  /* Common assembly source macros */
+> >
+> > @@ -80,6 +81,70 @@
+> >         .endr
+> >  .endm
+> >
+> > +       /* save all GPs except ra, sp and tp */
+> > +       .macro save_gp
+> How about leave x3(gp) out of the macro, and define:
+> .marco save_from_x5_to_x31
+> .marco restore_from_x5_to_x31
 
-Oof, good eyes.  Thanks!
+Good idea, will do in next version.
+
+Thanks
