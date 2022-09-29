@@ -1,149 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mta-p8.oit.umn.edu (mta-p8.oit.umn.edu [134.84.196.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCD3EA9
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664414496;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7jNI0LDpSJfJvOKK5gKaWFfExO3xy3tcXQHFOE3WDMY=;
-	b=PUEvAsi4IYZj0ZLxZIp/+eHwY3apFHXTqegRWfcUUP6iONN5mFDoy+ijd129gj/xaGTnnb
-	qaR65sidqj0WZRvP2RQbsd4VqO1dml4XTAwbFYd42HcJ/+rlI5i0y+/a/0m8Xkv7iz/v6F
-	t9zRRGjn1C5Wh05P/VrmcZJNCxxKjwM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-263-fdEIfiXAMJiRx6wcGxmAkQ-1; Wed, 28 Sep 2022 21:21:35 -0400
-X-MC-Unique: fdEIfiXAMJiRx6wcGxmAkQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7931EA9
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:37:26 +0000 (UTC)
+Received: from localhost (unknown [127.0.0.1])
+	by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4MdG2l5Xrnz9vJbq
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:28:15 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+	by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ON83GR1BJrfu for <llvm@lists.linux.dev>;
+	Wed, 28 Sep 2022 20:28:15 -0500 (CDT)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D441485A59D
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:21:34 +0000 (UTC)
-Received: from [172.64.5.45] (unknown [10.30.33.168])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B224C2166B26;
-	Thu, 29 Sep 2022 01:21:34 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
- mainline.kernel.org-clang, c3e0e1e2)
-Date: Thu, 29 Sep 2022 01:21:32 -0000
-CC: bgoncalv@redhat.com
+	by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4MdG2l3F9rz9vJbs
+	for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 20:28:15 -0500 (CDT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4MdG2l3F9rz9vJbs
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4MdG2l3F9rz9vJbs
+Received: by mail-pj1-f71.google.com with SMTP id pc10-20020a17090b3b8a00b00202be8d81d2so2604744pjb.1
+        for <llvm@lists.linux.dev>; Wed, 28 Sep 2022 18:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=r2sN88rES+GCiij16Y6H9XHSivZGMue4f1jc1ky8Ql0=;
+        b=S++o4oz4c/L6xd1QrKh+G1zz1rLXqXCY4Uh/y8kaeoeiOholc/cSfPq0vqNO8tOsAt
+         By09HeYOaWLW+0lFkXk+8+i/qlVpQKDdvdo4s5J3Eo90QqdeoOqQxfhcJJus8PVf/b1W
+         t5NEFbhenLCW2KBClz+wc0OPxn4vHuKuZfUdePpfnh0IgOZ9Q8z1kKouxoNo9FMb9GIz
+         pLqCsixyriepEtH6OwUjwThSRA1cEJT87Y1TH5HnJXoCdRCQpqrRSz87A9lq8xG+3JPo
+         9rMfM0fLJtF31pYO46c9UnCYz9LD+tcUto2tPBV+gEhvhL+uWdB+QMvqAkisDenpXNeG
+         IdHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=r2sN88rES+GCiij16Y6H9XHSivZGMue4f1jc1ky8Ql0=;
+        b=WuYKIPaADQwfuxZJlSaxOFYzwPTAlVtSdwKuSFdGg1PEKKvJ30TBgJeGYFQL5XT0gh
+         Cre1MtJenAKq7SeDjL8PNjfkAtSVB1UKl/U5/JSJT18y8vL5jyy/O6DPojM/AXwvl0kD
+         ywIyRnIakN2MGloyWsouDfP8Jfruc/8sSnujkBtBmfHlxpTom77frVQCCCH/EVp42Fwd
+         CtAvnelXwBHaoUSNAFh22eX4nEeEUkzE2CDrPGQu9830pbRAmbWA4tsrSvrRyYBDg0Ay
+         9NHKWP0IKbO0+Q3I0ZAvFb///s2h9YLctPsA13+AqFaqv/tOnDv3lCApUJ+f9g2IkXSR
+         WNSw==
+X-Gm-Message-State: ACrzQf2RSXsdSjeIncZTHCErA97lM7OM3k/pudiRkPvmq6LQ0Gibk7sv
+	/IEbLk1gJxL+h39wsAw6RxH7CdrY6IK0AJxZ9nePruQ7dWr/EIwukTeOnMsead2AJK5pYIgcZax
+	v5w9TOBuRlWUASE9cni9JepU7VBu/aEERJQ==
+X-Received: by 2002:a05:6a00:14c4:b0:542:cd3a:591e with SMTP id w4-20020a056a0014c400b00542cd3a591emr772785pfu.27.1664414894436;
+        Wed, 28 Sep 2022 18:28:14 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7TbmuEiE7cSesx/sittSjJusa70P4btPEL7zmj+gB3zmQI0mIm/OSrLd1PIYcWITVRpW4vJ18hGClrQzJ+uZY=
+X-Received: by 2002:a05:6a00:14c4:b0:542:cd3a:591e with SMTP id
+ w4-20020a056a0014c400b00542cd3a591emr772760pfu.27.1664414894092; Wed, 28 Sep
+ 2022 18:28:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <78529.122092821213500317@us-mta-263.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <CAGXevkhSrz5B=NavzTH1WLLGjmJ=z2AVXb-vm1ZRvJO=vK8x+w@mail.gmail.com>
+ <CAKwvOdmb3dpYM5tOasgKHB3h1CQuV0GTpjM6Z2NL-kgrhGuvwg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmb3dpYM5tOasgKHB3h1CQuV0GTpjM6Z2NL-kgrhGuvwg@mail.gmail.com>
+From: Kangjie Lu <kjlu@umn.edu>
+Date: Wed, 28 Sep 2022 20:28:02 -0500
+Message-ID: <CAK8KejrVM=ArJ1yobfT7kQL1=RnX8uuWm8orCKEyqUr9FuDh+g@mail.gmail.com>
+Subject: Re: Connecting Nick and Kangjie
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Navid Emamdoost <navidem@google.com>, Nathan Huckleberry <nhuck@google.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, clang-built-linux <llvm@lists.linux.dev>, 
+	Kees Cook <keescook@chromium.org>, Mats Heimdahl <heimdahl@umn.edu>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Hi Navid and Nick,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Glad to hear from you!
 
+On Wed, Sep 28, 2022 at 5:50 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Wed, Sep 28, 2022 at 3:37 PM Navid Emamdoost <navidem@google.com> wrot=
+e:
+> >
+> > Hi Kangjie,
+> >
+> > I hope you are doing well. I wanted to introduce you to Nick who is wor=
+king on very interesting projects at Google for the Clang-built kernels. He=
+ came across your CCS paper on identifying indirect calls targets, and was =
+interested to know about more of your work.
+> >
+> > Nick,
+> > Kangjie was on my PhD committee and we published a couple papers on det=
+ecting resource release bugs in the Linux kernel. Hope you can find interes=
+ting topics to collaborate on. Please feel free to keep me in the loop.
+>
+> Naveed, many thanks for the introduction.
+>
+> Professor,
+> My colleague, Nathan, recently pointed me to
+> https://github.com/umnsec/mlta which I was unfamiliar with.  I've been
+> driving the effort to get the kernel buildable with clang for the past
+> ~6 years, to help facilitate such academic research as this.  `asm
+> goto` support landed in clang-9, and has been a major focus of my work
+> in LLVM in particular.  Seeing the difficulties with them mentioned in
+> section 5.1 of https://www-users.cse.umn.edu/~kjlu/papers/mlta.pdf
+> gave me a chuckle (a sad one...it's been a long painful journey).
 
-Kernel information:
-    Commit message: Merge tag 'irq_urgent_for_v6.0' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/tip/tip
+After the MLTA work, I was amazed to find that Linux was fully
+compilable with Clang. Now I realized someone is striving to make this
+happen :)  Thanks!
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54558
+>
+> I was wondering if you would be able to stop by a public virtual
+> meeting we host once every 2 weeks and give a quick (~15 minute)
+> presentation on MLTA?
+> https://clangbuiltlinux.github.io/ has the Google Meet and Calendar
+> links. The next instance would be Wednesday next week at noon Pacific.
 
-One or more kernel tests failed:
+I'd love to. The best time for me is the one following next week
+(10/19). Anytime before noon or after 2pm PST should work for me.
 
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5295608
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5295622
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5295663
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5295668
+>
+> In particular, I'm also curious if you have additional research
+> underway involving the combination of LLVM and the Linux kernel?
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+We do have ongoing research that is involving both LLVM and Linux, but
+it is purely for analysis and code hardening, not for bug finding. For
+example, we recently finished another follow-up work of MLTA and are
+able to further remove 40% of indirect-call targets in the Linux
+kernel.
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+Best regards,
+Kangjie
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--=20
+Kangjie Lu
+Assistant Professor
+Department of Computer Science and Engineering
+University of Minnesota
+https://www-users.cs.umn.edu/~kjlu
