@@ -1,59 +1,56 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074CE53A5
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 18:19:53 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id q17-20020a25f911000000b006bcc33faa7bso1654236ybe.4
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 11:19:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6BB53A5
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 18:27:14 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id j3-20020a256e03000000b006bc0294164dso1815112ybc.20
+        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 11:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=SPo8cxe5Gv4Icg9WBrTrddqkcf882sEf/dI0Be8XuxM=;
-        b=DXJnnm+NdL8nSanlq3PhzlVA2yW8T9I3mOa4xTvpj42zBvFu66FIb2DtQDOjHeG+6v
-         HG3cK4hF922dwdGX+x8p7M6qxWMG+f6hDGB2TfxfIDs0H1DDPVDs5ZPI69y+pKxTDeMT
-         SpO1i5Gshc3VpB6UyQQDsQzCy3FgY7GG6NVmJ647J6qtYhmcaVPt+8gNr+34nTwANlSa
-         QbU/D0nreNEhATK9tXjmehbZPg/h6npv7o0zZWMdjdFVDdsBQQBUkwwgu0CxZL0FgOyG
-         duIQJBBQvHvR4F1IfLZu86vzbPpr/r1yF9N17o8yLu1I88CUq0ClhnYOWb683aA7tvTM
-         jwJQ==
+        h=cc:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=TCNjSWh2khixhi5M5S96BCZPDyWIajI7MNk5y1CP4tQ=;
+        b=Yo13DwjTXnaoeS0y6g7A4ryURj7HmjxBjY1CIx8TA8YG0TkQeid3iS0nI73l52wOPY
+         OG7zCxcPiuHhWJBN1wbHSYfw7cwCn5I35So62E5eR1kE8BK1SFxRmn3B89ABq5Lb0XCA
+         c17V4jSFwNhveOL7+DoIvuf/GoktBvkCGTAZ6+BGzXcKPIcD7H4cYGGgvXGK7mjY9qT3
+         Ok5lfnDgUNuXR8dXwGPndNvqxGPJSya/3tbK7N7qzE50pusBYGqq4fr9UJq1WdhrOaC5
+         2yroxqPOSJx3ghVVkZkHFKDy/eVWAZdhB57BpYvOzbIwfAkbQaqOZGbYVChXyDnJex8Q
+         WObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=SPo8cxe5Gv4Icg9WBrTrddqkcf882sEf/dI0Be8XuxM=;
-        b=2Ek4AElcmwfzAYKbTr3wi2bOGOKV9vQ5z/VwUne8Ysxlg/tbYeIP6d8MFVuwU7o28t
-         QIRBtE7bLPnCAaOCqRGH24okjJxxiHs6h4I4mKdtehVhU0hY3hfEhvrrzLQyIdQDNvsj
-         DDuXDp0CfuTMsTJQ3OAbcK4MMrZq7lGDmHKSiURVlFCAEl+XKWb1W7lpIqn4Yx874ZIJ
-         aq/d7k6HETaWOV0F2m+pPBabbFZWD+h4opeoQjx64qeaYgjlCwz6W4D47xUKd5/SZZLn
-         LSHEVkS17wIPB2UzQUxI4QIu80N/Ack1gUEzIG8Kl6A7BuWcXiw9f013UDDFgTyul3B6
-         O+Ig==
-X-Gm-Message-State: ACrzQf1qYHC2IdxntLrK5bv3X3BRENP5IN4bEC6jATo1PtbrZb3UPUOd
-	x+gwjAGI0CjzbKTiODX3nIlM//IXbw==
-X-Google-Smtp-Source: AMsMyM7hNJtv8eCYHU7H8bJzKkzWK1XeHZnh/Mh4XMITraHR5mnwjiEVoe7+u4ihdbWsT8jjcmHhOIx6uQ==
+        h=cc:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=TCNjSWh2khixhi5M5S96BCZPDyWIajI7MNk5y1CP4tQ=;
+        b=htO+bpYXuGKRHWeWQXW+1QOz4oRDpvJAV8oM6WgqGyxWrxHkMQzsjWWr2hXMTqDRGu
+         UurViCsyoZPZfkc/P4jEAxO30Jb4UK3Ok+t7J9bHapOZeizY/V1tP7dwYMVIWI/6grO+
+         ESX9BchDzNtMh+R4PdrrCewOaj968tdfQIsC3AZkzZg+76u/J2yMzT1K6PaXmwHclFeI
+         vXSgsoE1HXfdK/XPmx9a0QtyJzbzssDuM797naF+1fvcLCw7BEOxJF+lSpAj9uC28TBI
+         2khWyDIgqmsvHjCzzks0uTnz1wBUZcertjXI8KSYNT53xbgaYXB5h7y5/D8f0Ndwt2Tk
+         EZsw==
+X-Gm-Message-State: ACrzQf2AjO11Cl6woL0ffsk8XdOCX9Xu+3EF+xfC89THyWugo20Q1POj
+	hpL0qI21/Ridj2uoeW1WOLEPJ9VVeA==
+X-Google-Smtp-Source: AMsMyM7izNOHKJTh4Ttf/2FZTV0VPOoAFMNNllUoSw1AaASTnPFHL4tWGLHJ4a22FeLFfd2iILIYokFOUg==
 X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a81:c45:0:b0:34d:21de:b794 with SMTP id
- 66-20020a810c45000000b0034d21deb794mr4937456ywm.138.1664475593080; Thu, 29
- Sep 2022 11:19:53 -0700 (PDT)
-Date: Thu, 29 Sep 2022 11:19:47 -0700
-In-Reply-To: <20220920073003.5dab2753@kernel.org>
+ (user=nhuck job=sendgmr) by 2002:a0d:d708:0:b0:354:b610:fd3d with SMTP id
+ z8-20020a0dd708000000b00354b610fd3dmr4693272ywd.28.1664476033986; Thu, 29 Sep
+ 2022 11:27:13 -0700 (PDT)
+Date: Thu, 29 Sep 2022 11:27:03 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-References: <20220920073003.5dab2753@kernel.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220929181947.62909-1-nhuck@google.com>
-Subject: [PATCH v2] net: sparx5: Fix return type of sparx5_port_xmit_impl
+Message-ID: <20220929182704.64438-1-nhuck@google.com>
+Subject: [PATCH] net: lan966x: Fix return type of lan966x_port_xmit
 From: Nathan Huckleberry <nhuck@google.com>
-To: kuba@kernel.org
-Cc: Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com, 
-	casper.casan@gmail.com, davem@davemloft.net, edumazet@google.com, 
-	error27@gmail.com, horatiu.vultur@microchip.com, lars.povlsen@microchip.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, nhuck@google.com, pabeni@redhat.com, trix@redhat.com
+Cc: Nathan Huckleberry <nhuck@google.com>, Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev, 
+	Horatiu Vultur <horatiu.vultur@microchip.com>, UNGLinuxDriver@microchip.com, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 The ndo_start_xmit field in net_device_ops is expected to be of type
@@ -62,7 +59,7 @@ netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 The mismatched return type breaks forward edge kCFI since the underlying
 function definition does not match the function hook definition.
 
-The return type of sparx5_port_xmit_impl should be changed from int to
+The return type of lan966x_port_xmit should be changed from int to
 netdev_tx_t.
 
 Reported-by: Dan Carpenter <error27@gmail.com>
@@ -70,47 +67,23 @@ Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Changes v1 -> v2
-- Updated header file
-
- drivers/net/ethernet/microchip/sparx5/sparx5_main.h   | 2 +-
- drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-index 8b42cad0e49c..7a83222caa73 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-@@ -305,7 +305,7 @@ struct frame_info {
- void sparx5_xtr_flush(struct sparx5 *sparx5, u8 grp);
- void sparx5_ifh_parse(u32 *ifh, struct frame_info *info);
- irqreturn_t sparx5_xtr_handler(int irq, void *_priv);
--int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
- int sparx5_manual_injection_mode(struct sparx5 *sparx5);
- void sparx5_port_inj_timer_setup(struct sparx5_port *port);
- 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-index 21844beba72d..83c16ca5b30f 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-@@ -222,13 +222,13 @@ static int sparx5_inject(struct sparx5 *sparx5,
- 	return NETDEV_TX_OK;
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index b98d37c76edb..be2fd030cccb 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -344,7 +344,8 @@ static void lan966x_ifh_set_timestamp(void *ifh, u64 timestamp)
+ 		IFH_POS_TIMESTAMP, IFH_LEN * 4, PACK, 0);
  }
  
--int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
+-static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
++				     struct net_device *dev)
  {
- 	struct net_device_stats *stats = &dev->stats;
- 	struct sparx5_port *port = netdev_priv(dev);
- 	struct sparx5 *sparx5 = port->sparx5;
- 	u32 ifh[IFH_LEN];
--	int ret;
-+	netdev_tx_t ret;
- 
- 	memset(ifh, 0, IFH_LEN * 4);
- 	sparx5_set_port_ifh(ifh, port->portno);
+ 	struct lan966x_port *port = netdev_priv(dev);
+ 	struct lan966x *lan966x = port->lan966x;
 -- 
 2.38.0.rc1.362.ged0d419d3c-goog
 
