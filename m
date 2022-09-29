@@ -1,130 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B6053A5;
-	Thu, 29 Sep 2022 16:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FDCC433D6;
-	Thu, 29 Sep 2022 16:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664470402;
-	bh=OTCJDDYmogsWoBsRnQwhGbY0Cu0/Bl2M4UiySUYJ8gU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qR9F3j97WWgZnCrPk0dLVer0gHaXTYv55tRkVfNOyJMbhUhe4Fk0GBw28xacW6ogD
-	 iqJ0UuB7VHQnoAQhhDaIxxQiiBUcA+xHoRiMz+92WDgoN51UeP0v4uy7Fp4ne6sFzh
-	 tfHwZ13qMAm5zQwA9yZJfJU7VGNZH7S6wzAIvo4PM2UpTHCSQrAZXPHVVh/EQfdiUc
-	 Thj+MiMAG3/y7/lA06QcBuMN9GrZKOsv2Y45eufyMuBRMiwRtOGAeazreAmfwyn6R/
-	 jLyXZjF0If4UGZZ+XRo4vmLcEzdVXVkl+EHR3ZXRRrz9q4TZDvRY3yem0CHaCUwl+b
-	 9tKBAqSKgYaSQ==
-Date: Thu, 29 Sep 2022 09:53:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andi Shyti <andi.shyti@linux.intel.com>
-Cc: Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>, intel-gfx@lists.freedesktop.org,
-	Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Ashutosh Dixit <ashutosh.dixit@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: Fix CFI violations in gt_sysfs
-Message-ID: <YzXNf859huM45MdK@dev-arch.thelio-3990X>
-References: <20220922195127.2607496-1-nathan@kernel.org>
- <202209232143.172BCCDC4@keescook>
- <Yy/bglnYjnFfjDDI@dev-arch.thelio-3990X>
- <YzXL6v3VAVUMiYO0@ashyti-mobl2.lan>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D49953A5
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 17:26:42 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id jo24so1260296plb.13
+        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 10:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hp5MQIBdOQ5Xk6FQmwC1/qIjFwJwbOcf9xoZvfBFSSs=;
+        b=RyAGnpmVQ7MHTy3FCbwhx+2SCA1IVKkyCDgY5S0n/JQkX7ciyU6WlRztNvL4tNYrWY
+         P8yeb9atgz7sJsNunvKwjSto1jvT288QBV6GYqC7mDy3SZwOfgTA5t2FFXRx+RY8vD1K
+         prK2Vz3hNVAMyJWXzGokK3qlkKIop5mkwV5XeVXDK9D8JowjYfW2wPcbAXwbOtCYcci0
+         wpJJ4cwbTD8ShNL1hy5MkbWLlI5g2YJ3Hze+RsckkZqZfGsUhNdyzO3PbImn4y+OfjdG
+         qSqThRukWMKgvEj4MkvYX/UUXLkN4msLyzS2iZukUZ1wsy+oAQDEztxkF5S0D94S0938
+         CskQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hp5MQIBdOQ5Xk6FQmwC1/qIjFwJwbOcf9xoZvfBFSSs=;
+        b=uajAh0SH8KnMfX4bj8D9/CBfUXOuRDm90Pn+cZ+6crHMBus4/rJAah6gowFGCrnlDc
+         PT2/KK03owzg0z6lbtBkA8Apk9oR9h04eUTuGZkiBMzRGg0I0BTV1b5B//fTnvSY6mai
+         a1mAroRuB+x/w+UuGaE48SUa59y4uClksGMtWGYELfpeJIpCPDx+C7YAo5X2qRsEnpGW
+         QmcBK/rvCDKrifti71hS2WyHGL0Aj6SbXYH8+FCS+ZFIHksxgv2wqnA/cEDJsWeF2lKy
+         SAQKQFIWxQEG63ONM97vJkF1kPVWEb/7tTZtvybc+HGrX2tQiKbqsiOXWhkJR9ItE6aL
+         q/MQ==
+X-Gm-Message-State: ACrzQf3QbsLjMOVYDaxrQRffJ2lTEIDL56V+weX3Z6lBwef4wpco6cts
+	0tQ2K4+JVppwp70sPIgzz0WqkMxvRyyrmaeHjeL3RA==
+X-Google-Smtp-Source: AMsMyM6PcJA6nad6z96ctWkFUw7ZK/KRKkinRUcyyms0OiRxIbikPJZ4kvR4bJl/I/IumZ6cAydMH85aCXmtXaokv7o=
+X-Received: by 2002:a17:90b:1d0f:b0:202:be3e:a14a with SMTP id
+ on15-20020a17090b1d0f00b00202be3ea14amr17447921pjb.102.1664472401750; Thu, 29
+ Sep 2022 10:26:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzXL6v3VAVUMiYO0@ashyti-mobl2.lan>
+References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
+ <20220928210512.642594-1-ndesaulniers@google.com> <YzVRJ3NY2w1NSoM2@gmail.com>
+In-Reply-To: <YzVRJ3NY2w1NSoM2@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 29 Sep 2022 10:26:29 -0700
+Message-ID: <CAKwvOdk4bbwy6mb+uxO1BUCz5=0K7t1Xa899WnZS1VY5Sdhqkg@mail.gmail.com>
+Subject: Re: [PATCH v4] x86, mem: move memmove to out of line assembler
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <keescook@chromium.org>, 
+	linux-kernel@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>, 
+	llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 29, 2022 at 06:46:34PM +0200, Andi Shyti wrote:
-> Hi Nathan,
-> 
-> thanks for this refactoring... looks good even though i would
-> have split it in more patches as this is doing quite many things.
+On Thu, Sep 29, 2022 at 1:02 AM Ingo Molnar <mingo@kernel.org> wrote:
+>
+> Yeah, so you did various whitespace & indentation cleanups, and I think if
+> we are touching trivialities we might as well fix/improve the documentation
+> of this function too...
 
-Right, sorry about that :/ I initially thought the problem was much
-simpler and the diff was more reasonable before I truly saw what was
-happening and by that point, trying to break things apart felt like
-navigating a mine field. I will definitely keep that in mind for the
-future though.
+Yes, these are all wonderful suggestions.  My hope is to also improve
+the readability of the implementation. I will incorporate your
+suggestions into a v5 and credit you with a suggested-by tag.
 
-> But I will not be stubborn, I understand that it's not trivial to
-> have things split. I will give my r-b for now but I will check it
-> again before applying it as it's very easy to get tangled-up in
-> between all those defines:
-> 
-> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+> calling standards details. If we want to mention it to make it clear what
+> we are saving on the stack and what not, the best description is the one
+> from calling.h:
+>
+>    x86 function calling convention, 32-bit:
+>    ----------------------------------------
+>     arguments         | callee-saved        | extra caller-saved | return
+>    [callee-clobbered] |                     | [callee-clobbered] |
+>    -------------------------------------------------------------------------
+>    eax edx ecx        | ebx edi esi ebp [*] | <none>             | eax
 
-Appreciate it! I don't have access to some of the hardware that is
-special cased in this code so I definitely would not mind some
-additional eyes and testing for this change.
+Oh! Perfect! I'm so glad this table exists!
 
-> For now I'm quite surprised to see how easily our CI gives green
-> lights :-P
-> 
-> On Sat, Sep 24, 2022 at 09:39:30PM -0700, Nathan Chancellor wrote:
-> > On Fri, Sep 23, 2022 at 09:57:47PM -0700, Kees Cook wrote:
-> > > On Thu, Sep 22, 2022 at 12:51:27PM -0700, Nathan Chancellor wrote:
-> > > > [...]
-> > > > To make everything work properly, adjust certain functions to match the
-> > > > type of the ->show() and ->store() members in 'struct kobj_attribute'.
-> > > > Add a macro to generate functions for that can be called via both
-> > > > dev_attr_{show,store}() or kobj_attr_{show,store}() so that they can be
-> > > > called through both kobject locations without violating kCFI and adjust
-> > > > the attribute groups to account for this.
-> > > 
-> > > This was quite a roller coaster! I think the solution looks good, even
-> > > if I'm suspicious of the original design that has the same stuff
-> > > available twice in different places. (I have a dim memory of rdma
-> > > needing a refactoring like this too?)
-> > 
-> > Right, I noticed this comment in intel_gt_sysfs_register() once I fully
-> > saw what was going on:
-> > 
-> > 	/*
-> > 	 * We need to make things right with the
-> > 	 * ABI compatibility. The files were originally
-> > 	 * generated under the parent directory.
-> > 	 *
-> > 	 * We generate the files only for gt 0
-> > 	 * to avoid duplicates.
-> > 	 */
-> > 
-> > Makes it seem like there will be userspace breakage if these files do
-> > not exist? I figured this was the cleanest solution within those
-> > parameters.
-> 
-> i915 went multi-gt (multitile) so that some interfaces, like the
-> power management files, have effect only on one of the tiles.
-> This means that we needed to move some of the files inside the
-> newly created gt0/gt1 directory.
-> 
-> But, because some of those files are part of an ABI
-> specification, we can't simply transfer them from the original
-> position so that we needed to make a "hard" copy (actually the
-> original files now take the role of affecting all the GTs instead
-> of only one).
-> 
-> The complexity of this file comes from the necessity of
-> minimizing code duplication, otherwise we could have had two
-> perfectly identical files (which looking at the final result it
-> wouldn't have been a completely bad idea after all).
-> 
-> Thanks again, will let you know when I will get this into our
-> branch.
+> Feel free to carry these changes over into your patch.
 
-Ah, that all makes sense, good to know that this solution will allow all
-of that to continue to work.
-
-If there are any issues or further comments, I am happy to follow up in
-whatever way I need to. Thanks again for the review and tentative
-acceptance!
-
-Cheers,
-Nathan
+Will do, thanks.
+-- 
+Thanks,
+~Nick Desaulniers
