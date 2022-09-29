@@ -1,80 +1,79 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1002610E5
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 04:22:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363D710E8
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 05:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664425331; x=1695961331;
+  t=1664428208; x=1695964208;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Y17JjZrPpcCOG/tmKMeZ9E0Hle7ucfwp2RcoN3IQDTU=;
-  b=YS1qFwFUH+DYuRhyVG0Ywcp889/y5tM0+NhvJ9OaVGwfR+3XqcHb/cIm
-   T3wkl1cSn0dG5xiOB/xBoMHMztw1qf+OiqL6F0p3wZdDdFFkd6LnyWESd
-   XkHM0Rehu4/NsptaMKjH5Dbip/Y/GDuTRnB7yd9PW41yYHIzGwy6CtVe8
-   5oEHAiH7w0uluOXikr+GuRoz1wbwnDFFN+UirmH8CJwU6Ow2xLeV+Vq80
-   ffzzksilM3lQkM/AhEMe0KtFvJZTbSF/H3AuJVb40jtYGexhEqtlsYyHc
-   iotOtD/oKPTo1NBxyEy5yxolAorAJcU7K2Jsv8x6xE1hbO3DcLzb8Niim
+  bh=xtO4mf3gtbRGz2afDV5FzAYSDn+eU6ddhzKWDiFITEA=;
+  b=ENeQP5LKJS1i8pvuV3BIEh+zQjsOqjNrrFzYZde/g1iW3qA1ZM842r0g
+   Tf4kxd6DiuNOIVA3rUsY0GdsWYMMK0p2//psm129OJa18GRDylvYSih05
+   vIkOZHa9keZ9Fhe61j0BsrX8Ph+TK43nNiVb7Nes8QAcVzKaQk+XSpUU9
+   tLQk+kllxRKRxlTThkj8uZ60JkiYR3Q6mulYRFhy5Q/8NmQFh+z9LEOAc
+   f/d0FM0IrQfe6FVzw0mFVCfkpuaz5OiGRD+Iv5NOToIvdkcyqIV0KLyT6
+   oGJLX+4r4zbL2SKGzEIKijssN+EqygqX8bFdM8Q0hQQYAeiY1ZLjgncEb
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="284923552"
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="328168114"
 X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="284923552"
+   d="scan'208";a="328168114"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 21:22:07 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 22:10:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="867225460"
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="867239368"
 X-IronPort-AV: E=Sophos;i="5.93,354,1654585200"; 
-   d="scan'208";a="867225460"
+   d="scan'208";a="867239368"
 Received: from lkp-server01.sh.intel.com (HELO 6126f2790925) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Sep 2022 21:22:01 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 28 Sep 2022 22:10:03 -0700
 Received: from kbuild by 6126f2790925 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1odl3g-0000ZU-32;
-	Thu, 29 Sep 2022 04:22:00 +0000
-Date: Thu, 29 Sep 2022 12:21:01 +0800
+	id 1odloB-0000dI-0W;
+	Thu, 29 Sep 2022 05:10:03 +0000
+Date: Thu, 29 Sep 2022 13:09:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Rosenberg <drosen@google.com>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>
+To: Peter Collingbourne <pcc@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrey Konovalov <andreyknvl@gmail.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Daniel Rosenberg <drosen@google.com>,
-	Paul Lawrence <paullawrence@google.com>,
-	Alessio Balsini <balsini@google.com>,
-	David Anderson <dvander@google.com>,
-	Sandeep Patil <sspatil@google.com>, linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 02/26] bpf: verifier: Allow single packet invalidation
-Message-ID: <202209291248.Ue1yhIlr-lkp@intel.com>
-References: <20220926231822.994383-3-drosen@google.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Peter Collingbourne <pcc@google.com>,
+	linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2] kasan: also display registers for reports from HW
+ exceptions
+Message-ID: <202209291221.YCyFn42J-lkp@intel.com>
+References: <20220927012044.2794384-1-pcc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="hphjGsDt8duBQ1ky"
+Content-Type: multipart/mixed; boundary="z/qHIY4vH2/Q24mb"
 Content-Disposition: inline
-In-Reply-To: <20220926231822.994383-3-drosen@google.com>
+In-Reply-To: <20220927012044.2794384-1-pcc@google.com>
 
 
---hphjGsDt8duBQ1ky
+--z/qHIY4vH2/Q24mb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Daniel,
+Hi Peter,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on bf682942cd26ce9cd5e87f73ae099b383041e782]
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20220928]
+[cannot apply to arm64/for-next/core linus/master v6.0-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Rosenberg/FUSE-BPF-A-Stacked-Filesystem-Extension-for-FUSE/20220927-095052
-base:   bf682942cd26ce9cd5e87f73ae099b383041e782
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Collingbourne/kasan-also-display-registers-for-reports-from-HW-exceptions/20220927-092847
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
 config: powerpc-randconfig-r006-20220925
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
@@ -82,22 +81,39 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install powerpc cross compiling tool for clang build
         # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/2be5946421bc5b6135b701f5362e0b591836ecc1
+        # https://github.com/intel-lab-lkp/linux/commit/010a23f5998ecdcc86e8dd37393862861dbd7e55
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Rosenberg/FUSE-BPF-A-Stacked-Filesystem-Extension-for-FUSE/20220927-095052
-        git checkout 2be5946421bc5b6135b701f5362e0b591836ecc1
+        git fetch --no-tags linux-review Peter-Collingbourne/kasan-also-display-registers-for-reports-from-HW-exceptions/20220927-092847
+        git checkout 010a23f5998ecdcc86e8dd37393862861dbd7e55
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash mm/kasan/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:45:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:182:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from mm/kasan/report.c:13:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
@@ -109,17 +125,16 @@ All warnings (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:13:1: note: expanded from here
+   <scratch space>:184:1: note: expanded from here
    __do_insl
    ^
    arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
    #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
+   In file included from mm/kasan/report.c:13:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
@@ -131,17 +146,16 @@ All warnings (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:15:1: note: expanded from here
+   <scratch space>:186:1: note: expanded from here
    __do_outsb
    ^
    arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
    #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
                                            ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
+   In file included from mm/kasan/report.c:13:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
@@ -153,17 +167,16 @@ All warnings (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:17:1: note: expanded from here
+   <scratch space>:188:1: note: expanded from here
    __do_outsw
    ^
    arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
    #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
                                            ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from kernel/bpf/core.c:21:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:11:
+   In file included from mm/kasan/report.c:13:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/powerpc/include/asm/hardirq.h:6:
    In file included from include/linux/irq.h:20:
@@ -175,56 +188,50 @@ All warnings (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:19:1: note: expanded from here
+   <scratch space>:190:1: note: expanded from here
    __do_outsl
    ^
    arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
    #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
                                            ~~~~~~~~~~~~~~~~~~~~~^
-   kernel/bpf/core.c:1623:12: warning: no previous prototype for function 'bpf_probe_read_kernel' [-Wmissing-prototypes]
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-              ^
-   kernel/bpf/core.c:1623:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-   ^
-   static 
-   kernel/bpf/core.c:2062:6: warning: no previous prototype for function 'bpf_patch_call_args' [-Wmissing-prototypes]
-   void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+>> mm/kasan/report.c:514:6: warning: no previous prototype for function 'kasan_report_regs' [-Wmissing-prototypes]
+   bool kasan_report_regs(unsigned long addr, size_t size, bool is_write,
         ^
-   kernel/bpf/core.c:2062:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+   mm/kasan/report.c:514:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool kasan_report_regs(unsigned long addr, size_t size, bool is_write,
    ^
    static 
->> kernel/bpf/core.c:2688:13: warning: no previous prototype for function 'bpf_helper_changes_one_pkt_data' [-Wmissing-prototypes]
-   bool __weak bpf_helper_changes_one_pkt_data(void *func)
-               ^
-   kernel/bpf/core.c:2688:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool __weak bpf_helper_changes_one_pkt_data(void *func)
-   ^
-   static 
-   9 warnings generated.
+   7 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PROC_CHILDREN
+   Depends on [n]: PROC_FS [=n]
+   Selected by [y]:
+   - CHECKPOINT_RESTORE [=y]
 
 
-vim +/bpf_helper_changes_one_pkt_data +2688 kernel/bpf/core.c
+vim +/kasan_report_regs +514 mm/kasan/report.c
 
-  2687	
-> 2688	bool __weak bpf_helper_changes_one_pkt_data(void *func)
-  2689	{
-  2690		return false;
-  2691	}
-  2692	
+   513	
+ > 514	bool kasan_report_regs(unsigned long addr, size_t size, bool is_write,
+   515			       struct pt_regs *regs)
+   516	{
+   517		return __kasan_report(addr, size, is_write, instruction_pointer(regs),
+   518				      regs);
+   519	}
+   520	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---hphjGsDt8duBQ1ky
+--z/qHIY4vH2/Q24mb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.0.0-rc6 Kernel Configuration
+# Linux/powerpc 6.0.0-rc3 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 791a7ae1ba3efd6bca96338e10ffde557ba83920)"
 CONFIG_GCC_VERSION=0
@@ -562,7 +569,7 @@ CONFIG_PPC_PAGE_SHIFT=12
 CONFIG_THREAD_SHIFT=13
 # CONFIG_DATA_SHIFT_BOOL is not set
 CONFIG_DATA_SHIFT=24
-CONFIG_FORCE_MAX_ZONEORDER=11
+CONFIG_ARCH_FORCE_MAX_ORDER=11
 CONFIG_CMDLINE=""
 CONFIG_EXTRA_TARGETS=""
 CONFIG_PM=y
@@ -659,7 +666,6 @@ CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
 CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
 CONFIG_MODULES_USE_ELF_RELA=y
 CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK=y
-CONFIG_SOFTIRQ_ON_OWN_STACK=y
 CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
 CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
 CONFIG_ARCH_MMAP_RND_BITS=11
@@ -716,6 +722,7 @@ CONFIG_BLOCK=y
 CONFIG_BLOCK_LEGACY_AUTOLOAD=y
 CONFIG_BLK_DEV_BSG_COMMON=y
 CONFIG_BLK_ICQ=y
+# CONFIG_BLK_USE_PIN_USER_PAGES_FOR_DIO is not set
 CONFIG_BLK_DEV_BSGLIB=y
 CONFIG_BLK_DEV_INTEGRITY=y
 CONFIG_BLK_DEV_INTEGRITY_T10=m
@@ -835,6 +842,7 @@ CONFIG_PERCPU_STATS=y
 CONFIG_ARCH_HAS_PTE_SPECIAL=y
 CONFIG_KMAP_LOCAL=y
 # CONFIG_USERFAULTFD is not set
+# CONFIG_LRU_GEN is not set
 
 #
 # Data Access Monitoring
@@ -4792,7 +4800,6 @@ CONFIG_BCM_PMB=y
 # NXP/Freescale QorIQ SoC drivers
 #
 # CONFIG_QUICC_ENGINE is not set
-CONFIG_FSL_GUTS=y
 CONFIG_FSL_MC_DPIO=y
 # CONFIG_DPAA2_CONSOLE is not set
 # end of NXP/Freescale QorIQ SoC drivers
@@ -5901,7 +5908,7 @@ CONFIG_DEBUG_STACK_USAGE=y
 # CONFIG_SCHED_STACK_END_CHECK is not set
 CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=y
 CONFIG_DEBUG_VM=y
-# CONFIG_DEBUG_VM_VMACACHE is not set
+# CONFIG_DEBUG_VM_MAPLE_TREE is not set
 # CONFIG_DEBUG_VM_RB is not set
 # CONFIG_DEBUG_VM_PGFLAGS is not set
 CONFIG_DEBUG_VM_PGTABLE=y
@@ -5987,6 +5994,7 @@ CONFIG_DEBUG_PLIST=y
 CONFIG_DEBUG_SG=y
 # CONFIG_DEBUG_NOTIFIERS is not set
 # CONFIG_BUG_ON_DATA_CORRUPTION is not set
+# CONFIG_DEBUG_MAPLE_TREE is not set
 # end of Debug kernel data structures
 
 # CONFIG_DEBUG_CREDENTIALS is not set
@@ -6118,4 +6126,4 @@ CONFIG_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---hphjGsDt8duBQ1ky--
+--z/qHIY4vH2/Q24mb--
