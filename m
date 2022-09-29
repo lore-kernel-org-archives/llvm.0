@@ -1,142 +1,170 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7B01103
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 08:36:17 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4MdRXW0Bs9z4xGG;
-	Thu, 29 Sep 2022 18:36:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1664440575;
-	bh=Zm00l+zmqsCWLK3LqHtfXzxyyxS1KKRiDBtm93jjX9o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=HvksgIIi1oeSL3sCDaWnCOeWcGonlpaPKJKiI3OtvAu+BHn2yjS8AR76e3Ton4Nmy
-	 +EG26HHK0KGq8vBvYX1EeVNsxcIp9mIU6us0cOvxy60zyQiQGRFQuv/txggXaNqN90
-	 ZKWhlWHVgkpzhtZMxMhIP2Bw8oAKyLOzGZWe9yuxbUXzVLSr62mIeEvbWCpkSHrZlO
-	 Twy98ZJlAAXDut/ui87OToN2gdrJMOcxFt0qGiH5Q17PEp3FYZEI4DXZJQ30tNXk1t
-	 9aFxJpinn/zEKI8MPHuL3gndj8LsbUTOOq0tZEPF560BHpeqU2OY2AdZ4ghD6NHw5p
-	 pKXBKh32qbh6A==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Kees Cook <keescook@chromium.org>, Geert Uytterhoeven
- <geert@linux-m68k.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
- Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>,
- Joonsoo Kim <iamjoonsoo.kim@lge.com>, Andrew Morton
- <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>, Marco Elver <elver@google.com>,
- linux-mm@kvack.org, "Ruhl, Michael J" <michael.j.ruhl@intel.com>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Alex Elder <elder@kernel.org>, Josef Bacik
- <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, Sumit Semwal
- <sumit.semwal@linaro.org>, Christian =?utf-8?Q?K=C3=B6nig?=
- <christian.koenig@amd.com>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>, Daniel Micay
- <danielmicay@gmail.com>, Yonghong Song <yhs@fb.com>, Miguel Ojeda
- <ojeda@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-btrfs@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- linux-fsdevel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- dev@openvswitch.org, x86@kernel.org, llvm@lists.linux.dev,
- linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 01/16] slab: Remove __malloc attribute from realloc
- functions
-In-Reply-To: <202209281011.66DD717D@keescook>
-References: <20220923202822.2667581-1-keescook@chromium.org>
- <20220923202822.2667581-2-keescook@chromium.org>
- <CAMuHMdXK+UN1YVZm9DenuXAM8hZRUZJwp=SXsueP7sWiVU3a9A@mail.gmail.com>
- <202209281011.66DD717D@keescook>
-Date: Thu, 29 Sep 2022 18:36:05 +1000
-Message-ID: <874jwqfuh6.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67D71107
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 08:49:12 +0000 (UTC)
+Date: Thu, 29 Sep 2022 10:48:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1664441343;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zM5eWlusI4fZeTPCTlJzvY2vl0b4z7Eo9YuNDNRRBfg=;
+	b=w8KL9UJaiGZ6rWz/TPpHN7naUgaciFFyEvmIwoltT/LPc4XLtYjE/MblKXB0gTKuZ/kegP
+	FZSLeSczifEN3rrwRG7tjjJqCldwsBokBeJru5d+KO0EayDeNbz69prIp4xan1MZSRDUx4
+	738oa4Rn1gipk1Mu49eLl0kpAKi0uOg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Andrew Jones <andrew.jones@linux.dev>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 1/7] KVM: selftests: Implement memcmp(), memcpy(), and
+ memset() for guest use
+Message-ID: <20220929084855.26t6r6aaurm2caum@kamzik>
+References: <20220928233652.783504-1-seanjc@google.com>
+ <20220928233652.783504-2-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928233652.783504-2-seanjc@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-Kees Cook <keescook@chromium.org> writes:
-> On Wed, Sep 28, 2022 at 09:26:15AM +0200, Geert Uytterhoeven wrote:
->> On Fri, Sep 23, 2022 at 10:35 PM Kees Cook <keescook@chromium.org> wrote:
->> > The __malloc attribute should not be applied to "realloc" functions, as
->> > the returned pointer may alias the storage of the prior pointer. Inste=
-ad
->> > of splitting __malloc from __alloc_size, which would be a huge amount =
-of
->> > churn, just create __realloc_size for the few cases where it is needed.
->> >
->> > Additionally removes the conditional test for __alloc_size__, which is
->> > always defined now.
->> >
->> > Cc: Christoph Lameter <cl@linux.com>
->> > Cc: Pekka Enberg <penberg@kernel.org>
->> > Cc: David Rientjes <rientjes@google.com>
->> > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
->> > Cc: Andrew Morton <akpm@linux-foundation.org>
->> > Cc: Vlastimil Babka <vbabka@suse.cz>
->> > Cc: Roman Gushchin <roman.gushchin@linux.dev>
->> > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->> > Cc: Marco Elver <elver@google.com>
->> > Cc: linux-mm@kvack.org
->> > Signed-off-by: Kees Cook <keescook@chromium.org>
->>=20
->> Thanks for your patch, which is now commit 63caa04ec60583b1 ("slab:
->> Remove __malloc attribute from realloc functions") in next-20220927.
->>=20
->> Noreply@ellerman.id.au reported all gcc8-based builds to fail
->> (e.g. [1], more at [2]):
->>=20
->>     In file included from <command-line>:
->>     ./include/linux/percpu.h: In function =E2=80=98__alloc_reserved_perc=
-pu=E2=80=99:
->>     ././include/linux/compiler_types.h:279:30: error: expected
->> declaration specifiers before =E2=80=98__alloc_size__=E2=80=99
->>      #define __alloc_size(x, ...) __alloc_size__(x, ## __VA_ARGS__) __ma=
-lloc
->>                                   ^~~~~~~~~~~~~~
->>     ./include/linux/percpu.h:120:74: note: in expansion of macro =E2=80=
-=98__alloc_size=E2=80=99
->>     [...]
->>=20
->> It's building fine with e.g. gcc-9 (which is my usual m68k cross-compile=
-r).
->> Reverting this commit on next-20220927 fixes the issue.
->>=20
->> [1] http://kisskb.ellerman.id.au/kisskb/buildresult/14803908/
->> [2] http://kisskb.ellerman.id.au/kisskb/head/1bd8b75fe6adeaa89d02968bdd8=
-11ffe708cf839/
->
-> Eek! Thanks for letting me know. I'm confused about this --
-> __alloc_size__ wasn't optional in compiler_attributes.h -- but obviously
-> I broke something! I'll go figure this out.
+On Wed, Sep 28, 2022 at 11:36:46PM +0000, Sean Christopherson wrote:
+> Implement memcmp(), memcpy(), and memset() to override the compiler's
+> built-in versions in order to guarantee that the compiler won't generate
+> out-of-line calls to external functions via the PLT.  This allows the
+> helpers to be safely used in guest code, as KVM selftests don't support
+> dynamic loading of guest code.
+> 
+> Steal the implementations from the kernel's generic versions, sans the
+> optimizations in memcmp() for unaligned accesses.
+> 
+> Put the utilities in a separate compilation unit and build with
+> -ffreestanding to fudge around a gcc "feature" where it will optimize
+> memset(), memcpy(), etc... by generating a recursive call.  I.e. the
+> compiler optimizes itself into infinite recursion.  Alternatively, the
+> individual functions could be tagged with
+> optimize("no-tree-loop-distribute-patterns"), but using "optimize" for
+> anything but debug is discouraged, and Linus NAK'd the use of the flag
+> in the kernel proper[*].
+> 
+> https://lore.kernel.org/lkml/CAHk-=wik-oXnUpfZ6Hw37uLykc-_P0Apyn2XuX-odh-3Nzop8w@mail.gmail.com
+> 
+> Cc: Andrew Jones <andrew.jones@linux.dev>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Atish Patra <atishp@atishpatra.org>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Janosch Frank <frankja@linux.ibm.com>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile          | 11 +++++-
+>  .../selftests/kvm/lib/string_override.c       | 39 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kvm/lib/string_override.c
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 8b1b32628ac8..681816df69cc 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -48,6 +48,8 @@ LIBKVM += lib/rbtree.c
+>  LIBKVM += lib/sparsebit.c
+>  LIBKVM += lib/test_util.c
+>  
+> +LIBKVM_STRING += lib/string_override.c
+> +
+>  LIBKVM_x86_64 += lib/x86_64/apic.c
+>  LIBKVM_x86_64 += lib/x86_64/handlers.S
+>  LIBKVM_x86_64 += lib/x86_64/perf_test_util.c
+> @@ -221,7 +223,8 @@ LIBKVM_C := $(filter %.c,$(LIBKVM))
+>  LIBKVM_S := $(filter %.S,$(LIBKVM))
+>  LIBKVM_C_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_C))
+>  LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
+> -LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ)
+> +LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
+> +LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
+>  
+>  EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
+>  
+> @@ -232,6 +235,12 @@ $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
+>  $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  
+> +# Compile the string overrides as freestanding to prevent the compiler from
+> +# generating self-referential code, e.g. with "freestanding" the compiler may
+                                            ^ without
 
-This fixes it for me.
+> +# "optimize" memcmp() by invoking memcmp(), thus causing infinite recursion.
+> +$(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
+> +
+>  x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+>  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+>  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+> diff --git a/tools/testing/selftests/kvm/lib/string_override.c b/tools/testing/selftests/kvm/lib/string_override.c
+> new file mode 100644
+> index 000000000000..632398adc229
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/string_override.c
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <stddef.h>
+> +
+> +/*
+> + * Override the "basic" built-in string helpers so that they can be used in
+> + * guest code.  KVM selftests don't support dynamic loading in guest code and
+> + * will jump into the weeds if the compiler decides to insert an out-of-line
+> + * call via the PLT.
+> + */
+> +int memcmp(const void *cs, const void *ct, size_t count)
+> +{
+> +	const unsigned char *su1, *su2;
+> +	int res = 0;
+> +
+> +	for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--) {
+> +		if ((res = *su1 - *su2) != 0)
+> +			break;
+> +	}
+> +	return res;
+> +}
+> +
+> +void *memcpy(void *dest, const void *src, size_t count)
+> +{
+> +	char *tmp = dest;
+> +	const char *s = src;
+> +
+> +	while (count--)
+> +		*tmp++ = *s++;
+> +	return dest;
+> +}
+> +
+> +void *memset(void *s, int c, size_t count)
+> +{
+> +	char *xs = s;
+> +
+> +	while (count--)
+> +		*xs++ = c;
+> +	return s;
+> +}
+> -- 
+> 2.37.3.998.g577e59143f-goog
+> 
 
-cheers
+Otherwise
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index f141a6f6b9f6..0717534f8364 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -275,8 +275,13 @@ struct ftrace_likely_data {
-  * be performing a _reallocation_, as that may alias the existing pointer.
-  * For these, use __realloc_size().
-  */
--#define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
--#define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
-+#ifdef __alloc_size__
-+# define __alloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__) __malloc
-+# define __realloc_size(x, ...)	__alloc_size__(x, ## __VA_ARGS__)
-+#else
-+# define __alloc_size(x, ...)	__malloc
-+# define __realloc_size(x, ...)
-+#endif
-=20
- #ifndef asm_volatile_goto
- #define asm_volatile_goto(x...) asm goto(x)
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
