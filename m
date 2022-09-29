@@ -1,88 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916DD2579;
-	Thu, 29 Sep 2022 15:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876D1C433C1;
-	Thu, 29 Sep 2022 15:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664464828;
-	bh=bZtdd37VqJjCVyqVFWFxsZ1BmVYfv83mHcIlp+XAedo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=mv/lusf06cppsXLB1un/psyiQzzVLUBTz6IO19L2CrVFkHsesGteiNFIRIOlWQ2tX
-	 E1osPvpkt3Hr6PGTXzK8DdQMbuqLR8gcMUBuxBVYPdeaKHZlCFl0azV+M+ciFeaRjg
-	 Ef4Ere4bkba5NC/M38UmWVBhT7m3GEreGfbHfdDblfh0a2Tqhy0yt41pM69LIPHnJB
-	 fmG6x6pfYVZbqdFiPGGKdTsDE5bf8Kyl2GfgukRoso4JEzmWpAzs3NxLUab8HuVoav
-	 5svSoL/hRnxUliuVRqDkBB1gLBlhZkkeRPnd2p8LTMUZWR9c5jsWBOC3o+/ClwUkEq
-	 o84pVud99QujA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91142579
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 15:21:35 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id i6so1751478pfb.2
+        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 08:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=+DNNP6SHxbQnNh6YvMOmq3FXeAXvMFe/ESayAoZ8RAc=;
+        b=QfjHyNuy9ubDPnO1F1EywSQRa43BRlBD1elemgCKhFUx95gJTgftGmM7zenvcr+vP2
+         NNPXYODaUrG6ZcL5ShCQGniRniwQ9Q0dgfD8Yc18qmR8S43eQn45iL5YamTQepz4Oe+z
+         5AvilvLcNkYHY1lg5izYSjO9yrnYsPRZhSJhgZBl30ETXDtv8N3ul4SM1BtZ/MZdqAj6
+         vgdHNj6co8pMsjnpJbwi6LZl2A9XlBzg3xkLAF1oXD4Z5UyzOMz8jEblFDXNT0MfpgQh
+         3iSAeaYikiItVFN4amJ5xmljriRfxGOWNZS7c4U/DHQGX7S/X0JQ9rZEqVZAoIuMVLHO
+         YUlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=+DNNP6SHxbQnNh6YvMOmq3FXeAXvMFe/ESayAoZ8RAc=;
+        b=PiDEMGoPXWkZf2aFIZNAeoMbNJ4wKFQ7BWKmV1IPFkX+L9Gob0ZrzEi8W53P6mesPK
+         KR9RtV36Gg61I5tHUQ6V20rEpml5kbPN6oejZUhfvQU1l+rA8PA2EQlw/pUctflI90Gr
+         BmBd1EO0kyS1jFGJVUDJQKKWuktjWL5qM4bhMPqduMIbe2lL+rdT+EUnMWsosJZB7zvU
+         h+wOKukvuzSn/sEY5rkNpniSbeHe7m24Am/eiukhm4FSKRfZXYyb7TjYr3XxJWM2BVRo
+         lKQ81DujhUklUFRyYh6PlVwlEX0yiSwgARSi3hB+fee9tTIlbUNbfoXKbRhtSaGXy1E3
+         e5Vg==
+X-Gm-Message-State: ACrzQf3Huq01PCc2rUwEd8y0pyVwoJHpwk7rUSn9c/q+z7icBjTaQ20G
+	AvPxd9rlofSqeXMhtguLdfUcmw==
+X-Google-Smtp-Source: AMsMyM7H917Sg+MttAyxwzaKo5iPEQjGqRIX6khDOT3zeXNheBMvFb18YVSJGNVn/GVF8iOJdQWNHw==
+X-Received: by 2002:a65:4508:0:b0:43c:e3c6:d1c2 with SMTP id n8-20020a654508000000b0043ce3c6d1c2mr3341488pgq.582.1664464895083;
+        Thu, 29 Sep 2022 08:21:35 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170902758300b001750b31faabsm5967160pll.262.2022.09.29.08.21.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 08:21:34 -0700 (PDT)
+Date: Thu, 29 Sep 2022 15:21:31 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Andrew Jones <andrew.jones@linux.dev>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] x86/Kconfig: Drop check for '-mabi=ms' for CONFIG_EFI_STUB
-Date: Thu, 29 Sep 2022 08:20:10 -0700
-Message-Id: <20220929152010.835906-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 1/7] KVM: selftests: Implement memcmp(), memcpy(), and
+ memset() for guest use
+Message-ID: <YzW3+0yIkMwi4YdT@google.com>
+References: <20220928233652.783504-1-seanjc@google.com>
+ <20220928233652.783504-2-seanjc@google.com>
+ <20220929084855.26t6r6aaurm2caum@kamzik>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929084855.26t6r6aaurm2caum@kamzik>
 
-A recent change in LLVM made CONFIG_EFI_STUB unselectable because it no
-longer pretends to support '-mabi=ms', breaking the dependency in
-Kconfig. Lack of CONFIG_EFI_STUB can prevent kernels from booting via
-EFI in certain circumstances.
+On Thu, Sep 29, 2022, Andrew Jones wrote:
+> On Wed, Sep 28, 2022 at 11:36:46PM +0000, Sean Christopherson wrote:
+> > @@ -232,6 +235,12 @@ $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
+> >  $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S
+> >  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+> >  
+> > +# Compile the string overrides as freestanding to prevent the compiler from
+> > +# generating self-referential code, e.g. with "freestanding" the compiler may
+>                                             ^ without
 
-This check was added by commit 8f24f8c2fc82 ("efi/libstub: Annotate
-firmware routines as __efiapi") to ensure that '__attribute__((ms_abi))'
-was available, as '-mabi=ms' is not actually used in any cflags.
-According to the GCC documentation, this attribute has been supported
-since GCC 4.4.7. The kernel currently requires GCC 5.1 so this check is
-not necessary; even when that change landed in 5.6, the kernel required
-GCC 4.9 so it was unnecessary then as well.  Clang supports
-'__attribute__((ms_abi))' for all versions that are supported for
-building the kernel so no additional check is needed. Remove the
-'depends on' line altogether to allow CONFIG_EFI_STUB to be selected
-when CONFIG_EFI is enabled, regardless of compiler.
-
-Cc: stable@vger.kernel.org
-Fixes: 8f24f8c2fc82 ("efi/libstub: Annotate firmware routines as __efiapi")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1725
-Link: https://gcc.gnu.org/onlinedocs/gcc-4.4.7/gcc/Function-Attributes.html
-Link: https://github.com/llvm/llvm-project/commit/d1ad006a8f64bdc17f618deffa9e7c91d82c444d
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..81012154d9ed 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1956,7 +1956,6 @@ config EFI
- config EFI_STUB
- 	bool "EFI stub support"
- 	depends on EFI
--	depends on $(cc-option,-mabi=ms) || X86_32
- 	select RELOCATABLE
- 	help
- 	  This kernel feature allows a bzImage to be loaded directly
-
-base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
--- 
-2.37.3
-
+Oof, good eyes.  Thanks!
