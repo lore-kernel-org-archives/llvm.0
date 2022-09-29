@@ -1,83 +1,224 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4565395
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 16:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6583C433D6;
-	Thu, 29 Sep 2022 16:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664467882;
-	bh=YQ2VBsdrbmdPy2lXy7ot5iuJYzQlEhfs7SsBIKRXys0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EIiXGJaWxiVEK7X2NAyW+d/K6UeALMRP5UlZu5D/jYoqbAmGXNDzv/Y20YziT2HIH
-	 VueM46Fqx1jwmmpB0RtTnFQXf54vSZf4HvO8hSpXJKylMbkhya2nJd3ceYoEwHrZ+b
-	 HRZcZlwA6YvAr8MTVFHSDZX25Q0JHnBXN8qGKSXnsIJp70DrelwBnXwyhPesBQ47gm
-	 YH7R5AFs5g8+tMucOIcfZ3NrS8Adnt1Kl6HMmkvlF0vM9daU5BzAT7jge2N8jcfL+Q
-	 Bx4xR5htE9VIukaJeLeN8dRKyCt0N7YSTrqHusSOYOutV3dB1idDjYbC6Ec1wfsamg
-	 UfTL446k0S+nw==
-Date: Fri, 30 Sep 2022 00:01:42 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Guo Ren <guoren@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9345395
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 16:19:22 +0000 (UTC)
+Received: by mail-io1-f48.google.com with SMTP id 64so1277470iov.13
+        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 09:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MXIVSMuAlBQ+2uSHmUHfHLOHcWF4zJCrevwd/gYh7dQ=;
+        b=dsmioauJSX/3oatV6YYYUCM6wUugxdJ55wkiAT9yEJEv4LIHzw5FG0PgkXOAlwZn59
+         hUKWeM1H6uEW+mxbWtyTrEIKyYQ+ZPeF3hxDEmf7GDwbA7fS/Z6wwuscpoajTudrI39X
+         tquzl4O104NooQFCFGAnjWz4UmvZ4NXm/Y1Wk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MXIVSMuAlBQ+2uSHmUHfHLOHcWF4zJCrevwd/gYh7dQ=;
+        b=uSEqA7mDsZnUn28ppudrmQpdCiy5KyCBjxFa6sCNIDfegoq11ONnuZ08JnEK8tC6tp
+         k3coroZmUoCp7sivjndW17qhCvReGH/m92SZSESgqxpzcGcPLCZdasgI41DqbyBnLofK
+         VoEx9w3+r5eYNpXashUa/QzwOuDokcB/pFM9IFgi0h+aqB1IKk2umwDWyIkCTb26mR1e
+         8YEKrfh9yMO8FIxBKVfELpMdRtLvu363ct38aQ8mMgjfvF8wgqnYjATQ8cfmnsH2F6vu
+         M/wlscnM3v2xavH7nr08pJO5adYKUqNRWSy9yHEPdFsgn4YQMWKzVtAU00MX8QOUFcXW
+         qPyw==
+X-Gm-Message-State: ACrzQf22eJ6tVwEHH5bKMGwsS5wLcQFsZ0CUNpumcvtBLN2FrzqCbSHk
+	yz7dF+x0EMNS5pI17WzSkQgXSQ==
+X-Google-Smtp-Source: AMsMyM48p648vCzLy0mzgB1SpfuUOV6UBxOwCPopt1gMezmSdZkKJCSvUHOMvuMmrY0rMqLArJW7Vw==
+X-Received: by 2002:a05:6638:339e:b0:35a:39e5:ed46 with SMTP id h30-20020a056638339e00b0035a39e5ed46mr2306365jav.12.1664468361129;
+        Thu, 29 Sep 2022 09:19:21 -0700 (PDT)
+Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
+        by smtp.gmail.com with ESMTPSA id f12-20020a02848c000000b0035aab2f1ab1sm2965451jai.134.2022.09.29.09.19.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 09:19:20 -0700 (PDT)
+From: Raul E Rangel <rrangel@chromium.org>
+To: linux-acpi@vger.kernel.org,
+	linux-input@vger.kernel.org
+Cc: andriy.shevchenko@linux.intel.com,
+	dmitry.torokhov@gmail.com,
+	hdegoede@redhat.com,
+	rafael@kernel.org,
+	mika.westerberg@linux.intel.com,
+	mario.limonciello@amd.com,
+	timvp@google.com,
+	linus.walleij@linaro.org,
+	jingle.wu@emc.com.tw,
+	Raul E Rangel <rrangel@chromium.org>,
+	Alistair Francis <alistair@alistair23.me>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Bartosz Szczepanek <bsz@semihalf.com>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Johnny Chuang <johnny.chuang.emc@gmail.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Len Brown <lenb@kernel.org>,
+	Matthias Kaehlcke <mka@chromium.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Terry Bowman <terry.bowman@amd.com>,
+	Tom Rix <trix@redhat.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Yang Li <yang.lee@linux.alibaba.com>,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 4/4] riscv: entry: consolidate general regs saving
- into save_gp
-Message-ID: <YzXBZnGXQdEGR1LW@xhacker>
-References: <20220928162007.3791-1-jszhang@kernel.org>
- <20220928162007.3791-5-jszhang@kernel.org>
- <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com>
+Subject: [PATCH v6 00/13] acpi: i2c: Use SharedAndWake and ExclusiveAndWake to enable wake irq
+Date: Thu, 29 Sep 2022 10:19:04 -0600
+Message-Id: <20220929161917.2348231-1-rrangel@chromium.org>
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTTADq-JpUtitSr0nw1aDPZrsB6f1jA-04WmOVcrxYeakw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 29, 2022 at 11:59:00AM +0800, Guo Ren wrote:
-> On Thu, Sep 29, 2022 at 12:29 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > Consolidate the saving/restoring GPs(except ra, sp and tp) into
-> > save_gp/restore_gp macro.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> >  arch/riscv/include/asm/asm.h   | 65 +++++++++++++++++++++++++
-> >  arch/riscv/kernel/entry.S      | 87 ++--------------------------------
-> >  arch/riscv/kernel/mcount-dyn.S | 58 +----------------------
-> >  3 files changed, 70 insertions(+), 140 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> > index 1b471ff73178..2f3b49536e9d 100644
-> > --- a/arch/riscv/include/asm/asm.h
-> > +++ b/arch/riscv/include/asm/asm.h
-> > @@ -68,6 +68,7 @@
-> >  #endif
-> >
-> >  #ifdef __ASSEMBLY__
-> > +#include <asm/asm-offsets.h>
-> >
-> >  /* Common assembly source macros */
-> >
-> > @@ -80,6 +81,70 @@
-> >         .endr
-> >  .endm
-> >
-> > +       /* save all GPs except ra, sp and tp */
-> > +       .macro save_gp
-> How about leave x3(gp) out of the macro, and define:
-> .marco save_from_x5_to_x31
-> .marco restore_from_x5_to_x31
+Today, i2c drivers are making the assumption that their IRQs can also
+be used as wake IRQs. This isn't always the case and it can lead to
+spurious wakes. This has recently started to affect AMD Chromebooks.
+With the introduction of
+d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
+controller gained the capability to set the wake bit on each GPIO. The
+ACPI specification defines two ways to inform the system if a device is
+wake capable:
+1) The _PRW object defines the GPE that can be used to wake the system.
+2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
 
-Good idea, will do in next version.
+Currently only the first method is supported. The i2c drivers don't have
+any indication that the IRQ is wake capable, so they guess. This causes
+spurious interrupts, for example:
+* We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
+  `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
+  system.
+* The IRQ line is active level low for this device and is pulled up by
+  the power resource defined in `_PR0`/`_PR3`.
+* The i2c driver will (incorrectly) arm the GPIO for wake by calling
+  `enable_irq_wake` as part of its suspend hook.
+* ACPI will power down the device since it doesn't have a wake GPE
+  associated with it.
+* When the device is powered down, the IRQ line will drop, and it will
+  trigger a wake event.
 
-Thanks
+See the following debug log:
+[   42.335804] PM: Suspending system (s2idle)
+[   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
+[   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
+[   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
+[   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
+[   42.535293] PM: Wakeup unrelated to ACPI SCI
+[   42.535294] PM: resume from suspend-to-idle
+
+In order to fix this, we need to take into account the wake capable bit
+defined on the Interrupt/GpioInt. This is accomplished by:
+* Migrating some of the i2c drivers over to using the PM subsystem to
+  manage the wake IRQ.
+* Expose the wake_capable bit from the ACPI Interrupt/GpioInt resource
+  to the  i2c core.
+* Use the wake_capable bit in the i2c core to call
+  `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
+* Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
+  handled by the i2c core.
+* Make the ACPI device PM system aware of the wake_irq. This is
+  necessary so the device doesn't incorrectly get powered down when a
+  wake_irq is enabled.
+
+I've tested this code with various combinations of having _PRW,
+ExclusiveAndWake and power resources all defined or not defined, but it
+would be great if others could test this out on their hardware.
+
+I'm sure this will surface some devices where the IRQs were not
+correctly marked as wake capable. Ideally the firmware can be fixed, but
+if not we can work around this in the kernel by providing a board
+specific `struct i2c_board_info` with the `I2C_CLIENT_WAKE` flag set.
+See `chromeos_laptop.c` for an example of matching DMI properties and
+setting the `I2C_CLIENT_WAKE` override.
+
+Thanks,
+Raul
+
+Changes in v6:
+- Return early when irq < 0
+- Refactored to leave else clause
+
+Changes in v5:
+- Added Acked-by: Benjamin Tissoires
+- Removed clang-format white space changes
+- Check irq return value before updating wake_capable pointer
+- Go back to using adev->wakeup.flags.valid to keep the diff cleaner
+- Fix a typo in comment
+
+Changes in v4:
+- Added Reviewed-by
+- Reformatted with 96 char limit
+- Added Reviewed-by
+- Reformatted with 96 char limit
+- Removed unnecessary !!
+- Removed unrelated whitespace change
+- Added Reviewed-by
+- Renamed i2c_acpi_add_resource to i2c_acpi_add_irq_resource
+- Expanded logic in i2c_acpi_add_i2c_resource to make it easier to read
+
+Changes in v3:
+- Kept `acpi_dev_gpio_irq_get_by` unchanged to avoid having to touch
+  unrelated drivers.
+- Converted wake_capable parameter to bool.
+- Fixed bad indent
+- Convert wake_capable to bool
+- Only update wake_capable pointer once
+- Move wake_capable local into local block
+
+Changes in v2:
+- Added elants_i2c to series
+- Added raydium_ts_i2c to series
+- Fixed call site in mlxbf_gige_probe
+- Added ability to extract wake bit from Interrupt/IRQ resources
+- Look at wake_cabple bit for IRQ/Interrupt resources
+- I chose not to keep the legacy code around since systems without DT or ACPI should be rare.
+
+Raul E Rangel (13):
+  HID: i2c-hid: Use PM subsystem to manage wake irq
+  Input: elan_i2c - Use PM subsystem to manage wake irq
+  Input: elants_i2c - Use PM subsystem to manage wake irq
+  Input: raydium_ts_i2c - Use PM subsystem to manage wake irq
+  gpiolib: acpi: Add wake_capable variants of acpi_dev_gpio_irq_get
+  ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+  i2c: acpi: Use ACPI wake capability bit to set wake_irq
+  ACPI: PM: Take wake IRQ into consideration when entering
+    suspend-to-idle
+  HID: i2c-hid: acpi: Stop setting wakeup_capable
+  HID: i2c-hid: Don't set wake_capable and wake_irq
+  Input: elan_i2c - Don't set wake_capable and wake_irq
+  Input: elants_i2c - Don't set wake_capable and wake_irq
+  Input: raydium_ts_i2c - Don't set wake_capable and wake_irq
+
+ drivers/acpi/device_pm.c                   | 15 ++++++++
+ drivers/acpi/irq.c                         |  8 +++--
+ drivers/acpi/resource.c                    | 16 ++++++---
+ drivers/gpio/gpiolib-acpi.c                | 15 ++++++--
+ drivers/gpio/gpiolib-acpi.h                |  2 ++
+ drivers/hid/i2c-hid/i2c-hid-acpi.c         |  5 ---
+ drivers/hid/i2c-hid/i2c-hid-core.c         | 24 ++-----------
+ drivers/i2c/i2c-core-acpi.c                | 40 ++++++++++++++++------
+ drivers/i2c/i2c-core-base.c                |  6 +++-
+ drivers/i2c/i2c-core.h                     |  4 +--
+ drivers/input/mouse/elan_i2c_core.c        | 15 +-------
+ drivers/input/touchscreen/elants_i2c.c     | 13 ++-----
+ drivers/input/touchscreen/raydium_i2c_ts.c |  7 +---
+ drivers/pnp/pnpacpi/rsparser.c             |  7 ++--
+ include/linux/acpi.h                       | 23 ++++++++++---
+ include/linux/ioport.h                     |  3 +-
+ 16 files changed, 113 insertions(+), 90 deletions(-)
+
+-- 
+2.37.3.998.g577e59143f-goog
+
