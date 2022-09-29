@@ -1,276 +1,276 @@
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC9A5395
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 16:19:29 +0000 (UTC)
-Received: by mail-il1-f174.google.com with SMTP id i9so687245ilv.9
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 09:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=trAVAQ/Rk+05nanA+Ls+tVQdWt1P+e+XoZ1M5Mz7QPs=;
-        b=ClCJa5EeIpkbGLUnO1iAjuRXn86T2iN6ujl8XRaJrvhJ8kpYKDupSHzyOl+yFht1AK
-         ITKHOMHT71jNBG4ppllwJpnzN5TyyA/7lAgRygqNezwuivEvblef33AlkTVG1OYDz2LE
-         IUHEqhZY2+5M/i6riHlVmhYyC/aicDj6wd9SE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=trAVAQ/Rk+05nanA+Ls+tVQdWt1P+e+XoZ1M5Mz7QPs=;
-        b=j6OXIWZnktvc5YdcDSep44V/GVKf2lV32ytiUpVtp3QS8Z2kuXamts84LFqi4MQRSk
-         krl0PRRi/H0QK6QVSedP4lM8NCXipeyMAweT0yS+LU9ofJUwVE49mo+6rCgjw4K1w44X
-         UZmkbforjTgqfamyPwUB4agotPK0voeyA01EPIs4aL6oSJgYUD3U0nIRFUpN4J6BBhKj
-         ORve5obzwA7BmIlMERsyqoR2mpSoK101RHZKBprk03Shy5DPi9uzlq5hhnSIhSZOWw6M
-         2Vg2EAI69zvCA+VxZGcVMu/sXvDC2vFY17EApMpL7YvaS/+itNGQ6sm0UaL6Y4/3Y3od
-         28jA==
-X-Gm-Message-State: ACrzQf0AJS3DnK08B16rqqSTTPsJxhnWlplMmsFmJBILyaokZ8tjYPVs
-	BjqNTUtxKIu0bPa3ZGJI0svUiw==
-X-Google-Smtp-Source: AMsMyM4zClFMoDKbvaeEW+zlLBZjqnVkfst4kRK+81w90pZm1NYPxNwRdJR9ZKhjrxM+yROnPglfzA==
-X-Received: by 2002:a92:c988:0:b0:2f6:16a8:a4cb with SMTP id y8-20020a92c988000000b002f616a8a4cbmr1947632iln.241.1664468368183;
-        Thu, 29 Sep 2022 09:19:28 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id f12-20020a02848c000000b0035aab2f1ab1sm2965451jai.134.2022.09.29.09.19.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 09:19:27 -0700 (PDT)
-From: Raul E Rangel <rrangel@chromium.org>
-To: linux-acpi@vger.kernel.org,
-	linux-input@vger.kernel.org
-Cc: andriy.shevchenko@linux.intel.com,
-	dmitry.torokhov@gmail.com,
-	hdegoede@redhat.com,
-	rafael@kernel.org,
-	mika.westerberg@linux.intel.com,
-	mario.limonciello@amd.com,
-	timvp@google.com,
-	linus.walleij@linaro.org,
-	jingle.wu@emc.com.tw,
-	Raul E Rangel <rrangel@chromium.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Len Brown <lenb@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE075395
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 16:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD83C433C1;
+	Thu, 29 Sep 2022 16:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664468858;
+	bh=zcRIiDMZOhjLCgp1CslgmZqWSDLMvCCHimAqZwZ4VWY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=naV80iJNZfqdUu1/Hrsqf7xBYeQcjycv6V3g8u91Cg/TXVulheKC9ZOmA+m1cslRa
+	 5C14/QlYOpBFmSDne8VmjCgiYlktA75OyW3/DzCIAIbWBbSIhYmp1LmGecTJhpJtfO
+	 +mq5hRbn18RKxPfYeqYJrMMEOjVzPdYufviuvneJseF3RR8oHI+HuyLWFvMQb1eDbY
+	 6TklMRbAVDLn2FrgSM1a4V+ltW/qX6LmDN2YGARxPHsz0i8xjqNOewnzNlAi+PiCPt
+	 rAVYoHq8BbIZ0o6ik9uYfFEH+cOoGjEPE43B/ilHpyPtbWvsgM2caVY9eOZxtTgMeQ
+	 OQ4yzrGeE4OeQ==
+Date: Fri, 30 Sep 2022 00:18:09 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Guo Ren <guoren@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Terry Bowman <terry.bowman@amd.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-Date: Thu, 29 Sep 2022 10:19:10 -0600
-Message-Id: <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
-X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
-In-Reply-To: <20220929161917.2348231-1-rrangel@chromium.org>
-References: <20220929161917.2348231-1-rrangel@chromium.org>
+Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
+ remove shadow_stack
+Message-ID: <YzXFQeyktIK5IQ7C@xhacker>
+References: <20220928162007.3791-1-jszhang@kernel.org>
+ <20220928162007.3791-4-jszhang@kernel.org>
+ <YzR8OUFuV+R1i1Y6@xhacker>
+ <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
 
-ACPI IRQ/Interrupt resources contain a bit that describes if the
-interrupt should wake the system. This change exposes that bit via
-a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
-before arming an IRQ to wake the system.
+On Thu, Sep 29, 2022 at 01:54:25PM +0800, Guo Ren wrote:
+> On Thu, Sep 29, 2022 at 1:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> >
+> > On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
+> > > Currently, when detecting vmap stack overflow, riscv firstly switches
+> > > to the so called shadow stack, then use this shadow stack to call the
+> > > get_overflow_stack() to get the overflow stack. However, there's
+> > > a race here if two or more harts use the same shadow stack at the same
+> > > time.
+> > >
+> > > To solve this race, we rely on two facts:
+> > > 1. the content of kernel thread pointer I.E "tp" register can still
+> > > be gotten from the the CSR_SCRATCH register, thus we can clobber tp
+> > > under the condtion that we restore tp from CSR_SCRATCH later.
+> > >
+> > > 2. Once vmap stack overflow happen, panic is comming soon, no
+> > > performance concern at all, so we don't need to define the overflow
+> > > stack as percpu var, we can simplify it into a pointer array which
+> > > points to allocated pages.
+> > >
+> > > Thus we can use tp as a tmp register to get the cpu id to calculate
+> > > the offset of overflow stack pointer array for each cpu w/o shadow
+> > > stack any more. Thus the race condition is removed as a side effect.
+> > >
+> > > NOTE: we can use similar mechanism to let each cpu use different shadow
+> > > stack to fix the race codition, but if we can remove shadow stack usage
+> > > totally, why not.
+> > >
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> > > ---
+> > >  arch/riscv/include/asm/asm-prototypes.h |  1 -
+> > >  arch/riscv/include/asm/thread_info.h    |  4 +-
+> > >  arch/riscv/kernel/asm-offsets.c         |  1 +
+> > >  arch/riscv/kernel/entry.S               | 56 ++++---------------------
+> > >  arch/riscv/kernel/traps.c               | 31 ++++++++------
+> > >  5 files changed, 29 insertions(+), 64 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
+> > > index ef386fcf3939..4a06fa0f6493 100644
+> > > --- a/arch/riscv/include/asm/asm-prototypes.h
+> > > +++ b/arch/riscv/include/asm/asm-prototypes.h
+> > > @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+> > >  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+> > >  DECLARE_DO_ERROR_INFO(do_trap_break);
+> > >
+> > > -asmlinkage unsigned long get_overflow_stack(void);
+> > >  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+> > >
+> > >  #endif /* _ASM_RISCV_PROTOTYPES_H */
+> > > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > > index c970d41dc4c6..c604a5212a73 100644
+> > > --- a/arch/riscv/include/asm/thread_info.h
+> > > +++ b/arch/riscv/include/asm/thread_info.h
+> > > @@ -28,14 +28,12 @@
+> > >
+> > >  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+> > >  #define OVERFLOW_STACK_SIZE     SZ_4K
+> > > -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
+> > > +#define OVERFLOW_STACK_SHIFT 12
+> >
+> > oops, this should be removed, will update it in a newer version after
+> > collecting review comments.
+> >
+> > >
+> > >  #define IRQ_STACK_SIZE               THREAD_SIZE
+> > >
+> > >  #ifndef __ASSEMBLY__
+> > >
+> > > -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+> > > -
+> > >  #include <asm/processor.h>
+> > >  #include <asm/csr.h>
+> > >
+> > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> > > index df9444397908..62bf3bacc322 100644
+> > > --- a/arch/riscv/kernel/asm-offsets.c
+> > > +++ b/arch/riscv/kernel/asm-offsets.c
+> > > @@ -37,6 +37,7 @@ void asm_offsets(void)
+> > >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+> > >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> > >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> > > +     OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> > >
+> > >       OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+> > >       OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > > index a3e1ed2fa2ac..5a6171a90d81 100644
+> > > --- a/arch/riscv/kernel/entry.S
+> > > +++ b/arch/riscv/kernel/entry.S
+> > > @@ -223,54 +223,16 @@ END(ret_from_exception)
+> > >
+> > >  #ifdef CONFIG_VMAP_STACK
+> > >  ENTRY(handle_kernel_stack_overflow)
+> > > -     la sp, shadow_stack
+> > > -     addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> > > -
+> > > -     //save caller register to shadow stack
+> > > -     addi sp, sp, -(PT_SIZE_ON_STACK)
+> > > -     REG_S x1,  PT_RA(sp)
+> > > -     REG_S x5,  PT_T0(sp)
+> > > -     REG_S x6,  PT_T1(sp)
+> > > -     REG_S x7,  PT_T2(sp)
+> > > -     REG_S x10, PT_A0(sp)
+> > > -     REG_S x11, PT_A1(sp)
+> > > -     REG_S x12, PT_A2(sp)
+> > > -     REG_S x13, PT_A3(sp)
+> > > -     REG_S x14, PT_A4(sp)
+> > > -     REG_S x15, PT_A5(sp)
+> > > -     REG_S x16, PT_A6(sp)
+> > > -     REG_S x17, PT_A7(sp)
+> > > -     REG_S x28, PT_T3(sp)
+> > > -     REG_S x29, PT_T4(sp)
+> > > -     REG_S x30, PT_T5(sp)
+> > > -     REG_S x31, PT_T6(sp)
+> > > -
+> > > -     la ra, restore_caller_reg
+> > > -     tail get_overflow_stack
+> > > -
+> > > -restore_caller_reg:
+> > > -     //save per-cpu overflow stack
+> > > -     REG_S a0, -8(sp)
+> > > -     //restore caller register from shadow_stack
+> > > -     REG_L x1,  PT_RA(sp)
+> > > -     REG_L x5,  PT_T0(sp)
+> > > -     REG_L x6,  PT_T1(sp)
+> > > -     REG_L x7,  PT_T2(sp)
+> > > -     REG_L x10, PT_A0(sp)
+> > > -     REG_L x11, PT_A1(sp)
+> > > -     REG_L x12, PT_A2(sp)
+> > > -     REG_L x13, PT_A3(sp)
+> > > -     REG_L x14, PT_A4(sp)
+> > > -     REG_L x15, PT_A5(sp)
+> > > -     REG_L x16, PT_A6(sp)
+> > > -     REG_L x17, PT_A7(sp)
+> > > -     REG_L x28, PT_T3(sp)
+> > > -     REG_L x29, PT_T4(sp)
+> > > -     REG_L x30, PT_T5(sp)
+> > > -     REG_L x31, PT_T6(sp)
+> > > +     la sp, overflow_stack
+> > > +     /* use tp as tmp register since we can restore it from CSR_SCRATCH */
+> > > +     REG_L tp, TASK_TI_CPU(tp)
+> > > +     slli tp, tp, RISCV_LGPTR
+> > > +     add tp, sp, tp
+> > > +     REG_L sp, 0(tp)
+> > > +
+> > > +     /* restore tp */
+> > > +     csrr tp, CSR_SCRATCH
+> > >
+> > > -     //load per-cpu overflow stack
+> > > -     REG_L sp, -8(sp)
+> > >       addi sp, sp, -(PT_SIZE_ON_STACK)
+> > >
+> > >       //save context to overflow stack
+> > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > > index 73f06cd149d9..b6c64f0fb70f 100644
+> > > --- a/arch/riscv/kernel/traps.c
+> > > +++ b/arch/riscv/kernel/traps.c
+> > > @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
+> > >  #endif /* CONFIG_GENERIC_BUG */
+> > >
+> > >  #ifdef CONFIG_VMAP_STACK
+> > > -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+> > > -             overflow_stack)__aligned(16);
+> > > -/*
+> > > - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+> > > - * to get per-cpu overflow stack(get_overflow_stack).
+> > > - */
+> > > -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
+> > > -asmlinkage unsigned long get_overflow_stack(void)
+> > > -{
+> > > -     return (unsigned long)this_cpu_ptr(overflow_stack) +
+> > > -             OVERFLOW_STACK_SIZE;
+> > > -}
+> > > +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
+> Er... We've talked NR_CPUS = 8192, even a pointer would cause 64KB wasted.
+> 
+> I prefer the previous solution with a atomic flag.
 
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi guo,
 
----
+I see your opinions. Here are my comments:
 
-(no changes since v5)
+Now the range of riscv's NR_CPUS is 2~32, given I have removed the 1KB
+shadow stack, so this patch saves 768Bytes or more rather than wastes
+memory. No mention that I also removed the shadow stack save and
+restore code.
 
-Changes in v5:
-- Removed clang-format white space changes
+From another side, we didn't see such riscv system with huge(8192) CPU
+numbers. Even if we do have such system in the future, I belive such
+system should be powered by lots of memory, 64KB is trivial comapred
+with GBs or TBs memory size.
 
-Changes in v4:
-- Added Reviewed-by
-- Reformatted with 96 char limit
+Given the simplicity of my solution, I still prefer my solution. What
+do you think?
 
-Changes in v3:
-- Fixed bad indent
-
-Changes in v2:
-- Added ability to extract wake bit from Interrupt/IRQ resources
-
- drivers/acpi/irq.c             |  8 +++++---
- drivers/acpi/resource.c        | 16 +++++++++++-----
- drivers/pnp/pnpacpi/rsparser.c |  7 ++++---
- include/linux/acpi.h           |  2 +-
- include/linux/ioport.h         |  3 ++-
- 5 files changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
-index dabe45eba055d1f..4bb5ab33a5ceb10 100644
---- a/drivers/acpi/irq.c
-+++ b/drivers/acpi/irq.c
-@@ -147,6 +147,7 @@ struct acpi_irq_parse_one_ctx {
-  * @polarity: polarity attributes of hwirq
-  * @polarity: polarity attributes of hwirq
-  * @shareable: shareable attributes of hwirq
-+ * @wake_capable: wake capable attribute of hwirq
-  * @ctx: acpi_irq_parse_one_ctx updated by this function
-  *
-  * Description:
-@@ -156,12 +157,13 @@ struct acpi_irq_parse_one_ctx {
- static inline void acpi_irq_parse_one_match(struct fwnode_handle *fwnode,
- 					    u32 hwirq, u8 triggering,
- 					    u8 polarity, u8 shareable,
-+					    u8 wake_capable,
- 					    struct acpi_irq_parse_one_ctx *ctx)
- {
- 	if (!fwnode)
- 		return;
- 	ctx->rc = 0;
--	*ctx->res_flags = acpi_dev_irq_flags(triggering, polarity, shareable);
-+	*ctx->res_flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
- 	ctx->fwspec->fwnode = fwnode;
- 	ctx->fwspec->param[0] = hwirq;
- 	ctx->fwspec->param[1] = acpi_dev_get_irq_type(triggering, polarity);
-@@ -204,7 +206,7 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_resource *ares,
- 		fwnode = acpi_get_gsi_domain_id(irq->interrupts[ctx->index]);
- 		acpi_irq_parse_one_match(fwnode, irq->interrupts[ctx->index],
- 					 irq->triggering, irq->polarity,
--					 irq->shareable, ctx);
-+					 irq->shareable, irq->wake_capable, ctx);
- 		return AE_CTRL_TERMINATE;
- 	case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
- 		eirq = &ares->data.extended_irq;
-@@ -218,7 +220,7 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_resource *ares,
- 						      eirq->interrupts[ctx->index]);
- 		acpi_irq_parse_one_match(fwnode, eirq->interrupts[ctx->index],
- 					 eirq->triggering, eirq->polarity,
--					 eirq->shareable, ctx);
-+					 eirq->shareable, eirq->wake_capable, ctx);
- 		return AE_CTRL_TERMINATE;
- 	}
- 
-diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-index 510cdec375c4d88..81733369f4c1de0 100644
---- a/drivers/acpi/resource.c
-+++ b/drivers/acpi/resource.c
-@@ -336,8 +336,9 @@ EXPORT_SYMBOL_GPL(acpi_dev_resource_ext_address_space);
-  * @triggering: Triggering type as provided by ACPI.
-  * @polarity: Interrupt polarity as provided by ACPI.
-  * @shareable: Whether or not the interrupt is shareable.
-+ * @wake_capable: Wake capability as provided by ACPI.
-  */
--unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable)
-+unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable, u8 wake_capable)
- {
- 	unsigned long flags;
- 
-@@ -351,6 +352,9 @@ unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable)
- 	if (shareable == ACPI_SHARED)
- 		flags |= IORESOURCE_IRQ_SHAREABLE;
- 
-+	if (wake_capable == ACPI_WAKE_CAPABLE)
-+		flags |= IORESOURCE_IRQ_WAKECAPABLE;
-+
- 	return flags | IORESOURCE_IRQ;
- }
- EXPORT_SYMBOL_GPL(acpi_dev_irq_flags);
-@@ -442,7 +446,7 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
- 
- static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
- 				     u8 triggering, u8 polarity, u8 shareable,
--				     bool check_override)
-+				     u8 wake_capable, bool check_override)
- {
- 	int irq, p, t;
- 
-@@ -475,7 +479,7 @@ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
- 		}
- 	}
- 
--	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable);
-+	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
- 	irq = acpi_register_gsi(NULL, gsi, triggering, polarity);
- 	if (irq >= 0) {
- 		res->start = irq;
-@@ -523,7 +527,8 @@ bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
- 		}
- 		acpi_dev_get_irqresource(res, irq->interrupts[index],
- 					 irq->triggering, irq->polarity,
--					 irq->shareable, true);
-+					 irq->shareable, irq->wake_capable,
-+					 true);
- 		break;
- 	case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
- 		ext_irq = &ares->data.extended_irq;
-@@ -534,7 +539,8 @@ bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
- 		if (is_gsi(ext_irq))
- 			acpi_dev_get_irqresource(res, ext_irq->interrupts[index],
- 					 ext_irq->triggering, ext_irq->polarity,
--					 ext_irq->shareable, false);
-+					 ext_irq->shareable, ext_irq->wake_capable,
-+					 false);
- 		else
- 			irqresource_disabled(res, 0);
- 		break;
-diff --git a/drivers/pnp/pnpacpi/rsparser.c b/drivers/pnp/pnpacpi/rsparser.c
-index da78dc77aed32e4..4f05f610391b006 100644
---- a/drivers/pnp/pnpacpi/rsparser.c
-+++ b/drivers/pnp/pnpacpi/rsparser.c
-@@ -206,7 +206,8 @@ static acpi_status pnpacpi_allocated_resource(struct acpi_resource *res,
- 		if (i >= 0) {
- 			flags = acpi_dev_irq_flags(gpio->triggering,
- 						   gpio->polarity,
--						   gpio->shareable);
-+						   gpio->shareable,
-+						   gpio->wake_capable);
- 		} else {
- 			flags = IORESOURCE_DISABLED;
- 		}
-@@ -315,7 +316,7 @@ static __init void pnpacpi_parse_irq_option(struct pnp_dev *dev,
- 		if (p->interrupts[i])
- 			__set_bit(p->interrupts[i], map.bits);
- 
--	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable);
-+	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable, p->wake_capable);
- 	pnp_register_irq_resource(dev, option_flags, &map, flags);
- }
- 
-@@ -339,7 +340,7 @@ static __init void pnpacpi_parse_ext_irq_option(struct pnp_dev *dev,
- 		}
- 	}
- 
--	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable);
-+	flags = acpi_dev_irq_flags(p->triggering, p->polarity, p->shareable, p->wake_capable);
- 	pnp_register_irq_resource(dev, option_flags, &map, flags);
- }
- 
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index cd7371a5f2839bd..ea2efbdbeee5116 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -495,7 +495,7 @@ bool acpi_dev_resource_address_space(struct acpi_resource *ares,
- 				     struct resource_win *win);
- bool acpi_dev_resource_ext_address_space(struct acpi_resource *ares,
- 					 struct resource_win *win);
--unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable);
-+unsigned long acpi_dev_irq_flags(u8 triggering, u8 polarity, u8 shareable, u8 wake_capable);
- unsigned int acpi_dev_get_irq_type(int triggering, int polarity);
- bool acpi_dev_resource_interrupt(struct acpi_resource *ares, int index,
- 				 struct resource *res);
-diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-index 616b683563a9704..3baeea4d903bfd1 100644
---- a/include/linux/ioport.h
-+++ b/include/linux/ioport.h
-@@ -79,7 +79,8 @@ struct resource {
- #define IORESOURCE_IRQ_HIGHLEVEL	(1<<2)
- #define IORESOURCE_IRQ_LOWLEVEL		(1<<3)
- #define IORESOURCE_IRQ_SHAREABLE	(1<<4)
--#define IORESOURCE_IRQ_OPTIONAL 	(1<<5)
-+#define IORESOURCE_IRQ_OPTIONAL		(1<<5)
-+#define IORESOURCE_IRQ_WAKECAPABLE	(1<<6)
- 
- /* PnP DMA specific bits (IORESOURCE_BITS) */
- #define IORESOURCE_DMA_TYPE_MASK	(3<<0)
--- 
-2.37.3.998.g577e59143f-goog
-
+Thanks
+> 
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 5cbd6684ef52..42a3b14a20ab 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -223,6 +223,9 @@ END(ret_from_exception)
+> 
+>  #ifdef CONFIG_VMAP_STACK
+>  ENTRY(handle_kernel_stack_overflow)
+> +1:     la sp, spin_ shadow_stack
+> +       amoswap.w sp, sp, (sp)
+> +       bnez sp, 1b
+>         la sp, shadow_stack
+>         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> 
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 73f06cd149d9..9058a05cac53 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -229,11 +229,15 @@ asmlinkage unsigned long get_overflow_stack(void)
+>                 OVERFLOW_STACK_SIZE;
+>  }
+> 
+> +atomic_t spin_ shadow_stack __section(".sdata");
+> +
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  {
+>         unsigned long tsk_stk = (unsigned long)current->stack;
+>         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> 
+> +       atomic_set_release(spin_ shadow_stack, 0);
+> +
+>         console_verbose();
+> 
+>         pr_emerg("Insufficient stack space to handle exception!\n");
