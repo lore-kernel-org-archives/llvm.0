@@ -1,165 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7426CEA9
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:03:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00E9C43470;
-	Thu, 29 Sep 2022 01:03:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664413423;
-	bh=FLp4sgPuzP7zViTFviriXIWyJFs0iYu9SQmq01swafI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H6B2aW+9HpehgeRzAvFf8PJcrnhFhZZdzSRPoWHYH9ubpSNfpoB/NA8aVnTNLlGPC
-	 1PHHlB6AsYCUj2Wot9415gEI1PXVuppRSQk/dLDXdzTf74qZLAOb7mhAltEPw9sJ1O
-	 Ws9v/e0jb+DjxGdag2pd1mWdRXOebOk7sBM3sggxokb8fr6u8lCB2V4wSqAVsDFD8o
-	 oIOcV7D4JUAC82BJQ3fcjwb8q081monl/OqjOxNed6ZEeNW/y91BFdlFxr15kZqEh1
-	 h18fL/nlS8jVvrXB5XTz60i/TPChlB0dLxxB38gO+jzERwJaPckfI6Vq8ZyLJv4Hvx
-	 GO48TqMST+QZQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 51F97405F0; Wed, 28 Sep 2022 22:03:40 -0300 (-03)
-Date: Wed, 28 Sep 2022 22:03:40 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, dwarves@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: die__process_unit: DW_TAG_label (0xa) @ <0x7b> not handled!
-Message-ID: <YzTu7C+FSoMv4AEf@kernel.org>
-References: <YzNHYoI4EZOQdCQ0@dev-arch.thelio-3990X>
- <YzNKEhM+H/X0xUK3@kernel.org>
- <YzNWBxJTKDRBNNDa@dev-arch.thelio-3990X>
- <YzRPXVUfjcyQ4Utz@kernel.org>
- <YzRnfz0sVpX8CzeL@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCD3EA9
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664414496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7jNI0LDpSJfJvOKK5gKaWFfExO3xy3tcXQHFOE3WDMY=;
+	b=PUEvAsi4IYZj0ZLxZIp/+eHwY3apFHXTqegRWfcUUP6iONN5mFDoy+ijd129gj/xaGTnnb
+	qaR65sidqj0WZRvP2RQbsd4VqO1dml4XTAwbFYd42HcJ/+rlI5i0y+/a/0m8Xkv7iz/v6F
+	t9zRRGjn1C5Wh05P/VrmcZJNCxxKjwM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-fdEIfiXAMJiRx6wcGxmAkQ-1; Wed, 28 Sep 2022 21:21:35 -0400
+X-MC-Unique: fdEIfiXAMJiRx6wcGxmAkQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D441485A59D
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 01:21:34 +0000 (UTC)
+Received: from [172.64.5.45] (unknown [10.30.33.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B224C2166B26;
+	Thu, 29 Sep 2022 01:21:34 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
+ mainline.kernel.org-clang, c3e0e1e2)
+Date: Thu, 29 Sep 2022 01:21:32 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YzRnfz0sVpX8CzeL@dev-arch.thelio-3990X>
-X-Url: http://acmel.wordpress.com
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <78529.122092821213500317@us-mta-263.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Em Wed, Sep 28, 2022 at 08:25:51AM -0700, Nathan Chancellor escreveu:
-> On Wed, Sep 28, 2022 at 10:42:53AM -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Tue, Sep 27, 2022 at 12:59:03PM -0700, Nathan Chancellor escreveu:
-> > > On Tue, Sep 27, 2022 at 04:08:02PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > Em Tue, Sep 27, 2022 at 11:56:34AM -0700, Nathan Chancellor escreveu:
-> > > > > When building a kernel with LLVM and CONFIG_DEBUG_INFO_BTF after commit
-> > > > > 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files") in
-> > > > > the kernel, I see the following spew of warnings, which appear to come
-> > > > > from pahole:
-> > > > > 
-> > > > > $ clang --version
-> > > > > clang version 15.0.0 (Fedora 15.0.0-3.fc38)
-> > > > > Target: x86_64-redhat-linux-gnu
-> > > > > Thread model: posix
-> > > > > InstalledDir: /usr/bin
-> > > > > 
-> > > > > $ pahole --version
-> > > > > v1.24
-> > > > > 
-> > > > > $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 defconfig
-> > > > > 
-> > > > > $ scripts/config \
-> > > > >     -d DEBUG_INFO_NONE \
-> > > > >     -e BPF_SYSCALL \
-> > > > >     -e DEBUG_INFO_BTF \
-> > > > >     -e DEBUG_INFO_DWARF5
-> > > > > 
-> > > > > $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 olddefconfig all
-> > > > > ...
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0x7b> not handled!
-> > > > > die__process_unit: tag not supported 0xa (label)!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0x97> not handled!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0xbd> not handled!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0xed> not handled!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0x109> not handled!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0x12a> not handled!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0x146> not handled!
-> > > > > die__process_unit: DW_TAG_label (0xa) @ <0x16f> not handled!
-> > > > > ...
-> > > > > 
-> > > > > Is this a problem with LLVM or pahole? I do not see this when building
-> > > > > with GCC + GNU as but that could just be a red herring. I assume that
-> > > > > there could be something missing for processing debug info from
-> > > > > assembly, perhaps? If there is any further information I can provide or
-> > > > > anything I can test, I am more than happy to do so.
-> > > > 
-> > > > I'll try to repro, but at first sight it looks like a label in a
-> > > 
-> > > If you need help reproducing this locally, feel free to reach out
-> > > through this thread or #clangbuiltlinux on Libera.
-> > 
-> > Can you please provide the vmlinux file where this takes place?
-> 
-> Sure thing, it is compressed to save some bandwidth while downloading:
-> 
-> https://1drv.ms/u/s!AsQNYeB-IEbqnnzsULjM1pXmOlI5?e=qHKjuW
-> 
-> If there is anything else I can provide, please let me know!
+Hi, we tested your kernel and here are the results:
 
-Interesting, indeed it is inside a DW_TAG_compile_unit, outside
-functions, so pahole has no use for it right now, I'll just ignore it
-and remove that warning.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-These are for arch/x86/kernel/verify_cpu.S, asm file indeed.
 
-⬢[acme@toolbox Nathan]$ readelf -wi vmlinux-pahole-warnings
-Contents of the .debug_info section:
+Kernel information:
+    Commit message: Merge tag 'irq_urgent_for_v6.0' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/tip/tip
 
-  Compilation Unit @ offset 0x0:
-   Length:        0x1df (32-bit)
-   Version:       5
-   Unit Type:     DW_UT_compile (1)
-   Abbrev Offset: 0x0
-   Pointer Size:  8
- <0><c>: Abbrev Number: 1 (DW_TAG_compile_unit)
-    <d>   DW_AT_stmt_list   : 0x0
-    <11>   DW_AT_ranges      : 0xc
-    <15>   DW_AT_name        : arch/x86/kernel/verify_cpu.S
-    <32>   DW_AT_comp_dir    : /home/nathan/cbl/src/linux
-    <4d>   DW_AT_producer    : ClangBuiltLinux clang version 16.0.0 (https://github.com/llvm/llvm-project 7e22179d38c438fedb0d9bb0cff1585843bd7082)
-    <c2>   DW_AT_language    : 32769    (MIPS assembler)
- <1><c4>: Abbrev Number: 2 (DW_TAG_label)
-    <c5>   DW_AT_name        : startup_64
-    <d0>   DW_AT_decl_file   : 0x0
-    <d4>   DW_AT_decl_line   : 0x364
-    <d8>   DW_AT_low_pc      : 0xffffffff81000000
- <1><e0>: Abbrev Number: 2 (DW_TAG_label)
-    <e1>   DW_AT_name        : secondary_startup_64
-    <f6>   DW_AT_decl_file   : 0x0
-    <fa>   DW_AT_decl_line   : 0x399
-    <fe>   DW_AT_low_pc      : 0xffffffff81000060
- <1><106>: Abbrev Number: 2 (DW_TAG_label)
-    <107>   DW_AT_name        : secondary_startup_64_no_verify
-    <126>   DW_AT_decl_file   : 0x0
-    <12a>   DW_AT_decl_line   : 0x39f
-    <12e>   DW_AT_low_pc      : 0xffffffff81000065
- <1><136>: Abbrev Number: 2 (DW_TAG_label)
-    <137>   DW_AT_name        : verify_cpu
-    <142>   DW_AT_decl_file   : 0x0
-    <146>   DW_AT_decl_line   : 0x430
-    <14a>   DW_AT_low_pc      : 0xffffffff81000150
- <1><152>: Abbrev Number: 2 (DW_TAG_label)
-    <153>   DW_AT_name        : sev_verify_cbit
-    <163>   DW_AT_decl_file   : 0x1
-    <167>   DW_AT_decl_line   : 0x491
-    <16b>   DW_AT_low_pc      : 0xffffffff81000250
- <1><173>: Abbrev Number: 2 (DW_TAG_label)
-    <174>   DW_AT_name        : start_cpu0
-    <17f>   DW_AT_decl_file   : 0x2
-    <183>   DW_AT_decl_line   : 0x49e
-    <187>   DW_AT_low_pc      : 0xffffffff81000260
- <1><18f>: Abbrev Number: 2 (DW_TAG_label)
-    <190>   DW_AT_name        : early_idt_handler_array
-    <1a8>   DW_AT_decl_file   : 0x0
-    <1ac>   DW_AT_decl_line   : 0x4ad
-    <1b0>   DW_AT_low_pc      : 0xffffffff83796000
- <1><1b8>: Abbrev Number: 2 (DW_TAG_label)
-    <1b9>   DW_AT_name        : early_idt_handler_common
-    <1d2>   DW_AT_decl_file   : 0x0
-    <1d6>   DW_AT_decl_line   : 0x4c1
-    <1da>   DW_AT_low_pc      : 0xffffffff83796120
-<BIG SNIP>
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54558
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5295608
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5295622
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5295663
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5295668
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
