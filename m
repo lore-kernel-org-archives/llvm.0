@@ -1,86 +1,110 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D49953A5
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 17:26:42 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id jo24so1260296plb.13
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 10:26:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948B153A5
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 18:14:18 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-35076702654so20956497b3.17
+        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 11:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hp5MQIBdOQ5Xk6FQmwC1/qIjFwJwbOcf9xoZvfBFSSs=;
-        b=RyAGnpmVQ7MHTy3FCbwhx+2SCA1IVKkyCDgY5S0n/JQkX7ciyU6WlRztNvL4tNYrWY
-         P8yeb9atgz7sJsNunvKwjSto1jvT288QBV6GYqC7mDy3SZwOfgTA5t2FFXRx+RY8vD1K
-         prK2Vz3hNVAMyJWXzGokK3qlkKIop5mkwV5XeVXDK9D8JowjYfW2wPcbAXwbOtCYcci0
-         wpJJ4cwbTD8ShNL1hy5MkbWLlI5g2YJ3Hze+RsckkZqZfGsUhNdyzO3PbImn4y+OfjdG
-         qSqThRukWMKgvEj4MkvYX/UUXLkN4msLyzS2iZukUZ1wsy+oAQDEztxkF5S0D94S0938
-         CskQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=jYPKWuT1u5m0MnKr4TovJZUrMbudnfje+CzX8rxj9dY=;
+        b=Ury0CFn0zT2Q+dgdtmwk3iQr3s9PWnviEmpKdjL2ckeEaSmqrBmREvZyOZsYx7mfNx
+         ECzbRm2XMKNf8IHIfQieAGeVmFDIKL4DvNsgEpkMewEU+OzV/roiRamuWScwv9Oc1wRN
+         ijQp0mOci65LBvTFCA0oCNoNC8WlfpZsz+Tq7aVC8M0pO+Hj+OnGwI5r7GGQ2npv/b+V
+         21bRDiDcuTW39u8v2MFAmqGu/gcyiUSyN20+vWsHPh1gtHAvk8ThOVjIFxdOBhx8XTyc
+         jfszHIqgdfl0jAOVUeHhK+UvFa1CyD4djovV+L8K84r1YaiZsjc9wGyt7ZHsGqI8mieF
+         JEVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hp5MQIBdOQ5Xk6FQmwC1/qIjFwJwbOcf9xoZvfBFSSs=;
-        b=uajAh0SH8KnMfX4bj8D9/CBfUXOuRDm90Pn+cZ+6crHMBus4/rJAah6gowFGCrnlDc
-         PT2/KK03owzg0z6lbtBkA8Apk9oR9h04eUTuGZkiBMzRGg0I0BTV1b5B//fTnvSY6mai
-         a1mAroRuB+x/w+UuGaE48SUa59y4uClksGMtWGYELfpeJIpCPDx+C7YAo5X2qRsEnpGW
-         QmcBK/rvCDKrifti71hS2WyHGL0Aj6SbXYH8+FCS+ZFIHksxgv2wqnA/cEDJsWeF2lKy
-         SAQKQFIWxQEG63ONM97vJkF1kPVWEb/7tTZtvybc+HGrX2tQiKbqsiOXWhkJR9ItE6aL
-         q/MQ==
-X-Gm-Message-State: ACrzQf3QbsLjMOVYDaxrQRffJ2lTEIDL56V+weX3Z6lBwef4wpco6cts
-	0tQ2K4+JVppwp70sPIgzz0WqkMxvRyyrmaeHjeL3RA==
-X-Google-Smtp-Source: AMsMyM6PcJA6nad6z96ctWkFUw7ZK/KRKkinRUcyyms0OiRxIbikPJZ4kvR4bJl/I/IumZ6cAydMH85aCXmtXaokv7o=
-X-Received: by 2002:a17:90b:1d0f:b0:202:be3e:a14a with SMTP id
- on15-20020a17090b1d0f00b00202be3ea14amr17447921pjb.102.1664472401750; Thu, 29
- Sep 2022 10:26:41 -0700 (PDT)
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=jYPKWuT1u5m0MnKr4TovJZUrMbudnfje+CzX8rxj9dY=;
+        b=KSPx5s5kn8+ff9jMZykjdV2m4RCzTVFAzvxt/b1oIST1F6Iqp5x5zrS4wOjTa6ztUf
+         nBsW/sX8LHeMZAWy4hJcJPsUaji2vOropWDssGgen6d6x8dUvTujXCp+KqUMA9vvvkjd
+         +DCNtDo1NqfTM/vswUg69w3F576rUOY6Wyhe0oDwBOyb3K1dkk2U3jdj7WLmVEBBjb1t
+         qrJr9T9sjEm0hOmyb0w5zK/BeL32V8DMDVqNEuMa4sB5sAZEUUckVmkshwdrbo/zH1jk
+         Rb1FSc89O9yZe6JgE8Z7DbYWompl0K6ZSiMwbEfvcfD99bwH/dtKgY8ARkkRi9ioCe14
+         NV9A==
+X-Gm-Message-State: ACrzQf3HEOumrFGck7GFvIi6mywUco9ufVCHDRKTOTE+/RoCmaQyjUJR
+	pO7RxepLbUkvRzifZjWz9GL0+pIwog==
+X-Google-Smtp-Source: AMsMyM6Pf2IhccLpOcVpEi4t74u7CQmid4Z2TwcCudea8RUMSv/ibgUI3NSufaIAn+mbxQCtqU2gHTq9QA==
+X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
+ (user=nhuck job=sendgmr) by 2002:a25:9104:0:b0:6bc:5ecf:30b7 with SMTP id
+ v4-20020a259104000000b006bc5ecf30b7mr4758739ybl.293.1664475257510; Thu, 29
+ Sep 2022 11:14:17 -0700 (PDT)
+Date: Thu, 29 Sep 2022 11:14:11 -0700
+In-Reply-To: <20220919182832.158c0ea2@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
- <20220928210512.642594-1-ndesaulniers@google.com> <YzVRJ3NY2w1NSoM2@gmail.com>
-In-Reply-To: <YzVRJ3NY2w1NSoM2@gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 29 Sep 2022 10:26:29 -0700
-Message-ID: <CAKwvOdk4bbwy6mb+uxO1BUCz5=0K7t1Xa899WnZS1VY5Sdhqkg@mail.gmail.com>
-Subject: Re: [PATCH v4] x86, mem: move memmove to out of line assembler
-To: Ingo Molnar <mingo@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <keescook@chromium.org>, 
-	linux-kernel@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>, 
-	llvm@lists.linux.dev, Andy Lutomirski <luto@kernel.org>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Mime-Version: 1.0
+References: <20220919182832.158c0ea2@kernel.org>
+X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
+Message-ID: <20220929181411.61331-1-nhuck@google.com>
+Subject: [PATCH v2] net: mana: Fix return type of mana_start_xmit
+From: Nathan Huckleberry <nhuck@google.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net, decui@microsoft.com, edumazet@google.com, 
+	error27@gmail.com, haiyangz@microsoft.com, kys@microsoft.com, 
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	netdev@vger.kernel.org, nhuck@google.com, pabeni@redhat.com, 
+	sthemmin@microsoft.com, trix@redhat.com, wei.liu@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 29, 2022 at 1:02 AM Ingo Molnar <mingo@kernel.org> wrote:
->
-> Yeah, so you did various whitespace & indentation cleanups, and I think if
-> we are touching trivialities we might as well fix/improve the documentation
-> of this function too...
+The ndo_start_xmit field in net_device_ops is expected to be of type
+netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 
-Yes, these are all wonderful suggestions.  My hope is to also improve
-the readability of the implementation. I will incorporate your
-suggestions into a v5 and credit you with a suggested-by tag.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-> calling standards details. If we want to mention it to make it clear what
-> we are saving on the stack and what not, the best description is the one
-> from calling.h:
->
->    x86 function calling convention, 32-bit:
->    ----------------------------------------
->     arguments         | callee-saved        | extra caller-saved | return
->    [callee-clobbered] |                     | [callee-clobbered] |
->    -------------------------------------------------------------------------
->    eax edx ecx        | ebx edi esi ebp [*] | <none>             | eax
+The return type of mana_start_xmit should be changed from int to
+netdev_tx_t.
 
-Oh! Perfect! I'm so glad this table exists!
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+---
 
-> Feel free to carry these changes over into your patch.
+Changes v1 -> v2
+- Update header file
 
-Will do, thanks.
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 2 +-
+ include/net/mana/mana.h                       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+index 7ca313c7b7b3..a3df5678bb4f 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+@@ -141,7 +141,7 @@ static int mana_map_skb(struct sk_buff *skb, struct mana_port_context *apc,
+ 	return -ENOMEM;
+ }
+ 
+-int mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ {
+ 	enum mana_tx_pkt_format pkt_fmt = MANA_SHORT_PKT_FMT;
+ 	struct mana_port_context *apc = netdev_priv(ndev);
+diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+index 20212ffeefb9..3bb579962a14 100644
+--- a/include/net/mana/mana.h
++++ b/include/net/mana/mana.h
+@@ -390,7 +390,7 @@ struct mana_port_context {
+ 	struct mana_ethtool_stats eth_stats;
+ };
+ 
+-int mana_start_xmit(struct sk_buff *skb, struct net_device *ndev);
++netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev);
+ int mana_config_rss(struct mana_port_context *ac, enum TRI_STATE rx,
+ 		    bool update_hash, bool update_tab);
+ 
 -- 
-Thanks,
-~Nick Desaulniers
+2.38.0.rc1.362.ged0d419d3c-goog
+
