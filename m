@@ -1,91 +1,175 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE8753B5
-	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 19:27:43 +0000 (UTC)
-Received: by mail-pl1-f181.google.com with SMTP id n7so2101978plp.1
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 12:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/2GwsSTauJmjYfkTPtC2/6DT6emkrfoGXZJnJAKA7Q4=;
-        b=foDx98KEnUwOdRff85G0E13/0WM6bs/iCCF+h2oxTRfhB7Y8cg42aTZN6jyESeGP+M
-         SMXoHJxaNBf/dU4aqoq9XMjty27bRq6o4egGu9mjF8HT6/tzgOCXTI19ixxEOtuJv4Hq
-         BZNIv06QP3dxoJFec7uxD64LNaJdcxUwDvWos=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/2GwsSTauJmjYfkTPtC2/6DT6emkrfoGXZJnJAKA7Q4=;
-        b=u/K85Gjm/1OT7cv4F1twsNiS/PoLOl7PrvCWI2xNT31PWboFyWAMix83ncQXce4GB8
-         z17C9A5x0i9ZTnirqThlW0eSEGLkcjR80xj5Eqk1wjB8L2mS5oOS9SzWNLSEPxT2Ekhm
-         GLPAbp1GJPnwxc8Qkw1AsI5q2l4l1Q3IgSDSKLG0xD7m2AGqj2gmltad8VpjR8/huJjV
-         kiYw9gGsk1hShW5BOZ4k2Wkqk+76i33aW5iZ2bGzRd57cRJj2cZmQbQRi4AvrIb2qPtd
-         2Rg/yXFl/DT92G8lyXbBH7sRWo3tQeENuuPKimQ6PsWABoCf3+F/zJqvPCG9Vsjy+BZH
-         a2pw==
-X-Gm-Message-State: ACrzQf3Si5YjOoQph1VHkei5Sa8N5vD6iImm0TSpirQzKAYPE6CN8h/K
-	bXrN1dg4HYKJPmRUWugdb6jxLAI+NzMiuw==
-X-Google-Smtp-Source: AMsMyM665cvOb3HTv7sg8lgOvRp1MQW8B/UlYAQJsw9Cdiw0jnBamf+jTBKYHtv+CnwTWAxIWd2ZUA==
-X-Received: by 2002:a17:902:ccc2:b0:178:29f9:5c5c with SMTP id z2-20020a170902ccc200b0017829f95c5cmr4908638ple.19.1664479662576;
-        Thu, 29 Sep 2022 12:27:42 -0700 (PDT)
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com. [209.85.215.176])
-        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b001728ac8af94sm229159plh.248.2022.09.29.12.27.42
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 12:27:42 -0700 (PDT)
-Received: by mail-pg1-f176.google.com with SMTP id 3so2319757pga.1
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 12:27:42 -0700 (PDT)
-X-Received: by 2002:a63:e16:0:b0:43b:d646:1bb7 with SMTP id
- d22-20020a630e16000000b0043bd6461bb7mr4327148pgl.53.1664479651010; Thu, 29
- Sep 2022 12:27:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C6D53B5
+	for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 19:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DCEC433D6;
+	Thu, 29 Sep 2022 19:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664480000;
+	bh=Gqk6mkG07MRkaEibbAqYt/HrTW67QOd61oH6wR8xIkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t9HdWQg/Q0Ta9SRyfuor7UzCFDIDJRjxrkloLcS8Kh3hW2KhKjwUAAVl6xGNxNB7W
+	 +cxRJnZjDTl6lsImGKVh2NassxV7aBc4iNzKmHF2afKD4rRBrC5lsDW2Ydpz8amAsV
+	 9kaY2spyWnTzmtWlXeog7TikoMmNxnQHLfFwHnGQHKPp/fWc6VxUpLf0WVxLbh3B5E
+	 /W0Uu0E97FxciOiyhktNculPX5nPPSmiNOGmWb05GpzF7eNSB39SLBxQADffVCYouj
+	 zQQib3bXpkS1VSDx2qBzO/ik97Hx63BBRwlWMVIxMTqqC0hsaH4XgBrChnbUa1N2b8
+	 TaTW1yvA0PbMg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 329F84062C; Thu, 29 Sep 2022 16:33:17 -0300 (-03)
+Date: Thu, 29 Sep 2022 16:33:17 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Yonghong Song <yhs@fb.com>, Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, dwarves@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: BTF: A fix and more work to do :Re: die__process_unit:
+ DW_TAG_label (0xa) @ <0x7b> not handled!
+Message-ID: <YzXy/birngORHLEd@kernel.org>
+References: <YzNHYoI4EZOQdCQ0@dev-arch.thelio-3990X>
+ <YzNKEhM+H/X0xUK3@kernel.org>
+ <YzNWBxJTKDRBNNDa@dev-arch.thelio-3990X>
+ <YzRPXVUfjcyQ4Utz@kernel.org>
+ <YzRnfz0sVpX8CzeL@dev-arch.thelio-3990X>
+ <YzWSzXKcm6rSWOC5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid> <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
-In-Reply-To: <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
-From: Raul Rangel <rrangel@chromium.org>
-Date: Thu, 29 Sep 2022 13:27:19 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
-Message-ID: <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, linux-input <linux-input@vger.kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Hans de Goede <hdegoede@redhat.com>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Tim Van Patten <timvp@google.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, "jingle.wu" <jingle.wu@emc.com.tw>, 
-	Dan Williams <dan.j.williams@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Len Brown <lenb@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YzWSzXKcm6rSWOC5@kernel.org>
+X-Url: http://acmel.wordpress.com
 
-On Thu, Sep 29, 2022 at 1:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Sep 29, 2022 at 6:19 PM Raul E Rangel <rrangel@chromium.org> wrote:
-> >
-> > ACPI IRQ/Interrupt resources contain a bit that describes if the
-> > interrupt should wake the system. This change exposes that bit via
-> > a new IORESOURCE_IRQ_WAKECAPABLE flag. Drivers should check this flag
->
-> I would call this IORESOURCE_IRQ_WAKE which is (a) simpler and easier
-> to read and (b) it sort of matches the "wakeirq" naming convention.
+Em Thu, Sep 29, 2022 at 09:42:53AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Sep 28, 2022 at 08:25:51AM -0700, Nathan Chancellor escreveu:
+> > On Wed, Sep 28, 2022 at 10:42:53AM -0300, Arnaldo Carvalho de Melo wrote:
+> > > Can you please provide the vmlinux file where this takes place?
+> > 
+> > Sure thing, it is compressed to save some bandwidth while downloading:
+> > 
+> > https://1drv.ms/u/s!AsQNYeB-IEbqnnzsULjM1pXmOlI5?e=qHKjuW
+> 
+> So, fixed the case reported, DW_TAG_label outside a DW_TAG_lexblock, on
+> asm DW_TAG_compile_unit DWARF containers, now I noticed that pahole
+> suports encoding BTF_KIND_TAG (18) but not _decoding_ those, so off I go
+> to work on it on btf_loader.c, looking at what btf_encoder.c does.
+> 
+> Good that you got me this vmlinux built by clang 15 :-)
+> 
+> Now we can BTF encode a vmlinux (-J) using all the CPUs in the system
+> (-j), and then we end up with a kernel with BTF_KIND_TAG that can't be
+> properly grokked by pahole when loading from BTF:
+> 
+> ⬢[acme@toolbox pahole]$ pahole -j -J vmlinux-pahole-warnings
+> ⬢[acme@toolbox pahole]$ pahole -F btf vmlinux-pahole-warnings  > pahole-pretty-printed-from-btf
+> BTF: idx: 277, Unknown kind 18
+> BTF: idx: 281, Unknown kind 18
+> BTF: idx: 331, Unknown kind 18
+> BTF: idx: 689, Unknown kind 18
+> BTF: idx: 692, Unknown kind 18
+> 
+> For instance:
+> 
+> ⬢[acme@toolbox pahole]$ pahole -C __sifields -F btf vmlinux-pahole-warnings
+> BTF: idx: 277, Unknown kind 18
+> BTF: idx: 281, Unknown kind 18
+> BTF: idx: 331, Unknown kind 18
+> BTF: idx: 689, Unknown kind 18
+> <BIG SNIP>
+> BTF: idx: 128403, Unknown kind 18
+> BTF: idx: 128409, Unknown kind 18
+> union __sifields {
+> 	struct {
+> 		__kernel_pid_t     _pid;               /*     0     4 */
+> 		__kernel_uid32_t   _uid;               /*     4     4 */
+> 	} _kill;                                       /*     0     8 */
+> 	struct {
+> 		__kernel_timer_t   _tid;               /*     0     4 */
+> 		int                _overrun;           /*     4     4 */
+> 		sigval_t           _sigval;            /*     8     8 */
+> 		int                _sys_private;       /*    16     4 */
+> 	} _timer;                                      /*     0    24 */
+> 	struct {
+> 		__kernel_pid_t     _pid;               /*     0     4 */
+> 		__kernel_uid32_t   _uid;               /*     4     4 */
+> 		sigval_t           _sigval;            /*     8     8 */
+> 	} _rt;                                         /*     0    16 */
+> 	struct {
+> 		__kernel_pid_t     _pid;               /*     0     4 */
+> 		__kernel_uid32_t   _uid;               /*     4     4 */
+> 		int                _status;            /*     8     4 */
+> 
+> 		/* XXX 4 bytes hole, try to pack */
+> 
+> 		__kernel_clock_t   _utime;             /*    16     8 */
+> 		__kernel_clock_t   _stime;             /*    24     8 */
+> 	} _sigchld;                                    /*     0    32 */
+> 	struct {
+> 		<ERROR            > _addr;             /*     0     8 */
 
-It was Dmitry who originally suggested the name. I personally like the
-CAPABLE in the name. It makes it clear that it's capable of acting as
-a wake source, not to be confused with being enabled as a wake source.
+So this shares a type with several other fields/variables/whatever and
+then:
 
->
-> This is not a big deal if you insist on this name and for a good
-> reason, but just something I would do differently.
->
-> The patch LGTM otherwise.
->
+ [  cb57]      member               abbrev: 6
+               name                 (strx2) "sival_ptr"
+               type                 (ref4) [  cb62]
+               decl_file            (data1) siginfo.h (153)
+               decl_line            (data1) 10
+               data_member_location (data1) 0
+ [  cb62]    pointer_type         abbrev: 80
+ [  cb63]      lo_user+0x1f80       abbrev: 51
+               name                 (strx1) "btf_type_tag"
+               const_value          (strx1) "user"
+
+
+This is with eu-readelf from elfutils, binutils readelf gets confused,
+unsure about the equivalent for llvm, lets see:
+
+llvm-dwarfdump gets:
+
+0x0000cb57:     DW_TAG_member
+                  DW_AT_name    ("sival_ptr")
+                  DW_AT_type    (0x0000cb62 "void *")
+                  DW_AT_decl_file       ("/home/nathan/cbl/src/linux/./include/uapi/asm-generic/siginfo.h")
+                  DW_AT_decl_line       (10)
+                  DW_AT_data_member_location    (0x00)
+
+looks saner, a void pointer, probably with an attribute of btf_type_tag
+(DW_TAG_llvm-something, IIRC):
+
+0x0000cb62:   DW_TAG_pointer_type
+
+0x0000cb63:     DW_TAG_LLVM_annotation
+                  DW_AT_name    ("btf_type_tag")
+                  DW_AT_const_value     ("user")
+
+0x0000cb66:     NULL
+
+None of these tools seem to be grokking this nicely, Yonghong?
+
+⬢[acme@toolbox pahole]$ llvm-dwarfdump --version
+LLVM (http://llvm.org/):
+  LLVM version 14.0.0git
+  Optimized build.
+  Default target: x86_64-unknown-linux-gnu
+  Host CPU: znver3
+⬢[acme@toolbox pahole]$ cat /etc/fedora-release
+Fedora release 36 (Thirty Six)
+⬢[acme@toolbox pahole]$
+
+
+I.e. sival_ptr is a:
+
+typedef union sigval {
+        int sival_int;
+        void __user *sival_ptr;
+} sigval_t;
+
+So I would expect that sival_ptr pointed to a void * with an
+intermediate DW_TAG_LLVM_annotation? What is the semantics? How all
+these tools need to grok this?
+
+- Arnaldo
