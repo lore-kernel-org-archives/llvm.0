@@ -1,18 +1,18 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CEC1FA7
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 09:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506511FA7
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 10:14:32 +0000 (UTC)
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-120-36BsWVuQPhi0hJ_WTZLnVw-1; Fri, 30 Sep 2022 10:55:31 +0100
-X-MC-Unique: 36BsWVuQPhi0hJ_WTZLnVw-1
+ uk-mta-17-B0DimJooNkqDfXWRKMPRaA-1; Fri, 30 Sep 2022 11:14:29 +0100
+X-MC-Unique: B0DimJooNkqDfXWRKMPRaA-1
 Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
  (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 30 Sep
- 2022 10:55:27 +0100
+ 2022 11:14:25 +0100
 Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 30 Sep 2022 10:55:27 +0100
+ id 15.00.1497.040; Fri, 30 Sep 2022 11:14:25 +0100
 From: David Laight <David.Laight@ACULAB.COM>
 To: 'Nick Desaulniers' <ndesaulniers@google.com>, Thomas Gleixner
 	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
@@ -25,9 +25,9 @@ CC: "x86@kernel.org" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
 	<linux@rasmusvillemoes.dk>
 Subject: RE: [PATCH v4] x86, mem: move memmove to out of line assembler
 Thread-Topic: [PATCH v4] x86, mem: move memmove to out of line assembler
-Thread-Index: AQHY037pE1P6FVCPj0CNx24XV/n/hK33u1Gw
-Date: Fri, 30 Sep 2022 09:55:27 +0000
-Message-ID: <5672845ec66744df9ee0f0c56031ab00@AcuMS.aculab.com>
+Thread-Index: AQHY037pE1P6FVCPj0CNx24XV/n/hK33wjDg
+Date: Fri, 30 Sep 2022 10:14:25 +0000
+Message-ID: <35ab0ccca42b4b4695f6c99b6d741b8f@AcuMS.aculab.com>
 References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
  <20220928210512.642594-1-ndesaulniers@google.com>
 In-Reply-To: <20220928210512.642594-1-ndesaulniers@google.com>
@@ -49,17 +49,17 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: base64
 
 RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAyOCBTZXB0ZW1iZXIgMjAyMiAyMjowNQ0K
-Li4uDQo+IG1lbW1vdmUgaXMgcXVpdGUgbGFyZ2UgYW5kIHByb2JhYmx5IHNob3VsZG4ndCBiZSBp
-bmxpbmVkIGR1ZSB0byBzaXplDQo+IGFsb25lDQouLg0KPiArCS8qIERlY2lkZSBmb3J3YXJkL2Jh
-Y2t3YXJkIGNvcHkgbW9kZSAqLw0KPiArCWNtcGwJZGVzdCwgc3JjDQo+ICsJamIJLkxiYWNrd2Fy
-ZHNfaGVhZGVyDQoNCkl0IGhhcyB0byBiZSBiZXR0ZXIgdG8gZG8gdGhlIHNsaWdodGx5IG1vcmUg
-Y29tcGxpY2F0ZWQNCnRlc3QgJ2Rlc3QgLSBzcmMgPCBzaXplJyAoYXMgdW5zaWduZWQpIHNvIHRo
-YXQgcmV2ZXJzZQ0KY29waWVzIGFyZSBvbmx5IGRvbmUgd2hlbiBhYnNvbHV0ZWx5IG5lY2Vzc2Fy
-eS4NCg0KSWdub3JpbmcgcGF0aG9sb2dpY2FsIGNhc2VzIG9uIHNvbWUgY3B1IGZhbWlsaWVzIHRo
-ZQ0KZm9yd2FyZHMgY29weSB3aWxsIGJlbmVmaXQgZnJvbSBoYXJkd2FyZSBjYWNoZSBwcmVmZXRj
-aC4NCg0KSSBhbHNvIGhhdmUgYSB2YWd1ZSByZWNvbGxlY3Rpb24gb2Ygc3RkIGFuZCBjbGQgYmVp
-bmcgc2xvdy4NCg0KT2ggLSBhbmQgd2h5IGRvIGFsbCB0aGUgbGFiZWxzIGhhdmUgJ2J5dGVzd2Fw
-JyBpbiB0aGVtPw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBC
-cmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdp
-c3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Li4uDQoNClJlYWRpbmcgaXQgYWdhaW4sIHdoYXQgaXMgdGhpcyB0ZXN0IHN1cHBvc2VkIHRvIGFj
+aGlldmU/DQoNCj4gKwkvKg0KPiArCSAqIG1vdnMgaW5zdHJ1Y3Rpb24gaXMgb25seSBnb29kIGZv
+ciBhbGlnbmVkIGNhc2UuDQo+ICsJICovDQo+ICsJbW92bAlzcmMsIHRtcDANCj4gKwl4b3JsCWRl
+c3QsIHRtcDANCj4gKwlhbmRsCSQweGZmLCB0bXAwDQo+ICsJanoJLkxmb3J3YXJkX21vdnMNCg0K
+VGhlICdhbGlnbmVkJyB0ZXN0IHdvdWxkIGJlICcoc3JjIHwgZGVzdCkgJiAzJy4NCihPciBtYXli
+ZSAnJiA3JyBzaW5jZSBzb21lIDMyYml0IHg4NiBjcHUgYWN0YWxseQ0KZG8gOCBieXRlIGFsaWdu
+ZWQgJ3JlcCBtb3ZzbCcgZmFzdGVyIHRoYW4gNCBieXRlDQphbGlnbmVkIG9uZXMuDQpPVE9IIHRo
+ZSBjb2RlIGxvb3AgaXMgbGlrZWx5IHRvIGJlIHNsb3dlciBzdGlsbC4NCg0KSSd2ZSBub3QgdHJp
+ZWQgbWVhc3VyaW5nIG1pc2FsaWduZWQgJ3JlcCBtb3ZzdycgYnV0DQpvbiBzb21lIHJlY2VudCBp
+bnRlbCBjcHUgbm9ybWFsIG1pc2FsaWduZWQgcmVhZHMgY29zdA0KYWxtb3N0IG5vdGhpbmcgLSBl
+dmVuIHdoZW4gZG9pbmcgdHdvIHJlYWRzL2Nsb2NrLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
+ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
+ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
