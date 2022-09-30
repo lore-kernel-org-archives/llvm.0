@@ -1,100 +1,80 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24DE85A7C
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 17:42:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664559742; x=1696095742;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=frSbyhVpNySk0Rm2XauruAvwsaf78K6x1ptT3JAqffg=;
-  b=aEb2kuuB9miBdiVLvp2GLtfp7dtUC8Ne55OL3dJlZgfoUM3Q57csA3hB
-   o5Y2UEcPrmdbmtNi55aCqohQu7yVMl5DFYjQhVJBKt4iYhsIqeZdBXxf9
-   gc1F23/4/JN5GY3ZVh7htOc8ZQB8leGZVoUAhpb6fFfNJPh7PfCbNMxtQ
-   vRHKw+JXNkuaGb5AjeicWWQdlmmpQ9rTLMkEoQdrve52sD+ttVyuKFhLC
-   829wbFZZbPtrUSoT/H97iCf5+x/YwSwvSwyGCLXarXR85U8RaodorzwN+
-   Lll1EctihlUic1M6U6F4lWItGmPuB/iNUPiH/HHqJHGjI3RZEFYOQB7nU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="300966588"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="300966588"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 10:42:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="685367753"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="685367753"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2022 10:42:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1oeK1e-000d1L-0Y;
-	Fri, 30 Sep 2022 20:42:14 +0300
-Date: Fri, 30 Sep 2022 20:42:13 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Raul Rangel <rrangel@chromium.org>,
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-	linux-input <linux-input@vger.kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Tim Van Patten <timvp@google.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"jingle.wu" <jingle.wu@emc.com.tw>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Len Brown <lenb@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to
- acpi_dev_irq_flags
-Message-ID: <YzcqdTxLMF5028yz@smile.fi.intel.com>
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
- <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
- <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
- <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
- <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
- <YzYowYJpRTImmg4m@google.com>
- <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A455A7C
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 17:54:12 +0000 (UTC)
+Received: by mail-qt1-f170.google.com with SMTP id f26so3110618qto.11
+        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 10:54:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HELMaTyjtjhoi6PlS/lrYVTcmHlgwprNubgdTucekMw=;
+        b=Sq2gKy0cpgxWAj6U4q6GANFB+Y2ruZpEOXkphVX5e/JMIdHN9gfX3cqy0xT0J+IRwJ
+         eEjYPSnhlAcR3NRCtvpXOaMOd/eGo6B4ag5zI5OND87UdrhW5JazD4aOKJdT9LZSo74x
+         z4n8IV6kNGSgspkVHTVK9FQH+vosuY5uHxqhYkbATNMJrYRboT8FOq1C6YVCgpTt5d6p
+         Rq+bHc2155p3S2HrxsWsN1ReKw9QtTnoJ0cA7a/1bfwe4KoeenFTJNVwG23sMoSNv3Q7
+         XpBG6T6BzrMCCUShMuKeR+CJycT3+GlzNKp4XqnReaCWlGUKA/ZkAn/z2pDV5JgnEVOA
+         nJlg==
+X-Gm-Message-State: ACrzQf0WqlZ5q/HNaJFHLYWQZGrAICjCpRcPca//+DCVKHYZxI139gh1
+	NniOynTt7SeNfJhcACwVotvLUEzm/vFr8i7lX+Y=
+X-Google-Smtp-Source: AMsMyM6gUKsfNdNlP0krr+unzlH0ZtWUYXzYLAgQBWxCiR/BoWt2ZuPLZvK19ukpMbjR+S3MhzBOSlW6W9ac9cM3Tlw=
+X-Received: by 2002:a05:622a:64e:b0:35d:5213:284f with SMTP id
+ a14-20020a05622a064e00b0035d5213284fmr7809313qtb.49.1664560451538; Fri, 30
+ Sep 2022 10:54:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220929161917.2348231-1-rrangel@chromium.org>
+ <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
+ <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
+ <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
+ <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
+ <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
+ <YzYowYJpRTImmg4m@google.com> <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
+ <YzcqdTxLMF5028yz@smile.fi.intel.com>
+In-Reply-To: <YzcqdTxLMF5028yz@smile.fi.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 30 Sep 2022 19:54:00 +0200
+Message-ID: <CAJZ5v0jE+53MZrPL9F_=f89cJHW8CPHPRM8PXb-i9DK8Ln=iDg@mail.gmail.com>
+Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Raul Rangel <rrangel@chromium.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, 
+	linux-input <linux-input@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Tim Van Patten <timvp@google.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, "jingle.wu" <jingle.wu@emc.com.tw>, 
+	Dan Williams <dan.j.williams@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Len Brown <lenb@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> wrote:
+On Fri, Sep 30, 2022 at 7:42 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
+> > On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
+> > <dmitry.torokhov@gmail.com> wrote:
+>
+> ...
+>
+> > I think that patches [5-8/13] from this series are significant
+> > framework changes, so it would make sense to route them via the ACPI
+> > tree.
+> >
+> > If this is fine with everybody, I will queue them up for merging into
+> > 6.1 (probably in the second half of the upcoming merge window).
+>
+> I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
+> but if you wish you always may take this PR [1] to your tree (it's already in
+> GPIO tree pending v6.1), it may be considered as immutable tag.
+>
+> [1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
 
-...
-
-> I think that patches [5-8/13] from this series are significant
-> framework changes, so it would make sense to route them via the ACPI
-> tree.
-> 
-> If this is fine with everybody, I will queue them up for merging into
-> 6.1 (probably in the second half of the upcoming merge window).
-
-I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
-but if you wish you always may take this PR [1] to your tree (it's already in
-GPIO tree pending v6.1), it may be considered as immutable tag.
-
-[1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks for the pointer!
