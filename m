@@ -1,462 +1,291 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AF61363
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 01:35:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664501752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=apDMaTh5Z0mhMiQR6csH9hQJkGTkpalOtF3hMWGKJ/I=;
-	b=bMNIDb2VgRt/3ImgL93Urx3jHWlJEg6B7b349DFgM05tHHljyH4xbI4d1QDA66c2O2ghgd
-	4AD7KoQv72X7Q7jIIuEsS7ZmdKpJOJMPFc/1Sh3B91N6JS/RU5mkeVY8NjNDkIKoCmIsxl
-	5nb9fnnYvEFRr/17i5AfZzup4EnsMOg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-320-EW7-7i59OwKKURdyLfKLEw-1; Thu, 29 Sep 2022 21:35:48 -0400
-X-MC-Unique: EW7-7i59OwKKURdyLfKLEw-1
-Received: by mail-qv1-f71.google.com with SMTP id lc12-20020a0562142c0c00b004afa6c72f9fso2042265qvb.5
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 18:35:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=id5jS9GIl5YUAGyi9JHeiLoaOFFBXFXBzzRQ0BDhWCQ=;
-        b=jV7TdkRmbn3MYFXjX6b850zyy5+aUV3L7A0+8/Jn6QlN/STcDnvmqsccFgCDXnbnuJ
-         EPP06husF7m5mNP5YPxCDs33FDpWTFOBu2eSS81E9Ym88NSWqZMVjAM3zs9K4/QF0Zp0
-         K8+lUXTn+f7mznDEzMJTOfpTtIIlxcCROTQ62fg6WtHHz0u7IdWTT+44K/xk/MobH3wa
-         h6ZqdYqDfj8H2+8MTsMtvzcEfCt2WFXZFmsdfKDeeu1W0n9yTeayRclQbBhUA4LCfVqZ
-         EpLeG8kKC6AI1qYR+ywI+2MEagIrKAkABhU4RefDf7qyx0KhWEIY3ESQKv7BfL4bhZDh
-         F+hA==
-X-Gm-Message-State: ACrzQf1+GuZR4DQtloqAHF85EaX5wMlFBbLUmcDx7XEJIUNx5TInVKC5
-	iHK3cjBgMm/KlXwpBNIE//+KqyLdjlOngC9uVV8AOlGmOu/27GGP26R/oB7UTR57ZPTbiMP7Zbv
-	uFZzUuZBGVWCaNw==
-X-Received: by 2002:a05:622a:1883:b0:35b:b7fc:24ac with SMTP id v3-20020a05622a188300b0035bb7fc24acmr4972661qtc.182.1664501747915;
-        Thu, 29 Sep 2022 18:35:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7hwGFnM0XdWDVcazOEqGszR1x6gBn90V179XMk0fqa7T91LVp01wdQt1g89vtZwvruAPkiqA==
-X-Received: by 2002:a05:622a:1883:b0:35b:b7fc:24ac with SMTP id v3-20020a05622a188300b0035bb7fc24acmr4972628qtc.182.1664501747607;
-        Thu, 29 Sep 2022 18:35:47 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac8519a000000b0035d4344a389sm660594qtn.94.2022.09.29.18.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 18:35:46 -0700 (PDT)
-Date: Thu, 29 Sep 2022 21:35:45 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Hugh Dickins <hughd@google.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yang Shi <shy828301@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
-	akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
-	ndesaulniers@google.com, songmuchun@bytedance.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] general protection fault in PageHeadHuge
-Message-ID: <YzZH8fqmItIS0cu4@xz-m1.local>
-References: <Yy4g/BKpnJga1toG@monkey>
- <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com>
- <Yy5WHvioerD2Sev1@x1n>
- <Yy8dBrmvDmqlsRXE@x1n>
- <Yy9T/JmVb4ymf6WM@monkey>
- <YzDuHbuo2x/b2Mbr@x1n>
- <YzMjxY5O6Hf/IPTx@monkey>
- <YzMomT+OusJnLOPC@x1n>
- <YzYrYVeA0b9d5dos@monkey>
- <YzZGkhNpluNHhTc3@xz-m1.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEC11841
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 03:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CCDC43470
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 03:36:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664508970;
+	bh=g8CiGhPxHJf7NqoCl/P7yE7oYJwpzOdl9USL8R5/BbA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gVllG3liVQ12hC98Ip+BuDRMiJM1VZy7Xyp8LkeyjcHvGGn2CHtdZxCPR2ZmuTmCy
+	 UmAeOU7amRZSI3Tr9M/SFCqMBZr/gHgbeG+SW2BPYC94t6ZsVubdv5OIGj3Fm9ye1c
+	 PX31qamT9zKAwARZezcOgG1tyVC8p7XJ+nsBoJqaQdSwDu0awPzge4Kw2dOBXaOLNT
+	 1/3XT9PYDxA1cKMn8woaQklQ1/7IojTfP5hjGgJo8bPJ0qd+XxE3eOsGcS6BUVG1y/
+	 h31O2X6tpzSS1XQ+sljM735ridZ2LKLnU4b2qgUMfrQnpfPPjg1cnpSRYL1CA5iFML
+	 GpzVqbbVMSKSg==
+Received: by mail-oi1-f175.google.com with SMTP id m81so3581242oia.1
+        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 20:36:10 -0700 (PDT)
+X-Gm-Message-State: ACrzQf24moIG4kVxJ663giJGnHjG1om9mWKwxgxtXRAd9sGoyBZ7z+gC
+	rB/hVI95M9c23tAy/snJWjnvPN+5hqaE+3y0qUU=
+X-Google-Smtp-Source: AMsMyM4hcJ64HVv+uPMw+VPMdVCIyGUBoOKGywRLZSFqJqIbHbrdLnrM83HuJnMf7jylGu0BZxUl08QkpLisNt4tUXc=
+X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
+ q31-20020a056808201f00b0034f9fdfdbbfmr8135735oiw.19.1664508969786; Thu, 29
+ Sep 2022 20:36:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <YzZGkhNpluNHhTc3@xz-m1.local>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/mixed; boundary="6BJDNHv8LiVvXy5W"
-Content-Disposition: inline
+References: <20220928162007.3791-1-jszhang@kernel.org> <20220928162007.3791-4-jszhang@kernel.org>
+ <YzR8OUFuV+R1i1Y6@xhacker> <CAJF2gTSaCGeMG06xrRxjkk2UnjqcgrRTwdch9Ug_TyH-9LsP4g@mail.gmail.com>
+ <YzXFQeyktIK5IQ7C@xhacker>
+In-Reply-To: <YzXFQeyktIK5IQ7C@xhacker>
+From: Guo Ren <guoren@kernel.org>
+Date: Fri, 30 Sep 2022 11:35:57 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQtLxRT2JBt+Hzf7ErGga3pUnSxs3nc+xa38BN4VdB8pg@mail.gmail.com>
+Message-ID: <CAJF2gTQtLxRT2JBt+Hzf7ErGga3pUnSxs3nc+xa38BN4VdB8pg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] riscv: fix race when vmap stack overflow and
+ remove shadow_stack
+To: Jisheng Zhang <jszhang@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
---6BJDNHv8LiVvXy5W
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+On Fri, Sep 30, 2022 at 12:27 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Thu, Sep 29, 2022 at 01:54:25PM +0800, Guo Ren wrote:
+> > On Thu, Sep 29, 2022 at 1:03 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+> > >
+> > > On Thu, Sep 29, 2022 at 12:20:06AM +0800, Jisheng Zhang wrote:
+> > > > Currently, when detecting vmap stack overflow, riscv firstly switches
+> > > > to the so called shadow stack, then use this shadow stack to call the
+> > > > get_overflow_stack() to get the overflow stack. However, there's
+> > > > a race here if two or more harts use the same shadow stack at the same
+> > > > time.
+> > > >
+> > > > To solve this race, we rely on two facts:
+> > > > 1. the content of kernel thread pointer I.E "tp" register can still
+> > > > be gotten from the the CSR_SCRATCH register, thus we can clobber tp
+> > > > under the condtion that we restore tp from CSR_SCRATCH later.
+> > > >
+> > > > 2. Once vmap stack overflow happen, panic is comming soon, no
+> > > > performance concern at all, so we don't need to define the overflow
+> > > > stack as percpu var, we can simplify it into a pointer array which
+> > > > points to allocated pages.
+> > > >
+> > > > Thus we can use tp as a tmp register to get the cpu id to calculate
+> > > > the offset of overflow stack pointer array for each cpu w/o shadow
+> > > > stack any more. Thus the race condition is removed as a side effect.
+> > > >
+> > > > NOTE: we can use similar mechanism to let each cpu use different shadow
+> > > > stack to fix the race codition, but if we can remove shadow stack usage
+> > > > totally, why not.
+> > > >
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> > > > ---
+> > > >  arch/riscv/include/asm/asm-prototypes.h |  1 -
+> > > >  arch/riscv/include/asm/thread_info.h    |  4 +-
+> > > >  arch/riscv/kernel/asm-offsets.c         |  1 +
+> > > >  arch/riscv/kernel/entry.S               | 56 ++++---------------------
+> > > >  arch/riscv/kernel/traps.c               | 31 ++++++++------
+> > > >  5 files changed, 29 insertions(+), 64 deletions(-)
+> > > >
+> > > > diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
+> > > > index ef386fcf3939..4a06fa0f6493 100644
+> > > > --- a/arch/riscv/include/asm/asm-prototypes.h
+> > > > +++ b/arch/riscv/include/asm/asm-prototypes.h
+> > > > @@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+> > > >  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+> > > >  DECLARE_DO_ERROR_INFO(do_trap_break);
+> > > >
+> > > > -asmlinkage unsigned long get_overflow_stack(void);
+> > > >  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+> > > >
+> > > >  #endif /* _ASM_RISCV_PROTOTYPES_H */
+> > > > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > > > index c970d41dc4c6..c604a5212a73 100644
+> > > > --- a/arch/riscv/include/asm/thread_info.h
+> > > > +++ b/arch/riscv/include/asm/thread_info.h
+> > > > @@ -28,14 +28,12 @@
+> > > >
+> > > >  #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
+> > > >  #define OVERFLOW_STACK_SIZE     SZ_4K
+> > > > -#define SHADOW_OVERFLOW_STACK_SIZE (1024)
+> > > > +#define OVERFLOW_STACK_SHIFT 12
+> > >
+> > > oops, this should be removed, will update it in a newer version after
+> > > collecting review comments.
+> > >
+> > > >
+> > > >  #define IRQ_STACK_SIZE               THREAD_SIZE
+> > > >
+> > > >  #ifndef __ASSEMBLY__
+> > > >
+> > > > -extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+> > > > -
+> > > >  #include <asm/processor.h>
+> > > >  #include <asm/csr.h>
+> > > >
+> > > > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> > > > index df9444397908..62bf3bacc322 100644
+> > > > --- a/arch/riscv/kernel/asm-offsets.c
+> > > > +++ b/arch/riscv/kernel/asm-offsets.c
+> > > > @@ -37,6 +37,7 @@ void asm_offsets(void)
+> > > >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+> > > >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> > > >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> > > > +     OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> > > >
+> > > >       OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+> > > >       OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> > > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > > > index a3e1ed2fa2ac..5a6171a90d81 100644
+> > > > --- a/arch/riscv/kernel/entry.S
+> > > > +++ b/arch/riscv/kernel/entry.S
+> > > > @@ -223,54 +223,16 @@ END(ret_from_exception)
+> > > >
+> > > >  #ifdef CONFIG_VMAP_STACK
+> > > >  ENTRY(handle_kernel_stack_overflow)
+> > > > -     la sp, shadow_stack
+> > > > -     addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> > > > -
+> > > > -     //save caller register to shadow stack
+> > > > -     addi sp, sp, -(PT_SIZE_ON_STACK)
+> > > > -     REG_S x1,  PT_RA(sp)
+> > > > -     REG_S x5,  PT_T0(sp)
+> > > > -     REG_S x6,  PT_T1(sp)
+> > > > -     REG_S x7,  PT_T2(sp)
+> > > > -     REG_S x10, PT_A0(sp)
+> > > > -     REG_S x11, PT_A1(sp)
+> > > > -     REG_S x12, PT_A2(sp)
+> > > > -     REG_S x13, PT_A3(sp)
+> > > > -     REG_S x14, PT_A4(sp)
+> > > > -     REG_S x15, PT_A5(sp)
+> > > > -     REG_S x16, PT_A6(sp)
+> > > > -     REG_S x17, PT_A7(sp)
+> > > > -     REG_S x28, PT_T3(sp)
+> > > > -     REG_S x29, PT_T4(sp)
+> > > > -     REG_S x30, PT_T5(sp)
+> > > > -     REG_S x31, PT_T6(sp)
+> > > > -
+> > > > -     la ra, restore_caller_reg
+> > > > -     tail get_overflow_stack
+> > > > -
+> > > > -restore_caller_reg:
+> > > > -     //save per-cpu overflow stack
+> > > > -     REG_S a0, -8(sp)
+> > > > -     //restore caller register from shadow_stack
+> > > > -     REG_L x1,  PT_RA(sp)
+> > > > -     REG_L x5,  PT_T0(sp)
+> > > > -     REG_L x6,  PT_T1(sp)
+> > > > -     REG_L x7,  PT_T2(sp)
+> > > > -     REG_L x10, PT_A0(sp)
+> > > > -     REG_L x11, PT_A1(sp)
+> > > > -     REG_L x12, PT_A2(sp)
+> > > > -     REG_L x13, PT_A3(sp)
+> > > > -     REG_L x14, PT_A4(sp)
+> > > > -     REG_L x15, PT_A5(sp)
+> > > > -     REG_L x16, PT_A6(sp)
+> > > > -     REG_L x17, PT_A7(sp)
+> > > > -     REG_L x28, PT_T3(sp)
+> > > > -     REG_L x29, PT_T4(sp)
+> > > > -     REG_L x30, PT_T5(sp)
+> > > > -     REG_L x31, PT_T6(sp)
+> > > > +     la sp, overflow_stack
+> > > > +     /* use tp as tmp register since we can restore it from CSR_SCRATCH */
+> > > > +     REG_L tp, TASK_TI_CPU(tp)
+> > > > +     slli tp, tp, RISCV_LGPTR
+> > > > +     add tp, sp, tp
+> > > > +     REG_L sp, 0(tp)
+> > > > +
+> > > > +     /* restore tp */
+> > > > +     csrr tp, CSR_SCRATCH
+> > > >
+> > > > -     //load per-cpu overflow stack
+> > > > -     REG_L sp, -8(sp)
+> > > >       addi sp, sp, -(PT_SIZE_ON_STACK)
+> > > >
+> > > >       //save context to overflow stack
+> > > > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > > > index 73f06cd149d9..b6c64f0fb70f 100644
+> > > > --- a/arch/riscv/kernel/traps.c
+> > > > +++ b/arch/riscv/kernel/traps.c
+> > > > @@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
+> > > >  #endif /* CONFIG_GENERIC_BUG */
+> > > >
+> > > >  #ifdef CONFIG_VMAP_STACK
+> > > > -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+> > > > -             overflow_stack)__aligned(16);
+> > > > -/*
+> > > > - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+> > > > - * to get per-cpu overflow stack(get_overflow_stack).
+> > > > - */
+> > > > -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
+> > > > -asmlinkage unsigned long get_overflow_stack(void)
+> > > > -{
+> > > > -     return (unsigned long)this_cpu_ptr(overflow_stack) +
+> > > > -             OVERFLOW_STACK_SIZE;
+> > > > -}
+> > > > +void *overflow_stack[NR_CPUS] __ro_after_init __aligned(16);
+> > Er... We've talked NR_CPUS = 8192, even a pointer would cause 64KB wasted.
+> >
+> > I prefer the previous solution with a atomic flag.
+>
+> Hi guo,
+>
+> I see your opinions. Here are my comments:
+>
+> Now the range of riscv's NR_CPUS is 2~32, given I have removed the 1KB
+> shadow stack, so this patch saves 768Bytes or more rather than wastes
+> memory. No mention that I also removed the shadow stack save and
+> restore code.
+>
+> From another side, we didn't see such riscv system with huge(8192) CPU
+> numbers. Even if we do have such system in the future, I belive such
+> system should be powered by lots of memory, 64KB is trivial comapred
+> with GBs or TBs memory size.
+>
+> Given the simplicity of my solution, I still prefer my solution. What
+> do you think?
+Yours is a new proposal, but mine is just a fixup. So I think we
+should fix up the previous bug. And then move to the next.
 
-On Thu, Sep 29, 2022 at 09:29:54PM -0400, Peter Xu wrote:
-> Hi, Mike,
-> 
-> On Thu, Sep 29, 2022 at 04:33:53PM -0700, Mike Kravetz wrote:
-> > I added some TLB flushing to hugetlb_mcopy_atomic_pte, but it did not make
-> > any difference.  Suggestions would be appreciated as cache/tlb/???  flushing
-> > issues take me a while to figure out.
-> 
-> It seems the UFFDIO_COPY for hugetlb is the major issue here, in that for
-> private mappings we don't inject the page cache.
-> 
-> I think it makes sense in that e.g. we don't want to allow a private
-> mapping to be able to write to the page cache.  But afaict that's not
-> correct because UFFDIO_COPY resolves exactly page faults in page cache
-> layer for file backed memories.  So what we should do is inject page cache
-> but mark the page RO, waiting for a coming CoW if needed.
-> 
-> I'll attach one patch fix that will start to inject the page into page
-> cache for UFFDIO_COPY+hugetlb even if mapping is private.  Another test
-> patch is also added because otherwise the private hugetlb selftest won't
-> work after the fix applied - in the selftest we used to use DONTNEED to
-> drop the private mapping, but IMHO that's not enough, we need to drop the
-> page cache too (after the fix).  I've also have the test patch attached.
-> 
-> Feel free to try out with the two patches applied.  It started to work for
-> me for current issue.
-> 
-> I didn't yet post them out yet because after I applied the two patches I
-> found other issues - the reserved pages are messed up and leaked.  I'll
-> keep looking tomorrow on the leak issue, but please also let me know if you
-> figured anything suspecious as I know you're definitely must more fluent on
-> the reservation code.
-> 
-> And that's not the only issue I found - shmem can have other issues
-> regarding private mappings; shmem does it right on the page cache insertion
-> but not the rest I think..  I'll look into them one by one.  It's quite
-> interesting to dig multiple things out of the write check symptons..
+>
+> Thanks
+> >
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index 5cbd6684ef52..42a3b14a20ab 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -223,6 +223,9 @@ END(ret_from_exception)
+> >
+> >  #ifdef CONFIG_VMAP_STACK
+> >  ENTRY(handle_kernel_stack_overflow)
+> > +1:     la sp, spin_ shadow_stack
+> > +       amoswap.w sp, sp, (sp)
+> > +       bnez sp, 1b
+> >         la sp, shadow_stack
+> >         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> >
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index 73f06cd149d9..9058a05cac53 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -229,11 +229,15 @@ asmlinkage unsigned long get_overflow_stack(void)
+> >                 OVERFLOW_STACK_SIZE;
+> >  }
+> >
+> > +atomic_t spin_ shadow_stack __section(".sdata");
+> > +
+> >  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+> >  {
+> >         unsigned long tsk_stk = (unsigned long)current->stack;
+> >         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> >
+> > +       atomic_set_release(spin_ shadow_stack, 0);
+> > +
+> >         console_verbose();
+> >
+> >         pr_emerg("Insufficient stack space to handle exception!\n");
 
-The patches..
+
 
 -- 
-Peter Xu
-
---6BJDNHv8LiVvXy5W
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-mm-hugetlb-Insert-page-cache-for-UFFDIO_COPY-even-if.patch"
-
-From 1255fabde4f950bef4751ef337791b93f5373a1f Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Wed, 28 Sep 2022 17:44:00 -0400
-Subject: [PATCH 1/2] mm/hugetlb: Insert page cache for UFFDIO_COPY even if
- private
-Content-type: text/plain
-
-UFFDIO_COPY resolves page fault in page cache layer for file backed
-memories on shmem and hugetlbfs.  It also means for each UFFDIO_COPY we
-should inject the new page into page cache no matter whether it's private
-or shared mappings.
-
-We used to not do that probably because for private mappings we should not
-allow the page cache be written for the private mapped process. However it
-can be done by removing the write bit (as what this patch does) so that CoW
-will trigger properly for the page cache.
-
-Leaving the page cache empty could lead to below sequence:
-
-  (1) map hugetlb privately, register with uffd missing+wp
-  (2) read page, trigger MISSING event with READ
-  (3) UFFDIO_COPY(wp=1) resolve page fault, keep wr-protected
-  (4) write page, trigger MISSING event again (because page cache missing!)
-      with WRITE
-
-This behavior existed since the initial commit of hugetlb MISSING mode
-support, which is commit 1c9e8def43a3 ("userfaultfd: hugetlbfs: add
-UFFDIO_COPY support for shared mappings", 2017-02-22).  In most cases it
-should be fine as long as the hugetlb page/pte will be stable (e.g., no
-wr-protect, no MADV_DONTNEED, ...).  However for any reason if a further
-page fault is triggered, it could cause issue.  Recently due to the newly
-introduced uffd-wp on hugetlbfs and also a recent locking rework from Mike,
-we can easily fail userfaultfd kselftest with hugetlb private mappings.
-
-One further step is we can do early CoW if the private mapping is
-writable, but let's leave that for later.
-
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- mm/hugetlb.c | 28 ++++++++--------------------
- 1 file changed, 8 insertions(+), 20 deletions(-)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9679fe519b90..a43fc6852f27 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5933,14 +5933,12 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	int ret = -ENOMEM;
- 	struct page *page;
- 	int writable;
--	bool page_in_pagecache = false;
- 
- 	if (is_continue) {
- 		ret = -EFAULT;
- 		page = find_lock_page(mapping, idx);
- 		if (!page)
- 			goto out;
--		page_in_pagecache = true;
- 	} else if (!*pagep) {
- 		/* If a page already exists, then it's UFFDIO_COPY for
- 		 * a non-missing case. Return -EEXIST.
-@@ -6014,8 +6012,8 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	 */
- 	__SetPageUptodate(page);
- 
--	/* Add shared, newly allocated pages to the page cache. */
--	if (vm_shared && !is_continue) {
-+	/* Add newly allocated pages to the page cache for UFFDIO_COPY. */
-+	if (!is_continue) {
- 		size = i_size_read(mapping->host) >> huge_page_shift(h);
- 		ret = -EFAULT;
- 		if (idx >= size)
-@@ -6030,7 +6028,6 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 		ret = hugetlb_add_to_page_cache(page, mapping, idx);
- 		if (ret)
- 			goto out_release_nounlock;
--		page_in_pagecache = true;
- 	}
- 
- 	ptl = huge_pte_lock(h, dst_mm, dst_pte);
-@@ -6044,18 +6041,13 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	if (!huge_pte_none_mostly(huge_ptep_get(dst_pte)))
- 		goto out_release_unlock;
- 
--	if (page_in_pagecache) {
--		page_dup_file_rmap(page, true);
--	} else {
--		ClearHPageRestoreReserve(page);
--		hugepage_add_new_anon_rmap(page, dst_vma, dst_addr);
--	}
-+	page_dup_file_rmap(page, true);
- 
- 	/*
--	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
--	 * with wp flag set, don't set pte write bit.
-+	 * For either: (1) a non-shared VMA, or (2) UFFDIO_COPY with wp
-+	 * flag set, don't set pte write bit.
- 	 */
--	if (wp_copy || (is_continue && !vm_shared))
-+	if (wp_copy || !vm_shared)
- 		writable = 0;
- 	else
- 		writable = dst_vma->vm_flags & VM_WRITE;
-@@ -6083,18 +6075,14 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 	spin_unlock(ptl);
- 	if (!is_continue)
- 		SetHPageMigratable(page);
--	if (vm_shared || is_continue)
--		unlock_page(page);
-+	unlock_page(page);
- 	ret = 0;
- out:
- 	return ret;
- out_release_unlock:
- 	spin_unlock(ptl);
--	if (vm_shared || is_continue)
--		unlock_page(page);
-+	unlock_page(page);
- out_release_nounlock:
--	if (!page_in_pagecache)
--		restore_reserve_on_error(h, dst_vma, dst_addr, page);
- 	put_page(page);
- 	goto out;
- }
--- 
-2.32.0
-
-
---6BJDNHv8LiVvXy5W
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0002-selftests-vm-Use-memfd-for-hugetlb-tests.patch"
-
-From 046ba2d1f5a74d86c6546a4f1bc8081f7c0fd3f8 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Thu, 29 Sep 2022 11:55:26 -0400
-Subject: [PATCH 2/2] selftests/vm: Use memfd for hugetlb tests
-Content-type: text/plain
-
-We already used memfd for shmem test, move it forward with hugetlb too so
-that we don't need user to specify the hugetlb file path explicitly when
-running hugetlb shared tests.
-
-More importantly, this patch will start to correctly release hugetlb pages
-using fallocate(FALLOC_FL_PUNCH_HOLE) even for private mappings, because
-for private mappings MADV_DONTNEED may not be enough to test UFFDIO_COPY
-which only zap the pgtables but not evicting the page caches.
-
-Here unfortunately we need to cache the ptr<->offset relationship for
-hugetlb for using fallocate() by adding mem_fd_[src|dst]_offset, because
-that's the only way to evict the page cache for private mappings.  IOW
-MADV_REMOVE doesn't work.
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 98 +++++++++++++-----------
- 1 file changed, 53 insertions(+), 45 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 74babdbc02e5..4561e9d443e4 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -93,10 +93,11 @@ static volatile bool test_uffdio_zeropage_eexist = true;
- static bool test_uffdio_wp = true;
- /* Whether to test uffd minor faults */
- static bool test_uffdio_minor = false;
--
- static bool map_shared;
--static int shm_fd;
--static int huge_fd;
-+static int mem_fd;
-+/* File offset for area_src/area_dst upon mem_fd.  Needed for hole punching */
-+static off_t mem_fd_src_offset;
-+static off_t mem_fd_dst_offset;
- static unsigned long long *count_verify;
- static int uffd = -1;
- static int uffd_flags, finished, *pipefd;
-@@ -247,48 +248,59 @@ static void noop_alias_mapping(__u64 *start, size_t len, unsigned long offset)
- {
- }
- 
-+static off_t ptr_to_offset(char *ptr)
-+{
-+	if (ptr == area_src)
-+		return mem_fd_src_offset;
-+	else
-+		return mem_fd_dst_offset;
-+}
-+
- static void hugetlb_release_pages(char *rel_area)
- {
-+	off_t size = nr_pages * page_size, offset = ptr_to_offset(rel_area);
-+
- 	if (!map_shared) {
- 		if (madvise(rel_area, nr_pages * page_size, MADV_DONTNEED))
- 			err("madvise(MADV_DONTNEED) failed");
--	} else {
--		if (madvise(rel_area, nr_pages * page_size, MADV_REMOVE))
--			err("madvise(MADV_REMOVE) failed");
--	}
-+
-+		/* Evict page cache explibitly for private mappings */
-+		if (fallocate(mem_fd,
-+			      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-+			      offset, size))
-+			err("fallocate(FALLOC_FL_PUNCH_HOLE) failed");
-+       } else {
-+               if (madvise(rel_area, nr_pages * page_size, MADV_REMOVE))
-+                       err("madvise(MADV_REMOVE) failed");
-+       }
- }
- 
- static void hugetlb_allocate_area(void **alloc_area, bool is_src)
- {
-+	off_t size = nr_pages * page_size;
-+	off_t offset = is_src ? 0 : size;
- 	void *area_alias = NULL;
- 	char **alloc_area_alias;
- 
--	if (!map_shared)
--		*alloc_area = mmap(NULL,
--			nr_pages * page_size,
--			PROT_READ | PROT_WRITE,
--			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB |
--				(is_src ? 0 : MAP_NORESERVE),
--			-1,
--			0);
--	else
--		*alloc_area = mmap(NULL,
--			nr_pages * page_size,
--			PROT_READ | PROT_WRITE,
--			MAP_SHARED |
--				(is_src ? 0 : MAP_NORESERVE),
--			huge_fd,
--			is_src ? 0 : nr_pages * page_size);
-+	*alloc_area = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
-+			   (is_src ? 0 : MAP_NORESERVE),
-+			   mem_fd, offset);
- 	if (*alloc_area == MAP_FAILED)
- 		err("mmap of hugetlbfs file failed");
- 
-+	/*
-+	 * Only hugetlb needs to cache ptr<->offset because it needs to
-+	 * fallocate(FALLOC_FL_PUNCH_HOLE).
-+	 */
-+	if (is_src)
-+		mem_fd_src_offset = offset;
-+	else
-+		mem_fd_dst_offset = offset;
-+
- 	if (map_shared) {
--		area_alias = mmap(NULL,
--			nr_pages * page_size,
--			PROT_READ | PROT_WRITE,
--			MAP_SHARED,
--			huge_fd,
--			is_src ? 0 : nr_pages * page_size);
-+		area_alias = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+				  MAP_SHARED, mem_fd, offset);
- 		if (area_alias == MAP_FAILED)
- 			err("mmap of hugetlb file alias failed");
- 	}
-@@ -334,14 +346,14 @@ static void shmem_allocate_area(void **alloc_area, bool is_src)
- 	}
- 
- 	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
--			   shm_fd, offset);
-+			   mem_fd, offset);
- 	if (*alloc_area == MAP_FAILED)
- 		err("mmap of memfd failed");
- 	if (test_collapse && *alloc_area != p)
- 		err("mmap of memfd failed at %p", p);
- 
- 	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
--			  shm_fd, offset);
-+			  mem_fd, offset);
- 	if (area_alias == MAP_FAILED)
- 		err("mmap of memfd alias failed");
- 	if (test_collapse && area_alias != p_alias)
-@@ -1629,7 +1641,7 @@ static int userfaultfd_stress(void)
- 
- 		/* prepare next bounce */
- 		swap(area_src, area_dst);
--
-+		swap(mem_fd_src_offset, mem_fd_dst_offset);
- 		swap(area_src_alias, area_dst_alias);
- 
- 		uffd_stats_report(uffd_stats, nr_cpus);
-@@ -1821,21 +1833,17 @@ int main(int argc, char **argv)
- 	}
- 	nr_pages = nr_pages_per_cpu * nr_cpus;
- 
--	if (test_type == TEST_HUGETLB && map_shared) {
--		if (argc < 5)
--			usage();
--		huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
--		if (huge_fd < 0)
--			err("Open of %s failed", argv[4]);
--		if (ftruncate(huge_fd, 0))
--			err("ftruncate %s to size 0 failed", argv[4]);
--	} else if (test_type == TEST_SHMEM) {
--		shm_fd = memfd_create(argv[0], 0);
--		if (shm_fd < 0)
-+	if (test_type == TEST_SHMEM || test_type == TEST_HUGETLB) {
-+		unsigned int memfd_flags = 0;
-+
-+		if (test_type == TEST_HUGETLB)
-+			memfd_flags = MFD_HUGETLB;
-+		mem_fd = memfd_create(argv[0], memfd_flags);
-+		if (mem_fd < 0)
- 			err("memfd_create");
--		if (ftruncate(shm_fd, nr_pages * page_size * 2))
-+		if (ftruncate(mem_fd, nr_pages * page_size * 2))
- 			err("ftruncate");
--		if (fallocate(shm_fd,
-+		if (fallocate(mem_fd,
- 			      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
- 			      nr_pages * page_size * 2))
- 			err("fallocate");
--- 
-2.32.0
-
-
---6BJDNHv8LiVvXy5W--
-
+Best Regards
+ Guo Ren
