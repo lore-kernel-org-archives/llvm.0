@@ -1,309 +1,338 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F4A5A98
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 21:15:12 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3538689fc60so52908627b3.3
-        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 14:15:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6744D7B
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 21:38:25 +0000 (UTC)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UKnP6X019630;
+	Fri, 30 Sep 2022 21:38:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=xb5Zcq/sXu52EkJakmnk22Y7yC5VAB+5ZoKeyzsQMdM=;
+ b=t0eYs6YZuB1gj6qb7ZmXZeOe+cUpSNetzSPEXomehTFPFvIdpZy0olWzTKxPliz3YBxL
+ 8YGYfxPyKxtkded8J1EiG0fzjjx0tqg13O9/ycc4aHkHpYGKFnQ2IJvJAzvjUs0v8beA
+ 3SAqhT2CgtYuBLZdzzufU0/rlRC3L64YaBsP9iv7jo20Bi0pTXNtW5egk+ziXgVppt1d
+ uUwcQqTBQEFNp82FaSirQ379h7wxkst1iCC2xGrMDoWzMm4rK8voqdswtxn138u+6pnS
+ rK89TvGzzqYJjI0csw4CQFbG5cwtxVpSXNPBLeI99C+YQXDwLVkirbjNhJsZKx+mjfun xg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jst13rvnn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 30 Sep 2022 21:38:08 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28UJIpxs034103;
+	Fri, 30 Sep 2022 21:38:07 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpqc2t1e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 30 Sep 2022 21:38:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CDJ1Zga86m9x5OePbmcOnVZTjz+O2xuoGWDDbKfcml9IomLamvBLeK0U4HtQ1GK92KZLzxXFN23thia/B5EuS7Jwc8E2+YUWJ8Ir9Wjj8pociSP0DOSxYAsHAdp1uOLKpdjk3U+W+aV9MlvsX2L7F0ABrQhrJlVPGLMauUOrYaGHJq/v8q/3jI+Ya16OOmeYnGS2hjPFJ+SfFsjkdTVxqfRrplfUnY84qkQYmVzf8+fo3ingUpaGvmXvZzJYHI15VjawBkFdMvdZhbpOA9oQSWNZSWmy17YS+7UzXCBPFT5qUO81FUQd13YLlXFbHAG2ZA0sKy8byEf2hzrGFIG6ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xb5Zcq/sXu52EkJakmnk22Y7yC5VAB+5ZoKeyzsQMdM=;
+ b=M8kDf1P7JMmnMNMzMO47sPJCWcKSzSpJvWBfZ4feDfAJTnkXBxHvL7nb1/0gE6Nz4YnwTAjfGE9+FsgFlwjlp40cPNPCqzBrMH80KaDHI5nBVoc5bbskwBwJ/WKSu5GeEXWrKZlRKHSgn8O4AsImtBRM92SkwkhkexMUZ4+cl+hIAwt+j/9e9dpPfZ/t9wPItHIDsR+Rh+X5o7dxs6H2lxrbDi9WwjneazU1CTbcOGMkkIeKFDEvN2L0/v2ZxXLcWBb7Hxylw5HNvW5qgzsbPYzuYBuu8yOQTbmBXfRBbUzJGPHsMgF5QOzUE+WtZ3smiwjFdVdXLhLA6NcHbgbXZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=w1VewG6/ucM/kWlIiY+OEg0V0mx9+6eAtRi0Lhie0XM=;
-        b=Tp4dwoaPnTRGNUQ5SxT2h9xiIpSnWjwEzaPEwoI8MlCxexAhEiLEqRHO8PW5T23IId
-         5Z4MNnMGJ6bEh3IykJGWZD1Cjl3WbZ+MzSwKdza895nUPVaPuuCpfzKe+5nXAOXo/ERI
-         dMb/3ioM6tA4SSQlflXue7wEZ/zwv+/Hzm1gd6Y1OpWpwPDgWPqnR3FjnBJm4a0cY5Q0
-         ZxUnaWwDPaCeMAtGm2Cr+0jD7CykU38ZGdxw78ZwyVsMlQ8axvbF7DsfajwOUflc8Y+e
-         N9sOLvNkGI8mgABbWzD3GKbLDl9qBOFocS14lDUJsY28r5QO41jsJwHTGvOBJWpXx1ZV
-         0Y8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=w1VewG6/ucM/kWlIiY+OEg0V0mx9+6eAtRi0Lhie0XM=;
-        b=uMepH4jRvsO13D9KV8ZQmo3Gta1WNqkMretLUv1GAs4mpnm1hLtRVWQUtpeXReKk0R
-         E/qRyCx1xuRggWUiOw2DwQc/HZYYfnv1PPTLZAVC+Cacvkh/y3Zdc9dqacrAmILoaeG4
-         mcoa7ApH+I2+gew2WTkBAUtdxNbnSWwLDGmGn95uGIMe4xjYtZLO+JlbcTSwyW+V6UNU
-         upT9nrM0Hu/3dA5M7Tq0e2A2yc6jkRmDB8HX/mA0XmKewwW48oQFygZP67rc6tvv6qGW
-         9yK2lNxOunJfghSu+YV0YNucs8ncr6NNp6LytCWn9gmX2XdyUlnJ9qxYFv6SJ+wuGT6U
-         mK8w==
-X-Gm-Message-State: ACrzQf0u1YXJrReHnVlz4DmpseRUj89/h77o/mfXuQ8lrzbML31hqFyo
-	Ove8P46LYZUCjioOfziO12nOS6i2V6rmjUaIldc=
-X-Google-Smtp-Source: AMsMyM6YfkwaQZI8VA1GX09CQYJhLs6XtLjF9X9QwGccCpJhS1/Y/ezpwRrI67d9a0y9ulfsLbxEglc5x0GPl3wehn4=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:8142:a086:b6c7:da71])
- (user=ndesaulniers job=sendgmr) by 2002:a25:70d7:0:b0:6bc:20d5:b4b7 with SMTP
- id l206-20020a2570d7000000b006bc20d5b4b7mr10140202ybc.175.1664572511464; Fri,
- 30 Sep 2022 14:15:11 -0700 (PDT)
-Date: Fri, 30 Sep 2022 14:15:05 -0700
-In-Reply-To: <202209291607.0MlscIht-lkp@intel.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xb5Zcq/sXu52EkJakmnk22Y7yC5VAB+5ZoKeyzsQMdM=;
+ b=IkwUJFBCI1HuchfmSoAR4RF8oEj1RO57M2MI5dKxs0Txpc5F0a+9Lpqor349YqXIZ+00IM6y7Eh2nlhkbW9Cdsgv6FvPeVwDGW6qdIyy34Ilj3zI+1OJxtBoVb6jaaXDz02aJhpkK0moPUC90P/rJCcl1FIfS8xQ5pFXW0RwmNE=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by PH0PR10MB5578.namprd10.prod.outlook.com (2603:10b6:510:f1::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.15; Fri, 30 Sep
+ 2022 21:38:04 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::dfde:308:42fe:6c5a%3]) with mapi id 15.20.5676.023; Fri, 30 Sep 2022
+ 21:38:04 +0000
+Date: Fri, 30 Sep 2022 14:38:01 -0700
+From: Mike Kravetz <mike.kravetz@oracle.com>
+To: Peter Xu <peterx@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>, Axel Rasmussen <axelrasmussen@google.com>,
+        Yang Shi <shy828301@gmail.com>, Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+152d76c44ba142f8992b@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, songmuchun@bytedance.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] general protection fault in PageHeadHuge
+Message-ID: <YzdhuZmfQCjLFEMO@monkey>
+References: <Yy4g/BKpnJga1toG@monkey>
+ <7693a84-bdc2-27b5-2695-d0fe8566571f@google.com>
+ <Yy5WHvioerD2Sev1@x1n>
+ <Yy8dBrmvDmqlsRXE@x1n>
+ <Yy9T/JmVb4ymf6WM@monkey>
+ <YzDuHbuo2x/b2Mbr@x1n>
+ <YzMjxY5O6Hf/IPTx@monkey>
+ <YzMomT+OusJnLOPC@x1n>
+ <YzYrYVeA0b9d5dos@monkey>
+ <YzcTt3P3ofvbGQmi@x1n>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzcTt3P3ofvbGQmi@x1n>
+X-ClientProxiedBy: MW4PR04CA0100.namprd04.prod.outlook.com
+ (2603:10b6:303:83::15) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <202209291607.0MlscIht-lkp@intel.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1664572505; l=8791;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=lUHlzSuudiJPVlmyWzn9mgQxtMlrWznVl5z96sKGkm0=;
- b=klReRD9UTEurRxPEn7v7Gd0sQIl5ojDRVmi98qbP9jMxVf+iTDPbNWAIVcyl78Z2aukRN7HsHkT6
- TsjkJLbTDyk437hkn9Vgicxxb0pverqsO5Ltyk3o43d6Mg62tdzh
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930211505.209939-1-ndesaulniers@google.com>
-Subject: [PATCH v3] ARM: kprobes: move __kretprobe_trampoline to out of line assembler
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>, Masami Hiramatsu <mhiramat@kernel.org>
-Cc: "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	sparkhuang <huangshaobo6@huawei.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Chen Zhongjin <chenzhongjin@huawei.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	regressions@lists.linux.dev, lkft-triage@lists.linaro.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Linux Kernel Functional Testing <lkft@linaro.org>, 
-	Logan Chien <loganchien@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB5578:EE_
+X-MS-Office365-Filtering-Correlation-Id: 45768b40-e608-43e1-88fb-08daa32c0e89
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	8PlHhV9OFul2qkw6a5NBpvvwbYudPu83BwNcA4I+PS1K9hDFV3ecFvYXtQZ4lCNK29ZTJ+2gw8u7KLSL0SGMcJyXKRPa5GC0cFDhxam0kbsjY9msoMquu0Q64vw8wJeI+WmQHcICJic8rFLs81V77i77z2WXZKmIzWaKgmAc5YA86UuWLyjcS+Qkh7soGwpMS4QZiLKqoBFUsW1KnBTys+Iy91yH4n+p/hJesYdiqf7LmYTbYFMUPkqMYi0s1AsC4+5MHd11SdW4iInoIOig3nIgR6Ey2ULd4TH6LB6vw7CMt81xxSN36WEVmyHFGiy3I1hjxTAaqEqX/Sqh0vBIRDUBnRin5SCzwWqNFL3nmx668w7LEgO6ZU8PKbJv8m7XT07TLyvhAnBVvLsQ93Fz2sSs2mq1ZMWi2nv5iRJqAfVcRrxqWjg6tb1lwQpZGga/Y26BSSlg+6naTT8ZR2X1YqITY7+qFtk+GASnnXqPoVkGl+MBtUyOYjlENZVn+PHFM0dKOL6xBUjYGSpOJiR5IQoYMwycGzdfKqPmi7CTWK8ZvWEyLZuvbYoEs9o5Hnt3+WOcY/b/UAPYwHv3YLP3+hsZNvVNgBaQtli7/3DcZ1Ow62lM4kR5uAp/SPDesrkCgGewG2FSD8XMzsI6VNi4a2fKUYx6hxlV5UrEhnQWEODkmzdm8rpUKpY2SWycPbCswhM9sda1/056bFeCf8iy0g==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199015)(8676002)(4326008)(44832011)(66556008)(26005)(33716001)(66476007)(6506007)(83380400001)(66946007)(6512007)(53546011)(9686003)(478600001)(5660300002)(38100700002)(2906002)(6916009)(7416002)(316002)(6486002)(54906003)(8936002)(6666004)(86362001)(186003)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?yEF4qDvnaq8g0rj1xjinRw38mqf1loPNzHzssUT3bsfC2qSZJBNgodbmdWBm?=
+ =?us-ascii?Q?Bi7Lpl5Hgjn61B9wqksN89F3bZ5ZPtPewlrtkhcSDThAWqO+p1vxTpZodcU/?=
+ =?us-ascii?Q?avCMA+2MBcBAAhxzbtdVbUK99HbC8HCS5SG7kLjPRlBiSZ4SBedgLhWmZdFD?=
+ =?us-ascii?Q?x4VAhf4NhnyiIjzzw1eEm4qPYsMuQSlB3U+gY3p5RUE0LK+nwGTvLKEPd7QY?=
+ =?us-ascii?Q?8scuBQqhciPvSxQprt5/g3jocXcdmoyLvQDKZAmPHvksfwE0c9J03RfjvxLq?=
+ =?us-ascii?Q?wE1MeFPOg/QAy+30YbwQo1zrCbX5biJf8cWTpVPCJHtTcLkvbw/4AIICikES?=
+ =?us-ascii?Q?jnRfoCTxJ7sHqVgMiLKA3+a/43D57mDvotjeSZjDmVtJz2+UU6+ERJXicZIn?=
+ =?us-ascii?Q?2SUOQwzhWqXjBFLTYw5mMXdg7gdrh7AcB4miVF/HfzLds5ctk7x7D254oTSU?=
+ =?us-ascii?Q?hSBAX3xnHbrsySzQBJa5Y2kokA0hsybW8PEdK25CGTf6ICSlpx9r+kIjymja?=
+ =?us-ascii?Q?S0vfwmZH8xSjYygfsGf9JCtiFwyr7r/Lz41JlNCr0SDe35HEN1R6etU8Qng0?=
+ =?us-ascii?Q?nZc86mU2tfeeuUZEJu0abk6H5gg2YN3XDD9IT0BP84eP2Rb09KJITbYs6ePP?=
+ =?us-ascii?Q?ObEoUYF3vYZLxslLqKfAmEFRtec42VGPcWMH8dmkbk/zjOjYd9s7duA8Efv1?=
+ =?us-ascii?Q?lF+lx0a9G8kLPAp9dtfmeHXjAsQEIMyH9bqvgaAod15CXRVgJR/sE0+vm3ZK?=
+ =?us-ascii?Q?eTfg1bdCCgkfIp/thcMp0LeAhxAnkZSqmV2cV2cEYob6/TtX8dLn0LpZ3K5n?=
+ =?us-ascii?Q?XW3ZrKObEKIEZ1blOWzl8VvkzFt8Xswo77v80jpd1FecnVDpOfg+GPDwp7Be?=
+ =?us-ascii?Q?/VtTNluTLjxZZU4DnCFLwDuKOMLM0X88K4jH7RGexCKSE/3DJ1tOly+ksqVT?=
+ =?us-ascii?Q?/xeqV4lj/prdwD5bvkCb0qv5hWZ/d0f9FXBpa+W5CLv+QzCL3p3RBKdBMPCy?=
+ =?us-ascii?Q?wFCAEhSJw7FqLQD/1Iy/5IamEroe3owg+5LaY8NPkevqAa0T/u8RGzZaOo81?=
+ =?us-ascii?Q?yu8U68Hriz9GuQPmBzIymzgQ6UAsKGPMlFsHnPQmgdSjzXu1VfnwlJX6iRDP?=
+ =?us-ascii?Q?5KoRz30UYgAHX/l4DhXZbOQ5/0DX8bGho48CeEX2NHmHOm4OLPLjxU9VQ7Bf?=
+ =?us-ascii?Q?woIgJ/woxOIMro7N+ba8SMNhDO/cbPY81UgzdhMBhu4QPZgY12ZH0dyamz2d?=
+ =?us-ascii?Q?2CM8J5q9Fb/tUhOfNMym7ySUVk/CTckjIoMsM7pN5/opBxIze6o74e7mCMAR?=
+ =?us-ascii?Q?fBljhDq07+eyiUk2zYUdb4n+d1tyvT2gl8oOvpo6VHN57ZXfnZQWpC2LZCpP?=
+ =?us-ascii?Q?muZzUPVt2557Rl+O1I9ji+5L3dLZBwcotsC8bx23rllpnNKX+hb4I22OCWD0?=
+ =?us-ascii?Q?7J7DfufWl4it+CUHQn+oi8dhNeGEpJzHhJaAyGEEQ7/XnDhPnNkPEIVxmbQ+?=
+ =?us-ascii?Q?MJYPZj70eW4XVKs9InS6pSdkJzh6q7io0VP/EN6pDb9IPc7hTcHbLV5j8ldy?=
+ =?us-ascii?Q?kd7y/6RLCi3gXIjyy0jUA8GXT4VNCUh6FZSrE3jscwovSq8oSyVopAE0IUMG?=
+ =?us-ascii?Q?lg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45768b40-e608-43e1-88fb-08daa32c0e89
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2022 21:38:04.6785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9GWiqSslPGmYgRnytC7P/d50RX5O2WPluobkYmFWXZtLZ9ibsY3Cv7TpXnyPhBULqSQpD3VYQvKugAkVzxhKXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5578
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209300135
+X-Proofpoint-ORIG-GUID: AtR68U-kBqOYTZLGRit8oaYciFr8Jfp3
+X-Proofpoint-GUID: AtR68U-kBqOYTZLGRit8oaYciFr8Jfp3
 
-commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
-EABI stack unwinder")
-tickled a bug in clang's integrated assembler where the .save and .pad
-directives must have corresponding .fnstart directives. The integrated
-assembler is unaware that the compiler will be generating the .fnstart
-directive.
+On 09/30/22 12:05, Peter Xu wrote:
+> On Thu, Sep 29, 2022 at 04:33:53PM -0700, Mike Kravetz wrote:
+> > I was able to do a little more debugging:
+> > 
+> > As you know the hugetlb calling path to handle_userfault is something
+> > like this,
+> > 
+> > hugetlb_fault
+> > 	mutex_lock(&hugetlb_fault_mutex_table[hash]);
+> > 	ptep = huge_pte_alloc(mm, vma, haddr, huge_page_size(h));
+> > 	if (huge_pte_none_mostly())
+> > 		hugetlb_no_page()
+> > 			page = find_lock_page(mapping, idx);
+> > 			if (!page) {
+> > 				if (userfaultfd_missing(vma))
+> > 					mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+> > 					return handle_userfault()
+> > 			}
+> > 
+> > For anon mappings, find_lock_page() will never find a page, so as long
+> > as huge_pte_none_mostly() is true we will call into handle_userfault().
+> > 
+> > Since your analysis shows the testcase should never call handle_userfault() for
+> > a write fault, I simply added a 'if (flags & FAULT_FLAG_WRITE) printk' before
+> > the call to handle_userfault().  Sure enough, I saw plenty of printk messages.
+> > 
+> > Then, before calling handle_userfault() I added code to take the page table
+> > lock and test huge_pte_none_mostly() again.  In every FAULT_FLAG_WRITE case,
+> > this second test of huge_pte_none_mostly() was false.  So, the condition
+> > changed from the check in hugetlb_fault until the check (with page table
+> > lock) in hugetlb_no_page.
+> > 
+> > IIUC, the only code that should be modifying the pte in this test is
+> > hugetlb_mcopy_atomic_pte().  It also holds the hugetlb_fault_mutex while
+> > updating the pte.
+> > 
+> > It 'appears' that hugetlb_fault is not seeing the updated pte and I can
+> > only guess that it is due to some caching issues.
+> > 
+> > After writing the pte in hugetlb_mcopy_atomic_pte() there is this comment.
+> > 
+> > 	/* No need to invalidate - it was non-present before */
+> > 	update_mmu_cache(dst_vma, dst_addr, dst_pte);
+> > 
+> > I suspect that is true.  However, it seems like this test depends on all
+> > CPUs seeing the updated pte immediately?
+> > 
+> > I added some TLB flushing to hugetlb_mcopy_atomic_pte, but it did not make
+> > any difference.  Suggestions would be appreciated as cache/tlb/???  flushing
+> > issues take me a while to figure out.
+> 
+> This morning when I went back and rethink the matter, I just found that the
+> common hugetlb path handles private anonymous mappings with all empty page
+> cache as you explained above.  In that sense the two patches I posted may
+> not really make sense even if they can pass the tests.. and maybe that's
+> also the reason why the reservations got messed up.  This is also something
+> I found after I read more on the reservation code e.g. no matter private or
+> shared hugetlb mappings we only reserve that only number of pages when mmap().
+> 
+> Indeed if with that in mind the UFFDIO_COPY should also work because
+> hugetlb fault handler checks pte first before page cache, so uffd missing
+> should still work as expected.
+> 
+> It makes sense especially for hugetlb to do that otherwise there can be
+> plenty of zero huge pages cached in the page cache.  I'm not sure whether
+> this is the reason hugetlb does it differently (e.g. comparing to shmem?),
+> it'll be great if I can get a confirmation.  If it's true please ignore the
+> two patches I posted.
+> 
+> I think what you analyzed is correct in that the pte shouldn't go away
+> after being armed once.  One more thing I tried (actually yesterday) was
+> SIGBUS the process when the write missing event was generated, and I can
+> see the user stack points to the cmpxchg() of the pthread_mutex_lock().  It
+> means indeed it moved forward and passed the mutex type check, it also
+> means it should have seen a !none pte already with at least reading
+> permission, in that sense it matches with "missing TLB" possibility
+> experiment mentioned above, because for a missing TLB it should keep
+> stucking at the read not write.  It's still uncertain why the pte can go
+> away somehow from under us and why it quickly re-appears according to your
+> experiment.
+> 
 
-  arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
-  .save or .vsave directives
-  <inline asm>:3:2: note: instantiated into assembly here
-  .save   {sp, lr, pc}
-  ^
-  arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
-  .pad directive
-  <inline asm>:6:2: note: instantiated into assembly here
-  .pad    #52
-  ^
+I 'think' it is more of a race with all cpus seeing the pte update.  To be
+honest, I can not wrap my head around how that can happen.
 
-__kretprobe_trampoline's definition is already entirely inline asm. Move
-it to out-of-line asm to avoid breaking the build. Forward declare
-trampoline_handler() to avoid -Wmissing-prototypes since it's only
-called from assembler. Fixes another instance of -Wmissing-prototypes on
-kprobe_handler() so that arch/arm/probes/kprobes/core.c builds cleanly
-with W=1.
+I did not really like your idea of adding anon (or private) pages to the
+page cache.  As you discovered, there is code like reservations which depend
+on current behavior.
 
-Link: https://github.com/llvm/llvm-project/issues/57993
-Link: https://github.com/ClangBuiltLinux/linux/issues/1718
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Suggested-by: Logan Chien <loganchien@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+It seems to me that for 'missing' hugetlb faults there are two specific cases:
+1) Shared or file backed mappings.  In this case, the page cache is the
+   'source of truth'.  If there is not a page in the page cache, then we
+   hand off to userfault with VM_UFFD_MISSING.
+2) anon or private mappings.  In this case, pages are not in the page cache.
+   The page table is the 'source of truth'.  Early in hugetlb fault processing
+   we check the page table (huge_pte_none_mostly).  However, as my debug code
+   has shown, checking the page table again with lock held will reveal that
+   the pte has in fact been updated.
+
+My thought was that regular anon pages would have the same issue.  So, I looked
+at the calling code there.  In do_anonymous_page() there is this block:
+
+	/* Use the zero-page for reads */
+	if (!(vmf->flags & FAULT_FLAG_WRITE) &&
+			!mm_forbids_zeropage(vma->vm_mm)) {
+		entry = pte_mkspecial(pfn_pte(my_zero_pfn(vmf->address),
+						vma->vm_page_prot));
+		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+				vmf->address, &vmf->ptl);
+		if (!pte_none(*vmf->pte)) {
+			update_mmu_tlb(vma, vmf->address, vmf->pte);
+			goto unlock;
+		}
+		ret = check_stable_address_space(vma->vm_mm);
+		if (ret)
+			goto unlock;
+		/* Deliver the page fault to userland, check inside PT lock */
+		if (userfaultfd_missing(vma)) {
+			pte_unmap_unlock(vmf->pte, vmf->ptl);
+			return handle_userfault(vmf, VM_UFFD_MISSING);
+		}
+		goto setpte;
+	}
+
+Notice that here the pte is checked while holding the page table lock while
+to make the decision to call handle_userfault().
+
+In my testing, if we check huge_pte_none_mostly() while holding the page table
+lock before calling handle_userfault we will not experience the failure.  Can
+you see if this also resolves the issue in your environment?  I do not love
+this solution as I still can not explain how this code is missing the pte
+update.
+
+From f910e7155d6831514165af35e0d75574124a4477 Mon Sep 17 00:00:00 2001
+From: Mike Kravetz <mike.kravetz@oracle.com>
+Date: Fri, 30 Sep 2022 13:45:08 -0700
+Subject: [PATCH] hugetlb: check pte with page table lock before handing to
+ userfault
+
+In hugetlb_no_page we decide a page is missing if not present in the
+page cache.  This is perfectly valid for shared/file mappings where
+pages must exist in the page cache.  For anon/private mappings, the page
+table must be checked.  This is done early in hugetlb_fault processing
+and is the reason we enter hugetlb_no_page.  However, the early check is
+made without holding the page table lock.  There could be racing updates
+to the pte entry, so check again with page table lock held before
+deciding to call handle_userfault.
+
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 ---
-Changes v2 -> v3:
-* Fix -Wmissing-prototypes on trampoline_handler() as reported by kernel
-  test robot.
-* Update comment above trampoline_handler().
-* Fix another pre-existing case of -Wmissing-prototypes on
-  kprobe_handler() so that arch/arm/probes/kprobes/core.c builds cleanly
-  with W=1.
-* Make note of the above in the commit message.
+ mm/hugetlb.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-Changes v1 -> v2:
-* rebase on linux-next again.
-* drop commented out declaration of __kretprobe_trampoline from v1.
-
- arch/arm/probes/kprobes/Makefile              |  1 +
- arch/arm/probes/kprobes/core.c                | 54 +++---------------
- .../arm/probes/kprobes/kretprobe-trampoline.S | 55 +++++++++++++++++++
- include/asm-generic/kprobes.h                 | 13 +++--
- 4 files changed, 72 insertions(+), 51 deletions(-)
- create mode 100644 arch/arm/probes/kprobes/kretprobe-trampoline.S
-
-diff --git a/arch/arm/probes/kprobes/Makefile b/arch/arm/probes/kprobes/Makefile
-index 6159010dac4a..cdbe9dd99e28 100644
---- a/arch/arm/probes/kprobes/Makefile
-+++ b/arch/arm/probes/kprobes/Makefile
-@@ -3,6 +3,7 @@ KASAN_SANITIZE_actions-common.o := n
- KASAN_SANITIZE_actions-arm.o := n
- KASAN_SANITIZE_actions-thumb.o := n
- obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
-+obj-$(CONFIG_KPROBES)		+= kretprobe-trampoline.o
- obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
- test-kprobes-objs		:= test-core.o
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 60e077ce6ca7..4cb44a4629b8 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5560,10 +5560,29 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		if (idx >= size)
+ 			goto out;
+ 		/* Check for page in userfault range */
+-		if (userfaultfd_missing(vma))
++		if (userfaultfd_missing(vma)) {
++			/*
++			 * For missing pages, the page cache (checked above) is
++			 * the 'source of truth' for shared mappings.  For anon
++			 * mappings, the source of truth is the page table.  We
++			 * already checked huge_pte_none_mostly() in
++			 * hugetlb_fault.  However, there could be racing
++			 * updates.  Check again while holding page table lock
++			 * before handing off to userfault.
++			 */
++			if (!(vma->vm_flags & VM_MAYSHARE)) {
++				ptl = huge_pte_lock(h, mm, ptep);
++				if (!huge_pte_none_mostly(huge_ptep_get(ptep))) {
++					spin_unlock(ptl);
++					ret = 0;
++					goto out;
++				}
++				spin_unlock(ptl);
++			}
+ 			return hugetlb_handle_userfault(vma, mapping, idx,
+ 						       flags, haddr, address,
+ 						       VM_UFFD_MISSING);
++		}
  
-diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
-index 9090c3a74dcc..11159fcf6ba6 100644
---- a/arch/arm/probes/kprobes/core.c
-+++ b/arch/arm/probes/kprobes/core.c
-@@ -233,7 +233,7 @@ singlestep(struct kprobe *p, struct pt_regs *regs, struct kprobe_ctlblk *kcb)
-  * kprobe, and that level is reserved for user kprobe handlers, so we can't
-  * risk encountering a new kprobe in an interrupt handler.
-  */
--void __kprobes kprobe_handler(struct pt_regs *regs)
-+static void __kprobes kprobe_handler(struct pt_regs *regs)
- {
- 	struct kprobe *p, *cur;
- 	struct kprobe_ctlblk *kcb;
-@@ -366,53 +366,11 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
- }
- 
- /*
-- * When a retprobed function returns, trampoline_handler() is called,
-- * calling the kretprobe's handler. We construct a struct pt_regs to
-- * give a view of registers r0-r11, sp, lr, and pc to the user
-- * return-handler. This is not a complete pt_regs structure, but that
-- * should be enough for stacktrace from the return handler with or
-- * without pt_regs.
-+ * Called from __kretprobe_trampoline in assembler. Forward declare to avoid
-+ * -Wmissing-prototypes.
-  */
--void __naked __kprobes __kretprobe_trampoline(void)
--{
--	__asm__ __volatile__ (
--#ifdef CONFIG_FRAME_POINTER
--		"ldr	lr, =__kretprobe_trampoline	\n\t"
--	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
--#ifdef CONFIG_CC_IS_CLANG
--		"stmdb	sp, {sp, lr, pc}	\n\t"
--		"sub	sp, sp, #12		\n\t"
--		/* In clang case, pt_regs->ip = lr. */
--		"stmdb	sp!, {r0 - r11, lr}	\n\t"
--		/* fp points regs->r11 (fp) */
--		"add	fp, sp,	#44		\n\t"
--#else /* !CONFIG_CC_IS_CLANG */
--		/* In gcc case, pt_regs->ip = fp. */
--		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
--		"sub	sp, sp, #16		\n\t"
--		"stmdb	sp!, {r0 - r11}		\n\t"
--		/* fp points regs->r15 (pc) */
--		"add	fp, sp, #60		\n\t"
--#endif /* CONFIG_CC_IS_CLANG */
--#else /* !CONFIG_FRAME_POINTER */
--		"sub	sp, sp, #16		\n\t"
--		"stmdb	sp!, {r0 - r11}		\n\t"
--#endif /* CONFIG_FRAME_POINTER */
--		"mov	r0, sp			\n\t"
--		"bl	trampoline_handler	\n\t"
--		"mov	lr, r0			\n\t"
--		"ldmia	sp!, {r0 - r11}		\n\t"
--		"add	sp, sp, #16		\n\t"
--#ifdef CONFIG_THUMB2_KERNEL
--		"bx	lr			\n\t"
--#else
--		"mov	pc, lr			\n\t"
--#endif
--		: : : "memory");
--}
--
--/* Called from __kretprobe_trampoline */
--static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
-+void *trampoline_handler(struct pt_regs *regs);
-+__kprobes void *trampoline_handler(struct pt_regs *regs)
- {
- 	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->ARM_fp);
- }
-@@ -420,6 +378,8 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
- void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
- 				      struct pt_regs *regs)
- {
-+	extern void __kretprobe_trampoline(void);
-+
- 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
- 	ri->fp = (void *)regs->ARM_fp;
- 
-diff --git a/arch/arm/probes/kprobes/kretprobe-trampoline.S b/arch/arm/probes/kprobes/kretprobe-trampoline.S
-new file mode 100644
-index 000000000000..261c99b8c17f
---- /dev/null
-+++ b/arch/arm/probes/kprobes/kretprobe-trampoline.S
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/linkage.h>
-+#include <asm/unwind.h>
-+#include <asm-generic/kprobes.h>
-+
-+/*
-+ * When a retprobed function returns, trampoline_handler() is called,
-+ * calling the kretprobe's handler. We construct a struct pt_regs to
-+ * give a view of registers r0-r11, sp, lr, and pc to the user
-+ * return-handler. This is not a complete pt_regs structure, but that
-+ * should be enough for stacktrace from the return handler with or
-+ * without pt_regs.
-+ */
-+__KPROBE
-+SYM_FUNC_START(__kretprobe_trampoline)
-+UNWIND(.fnstart)
-+	ldr	lr, =__kretprobe_trampoline
-+#ifdef CONFIG_FRAME_POINTER
-+	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
-+#ifdef CONFIG_CC_IS_CLANG
-+	stmdb	sp, {sp, lr, pc}
-+	sub	sp, sp, #12
-+	/* In clang case, pt_regs->ip = lr. */
-+	stmdb	sp!, {r0 - r11, lr}
-+	/* fp points regs->r11 (fp) */
-+	add	fp, sp, #44
-+#else /* !CONFIG_CC_IS_CLANG */
-+	/* In gcc case, pt_regs->ip = fp. */
-+	stmdb	sp, {fp, sp, lr, pc}
-+	sub	sp, sp, #16
-+	stmdb	sp!, {r0 - r11}
-+	/* fp points regs->r15 (pc) */
-+	add	fp, sp, #60
-+#endif /* CONFIG_CC_IS_CLANG */
-+#else /* !CONFIG_FRAME_POINTER */
-+	/* store SP, LR on stack and add EABI unwind hint */
-+	stmdb	sp, {sp, lr, pc}
-+UNWIND(.save	{sp, lr, pc})
-+	sub	sp, sp, #16
-+	stmdb	sp!, {r0 - r11}
-+UNWIND(.pad	#52)
-+#endif /* CONFIG_FRAME_POINTER */
-+	mov	r0, sp
-+	bl	trampoline_handler
-+	mov	lr, r0
-+	ldmia	sp!, {r0 - r11}
-+	add	sp, sp, #16
-+#ifdef CONFIG_THUMB2_KERNEL
-+	bx	lr
-+#else
-+	mov	pc, lr
-+#endif
-+UNWIND(.fnend)
-+SYM_FUNC_END(__kretprobe_trampoline)
-diff --git a/include/asm-generic/kprobes.h b/include/asm-generic/kprobes.h
-index 060eab094e5a..1509daa281b8 100644
---- a/include/asm-generic/kprobes.h
-+++ b/include/asm-generic/kprobes.h
-@@ -2,7 +2,11 @@
- #ifndef _ASM_GENERIC_KPROBES_H
- #define _ASM_GENERIC_KPROBES_H
- 
--#if defined(__KERNEL__) && !defined(__ASSEMBLY__)
-+#ifdef __KERNEL__
-+
-+#ifdef __ASSEMBLY__
-+# define __KPROBE .section ".kprobes.text", "ax"
-+#else
- #ifdef CONFIG_KPROBES
- /*
-  * Blacklist ganerating macro. Specify functions which is not probed
-@@ -16,11 +20,12 @@ static unsigned long __used					\
- /* Use this to forbid a kprobes attach on very low level functions */
- # define __kprobes	__section(".kprobes.text")
- # define nokprobe_inline	__always_inline
--#else
-+#else /* !defined(CONFIG_KPROBES) */
- # define NOKPROBE_SYMBOL(fname)
- # define __kprobes
- # define nokprobe_inline	inline
--#endif
--#endif /* defined(__KERNEL__) && !defined(__ASSEMBLY__) */
-+#endif /* defined(CONFIG_KPROBES) */
-+#endif /* defined(__ASSEMBLY__) */
-+#endif /* defined(__KERNEL__) */
- 
- #endif /* _ASM_GENERIC_KPROBES_H */
+ 		page = alloc_huge_page(vma, haddr, 0);
+ 		if (IS_ERR(page)) {
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+2.37.3
 
