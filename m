@@ -1,65 +1,252 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506511FA7
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 10:14:32 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-17-B0DimJooNkqDfXWRKMPRaA-1; Fri, 30 Sep 2022 11:14:29 +0100
-X-MC-Unique: B0DimJooNkqDfXWRKMPRaA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 30 Sep
- 2022 11:14:25 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Fri, 30 Sep 2022 11:14:25 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Nick Desaulniers' <ndesaulniers@google.com>, Thomas Gleixner
-	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
-CC: "x86@kernel.org" <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>, Kees Cook <keescook@chromium.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Linus Torvalds
-	<torvalds@linux-foundation.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Andy Lutomirski <luto@kernel.org>, Rasmus Villemoes
-	<linux@rasmusvillemoes.dk>
-Subject: RE: [PATCH v4] x86, mem: move memmove to out of line assembler
-Thread-Topic: [PATCH v4] x86, mem: move memmove to out of line assembler
-Thread-Index: AQHY037pE1P6FVCPj0CNx24XV/n/hK33wjDg
-Date: Fri, 30 Sep 2022 10:14:25 +0000
-Message-ID: <35ab0ccca42b4b4695f6c99b6d741b8f@AcuMS.aculab.com>
-References: <CAKwvOdkaKTa2aiA90VzFrChNQM6O_ro+b7VWs=op70jx-DKaXA@mail.gmail.com>
- <20220928210512.642594-1-ndesaulniers@google.com>
-In-Reply-To: <20220928210512.642594-1-ndesaulniers@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094A4256A
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 11:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F84C433D6
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 11:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664538136;
+	bh=KFROWPn73/7rJP9SI4CZud7oy+CCbKgOqA6fz7R31+Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZjqGS3asHUSkBp9ZBlUW7q6K3X+XdXJZcMOS9as2NE9T6EvcUfm075rOUpaUXv6co
+	 DE9grf8QOP5h1aBZH/tnqSzIwPr+1wzQUlEmj93ecfQg7vQ61Zw2rWQdJCZ69Hq02h
+	 Jb6zP4iacZV3IKjIZsJdC+lB+bWU6XpLuTxixKrbjcPvcHQc2kphK63Dn44IScHfme
+	 TGRJy4rz0q0QbwdWD7fmY7SkyAHn5wDiDh+AqzTFb/FX8ZarxJqhpRo/onU2uH1vY4
+	 kSiJT7YaBsBaQfeHGtRhOlu90f9U9t0iprXWtehZ0T+aAjIOdcHSJo/5kzO4LDXKV7
+	 krH40VTxHy5ww==
+Received: by mail-oi1-f182.google.com with SMTP id m130so4441306oif.6
+        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 04:42:16 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1RPEQzlMroQhDlFfO8V+WD/OMxH5e4on42IDRItcY0PBLj/yHX
+	dU8hsYJA+xEIeIKycyVL9q6/wjNZZsgos6PlQDg=
+X-Google-Smtp-Source: AMsMyM5fW7Z9eq8pH8iy/nhc1CcydnvenfTlTFms6cUFftUrU9LVXkgPcsDKEo/+VsWTpv7ZvXQ2G6yD9nRxsht64cE=
+X-Received: by 2002:a05:6808:151f:b0:350:1b5e:2380 with SMTP id
+ u31-20020a056808151f00b003501b5e2380mr9076652oiw.112.1664538135880; Fri, 30
+ Sep 2022 04:42:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+References: <20220925175356.681-1-jszhang@kernel.org> <20220925175356.681-3-jszhang@kernel.org>
+ <CAJF2gTTqup62EM9LZQ-9daKk11O0geax9Z3HmTMOxYy2mAwm=w@mail.gmail.com>
+ <YzHNr13U+SdwJHo1@xhacker> <CAJF2gTRbvvMcdm7ZrAeow=Dm7=HXx59+4g-3mBqb2-SN5mOpZg@mail.gmail.com>
+ <YzR471Zo4LbSCJoX@xhacker>
+In-Reply-To: <YzR471Zo4LbSCJoX@xhacker>
+From: Guo Ren <guoren@kernel.org>
+Date: Fri, 30 Sep 2022 19:42:03 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQxC6uxhbaZ_ftH6a4p58fp0C26r54EV5X5SdDr4xwmqQ@mail.gmail.com>
+Message-ID: <CAJF2gTQxC6uxhbaZ_ftH6a4p58fp0C26r54EV5X5SdDr4xwmqQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] riscv: consolidate ret_from_kernel_thread into ret_from_fork
+To: Jisheng Zhang <jszhang@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAyOCBTZXB0ZW1iZXIgMjAyMiAyMjowNQ0K
-Li4uDQoNClJlYWRpbmcgaXQgYWdhaW4sIHdoYXQgaXMgdGhpcyB0ZXN0IHN1cHBvc2VkIHRvIGFj
-aGlldmU/DQoNCj4gKwkvKg0KPiArCSAqIG1vdnMgaW5zdHJ1Y3Rpb24gaXMgb25seSBnb29kIGZv
-ciBhbGlnbmVkIGNhc2UuDQo+ICsJICovDQo+ICsJbW92bAlzcmMsIHRtcDANCj4gKwl4b3JsCWRl
-c3QsIHRtcDANCj4gKwlhbmRsCSQweGZmLCB0bXAwDQo+ICsJanoJLkxmb3J3YXJkX21vdnMNCg0K
-VGhlICdhbGlnbmVkJyB0ZXN0IHdvdWxkIGJlICcoc3JjIHwgZGVzdCkgJiAzJy4NCihPciBtYXli
-ZSAnJiA3JyBzaW5jZSBzb21lIDMyYml0IHg4NiBjcHUgYWN0YWxseQ0KZG8gOCBieXRlIGFsaWdu
-ZWQgJ3JlcCBtb3ZzbCcgZmFzdGVyIHRoYW4gNCBieXRlDQphbGlnbmVkIG9uZXMuDQpPVE9IIHRo
-ZSBjb2RlIGxvb3AgaXMgbGlrZWx5IHRvIGJlIHNsb3dlciBzdGlsbC4NCg0KSSd2ZSBub3QgdHJp
-ZWQgbWVhc3VyaW5nIG1pc2FsaWduZWQgJ3JlcCBtb3ZzdycgYnV0DQpvbiBzb21lIHJlY2VudCBp
-bnRlbCBjcHUgbm9ybWFsIG1pc2FsaWduZWQgcmVhZHMgY29zdA0KYWxtb3N0IG5vdGhpbmcgLSBl
-dmVuIHdoZW4gZG9pbmcgdHdvIHJlYWRzL2Nsb2NrLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Thu, Sep 29, 2022 at 12:49 AM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 07:55:27AM +0800, Guo Ren wrote:
+> > On Tue, Sep 27, 2022 at 12:14 AM Jisheng Zhang <jszhang@kernel.org> wro=
+te:
+> > >
+> > > On Mon, Sep 26, 2022 at 07:25:30AM +0800, Guo Ren wrote:
+> > > > On Mon, Sep 26, 2022 at 2:03 AM Jisheng Zhang <jszhang@kernel.org> =
+wrote:
+> > > > >
+> > > > > The ret_from_kernel_thread() behaves similarly with ret_from_fork=
+(),
+> > > > > the only difference is whether call the fn(arg) or not, this can =
+be
+> > > > > acchieved by testing fn is NULL or not, I.E s0 is 0 or not.
+> > > > >
+> > > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > > ---
+> > > > >  arch/riscv/kernel/entry.S   | 11 +++--------
+> > > > >  arch/riscv/kernel/process.c |  5 ++---
+> > > > >  2 files changed, 5 insertions(+), 11 deletions(-)
+> > > > >
+> > > > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.=
+S
+> > > > > index 2207cf44a3bc..a3e1ed2fa2ac 100644
+> > > > > --- a/arch/riscv/kernel/entry.S
+> > > > > +++ b/arch/riscv/kernel/entry.S
+> > > > > @@ -323,20 +323,15 @@ END(handle_kernel_stack_overflow)
+> > > > >
+> > > > >  ENTRY(ret_from_fork)
+> > > > >         call schedule_tail
+> > > > > -       move a0, sp /* pt_regs */
+> > > > > -       la ra, ret_from_exception
+> > > > > -       tail syscall_exit_to_user_mode
+> > > > > -ENDPROC(ret_from_fork)
+> > > > > -
+> > > > > -ENTRY(ret_from_kernel_thread)
+> > > > > -       call schedule_tail
+> > > > > +       beqz s0, 1f     /* not from kernel thread */
+> > >
+> > > Hi Guo,
+> > >
+> > > > We can't use s0 as condition for ret_from_fork/ret_from_kernel_thre=
+ad.
+> > > > The s0=3D0 is also okay for ret_from_fork.
+> > >
+> > > IIUC, in ret_from_fork, the s0 comes p->thread.s[0] rather than s0 in
+> > > pt_regs.
+> > Yes, you are correct.
+> >
+> > >
+> > > >
+> > > >         /* p->thread holds context to be restored by __switch_to() =
+*/
+> > > >         if (unlikely(args->fn)) {
+> > > >                 /* Kernel thread */
+> > > >                 memset(childregs, 0, sizeof(struct pt_regs));
+> > > >                 childregs->gp =3D gp_in_global;
+> > > >                 /* Supervisor/Machine, irqs on: */
+> > > >                 childregs->status =3D SR_PP | SR_PIE;
+> > > >
+> > > >                 p->thread.ra =3D (unsigned long)ret_from_kernel_thr=
+ead;
+> > > >                 p->thread.s[0] =3D (unsigned long)args->fn;
+> > > >                 p->thread.s[1] =3D (unsigned long)args->fn_arg;
+> > > >         } else {
+> > > >                 *childregs =3D *(current_pt_regs());
+> > > >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > Oh, I'm wrong, It's switch_to_restore -> exception_restore.
+> >
+> > > >                 if (usp) /* User fork */
+> > > >                         childregs->sp =3D usp;
+> > > >                 if (clone_flags & CLONE_SETTLS)
+> > > >                         childregs->tp =3D tls;
+> > > >                 childregs->a0 =3D 0; /* Return value of fork() */
+> > > >                 p->thread.ra =3D (unsigned long)ret_from_fork;
+> > > >         }
+> > > >         p->thread.sp =3D (unsigned long)childregs; /* kernel sp */
+> > > >
+> > >
+> > > <snip>
+> > >
+> > > > > @@ -182,8 +180,9 @@ int copy_thread(struct task_struct *p, const =
+struct kernel_clone_args *args)
+> > > > >                 if (clone_flags & CLONE_SETTLS)
+> > > > >                         childregs->tp =3D tls;
+> > > > >                 childregs->a0 =3D 0; /* Return value of fork() */
+> > > > > -               p->thread.ra =3D (unsigned long)ret_from_fork;
+> > > > > +               p->thread.s[0] =3D 0;
+> > >
+> > > Here we assign 0 to p->thread.s[0]
+> > I missed that.
+> >
+> > Merge thread & fork is not a good idea, and using fp as the flag is so =
+implicit.
+> >
+> > =E2=9E=9C  linux git:(rv64sv32) grep ret_from_fork arch -r | grep entry=
+.S
+> > arch/arc/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/arc/kernel/entry.S:END(ret_from_fork)
+> > arch/csky/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/x86/kernel/process_32.c: * the task-switch, and shows up in
+> > ret_from_fork in entry.S,
+> > arch/alpha/kernel/entry.S:      .globl  ret_from_fork
+> > arch/alpha/kernel/entry.S:      .ent    ret_from_fork
+> > arch/alpha/kernel/entry.S:ret_from_fork:
+> > arch/alpha/kernel/entry.S:.end ret_from_fork
+> > arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_fork)
+> > arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_fork)
+> > arch/hexagon/kernel/vm_entry.S: .globl ret_from_fork
+> > arch/hexagon/kernel/vm_entry.S:ret_from_fork:
+> > arch/microblaze/kernel/entry.S:   (copy_thread makes ret_from_fork the
+> > return address in each new thread's
+> > arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_fork):
+> > arch/m68k/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/arm64/kernel/entry.S:SYM_CODE_START(ret_from_fork)
+> > arch/arm64/kernel/entry.S:SYM_CODE_END(ret_from_fork)
+> > arch/arm64/kernel/entry.S:NOKPROBE(ret_from_fork)
+> > arch/riscv/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/riscv/kernel/entry.S:ENDPROC(ret_from_fork)
+> > arch/s390/kernel/entry.S:# a new process exits the kernel with ret_from=
+_fork
+> > arch/s390/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/s390/kernel/entry.S:       brasl   %r14,__ret_from_fork
+> > arch/s390/kernel/entry.S:ENDPROC(ret_from_fork)
+> > arch/mips/kernel/entry.S:FEXPORT(ret_from_fork)
+> > arch/openrisc/kernel/entry.S:   /* All syscalls return here... just
+> > pay attention to ret_from_fork
+> > arch/openrisc/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/openrisc/kernel/entry.S:    * that may be either schedule(),
+> > ret_from_fork(), or
+> > arch/nios2/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/xtensa/kernel/entry.S:ENTRY(ret_from_fork)
+> > arch/xtensa/kernel/entry.S:ENDPROC(ret_from_fork)
+> > arch/sparc/kernel/entry.S:      .globl  ret_from_fork
+> > arch/sparc/kernel/entry.S:ret_from_fork:
+> > =E2=9E=9C  linux git:(rv64sv32) grep ret_from_kernel_thread arch -r | g=
+rep entry.S
+> > arch/csky/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+> > arch/alpha/kernel/entry.S:      .globl  ret_from_kernel_thread
+> > arch/alpha/kernel/entry.S:      .ent    ret_from_kernel_thread
+> > arch/alpha/kernel/entry.S:ret_from_kernel_thread:
+> > arch/alpha/kernel/entry.S:.end ret_from_kernel_thread
+> > arch/parisc/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+> > arch/parisc/kernel/entry.S:END(ret_from_kernel_thread)
+> > arch/loongarch/kernel/entry.S:SYM_CODE_START(ret_from_kernel_thread)
+> > arch/loongarch/kernel/entry.S:SYM_CODE_END(ret_from_kernel_thread)
+> > arch/microblaze/kernel/entry.S:C_ENTRY(ret_from_kernel_thread):
+> > arch/m68k/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+> > arch/riscv/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+> > arch/riscv/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
+> > arch/mips/kernel/entry.S:FEXPORT(ret_from_kernel_thread)
+> > arch/openrisc/kernel/entry.S:    * ret_from_kernel_thread().  If we
+> > are returning to a new thread,
+> > arch/nios2/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+> > arch/xtensa/kernel/entry.S:ENTRY(ret_from_kernel_thread)
+> > arch/xtensa/kernel/entry.S:ENDPROC(ret_from_kernel_thread)
+> > arch/sparc/kernel/entry.S:      .globl  ret_from_kernel_thread
+> > arch/sparc/kernel/entry.S:ret_from_kernel_thread:
+> >
+> > Many architectures use a similar style. If you want to continue the
+> > patch, I think you should first rename ret_from_fork properly, and
+> > give an explicit flag definition, not just setting fp =3D 0.
+> >
+>
+> Above list also shows many architectures don't have a
+> ret_from_kernel_thread, I think the reason is simple it behaves
+> similarly as ret_from_fork.
+After looking at x86 & arm64, you've convinced me.
 
+Acked-by: Guo Ren <guoren@kernel.org>
+
+> As for flag, IMHO, we may missed something as clearing the s[12]
+> array in thread_struct when user fork, because s[12] may contain
+> random kernel memory content, which may be finally leaked to
+> userspace. This is a security hole.
+>
+> A trivial patch of memset(0) can fix it, after this fix, checking the
+> s[0] is straightforward.
+>
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index 67e7cd123ceb..50a0f7e4327c 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -174,6 +174,7 @@ int copy_thread(struct task_struct *p, const struct k=
+ernel_clone_args *args)
+>                 p->thread.s[0] =3D (unsigned long)args->fn;
+>                 p->thread.s[1] =3D (unsigned long)args->fn_arg;
+>         } else {
+> +               memset(&p->thread.s, 0, sizeof(p->thread.s));
+Good catch. s[12] may leave some information about the kernel.
+
+It could be a separate patch with a Fixes flag.
+
+>                 *childregs =3D *(current_pt_regs());
+>                 if (usp) /* User fork */
+>                         childregs->sp =3D usp;
+>
+
+
+--=20
+Best Regards
+ Guo Ren
