@@ -1,132 +1,186 @@
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F005A66;
-	Fri, 30 Sep 2022 16:21:53 +0000 (UTC)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 339611D0C;
-	Fri, 30 Sep 2022 16:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE855A66
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 16:27:03 +0000 (UTC)
+Received: by mail-wr1-f50.google.com with SMTP id h7so7602306wru.10
+        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 09:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1664554776;
-	bh=J+wfgllXwhLlahIGgqIBX6suMZ9PoYV9QymXeIuNwCc=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=bNdPIHuapMl8Koo/PjBaYPQsAzsMr6saaO3CGJ5rIunkK1GpDENWC7JMMnJKngm7u
-	 mKcbVIu/Ky7WWweEWCpDT0ziFVXpTTYveDw3qlfW09CDp2PbGsslDqYIlwB1jDeL/D
-	 mAIg0kgRsB7rS7+dVSZ6fwtD8q68rQmcZluRFurc=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-	by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 43A161E81;
-	Fri, 30 Sep 2022 16:21:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1664554911;
-	bh=J+wfgllXwhLlahIGgqIBX6suMZ9PoYV9QymXeIuNwCc=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=Ux6Q0Z9Px7xpCRJV5iyUCUxcTIEmVXbWJLM9Tr+SN5unkJbSR+5khsfttRre6sTYQ
-	 dQkBD+3fEVkwYWWfl/55qxa+cM3HXyz4vqDT0GR9mI7mRmSvAUsJK+1DSXuc8ZkmNe
-	 0DKnKFcBvDBe0zAy9SJ1LZ7M5j2bNU7Ja9L5lOLo=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 30 Sep 2022 19:21:50 +0300
-Message-ID: <6bb11497-c6bd-41ea-409a-fbddcf75ea97@paragon-software.com>
-Date: Fri, 30 Sep 2022 19:21:49 +0300
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=6G1w7rleyZqUvL2CNwMdqEOX+vKWh0uG8GbS6llGVCg=;
+        b=bQEqCIzF1tPLK+ONdPDtTEQGoUqBYenM2qd7Kp+iHWeXN9ECqy+1tl4llEWmubzhNO
+         tOJkMHGvUZEfh66+jJvQIaukdumR+IxnIeXGB8qL2j36iVnIv7JV17HZxxF5w462hTgz
+         y6F6itSGxcUHEHxrk8CknVPXInKcAPyp9qJwCwf+/ea8KXGqTWYsqLNIfJov+OdKaV1w
+         PtQRkE/B8TFYmaqnjOSnj0TSdy+kqEH03bjahcDGwMvYaCGHRzLwc+aa9kEnmjVUPEfo
+         ijet0UafijqcXo8tpC8+1JUlgMQ+OrIV/ki/koVdLmh+zpnvey0FjtWSdmPkDc2Of7zw
+         Bklg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6G1w7rleyZqUvL2CNwMdqEOX+vKWh0uG8GbS6llGVCg=;
+        b=kw3COlfexnJ4WxqmVUuLBK5BzPpQZWzAxRzu8AzyiM6J5NBIJ00G4f2HahSIN5DyNN
+         VqBLlLYWlN5IGgiKFgZEi+H2k7lQYckNkGGgAsy054COsUhXX4GYt7+4zT0uDi76HAiA
+         aVPvBlfO1raMP5hcwlcr07kbyMe9fjWGjQpaYt1b6QndxTf64YKg+BFYCOCd8lFx9dXl
+         aMkyOoFzv4UL+CABis3jRCqyOS5Ihw6lz+VcW5BfOCWOigrxSIAea3fXq+TmdSntN8aI
+         MeXi0JDOJoir2cG1BMOFWa1KSNtn7fSzM3qjqavYEqAF8vkC4MPBDIDvfrf8dmpm+1v7
+         5DcQ==
+X-Gm-Message-State: ACrzQf2CDDl2424PHqgnhSCvfHXQUlOMUF4B1MLdCEycyXoDyvgEJpXX
+	JBpFYJ00b2Scg+RWWnOo/1WTKg==
+X-Google-Smtp-Source: AMsMyM6ayqcfd0Q//6v/OwWOkLbzIAl3QtqboHlsDLG6xcMHCS0KuWtutlxTEtXeKef4jt11I9RX5w==
+X-Received: by 2002:adf:9cd0:0:b0:22a:7cea:d3c3 with SMTP id h16-20020adf9cd0000000b0022a7cead3c3mr6771605wre.196.1664555221581;
+        Fri, 30 Sep 2022 09:27:01 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id bd16-20020a05600c1f1000b003a4efb794d7sm2519778wmb.36.2022.09.30.09.26.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 09:26:59 -0700 (PDT)
+Message-ID: <83307f48-bef0-bff8-e3b5-f8df7a592678@isovalent.com>
+Date: Fri, 30 Sep 2022 17:26:58 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] fs/ntfs3: fix memory leak in put_ntfs()
-Content-Language: en-US
-To: Karthik Alapati <mail@karthek.com>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
-CC: <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <Yw7k0VQm+8l8JKWr@karthik-strix-linux.karthek.com>
-From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <Yw7k0VQm+8l8JKWr@karthik-strix-linux.karthek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog
+ load|loadall
+Content-Language: en-GB
+To: Wang Yufen <wangyufen@huawei.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+ hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+From: Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
 
+Tue Sep 27 2022 12:21:14 GMT+0100 ~ Wang Yufen <wangyufen@huawei.com>
+> Add auto_attach optional to support one-step load-attach-pin_link.
 
+Nit: Now "autoattach" instead of "auto_attach". Same in commit title.
 
-On 8/31/22 07:34, Karthik Alapati wrote:
-> free options in put_ntfs() rather than in ntfs_put_super()
 > 
-> BUG: memory leak
-> unreferenced object 0xffff8881104f3720 (size 32):
->    comm "syz-executor634", pid 3605, jiffies 4294945517 (age 12.630s)
->    hex dump (first 32 bytes):
->      e0 36 4f 10 81 88 ff ff 80 57 e1 85 ff ff ff ff  .6O......W......
->      00 00 00 00 00 00 00 00 c0 ff c0 ff 00 00 00 00  ................
->    backtrace:
->      [<ffffffff81b23ef2>] kmalloc include/linux/slab.h:600 [inline]
->      [<ffffffff81b23ef2>] kzalloc include/linux/slab.h:733 [inline]
->      [<ffffffff81b23ef2>] ntfs_init_fs_context+0x22/0x1e0 fs/ntfs3/super.c:1397
->      [<ffffffff81650045>] alloc_fs_context+0x225/0x3b0 fs/fs_context.c:290
->      [<ffffffff8162bed3>] do_new_mount fs/namespace.c:3025 [inline]
->      [<ffffffff8162bed3>] path_mount+0x6f3/0x10d0 fs/namespace.c:3370
->      [<ffffffff8162cffe>] do_mount fs/namespace.c:3383 [inline]
->      [<ffffffff8162cffe>] __do_sys_mount fs/namespace.c:3591 [inline]
->      [<ffffffff8162cffe>] __se_sys_mount fs/namespace.c:3568 [inline]
->      [<ffffffff8162cffe>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
->      [<ffffffff845e4855>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff845e4855>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
 > 
-> BUG: memory leak
-> unreferenced object 0xffff8881104f36e0 (size 32):
->    comm "syz-executor634", pid 3605, jiffies 4294945517 (age 12.630s)
->    hex dump (first 32 bytes):
->      6d 61 63 63 79 72 69 6c 6c 69 63 00 00 00 00 00  maccyrillic.....
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff814c5b1d>] kmemdup_nul+0x2d/0x70 mm/util.c:152
->      [<ffffffff8164f66e>] vfs_parse_fs_string+0x6e/0xd0 fs/fs_context.c:178
->      [<ffffffff8164f7b0>] generic_parse_monolithic+0xe0/0x130 fs/fs_context.c:224
->      [<ffffffff8162c374>] do_new_mount fs/namespace.c:3036 [inline]
->      [<ffffffff8162c374>] path_mount+0xb94/0x10d0 fs/namespace.c:3370
->      [<ffffffff8162cffe>] do_mount fs/namespace.c:3383 [inline]
->      [<ffffffff8162cffe>] __do_sys_mount fs/namespace.c:3591 [inline]
->      [<ffffffff8162cffe>] __se_sys_mount fs/namespace.c:3568 [inline]
->      [<ffffffff8162cffe>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3568
->      [<ffffffff845e4855>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff845e4855>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>    	loaded_at 2022-09-09T21:39:49+0800  uid 0
+>    	xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>    	btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>    	loaded_at 2022-09-09T21:41:32+0800  uid 0
+>    	xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>    	btf_id 82
 > 
-> Link: https://syzkaller.appspot.com/bug?id=332ba47915d0e39e94b42a622f195f0804ecb67f
-> Reported-by: syzbot+9d67170b20e8f94351c8@syzkaller.appspotmail.com
-> Signed-off-by: Karthik Alapati <mail@karthek.com>
+>    $ bpftool link
+>    1: tracing  prog 26
+>    	prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+> 
+> The autoattach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+> 
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 > ---
->   fs/ntfs3/super.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> v6 -> v7: add info msg print and update doc for the skip program
+> v5 -> v6: skip the programs not supporting auto-attach,
+> 	  and change optional name from "auto_attach" to "autoattach"
+> v4 -> v5: some formatting nits of doc
+> v3 -> v4: rename functions, update doc, bash and do_help()
+> v2 -> v3: switch to extend prog load command instead of extend perf
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>  tools/bpf/bpftool/prog.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 79 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-> index 47012c9bf505..ffb76a5bfd4f 100644
-> --- a/fs/ntfs3/super.c
-> +++ b/fs/ntfs3/super.c
-> @@ -439,6 +439,7 @@ static void init_once(void *foo)
->    */
->   static noinline void put_ntfs(struct ntfs_sb_info *sbi)
->   {
-> +	put_mount_options(sbi->options);
->   	kfree(sbi->new_rec);
->   	kvfree(ntfs_put_shared(sbi->upcase));
->   	kfree(sbi->def_table);
-> @@ -482,7 +483,6 @@ static void ntfs_put_super(struct super_block *sb)
->   	/* Mark rw ntfs as clear, if possible. */
->   	ntfs_set_state(sbi, NTFS_DIRTY_CLEAR);
->   
-> -	put_mount_options(sbi->options);
->   	put_ntfs(sbi);
->   	sb->s_fs_info = NULL;
->   
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index c81362a..84eced8 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1453,6 +1453,72 @@ static int do_run(int argc, char **argv)
+>  	return ret;
+>  }
+>  
+> +static int
+> +auto_attach_program(struct bpf_program *prog, const char *path)
+> +{
+> +	struct bpf_link *link;
+> +	int err;
+> +
+> +	link = bpf_program__attach(prog);
+> +	if (!link)
+> +		return -1;
+> +
+> +	err = bpf_link__pin(link, path);
+> +	if (err) {
+> +		bpf_link__destroy(link);
+> +		return err;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int pathname_concat(const char *path, const char *name, char *buf)
+> +{
+> +	int len;
+> +
+> +	len = snprintf(buf, PATH_MAX, "%s/%s", path, name);
+> +	if (len < 0)
+> +		return -EINVAL;
+> +	if (len >= PATH_MAX)
+> +		return -ENAMETOOLONG;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +auto_attach_programs(struct bpf_object *obj, const char *path)
+> +{
+> +	struct bpf_program *prog;
+> +	char buf[PATH_MAX];
+> +	int err;
+> +
+> +	bpf_object__for_each_program(prog, obj) {
+> +		err = pathname_concat(path, bpf_program__name(prog), buf);
+> +		if (err)
+> +			goto err_unpin_programs;
+> +
+> +		err = auto_attach_program(prog, buf);
+> +		if (!err)
+> +			continue;
+> +		if (errno == EOPNOTSUPP)
+> +			p_info("Program %s does not support autoattach",
+> +			       bpf_program__name(prog));
+> +		else
+> +			goto err_unpin_programs
+With this code, if auto-attach fails, then we skip this program and move
+on to the next. That's an improvement, but in that case the program
+won't remain loaded in the kernel after bpftool exits. My suggestion in
+my previous message (sorry if it was not clear) was to fall back to
+regular pinning in that case (bpf_obj_pin()), along with the p_info()
+message, so we can have the program pinned but not attached and let the
+user know. If regular pinning fails as well, then we should unpin all
+and error out, for consistency with bpf_object__pin_programs().
 
-Hello
-This patch failed our tests and caused email from kernel test robot,
-so I can't accept it.
-But the memory leak is a concern, thanks for the report.
+And in that case, the (errno == EOPNOTSUPP) with fallback to regular
+pinning could maybe be moved into auto_attach_program(), so that
+auto-attaching single programs can use the fallback too?
+
+Thanks,
+Quentin
