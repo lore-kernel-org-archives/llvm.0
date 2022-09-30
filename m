@@ -1,108 +1,71 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6835A7C
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 17:55:21 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id w10so4580145pll.11
-        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 10:55:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FCF5A7C
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 18:10:56 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id b75so4908946pfb.7
+        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 11:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=oIAo9+qWUeQbXeHzAy+ugcYbG6Lm0wKQlqadtQ8eNSA=;
-        b=L/Jm/QyNeAQsX6+TeyY0u4/7zeV88gIhYmLe2m73zwA0wA/SJwDkIfQXSSbCUMvZRM
-         acULk+m2YNyYFhFx8tcXL6TehWZL/D3wdG2g4SSdVTCUIx4mfudsC1OuSGTXYaA9ksyL
-         gXs5jQYipA18IFaU8v8eLJzatgtz6IqMQ2URxp04w4EapLyNuLhDJPCMsJcqUP79I8yk
-         Jc8Rl3Dp1j4sSwMz5ayOWj6t02lnmMne66MkBzg5grVaslbsFA9U/+el0e5csEXQYfxN
-         tRKuOTDQHGlsdNnUNuPVMrMXTZy6pqgEq0VWyDP5muDgaWbQkvBJQDzD8qkQqcKxTmY9
-         BShw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=FdAwaR2ThOuiEkbcZBSK+LnUmsamyS86q3QP/tm0gAk=;
+        b=l7a1aZIzcaqxlxcKCOg2rfD97WjT6mvyxS81K+jeiPEurzrvoMXhrmG7+DY3ACQRKp
+         eqh+1SeGRM4Gvzfo0L77PITM901lagPAy9lB2dzRjNnftL6Aqx0g8i51uYGXx4E4tqce
+         BdSW4Ryr9LwIHzyHWZE97S+54YNi5ptJlU8bLbpORMt10xlSekDHWmoaSEaVC+6dX6N9
+         ab5ezxQpsnvMSUY4/6SMgATV+4pVdmux8qv4W3ByYsp2NFQy263vTkvV9362enHEROkh
+         OtQB7iq2d6GzbAOn0E/oP3/jlXZAIiAFJw1MQBWyw4lgPNrbndVa/j/XjURbLkpkK6nO
+         OTPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=oIAo9+qWUeQbXeHzAy+ugcYbG6Lm0wKQlqadtQ8eNSA=;
-        b=BLqr64vs+MBLfG+VmMkM9oWtabatVMhrGUL7mNAFprLx2wca9Se+qGUBTtPL/vm8fH
-         kG0PFZxc+f52jx/3bDhfF6lw7fibGqYjHYpM+GQdAtYmLlYKJIMc6dcV+l24Kp04f8MZ
-         XhiW7XIG9rvt4QZaJp8xGERkSfz+oeZ5pz/tID8Pi+Og/xP57d9q44yIPHjyjs7RHVna
-         o8o365C/jx5fzse7xxh1iLcp2dfZb0+AD3FPXi/QsUE0sROntFJOCSJK8UTA0rhWqQpW
-         2oSEBigB8oxYUfOVvllt7R/J6bDYH41jF3h8NoFBU05QhmT8gq40Xw4C5OPxuluyCCg9
-         8ZwQ==
-X-Gm-Message-State: ACrzQf2dY/Rx2dsCeRUO5E6IQPrqry4HijmDilCrS5x65lbKFfPMXgpF
-	5teOlKJ+Ei6GM/PiXHBTetE=
-X-Google-Smtp-Source: AMsMyM52dJzRPZQA4CrgFqXqnB8JDUSQFWJSxghPXouTP3w78MpcSmkjO5+lWVlBP2dTfjQfG+s+sA==
-X-Received: by 2002:a17:90a:10d6:b0:20a:46a7:beb9 with SMTP id b22-20020a17090a10d600b0020a46a7beb9mr3505094pje.49.1664560520691;
-        Fri, 30 Sep 2022 10:55:20 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:d016:f5be:4ff2:43f])
-        by smtp.gmail.com with ESMTPSA id z17-20020aa79491000000b0053ebafa7c42sm2110574pfk.79.2022.09.30.10.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 10:55:19 -0700 (PDT)
-Date: Fri, 30 Sep 2022 10:55:16 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Raul Rangel <rrangel@chromium.org>,
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-	linux-input <linux-input@vger.kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Tim Van Patten <timvp@google.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"jingle.wu" <jingle.wu@emc.com.tw>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Len Brown <lenb@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to
- acpi_dev_irq_flags
-Message-ID: <YzcthIfnpi8E6XVk@google.com>
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
- <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
- <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
- <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
- <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
- <YzYowYJpRTImmg4m@google.com>
- <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
- <YzcqdTxLMF5028yz@smile.fi.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=FdAwaR2ThOuiEkbcZBSK+LnUmsamyS86q3QP/tm0gAk=;
+        b=oHAvnbsXoGCISbOleMLOCtmXBtzF0LvMGvggFl4maJENk5C9Ano97BpN+LSeZxyHEQ
+         hPsNN+hh7CzFwzYGnphOl9eeCzLMm1zZ/U3FzzT9XEeE20GutgCoqdd8XkqcgJd5MAYu
+         BtGv4ybQNu4s22SWvPQmZpGzjwvm8I4+StQV90zbagLjXsU8EuoGIBlwJs/sLZDzBZ88
+         oJ/T3ugkrBisAZK7M2Zno79qz8GInNIpJ7wTOjy6ZHWqDdkTnIe5MdRJT4Zr/iFm+Eox
+         9Ntd+pgDi3K2HV1KdcgxI3RT9VNWp8HHVLR4x54zIr2C5NjYq8KIq+15ncTN3N95le2t
+         n6Vg==
+X-Gm-Message-State: ACrzQf0uSTI89yy5PC7PB/hIE4FwE1YKEu8q1ipRc4T6ol6bEUzdXm4K
+	Fj/K7nAdT8i5nrpSBq9sb0JHu+uoIeiE+Zu69u0asQ==
+X-Google-Smtp-Source: AMsMyM6b6d5PRzEl8t8Xryx+i34BOBUdxOQjKRDtvOB1nuKhNXfvBQg1ErJjFskWinXmgjPpV9+i5H9hBPxol7sIhOo=
+X-Received: by 2002:a05:6a00:4c11:b0:53e:4f07:fce9 with SMTP id
+ ea17-20020a056a004c1100b0053e4f07fce9mr10553729pfb.66.1664561455909; Fri, 30
+ Sep 2022 11:10:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YzcqdTxLMF5028yz@smile.fi.intel.com>
+References: <20220817185410.1174782-1-nathan@kernel.org> <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
+ <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
+In-Reply-To: <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 30 Sep 2022 11:10:44 -0700
+Message-ID: <CAKwvOdk_XAXNJ5n_WdymSqZq=No2pbHpSJiJkH6K4gPFEEVNNg@mail.gmail.com>
+Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
+ GCC-only block
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, "Moreira, Joao" <joao.moreira@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 30, 2022 at 08:42:13PM +0300, Andy Shevchenko wrote:
-> On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
-> > On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> 
-> ...
-> 
-> > I think that patches [5-8/13] from this series are significant
-> > framework changes, so it would make sense to route them via the ACPI
-> > tree.
-> > 
-> > If this is fine with everybody, I will queue them up for merging into
-> > 6.1 (probably in the second half of the upcoming merge window).
-> 
-> I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
-> but if you wish you always may take this PR [1] to your tree (it's already in
-> GPIO tree pending v6.1), it may be considered as immutable tag.
-> 
-> [1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
+On Thu, Aug 18, 2022 at 12:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> This being clang, you'll ofcourse still have a few weird:
+>
+>         "Jcc.d32 __x86_indirect_thunk_r11"
+>
+> sites that will not be able to be replaced, but there's nothing I can do
+> about that other than to continue to encourage y'all to stop emitting
+> them ;-)
 
-Yeah, having an immutable branch hanging off 6.0-rcN would be awesome -
-I could pull it and this would avoid any potential conflicts later.
-
-Thanks.
-
+Joao has a patch up for this:
+https://reviews.llvm.org/D134915
 -- 
-Dmitry
+Thanks,
+~Nick Desaulniers
