@@ -1,122 +1,193 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69ED41C05
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 06:06:31 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id d82so3360759pfd.10
-        for <llvm@lists.linux.dev>; Thu, 29 Sep 2022 23:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=i61OOr58zfCwmexOF8+V4sJvwXGh54OgnBPaDfVHlGA=;
-        b=XrUm2q7pHn5YVcdWCabm5lL8LorV8ISHr/1212QXQdrjg3/Kt+SvDhuzuXEaddLwT1
-         68wupfeFMGa5cVABPm6j3CZIKARFcpzYJdErZIisU0Pbl3tPfaYCJewbDmauYWjBg7NX
-         LZ567LM6Y+rRC4b3ctDg+e3Q3aAqx+jyUdjGs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=i61OOr58zfCwmexOF8+V4sJvwXGh54OgnBPaDfVHlGA=;
-        b=CgqYBf9wwC6jszAygewZd9yl3D5YOgUCTbdEK+6gYYyiVnY9Arb5w7BUpb5TdYtFCx
-         bgm/H0oJtgW0yG/5rcg6IRVZJR9nlf3V8E8Wkaz0Wixnw6aasgOOYM3iWeMduQy2dZtZ
-         /bGOHb+cUQ8KCS2Am8YSIrpm8f2VWGYJKTo/yuie48ba/zvHU6OadIrtHq9UOIcyhUcP
-         6vNPbgQm1iUKHFNVz8g+4YaLtVNa4U7FcDh0qS9ow7mTJWmurNbN0qD44vq542LVp+Zf
-         X2KqvDlLJZvsuYtFfyHUrUiBOzUWjCpjrcqRD47j7JLnDMi1DVyAx9zeaXiUmzWt0xMA
-         HXnA==
-X-Gm-Message-State: ACrzQf1LlFDxpo6jevDrxmmzPjzjCX8hd1BzE46kovDzG6LK87neeRA5
-	zvJbN5B8GiyewqnPdiVz+NvMYg==
-X-Google-Smtp-Source: AMsMyM5NdWi48t1xNiMrpGz/Drk58wReh3dQyhi+9lyFbKCYyeIBcK8Mr0cBbc6xo9tPqc3oVIsMiA==
-X-Received: by 2002:a63:77c4:0:b0:435:4224:98b6 with SMTP id s187-20020a6377c4000000b00435422498b6mr6262577pgc.94.1664517990821;
-        Thu, 29 Sep 2022 23:06:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i6-20020a628706000000b005375a574846sm776607pfe.125.2022.09.29.23.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 23:06:30 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero
-Date: Thu, 29 Sep 2022 23:06:24 -0700
-Message-Id: <20220930060624.2411883-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3B67B
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 07:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1664522142; x=1696058142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nBnk2H1ZFAJdL54aE/crKqQH3+vyJO5hi81g9RggVEU=;
+  b=M5BZuE/QpIIMZCYTu3wbbjoR3Tkfpl7VoKeTqrZ3cY2r4GhrWBfxnPvT
+   Wt1Uv/1WRH+9q4Filmc8uiPnULgVm9eVRDWgB4KjnCCQ1a2ioKGgmH66T
+   oWjRvYBFIOWD8jQF1L5gs/EgE50216xh6fB3C4mNMMEnmoxFXm81Vg0ph
+   8xKLc2Y9bBncifOl8oRl6jZssFRyNo+RRnjDu8EBO7s+oHwOSx44bR/Il
+   DFC0kMc3dfq/bHziFl+Ck2Itq6laXy57ZImpgZQvpO0A94h/3QFiG6dBf
+   x7zas0nFrSp8A4Mc99Gy6Kbw92Fj9UknPA5n8lTrlcMXNTbZkF91m2621
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,357,1654585200"; 
+   d="scan'208";a="182751300"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2022 00:15:41 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 30 Sep 2022 00:15:39 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 30 Sep 2022 00:15:39 -0700
+Date: Fri, 30 Sep 2022 09:20:08 +0200
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+To: Nathan Huckleberry <nhuck@google.com>
+CC: Dan Carpenter <error27@gmail.com>, <llvm@lists.linux.dev>,
+	<UNGLinuxDriver@microchip.com>, "David S. Miller" <davem@davemloft.net>,
+	"Eric Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: lan966x: Fix return type of lan966x_port_xmit
+Message-ID: <20220930072008.jhu2wj7tqpa3nfud@soft-dev3-1.localhost>
+References: <20220929182704.64438-1-nhuck@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2597; h=from:subject; bh=nee5BjW/8fsDLojYzngsPv0G3HZZqrClAK92SqD+Bm0=; b=owEBbAKT/ZANAwAKAYly9N/cbcAmAcsmYgBjNodfq65LRtk/UBksZoj1vtyFkICUBDgXDFDpBHwd P7zBojCJAjIEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYzaHXwAKCRCJcvTf3G3AJl82D/ dWwl4+QkOkCDHzckmUB8wlGj5qqJ6Fg8GDdTURrwdWm7l3PYhAA67RhthYa8ayfPxLo/4KMTDa07Dh SKEw0FdHsNd41lVDcbsKEFoR9hhg0yRb0UJvpnpT84bLCpmuDAfgzEFxuDcYgUoTypf//twXA6ejgG 293hWR8BTuCijVkZsoba5WxIAJ6GMUWsSC+UzE0+Dm9NWWmBH9bEUKWVReE89ndReqRjLqr0urjp9k V0VN4f0j3pqWhswGfwTebVGEH98nwKaqtc3mCREYDdFL/KRqwJe3e183oCFmb4ZLY1A0uTzkxt/jVB xxGHrQiQ1eO0V6S5BalYSdRP5z+PFp5LVOuXJadkOTug+IjCKAX6o03zztUa9GocDU6F24pcx99PJn MMxaI5PgqmoKAx8CEe6Axg/Dl290DQmRh1ptHpKgVFCN7fz6FmG7Hv9sl4eUD2EQKbwJFjgqrzQuU9 OamayeMH/oDl4ecPo+1lP/iHCJEQaoO/2Dsj1j02cQ3Rt6FSB9uD35Z8UMo3XnRv8mU1iNH/28e6Kl h64GD6EPMJMUcVSJWXM9ITMfpr44Zz0SOdTKuLFMve/6S/+4P9gsNqs4fj1KZIiZVdl2qvWgh5pijw pR81kGTon+9ktJZM4SGbMTZg720WxYOk7TcaWROUL/d2JQBgWdW+jH8k+B
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220929182704.64438-1-nhuck@google.com>
 
-Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
-option is no longer required, remove it from the command line. Clang 16
-and later will warn when it is used, which will cause Kconfig to think
-it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
-is required and only use it when so.
+The 09/29/2022 11:27, Nathan Huckleberry wrote:
 
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Cc: stable@vger.kernel.org
-Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Hi Nathan,
+
+> 
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+> 
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+> 
+> The return type of lan966x_port_xmit should be changed from int to
+> netdev_tx_t.
+> 
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+
+It looks pretty good.
+If we change the return type of lan966x_port_xmit, can we change also the
+return type of the functions lan966x_fdma_xmit and
+lan966x_port_ifh_xmit?
+And then also make sure to return NETDEV_TX_BUSY in case
+lan966x_ptp_txtstamp_request fails and not the error code?
+
+I have a diff below:
 ---
- Makefile                   |  4 ++--
- security/Kconfig.hardening | 14 ++++++++++----
- 2 files changed, 12 insertions(+), 6 deletions(-)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 7e4061c854f0e..148920bb74e08 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -558,7 +558,8 @@ static int lan966x_fdma_get_next_dcb(struct lan966x_tx *tx)
+        return -1;
+ }
 
-diff --git a/Makefile b/Makefile
-index c7705f749601..02c857e2243c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -831,8 +831,8 @@ endif
- # Initialize all stack variables with a zero value.
- ifdef CONFIG_INIT_STACK_ALL_ZERO
- KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
--ifdef CONFIG_CC_IS_CLANG
--# https://bugs.llvm.org/show_bug.cgi?id=45497
-+ifdef CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-+# https://github.com/llvm/llvm-project/issues/44842
- KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
- endif
- endif
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index bd2aabb2c60f..995bc42003e6 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -22,11 +22,17 @@ menu "Memory initialization"
- config CC_HAS_AUTO_VAR_INIT_PATTERN
- 	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
- 
--config CC_HAS_AUTO_VAR_INIT_ZERO
--	# GCC ignores the -enable flag, so we can test for the feature with
--	# a single invocation using the flag, but drop it as appropriate in
--	# the Makefile, depending on the presence of Clang.
-+config CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-+	def_bool $(cc-option,-ftrivial-auto-var-init=zero)
-+
-+config CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-+	# Clang 16 and later warn about using the -enable flag, but it
-+	# is required before then.
- 	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
-+	depends on !CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-+
-+config CC_HAS_AUTO_VAR_INIT_ZERO
-+	def_bool CC_HAS_AUTO_VAR_INIT_ZERO_BARE || CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
- 
- choice
- 	prompt "Initialize kernel stack variables at function entry"
+-int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
++netdev_tx_t lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh,
++                             struct net_device *dev)
+ {
+        struct lan966x_port *port = netdev_priv(dev);
+        struct lan966x *lan966x = port->lan966x;
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index b98d37c76edbc..4b471a1562e29 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -219,9 +219,9 @@ static int lan966x_port_inj_ready(struct lan966x *lan966x, u8 grp)
+                                         READL_SLEEP_US, READL_TIMEOUT_US);
+ }
+
+-static int lan966x_port_ifh_xmit(struct sk_buff *skb,
+-                                __be32 *ifh,
+-                                struct net_device *dev)
++static netdev_tx_t lan966x_port_ifh_xmit(struct sk_buff *skb,
++                                        __be32 *ifh,
++                                        struct net_device *dev)
+ {
+        struct lan966x_port *port = netdev_priv(dev);
+        struct lan966x *lan966x = port->lan966x;
+@@ -344,12 +344,12 @@ static void lan966x_ifh_set_timestamp(void *ifh, u64 timestamp)
+                IFH_POS_TIMESTAMP, IFH_LEN * 4, PACK, 0);
+ }
+
+-static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+        struct lan966x_port *port = netdev_priv(dev);
+        struct lan966x *lan966x = port->lan966x;
+        __be32 ifh[IFH_LEN];
+-       int err;
++       netdev_tx_t ret;
+
+        memset(ifh, 0x0, sizeof(__be32) * IFH_LEN);
+
+@@ -360,9 +360,8 @@ static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
+        lan966x_ifh_set_vid(ifh, skb_vlan_tag_get(skb));
+
+        if (port->lan966x->ptp && skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) {
+-               err = lan966x_ptp_txtstamp_request(port, skb);
+-               if (err)
+-                       return err;
++               if (lan966x_ptp_txtstamp_request(port, skb))
++                       return NETDEV_TX_BUSY;
+
+                lan966x_ifh_set_rew_op(ifh, LAN966X_SKB_CB(skb)->rew_op);
+                lan966x_ifh_set_timestamp(ifh, LAN966X_SKB_CB(skb)->ts_id);
+@@ -370,12 +369,12 @@ static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
+
+        spin_lock(&lan966x->tx_lock);
+        if (port->lan966x->fdma)
+-               err = lan966x_fdma_xmit(skb, ifh, dev);
++               ret = lan966x_fdma_xmit(skb, ifh, dev);
+        else
+-               err = lan966x_port_ifh_xmit(skb, ifh, dev);
++               ret = lan966x_port_ifh_xmit(skb, ifh, dev);
+        spin_unlock(&lan966x->tx_lock);
+
+-       return err;
++       return ret;
+ }
+
+ static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index 9656071b8289e..d61a0fc4b33ab 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -434,7 +434,8 @@ irqreturn_t lan966x_ptp_ext_irq_handler(int irq, void *args);
+ u32 lan966x_ptp_get_period_ps(void);
+ int lan966x_ptp_gettime64(struct ptp_clock_info *ptp, struct timespec64 *ts);
+
+-int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
++netdev_tx_t lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh,
++                             struct net_device *dev);
+ int lan966x_fdma_change_mtu(struct lan966x *lan966x);
+ void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
+ void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
+---
+
+> ---
+>  drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index b98d37c76edb..be2fd030cccb 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> @@ -344,7 +344,8 @@ static void lan966x_ifh_set_timestamp(void *ifh, u64 timestamp)
+>                 IFH_POS_TIMESTAMP, IFH_LEN * 4, PACK, 0);
+>  }
+> 
+> -static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
+> +static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
+> +                                    struct net_device *dev)
+>  {
+>         struct lan966x_port *port = netdev_priv(dev);
+>         struct lan966x *lan966x = port->lan966x;
+> --
+> 2.38.0.rc1.362.ged0d419d3c-goog
+> 
+
 -- 
-2.34.1
-
+/Horatiu
