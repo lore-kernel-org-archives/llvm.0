@@ -1,100 +1,110 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89553200
-	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 20:33:16 +0000 (UTC)
-Received: by mail-pj1-f74.google.com with SMTP id z9-20020a17090a468900b00202fdb32ba1so3196012pjf.1
-        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 13:33:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B8E3200
+	for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 20:55:16 +0000 (UTC)
+Received: by mail-ed1-f41.google.com with SMTP id s30so3811865eds.1
+        for <llvm@lists.linux.dev>; Fri, 30 Sep 2022 13:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=SMQsBtCCyLRrqpBDgN2Zoeao+ul/V+LJS6j1U8pzQAU=;
-        b=JVe8vVsAiLOpWL3/NzYtEi2BruvEjHVm4AEMgx5mc+Ak77rP8Jn9WKf6W8EyjFam2W
-         KfDCzI3KrvVgqbNhjxoez9qP5YEmbdUysYr9GoCP1FW6BXKAoMJg3z62g2AVRExvSItO
-         ST7N4OvdR10yDD31HpFVvaviiwtZXkcWkUHN4BUBKZ6kbWrOx9bHCUDM1hnbjh0OB/LZ
-         +4evEXvbMukJR3Z7UJPKMhEQvgUVk6VZoGsD4dxkiwBIDf5lgOZLoh6U9oNmPRixYW2z
-         InT4O0wyUrlRVLU87m+DiRzIw7QXhJZJDPnK6cg+xujAwI/HKnh7B0Qa97c09DHyCmIL
-         5A3Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1K6Q0nQ5Q42g4z04WoQRYtpfm67biYFm2mWxuvCIHOg=;
+        b=SlpVM0+LZ62XFANK16bQHLbikjK/JqKERbC2w9AnTEhvLIhcRRxnIsBQtmz9zQX3ob
+         9h9dhCl6G4vLD8wsvGMaKJwVRoxGsPo5O5RFxmlLOvZKMdrAAWLyTghBzlhUsSKO6Gz2
+         YWMhzPJTiaVo5I806ggo7ejuMMWpM6txhgt+duAy2Dh5aGpT+ApCh/NWZ8w+hg4PkIAE
+         mWA+kLNtirYohN88y4+G5/LgmrPYAEUq40gG7VYx2xcZYlkx/Cm0hTSrJwcTlOhB0K+z
+         kXeNFUZ1Bj7um2axCBiBEFXA2DfaYQYtu+6rUbZbsO9FziviHfyxIRfGD60/YGY42EVd
+         LoxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=SMQsBtCCyLRrqpBDgN2Zoeao+ul/V+LJS6j1U8pzQAU=;
-        b=gsu25EBPL+sg8mc54w2CGad0PydkdHi3zq3xqEkj6K8jimorMle0snBPLinF3WSUnF
-         r7WxI6cnHp2dE51TU+TYsjEKGsFaGKXT69IuSe466UX5vbHrFE7eugBL3bCYRyzLMFQK
-         pSMmhPZE5dqbK04jfKgUCvylXB60MRw1wsKZjK4COKWxPi7QXZ4ZTAhEU6srhMbqznyV
-         jxyNXjK+07S17Vzwxac0GqnRa2Xvpc8V0siRmZfDQY97poC/e/QxE9pCRQ+yy8qSiNsz
-         QQA/M98eDukKDzCSH1vlT+5BPQEzsLieleTGAAIVaAJ5Vwx5ZcCe/c8ousleB1DxyQ5x
-         zy2g==
-X-Gm-Message-State: ACrzQf1gUseHyUcZjDAMIBQYl048iyT9Dworaxbc8MMriWhYYAXGkAOv
-	VOWBeCNKCcZHVAqmNebjftVCBrt5+7Bpb46DTPc=
-X-Google-Smtp-Source: AMsMyM4eAqTCDUfydVdhf5U7mW3z+20dr+NzSt2BRmPuylTSU+w9kmiWK1I1Beyd2swmkxphq45pk8BzPKKFXP13glo=
-X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a17:90b:1b06:b0:20a:6d32:b05e with
- SMTP id nu6-20020a17090b1b0600b0020a6d32b05emr35559pjb.103.1664569996339;
- Fri, 30 Sep 2022 13:33:16 -0700 (PDT)
-Date: Fri, 30 Sep 2022 20:33:10 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1K6Q0nQ5Q42g4z04WoQRYtpfm67biYFm2mWxuvCIHOg=;
+        b=sxxU0IyoZO9j1miWjT+w4/w+42Zo71i/zA4iM9m+YNhFaUz0R4ZyAoAxURkq6ou15r
+         c/UEUg6z52stt/CAd4BymS4c75spqYIW7IGrTMM4qj/IFdzAbS078xDXbmvWFYqBgM6T
+         yYUkaX2lBtfDiTKODOn7EsF8K2C928bve6d1DHBnIRZqudCa76rCy1iQsG5t37HGhVqQ
+         ba/LjU1raA8rdsA2Y7bBUd054ribsj1oSTPvjpy9s0kZI9g5OQKEoJw/F/PRdxeOe8Xz
+         pqm2kiSxlNa6EUfLWmabGbEZtwyz1Zq+sdeY4jEWzrSd9719zwsLPfE7KqYgbkWbpKfb
+         U7tQ==
+X-Gm-Message-State: ACrzQf2Nk48CRLBZDrLxGriolCWEH6Z+CTOHOW1qHo3MoANR9NKE7dSZ
+	j7sC6tHMTFCwrKnRuH7TM+2txzMOJSBQmpXviR4=
+X-Google-Smtp-Source: AMsMyM4w21D6+g+NYtAd21bjoLgpQkIkbF1JRstbzPza0hG03AHTy30/AcEhExNWT9pCsjRE6y0WIA0pR5dFurG2icU=
+X-Received: by 2002:a50:eb05:0:b0:457:c6f5:5f65 with SMTP id
+ y5-20020a50eb05000000b00457c6f55f65mr9082580edp.311.1664571314648; Fri, 30
+ Sep 2022 13:55:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1362; i=samitolvanen@google.com;
- h=from:subject; bh=cb9uxuoR+cjTVhl0LEU/KRuB1nV8Tr++NRhDrxG0pH4=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjN1KGfuXEg/p2HFc8oG4zdl0hi2M0tCCEpmBR8vbU
- mUEvbkOJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYzdShgAKCRBMtfaEi7xW7o3tC/
- 4gIorPccJBNlneIDwxrzmurGTgMjEeX26RFRVwv1bFgkbufV7u5gYf1jZCrCRrckERcBv7s33gacaH
- yEHS51srndw7V5ol/CX17484w4zcqhkH2nNeZP996dY9m6tYwJsHHSYgRv5N6gcwzUaFa6+rPqHFbb
- 5yH2tr+5q4c6aN5Ra9Wj83rCOw6aaNCnvOG8nhhT69MHyX6esWf1sec64IIyd8q7v1d8aXKIdz2PJ4
- Ae7bsBLZClrEcol4ijmrLF1iGizStoGTNj9xMwG9w5v/2b5mrtgqtq40qS0dW57Gp/QJjPuRcPYoMb
- dD8q9EpQazoDLbScLb62qEOwX1G/H7GRmB1Q21KJGAmwCinxforNZFI9L4RyQXmkVzx+G6aeFH2vcl
- tMleRf8wUgpPUQOHrLzwcC4hZwapkOsp2NYhpt6QjGO3nqowr769r+oK0/H5CN55y9+JJotNsKuaAg
- 3ZRV9R/cRNiXFj9x7u3YnkUfAVkxpRQnoMA5t3T9cxrQs=
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20220930203310.4010564-1-samitolvanen@google.com>
-Subject: [PATCH] Makefile.extrawarn: Move -Wcast-function-type-strict to W=1
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Kees Cook <keescook@chromium.org>, Sami Tolvanen <samitolvanen@google.com>, stable@vger.kernel.org
+MIME-Version: 1.0
+References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+In-Reply-To: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 30 Sep 2022 13:55:02 -0700
+Message-ID: <CAEf4BzaBPpZvxD6sDMWWRXVqKYTgwaxsggye0CRbv7q5_4jrPA@mail.gmail.com>
+Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog load|loadall
+To: Wang Yufen <wangyufen@huawei.com>
+Cc: quentin@isovalent.com, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org, 
+	hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-We enable -Wcast-function-type globally in the kernel to warn about
-mismatching types in function pointer casts. Compilers currently
-warn only about ABI incompability with this flag, but Clang 16 will
-enable a stricter version of the check by default that checks for an
-exact type match. This will be very noisy in the kernel, so disable
--Wcast-function-type-strict without W=1 until the new warnings have
-been addressed.
+On Tue, Sep 27, 2022 at 4:00 AM Wang Yufen <wangyufen@huawei.com> wrote:
+>
+> Add auto_attach optional to support one-step load-attach-pin_link.
+>
+> For example,
+>    $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
+>
+>    $ bpftool link
+>    26: tracing  name test1  tag f0da7d0058c00236  gpl
+>         loaded_at 2022-09-09T21:39:49+0800  uid 0
+>         xlated 88B  jited 55B  memlock 4096B  map_ids 3
+>         btf_id 55
+>    28: kprobe  name test3  tag 002ef1bef0723833  gpl
+>         loaded_at 2022-09-09T21:39:49+0800  uid 0
+>         xlated 88B  jited 56B  memlock 4096B  map_ids 3
+>         btf_id 55
+>    57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
+>         loaded_at 2022-09-09T21:41:32+0800  uid 0
+>         xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
+>         btf_id 82
+>
+>    $ bpftool link
+>    1: tracing  prog 26
+>         prog_type tracing  attach_type trace_fentry
+>    3: perf_event  prog 28
+>    10: perf_event  prog 57
+>
+> The autoattach optional can support tracepoints, k(ret)probes,
+> u(ret)probes.
+>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+> ---
 
-Cc: stable@vger.kernel.org
-Link: https://reviews.llvm.org/D134831
-Link: https://github.com/ClangBuiltLinux/linux/issues/1724
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- scripts/Makefile.extrawarn | 1 +
- 1 file changed, 1 insertion(+)
+For next revision, please also attach cover letter describing the
+overall goal of the patch set (and that's where the version log
+between revisions is put as well).
 
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 6ae482158bc4..52bd7df84fd6 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -64,6 +64,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
- KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
- KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
- KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
-+KBUILD_CFLAGS += $(call cc-disable-warning, cast-function-type-strict)
- endif
- 
- endif
 
-base-commit: 7bc6e90d7aa4170039abe80b9f4e8c8e4eb35091
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
+> v6 -> v7: add info msg print and update doc for the skip program
+> v5 -> v6: skip the programs not supporting auto-attach,
+>           and change optional name from "auto_attach" to "autoattach"
+> v4 -> v5: some formatting nits of doc
+> v3 -> v4: rename functions, update doc, bash and do_help()
+> v2 -> v3: switch to extend prog load command instead of extend perf
+> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
+> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
+>  tools/bpf/bpftool/prog.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 79 insertions(+), 2 deletions(-)
+>
 
+[...]
