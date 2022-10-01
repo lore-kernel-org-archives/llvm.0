@@ -1,121 +1,121 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D042A23A2
-	for <llvm@lists.linux.dev>; Sat,  1 Oct 2022 05:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7431851
+	for <llvm@lists.linux.dev>; Sat,  1 Oct 2022 06:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664603721; x=1696139721;
+  t=1664606254; x=1696142254;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hGEmDCL41yQTriC+xGqRe3Zr8KKYVNZU32zgCe/CGqM=;
-  b=Cybs0cUERVs3vvF7BI2IE3gELHcn4vj/uE0I/kvikemwXXJO1+NaAjS3
-   Y0WZVMmY4F0ruQ8h04pYXLkfVq6snwUk2c7ceN1VTNVzsFAa0aFbQAh9t
-   m0EWvRbC0C4QwIdkmRAwPhneumLDaJEzUqGlUXxmInhijaSFSkizoeT48
-   aVRmrhKusbre788hCT42WJ0+Hno/tR4rREJZJaqwc3652izLtEqJomSpN
-   aSPSQlNG88jUNyfJvVdksP8bsnh3EAJNJpLsuTe+XfSfJp09S6/ijp9ys
-   TfSOP47DibkDbZMhH+fewzbiFRJjBM1zcrmu/xBS5X9F6IXeNqDw3AL1k
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="282054909"
+  bh=oql7rvkXkNtvGLaBnvwR0nB+c9Vz/zu3UeaD8+CQSAk=;
+  b=k/9IeCAu6OgQdo0ioM3Wxu2+Qk6LbFFV4wyt9AzQ6Mq88M2r3xNeXkqp
+   JRPOBkGjDtWd7hmcrx9zPjpvundpuwgXo8A0PeVVI9MEudazvYtt9ViJt
+   e9Cr7vYVmt5PHPSMvDxOx4WGIm42HvrJ4gyYQn8M/HzU20tngSvCcI/Zr
+   KcTBEfi8azyOSEZcEmU6PC5RoyQ9VNIV2sqqq3pM03R0HI38Zaqm84Gco
+   IJq3AZKvX61vStNsPXyINqzw7Of9h3cgBpxepnVj0N4l9Pns+pr7Fc36I
+   /vJfqTkQzpWGh6zzokxtL96ksG8zEM+CTGgfYIsljUYdP/Yk9oOAaKSMQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="328733253"
 X-IronPort-AV: E=Sophos;i="5.93,360,1654585200"; 
-   d="scan'208";a="282054909"
+   d="scan'208";a="328733253"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 22:55:20 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 23:37:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="574090306"
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="574095378"
 X-IronPort-AV: E=Sophos;i="5.93,360,1654585200"; 
-   d="scan'208";a="574090306"
+   d="scan'208";a="574095378"
 Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Sep 2022 22:55:17 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Sep 2022 23:37:20 -0700
 Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oeVT3-0001wB-0v;
-	Sat, 01 Oct 2022 05:55:17 +0000
-Date: Sat, 1 Oct 2022 13:55:03 +0800
+	id 1oeW7i-0001y1-10;
+	Sat, 01 Oct 2022 06:37:18 +0000
+Date: Sat, 1 Oct 2022 14:37:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
 	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15 579/1336]
- drivers/media/mc/mc-entity.c:308: warning: expecting prototype for
- media_entity_graph_walk_init(). Prototype was for media_graph_walk_init()
- instead
-Message-ID: <202210011337.DYXei0au-lkp@intel.com>
+	Michal Simek <monstr@monstr.eu>,
+	Davor Joja <davor.joja@logicbricks.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15 622/1336]
+ drivers/media/i2c/adv7511-v4l2.c:2245:21: warning: no previous prototype for
+ function 'adv7511_subdev'
+Message-ID: <202210011446.pUwz4817-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="BWaklh9wDq0eVCji"
+Content-Type: multipart/mixed; boundary="nkFaNFjqhWy2S/GY"
 Content-Disposition: inline
 
 
---BWaklh9wDq0eVCji
+--nkFaNFjqhWy2S/GY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Laurent,
+Hi Radhey,
 
 FYI, the error/warning still remains.
 
 tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
 head:   608ac1c01df8c338926b627aca5200c040c7f4f6
-commit: 8b578fae9aba7b82a2af5e1bce0edc9189ca9b79 [579/1336] media: entity: Add media_entity_has_route() function
+commit: 59e26517c7b77c4c82aad32cfac74ae39c32b76b [622/1336] drivers: media: Customized adv7511 for Xylon LogiCVC (deprecated)
 config: hexagon-randconfig-r045-20220928
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/8b578fae9aba7b82a2af5e1bce0edc9189ca9b79
+        # https://github.com/Xilinx/linux-xlnx/commit/59e26517c7b77c4c82aad32cfac74ae39c32b76b
         git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
         git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15
-        git checkout 8b578fae9aba7b82a2af5e1bce0edc9189ca9b79
+        git checkout 59e26517c7b77c4c82aad32cfac74ae39c32b76b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/ drivers/media/mc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/i2c/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/mc/mc-entity.c:308: warning: expecting prototype for media_entity_graph_walk_init(). Prototype was for media_graph_walk_init() instead
+>> drivers/media/i2c/adv7511-v4l2.c:2245:21: warning: no previous prototype for function 'adv7511_subdev' [-Wmissing-prototypes]
+   struct v4l2_subdev *adv7511_subdev(struct v4l2_subdev *sd)
+                       ^
+   drivers/media/i2c/adv7511-v4l2.c:2245:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct v4l2_subdev *adv7511_subdev(struct v4l2_subdev *sd)
+   ^
+   static 
+   drivers/media/i2c/adv7511-v4l2.c:304:19: warning: unused function 'adv7511_cec_write_and_or' [-Wunused-function]
+   static inline int adv7511_cec_write_and_or(struct v4l2_subdev *sd, u8 reg, u8 mask,
+                     ^
+   drivers/media/i2c/adv7511-v4l2.c:334:20: warning: unused function 'adv7511_pktmem_wr_and_or' [-Wunused-function]
+   static inline void adv7511_pktmem_wr_and_or(struct v4l2_subdev *sd, u8 reg, u8 clr_mask, u8 val_mask)
+                      ^
+   3 warnings generated.
 
 
-vim +308 drivers/media/mc/mc-entity.c
+vim +/adv7511_subdev +2245 drivers/media/i2c/adv7511-v4l2.c
 
-8b578fae9aba7b drivers/media/mc/mc-entity.c Laurent Pinchart 2014-03-26  294  
-8b578fae9aba7b drivers/media/mc/mc-entity.c Laurent Pinchart 2014-03-26  295  /**
-8b578fae9aba7b drivers/media/mc/mc-entity.c Laurent Pinchart 2014-03-26  296   * media_entity_graph_walk_init - Allocate resources for graph walk
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  297   * @graph: Media graph structure that will be used to walk the graph
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  298   * @mdev: Media device
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  299   *
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  300   * Reserve resources for graph walk in media device's current
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  301   * state. The memory must be released using
-20b852273642f4 drivers/media/media-entity.c Sakari Ailus     2016-11-21  302   * media_graph_walk_free().
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  303   *
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  304   * Returns error on failure, zero on success.
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  305   */
-20b852273642f4 drivers/media/media-entity.c Sakari Ailus     2016-11-21  306  __must_check int media_graph_walk_init(
-20b852273642f4 drivers/media/media-entity.c Sakari Ailus     2016-11-21  307  	struct media_graph *graph, struct media_device *mdev)
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16 @308  {
-29d8da02d13020 drivers/media/media-entity.c Sakari Ailus     2015-12-16  309  	return media_entity_enum_init(&graph->ent_enum, mdev);
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  310  }
-20b852273642f4 drivers/media/media-entity.c Sakari Ailus     2016-11-21  311  EXPORT_SYMBOL_GPL(media_graph_walk_init);
-e03d220336dd69 drivers/media/media-entity.c Sakari Ailus     2015-12-16  312  
-
-:::::: The code at line 308 was first introduced by commit
-:::::: e03d220336dd69292370393f5eee98ac17eda308 [media] media: Amend media graph walk API by init and cleanup functions
-
-:::::: TO: Sakari Ailus <sakari.ailus@iki.fi>
-:::::: CC: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+  2244	
+> 2245	struct v4l2_subdev *adv7511_subdev(struct v4l2_subdev *sd)
+  2246	{
+  2247		static struct v4l2_subdev *subdev;
+  2248	
+  2249		if (sd)
+  2250			subdev = sd;
+  2251	
+  2252		return subdev;
+  2253	}
+  2254	EXPORT_SYMBOL(adv7511_subdev);
+  2255	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---BWaklh9wDq0eVCji
+--nkFaNFjqhWy2S/GY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -4685,4 +4685,4 @@ CONFIG_TEST_FREE_PAGES=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---BWaklh9wDq0eVCji--
+--nkFaNFjqhWy2S/GY--
