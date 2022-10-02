@@ -1,96 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36BD3D8A
-	for <llvm@lists.linux.dev>; Sun,  2 Oct 2022 22:50:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329BEC43140;
-	Sun,  2 Oct 2022 22:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664751059;
-	bh=gZav1BV8mfJpV0flxuOS9osbWhcUEDRWDElsQ/iQu7k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DB7h88QOHTKAhFySvvEZTQOWzLuFcDr9X8qhFE3wEHHkLkp/LElD5QjvbcPQ9U4Sw
-	 52BWHaRmArbu7rw0U6QZFMiAE6F9YuYZ3k1RhoCgzGSQNgSbewwlpncoKMJq4+vl0+
-	 MLa9zpW+zR/2HAO0LOLyxXjmLei+fDBYD1734Zxp1K5A1zSgWaTzbEW5EGYHRiRo74
-	 JnGyX4ivU7wnk1hP+X1C/OSzu8/xCn9CUTqsG3pN8O9T6zWKq49MwRsMRdXmdd7egv
-	 rZWq/WgklvzLW9dMbKx1yCTkHSWDGTbdutcfJPOrBQ+8ezv6Q1kDo7O97RzMDGrPGz
-	 uu5QM6dSLjiGg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-	Fangrui Song <maskray@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	michal.lkml@markovi.net,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.19 29/29] Makefile.debug: set -g unconditional on CONFIG_DEBUG_INFO_SPLIT
-Date: Sun,  2 Oct 2022 18:49:22 -0400
-Message-Id: <20221002224922.238837-29-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221002224922.238837-1-sashal@kernel.org>
-References: <20221002224922.238837-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A569C3D8A
+	for <llvm@lists.linux.dev>; Sun,  2 Oct 2022 23:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1664754042;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=m/3FZ0ezfiUXsRIRvAJcy/dDMwtfjIvtNu85RNCJa/M=;
+	b=PAitwAlPca4afwg5j46e3GJEmczj1iwIzHAD0Zp47294pW312ekSOw6euSIp4M8U7d15Ok
+	+9c4JOXHe+hzv366M05lxrvkqLvUdoM/LCKbz1a45X7UqYkLPizqZ5AIAUXIFCCcLePeAB
+	/PqFAKFxquIP2x0OaoZ5KjsHmCz1Mu8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-FZnFrEHpORu-btpUNs-QKg-1; Sun, 02 Oct 2022 19:40:40 -0400
+X-MC-Unique: FZnFrEHpORu-btpUNs-QKg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94704882821
+	for <llvm@lists.linux.dev>; Sun,  2 Oct 2022 23:40:40 +0000 (UTC)
+Received: from [172.64.4.38] (unknown [10.30.34.212])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 354631402BDA;
+	Sun,  2 Oct 2022 23:40:38 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0-rc7,
+ mainline.kernel.org-clang, a962b54e)
+Date: Sun, 02 Oct 2022 23:40:35 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <46085.122100219404000401@us-mta-562.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+Hi, we tested your kernel and here are the results:
 
-[ Upstream commit 61f2b7c7497ba96cdde5bbaeb9e07f4c48f41f97 ]
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Dmitrii, Fangrui, and Mashahiro note:
 
-  Before GCC 11 and Clang 12 -gsplit-dwarf implicitly uses -g2.
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.0-rc8' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/wsa/linux
 
-Fix CONFIG_DEBUG_INFO_SPLIT for gcc-11+ & clang-12+ which now need -g
-specified in order for -gsplit-dwarf to work at all.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/54963
 
--gsplit-dwarf has been mutually exclusive with -g since support for
-CONFIG_DEBUG_INFO_SPLIT was introduced in
-commit 866ced950bcd ("kbuild: Support split debug info v4")
-I don't think it ever needed to be.
+One or more kernel tests failed:
 
-Link: https://lore.kernel.org/lkml/20220815013317.26121-1-dmitrii.bundin.a@gmail.com/
-Link: https://lore.kernel.org/lkml/CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com/
-Link: https://reviews.llvm.org/D80391
-Cc: Andi Kleen <ak@linux.intel.com>
-Reported-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Reported-by: Fangrui Song <maskray@google.com>
-Reported-by: Masahiro Yamada <masahiroy@kernel.org>
-Suggested-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- scripts/Makefile.debug | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5342674
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5343188
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5343195
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5343262
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5343271
 
-diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-index 9f39b0130551..26d6a9d97a20 100644
---- a/scripts/Makefile.debug
-+++ b/scripts/Makefile.debug
-@@ -1,9 +1,7 @@
--DEBUG_CFLAGS	:=
-+DEBUG_CFLAGS	:= -g
- 
- ifdef CONFIG_DEBUG_INFO_SPLIT
- DEBUG_CFLAGS	+= -gsplit-dwarf
--else
--DEBUG_CFLAGS	+= -g
- endif
- 
- ifndef CONFIG_AS_IS_LLVM
--- 
-2.35.1
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
+/devices/mc0'
+            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
+-June/750380.html
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
