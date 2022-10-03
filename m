@@ -1,167 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5591195
-	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 02:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664765438;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OlXCyvm89hTz+AKjq27gMPTR1/X3+bk2QEp0+avo9ks=;
-	b=a2Qbk/t7MNKfzIO+RK/oq4xjtxD7AwppRLDBGtza7D5l74vfW4Aa8hpOfaCo/iRJ1GuC4s
-	nka6cSoAg/ktKuA0vQCMyUnghrdRWnB3U5r8H+L8QWcr90UrT1iYUfSl3Gy817I9MkbeyP
-	Luna+ZZo7wHycIBhPhX4LT7qw2jBKP8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-ietJ5affPXSoWzes0XaTjQ-1; Sun, 02 Oct 2022 22:50:37 -0400
-X-MC-Unique: ietJ5affPXSoWzes0XaTjQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F9091C05AC9
-	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 02:50:37 +0000 (UTC)
-Received: from [172.64.4.38] (unknown [10.30.34.212])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 28B861759F;
-	Mon,  3 Oct 2022 02:50:37 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
- mainline.kernel.org-clang, 4fe89d07)
-Date: Mon, 03 Oct 2022 02:50:35 -0000
-CC: bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C5B15DA
+	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 03:53:32 +0000 (UTC)
+Received: by mail-io1-f70.google.com with SMTP id u23-20020a6be917000000b0069f4854e11eso6081239iof.2
+        for <llvm@lists.linux.dev>; Sun, 02 Oct 2022 20:53:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=5UX8UvFELFPf+hJe9Pw+hJuyDg2PnF+1lGkZkcSAJUE=;
+        b=bYAA0HUHsNJGxXO+696bRZ7yxgUs0flq8YPtqT8uFgyorDwi42V9eqGjrUAF4lazFZ
+         d9RCPaXZhRR8zqorYSQOsAgAnCeX16SLmbhE6koZt/Tpfjfu10sskzNYIvQfePGTsOf+
+         mGUHaXd2cjZ0CdETY3IaAg94320lP6K5DKVMIhZFx48LKZnw21NXiq0ZR2tvHctu5Rwp
+         hndxO5RxlDNlbfMUZNa6Vl/wPTfD9tsrGHEa8HOsr1edzLSGmMHkiVLgY1Gu0/UYBloU
+         RUjKA0PC3tnClqm/DXG8CvI0/GHspAmvJljavYYUakRD+UITQGmnyyf+MtLPRiWmK+B0
+         zWyQ==
+X-Gm-Message-State: ACrzQf1M5hndjphTyzg1d/6bjiNN2BU1T0yGGzgbTCcgvT+8ijmRHjRl
+	Hd6YgM1iykIIJqzp+Ka0Fi8OdKXGLvfqWw4gIrbvyXbIcdIY
+X-Google-Smtp-Source: AMsMyM4tIse+vTF2vTGYf88YS+ZbvTLfYLud4mHfj6888dXkC8/x211A1QvMeXbgJeV5vxTyx6A1rFozzZLDb7cJk/Pxi6ZdLL+I
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <16586.122100222503700294@us-mta-580.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a6b:e714:0:b0:6a1:35af:82dc with SMTP id
+ b20-20020a6be714000000b006a135af82dcmr7585539ioh.205.1664769211197; Sun, 02
+ Oct 2022 20:53:31 -0700 (PDT)
+Date: Sun, 02 Oct 2022 20:53:31 -0700
+In-Reply-To: <00000000000068e76205e2ec0e6b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000776f5005ea1949d8@google.com>
+Subject: Re: [syzbot] WARNING in match_held_lock
+From: syzbot <syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, boqun.feng@gmail.com, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, llvm@lists.linux.dev, 
+	longman@redhat.com, mingo@redhat.com, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, peterz@infradead.org, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+syzbot has found a reproducer for the following issue on:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+HEAD commit:    a962b54e162c Merge tag 'i2c-for-6.0-rc8' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11833a82880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=755695d26ad09807
+dashboard link: https://syzkaller.appspot.com/bug?extid=6c67d4224af196c99976
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b51e14880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b33c68880000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c0d6002d7b4b/disk-a962b54e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cf0a29408406/vmlinux-a962b54e.xz
 
-Kernel information:
-    Commit message: Linux 6.0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6c67d4224af196c99976@syzkaller.appspotmail.com
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/54967
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5344268
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5344282
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5344323
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5344328
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
-UT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1374
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: [aarch64] [ampere] sysfs: cannot create duplicate filename '=
-/devices/mc0'
-            URL: http://lists.infradead.org/pipermail/linux-arm-kernel/2022=
--June/750380.html
-            Affected tests:
-                 aarch64 - Boot test
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+ntfs3: loop3: Different NTFS' sector size (1024) and media sector size (512)
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(!hlock->nest_lock)
+WARNING: CPU: 0 PID: 5565 at kernel/locking/lockdep.c:5135 match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
+Modules linked in:
+CPU: 0 PID: 5565 Comm: syz-executor151 Not tainted 6.0.0-rc7-syzkaller-00250-ga962b54e162c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:match_held_lock+0xad/0xc0 kernel/locking/lockdep.c:5135
+Code: e8 b8 c4 7a fa 85 c0 74 e4 8b 05 26 e5 5e 04 85 c0 75 da 48 c7 c6 60 ac ec 89 48 c7 c7 e0 a8 ec 89 89 44 24 04 e8 45 e7 ba ff <0f> 0b 8b 44 24 04 eb bd 66 66 2e 0f 1f 84 00 00 00 00 00 41 57 41
+RSP: 0018:ffffc900058c79d8 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffff88807e390aa0 RCX: 0000000000000000
+RDX: ffff88807e390000 RSI: ffffffff8161f2a8 RDI: fffff52000b18f2d
+RBP: ffffffff8bf89640 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000002 R11: 0000000000000001 R12: ffff88807e390000
+R13: ffff88807e390a78 R14: 00000000ffffffff R15: ffff88807e390aa0
+FS:  0000555556d9c300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbbd6497056 CR3: 0000000016c2f000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ __lock_is_held kernel/locking/lockdep.c:5407 [inline]
+ lock_is_held_type+0xa7/0x140 kernel/locking/lockdep.c:5709
+ lock_is_held include/linux/lockdep.h:283 [inline]
+ rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
+ trace_lock_release include/trace/events/lock.h:69 [inline]
+ lock_release+0x560/0x780 kernel/locking/lockdep.c:5677
+ __raw_spin_unlock include/linux/spinlock_api_smp.h:141 [inline]
+ _raw_spin_unlock+0x12/0x40 kernel/locking/spinlock.c:186
+ spin_unlock include/linux/spinlock.h:389 [inline]
+ inode_sb_list_del fs/inode.c:505 [inline]
+ evict+0x2aa/0x6b0 fs/inode.c:654
+ iput_final fs/inode.c:1748 [inline]
+ iput.part.0+0x55d/0x810 fs/inode.c:1774
+ iput+0x58/0x70 fs/inode.c:1764
+ ntfs_fill_super+0x2e89/0x37f0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x440/0x760 fs/super.c:1323
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbbd6459e7a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 c8 03 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd6a35b568 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbbd6459e7a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd6a35b580
+RBP: 00007ffd6a35b580 R08: 00007ffd6a35b5c0 R09: 00007ffd6a35b5c0
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
+R13: 00007ffd6a35b5c0 R14: 000000000000010e R15: 0000000020001b50
+ </TASK>
 
