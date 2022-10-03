@@ -1,72 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F72A7C
-	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 16:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95CD2C433D7;
-	Mon,  3 Oct 2022 16:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725297C
+	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 16:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C863C433D7;
+	Mon,  3 Oct 2022 16:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664814015;
-	bh=dwtZ7BObBTPWiquhzCO1AxtAGeHx+444b7TsTQk1lo0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WEq7hCj9eCDltGUuKPub8wnP8pgjfUo6xszFUjO+XfFecxWRDAKWGpePfCebP6EnU
-	 YuG4JGe6NdpAJVdSIO+UFfL9y2Ox2R//0uEySigJOOwkUtklX9Ff3+3xpOI7rin2Mu
-	 7J0dfPsXCe8yxVYjUyVF3Jr3jkKHJ7Ppl2R5sCr6UjbFCqcZ9wAbtbg43N6vHhSYTk
-	 6i47wPZ5dcTGARMiH1yoJ6zmnHs51xNX6ZkKPMfA80xx6wd12C1yLGVRH4iqAXsvtS
-	 VEAJRPFj0OZ2ccEn3ElH7s2VZ+D50ZcgEyTDKdvfmtq5QIFJ4kPNGPQHeLhbGcFinX
-	 3GzFvtBrWPFGA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7485BE49FA3;
-	Mon,  3 Oct 2022 16:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1664814113;
+	bh=VTqxixtRfZ1cqoQoc7riPul/A+U8/gArsffJmC8qpto=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a3CTmKINIb0JgJDTUTT2zDLBirlmklF9ciLNeNaXcOgWEKU8tXE4nmexWQkW1SSSD
+	 Zk00wtwpggMkrnxbhhPiVOStWn++Qnm9yYSeZo6o+M9djPmEk4tILvJGSWtvl8Xnfx
+	 amktooN8CjXGlFqG/fBA5KFeC629SeOakNwF5sxmyyI4zwXsSSfqr6Hh4VY+anWhFB
+	 Zq3ayG9WpH4w/8Ql38zNgmAU9TPxlpqn6ODHNy/D4yu/mLM4TPHBZbbQJME/W4lOos
+	 vMdMIS+pfMt8mM3WQ/Cgj3wowQU3oc3RNMQdXFcYXE3vQd7aa1bjtVfhwl0QJ9Entk
+	 bg7rj/4jBC83g==
+Date: Mon, 3 Oct 2022 09:21:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [linux-next:master 7287/11993] s390x-linux-ld:
+ topology.c:undefined reference to `__tsan_memcpy'
+Message-ID: <YzsMHqG9LvMZXTz8@dev-arch.thelio-3990X>
+References: <202210010718.2kaVANGb-lkp@intel.com>
+ <YzeW3yqxvkpYKCxa@yury-laptop>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] Documentation: bpf: Add implementation notes
- documentations to table of contents
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <166481401546.8397.14038744797480125600.git-patchwork-notify@kernel.org>
-Date: Mon, 03 Oct 2022 16:20:15 +0000
-References: <20221002032022.24693-1-bagasdotme@gmail.com>
-In-Reply-To: <20221002032022.24693-1-bagasdotme@gmail.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: bpf@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- dthaler@microsoft.com, lkp@intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzeW3yqxvkpYKCxa@yury-laptop>
 
-Hello:
+Hi Yury,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sun,  2 Oct 2022 10:20:23 +0700 you wrote:
-> Sphinx reported warnings on missing implementation notes documentations in the
-> table of contents:
+On Fri, Sep 30, 2022 at 06:24:47PM -0700, Yury Norov wrote:
+> On Sat, Oct 01, 2022 at 07:12:48AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   274d7803837da78dfc911bcda0d593412676fc20
+> > commit: aa47a7c215e79a2ade6916f163c5a17b561bce4f [7287/11993] lib/cpumask: deprecate nr_cpumask_bits
+> > config: s390-randconfig-r023-20220926
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install s390 cross compiling tool for clang build
+> >         # apt-get install binutils-s390x-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=aa47a7c215e79a2ade6916f163c5a17b561bce4f
+> >         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> >         git fetch --no-tags linux-next master
+> >         git checkout aa47a7c215e79a2ade6916f163c5a17b561bce4f
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    s390x-linux-ld: ipl.c:(.text+0x1004): undefined reference to `__tsan_memcpy'
+> >    s390x-linux-ld: ipl.c:(.text+0x1046): undefined reference to `__tsan_memset'
+> >    s390x-linux-ld: arch/s390/kernel/ipl.o: in function `reipl_fcp_scpdata_write':
 > 
-> Documentation/bpf/clang-notes.rst: WARNING: document isn't included in any toctree
-> Documentation/bpf/linux-notes.rst: WARNING: document isn't included in any toctree
+> I can't reproduce the bug. In fact, the build is broken for me on
+> next-20220930. To make the s390 image somehow building, I commented
+> out some functions that aren't found by the LD.
+
+Sorry for the noise, this is not a kernel issue, it is a toolchain
+problem that will be fixed soon:
+
+https://github.com/ClangBuiltLinux/linux/issues/1704
+https://lore.kernel.org/20220912094541.929856-1-elver@google.com/
+
+I had asked the Intel folks to stop sending reports based on this build
+breakage a few times but it seems like their filter is not working
+still?
+
+https://lore.kernel.org/Yx3HnuEDyFG0+G62@dev-arch.thelio-3990X/
+https://lore.kernel.org/Yy3PxL973jtEtEUK@dev-arch.thelio-3990X/
+
+Cheers,
+Nathan
+
+> Thanks,
+> Yury
 > 
-> Add these documentations to the table of contents (index.rst) of BPF
-> documentation to fix the warnings.
+> diff --git a/drivers/irqchip/irq-al-fic.c b/drivers/irqchip/irq-al-fic.c
+> index 886de028a901..d696d78132a0 100644
+> --- a/drivers/irqchip/irq-al-fic.c
+> +++ b/drivers/irqchip/irq-al-fic.c
+> @@ -235,6 +235,7 @@ static struct al_fic *al_fic_wire_init(struct device_node *node,
+>         return ERR_PTR(ret);
+>  }
 > 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] Documentation: bpf: Add implementation notes documentations to table of contents
-    https://git.kernel.org/bpf/bpf-next/c/736baae643cb
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> +void __iomem *of_iomap(struct device_node *np, int index);
+>  static int __init al_fic_init_dt(struct device_node *node,
+>                                  struct device_node *parent)
+>  {
+> @@ -249,7 +250,7 @@ static int __init al_fic_init_dt(struct device_node *node,
+>                 return -EINVAL;
+>         }
+> 
+> -       base = of_iomap(node, 0);
+> +       base = NULL;//of_iomap(node, 0);
+>         if (!base) {
+>                 pr_err("%s: fail to map memory\n", node->name);
+>                 return -ENOMEM;
+> diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
+> index 7633b227b2ca..4e4c9d9743bf 100644
+> --- a/drivers/net/ethernet/altera/altera_tse_main.c
+> +++ b/drivers/net/ethernet/altera/altera_tse_main.c
+> @@ -1122,8 +1122,8 @@ static int request_and_map(struct platform_device *pdev, const char *name,
+>                 return -EBUSY;
+>         }
+> 
+> -       *ptr = devm_ioremap(device, region->start,
+> -                                   resource_size(region));
+> +       *ptr = NULL;//devm_ioremap(device, region->start,
+> +               //                  resource_size(region));
+>         if (*ptr == NULL) {
+>                 dev_err(device, "ioremap of %s failed!", name);
+>                 return -ENOMEM;
+> diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+> index 230c2d19116d..9f88be3c2b08 100644
+> --- a/fs/afs/dir.c
+> +++ b/fs/afs/dir.c
+> @@ -49,6 +49,7 @@ static bool afs_dir_dirty_folio(struct address_space *mapping,
+>                 struct folio *folio)
+>  {
+>         BUG(); /* This should never happen. */
+> +       return false;
+>  }
+> 
+>  const struct file_operations afs_dir_file_operations = {
+> 
