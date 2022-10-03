@@ -1,98 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F38257E;
-	Mon,  3 Oct 2022 19:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBCBC433C1;
-	Mon,  3 Oct 2022 19:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664825895;
-	bh=Z5uRFsHl6SPKbk0/WGTwqQLIH025+FbP7BaJo03laec=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Ahabk80hG2D2R9f3jEm/UZHLcrRNXrBBZXdf+xFbTH6bZjGb/MXoxQkRJUWJmyryI
-	 T0JWyTzP2ZAldRAEdGY+DmJ6LUPapLPOc5+fca2BY9Yzld1eI/4YtEX/AoGljmX+6I
-	 cMUvj9+GT++0vGpBXH+HEJDehY33Q3RGUalTld27L35hIbOxulRxdISRb/1yxJZ0JY
-	 JG3Hrmjj5ILE1/ivTOj73AUhmtx94MbAoJXfxegDX4l60eObWurL9Mb0jzX8EAEwQd
-	 6kiUEz3j5rG5kTZrqhZWr9xIK0ONbcbj8gRjMKYUpmdhnLtRJqUSEqOFlTJDjzX5XH
-	 bA7SET2mtPPYA==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH -next] arm64: alternatives: Use vdso/bits.h instead of linux/bits.h
-Date: Mon,  3 Oct 2022 12:37:59 -0700
-Message-Id: <20221003193759.1141709-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF73528E1
+	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 20:19:42 +0000 (UTC)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 293KJSwK002379
+	for <llvm@lists.linux.dev>; Tue, 4 Oct 2022 05:19:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 293KJSwK002379
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1664828370;
+	bh=en/eOlsz+VpPl2StotBX9dnQ8w056gBCRhQH40Az1YE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rNK4TK6mFMUpfOVnSbGdnEDqCJe21xvYHNN2jg0GbY0lSb0LpXoFOgcqmUKG5Ttbk
+	 nG7pXu++B6rmr7yEgBouLmfWFql2yL7o1V7LhDhu+GGQpvJk4Xe5ILOmPtG//2CsrP
+	 53WtomhLT1JZVd7caqxenPXbLeOhlgzI/7rchiJTpbWdMFL8oQfhbbOgSY+PVrbhye
+	 784GMAQdfq98gXN5G3hCjspsK1eY1W4XBPknYnwmtZ2xJmAcGTE70YnlbfTkkytLvB
+	 7x4HC6zWyc3TDx4MA1/cYXO2kbG6VdV1ERFN6oeaYCBgQmycUAiKrnZkh6ObVA9Rd6
+	 +7hHqhNhuhGpA==
+X-Nifty-SrcIP: [209.85.167.41]
+Received: by mail-lf1-f41.google.com with SMTP id z4so18219732lft.2
+        for <llvm@lists.linux.dev>; Mon, 03 Oct 2022 13:19:29 -0700 (PDT)
+X-Gm-Message-State: ACrzQf140J+g4dW/xRbH0WoyYoA6VAvGz5yKSodcG2KMK0c6mzx8CU1j
+	8AVj5zxmBcDGCtaUfSTbWfp8Q03wiH8BaA2lU9c=
+X-Google-Smtp-Source: AMsMyM4nlxjJWmlovLd9PysPPVMnO+LKufcwwqls+KOJ7WdH9CE5GkWTDYwUMVBbHusWmMyhRMoCR5P6dxS2NfoDjvk=
+X-Received: by 2002:a19:5f4b:0:b0:49f:a4b7:3f1c with SMTP id
+ a11-20020a195f4b000000b0049fa4b73f1cmr7465846lfj.333.1664828367529; Mon, 03
+ Oct 2022 13:19:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221002181107.51286-1-masahiroy@kernel.org> <20221002181107.51286-3-masahiroy@kernel.org>
+ <YzsXa0GCGT6A0szV@dev-arch.thelio-3990X>
+In-Reply-To: <YzsXa0GCGT6A0szV@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 4 Oct 2022 05:18:49 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASnp4DA9AADx4Nj9b_h6r5wfPFUaonfmOfaHaSizpyfgg@mail.gmail.com>
+Message-ID: <CAK7LNASnp4DA9AADx4Nj9b_h6r5wfPFUaonfmOfaHaSizpyfgg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Kconfig.debug: add toolchain checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-When building with CONFIG_LTO after commit ba00c2a04fa5 ("arm64: fix the
-build with binutils 2.27"), the following build error occurs:
+On Tue, Oct 4, 2022 at 2:10 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, Oct 03, 2022 at 03:11:06AM +0900, Masahiro Yamada wrote:
+> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT passes the -g option to the
+> > command line. The actual DWARF version is up to the toolchain.
+> >
+> > The combination of GCC and GAS works fine, and Clang with the integrated
+> > assembler is good too.
+> >
+> > The combination of Clang and GAS is a bit tricky, but at least, the
+> > default -g flag worked until LLVM 14 was released because Clang <=13
+> > defaults to DWARF v4.
+> >
+> > Clang 14 switched to DWARF v5 by default.
+> >
+> > Now, CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT has the same issue as
+> > addressed by commit 98cd6f521f10 ("Kconfig: allow explicit opt in to
+> > DWARF v5").
+> >
+> > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y for Clang >= 14 and
+> > GAS < 2.35 produces a ton of errors like follows:
+> >
+> >   /tmp/main-c2741c.s: Assembler messages:
+> >   /tmp/main-c2741c.s:109: Error: junk at end of line, first unrecognized character is `"'
+> >   /tmp/main-c2741c.s:109: Error: file number less than one
+> >
+> > Add 'depends on' to check toolchains.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  lib/Kconfig.debug | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index f4b2165f24db..cc90414d492e 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -253,6 +253,7 @@ config DEBUG_INFO_NONE
+> >  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> >       bool "Rely on the toolchain's implicit default DWARF version"
+> >       select DEBUG_INFO
+> > +     depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+> >       help
+> >         The implicit default version of DWARF debug info produced by a
+> >         toolchain changes over time.
+> > --
+> > 2.34.1
+> >
+> >
+>
+> Could we do something like this instead? Bikeshed the configuration
+> names as much as you want but we are duplicating most of this
+> conditional in a few different places so it would be good to consolidate
+> those in my opinion. Even though the DWARF4 and DWARF5 conditions are
+> the same, they might diverge so I think it makes sense to keep them
+> separate.
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index cc90414d492e..8e34a639cd40 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -231,6 +231,17 @@ config DEBUG_INFO
+>           in the "Debug information" choice below, indicating that debug
+>           information will be generated for build targets.
+>
+> +config CC_AND_AS_SUPPORT_DWARF4
+> +       def_bool !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> +
+> +config CC_AND_AS_SUPPORT_DWARF5
+> +       def_bool !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> +
+> +config CC_AND_AS_SUPPORT_DWARF_DEFAULT
+> +       bool
+> +       default y if CC_AND_AS_SUPPORT_DWARF5 && (CLANG_VERSION >= 140000 || GCC_VERSION >= 110000)
+> +       default y if CC_AND_AS_SUPPORT_DWARF4 && (CLANG_VERSION < 140000 || GCC_VERSION < 110000)
 
-  In file included from arch/arm64/kernel/module-plts.c:6:
-  In file included from include/linux/elf.h:6:
-  In file included from arch/arm64/include/asm/elf.h:8:
-  In file included from arch/arm64/include/asm/hwcap.h:9:
-  In file included from arch/arm64/include/asm/cpufeature.h:9:
-  In file included from arch/arm64/include/asm/alternative-macros.h:5:
-  In file included from include/linux/bits.h:22:
-  In file included from include/linux/build_bug.h:5:
-  In file included from include/linux/compiler.h:248:
-  In file included from arch/arm64/include/asm/rwonce.h:71:
-  include/asm-generic/rwonce.h:67:9: error: expected string literal in 'asm'
-          return __READ_ONCE(*(unsigned long *)addr);
-                ^
-  arch/arm64/include/asm/rwonce.h:43:16: note: expanded from macro '__READ_ONCE'
-                  asm volatile(__LOAD_RCPC(b, %w0, %1)                    \
-                              ^
-  arch/arm64/include/asm/rwonce.h:17:2: note: expanded from macro '__LOAD_RCPC'
-          ALTERNATIVE(                                                    \
-          ^
 
-Similar to the issue resolved by commit 0072dc1b53c3 ("arm64: avoid
-BUILD_BUG_ON() in alternative-macros"), there is a circular include
-dependency through <linux/bits.h> when CONFIG_LTO is enabled due to
-<asm/rwonce.h> appearing in the include chain before the contents of
-<asm/alternative-macros.h>, which results in ALTERNATIVE() not getting
-expanded properly because it has not been defined yet.
+No, this is an overkill.
 
-Avoid this issue by including <vdso/bits.h>, which includes the
-definition of the BIT() macro, instead of <linux/bits.h>, as BIT() is the
-only macro from bits.h that is relevant to this header.
 
-Fixes: ba00c2a04fa5 ("arm64: fix the build with binutils 2.27")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1728
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/arm64/include/asm/alternative-macros.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/alternative-macros.h b/arch/arm64/include/asm/alternative-macros.h
-index b5ac0b85c9bb..3622e9f4fb44 100644
---- a/arch/arm64/include/asm/alternative-macros.h
-+++ b/arch/arm64/include/asm/alternative-macros.h
-@@ -2,8 +2,8 @@
- #ifndef __ASM_ALTERNATIVE_MACROS_H
- #define __ASM_ALTERNATIVE_MACROS_H
- 
--#include <linux/bits.h>
- #include <linux/const.h>
-+#include <vdso/bits.h>
- 
- #include <asm/cpucaps.h>
- #include <asm/insn-def.h>
 
-base-commit: ba00c2a04fa5431d204a4183062b30372c062aa7
+In my patch, you can enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+for the combination of:
+    CC_IS_CLANG=y
+    CLANG_VERSION < 140000
+    AS_IS_GNU=y
+    AS_VERSION < 23502
+
+But, your code disallows it.
+
+You are requiring binutils 2.35.2 for Clang+GAS, but
+it is not necessary.
+
+
+
+
+
+
+
+>  choice
+>         prompt "Debug information"
+>         depends on DEBUG_KERNEL
+> @@ -253,7 +264,7 @@ config DEBUG_INFO_NONE
+>  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>         bool "Rely on the toolchain's implicit default DWARF version"
+>         select DEBUG_INFO
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+> +       depends on CC_AND_AS_SUPPORT_DWARF_DEFAULT
+>         help
+>           The implicit default version of DWARF debug info produced by a
+>           toolchain changes over time.
+> @@ -265,7 +276,7 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>  config DEBUG_INFO_DWARF4
+>         bool "Generate DWARF Version 4 debuginfo"
+>         select DEBUG_INFO
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> +       depends on CC_AND_AS_SUPPORT_DWARF4
+>         help
+>           Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
+>           if using clang without clang's integrated assembler, and gdb 7.0+.
+> @@ -277,7 +288,7 @@ config DEBUG_INFO_DWARF4
+>  config DEBUG_INFO_DWARF5
+>         bool "Generate DWARF Version 5 debuginfo"
+>         select DEBUG_INFO
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> +       depends on CC_AND_AS_SUPPORT_DWARF5
+>         help
+>           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+>           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+
+
+
 -- 
-2.37.3
-
+Best Regards
+Masahiro Yamada
