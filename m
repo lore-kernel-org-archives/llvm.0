@@ -1,32 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9518A18E
-	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 16:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55DAC433C1;
-	Mon,  3 Oct 2022 16:41:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1656917E9
+	for <llvm@lists.linux.dev>; Mon,  3 Oct 2022 17:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C41CC433D6;
+	Mon,  3 Oct 2022 17:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1664815281;
-	bh=ewRIHxFHQnpnU+77QvY0efvP5IYmrYF1YUCXFo+oQUw=;
+	s=k20201202; t=1664817005;
+	bh=jrqogJN868qyHKjau9Ij3FcAorXeaYlWGK7fPCmyOzw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ObCftzAOdYjUvr9qOMLruH34zB69a8teiZ4pyncy9G1zYaSLtr23c9a0KjJclRexZ
-	 F/8W27RkAL5CqSEVqsJRaid8iW7LVfzITG8cAsxFV0rs16ihk+Sj/Azj3Mnh3MJ0Ia
-	 tleI8op8c5grkm1q7k0wmPCPZsj4qOozn+9D0i3j0P0CYxBDffMKuS9dJEMqaBykXG
-	 Mtl+SiJmmPR963j7imay5w4JIPkrz/CEimvcOE8/kpNXJGe1S+9MxgTGN3QUKB6Ir+
-	 S4a5VhYH/XRu9S6ek+dW35L8OMg6q2mFukS1zOL5meswXWDPnBznvhvurD7NtvlB+g
-	 PfGHX3DF7Jg6A==
-Date: Mon, 3 Oct 2022 09:41:19 -0700
+	b=tRUOnk/O14dqEtGuH88iwm/y+qBbJD6alLUrOSPbQnajN0YWqLWN3yji8kYnXY0cy
+	 r1eQRcD4BwLLJ4Xl8i+w0wnlk6vFhrU/tBA7iv5NksgGv3rZbBJcPbNUgawCfzfeBv
+	 0iJ0OYjU+F+Y7dYtcAtj35NWkeKI43BsXaP4uvYej3z2KAOOQGlSkha95/hElXG00H
+	 PZ4ND6RbRaPhR9xBeZn3+nEJurAuU8OCgl8Nnj2CHc14UfBUrOJCtYCSKybFduKdgH
+	 j/ZltU+OQwj6dtyhLUQjPy5LD+a+832dGVzDFHsNIdDS4hH2Up3+Ma3QEkN7eb5Qxt
+	 d75j0gjeu7BNg==
+Date: Mon, 3 Oct 2022 10:10:03 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] hardening: Remove Clang's enable flag for
- -ftrivial-auto-var-init=zero
-Message-ID: <YzsQr/DqrNzJILkr@dev-arch.thelio-3990X>
-References: <20220930060624.2411883-1-keescook@chromium.org>
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] Kconfig.debug: add toolchain checks for
+ DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+Message-ID: <YzsXa0GCGT6A0szV@dev-arch.thelio-3990X>
+References: <20221002181107.51286-1-masahiroy@kernel.org>
+ <20221002181107.51286-3-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,93 +34,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220930060624.2411883-1-keescook@chromium.org>
+In-Reply-To: <20221002181107.51286-3-masahiroy@kernel.org>
 
-On Thu, Sep 29, 2022 at 11:06:24PM -0700, Kees Cook wrote:
-> Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
-> option is no longer required, remove it from the command line. Clang 16
-> and later will warn when it is used, which will cause Kconfig to think
-> it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
-> is required and only use it when so.
+On Mon, Oct 03, 2022 at 03:11:06AM +0900, Masahiro Yamada wrote:
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT passes the -g option to the
+> command line. The actual DWARF version is up to the toolchain.
 > 
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Cc: stable@vger.kernel.org
-> Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Thanks for sending this change!
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Please consider getting this to Linus ASAP so that this can start
-filtering into stable now that the LLVM change has landed, as I lost the
-ability to use CONFIG_INIT_STACK_ALL_ZERO after upgrading my toolchain
-over the weekend :)
-
-Additionally, I am not sure the fixes tag is going to ensure that this
-change automatically makes it back to 5.15 and 5.10, which have
-commit f0fe00d4972a ("security: allow using Clang's zero initialization
-for stack variables") but not commit f02003c860d9 ("hardening: Avoid
-harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO"). I guess if I
-am reading the stable documentation right, we could do something like:
-
-Cc: stable@vger.kernel.org # dcb7c0b9461c + f02003c860d9
-Fixes: f0fe00d4972a ("security: allow using Clang's zero initialization for stack variables")
-
-but I am not sure. I guess we can always just send manual backports
-once it is merged.
-
+> The combination of GCC and GAS works fine, and Clang with the integrated
+> assembler is good too.
+> 
+> The combination of Clang and GAS is a bit tricky, but at least, the
+> default -g flag worked until LLVM 14 was released because Clang <=13
+> defaults to DWARF v4.
+> 
+> Clang 14 switched to DWARF v5 by default.
+> 
+> Now, CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT has the same issue as
+> addressed by commit 98cd6f521f10 ("Kconfig: allow explicit opt in to
+> DWARF v5").
+> 
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y for Clang >= 14 and
+> GAS < 2.35 produces a ton of errors like follows:
+> 
+>   /tmp/main-c2741c.s: Assembler messages:
+>   /tmp/main-c2741c.s:109: Error: junk at end of line, first unrecognized character is `"'
+>   /tmp/main-c2741c.s:109: Error: file number less than one
+> 
+> Add 'depends on' to check toolchains.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  Makefile                   |  4 ++--
->  security/Kconfig.hardening | 14 ++++++++++----
->  2 files changed, 12 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index c7705f749601..02c857e2243c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -831,8 +831,8 @@ endif
->  # Initialize all stack variables with a zero value.
->  ifdef CONFIG_INIT_STACK_ALL_ZERO
->  KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
-> -ifdef CONFIG_CC_IS_CLANG
-> -# https://bugs.llvm.org/show_bug.cgi?id=45497
-> +ifdef CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-> +# https://github.com/llvm/llvm-project/issues/44842
->  KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
->  endif
->  endif
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index bd2aabb2c60f..995bc42003e6 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -22,11 +22,17 @@ menu "Memory initialization"
->  config CC_HAS_AUTO_VAR_INIT_PATTERN
->  	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
->  
-> -config CC_HAS_AUTO_VAR_INIT_ZERO
-> -	# GCC ignores the -enable flag, so we can test for the feature with
-> -	# a single invocation using the flag, but drop it as appropriate in
-> -	# the Makefile, depending on the presence of Clang.
-> +config CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-> +	def_bool $(cc-option,-ftrivial-auto-var-init=zero)
-> +
-> +config CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-> +	# Clang 16 and later warn about using the -enable flag, but it
-> +	# is required before then.
->  	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
-> +	depends on !CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-> +
-> +config CC_HAS_AUTO_VAR_INIT_ZERO
-> +	def_bool CC_HAS_AUTO_VAR_INIT_ZERO_BARE || CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
->  
->  choice
->  	prompt "Initialize kernel stack variables at function entry"
+>  lib/Kconfig.debug | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index f4b2165f24db..cc90414d492e 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -253,6 +253,7 @@ config DEBUG_INFO_NONE
+>  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>  	bool "Rely on the toolchain's implicit default DWARF version"
+>  	select DEBUG_INFO
+> +	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+>  	help
+>  	  The implicit default version of DWARF debug info produced by a
+>  	  toolchain changes over time.
 > -- 
 > 2.34.1
 > 
+> 
+
+Could we do something like this instead? Bikeshed the configuration
+names as much as you want but we are duplicating most of this
+conditional in a few different places so it would be good to consolidate
+those in my opinion. Even though the DWARF4 and DWARF5 conditions are
+the same, they might diverge so I think it makes sense to keep them
+separate.
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index cc90414d492e..8e34a639cd40 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -231,6 +231,17 @@ config DEBUG_INFO
+ 	  in the "Debug information" choice below, indicating that debug
+ 	  information will be generated for build targets.
+ 
++config CC_AND_AS_SUPPORT_DWARF4
++	def_bool !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
++
++config CC_AND_AS_SUPPORT_DWARF5
++	def_bool !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
++
++config CC_AND_AS_SUPPORT_DWARF_DEFAULT
++	bool
++	default y if CC_AND_AS_SUPPORT_DWARF5 && (CLANG_VERSION >= 140000 || GCC_VERSION >= 110000)
++	default y if CC_AND_AS_SUPPORT_DWARF4 && (CLANG_VERSION < 140000 || GCC_VERSION < 110000)
++
+ choice
+ 	prompt "Debug information"
+ 	depends on DEBUG_KERNEL
+@@ -253,7 +264,7 @@ config DEBUG_INFO_NONE
+ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ 	bool "Rely on the toolchain's implicit default DWARF version"
+ 	select DEBUG_INFO
+-	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
++	depends on CC_AND_AS_SUPPORT_DWARF_DEFAULT
+ 	help
+ 	  The implicit default version of DWARF debug info produced by a
+ 	  toolchain changes over time.
+@@ -265,7 +276,7 @@ config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ config DEBUG_INFO_DWARF4
+ 	bool "Generate DWARF Version 4 debuginfo"
+ 	select DEBUG_INFO
+-	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
++	depends on CC_AND_AS_SUPPORT_DWARF4
+ 	help
+ 	  Generate DWARF v4 debug info. This requires gcc 4.5+, binutils 2.35.2
+ 	  if using clang without clang's integrated assembler, and gdb 7.0+.
+@@ -277,7 +288,7 @@ config DEBUG_INFO_DWARF4
+ config DEBUG_INFO_DWARF5
+ 	bool "Generate DWARF Version 5 debuginfo"
+ 	select DEBUG_INFO
+-	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
++	depends on CC_AND_AS_SUPPORT_DWARF5
+ 	help
+ 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+ 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
