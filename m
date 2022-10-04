@@ -1,63 +1,61 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5173020F7
-	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 06:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D13A20F7
+	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 07:21:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664866231; x=1696402231;
+  t=1664868091; x=1696404091;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FUUqcpuwjE0vpY8+jzf//k/RZLkgvEmJQCGMQeNZMr8=;
-  b=LGvVab/21qW9EAChd8xWR1FDa7XFpgWxWESNvi/tiErotc4wowTpYHMY
-   lYLdONNT6zVSBYMqXIEEHJKGvH+2IHvZ/cS3pMsZxa0kv4/7TAxrKk5Vj
-   mPRo+jjE6VC2eHGaA/5pEVjpLVVyiiDSSg+FiL26uIFDYPtHTyZkubi2s
-   Y/vJS5l5NZWvE/R+o8gHlczNDbx6hnILh/Ja31N8DXXQyG7JqsrCuazhf
-   3kmb0sx5MlzKZpeU4aMrfl5YArpawomypIkzxKobVjRe7A+BXCHIMS/Xd
-   gRTa6XmFIwLUSDemk75zqURa/x2vbribe3PmsW8ri2BTAQpRChEgMd6aN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="389132921"
+  bh=g+9tf2KjU2DeU26gKOPNjSces+D8qTcQXtuHKZ5ySTI=;
+  b=VM+eVbUNnEpPYLe0J3vwe/WcwEH/0Pem0DTI6yFCMoEQEYCcAkgzDP4s
+   sF4IJxaAlDfmzFf1LszIh8sds/1OPaiM1saZNXtJgQNgs/xoXVe+fEsDO
+   kSBglO8xxDwoiK5REXc7klHbZMRqLkhnZkpZNT8Of7h4doUVTzomWwTL/
+   40zxk4e3sBWEIu6sDi308g/Qt6aRExLxIwXUy7tfdSy2C++oRFgpLPY4s
+   bMjpsRoX1waM9D4e0Zl5WknONgtkh3ekaulQmvVhXCZyHpsFJ+2zedzya
+   FIQj1l28DxkEvi6N8+DKkxRGdk1fQ3ovAar8jn/CPTLdg3wjinDKpOB+z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="286037531"
 X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="389132921"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 23:50:30 -0700
+   d="scan'208";a="286037531"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2022 00:21:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="619008051"
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="657036323"
 X-IronPort-AV: E=Sophos;i="5.93,367,1654585200"; 
-   d="scan'208";a="619008051"
+   d="scan'208";a="657036323"
 Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 03 Oct 2022 23:50:27 -0700
+  by orsmga001.jf.intel.com with ESMTP; 04 Oct 2022 00:21:28 -0700
 Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ofbl4-0005PR-2s;
-	Tue, 04 Oct 2022 06:50:26 +0000
-Date: Tue, 4 Oct 2022 14:49:51 +0800
+	id 1ofcF5-0005Qj-26;
+	Tue, 04 Oct 2022 07:21:27 +0000
+Date: Tue, 4 Oct 2022 15:20:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
-	devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [driver-core:kobject-const 15/18]
- drivers/firmware/arm_ffa/bus.c:97:13: error: incompatible function pointer
- types initializing 'int (*)(const struct device *, struct kobj_uevent_env
- *)' with an expression of type 'int (struct device *, struct kobj_uevent_env
- *)'
-Message-ID: <202210041439.GQQfaK8J-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 11836/11993] ld.lld: error: assignment to symbol
+ __efistub_kernel_size does not converge
+Message-ID: <202210041553.k9dc1Joc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ouLIERU7nV3VxTxU"
+Content-Type: multipart/mixed; boundary="fYxWJElWf/hE9y26"
 Content-Disposition: inline
 
 
---ouLIERU7nV3VxTxU
+--fYxWJElWf/hE9y26
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git kobject-const
-head:   9f03f357aab62f25e828feb0be7423fff02b2764
-commit: 794bcdced821ac77ed4a517b6038baae03d553ea [15/18] driver core: make struct bus_type.uevent() take a const *
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   274d7803837da78dfc911bcda0d593412676fc20
+commit: 07b0f07b6ee0f8ef93de91b65c61c8381e738818 [11836/11993] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git
 config: arm64-buildonly-randconfig-r002-20221003
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
@@ -65,10 +63,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=794bcdced821ac77ed4a517b6038baae03d553ea
-        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-        git fetch --no-tags driver-core kobject-const
-        git checkout 794bcdced821ac77ed4a517b6038baae03d553ea
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=07b0f07b6ee0f8ef93de91b65c61c8381e738818
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 07b0f07b6ee0f8ef93de91b65c61c8381e738818
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
@@ -78,43 +76,19 @@ If you fix the issue, kindly add following tag where applicable
 
 All errors (new ones prefixed by >>):
 
->> drivers/firmware/arm_ffa/bus.c:97:13: error: incompatible function pointer types initializing 'int (*)(const struct device *, struct kobj_uevent_env *)' with an expression of type 'int (struct device *, struct kobj_uevent_env *)' [-Wincompatible-function-pointer-types]
-           .uevent         = ffa_device_uevent,
-                             ^~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +97 drivers/firmware/arm_ffa/bus.c
-
-e781858488b918 Sudeep Holla 2021-05-21   91  
-e781858488b918 Sudeep Holla 2021-05-21   92  struct bus_type ffa_bus_type = {
-e781858488b918 Sudeep Holla 2021-05-21   93  	.name		= "arm_ffa",
-e781858488b918 Sudeep Holla 2021-05-21   94  	.match		= ffa_device_match,
-e781858488b918 Sudeep Holla 2021-05-21   95  	.probe		= ffa_device_probe,
-244f5d597e1ea5 Sudeep Holla 2021-09-24   96  	.remove		= ffa_device_remove,
-e781858488b918 Sudeep Holla 2021-05-21  @97  	.uevent		= ffa_device_uevent,
-e781858488b918 Sudeep Holla 2021-05-21   98  	.dev_groups	= ffa_device_attributes_groups,
-e781858488b918 Sudeep Holla 2021-05-21   99  };
-e781858488b918 Sudeep Holla 2021-05-21  100  EXPORT_SYMBOL_GPL(ffa_bus_type);
-e781858488b918 Sudeep Holla 2021-05-21  101  
-
-:::::: The code at line 97 was first introduced by commit
-:::::: e781858488b918e30a6ff28e9eab6058b787e3b3 firmware: arm_ffa: Add initial FFA bus support for device enumeration
-
-:::::: TO: Sudeep Holla <sudeep.holla@arm.com>
-:::::: CC: Sudeep Holla <sudeep.holla@arm.com>
+>> ld.lld: error: assignment to symbol __efistub_kernel_size does not converge
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---ouLIERU7nV3VxTxU
+--fYxWJElWf/hE9y26
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 6.0.0-rc6 Kernel Configuration
+# Linux/arm64 6.0.0-rc7 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 791a7ae1ba3efd6bca96338e10ffde557ba83920)"
 CONFIG_GCC_VERSION=0
@@ -381,30 +355,24 @@ CONFIG_ARCH_ACTIONS=y
 CONFIG_ARCH_SUNXI=y
 CONFIG_ARCH_ALPINE=y
 # CONFIG_ARCH_APPLE is not set
-CONFIG_ARCH_BCM2835=y
-# CONFIG_ARCH_BCM4908 is not set
-CONFIG_ARCH_BCM_IPROC=y
-CONFIG_ARCH_BCMBCA=y
+# CONFIG_ARCH_BCM is not set
 CONFIG_ARCH_BERLIN=y
 # CONFIG_ARCH_BITMAIN is not set
-# CONFIG_ARCH_BRCMSTB is not set
 # CONFIG_ARCH_EXYNOS is not set
 CONFIG_ARCH_SPARX5=y
 # CONFIG_ARCH_K3 is not set
-# CONFIG_ARCH_LAYERSCAPE is not set
 # CONFIG_ARCH_LG1K is not set
 CONFIG_ARCH_HISI=y
 CONFIG_ARCH_KEEMBAY=y
 CONFIG_ARCH_MEDIATEK=y
 CONFIG_ARCH_MESON=y
 CONFIG_ARCH_MVEBU=y
-# CONFIG_ARCH_MXC is not set
+# CONFIG_ARCH_NXP is not set
 CONFIG_ARCH_NPCM=y
 # CONFIG_ARCH_QCOM is not set
 CONFIG_ARCH_REALTEK=y
 # CONFIG_ARCH_RENESAS is not set
 CONFIG_ARCH_ROCKCHIP=y
-CONFIG_ARCH_S32=y
 CONFIG_ARCH_SEATTLE=y
 CONFIG_ARCH_INTEL_SOCFPGA=y
 CONFIG_ARCH_SYNQUACER=y
@@ -449,6 +417,7 @@ CONFIG_ARM64_ERRATUM_1463225=y
 CONFIG_ARM64_ERRATUM_1508412=y
 # CONFIG_ARM64_ERRATUM_2051678 is not set
 # CONFIG_ARM64_ERRATUM_2077057 is not set
+CONFIG_ARM64_ERRATUM_2658417=y
 CONFIG_ARM64_WORKAROUND_TSB_FLUSH_FAILURE=y
 CONFIG_ARM64_ERRATUM_2054223=y
 # CONFIG_ARM64_ERRATUM_2067961 is not set
@@ -516,6 +485,7 @@ CONFIG_ARM64_TAGGED_ADDR_ABI=y
 CONFIG_COMPAT=y
 # CONFIG_KUSER_HELPERS is not set
 # CONFIG_COMPAT_VDSO is not set
+# CONFIG_COMPAT_ALIGNMENT_FIXUPS is not set
 
 #
 # ARMv8.1 architectural features
@@ -731,9 +701,12 @@ CONFIG_HAVE_MOVE_PUD=y
 CONFIG_HAVE_MOVE_PMD=y
 CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
 CONFIG_HAVE_ARCH_HUGE_VMAP=y
+CONFIG_HAVE_ARCH_HUGE_VMALLOC=y
 CONFIG_ARCH_WANT_HUGE_PMD_SHARE=y
 CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
 CONFIG_MODULES_USE_ELF_RELA=y
+CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK=y
+CONFIG_SOFTIRQ_ON_OWN_STACK=y
 CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
 CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
 CONFIG_ARCH_MMAP_RND_BITS=16
@@ -1008,11 +981,8 @@ CONFIG_PCI=y
 CONFIG_PCI_DOMAINS=y
 CONFIG_PCI_DOMAINS_GENERIC=y
 CONFIG_PCI_SYSCALL=y
-CONFIG_PCIEPORTBUS=y
-CONFIG_HOTPLUG_PCI_PCIE=y
-# CONFIG_PCIEAER is not set
+# CONFIG_PCIEPORTBUS is not set
 # CONFIG_PCIEASPM is not set
-CONFIG_PCIE_PME=y
 CONFIG_PCIE_PTM=y
 CONFIG_PCI_MSI=y
 CONFIG_PCI_MSI_IRQ_DOMAIN=y
@@ -1036,9 +1006,7 @@ CONFIG_PCIE_BUS_SAFE=y
 # CONFIG_PCIE_BUS_PEER2PEER is not set
 CONFIG_VGA_ARB=y
 CONFIG_VGA_ARB_MAX_GPUS=16
-CONFIG_HOTPLUG_PCI=y
-# CONFIG_HOTPLUG_PCI_CPCI is not set
-# CONFIG_HOTPLUG_PCI_SHPC is not set
+# CONFIG_HOTPLUG_PCI is not set
 
 #
 # PCI controller drivers
@@ -1055,9 +1023,6 @@ CONFIG_PCIE_XILINX_CPM=y
 # CONFIG_PCI_XGENE is not set
 CONFIG_PCI_V3_SEMI=y
 CONFIG_PCI_VERSATILE=y
-CONFIG_PCIE_IPROC=m
-CONFIG_PCIE_IPROC_PLATFORM=m
-CONFIG_PCIE_IPROC_MSI=y
 # CONFIG_PCIE_ALTERA is not set
 CONFIG_PCI_HOST_THUNDER_PEM=y
 # CONFIG_PCI_HOST_THUNDER_ECAM is not set
@@ -2614,8 +2579,7 @@ CONFIG_GPIO_IDT3243X=y
 #
 # I2C GPIO expanders
 #
-CONFIG_GPIO_ADP5588=y
-CONFIG_GPIO_ADP5588_IRQ=y
+# CONFIG_GPIO_ADP5588 is not set
 CONFIG_GPIO_ADNP=m
 CONFIG_GPIO_GW_PLD=y
 CONFIG_GPIO_MAX7300=m
@@ -5661,7 +5625,6 @@ CONFIG_PL320_MBOX=y
 CONFIG_ARMADA_37XX_RWTM_MBOX=m
 # CONFIG_ROCKCHIP_MBOX is not set
 # CONFIG_ALTERA_MBOX is not set
-# CONFIG_BCM2835_MBOX is not set
 # CONFIG_HI3660_MBOX is not set
 # CONFIG_HI6220_MBOX is not set
 CONFIG_MAILBOX_TEST=m
@@ -5777,6 +5740,7 @@ CONFIG_DPAA2_CONSOLE=y
 #
 # CONFIG_IMX_GPCV2_PM_DOMAINS is not set
 CONFIG_SOC_IMX8M=y
+# CONFIG_SOC_IMX9 is not set
 # end of i.MX SoC drivers
 
 #
@@ -6532,7 +6496,6 @@ CONFIG_ARM_GIC_V3_ITS_PCI=y
 CONFIG_ARM_GIC_V3_ITS_FSL_MC=y
 CONFIG_ALPINE_MSI=y
 CONFIG_AL_FIC=y
-CONFIG_BRCMSTB_L2_IRQ=m
 CONFIG_DW_APB_ICTL=y
 CONFIG_HISILICON_IRQ_MBIGEN=y
 CONFIG_MADERA_IRQ=y
@@ -7365,7 +7328,6 @@ CONFIG_CRYPTO_DEV_ROCKCHIP=m
 CONFIG_CRYPTO_DEV_ZYNQMP_AES=m
 # CONFIG_CRYPTO_DEV_ZYNQMP_SHA3 is not set
 CONFIG_CRYPTO_DEV_VIRTIO=m
-CONFIG_CRYPTO_DEV_BCM_SPU=m
 # CONFIG_CRYPTO_DEV_SAFEXCEL is not set
 CONFIG_CRYPTO_DEV_CCREE=y
 # CONFIG_CRYPTO_DEV_HISI_SEC is not set
@@ -7454,6 +7416,7 @@ CONFIG_LZO_COMPRESS=y
 CONFIG_LZO_DECOMPRESS=y
 CONFIG_LZ4_COMPRESS=m
 CONFIG_LZ4_DECOMPRESS=m
+CONFIG_ZSTD_COMMON=m
 CONFIG_ZSTD_COMPRESS=m
 CONFIG_ZSTD_DECOMPRESS=m
 CONFIG_XZ_DEC=m
@@ -7866,4 +7829,4 @@ CONFIG_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---ouLIERU7nV3VxTxU--
+--fYxWJElWf/hE9y26--
