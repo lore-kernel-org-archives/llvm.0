@@ -1,35 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D6D20F7
-	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 07:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F89720F7
+	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 07:40:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664868643;
+	s=mimecast20190719; t=1664869247;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=c0VYDptWVFZNFRd/U7CYZYt32VYJK3VE8zEiz+v6/uc=;
-	b=GogHHtRNbQrHzpZLBNJqFZb7hzu2ita+l+La5q+axXn7vDijmsgV0JWvXKeu4LdtkhRcb+
-	yfvWk4ZHlQ51lMCviGTjcNoGBkFnO3PT1e9PpI45wyGDqi8QoaypYD8Cm74J569gfpxnj+
-	DJlRdqykgIAf+2w5Xz1V8j3aRE8GKBs=
+	bh=bvjs6fA1Jdw3hY1h53KMU52PwkgY71A7a8UYxZTSHaY=;
+	b=RR2E71V/CARLLguiHbScTg0kQE/FnoLFC3piU/HDuiFvqzOxQIvdlCwo8EdFjH2F7T3LS5
+	d840wG5/brDbGdnn9sHBEqtt8ZJWyiZpZc9o/rv2eSW5EmQhXjHbSzNek3eBE10n2O5R39
+	JuIMESY/SZ37PRkPQZ7kB9nnl9T8hbQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-6sJCuH-kNU2yujBzwIRMZA-1; Tue, 04 Oct 2022 03:30:42 -0400
-X-MC-Unique: 6sJCuH-kNU2yujBzwIRMZA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-484-5vmFkk6yO9uXJ4HYNvJGYA-1; Tue, 04 Oct 2022 03:40:45 -0400
+X-MC-Unique: 5vmFkk6yO9uXJ4HYNvJGYA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B49D487B2A1
-	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 07:30:41 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB237811E81
+	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 07:40:45 +0000 (UTC)
 Received: from [172.64.11.47] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9D77C492CA2;
-	Tue,  4 Oct 2022 07:30:41 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 96A75492B04;
+	Tue,  4 Oct 2022 07:40:45 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
- mainline.kernel.org-clang, 26b84401)
-Date: Tue, 04 Oct 2022 07:30:40 -0000
+ mainline.kernel.org-clang, d0989d01)
+Date: Tue, 04 Oct 2022 07:40:41 -0000
 CC: bgoncalv@redhat.com, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,8 +37,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <49114.122100403304200333@us-mta-187.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <82573.122100403404500213@us-mta-484.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,95 +53,84 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'lsm-pr-20221003' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/pcmoore/lsm
+    Commit message: Merge tag 'hardening-v6.1-rc1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/kees/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/55148
+    https://datawarehouse.cki-project.org/kcidb/checkouts/55146
 
 One or more kernel tests failed:
 
     Unrecognized or new issues:
          aarch64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367208
+5365971
          aarch64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367223
+5365986
          aarch64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367228
+5365991
          aarch64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367278
+5366041
          aarch64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367283
+5366046
          aarch64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367288
+5366051
          aarch64 - xfstests - ext4
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367289
+5366052
          aarch64 - xfstests - xfs
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367290
+5366053
            s390x - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367080
+5365810
            s390x - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367089
+5365819
            s390x - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367094
+5365824
            s390x - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367135
+5365865
            s390x - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367141
+5365871
           x86_64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5366985
+5365876
           x86_64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367001
+5365892
           x86_64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367006
+5365897
           x86_64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367060
+5365951
           x86_64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367066
+5365957
           x86_64 - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367071
+5365962
           x86_64 - xfstests - xfs
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367073
+5365964
           x86_64 - xfstests - cifsv3.11
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367075
+5365966
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5366978
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367146
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5367199
+5365644
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
         Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
 al_clmulni]
             URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
@@ -162,7 +151,6 @@ apability permissive=3D0
                  aarch64 - Networking cki netfilter test
                  aarch64 - ALSA PCM loopback test
                  aarch64 - Storage - SCSI VPD
-                   s390x - Networking cki netfilter test
                   x86_64 - Networking cki netfilter test
                   x86_64 - ALSA PCM loopback test
                   x86_64 - Storage - SCSI VPD
@@ -172,6 +160,17 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
