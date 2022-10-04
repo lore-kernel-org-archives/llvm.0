@@ -1,165 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E061210D
-	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 09:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1664874644;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=y5VVf7YtVQxoJaKhpb/VRGKDkl5b2yWRZx/xHYU4iSU=;
-	b=eAVhNNIYFRNwx4oLbElY03oJSu5R9pX0nFR7WyE2r1l1cen5p1M7O2RirCPGBdWhu8tJXK
-	B1IFeOOlcAnXHU9BjlMCr0G2QxDjtgOOZjrbqZ/CRn84MTaAbD//xt4zVbIDfafADR1u+g
-	KqaV3GwEdF+uJdalO/zy/eynNo2gmsk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-124-uBPG4LPmNs2h5Ey9XVu-uw-1; Tue, 04 Oct 2022 05:10:43 -0400
-X-MC-Unique: uBPG4LPmNs2h5Ey9XVu-uw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA34A1C09C82
-	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 09:10:42 +0000 (UTC)
-Received: from [172.64.11.47] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D5B0E1121314;
-	Tue,  4 Oct 2022 09:10:42 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
- mainline.kernel.org-clang, 725737e7)
-Date: Tue, 04 Oct 2022 09:10:42 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB93181;
+	Tue,  4 Oct 2022 12:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D55CC433C1;
+	Tue,  4 Oct 2022 12:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664886613;
+	bh=rx2frixyc5Te5j8Sw/gyPUpvVto2dBti0m4sZqVyRa0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T9uw1HzlHYYWLLleKlcwX5JPZtqTEgda9vZNsYb/h2gM9lmDnatfcAdCBBa0q+297
+	 wSnjbQk66fbku2ZmQq6fNsXz4miL8/sFyHZQVjK4rwI2IDBrd+APdHA/v94+kqXTLL
+	 L6h1QATiGCO1SWUEczp0kWoRi1XhnVh5v9jDHT6lWxf02OWI669P/p/NXya8THD962
+	 w0yOwACLZZ7ek+DX4IpGJ+UIoB5AZ9f6MBS2jFbVgdMRXHqdGKqGQwwqa0vPTxAr5b
+	 FqQ9Dy0HSDFtOgXebX2BA+KLoKR/+t2XBFwDfbMzHEMaGkwWs4XUEZyKAEsrdwjEbu
+	 Di0Wz9eVfT+9A==
+Date: Tue, 4 Oct 2022 13:30:08 +0100
+From: Will Deacon <will@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH -next] arm64: alternatives: Use vdso/bits.h instead of
+ linux/bits.h
+Message-ID: <20221004123008.GA23822@willie-the-truck>
+References: <20221003193759.1141709-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <30189.122100405104300441@us-mta-124.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003193759.1141709-1-nathan@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi, we tested your kernel and here are the results:
+On Mon, Oct 03, 2022 at 12:37:59PM -0700, Nathan Chancellor wrote:
+> When building with CONFIG_LTO after commit ba00c2a04fa5 ("arm64: fix the
+> build with binutils 2.27"), the following build error occurs:
+> 
+>   In file included from arch/arm64/kernel/module-plts.c:6:
+>   In file included from include/linux/elf.h:6:
+>   In file included from arch/arm64/include/asm/elf.h:8:
+>   In file included from arch/arm64/include/asm/hwcap.h:9:
+>   In file included from arch/arm64/include/asm/cpufeature.h:9:
+>   In file included from arch/arm64/include/asm/alternative-macros.h:5:
+>   In file included from include/linux/bits.h:22:
+>   In file included from include/linux/build_bug.h:5:
+>   In file included from include/linux/compiler.h:248:
+>   In file included from arch/arm64/include/asm/rwonce.h:71:
+>   include/asm-generic/rwonce.h:67:9: error: expected string literal in 'asm'
+>           return __READ_ONCE(*(unsigned long *)addr);
+>                 ^
+>   arch/arm64/include/asm/rwonce.h:43:16: note: expanded from macro '__READ_ONCE'
+>                   asm volatile(__LOAD_RCPC(b, %w0, %1)                    \
+>                               ^
+>   arch/arm64/include/asm/rwonce.h:17:2: note: expanded from macro '__LOAD_RCPC'
+>           ALTERNATIVE(                                                    \
+>           ^
+> 
+> Similar to the issue resolved by commit 0072dc1b53c3 ("arm64: avoid
+> BUILD_BUG_ON() in alternative-macros"), there is a circular include
+> dependency through <linux/bits.h> when CONFIG_LTO is enabled due to
+> <asm/rwonce.h> appearing in the include chain before the contents of
+> <asm/alternative-macros.h>, which results in ALTERNATIVE() not getting
+> expanded properly because it has not been defined yet.
+> 
+> Avoid this issue by including <vdso/bits.h>, which includes the
+> definition of the BIT() macro, instead of <linux/bits.h>, as BIT() is the
+> only macro from bits.h that is relevant to this header.
+> 
+> Fixes: ba00c2a04fa5 ("arm64: fix the build with binutils 2.27")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1728
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/arm64/include/asm/alternative-macros.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/include/asm/alternative-macros.h b/arch/arm64/include/asm/alternative-macros.h
+> index b5ac0b85c9bb..3622e9f4fb44 100644
+> --- a/arch/arm64/include/asm/alternative-macros.h
+> +++ b/arch/arm64/include/asm/alternative-macros.h
+> @@ -2,8 +2,8 @@
+>  #ifndef __ASM_ALTERNATIVE_MACROS_H
+>  #define __ASM_ALTERNATIVE_MACROS_H
+>  
+> -#include <linux/bits.h>
+>  #include <linux/const.h>
+> +#include <vdso/bits.h>
+>  
+>  #include <asm/cpucaps.h>
+>  #include <asm/insn-def.h>
+> 
+> base-commit: ba00c2a04fa5431d204a4183062b30372c062aa7
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+The 'vdso' namespace is a bit of a misnomer, but that's not your fault and I
+can confirm that this fixes the build on for-next/core with defconfig + thin
+LTO, so:
 
+Tested-by: Will Deacon <will@kernel.org>
 
-Kernel information:
-    Commit message: Merge tag 'statx-dioalign-for-linus' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/ebiggers/linux
+Thanks!
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/55156
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5368038
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: [upstream] memcpy: detected field-spanning write (size 32) o=
-f single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
-            URL: https://lore.kernel.org/all/000000000000a793cc05ea313b87@g=
-oogle.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - Boot test
-                  x86_64 - Boot test
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 - xfstests - cifsv3.11
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Will
