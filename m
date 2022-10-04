@@ -1,110 +1,149 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F3B4683
-	for <llvm@lists.linux.dev>; Tue,  4 Oct 2022 23:25:06 +0000 (UTC)
-Received: by mail-pf1-f174.google.com with SMTP id i6so14440955pfb.2
-        for <llvm@lists.linux.dev>; Tue, 04 Oct 2022 16:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=1SR11w2k/B9xoBwpvZGf3uCZd3F3Lb/iGIIfd8Lx/nc=;
-        b=cQ90SQaqi7G3Q0Kg9JLLaPEkuEVVB7d/HE1wF6HCDhI5xV1dsQACBjgMJH26APw3B4
-         biHWUcJgPBRnRXdP8SBBRPYxj1IlBF3jHP+qFMuT2kifoFqm2t40xKpStqdWPuSypIDI
-         H2IkuXT8EyjrjBseuyEv/3ubHVp0MDv/ton9thz3Pxi9bExJ/k8xKTJb1uyNf5lZmyDr
-         vSm0ApF+HIUsi3yneyA9GVmmKyV8522GOcUoJ6XrsjV1+XeBZURyJ9Lea5ug6OsIu5NG
-         0lY8XbYuiEk+y8yGXSP6sqwbneenX4qGsN5CBHjLvbaMcPurrr+jLmbs1xf/iOSOTzLQ
-         ziMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1SR11w2k/B9xoBwpvZGf3uCZd3F3Lb/iGIIfd8Lx/nc=;
-        b=Dsfs1luf+tLgCW0H90qtehqPjwp1swZibjb1e0aUqDL/K+7kYM7HrETNK6yZ55gcFM
-         fspB5i8gtDrSecZiG67FD9Bzg86NIeO5hIqpBThXuKJ8O9pnjUgFVdxEsVixvCQ+dG09
-         BUQVo2fYWCu6jBXWNJRoYcJKfruhnhslkEoBNyAKxxhURzp/bYclqkl4BZsD4jMuhmUS
-         q9QB7YIXR5Y3j7dPogjCsZr4XfDXSBivIvcuVQlt75ldVoyam2UgqfFfm5gG7ZsCABbQ
-         rLEDsDN3qF9A1Bz/oAtgLNBMp2iefPeFR75SuwJMYUgm0l7tFH9XoRt1sgCOGwLkyXlL
-         gwPQ==
-X-Gm-Message-State: ACrzQf2Qub95dfLOrgnijDpk5EPpBgm84LBuJWi8yMDOwSH4EAoEvb2i
-	HBdhdzWaixW/yII4BoGsGrsJhn2LgI08lokYFx7K7Q==
-X-Google-Smtp-Source: AMsMyM7YnEIWRIzeEdUNip8/tmKH5SfQZ4z1O+o04zFE2uJfPwDL1ty7x5Uyfuy8alWhEGanEeMpcgssbhEpYK2NXKw=
-X-Received: by 2002:a63:2cd2:0:b0:41c:5901:67d8 with SMTP id
- s201-20020a632cd2000000b0041c590167d8mr25033288pgs.365.1664925906003; Tue, 04
- Oct 2022 16:25:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5E84683;
+	Tue,  4 Oct 2022 23:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FA2EC433D6;
+	Tue,  4 Oct 2022 23:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664925972;
+	bh=hg5t47yAStpJb95gYWxc3f1CRgOEIT4RkUFnxKN6WNQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uM7FOR41lUjVTQLYowd2dzmS5mPYqsJVz6/XGBli3WjJT+fNQQmJSAOa/TvozpcBp
+	 RwwpHb2WKSIgyfnoCTsNhV7QNE6iLN1MIhcvckrzByCWfhedpYdolXoCr4aA9A5mbQ
+	 FppFMByjZE00QhMzKtfvzwAgFYUYaOze5xHXpYNo4ATySt2B0VswrPsDvUBdOPWYsk
+	 VGOb17Ae9c4m9+tZ3RD5psSECYR0n4rZF5a28tXWzgNkpsruxLZd9/CLNm8MPv4X6b
+	 RKE+i+1byKNNbpU12FaUxW7A+xUOluEe8gdbZne/zMQuCieFesRtp+w0yHs7hqtX0u
+	 /CIf9NheBMM9g==
+Date: Tue, 4 Oct 2022 16:26:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	Tom Rix <trix@redhat.com>, ntfs3@lists.linux.dev,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] fs/ntfs3: Don't use uni1 uninitialized in
+ ntfs_d_compare()
+Message-ID: <YzzBEoDiseHUG0P1@dev-arch.thelio-3990X>
+References: <20221004144145.1345772-1-nathan@kernel.org>
+ <CAKwvOdm=ZHjoF+j+ivj17t3OMpTA-5Dx71+g3KRSHO=L6RRpEA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202210050509.cZtMcazl-lkp@intel.com> <Yzy/VbCd0e+K3ptN@iweiny-mobl>
-In-Reply-To: <Yzy/VbCd0e+K3ptN@iweiny-mobl>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 4 Oct 2022 16:24:54 -0700
-Message-ID: <CAKwvOdkWLE2ONDbHpSgAbFSwMZUN=KF0yeLjncS2TVVh=Wrk+A@mail.gmail.com>
-Subject: Re: [linux-next:master 5475/12409] s390x-linux-ld:
- kernel/kexec_core.c:822: undefined reference to `__tsan_memcpy'
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: kernel test robot <lkp@intel.com>, "Fabio M. De Francesco" <fmdefrancesco@gmail.com>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, Linux Memory Management List <linux-mm@kvack.org>, 
-	Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdm=ZHjoF+j+ivj17t3OMpTA-5Dx71+g3KRSHO=L6RRpEA@mail.gmail.com>
 
-Sorry for the noise, please see:
-https://lore.kernel.org/all/Yx3HnuEDyFG0+G62@dev-arch.thelio-3990X/
-EOM
+On Tue, Oct 04, 2022 at 03:56:45PM -0700, Nick Desaulniers wrote:
+> On Tue, Oct 4, 2022 at 7:42 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Clang warns:
+> >
+> >   fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+> >                   if (toupper(c1) != toupper(c2)) {
+> >                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   ./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
+> >   #define toupper(c) __toupper(c)
+> >                     ^
+> >   fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+> >           __putname(uni1);
+> >                     ^~~~
+> >   ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+> >   #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+> >                                                                         ^~~~
+> >   fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
+> >                   if (toupper(c1) != toupper(c2)) {
+> >                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+> >                   if (!lm--) {
+> >                       ^~~~~
+> >   fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+> >           __putname(uni1);
+> >                     ^~~~
+> >   ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+> >   #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+> >                                                                         ^~~~
+> >   fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
+> >                   if (!lm--) {
+> >                   ^~~~~~~~~~~~
+> >   fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
+> >           struct cpu_str *uni1, *uni2;
+> >                               ^
+> >                               = NULL
+> >   2 errors generated.
+> >
+> > There is no point in calling __putname() in these particular error
+> > paths, as there has been no corresponding __getname() call yet. Just
+> > return directly in these blocks to clear up the warning.
+> >
+> > Fixes: a3a956c78efa ("fs/ntfs3: Add option "nocase"")
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1729
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  fs/ntfs3/namei.c | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+> > index 315763eb05ff..5d3a6ce3f05f 100644
+> > --- a/fs/ntfs3/namei.c
+> > +++ b/fs/ntfs3/namei.c
+> > @@ -431,10 +431,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+> >
+> >         /* First try fast implementation. */
+> >         for (;;) {
+> > -               if (!lm--) {
+> > -                       ret = len1 == len2 ? 0 : 1;
+> > -                       goto out;
+> > -               }
+> > +               if (!lm--)
+> > +                       return len1 == len2 ? 0 : 1;
+> 
+> I know the code originally used this, but I can't help but look at
+> this and think that it should be:
+> 
+> return len1 != len2;
+> 
+> Do you mind cleaning it up while you're here?
+> 
+> Otherwise LGTM;
+> 
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> You may retain my RB tag whether you send that suggestion in a v2 or not.
 
-On Tue, Oct 4, 2022 at 4:18 PM Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Wed, Oct 05, 2022 at 05:05:12AM +0800, kernel test robot wrote:
-> > Hi Fabio,
-> >
-> > FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
->
-> I don't think this is relevant.
->
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   4d80748d16c82a9c2c4ea5feea96e476de3cd876
-> > commit: 948084f0f6959f602f89f679522b706a72da0285 [5475/12409] kexec: replace kmap() with kmap_local_page()
-> > config: s390-randconfig-r035-20221003
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install s390 cross compiling tool for clang build
-> >         # apt-get install binutils-s390x-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=948084f0f6959f602f89f679522b706a72da0285
-> >         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> >         git fetch --no-tags linux-next master
-> >         git checkout 948084f0f6959f602f89f679522b706a72da0285
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > Note: the linux-next/master HEAD 4d80748d16c82a9c2c4ea5feea96e476de3cd876 builds fine.
-> >       It may have been fixed somewhere.
-> >
-> > All errors (new ones prefixed by >>):
-> >
->
-> [snip]
->
-> >    s390x-linux-ld: kernel/kexec_core.o: in function `kimage_load_normal_segment':
-> >    kernel/kexec_core.c:814: undefined reference to `__tsan_memset'
-> > >> s390x-linux-ld: kernel/kexec_core.c:822: undefined reference to `__tsan_memcpy'
-> >    s390x-linux-ld: kernel/kexec_core.o: in function `_copy_from_user':
->
-> I don't see __tsan_memcpy anywhere in the current linux-next tree?
->
-> Ira
->
+I sent a v2 but I kept the changes separate:
 
+https://lore.kernel.org/20221004232359.285685-1-nathan@kernel.org/
+https://lore.kernel.org/20221004232359.285685-2-nathan@kernel.org/
 
--- 
-Thanks,
-~Nick Desaulniers
+Thanks for taking a look!
+
+> >
+> >                 if ((c1 = *n1++) == (c2 = *n2++))
+> >                         continue;
+> > @@ -442,10 +440,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+> >                 if (c1 >= 0x80 || c2 >= 0x80)
+> >                         break;
+> >
+> > -               if (toupper(c1) != toupper(c2)) {
+> > -                       ret = 1;
+> > -                       goto out;
+> > -               }
+> > +               if (toupper(c1) != toupper(c2))
+> > +                       return 1;
+> >         }
+> >
+> >         /*
+> >
+> > base-commit: d45da67caedacd500879de5e649360cc70777af7
+> > --
+> > 2.37.3
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
