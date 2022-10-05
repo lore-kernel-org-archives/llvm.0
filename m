@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFEA136B
-	for <llvm@lists.linux.dev>; Wed,  5 Oct 2022 11:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203A4C433C1;
-	Wed,  5 Oct 2022 11:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7A3136B
+	for <llvm@lists.linux.dev>; Wed,  5 Oct 2022 11:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD643C433C1;
+	Wed,  5 Oct 2022 11:29:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1664969303;
-	bh=dy66xs+a3ayMX21PW1XoyLMYdrriBdWn6J0CWuEeJZw=;
+	s=korg; t=1664969354;
+	bh=GD/8VNoRB31Cv36aOUsSyXcKbYwAnyUco5nuh/udgvo=;
 	h=Subject:To:Cc:From:Date:From;
-	b=GH/CeGEFHKXQ//NXg7Jb7E4shXgi+u/ibAnsYirgv5g+YlalI5ik8cE1AHVueWBJP
-	 Hg6o9kU0hPymK4P/tyVzOvkAhTEGg9b4uSBPntD90yxzIuAD2WKWzKsV777fJ+Ok0K
-	 i9nqi5gB08LmoMp+3howBUKKpIxQgKJKGXyVuVZk=
-Subject: Patch "hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero" has been added to the 6.0-stable tree
+	b=LqGNedCQ0i1plinK2Mq9euihVKC3oweCy6mddQXAVDLUx4O1PCfPC6Z4Z3x+rKAC9
+	 5xd4W9m7OPDVJZ9kwrFi8rHID+H7cqxQZPS+8+uTlyAtiDEvVVO6qu2up2O+XfRu8V
+	 k9pI0bwmJqZIqT5TkxTEGH9B8BfP0TwHBEKw0Fy8=
+Subject: Patch "hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero" has been added to the 5.19-stable tree
 To: gregkh@linuxfoundation.org,keescook@chromium.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,ndesaulniers@google.com
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Wed, 05 Oct 2022 13:28:13 +0200
-Message-ID: <1664969293252163@kroah.com>
+Date: Wed, 05 Oct 2022 13:29:03 +0200
+Message-ID: <166496934312883@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,12 +34,12 @@ This is a note to let you know that I've just added the patch titled
 
     hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero
 
-to the 6.0-stable tree which can be found at:
+to the 5.19-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      hardening-remove-clang-s-enable-flag-for-ftrivial-auto-var-init-zero.patch
-and it can be found in the queue-6.0 subdirectory.
+and it can be found in the queue-5.19 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
@@ -76,7 +76,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/Makefile
 +++ b/Makefile
-@@ -831,8 +831,8 @@ endif
+@@ -830,8 +830,8 @@ endif
  # Initialize all stack variables with a zero value.
  ifdef CONFIG_INIT_STACK_ALL_ZERO
  KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
@@ -115,6 +115,6 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Patches currently in stable-queue which might be from keescook@chromium.org are
 
-queue-6.0/sparc-unbreak-the-build.patch
-queue-6.0/makefile.extrawarn-move-wcast-function-type-strict-to-w-1.patch
-queue-6.0/hardening-remove-clang-s-enable-flag-for-ftrivial-auto-var-init-zero.patch
+queue-5.19/sparc-unbreak-the-build.patch
+queue-5.19/makefile.extrawarn-move-wcast-function-type-strict-to-w-1.patch
+queue-5.19/hardening-remove-clang-s-enable-flag-for-ftrivial-auto-var-init-zero.patch
