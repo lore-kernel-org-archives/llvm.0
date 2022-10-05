@@ -1,104 +1,120 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9AF136B;
-	Wed,  5 Oct 2022 11:19:45 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id u10so25351472wrq.2;
-        Wed, 05 Oct 2022 04:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOH0N862OH/9tiivSt3Zwjt1qR1oUocM3XEbjZOA5Xs=;
-        b=p7hISEZxTLVrPFiIi0B0dRX9xAJv7UNvnE9chppraPoeFcDGnYgmBx7MsPASMikx7G
-         wbA5/N24Zr1SDnUFS219VtWjVVzWI8ci9lLmJCa1uE+xWm7Ij8o23Uk+sVKMH0HOwhyq
-         46wws/br7R6VdhUZST8gkDX94W8FD8Qaa0rk6paqpjPxiZB07oLDxHSMPMLAbs2cSUFX
-         xnwBOniashRY//mCbHOF1K4jdWMy5nBtpIP34SevKDdZs6cw9HgxroWtTSZh7SIDZt3M
-         GPgGr/fzo/bAdEeaVUXgAiCHCF7D2+4EP5K63Y/RDoC8YBfh3b5XZ5Nu2iDNFgICw3sr
-         ny2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOH0N862OH/9tiivSt3Zwjt1qR1oUocM3XEbjZOA5Xs=;
-        b=vF/OTVKA8xL8JQ+Uj9tEhBJWeG7a40v/OMotkM2CzoIuXB/2inDURN5hJ9Ikw4cqwc
-         t640/ydGOiZTKK8gmzJyv8TOly50KL4jBfGOo/NfFt4FA7D5tR4mVeVN/cW1RchLWEZJ
-         aeRrXFMdpI8jDQg0pnfwWJB+TMq849p24fJ5LplOZ65gv4DtZDpksPf2lI9lRUT0HqKc
-         JnTN4ilQvTri41fy+1cw/Bk9Z2JxLJISLZBZK7R27TwO4m/xcR+FDTKQCIrkE77nRerZ
-         Fjh6twyfKArPBa6idkKgCahaM95gIL5RhRNdY1Cc37ZswtL0gwjKXeckFd4iGf1FxvGg
-         m9lg==
-X-Gm-Message-State: ACrzQf0O4R0buqyJfMWRCRTF4RaIWZGpCVCKkuF0X/XR1A2komna2OL5
-	wyykzopZHKUgeWcMIDub42U=
-X-Google-Smtp-Source: AMsMyM7MATMXyZeCGO0qZBzgn4wRxM30AAQNmiEGIHECsD8SmyDHKW1kRFhFnMcsDjUGC6TUcmdX6w==
-X-Received: by 2002:adf:fdcf:0:b0:22e:3ef3:1d28 with SMTP id i15-20020adffdcf000000b0022e3ef31d28mr8765657wrs.331.1664968784078;
-        Wed, 05 Oct 2022 04:19:44 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05600c19d300b003bf6da9d2cesm1138180wmq.28.2022.10.05.04.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 04:19:43 -0700 (PDT)
-Date: Wed, 5 Oct 2022 12:19:42 +0100
-From: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, ntfs3@lists.linux.dev,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-next@vger.kernel.org
-Subject: build failure of next-20221005 due to a3a956c78efa ("fs/ntfs3: Add
- option "nocase"")
-Message-ID: <Yz1oTvzDpCkOE+fr@debian>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFEA136B
+	for <llvm@lists.linux.dev>; Wed,  5 Oct 2022 11:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203A4C433C1;
+	Wed,  5 Oct 2022 11:28:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1664969303;
+	bh=dy66xs+a3ayMX21PW1XoyLMYdrriBdWn6J0CWuEeJZw=;
+	h=Subject:To:Cc:From:Date:From;
+	b=GH/CeGEFHKXQ//NXg7Jb7E4shXgi+u/ibAnsYirgv5g+YlalI5ik8cE1AHVueWBJP
+	 Hg6o9kU0hPymK4P/tyVzOvkAhTEGg9b4uSBPntD90yxzIuAD2WKWzKsV777fJ+Ok0K
+	 i9nqi5gB08LmoMp+3howBUKKpIxQgKJKGXyVuVZk=
+Subject: Patch "hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero" has been added to the 6.0-stable tree
+To: gregkh@linuxfoundation.org,keescook@chromium.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,ndesaulniers@google.com
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Wed, 05 Oct 2022 13:28:13 +0200
+Message-ID: <1664969293252163@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi All,
-
-The builds of x86_84 allmodconfig with clang have failed to build
-next-20221005 with the error:
-
-fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-                if (toupper(c1) != toupper(c2)) {
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
-#define toupper(c) __toupper(c)
-                   ^
-fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
-        __putname(uni1);
-                  ^~~~
-./include/linux/fs.h:2803:65: note: expanded from macro '__putname'
-#define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
-                                                                       ^~~~
-fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
-                if (toupper(c1) != toupper(c2)) {
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-                if (!lm--) {
-                    ^~~~~
-fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
-        __putname(uni1);
-                  ^~~~
-./include/linux/fs.h:2803:65: note: expanded from macro '__putname'
-#define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
-                                                                       ^~~~
-fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
-                if (!lm--) {
-                ^~~~~~~~~~~~
-fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
-        struct cpu_str *uni1, *uni2;
-                            ^
-                             = NULL
-2 errors generated.
-
-git bisect pointed to a3a956c78efa ("fs/ntfs3: Add option "nocase"").
-
-I will be happy to test any patch or provide any extra log if needed.
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore 
 
 
--- 
-Regards
-Sudip
+This is a note to let you know that I've just added the patch titled
+
+    hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero
+
+to the 6.0-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+
+The filename of the patch is:
+     hardening-remove-clang-s-enable-flag-for-ftrivial-auto-var-init-zero.patch
+and it can be found in the queue-6.0 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From 607e57c6c62c00965ae276902c166834ce73014a Mon Sep 17 00:00:00 2001
+From: Kees Cook <keescook@chromium.org>
+Date: Thu, 29 Sep 2022 22:57:43 -0700
+Subject: hardening: Remove Clang's enable flag for -ftrivial-auto-var-init=zero
+
+From: Kees Cook <keescook@chromium.org>
+
+commit 607e57c6c62c00965ae276902c166834ce73014a upstream.
+
+Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+option is no longer required, remove it from the command line. Clang 16
+and later will warn when it is used, which will cause Kconfig to think
+it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
+is required and only use it when so.
+
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Cc: stable@vger.kernel.org
+Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ Makefile                   |    4 ++--
+ security/Kconfig.hardening |   14 ++++++++++----
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+--- a/Makefile
++++ b/Makefile
+@@ -831,8 +831,8 @@ endif
+ # Initialize all stack variables with a zero value.
+ ifdef CONFIG_INIT_STACK_ALL_ZERO
+ KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
+-ifdef CONFIG_CC_IS_CLANG
+-# https://bugs.llvm.org/show_bug.cgi?id=45497
++ifdef CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
++# https://github.com/llvm/llvm-project/issues/44842
+ KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+ endif
+ endif
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -22,11 +22,17 @@ menu "Memory initialization"
+ config CC_HAS_AUTO_VAR_INIT_PATTERN
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
+ 
+-config CC_HAS_AUTO_VAR_INIT_ZERO
+-	# GCC ignores the -enable flag, so we can test for the feature with
+-	# a single invocation using the flag, but drop it as appropriate in
+-	# the Makefile, depending on the presence of Clang.
++config CC_HAS_AUTO_VAR_INIT_ZERO_BARE
++	def_bool $(cc-option,-ftrivial-auto-var-init=zero)
++
++config CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
++	# Clang 16 and later warn about using the -enable flag, but it
++	# is required before then.
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
++	depends on !CC_HAS_AUTO_VAR_INIT_ZERO_BARE
++
++config CC_HAS_AUTO_VAR_INIT_ZERO
++	def_bool CC_HAS_AUTO_VAR_INIT_ZERO_BARE || CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
+ 
+ choice
+ 	prompt "Initialize kernel stack variables at function entry"
+
+
+Patches currently in stable-queue which might be from keescook@chromium.org are
+
+queue-6.0/sparc-unbreak-the-build.patch
+queue-6.0/makefile.extrawarn-move-wcast-function-type-strict-to-w-1.patch
+queue-6.0/hardening-remove-clang-s-enable-flag-for-ftrivial-auto-var-init-zero.patch
