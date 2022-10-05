@@ -1,110 +1,85 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5ED339E
-	for <llvm@lists.linux.dev>; Wed,  5 Oct 2022 07:05:35 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id v4-20020a5ec204000000b006a32e713217so10543360iop.15
-        for <llvm@lists.linux.dev>; Wed, 05 Oct 2022 00:05:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=c6S/9q5ksui85qM6iwFvwIQlmoGAhi/sn5XBEr1wsRw=;
-        b=DMkzEpUmhc3VcXlY+q1zhoRWrsFouwhm0YnKIwgoNzYWWHpVOIIUDlhJ8hjFn7Q1Jd
-         kj6xvCh1PKkZOo3NPrwWOJzCkQccNrqQFKa3qMrPHlDmBGNOh/N3D/Fnp2S/IoxFueLk
-         tMGNKvz+pNWlqJW05+sHwfWYRZ0OrMp/tIvxEf2ZPKWoFuc5zWNhDJTOIwt1gTXTnNvj
-         gCSkWoohlLX5/JpIzUPhxiSSHXGm3IOQN3w4fk1c/oFOozK8s1FojvMv2gDQ1Sd2NZnA
-         CTHkUmxXI0eKhchKYxHaXcVnR0SncQIVpStGDpiQgtEtjsV6shordepFO3QKAe8DEDdv
-         8KHA==
-X-Gm-Message-State: ACrzQf0NPu2rSPHrsiX+Y7+KbRNyLCe5AaxQ1oG6hne4kjwaeDg7t2Sy
-	WwKn44PrZyqBAVEKcuvSvFc99NgFOCm0nJmbtdQGHSQqAy6i
-X-Google-Smtp-Source: AMsMyM6pwUgiQq/JGG90QLfghqt7RZ+LW4fBvuzv87ab3VHbnnw9qwdfzXdTupeDLeyaHG4TcKK0HtxOuKozmjLRPDy1p2V5nfS3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8EF626
+	for <llvm@lists.linux.dev>; Wed,  5 Oct 2022 07:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14AAC433C1;
+	Wed,  5 Oct 2022 07:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1664956270;
+	bh=aE9etRiOEVxYZXgsGYS0VimxiIbgJuJ/6jugX8sMxWU=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=DqV1X5GB+NH9fM/qMl7lhz2eeHtCoZETQS9jk092yvCkqxgMeVfIg/2EdYx+4ZHvJ
+	 lpbZZbs8LiR1VkWbqWSimeWK1tvqJdaEx8TMUoAC/DKJ17CQWjw5SWPWGR0JbpwRKp
+	 sP1UwPsvInN+I1cC9SfdfJW+Vp9vSqEzUQoXuLB3WyST/s+eiDnqxM6VftliIDX8Nl
+	 sGNFS47PiCFW4AicE8/GBti8Mk4m7o182b+0HIzqBTmEcj9VwuMYtbAMq8u4AihFJp
+	 k6esy8BbH+2bpSIeLeQM19pyOPGQYicfWZJRUyp2DgtNyPKFBSBQIVGZZx2H3R6bm8
+	 CXoSAcHGu+hUA==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:19c9:b0:2f9:bcab:7b7c with SMTP id
- r9-20020a056e0219c900b002f9bcab7b7cmr6735513ill.251.1664953534880; Wed, 05
- Oct 2022 00:05:34 -0700 (PDT)
-Date: Wed, 05 Oct 2022 00:05:34 -0700
-In-Reply-To: <00000000000067a9d105ea0b6304@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000003a4b505ea4434cb@google.com>
-Subject: Re: [syzbot] WARNING in ntfs_fill_super
-From: syzbot <syzbot+33f3faaa0c08744f7d40@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, kari.argillander@gmail.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	penguin-kernel@I-love.SAKURA.ne.jp, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: atmel: Avoid clashing function prototypes
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221002032428.4091540-1-keescook@chromium.org>
+References: <20221002032428.4091540-1-keescook@chromium.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Simon Kelley <simon@thekelleys.org.uk>, Kees Cook <keescook@chromium.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166495626187.5945.10399695218838618829.kvalo@kernel.org>
+Date: Wed,  5 Oct 2022 07:51:06 +0000 (UTC)
 
-syzbot has found a reproducer for the following issue on:
+Kees Cook <keescook@chromium.org> wrote:
 
-HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1079eb04880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d323d85b1f8a4ed7
-dashboard link: https://syzkaller.appspot.com/bug?extid=33f3faaa0c08744f7d40
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=106b6db8880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13004fea880000
+> When built with Control Flow Integrity, function prototypes between
+> caller and function declaration must match. These mismatches are visible
+> at compile time with the new -Wcast-function-type-strict in Clang[1].
+> 
+> Of the 1549 warnings found, 188 come from the atmel driver. For example:
+> 
+> drivers/net/wireless/atmel/atmel.c:2518:2: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, void *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+>         (iw_handler) atmel_config_commit,       /* SIOCSIWCOMMIT */
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The atmel Wireless Extension handler callbacks (iw_handler) use a union
+> for the data argument. Actually use the union and perform explicit
+> member selection in the function body instead of having a function
+> prototype mismatch. There are no resulting binary differences.
+> 
+> This patch is a cleanup based on Brad Spengler/PaX Team's modifications
+> to the atmel driver in their last public patch of grsecurity/PaX based
+> on my understanding of the code. Changes or omissions from the original
+> code are mine and don't reflect the original grsecurity/PaX code.
+> 
+> [1] https://reviews.llvm.org/D134831
+> 
+> Cc: Simon Kelley <simon@thekelleys.org.uk>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c40d70ae7512/disk-0326074f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3603ce065271/vmlinux-0326074f.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/760fceba2d95/mount_0.gz
+Patch applied to wireless-next.git, thanks.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+33f3faaa0c08744f7d40@syzkaller.appspotmail.com
+8af9d4068e86 wifi: atmel: Avoid clashing function prototypes
 
-loop0: detected capacity change from 0 to 4096
-ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3608 at mm/page_alloc.c:5525 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-Modules linked in:
-CPU: 0 PID: 3608 Comm: syz-executor137 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-Code: 5c 24 04 0f 85 f3 00 00 00 44 89 e1 81 e1 7f ff ff ff a9 00 00 04 00 41 0f 44 cc 41 89 cc e9 e3 00 00 00 c6 05 7e 7d 2a 0c 01 <0f> 0b 83 fb 0a 0f 86 c8 fd ff ff 31 db 48 c7 44 24 20 0e 36 e0 45
-RSP: 0018:ffffc90003c5f8e0 EFLAGS: 00010246
-RAX: ffffc90003c5f940 RBX: 000000000000000c RCX: 0000000000000000
-RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003c5f968
-RBP: ffffc90003c5f9f0 R08: dffffc0000000000 R09: ffffc90003c5f940
-R10: fffff5200078bf2d R11: 1ffff9200078bf28 R12: 0000000000040c40
-R13: 1ffff9200078bf24 R14: dffffc0000000000 R15: 1ffff9200078bf20
-FS:  00005555562f1300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd6b4b4000 CR3: 000000007376f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kmalloc_order+0x41/0x140 mm/slab_common.c:933
- kmalloc_order_trace+0x15/0x70 mm/slab_common.c:949
- kmalloc_large include/linux/slab.h:529 [inline]
- __kmalloc+0x26e/0x370 mm/slub.c:4418
- kmalloc include/linux/slab.h:605 [inline]
- ntfs_fill_super+0x351b/0x42a0 fs/ntfs3/super.c:1144
- get_tree_bdev+0x400/0x620 fs/super.c:1323
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4211ce22aa
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd6b4b3898 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f4211ce22aa
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd6b4b38b0
-RBP: 00007ffd6b4b38b0 R08: 00007ffd6b4b38f0 R09: 00005555562f12c0
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
-R13: 00007ffd6b4b38f0 R14: 000000000000010d R15: 0000000020001b38
- </TASK>
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20221002032428.4091540-1-keescook@chromium.org/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
