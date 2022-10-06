@@ -1,125 +1,95 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB3A7EA
-	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 20:33:55 +0000 (UTC)
-Received: by mail-qk1-f173.google.com with SMTP id y1so1786826qky.12
-        for <llvm@lists.linux.dev>; Thu, 06 Oct 2022 13:33:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B11F7EA
+	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 20:35:16 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id l1so2705641pld.13
+        for <llvm@lists.linux.dev>; Thu, 06 Oct 2022 13:35:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JNBmgmbcEhRVb5/d/O8+b1/IfZcuQKrWWyPpGBHLay8=;
-        b=MHw3HdNkCpG1mwSCYrQqnL3L0IrPDqqPAD3ilpwGP90TMXi8pu0W5GlmDVedbtpfcK
-         1w/GL1Y3H0SkuA5usd7Xg9wGO/0L+otmqFDHSUU3qLcE7SAaNZSBS2aSpBCIdToIkrU1
-         wsJYWhugTQqfCjT+f4uwj0ZeetXJg90ORA+jnI03lh2xZA1UfMa+L5PycWsmNttuFRcc
-         AN8FUU5HBr+uWxxbyoW+MevYuOPjs8FDFj0QyzQJVL7mi/tY5nJPHPiI4PS2y+lK+7sC
-         zRUjczx4xMFaeTJxt37R4yeEkUUdFkybK+kaseljntR90ohTDbsNdQaH9jw5Ouv/w17y
-         b0Vg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=YrAC23faud15zS6eHd6bC3i2jrrjB6ysFBkxCYV0DUg=;
+        b=VnvmXZkP0hhSETFJ7/rWObNvgVlwQNsO9Q6Wr+CY5AhJLWqAxw5ymAu+d5E1rrq4qi
+         xtkMwQ6YDrHzIZayo7ZRhSzrDOrrFPnJhOXk4o7evz5s7x30Hn8I9naaZ0i069dQB/ph
+         cnMQ55FQ011gtIYFCTqyzmJZqzabfBru2us/cJbxwS7Jb7TSyZcJOK7aqO0uOmoTQAcH
+         GYFiGgWnKQU+ZbebJkkLcDLzUIDh8oQka9cmqiqC2XG21Fq/3L0j06kv3/yXoiZzN3Dc
+         NqeD9ebVrKYIEEnneSVmz+ISDsgVMRU1uRoqaUUyEVUz6KnTZG9lz9xnlm/sH0mgGJ4X
+         k7xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNBmgmbcEhRVb5/d/O8+b1/IfZcuQKrWWyPpGBHLay8=;
-        b=PNPrIVJFmF0S6buGbj9FatE/baD1dH0NqCUuDxsZW6FqqrmSrS1ZXKDW6wx6tV/Cvw
-         J/XPhR6xKRp67SmucdtKAT+FALpxELckWTCFzO4/0Oa/QEhz4hK5g6JH18siFZk53wCb
-         cVc0rb/PjZ2378MWnIbBypq5frLa0qge8GTMnOL093Z6iC7C8k1iDGdKJ5PoNF67u2ou
-         KEbUrte+CKDKnv0wsklfK4XkAgq7PKANX3zcURF/ONGGOghIKoJFc+22Uz8Le11HELTn
-         T+cRd8YMlC76HSGYyDOrO5VQ2kim3vWL2fH7gwrFK/opo7fxxTGZycdoyOHT6fRp4tBI
-         v7tA==
-X-Gm-Message-State: ACrzQf1oLUcOPMgbNEgn4RbHSI6qa3/wxp3xIMGxCb/yabiDwnQx2wTq
-	15B7Dao4xCSBXTMSSKigSoI=
-X-Google-Smtp-Source: AMsMyM6F4qYJwxq1tyY5ek8LBaSHy8ukK0aWx027FmAkx7naPxDDIEYwmkM+GNM1x9oufwbvzWcIAQ==
-X-Received: by 2002:ae9:e647:0:b0:6e6:62aa:b8d with SMTP id x7-20020ae9e647000000b006e662aa0b8dmr1536252qkl.669.1665088434395;
-        Thu, 06 Oct 2022 13:33:54 -0700 (PDT)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id j24-20020ac84418000000b0034456277e3asm411191qtn.89.2022.10.06.13.33.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 13:33:53 -0700 (PDT)
-Message-ID: <ed9b8268-0128-0486-04a3-54f343afd38b@gmail.com>
-Date: Thu, 6 Oct 2022 13:33:50 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=YrAC23faud15zS6eHd6bC3i2jrrjB6ysFBkxCYV0DUg=;
+        b=25hxjmQeoub2IVgw7pVB3pMWstIVkAvUOVgNy86roGkY6BgNrRew4A/AXbSEEnUkvy
+         BQSLPBo0ImvJxRFJLYrCE/Zh9UOtAIuUVY/1e3kIZW66sVSbmKhG9r5TZs+GlM4aSRfg
+         L/nzKZ+KUrtzxTTL3MLLkb81PmeKTPpwowAV2LtUqyel+0yU3BUMz0K73+2Bxq7/5zfr
+         fxQM+un7AuUjuWFnI3pDEjrgFqWu6H7E7W2z4qlMmyvFyHDrQ5Dl3dnG5GMoErx99H58
+         r0GHVYJfSYPNia6uwdIQywuQ3R7h+mXPHAp3zECoi0f2mvp5wQtgm03ehwtw8HqB7vhI
+         oPbA==
+X-Gm-Message-State: ACrzQf0SORzBgpkYqPi5lGUuOlwI8PQ3u9vl3+5ZJ0+Z4oFs1vQIlt/H
+	YVS8xecPGxNdi9J7cErZiWQFI7azx+PukWZWLRKntg==
+X-Google-Smtp-Source: AMsMyM4v3+jebTsx8rta3oTKTPbj+0QFRpgOMqqHaIV7tcXGfBpXOUbUwwIMLxbH/aI5igVtVyqUZJViZkQhI48Gf94=
+X-Received: by 2002:a17:902:7404:b0:17f:7fe6:7197 with SMTP id
+ g4-20020a170902740400b0017f7fe67197mr1565798pll.94.1665088515406; Thu, 06 Oct
+ 2022 13:35:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] include/uapi/linux/swab: Fix potentially missing
- __always_inline
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, =?UTF-8?Q?Petr_Van=c4=9bk?=
- <arkamar@atlas.cz>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, Justin Stitt <jstitt007@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Denys Vlasenko <dvlasenk@redhat.com>, Ingo Molnar <mingo@kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
- mmayer@broadcom.com, Khem Raj <raj.khem@gmail.com>,
- Philippe Ombredanne <pombredanne@nexb.com>,
- Kate Stewart <kstewart@linuxfoundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thomas Gleixner <tglx@linutronix.de>
-References: <20220927215256.528619-1-f.fainelli@gmail.com>
- <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <202209291607.0MlscIht-lkp@intel.com> <20220930211505.209939-1-ndesaulniers@google.com>
+In-Reply-To: <20220930211505.209939-1-ndesaulniers@google.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 6 Oct 2022 13:35:03 -0700
+Message-ID: <CAKwvOd=0p31f-Yya6S-9xKEv6CtUWpOCRxHO=jG2uk-hZgZ1bQ@mail.gmail.com>
+Subject: Re: [PATCH v3] ARM: kprobes: move __kretprobe_trampoline to out of
+ line assembler
+To: Chen Zhongjin <chenzhongjin@huawei.com>
+Cc: "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	sparkhuang <huangshaobo6@huawei.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>, regressions@lists.linux.dev, 
+	lkft-triage@lists.linaro.org, 
+	Linux Kernel Functional Testing <lkft@linaro.org>, Logan Chien <loganchien@google.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nathan,
+On Fri, Sep 30, 2022 at 2:15 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+> EABI stack unwinder")
+> tickled a bug in clang's integrated assembler where the .save and .pad
+> directives must have corresponding .fnstart directives. The integrated
+> assembler is unaware that the compiler will be generating the .fnstart
+> directive.
+>
+>   arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+>   .save or .vsave directives
+>   <inline asm>:3:2: note: instantiated into assembly here
+>   .save   {sp, lr, pc}
+>   ^
+>   arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+>   .pad directive
+>   <inline asm>:6:2: note: instantiated into assembly here
+>   .pad    #52
+>   ^
+>
 
-On 9/28/2022 3:36 PM, Nathan Chancellor wrote:
-> Hi Florian,
-> 
-> On Tue, Sep 27, 2022 at 02:52:56PM -0700, Florian Fainelli wrote:
->> From: Matt Redfearn <matt.redfearn@mips.com>
->>
->> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
->> of some byteswap operations") added __always_inline to swab functions
->> and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
->> userspace headers") added a definition of __always_inline for use in
->> exported headers when the kernel's compiler.h is not available.
->>
->> However, since swab.h does not include stddef.h, if the header soup does
->> not indirectly include it, the definition of __always_inline is missing,
->> resulting in a compilation failure, which was observed compiling the
->> perf tool using exported headers containing this commit:
->>
->> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
->>                   from /usr/include/asm/byteorder.h:14,
->>                   from tools/include/uapi/linux/perf_event.h:20,
->>                   from perf.h:8,
->>                   from builtin-bench.c:18:
->> /usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
->>   static __always_inline __u16 __swab16p(const __u16 *p)
->>
->> Fix this by replacing the inclusion of linux/compiler.h with
->> linux/stddef.h to ensure that we pick up that definition if required,
->> without relying on it's indirect inclusion. compiler.h is then included
->> indirectly, via stddef.h.
->>
->> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
->> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
->> Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> I took this through my kernel build matrix and did not see any new
-> issues.
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+Chen, I noticed that your patch was discarded; it's not in linux-next today.
+https://lore.kernel.org/linux-arm-kernel/YzHPGvhLkdQcDYzx@shell.armlinux.org.uk/
+https://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=9231/1
+How would you like to proceed here?
 
-Great thanks! Since this is really useful for kernel-headers in 
-toolchains, it would be great to get this picked up. Arnd is this 
-something that would go via your tree?
+I think moving this out of line, incorporating Ard's feedback, then
+putting the UNWIND directives on top might be the way to go. What do
+you think?
 -- 
-Florian
+Thanks,
+~Nick Desaulniers
