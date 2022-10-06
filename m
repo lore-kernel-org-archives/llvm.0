@@ -1,105 +1,125 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B034690
-	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 18:18:24 +0000 (UTC)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ogV3x-0001hI-UG; Thu, 06 Oct 2022 19:53:37 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Conor Dooley <conor@kernel.org>
-Cc: Tom Rix <trix@redhat.com>, Conor Dooley <conor.dooley@microchip.com>, Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH 1/2] riscv: fix detection of toolchain Zicbom support
-Date: Thu, 06 Oct 2022 19:53:36 +0200
-Message-ID: <14737143.tv2OnDr8pf@diego>
-In-Reply-To: <20221006173520.1785507-2-conor@kernel.org>
-References: <20221006173520.1785507-1-conor@kernel.org> <20221006173520.1785507-2-conor@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB3A7EA
+	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 20:33:55 +0000 (UTC)
+Received: by mail-qk1-f173.google.com with SMTP id y1so1786826qky.12
+        for <llvm@lists.linux.dev>; Thu, 06 Oct 2022 13:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JNBmgmbcEhRVb5/d/O8+b1/IfZcuQKrWWyPpGBHLay8=;
+        b=MHw3HdNkCpG1mwSCYrQqnL3L0IrPDqqPAD3ilpwGP90TMXi8pu0W5GlmDVedbtpfcK
+         1w/GL1Y3H0SkuA5usd7Xg9wGO/0L+otmqFDHSUU3qLcE7SAaNZSBS2aSpBCIdToIkrU1
+         wsJYWhugTQqfCjT+f4uwj0ZeetXJg90ORA+jnI03lh2xZA1UfMa+L5PycWsmNttuFRcc
+         AN8FUU5HBr+uWxxbyoW+MevYuOPjs8FDFj0QyzQJVL7mi/tY5nJPHPiI4PS2y+lK+7sC
+         zRUjczx4xMFaeTJxt37R4yeEkUUdFkybK+kaseljntR90ohTDbsNdQaH9jw5Ouv/w17y
+         b0Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JNBmgmbcEhRVb5/d/O8+b1/IfZcuQKrWWyPpGBHLay8=;
+        b=PNPrIVJFmF0S6buGbj9FatE/baD1dH0NqCUuDxsZW6FqqrmSrS1ZXKDW6wx6tV/Cvw
+         J/XPhR6xKRp67SmucdtKAT+FALpxELckWTCFzO4/0Oa/QEhz4hK5g6JH18siFZk53wCb
+         cVc0rb/PjZ2378MWnIbBypq5frLa0qge8GTMnOL093Z6iC7C8k1iDGdKJ5PoNF67u2ou
+         KEbUrte+CKDKnv0wsklfK4XkAgq7PKANX3zcURF/ONGGOghIKoJFc+22Uz8Le11HELTn
+         T+cRd8YMlC76HSGYyDOrO5VQ2kim3vWL2fH7gwrFK/opo7fxxTGZycdoyOHT6fRp4tBI
+         v7tA==
+X-Gm-Message-State: ACrzQf1oLUcOPMgbNEgn4RbHSI6qa3/wxp3xIMGxCb/yabiDwnQx2wTq
+	15B7Dao4xCSBXTMSSKigSoI=
+X-Google-Smtp-Source: AMsMyM6F4qYJwxq1tyY5ek8LBaSHy8ukK0aWx027FmAkx7naPxDDIEYwmkM+GNM1x9oufwbvzWcIAQ==
+X-Received: by 2002:ae9:e647:0:b0:6e6:62aa:b8d with SMTP id x7-20020ae9e647000000b006e662aa0b8dmr1536252qkl.669.1665088434395;
+        Thu, 06 Oct 2022 13:33:54 -0700 (PDT)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id j24-20020ac84418000000b0034456277e3asm411191qtn.89.2022.10.06.13.33.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Oct 2022 13:33:53 -0700 (PDT)
+Message-ID: <ed9b8268-0128-0486-04a3-54f343afd38b@gmail.com>
+Date: Thu, 6 Oct 2022 13:33:50 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] include/uapi/linux/swab: Fix potentially missing
+ __always_inline
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, =?UTF-8?Q?Petr_Van=c4=9bk?=
+ <arkamar@atlas.cz>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, Justin Stitt <jstitt007@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Denys Vlasenko <dvlasenk@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+ "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
+ mmayer@broadcom.com, Khem Raj <raj.khem@gmail.com>,
+ Philippe Ombredanne <pombredanne@nexb.com>,
+ Kate Stewart <kstewart@linuxfoundation.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+References: <20220927215256.528619-1-f.fainelli@gmail.com>
+ <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YzTMUpd6HbHmZu8f@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Conor,
+Hi Nathan,
 
-Am Donnerstag, 6. Oktober 2022, 19:35:20 CEST schrieb Conor Dooley:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 9/28/2022 3:36 PM, Nathan Chancellor wrote:
+> Hi Florian,
 > 
-> It is not sufficient to check if a toolchain supports a particular
-> extension without checking if the linker supports that extension too.
-> For example, Clang 15 supports Zicbom but GNU bintutils 2.35.2 does
-> not, leading build errors like so:
+> On Tue, Sep 27, 2022 at 02:52:56PM -0700, Florian Fainelli wrote:
+>> From: Matt Redfearn <matt.redfearn@mips.com>
+>>
+>> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
+>> of some byteswap operations") added __always_inline to swab functions
+>> and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
+>> userspace headers") added a definition of __always_inline for use in
+>> exported headers when the kernel's compiler.h is not available.
+>>
+>> However, since swab.h does not include stddef.h, if the header soup does
+>> not indirectly include it, the definition of __always_inline is missing,
+>> resulting in a compilation failure, which was observed compiling the
+>> perf tool using exported headers containing this commit:
+>>
+>> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
+>>                   from /usr/include/asm/byteorder.h:14,
+>>                   from tools/include/uapi/linux/perf_event.h:20,
+>>                   from perf.h:8,
+>>                   from builtin-bench.c:18:
+>> /usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
+>>   static __always_inline __u16 __swab16p(const __u16 *p)
+>>
+>> Fix this by replacing the inclusion of linux/compiler.h with
+>> linux/stddef.h to ensure that we pick up that definition if required,
+>> without relying on it's indirect inclusion. compiler.h is then included
+>> indirectly, via stddef.h.
+>>
+>> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
+>> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
+>> Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > 
-> riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicbom1p0_zihintpause2p0: Invalid or unknown z ISA extension: 'zicbom'
+> I took this through my kernel build matrix and did not see any new
+> issues.
 > 
-> Convert CC_HAS_ZICBOM to TOOLCHAIN_HAS_ZICBOM & check if the linker
-> also supports Zicbom.
-> 
-> Reported-by: Kevin Hilman <khilman@baylibre.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1714
-> Link: https://storage.kernelci.org/next/master/next-20220920/riscv/defconfig+CONFIG_EFI=n/clang-16/logs/kernel.log
-> Fixes: 1631ba1259d6 ("riscv: Add support for non-coherent devices using zicbom extension")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/Kconfig  | 10 ++++++----
->  arch/riscv/Makefile |  3 +--
->  2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index d557cc50295d..6da36553158b 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -401,14 +401,16 @@ config RISCV_ISA_SVPBMT
->  
->  	   If you don't know what to do here, say Y.
->  
-> -config CC_HAS_ZICBOM
-> +config TOOLCHAIN_HAS_ZICBOM
->  	bool
-> -	default y if 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
-> -	default y if 32BIT && $(cc-option,-mabi=ilp32 -march=rv32ima_zicbom)
-> +	default y
-> +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
-> +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zicbom)
-> +	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-I did needed to look quite closely at the cc-option-voodoo, but it really
-seems to work out as expected :-)
-
-I can't say much to the specific L(L)D_VERSION values but the change itself
-looks good, so
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
->  
->  config RISCV_ISA_ZICBOM
->  	bool "Zicbom extension support for non-coherent DMA operation"
-> -	depends on CC_HAS_ZICBOM
-> +	depends on TOOLCHAIN_HAS_ZICBOM
->  	depends on !XIP_KERNEL && MMU
->  	select RISCV_DMA_NONCOHERENT
->  	select RISCV_ALTERNATIVE
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 3fa8ef336822..3607d38edb4f 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -57,8 +57,7 @@ toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zi
->  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
->  
->  # Check if the toolchain supports Zicbom extension
-> -toolchain-supports-zicbom := $(call cc-option-yn, -march=$(riscv-march-y)_zicbom)
-> -riscv-march-$(toolchain-supports-zicbom) := $(riscv-march-y)_zicbom
-> +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICBOM) := $(riscv-march-y)_zicbom
->  
->  # Check if the toolchain supports Zihintpause extension
->  toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
-> 
-
-
-
-
+Great thanks! Since this is really useful for kernel-headers in 
+toolchains, it would be great to get this picked up. Arnd is this 
+something that would go via your tree?
+-- 
+Florian
