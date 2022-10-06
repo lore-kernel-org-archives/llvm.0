@@ -1,235 +1,79 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D927F
-	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 23:00:23 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id i3so3373254pfk.9
-        for <llvm@lists.linux.dev>; Thu, 06 Oct 2022 16:00:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DAA7F
+	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 23:01:41 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso5660144pjf.5
+        for <llvm@lists.linux.dev>; Thu, 06 Oct 2022 16:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=Pn8fcUlKY0mYD9k9yXJJA4/wPvgxmMVXtOKhuvaDv08=;
-        b=X0/oSN+NgcBE9LzK/xFfsNZg9g1Rx0vWlrIcwfj2oCW5GUiDTWoqGSDNB/5dHNuJj1
-         sFoZCnvc87wzVXiYR+syjJ+tLMFeBXfNVZNfxye1tOeElsXM/o1mcdWFhVfSd9e1UOYS
-         41VjDTqiMRon+kJj1sV7DZI3cGWS6Mi/o7/xU=
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=5lHHNxEaw1N/qiNsX/rZAMgE4JCMxOihLZEqjiwD3Cw=;
+        b=UHQCpECQbmOofvKvJGmZP0kvMdNgl4biR1ihxCVbMojpao1VL+iUW/hxrOsd+Gwm4o
+         riePqZBQywLj53+7yV9mye0bOBGYGQCT68w3AAvYjAgcaAbzMvzFPg+7JXk10fX00EYp
+         jTBHm7xM+VInwkMHzdrGhODgSo+YDOJGuPUNQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Pn8fcUlKY0mYD9k9yXJJA4/wPvgxmMVXtOKhuvaDv08=;
-        b=zzK5mU0oey07H+buC1uDZklfy2Bol3yknBFak90cyW6gl5e6GRqhVYsK0W8w9SV2F0
-         pdDB/cqpARjZIlZdMijqgxkA5IwfgATaZf91DfWoF9N/7xGGpVYYUG8Lh6fRxS9B1ANa
-         OGDAHdalYfwyDVkAXjbNuYJ4YpOtKD15ECCqI97pgB0oTK36Lba7x7H4ZW05DG9/+RrU
-         TBwCtdzFFAHsf2UvcZn0hMk5JHZyEa56fDQe4DccU/WxP8Okgwkyv+CtrbvOcUr35Ann
-         6GfKjhSTmQBWRVwchfTpATcIWEk53Ah7xVbDQnvQxJa+akpTETHgU5nr4HBN53LFyaeu
-         oooQ==
-X-Gm-Message-State: ACrzQf24ldbaSqoSV9Jxd3wYHVRr0wi82ABt/CUHfcjxOCjOqgy9r6Wy
-	leRXIkL+yf5G9foHVRAd2Mwc+w==
-X-Google-Smtp-Source: AMsMyM4Ckf5cj04XnOcnSqGJpTFhoYdbvGQpwjY9d/nzsMIDyoUMaVibbqp4SWiQ+1Jwh1O0zAxZsQ==
-X-Received: by 2002:a05:6a00:f0f:b0:562:3169:eba1 with SMTP id cr15-20020a056a000f0f00b005623169eba1mr1975042pfb.59.1665097223233;
-        Thu, 06 Oct 2022 16:00:23 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=5lHHNxEaw1N/qiNsX/rZAMgE4JCMxOihLZEqjiwD3Cw=;
+        b=erivpcUWxvGULvK3uvbhF0RKUw4hjlTK905l9/UTjZvZW5HJirSp22Tv/M3KGaaWdS
+         zn3PUFaZbGh1N/8Si3VhgTImG+7yBlIbVy4XNTdyrA9WlYM5sYh7pWWer1tO/vGPpSci
+         qVH571VLyvH9/EQifJFjXMH6+tGQ9Yp9ET4vTYlWod6bSBIqA8PEFWNqN3RIIt1g57WM
+         BN+IGMm7Y+lfojXDKz032oWi1qOjJv0S/baSvLKi9ADHsx0yAMZGjBD9o9yT7AABnL2l
+         dg4tIrV60Vb4kw7NmI3HlsQf9gxgfFraDwrwhpKYz9JMCvRmU59/lTyFD122AYAbVbOn
+         EfrA==
+X-Gm-Message-State: ACrzQf2InBmcAD1Tu5AQBR/bdqd37O9ZEdDIYAdnUnO4Xjr62fbbMmlx
+	n1DnOZ2YU4Cs27JL1zPLDGe10g==
+X-Google-Smtp-Source: AMsMyM5WbrKYoemcqZEbVaft4QIlTUAzKU/G+QDttz1riQII4W8oSyZcqTd/hNVbxTpH6I1LSXR/lQ==
+X-Received: by 2002:a17:90b:1b06:b0:202:cce0:2148 with SMTP id nu6-20020a17090b1b0600b00202cce02148mr13141905pjb.84.1665097301152;
+        Thu, 06 Oct 2022 16:01:41 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q27-20020aa7983b000000b005625d5ae760sm172534pfl.11.2022.10.06.16.00.21
+        by smtp.gmail.com with ESMTPSA id g29-20020aa79f1d000000b005627d995a36sm162160pfr.44.2022.10.06.16.01.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 16:00:22 -0700 (PDT)
+        Thu, 06 Oct 2022 16:01:40 -0700 (PDT)
+Date: Thu, 6 Oct 2022 16:01:39 -0700
 From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	Daniel Latypov <dlatypov@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-	llvm@lists.linux.dev,
-	Vitor Massaru Iha <vitor@massaru.org>,
-	kernel test robot <lkp@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] overflow: Refactor test skips for Clang-specific issues
-Date: Thu,  6 Oct 2022 16:00:17 -0700
-Message-Id: <20221006230017.1833458-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+To: ndesaulniers@google.com
+Cc: linux-kernel@vger.kernel.org, gustavoars@kernel.org,
+	dlatypov@google.com, gwan-gyeong.mun@intel.com, nathan@kernel.org,
+	trix@redhat.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] overflow: disable failing tests for older clang
+ versions
+Message-ID: <202210061600.84A665DA2B@keescook>
+References: <202210061321.xSA91B7C-lkp@intel.com>
+ <20221006171751.3444575-1-ndesaulniers@google.com>
+ <166509712398.1833114.15283539764161050044.b4-ty@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6247; h=from:subject; bh=j/3CMmy55Kdm3/X782SP6kTirnk/8cojn34Zi1xcMKs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjP14AcEaP52jAhjBzmN95Tg9NNgDVNYSdf19Loaxq qnzI5jaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYz9eAAAKCRCJcvTf3G3AJh3fD/ 4n4TxICbE9hSAohxcs9hLF/IkcxjBIPcVy8GnJ/FTJlYL6h9p7F0Lq/3IIVqXU02BptNhqcfoMIHKv +ehFrpslUvXHPYIO+VbD3GlJYQPvNLMcGOUN9tre6WVHQ1rcYCEd9D0KhESlIldEUMYybT4yrno/Fh 5fqnEKJR5qWjd9paYp/VREtLFlx4d7knNFaLgYLEeF0uERNkIdVLUXJPl3nCmcoiZrBj3KLsccVdhv H+IuVqIYEsoEvtJNlMpXin1K91h5QjWt3a75DmD6u/vKBxTbn+NOu4rbPFq2ogwCXrpjl/GBYZFi/+ InTdXGeresTM7+EWW919kwaX3OT1mpiwWJcAk+tO48NOPUClBMEymH3yNKd448vsLF9Dv5NRvY4I46 lAJHF9laNPhSqbQQNEAKnU0SnAXL0C+3FWdWZlHmI8X52tMynWTq1Yk3bJ77Aqhor5CGtPhab1qtiO Wjovi21uSQAEz+7Gu2agZin46hANSs7/O8SMh1lM3HBnf7ScMdQC5Qe8jdbZTbinPZuFdDN+Msizle 0vO8eFdUGhgdj4iXyNLAb2F7a/rjxuOoYoFvCcKRN4ezyM0LtC1DYiwFJgKlyxhgMXTvQ2Eyum7XtL N4yO0gLjT0aW3jNRKbXl6GrXsL1WKYXTO5K0tmGyMbOBxUdc48m+dA7Ef5jQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166509712398.1833114.15283539764161050044.b4-ty@chromium.org>
 
-Convert test exclusion into test skipping. This brings the logic for
-why a test is being skipped into the test itself, instead of having to
-spread ifdefs around the code. This will make cleanup easier as minimum
-tests get raised. Drop __maybe_unused so missed tests will be noticed
-again and clean up whitespace.
+On Thu, Oct 06, 2022 at 03:58:49PM -0700, Kees Cook wrote:
+> On Thu, 6 Oct 2022 10:17:51 -0700, Nick Desaulniers wrote:
+> > Building the overflow kunit tests with clang-11 fails with:
+> > 
+> > $ ./tools/testing/kunit/kunit.py run --arch=arm --make_options LLVM=1 \
+> > overflow
+> > ...
+> > ld.lld: error: undefined symbol: __mulodi4
+> > ...
+> > 
+> > [...]
+> 
+> Applied to for-next/hardening, thanks!
+> 
+> [1/1] overflow: disable failing tests for older clang versions
+>       https://git.kernel.org/kees/c/2d4df670c64c
 
-For example, clang-11 on i386:
+I sent a follow-up that refactor this -- I realized I actually wanted to
+see "skips" instead of just having the test go missing.
 
-[15:52:32] ================== overflow (18 subtests) ==================
-[15:52:32] [PASSED] u8_u8__u8_overflow_test
-[15:52:32] [PASSED] s8_s8__s8_overflow_test
-[15:52:32] [PASSED] u16_u16__u16_overflow_test
-[15:52:32] [PASSED] s16_s16__s16_overflow_test
-[15:52:32] [PASSED] u32_u32__u32_overflow_test
-[15:52:32] [PASSED] s32_s32__s32_overflow_test
-[15:52:32] [SKIPPED] u64_u64__u64_overflow_test
-[15:52:32] [SKIPPED] s64_s64__s64_overflow_test
-[15:52:32] [SKIPPED] u32_u32__int_overflow_test
-[15:52:32] [PASSED] u32_u32__u8_overflow_test
-[15:52:32] [PASSED] u8_u8__int_overflow_test
-[15:52:32] [PASSED] int_int__u8_overflow_test
-[15:52:32] [PASSED] shift_sane_test
-[15:52:32] [PASSED] shift_overflow_test
-[15:52:32] [PASSED] shift_truncate_test
-[15:52:32] [PASSED] shift_nonsense_test
-[15:52:32] [PASSED] overflow_allocation_test
-[15:52:32] [PASSED] overflow_size_helpers_test
-[15:52:32] ==================== [PASSED] overflow =====================
-[15:52:32] ============================================================
-[15:52:32] Testing complete. Ran 18 tests: passed: 15, skipped: 3
-
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Daniel Latypov <dlatypov@google.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- lib/overflow_kunit.c | 52 +++++++++++++++++++++++++++++---------------
- 1 file changed, 35 insertions(+), 17 deletions(-)
-
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index 2914c9d36b0f..3062b33e4bb1 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -16,6 +16,34 @@
- #include <linux/types.h>
- #include <linux/vmalloc.h>
- 
-+#define SKIP(cond, reason)		do {			\
-+	if (cond) {						\
-+		kunit_skip(test, reason);			\
-+		return;						\
-+	}							\
-+} while (0)
-+
-+/*
-+ * Clang 11 and earlier generate unwanted libcalls for signed output
-+ * on unsigned input.
-+ */
-+#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 11
-+# define SKIP_SIGN_MISMATCH(t)	SKIP(t, "Clang 11 unwanted libcalls")
-+#else
-+# define SKIP_SIGN_MISMATCH(t)	do { } while (0)
-+#endif
-+
-+/*
-+ * Clang 13 and earlier generate unwanted libcalls for 64-bit tests on
-+ * 32-bit hosts.
-+ */
-+#if defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 13 &&	\
-+    BITS_PER_LONG != 64
-+# define SKIP_64_ON_32(t)	SKIP(t, "Clang 13 unwanted libcalls")
-+#else
-+# define SKIP_64_ON_32(t)	do { } while (0)
-+#endif
-+
- #define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
- 	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
- 		t1 a;						\
-@@ -94,7 +122,6 @@ DEFINE_TEST_ARRAY(u32) = {
- 	{-4U, 5U, 1U, -9U, -20U, true, false, true},
- };
- 
--#if BITS_PER_LONG == 64
- DEFINE_TEST_ARRAY(u64) = {
- 	{0, 0, 0, 0, 0, false, false, false},
- 	{1, 1, 2, 0, 1, false, false, false},
-@@ -118,7 +145,6 @@ DEFINE_TEST_ARRAY(u64) = {
- 	 false, true, false},
- 	{-15ULL, 10ULL, -5ULL, -25ULL, -150ULL, false, false, true},
- };
--#endif
- 
- DEFINE_TEST_ARRAY(s8) = {
- 	{0, 0, 0, 0, 0, false, false, false},
-@@ -194,7 +220,6 @@ DEFINE_TEST_ARRAY(s32) = {
- 	{S32_MAX, S32_MAX, -2, 0, 1, true, false, true},
- };
- 
--#if BITS_PER_LONG == 64
- DEFINE_TEST_ARRAY(s64) = {
- 	{0, 0, 0, 0, 0, false, false, false},
- 
-@@ -223,7 +248,6 @@ DEFINE_TEST_ARRAY(s64) = {
- 	{-128, -1, -129, -127, 128, false, false, false},
- 	{0, -S64_MAX, -S64_MAX, S64_MAX, 0, false, false, false},
- };
--#endif
- 
- #define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
- 	int _a_orig = a, _a_bump = a + 1;				\
-@@ -246,7 +270,7 @@ DEFINE_TEST_ARRAY(s64) = {
- 
- #define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
- static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
--{							   		\
-+{									\
- 	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
- 	check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);	\
- 	check_one_op(t, fmt, sub, "-", p->a, p->b, p->diff, p->d_of);	\
-@@ -254,10 +278,15 @@ static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
- 	check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);	\
- }									\
- 									\
--__maybe_unused								\
- static void n ## _overflow_test(struct kunit *test) {			\
- 	unsigned i;							\
- 									\
-+	SKIP_64_ON_32(__same_type(t, u64));				\
-+	SKIP_64_ON_32(__same_type(t, s64));				\
-+	SKIP_SIGN_MISMATCH(__same_type(n ## _tests[0].a, u32) &&	\
-+			   __same_type(n ## _tests[0].b, u32) &&	\
-+			   __same_type(n ## _tests[0].sum, int));	\
-+									\
- 	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
- 		do_test_ ## n(test, &n ## _tests[i]);			\
- 	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
-@@ -273,10 +302,8 @@ DEFINE_TEST_FUNC(u16, "%d");
- DEFINE_TEST_FUNC(s16, "%d");
- DEFINE_TEST_FUNC(u32, "%u");
- DEFINE_TEST_FUNC(s32, "%d");
--#if BITS_PER_LONG == 64
- DEFINE_TEST_FUNC(u64, "%llu");
- DEFINE_TEST_FUNC(s64, "%lld");
--#endif
- 
- DEFINE_TEST_ARRAY_TYPED(u32, u32, u8) = {
- 	{0, 0, 0, 0, 0, false, false, false},
-@@ -716,18 +743,9 @@ static struct kunit_case overflow_test_cases[] = {
- 	KUNIT_CASE(s16_s16__s16_overflow_test),
- 	KUNIT_CASE(u32_u32__u32_overflow_test),
- 	KUNIT_CASE(s32_s32__s32_overflow_test),
--/* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
--#if BITS_PER_LONG == 64
- 	KUNIT_CASE(u64_u64__u64_overflow_test),
- 	KUNIT_CASE(s64_s64__s64_overflow_test),
--#endif
--/*
-- * Clang 11 and earlier generate unwanted libcalls for signed output, unsigned
-- * input.
-- */
--#if !(defined(CONFIG_CC_IS_CLANG) && __clang_major__ <= 11)
- 	KUNIT_CASE(u32_u32__int_overflow_test),
--#endif
- 	KUNIT_CASE(u32_u32__u8_overflow_test),
- 	KUNIT_CASE(u8_u8__int_overflow_test),
- 	KUNIT_CASE(int_int__u8_overflow_test),
 -- 
-2.34.1
-
+Kees Cook
