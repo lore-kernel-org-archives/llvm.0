@@ -1,126 +1,187 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F3F7F
-	for <llvm@lists.linux.dev>; Thu,  6 Oct 2022 23:51:16 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id h13so2038409pfr.7
-        for <llvm@lists.linux.dev>; Thu, 06 Oct 2022 16:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb0bMzq7CzIxn27Bm3qAvEt7vJtMj9Hk4nZZ0L4qohs=;
-        b=q4540usMviIDIHmpiRUMzOa910OncxizTkP+E/hL5zNuXzop6odk7tuyzVEDTHNHIX
-         X/3uM3TDImpdIbf4DvksZX1syZyFsZK4mB3ANxxnmaqVDlvw1/wVxyOEI0siPqwKhj//
-         MhmpNxgQNCEdGkfr95TMowoeyKvNWZ3P/PQorHxYmfj7BdtflyblEDl1m7lL7Jhi68xG
-         14UsSIp+a9qRu7OCnaVXbOiV2Lmlvr3FgmmAjn6SB5AnbePu9oqN+FuzvjjsFrf43ntO
-         5CD1mkbnRzyAk/OlS3YOZRbiQ7NAowFqbYUOK8b4Jad8rpaydFC3a69hOF6gUYrWiX4m
-         o6lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb0bMzq7CzIxn27Bm3qAvEt7vJtMj9Hk4nZZ0L4qohs=;
-        b=mLbLfMsxFnwIr43FGMcPn+cuFh3SOPWsBbNvd1gYnXFjO79uU+T/zjHkddhD+z8aN1
-         ySY4IpLiXP1zOmzGZVuBRYsZddp9Jq/OXCbY82cDBE1o6sn5gnzLJPEfGwplsx9MKw6S
-         j/iRCDyaGMvqQYaHbVGHtDv3iTqgd5rU7WuI/HO4+59+9j2gkarhEH7Xe8HYQlTbv814
-         cEUAVzquv46JmGIcR5Q599NUBq65dcvxEoIajj8iqlqi3QyXd5j5DcA6z90jFHi917qW
-         c8bclI+Zs6mk5lnvDHyXb5AZkTXB2px1tKn8LlCeMj7trpKtwSbfU0CzpclUhnADwCgx
-         38lw==
-X-Gm-Message-State: ACrzQf0Wf6g5mRCYfEe8+2d/30Uc93cErI+T4CO9VyC1a9MUpavXjtq8
-	sP2W+Q39WuF20JAvbftCRXQK6RaaLDwasmuX
-X-Google-Smtp-Source: AMsMyM4oijrcSQd/dKg069SIlyyV2cQasyARBrPUoBqyO98yId81kE4Hm2QtLr3/SKm6UV/Hq/309A==
-X-Received: by 2002:a05:6a00:1691:b0:53b:3f2c:3257 with SMTP id k17-20020a056a00169100b0053b3f2c3257mr1946901pfc.21.1665100275607;
-        Thu, 06 Oct 2022 16:51:15 -0700 (PDT)
-Received: from ?IPV6:2406:3400:213:70c0:9df6:7e57:88ce:1bea? ([2406:3400:213:70c0:9df6:7e57:88ce:1bea])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b0017f92246e4dsm176326plg.181.2022.10.06.16.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Oct 2022 16:51:15 -0700 (PDT)
-Message-ID: <4f2e69e1-c9a2-0197-341c-c8c0bc9fda1c@flatmax.com>
-Date: Fri, 7 Oct 2022 10:51:11 +1100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0359805
+	for <llvm@lists.linux.dev>; Fri,  7 Oct 2022 03:56:45 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fgbRFlzC8WosCLs2SO/ayKpQXhSY9drjzUewdhGCOU6NuiHbliWwHutStod/lf8r7W02PqZ7yOZ3xeYTyohrXA1+HrniUyWLvcGTvZzSqCWAJiDIo/b1uhGkmoywtMQF7I6jrrDPMe0JCyvL4ge7lrqwU4B/EwS9UC9O758jHPvQxJgERaIF8ROz/Gkhg6G3Riyl5NjHmwKYfD1DcN0H66VMUQovbwTBdQ7Mk/lZmTxxf0E8R1i3v4xYvWIY9cIDBYQ8nrfDa2eicfezw8uZbgmDS6u1727zcEem/0s0BLMl2neYYnB2Kae+DoI1daBep9fBW2IUkYog8uJMkKCJ3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y234KU8weIKY5+At88pURJ+mYxYho9fIjTX12q/1PtE=;
+ b=Lh+9xcTDKmJ1ztR36lAR/cEOUr2qHEUAC/foQ2lfxf81IyjADihiASiMITB6bY0N3b++X7Q+Pqrl7h2W27fj71as+44DGB0dT8MqJ30PAC0xKa0IcXhcE+HkIY2iTo8Wa2BHmmvF1p3duPdG1pJ98aeCiKaT109C9DsjdgBepuDjaX6uH/H7+Uxd6G1vpAjILvYM4oBFnBBKTMJShIu7bJHW6GVqtk3gmG1tDP2klRljnQ7MLIuejmd8W9veMzKjqjKYkIroGut6pzu5kkN3mjnQXnN0jRrtsupDeLr3HkAs4U6jtdmdfutSwLutLfHkZn02ptA780CWW2TrECAmdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y234KU8weIKY5+At88pURJ+mYxYho9fIjTX12q/1PtE=;
+ b=P12gv1XLVLMqaEGYV6Ccywei/g/E4NEIavDdHQ83re9tB1MVh1ghWMdogvgBZRNagyJuQ7f6f81oManPVUnY+YsX2IBIlUKTkxGuT+1N/xnZ5D8HZdUfnVmp4O1Rx1ZghkqC08J/eSy0KwTTjBt/LDuFdd7TyvtHuCJTOzlxvz0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by DM4PR12MB5037.namprd12.prod.outlook.com (2603:10b6:5:39a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Fri, 7 Oct
+ 2022 03:56:43 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::4a1c:7d22:b1b:1adc]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::4a1c:7d22:b1b:1adc%6]) with mapi id 15.20.5676.032; Fri, 7 Oct 2022
+ 03:56:42 +0000
+Message-ID: <85822c3c-2254-52cc-e6b1-9c89adb63771@amd.com>
+Date: Fri, 7 Oct 2022 09:26:30 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Invalid event (cycles:pp) in per-thread mode, enable system wide
+ with '-a'.
+Content-Language: en-US
+To: Stephane Eranian <eranian@google.com>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Slade Watkins <srw@sladewatkins.net>,
+ linux-perf-users <linux-perf-users@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, Ian Rogers <irogers@google.com>,
+ Namhyung Kim <namhyung@gmail.com>, Kees Cook <keescook@chromium.org>,
+ sandipan.das@amd.com, Bill Wendling <morbo@google.com>,
+ clang-built-linux <llvm@lists.linux.dev>, Yonghong Song <yhs@fb.com>,
+ Peter Zijlstra <peterz@infradead.org>
+References: <CAKwvOdnrHErOK+w878izVauHUKaX3eD-HXgigq2Ogm3iSj-fHA@mail.gmail.com>
+ <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net>
+ <CAP-5=fXVgwMO_CpS-EHN6PFhLB-J5Ft7qHz7oQd-WOMnTj72Cw@mail.gmail.com>
+ <CAM9d7chvZjZ4YVc6j3w7OkdHteyJ0GUZboieu9G7jAWBevoZqA@mail.gmail.com>
+ <e553c4f8-ed3d-0755-cc8a-b5ffe43b2c2f@amd.com>
+ <CAKwvOdk6TTNhu_+FdONTXPo9Z8u5D4-5kf-rMN8oK4+6fMyc-w@mail.gmail.com>
+ <CABPqkBQVfQFJKCdHXEMGFcupzvy8zq14F52eLW5s9vr2Shmi6w@mail.gmail.com>
+From: Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <CABPqkBQVfQFJKCdHXEMGFcupzvy8zq14F52eLW5s9vr2Shmi6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0162.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::17) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable
- 'src4xxx_of_match'
-Content-Language: en-AU
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org,
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <202210070151.yWxzUNdm-lkp@intel.com>
-From: Matt Flax <flatmax@flatmax.com>
-In-Reply-To: <202210070151.yWxzUNdm-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|DM4PR12MB5037:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f0f6c37-6ebb-4541-d2c8-08daa817f208
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	rK5yXFL+klSwBYrqnK5ZZUwvt64z8sGOTuMUM3ypRAAdFjInwpHulcbNA6lH0CGoImkx1ZdBseGo94LNYJxoTpJ08wxRged1m5qbBxyf3ziY6CfEntDH3C9ytZJIVNNHG2bEXljxTUP9Z1khFFKZGZBY7JfgzZTUIE0jGUibheTFVLcFH6N6YBBpe88MmQGsXPBTlKjkJ7MnRrHbR1uz4ZCKHI9XZVYQd1T4o7TDPDZA4bQrvstmEKyZEVDF/Z5stXKRR/Y5ROY8AcV49b8uzTmPmxk8J7w60zJb5gyPOSNdVhGrAvF/DdD8N4IzSmPBViTnjADeXkB/zz8w5hHRLETsaCB8n7ZLDEwxP7ItmAUvQ6ic/8P6kMv+dN9fGtgatpUTPUt99qO7uXERslnshRVHiigo6ZMy225vlcicNAeDMna6s9GW22mz+mtVHXokUq1koFiP9JwhxA6ioNXrTYyLU/2Vg/R4rXtKw5f2znkXssmLUWv93PP4nqc0+7WIMAQdg2J1dkpJ7rT0pzy5YsSBsiY23Kqbq9lwU0FkbRdymqnJ7srT11cfeMGDNjw0W2PuBYA8/i+Wrgia+NLDRM83m1lrai1KpKgz97L9yv5ptX1Ya+p7mcjVXdu8/th3P9+h7j+94D2sDYPpzyQtL0QAKNJ4d638gg8WBlEK1D2dyOs4NOKf2mrLwpbYC0Q+00CwytjA9mWrJA12JbqKzY022996TEy1oyDdszqu+u1oReEOLptlwNKk610FBVGOpz076hmPsIpJJiROAF24AafVEdaedrjRK8neyadol3O+4LcJnOiH0N5OTfZjlyHxlBH7qohPyElpbeOqYqYL8cNvgl+LpQHt3RtFJeVtTms=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(39860400002)(346002)(396003)(136003)(451199015)(6666004)(36756003)(5660300002)(41300700001)(38100700002)(7416002)(44832011)(8936002)(8676002)(66946007)(6512007)(316002)(4326008)(26005)(66476007)(66556008)(6506007)(86362001)(2906002)(186003)(31696002)(2616005)(966005)(110136005)(83380400001)(6486002)(31686004)(478600001)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NzFrWCtZMXE5ZW5oamVabXlPbzNBWjVBY3dwMWdzdmltQTJGV2VOOW9OeFdt?=
+ =?utf-8?B?R0dCajZLZFZBODZzL3JpemJTRjJpOXRhQ1RGZWhjdThHNXpTY2w4WVhZRW1N?=
+ =?utf-8?B?OTYyQWVkam9pd0pLaFlvZkpFZ3hVbThyUHhQZTFDbEtLY1lvYVVDYzMrRGZx?=
+ =?utf-8?B?WU9RVHg4SDhYSXpxaVBSRUlHbVFXS0ZqM1l0cDJQY1RtMFNIZVdiK1RHMkFt?=
+ =?utf-8?B?UlQ4QkJBdmxHVjBQTTlKYU5rMlMxVWJ2U3I3OTY0NnMyNjBLd0oxNTdTODZL?=
+ =?utf-8?B?eHNrYkdkTmtOclA0bWZUVmRZVDZvSTlKc2dvbWZMbjZ6Vmk2SGZBN1JBU3FR?=
+ =?utf-8?B?UmxlMEo2RUVCRGwvZ2dTeGpuY3YwM1lFT0JkVGxRZ1lib3k3NVRkeVZ0allP?=
+ =?utf-8?B?d1cxRlVPV2F1ZnZacjhzd3dQNTJiMmVmVStyOUJFcmJvVGlhd0E1SjdvZTk3?=
+ =?utf-8?B?bVhRMFJndkt2dkF6UjZZWG5sbW51NWdsNGZVYUcvMkFyTDYrRXdQLzh3Wjc2?=
+ =?utf-8?B?RHo2cmFiZktNUWtodW9uT2Z4R3A5dlRBSkVtUTV2dVQ1REVUSERXYlZpcG03?=
+ =?utf-8?B?cWlwUnhjYW9jeVJLV3RSZHpDWUIzQ2ZrcFRlWVpub3c4U1ZhbitYekFUdHhJ?=
+ =?utf-8?B?dDZFUEU0R1ZVYjdtZzBKd3BTbjlsS0ZBTm1LazFKT2JCbkdGTGU4MSs5Qi83?=
+ =?utf-8?B?MDFCNWh3WjBLTUh2MFlRSmlJalVmaTB6TFFuRWwxdDRUZFB2cnVQRWw3Ny8w?=
+ =?utf-8?B?UGd1dTFxcno3UWZ6ZU0wSXc1QmNIdk5YVUpUbGJNTSs1YTd5R3o0QlZheHhB?=
+ =?utf-8?B?TkJxbkVWTHY2cGQvZ1VKNjJwVk5rVW9GNUs5VWJZM0FWT1oyVmRrb1pQNmlV?=
+ =?utf-8?B?VGZCUERBZkVvMk5LMmpTOW1xSGpYVFRzK2tEYmk0YWlOOEREb1cyYjQvSGc2?=
+ =?utf-8?B?ZFBOY2hSUnBBdmlEZkVkbGt1cVZWdlNib1FhbElsYk1JdUNIdTE3bWVZR0FE?=
+ =?utf-8?B?cTRKRjIrSVJKTDc4STNGcjMxTWhQd2trV0xlWmN5OEQyMFNWK05NaC9LNzJm?=
+ =?utf-8?B?MnZrSnAzNDdiamlSUi85cDRsejFpRnJodCtpT21YaTRrb01WUHdGVko0VTU3?=
+ =?utf-8?B?WXlqWjhBMS9pYnFLS05kSmE5VHVxamgrbC9Fb1VpQ0RYWWFnS01XQXhEZlNl?=
+ =?utf-8?B?MTFidEhTRk9oNVlHUDJxNHl6bGxiaWErcUMyV21LS2pvd3g3OUMrdERoaTFR?=
+ =?utf-8?B?Y3R6N2dYV2UvN0tXZWRGM05OQU1oZ3VOQjNFNjQ2OTJnaC93akNyU3hxWkhR?=
+ =?utf-8?B?T3FVZWNVcE5OSDFVYzhRdzRNZXd6ZTRVYTlWYWJsSTFpdHlmeVJxdko1Y0xl?=
+ =?utf-8?B?RDJHS2JBcjdoMVhaSVc3cXNhL1g1clp1akpQWEloZFVwQUsvMzBrZ0hkbkF0?=
+ =?utf-8?B?eDRkWnRLR3VqWDBkRXZoZTJXV2ZvYjd3Z1hDNktrQzdiNDBVdjNvZUJyb2Zt?=
+ =?utf-8?B?ZFRWa1BkTVhNS0Q5aU5vdTN5NjhQZHFOeGkrWXFoNFRaenh6V21zbVFlcVgr?=
+ =?utf-8?B?NTlBMnJHSElGYVZUenVLRUZObS83MWRES3drd1h2OThhYkZFdUZrNkUwaG9a?=
+ =?utf-8?B?N05DMHRkd0xoOUJqRGduQ2lxQVh3VW10c0w4d2lDVjZNSkowdXowd2gwUUZJ?=
+ =?utf-8?B?Zk5La0wrTklzeWtBczIyVE5hN21ZdUp1THo1b1M2R3RTdVdEMlQrb1VhaVo4?=
+ =?utf-8?B?ZWVZMlZndC9yTklYY0dCM2JiUmtZVGJIUjk5emNTclZLeWlwSnlET3VmR3Bj?=
+ =?utf-8?B?d3RJSnVKOHJRTFNCa2NNMS9vcDh1cnZwU0orVU5oRks0QmMyb0s3VDhuTk5Y?=
+ =?utf-8?B?dW55M0NDcHJrNlJCYU9OSWwrL1ZKT2JDeURJRDNYbmpFSjhwWStnU1BPRFNF?=
+ =?utf-8?B?anZmYzVvbjJ3VCt1anBpVi9kVVhybElSdGJPMWtiSkVUTGo3bTZzc0JpSFZo?=
+ =?utf-8?B?U1RkL2FtY0c0cVNUaWUwV3g2SlJWdmJOeU13ZFhBVEozWmF0R0JYZC8yWEJT?=
+ =?utf-8?B?Z2ZQemV2ejRpenNVMzAvWWpZZjJOc0ZibkxwSjJXeTk5dms3ckIxSlNGWnRX?=
+ =?utf-8?Q?7vDjA3agIogfZ7ccHQhVKx6aR?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f0f6c37-6ebb-4541-d2c8-08daa817f208
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 03:56:42.8318
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uvS85lNvijExptjRC2TYTUO+VvaNHiGNSOeXMgfBH8FWTTKgZK1NKsjongpH5aXX+bnhHi9Z1YNC370ZVodx3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5037
 
-Hi all,
++cc: PeterZ
 
-Can this test system be updated to catch of_match_ptr usage ?
+>>>>> +Ravi who may be able to say if there are any issues with the precise
+>>>>> sampling on AMD.
+>>>>
+>>>> Afaik cvcles:pp will use IBS but it doesn't support per-task profiling
+>>>> since it has no task context.  Ravi is working on it..
+>>>
+>>> Right.
+>>> https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@amd.com
+>>
+>> Cool, thanks for working on this Ravi.
+>>
+>> I'm not sure yet whether I may replace the kernel on my corporate
+>> provided workstation, so I'm not sure yet I can help test that patch.
+>>
+>> Can you confirm that
+>> $ perf record -e cycles:pp --freq=128 --call-graph lbr -- <command to profile>
+>>
+>> works with just that patch applied? Or is there more work required?
+>> What is the status of that patch?
+>>
+>> For context, we had difficulty upstreaming support for instrumentation
+>> based profile guided optimizations in the Linux kernel.
+>> https://lore.kernel.org/lkml/CAHk-=whqCT0BeqBQhW8D-YoLLgp_eFY=8Y=9ieREM5xx0ef08w@mail.gmail.com/
+>> We'd like to be able to use either instrumentation or sampling to
+>> optimize our builds.  The major barrier to sample based approaches are
+>> architecture / micro architecture issues with sample based profile
+>> data collection, and bitrot of data processing utilities.
+>> https://github.com/google/autofdo/issues/144
+> 
+> On existing AMD Zen2, Zen3 the following cmdline:
+> $ perf record -e cycles:pp --freq=128 --call-graph lbr -- <command to profile>
+> 
+> does not work. I see two reasons:
+> 
+> 1. cycles:pp is likely converted into IBS op in cycle mode.
+>     Current kernels do not support IBS in per-thread mode.
+>     This is purely a kernel limitation
 
-Here is the decleration :
+Right, it's purely a kernel limitation. And below simple patch on top
+of event-context rewrite patch[1] should be sufficient to make cycles:pp
+working in per-process mode on AMD Zen.
 
-static const struct of_device_id src4xxx_of_match[] = {
-     { .compatible = "ti,src4392", },
-     { }
-};
-MODULE_DEVICE_TABLE(of, src4xxx_of_match);
+---
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index c251bc44c088..de01b5d27e40 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -665,7 +665,7 @@ static struct perf_ibs perf_ibs_fetch = {
+ 
+ static struct perf_ibs perf_ibs_op = {
+ 	.pmu = {
+-		.task_ctx_nr	= perf_invalid_context,
++		.task_ctx_nr	= perf_hw_context,
+ 
+ 		.event_init	= perf_ibs_init,
+ 		.add		= perf_ibs_add,
+---
 
-Here is the usage (in the same file) :
-
-static struct i2c_driver src4xxx_i2c_driver = {
-     .driver = {
-         .name = "src4xxx",
-         .of_match_table = of_match_ptr(src4xxx_of_match),
-
-
-On 7/10/22 04:21, kernel test robot wrote:
-> Hi Matt,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   833477fce7a14d43ae4c07f8ddc32fa5119471a2
-> commit: 4e6bedd3c396014ba70de2b4c9995c8e024e82b3 ASoC: codecs: add support for the TI SRC4392 codec
-> date:   8 weeks ago
-> config: hexagon-randconfig-r045-20221006
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e6bedd3c396014ba70de2b4c9995c8e024e82b3
->          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->          git fetch --no-tags linus master
->          git checkout 4e6bedd3c396014ba70de2b4c9995c8e024e82b3
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/soc/codecs/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> sound/soc/codecs/src4xxx-i2c.c:28:34: warning: unused variable 'src4xxx_of_match' [-Wunused-const-variable]
->     static const struct of_device_id src4xxx_of_match[] = {
->                                      ^
->     1 warning generated.
->
->
-> vim +/src4xxx_of_match +28 sound/soc/codecs/src4xxx-i2c.c
->
->      27	
->    > 28	static const struct of_device_id src4xxx_of_match[] = {
->      29		{ .compatible = "ti,src4392", },
->      30		{ }
->      31	};
->      32	MODULE_DEVICE_TABLE(of, src4xxx_of_match);
->      33	
->      34	
->
+[1]: https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@amd.com
