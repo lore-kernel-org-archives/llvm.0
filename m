@@ -1,259 +1,155 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649C7256D
-	for <llvm@lists.linux.dev>; Fri,  7 Oct 2022 19:04:24 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id l4so5347144plb.8
-        for <llvm@lists.linux.dev>; Fri, 07 Oct 2022 12:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=21A6ZjPuJYw0WXuNQnO8404OZpL79Fxvlo9cifFtwEE=;
-        b=OgjwR2mpvL7at1QiCptYJGYayigIS2Mnch4J2YrXJaQ42rnGB/rkvrX9a67tle7xCW
-         DV71jD5VbMXXT2fc+6W0GIBPw1RiWVdwt6xGnnYBPGuFo/EzsOy/rYI7EuOCIe3RPp6f
-         Yl/EYakcL4uTGWudHHVZseK0jFW5qg1nLAG4ilXwFF+7zrcOlHvO6YaFMLo01IDsHNMz
-         /aLxG6AryM6U/BcZnz6+L5Z7priSsJeGNyF5GYnJIqCU0z3nnctU3XBYqlY72vmrxcCm
-         oD+C6JsVYJXXYXNb2pFrfb5IRNVRWQy7LL3JjivtxT2cs4CraTszZRiSB9sC+s0w6SnG
-         3gmQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10444C81
+	for <llvm@lists.linux.dev>; Fri,  7 Oct 2022 19:14:36 +0000 (UTC)
+Received: by mail-il1-f199.google.com with SMTP id j29-20020a056e02219d00b002f9b13c40c5so4520713ila.21
+        for <llvm@lists.linux.dev>; Fri, 07 Oct 2022 12:14:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=21A6ZjPuJYw0WXuNQnO8404OZpL79Fxvlo9cifFtwEE=;
-        b=O5mE75eSakcLnWjzIUxAn9Hh+SIchTPpoXrs7OwPPvkngQwvqoHntgr/umAltWlqDc
-         5yJjhNrY3Yb3Ti+ft8cPfCsfnHe3KH3lY1mVYtPG34q8L6xYndxOgzNeaoK3W+YCh0bS
-         qlGQezK3dY5kRRr8gqaqCshJroEIPtU9Oe1ORHRC+1KxOAGzV62Q4U4hnGoVGX5y/ST6
-         k9AMXXAeGmwlVm6rCbYPT1LiCrYcZS7c9kRL5sx52yWMc5lKc5smOMxLfTZF/LsgDXUe
-         uNFicUwRbEXzAfWqSOT5S/3h7XtncmSZzmgG6giaSXyExoPZ6AuLD9yGWJCGyxQ2zTSB
-         97tg==
-X-Gm-Message-State: ACrzQf1jhILs6Gr7RZ2vXHQal1ZjgAuInU8fHDUKpDA2NqRv4yOqp1Dc
-	tvgmvguj0cqKMSWouglDgGWIi9JtGhZX/vcyUR76aQ==
-X-Google-Smtp-Source: AMsMyM4sNQYpMbZ9f/4CGWZVJyb3GZQElKXVzVQNQlRukk6gLIsS/wsrK2rtho4EMPQYRyH3dy8QJ4ruM6l9u5XKLvo=
-X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
- om8-20020a17090b3a8800b00209f35dad53mr17920889pjb.102.1665169463422; Fri, 07
- Oct 2022 12:04:23 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M4APzCkPuF600r0PgqvgOnvCjhsuYAH/Jg4lyIp+ByI=;
+        b=akuYF7bRaBbVBawxQTehlw+9Dtk0Nv8WGslkC1mHzXKG3kzDgN8BlzvcMzP17iv9M9
+         FjXDKmT3fyeuDuaueMvIRIcCtiUWsHxjxDRkzM5e+6GyR1TdmrW36tsS0GZ2YjhlGvSW
+         r+2Xt9oyuXsMqyEk6D8AzqtoZGFJVmuSaywyCAABYl+cdBDAEikcQDpMXeGqe1TOlqNf
+         NWFAdbLB6elGXY9Zpk2JgOvwDv3gIrEz+v1RwHfWLpZiNEtJV7qsC8iax1Juadu75QAY
+         B4orVchjnt6msCUD3+tBtzxcTrd4du8ZHUC8hwiyC54GuNKteO6pm2kzkinDlvz0dsdb
+         aCYA==
+X-Gm-Message-State: ACrzQf0h8nfDlCernJZ+svUi1pgwhbxrrdsgRodPvGA337No4mmhTrFN
+	JaHX7V1Ppwxs47veBpqh/3zedwSXsM/vfO+EZpo/rCD8jqrP
+X-Google-Smtp-Source: AMsMyM5/ZcDTdnJFZvYu9Ur+MDfNC36uSndF/XYziyAsQw+Nt0oTwPoDkSb95/OpySnJHxTAAttc8SgdNFRQC6Kqqnrw9KxRPKHW
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20190307090146.1874906-1-arnd@arndb.de> <20221006222124.aabaemy7ofop7ccz@google.com>
- <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
-In-Reply-To: <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Oct 2022 12:04:11 -0700
-Message-ID: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
-Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
-To: Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>
-Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andi Kleen <ak@linux.intel.com>, 
-	Christoph Hellwig <hch@lst.de>, Eric Dumazet <edumazet@google.com>, 
-	"Darrick J. Wong" <darrick.wong@oracle.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Paul Kirth <paulkirth@google.com>
+X-Received: by 2002:a05:6638:1644:b0:35a:5304:f19f with SMTP id
+ a4-20020a056638164400b0035a5304f19fmr3512556jat.270.1665170075858; Fri, 07
+ Oct 2022 12:14:35 -0700 (PDT)
+Date: Fri, 07 Oct 2022 12:14:35 -0700
+In-Reply-To: <000000000000905ada05ea45e13c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dcbba905ea769e07@google.com>
+Subject: Re: [syzbot] WARNING: nested lock was not taken in ntfs_fill_super
+From: syzbot <syzbot+b9bd2bf91ab68a2ab30c@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
-+ Kees, Paul
+syzbot has found a reproducer for the following issue on:
 
-On Fri, Oct 7, 2022 at 1:28 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Oct 7, 2022, at 12:21 AM, Nick Desaulniers wrote:
-> > On Thu, Mar 07, 2019 at 10:01:36AM +0100, Arnd Bergmann wrote:
-> >> The select() implementation is carefully tuned to put a sensible amount
-> >> of data on the stack for holding a copy of the user space fd_set,
-> >> but not too large to risk overflowing the kernel stack.
-> >>
-> >> When building a 32-bit kernel with clang, we need a little more space
-> >> than with gcc, which often triggers a warning:
-> >>
-> >> fs/select.c:619:5: error: stack frame size of 1048 bytes in function 'core_sys_select' [-Werror,-Wframe-larger-than=]
-> >> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
-> >>
-> >> I experimentally found that for 32-bit ARM, reducing the maximum
-> >> stack usage by 64 bytes keeps us reliably under the warning limit
-> >> again.
-> >>
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >> ---
-> >>  include/linux/poll.h | 4 ++++
-> >>  1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/include/linux/poll.h b/include/linux/poll.h
-> >> index 7e0fdcf905d2..1cdc32b1f1b0 100644
-> >> --- a/include/linux/poll.h
-> >> +++ b/include/linux/poll.h
-> >> @@ -16,7 +16,11 @@
-> >>  extern struct ctl_table epoll_table[]; /* for sysctl */
-> >>  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
-> >>     additional memory. */
-> >> +#ifdef __clang__
-> >> +#define MAX_STACK_ALLOC 768
-> >
-> > Hi Arnd,
-> > Upon a toolchain upgrade for Android, our 32b x86 image used for
-> > first-party developer VMs started tripping -Wframe-larger-than= again
-> > (thanks -Werror) which is blocking our ability to upgrade our toolchain.
-> >
-> > I've attached the zstd compressed .config file that reproduces with ToT
-> > LLVM:
-> >
-> > $ cd linux
-> > $ zstd -d path/to/config.zst -o .config
-> > $ make ARCH=i386 LLVM=1 -j128 fs/select.o
-> > fs/select.c:625:5: error: stack frame size (1028) exceeds limit (1024)
-> > in 'core_sys_select' [-Werror,-Wframe-larger-than]
-> > int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
-> >     ^
-> >
-> > As you can see, we're just barely tipping over the limit.  Should I send
-> > a patch to reduce this again? If so, any thoughts by how much?
-> > Decrementing the current value by 4 builds the config in question, but
-> > seems brittle.
-> >
-> > Do we need to only do this if !CONFIG_64BIT?
-> > commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> > seems to allude to this being more problematic on 32b targets?
->
-> I think we should keep the limit consistent between 32 bit and 64 bit
-> kernels. Lowering the allocation a bit more would of course have a
-> performance impact for users that are just below the current limit,
-> so I think it would be best to first look at what might be going
-> wrong in the compiler.
->
-> I managed to reproduce the issue and had a look at what happens
-> here. A few random observations:
->
-> - the kernel is built with -fsanitize=local-bounds, dropping this
->   option reduces the stack allocation for this function by around
->   100 bytes, which would be the easiest change for you to build
->   those kernels again without any source changes, but it may also
->   be possible to change the core_sys_select function in a way that
->   avoids the insertion of runtime bounds checks.
+HEAD commit:    4c86114194e6 Merge tag 'iomap-6.1-merge-1' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=121dd3f4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9905c889cc4ad738
+dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd2bf91ab68a2ab30c
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a62cc8880000
 
-Thanks for taking a look Arnd; ++beers_owed;
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bf7f1dcd539b/disk-4c861141.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c214481af743/vmlinux-4c861141.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a53514c0308a/mount_0.gz
 
-I'm not sure we'd want to disable CONFIG_UBSAN_LOCAL_BOUNDS=y for this
-particular configuration of the kernel over this, or remove
--fsanitize=local-bounds for this translation unit (even if we did so
-specifically for 32b targets).  FWICT, the parameter n of function
-core_sys_select() is used to index into the stack allocated stack_fds,
-which is what -fsanitize=local-bounds is inserting runtime guards for.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b9bd2bf91ab68a2ab30c@syzkaller.appspotmail.com
 
-If I dump the compiler IR (before register allocation), the only
-explicit stack allocations I observe once the middle end optimizations
-have run are:
+loop0: detected capacity change from 0 to 4096
+ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
+==================================
+WARNING: Nested lock was not taken
+6.0.0-syzkaller-06475-g4c86114194e6 #0 Not tainted
+----------------------------------
+syz-executor.0/3971 is trying to lock:
+ffff8880721ddb70 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
+ffff8880721ddb70 (&sb->s_type->i_lock_key#33){+.+.}-{2:2}, at: _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
 
-1. a single 64b value...looks like the ktime_t passed to
-poll_schedule_timeout IIUC.
-2. a struct poll_wqueues inlined from do_select.
-3. 64x32b array, probably stack_fds.
+but this task is not holding:
+general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+CPU: 1 PID: 3971 Comm: syz-executor.0 Not tainted 6.0.0-syzkaller-06475-g4c86114194e6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
+RIP: 0010:__lock_acquire+0x1112/0x1f60 kernel/locking/lockdep.c:5044
+Code: 3c 30 00 48 8b 5c 24 70 74 12 48 89 df e8 96 42 73 00 49 be 00 00 00 00 00 fc ff df 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 6f 42 73 00 48 8b 33 45 31 f6 48
+RSP: 0018:ffffc90004bef828 EFLAGS: 00010006
+RAX: 0000000000000003 RBX: 0000000000000018 RCX: f3af2e06a081bf00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: ffff88807f6085e0 R08: ffffffff816af64d R09: ffffed1017364f13
+R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff88807f608848
+R13: bd0c5e3edb57b21a R14: dffffc0000000000 R15: ffff88807f608000
+FS:  00007f4b59f80700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4b59f81000 CR3: 000000007a2ee000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:349 [inline]
+ _atomic_dec_and_lock+0x9d/0x110 lib/dec_and_lock.c:28
+ iput+0x85/0x760 fs/inode.c:1765
+ ntfs_fill_super+0x3af3/0x42a0 fs/ntfs3/super.c:1190
+ get_tree_bdev+0x400/0x620 fs/super.c:1323
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4b58e8bada
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4b59f7ff88 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f4b58e8bada
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f4b59f7ffe0
+RBP: 00007f4b59f80020 R08: 00007f4b59f80020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f4b59f7ffe0 R15: 00000000200021c0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:print_lock_nested_lock_not_held kernel/locking/lockdep.c:4885 [inline]
+RIP: 0010:__lock_acquire+0x1112/0x1f60 kernel/locking/lockdep.c:5044
+Code: 3c 30 00 48 8b 5c 24 70 74 12 48 89 df e8 96 42 73 00 49 be 00 00 00 00 00 fc ff df 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 6f 42 73 00 48 8b 33 45 31 f6 48
+RSP: 0018:ffffc90004bef828 EFLAGS: 00010006
+RAX: 0000000000000003 RBX: 0000000000000018 RCX: f3af2e06a081bf00
+RDX: 0000000000000000 RSI: 0000000080000001 RDI: 0000000000000000
+RBP: ffff88807f6085e0 R08: ffffffff816af64d R09: ffffed1017364f13
+R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff88807f608848
+R13: bd0c5e3edb57b21a R14: dffffc0000000000 R15: ffff88807f608000
+FS:  00007f4b59f80700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4b59f81000 CR3: 000000007a2ee000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	3c 30                	cmp    $0x30,%al
+   2:	00 48 8b             	add    %cl,-0x75(%rax)
+   5:	5c                   	pop    %rsp
+   6:	24 70                	and    $0x70,%al
+   8:	74 12                	je     0x1c
+   a:	48 89 df             	mov    %rbx,%rdi
+   d:	e8 96 42 73 00       	callq  0x7342a8
+  12:	49 be 00 00 00 00 00 	movabs $0xdffffc0000000000,%r14
+  19:	fc ff df
+  1c:	48 8b 1b             	mov    (%rbx),%rbx
+  1f:	48 83 c3 18          	add    $0x18,%rbx
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	48 89 df             	mov    %rbx,%rdi
+  34:	e8 6f 42 73 00       	callq  0x7342a8
+  39:	48 8b 33             	mov    (%rbx),%rsi
+  3c:	45 31 f6             	xor    %r14d,%r14d
+  3f:	48                   	rex.W
 
-(oh, yeah, those are correct, if I rebuild with `KCFLAGS="-g0
--fno-discard-value-names"` the IR retains identifiers for locals. I
-should send a patch for that for kbuild).
-
-I think that implies that the final stack slots emitted are a result
-of the register allocator failing to keep all temporary values live in
-registers; they are spilled to the stack.
-
-Paul has been playing with visualizing stack slots recently, and might
-be able to provide more color.
-
-I worry that the back end might do tail duplication or if conversion
-and potentially split large stack values into two distinct
-(non-overlapping) stack slots, but haven't seen that yet in reality.
-
-We've also seen poor stack slot reuse with KASAN with clang as well...
-
->
-> - If I mark 'do_select' as noinline_for_stack, the reported frame
->   size is decreased a lot and is suddenly independent of
->   -fsanitize=local-bounds:
->   fs/select.c:625:5: error: stack frame size (336) exceeds limit (100) in 'core_sys_select' [-Werror,-Wframe-larger-than]
-> int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
->   fs/select.c:479:21: error: stack frame size (684) exceeds limit (100) in 'do_select' [-Werror,-Wframe-larger-than]
-> static noinline int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
-
-I think this approach makes the most sense to me; the caller
-core_sys_select() has a large stack allocation `stack_fds`, and so
-does the callee do_select with `table`.  Add in inlining and long live
-ranges and it makes sense that stack spills are going to tip us over
-the threshold set by -Wframe-larger-than.
-
-Whether you make do_select() `noinline_for_stack` conditional on
-additional configs like CC_IS_CLANG or CONFIG_UBSAN_LOCAL_BOUNDS is
-perhaps also worth considering.
-
-How would you feel about a patch that:
-1. reverts commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-2. marks do_select noinline_for_stack
-
-?
-
-I assume the point of "small string optimization" going on with
-`stack_fds` in core_sys_select() is that the potential overhead for
-kmalloc is much much higher than the cost of not inlining do_select()
-into core_sys_select().  The above approach does solve this .config's
-instance, and seems slightly less brittle to me.
-
->   However, I don't even see how this makes sense at all, given that
->   the actual frame size should be at least SELECT_STACK_ALLOC!
-
-I think the math checks out:
-
-#define FRONTEND_STACK_ALLOC  256
-#define SELECT_STACK_ALLOC  FRONTEND_STACK_ALLOC
-long stack_fds[SELECT_STACK_ALLOC/sizeof(long)];
-
-sizeof(long) == 4; // i386 ilp32
-sizeof(stack_fds) == sizeof(long) * 256 / sizeof(long) == 256
-
->
-> - The behavior of -ftrivial-auto-var-init= is a bit odd here: with =zero or
->   =pattern, the stack usage is just below the limit (1020), without the
->   option it is up to 1044. It looks like your .config picks =zero, which
->   was dropped in the latest clang version, so it falls back to not
-
-Huh? What do you mean by "was dropped?"
-
-The config I sent has:
-CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
-CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_BARE=y
-CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
-# CONFIG_INIT_STACK_NONE is not set
-CONFIG_INIT_STACK_ALL_ZERO=y
-
-Disabling INIT_STACK_ALL_ZERO from the config provided doesn't elide
-the diagnostic.
-Enabling INIT_STACK_ALL_PATTERN does... explicit stack allocations in
-IR haven't changed. In the generated assembly we're pushing 3x 4B
-GPRs, subtracting 8B from the stack pointer, then another 1008B.
-(Filed: https://github.com/llvm/llvm-project/issues/58237)
-So that's 3 * 4B + 8B + 1008B == 1028.  But CONFIG_FRAME_WARN is set
-to 1024.  I wonder if this diagnostic is not as precise as it could
-be, or my math is wrong?
-
-It looks like for arrays INIT_STACK_ALL_PATTERN uses memset to fill
-the array with 0xFF rather than 0x00 used by INIT_STACK_ALL_ZERO. Not
-sure why that would make a difference, but curious that it does.
-Looking at the delta in the (massive) IR between the two, it looks
-like the second for loop preheader and body differ. That's going to
-result in different choices by the register allocator.  The second
-loop is referencing `can_busy_loop`, `busy_flag`, and `retval1` FWICT
-when looking at IR. That looks like one of the loops in do_select.
-
->   initializing. Setting it to =pattern should give you the old
->   behavior, but I don't understand why clang uses more stack without
->   the initialization, rather than using less, as it would likely cause
->   fewer spills
->
->        Arnd
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
