@@ -1,99 +1,55 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0C710E0
-	for <llvm@lists.linux.dev>; Sat,  8 Oct 2022 05:22:39 +0000 (UTC)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mktjq2zsZzlXdR;
-	Sat,  8 Oct 2022 13:18:07 +0800 (CST)
-Received: from [10.174.179.191] (10.174.179.191) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 8 Oct 2022 13:22:35 +0800
-Message-ID: <e2f2b01a-1f0e-a862-c3df-96f61dbdbaf6@huawei.com>
-Date: Sat, 8 Oct 2022 13:22:35 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C183410E0
+	for <llvm@lists.linux.dev>; Sat,  8 Oct 2022 05:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B57C433C1;
+	Sat,  8 Oct 2022 05:56:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1665208583;
+	bh=s0LjJFfi+hfHWwyYzeazkY4sx1RI6b2GS+sMxd09+dQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QFSnyER77mdb0qwHg5PA4HkheV448oi8kv9npavvKSc+uciqbe7TxsDNYsHY+s0VL
+	 XnNIvoKvJLvpt4s8CQQRiWJh1MtyzzA84puETvSKPvUS4sWGXaRJQllJiRltcy8Tfq
+	 q//9aShAOk8zeNIBmZbyH+46LVLYr3M9z43NYPPtKUuh/LJY2VWern39oWYngvwmRS
+	 E6XEsEE9xIQlAmPkTBgUu3c/T29c6Tg3Dy1IlGhbmPOuzFuj9a4MC8Ja0q0M/xs0zy
+	 CiOA5UHCnEnaBt9rlUGgp0lm+UyXOrs+sNoml0srTYwPuxuaWMODRYWCl5n+7ySug8
+	 NROfNan6f27sA==
+Date: Sat, 8 Oct 2022 07:56:17 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Amir Goldstein <amir73il@gmail.com>, Miklos Szeredi <miklos@szeredi.hu>,
+	"Darrick J . Wong" <djwong@kernel.org>, llvm@lists.linux.dev,
+	kbuild-all@lists.01.org, Al Viro <viro@zeniv.linux.org.uk>,
+	Christoph Hellwig <hch@lst.de>, Seth Forshee <sforshee@kernel.org>,
+	Yang Xu <xuyang2018.jy@fujitsu.com>,
+	Filipe Manana <fdmanana@kernel.org>, linux-unionfs@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] attr: add should_remove_sgid()
+Message-ID: <20221008055617.ssv7sbe4gj556oxq@wittgenstein>
+References: <20221007140543.1039983-3-brauner@kernel.org>
+ <202210080357.inSALqdT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [bpf-next v7 1/3] bpftool: Add auto_attach for bpf prog
- load|loadall
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC: <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-	<haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <hawk@kernel.org>, <nathan@kernel.org>,
-	<ndesaulniers@google.com>, <trix@redhat.com>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <1664277676-2228-1-git-send-email-wangyufen@huawei.com>
- <CAEf4BzaBPpZvxD6sDMWWRXVqKYTgwaxsggye0CRbv7q5_4jrPA@mail.gmail.com>
-From: wangyufen <wangyufen@huawei.com>
-In-Reply-To: <CAEf4BzaBPpZvxD6sDMWWRXVqKYTgwaxsggye0CRbv7q5_4jrPA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.191]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202210080357.inSALqdT-lkp@intel.com>
 
+On Sat, Oct 08, 2022 at 03:16:04AM +0800, kernel test robot wrote:
+> Hi Christian,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on mszeredi-vfs/overlayfs-next]
+> [cannot apply to linus/master mszeredi-fuse/for-next v6.0 next-20221007]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-在 2022/10/1 4:55, Andrii Nakryiko 写道:
-> On Tue, Sep 27, 2022 at 4:00 AM Wang Yufen <wangyufen@huawei.com> wrote:
->> Add auto_attach optional to support one-step load-attach-pin_link.
->>
->> For example,
->>     $ bpftool prog loadall test.o /sys/fs/bpf/test autoattach
->>
->>     $ bpftool link
->>     26: tracing  name test1  tag f0da7d0058c00236  gpl
->>          loaded_at 2022-09-09T21:39:49+0800  uid 0
->>          xlated 88B  jited 55B  memlock 4096B  map_ids 3
->>          btf_id 55
->>     28: kprobe  name test3  tag 002ef1bef0723833  gpl
->>          loaded_at 2022-09-09T21:39:49+0800  uid 0
->>          xlated 88B  jited 56B  memlock 4096B  map_ids 3
->>          btf_id 55
->>     57: tracepoint  name oncpu  tag 7aa55dfbdcb78941  gpl
->>          loaded_at 2022-09-09T21:41:32+0800  uid 0
->>          xlated 456B  jited 265B  memlock 4096B  map_ids 17,13,14,15
->>          btf_id 82
->>
->>     $ bpftool link
->>     1: tracing  prog 26
->>          prog_type tracing  attach_type trace_fentry
->>     3: perf_event  prog 28
->>     10: perf_event  prog 57
->>
->> The autoattach optional can support tracepoints, k(ret)probes,
->> u(ret)probes.
->>
->> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->> ---
-> For next revision, please also attach cover letter describing the
-> overall goal of the patch set (and that's where the version log
-> between revisions is put as well).
-
-Thanks, will add a cover letter in v8.
-
->
->
->> v6 -> v7: add info msg print and update doc for the skip program
->> v5 -> v6: skip the programs not supporting auto-attach,
->>            and change optional name from "auto_attach" to "autoattach"
->> v4 -> v5: some formatting nits of doc
->> v3 -> v4: rename functions, update doc, bash and do_help()
->> v2 -> v3: switch to extend prog load command instead of extend perf
->> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
->> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
->>   tools/bpf/bpftool/prog.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++--
->>   1 file changed, 79 insertions(+), 2 deletions(-)
->>
-> [...]
->
+This isn't rebased and thus will fail to apply. There'll be a merge
+conflict with changes to fs/internal.h for current master. Best to wait
+until I have rebased this after v6.0-rc1 is out.
