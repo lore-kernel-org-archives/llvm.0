@@ -1,41 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A61C5C97
-	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 22:12:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284AAC433D7;
-	Sun,  9 Oct 2022 22:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD87D5C97
+	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 22:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72710C433D6;
+	Sun,  9 Oct 2022 22:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665353527;
-	bh=EV1aWa0RnASqulCvNKmsejHYmsYcScF6Ye+v3g617V4=;
+	s=k20201202; t=1665353670;
+	bh=vkat4yOAmBKTohHWR4IO8HDVyG+wngIzOyTOnf5NIBg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Jew543X4ihkNoveEcCja/BcWNsrh+qufqZbcJ79i405WrJ74mYToeFmX/fXSORpjy
-	 7MnTl5FiLucZahuoIWwIHAsMgBNIakW7WqrcxlfsvyIkIMUmm7EPef7rpuxioZP5fy
-	 ZwsvdEc9wIEylePMS/FdhfGf4hl7+An3yOx8yG65bQojcXrMZXjPDRjRUcIxROZmRC
-	 +8Gssfv4Ahp7QR5b2ghTdqkeuw0cJxe5WvFYtHK+Mkuebh3BePI0dMIaQEwyVmMMTx
-	 sqFgVACNvhJkvcVZOcUycYhEYpekvfdPzb0tvSgX6KAxKjNsgBdU8bFnhhuEWJd+8M
-	 I+cBGg4cbZcFw==
+	b=hIc2C110Dsa+/OqOBW8CV9cpK/LaS6JwUIoWe4Ayv4hYMb9cTiH+wS7rd4mn8Vqai
+	 ARYBl3RnhXYpxw2143VGbE6L0SIoJm1DzbhjyIxkiMWhk7GG5mfPGyGFz8KNWueOwX
+	 ETnGd4CGFIQ0pdwN+3AtgYjEBEpobB0s3ZnQqrmMN+jjqED5TQxrO55e2GrXKd5AN9
+	 k99z15c2DxNdNNhbdNjAPrGKW+N9daE6/UtSSe6i4KlRJ3w4WHt/3I8mIKPcWB653b
+	 orIbP+NakUBbBtLV8wDPKI9uoxR5ype9IgcXjljPIeWsWaNgp5T2zPd8Mj/F43fNOd
+	 tlRSC4eqjfZjQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Nathan Huckleberry <nhuck@google.com>,
 	Dan Carpenter <error27@gmail.com>,
 	llvm@lists.linux.dev,
-	Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
 	Sasha Levin <sashal@kernel.org>,
-	chandrashekar.devegowda@intel.com,
-	linuxwwan@intel.com,
-	loic.poulain@linaro.org,
-	davem@davemloft.net,
 	edumazet@google.com,
+	kuba@kernel.org,
 	pabeni@redhat.com,
+	lars.povlsen@microchip.com,
+	Steen.Hegelund@microchip.com,
+	daniel.machon@microchip.com,
+	UNGLinuxDriver@microchip.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 51/77] net: wwan: t7xx: Fix return type of t7xx_ccmni_start_xmit
-Date: Sun,  9 Oct 2022 18:07:28 -0400
-Message-Id: <20221009220754.1214186-51-sashal@kernel.org>
+	casper.casan@gmail.com,
+	horatiu.vultur@microchip.com,
+	netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.0 75/77] net: sparx5: Fix return type of sparx5_port_xmit_impl
+Date: Sun,  9 Oct 2022 18:07:52 -0400
+Message-Id: <20221009220754.1214186-75-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
 References: <20221009220754.1214186-1-sashal@kernel.org>
@@ -51,7 +54,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Huckleberry <nhuck@google.com>
 
-[ Upstream commit 73c99e26036529e633a0f2d628ad7ddff6594668 ]
+[ Upstream commit 73ea735073599430818e89b8901452287a15a718 ]
 
 The ndo_start_xmit field in net_device_ops is expected to be of type
 netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
@@ -59,34 +62,53 @@ netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 The mismatched return type breaks forward edge kCFI since the underlying
 function definition does not match the function hook definition.
 
-The return type of t7xx_ccmni_start_xmit should be changed from int to
+The return type of sparx5_port_xmit_impl should be changed from int to
 netdev_tx_t.
 
 Reported-by: Dan Carpenter <error27@gmail.com>
 Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Acked-by: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Link: https://lore.kernel.org/r/20220912214510.929070-1-nhuck@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wwan/t7xx/t7xx_netdev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/microchip/sparx5/sparx5_main.h   | 2 +-
+ drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wwan/t7xx/t7xx_netdev.c b/drivers/net/wwan/t7xx/t7xx_netdev.c
-index c6b6547f2c6f..f71d3bc3b237 100644
---- a/drivers/net/wwan/t7xx/t7xx_netdev.c
-+++ b/drivers/net/wwan/t7xx/t7xx_netdev.c
-@@ -74,7 +74,7 @@ static int t7xx_ccmni_send_packet(struct t7xx_ccmni *ccmni, struct sk_buff *skb,
- 	return 0;
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
+index d071ac3b7106..705d8852078f 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
+@@ -291,7 +291,7 @@ struct frame_info {
+ void sparx5_xtr_flush(struct sparx5 *sparx5, u8 grp);
+ void sparx5_ifh_parse(u32 *ifh, struct frame_info *info);
+ irqreturn_t sparx5_xtr_handler(int irq, void *_priv);
+-int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
++netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
+ int sparx5_manual_injection_mode(struct sparx5 *sparx5);
+ void sparx5_port_inj_timer_setup(struct sparx5_port *port);
+ 
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+index 21844beba72d..83c16ca5b30f 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+@@ -222,13 +222,13 @@ static int sparx5_inject(struct sparx5 *sparx5,
+ 	return NETDEV_TX_OK;
  }
  
--static int t7xx_ccmni_start_xmit(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t t7xx_ccmni_start_xmit(struct sk_buff *skb, struct net_device *dev)
+-int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
  {
- 	struct t7xx_ccmni *ccmni = wwan_netdev_drvpriv(dev);
- 	int skb_len = skb->len;
+ 	struct net_device_stats *stats = &dev->stats;
+ 	struct sparx5_port *port = netdev_priv(dev);
+ 	struct sparx5 *sparx5 = port->sparx5;
+ 	u32 ifh[IFH_LEN];
+-	int ret;
++	netdev_tx_t ret;
+ 
+ 	memset(ifh, 0, IFH_LEN * 4);
+ 	sparx5_set_port_ifh(ifh, port->portno);
 -- 
 2.35.1
 
