@@ -1,40 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05EE5C97
-	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 20:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090B9C433D6;
-	Sun,  9 Oct 2022 20:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4365C97
+	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 20:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF82C433D6;
+	Sun,  9 Oct 2022 20:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665348758;
-	bh=hzbiDCjgP4PWpxtEpRK2mCWbxYUpFdc6paCISbBKNxg=;
+	s=k20201202; t=1665348763;
+	bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VPmd5hluPJe5Mjr6czZ3IznGYFbRVwrIKDmKnxVxc23tY4G7sGy1WW3Qiw+KzZSex
-	 n2NAmDA97sZkqAUhcs69JZx3A4m7AQN9lfxGCVQKp6HhbDBl1cJuqXlsOkQBzWHtOl
-	 MT8uP4LjnKH5ZJpDQ/6devxq24ipNwOAnzeGCF6+1Nrvd9Hu7C03I/7C16pBYUwV3o
-	 zDvN2r7MT6gbN156fgW9ZgQHTvB/GD+NDy+VrAxxdb59Y3VRgP5BZHBBU2MxDE2gCd
-	 0DLQ+LCt1Wsbw9yQdJbLuyMIQmVHV7nkE0zQGJsUeoYL4fxyT81hKNwo98tazDyn5b
-	 qT7MU4Bho0RGQ==
+	b=iFdIX/r/X/ZD2nGODT8vCwayOvknwsoMlraCaNDgSfXZryTM7ZkHK7fRG8DdNlBXO
+	 xGZyMpdLC6UAJqsfC8qVRx9qOOqtdul6RP7pdlY8mmjoQrMTSas3T953cmX3tDfgo3
+	 I9q1xDZmwq7K47VDI3jCNfRJxgA9IaSfvBe+78M+YACOrFUmZKNGSEfequn+ZwMMVK
+	 AWdf/3I8B1x3kkvmTlUGNkCf4G/lTebCwkopD5MP7gYiu1VVZN8+oygkUBA8pjneey
+	 j9ofLYPDQ6MFlwNfXgC6IZlIH6Df1qNzTH9DH/BXTUrNxJpMOWkKAeWx5Qi7X/PfMg
+	 8B+4k3PKZJH1Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	David Gow <davidgow@google.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Sander Vanheule <sander@svanheule.net>,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.19 06/16] fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
-Date: Sun,  9 Oct 2022 16:52:15 -0400
-Message-Id: <20221009205226.1202133-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 09/16] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date: Sun,  9 Oct 2022 16:52:18 -0400
+Message-Id: <20221009205226.1202133-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221009205226.1202133-1-sashal@kernel.org>
 References: <20221009205226.1202133-1-sashal@kernel.org>
@@ -44,87 +40,62 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit d07c0acb4f41cc42a0d97530946965b3e4fa68c1 ]
+[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
 
-With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we observe
-a runtime panic while running Android's Compatibility Test Suite's (CTS)
-android.hardware.input.cts.tests. This is stemming from a strlen()
-call in hidinput_allocate().
+Clang is especially sensitive about argument type matching when using
+__overloaded functions (like memcmp(), etc). Help it see that function
+pointers are just "void *". Avoids this error:
 
-__compiletime_strlen() is implemented in terms of __builtin_object_size(),
-then does an array access to check for NUL-termination. A quirk of
-__builtin_object_size() is that for strings whose values are runtime
-dependent, __builtin_object_size(str, 1 or 0) returns the maximum size
-of possible values when those sizes are determinable at compile time.
-Example:
+arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
+                   if (!memcmp(prom_init, prom_init + mem, 32))
+                        ^~~~~~
+include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
 
-  static const char *v = "FOO BAR";
-  static const char *y = "FOO BA";
-  unsigned long x (int z) {
-      // Returns 8, which is:
-      // max(__builtin_object_size(v, 1), __builtin_object_size(y, 1))
-      return __builtin_object_size(z ? v : y, 1);
-  }
-
-So when FORTIFY_SOURCE is enabled, the current implementation of
-__compiletime_strlen() will try to access beyond the end of y at runtime
-using the size of v. Mixed with UBSAN_LOCAL_BOUNDS we get a fault.
-
-hidinput_allocate() has a local C string whose value is control flow
-dependent on a switch statement, so __builtin_object_size(str, 1)
-evaluates to the maximum string length, making all other cases fault on
-the last character check. hidinput_allocate() could be cleaned up to
-avoid runtime calls to strlen() since the local variable can only have
-literal values, so there's no benefit to trying to fortify the strlen
-call site there.
-
-Perform a __builtin_constant_p() check against index 0 earlier in the
-macro to filter out the control-flow-dependant case. Add a KUnit test
-for checking the expected behavioral characteristics of FORTIFY_SOURCE
-internals.
-
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: "Rafał Miłecki" <zajec5@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
 Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc: David Gow <davidgow@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Sander Vanheule <sander@svanheule.net>
-Cc: linux-hardening@vger.kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>
 Cc: llvm@lists.linux.dev
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Android Treehugger Robot
-Link: https://android-review.googlesource.com/c/kernel/common/+/2206839
-Co-developed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/fortify-string.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/bcm47xx/prom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 3b401fa0f374..fce2fb2fc962 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -19,7 +19,8 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
- 	unsigned char *__p = (unsigned char *)(p);		\
- 	size_t __ret = (size_t)-1;				\
- 	size_t __p_size = __builtin_object_size(p, 1);		\
--	if (__p_size != (size_t)-1) {				\
-+	if (__p_size != (size_t)-1 &&				\
-+	    __builtin_constant_p(*__p)) {			\
- 		size_t __p_len = __p_size - 1;			\
- 		if (__builtin_constant_p(__p[__p_len]) &&	\
- 		    __p[__p_len] == '\0')			\
+diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
+index 0a63721d0fbf..5a33d6b48d77 100644
+--- a/arch/mips/bcm47xx/prom.c
++++ b/arch/mips/bcm47xx/prom.c
+@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
+ 			pr_debug("Assume 128MB RAM\n");
+ 			break;
+ 		}
+-		if (!memcmp(prom_init, prom_init + mem, 32))
++		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
+ 			break;
+ 	}
+ 	lowmem = mem;
+@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
+ 
+ 	off = EXTVBASE + __pa(off);
+ 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
+-		if (!memcmp(prom_init, (void *)(off + extmem), 16))
++		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
+ 			break;
+ 	}
+ 	extmem -= lowmem;
 -- 
 2.35.1
 
