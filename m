@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635555CAB
-	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 23:57:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952F4C43143;
-	Sun,  9 Oct 2022 23:57:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E9C5CAB
+	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 23:58:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15334C43141;
+	Sun,  9 Oct 2022 23:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665359859;
-	bh=68484usKTHxDSlDitAPfp628Cran1WU7zwP/eWP86Gw=;
+	s=k20201202; t=1665359887;
+	bh=smQ+WOJ2DvzcoWgCJ8NdsVMDowvo9I+a12p6Z3muVUs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lz8DXgxUCo36HAfVU1HSaF50/BNpFJyelblOAqqkw2QrkFWXmnkY0CgTe1guz71fL
-	 YgYX4PSfgpv47Z+STiXUgu12uM7Dn5D4k0T9Fsc8jw6CT3g6e/nRX0PQNoXzXVYCWE
-	 /Zk2oFmgbwjKf1Zr4ZBceqa1wDx+c2jJ+CWNehwrLOUb5Do4N8S4yxmjjY8N563WZz
-	 J4qHcS5tsrpBCmGrbz0tIK+osG8c98hnjBFKFabIbFRurnLx9P9FXVAjzoT3YjfTS8
-	 psp73axcTTQqsjUqjlMALcGSZngg2q70//xI7boyGCGI/bn8TFx22U/Fi93upB1Sgf
-	 yCmya1tDxF7ZQ==
+	b=D5MDaU90hyZH12wsdpfdQYWILWq7W6zKm+dDSF6MVlXf3zhWnxMEDR/XNqB4Yodt3
+	 uxQXkSms29xREs4t0mjv2B+752yZfMIasuRrl6k7HOcGPzvshMUMlpESC+vIIdMKVN
+	 jMOZDOI4MvET+mrfIvetOx5yKQSca5AHBVO9O6oMsm+vmIRLmcT9Ns9aAA5tpIgdL8
+	 Hp3BdvqWCGmzel0XTgylexjn8AZ17Q+WnplHb6Dr8ZxH7K9Q99XeLb9c0WUZ+o+jSw
+	 k9UacFgC5QKFqBXNjrTsJAdoix5ql5q/cuG9PaXAa33aHLzgVLczTqD0f243KGKYip
+	 7oHFhqm178pDg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -33,12 +33,12 @@ Cc: Nathan Huckleberry <nhuck@google.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 12/14] drm/exynos: Fix return type for mixer_mode_valid and hdmi_mode_valid
-Date: Sun,  9 Oct 2022 19:57:08 -0400
-Message-Id: <20221009235710.1231937-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 10/10] drm/exynos: Fix return type for mixer_mode_valid and hdmi_mode_valid
+Date: Sun,  9 Oct 2022 19:57:45 -0400
+Message-Id: <20221009235746.1232129-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009235710.1231937-1-sashal@kernel.org>
-References: <20221009235710.1231937-1-sashal@kernel.org>
+In-Reply-To: <20221009235746.1232129-1-sashal@kernel.org>
+References: <20221009235746.1232129-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/exynos/exynos_hdmi.c b/drivers/gpu/drm/exynos/exynos_hdmi.c
-index 0073a2b3b80a..838a638fb03a 100644
+index 2092a650df7d..227856f0a3c4 100644
 --- a/drivers/gpu/drm/exynos/exynos_hdmi.c
 +++ b/drivers/gpu/drm/exynos/exynos_hdmi.c
 @@ -911,8 +911,8 @@ static int hdmi_find_phy_conf(struct hdmi_context *hdata, u32 pixel_clock)
@@ -95,10 +95,10 @@ index 0073a2b3b80a..838a638fb03a 100644
  	struct hdmi_context *hdata = connector_to_hdmi(connector);
  	int ret;
 diff --git a/drivers/gpu/drm/exynos/exynos_mixer.c b/drivers/gpu/drm/exynos/exynos_mixer.c
-index 22f494145411..07c59e647fc2 100644
+index 522d6c46d7b1..16a7624021a8 100644
 --- a/drivers/gpu/drm/exynos/exynos_mixer.c
 +++ b/drivers/gpu/drm/exynos/exynos_mixer.c
-@@ -1039,7 +1039,7 @@ static void mixer_disable(struct exynos_drm_crtc *crtc)
+@@ -1018,7 +1018,7 @@ static void mixer_disable(struct exynos_drm_crtc *crtc)
  	clear_bit(MXR_BIT_POWERED, &ctx->flags);
  }
  
