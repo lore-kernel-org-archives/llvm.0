@@ -1,36 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345E35C97
-	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 20:54:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4149C43470;
-	Sun,  9 Oct 2022 20:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51315C97
+	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 20:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B824C433D6;
+	Sun,  9 Oct 2022 20:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665348888;
-	bh=7Biv/RB4g1yWRQ3Ir7P+DO9H5qF3EuPehLJSXWw6ecI=;
+	s=k20201202; t=1665348893;
+	bh=HDBZX01FN2W9c75Sd8NoXHb1ZhN7yyXXynCHY/64+/k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fq/4Fw8QUdiruOQpxNS4XSdHbVb1fdggsYuYIT4qn1Fjweeiykk5wA5SwE1fdLWO2
-	 XtoCyHWG61UqorT6TEO3Fq9p6Mag2U27UJlNK5Z0/i1a7ePQUEwOrL7jh9SeypHNS5
-	 T+GcJEU+0b+07NierTN8uCdISAIFVSXyE5FySKUvTfIMgv/3RTV6CUPekArcKb9u72
-	 g3ypfW52tCVvnNMzJOzU8jJcicMb9aa9RyLJ2TGEGCHfhY+Vrx1bCGdkQKSBYYRr0w
-	 O84XjY9s0FRKoZZQwmxK4ONZGDNyHlId/60CUD1YfqdAHfHMcuA5RlrWa8KHy7yXw/
-	 IH2E8naq4BucA==
+	b=pt7bTe+swnrVgAIZUI319jGl8bUpA4xsKzNCd7+sQPVqIF0i/DZ63Eg5JcllsHDbN
+	 hm03b7Mq4Jy2rlwygWwRaUN/lSc0L28sjK5xx/A5QmGUkVIqXCpc9viNCv1Qd9/rLx
+	 +g894KW5BLmWvbg8LkKXehPOlHpO2+LbO52F8/Svj2BdwxEQ2Ytmr//+5F2JxmJgVq
+	 QD6wUrCdm5opT2Uwjt2QvuVhesMl5hdfYEtRuanofxE9G04zFztCr0Fyo1PKZUhaV9
+	 KGxyYL2RpjpukVg2JtCgqT1BvIBui/3zLEa5r2gHvwrjhiDq4/gRVg+ox6m3qLrxlX
+	 Y6e463HYckFPA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 2/6] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date: Sun,  9 Oct 2022 16:54:38 -0400
-Message-Id: <20221009205443.1203725-2-sashal@kernel.org>
+	Juergen Gross <jgross@suse.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	xen-devel@lists.xenproject.org,
+	Sasha Levin <sashal@kernel.org>,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 4.19 5/6] x86/entry: Work around Clang __bdos() bug
+Date: Sun,  9 Oct 2022 16:54:41 -0400
+Message-Id: <20221009205443.1203725-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221009205443.1203725-1-sashal@kernel.org>
 References: <20221009205443.1203725-1-sashal@kernel.org>
@@ -40,62 +44,68 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
+[ Upstream commit 3e1730842f142add55dc658929221521a9ea62b6 ]
 
-Clang is especially sensitive about argument type matching when using
-__overloaded functions (like memcmp(), etc). Help it see that function
-pointers are just "void *". Avoids this error:
+Clang produces a false positive when building with CONFIG_FORTIFY_SOURCE=y
+and CONFIG_UBSAN_BOUNDS=y when operating on an array with a dynamic
+offset. Work around this by using a direct assignment of an empty
+instance. Avoids this warning:
 
-arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
+../include/linux/fortify-string.h:309:4: warning: call to __write_overflow_field declared with 'warn
+ing' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wat
+tribute-warning]
+                        __write_overflow_field(p_size_field, size);
+                        ^
 
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "Rafał Miłecki" <zajec5@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
+which was isolated to the memset() call in xen_load_idt().
+
+Note that this looks very much like another bug that was worked around:
+https://github.com/ClangBuiltLinux/linux/issues/1592
+
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: xen-devel@lists.xenproject.org
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Link: https://lore.kernel.org/lkml/41527d69-e8ab-3f86-ff37-6b298c01d5bc@oracle.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bcm47xx/prom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/xen/enlighten_pv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index 135a5407f015..d26d9a6f6ee7 100644
---- a/arch/mips/bcm47xx/prom.c
-+++ b/arch/mips/bcm47xx/prom.c
-@@ -85,7 +85,7 @@ static __init void prom_init_mem(void)
- 			pr_debug("Assume 128MB RAM\n");
- 			break;
- 		}
--		if (!memcmp(prom_init, prom_init + mem, 32))
-+		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
- 			break;
- 	}
- 	lowmem = mem;
-@@ -162,7 +162,7 @@ void __init bcm47xx_prom_highmem_init(void)
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 8f1ff8dad2ce..04bfd9c3987b 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -752,6 +752,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
+ {
+ 	static DEFINE_SPINLOCK(lock);
+ 	static struct trap_info traps[257];
++	static const struct trap_info zero = { };
+ 	unsigned out;
  
- 	off = EXTVBASE + __pa(off);
- 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
--		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-+		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
- 			break;
- 	}
- 	extmem -= lowmem;
+ 	trace_xen_cpu_load_idt(desc);
+@@ -761,7 +762,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
+ 	memcpy(this_cpu_ptr(&idt_desc), desc, sizeof(idt_desc));
+ 
+ 	out = xen_convert_trap_info(desc, traps, false);
+-	memset(&traps[out], 0, sizeof(traps[0]));
++	traps[out] = zero;
+ 
+ 	xen_mc_flush();
+ 	if (HYPERVISOR_set_trap_table(traps))
 -- 
 2.35.1
 
