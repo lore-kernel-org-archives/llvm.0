@@ -1,44 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126155C97
-	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 22:19:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01BCC433D6;
-	Sun,  9 Oct 2022 22:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD315C97
+	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 22:19:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F446C4347C;
+	Sun,  9 Oct 2022 22:19:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665353942;
-	bh=vkat4yOAmBKTohHWR4IO8HDVyG+wngIzOyTOnf5NIBg=;
+	s=k20201202; t=1665353944;
+	bh=79sX76vh9ai+k4JQ7VU0DTX+Fu1WGVzAUgZNp9U+T/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tNF+MKgrZ5E9BGW2s60yT3FTgv73eM+U7lfHb6ECKEvoOb5EaqNYkjIuWfGe5LrOX
-	 EG8IeXBRUIpgbqT4c4HnlLrUNeOu2Rch6Udu0fvC0fl/xE5MsueZKrE2g02a/SvQlz
-	 b4QA/5Duc/K35LvUz1BCZr8hA2joudPLmheCBJOEysq1SFr9buBgVRZsFiLGgTOAc8
-	 ROCK0Lv7MYReWFituWStfrau6QD68SX9USPxKylUbBiLpsimY1azCwTqQ48nzBdbn5
-	 AMylii/fUTl/980z6RtzQtzmoOi1yqPu/CMTc6iufLkB6tYsKj1EF3LQBWxgnCMM7s
-	 uoe2PnZ3lAvVQ==
+	b=q8jnz9g+8PUagMokGYRz7I+VvkHL6ZupWAqAOLUkm/INP6H0CUVXqikvcXSvifSPX
+	 U50GZ0cizGoJ7OE3cOyqKgY9PfjK35cpgBbJG8ZlhmD7dp4h7L2RgEgUDd1Ix9yAgy
+	 FMsx1WyS08HMSaT+Se04zUaZULHCMlQhWF6Axm5TVhJCCPpt9RKaUdANUXB4lE9GUo
+	 tkOhCZ7sUxRcfgo4o6Vb6AyqczCe3WBJVtrT3gliq9FifCFXiIfcihDPxHFX/jNpJq
+	 N/463UfKWI7OCdjCDGCWRvwm+AISF4Eh8cWcuEeFT8QQcxwhBuqcxdx2L2cdqfSKPp
+	 ejFGSiHuvmjDg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Nathan Huckleberry <nhuck@google.com>,
 	Dan Carpenter <error27@gmail.com>,
 	llvm@lists.linux.dev,
-	"David S . Miller" <davem@davemloft.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	lars.povlsen@microchip.com,
-	Steen.Hegelund@microchip.com,
-	daniel.machon@microchip.com,
-	UNGLinuxDriver@microchip.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	casper.casan@gmail.com,
 	horatiu.vultur@microchip.com,
-	netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.19 71/73] net: sparx5: Fix return type of sparx5_port_xmit_impl
-Date: Sun,  9 Oct 2022 18:14:49 -0400
-Message-Id: <20221009221453.1216158-71-sashal@kernel.org>
+	UNGLinuxDriver@microchip.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	ndesaulniers@google.com,
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 72/73] net: lan966x: Fix return type of lan966x_port_xmit
+Date: Sun,  9 Oct 2022 18:14:50 -0400
+Message-Id: <20221009221453.1216158-72-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221009221453.1216158-1-sashal@kernel.org>
 References: <20221009221453.1216158-1-sashal@kernel.org>
@@ -54,7 +49,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Huckleberry <nhuck@google.com>
 
-[ Upstream commit 73ea735073599430818e89b8901452287a15a718 ]
+[ Upstream commit 450a580fc4b5e7f7fb8d9b1a0208bf0d1efc53a8 ]
 
 The ndo_start_xmit field in net_device_ops is expected to be of type
 netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
@@ -62,53 +57,35 @@ netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 The mismatched return type breaks forward edge kCFI since the underlying
 function definition does not match the function hook definition.
 
-The return type of sparx5_port_xmit_impl should be changed from int to
+The return type of lan966x_port_xmit should be changed from int to
 netdev_tx_t.
 
 Reported-by: Dan Carpenter <error27@gmail.com>
 Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20220929182704.64438-1-nhuck@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microchip/sparx5/sparx5_main.h   | 2 +-
- drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-index d071ac3b7106..705d8852078f 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_main.h
-@@ -291,7 +291,7 @@ struct frame_info {
- void sparx5_xtr_flush(struct sparx5 *sparx5, u8 grp);
- void sparx5_ifh_parse(u32 *ifh, struct frame_info *info);
- irqreturn_t sparx5_xtr_handler(int irq, void *_priv);
--int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev);
- int sparx5_manual_injection_mode(struct sparx5 *sparx5);
- void sparx5_port_inj_timer_setup(struct sparx5_port *port);
- 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-index 21844beba72d..83c16ca5b30f 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-@@ -222,13 +222,13 @@ static int sparx5_inject(struct sparx5 *sparx5,
- 	return NETDEV_TX_OK;
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index d928b75f3780..be40c6d3ec68 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -344,7 +344,8 @@ static void lan966x_ifh_set_timestamp(void *ifh, u64 timestamp)
+ 		IFH_POS_TIMESTAMP, IFH_LEN * 4, PACK, 0);
  }
  
--int sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t sparx5_port_xmit_impl(struct sk_buff *skb, struct net_device *dev)
+-static int lan966x_port_xmit(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t lan966x_port_xmit(struct sk_buff *skb,
++				     struct net_device *dev)
  {
- 	struct net_device_stats *stats = &dev->stats;
- 	struct sparx5_port *port = netdev_priv(dev);
- 	struct sparx5 *sparx5 = port->sparx5;
- 	u32 ifh[IFH_LEN];
--	int ret;
-+	netdev_tx_t ret;
- 
- 	memset(ifh, 0, IFH_LEN * 4);
- 	sparx5_set_port_ifh(ifh, port->portno);
+ 	struct lan966x_port *port = netdev_priv(dev);
+ 	struct lan966x *lan966x = port->lan966x;
 -- 
 2.35.1
 
