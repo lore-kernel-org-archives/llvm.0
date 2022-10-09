@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B715C97
-	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 20:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC14CC43470;
-	Sun,  9 Oct 2022 20:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05EE5C97
+	for <llvm@lists.linux.dev>; Sun,  9 Oct 2022 20:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090B9C433D6;
+	Sun,  9 Oct 2022 20:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665348742;
-	bh=WOtLqPtfTzhG6xYKuXLzf9SXFlrNx350kTurMW1iEWw=;
+	s=k20201202; t=1665348758;
+	bh=hzbiDCjgP4PWpxtEpRK2mCWbxYUpFdc6paCISbBKNxg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bGVsRFYHKQtNA4R65IBHvJqQhHVfXeVzI56AvLm8fW7H5Kq2kgFfGutf7RKDs6hgq
-	 p7TDDcpMn9biVK2r1bAXLntk+tX4cBLFyHSjwxWA5FuqMxUzO6ZOn0cxwyBZdnwXQG
-	 IM74+upYugArq9YuX/P250IdX/3q9YWT7ZLFiUc2HKZRSOEKxhbl3khzFLPKqNgcF9
-	 3q9s82VxGZOOBUj32wxkslhG2JvJhZxXtg45H32JYVfp76slkyZ8ZE8KWKt9FidK4G
-	 qFxa58aT1SG/veA5qEpW3I60HIsHAtMmHRkpcYTFQDn1bm6Lusy6o5uY44nzKeajWz
-	 zNwzVB3QyJYvQ==
+	b=VPmd5hluPJe5Mjr6czZ3IznGYFbRVwrIKDmKnxVxc23tY4G7sGy1WW3Qiw+KzZSex
+	 n2NAmDA97sZkqAUhcs69JZx3A4m7AQN9lfxGCVQKp6HhbDBl1cJuqXlsOkQBzWHtOl
+	 MT8uP4LjnKH5ZJpDQ/6devxq24ipNwOAnzeGCF6+1Nrvd9Hu7C03I/7C16pBYUwV3o
+	 zDvN2r7MT6gbN156fgW9ZgQHTvB/GD+NDy+VrAxxdb59Y3VRgP5BZHBBU2MxDE2gCd
+	 0DLQ+LCt1Wsbw9yQdJbLuyMIQmVHV7nkE0zQGJsUeoYL4fxyT81hKNwo98tazDyn5b
+	 qT7MU4Bho0RGQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Kees Cook <keescook@chromium.org>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	xen-devel@lists.xenproject.org,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 16/18] x86/entry: Work around Clang __bdos() bug
-Date: Sun,  9 Oct 2022 16:51:33 -0400
-Message-Id: <20221009205136.1201774-16-sashal@kernel.org>
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	David Gow <davidgow@google.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Sander Vanheule <sander@svanheule.net>,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.19 06/16] fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
+Date: Sun,  9 Oct 2022 16:52:15 -0400
+Message-Id: <20221009205226.1202133-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009205136.1201774-1-sashal@kernel.org>
-References: <20221009205136.1201774-1-sashal@kernel.org>
+In-Reply-To: <20221009205226.1202133-1-sashal@kernel.org>
+References: <20221009205226.1202133-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,62 +50,81 @@ Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 3e1730842f142add55dc658929221521a9ea62b6 ]
+[ Upstream commit d07c0acb4f41cc42a0d97530946965b3e4fa68c1 ]
 
-Clang produces a false positive when building with CONFIG_FORTIFY_SOURCE=y
-and CONFIG_UBSAN_BOUNDS=y when operating on an array with a dynamic
-offset. Work around this by using a direct assignment of an empty
-instance. Avoids this warning:
+With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we observe
+a runtime panic while running Android's Compatibility Test Suite's (CTS)
+android.hardware.input.cts.tests. This is stemming from a strlen()
+call in hidinput_allocate().
 
-../include/linux/fortify-string.h:309:4: warning: call to __write_overflow_field declared with 'warn
-ing' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wat
-tribute-warning]
-                        __write_overflow_field(p_size_field, size);
-                        ^
+__compiletime_strlen() is implemented in terms of __builtin_object_size(),
+then does an array access to check for NUL-termination. A quirk of
+__builtin_object_size() is that for strings whose values are runtime
+dependent, __builtin_object_size(str, 1 or 0) returns the maximum size
+of possible values when those sizes are determinable at compile time.
+Example:
 
-which was isolated to the memset() call in xen_load_idt().
+  static const char *v = "FOO BAR";
+  static const char *y = "FOO BA";
+  unsigned long x (int z) {
+      // Returns 8, which is:
+      // max(__builtin_object_size(v, 1), __builtin_object_size(y, 1))
+      return __builtin_object_size(z ? v : y, 1);
+  }
 
-Note that this looks very much like another bug that was worked around:
-https://github.com/ClangBuiltLinux/linux/issues/1592
+So when FORTIFY_SOURCE is enabled, the current implementation of
+__compiletime_strlen() will try to access beyond the end of y at runtime
+using the size of v. Mixed with UBSAN_LOCAL_BOUNDS we get a fault.
 
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: xen-devel@lists.xenproject.org
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/lkml/41527d69-e8ab-3f86-ff37-6b298c01d5bc@oracle.com
+hidinput_allocate() has a local C string whose value is control flow
+dependent on a switch statement, so __builtin_object_size(str, 1)
+evaluates to the maximum string length, making all other cases fault on
+the last character check. hidinput_allocate() could be cleaned up to
+avoid runtime calls to strlen() since the local variable can only have
+literal values, so there's no benefit to trying to fortify the strlen
+call site there.
+
+Perform a __builtin_constant_p() check against index 0 earlier in the
+macro to filter out the control-flow-dependant case. Add a KUnit test
+for checking the expected behavioral characteristics of FORTIFY_SOURCE
+internals.
+
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc: David Gow <davidgow@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Sander Vanheule <sander@svanheule.net>
+Cc: linux-hardening@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Android Treehugger Robot
+Link: https://android-review.googlesource.com/c/kernel/common/+/2206839
+Co-developed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/xen/enlighten_pv.c | 3 ++-
+ include/linux/fortify-string.h | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 0ed2e487a693..9b1a58dda935 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -765,6 +765,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
- {
- 	static DEFINE_SPINLOCK(lock);
- 	static struct trap_info traps[257];
-+	static const struct trap_info zero = { };
- 	unsigned out;
- 
- 	trace_xen_cpu_load_idt(desc);
-@@ -774,7 +775,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
- 	memcpy(this_cpu_ptr(&idt_desc), desc, sizeof(idt_desc));
- 
- 	out = xen_convert_trap_info(desc, traps, false);
--	memset(&traps[out], 0, sizeof(traps[0]));
-+	traps[out] = zero;
- 
- 	xen_mc_flush();
- 	if (HYPERVISOR_set_trap_table(traps))
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index 3b401fa0f374..fce2fb2fc962 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -19,7 +19,8 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
+ 	unsigned char *__p = (unsigned char *)(p);		\
+ 	size_t __ret = (size_t)-1;				\
+ 	size_t __p_size = __builtin_object_size(p, 1);		\
+-	if (__p_size != (size_t)-1) {				\
++	if (__p_size != (size_t)-1 &&				\
++	    __builtin_constant_p(*__p)) {			\
+ 		size_t __p_len = __p_size - 1;			\
+ 		if (__builtin_constant_p(__p[__p_len]) &&	\
+ 		    __p[__p_len] == '\0')			\
 -- 
 2.35.1
 
