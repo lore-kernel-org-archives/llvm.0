@@ -1,123 +1,125 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AA033CC
-	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 17:29:44 +0000 (UTC)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29AGdcAp020104;
-	Mon, 10 Oct 2022 17:29:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=RR+rZWydssfivVKmDxVVu22FUk3nGmiN5dKRjkPf/nw=;
- b=RYh9Vg3UHdL1zwBneonVAPmX+cG28C4LmmC7SWzEjHiieAt53Vq5vG2CPi7R2OAj6103
- 5hU1A1X6me40bJlcGCT4vrnjU0NY9fw3uq2Wa8/McT7XrpnK8DtD7X1IVKo+DIwuzBsA
- AC1xjRVdJyhBxu/yS80QMSGF40Q2A771Ze1jKcZTPO4JHuK9RyK9ZJ4kBBWFENHsRMGu
- VST05jzmjngd1ABr4qahQMFWWM/sRG1Wnw/d57JjBvHc+X1eHJ4QO+rr0WNDghlav4nl
- XbIBsG2OnROh9panXY3+R6R+hRAj9J5zIngy9M414d31qWCVaC32fDgIxjREK+gP8OGS jA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k32gemw83-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Oct 2022 17:29:35 +0000
-Received: from pps.filterd (NASANPPMTA05.qualcomm.com [127.0.0.1])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 29AHLn3d001373;
-	Mon, 10 Oct 2022 17:29:34 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NASANPPMTA05.qualcomm.com (PPS) with ESMTPS id 3k3jqa2mdj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Oct 2022 17:29:34 +0000
-Received: from NASANPPMTA05.qualcomm.com (NASANPPMTA05.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29AHTY36012611;
-	Mon, 10 Oct 2022 17:29:34 GMT
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (PPS) with ESMTPS id 29AHTYU2012610
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Oct 2022 17:29:34 +0000
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 10 Oct
- 2022 10:29:33 -0700
-Date: Mon, 10 Oct 2022 10:29:32 -0700
-From: Guru Das Srinagesh <quic_gurus@quicinc.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-CC: Tom Rix <trix@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
-        "Elliot
- Berman" <quic_eberman@quicinc.com>, <llvm@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <matt@codeconstruct.com.au>,
-        David Howells
-	<dhowells@redhat.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>, <jackm@dev.mellanox.co.il>
-Subject: Re: [PATCH 2/2] scripts/clang-tools: Remove
- core.uninitialized.Assign check
-Message-ID: <20221010172932.GA16534@quicinc.com>
-References: <5a10dda2a06b92f040ec7a18876db4c8107b4989.1665026261.git.quic_gurus@quicinc.com>
- <edc9712e479c433471a5c6b14d3e7ede9c228f5c.1665026261.git.quic_gurus@quicinc.com>
- <CAKwvOdm9fOEEQ9cYud7U16Zgd+uahM6Gnv+evoQPjfOc13gZEA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD8033CC
+	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 17:51:43 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id p5-20020a25bd45000000b006beafa0d110so11337315ybm.1
+        for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 10:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBlnd4XOswp/sg9aQW3gv5szg86tXu6TkQ8l/Mwzfog=;
+        b=nk/3rxvqJoK9SyUHQWL4FrcBRa1u5cO4vRwonLiomf+mwgVgWWJI1zDI2WrsG4X70S
+         nmYcNaaINMTJvz4X+rhldlAAsnDEIdQ1m/0le3N3a4jcmuJBnx7ADpYTD37EtiIQ8Ek4
+         UdZRVtpQ9jRuCSlVU0a7FPDzhLIVxEVRtxg1As+928YvNnSFB/ebJx9BGRXZ+TqF7Yvx
+         1RE2jxe2d5hBME089OeAg4k07EJx1sEL1FXum8kBR1LYise8GCM5CrRWtjtenaTYKGO8
+         7ToFnDGrUdgCeG5TNXYr09gkPBJU4y/mo/PCaw7hg1fsyCBRDaiMRFl5EKrZexrFlMpB
+         5aaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBlnd4XOswp/sg9aQW3gv5szg86tXu6TkQ8l/Mwzfog=;
+        b=Z9arLRnSpXfTWi6wDojMGp7KA//GW/C045s1Yll7sCbLxWJggNDz6owwfC6OsTb2mR
+         pgobsVfIwVmSO7csxdVwgTG2nU0SbvrYIGc8B+IcOZP41eidO/Xg1av/fGOtAekFLcTy
+         TXSBAGlwWgJd40s7TyxD+bpS74uQlmxBUyGpaAod2ba8Zz9NI3IY3UeJa0nR0bTKlxUC
+         eL2WXfHFzftSPKc5WIN4OdPOw5VYD8kXJMpyG1Yf6x917ckMWwjZ1NgBdRftWtg6cChW
+         vSAa0F+UYQcv97CiCSmnc86O/L6etYVw01VR9tZFAVo4gzZcHFiO4MpPm4nitYSDz4ab
+         XI9g==
+X-Gm-Message-State: ACrzQf0CeF2ZBDxeka0qyXlGUfUaXSFn121n+q991YBMPXZu/aLUIvk1
+	gdA0FWS23S9UpcsSGMplpR/dfyzOqvTuuTIcnuI=
+X-Google-Smtp-Source: AMsMyM5jkqv1zz43050m6pWEovXCAiaua+rKQiGXBtEfN0TkeuKfcUR3yW7cLziDOqKL4IlVFs/66K0FaURGRe5s6Ow=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:883d:1c60:2d47:598d])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:d45:0:b0:356:d50d:d010 with SMTP
+ id 66-20020a810d45000000b00356d50dd010mr18174102ywn.437.1665424302401; Mon,
+ 10 Oct 2022 10:51:42 -0700 (PDT)
+Date: Mon, 10 Oct 2022 10:51:34 -0700
+In-Reply-To: <202210072120.V1O2SuKY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdm9fOEEQ9cYud7U16Zgd+uahM6Gnv+evoQPjfOc13gZEA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hkz4-1LKFfmDPtsW42boW1ftHoUku3Ph
-X-Proofpoint-ORIG-GUID: hkz4-1LKFfmDPtsW42boW1ftHoUku3Ph
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-10_11,2022-10-10_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 mlxlogscore=999 clxscore=1011 adultscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210100104
+Mime-Version: 1.0
+References: <202210072120.V1O2SuKY-lkp@intel.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1665424294; l=2791;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=79P/bvbEb7lOxoUitL3cE1zzO5WZPlSo0wty3dVeQAY=;
+ b=B5zs5846RZppHTs/CE8/c+09IEq445Jvsd3Vdr73h8bHw68EC4yYmabbF1udsPYDDSop/Y6KuyI3
+ Q9t55mKQDsfxtPXBKw7hoZQJMbxVuxixwsIYFa/HaIIjtnJ9joA3
+X-Mailer: git-send-email 2.38.0.rc2.412.g84df46c1b4-goog
+Message-ID: <20221010175134.2671410-1-ndesaulniers@google.com>
+Subject: [PATCH] lib/xor: use r10 rather than r7 in xor_arm4regs_{2|3}
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Russell King <linux@armlinux.org.uk>, Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>, kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Oct 10 2022 10:22, Nick Desaulniers wrote:
-> On Wed, Oct 5, 2022 at 8:24 PM Guru Das Srinagesh
-> <quic_gurus@quicinc.com> wrote:
-> >
-> > Remove this check as it leads to false positives in some cases (not all):
-> >
-> > warning: Assigned value is garbage or undefined
-> > [clang-analyzer-core.uninitialized.Assign]
-> >       list_for_each_entry_safe(page, tmp_page, &pages, lru)
-> >       ^
-> 
-> I don't think we want to disable this.  Tom and others have fixed bugs
-> from this report. See also:
-> commit d1bd5fa07667 ("lib: remove back_str initialization")
-> commit 33b5bc9e7033 ("octeontx2-af: initialize action variable")
-> commit 8d783197f06d ("mctp: Fix warnings reported by clang-analyzer")
-> commit eed1a5c74216 ("drm/amdgpu: check return status before using
-> stable_pstate")
-> commit 3da4b7403db8 ("ALSA: usb-audio: initialize variables that could
-> ignore errors")
-> commit 38ac2f038666 ("iio: chemical: sunrise_co2: set val parameter
-> only on success")
-> commit afe6949862f7 ("afs: check function return")
-> commit d108370c644b ("apparmor: fix error check")
-> commit d52e419ac8b5 ("rxrpc: Fix handling of an unsupported token type
-> in rxrpc_read()")
-> commit 6a6516c024bb ("USB: storage: avoid use of uninitialized values
-> in error path")
-> commit f71e41e23e12 ("iio:imu:st_lsm6dsx: check
-> st_lsm6dsx_shub_read_output return")
-> commit 3a61cdf43e67 ("hwrng: intel - cleanup initialization")
-> commit 094dd0d73062 ("rndis_wlan: tighten check of rndis_query_oid return")
-> commit e3914ed6cf44 ("ieee802154/adf7242: check status of adf7242_read_reg")
-> commit c2a3d4b4cac1 ("net/mlx4_en: Cleanups suggested by clang static checker")
+kbuild test robot reports:
+In file included from crypto/xor.c:17:
+./arch/arm/include/asm/xor.h:61:3: error: write to reserved register 'R7'
+                GET_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+        __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                ^
+./arch/arm/include/asm/xor.h:63:3: error: write to reserved register 'R7'
+                PUT_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+        __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                             ^
+./arch/arm/include/asm/xor.h:83:3: error: write to reserved register 'R7'
+                GET_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+        __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                ^
+./arch/arm/include/asm/xor.h:86:3: error: write to reserved register 'R7'
+                PUT_BLOCK_4(p1);
+                ^
+./arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+        __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                             ^
+Thumb2 uses r7 rather than r11 as the frame pointer. Let's use r10
+rather than r7 for these temporaries.
 
-Thanks for the list of these commits. Will review the relevant portion of my
-code to address this report.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1732
+Link: https://lore.kernel.org/llvm/202210072120.V1O2SuKY-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ arch/arm/include/asm/xor.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thank you.
+diff --git a/arch/arm/include/asm/xor.h b/arch/arm/include/asm/xor.h
+index 669cad5194d3..934b549905f5 100644
+--- a/arch/arm/include/asm/xor.h
++++ b/arch/arm/include/asm/xor.h
+@@ -51,7 +51,7 @@ xor_arm4regs_2(unsigned long bytes, unsigned long * __restrict p1,
+ 	register unsigned int a1 __asm__("r4");
+ 	register unsigned int a2 __asm__("r5");
+ 	register unsigned int a3 __asm__("r6");
+-	register unsigned int a4 __asm__("r7");
++	register unsigned int a4 __asm__("r10");
+ 	register unsigned int b1 __asm__("r8");
+ 	register unsigned int b2 __asm__("r9");
+ 	register unsigned int b3 __asm__("ip");
+@@ -73,7 +73,7 @@ xor_arm4regs_3(unsigned long bytes, unsigned long * __restrict p1,
+ 	register unsigned int a1 __asm__("r4");
+ 	register unsigned int a2 __asm__("r5");
+ 	register unsigned int a3 __asm__("r6");
+-	register unsigned int a4 __asm__("r7");
++	register unsigned int a4 __asm__("r10");
+ 	register unsigned int b1 __asm__("r8");
+ 	register unsigned int b2 __asm__("r9");
+ 	register unsigned int b3 __asm__("ip");
+-- 
+2.38.0.rc2.412.g84df46c1b4-goog
 
-Guru Das.
