@@ -1,103 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3080223A4
-	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 07:06:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7DFC433C1;
-	Mon, 10 Oct 2022 07:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1665385573;
-	bh=6Hc5bx5GFEZjGF07ymlLvZqUuiQjA3jUBwJkJeUbZF0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=slhjoD/ysicAWx5J7YWsCuEcTtcGRGqJg4Rkg5EQlRdMTb548K2qmbK88QdZKoX77
-	 7lNrx0OqhkiFOGZEZMl1tT4oDMDk4g3ZTZ5wWrj5N1hsWCvx2KsyWiUVll53zVzqQA
-	 IuA8K+ky9YWmHFZRoKe5j5PlXQc5trjAmfYeGWk4=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75EC23A4
+	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 07:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=1eRxM63YBnLGny/uQKmG8pvw2aWvkBhE+yRLA3VSCIo=; b=alpCk4Y7XDeobV7r9Ze3bANnuZ
+	YsatUfSY7waSevjuZjzkz3TguPyg0CPr0q7Sdh1FM3A9UKmyKoGsbt2tHp1xhwhKzwvX6+rdEEKnz
+	1QJO/1bqiFsf7Gl0cTI1GlzTcsU7DHlfUXMtDcrUR5CSy7N4AgeEigb6wtZUmfKNI3DpobUKdy3Vs
+	UlpYBoonNFHS1b0622NexQMFh9oRy0sCvMKQac3Lv+IXtzScVawVEtrv24Qu1su8zPcgq3VCoMwWM
+	DWfBdcmm3xTOnPYu2XEz4HSORmDKdRBDNzkaoqAMvOLRAi982hFCPcrI9LRDtGlQgEXGtiI1dJ7XS
+	k7yzt+NQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1ohnMe-0042uk-GF; Mon, 10 Oct 2022 07:38:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8F0183001CB;
+	Mon, 10 Oct 2022 09:38:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7BFC12BF1DAC2; Mon, 10 Oct 2022 09:38:11 +0200 (CEST)
+Date: Mon, 10 Oct 2022 09:38:11 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Ingo Molnar <mingo@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.19 03/48] hardening: Remove Clangs enable flag for -ftrivial-auto-var-init=zero
-Date: Mon, 10 Oct 2022 09:05:01 +0200
-Message-Id: <20221010070333.780586109@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
-References: <20221010070333.676316214@linuxfoundation.org>
-User-Agent: quilt/0.67
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] sched: Introduce struct balance_callback to avoid CFI
+ mismatches
+Message-ID: <Y0PL4zKWyS6z6OX2@hirez.programming.kicks-ass.net>
+References: <20221008000758.2957718-1-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221008000758.2957718-1-keescook@chromium.org>
 
-From: Kees Cook <keescook@chromium.org>
+On Fri, Oct 07, 2022 at 05:07:58PM -0700, Kees Cook wrote:
+> Introduce distinct struct balance_callback instead of performing function
+> pointer casting which will trip CFI. Avoids warnings as found by Clang's
+> future -Wcast-function-type-strict option:
+> 
+> In file included from kernel/sched/core.c:84:
+> kernel/sched/sched.h:1755:15: warning: cast from 'void (*)(struct rq *)' to 'void (*)(struct callback_head *)' converts to incompatible function type [-Wcast-function-type-strict]
+>         head->func = (void (*)(struct callback_head *))func;
+>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> No binary differences result from this change.
+> 
+> This patch is a cleanup based on Brad Spengler/PaX Team's modifications
+> to sched code in their last public patch of grsecurity/PaX based on my
+> understanding of the code. Changes or omissions from the original code
+> are mine and don't reflect the original grsecurity/PaX code.
+> 
+> Reported-by: Sami Tolvanen <samitolvanen@google.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1724
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  kernel/sched/core.c     | 24 ++++++++++++------------
+>  kernel/sched/deadline.c |  4 ++--
+>  kernel/sched/rt.c       |  4 ++--
+>  kernel/sched/sched.h    | 14 ++++++++++----
+>  4 files changed, 26 insertions(+), 20 deletions(-)
 
-commit 607e57c6c62c00965ae276902c166834ce73014a upstream.
-
-Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
-option is no longer required, remove it from the command line. Clang 16
-and later will warn when it is used, which will cause Kconfig to think
-it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
-is required and only use it when so.
-
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Cc: stable@vger.kernel.org
-Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- Makefile                   |    4 ++--
- security/Kconfig.hardening |   14 ++++++++++----
- 2 files changed, 12 insertions(+), 6 deletions(-)
-
---- a/Makefile
-+++ b/Makefile
-@@ -830,8 +830,8 @@ endif
- # Initialize all stack variables with a zero value.
- ifdef CONFIG_INIT_STACK_ALL_ZERO
- KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
--ifdef CONFIG_CC_IS_CLANG
--# https://bugs.llvm.org/show_bug.cgi?id=45497
-+ifdef CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-+# https://github.com/llvm/llvm-project/issues/44842
- KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
- endif
- endif
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -22,11 +22,17 @@ menu "Memory initialization"
- config CC_HAS_AUTO_VAR_INIT_PATTERN
- 	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
- 
--config CC_HAS_AUTO_VAR_INIT_ZERO
--	# GCC ignores the -enable flag, so we can test for the feature with
--	# a single invocation using the flag, but drop it as appropriate in
--	# the Makefile, depending on the presence of Clang.
-+config CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-+	def_bool $(cc-option,-ftrivial-auto-var-init=zero)
-+
-+config CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
-+	# Clang 16 and later warn about using the -enable flag, but it
-+	# is required before then.
- 	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
-+	depends on !CC_HAS_AUTO_VAR_INIT_ZERO_BARE
-+
-+config CC_HAS_AUTO_VAR_INIT_ZERO
-+	def_bool CC_HAS_AUTO_VAR_INIT_ZERO_BARE || CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
- 
- choice
- 	prompt "Initialize kernel stack variables at function entry"
-
-
+Thanks!
