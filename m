@@ -1,87 +1,120 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D167320A
-	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 16:42:43 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id c24so10847984pls.9
-        for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 09:42:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5743209
+	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 16:44:37 +0000 (UTC)
+Received: by mail-pj1-f54.google.com with SMTP id 70so10257520pjo.4
+        for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 09:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+X0dPUNTzvXsxSJGYhvGB/UduBVQg8zNVHQH+Kp9jQ=;
-        b=eVCfkkkCkVgQuSb4QlPgq/2erp2lpWi8z0RZhA7C/aNm1ryA2KL2HGi2tJdq6mOpSO
-         WuXGAjiirI7U10uM01RcSKJh8syoKd80r4J9HjkukfdWHJdmIwxIQuPiFOgB+eIBVopK
-         jBeWUolzRg2C11i9Zy4jhkAKGDVPBE+oz3FhXEZ4GYVX20ZlHL6h53UAvoKZm4ckMPkZ
-         +DbTFd9cYNC8CSOF4i3zIOg+40YGb8f1lE52HMat42SH/4mOSV0cEPSuPFHx4TwYaegO
-         3f346LPCE4dJK9Wc1VYUZ13QEKKdlGshSU8Rilx20RzdPiYfXu6qE8068aTIWcnzOc82
-         55TA==
+        bh=anf2u1EbUOW94hW1mECFJfimfAQsErLr0AHCvxvjmdk=;
+        b=Dy8KkpWEM4viPKcw92pWH9OkrFjFTq+0m4ithX9J6aDaD6+HydyU+UAmJw013gXhoX
+         mJbm707DHRTRw7yA4lkBJC8ai6XTkgxlcj+dS9JufldckCu3ifKgGIXfE3zz88014G8P
+         DXhQxmRn9Evt46YcrhuH6IYopCmZZD2jLP1XyDMGp0HVBbXolBQ79AOu4L6KpGDHayoo
+         zrarz1iSslRJV7g8vj7IrQTvDdsHHCWC8vvqksfe9bBTmAcRuq5+Yte3g7NQU/NmPUMP
+         PN4j2Nuy6ofSadM570VOxEDGdoVkjoUFAblgvGHAsvhQ218hCJh4CFJYVcKGJKGvTVEw
+         FK8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=f+X0dPUNTzvXsxSJGYhvGB/UduBVQg8zNVHQH+Kp9jQ=;
-        b=xGHJSNbenMfAY06njPHmso5qGE85KBzas3C12qrCUFp+aonqfNIHLqFX+NncZ1vsUC
-         ZaKDVwLfF4/24ujEuiMeXLiOUM06cYj8aMQYAcXjSl/AbXhf7tpFizyVhk6JCe7YYsbQ
-         5Ro0UAmihhvpn5ddeG8o4g6m6gyYU/f/p2NS61Zlzr2zEnAOzap5Jc0EwNB9bIZknQHr
-         8hyrfxwZ2c606E4g4wGBxg7NCwGmrYwGPKkbCyOJD0zv2+HBAK0oza8XXf1REkY4l7Ts
-         Z6AZM+9TTNtyI8DvQCT+2Yk4oC8jyBJZP+tcID3SGyqGQ+/iZBPwUmFR703EGAGSMmZp
-         VHiQ==
-X-Gm-Message-State: ACrzQf20tCFFNz1D1d0yf3TRuSiams4+CSvkOdcNkFqGBrhsCRZ7jj+R
-	2nL46zC75sVnAAyAz7Pbcs1Wz0PuBV1tK8bVKRSG8Q==
-X-Google-Smtp-Source: AMsMyM5dNVNTY7K3+ncFOHk+OeTpeT8OH00IQspK/gDrewkWzjoXpQQCcmk0OWiDXIO2CGOxDrblgnKbzMTHV98NIUI=
-X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
- om8-20020a17090b3a8800b00209f35dad53mr32777961pjb.102.1665420163240; Mon, 10
- Oct 2022 09:42:43 -0700 (PDT)
+        bh=anf2u1EbUOW94hW1mECFJfimfAQsErLr0AHCvxvjmdk=;
+        b=K9lQbtlmFndyzApGWeViVrqOs9FfBuX/HGJY5uZCoO1MV8ydrnf0s9gRyikqiueToj
+         hyiQe9dHwfl8qh9wq7PMgflKo4SlYKUE0AWzMM6I7w2x+Pat02m9IyoeFJ3jlIU699XC
+         /Sw3hCY94cYFtk9ImJjl1hA7XM4rr2A6ifzLTckeQw7uwS/x10/0BgL/U0h4K5EEPZsq
+         AM+PWWngqAmqjclxlho2qwSvaskW5ZJPLptgzmFWHJ7loVe9yMzhUH3V7XVgsVn8gxgW
+         2Ps3AIhwHBdiDiri3Vd0HYr3l5Imin8d5ptGRBThxAMKxFEfSZI+RUN2daRlPBl+kVCw
+         r07w==
+X-Gm-Message-State: ACrzQf2T4S2wNzOE+KNpNno8JMrhE9ZoZmxS2LlCGHoXOeeeNjIHB5Y+
+	Z752Ft584+ahIR1vm+nV7ZK5som3DYNdsdi/US7XAA==
+X-Google-Smtp-Source: AMsMyM4Qvyn2KkVMESz39nPlRCBM18juvwRx/yYvOtyFXZF5TAbCx3+mr8Oo3PF8mfWyuGM6quJltqY8u49ijI+NewA=
+X-Received: by 2002:a17:902:b210:b0:17d:c3ca:4a4f with SMTP id
+ t16-20020a170902b21000b0017dc3ca4a4fmr19349499plr.33.1665420276986; Mon, 10
+ Oct 2022 09:44:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
- <20221007201140.1744961-1-ndesaulniers@google.com> <20221010074409.GA20998@lst.de>
-In-Reply-To: <20221010074409.GA20998@lst.de>
+References: <bd3872ce5125477ea80b1131ad9a34c98aa1a796.1665375018.git.viresh.kumar@linaro.org>
+In-Reply-To: <bd3872ce5125477ea80b1131ad9a34c98aa1a796.1665375018.git.viresh.kumar@linaro.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 10 Oct 2022 09:42:31 -0700
-Message-ID: <CAKwvOdm1yMbUUHGeqnKYBptBEqSO0T4k=sUy5i0Bhy3g41+nDg@mail.gmail.com>
-Subject: Re: [PATCH] fs/select: mark do_select noinline_for_stack for 32b
-To: Christoph Hellwig <hch@lst.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Xiaoming Ni <nixiaoming@huawei.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Andi Kleen <ak@linux.intel.com>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Eric Dumazet <edumazet@google.com>, "Darrick J. Wong" <darrick.wong@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Mon, 10 Oct 2022 09:44:25 -0700
+Message-ID: <CAKwvOdkH89GbKiymi7O2_XekQwC2zYVTUfKYg1v2nzG081p7=Q@mail.gmail.com>
+Subject: Re: [PATCH] ARM: spear6xx: Staticize few definitions
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Viresh Kumar <vireshk@kernel.org>, Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org, 
+	Russell King <linux@armlinux.org.uk>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 10, 2022 at 12:44 AM Christoph Hellwig <hch@lst.de> wrote:
+On Sun, Oct 9, 2022 at 9:11 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On Fri, Oct 07, 2022 at 01:11:40PM -0700, Nick Desaulniers wrote:
-> > Effectively a revert of
-> > commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> >
-> > Various configs can still push the stack useage of core_sys_select()
-> > over the CONFIG_FRAME_WARN threshold (1024B on 32b targets).
-> >
-> >   fs/select.c:619:5: error: stack frame size of 1048 bytes in function
-> >   'core_sys_select' [-Werror,-Wframe-larger-than=]
+> Fix warnings with clang like:
 >
-> Btw, I also see a warning here with all my KASAN x86_64 gcc builds.
+> arch/arm/mach-spear/spear6xx.c:365:13: warning: no previous prototype for function 'spear6xx_map_io' [-Wmissing-prototypes]
+>
+> by making few definitions static.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Thanks for the report.  That might be another interesting data point;
-I haven't been able to reproduce that locally though:
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-$ make -j$(nproc) defconfig
-$ ./scripts/config -e KASAN
-$ make -j$(nproc) olddefconfig fs/select.o
-$ gcc --version | head -n1
-gcc (Debian 12.2.0-1) 12.2.0
+> ---
+> Rebased on v6.0.
+>
+>  arch/arm/mach-spear/spear6xx.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm/mach-spear/spear6xx.c b/arch/arm/mach-spear/spear6xx.c
+> index 58183493e06d..7a5fff134872 100644
+> --- a/arch/arm/mach-spear/spear6xx.c
+> +++ b/arch/arm/mach-spear/spear6xx.c
+> @@ -339,7 +339,7 @@ static struct pl08x_platform_data spear6xx_pl080_plat_data = {
+>   * 0xD0000000          0xFD000000
+>   * 0xFC000000          0xFC000000
+>   */
+> -struct map_desc spear6xx_io_desc[] __initdata = {
+> +static struct map_desc spear6xx_io_desc[] __initdata = {
+>         {
+>                 .virtual        = (unsigned long)VA_SPEAR6XX_ML_CPU_BASE,
+>                 .pfn            = __phys_to_pfn(SPEAR_ICM3_ML1_2_BASE),
+> @@ -359,12 +359,12 @@ struct map_desc spear6xx_io_desc[] __initdata = {
+>  };
+>
+>  /* This will create static memory mapping for selected devices */
+> -void __init spear6xx_map_io(void)
+> +static void __init spear6xx_map_io(void)
+>  {
+>         iotable_init(spear6xx_io_desc, ARRAY_SIZE(spear6xx_io_desc));
+>  }
+>
+> -void __init spear6xx_timer_init(void)
+> +static void __init spear6xx_timer_init(void)
+>  {
+>         char pclk_name[] = "pll3_clk";
+>         struct clk *gpt_clk, *pclk;
+> @@ -394,7 +394,7 @@ void __init spear6xx_timer_init(void)
+>  }
+>
+>  /* Add auxdata to pass platform data */
+> -struct of_dev_auxdata spear6xx_auxdata_lookup[] __initdata = {
+> +static struct of_dev_auxdata spear6xx_auxdata_lookup[] __initdata = {
+>         OF_DEV_AUXDATA("arm,pl080", SPEAR_ICM3_DMA_BASE, NULL,
+>                         &spear6xx_pl080_plat_data),
+>         {}
+> --
+> 2.31.1.272.g89b43f80a514
+>
 
-I also tried enabling CONFIG_KASAN_INLINE=y but couldn't reproduce.
-Mind sending me your .config that reproduces this?
+
 -- 
 Thanks,
 ~Nick Desaulniers
