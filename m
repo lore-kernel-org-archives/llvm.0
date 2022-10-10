@@ -1,92 +1,118 @@
-Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F183207
-	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 16:24:48 +0000 (UTC)
-Date: Mon, 10 Oct 2022 16:17:54 +0000
-Authentication-Results: mail-41104.protonmail.ch;
-	dkim=pass (1024-bit key) header.d=connolly.tech header.i=@connolly.tech header.b="lOxRxmLy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-	s=protonmail; t=1665418683; x=1665677883;
-	bh=v8t2lgopjGAlj4wqpLkRQ1AnOzaZKPh8TfSRmc4oklE=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID;
-	b=lOxRxmLyaILR+j+bXkejDUmHL1SmEfzt6EeJ4BvN9pTighkdY+YF9dwmwUo/It/jP
-	 xt7OYk41es+gckbAfe7lfCvtcidi1vVuYuDlCRSNLzbDFZ/+lZfF2cco2KhZeA8bBh
-	 astZAlu0V3026VrhzkQ61BVp+L+cZH+2Oc44keMU=
-To: caleb@connolly.tech
-From: Caleb Connolly <caleb@connolly.tech>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jeff LaBundy <jeff@labundy.com>, Konrad Dybcio <konrad.dybcio@somainline.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-Subject: [PATCH v5 0/2] input: introduce support for Qualcomm SPMI haptics
-Message-ID: <20221010161727.1298112-1-caleb@connolly.tech>
-Feedback-ID: 10753939:user:proton
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FC53207
+	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 16:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
+	t=1665419249; bh=lXVpsiA1kRkx/m2eVbexE0t3+2KCIuXZ+dsxk8kGNLY=;
+	h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:MIME-Version;
+	b=IYvrYUGiIKM4nmTr0wGoDR60cEUt6SxXPcu4A9ZiyTEQCE3h8TGXJjTC/eRtiZwjB
+	 Bt1mzTW6G7Kcr/RG7fAnbODyqjGwpzYUBMhhkchYBzMBWlHFPsKzVz0pUFPOrT1aTG
+	 y8y2q2PWsjYVJr3RTrALDiLFF/PSk796WQbf8xeU=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+	via [213.182.55.207]
+	Mon, 10 Oct 2022 18:27:28 +0200 (CEST)
+X-EA-Auth: 3JdaEEkKGGA2MDsf9ahjjha2bXyeSKvTxVFpPb0htksJFObLCHQW8C7IThbhzSmLl3wrHYtrlYo0TiJHHDQ2d4C3klQTX5C1o0oAR8rCD4k=
+Message-ID: <5f9ef5a25b983d31b4e0a57ad48fea2fc04724ae.camel@mailoo.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: input: document Qualcomm PMI8998
+ haptics driver
+From: Vincent Knecht <vincent.knecht@mailoo.org>
+To: Caleb Connolly <caleb@connolly.tech>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Jeff LaBundy <jeff@labundy.com>, Konrad Dybcio
+ <konrad.dybcio@somainline.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev,  Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Rob Herring <robh+dt@kernel.org>,
+ Tom Rix <trix@redhat.com>
+Date: Mon, 10 Oct 2022 18:27:25 +0200
+In-Reply-To: <20221010161727.1298112-2-caleb@connolly.tech>
+References: <20221010161727.1298112-1-caleb@connolly.tech>
+	 <20221010161727.1298112-2-caleb@connolly.tech>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-This series introduces a driver for the SPMI haptics hardware block
-found in Qualcomm PMICs. SPMI haptics support LRA (Linear Resonant
-Actuator) style haptics, as well as ERM (Eccentric Rotating Mass).
-It also supports several modes of driving the haptics, e.g. by loading
-the pattern to play into an internal buffer, or using PWM.
+Le lundi 10 octobre 2022 =C3=A0 16:18 +0000, Caleb Connolly a =C3=A9crit=C2=
+=A0:
+> Add bindings for qcom PMIC PMI8998 haptics driver.
+>=20
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> ---
+> =C2=A0.../bindings/input/qcom,pmi8998-haptics.yaml=C2=A0 | 72 +++++++++++=
+++++++++
+> =C2=A01 file changed, 72 insertions(+)
+> =C2=A0create mode 100644 Documentation/devicetree/bindings/input/qcom,pmi=
+8998-haptics.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics=
+.yaml
+> b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
+> new file mode 100644
+> index 000000000000..cdffe893c77a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2020 Unisoc Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/qcom,spmi-haptics.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PMI8998/PM660 Haptics
+> +
+> +maintainers:
+> +=C2=A0 - Caleb Connolly <caleb@connolly.tech>
+> +
+> +description: |
+> +=C2=A0 Qualcomm SPMI haptics is a peripheral on some QTI PMICs. It suppo=
+rts linear resonant
+> +=C2=A0 actuators and eccentric rotating mass type haptics commonly found=
+ in mobile devices.
+> +=C2=A0 It supports multiple sources of wave data such as an internal buf=
+fer, direct play
+> +=C2=A0 (from kernel or userspace) as well as an audio output mode.
+> +
+> +properties:
+> +=C2=A0 compatible:
+> +=C2=A0=C2=A0=C2=A0 items:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - qcom,pmi8998-ha=
+ptics
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - qcom,pm660-char=
+ger
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - qcom,pmi8996-ha=
+ptics
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - qcom,pmi8941-ha=
+ptics
+> +
+> +=C2=A0 reg:
+> +=C2=A0=C2=A0=C2=A0 maxItems: 1
+> +
+> +=C2=A0 interrupts:
+> +=C2=A0=C2=A0=C2=A0 maxItems: 2
+> +
+> +=C2=A0 interrupt-names:
+> +=C2=A0=C2=A0=C2=A0 items:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: short
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: play
+> +
+> +=C2=A0 qcom,wave-play-rate-us:
+> +=C2=A0=C2=A0=C2=A0 description: |
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Wave sample durection in microseconds, 1/=
+f where f
 
-More information about the hardware can be found here:
-        https://gitlab.com/sdm845-mainline/linux/-/wikis/PMI8998-QPNP-Hapti=
-cs
+duration, I guess ?
 
-This driver has been written based on downstream sources as no public
-documentation is available. It includes initial support for LRA haptics
-in buffer mode, this combination seems to be the most common and will
-enable haptics on the OnePlus 6 and 6T, PocoPhone F1, OnePlus 5 and
-several other Qualcomm devices with mainline kernel support.
-
-The driver is implemented using the ff-memless (forcefeedback) input
-framework and makes an attempt to control the strength of vibration relativ=
-e
-to the magnitude set from userspace.
-
-Changes since v4:
- - Significant rewrite and cleanup
- - switch to dev_err_probe()
- - Run through clang-format
-
-Changes since v3:
- - Adjust example DTS to avoid creating new warnings in dt_binding_check
- - Address warnings from kernel test robot.
-
-Changes since v2:
- - Addressed Rob's comments on dt-bindings (I'm not sure what to do
-   about the pmic compatible?)
- - Fixed some typos
-
-Changes since v1:
- - Replace old QPNP naming with SPMI
- - Address Bjorn's comments on the driver, various style and code cleanups
- - Address Bjorn's comments on the DT bindings and DTS
- - Pickup patches from Joel and Jami to enable haptics on the OnePlus 5
-   and Poco F1.
-
-Caleb Connolly (2):
-  dt-bindings: input: add Qualcomm SPMI haptics driver
-  input: add Qualcomm SPMI haptics driver
-
- .../bindings/input/qcom,spmi-haptics.yaml     | 123 ++++
- drivers/input/misc/Kconfig                    |  15 +
- drivers/input/misc/Makefile                   |   1 +
- drivers/input/misc/qcom-spmi-haptics.c        | 674 ++++++++++++++++++
- include/dt-bindings/input/qcom,spmi-haptics.h |  32 +
- 5 files changed, 845 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/qcom,spmi-hapti=
-cs.yaml
- create mode 100644 drivers/input/misc/qcom-spmi-haptics.c
- create mode 100644 include/dt-bindings/input/qcom,spmi-haptics.h
-
---
-2.38.0
 
 
