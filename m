@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9C823A4
-	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 07:04:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF57DC433D6;
-	Mon, 10 Oct 2022 07:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3080223A4
+	for <llvm@lists.linux.dev>; Mon, 10 Oct 2022 07:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7DFC433C1;
+	Mon, 10 Oct 2022 07:06:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1665385477;
-	bh=DsoCa3MDoRxrq2Sl640fMowD0OxS0uU2ONr/dWh+nng=;
+	s=korg; t=1665385573;
+	bh=6Hc5bx5GFEZjGF07ymlLvZqUuiQjA3jUBwJkJeUbZF0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BtFXPUlE/6bkWdQIDch8i3r1951CjWGEIfhmRAwB+jxfr3AyqNVD1uyea7cBuLWpQ
-	 PSae47Ieaw8QTIeGJsQOOwlWvN7MuiYOVosB2Cc4MZyrkelP9cHUumUdylgvBjQf2/
-	 +Gqd/Pz//4pjnjQNzhXvgFDFe2B1eMPfPCUt0sMs=
+	b=slhjoD/ysicAWx5J7YWsCuEcTtcGRGqJg4Rkg5EQlRdMTb548K2qmbK88QdZKoX77
+	 7lNrx0OqhkiFOGZEZMl1tT4oDMDk4g3ZTZ5wWrj5N1hsWCvx2KsyWiUVll53zVzqQA
+	 IuA8K+ky9YWmHFZRoKe5j5PlXQc5trjAmfYeGWk4=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -22,12 +22,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-kbuild@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Kees Cook <keescook@chromium.org>
-Subject: [PATCH 6.0 06/17] hardening: Remove Clangs enable flag for -ftrivial-auto-var-init=zero
-Date: Mon, 10 Oct 2022 09:04:29 +0200
-Message-Id: <20221010070330.376138580@linuxfoundation.org>
+Subject: [PATCH 5.19 03/48] hardening: Remove Clangs enable flag for -ftrivial-auto-var-init=zero
+Date: Mon, 10 Oct 2022 09:05:01 +0200
+Message-Id: <20221010070333.780586109@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010070330.159911806@linuxfoundation.org>
-References: <20221010070330.159911806@linuxfoundation.org>
+In-Reply-To: <20221010070333.676316214@linuxfoundation.org>
+References: <20221010070333.676316214@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -64,7 +64,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/Makefile
 +++ b/Makefile
-@@ -831,8 +831,8 @@ endif
+@@ -830,8 +830,8 @@ endif
  # Initialize all stack variables with a zero value.
  ifdef CONFIG_INIT_STACK_ALL_ZERO
  KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
