@@ -1,153 +1,107 @@
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D3D6112
-	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 21:41:18 +0000 (UTC)
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-07.nifty.com with ESMTP id 29BLaFFC030013
-	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 06:36:15 +0900
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
-	by conssluserg-05.nifty.com with ESMTP id 29BLa3qr029622
-	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 06:36:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 29BLa3qr029622
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27EF56112
+	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 21:45:44 +0000 (UTC)
+Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-02.nifty.com with ESMTP id 29BLdNK1026769
+	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 06:39:23 +0900
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
+	by conssluserg-06.nifty.com with ESMTP id 29BLcu3o017545
+	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 06:38:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 29BLcu3o017545
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1665524164;
-	bh=1xiHuOIhCXv9cmT4wyT8wFlNoveMxozMd1fUtU9/tZI=;
+	s=dec2015msa; t=1665524337;
+	bh=6QF2Z+xGT+0UIwMrYon1K2nSWoQjAKCrqu9BXQ1yjQE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=m99Q56LQNOooDDWWTy9Vxr4H0OR4AC7VhY8mK7Gz3ktpVsT9VSJpx2peQknec8Jdt
-	 9yvOmYk2fC/U9HkxzG1yKgEcJjsCKN4xteRKvegI+Ef4jaL5bgFpu4TyHtLgs1mrGg
-	 YcY2m9d5HxDynhz/YMNWuROHDaZCBYlnJelYJSqq7NfBJ2M6CxxsNXttF3m29xn294
-	 rSyzZ6TRACfdFK95vWiV9eS5x3kACMallV1jqMXWzcSquqsvvUa60fNTrcLxs7iR8b
-	 D0kmNdUsX6JWepNRumSpmFzbnwGrgvIt07WNjf7KpYEyIVQ7IXBHdJXnBxhr3tCdsJ
-	 m2SWlafcwXbRA==
-X-Nifty-SrcIP: [209.85.160.44]
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso17492693fac.6
-        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 14:36:03 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2Tk/2T8jdGw8KHKM2K2OEdwY4W2NFIM/l7UkZlw3m6z7Wcpx7d
-	7UdJebc7oBzDZxOvKor1zZR/X4e4MTsnHh8k9ug=
-X-Google-Smtp-Source: AMsMyM6v64vpV95ouNcRXIrUzy2RvsBh4w4NffHVMs8HI/+CZhislBCDqe3eFdHm9YPoU72smBmSnsD55wr2DT+jpQ4=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr681050oab.287.1665524162610; Tue, 11
- Oct 2022 14:36:02 -0700 (PDT)
+	b=p/HK3sAjxHBXYZQkb9tU2rYXQp3XQaiV5Br8vKhS/OSy5aQVU6ihXweLBAzVhUCai
+	 il63aoeJ9l94+b0p7E2TMExrylgk5OdqCTbbcWfwL0Yygu8JM2ouQ3ypSkO2LVLAXa
+	 855qI6W1wWwkSAoswvr9jgBpypqRi3btr4rATEZfAQ3cZ6ODWGdmp2X9UiyU0A/4Lv
+	 vNC1RVVf684QGfuwIiZna0XpXK/LGqageK+PO9AG53POXhYtIT0ieBJDP+67Em9ijL
+	 6ryyJUzNmblOhep5KtgTnbvF3r+P9FCNdqqGy+cM8IamN5pyl7rbEroWSXbDTwuzxW
+	 hydPz66es2rlw==
+X-Nifty-SrcIP: [209.85.160.49]
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-12c8312131fso17507175fac.4
+        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 14:38:57 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2oEnhh42Kdbb1PuZS2JfFUaYl8/nEqHL+7w4xwcehU1FiLu1B4
+	zVUDOwhHbd0Y3W6eAFC+bX1BLZ1SKSSTnnZcFqs=
+X-Google-Smtp-Source: AMsMyM7Z0Beqt9F0KJlic1siwi6JGV1pqmUpr6Tl15m1gksXT1Vh8LdiQC/jmufunGb0eKIrggIS7QUqyHgwrx9hSM4=
+X-Received: by 2002:a05:6870:8a09:b0:132:554d:2f3d with SMTP id
+ p9-20020a0568708a0900b00132554d2f3dmr729290oaq.194.1665524336217; Tue, 11 Oct
+ 2022 14:38:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221011032327.2761241-1-zengheng4@huawei.com> <CAKwvOdn=4Vzgt6zo64tTc+d=QHVrWxRe2JzBC8ydyc_wst1EEA@mail.gmail.com>
-In-Reply-To: <CAKwvOdn=4Vzgt6zo64tTc+d=QHVrWxRe2JzBC8ydyc_wst1EEA@mail.gmail.com>
+References: <a10e25f13205cb96e1ad63f1b1371a76f37af549.1665515051.git.quic_gurus@quicinc.com>
+ <CAKwvOdmsjxB_i=9Qy6L+4AH+CwOYa0EsRBPFUTj9vwxJ6vNPSg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmsjxB_i=9Qy6L+4AH+CwOYa0EsRBPFUTj9vwxJ6vNPSg@mail.gmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 12 Oct 2022 06:35:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASyaZsohRvp3UDSOY8tr9XJ1f0eCaRobmnwqd2v4BLgwg@mail.gmail.com>
-Message-ID: <CAK7LNASyaZsohRvp3UDSOY8tr9XJ1f0eCaRobmnwqd2v4BLgwg@mail.gmail.com>
-Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
- compile build
+Date: Wed, 12 Oct 2022 06:38:19 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR8RKxe0AizKjDS5NJcDG47LEDQS-qDzWTnEZaxS5r7SA@mail.gmail.com>
+Message-ID: <CAK7LNAR8RKxe0AizKjDS5NJcDG47LEDQS-qDzWTnEZaxS5r7SA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] scripts/clang-tools: Convert clang-tidy args to list
 To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Zeng Heng <zengheng4@huawei.com>, michal.lkml@markovi.net,
-        nathan@kernel.org, trix@redhat.com, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, liwei391@huawei.com
+Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        John Moon <quic_johmoo@quicinc.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 12, 2022 at 6:10 AM Nick Desaulniers
+On Wed, Oct 12, 2022 at 5:34 AM Nick Desaulniers
 <ndesaulniers@google.com> wrote:
 >
-> On Mon, Oct 10, 2022 at 8:24 PM Zeng Heng <zengheng4@huawei.com> wrote:
+> On Tue, Oct 11, 2022 at 12:06 PM Guru Das Srinagesh
+> <quic_gurus@quicinc.com> wrote:
 > >
-> > Enable implicit enum-conversion warning option in kernel gcc build.
-> > When it set enabled, it can detect implicit enum type conversion
-> > and locate conversion errors like below (use "allmodconfig"):
+> > Convert list of clang-tidy arguments to a list for ease of adding to
+> > them and extending them as required.
 > >
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.=
-c:3904:46:
-> > error: implicit conversion from =E2=80=98enum <anonymous>=E2=80=99 to =
-=E2=80=98enum odm_combine_mode=E2=80=99
-> > [-Werror=3Denum-conversion]
-> >  3904 |       locals->ODMCombineEnablePerState[i][k] =3D true;
-> >       |                                              ^
-> >
-> > The '-Wenum-conversion' could be regarded as effective check in
-> > compile runtime and call attention on potential mistakes, which is
-> > firstly introduced from GNU gcc-10.
-> >
-> > Although "-Wenum-conversion" could be enabled by "-Wextra"
-> > when compiling with 'W=3D[123]' option, there are many warnings
-> > generated by '-Wextra' that cause too much noise in the build.
-> >
-> > Seeing the more details from the following link:
-> > https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
-> >
-> > Therefore, "-Wenum-conversion" warning option needs to be
-> > explicitly requested for GCC when compilation process is only
-> > companied with '-Wall'.
-> >
-> > With clang, -Wenum-conversion is just default enabled, not even
-> > behind -Wall.
+> > Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 >
-> Probably didn't need the examples below since you already provide an
-> example above, too, but it doesn't matter.  Thanks for the patch.
->
+> Thanks for the patch!
 > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 >
-> >
-> > Provide a couple examples for reference as below:
-> >
-> > $ cat test.c
-> > enum enum1 { A =3D 1 };
-> > enum enum2 { B =3D 2 };
-> >
-> > enum enum1 foo(enum enum2 bar)
-> > {
-> >     return bar;
-> > }
-> >
-> > $ gcc -Wall -fsyntax-only test.c
-> >
-> > $ gcc -Wall -Wenum-conversion -fsyntax-only test.c
-> > test.c: In function =E2=80=98foo=E2=80=99:
-> > test.c:6:9: warning: implicit conversion from =E2=80=98enum enum2=E2=80=
-=99 to =E2=80=98enum enum1=E2=80=99 [-Wenum-conversion]
-> >     6 |  return bar;
-> >       |         ^~~
-> >
-> > $ gcc -Wextra -fsyntax-only test.c
-> > test.c: In function =E2=80=98foo=E2=80=99:
-> > test.c:6:9: warning: implicit conversion from =E2=80=98enum enum2=E2=80=
-=99 to =E2=80=98enum enum1=E2=80=99 [-Wenum-conversion]
-> >     6 |  return bar;
-> >       |         ^~~
-> >
-> > $ clang -fsyntax-only test.c
-> > test.c:6:9: warning: implicit conversion from enumeration type 'enum en=
-um2' to different enumeration type 'enum enum1' [-Wenum-conversion]
-> >         return bar;
-> >         ~~~~~~ ^~~
-> > 1 warning generated.
-> >
-> > Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Masahiro, would you please be able to carry this up through the kbuild tree?
+
+
+Applied to linux-kbuild. Thanks.
+
+
+
 > > ---
-> >  Makefile | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> >  scripts/clang-tools/run-clang-tools.py | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
 > >
-> > diff --git a/Makefile b/Makefile
-> > index 8f6ed52fa08f..72103d22df23 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -880,6 +880,10 @@ endif
-> >  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
-> >  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
+> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> > index bb78c9b..56f2ec8 100755
+> > --- a/scripts/clang-tools/run-clang-tools.py
+> > +++ b/scripts/clang-tools/run-clang-tools.py
+> > @@ -45,13 +45,14 @@ def init(l, a):
 > >
-> > +# implicit enum conversion checking is supported since from gcc-10
-> > +# this warning option has to be explicitly requested for GCC
-> > +KBUILD_CFLAGS +=3D $(call cc-option, -Wenum-conversion)
-> > +
-> >  # These result in bogus false positives
-> >  KBUILD_CFLAGS +=3D $(call cc-disable-warning, dangling-pointer)
-> >
+> >  def run_analysis(entry):
+> >      # Disable all checks, then re-enable the ones we want
+> > -    checks = "-checks=-*,"
+> > +    checks = []
+> > +    checks.append("-checks=-*")
+> >      if args.type == "clang-tidy":
+> > -        checks += "linuxkernel-*"
+> > +        checks.append("linuxkernel-*")
+> >      else:
+> > -        checks += "clang-analyzer-*"
+> > -        checks += ",-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling"
+> > -    p = subprocess.run(["clang-tidy", "-p", args.path, checks, entry["file"]],
+> > +        checks.append("clang-analyzer-*")
+> > +        checks.append("-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling")
+> > +    p = subprocess.run(["clang-tidy", "-p", args.path, ",".join(checks), entry["file"]],
+> >                         stdout=subprocess.PIPE,
+> >                         stderr=subprocess.STDOUT,
+> >                         cwd=entry["directory"])
 > > --
-> > 2.25.1
+> > 2.7.4
 > >
 >
 >
@@ -157,9 +111,6 @@ um2' to different enumeration type 'enum enum1' [-Wenum-conversion]
 
 
 
-Applied to linux-kbuild. Thanks.
-
-
---=20
+-- 
 Best Regards
 Masahiro Yamada
