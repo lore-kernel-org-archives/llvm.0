@@ -1,159 +1,134 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BFF6112
-	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 21:10:38 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id z20so14369274plb.10
-        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 14:10:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1D76112
+	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 21:32:23 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id b15so13616261pje.1
+        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 14:32:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oafogegdaPZXzoXHnF3Oghbpz4xzRGdJpbKq76q2a2Y=;
-        b=jnczQYliYIsLsFbP/UZl/kvgenSOJLgaf8Pfm1gb8cHOLkDDEW/2cL9PG94IxYEW4q
-         suMuqxEBoUSfPSr3l/S2pPP9K5AJA9cI9+5wWr/qdpXCWpBciZLC0oZsQXhwfXtf2OsA
-         6RJxL7AzUa28+fyVCxQacl3gaAztM+w+YBCduYXw0Egcpc7YFDWfvnNpJ8RcD+rpETnN
-         kt85vhSqQmsz/hifsR8afjplOuiFTmszmZeKLXMiVESMeAbxVrGzZ3PjqGltw8pWZY1Y
-         Ev74QT2hKYNO4YwgVSkfOPntQ6+e6GjXQekolNwSW1WOKXOVG3Fknivha7plE/WWXlUk
-         FW+Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ikGBgko34MK8Q4AzkK3JoVI5yFlG4OFIaLI3Bh2Pdvk=;
+        b=TBVibUTb+e+fqcJcnLpSEAgXBwg/5lAvgViQjDw5VSZnqEIJ4ZYFGy4Lx0WWSlruVY
+         yYzo8d5UsknaIBJ05dROYJNKw1IBdsNHfqJWTX6aTAEtpa7LdQlExy5dwrWW2IvCN++Z
+         wNfDaDvn7TdNqXf6R0909mywmpJJaswv6WKub/g4xXrPsVkVxQhimgJZwoMZsiFJYRIB
+         Dha6Hx7uzVLNRRM8Zk1iwJbchU2+cUjtjyDI66jRw8z4tJMBs8+Xi/zyW3X9nPVrI5Ij
+         hD61P6ACVj5QHawphHPWH1Kf73y6Zdz9FwntK8yUZDl9TiXYytbelmNFNSyQdnSdfbsT
+         u0lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oafogegdaPZXzoXHnF3Oghbpz4xzRGdJpbKq76q2a2Y=;
-        b=CPR5un23muTxmYLPd4peCvOic5pxvMDAv9IpDZAlGa1+bUnFuTyXbvZbdB7VguejcB
-         sBLVhxh2KS8ImnTWCiY80HfYxkiza0oJSCKegdILBgLHnc1CwcfBNdeWtcuURBq4LtS/
-         FeqKoKEMz8uYK8lRz2SYsj4Sg8nTkrQZG8GPZbXE8RuyYLQ6PqEdCoyEFhgXvKDfOxL2
-         VHE8ni4c1Fjotf1XTh/fYmi9GyZogjCc3zTValMa9bne42SDgJTSBpiaYtl7SYReUv86
-         9f5LG0SEMUF9TTEkZzrD2SllC+jmKWfsw1Q+7gRDyJCyV4/YAm+ppdhBNoePGTBQQ36w
-         dqAQ==
-X-Gm-Message-State: ACrzQf0/9KgxwjteJSt0Eg3k+4KZdMNL9XTpk5+Vp3HMWEy+HdYHYPnX
-	wzmPankJCeJCKtgIg6Sw5EKBwof0oVhiqfClMBnvIA==
-X-Google-Smtp-Source: AMsMyM6PldU15XpYKT+5xulQiXStYTcESn3GyVSq7lLp6grdvkqvA9V1svb1pzlVoyZmAjU53mCAHKZxCjfWfjlGatM=
-X-Received: by 2002:a17:90b:33c3:b0:20a:ebc3:6514 with SMTP id
- lk3-20020a17090b33c300b0020aebc36514mr1188220pjb.147.1665522637959; Tue, 11
- Oct 2022 14:10:37 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ikGBgko34MK8Q4AzkK3JoVI5yFlG4OFIaLI3Bh2Pdvk=;
+        b=fJ+gIPYAy9ItdQKzLyjhyDyDsEj6dB7Max6jE1MEt1KrmZyBw+5dIR+yl2atEzSI/H
+         yguTTT2gvFY+2nlGlDPG68qkeNmPfNC6OE12BimRxwLhsmlIT+jtOXZBBxQ7DeQv//he
+         QLHh/rDH07yFTrZI0aED1IL/Pdr2akrqvw8Y5gfaA0ThqMWF20LrUKkfoLuj6ZDUm65B
+         oMMOLMUV/STr4BxjXTp2l7MvEKaHOBAvl5xhXWdKWvO8qDXJxTnHeZMT4U8ezpNSpx15
+         z3vlcHnqkeqM+e7V633O0jh7/jxW/il7TCyATF99lwXqYmWKIBvzrn/ECBNW6U6s1yC8
+         W2UA==
+X-Gm-Message-State: ACrzQf0D6rpCYF1giNtydu+PtjguzETdKCtbNTd+DXNCnV3+cxb7osZJ
+	qFTyH3c0DaEzAxyQi8ZM7lQAp+gNVk5y7n/eNva8iw==
+X-Google-Smtp-Source: AMsMyM7vUNgsNdzlwAgOOqjbogivmsfmkpSHWwUyP76bR5WmeWGZF8Mjzaf+a+QNqMDUPosfKwLOOYdIJLja5h2QLMw=
+X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
+ t24-20020a170902b21800b00184710c8c52mr92201plr.95.1665523942762; Tue, 11 Oct
+ 2022 14:32:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221011032327.2761241-1-zengheng4@huawei.com>
-In-Reply-To: <20221011032327.2761241-1-zengheng4@huawei.com>
+References: <CAKwvOdnrHErOK+w878izVauHUKaX3eD-HXgigq2Ogm3iSj-fHA@mail.gmail.com>
+ <76CB17D0-5A66-4D49-A389-8F40EC830DC0@sladewatkins.net> <CAP-5=fXVgwMO_CpS-EHN6PFhLB-J5Ft7qHz7oQd-WOMnTj72Cw@mail.gmail.com>
+ <CAM9d7chvZjZ4YVc6j3w7OkdHteyJ0GUZboieu9G7jAWBevoZqA@mail.gmail.com>
+ <e553c4f8-ed3d-0755-cc8a-b5ffe43b2c2f@amd.com> <CAKwvOdk6TTNhu_+FdONTXPo9Z8u5D4-5kf-rMN8oK4+6fMyc-w@mail.gmail.com>
+ <CABPqkBQVfQFJKCdHXEMGFcupzvy8zq14F52eLW5s9vr2Shmi6w@mail.gmail.com> <85822c3c-2254-52cc-e6b1-9c89adb63771@amd.com>
+In-Reply-To: <85822c3c-2254-52cc-e6b1-9c89adb63771@amd.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 11 Oct 2022 14:10:26 -0700
-Message-ID: <CAKwvOdn=4Vzgt6zo64tTc+d=QHVrWxRe2JzBC8ydyc_wst1EEA@mail.gmail.com>
-Subject: Re: [PATCH -next] Makefile: add implicit enum-conversion check for
- compile build
-To: Zeng Heng <zengheng4@huawei.com>
-Cc: masahiroy@kernel.org, michal.lkml@markovi.net, nathan@kernel.org, 
-	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	liwei391@huawei.com
+Date: Tue, 11 Oct 2022 14:32:11 -0700
+Message-ID: <CAKwvOdkfEexsE07XXGW3FF+nMt-pR8uv2EA7QzsPbEZsSQBO-Q@mail.gmail.com>
+Subject: Re: Invalid event (cycles:pp) in per-thread mode, enable system wide
+ with '-a'.
+To: Ravi Bangoria <ravi.bangoria@amd.com>
+Cc: Stephane Eranian <eranian@google.com>, Slade Watkins <srw@sladewatkins.net>, 
+	linux-perf-users <linux-perf-users@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@gmail.com>, 
+	Kees Cook <keescook@chromium.org>, sandipan.das@amd.com, 
+	Bill Wendling <morbo@google.com>, clang-built-linux <llvm@lists.linux.dev>, Yonghong Song <yhs@fb.com>, 
+	Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 10, 2022 at 8:24 PM Zeng Heng <zengheng4@huawei.com> wrote:
+On Thu, Oct 6, 2022 at 8:56 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 >
-> Enable implicit enum-conversion warning option in kernel gcc build.
-> When it set enabled, it can detect implicit enum type conversion
-> and locate conversion errors like below (use "allmodconfig"):
+> +cc: PeterZ
 >
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_mode_vba_20.c:=
-3904:46:
-> error: implicit conversion from =E2=80=98enum <anonymous>=E2=80=99 to =E2=
-=80=98enum odm_combine_mode=E2=80=99
-> [-Werror=3Denum-conversion]
->  3904 |       locals->ODMCombineEnablePerState[i][k] =3D true;
->       |                                              ^
+> >>>>> +Ravi who may be able to say if there are any issues with the precise
+> >>>>> sampling on AMD.
+> >>>>
+> >>>> Afaik cvcles:pp will use IBS but it doesn't support per-task profiling
+> >>>> since it has no task context.  Ravi is working on it..
+> >>>
+> >>> Right.
+> >>> https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@amd.com
+> >>
+> >> Cool, thanks for working on this Ravi.
+> >>
+> >> I'm not sure yet whether I may replace the kernel on my corporate
+> >> provided workstation, so I'm not sure yet I can help test that patch.
+> >>
+> >> Can you confirm that
+> >> $ perf record -e cycles:pp --freq=128 --call-graph lbr -- <command to profile>
+> >>
+> >> works with just that patch applied? Or is there more work required?
+> >> What is the status of that patch?
+> >>
+> >> For context, we had difficulty upstreaming support for instrumentation
+> >> based profile guided optimizations in the Linux kernel.
+> >> https://lore.kernel.org/lkml/CAHk-=whqCT0BeqBQhW8D-YoLLgp_eFY=8Y=9ieREM5xx0ef08w@mail.gmail.com/
+> >> We'd like to be able to use either instrumentation or sampling to
+> >> optimize our builds.  The major barrier to sample based approaches are
+> >> architecture / micro architecture issues with sample based profile
+> >> data collection, and bitrot of data processing utilities.
+> >> https://github.com/google/autofdo/issues/144
+> >
+> > On existing AMD Zen2, Zen3 the following cmdline:
+> > $ perf record -e cycles:pp --freq=128 --call-graph lbr -- <command to profile>
+> >
+> > does not work. I see two reasons:
+> >
+> > 1. cycles:pp is likely converted into IBS op in cycle mode.
+> >     Current kernels do not support IBS in per-thread mode.
+> >     This is purely a kernel limitation
 >
-> The '-Wenum-conversion' could be regarded as effective check in
-> compile runtime and call attention on potential mistakes, which is
-> firstly introduced from GNU gcc-10.
+> Right, it's purely a kernel limitation. And below simple patch on top
+> of event-context rewrite patch[1] should be sufficient to make cycles:pp
+> working in per-process mode on AMD Zen.
 >
-> Although "-Wenum-conversion" could be enabled by "-Wextra"
-> when compiling with 'W=3D[123]' option, there are many warnings
-> generated by '-Wextra' that cause too much noise in the build.
->
-> Seeing the more details from the following link:
-> https://gcc.gnu.org/onlinedocs/gcc-11.3.0/gcc/Warning-Options.html
->
-> Therefore, "-Wenum-conversion" warning option needs to be
-> explicitly requested for GCC when compilation process is only
-> companied with '-Wall'.
->
-> With clang, -Wenum-conversion is just default enabled, not even
-> behind -Wall.
-
-Probably didn't need the examples below since you already provide an
-example above, too, but it doesn't matter.  Thanks for the patch.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> Provide a couple examples for reference as below:
->
-> $ cat test.c
-> enum enum1 { A =3D 1 };
-> enum enum2 { B =3D 2 };
->
-> enum enum1 foo(enum enum2 bar)
-> {
->     return bar;
-> }
->
-> $ gcc -Wall -fsyntax-only test.c
->
-> $ gcc -Wall -Wenum-conversion -fsyntax-only test.c
-> test.c: In function =E2=80=98foo=E2=80=99:
-> test.c:6:9: warning: implicit conversion from =E2=80=98enum enum2=E2=80=
-=99 to =E2=80=98enum enum1=E2=80=99 [-Wenum-conversion]
->     6 |  return bar;
->       |         ^~~
->
-> $ gcc -Wextra -fsyntax-only test.c
-> test.c: In function =E2=80=98foo=E2=80=99:
-> test.c:6:9: warning: implicit conversion from =E2=80=98enum enum2=E2=80=
-=99 to =E2=80=98enum enum1=E2=80=99 [-Wenum-conversion]
->     6 |  return bar;
->       |         ^~~
->
-> $ clang -fsyntax-only test.c
-> test.c:6:9: warning: implicit conversion from enumeration type 'enum enum=
-2' to different enumeration type 'enum enum1' [-Wenum-conversion]
->         return bar;
->         ~~~~~~ ^~~
-> 1 warning generated.
->
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->  Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index c251bc44c088..de01b5d27e40 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -665,7 +665,7 @@ static struct perf_ibs perf_ibs_fetch = {
 >
-> diff --git a/Makefile b/Makefile
-> index 8f6ed52fa08f..72103d22df23 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -880,6 +880,10 @@ endif
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
+>  static struct perf_ibs perf_ibs_op = {
+>         .pmu = {
+> -               .task_ctx_nr    = perf_invalid_context,
+> +               .task_ctx_nr    = perf_hw_context,
 >
-> +# implicit enum conversion checking is supported since from gcc-10
-> +# this warning option has to be explicitly requested for GCC
-> +KBUILD_CFLAGS +=3D $(call cc-option, -Wenum-conversion)
-> +
->  # These result in bogus false positives
->  KBUILD_CFLAGS +=3D $(call cc-disable-warning, dangling-pointer)
+>                 .event_init     = perf_ibs_init,
+>                 .add            = perf_ibs_add,
+> ---
 >
-> --
-> 2.25.1
->
+> [1]: https://lore.kernel.org/lkml/20220829113347.295-1-ravi.bangoria@amd.com
 
+Hi Ravi,
+I didn't see the above diff in
+https://lore.kernel.org/lkml/20221008062424.313-1-ravi.bangoria@amd.com/
+Was there another distinct patch you were going to send for the above?
 
---=20
+-- 
 Thanks,
 ~Nick Desaulniers
