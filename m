@@ -1,175 +1,139 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98473207
-	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 12:20:14 +0000 (UTC)
-Received: by mail-qt1-f181.google.com with SMTP id f22so4111517qto.3
-        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 05:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/YakFhNpLpumvOh5oHDunclA+gkTRZwRtWWXCJ8zRl8=;
-        b=jhOz86q+hE4Tl/6wOHJGFEWqFbyw8x+EKAvrco08gfgBy80fcwjZipZU2w4+1Lk12g
-         imuWft0S/KkaxjwCRHY1jWIUwzvF+UpZzGnnLYBSXOMalVKtYq8YMYcvNd5Bjz7Wa12s
-         cATv6WR2Ib0WgHHUEdbDPxaYu5kCo/58kmY3tY7CAF01NjR/iOHwMCZNT0n7qKcf0mOs
-         isz4f2ku3VuewEFctR0EF319aMwEaBLIXgZ7w8k+LGFKXHqhW0+6WAeYE5/bLm/t3Agy
-         GLNkifIVQMprhorNHpNbmZKGst0y9Bbn13nDtpzP5VPLu964O02c8oZmng/MXZ39W1/8
-         UejQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/YakFhNpLpumvOh5oHDunclA+gkTRZwRtWWXCJ8zRl8=;
-        b=vT6N8Cyjksby6REFaDA+NZkVjNh3e7C/7XX0Eh27hrX33MXsBUIxMNU+FpeeYKO1Y3
-         lei57GRUsg2Uru1cZpMfXHiPRTkfwPRfGSfni0OWUlfmxq2js+y7/US/jg5pAduZCFX0
-         gajHkzKW1H7j9OWCADn3ChFKQTR948b7wazZR7w/8nJX/nm9tKQAVmXUnchvF+bwseqy
-         aYr9VQQguYm9GvNdjiV516ICAUGoO9UK0WiovANFem2+JwFJ6pvqmnRXcJD6e9VtX4I6
-         6zivRuQTT1YgDZcfQmL47d6hqDcPKurzEJi3Q5EE8DQ/TJB4sONUlj4F8HDl64M+sNES
-         gzzQ==
-X-Gm-Message-State: ACrzQf1TDhPri5+evrxNdWvk1IIqros12mj4vcYgwDSp9z3lTO1PJzqa
-	VIf5qk14NFuVO7V1Nc6zWh968A==
-X-Google-Smtp-Source: AMsMyM6fRbj6X+C2Y6tfih+FThJWoSnfBLJ6Ysf+7CiShQzNRCRB2RKBkJpFjOd2eRKG+uoLu3GezA==
-X-Received: by 2002:ac8:7f4b:0:b0:35c:bfa2:8bd2 with SMTP id g11-20020ac87f4b000000b0035cbfa28bd2mr18401847qtk.644.1665490813776;
-        Tue, 11 Oct 2022 05:20:13 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id dt39-20020a05620a47a700b006ec59941acasm7243990qkb.11.2022.10.11.05.20.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 05:20:13 -0700 (PDT)
-Message-ID: <f479acd6-457c-5242-432b-10fec91f0c3b@linaro.org>
-Date: Tue, 11 Oct 2022 08:18:02 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7515633DA
+	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 12:46:56 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 419A25801D6;
+	Tue, 11 Oct 2022 08:46:55 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 11 Oct 2022 08:46:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1665492415; x=1665496015; bh=KeTUBIcKTF
+	qBNdPoZmaI0adYgj0Mb+XfDZHZQqTacys=; b=wkfAs5UQIghk/i14T5tUOMaejV
+	yDpMyNaz6jJGUqRraFageD0jyfJmFzSQtbScn21qS7LFSOimE1dpakf6GQCz3c5e
+	PRFxvjnBD7q6pj2iyiTShDHuCqTUJdIu41YFtyxOtUrkRRI8R6IKj8SIw0y94VAm
+	+IRYS7iCAMHVv6KtIbqi+dgPq8FFZAGh+1b8Es1DEc+Zm4n9lNRxgZp8wXgmx34J
+	hzj9pJ4ze6vu1tht9F++K3AaYvnXJqEa4oJLVi7mNqHE2m/caWczjBYkfUUoT6fD
+	YO5EgVI4Sz2046fE5fky24hdQ2JnhHzHroi6iZEH7iflDLd5i6qqgR0oYebg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1665492415; x=1665496015; bh=KeTUBIcKTFqBNdPoZmaI0adYgj0M
+	b+XfDZHZQqTacys=; b=aqWTZMM4a78aJ/gDgm0SO0iC8yhUP2RlYwvPKLJg9ucB
+	Yw1gl5jSaLJBOgqtYpXsjlaefnPgTxDGaDPzjJYgkOJz0hSkfcj5qHsO32PGrbrk
+	n0oMcurKtqS4jHiY4+XOScYJLc0lmoNTAtfWZ6IDmt01+ldKv9bfTM1u0CGe7Cu/
+	1RzoSmWdDnLfsEfY3/u9lRMfSNoV4b590P0zynLs3C8T3B+SAnBk+v6b9Y1CtWvJ
+	p1Q6VMRkdwPADqGmaKs/sstUN3pomSMbuj3LtB7V81KDqrwhgycp7rd3SlVuDwa6
+	+w4jswG5qo0oNHjLAzu2myHlJ5VV3s0Tr6qzuRF29A==
+X-ME-Sender: <xms:vWVFY4TuUsocUbtpC5rYDetWax-0Lbob7188NzkpaXnltWlynGg1LA>
+    <xme:vWVFY1xCQEkJ1Gtba1a6PIH-wGDU0YBLFNMn_3vnYQaqxQ481CTVG_M9oaicrqdE3
+    rRgA3eFAJNkMLZS8cM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejiedghedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhephfegteejueeugedtteefueejjefgveekteevvdelfeeftdelkeetffehvefg
+    fffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhlvhhmrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
+    uggsrdguvg
+X-ME-Proxy: <xmx:vWVFY11BK9hLqBNvqqlQxl6DG--Mau6RkqbAQ3bLNJWWgs-grw8WQQ>
+    <xmx:vWVFY8DOwxO5sihG0RMGIDK7mmrxVWRZUaq2yGUZYomaLJQa31-4eg>
+    <xmx:vWVFYxhMY6vSQlKAcsH_FeSUQwwcmvUQ3gHho6L9wnF-M4upulb8-w>
+    <xmx:vmVFY2YUFVZkrVOZEC-fBdFiErc8LaMQL8xffU0TFLQb-q0B2PNnFw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B792EB60086; Tue, 11 Oct 2022 08:46:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v6 1/2] dt-bindings: input: document Qualcomm PMI8998
- haptics driver
-Content-Language: en-US
-To: Caleb Connolly <caleb@connolly.tech>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Jeff LaBundy <jeff@labundy.com>, Konrad Dybcio
- <konrad.dybcio@somainline.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+Mime-Version: 1.0
+Message-Id: <c8f87abd-9d66-40cf-bcea-e2b1388d3030@app.fastmail.com>
+In-Reply-To: 
+ <CAKwvOdmWvDBw9MnO==dZ8i=gqbVPSUuiuRtwKmWuV8uXzJYNww@mail.gmail.com>
+References: <20190307090146.1874906-1-arnd@arndb.de>
+ <20221006222124.aabaemy7ofop7ccz@google.com>
+ <c646ea1e-c860-41cf-9a8e-9abe541034ff@app.fastmail.com>
+ <CAKwvOdkEied8hf6Oid0sGf0ybF2WqrzOvtRiXa=j7Ms-Rc6uBA@mail.gmail.com>
+ <e554eb3c-d065-4aad-b6d2-a12469eaf49c@app.fastmail.com>
+ <CAKwvOdmNiSok3sAMJs2PQLs0yVzOfMTaQTWjyW8q2oc3VF60sw@mail.gmail.com>
+ <CAKwvOdmWvDBw9MnO==dZ8i=gqbVPSUuiuRtwKmWuV8uXzJYNww@mail.gmail.com>
+Date: Tue, 11 Oct 2022 14:46:33 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nick Desaulniers" <ndesaulniers@google.com>
+Cc: "Kees Cook" <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Andi Kleen" <ak@linux.intel.com>, "Christoph Hellwig" <hch@lst.de>,
+ "Eric Dumazet" <edumazet@google.com>,
+ "Darrick J. Wong" <darrick.wong@oracle.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Rob Herring
- <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-References: <20221010162945.1325770-1-caleb@connolly.tech>
- <20221010162945.1325770-2-caleb@connolly.tech>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221010162945.1325770-2-caleb@connolly.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ "Paul Kirth" <paulkirth@google.com>
+Subject: Re: [PATCH] fs/select: avoid clang stack usage warning
+Content-Type: text/plain
 
-On 10/10/2022 12:30, Caleb Connolly wrote:
-> Add bindings for qcom PMIC PMI8998 haptics driver.
-> 
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-> ---
->  .../bindings/input/qcom,pmi8998-haptics.yaml  | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
-> new file mode 100644
-> index 000000000000..9f51c527595c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2020 Unisoc Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/qcom,pmi8998-haptics.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMI8998/PM660 Haptics
-> +
-> +maintainers:
-> +  - Caleb Connolly <caleb@connolly.tech>
-> +
-> +description: |
-> +  Qualcomm SPMI haptics is a peripheral on some QTI PMICs. It supports linear resonant
-> +  actuators and eccentric rotating mass type haptics commonly found in mobile devices.
-> +  It supports multiple sources of wave data such as an internal buffer, direct play
-> +  (from kernel or userspace) as well as an audio output mode.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,pmi8998-haptics
-> +          - qcom,pm660-charger
-> +          - qcom,pmi8996-haptics
-> +          - qcom,pmi8941-haptics
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: short
-> +      - const: play
-> +
-> +  qcom,wave-play-rate-us:
+On Mon, Oct 10, 2022, at 8:40 PM, Nick Desaulniers wrote:
+> On Fri, Oct 7, 2022 at 3:54 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> $ CROSS_COMPILE=aarch64-linux-gnu- ARCH=arm64 make -j128 defconfig fs/select.o
+> $ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
+> grep do_select
+>     1a48: 2e fb ff 97  bl 0x700 <do_select>
+>
+> Same for 32b ARM.
+> arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110
+>
+> $ CROSS_COMPILE=arm-linux-gnueabi- ARCH=arm make -j128 defconfig fs/select.o
+> $ llvm-objdump -Dr --disassemble-symbols=core_sys_select fs/select.o |
+> grep do_select
+>     1620: 07 fc ff eb  bl #-4068 <do_select>
+>
+> Is there a set of configs or different compiler version for which
+> that's not the case? Perhaps. But it doesn't look like marking
+> do_select noinline_for_stack changes the default behavior for GCC
+> builds, which is good.
 
-s/rate/duration/
-?
+I checked all arm32 defconfigs, and all supported gcc versions for arm32,
+they all behave the same.
 
-> +    description: |
-> +      Wave sample duration in microseconds, 1/f where f
-> +      is the resonant frequency of the actuator.
-> +    minimum: 0
-> +    maximum: 20475
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - qcom,wave-play-rate-us
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/interrupt-controller/irq.h>
+> So it looks like it's just clang being aggressive with inlining since
+> it doesn't have -fconserve-stack.  I think
+> https://lore.kernel.org/lkml/20221007201140.1744961-1-ndesaulniers@google.com/
+> is still on the right track, though I'd remove the 32b only guard for
+> v2.
 
-Align it with -| above.
+I think it's again the difference between top-down and bottom-up inlining.
 
-> +
-> +      spmi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        pmi8998_haptics: haptics@c000 {
-> +          compatible = "qcom,pmi8998-haptics";
-> +          reg = <0xc000>;
-> +
-> +          interrupts = <0x3 0xc0 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                      <0x3 0xc0 0x1 IRQ_TYPE_EDGE_BOTH>;
+> Paul also mentioned that -finline-max-stacksize is a thing, at least 
+> for clang.
+> https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-finline-max-stacksize
+> Though this only landed recently
+> https://reviews.llvm.org/rG8564e2fea559 and wont ship until clang-16.
+> That feels like a large hammer for core_sys_select/do_select; I think
+> we can use a fine scalpel.  But it might be interesting to use that
+> with KASAN.
 
-Align with previous <
 
-> +          interrupt-names = "short", "play";
-> +
-> +          qcom,wave-play-rate-us = <4255>;
-> +        };
-> +      };
-> --
-> 2.38.0
-> 
-> 
+It's an interesting question whether it would help or hurt with
+KASAN_STACK: Normally the idea is that KASAN_STACK intentionally
+makes stack slots inside of a function non-overlapping, similar
+to the use-after-scope sanitizer that we no longer use because
+it caused too many stack overflows. Making it inline less should
+help reduce the actual stack consumption (not just the reported
+usage) because it makes called functions reuse the same stack slots,
+but it also makes KASAN_STACK less effective because of the same
+thing.
 
-Best regards,
-Krzysztof
+If -finline-max-stacksize is the equivalent of gcc's
+-fconserve-stack, we could of course just always enable that.
 
+    Arnd
