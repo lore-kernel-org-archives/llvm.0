@@ -1,94 +1,116 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2553C14
-	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 16:17:47 +0000 (UTC)
-Received: by mail-wr1-f51.google.com with SMTP id w18so22405031wro.7
-        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 09:17:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16FE3C32
+	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 16:43:50 +0000 (UTC)
+Received: by mail-pg1-f181.google.com with SMTP id q9so13263033pgq.8
+        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 09:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8p+Ph8umyk1fiV8rOh8aDOZpPjjfRG0WHPagf8EYGjI=;
-        b=LD0gGXDMEqnlsIxmg0Bf/DhQPtX3hLNQyJtg7EC16SmGNowy/93F7CLepmdLP417rL
-         4tREBjrSdHGSA/WBUkWANyn51X4CKiDUtc/bBqmqW1l9dCcVktSKDhziGWMFDFx2FfEk
-         00aCa49AU1QzBU61GiEqOzXUUjkp7P1Cw0I5ifW503DsoATwzYap0kC3aaXDs58plncF
-         UGvfQ/aMdB8N7MHHd5tNx0SFUcRTECD7AZjCJ0xX30IRmb/rbEXX+AbmrfvyqT0E6ypG
-         k5+z8/p86SDwGtxQgD+Pg1K9AYiBcKhpcFooG1QfKfHRv4LBWVHU/Hs7IRmLGRIuZgKr
-         oJ3A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4cQLsLHBibKCXET80IomNLXe7aKtZBxMhsEFPZH1Ilw=;
+        b=NbElJqk8KLlSeynJnSBpTuSUqK+dlJYSfjhESozbJipfngxmf7ra2Ycw3zm/u4nHA6
+         6vCmS1QuGcgLscl9XWSAOOAwqpHu/sLmhW/XVhKgvzGBGCZ/qhUBgWEvOkoBPtK0lkaY
+         TMu10prmH3kqlnb2mx2V7ssj2qI05plyUVofdlecVN79yA09z/4j3zgJcZzp6D9Hr0dI
+         rUsUQb27ndeQNA1LLQbIerUw2VZwNwoNuYbuV0t3igIjp6CvQF3wICa0zY+8b3t2v294
+         7w9WckZyZtFM/7TCDHn64q6XmEv9WMw7LtNZaQjYoBUCG2PPyTAhNC8AgCrhRQWhI1Ok
+         U1dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8p+Ph8umyk1fiV8rOh8aDOZpPjjfRG0WHPagf8EYGjI=;
-        b=M/zQfcNs0SRr0fOnq1IglvhO+V5rJ6+zyx0Pg94cDjx51BEESN3zIaNRGpTSJ7O5qg
-         g/s0EDao8EQj0EvkSKp4G4p8L914+MKtut1WdlVHW5a+U1SBhxfBQ9gH19JtCK2Wh9xy
-         XyvM1KQ6OvB63X+ESdacEQngcBZ1p7nr2otJsyQMvV2QwDpoAXfMfnEvRXULdtNkLLqc
-         D7A9Bsfeyfu8iTIwjjf5+SngKr1mT6uONTvjIFWrOq0YHlqaa6/Y4OsK96I1hhSSRzAL
-         oSmqUVpPoS+v50C/4cK+tOo+pXom75KRQ4fPDrKf4PQ4eVSXn4s3HDzxJl6tadjiVeSq
-         PdCg==
-X-Gm-Message-State: ACrzQf1g8IRoZ23OJ9v1BqViLh2MYDZxtrQoBNgKfeH9099GfXeoDs8o
-	6eBm3VNT4getNSwIlGQ0Cba3OA==
-X-Google-Smtp-Source: AMsMyM7gpUdapuVTKHfKEDpK7jYbQ5SOEi2bep8snUSDGTh015napIGgYLeHXayu6RLOZacsubuMVw==
-X-Received: by 2002:a5d:64cd:0:b0:22e:4af7:8182 with SMTP id f13-20020a5d64cd000000b0022e4af78182mr16328525wri.453.1665505065986;
-        Tue, 11 Oct 2022 09:17:45 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id t128-20020a1c4686000000b003b4a699ce8esm11025005wma.6.2022.10.11.09.17.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 09:17:45 -0700 (PDT)
-Message-ID: <9ea9fc0c-41e7-d7cc-7822-dcfab9398d7d@isovalent.com>
-Date: Tue, 11 Oct 2022 17:17:44 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4cQLsLHBibKCXET80IomNLXe7aKtZBxMhsEFPZH1Ilw=;
+        b=FynvXbL4nY8MtANMfoTXF2ORuYRD4T/61vTz9LenOdCaxdHP2FG6YKeRkZaNmkyRm5
+         2LSJ1SYvmGuX78kh+yLzDlMzW5jfA2pzrGJiVtEyTd1MSRHvq8A1s97DwGwp2jkyIYft
+         d/2/JdqmwNsIycsfIEig7SkNS24o+d5YFIEu9i9zcN0WM0hv4PkmatQhaFUou6GwxdbJ
+         cVIYGWUWvwmckSHny6whkqOn0SZxsOx1sUmKl90n/573cGSv98QPIhLqnvlLMPJc5fow
+         +RI5ohFhOQt96kP3uS6xQeGEhAqwf6PA+giNcuh1hEiFIS+rpl4ZO/4OgVhP/TFNKLvu
+         PyOg==
+X-Gm-Message-State: ACrzQf3sh8hXWDl1QbyAsV1M3hY/BAd+iUPbclPJN56AkP1UzK7aNZXC
+	OtSfsVjUewfuORllcf5g+STdQWKRrfYy9WjUr0S/GQ==
+X-Google-Smtp-Source: AMsMyM4rvA/2n5H3Zcyx4WXYAkabqtuxLr5z5RO3dT1uqSNjwxQckRtR8KJxEieT2UD4Lcinf1i3GQzKzRSuDjeW99o=
+X-Received: by 2002:a05:6a00:1748:b0:563:8346:12ea with SMTP id
+ j8-20020a056a00174800b00563834612eamr8498810pfc.23.1665506629981; Tue, 11 Oct
+ 2022 09:43:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [bpf-next v8 0/3] bpftool: Add autoattach for bpf prog
- load|loadall
-Content-Language: en-GB
-To: Wang Yufen <wangyufen@huawei.com>, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
- hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <1665399601-29668-1-git-send-email-wangyufen@huawei.com>
-From: Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <1665399601-29668-1-git-send-email-wangyufen@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221011031843.960217-1-masahiroy@kernel.org> <08db7754-ecd8-4425-875b-4f2b44497f6b@app.fastmail.com>
+In-Reply-To: <08db7754-ecd8-4425-875b-4f2b44497f6b@app.fastmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 11 Oct 2022 09:43:38 -0700
+Message-ID: <CAKwvOdm3z2MWzxTuK9e=eZXWLEBgnkT3NC-ALKNB8z7L9PnfQw@mail.gmail.com>
+Subject: Re: [RFC PATCH] Remove Intel compiler support
+To: Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-ia64@vger.kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Terrell <terrelln@fb.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Robert Moore <robert.moore@intel.com>, 
+	Tom Rix <trix@redhat.com>, devel@acpica.org, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-2022-10-10 18:59 UTC+0800 ~ Wang Yufen <wangyufen@huawei.com>
-> This patchset add "autoattach" optional for "bpftool prog load(_all)" to support
-> one-step load-attach-pin_link.
-> 
-> v7 -> v8: for the programs not supporting autoattach, fall back to reguler pinning
-> 	  instead of skipping
-> v6 -> v7: add info msg print and update doc for the skip program
-> v5 -> v6: skip the programs not supporting auto-attach,
-> 	  and change optional name from "auto_attach" to "autoattach"
-> v4 -> v5: some formatting nits of doc
-> v3 -> v4: rename functions, update doc, bash and do_help()
-> v2 -> v3: switch to extend prog load command instead of extend perf
-> v2: https://patchwork.kernel.org/project/netdevbpf/patch/20220824033837.458197-1-weiyongjun1@huawei.com/
-> v1: https://patchwork.kernel.org/project/netdevbpf/patch/20220816151725.153343-1-weiyongjun1@huawei.com/
-> 
-> Wang Yufen (3):
->   bpftool: Add autoattach for bpf prog load|loadall
->   bpftool: Update doc (add autoattach to prog load)
->   bpftool: Update the bash completion(add autoattach to prog load)
-> 
->  tools/bpf/bpftool/Documentation/bpftool-prog.rst | 15 ++++-
->  tools/bpf/bpftool/bash-completion/bpftool        |  1 +
->  tools/bpf/bpftool/prog.c                         | 78 +++++++++++++++++++++++-
->  3 files changed, 90 insertions(+), 4 deletions(-)
-> 
+On Tue, Oct 11, 2022 at 8:18 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Oct 11, 2022, at 5:18 AM, Masahiro Yamada wrote:
+> > include/linux/compiler-intel.h had no update in the past 3 years.
+> >
+> > We often forget about the third C compiler to build the kernel.
+> >
+> > For example, commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
+> > only mentioned GCC and Clang.
+> >
+> > init/Kconfig defines CC_IS_GCC and CC_IS_CLANG but not CC_IS_ICC,
+> > and nobody has reported any issue.
+> >
+> > I guess the Intel Compiler support is broken, and nobody is caring
+> > about it.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> > I am sending this to Linus and the x86 maintainers with RFC.
+> > If somebody is still using ICC, please speak up!
+>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>
+>
+> I had the same thought a while back and tried to show that it as
+> already broken, but I never managed to actually download the compiler
+> at the time.
+>
+> It appears that in the meantime, Intel have completely dropped their
+> old codebase and moved to using LLVM[1], so my guess is that with the
+> current releases it will behave the same as clang. It might help
+> to verify that this is indeed the case if you want to add that
+> to the changelog text.
 
-The series looks good to me, thank you!
+This is my thought, too.  I'm happy to help folks working on icx to
+get icx up and running for kernel builds, if there's interest.
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Change LGTM; there's probably some refactoring we might be able to do
+as a result of this; we might be able to move more common definitions
+out of include/linux/compiler-gcc.h and include/linux/compiler-clang.h
+into include/linux/compiler_types.h, but that can wait until after
+this change.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+>      Arnd
+>
+> [1] https://www.intel.com/content/www/us/en/developer/articles/technical/adoption-of-llvm-complete-icx.html
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
