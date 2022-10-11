@@ -1,33 +1,33 @@
-Received: from condef-08.nifty.com (condef-08.nifty.com [202.248.20.73])
+Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C773C32
-	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 16:59:22 +0000 (UTC)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-08.nifty.com with ESMTP id 29BGrT1g017610
-	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 01:53:29 +0900
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177]) (authenticated)
-	by conssluserg-04.nifty.com with ESMTP id 29BGr4UG006654
-	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 01:53:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 29BGr4UG006654
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4913C32
+	for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 17:09:33 +0000 (UTC)
+Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-05.nifty.com with ESMTP id 29BH3SWB030573
+	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 02:03:28 +0900
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42]) (authenticated)
+	by conssluserg-03.nifty.com with ESMTP id 29BH3Acj006785
+	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 02:03:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29BH3Acj006785
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1665507185;
-	bh=f8HvnuVAteWRI5ncBuuE0MgQLi5Hb1h+j3HTVM2jcno=;
+	s=dec2015msa; t=1665507791;
+	bh=jTdnNEbZqROx00fEcB0iHuyEJaBWdVHynTGvE9aGH6M=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qf8UL9ba1bhUo0chFLLB20TY56gnxZVwRMDNLwKGRx5d8SBtKu723evzOB1ogKA54
-	 MCsmRZgqE4FtDWOTviTId/6CU4JJl6ENThC45ijm8cy2RogCD8v/PNpFzNx8mG0L46
-	 lbWzNeelzbfNAeKbEolTII7gQdBVawu/+xMtL7vigjAu3XPZuYYt8oKFhswWK0KHuf
-	 Oj4P8BZdP81GOX1vLa71zZGvb0tPxgRmpUjfFUFiw/3/alI+bKqPBzB445m2aCCmcG
-	 9a/5PQ/3ElYCrySigHsvHQXx/Bd6aVLDUpIUNVxigUVZAjtkb2P8w20bSID/79Iug6
-	 WELXf5efwYahA==
-X-Nifty-SrcIP: [209.85.167.177]
-Received: by mail-oi1-f177.google.com with SMTP id w196so10136394oiw.8
-        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 09:53:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1uKcD2md+aZhJ3nmryatmIH9FNW3I3uMVPzIaNXGP10Z9bi1Oq
-	renG5eAsbz8qbwPqP7F+pXOoPS/mQp/en6RP0KQ=
-X-Google-Smtp-Source: AMsMyM60Tso+KMnUhy3DtJsunnEn/q5/4uBQ3277fO82D6ZNQB96rIUQqv8lGiPwNNRorBX3UApuHH5XmivLJygZy+I=
-X-Received: by 2002:aca:bbd4:0:b0:353:f167:6fd3 with SMTP id
- l203-20020acabbd4000000b00353f1676fd3mr945oif.287.1665507183814; Tue, 11 Oct
- 2022 09:53:03 -0700 (PDT)
+	b=HbGHoh0lmJaEk1JQf533TfgIsvb0et8BoUYi915JOHMUOLnOIJRzA3E+s/+Ko+sSa
+	 hJmUa7IpjxtMB/QDNCzUrBEgyF3znejZGyIz6HnE8tr/kOII+l68wZsQzYk8AOLZk0
+	 Y/Bb6u9ZG6Rv48Eab7A3TlrjKPigGaPsKVU6OpHUIT06Y1t06ToX47JN0HjTPVeVZp
+	 6y28ICfE9Ue+TOx/sgRwTyqE1Wj7pkWnfH11muBvGt9Q7XzxBjT7m9uq6HOVLUtGpR
+	 kVknkrKILIC9yzYUss4N8gfL25imV3k6zviB0z2byHVZ5WGjK/v6Sl5Nk4vIc+bMY1
+	 1VHnJVoZS4VKQ==
+X-Nifty-SrcIP: [209.85.161.42]
+Received: by mail-oo1-f42.google.com with SMTP id c17-20020a4aa4d1000000b0047653e7c5f3so10497871oom.1
+        for <llvm@lists.linux.dev>; Tue, 11 Oct 2022 10:03:10 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1usNIrE34voUTpHacsP8mDuvTU23AD0ZJIL9yWUiwZKmzNjMIB
+	hA1/+T0qLUP5xTJC5WjfAh5Z8WfanWkdHAxR/Kw=
+X-Google-Smtp-Source: AMsMyM75hvTFtbuimxDA6m9fRmoFNWKNX/W8y3QilQSqAN5t4L/BrgAgLfccLylWXZqq0BMYs6A2WLP5QpXDJi0kKAA=
+X-Received: by 2002:a05:6830:3115:b0:658:ea61:249c with SMTP id
+ b21-20020a056830311500b00658ea61249cmr11488919ots.225.1665507789684; Tue, 11
+ Oct 2022 10:03:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,11 +35,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20221011031843.960217-1-masahiroy@kernel.org> <CANiq72k9wAVCbHKVZFE=E3xv+2ZamUMsJ=uV43NxsSUQ4wXGdw@mail.gmail.com>
-In-Reply-To: <CANiq72k9wAVCbHKVZFE=E3xv+2ZamUMsJ=uV43NxsSUQ4wXGdw@mail.gmail.com>
+ <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
+In-Reply-To: <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 12 Oct 2022 01:52:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
-Message-ID: <CAK7LNASP74qJ5fjjcVYcw4CyZ1psPnnyzLHsUu0b+MxLq-W1eQ@mail.gmail.com>
+Date: Wed, 12 Oct 2022 02:02:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS3VMaZ2epwRuZt3dKCH434iKmrVnzBNxZ1ktbeTUaWWw@mail.gmail.com>
+Message-ID: <CAK7LNAS3VMaZ2epwRuZt3dKCH434iKmrVnzBNxZ1ktbeTUaWWw@mail.gmail.com>
 Subject: Re: [RFC PATCH] Remove Intel compiler support
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -57,35 +58,45 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 11, 2022 at 8:55 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Wed, Oct 12, 2022 at 1:52 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Tue, Oct 11, 2022 at 5:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> On Tue, Oct 11, 2022 at 8:55 PM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
 > >
-> >  include/linux/compiler-intel.h            |  34 -----
-> >  include/linux/compiler_types.h            |   2 -
+> > On Tue, Oct 11, 2022 at 5:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > >  include/linux/compiler-intel.h            |  34 -----
+> > >  include/linux/compiler_types.h            |   2 -
+> >
+> > You can also remove a few lines from `compiler_attributes.h`:
+> >
+> >     * Optional: not supported by icc
+> >
+> > Thanks for this!
+> >
+> > Cheers,
+> > Miguel
 >
-> You can also remove a few lines from `compiler_attributes.h`:
 >
->     * Optional: not supported by icc
 >
-> Thanks for this!
+> Thanks.
 >
-> Cheers,
-> Miguel
+>
+> Maybe, we can drop #if ... #else ... #endif
+> around __assume_aligned(a, ...), but I will leave it to you.
+>
+>
+> I will just drop the comment lines for now.
+> (Then, you will clean up compiler_attributes.h in the next cycle)
+> Is this your expectation for v2 ?
+
+
+Taking a look at the code, there is only one redundant #if.
+So, I will clean up __assume_aligned() in v2.
 
 
 
-Thanks.
 
-
-Maybe, we can drop #if ... #else ... #endif
-around __assume_aligned(a, ...), but I will leave it to you.
-
-
-I will just drop the comment lines for now.
-(Then, you will clean up compiler_attributes.h in the next cycle)
-Is this your expectation for v2 ?
 
 
 
