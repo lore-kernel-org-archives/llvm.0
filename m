@@ -1,80 +1,197 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5152C17CB
-	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 08:26:12 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E004115A1;
-	Wed, 12 Oct 2022 01:26:17 -0700 (PDT)
-Received: from [10.57.65.190] (unknown [10.57.65.190])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D43063F67D;
-	Wed, 12 Oct 2022 01:26:10 -0700 (PDT)
-Message-ID: <84f832ae-bfc5-a718-e757-11c47164ec03@arm.com>
-Date: Wed, 12 Oct 2022 09:26:09 +0100
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6653C17CB
+	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 08:50:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1665564648;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=chB+T51ryX+1xJLjFQOA0XYagfiXIN29fQudsmESwwk=;
+	b=AmVdXgnmurH+yrIST24Pi9ikT5+a7wBIg9w+WS72U4ohOKFvI1zHR+WE5gUDJiBk+RAF3i
+	wyprXDrdZEXF5MSqQoZvG2FnJwkYpklUo30HUAOP1dy4/2lY9sSyCF2gi/u9FsRHXu9xWK
+	JA8DoTgncPq4Zceqh22G5ruMwq9FcVQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-576-zElHO9YOP0ayXyJ-D6hzxg-1; Wed, 12 Oct 2022 04:50:47 -0400
+X-MC-Unique: zElHO9YOP0ayXyJ-D6hzxg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6F3D87B2A1
+	for <llvm@lists.linux.dev>; Wed, 12 Oct 2022 08:50:46 +0000 (UTC)
+Received: from [172.64.3.56] (unknown [10.30.34.235])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B22364EA47;
+	Wed, 12 Oct 2022 08:50:46 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
+ mainline.kernel.org-clang, f311d498)
+Date: Wed, 12 Oct 2022 08:50:46 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: coresight: etm4x build failure with unrolled loops
-To: Arnd Bergmann <arnd@kernel.org>, Luong Ngo <lngo@google.com>
-Cc: llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>
-References: <CABgnqwAZW=ro3BWdjar97RLif5mdeNGz7XssiKFyHcnfnC+uqA@mail.gmail.com>
- <CABgnqwDx_tiQKonycPMKKDXnnhyoEvcvaBSZVeyNuVenJ2FrkQ@mail.gmail.com>
- <43ee826c-5f1a-4fb3-b644-49caf5778ad4@app.fastmail.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <43ee826c-5f1a-4fb3-b644-49caf5778ad4@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <60887.122101204504700229@us-mta-576.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-On 12/10/2022 07:33, Arnd Bergmann wrote:
-> On Wed, Oct 12, 2022, at 1:20 AM, Luong Ngo wrote:
->> Resend with another Arnd's email as arnd@arndb.be is not working any more.
-> 
-> arnd@arndb.de is my normal address, if you are seeing problems with it, can
-> you tell me what went wrong? If you got a bounce, please forward that to
-> my @kernel.org address.
-> 
->>> Hello Arnd and Suzuki,
->>>
->>> We recently enable coresight driver in our kernel and the build failed with the exact same error that I found your discussion of same issue in this mail thread (https://lkml.org/lkml/2021/4/29/862). The suggestion fix by changing etm4x_relaxed_read32 with csdev_access_relaxed_read32 indeed fix the compilation error. However, the change was not upstreamed. Do you have insight into why the fix was not submitted?  Is there any chance for it to be submitted?
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
 
-This was committed upstream, as :
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/56003
 
-4d45bc82df667, avaialable upstream since, v6.0-rc1.  However, I see
-that it was not sufficient. We need the same fix for "write"
-operatoins too. Something like :
+One or more kernel tests failed:
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h 
-b/drivers/hwtracing/coresight/coresight-etm4x.h
-index 4b21bb79f168..38192eae55b3 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x.h
-+++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-@@ -525,7 +525,7 @@
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5480603
 
-  #define write_etm4x_sysreg_offset(val, offset, _64bit)                 \
-  	do {                                                            \
--		if (__builtin_constant_p((offset)))                     \
-+		if (__is_constexpr((offset)))                           \
-			write_etm4x_sysreg_const_offset((val),          \
-                                                         (offset));      \
-                 else                                                    \
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
+al_clmulni]
+            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
+hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1424
+            Affected tests:
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
+                  x86_64 - Networking bridge: sanity
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: [upstream] [aarch64] [ampere] [altramax] 5.19.0-rc8 - panic =
+__efi_rt_asm_wrapper+0x2c/0x4c efi_call_rts+0x260/0x3d4
+            URL: https://lore.kernel.org/all/CA+QYu4r50dDuTyWbAqjjbvniW6O6N=
+r4V+1A_G2f37EVHJtM3_Q@mail.gmail.com/T/#t
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-I will post this out and queue it as fixes for 6.1-rc1
 
-Thanks
-Suzuki
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-> 
-> I think that issue came up again on the clangbuiltlinux project, and
-> we concluded that we should resend one of the old patches, but I don't
-> know if anyone did, or which one of the them we decided on. It should
-> not be hard to fix.
-> 
->      Arnd
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
