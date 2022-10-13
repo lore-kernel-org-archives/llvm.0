@@ -1,43 +1,44 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19BB2917
-	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 10:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A87D2CA4
+	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 12:21:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1665658253;
+	s=mimecast20190719; t=1665663714;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=WKaP5zASrLqHunEsHeyyAgUvBvWT3sMq1I5EXy1SqQo=;
-	b=Lppk7vHVYlmKaHNRRRrsLphJYSnQg9Fm7yrX2/UMVZuJyxq3/UXire7q+LHQUkScUhyGhY
-	W+tvL3p3TMyWrh64pCAZW32wbpR3l+jIKmQtqvXgRYGwxpTHJxD+fJdcAmT1Won7/KoCwp
-	bTyMmKO+sZSw8MZvoNsQ6GV/SSfGLUM=
+	bh=QESwdie7YWxZWjkaCHh5rgQKF8zj9rat87CSO3cDsd8=;
+	b=R+aQhl26Qpt7t55QHQtiBNhOABEpa1yoj8bOEWiFzTsEpVqKrqhAhj1wTd/lujb4+YfdBD
+	sysCNv7NHZkyXLJ8WguDt1u4JyaC1wy2zbXe1dM6m+T4njRqyeiExVWlB+FYGzbd3qKS9e
+	UK7iGl5qvxJjBB0fCHdEKQst8A0rhe0=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347--GMUJbqKOuqiToeqDxLFGw-1; Thu, 13 Oct 2022 06:50:52 -0400
-X-MC-Unique: -GMUJbqKOuqiToeqDxLFGw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-369-1ni3Db6dMdu50unHQ9oNKQ-1; Thu, 13 Oct 2022 08:21:53 -0400
+X-MC-Unique: 1ni3Db6dMdu50unHQ9oNKQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BC6C3804503
-	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 10:50:52 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B6D1381A737
+	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 12:21:52 +0000 (UTC)
 Received: from [172.64.3.56] (unknown [10.30.34.235])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 199B74C3700;
-	Thu, 13 Oct 2022 10:50:52 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3AA9740CA411;
+	Thu, 13 Oct 2022 12:21:49 +0000 (UTC)
 From: cki-project@redhat.com
 To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4pyF?= PASS (89/371 SKIPPED): Test report for master
- (6.0.0, mainline.kernel.org-clang, 1440f576)
-Date: Thu, 13 Oct 2022 10:50:50 -0000
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
+ mainline.kernel.org-clang, a185a099)
+Date: Thu, 13 Oct 2022 12:21:41 -0000
+CC: bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <98436.122101306505200565@us-mta-347.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <90063.122101308215300394@us-mta-369.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -45,37 +46,38 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi, we tested your kernel and here are the results:
 
-    Overall result: PASSED
+    Overall result: FAILED
              Merge: OK
            Compile: OK
-              Test: OK
+              Test: FAILED
 
-Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'mm-hotfixes-stable-2022-10-11' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/akpm/mm
+    Commit message: Merge tag 'linux-kselftest-kunit-6.1-rc1-2' of git://gi=
+t.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/56121
+    https://datawarehouse.cki-project.org/kcidb/checkouts/56148
 
 One or more kernel tests failed:
 
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5497079
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5497303
+
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
         Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
 systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
 u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
 sk_device_t:s0 tclass=3Dblk_file
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
             Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
                  aarch64 - LTP: openposix test suite
                  aarch64 - CIFS Connectathon
                  aarch64 - Networking bridge: sanity
@@ -135,16 +137,6 @@ l-tests/-/issues/1375
             Affected tests:
                    s390x - Storage - blktests - blk
                   x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: stress: stress-ng - cpu: perf: interrupt took too long
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1034
-            Affected tests:
-                  x86_64 - stress: stress-ng - cpu-cache
         Issue: Networking route: pmtu: Cannot find device "veth0_client"
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1346
@@ -173,12 +165,24 @@ l-tests/-/issues/1419
 l-tests/-/issues/1425
             Affected tests:
                    s390x - stress: stress-ng - memory
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                   s390x - Storage - swraid simple_reshape
         Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
  write: No space left on device
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1047
             Affected tests:
                  ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
         Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
 found
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
