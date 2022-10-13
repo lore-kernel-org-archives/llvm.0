@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BB47B;
-	Thu, 13 Oct 2022 00:26:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C904C433D7;
-	Thu, 13 Oct 2022 00:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF7E7B;
+	Thu, 13 Oct 2022 00:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3C3C43141;
+	Thu, 13 Oct 2022 00:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665620765;
-	bh=aUtu/lpREqGhiOct7mEgMbHuIL7L4i+oj4RQj4p8H/I=;
+	s=k20201202; t=1665620815;
+	bh=VQ2mltT8whCGVNARhklSvaf54szNe4vABpiW3xSN8PY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oA17L6youwzNoZ/mVipIYjGOeUFjmq6+oAyJMw1tT/h6OLhbwnArnjPjMsA254B3/
-	 dnVDbHSSiV/05hsmAUSp9ksB8TQepa2HeF6/NXN66zPGdzK6rvtBhm6L55IvL0scGE
-	 MQrw7z89raUUFZG4iv4+F/ww++VCxRnKepmt6rK8qQAoKg4oLRUkoB/oh/hqdq71wA
-	 y2vlt5b2OcY7UX80RLaAgBgRBx3+5plBBUEcff46VBUUPQx2JLOsGo/qoixyJO98f6
-	 T+ntwt8S7I6yHEhstrLGrY4y4UkD3y+dwFwYH16Gs+Zlj58KJ4uB5HYmW93ak0aBZx
-	 sHJV4GASSIzJw==
+	b=fsnecOrQkbIRiE5C6XgFDU2QYze4Bi8E8XDXGHRQUzE0SUjhT0JlMbgRWVnLQ7hR7
+	 kVbMQMNy4ME8XacV85tb+eLbvRyKxBPocMGD6CfB0mQv7zm229WCAbxfmbnQvSltpJ
+	 i+HTDjcCfpvdwAOsl2+iZzEFJVD02MGziqU8uWLuAqdDSsV99++h3qecs9mKE7Aba2
+	 Q+dsnb+fZ4A4liQHKmnfhwkcfOnUHblv/sHK2aGibOqWqY7uCHDq4/yR40I2h5fjga
+	 kUQZwTiaeoRpBudRv0iHYA9l5hMJJ7J2EWVaIhemVWNRv8LIDddlmK88mNTQoaLG7C
+	 TknGDidYkyM9g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -22,17 +22,18 @@ Cc: Nathan Huckleberry <nhuck@google.com>,
 	llvm@lists.linux.dev,
 	Dan Carpenter <error27@gmail.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	ndesaulniers@google.com,
+	ztong0001@gmail.com,
+	dave@stgolabs.net,
 	linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 21/27] staging: octeon: Fix return type of cvm_oct_xmit and cvm_oct_xmit_pow
-Date: Wed, 12 Oct 2022 20:24:53 -0400
-Message-Id: <20221013002501.1895204-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 14/19] staging: rtl8192u: Fix return type of ieee80211_xmit
+Date: Wed, 12 Oct 2022 20:26:13 -0400
+Message-Id: <20221013002623.1895576-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013002501.1895204-1-sashal@kernel.org>
-References: <20221013002501.1895204-1-sashal@kernel.org>
+In-Reply-To: <20221013002623.1895576-1-sashal@kernel.org>
+References: <20221013002623.1895576-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +46,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Huckleberry <nhuck@google.com>
 
-[ Upstream commit b77599043f00fce9253d0f22522c5d5b521555ce ]
+[ Upstream commit 2851349ac351010a2649e0ff86a1e3d68fe5d683 ]
 
 The ndo_start_xmit field in net_device_ops is expected to be of type
 netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
@@ -53,60 +54,64 @@ netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 The mismatched return type breaks forward edge kCFI since the underlying
 function definition does not match the function hook definition.
 
-The return type of cvm_oct_xmit and cvm_oct_xmit_pow should be changed
-from int to netdev_tx_t.
+The return type of ieee80211_xmit should be changed from int to
+netdev_tx_t.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1703
 Cc: llvm@lists.linux.dev
 Reported-by: Dan Carpenter <error27@gmail.com>
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-Link: https://lore.kernel.org/r/20220914211057.423617-1-nhuck@google.com
+Link: https://lore.kernel.org/r/20220914210750.423048-1-nhuck@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/octeon/ethernet-tx.c | 4 ++--
- drivers/staging/octeon/ethernet-tx.h | 4 ++--
+ drivers/staging/rtl8192u/ieee80211/ieee80211.h    | 2 +-
+ drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c | 6 +++---
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/octeon/ethernet-tx.c b/drivers/staging/octeon/ethernet-tx.c
-index fe6e1ae73460..15568bf2ca56 100644
---- a/drivers/staging/octeon/ethernet-tx.c
-+++ b/drivers/staging/octeon/ethernet-tx.c
-@@ -125,7 +125,7 @@ static void cvm_oct_free_tx_skbs(struct net_device *dev)
-  *
-  * Returns Always returns NETDEV_TX_OK
-  */
--int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	cvmx_pko_command_word0_t pko_command;
- 	union cvmx_buf_ptr hw_buffer;
-@@ -507,7 +507,7 @@ int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+index 3cfeac0d7214..404ec615b74b 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+@@ -2183,7 +2183,7 @@ int ieee80211_set_encryption(struct ieee80211_device *ieee);
+ int ieee80211_encrypt_fragment(struct ieee80211_device *ieee,
+ 			       struct sk_buff *frag, int hdr_len);
  
-  * Returns Always returns zero
-  */
--int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
-+netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct octeon_ethernet *priv = netdev_priv(dev);
- 	void *packet_buffer;
-diff --git a/drivers/staging/octeon/ethernet-tx.h b/drivers/staging/octeon/ethernet-tx.h
-index 78936e9b33b0..6c524668f65a 100644
---- a/drivers/staging/octeon/ethernet-tx.h
-+++ b/drivers/staging/octeon/ethernet-tx.h
-@@ -5,8 +5,8 @@
-  * Copyright (c) 2003-2007 Cavium Networks
-  */
+-int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev);
++netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev);
+ void ieee80211_txb_free(struct ieee80211_txb *txb);
  
--int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
--int cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev);
-+netdev_tx_t cvm_oct_xmit_pow(struct sk_buff *skb, struct net_device *dev);
- int cvm_oct_transmit_qos(struct net_device *dev, void *work_queue_entry,
- 			 int do_free, int qos);
- void cvm_oct_tx_initialize(void);
+ 
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+index cc4049de975d..29fffd9073ec 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+@@ -593,7 +593,7 @@ static void ieee80211_query_seqnum(struct ieee80211_device *ieee,
+ 	}
+ }
+ 
+-int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct ieee80211_device *ieee = netdev_priv(dev);
+ 	struct ieee80211_txb *txb = NULL;
+@@ -901,13 +901,13 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+ 			if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
+ 				stats->tx_packets++;
+ 				stats->tx_bytes += __le16_to_cpu(txb->payload_size);
+-				return 0;
++				return NETDEV_TX_OK;
+ 			}
+ 			ieee80211_txb_free(txb);
+ 		}
+ 	}
+ 
+-	return 0;
++	return NETDEV_TX_OK;
+ 
+  failed:
+ 	spin_unlock_irqrestore(&ieee->lock, flags);
 -- 
 2.35.1
 
