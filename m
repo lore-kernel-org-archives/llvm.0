@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FAA4416
-	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 20:00:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627D8C433C1;
-	Thu, 13 Oct 2022 20:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9231D4416
+	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 20:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05FBC433C1;
+	Thu, 13 Oct 2022 20:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665691203;
-	bh=lT0xCcs8gPxn4mJZ8eC38qELd8nIUAX3/Iu/+Z8ntUQ=;
+	s=k20201202; t=1665691358;
+	bh=i18v1UzG5DHLVVG2SboDwv9Bv5/FK9lsYOzp9QQTXg8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TzodfSjWq/+9Bifv5u45YZFRR2G6PjG4XW1GyGJS4w87dw/1tQmO5YCputmrmAP/n
-	 vXCSJ2mpCreCBTlFmDdP2lNj+MxzixOmhKa5F80QP7pL0RDRbxQkapvOu8mSz9Tjif
-	 LrLSoSMXpYI0BkA4tvs7kWFq3QCmCwFj+FVnhnFyN7NYG1sRF4lE4JTfMzYMBydVke
-	 OMZfDKU7isbX9YKkNB0WeYMeF+mGK2JZLtz2xIcQQ3v9TtBi8r+y/oFbFg2LIXSYkr
-	 MhLfKZVDg8+EzxjFDnZRN8CXL4Pc0z3htMWpOtwuWupOUgGWSSeaPSsw957NcPuwfb
-	 XJZTNJO02h58A==
-Date: Thu, 13 Oct 2022 13:00:00 -0700
+	b=i5rWVlLZ1jhM3iqtj3Z4I5co8SSEjWs2wqxjqrtzRMKXzNo7WiULOIa5clEQEy3zB
+	 vZVv+hXeZ8K380y70lWrY8M7hS29dRhgYdPf9W7V679hNmocPUzX1xE497ifUxaOuh
+	 Dy69is0Bg8N/TWaVhmeAghkFRCxlydVaDPDRSfsFXdUhwqmiFfgO+y9ope272v5cwC
+	 6DladBYYUJpmDOLDj8+AqzKe0VKnEphieczflB/sYBYzJCT64BbqoAfUu4fL9T8Zk6
+	 ji5a1Q42yhsM6ojYzLa6+e13UbtPjGUYN4sv8Z5PhABOZqpd04ehCF4uRpGHFt8HD9
+	 piDFw8QhpLQ0Q==
+Date: Thu, 13 Oct 2022 13:02:35 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-ia64@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] sched: Introduce struct balance_callback to avoid CFI
- mismatches
-Message-ID: <Y0huQNtO8bA2j98Y@dev-arch.thelio-3990X>
-References: <20221008000758.2957718-1-keescook@chromium.org>
+	Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Len Brown <lenb@kernel.org>, Nick Terrell <terrelln@fb.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Tom Rix <trix@redhat.com>,
+	devel@acpica.org, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] Remove Intel compiler support
+Message-ID: <Y0hu2/RZWcWAumLy@dev-arch.thelio-3990X>
+References: <20221011171427.58891-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,220 +43,546 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221008000758.2957718-1-keescook@chromium.org>
+In-Reply-To: <20221011171427.58891-1-masahiroy@kernel.org>
 
-On Fri, Oct 07, 2022 at 05:07:58PM -0700, Kees Cook wrote:
-> Introduce distinct struct balance_callback instead of performing function
-> pointer casting which will trip CFI. Avoids warnings as found by Clang's
-> future -Wcast-function-type-strict option:
+On Wed, Oct 12, 2022 at 02:14:27AM +0900, Masahiro Yamada wrote:
+> include/linux/compiler-intel.h had no update in the past 3 years.
 > 
-> In file included from kernel/sched/core.c:84:
-> kernel/sched/sched.h:1755:15: warning: cast from 'void (*)(struct rq *)' to 'void (*)(struct callback_head *)' converts to incompatible function type [-Wcast-function-type-strict]
->         head->func = (void (*)(struct callback_head *))func;
->                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> We often forget about the third C compiler to build the kernel.
+> For example, commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
+> only mentioned GCC and Clang.
 > 
-> No binary differences result from this change.
+> init/Kconfig defines CC_IS_GCC and CC_IS_CLANG but not CC_IS_ICC,
+> and nobody has reported any issue.
 > 
-> This patch is a cleanup based on Brad Spengler/PaX Team's modifications
-> to sched code in their last public patch of grsecurity/PaX based on my
-> understanding of the code. Changes or omissions from the original code
-> are mine and don't reflect the original grsecurity/PaX code.
+> I guess the Intel Compiler support is broken, and nobody is caring
+> about it.
 > 
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1724
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Harald Arnesen pointed out ICC (classic Intel C/C++ compiler) is
+> deprecated:
+> 
+>     $ icc -v
+>     icc: remark #10441: The Intel(R) C++ Compiler Classic (ICC) is
+>     deprecated and will be removed from product release in the second half
+>     of 2023. The Intel(R) oneAPI DPC++/C++ Compiler (ICX) is the recommended
+>     compiler moving forward. Please transition to use this compiler. Use
+>     '-diag-disable=10441' to disable this message.
+>     icc version 2021.7.0 (gcc version 12.1.0 compatibility)
+> 
+> Arnd Bergmann provided a link to the article, "Intel C/C++ compilers
+> complete adoption of LLVM".
+> 
+> Link: https://www.intel.com/content/www/us/en/developer/articles/technical/adoption-of-llvm-complete-icx.html
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  kernel/sched/core.c     | 24 ++++++++++++------------
->  kernel/sched/deadline.c |  4 ++--
->  kernel/sched/rt.c       |  4 ++--
->  kernel/sched/sched.h    | 14 ++++++++++----
->  4 files changed, 26 insertions(+), 20 deletions(-)
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index ee28253c9ac0..911db628092e 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4815,10 +4815,10 @@ static inline void finish_task(struct task_struct *prev)
+> Changes in v2:
+>   - Remove "not supported by icc." comments from compiler_attributes.h
+>   - Clean up __assume_aligned() macro
+>   - Add more info from Harald Arnesen and Arnd Bergmann
+> 
+>  arch/ia64/include/uapi/asm/cmpxchg.h      |   6 +-
+>  arch/ia64/include/uapi/asm/intel_intrin.h | 162 ----------------------
+>  arch/ia64/include/uapi/asm/intrinsics.h   |   6 +-
+>  include/acpi/platform/acenv.h             |   5 +-
+>  include/acpi/platform/acenvex.h           |   2 +-
+>  include/acpi/platform/acintel.h           |  55 --------
+>  include/linux/compiler-intel.h            |  34 -----
+>  include/linux/compiler_attributes.h       |  14 +-
+>  include/linux/compiler_types.h            |   2 -
+>  lib/zstd/common/compiler.h                |   2 +-
+>  lib/zstd/compress/zstd_fast.c             |   7 -
+>  scripts/cc-version.sh                     |   2 -
+>  scripts/min-tool-version.sh               |   4 -
+>  13 files changed, 6 insertions(+), 295 deletions(-)
+>  delete mode 100644 arch/ia64/include/uapi/asm/intel_intrin.h
+>  delete mode 100644 include/acpi/platform/acintel.h
+>  delete mode 100644 include/linux/compiler-intel.h
+> 
+> diff --git a/arch/ia64/include/uapi/asm/cmpxchg.h b/arch/ia64/include/uapi/asm/cmpxchg.h
+> index ca2e02685343..259ae57570bf 100644
+> --- a/arch/ia64/include/uapi/asm/cmpxchg.h
+> +++ b/arch/ia64/include/uapi/asm/cmpxchg.h
+> @@ -15,11 +15,7 @@
+>  #include <linux/types.h>
+>  /* include compiler specific intrinsics */
+>  #include <asm/ia64regs.h>
+> -#ifdef __INTEL_COMPILER
+> -# include <asm/intel_intrin.h>
+> -#else
+> -# include <asm/gcc_intrin.h>
+> -#endif
+> +#include <asm/gcc_intrin.h>
 >  
->  #ifdef CONFIG_SMP
->  
-> -static void do_balance_callbacks(struct rq *rq, struct callback_head *head)
-> +static void do_balance_callbacks(struct rq *rq, struct balance_callback *head)
->  {
->  	void (*func)(struct rq *rq);
-> -	struct callback_head *next;
-> +	struct balance_callback *next;
->  
->  	lockdep_assert_rq_held(rq);
->  
-> @@ -4845,15 +4845,15 @@ static void balance_push(struct rq *rq);
->   * This abuse is tolerated because it places all the unlikely/odd cases behind
->   * a single test, namely: rq->balance_callback == NULL.
->   */
-> -struct callback_head balance_push_callback = {
-> +struct balance_callback balance_push_callback = {
->  	.next = NULL,
-> -	.func = (void (*)(struct callback_head *))balance_push,
-> +	.func = balance_push,
->  };
->  
-> -static inline struct callback_head *
-> +static inline struct balance_callback *
->  __splice_balance_callbacks(struct rq *rq, bool split)
->  {
-> -	struct callback_head *head = rq->balance_callback;
-> +	struct balance_callback *head = rq->balance_callback;
->  
->  	if (likely(!head))
->  		return NULL;
-> @@ -4875,7 +4875,7 @@ __splice_balance_callbacks(struct rq *rq, bool split)
->  	return head;
->  }
->  
-> -static inline struct callback_head *splice_balance_callbacks(struct rq *rq)
-> +static inline struct balance_callback *splice_balance_callbacks(struct rq *rq)
->  {
->  	return __splice_balance_callbacks(rq, true);
->  }
-> @@ -4885,7 +4885,7 @@ static void __balance_callbacks(struct rq *rq)
->  	do_balance_callbacks(rq, __splice_balance_callbacks(rq, false));
->  }
->  
-> -static inline void balance_callbacks(struct rq *rq, struct callback_head *head)
-> +static inline void balance_callbacks(struct rq *rq, struct balance_callback *head)
->  {
->  	unsigned long flags;
->  
-> @@ -4902,12 +4902,12 @@ static inline void __balance_callbacks(struct rq *rq)
->  {
->  }
->  
-> -static inline struct callback_head *splice_balance_callbacks(struct rq *rq)
-> +static inline struct balance_callback *splice_balance_callbacks(struct rq *rq)
->  {
->  	return NULL;
->  }
->  
-> -static inline void balance_callbacks(struct rq *rq, struct callback_head *head)
-> +static inline void balance_callbacks(struct rq *rq, struct balance_callback *head)
->  {
->  }
->  
-> @@ -6179,7 +6179,7 @@ static void sched_core_balance(struct rq *rq)
->  	preempt_enable();
->  }
->  
-> -static DEFINE_PER_CPU(struct callback_head, core_balance_head);
-> +static DEFINE_PER_CPU(struct balance_callback, core_balance_head);
->  
->  static void queue_core_balance(struct rq *rq)
->  {
-> @@ -7410,7 +7410,7 @@ static int __sched_setscheduler(struct task_struct *p,
->  	int oldpolicy = -1, policy = attr->sched_policy;
->  	int retval, oldprio, newprio, queued, running;
->  	const struct sched_class *prev_class;
-> -	struct callback_head *head;
-> +	struct balance_callback *head;
->  	struct rq_flags rf;
->  	int reset_on_fork;
->  	int queue_flags = DEQUEUE_SAVE | DEQUEUE_MOVE | DEQUEUE_NOCLOCK;
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index 0ab79d819a0d..6498951b7d41 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -644,8 +644,8 @@ static inline bool need_pull_dl_task(struct rq *rq, struct task_struct *prev)
->  	return rq->online && dl_task(prev);
->  }
->  
-> -static DEFINE_PER_CPU(struct callback_head, dl_push_head);
-> -static DEFINE_PER_CPU(struct callback_head, dl_pull_head);
-> +static DEFINE_PER_CPU(struct balance_callback, dl_push_head);
-> +static DEFINE_PER_CPU(struct balance_callback, dl_pull_head);
->  
->  static void push_dl_tasks(struct rq *);
->  static void pull_dl_task(struct rq *);
-> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> index 55f39c8f4203..ad020a2a72f3 100644
-> --- a/kernel/sched/rt.c
-> +++ b/kernel/sched/rt.c
-> @@ -410,8 +410,8 @@ static inline int has_pushable_tasks(struct rq *rq)
->  	return !plist_head_empty(&rq->rt.pushable_tasks);
->  }
->  
-> -static DEFINE_PER_CPU(struct callback_head, rt_push_head);
-> -static DEFINE_PER_CPU(struct callback_head, rt_pull_head);
-> +static DEFINE_PER_CPU(struct balance_callback, rt_push_head);
-> +static DEFINE_PER_CPU(struct balance_callback, rt_pull_head);
->  
->  static void push_rt_tasks(struct rq *);
->  static void pull_rt_task(struct rq *);
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index e26688d387ae..54971a57a4ea 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -953,6 +953,12 @@ struct uclamp_rq {
->  DECLARE_STATIC_KEY_FALSE(sched_uclamp_used);
->  #endif /* CONFIG_UCLAMP_TASK */
->  
-> +struct rq;
-> +struct balance_callback {
-> +	struct balance_callback *next;
-> +	void (*func)(struct rq *rq);
-> +};
-> +
 >  /*
->   * This is the main, per-CPU runqueue data structure.
+>   * This function doesn't exist, so you'll get a linker error if
+> diff --git a/arch/ia64/include/uapi/asm/intel_intrin.h b/arch/ia64/include/uapi/asm/intel_intrin.h
+> deleted file mode 100644
+> index dc1884dc54b5..000000000000
+> --- a/arch/ia64/include/uapi/asm/intel_intrin.h
+> +++ /dev/null
+> @@ -1,162 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> -#ifndef _ASM_IA64_INTEL_INTRIN_H
+> -#define _ASM_IA64_INTEL_INTRIN_H
+> -/*
+> - * Intel Compiler Intrinsics
+> - *
+> - * Copyright (C) 2002,2003 Jun Nakajima <jun.nakajima@intel.com>
+> - * Copyright (C) 2002,2003 Suresh Siddha <suresh.b.siddha@intel.com>
+> - * Copyright (C) 2005,2006 Hongjiu Lu <hongjiu.lu@intel.com>
+> - *
+> - */
+> -#include <ia64intrin.h>
+> -
+> -#define ia64_barrier()		__memory_barrier()
+> -
+> -#define ia64_stop()	/* Nothing: As of now stop bit is generated for each
+> -		 	 * intrinsic
+> -		 	 */
+> -
+> -#define ia64_getreg		__getReg
+> -#define ia64_setreg		__setReg
+> -
+> -#define ia64_hint		__hint
+> -#define ia64_hint_pause		__hint_pause
+> -
+> -#define ia64_mux1_brcst		_m64_mux1_brcst
+> -#define ia64_mux1_mix		_m64_mux1_mix
+> -#define ia64_mux1_shuf		_m64_mux1_shuf
+> -#define ia64_mux1_alt		_m64_mux1_alt
+> -#define ia64_mux1_rev		_m64_mux1_rev
+> -
+> -#define ia64_mux1(x,v)		_m_to_int64(_m64_mux1(_m_from_int64(x), (v)))
+> -#define ia64_popcnt		_m64_popcnt
+> -#define ia64_getf_exp		__getf_exp
+> -#define ia64_shrp		_m64_shrp
+> -
+> -#define ia64_tpa		__tpa
+> -#define ia64_invala		__invala
+> -#define ia64_invala_gr		__invala_gr
+> -#define ia64_invala_fr		__invala_fr
+> -#define ia64_nop		__nop
+> -#define ia64_sum		__sum
+> -#define ia64_ssm		__ssm
+> -#define ia64_rum		__rum
+> -#define ia64_rsm		__rsm
+> -#define ia64_fc			__fc
+> -
+> -#define ia64_ldfs		__ldfs
+> -#define ia64_ldfd		__ldfd
+> -#define ia64_ldfe		__ldfe
+> -#define ia64_ldf8		__ldf8
+> -#define ia64_ldf_fill		__ldf_fill
+> -
+> -#define ia64_stfs		__stfs
+> -#define ia64_stfd		__stfd
+> -#define ia64_stfe		__stfe
+> -#define ia64_stf8		__stf8
+> -#define ia64_stf_spill		__stf_spill
+> -
+> -#define ia64_mf			__mf
+> -#define ia64_mfa		__mfa
+> -
+> -#define ia64_fetchadd4_acq	__fetchadd4_acq
+> -#define ia64_fetchadd4_rel	__fetchadd4_rel
+> -#define ia64_fetchadd8_acq	__fetchadd8_acq
+> -#define ia64_fetchadd8_rel	__fetchadd8_rel
+> -
+> -#define ia64_xchg1		_InterlockedExchange8
+> -#define ia64_xchg2		_InterlockedExchange16
+> -#define ia64_xchg4		_InterlockedExchange
+> -#define ia64_xchg8		_InterlockedExchange64
+> -
+> -#define ia64_cmpxchg1_rel	_InterlockedCompareExchange8_rel
+> -#define ia64_cmpxchg1_acq	_InterlockedCompareExchange8_acq
+> -#define ia64_cmpxchg2_rel	_InterlockedCompareExchange16_rel
+> -#define ia64_cmpxchg2_acq	_InterlockedCompareExchange16_acq
+> -#define ia64_cmpxchg4_rel	_InterlockedCompareExchange_rel
+> -#define ia64_cmpxchg4_acq	_InterlockedCompareExchange_acq
+> -#define ia64_cmpxchg8_rel	_InterlockedCompareExchange64_rel
+> -#define ia64_cmpxchg8_acq	_InterlockedCompareExchange64_acq
+> -
+> -#define __ia64_set_dbr(index, val)	\
+> -		__setIndReg(_IA64_REG_INDR_DBR, index, val)
+> -#define ia64_set_ibr(index, val)	\
+> -		__setIndReg(_IA64_REG_INDR_IBR, index, val)
+> -#define ia64_set_pkr(index, val)	\
+> -		__setIndReg(_IA64_REG_INDR_PKR, index, val)
+> -#define ia64_set_pmc(index, val)	\
+> -		__setIndReg(_IA64_REG_INDR_PMC, index, val)
+> -#define ia64_set_pmd(index, val)	\
+> -		__setIndReg(_IA64_REG_INDR_PMD, index, val)
+> -#define ia64_set_rr(index, val)		\
+> -		__setIndReg(_IA64_REG_INDR_RR, index, val)
+> -
+> -#define ia64_get_cpuid(index)	\
+> -		__getIndReg(_IA64_REG_INDR_CPUID, index)
+> -#define __ia64_get_dbr(index)		__getIndReg(_IA64_REG_INDR_DBR, index)
+> -#define ia64_get_ibr(index)		__getIndReg(_IA64_REG_INDR_IBR, index)
+> -#define ia64_get_pkr(index)		__getIndReg(_IA64_REG_INDR_PKR, index)
+> -#define ia64_get_pmc(index)		__getIndReg(_IA64_REG_INDR_PMC, index)
+> -#define ia64_get_pmd(index)		__getIndReg(_IA64_REG_INDR_PMD, index)
+> -#define ia64_get_rr(index)		__getIndReg(_IA64_REG_INDR_RR, index)
+> -
+> -#define ia64_srlz_d		__dsrlz
+> -#define ia64_srlz_i		__isrlz
+> -
+> -#define ia64_dv_serialize_data()
+> -#define ia64_dv_serialize_instruction()
+> -
+> -#define ia64_st1_rel		__st1_rel
+> -#define ia64_st2_rel		__st2_rel
+> -#define ia64_st4_rel		__st4_rel
+> -#define ia64_st8_rel		__st8_rel
+> -
+> -/* FIXME: need st4.rel.nta intrinsic */
+> -#define ia64_st4_rel_nta	__st4_rel
+> -
+> -#define ia64_ld1_acq		__ld1_acq
+> -#define ia64_ld2_acq		__ld2_acq
+> -#define ia64_ld4_acq		__ld4_acq
+> -#define ia64_ld8_acq		__ld8_acq
+> -
+> -#define ia64_sync_i		__synci
+> -#define ia64_thash		__thash
+> -#define ia64_ttag		__ttag
+> -#define ia64_itcd		__itcd
+> -#define ia64_itci		__itci
+> -#define ia64_itrd		__itrd
+> -#define ia64_itri		__itri
+> -#define ia64_ptce		__ptce
+> -#define ia64_ptcl		__ptcl
+> -#define ia64_ptcg		__ptcg
+> -#define ia64_ptcga		__ptcga
+> -#define ia64_ptri		__ptri
+> -#define ia64_ptrd		__ptrd
+> -#define ia64_dep_mi		_m64_dep_mi
+> -
+> -/* Values for lfhint in __lfetch and __lfetch_fault */
+> -
+> -#define ia64_lfhint_none	__lfhint_none
+> -#define ia64_lfhint_nt1		__lfhint_nt1
+> -#define ia64_lfhint_nt2		__lfhint_nt2
+> -#define ia64_lfhint_nta		__lfhint_nta
+> -
+> -#define ia64_lfetch		__lfetch
+> -#define ia64_lfetch_excl	__lfetch_excl
+> -#define ia64_lfetch_fault	__lfetch_fault
+> -#define ia64_lfetch_fault_excl	__lfetch_fault_excl
+> -
+> -#define ia64_intrin_local_irq_restore(x)		\
+> -do {							\
+> -	if ((x) != 0) {					\
+> -		ia64_ssm(IA64_PSR_I);			\
+> -		ia64_srlz_d();				\
+> -	} else {					\
+> -		ia64_rsm(IA64_PSR_I);			\
+> -	}						\
+> -} while (0)
+> -
+> -#define __builtin_trap()	__break(0);
+> -
+> -#endif /* _ASM_IA64_INTEL_INTRIN_H */
+> diff --git a/arch/ia64/include/uapi/asm/intrinsics.h b/arch/ia64/include/uapi/asm/intrinsics.h
+> index a0e0a064f5b1..63f27c4ec739 100644
+> --- a/arch/ia64/include/uapi/asm/intrinsics.h
+> +++ b/arch/ia64/include/uapi/asm/intrinsics.h
+> @@ -14,11 +14,7 @@
+>  #include <linux/types.h>
+>  /* include compiler specific intrinsics */
+>  #include <asm/ia64regs.h>
+> -#ifdef __INTEL_COMPILER
+> -# include <asm/intel_intrin.h>
+> -#else
+> -# include <asm/gcc_intrin.h>
+> -#endif
+> +#include <asm/gcc_intrin.h>
+>  #include <asm/cmpxchg.h>
+>  
+>  #define ia64_set_rr0_to_rr4(val0, val1, val2, val3, val4)		\
+> diff --git a/include/acpi/platform/acenv.h b/include/acpi/platform/acenv.h
+> index 03eb3d977075..9e4f7564201a 100644
+> --- a/include/acpi/platform/acenv.h
+> +++ b/include/acpi/platform/acenv.h
+> @@ -148,15 +148,12 @@
 >   *
-> @@ -1051,7 +1057,7 @@ struct rq {
->  	unsigned long		cpu_capacity;
->  	unsigned long		cpu_capacity_orig;
+>   *****************************************************************************/
 >  
-> -	struct callback_head	*balance_callback;
-> +	struct balance_callback *balance_callback;
+> -#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+> +#if defined(__GNUC__)
+>  #include <acpi/platform/acgcc.h>
 >  
->  	unsigned char		nohz_idle_balance;
->  	unsigned char		idle_balance;
-> @@ -1559,7 +1565,7 @@ struct rq_flags {
+>  #elif defined(_MSC_VER)
+>  #include "acmsvc.h"
+>  
+> -#elif defined(__INTEL_COMPILER)
+> -#include <acpi/platform/acintel.h>
+> -
 >  #endif
->  };
 >  
-> -extern struct callback_head balance_push_callback;
-> +extern struct balance_callback balance_push_callback;
+>  #if defined(_LINUX) || defined(__linux__)
+> diff --git a/include/acpi/platform/acenvex.h b/include/acpi/platform/acenvex.h
+> index 3a6b1db9a984..72cc7bab469e 100644
+> --- a/include/acpi/platform/acenvex.h
+> +++ b/include/acpi/platform/acenvex.h
+> @@ -35,7 +35,7 @@
+>  
+>  #endif
+>  
+> -#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+> +#if defined(__GNUC__)
+>  #include "acgccex.h"
+>  
+>  #elif defined(_MSC_VER)
+> diff --git a/include/acpi/platform/acintel.h b/include/acpi/platform/acintel.h
+> deleted file mode 100644
+> index 85b1ae86ee63..000000000000
+> --- a/include/acpi/platform/acintel.h
+> +++ /dev/null
+> @@ -1,55 +0,0 @@
+> -/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
+> -/******************************************************************************
+> - *
+> - * Name: acintel.h - VC specific defines, etc.
+> - *
+> - * Copyright (C) 2000 - 2022, Intel Corp.
+> - *
+> - *****************************************************************************/
+> -
+> -#ifndef __ACINTEL_H__
+> -#define __ACINTEL_H__
+> -
+> -/*
+> - * Use compiler specific <stdarg.h> is a good practice for even when
+> - * -nostdinc is specified (i.e., ACPI_USE_STANDARD_HEADERS undefined.
+> - */
+> -#ifndef va_arg
+> -#include <stdarg.h>
+> -#endif
+> -
+> -/* Configuration specific to Intel 64-bit C compiler */
+> -
+> -#define COMPILER_DEPENDENT_INT64    __int64
+> -#define COMPILER_DEPENDENT_UINT64   unsigned __int64
+> -#define ACPI_INLINE                 __inline
+> -
+> -/*
+> - * Calling conventions:
+> - *
+> - * ACPI_SYSTEM_XFACE        - Interfaces to host OS (handlers, threads)
+> - * ACPI_EXTERNAL_XFACE      - External ACPI interfaces
+> - * ACPI_INTERNAL_XFACE      - Internal ACPI interfaces
+> - * ACPI_INTERNAL_VAR_XFACE  - Internal variable-parameter list interfaces
+> - */
+> -#define ACPI_SYSTEM_XFACE
+> -#define ACPI_EXTERNAL_XFACE
+> -#define ACPI_INTERNAL_XFACE
+> -#define ACPI_INTERNAL_VAR_XFACE
+> -
+> -/* remark 981 - operands evaluated in no particular order */
+> -#pragma warning(disable:981)
+> -
+> -/* warn C4100: unreferenced formal parameter */
+> -#pragma warning(disable:4100)
+> -
+> -/* warn C4127: conditional expression is constant */
+> -#pragma warning(disable:4127)
+> -
+> -/* warn C4706: assignment within conditional expression */
+> -#pragma warning(disable:4706)
+> -
+> -/* warn C4214: bit field types other than int */
+> -#pragma warning(disable:4214)
+> -
+> -#endif				/* __ACINTEL_H__ */
+> diff --git a/include/linux/compiler-intel.h b/include/linux/compiler-intel.h
+> deleted file mode 100644
+> index b17f3cd18334..000000000000
+> --- a/include/linux/compiler-intel.h
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __LINUX_COMPILER_TYPES_H
+> -#error "Please don't include <linux/compiler-intel.h> directly, include <linux/compiler.h> instead."
+> -#endif
+> -
+> -#ifdef __ECC
+> -
+> -/* Compiler specific definitions for Intel ECC compiler */
+> -
+> -#include <asm/intrinsics.h>
+> -
+> -/* Intel ECC compiler doesn't support gcc specific asm stmts.
+> - * It uses intrinsics to do the equivalent things.
+> - */
+> -
+> -#define barrier() __memory_barrier()
+> -#define barrier_data(ptr) barrier()
+> -
+> -#define RELOC_HIDE(ptr, off)					\
+> -  ({ unsigned long __ptr;					\
+> -     __ptr = (unsigned long) (ptr);				\
+> -    (typeof(ptr)) (__ptr + (off)); })
+> -
+> -/* This should act as an optimization barrier on var.
+> - * Given that this compiler does not have inline assembly, a compiler barrier
+> - * is the best we can do.
+> - */
+> -#define OPTIMIZER_HIDE_VAR(var) barrier()
+> -
+> -#endif
+> -
+> -/* icc has this, but it's called _bswap16 */
+> -#define __HAVE_BUILTIN_BSWAP16__
+> -#define __builtin_bswap16 _bswap16
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 898b3458b24a..9221302f6ae8 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -64,16 +64,10 @@
+>   * compiler should see some alignment anyway, when the return value is
+>   * massaged by 'flags = ptr & 3; ptr &= ~3;').
+>   *
+> - * Optional: not supported by icc
+> - *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-assume_005faligned-function-attribute
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#assume-aligned
+>   */
+> -#if __has_attribute(__assume_aligned__)
+> -# define __assume_aligned(a, ...)       __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
+> -#else
+> -# define __assume_aligned(a, ...)
+> -#endif
+> +#define __assume_aligned(a, ...)        __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
 >  
 >  /*
->   * Lockdep annotation that avoids accidental unlocks; it's like a
-> @@ -1739,7 +1745,7 @@ init_numa_balancing(unsigned long clone_flags, struct task_struct *p)
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
+> @@ -91,7 +85,6 @@
+>  /*
+>   * Optional: only supported since gcc >= 9
+>   * Optional: not supported by clang
+> - * Optional: not supported by icc
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-copy-function-attribute
+>   */
+> @@ -104,7 +97,6 @@
+>  /*
+>   * Optional: not supported by gcc
+>   * Optional: only supported since clang >= 14.0
+> - * Optional: not supported by icc
+>   *
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#diagnose_as_builtin
+>   */
+> @@ -128,7 +120,6 @@
 >  
->  static inline void
->  queue_balance_callback(struct rq *rq,
-> -		       struct callback_head *head,
-> +		       struct balance_callback *head,
->  		       void (*func)(struct rq *rq))
->  {
->  	lockdep_assert_rq_held(rq);
-> @@ -1752,7 +1758,7 @@ queue_balance_callback(struct rq *rq,
->  	if (unlikely(head->next || rq->balance_callback == &balance_push_callback))
->  		return;
+>  /*
+>   * Optional: not supported by clang
+> - * Optional: not supported by icc
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html#index-designated_005finit-type-attribute
+>   */
+> @@ -242,7 +233,6 @@
+>  /*
+>   * Optional: only supported since gcc >= 8
+>   * Optional: not supported by clang
+> - * Optional: not supported by icc
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-nonstring-variable-attribute
+>   */
+> @@ -273,7 +263,6 @@
 >  
-> -	head->func = (void (*)(struct callback_head *))func;
-> +	head->func = func;
->  	head->next = rq->balance_callback;
->  	rq->balance_callback = head;
->  }
+>  /*
+>   * Optional: not supported by gcc.
+> - * Optional: not supported by icc.
+>   *
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#overloadable
+>   */
+> @@ -293,7 +282,6 @@
+>   * Note: the "type" argument should match any __builtin_object_size(p, type) usage.
+>   *
+>   * Optional: not supported by gcc.
+> - * Optional: not supported by icc.
+>   *
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-pass-dynamic-object-size
+>   */
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 74e04ecd4c89..0e06a1a79401 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -92,8 +92,6 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+>  /* Compiler specific macros. */
+>  #ifdef __clang__
+>  #include <linux/compiler-clang.h>
+> -#elif defined(__INTEL_COMPILER)
+> -#include <linux/compiler-intel.h>
+>  #elif defined(__GNUC__)
+>  /* The above compilers also define __GNUC__, so order is important here. */
+>  #include <linux/compiler-gcc.h>
+> diff --git a/lib/zstd/common/compiler.h b/lib/zstd/common/compiler.h
+> index f5a9c70a228a..c281a6430cd4 100644
+> --- a/lib/zstd/common/compiler.h
+> +++ b/lib/zstd/common/compiler.h
+> @@ -116,7 +116,7 @@
+>  
+>  /* vectorization
+>   * older GCC (pre gcc-4.3 picked as the cutoff) uses a different syntax */
+> -#if !defined(__INTEL_COMPILER) && !defined(__clang__) && defined(__GNUC__)
+> +#if !defined(__clang__) && defined(__GNUC__)
+>  #  if (__GNUC__ == 4 && __GNUC_MINOR__ > 3) || (__GNUC__ >= 5)
+>  #    define DONT_VECTORIZE __attribute__((optimize("no-tree-vectorize")))
+>  #  else
+> diff --git a/lib/zstd/compress/zstd_fast.c b/lib/zstd/compress/zstd_fast.c
+> index 96b7d48e2868..800f3865119f 100644
+> --- a/lib/zstd/compress/zstd_fast.c
+> +++ b/lib/zstd/compress/zstd_fast.c
+> @@ -80,13 +80,6 @@ ZSTD_compressBlock_fast_generic(
+>      }
+>  
+>      /* Main Search Loop */
+> -#ifdef __INTEL_COMPILER
+> -    /* From intel 'The vector pragma indicates that the loop should be
+> -     * vectorized if it is legal to do so'. Can be used together with
+> -     * #pragma ivdep (but have opted to exclude that because intel
+> -     * warns against using it).*/
+> -    #pragma vector always
+> -#endif
+>      while (ip1 < ilimit) {   /* < instead of <=, because check at ip0+2 */
+>          size_t mLength;
+>          BYTE const* ip2 = ip0 + 2;
+> diff --git a/scripts/cc-version.sh b/scripts/cc-version.sh
+> index 2401c86fcf53..0573c92e841d 100755
+> --- a/scripts/cc-version.sh
+> +++ b/scripts/cc-version.sh
+> @@ -12,8 +12,6 @@ get_c_compiler_info()
+>  	cat <<- EOF | "$@" -E -P -x c - 2>/dev/null
+>  	#if defined(__clang__)
+>  	Clang	__clang_major__  __clang_minor__  __clang_patchlevel__
+> -	#elif defined(__INTEL_COMPILER)
+> -	ICC	__INTEL_COMPILER  __INTEL_COMPILER_UPDATE
+>  	#elif defined(__GNUC__)
+>  	GCC	__GNUC__  __GNUC_MINOR__  __GNUC_PATCHLEVEL__
+>  	#else
+> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+> index b6593eac5003..8766e248ffbb 100755
+> --- a/scripts/min-tool-version.sh
+> +++ b/scripts/min-tool-version.sh
+> @@ -19,10 +19,6 @@ binutils)
+>  gcc)
+>  	echo 5.1.0
+>  	;;
+> -icc)
+> -	# temporary
+> -	echo 16.0.3
+> -	;;
+>  llvm)
+>  	if [ "$SRCARCH" = s390 ]; then
+>  		echo 14.0.0
 > -- 
 > 2.34.1
 > 
