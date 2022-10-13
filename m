@@ -1,146 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01BA2F4A
-	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 20:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6178C433D6;
-	Thu, 13 Oct 2022 20:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665693369;
-	bh=Lv/xeU7pcPzUnADyJpxL1Q+e8T9Z+tXL2sat6MNFhmk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T++5dAXRzVNF1OW2pF85FIJJlqMidkZWYucIauD8/vv+tA2SJG+p5+Gnn5MTOXrS+
-	 15WVByQODgUU/PuesapfgVZsAnQDwtqPgJLnMk8ka90B5PKGA03bISCEFfFRiSdP59
-	 0sDsV0wvJhDpC6KZzko1Aw2IIxl4WsgvyyURf9I3OxQFhhpGwIEvWcyfqKiqiNpoIT
-	 sLp90DMMpXwADBfxUUxPuFiyrUYDS0oB+GT77PtaFL0hCUArd5FWJMWVlVyVb77XT7
-	 yQGoCcw1jNLvFXv4p7f0q0JtOYVks0k7CQCP1XWsu3iTJxggd3C+r8izdaHichPTab
-	 XxfTgBdRF+RFA==
-Date: Thu, 13 Oct 2022 13:36:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Dao Lu <daolu@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>,
-	Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH 1/2] riscv: fix detection of toolchain Zicbom support
-Message-ID: <Y0h2ttpShmMbJFp5@dev-arch.thelio-3990X>
-References: <20221006173520.1785507-1-conor@kernel.org>
- <20221006173520.1785507-2-conor@kernel.org>
- <Y0hzl75d11uWC+f3@dev-arch.thelio-3990X>
- <Y0h2GVhYwj8UEJV2@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE144429
+	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 20:41:56 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so5977829pjq.3
+        for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 13:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6JICtmZ5L3A0h8C6yvptMu+Lji/U285FLCGFhTH6x80=;
+        b=c7sKjaguGko9z/IakH5Gg5HPgMLMewRVpBvxxI+jDkspawnziECrx81yX5ZHRTBahW
+         P9qjQbMWBHhm33q5lsrqAbzKBVGz4GFaJ3ZHF/GuFLwPxu2sMvI1E5uvXOi9ruj3JasX
+         GPddpp8SSY5p/tXZavJAVe4QiHGxiFmToBeUWGh4DsT0/f+yNPCd5R4PDqsprt8aeCvR
+         kC7oyxxAa3Mz4GN2hCjzi9kqoEK3W9OupXKm6LgrtU4r9TnyeNwkZGU909VoOUF7qK+y
+         Km2eTbusk/bJ//WR/Hi8wEhRUoqHAI5DznKxZkhUMWsr67W0oiMUHkbWKcMoIh21l0uC
+         0ifg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JICtmZ5L3A0h8C6yvptMu+Lji/U285FLCGFhTH6x80=;
+        b=yfoP7Fd5Z6AvQG0tLdGkbFxmT2onVSwIbo9p+3+DbtUFS8VrkBeWr20SjAsNMewFr3
+         ONAXBSgUI4reIAhaXA+6NPAsOad4hpDO7J4BqKdHzCUKNmha/zcx37YLGnjm3wTijdyb
+         nCtwQEAkMgcJxWkDXGaIfEB1DciiAGusWp4h0qYGSXQ8hfdpHnnyuboH5FeBQMQbzm5I
+         vK8aD1pCOKFAny+VLJ3i36VF2rZ/AHXcthhjNF2oFessOekYyPdwzhDBOBsbQVGNoWQn
+         5AWT0d6T2XM2rOE8/DKz/gCV8tUxdahIV1m4FyK27H4G00SpekpCLBLO/SW2W8cGvei0
+         JzFQ==
+X-Gm-Message-State: ACrzQf0smHh2sStG/ovHreMrnj+Kh3DJz3nVs14fzqeduS9k2UmGMPhi
+	h2nm3rKTa234AT5zr0iglRAKXw==
+X-Google-Smtp-Source: AMsMyM6WTSYmWdPGI+Pjzy9fAYqwoSziLTAE+lOU9CD+8wcAlDFUz8PUopg4+rDzf1a7QHLj65fqcA==
+X-Received: by 2002:a17:902:ec91:b0:182:8eca:ade2 with SMTP id x17-20020a170902ec9100b001828ecaade2mr1525554plg.12.1665693716000;
+        Thu, 13 Oct 2022 13:41:56 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:9ffc:cb04:293c:acec])
+        by smtp.gmail.com with ESMTPSA id k5-20020aa79985000000b0054223a0185asm109694pfh.161.2022.10.13.13.41.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 13:41:54 -0700 (PDT)
+Date: Thu, 13 Oct 2022 13:41:51 -0700
+From: Fangrui Song <maskray@google.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
+Message-ID: <20221013204151.skzateatn2keencb@google.com>
+References: <20221007203236.1750890-1-ndesaulniers@google.com>
+ <Y0htZDJoTuQegVQR@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Y0h2GVhYwj8UEJV2@spud>
+In-Reply-To: <Y0htZDJoTuQegVQR@dev-arch.thelio-3990X>
 
-On Thu, Oct 13, 2022 at 09:33:29PM +0100, Conor Dooley wrote:
-> On Thu, Oct 13, 2022 at 01:22:47PM -0700, Nathan Chancellor wrote:
-> > On Thu, Oct 06, 2022 at 06:35:20PM +0100, Conor Dooley wrote:
-> > > From: Conor Dooley <conor.dooley@microchip.com>
-> > > 
-> > > It is not sufficient to check if a toolchain supports a particular
-> > > extension without checking if the linker supports that extension too.
-> > > For example, Clang 15 supports Zicbom but GNU bintutils 2.35.2 does
-> > > not, leading build errors like so:
-> > > 
-> > > riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicbom1p0_zihintpause2p0: Invalid or unknown z ISA extension: 'zicbom'
-> > > 
-> > > Convert CC_HAS_ZICBOM to TOOLCHAIN_HAS_ZICBOM & check if the linker
-> > > also supports Zicbom.
-> > > 
-> > > Reported-by: Kevin Hilman <khilman@baylibre.com>
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1714
-> > > Link: https://storage.kernelci.org/next/master/next-20220920/riscv/defconfig+CONFIG_EFI=n/clang-16/logs/kernel.log
-> > > Fixes: 1631ba1259d6 ("riscv: Add support for non-coherent devices using zicbom extension")
-> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > The versions look correct to me. I see the LLVM zicbom commit [1] in
-> > llvmorg-15.0.0 and I see the binutils zicbom commit [2] in
-> > binutils-2_39.
-> > 
-> > FWIW, if we are adding explicit tool versions to the Kconfig, could you
-> > not also drop the cc-option checks? Typically, cc-option is only used
-> > when dynamically checking for a feature, in lieu of statically checking
-> > a version. No strong opinion though.
-> 
-> Ehh, the explicit version checks are for linker support, but it could be
-> that your linker supports it but other things do not. The compilers
-> support can still be checked with cc-option, no?
-> 
-> This error here happens when the compiler does support it, so the string
-> containing zicbom is emitted in the object files. That can't be checked
-> dynamically. For the opposite situation, dynamic checking is possible so
-> I tried retained them. If it's convention to do one or the other, I can
-> easily switch.
-> 
-> I'm out of my comfort zone when it comes to kbuild plumbing so please,
-> please lmk if I'm missing something...
+On 2022-10-13, Nathan Chancellor wrote:
+>On Fri, Oct 07, 2022 at 01:32:36PM -0700, Nick Desaulniers wrote:
+>> When debugging LLVM IR, it can be handy for clang to not discard value
+>> names used for local variables and parameters. Compare the generated IR.
+>>
+>> Implicit Default (-fdiscard-value-names):
+>>   define i32 @core_sys_select(i32 %0, ptr %1, ptr %2, ptr %3, ptr %4) {
+>>     %6 = alloca i64
+>>     %7 = alloca %struct.poll_wqueues
+>>     %8 = alloca [64 x i32]
+>>
+>> Explicit -fno-discard-value-names:
+>>   define i32 @core_sys_select(i32 %n, ptr %inp, ptr %outp, ptr %exp,
+>>                               ptr %end_time) {
+>>     %expire.i = alloca i64
+>>     %table.i = alloca %struct.poll_wqueues
+>>     %stack_fds = alloca [64 x i32]
+>>
+>> The rule for generating human readable LLVM IR (.ll) is only useful as a
+>> debugging feature:
+>>
+>> $ make LLVM=1 fs/select.ll
+>>
+>> Clang defaults to -fdiscard-value-names to save memory when generating
+>> LLVM IR. For debugging purposes, the improvement in readability at a
+>> cost of more verbose IR is a cost we're happy to pay.
 
-No, you are absolutely correct. That's what I get for reviewing changes
-right after being off for a week ;) the cc-option checks should remain
-in addition to the new linker checks, so please disregard that feedback
-on both changes.
+A LLVM_ENABLE_ASSEERTIONS=off build of Clang defaults to -fdiscard-value-names.
 
-> > 
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > 
-> > [1]: https://github.com/llvm/llvm-project/commit/4f40ca53cefb725aca6564585d0ec4836a79e21a
-> > [2]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=41d6ac5da655a2e78109848f2db47e53552fd61a
-> > 
-> > > ---
-> > >  arch/riscv/Kconfig  | 10 ++++++----
-> > >  arch/riscv/Makefile |  3 +--
-> > >  2 files changed, 7 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index d557cc50295d..6da36553158b 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -401,14 +401,16 @@ config RISCV_ISA_SVPBMT
-> > >  
-> > >  	   If you don't know what to do here, say Y.
-> > >  
-> > > -config CC_HAS_ZICBOM
-> > > +config TOOLCHAIN_HAS_ZICBOM
-> > >  	bool
-> > > -	default y if 64BIT && $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
-> > > -	default y if 32BIT && $(cc-option,-mabi=ilp32 -march=rv32ima_zicbom)
-> > > +	default y
-> > > +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zicbom)
-> > > +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zicbom)
-> > > +	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
-> > >  
-> > >  config RISCV_ISA_ZICBOM
-> > >  	bool "Zicbom extension support for non-coherent DMA operation"
-> > > -	depends on CC_HAS_ZICBOM
-> > > +	depends on TOOLCHAIN_HAS_ZICBOM
-> > >  	depends on !XIP_KERNEL && MMU
-> > >  	select RISCV_DMA_NONCOHERENT
-> > >  	select RISCV_ALTERNATIVE
-> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > index 3fa8ef336822..3607d38edb4f 100644
-> > > --- a/arch/riscv/Makefile
-> > > +++ b/arch/riscv/Makefile
-> > > @@ -57,8 +57,7 @@ toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zi
-> > >  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-> > >  
-> > >  # Check if the toolchain supports Zicbom extension
-> > > -toolchain-supports-zicbom := $(call cc-option-yn, -march=$(riscv-march-y)_zicbom)
-> > > -riscv-march-$(toolchain-supports-zicbom) := $(riscv-march-y)_zicbom
-> > > +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICBOM) := $(riscv-march-y)_zicbom
-> > >  
-> > >  # Check if the toolchain supports Zihintpause extension
-> > >  toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
-> > > -- 
-> > > 2.37.3
-> > > 
-> > > 
+A LLVM_ENABLE_ASSEERTIONS=on build of Clang defaults to -fno-discard-value-names.
+
+See clang/lib/Driver/ToolChains/Clang.cpp:5030
+
+>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+>Thanks for the patch!
+>
+>Link: https://github.com/ClangBuiltLinux/linux/issues/1467
+>Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+Reviewed-by: Fangrui Song <maskray@google.com>
+
+>> ---
+>>  scripts/Makefile.build | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+>> index 27be77c0d6d8..d0e4f476dfee 100644
+>> --- a/scripts/Makefile.build
+>> +++ b/scripts/Makefile.build
+>> @@ -140,7 +140,7 @@ $(obj)/%.symtypes : $(src)/%.c FORCE
+>>  # LLVM assembly
+>>  # Generate .ll files from .c
+>>  quiet_cmd_cc_ll_c = CC $(quiet_modtag)  $@
+>> -      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -o $@ $<
+>> +      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -fno-discard-value-names -o $@ $<
+>>
+>>  $(obj)/%.ll: $(src)/%.c FORCE
+>>  	$(call if_changed_dep,cc_ll_c)
+>>
+>> base-commit: 93ed07a23fd08b8613f64cf0a15d7fbdaca010fd
+>> --
+>> 2.38.0.rc2.412.g84df46c1b4-goog
+>>
+>
