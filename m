@@ -1,199 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AAB7B
-	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 00:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1665619303;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mhCdW+xcKxT0KoHjnQ4E4k2mM/23P0JlZ//DeEtEHMg=;
-	b=a76hTSFmqujMBDBvTgT88vvg5IQ3oIMPZe2992Ub2LwGyk1oTq7oa1paPLfw/32cfV5J6a
-	EWZw9iM8XNTkK9e+hDZ6GUlTRZb5ab7LJj3fmtskPy/D0T+Lx1x4cadqefXU/G2c3P71ur
-	ouv1e3vXS+EEEBt66HFfSKs6loWgaJk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-88-CZXMq52UMjKOSJKHNhoTyw-1; Wed, 12 Oct 2022 20:01:41 -0400
-X-MC-Unique: CZXMq52UMjKOSJKHNhoTyw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A08C029DD98B
-	for <llvm@lists.linux.dev>; Thu, 13 Oct 2022 00:01:41 +0000 (UTC)
-Received: from [172.64.3.56] (unknown [10.30.34.235])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8F4C2404CD9B;
-	Thu, 13 Oct 2022 00:01:41 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
- mainline.kernel.org-clang, 95b8b595)
-Date: Thu, 13 Oct 2022 00:01:41 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D657B;
+	Thu, 13 Oct 2022 00:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B7E7C433D6;
+	Thu, 13 Oct 2022 00:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1665620268;
+	bh=c7RVjqcmClAXhrEggnXFpKNhPPpv6Yk6Q3YUARexdQQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=INbm51gn84E8UcT1xJkLG62s1TV4fKbkbV/QtUOWaZge8txmtIkgDmuM48k+8k5aG
+	 OxioXl/+UobxtI9PzWzvx2KuEMTTleF+vCAICX0JPoJDfcdIM+TtnJNbmLqMCAp/NX
+	 QFp4XhNzpKoCPQGGXuNtUYsbUjWhzqXyRZzUMOrkTXy3JZE++HyczxsGxJfO99uYrb
+	 jkvke8HKnUs4DBvvvAjQJCk69Jk0+qfwi4YXbp5oF1Azr8g4MMADTSqB9z0tuwqlOL
+	 Pb5M2LBYYivpUD9WlBxAeYXPwJjQ74aC9FcaIPF3A6R9qvke9HaZaVB5bG5BK6DAWD
+	 dzvdLBpA6ySww==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nathan Huckleberry <nhuck@google.com>,
+	llvm@lists.linux.dev,
+	Dan Carpenter <error27@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	ndesaulniers@google.com,
+	ztong0001@gmail.com,
+	dave@stgolabs.net,
+	linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 47/67] staging: rtl8192u: Fix return type of ieee80211_xmit
+Date: Wed, 12 Oct 2022 20:15:28 -0400
+Message-Id: <20221013001554.1892206-47-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221013001554.1892206-1-sashal@kernel.org>
+References: <20221013001554.1892206-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <90498.122101220014100423@us-mta-88.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Nathan Huckleberry <nhuck@google.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[ Upstream commit 2851349ac351010a2649e0ff86a1e3d68fe5d683 ]
 
+The ndo_start_xmit field in net_device_ops is expected to be of type
+netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
 
-Kernel information:
-    Commit message: Merge tag 'loongarch-6.1' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/chenhuacai/linux-loongson
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/56109
+The return type of ieee80211_xmit should be changed from int to
+netdev_tx_t.
 
-One or more kernel tests failed:
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Cc: llvm@lists.linux.dev
+Reported-by: Dan Carpenter <error27@gmail.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+Link: https://lore.kernel.org/r/20220914210750.423048-1-nhuck@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/staging/rtl8192u/ieee80211/ieee80211.h    | 2 +-
+ drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5492426
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1424
-            Affected tests:
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                   s390x - Networking bridge: sanity
-                  x86_64 - Networking bridge: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+index b577f9c81f85..9cd4b1896745 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+@@ -2178,7 +2178,7 @@ int ieee80211_set_encryption(struct ieee80211_device *ieee);
+ int ieee80211_encrypt_fragment(struct ieee80211_device *ieee,
+ 			       struct sk_buff *frag, int hdr_len);
+ 
+-int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev);
++netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev);
+ void ieee80211_txb_free(struct ieee80211_txb *txb);
+ 
+ 
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+index 8602e3a6c837..e4b6454809a0 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_tx.c
+@@ -526,7 +526,7 @@ static void ieee80211_query_seqnum(struct ieee80211_device *ieee,
+ 	}
+ }
+ 
+-int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
++netdev_tx_t ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct ieee80211_device *ieee = netdev_priv(dev);
+ 	struct ieee80211_txb *txb = NULL;
+@@ -822,13 +822,13 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
+ 			if ((*ieee->hard_start_xmit)(txb, dev) == 0) {
+ 				stats->tx_packets++;
+ 				stats->tx_bytes += __le16_to_cpu(txb->payload_size);
+-				return 0;
++				return NETDEV_TX_OK;
+ 			}
+ 			ieee80211_txb_free(txb);
+ 		}
+ 	}
+ 
+-	return 0;
++	return NETDEV_TX_OK;
+ 
+  failed:
+ 	spin_unlock_irqrestore(&ieee->lock, flags);
+-- 
+2.35.1
 
