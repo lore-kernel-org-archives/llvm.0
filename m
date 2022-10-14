@@ -1,89 +1,90 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B63440C
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 20:17:00 +0000 (UTC)
-Received: by mail-pg1-f174.google.com with SMTP id 129so5256325pgc.5
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:17:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F40440C
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 20:19:26 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id p14so5914567pfq.5
+        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d9uRIcoHHJz9/gFQgE1VQpj6K6kcy16s5GCXSPDSWz4=;
-        b=HNA6dMTAcvloY9M5J90Db+W0xpQ45C2srAwJ1pL0+gxkF1JbTwXp/LqhGKlbAlzdTY
-         60H49gCz+iDQL2gbl+RNuwngV0a+jL6REBC6XYZA9uj4YugIfa1EAIRrq7LuLMxKIPr5
-         EADYMgZJgxiiTr+YVX9jbyIxvTOmyEhGq2Qw5NYLz0wi+4xjrukjgsVPfRK+wPIb/Rzr
-         eD2FjSLtdx1xgHjxXU9QPMAzO99i1tydmNWzZ0XJ1GE49+EIE2xqDx6IhwxYRCQ5BMpS
-         ikxj7fU7hZE59fz0AeWVV6mSRtSYH7O29VZbQMhyyfEqMbbnISu5W8IP5CgSj5OnMCR4
-         W6rw==
+        bh=M8IVK8k7k9gOGjXG9NHmvjgor4/KedW5P7/8L1lQGUs=;
+        b=l7NuPTgKJF77glfTg5wUM0i6Q1IBcSYKNmIAmbVOrS58xzVMla3V3aoAS25ZQIUKQi
+         dbJi/3AGnfBgfwfQsywObFaIUWAEy3rJ41PT8pwaNNaS4VLPsBVEdBrEi+z4af3TsPRS
+         zR+hhvenq+Tzp4+/xhyTQDKDrx/rgaqXIoRHftUS6gljtbwBt3XwZulKmH4NCRZa4gc7
+         8jsphkevXa52aYaPftluIg3M62is4x/ZdDMdi3WCNvxSnJcAIFBeAJsmERI0DKCykVQs
+         3VIoXi58mU1wngSQkYfJiSMJMDjF67PPnEcfgW3X9Z7wWBv69C6cI6ipKt1pxq3JMo2+
+         oSGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d9uRIcoHHJz9/gFQgE1VQpj6K6kcy16s5GCXSPDSWz4=;
-        b=vJ1rcTifcJELyT9Rud4Qkx2tefoTD5GvnSgBiaVdgaCjmdP8vYFcgnbEX5aGy4IXMJ
-         MSNkJhUMUYRZNrcjeJtK0GZWvi6lRCfg3qz78t2l/hf5ZkLL6EZyLTKqcTy/EURXozzK
-         /rpqRvPvsZJIYW3Wll1JSaab7II0qiJizJrWjAL2gzPrvXi6u34NoeClZ8CKcdw+MK2p
-         fdsb8ys2if0rI5Na+VEV97I2p/WEP5woL15P6SvN2iHdoRzxJQWwL/CcLkAWJBPHZ7gN
-         baVNTK5lPzPv/rloEm1T/L9j10z1JqEySrx2vpFrrFIVDdK2vgd711XHah251p8PuNWj
-         FxSA==
-X-Gm-Message-State: ACrzQf2KWnCyKF4JF7qudQr6DKHBgYEVTSfcPs4m5AqjpVJovyW806R3
-	RLusvyACvHoHyoSgc7AIRNfG6mteBXTqHZBDZIW78g==
-X-Google-Smtp-Source: AMsMyM5xfbATi73WYV8RZgnDzrGNO9OZRqJyobu360Isyix61vSg0sq7gKJftcLC4q5SflGLTTLITg/mr1v7HdPS/ic=
-X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id
- a145-20020a621a97000000b00562558712d6mr6952880pfa.37.1665778619944; Fri, 14
- Oct 2022 13:16:59 -0700 (PDT)
+        bh=M8IVK8k7k9gOGjXG9NHmvjgor4/KedW5P7/8L1lQGUs=;
+        b=u4R9mkd3tP/Zi7c8lULYv59vSY9Brx8zo2GfanvK93CC0GTJ66Z4GKQZiv0msCVXQ3
+         w8VNzQGzVxAJ6usVO6tS5azNOlaBq3djjxKaPwCPh19gHWn0lO7XT3R+yjjXjbO49Pv1
+         cEheFQwaaybFjbNBzsH0EE+BrPDGEIyqKJgDwcM+kiD8pzHW2nOW6z+rvxv80vnfhedg
+         W2tHf9vBXfD+QMRIazEI5vB+v34X5cCKmU6weZCPNHKFz6yBb7KKrzBYoeyXn2El1d8M
+         FZBpbnP7XVqwvoudSI7Se5r1M8i9BpfoFeoO/naE53sp7Ka+QZRk8Y4mAbauGmsklArs
+         UbCQ==
+X-Gm-Message-State: ACrzQf2p4MM3kRqqlU1OPUFAIXrF9Qu93IQnxG/v5RfHM2qq6F8VBZeE
+	tkmnM5tx5KBP+3e9vVwjQAKLIucKhEYmaAFN4Q/Pjw==
+X-Google-Smtp-Source: AMsMyM7RQNAQa92JkPff2Imw1hV4Xm/n13lNelqA2N++jhAukEo0EG4H91O/ZREacbcJ1MI4faUBQ8OOZaYb5XFCoFs=
+X-Received: by 2002:a63:80c7:0:b0:46b:2ccb:ff93 with SMTP id
+ j190-20020a6380c7000000b0046b2ccbff93mr3283676pgd.403.1665778765642; Fri, 14
+ Oct 2022 13:19:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221014201354.3190007-1-ndesaulniers@google.com>
-In-Reply-To: <20221014201354.3190007-1-ndesaulniers@google.com>
+References: <20221012180118.331005-1-masahiroy@kernel.org> <Y0mIUW7Ozx9tseeG@dev-arch.thelio-3990X>
+In-Reply-To: <Y0mIUW7Ozx9tseeG@dev-arch.thelio-3990X>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 14 Oct 2022 13:16:47 -0700
-Message-ID: <CAKwvOdmio0+hq0wmoxySrGQW8fii860OYiLV-eebcPMkqKNoJw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] pass -march= only to compiler
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Nathan Chancellor <nathan@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>
+Date: Fri, 14 Oct 2022 13:19:13 -0700
+Message-ID: <CAKwvOdmm9FsH2G76bZ2Qr5Bbnbdb55JwONP5WG7oa_iMZUycXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kbuild: move -Werror from KBUILD_CFLAGS to KBUILD_CPPFLAGS
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 14, 2022 at 1:14 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Fri, Oct 14, 2022 at 9:03 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> When both -march= and -Wa,-march= are specified for assembler or
-> assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
-> value but Clang will warn that -march= is unused.
+> On Thu, Oct 13, 2022 at 03:01:17AM +0900, Masahiro Yamada wrote:
+> > CONFIG_WERROR turns warnings into errors, which  happens only for *.c
+> > files because -Werror is added to KBUILD_CFLAGS.
+> >
+> > Adding it to KBUILD_CPPFLAGS makes more sense because preprocessors
+> > understand the -Werror option.
+> >
+> For what it's worth, this is going to break 32-bit ARM builds with clang
+> plus the integrated assembler due to
+> https://github.com/ClangBuiltLinux/linux/issues/1315:
 >
-> warning: argument unused during compilation: '-march=armv6k'
-> [-Wunused-command-line-argument]
->
-> This is the top group of warnings we observe when using clang to
-> assemble the kernel via `ARCH=arm make LLVM=1`.
->
-> Arnd sent a v2 of my previous patch
-> https://lore.kernel.org/linux-arm-kernel/20210928154143.2106903-14-arnd@kernel.org/
-> I added yet a few more instances I found since then. Nathan pointed out
-> a new one too that I've fixed since v3.
->
-> Fixing this will allow us to enable
-> -Werror=unused-command-line-argument for clang builds.
->
-> v3 had an issue wrt. __thumb2__
-> https://lore.kernel.org/llvm/CAKwvOdmkd2PxvMUZA=A-72eATGDZkqDj--Bv1W+Xt_K_LWdROA@mail.gmail.com/
-> I've incorporated idea from Nathan and Ard on that.
+> clang-16: error: argument unused during compilation: '-march=armv7-a' [-Werror,-Wunused-command-line-argument]
 
-I probably should have made a note: the base of this series is a
-little funny.  It's based on today's linux-next (20221014) but with
-0a7606a9832ab375a38425a659bda13712ca89ae reverted.  It sounds like
-0a7606a9832ab375a38425a659bda13712ca89ae might be dropped from -next
-imminently
-https://lore.kernel.org/linux-next/CAK7LNARg8OpqLR_71PJV3ZoLuDV8+mz9mphg=CzEeEEMY0G3rw@mail.gmail.com/.
+Ah, sorry, I should have finished off that series back then. I've
+rebased the series and sent a v4.
+https://lore.kernel.org/llvm/20221014201354.3190007-1-ndesaulniers@google.com/
+
+You mentioned to me on IRC
+https://lore.kernel.org/linux-next/CAK7LNARg8OpqLR_71PJV3ZoLuDV8+mz9mphg=CzEeEEMY0G3rw@mail.gmail.com/
+maybe will be a conflict.
+
+>
+> Ultimately, I want -Wunused-command-line-argument to be an error anyways
+> (https://github.com/ClangBuiltLinux/linux/issues/1587) but it would be
+> nice to get these cleaned up before this goes in.
+>
+> Cheers,
+> Nathan
+
+
+
 -- 
 Thanks,
 ~Nick Desaulniers
