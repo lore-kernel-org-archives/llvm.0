@@ -1,158 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172CA4680
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 21:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D8D3C433C1;
-	Fri, 14 Oct 2022 21:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665782464;
-	bh=W830SBSAHyVTFgK+oBOpumaz6zT/ESPPX+briRUidUU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fim6nGXadK0daKWDcTjB7DuqqVbheHWqI2TI75c7Me6Bb8S3vzMN3U0upV68UhufP
-	 1i7dZ5O2wpChIqZQ8dIRaqGak5vjcw//6u3ymWrLr5ASvqHi1OP9fhCGw1IXIRiGuB
-	 Jj/Pbgff2MKLGb9XsIkR+e/T/z8JaWIgnDbnE44NcbbyJNjMnKikDazX9GyZyienZm
-	 OcwMSL3Jfb0MAwa7tLS6E0Cd2uPt6gSOPs3C/FQxDuGaHrsRmiwL3hsQPeTr36nSph
-	 B5VbR3/aRiTs+aFh+VkfhAA4ZxcQpaZk66qpJro2r0Z9yEm5bSAZ/8Jq5tbBrgKWnG
-	 98SFTw/7J2ndg==
-Date: Fri, 14 Oct 2022 14:21:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Russell King <rmk+kernel@armlinux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 4/4] ARM: pass -march= only to compiler
-Message-ID: <Y0nSvqpFMXsNzpaA@dev-arch.thelio-3990X>
-References: <20221014201354.3190007-1-ndesaulniers@google.com>
- <20221014201354.3190007-5-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D834680
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 21:52:04 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so5914982pjo.4
+        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 14:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+V1yq5kutqjuC703osZedH3rmdy8U8JIzTiIx0RrC4=;
+        b=nk+ppu6DZAbdjE0NaDIGVOIK4xC/wOk+IqBr0PnQsL96JO9Cwh8C5QM7ZtJQR2Sm4u
+         ZJAEwsrYBL/agkUk4PrOSJPZx+FjRj+Ua535NVuQO+3m4dK/VJeFD+W9y8rT3zYVUtlH
+         89D24IB+UaC8X9gvX59f+M/duyYgJA6Xrf+TfvpxmjN5HplOQQig/MEeQysG3VSHkmEr
+         PWSexmvNPCx6Y6qjv0TSXERh6818GwgMx463xig3lGWS72V9oPljwTxH1UlIDrHxBSx0
+         M+kINgtYCMJioajJP65SnSoeaURwMFUFq/NxHnp/uazNYt2K9s/crf6+Cos951bhdsUH
+         DAvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+V1yq5kutqjuC703osZedH3rmdy8U8JIzTiIx0RrC4=;
+        b=dwzfTwx+8Ypwf1yhvwBhUkSe4dTrnJf6DAJEqomj+25X5YLRCtzXYr0aAXgQKDW59y
+         gLFv6rR24H6fVcEP3LChVfFDO2u/br1ofehbzzDwGpn6KJwCc1X2W9ra0kUwyn3EqPPK
+         BEzJG+ru+lsoZOBmUwd/8ARxExxkuENvTmq2nhVHlZ08b23tdAbIbvckZnKu7sT151uV
+         LlFPB1MYwjZOpUtma10UuGgOACnjgkwrN2lRu4w4/MM6RFs2D5o7zvtpeNq/54dCze/s
+         tSOTpzHEE6yfbee07VySOhefl/wiFTNz7J7FuXeYoaQEiJokvHObg/0DivxGGJpHqXRC
+         DMlQ==
+X-Gm-Message-State: ACrzQf1UP1mRcRaoIlHEd60lNdAVV4vGlI2aXKQgzQY/JVn+oZaC79jV
+	2y9ol0vrTB8/hE90UZwruoMuYqc4Duph2/E7AegCMQ==
+X-Google-Smtp-Source: AMsMyM4ibZr+rEpY29bo3KcS2btMSVY8Lobg4hRbJlHPqrOKhBqk+gVVAhOrbTPvX7M08QjdnH2iaOcaxvx+g1V5rMM=
+X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
+ t24-20020a170902b21800b00184710c8c52mr7304165plr.95.1665784323454; Fri, 14
+ Oct 2022 14:52:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014201354.3190007-5-ndesaulniers@google.com>
+References: <20221014204210.383380-1-nathan@kernel.org>
+In-Reply-To: <20221014204210.383380-1-nathan@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 14 Oct 2022 14:51:51 -0700
+Message-ID: <CAKwvOdmvqoO1220ac7RVbVzvmbJB0wYq5WOfuz=T8hd+CkijBg@mail.gmail.com>
+Subject: Re: [PATCH v2] lib/Kconfig.debug: Add check for non-constant
+ .{s,u}leb128 support to DWARF5
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 14, 2022 at 01:13:54PM -0700, Nick Desaulniers wrote:
-> When both -march= and -Wa,-march= are specified for assembler or
-> assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
-> value but Clang will warn that -march= is unused.
-> 
-> warning: argument unused during compilation: '-march=armv6k'
-> [-Wunused-command-line-argument]
-> 
-> This is the top group of warnings we observe when using clang to
-> assemble the kernel via `ARCH=arm make LLVM=1`.
-> 
-> Split the arch-y make variable into two, so that -march= flags only get
-> passed to the compiler, not the assembler. -D flags are added to
-> KBUILD_CPPFLAGS which is used for both C and assembler-with-cpp sources.
-> 
-> Clang is trying to warn that it doesn't support different values for
-> -march= and -Wa,-march= (like GCC does, but the kernel doesn't need this)
-> though the value of the preprocessor define __thumb2__ is based on
-> -march=. Make sure to re-set __thumb2__ via -D flag for assembler
-> sources now that we're no longer passing -march= to the assembler. Set
-> it to a different value than the preprocessor would for -march= in case
-> -march= gets accidentally re-added to KBUILD_AFLAGS in the future.
-> Thanks to Ard and Nathan for this suggestion.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1315
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1587
-> Link: https://github.com/llvm/llvm-project/issues/55656
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Fri, Oct 14, 2022 at 1:48 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> When building with a RISC-V kernel with DWARF5 debug info using clang
+> and the GNU assembler, several instances of the following error appear:
+>
+>   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
+>
+> Dumping the .s file reveals these .uleb128 directives come from
+> .debug_loc and .debug_ranges:
+>
+>   .Ldebug_loc0:
+>           .byte   4                               # DW_LLE_offset_pair
+>           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
+>           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
+>           .byte   1                               # Loc expr size
+>           .byte   90                              # DW_OP_reg10
+>           .byte   0                               # DW_LLE_end_of_list
+>
+>   .Ldebug_ranges0:
+>           .byte   4                               # DW_RLE_offset_pair
+>           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
+>           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
+>           .byte   4                               # DW_RLE_offset_pair
+>           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
+>           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
+>           .byte   0                               # DW_RLE_end_of_list
+>
+> There is an outstanding binutils issue to support a non-constant operand
+> to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
+> be any movement on it, due to concerns over how it would work with
+> linker relaxation.
+>
+> To avoid these build errors, prevent DWARF5 from being selected when
+> using clang and an assembler that does not have support for these symbol
+> deltas, which can be easily checked in Kconfig with as-instr plus the
+> small test program from the dwz test suite from the binutils issue.
+>
+> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1719
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-This passed through my build matrix on top of commit dca45efbe3c8
-("Merge tag 'sound-fix-6.1-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound") and I saw no
-additional warnings/errors:
+Thanks for keeping these LLVM_IAS=0 builds alive a little longer.  My
+hope is the GNU binutils can relax their requirement for debug info
+sections to improve support for DWARF v5.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 
 > ---
-> Changes v3 -> v4:
-> * Add -D__thumb2__=2 to KBUILD_AFLAGS as per in-person discussion with
->   Ard and Nathan, and their SB tags.
-> * Reword commit message.
-> 
->  arch/arm/Makefile | 36 +++++++++++++++++++++++++-----------
->  1 file changed, 25 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> index ee888070b2ff..b58998749ead 100644
-> --- a/arch/arm/Makefile
-> +++ b/arch/arm/Makefile
-> @@ -60,21 +60,34 @@ endif
->  KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
->  
->  # This selects which instruction set is used.
-> +arch-$(CONFIG_CPU_32v7M)	:=-march=armv7-m
-> +arch-$(CONFIG_CPU_32v7)		:=-march=armv7-a
-> +arch-$(CONFIG_CPU_32v6)		:=-march=armv6
-> +# Only override the compiler option if ARMv6. The ARMv6K extensions are
-> +# always available in ARMv7
-> +ifeq ($(CONFIG_CPU_32v6),y)
-> +arch-$(CONFIG_CPU_32v6K)	:=-march=armv6k
-> +endif
-> +arch-$(CONFIG_CPU_32v5)		:=-march=armv5te
-> +arch-$(CONFIG_CPU_32v4T)	:=-march=armv4t
-> +arch-$(CONFIG_CPU_32v4)		:=-march=armv4
-> +arch-$(CONFIG_CPU_32v3)		:=-march=armv3m
+>
+> v2:
+>     - Rebase on commit bb1435f3f575 ("Kconfig.debug: add toolchain
+>       checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT") from the kbuild
+>       tree.
+>     - Limit CONFIG_AS_HAS_NON_CONST_LEB128 dependency to GNU as. There
+>       is no point to applying this dependency to the integrated
+>       assembler because it will always pass.
+>     - Apply the CONFIG_AS_HAS_NON_CONST_LEB128 dependency to
+>       CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as well, due to the
+>       aforementioned kbuild change.
+>     - Move comment block to above CONFIG_AS_HAS_NON_CONST_LEB128, as the
+>       configuration is now used in two places.
+>     - Drop Conor's tested by, as the patch is different enough to
+>       potentially require new testing.
+>
+> v1: https://lore.kernel.org/20220928182523.3105953-1-nathan@kernel.org/
+>
+>  lib/Kconfig.debug | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index db8d9271cabf..5c1c63575895 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -231,6 +231,11 @@ config DEBUG_INFO
+>           in the "Debug information" choice below, indicating that debug
+>           information will be generated for build targets.
+>
+> +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
+> +# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
+> +config AS_HAS_NON_CONST_LEB128
+> +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
 > +
->  # Note that GCC does not numerically define an architecture version
->  # macro, but instead defines a whole series of macros which makes
->  # testing for a specific architecture or later rather impossible.
-> -arch-$(CONFIG_CPU_32v7M)	:=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
-> -arch-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
-> -arch-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6 -march=armv6
-> -# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
-> +cpp-$(CONFIG_CPU_32v7M)		:=-D__LINUX_ARM_ARCH__=7
-> +cpp-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7
-> +cpp-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6
-> +# Only override the compiler option if ARMv6. The ARMv6K extensions are
->  # always available in ARMv7
->  ifeq ($(CONFIG_CPU_32v6),y)
-> -arch-$(CONFIG_CPU_32v6K)	:=-D__LINUX_ARM_ARCH__=6 -march=armv6k
-> +cpp-$(CONFIG_CPU_32v6K)		:=-D__LINUX_ARM_ARCH__=6
->  endif
-> -arch-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5 -march=armv5te
-> -arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
-> -arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
-> -arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3m
-> +cpp-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5
-> +cpp-$(CONFIG_CPU_32v4T)		:=-D__LINUX_ARM_ARCH__=4
-> +cpp-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4
-> +cpp-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3
->  
->  # This selects how we optimise for the processor.
->  tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
-> @@ -119,15 +132,16 @@ AFLAGS_NOWARN	:=$(call as-option,-Wa$(comma)-mno-warn-deprecated,-Wa$(comma)-W)
->  
->  ifeq ($(CONFIG_THUMB2_KERNEL),y)
->  CFLAGS_ISA	:=-mthumb -Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
-> -AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb
-> +AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb -D__thumb2__=2
->  else
->  CFLAGS_ISA	:=$(call cc-option,-marm,) $(AFLAGS_NOWARN)
->  AFLAGS_ISA	:=$(CFLAGS_ISA)
->  endif
->  
->  # Need -Uarm for gcc < 3.x
-> +KBUILD_CPPFLAGS	+=$(cpp-y)
->  KBUILD_CFLAGS	+=$(CFLAGS_ABI) $(CFLAGS_ISA) $(arch-y) $(tune-y) $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,)) -msoft-float -Uarm
-> -KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include asm/unified.h -msoft-float
-> +KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) -Wa,$(arch-y) $(tune-y) -include asm/unified.h -msoft-float
->  
->  CHECKFLAGS	+= -D__arm__
->  
-> -- 
-> 2.38.0.413.g74048e4d9e-goog
-> 
+>  choice
+>         prompt "Debug information"
+>         depends on DEBUG_KERNEL
+> @@ -253,7 +258,7 @@ config DEBUG_INFO_NONE
+>  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>         bool "Rely on the toolchain's implicit default DWARF version"
+>         select DEBUG_INFO
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
+> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
+>         help
+>           The implicit default version of DWARF debug info produced by a
+>           toolchain changes over time.
+> @@ -277,7 +282,7 @@ config DEBUG_INFO_DWARF4
+>  config DEBUG_INFO_DWARF5
+>         bool "Generate DWARF Version 5 debuginfo"
+>         select DEBUG_INFO
+> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
+> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
+>         help
+>           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
+>           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
+>
+> base-commit: bb1435f3f575b5213eaf27434efa3971f51c01de
+> --
+> 2.38.0
+>
+
+
+--
+Thanks,
+~Nick Desaulniers
