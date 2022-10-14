@@ -1,120 +1,217 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D6E2F5B
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 18:42:51 +0000 (UTC)
-Received: by mail-qv1-f54.google.com with SMTP id l19so3794423qvu.4
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 11:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9T8jQNwButrrQoYqMshRtxbE6/ysi6nkPvoph0oCh4=;
-        b=NZ+mnzMKjGzR20/DcjUW/jqBO2up2/pWNkWfpdBbp8dzS0x1xoVipOTEav2dPPlnam
-         1iam/ch44zJEDumTd2/KgTRPNkNMPl+jZY/tNG4MRytK0oOqZelynAWHJf/zZ8o8TZZB
-         +PJJlkqcVf1pS+tWQiJhPkSpSj45t0OtLAFTxO3EnEkSamYkv1RSVVdw+AivjLQkWpPl
-         GKA6ZXOaJCkt8JLzbGOA+EQhZtmsHw/GJfs5ExIberWdaIPK/k4jrJqKreRFy8ZgtQjq
-         J37+/wy2zIaI6EPqv1s/P6ovTemtvaMECbzJqEiSTfFtNb2aYgmF+Nj5aWJSQ4Nge5gf
-         ZGHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9T8jQNwButrrQoYqMshRtxbE6/ysi6nkPvoph0oCh4=;
-        b=1dBimGwCkiPQx2qHBiPRBvJkJ/jdbo5DZD26hN6iEc6Pqd/uOfmzTUW8NmWwkR3EEX
-         F1zBZlACtYmdo86QBUXyjZMbgo1NF4PBM7dk2tEKJu+ZEVOP8sGLYAFlE3m7pL6vjxNb
-         nZl8Fa78yXX1l+E8pqtECCO8ksafuOje5l4E6b7zSiH45N/xyhhNFP7RnZpxHK6fpJxJ
-         X67kCkyBYqkAyFr37YTbK8wJ9r4k/L0Wd3Yp85JuNwQB+mXK554gpVjZE9JjZ4AivZbo
-         deAv2ycGZ+7jrWiBuaOaZgkdnPx6FkrXnvoJTx+8U8tI1HyA4heAQM2xzKro2HJxlxnA
-         RjvA==
-X-Gm-Message-State: ACrzQf2dNiVg86e9Lv+nknWPcBN/PRGeQwTO1napN9IWmXcs+21ejrT4
-	AMPnXXvC579aYihq6UZNhXU=
-X-Google-Smtp-Source: AMsMyM59QX20NproZZLr6f8lAomXJGjze6pXpwJ3i6f8PkAyt8h2Y3hNSGyyzPU8j5uKZtHLzqOnwA==
-X-Received: by 2002:ad4:5aee:0:b0:4b4:595:fb54 with SMTP id c14-20020ad45aee000000b004b40595fb54mr5414058qvh.5.1665772970400;
-        Fri, 14 Oct 2022 11:42:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:b45a:72e4:d631:1b4c? ([2600:1700:2442:6db0:b45a:72e4:d631:1b4c])
-        by smtp.gmail.com with ESMTPSA id bm9-20020a05620a198900b006e42a8e9f9bsm3222120qkb.121.2022.10.14.11.42.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Oct 2022 11:42:49 -0700 (PDT)
-Message-ID: <90998e63-056e-52e6-03d2-775fc65d901d@gmail.com>
-Date: Fri, 14 Oct 2022 13:42:48 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F7D2F5B
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 19:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1665774646;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=g7WutChhfJ0dkVAkJ5PhjpHtUBvAk5Z3//VrbFZr7nI=;
+	b=XNMQO02C7hZdI/srhjzZe7Zc1hIoESbWIoVVrcd+JXwFz+brTJccotc1JxI8r5Bu/U8a2H
+	b7ose97xThJ/uagFMx3v8Ouzyw69QZVB2+uuwQdQ7U6Xn0/qCo8u1pXDivLrR0Mvd25iw7
+	YdWvkTP+KyqZaFdwnB+Kqg94dV/vI2Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-472-c6lfCaZpM_ClqPntcvyVbQ-1; Fri, 14 Oct 2022 15:10:45 -0400
+X-MC-Unique: c6lfCaZpM_ClqPntcvyVbQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1CAFB811E81
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 19:10:45 +0000 (UTC)
+Received: from [172.64.9.11] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 06E391121319;
+	Fri, 14 Oct 2022 19:10:44 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4pyF?= PASS (81/365 SKIPPED): Test report for master
+ (6.0.0, mainline.kernel.org-clang, f2b220ef)
+Date: Fri, 14 Oct 2022 19:10:44 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] of: declare string literals const
-Content-Language: en-US
-To: =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>
-Cc: Rob Herring <robh+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20221012174622.45006-1-cgzones@googlemail.com>
-From: Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20221012174622.45006-1-cgzones@googlemail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <92123.122101415104500531@us-mta-472.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/12/22 12:46, Christian Göttsche wrote:
-> of_overlay_action_name() returns a string literal from a function local
-> array.  Modifying string literals is undefined behavior which usage of
-> const pointer can avoid.  of_overlay_action_name() is currently only
-> used once in overlay_notify() to print the returned value.
-> 
-> While on it declare the data array const as well.
-> 
-> Reported by Clang:
-> 
->     In file included from arch/x86/kernel/asm-offsets.c:22:
->     In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
->     In file included from ./include/linux/kvm_host.h:19:
->     In file included from ./include/linux/msi.h:23:
->     In file included from ./arch/x86/include/asm/msi.h:5:
->     In file included from ./arch/x86/include/asm/irqdomain.h:5:
->     In file included from ./include/linux/irqdomain.h:35:
->     ./include/linux/of.h:1555:3: error: initializing 'char *' with an expression of type 'const char[5]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "init",
->                     ^~~~~~
->     ./include/linux/of.h:1556:3: error: initializing 'char *' with an expression of type 'const char[10]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "pre-apply",
->                     ^~~~~~~~~~~
->     ./include/linux/of.h:1557:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "post-apply",
->                     ^~~~~~~~~~~~
->     ./include/linux/of.h:1558:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "pre-remove",
->                     ^~~~~~~~~~~~
->     ./include/linux/of.h:1559:3: error: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "post-remove",
->                     ^~~~~~~~~~~~~
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
->  include/linux/of.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/of.h b/include/linux/of.h
-> index 6b79ef9a6541..8b9f94386dc3 100644
-> --- a/include/linux/of.h
-> +++ b/include/linux/of.h
-> @@ -1549,9 +1549,9 @@ enum of_overlay_notify_action {
->  	OF_OVERLAY_POST_REMOVE,
->  };
->  
-> -static inline char *of_overlay_action_name(enum of_overlay_notify_action action)
-> +static inline const char *of_overlay_action_name(enum of_overlay_notify_action action)
->  {
-> -	static char *of_overlay_action_name[] = {
-> +	static const char *const of_overlay_action_name[] = {
->  		"init",
->  		"pre-apply",
->  		"post-apply",
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Frank Rowand <frowand.list@gmail.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'docs-6.1-2' of git://git.lwn.net/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/56246
+
+One or more kernel tests failed:
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - software RAID testing
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - Storage - software RAID testing
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - CIFS Connectathon
+                  x86_64 (debug) - Networking: igmp conformance test
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
+al_clmulni]
+            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
+hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - cpu: perf: interrupt took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1034
+            Affected tests:
+                  x86_64 - stress: stress-ng - cpu-cache
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
+                  x86_64 - Networking bridge: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
