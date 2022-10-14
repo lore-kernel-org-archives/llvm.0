@@ -1,170 +1,135 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D834680
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 21:52:04 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id o9-20020a17090a0a0900b0020ad4e758b3so5914982pjo.4
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 14:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+V1yq5kutqjuC703osZedH3rmdy8U8JIzTiIx0RrC4=;
-        b=nk+ppu6DZAbdjE0NaDIGVOIK4xC/wOk+IqBr0PnQsL96JO9Cwh8C5QM7ZtJQR2Sm4u
-         ZJAEwsrYBL/agkUk4PrOSJPZx+FjRj+Ua535NVuQO+3m4dK/VJeFD+W9y8rT3zYVUtlH
-         89D24IB+UaC8X9gvX59f+M/duyYgJA6Xrf+TfvpxmjN5HplOQQig/MEeQysG3VSHkmEr
-         PWSexmvNPCx6Y6qjv0TSXERh6818GwgMx463xig3lGWS72V9oPljwTxH1UlIDrHxBSx0
-         M+kINgtYCMJioajJP65SnSoeaURwMFUFq/NxHnp/uazNYt2K9s/crf6+Cos951bhdsUH
-         DAvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d+V1yq5kutqjuC703osZedH3rmdy8U8JIzTiIx0RrC4=;
-        b=dwzfTwx+8Ypwf1yhvwBhUkSe4dTrnJf6DAJEqomj+25X5YLRCtzXYr0aAXgQKDW59y
-         gLFv6rR24H6fVcEP3LChVfFDO2u/br1ofehbzzDwGpn6KJwCc1X2W9ra0kUwyn3EqPPK
-         BEzJG+ru+lsoZOBmUwd/8ARxExxkuENvTmq2nhVHlZ08b23tdAbIbvckZnKu7sT151uV
-         LlFPB1MYwjZOpUtma10UuGgOACnjgkwrN2lRu4w4/MM6RFs2D5o7zvtpeNq/54dCze/s
-         tSOTpzHEE6yfbee07VySOhefl/wiFTNz7J7FuXeYoaQEiJokvHObg/0DivxGGJpHqXRC
-         DMlQ==
-X-Gm-Message-State: ACrzQf1UP1mRcRaoIlHEd60lNdAVV4vGlI2aXKQgzQY/JVn+oZaC79jV
-	2y9ol0vrTB8/hE90UZwruoMuYqc4Duph2/E7AegCMQ==
-X-Google-Smtp-Source: AMsMyM4ibZr+rEpY29bo3KcS2btMSVY8Lobg4hRbJlHPqrOKhBqk+gVVAhOrbTPvX7M08QjdnH2iaOcaxvx+g1V5rMM=
-X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
- t24-20020a170902b21800b00184710c8c52mr7304165plr.95.1665784323454; Fri, 14
- Oct 2022 14:52:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7E263C
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 22:39:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA51C433C1;
+	Fri, 14 Oct 2022 22:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1665787178;
+	bh=ScZ7ZpzpYCbhHr2dgKusZtqNyUk5mj5ETrqZNK3W/aA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IKRoMTk3ERHolXcN0xKekhjMg0NBp1WEHv9rsuu/0IMCA/UCaDojvajV92EMiC0AN
+	 r8wYZnYHeumVpj9Pn3k6EMognTrdbWYoNWnWMvDFGFqb6V7l1HBasqdVLFO1jKMcdH
+	 ETaLl8dwX9r6p19hSRp5v5AY10gVky2YNb1PoOLQ/MvyhPss2AUMolEf+WnnF5UpRW
+	 sOaP/8kq+N5/kWnWZ6oVXBaRyzWfVJLfMKwNu3YYzKaPI6iRf/iA07mGeVt6kIKZo2
+	 1HD5L7SNdD8WZoR+Yfelw11OpnVI7c58aRt/dVswBYfAnGDmhaYqV1KyIfKBayR6zT
+	 SYdTsyQ6aS8uQ==
+Date: Fri, 14 Oct 2022 15:39:35 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Tom Rix <trix@redhat.com>,
+	Xiaoming Ni <nixiaoming@huawei.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andi Kleen <ak@linux.intel.com>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Christoph Hellwig <hch@lst.de>, Eric Dumazet <edumazet@google.com>,
+	"Darrick J. Wong" <darrick.wong@oracle.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] fs/select: mark do_select noinline_for_stack
+Message-ID: <Y0nlJ6whtJuZddjr@dev-arch.thelio-3990X>
+References: <c8f87abd-9d66-40cf-bcea-e2b1388d3030@app.fastmail.com>
+ <20221011205547.14553-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221014204210.383380-1-nathan@kernel.org>
-In-Reply-To: <20221014204210.383380-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 14 Oct 2022 14:51:51 -0700
-Message-ID: <CAKwvOdmvqoO1220ac7RVbVzvmbJB0wYq5WOfuz=T8hd+CkijBg@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/Kconfig.debug: Add check for non-constant
- .{s,u}leb128 support to DWARF5
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley <conor@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011205547.14553-1-ndesaulniers@google.com>
 
-On Fri, Oct 14, 2022 at 1:48 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> When building with a RISC-V kernel with DWARF5 debug info using clang
-> and the GNU assembler, several instances of the following error appear:
->
->   /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant .uleb128 is not supported
->
-> Dumping the .s file reveals these .uleb128 directives come from
-> .debug_loc and .debug_ranges:
->
->   .Ldebug_loc0:
->           .byte   4                               # DW_LLE_offset_pair
->           .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset
->           .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset
->           .byte   1                               # Loc expr size
->           .byte   90                              # DW_OP_reg10
->           .byte   0                               # DW_LLE_end_of_list
->
->   .Ldebug_ranges0:
->           .byte   4                               # DW_RLE_offset_pair
->           .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset
->           .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset
->           .byte   4                               # DW_RLE_offset_pair
->           .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset
->           .uleb128 .Ltmp30-.Lfunc_begin0          #   ending offset
->           .byte   0                               # DW_RLE_end_of_list
->
-> There is an outstanding binutils issue to support a non-constant operand
-> to .sleb128 and .uleb128 in GAS for RISC-V but there does not appear to
-> be any movement on it, due to concerns over how it would work with
-> linker relaxation.
->
-> To avoid these build errors, prevent DWARF5 from being selected when
-> using clang and an assembler that does not have support for these symbol
-> deltas, which can be easily checked in Kconfig with as-instr plus the
-> small test program from the dwz test suite from the binutils issue.
->
-> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1719
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, Oct 11, 2022 at 01:55:47PM -0700, Nick Desaulniers wrote:
+> Effectively a revert of
+> commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> 
+> Various configs can still push the stack useage of core_sys_select()
+> over the CONFIG_FRAME_WARN threshold (1024B on 32b targets).
+> 
+>   fs/select.c:619:5: error: stack frame size of 1048 bytes in function
+>   'core_sys_select' [-Werror,-Wframe-larger-than=]
+> 
+> core_sys_select() has a large stack allocation for `stack_fds` where it
+> tries to do something equivalent to "small string optimization" to
+> potentially avoid a kmalloc.
+> 
+> core_sys_select() calls do_select() which has another potentially large
+> stack allocation, `table`. Both of these values depend on
+> FRONTEND_STACK_ALLOC.
+> 
+> Mix those two large allocation with register spills which are
+> exacerbated by various configs and compiler versions and we can just
+> barely exceed the 1024B limit.
+> 
+> Rather than keep trying to find the right value of MAX_STACK_ALLOC or
+> FRONTEND_STACK_ALLOC, mark do_select() as noinline_for_stack.
+> 
+> The intent of FRONTEND_STACK_ALLOC is to help potentially avoid a
+> dynamic memory allocation. In that spirit, restore the previous
+> threshold but separate the stack frames.
+> 
+> Many tests of various configs for different architectures and various
+> versions of GCC were performed; do_select() was never inlined into
+> core_sys_select() or compat_core_sys_select(). The kernel is built with
+> the GCC specific flag `-fconserve-stack` which can limit inlining
+> depending on per-target thresholds of callee stack size, which helps
+> avoid the issue when using GCC. Clang is being more aggressive and not
+> considering the stack size when decided whether to inline or not. We may
+> consider using the clang-16+ flag `-finline-max-stacksize=` in the
+> future.
+> 
+> Link: https://lore.kernel.org/lkml/20221006222124.aabaemy7ofop7ccz@google.com/
+> Fixes: ad312f95d41c ("fs/select: avoid clang stack usage warning")
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Thanks for keeping these LLVM_IAS=0 builds alive a little longer.  My
-hope is the GNU binutils can relax their requirement for debug info
-sections to improve support for DWARF v5.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->
-> v2:
->     - Rebase on commit bb1435f3f575 ("Kconfig.debug: add toolchain
->       checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT") from the kbuild
->       tree.
->     - Limit CONFIG_AS_HAS_NON_CONST_LEB128 dependency to GNU as. There
->       is no point to applying this dependency to the integrated
->       assembler because it will always pass.
->     - Apply the CONFIG_AS_HAS_NON_CONST_LEB128 dependency to
->       CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT as well, due to the
->       aforementioned kbuild change.
->     - Move comment block to above CONFIG_AS_HAS_NON_CONST_LEB128, as the
->       configuration is now used in two places.
->     - Drop Conor's tested by, as the patch is different enough to
->       potentially require new testing.
->
-> v1: https://lore.kernel.org/20220928182523.3105953-1-nathan@kernel.org/
->
->  lib/Kconfig.debug | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index db8d9271cabf..5c1c63575895 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -231,6 +231,11 @@ config DEBUG_INFO
->           in the "Debug information" choice below, indicating that debug
->           information will be generated for build targets.
->
-> +# Clang is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which
-> +# some targets may not support: https://sourceware.org/bugzilla/show_bug.cgi?id=27215
-> +config AS_HAS_NON_CONST_LEB128
-> +       def_bool $(as-instr,.uleb128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)
-> +
->  choice
->         prompt "Debug information"
->         depends on DEBUG_KERNEL
-> @@ -253,7 +258,7 @@ config DEBUG_INFO_NONE
->  config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->         bool "Rely on the toolchain's implicit default DWARF version"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
->         help
->           The implicit default version of DWARF debug info produced by a
->           toolchain changes over time.
-> @@ -277,7 +282,7 @@ config DEBUG_INFO_DWARF4
->  config DEBUG_INFO_DWARF5
->         bool "Generate DWARF Version 5 debuginfo"
->         select DEBUG_INFO
-> -       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)
-> +       depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502 && AS_HAS_NON_CONST_LEB128)
->         help
->           Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
->           5.0+ accepts the -gdwarf-5 flag but only had partial support for some
->
-> base-commit: bb1435f3f575b5213eaf27434efa3971f51c01de
-> --
-> 2.38.0
->
-
-
---
-Thanks,
-~Nick Desaulniers
+> Changes v1 -> v2:
+> * Drop the 32b specific guard, since I could reproduce the no-inlining
+>   w/ aarch64-linux-gnu-gcc-10 ARCH=arm64 defconfig, and per Arnd.
+> * Drop references to 32b in commit message.
+> * Add new paragraph in commit message at the end about -fconserve-stack
+>   and -finline-max-stacksize=.
+> * s/malloc/kmalloc/ in commit message.
+> 
+>  fs/select.c          | 1 +
+>  include/linux/poll.h | 4 ----
+>  2 files changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/fs/select.c b/fs/select.c
+> index 0ee55af1a55c..794e2a91b1fa 100644
+> --- a/fs/select.c
+> +++ b/fs/select.c
+> @@ -476,6 +476,7 @@ static inline void wait_key_set(poll_table *wait, unsigned long in,
+>  		wait->_key |= POLLOUT_SET;
+>  }
+>  
+> +noinline_for_stack
+>  static int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
+>  {
+>  	ktime_t expire, *to = NULL;
+> diff --git a/include/linux/poll.h b/include/linux/poll.h
+> index a9e0e1c2d1f2..d1ea4f3714a8 100644
+> --- a/include/linux/poll.h
+> +++ b/include/linux/poll.h
+> @@ -14,11 +14,7 @@
+>  
+>  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
+>     additional memory. */
+> -#ifdef __clang__
+> -#define MAX_STACK_ALLOC 768
+> -#else
+>  #define MAX_STACK_ALLOC 832
+> -#endif
+>  #define FRONTEND_STACK_ALLOC	256
+>  #define SELECT_STACK_ALLOC	FRONTEND_STACK_ALLOC
+>  #define POLL_STACK_ALLOC	FRONTEND_STACK_ALLOC
+> -- 
+> 2.38.0.rc2.412.g84df46c1b4-goog
+> 
+> 
