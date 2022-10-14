@@ -1,170 +1,89 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3410440C
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 20:14:15 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-3562f0fb5a7so55354087b3.1
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:14:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B63440C
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 20:17:00 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id 129so5256325pgc.5
+        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s1u5FCYn8RsWrm4xJEN7PdURIEcHyxJb/9pj2n8isAA=;
-        b=fhvrXFoWhZpC391txksgdYNhBWOVQCBl52aYSUmgLmhInb9/MtPSZeYIGNH/ys8YWI
-         mQSvZiXV1v5iLGTGKg3WLOnb1cFS0+Th+kedZ2Q3zmcpiIRzT5RaNzsSxxtcaNVbbxQo
-         6C/ki/P9jwc6ECEEO3qyZ7BhL6tV27cjhxD/VeL/TfQ+p/pKemcqLqpJM6t6JMdBSclB
-         h82uZmMBfbIJIfgs+0ai9YWmfThqceTYpj/4W8VtdRmM96JMViT3MmTw9mDdKQfv3xvt
-         kEinfPe2PO+UwyaMeL2LurLmXdFoE/9L88IDkDSdt7gWv/6RRC+AabmHqrVrKTq57VGh
-         UuKA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9uRIcoHHJz9/gFQgE1VQpj6K6kcy16s5GCXSPDSWz4=;
+        b=HNA6dMTAcvloY9M5J90Db+W0xpQ45C2srAwJ1pL0+gxkF1JbTwXp/LqhGKlbAlzdTY
+         60H49gCz+iDQL2gbl+RNuwngV0a+jL6REBC6XYZA9uj4YugIfa1EAIRrq7LuLMxKIPr5
+         EADYMgZJgxiiTr+YVX9jbyIxvTOmyEhGq2Qw5NYLz0wi+4xjrukjgsVPfRK+wPIb/Rzr
+         eD2FjSLtdx1xgHjxXU9QPMAzO99i1tydmNWzZ0XJ1GE49+EIE2xqDx6IhwxYRCQ5BMpS
+         ikxj7fU7hZE59fz0AeWVV6mSRtSYH7O29VZbQMhyyfEqMbbnISu5W8IP5CgSj5OnMCR4
+         W6rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s1u5FCYn8RsWrm4xJEN7PdURIEcHyxJb/9pj2n8isAA=;
-        b=rh4LfDUEGcbdip+iO6pbzcXCB2O+V9xatSgEyPuZLcQz7dOt/5h05DUhPVF7Voxjfg
-         IrnFMMkg0MkBO9p8HHoSTm0zbfKx3n3+f8smfMzGClGQyut/kPZZXd0N3WQbFxNsj3Ei
-         jIQvpIIUMpftTeNDJtY4+ksyKTeQkb4qr5cf5BahhVpEHXbN0TkbZpVZLU2jETO8dj/T
-         mhDWEDIAjwOY7svwpObYsflQAO8KThDDwFVcUkzsyIJoiNumWnMl21cBGp2/9tkiSjhY
-         UoaldumrkMXTuEVEEvKcRkimo/RDGVklAcBMTysS6w1xeITyu7wqZSNZLVmSroD5syI2
-         omTw==
-X-Gm-Message-State: ACrzQf1H3doQgLCRN/2W6BD+Wv8xoMFplVI0aD6JNxcBGrDSxBO/N1+k
-	nhDbnvAcBsd1fJ91jmO81wp+uoQ+1kbBfpToJ04=
-X-Google-Smtp-Source: AMsMyM5LJchL6EFofTHHxs4MNR5XzLntxu/R6NAv2OzNylDOZxQp85yFrPbs85r8ne1/8BZAIoLHNBBM5axsYtLlCVM=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:2ba5:63af:4077:4515])
- (user=ndesaulniers job=sendgmr) by 2002:a0d:eb0d:0:b0:356:67be:73ca with SMTP
- id u13-20020a0deb0d000000b0035667be73camr6144943ywe.108.1665778454896; Fri,
- 14 Oct 2022 13:14:14 -0700 (PDT)
-Date: Fri, 14 Oct 2022 13:13:54 -0700
-In-Reply-To: <20221014201354.3190007-1-ndesaulniers@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d9uRIcoHHJz9/gFQgE1VQpj6K6kcy16s5GCXSPDSWz4=;
+        b=vJ1rcTifcJELyT9Rud4Qkx2tefoTD5GvnSgBiaVdgaCjmdP8vYFcgnbEX5aGy4IXMJ
+         MSNkJhUMUYRZNrcjeJtK0GZWvi6lRCfg3qz78t2l/hf5ZkLL6EZyLTKqcTy/EURXozzK
+         /rpqRvPvsZJIYW3Wll1JSaab7II0qiJizJrWjAL2gzPrvXi6u34NoeClZ8CKcdw+MK2p
+         fdsb8ys2if0rI5Na+VEV97I2p/WEP5woL15P6SvN2iHdoRzxJQWwL/CcLkAWJBPHZ7gN
+         baVNTK5lPzPv/rloEm1T/L9j10z1JqEySrx2vpFrrFIVDdK2vgd711XHah251p8PuNWj
+         FxSA==
+X-Gm-Message-State: ACrzQf2KWnCyKF4JF7qudQr6DKHBgYEVTSfcPs4m5AqjpVJovyW806R3
+	RLusvyACvHoHyoSgc7AIRNfG6mteBXTqHZBDZIW78g==
+X-Google-Smtp-Source: AMsMyM5xfbATi73WYV8RZgnDzrGNO9OZRqJyobu360Isyix61vSg0sq7gKJftcLC4q5SflGLTTLITg/mr1v7HdPS/ic=
+X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id
+ a145-20020a621a97000000b00562558712d6mr6952880pfa.37.1665778619944; Fri, 14
+ Oct 2022 13:16:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 References: <20221014201354.3190007-1-ndesaulniers@google.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665778434; l=4916;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=VxwVKVoT72n36JM/fgC34SDckwipa3adGbKwxRiCt2I=;
- b=rr6SNqvjfUP45yOE+YAm3SR9cD5RDQnj3V+GfQQxH8pSx9VoCaj7uytjS9DlnvEkq4VZJ0hzDBme
- Yv8fiIbkB02j4cJV0iSKr9y6pV5x0SIUrX0N5J9BqTNYul2wwy6r
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221014201354.3190007-5-ndesaulniers@google.com>
-Subject: [PATCH v4 4/4] ARM: pass -march= only to compiler
+In-Reply-To: <20221014201354.3190007-1-ndesaulniers@google.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: Russell King <rmk+kernel@armlinux.org.uk>
+Date: Fri, 14 Oct 2022 13:16:47 -0700
+Message-ID: <CAKwvOdmio0+hq0wmoxySrGQW8fii860OYiLV-eebcPMkqKNoJw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] pass -march= only to compiler
+To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
+	Linus Walleij <linus.walleij@linaro.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 
-When both -march= and -Wa,-march= are specified for assembler or
-assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
-value but Clang will warn that -march= is unused.
+On Fri, Oct 14, 2022 at 1:14 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> When both -march= and -Wa,-march= are specified for assembler or
+> assembler-with-cpp sources, GCC and Clang will prefer the -Wa,-march=
+> value but Clang will warn that -march= is unused.
+>
+> warning: argument unused during compilation: '-march=armv6k'
+> [-Wunused-command-line-argument]
+>
+> This is the top group of warnings we observe when using clang to
+> assemble the kernel via `ARCH=arm make LLVM=1`.
+>
+> Arnd sent a v2 of my previous patch
+> https://lore.kernel.org/linux-arm-kernel/20210928154143.2106903-14-arnd@kernel.org/
+> I added yet a few more instances I found since then. Nathan pointed out
+> a new one too that I've fixed since v3.
+>
+> Fixing this will allow us to enable
+> -Werror=unused-command-line-argument for clang builds.
+>
+> v3 had an issue wrt. __thumb2__
+> https://lore.kernel.org/llvm/CAKwvOdmkd2PxvMUZA=A-72eATGDZkqDj--Bv1W+Xt_K_LWdROA@mail.gmail.com/
+> I've incorporated idea from Nathan and Ard on that.
 
-warning: argument unused during compilation: '-march=armv6k'
-[-Wunused-command-line-argument]
-
-This is the top group of warnings we observe when using clang to
-assemble the kernel via `ARCH=arm make LLVM=1`.
-
-Split the arch-y make variable into two, so that -march= flags only get
-passed to the compiler, not the assembler. -D flags are added to
-KBUILD_CPPFLAGS which is used for both C and assembler-with-cpp sources.
-
-Clang is trying to warn that it doesn't support different values for
--march= and -Wa,-march= (like GCC does, but the kernel doesn't need this)
-though the value of the preprocessor define __thumb2__ is based on
--march=. Make sure to re-set __thumb2__ via -D flag for assembler
-sources now that we're no longer passing -march= to the assembler. Set
-it to a different value than the preprocessor would for -march= in case
--march= gets accidentally re-added to KBUILD_AFLAGS in the future.
-Thanks to Ard and Nathan for this suggestion.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1315
-Link: https://github.com/ClangBuiltLinux/linux/issues/1587
-Link: https://github.com/llvm/llvm-project/issues/55656
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes v3 -> v4:
-* Add -D__thumb2__=2 to KBUILD_AFLAGS as per in-person discussion with
-  Ard and Nathan, and their SB tags.
-* Reword commit message.
-
- arch/arm/Makefile | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
-
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index ee888070b2ff..b58998749ead 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -60,21 +60,34 @@ endif
- KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
- 
- # This selects which instruction set is used.
-+arch-$(CONFIG_CPU_32v7M)	:=-march=armv7-m
-+arch-$(CONFIG_CPU_32v7)		:=-march=armv7-a
-+arch-$(CONFIG_CPU_32v6)		:=-march=armv6
-+# Only override the compiler option if ARMv6. The ARMv6K extensions are
-+# always available in ARMv7
-+ifeq ($(CONFIG_CPU_32v6),y)
-+arch-$(CONFIG_CPU_32v6K)	:=-march=armv6k
-+endif
-+arch-$(CONFIG_CPU_32v5)		:=-march=armv5te
-+arch-$(CONFIG_CPU_32v4T)	:=-march=armv4t
-+arch-$(CONFIG_CPU_32v4)		:=-march=armv4
-+arch-$(CONFIG_CPU_32v3)		:=-march=armv3m
-+
- # Note that GCC does not numerically define an architecture version
- # macro, but instead defines a whole series of macros which makes
- # testing for a specific architecture or later rather impossible.
--arch-$(CONFIG_CPU_32v7M)	:=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
--arch-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
--arch-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6 -march=armv6
--# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
-+cpp-$(CONFIG_CPU_32v7M)		:=-D__LINUX_ARM_ARCH__=7
-+cpp-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7
-+cpp-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6
-+# Only override the compiler option if ARMv6. The ARMv6K extensions are
- # always available in ARMv7
- ifeq ($(CONFIG_CPU_32v6),y)
--arch-$(CONFIG_CPU_32v6K)	:=-D__LINUX_ARM_ARCH__=6 -march=armv6k
-+cpp-$(CONFIG_CPU_32v6K)		:=-D__LINUX_ARM_ARCH__=6
- endif
--arch-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5 -march=armv5te
--arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
--arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
--arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3m
-+cpp-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5
-+cpp-$(CONFIG_CPU_32v4T)		:=-D__LINUX_ARM_ARCH__=4
-+cpp-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4
-+cpp-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3
- 
- # This selects how we optimise for the processor.
- tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
-@@ -119,15 +132,16 @@ AFLAGS_NOWARN	:=$(call as-option,-Wa$(comma)-mno-warn-deprecated,-Wa$(comma)-W)
- 
- ifeq ($(CONFIG_THUMB2_KERNEL),y)
- CFLAGS_ISA	:=-mthumb -Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
--AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb
-+AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb -D__thumb2__=2
- else
- CFLAGS_ISA	:=$(call cc-option,-marm,) $(AFLAGS_NOWARN)
- AFLAGS_ISA	:=$(CFLAGS_ISA)
- endif
- 
- # Need -Uarm for gcc < 3.x
-+KBUILD_CPPFLAGS	+=$(cpp-y)
- KBUILD_CFLAGS	+=$(CFLAGS_ABI) $(CFLAGS_ISA) $(arch-y) $(tune-y) $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,)) -msoft-float -Uarm
--KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include asm/unified.h -msoft-float
-+KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) -Wa,$(arch-y) $(tune-y) -include asm/unified.h -msoft-float
- 
- CHECKFLAGS	+= -D__arm__
- 
+I probably should have made a note: the base of this series is a
+little funny.  It's based on today's linux-next (20221014) but with
+0a7606a9832ab375a38425a659bda13712ca89ae reverted.  It sounds like
+0a7606a9832ab375a38425a659bda13712ca89ae might be dropped from -next
+imminently
+https://lore.kernel.org/linux-next/CAK7LNARg8OpqLR_71PJV3ZoLuDV8+mz9mphg=CzEeEEMY0G3rw@mail.gmail.com/.
 -- 
-2.38.0.413.g74048e4d9e-goog
-
+Thanks,
+~Nick Desaulniers
