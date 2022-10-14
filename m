@@ -1,56 +1,56 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105F1364
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 16:48:02 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id 189-20020a2516c6000000b006bbbcc3dd9bso4777438ybw.15
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 09:48:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41D133CA
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 16:53:06 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-33dc888dc62so50825567b3.4
+        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 09:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZK2Ju4zSJK/cFpoidH2hzfPFGWx+ElmNubQLi9yMXQ=;
-        b=ODM98BgJ/cKX1b/UZJZWr5JmMNrGuznQCVCMo06L5Ss1vTUP23ycGuGpUMPjwuSDKp
-         j36q2FVyfTmyxl+/RJbca7QQ40v9VCiLGiqDQWeo0Bd4LUDepGc88Zcert4lHdJPfpDR
-         COKUqItbECqRdReNDe0V2UqnP+u+g9lUME5ch1ulxh1KicqbP01tRq5wJrc/231XyPa7
-         R9+jLT5Nnk1UHImgA8Fe1p5k6y0qOQc8REE136O/uD1KeJIdGHsylPzXJjfnSEBpavnV
-         odxcZndY4511ArXjpnT+W+mbaAjUwnQbV0dYgkPK6uLnG+L2O4SdXweCgGu41fPagJsI
-         B76Q==
+        bh=Xc0BD757OBRsWzCUX9oyngIwjPQp+BAyfWqnsfk61u8=;
+        b=ioc3m6C5Fm/7qjEnH220M8dI3J7PTpr2dgi5QH5knbwJSaMVZo3DOqoVftmEFc47uu
+         W/XNCfPuCaPU/lK8Ubz8O0FeUc0ZkQyUaEisH2Yj+VAgrBTfdxCDRVLbpuDRxFCap6Qr
+         3qOBQ5T3dcWgZuwvW97ingzURD8DirZTk3f/mtLpAUdN3kYgDM5m7SvkNzkicBLv7LVF
+         Ps+K0ygARA3b8OW44TOQ0TZrvNby3xXW+dp1QmQ9/ckbd4lgL25p6VBIY5KTthYdNqi5
+         yqeKNRiFt8o8zVZaa37WDrhsuD9QD1pslQfcD/7KLv71DzgKqUj0KrdUd5zafiWy3L2U
+         yHzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZK2Ju4zSJK/cFpoidH2hzfPFGWx+ElmNubQLi9yMXQ=;
-        b=umh23DPXcmfRaZGSa1Lju6hzfnZw8EnGDnDCTvPnkZ58419uIlcNDlHS1McWVuUOsM
-         7MkddxcYBSNjOt4vm6JV2xG4PfQvakpeckzKA6LlbOJaOXpfWitLMkd8bdEF2zO+RMI8
-         LdUsHhR7XZ9S4FqSEND9jTRgeEN7pUGSdtERhVi7KllHR9/J0QFOXDnzqzSNKs3e1hmq
-         rOqGNyVxhlWqFoZZPFNV6hSgo/vPsyFr4Wb1/9NZQCQnmwdFv+4MMCWRCb8+R0fqKaVY
-         RSUVkfAuiEWNZVl8cs+zsI4hbJmFamO3OmmNlV+6IcCCH8cAfDXmELwnFDiNWKGjxV+h
-         VEmg==
-X-Gm-Message-State: ACrzQf3Q6zvfNi8tH132P38QxXP00FDBvqC1sX2HhEId6DZet39ypvnu
-	8WtKjozPiFMapGW0ZESnWMDDogloN/S65NpK11Q=
-X-Google-Smtp-Source: AMsMyM5v9kUJtiJrQNAYWu6hHLvOpX+vIujvu+NwJcpv1H+JJe66wf45HAi7nkt9Ldh+JszCV15k0iGrMXtD83KH7fk=
+        bh=Xc0BD757OBRsWzCUX9oyngIwjPQp+BAyfWqnsfk61u8=;
+        b=ilGa0MV3aZVAs/KkkMM49mRn7t7bD8D72u6slaITe2EATdyvrpdJafA+pZavVui411
+         zeW3Hvr20zLIC20H+UNju8Xo6Ki7vXvsB+wDgI6nnLbhX6S4N+5wTAnznCH1y84diuzb
+         9Yi/QqAD88hRbBKRQCbjyfvH3l3oBy+qqZf9Pkvj/GZmCDpD1UYOsiaSD8LDlIu5v/xm
+         sxluOMy5EiOIT2rSPDoTgsupywgHVRPcxnnIz7Ii11IGNj14tTrUJP01JZmCWGq5YQJF
+         y7YKMdNy/ejXLVxxqhQLES7hRYQgZTPoH3w1CAnXnovWd3RebWKTJ+bVIA4/IEEMN2aM
+         RLeA==
+X-Gm-Message-State: ACrzQf25X5gc8n87bAjD9f9bVSApj+gdTFzSYgqrRZG5ZxDPXI0N/x8m
+	1JJ+iEsh8CxnmEu9HLg3ASNGVO8rCReyxSzhpP4=
+X-Google-Smtp-Source: AMsMyM6R/JyO3K9ikaIzjDtG/9LUjuv/rAAlcjNa1CT0oDMtyliH9swRPu7SzFz8mSGv7Rfu1AQoWBRF9MD8foW7/04=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:ff3e:881c:4c2c:b8c9])
- (user=ndesaulniers job=sendgmr) by 2002:a81:468b:0:b0:364:8aa:8196 with SMTP
- id t133-20020a81468b000000b0036408aa8196mr4253949ywa.468.1665766082016; Fri,
- 14 Oct 2022 09:48:02 -0700 (PDT)
-Date: Fri, 14 Oct 2022 09:47:56 -0700
-In-Reply-To: <CAK7LNAT7yY3VL=so0+h=fsefT2QXsKHn4KjCFJ5VtGGkvSRjLg@mail.gmail.com>
+ (user=ndesaulniers job=sendgmr) by 2002:a25:7c41:0:b0:6b4:fa81:9803 with SMTP
+ id x62-20020a257c41000000b006b4fa819803mr5331099ybc.592.1665766386031; Fri,
+ 14 Oct 2022 09:53:06 -0700 (PDT)
+Date: Fri, 14 Oct 2022 09:53:02 -0700
+In-Reply-To: <20221014164756.843991-1-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-References: <CAK7LNAT7yY3VL=so0+h=fsefT2QXsKHn4KjCFJ5VtGGkvSRjLg@mail.gmail.com>
+References: <20221014164756.843991-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665766076; l=2224;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=8DTYldYpKZ2G8xj/84VezeBfD7KI9kJfAVZPcDwBDkg=;
- b=+Ngjjr5PZ7w9Yvg5XA7ztowz8vknz4VbMPJYWfMddmK/y0ivoHQAWynJyc9xe1DztL5gowdoj2P1
- BW8svoFJCzo84gyAnzQnjhXR+4Up0E0cV9bvMqJhVip6S+oas4Ro
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1665766382; l=2345;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=8HfLbf4qs/mk/4RV44RQCCc8Q6kO5IPcR6SJl0HTqUI=;
+ b=ItISVPZeSrDGVs3uBlS4saLOlHhj6pQ08OLur37IOFyLGVWyNIsnXGAvDmo56prRy6IxulxHD1V/
+ AH3DpJIBDLDuLrWr+6cIPVK6SM1+HlS2KyrAeWgFOjin7RDxUMJJ
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221014164756.843991-1-ndesaulniers@google.com>
-Subject: [PATCH v2] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
+Message-ID: <20221014165302.845203-1-ndesaulniers@google.com>
+Subject: [PATCH v3] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
 From: Nick Desaulniers <ndesaulniers@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
@@ -87,7 +87,7 @@ As Fangrui notes:
   A LLVM_ENABLE_ASSERTIONS=on build of Clang defaults to
   -fno-discard-value-names.
 
-Explicitly enable -fdiscard-value-names so that the IR always contains
+Explicitly enable -fno-discard-value-names so that the IR always contains
 value names regardless of whether assertions were enabled or not.
 Assertions generally are not enabled in releases of clang packaged by
 distributions.
@@ -97,14 +97,16 @@ Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Reviewed-by: Fangrui Song <maskray@google.com>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
+Changes v2 -> v3:
+* Fix typo in commit message
+  "enable -fdiscard-value-names" -> "enable -fno-discard-value-names"
+
 Changes v1 -> v2:
 * Only update commit message:
   * Pick up Nathan & Fangrui's RB tags.
   * Add link (I forgot I filed a bug about this a while ago!).
   * Add note from Fangrui.
   * Add final paragraph.
-
-
  scripts/Makefile.build | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
