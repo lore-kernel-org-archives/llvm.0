@@ -1,150 +1,215 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1350523D2
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 14:40:11 +0000 (UTC)
-Received: by mail-io1-f41.google.com with SMTP id h203so4045369iof.1
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 07:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gqNU3jyIKdP2LeNPDch6KlM75RQE0z3FFP6RVfvlhuM=;
-        b=bOZwXqjmw7sX8px0+Lq1iBo8giDDyRK0xiJO9OwdoKqeV1HX0S+EZc16NmoDZ3CreO
-         E3MsKXQNl8pOLt9wKYBMoUbK8LMoUsAhlVXPRyC3f/gN4Jhi9BrrjbNAspvqnLGhRNRi
-         67pzpwb+iThnF6UR0j3G/qaIxYxN0kn8C80RC3s1jnu899Zj4TgbKzaQgAB9ReHmRjcP
-         XrdIZgeVELwuXJEq7d9BEfq7PGtbOhbzc2+ObHITZOjbGju5C7nmlA5elNU1ObdBPamj
-         StKKbp+pt2rm7wAgOIJKzscSzTIZgFDpxUDFoXX7coX+Hq/+qzDa8Ki3cZiAi5jKCYZk
-         R5lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gqNU3jyIKdP2LeNPDch6KlM75RQE0z3FFP6RVfvlhuM=;
-        b=rXZoVt/zMfQhb6ZewIewiNbPubFG0rkmMPpCbrulpe7sYs+5TPB+cfwVxyi9nfZd31
-         +DR+ZFFJgU1V7bzPSYnycJpD+OeYxePt067/TjJXsHZk2XFx01gc7vNZKrU9jFwZINvi
-         VT2xUR9YqHEtByt3KluOxJjzP0nYzGZWnLUNtx6fMfhe1AslN8TYNnUraOvtv23Vvzrp
-         VoQfuUboVEd+Gm3FQT80Oq4vsfcQBfjvAiSrG4qCims8mQX6nKO2LKuleVx/zlSwCQaq
-         /8an1eEIpVFiLxLXH9OHFoYCTERR0+xp8Tkenh4Q16y7O0X57KioZKDwN2ydDAmPUIKA
-         krVA==
-X-Gm-Message-State: ACrzQf2LgxY160BHNga8RQNq3LyUPtNKwx8JNBhKSNDfsVrNwH+aojr4
-	XXQ4jVUqh9vZm0I3vyL8D+eB+Kpzg2JtGyoQWcw=
-X-Google-Smtp-Source: AMsMyM7FQagympQoF02w3NjUUBCYlwsxqfgUO0qOaLc+FgBJvwDwQYVryxvfwBHP7BeFHYosXU5c9eiwuRqFCvXiKUI=
-X-Received: by 2002:a05:6602:1509:b0:69b:35ba:4720 with SMTP id
- g9-20020a056602150900b0069b35ba4720mr2422187iow.155.1665758411053; Fri, 14
- Oct 2022 07:40:11 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A0F3205
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 15:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1665760845;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dcNaxvAH75cI2ipzwuclBiJFlHvqOutt416uMeHdutg=;
+	b=YVlaez90M09NKQwvke23TVtxr5rl3Y52r+y3VispSziMOLZQQcfqZ/HLx2vjNY055QygAH
+	3L8s0diAv5/D0IMZhhP+LtiAtOGS00qtcv12rxhfhtIR+Zwea6ySkkOfsEoiOYC/7G45Mb
+	oP7vEO9dQmS5UepDWAzXm2Pe1EOFT6E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-0Esc4oOZOrCrnVC3MoBW6Q-1; Fri, 14 Oct 2022 11:20:43 -0400
+X-MC-Unique: 0Esc4oOZOrCrnVC3MoBW6Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA96B3C10689
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 15:20:43 +0000 (UTC)
+Received: from [172.64.9.11] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9955640FF681;
+	Fri, 14 Oct 2022 15:20:43 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
+ mainline.kernel.org-clang, 6d84c258)
+Date: Fri, 14 Oct 2022 15:20:43 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221011171427.58891-1-masahiroy@kernel.org>
-In-Reply-To: <20221011171427.58891-1-masahiroy@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 14 Oct 2022 16:39:59 +0200
-Message-ID: <CANiq72kvaPGr=2S6J7q7gfEg_CauHUfhuLmABpktfUPfK+_Hvg@mail.gmail.com>
-Subject: Re: [PATCH v2] Remove Intel compiler support
-To: Masahiro Yamada <masahiroy@kernel.org>, Nick Terrell <terrelln@fb.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-ia64@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Len Brown <lenb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Robert Moore <robert.moore@intel.com>, Tom Rix <trix@redhat.com>, 
-	devel@acpica.org, linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <19838.122101411204301484@us-mta-470.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 11, 2022 at 7:16 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index 898b3458b24a..9221302f6ae8 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -64,16 +64,10 @@
->   * compiler should see some alignment anyway, when the return value is
->   * massaged by 'flags = ptr & 3; ptr &= ~3;').
->   *
-> - * Optional: not supported by icc
-> - *
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-assume_005faligned-function-attribute
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#assume-aligned
->   */
-> -#if __has_attribute(__assume_aligned__)
-> -# define __assume_aligned(a, ...)       __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
-> -#else
-> -# define __assume_aligned(a, ...)
-> -#endif
-> +#define __assume_aligned(a, ...)        __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
+Hi, we tested your kernel and here are the results:
 
-Thanks for cleaning the conditional inclusion here. I double-checked
-it is indeed available for both GCC and Clang current minimum versions
-just in case: https://godbolt.org/z/PxaqeEdcE.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> diff --git a/lib/zstd/common/compiler.h b/lib/zstd/common/compiler.h
-> index f5a9c70a228a..c281a6430cd4 100644
-> --- a/lib/zstd/common/compiler.h
-> +++ b/lib/zstd/common/compiler.h
-> @@ -116,7 +116,7 @@
->
->  /* vectorization
->   * older GCC (pre gcc-4.3 picked as the cutoff) uses a different syntax */
-> -#if !defined(__INTEL_COMPILER) && !defined(__clang__) && defined(__GNUC__)
-> +#if !defined(__clang__) && defined(__GNUC__)
->  #  if (__GNUC__ == 4 && __GNUC_MINOR__ > 3) || (__GNUC__ >= 5)
->  #    define DONT_VECTORIZE __attribute__((optimize("no-tree-vectorize")))
->  #  else
 
-These files come from upstream Zstandard -- should we keep those lines
-to minimize divergence?
-https://github.com/facebook/zstd/blob/v1.4.10/lib/common/compiler.h#L154.
+Kernel information:
+    Commit message: Merge tag 'devicetree-fixes-for-6.1-1' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/robh/linux
 
-Commit e0c1b49f5b67 ("lib: zstd: Upgrade to latest upstream zstd
-version 1.4.10") is the latest upgrade, and says:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/56253
 
-    This patch is 100% generated from upstream zstd commit 20821a46f412 [0].
+One or more kernel tests failed:
 
-    This patch is very large because it is transitioning from the custom
-    kernel zstd to using upstream directly. The new zstd follows upstreams
-    file structure which is different. Future update patches will be much
-    smaller because they will only contain the changes from one upstream
-    zstd release.
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5512938
 
-So I think Nick would prefer to keep the changes as minimal as
-possible with respect to upstream.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] WARNING: possible circular locking dependency det=
+ected: at: __flush_work+0xea/0x6b0 at: sugov_work+0x5f/0x90 powernow_k8
+            URL: https://lore.kernel.org/all/dada2033-1db5-4205-319b-0308db=
+ccd3b5@redhat.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - software RAID testing
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
+al_clmulni]
+            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
+hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: stress: stress-ng - cpu: perf: interrupt took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1034
+            Affected tests:
+                  x86_64 - stress: stress-ng - cpu-cache
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
+                  x86_64 - Networking bridge: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
-Further reading seems to suggest this is the case, e.g. see this
-commit upstream that introduces a space to match the kernel:
-https://github.com/facebook/zstd/commit/b53da1f6f499f0d44c5f40795b080d967b24e5fa.
 
-> diff --git a/lib/zstd/compress/zstd_fast.c b/lib/zstd/compress/zstd_fast.c
-> index 96b7d48e2868..800f3865119f 100644
-> --- a/lib/zstd/compress/zstd_fast.c
-> +++ b/lib/zstd/compress/zstd_fast.c
-> @@ -80,13 +80,6 @@ ZSTD_compressBlock_fast_generic(
->      }
->
->      /* Main Search Loop */
-> -#ifdef __INTEL_COMPILER
-> -    /* From intel 'The vector pragma indicates that the loop should be
-> -     * vectorized if it is legal to do so'. Can be used together with
-> -     * #pragma ivdep (but have opted to exclude that because intel
-> -     * warns against using it).*/
-> -    #pragma vector always
-> -#endif
->      while (ip1 < ilimit) {   /* < instead of <=, because check at ip0+2 */
->          size_t mLength;
->          BYTE const* ip2 = ip0 + 2;
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-Ditto: https://github.com/facebook/zstd/blob/v1.4.10/lib/compress/zstd_fast.c#L83.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Apart from the zstd divergence which I am not sure about, everything
-looks good to me!
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-
-Cheers,
-Miguel
