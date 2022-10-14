@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0048B20F8
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C05FC433D6;
-	Fri, 14 Oct 2022 13:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA38620F8
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:55:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456E2C4347C;
+	Fri, 14 Oct 2022 13:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665755694;
+	s=k20201202; t=1665755708;
 	bh=N7qjOu8AM4o2tEFVFWLtqsDSfSJXOTnsmwUIOChiYk8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HNDJOAoAAm8+hOfY2uYyAJujEnSDwITjQfjReVQzoC0yEaU6cffnc6OGzpdwVkjQX
-	 DCSckziW71BnQL8mmbJwFqTzXfUOfDolkQSbPdPi7QB4ktToOrgcASEV6oH2IDWg7x
-	 wwrcSUbg6vpHa81dwpa+uDNDG5ROBIEUzH5kIK33L1fPxjoHB+E2+bqjvhvmnReCj/
-	 blNJBbiieF9bqeaDhjNvUASzU2NVDqPVfKidQEBHL7gphwppPjVcwAl5B+wM7aEFA1
-	 zd+/z9Mx3Ge+rPexs8TFfKK6LSp7mBG7btfabY9mjTdj5XIh30ZSxFyvrV9ILapOBK
-	 ZADyIvFwvHm1g==
+	b=BkTrXLYUALuU6/9hlVAxeteCsotkWKIIc4NQXf5qRQn/7mAnTvwifd3Kuczr9oIU+
+	 aM2f2vRy2wQGU4NFG87BLraK05CQDfzGfn45iQ4rbRyal/w3f5SnWG6hK4cKwWi0no
+	 2tItU2V4wg+9tbwIuBZ8WxUfO7v8CifF7/2R22uVDYEqmyagTZNerxwv5cGXPzRgZF
+	 xqp4b0jNW92jf5b7hF7KyZ+zEfMv7aUnpyK4WgbhXFn64JicYfEJOk3kP/HuH9OCJN
+	 XkTL0HifctEjU8PL2jki4welqKb/u/iPqJ6MmGGmUhJwi3pmdhnbpp1EEj8G5jCBYU
+	 Y6wKimWxeDxKw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,17 +26,17 @@ Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	oss@buserror.net,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	christophe.leroy@csgroup.eu,
 	Julia.Lawall@inria.fr,
+	christophe.leroy@csgroup.eu,
 	nick.child@ibm.com,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 2/4] powerpc/85xx: Fix fall-through warning for Clang
-Date: Fri, 14 Oct 2022 09:54:45 -0400
-Message-Id: <20221014135448.2110152-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 2/3] powerpc/85xx: Fix fall-through warning for Clang
+Date: Fri, 14 Oct 2022 09:54:59 -0400
+Message-Id: <20221014135502.2110218-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221014135448.2110152-1-sashal@kernel.org>
-References: <20221014135448.2110152-1-sashal@kernel.org>
+In-Reply-To: <20221014135502.2110218-1-sashal@kernel.org>
+References: <20221014135502.2110218-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
