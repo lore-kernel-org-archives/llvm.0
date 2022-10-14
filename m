@@ -1,128 +1,120 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41D133CA
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 16:53:06 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-33dc888dc62so50825567b3.4
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 09:53:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D6E2F5B
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 18:42:51 +0000 (UTC)
+Received: by mail-qv1-f54.google.com with SMTP id l19so3794423qvu.4
+        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 11:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xc0BD757OBRsWzCUX9oyngIwjPQp+BAyfWqnsfk61u8=;
-        b=ioc3m6C5Fm/7qjEnH220M8dI3J7PTpr2dgi5QH5knbwJSaMVZo3DOqoVftmEFc47uu
-         W/XNCfPuCaPU/lK8Ubz8O0FeUc0ZkQyUaEisH2Yj+VAgrBTfdxCDRVLbpuDRxFCap6Qr
-         3qOBQ5T3dcWgZuwvW97ingzURD8DirZTk3f/mtLpAUdN3kYgDM5m7SvkNzkicBLv7LVF
-         Ps+K0ygARA3b8OW44TOQ0TZrvNby3xXW+dp1QmQ9/ckbd4lgL25p6VBIY5KTthYdNqi5
-         yqeKNRiFt8o8zVZaa37WDrhsuD9QD1pslQfcD/7KLv71DzgKqUj0KrdUd5zafiWy3L2U
-         yHzg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9T8jQNwButrrQoYqMshRtxbE6/ysi6nkPvoph0oCh4=;
+        b=NZ+mnzMKjGzR20/DcjUW/jqBO2up2/pWNkWfpdBbp8dzS0x1xoVipOTEav2dPPlnam
+         1iam/ch44zJEDumTd2/KgTRPNkNMPl+jZY/tNG4MRytK0oOqZelynAWHJf/zZ8o8TZZB
+         +PJJlkqcVf1pS+tWQiJhPkSpSj45t0OtLAFTxO3EnEkSamYkv1RSVVdw+AivjLQkWpPl
+         GKA6ZXOaJCkt8JLzbGOA+EQhZtmsHw/GJfs5ExIberWdaIPK/k4jrJqKreRFy8ZgtQjq
+         J37+/wy2zIaI6EPqv1s/P6ovTemtvaMECbzJqEiSTfFtNb2aYgmF+Nj5aWJSQ4Nge5gf
+         ZGHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xc0BD757OBRsWzCUX9oyngIwjPQp+BAyfWqnsfk61u8=;
-        b=ilGa0MV3aZVAs/KkkMM49mRn7t7bD8D72u6slaITe2EATdyvrpdJafA+pZavVui411
-         zeW3Hvr20zLIC20H+UNju8Xo6Ki7vXvsB+wDgI6nnLbhX6S4N+5wTAnznCH1y84diuzb
-         9Yi/QqAD88hRbBKRQCbjyfvH3l3oBy+qqZf9Pkvj/GZmCDpD1UYOsiaSD8LDlIu5v/xm
-         sxluOMy5EiOIT2rSPDoTgsupywgHVRPcxnnIz7Ii11IGNj14tTrUJP01JZmCWGq5YQJF
-         y7YKMdNy/ejXLVxxqhQLES7hRYQgZTPoH3w1CAnXnovWd3RebWKTJ+bVIA4/IEEMN2aM
-         RLeA==
-X-Gm-Message-State: ACrzQf25X5gc8n87bAjD9f9bVSApj+gdTFzSYgqrRZG5ZxDPXI0N/x8m
-	1JJ+iEsh8CxnmEu9HLg3ASNGVO8rCReyxSzhpP4=
-X-Google-Smtp-Source: AMsMyM6R/JyO3K9ikaIzjDtG/9LUjuv/rAAlcjNa1CT0oDMtyliH9swRPu7SzFz8mSGv7Rfu1AQoWBRF9MD8foW7/04=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:ff3e:881c:4c2c:b8c9])
- (user=ndesaulniers job=sendgmr) by 2002:a25:7c41:0:b0:6b4:fa81:9803 with SMTP
- id x62-20020a257c41000000b006b4fa819803mr5331099ybc.592.1665766386031; Fri,
- 14 Oct 2022 09:53:06 -0700 (PDT)
-Date: Fri, 14 Oct 2022 09:53:02 -0700
-In-Reply-To: <20221014164756.843991-1-ndesaulniers@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9T8jQNwButrrQoYqMshRtxbE6/ysi6nkPvoph0oCh4=;
+        b=1dBimGwCkiPQx2qHBiPRBvJkJ/jdbo5DZD26hN6iEc6Pqd/uOfmzTUW8NmWwkR3EEX
+         F1zBZlACtYmdo86QBUXyjZMbgo1NF4PBM7dk2tEKJu+ZEVOP8sGLYAFlE3m7pL6vjxNb
+         nZl8Fa78yXX1l+E8pqtECCO8ksafuOje5l4E6b7zSiH45N/xyhhNFP7RnZpxHK6fpJxJ
+         X67kCkyBYqkAyFr37YTbK8wJ9r4k/L0Wd3Yp85JuNwQB+mXK554gpVjZE9JjZ4AivZbo
+         deAv2ycGZ+7jrWiBuaOaZgkdnPx6FkrXnvoJTx+8U8tI1HyA4heAQM2xzKro2HJxlxnA
+         RjvA==
+X-Gm-Message-State: ACrzQf2dNiVg86e9Lv+nknWPcBN/PRGeQwTO1napN9IWmXcs+21ejrT4
+	AMPnXXvC579aYihq6UZNhXU=
+X-Google-Smtp-Source: AMsMyM59QX20NproZZLr6f8lAomXJGjze6pXpwJ3i6f8PkAyt8h2Y3hNSGyyzPU8j5uKZtHLzqOnwA==
+X-Received: by 2002:ad4:5aee:0:b0:4b4:595:fb54 with SMTP id c14-20020ad45aee000000b004b40595fb54mr5414058qvh.5.1665772970400;
+        Fri, 14 Oct 2022 11:42:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:b45a:72e4:d631:1b4c? ([2600:1700:2442:6db0:b45a:72e4:d631:1b4c])
+        by smtp.gmail.com with ESMTPSA id bm9-20020a05620a198900b006e42a8e9f9bsm3222120qkb.121.2022.10.14.11.42.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Oct 2022 11:42:49 -0700 (PDT)
+Message-ID: <90998e63-056e-52e6-03d2-775fc65d901d@gmail.com>
+Date: Fri, 14 Oct 2022 13:42:48 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20221014164756.843991-1-ndesaulniers@google.com>
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1665766382; l=2345;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=8HfLbf4qs/mk/4RV44RQCCc8Q6kO5IPcR6SJl0HTqUI=;
- b=ItISVPZeSrDGVs3uBlS4saLOlHhj6pQ08OLur37IOFyLGVWyNIsnXGAvDmo56prRy6IxulxHD1V/
- AH3DpJIBDLDuLrWr+6cIPVK6SM1+HlS2KyrAeWgFOjin7RDxUMJJ
-X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221014165302.845203-1-ndesaulniers@google.com>
-Subject: [PATCH v3] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Nick Desaulniers <ndesaulniers@google.com>, Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] of: declare string literals const
+Content-Language: en-US
+To: =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20221012174622.45006-1-cgzones@googlemail.com>
+From: Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20221012174622.45006-1-cgzones@googlemail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-When debugging LLVM IR, it can be handy for clang to not discard value
-names used for local variables and parameters. Compare the generated IR.
+On 10/12/22 12:46, Christian Göttsche wrote:
+> of_overlay_action_name() returns a string literal from a function local
+> array.  Modifying string literals is undefined behavior which usage of
+> const pointer can avoid.  of_overlay_action_name() is currently only
+> used once in overlay_notify() to print the returned value.
+> 
+> While on it declare the data array const as well.
+> 
+> Reported by Clang:
+> 
+>     In file included from arch/x86/kernel/asm-offsets.c:22:
+>     In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
+>     In file included from ./include/linux/kvm_host.h:19:
+>     In file included from ./include/linux/msi.h:23:
+>     In file included from ./arch/x86/include/asm/msi.h:5:
+>     In file included from ./arch/x86/include/asm/irqdomain.h:5:
+>     In file included from ./include/linux/irqdomain.h:35:
+>     ./include/linux/of.h:1555:3: error: initializing 'char *' with an expression of type 'const char[5]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "init",
+>                     ^~~~~~
+>     ./include/linux/of.h:1556:3: error: initializing 'char *' with an expression of type 'const char[10]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "pre-apply",
+>                     ^~~~~~~~~~~
+>     ./include/linux/of.h:1557:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "post-apply",
+>                     ^~~~~~~~~~~~
+>     ./include/linux/of.h:1558:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "pre-remove",
+>                     ^~~~~~~~~~~~
+>     ./include/linux/of.h:1559:3: error: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+>                     "post-remove",
+>                     ^~~~~~~~~~~~~
+> 
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> ---
+>  include/linux/of.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/of.h b/include/linux/of.h
+> index 6b79ef9a6541..8b9f94386dc3 100644
+> --- a/include/linux/of.h
+> +++ b/include/linux/of.h
+> @@ -1549,9 +1549,9 @@ enum of_overlay_notify_action {
+>  	OF_OVERLAY_POST_REMOVE,
+>  };
+>  
+> -static inline char *of_overlay_action_name(enum of_overlay_notify_action action)
+> +static inline const char *of_overlay_action_name(enum of_overlay_notify_action action)
+>  {
+> -	static char *of_overlay_action_name[] = {
+> +	static const char *const of_overlay_action_name[] = {
+>  		"init",
+>  		"pre-apply",
+>  		"post-apply",
 
--fdiscard-value-names:
-  define i32 @core_sys_select(i32 %0, ptr %1, ptr %2, ptr %3, ptr %4) {
-    %6 = alloca i64
-    %7 = alloca %struct.poll_wqueues
-    %8 = alloca [64 x i32]
-
--fno-discard-value-names:
-  define i32 @core_sys_select(i32 %n, ptr %inp, ptr %outp, ptr %exp,
-                              ptr %end_time) {
-    %expire.i = alloca i64
-    %table.i = alloca %struct.poll_wqueues
-    %stack_fds = alloca [64 x i32]
-
-The rule for generating human readable LLVM IR (.ll) is only useful as a
-debugging feature:
-
-$ make LLVM=1 fs/select.ll
-
-As Fangrui notes:
-  A LLVM_ENABLE_ASSERTIONS=off build of Clang defaults to
-  -fdiscard-value-names.
-
-  A LLVM_ENABLE_ASSERTIONS=on build of Clang defaults to
-  -fno-discard-value-names.
-
-Explicitly enable -fno-discard-value-names so that the IR always contains
-value names regardless of whether assertions were enabled or not.
-Assertions generally are not enabled in releases of clang packaged by
-distributions.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1467
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes v2 -> v3:
-* Fix typo in commit message
-  "enable -fdiscard-value-names" -> "enable -fno-discard-value-names"
-
-Changes v1 -> v2:
-* Only update commit message:
-  * Pick up Nathan & Fangrui's RB tags.
-  * Add link (I forgot I filed a bug about this a while ago!).
-  * Add note from Fangrui.
-  * Add final paragraph.
- scripts/Makefile.build | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 22adbf89cb31..41f3602fc8de 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -140,7 +140,7 @@ $(obj)/%.symtypes : $(src)/%.c FORCE
- # LLVM assembly
- # Generate .ll files from .c
- quiet_cmd_cc_ll_c = CC $(quiet_modtag)  $@
--      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -o $@ $<
-+      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -fno-discard-value-names -o $@ $<
- 
- $(obj)/%.ll: $(src)/%.c FORCE
- 	$(call if_changed_dep,cc_ll_c)
--- 
-2.38.0.413.g74048e4d9e-goog
+Reviewed-by: Frank Rowand <frowand.list@gmail.com>
 
