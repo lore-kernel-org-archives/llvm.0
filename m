@@ -1,228 +1,164 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9040B137D
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 11:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1665746439;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5CUrg9n2Rq7eQkDQAEgHuPo+4Cue2GDxE1sTbcKciHI=;
-	b=CYE00NQTGQIJFkrJlzHiWGwlyGFQSk1Seu81Eq8a0J+/bY2tPGnCX4AcRDKXWydioIZ4tS
-	iVgu+PbmEcWH152ntEem5LCBKluWAG64nGGgPVwyBMXFQLqkAMybEQ9q9Mwz2DeE/Fo214
-	BMrjiU93jLMFKSAyyFK0Ggf3qy1sLvE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-6n6PAkwcO0uvsvqm4iaZwg-1; Fri, 14 Oct 2022 07:20:38 -0400
-X-MC-Unique: 6n6PAkwcO0uvsvqm4iaZwg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6BF1800B30
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 11:20:37 +0000 (UTC)
-Received: from [172.64.3.56] (unknown [10.30.34.235])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D1B1D207B31A;
-	Fri, 14 Oct 2022 11:20:37 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
- mainline.kernel.org-clang, 9c9155a3)
-Date: Fri, 14 Oct 2022 11:20:35 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B3A20F8
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:31:32 +0000 (UTC)
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48]) (authenticated)
+	by conssluserg-04.nifty.com with ESMTP id 29EDVA5W012218
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 22:31:11 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 29EDVA5W012218
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1665754271;
+	bh=eoO4dT7/oE91n2LdemDyH/9TSUzar9QMEDiS2eiitmQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ATiYKVcA4e0RZgOhzHxW9xgv1sxtWf++e8DH9R3JQ9uLDt6a3cqaZoN5roh7LV38L
+	 qgMxVuPIN+uLvryPk8kqgft94DHItd8JK/4cBfo4f38am5XZag4ZX3aPC6P9fLU6Wf
+	 RyiUHQSE5WpfCHdmrW5Vzl8MEPpqEGxoA1emP1xX6RlColJpIZ6bpBwORCZNlZXem7
+	 1x806h4Zn5I7RJXxuhG05CmDvDULTSe/8zuZPIu+zLTkKnIZgE05dLLMizSVNwmLdD
+	 PktZd95AeD2TFiywRCpw/tSSlcTZJSyw0Yw8h9J894NiwgLCyCziyZPfMKrWzDgVtD
+	 pBlntivHho8kw==
+X-Nifty-SrcIP: [209.85.160.48]
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-136b5dd6655so5856076fac.3
+        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 06:31:11 -0700 (PDT)
+X-Gm-Message-State: ACrzQf34AVDspXfi/Zd9ND/RkMK4BhbjZoaYi7yWSO/hdQAGqfXv3XXu
+	mDtXFbwZCSLMmaqyTlN/7JJ7umB3j0CP+LXh9FI=
+X-Google-Smtp-Source: AMsMyM48rOk4RS1W8P1kWSTh8sIj+I5oTEn0bZai5fiS3d4C6lV+k5+G6w/5CYS/6+156Yhy0F/Kb6wcoz3pZhGxiuw=
+X-Received: by 2002:a05:6870:8a09:b0:132:554d:2f3d with SMTP id
+ p9-20020a0568708a0900b00132554d2f3dmr8390681oaq.194.1665754269746; Fri, 14
+ Oct 2022 06:31:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <56552.122101407203800349@us-mta-662.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20221007203236.1750890-1-ndesaulniers@google.com>
+ <Y0htZDJoTuQegVQR@dev-arch.thelio-3990X> <20221013204151.skzateatn2keencb@google.com>
+ <CAKwvOdmoXLvfgEWx740mw+Uqy3nfPM=a7ywVeOJ5XivGT=yRog@mail.gmail.com>
+In-Reply-To: <CAKwvOdmoXLvfgEWx740mw+Uqy3nfPM=a7ywVeOJ5XivGT=yRog@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 14 Oct 2022 22:30:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT7yY3VL=so0+h=fsefT2QXsKHn4KjCFJ5VtGGkvSRjLg@mail.gmail.com>
+Message-ID: <CAK7LNAT7yY3VL=so0+h=fsefT2QXsKHn4KjCFJ5VtGGkvSRjLg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add -fno-discard-value-names to cmd_cc_ll_c
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Fangrui Song <maskray@google.com>, Nathan Chancellor <nathan@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>, Tom Rix <trix@redhat.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'drm-next-2022-10-14' of git://anongit.freede=
-sktop.org/drm/drm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/56268
-
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5516176
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                 aarch64 - Storage - software RAID testing
-                 aarch64 - stress: stress-ng - cpu-cache
-                 aarch64 - stress: stress-ng - memory
-                 aarch64 - Storage - blktests - nvmeof-mp
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - software RAID testing
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - L2TP basic test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-                  x86_64 - Storage - block - storage fio numa
-        Issue: stress: stress-ng - cpu: perf: interrupt took too long
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1034
-            Affected tests:
-                  x86_64 - stress: stress-ng - cpu-cache
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                   s390x - Networking bridge: sanity
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - L2TP basic test
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+On Fri, Oct 14, 2022 at 5:54 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Thu, Oct 13, 2022 at 1:41 PM Fangrui Song <maskray@google.com> wrote:
+> >
+> > On 2022-10-13, Nathan Chancellor wrote:
+> > >On Fri, Oct 07, 2022 at 01:32:36PM -0700, Nick Desaulniers wrote:
+> > >> When debugging LLVM IR, it can be handy for clang to not discard value
+> > >> names used for local variables and parameters. Compare the generated IR.
+> > >>
+> > >> Implicit Default (-fdiscard-value-names):
+> > >>   define i32 @core_sys_select(i32 %0, ptr %1, ptr %2, ptr %3, ptr %4) {
+> > >>     %6 = alloca i64
+> > >>     %7 = alloca %struct.poll_wqueues
+> > >>     %8 = alloca [64 x i32]
+> > >>
+> > >> Explicit -fno-discard-value-names:
+> > >>   define i32 @core_sys_select(i32 %n, ptr %inp, ptr %outp, ptr %exp,
+> > >>                               ptr %end_time) {
+> > >>     %expire.i = alloca i64
+> > >>     %table.i = alloca %struct.poll_wqueues
+> > >>     %stack_fds = alloca [64 x i32]
+> > >>
+> > >> The rule for generating human readable LLVM IR (.ll) is only useful as a
+> > >> debugging feature:
+> > >>
+> > >> $ make LLVM=1 fs/select.ll
+> > >>
+> > >> Clang defaults to -fdiscard-value-names to save memory when generating
+> > >> LLVM IR. For debugging purposes, the improvement in readability at a
+> > >> cost of more verbose IR is a cost we're happy to pay.
+> >
+> > A LLVM_ENABLE_ASSEERTIONS=off build of Clang defaults to -fdiscard-value-names.
+> >
+> > A LLVM_ENABLE_ASSEERTIONS=on build of Clang defaults to -fno-discard-value-names.
+> >
+> > See clang/lib/Driver/ToolChains/Clang.cpp:5030
+>
+> Thanks!
+>
+> I thought I recalled this; I was literally just rereading through
+> https://github.com/ClangBuiltLinux/linux/issues/1467#issuecomment-1046071624
+> again to understand.
+>
+> That would be useful to include in the commit message, and is more
+> precise than "Clang defaults to -fdiscard-value-names to save memory
+> when generating LLVM IR."  Masahiro, would you mind including or
+> replacing that, or shall I send a v2?
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Can you send v2, or provide the entire new commit description?
+Thank you.
 
+
+
+
+
+
+
+
+>
+> I was surprised to find later in the day that I was running an
+> assertions-disabled (ie. release) build of clang, which I almost never
+> do!  Non-llvm-developers are more likely to be using release builds
+> than assertions-enabled builds of llvm, so this patch still very much
+> has merit.
+>
+> >
+> > >> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > >Thanks for the patch!
+> > >
+> > >Link: https://github.com/ClangBuiltLinux/linux/issues/1467
+> > >Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > Reviewed-by: Fangrui Song <maskray@google.com>
+> >
+> > >> ---
+> > >>  scripts/Makefile.build | 2 +-
+> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > >> index 27be77c0d6d8..d0e4f476dfee 100644
+> > >> --- a/scripts/Makefile.build
+> > >> +++ b/scripts/Makefile.build
+> > >> @@ -140,7 +140,7 @@ $(obj)/%.symtypes : $(src)/%.c FORCE
+> > >>  # LLVM assembly
+> > >>  # Generate .ll files from .c
+> > >>  quiet_cmd_cc_ll_c = CC $(quiet_modtag)  $@
+> > >> -      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -o $@ $<
+> > >> +      cmd_cc_ll_c = $(CC) $(c_flags) -emit-llvm -S -fno-discard-value-names -o $@ $<
+> > >>
+> > >>  $(obj)/%.ll: $(src)/%.c FORCE
+> > >>      $(call if_changed_dep,cc_ll_c)
+> > >>
+> > >> base-commit: 93ed07a23fd08b8613f64cf0a15d7fbdaca010fd
+> > >> --
+> > >> 2.38.0.rc2.412.g84df46c1b4-goog
+> > >>
+> > >
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
