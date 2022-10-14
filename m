@@ -1,88 +1,135 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BE94433
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 21:11:09 +0000 (UTC)
-Received: by mail-oi1-f176.google.com with SMTP id w74so6393189oie.0
-        for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 14:11:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmlOf0WqP2VWIwHpJCvrVP8vGAHC8knpaj2VRfeMJhY=;
-        b=kT//KpxazmxKcG8BccpbLlEUszMt7W6sRdNWUNgi767RCrjVfHxwQ8ylH5jehyXtb+
-         xtaVO/eKiUmdkoHc7Vzpm36ep4ZS/rWa0YjVaYp+fIib0CjyrIG+0TXSMXuwyaQ7GVdQ
-         zdNeHdmlynEP/J5JMB/GOz2gyHad5VO24oIHcLOqBQLfZ/ALXpgz1ufaP56r/i8CSGdx
-         ft7D5XvqqVQDjUUxEOehBltLTFJYLhAmjwdisuRXs27fQ64gNrx3j3ZAHo1rdN5oJQys
-         D5Uu1dcG+NdvyetcauB+6TbfEga3OJEIhT4+A4bKnnlon1WVhnYX6sdCob0n9XQnz1Ag
-         ePIQ==
-X-Gm-Message-State: ACrzQf0Cr/bYHTMEN3SsCjNFCUeMaUENCCHC7R+mqb/9j7cz4DifuR3w
-	DekY8oSkBgYOhY6Gf/OWqw==
-X-Google-Smtp-Source: AMsMyM5GyjLi8iHeCcE1tstB3RqHJ++cloFXkmlshA3SqL6w/+hImWx0FxD1VAug2ShRqCJY7tcXaQ==
-X-Received: by 2002:a05:6808:118e:b0:345:9c3e:121d with SMTP id j14-20020a056808118e00b003459c3e121dmr3480660oil.211.1665781869043;
-        Fri, 14 Oct 2022 14:11:09 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n6-20020a05687001c600b0010c727a3c79sm1772322oad.26.2022.10.14.14.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:11:08 -0700 (PDT)
-Received: (nullmailer pid 2912846 invoked by uid 1000);
-	Fri, 14 Oct 2022 21:11:09 -0000
-Date: Fri, 14 Oct 2022 16:11:09 -0500
-From: Rob Herring <robh@kernel.org>
-To: Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc: linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Frank Rowand <frowand.list@gmail.com>, llvm@lists.linux.dev, devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] of: declare string literals const
-Message-ID: <166578186819.2912776.6771227036062685821.robh@kernel.org>
-References: <20221012174622.45006-1-cgzones@googlemail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CBB4680
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 21:18:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C5EC433C1;
+	Fri, 14 Oct 2022 21:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1665782288;
+	bh=J6PgskZaAY1qyGHi1l6L6dU7ZAigdju+rA7uW8rvJK0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NwXHMijSjb74jNvLdzhT4c+M0NTILDkkhwY1rh1MZwqVvxOoDiIClA8F9b6uN8zsQ
+	 RrufGW9bGPu17NRSqJyM/Apv6sGywatUPt4w+r7jSGECot2Njyl8+5vdZ7IDRgQfao
+	 jpS8pGDS4NJV9MQrTu7tcAZcF7o63jjYUqu7TSCYu4YUOBgugkE5hDfcqrTYgzPpxH
+	 EuxS97FL2NY1riU9ZqbsrA3APgt7zEg0lWXP5y6LGcFevg5BoQ+x4b1EpSLUXhHNiJ
+	 WgJQ0tdAI+ID1ar20Fi5RYccfExXmf3kawsjGNNqU3lGPdz2DwGPClU1m85oL1RsfE
+	 kHEQz383xLBTw==
+Date: Fri, 14 Oct 2022 14:18:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Russell King <rmk+kernel@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/4] ARM: remove lazy evaluation in Makefile
+Message-ID: <Y0nSDuEumerVwyHT@dev-arch.thelio-3990X>
+References: <20221014201354.3190007-1-ndesaulniers@google.com>
+ <20221014201354.3190007-2-ndesaulniers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221012174622.45006-1-cgzones@googlemail.com>
+In-Reply-To: <20221014201354.3190007-2-ndesaulniers@google.com>
 
-On Wed, 12 Oct 2022 19:46:22 +0200, Christian Göttsche wrote:
-> of_overlay_action_name() returns a string literal from a function local
-> array.  Modifying string literals is undefined behavior which usage of
-> const pointer can avoid.  of_overlay_action_name() is currently only
-> used once in overlay_notify() to print the returned value.
+On Fri, Oct 14, 2022 at 01:13:51PM -0700, Nick Desaulniers wrote:
+> arch-y and tune-y used lazy evaluation since they used to contain
+> cc-option checks. They don't any longer, so just eagerly evaluate these
+> command line flags.
 > 
-> While on it declare the data array const as well.
-> 
-> Reported by Clang:
-> 
->     In file included from arch/x86/kernel/asm-offsets.c:22:
->     In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
->     In file included from ./include/linux/kvm_host.h:19:
->     In file included from ./include/linux/msi.h:23:
->     In file included from ./arch/x86/include/asm/msi.h:5:
->     In file included from ./arch/x86/include/asm/irqdomain.h:5:
->     In file included from ./include/linux/irqdomain.h:35:
->     ./include/linux/of.h:1555:3: error: initializing 'char *' with an expression of type 'const char[5]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "init",
->                     ^~~~~~
->     ./include/linux/of.h:1556:3: error: initializing 'char *' with an expression of type 'const char[10]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "pre-apply",
->                     ^~~~~~~~~~~
->     ./include/linux/of.h:1557:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "post-apply",
->                     ^~~~~~~~~~~~
->     ./include/linux/of.h:1558:3: error: initializing 'char *' with an expression of type 'const char[11]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "pre-remove",
->                     ^~~~~~~~~~~~
->     ./include/linux/of.h:1559:3: error: initializing 'char *' with an expression of type 'const char[12]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
->                     "post-remove",
->                     ^~~~~~~~~~~~~
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
->  include/linux/of.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> No change from v3.
 > 
-
-Applied, thanks!
+>  arch/arm/Makefile | 60 +++++++++++++++++++++--------------------------
+>  1 file changed, 27 insertions(+), 33 deletions(-)
+> 
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index c846119c448f..8dd943b50b7d 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -63,44 +63,38 @@ KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
+>  # Note that GCC does not numerically define an architecture version
+>  # macro, but instead defines a whole series of macros which makes
+>  # testing for a specific architecture or later rather impossible.
+> -arch-$(CONFIG_CPU_32v7M)	=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
+> -arch-$(CONFIG_CPU_32v7)		=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
+> -arch-$(CONFIG_CPU_32v6)		=-D__LINUX_ARM_ARCH__=6 -march=armv6
+> -# Only override the compiler option if ARMv6. The ARMv6K extensions are
+> +arch-$(CONFIG_CPU_32v7M)	:=-D__LINUX_ARM_ARCH__=7 -march=armv7-m
+> +arch-$(CONFIG_CPU_32v7)		:=-D__LINUX_ARM_ARCH__=7 -march=armv7-a
+> +arch-$(CONFIG_CPU_32v6)		:=-D__LINUX_ARM_ARCH__=6 -march=armv6
+> +# Only override the compiler opt:ion if ARMv6. The ARMv6K extensions are
+>  # always available in ARMv7
+>  ifeq ($(CONFIG_CPU_32v6),y)
+> -arch-$(CONFIG_CPU_32v6K)	=-D__LINUX_ARM_ARCH__=6 -march=armv6k
+> +arch-$(CONFIG_CPU_32v6K)	:=-D__LINUX_ARM_ARCH__=6 -march=armv6k
+>  endif
+> -arch-$(CONFIG_CPU_32v5)		=-D__LINUX_ARM_ARCH__=5 -march=armv5te
+> -arch-$(CONFIG_CPU_32v4T)	=-D__LINUX_ARM_ARCH__=4 -march=armv4t
+> -arch-$(CONFIG_CPU_32v4)		=-D__LINUX_ARM_ARCH__=4 -march=armv4
+> -arch-$(CONFIG_CPU_32v3)		=-D__LINUX_ARM_ARCH__=3 -march=armv3m
+> -
+> -# Evaluate arch cc-option calls now
+> -arch-y := $(arch-y)
+> +arch-$(CONFIG_CPU_32v5)		:=-D__LINUX_ARM_ARCH__=5 -march=armv5te
+> +arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
+> +arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
+> +arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3m
+>  
+>  # This selects how we optimise for the processor.
+> -tune-$(CONFIG_CPU_ARM7TDMI)	=-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM720T)	=-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM740T)	=-mtune=arm7tdmi
+> -tune-$(CONFIG_CPU_ARM9TDMI)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM940T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM946E)	=-mtune=arm9e
+> -tune-$(CONFIG_CPU_ARM920T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM922T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM925T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_ARM926T)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_FA526)	=-mtune=arm9tdmi
+> -tune-$(CONFIG_CPU_SA110)	=-mtune=strongarm110
+> -tune-$(CONFIG_CPU_SA1100)	=-mtune=strongarm1100
+> -tune-$(CONFIG_CPU_XSCALE)	=-mtune=xscale
+> -tune-$(CONFIG_CPU_XSC3)		=-mtune=xscale
+> -tune-$(CONFIG_CPU_FEROCEON)	=-mtune=xscale
+> -tune-$(CONFIG_CPU_V6)		=-mtune=arm1136j-s
+> -tune-$(CONFIG_CPU_V6K)		=-mtune=arm1136j-s
+> -
+> -# Evaluate tune cc-option calls now
+> -tune-y := $(tune-y)
+> +tune-$(CONFIG_CPU_ARM7TDMI)	:=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM720T)	:=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM740T)	:=-mtune=arm7tdmi
+> +tune-$(CONFIG_CPU_ARM9TDMI)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM940T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM946E)	:=-mtune=arm9e
+> +tune-$(CONFIG_CPU_ARM920T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM922T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM925T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_ARM926T)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_FA526)	:=-mtune=arm9tdmi
+> +tune-$(CONFIG_CPU_SA110)	:=-mtune=strongarm110
+> +tune-$(CONFIG_CPU_SA1100)	:=-mtune=strongarm1100
+> +tune-$(CONFIG_CPU_XSCALE)	:=-mtune=xscale
+> +tune-$(CONFIG_CPU_XSC3)		:=-mtune=xscale
+> +tune-$(CONFIG_CPU_FEROCEON)	:=-mtune=xscale
+> +tune-$(CONFIG_CPU_V6)		:=-mtune=arm1136j-s
+> +tune-$(CONFIG_CPU_V6K)		:=-mtune=arm1136j-s
+>  
+>  ifeq ($(CONFIG_AEABI),y)
+>  CFLAGS_ABI	:=-mabi=aapcs-linux -mfpu=vfp
+> -- 
+> 2.38.0.413.g74048e4d9e-goog
+> 
+> 
