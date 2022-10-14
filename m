@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBFC20F8
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A16EC433D6;
-	Fri, 14 Oct 2022 13:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E8320F8
+	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 13:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E5EC433D6;
+	Fri, 14 Oct 2022 13:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665755560;
-	bh=/XWebppsCRLIWrDwU0CfCo7fYTn2UiwKuoTYFPqeths=;
+	s=k20201202; t=1665755599;
+	bh=4hQpTDpd1K9WqK9XyDTFRW2d2jeqa1ZI2a7SGGKYSUY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=D69unZrMH86jcnjV9o7Ftq6s9viAh0ObLF5yZiSDki67lAcYFqm1/y+5HLWOQvBKN
-	 rikS+FoBLJKVMFUCISKK9U5mdMMrCZ79cDakcFcuP+3TOOAv+QKve5HqDw4qcb8asH
-	 WmgYmzdON9llMNRAxKNU9xnCbdicQqVZyhawsgvJz6UglIG0oYpFwY4YogFaYee6ho
-	 MtKPzPj/T9xUokI1SRQgKt/jaEYhhUEihgZVBhbu94CojF/GdlSlpONGehGB6dNAy/
-	 YUirMR688lS4fueVXXdn3l/UgNHPEHW8f8107F5vQAstoBLpBrLPHM+vqFQMI9pv2g
-	 pfmXtgfP5lYiA==
+	b=AczA1vaUdQr/23NDNa8IzhVXK4ilbpJAd12ovUw7eljIU4qrMiuAYGhJQ2tvxbIgb
+	 RJpxr8epIv86EBKLzblYwogHmwO3hBSZrVmAcct90FGz/OW+nos5DDDlPKyqCiOsxc
+	 OOdweHksLcPeqISe7120OQXQ79weo8HVCEkx7g7cqLpS31zZ0O47wp5b/cmZdP5dZl
+	 tBZ8Qg5T95OqpdrIqZ55BcFrHW0qWo59MxTFT0aRLpFNtkTSgm+0uPuv+aifbF8Znw
+	 jIGjy5fppRai/++cZYblh9bbeThgU6LWPYYvmvFpBAHe3pnmmMyPfBfx+J8R58lOGh
+	 Dxu7mEZrOWHbg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -26,18 +26,17 @@ Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	oss@buserror.net,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
-	christophe.leroy@csgroup.eu,
-	joel@jms.id.au,
 	nick.child@ibm.com,
 	Julia.Lawall@inria.fr,
+	christophe.leroy@csgroup.eu,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.19 05/10] powerpc/85xx: Fix fall-through warning for Clang
-Date: Fri, 14 Oct 2022 09:52:16 -0400
-Message-Id: <20221014135222.2109334-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 4/8] powerpc/85xx: Fix fall-through warning for Clang
+Date: Fri, 14 Oct 2022 09:52:57 -0400
+Message-Id: <20221014135302.2109489-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221014135222.2109334-1-sashal@kernel.org>
-References: <20221014135222.2109334-1-sashal@kernel.org>
+In-Reply-To: <20221014135302.2109489-1-sashal@kernel.org>
+References: <20221014135302.2109489-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/powerpc/platforms/85xx/mpc85xx_cds.c b/arch/powerpc/platforms/85xx/mpc85xx_cds.c
-index 48f3acfece0b..0b8f2101c5fb 100644
+index 172d2b7cfeb7..aedb2eb44b47 100644
 --- a/arch/powerpc/platforms/85xx/mpc85xx_cds.c
 +++ b/arch/powerpc/platforms/85xx/mpc85xx_cds.c
-@@ -159,6 +159,7 @@ static void __init mpc85xx_cds_pci_irq_fixup(struct pci_dev *dev)
+@@ -158,6 +158,7 @@ static void __init mpc85xx_cds_pci_irq_fixup(struct pci_dev *dev)
  			else
  				dev->irq = 10;
  			pci_write_config_byte(dev, PCI_INTERRUPT_LINE, dev->irq);
