@@ -1,91 +1,98 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0624123DA
-	for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 16:56:15 +0000 (UTC)
-Received: by mail-qt1-f180.google.com with SMTP id g11so5526732qts.1
-        for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 09:56:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h1kGMyZ8iPn6jxS1RJptkgeK4wGXJYpfTtGZVw/vNYE=;
-        b=UHmNbL5Ri/UDpExLSn8s6WhczzeXQ+nujMX7Iez+SgOcvXNmtwUTj6ANKOFy0ZsD51
-         rTVHm/Wr2DvAXFhOno947CSgncZY36C0KgDGulXpNH5dMNaWvPw73GSH92ZRioSxDnI5
-         fzxIZvSkIuCB0g4c5CCL7gUQ/K4jpyJ0dtAwE1EQeaXwf5puwdwf6Gfu7CApJxZVNFkS
-         zPirmkhHK0Ph4nm9UAY/teaBD2rJc/RW7LtslGd18RaTvsoKT0M418cggyLiG3JnElTP
-         1mj/UW1/V6Uz2v6fYqayy9ozjVqg0202bjzWOiM9m9oSbflVtp5tO70mNXHM5gJkO1RQ
-         J81g==
-X-Gm-Message-State: ACrzQf0jlJiVtWmCKQUMPKkxgaR52v+LRiN1UkMtqGxfOuvahoVsL5dG
-	lwx5+EtmNEdBz3ZHaOvuTg8ibotJNC2+W9C7Pl4=
-X-Google-Smtp-Source: AMsMyM5VpXNSDHG6hH+avu+LLqK1F1gCjNc62IhcpK3HG0VAkIbFT/UxIhJSbkA8ILrSffofXqNATnqaVHOyZGSQocM=
-X-Received: by 2002:ac8:5ac1:0:b0:39a:123c:9df5 with SMTP id
- d1-20020ac85ac1000000b0039a123c9df5mr2595647qtd.27.1665852974906; Sat, 15 Oct
- 2022 09:56:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEAC80C
+	for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 17:30:41 +0000 (UTC)
+Date: Sat, 15 Oct 2022 17:30:13 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+	s=protonmail; t=1665855025; x=1666114225;
+	bh=DkDUqYsIo4WD6IeoCvcUlhuchiJ68MTUFWYeBqoljY4=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID;
+	b=Sw/PwmuQCDhWwZXq8NvwyUot9fBwp5Y6usJuOMs9v147/fLo+mUb1xDf1TCPusCv2
+	 ruD9+xzlnNAgyXJOE+ubRWXf5jB6ujp1ZkvC7p/y0u458hgs19v/L3q4am7/A9aZPR
+	 JCbfowjoJSzw8uOZwJUuEIFZ26EWbUpffIgs1U3I=
+To: caleb@connolly.tech
+From: Caleb Connolly <caleb@connolly.tech>
+Cc: krzysztof.kozlowski@linaro.org, phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jeff LaBundy <jeff@labundy.com>, Konrad Dybcio <konrad.dybcio@somainline.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
+Subject: [PATCH v7 0/2] input: introduce support for Qualcomm SPMI haptics
+Message-ID: <20221015172915.1436236-1-caleb@connolly.tech>
+Feedback-ID: 10753939:user:proton
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20220929161917.2348231-1-rrangel@chromium.org>
- <20220929093200.v6.6.I8092e417a8152475d13d8d638eb4c5d8ea12ac7b@changeid>
- <CAJZ5v0izHjb8vE0ALyYo9yMOExdpCzG8f7-d5SpQnftqJfTEig@mail.gmail.com>
- <CAHQZ30CJyhPK-OriZ5NZ=GjwNbofaCW6GZ_CvPsL0WiJGsxs-Q@mail.gmail.com>
- <CAJZ5v0gcJRoMSODbTevRdK1zaEZHJcPxvG6XMy9-T_jvwxPFBw@mail.gmail.com>
- <CAHQZ30CQd-0YnQgYG_OJVWn9_aUjvDAuT_DRGsxQF-q+bjr5BA@mail.gmail.com>
- <YzYowYJpRTImmg4m@google.com> <CAJZ5v0i+QYcMuqsK9y6qy9qzJdUp503Sidr1e4V_ROyumLKCsw@mail.gmail.com>
- <YzcqdTxLMF5028yz@smile.fi.intel.com> <YzcthIfnpi8E6XVk@google.com>
-In-Reply-To: <YzcthIfnpi8E6XVk@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 15 Oct 2022 18:56:04 +0200
-Message-ID: <CAJZ5v0iKXWBGYPmmg9__g3oHK2GhY+xFMnSA6c5KctOv2kTfNQ@mail.gmail.com>
-Subject: Re: [PATCH v6 06/13] ACPI: resources: Add wake_capable parameter to acpi_dev_irq_flags
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Raul Rangel <rrangel@chromium.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, linux-input <linux-input@vger.kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Tim Van Patten <timvp@google.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, "jingle.wu" <jingle.wu@emc.com.tw>, 
-	Dan Williams <dan.j.williams@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Len Brown <lenb@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Terry Bowman <terry.bowman@amd.com>, Tom Rix <trix@redhat.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 30, 2022 at 7:55 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> On Fri, Sep 30, 2022 at 08:42:13PM +0300, Andy Shevchenko wrote:
-> > On Fri, Sep 30, 2022 at 07:13:37PM +0200, Rafael J. Wysocki wrote:
-> > > On Fri, Sep 30, 2022 at 1:22 AM Dmitry Torokhov
-> > > <dmitry.torokhov@gmail.com> wrote:
-> >
-> > ...
-> >
-> > > I think that patches [5-8/13] from this series are significant
-> > > framework changes, so it would make sense to route them via the ACPI
-> > > tree.
-> > >
-> > > If this is fine with everybody, I will queue them up for merging into
-> > > 6.1 (probably in the second half of the upcoming merge window).
-> >
-> > I believe it's fine from GPIO ACPI perspective (there shouldn't be conflict,
-> > but if you wish you always may take this PR [1] to your tree (it's already in
-> > GPIO tree pending v6.1), it may be considered as immutable tag.
-> >
-> > [1]: https://lore.kernel.org/linux-gpio/Yym%2Fj+Y9MBOIhWtK@black.fi.intel.com/
->
-> Yeah, having an immutable branch hanging off 6.0-rcN would be awesome -
-> I could pull it and this would avoid any potential conflicts later.
+This series introduces a driver for the SPMI haptics hardware block
+found in Qualcomm PMICs. SPMI haptics support LRA (Linear Resonant
+Actuator) style haptics, as well as ERM (Eccentric Rotating Mass).
+It also supports several modes of driving the haptics, e.g. by loading
+the pattern to play into an internal buffer, or using PWM.
 
-This material is in the mainline now, but the branch is still there in
-case you need it:
+More information about the hardware can be found here:
+        https://gitlab.com/sdm845-mainline/linux/-/wikis/PMI8998-QPNP-Hapti=
+cs
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-wakeup
+This driver has been written based on downstream sources as no public
+documentation is available. It includes initial support for LRA haptics
+in buffer mode, this combination seems to be the most common and will
+enable haptics on the OnePlus 6 and 6T, PocoPhone F1, OnePlus 5 and
+several other Qualcomm devices with mainline kernel support.
 
-It won't be necessary any more after 6.1-rc1 is out, though, I suppose.
+The driver is implemented using the ff-memless (forcefeedback) input
+framework and makes an attempt to control the strength of vibration relativ=
+e
+to the magnitude set from userspace.
+
+Changes since v6:
+ - Apply Krzysztof's dt-bindings suggestions
+ - Rename qcom,wave-play-rate-us to qcom,wave-play-duration-us and
+   add a comment explaining the name change compared to downstream.
+ - Add COMPILE_TEST to kconfig
+
+Changes since v5:
+ - Fix dt schema errors
+ - Fix typo (thanks Vincent)
+
+Changes since v4:
+ - Significant rewrite and cleanup
+ - switch to dev_err_probe()
+ - Run through clang-format
+
+Changes since v3:
+ - Adjust example DTS to avoid creating new warnings in dt_binding_check
+ - Address warnings from kernel test robot.
+
+Changes since v2:
+ - Addressed Rob's comments on dt-bindings (I'm not sure what to do
+   about the pmic compatible?)
+ - Fixed some typos
+
+Changes since v1:
+ - Replace old QPNP naming with SPMI
+ - Address Bjorn's comments on the driver, various style and code cleanups
+ - Address Bjorn's comments on the DT bindings and DTS
+ - Pickup patches from Joel and Jami to enable haptics on the OnePlus 5
+   and Poco F1.
+
+Caleb Connolly (2):
+  dt-bindings: input: document Qualcomm PMI8998 haptics driver
+  input: add Qualcomm SPMI haptics driver
+
+ .../bindings/input/qcom,pmi8998-haptics.yaml  |  73 ++
+ drivers/input/misc/Kconfig                    |  15 +
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/qcom-pmi8998-haptics.c     | 690 ++++++++++++++++++
+ 4 files changed, 779 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/qcom,pmi8998-ha=
+ptics.yaml
+ create mode 100644 drivers/input/misc/qcom-pmi8998-haptics.c
+
+--
+2.38.0
+
+
