@@ -1,135 +1,221 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7E263C
-	for <llvm@lists.linux.dev>; Fri, 14 Oct 2022 22:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA51C433C1;
-	Fri, 14 Oct 2022 22:39:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1665787178;
-	bh=ScZ7ZpzpYCbhHr2dgKusZtqNyUk5mj5ETrqZNK3W/aA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IKRoMTk3ERHolXcN0xKekhjMg0NBp1WEHv9rsuu/0IMCA/UCaDojvajV92EMiC0AN
-	 r8wYZnYHeumVpj9Pn3k6EMognTrdbWYoNWnWMvDFGFqb6V7l1HBasqdVLFO1jKMcdH
-	 ETaLl8dwX9r6p19hSRp5v5AY10gVky2YNb1PoOLQ/MvyhPss2AUMolEf+WnnF5UpRW
-	 sOaP/8kq+N5/kWnWZ6oVXBaRyzWfVJLfMKwNu3YYzKaPI6iRf/iA07mGeVt6kIKZo2
-	 1HD5L7SNdD8WZoR+Yfelw11OpnVI7c58aRt/dVswBYfAnGDmhaYqV1KyIfKBayR6zT
-	 SYdTsyQ6aS8uQ==
-Date: Fri, 14 Oct 2022 15:39:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Tom Rix <trix@redhat.com>,
-	Xiaoming Ni <nixiaoming@huawei.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andi Kleen <ak@linux.intel.com>, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Christoph Hellwig <hch@lst.de>, Eric Dumazet <edumazet@google.com>,
-	"Darrick J. Wong" <darrick.wong@oracle.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] fs/select: mark do_select noinline_for_stack
-Message-ID: <Y0nlJ6whtJuZddjr@dev-arch.thelio-3990X>
-References: <c8f87abd-9d66-40cf-bcea-e2b1388d3030@app.fastmail.com>
- <20221011205547.14553-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84334373
+	for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 05:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1665813104;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nWcmI63fyhtsS+h5zJwgDrGKwoxD/qsokTu/pMoOx7A=;
+	b=PeMrs1RE+yVjWcw8pARp6G8mCNBYv1qwxEi8WhlzeMZhgtmEH6WnFvWUelBxkU6TB1GQNL
+	zfo7MvjZi3f/s/+LyNiWhEy7BPS2yGRowjOTYHAix/jWPjd3t1xKqGDPB+H+hSqwLdyOcq
+	/SY9pDPN1svAKFIa/6IqHQd7I//F/NQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-504-4XtaSORxNyW0fNOE3MNwoA-1; Sat, 15 Oct 2022 01:51:42 -0400
+X-MC-Unique: 4XtaSORxNyW0fNOE3MNwoA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EB141C05146
+	for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 05:51:42 +0000 (UTC)
+Received: from [172.64.9.11] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id ED24040398B1;
+	Sat, 15 Oct 2022 05:51:41 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
+ mainline.kernel.org-clang, f2e44139)
+Date: Sat, 15 Oct 2022 05:51:41 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011205547.14553-1-ndesaulniers@google.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <64109.122101501514200159@us-mta-504.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 11, 2022 at 01:55:47PM -0700, Nick Desaulniers wrote:
-> Effectively a revert of
-> commit ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> 
-> Various configs can still push the stack useage of core_sys_select()
-> over the CONFIG_FRAME_WARN threshold (1024B on 32b targets).
-> 
->   fs/select.c:619:5: error: stack frame size of 1048 bytes in function
->   'core_sys_select' [-Werror,-Wframe-larger-than=]
-> 
-> core_sys_select() has a large stack allocation for `stack_fds` where it
-> tries to do something equivalent to "small string optimization" to
-> potentially avoid a kmalloc.
-> 
-> core_sys_select() calls do_select() which has another potentially large
-> stack allocation, `table`. Both of these values depend on
-> FRONTEND_STACK_ALLOC.
-> 
-> Mix those two large allocation with register spills which are
-> exacerbated by various configs and compiler versions and we can just
-> barely exceed the 1024B limit.
-> 
-> Rather than keep trying to find the right value of MAX_STACK_ALLOC or
-> FRONTEND_STACK_ALLOC, mark do_select() as noinline_for_stack.
-> 
-> The intent of FRONTEND_STACK_ALLOC is to help potentially avoid a
-> dynamic memory allocation. In that spirit, restore the previous
-> threshold but separate the stack frames.
-> 
-> Many tests of various configs for different architectures and various
-> versions of GCC were performed; do_select() was never inlined into
-> core_sys_select() or compat_core_sys_select(). The kernel is built with
-> the GCC specific flag `-fconserve-stack` which can limit inlining
-> depending on per-target thresholds of callee stack size, which helps
-> avoid the issue when using GCC. Clang is being more aggressive and not
-> considering the stack size when decided whether to inline or not. We may
-> consider using the clang-16+ flag `-finline-max-stacksize=` in the
-> future.
-> 
-> Link: https://lore.kernel.org/lkml/20221006222124.aabaemy7ofop7ccz@google.com/
-> Fixes: ad312f95d41c ("fs/select: avoid clang stack usage warning")
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Hi, we tested your kernel and here are the results:
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> ---
-> Changes v1 -> v2:
-> * Drop the 32b specific guard, since I could reproduce the no-inlining
->   w/ aarch64-linux-gnu-gcc-10 ARCH=arm64 defconfig, and per Arnd.
-> * Drop references to 32b in commit message.
-> * Add new paragraph in commit message at the end about -fconserve-stack
->   and -finline-max-stacksize=.
-> * s/malloc/kmalloc/ in commit message.
-> 
->  fs/select.c          | 1 +
->  include/linux/poll.h | 4 ----
->  2 files changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/fs/select.c b/fs/select.c
-> index 0ee55af1a55c..794e2a91b1fa 100644
-> --- a/fs/select.c
-> +++ b/fs/select.c
-> @@ -476,6 +476,7 @@ static inline void wait_key_set(poll_table *wait, unsigned long in,
->  		wait->_key |= POLLOUT_SET;
->  }
->  
-> +noinline_for_stack
->  static int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
->  {
->  	ktime_t expire, *to = NULL;
-> diff --git a/include/linux/poll.h b/include/linux/poll.h
-> index a9e0e1c2d1f2..d1ea4f3714a8 100644
-> --- a/include/linux/poll.h
-> +++ b/include/linux/poll.h
-> @@ -14,11 +14,7 @@
->  
->  /* ~832 bytes of stack space used max in sys_select/sys_poll before allocating
->     additional memory. */
-> -#ifdef __clang__
-> -#define MAX_STACK_ALLOC 768
-> -#else
->  #define MAX_STACK_ALLOC 832
-> -#endif
->  #define FRONTEND_STACK_ALLOC	256
->  #define SELECT_STACK_ALLOC	FRONTEND_STACK_ALLOC
->  #define POLL_STACK_ALLOC	FRONTEND_STACK_ALLOC
-> -- 
-> 2.38.0.rc2.412.g84df46c1b4-goog
-> 
-> 
+
+Kernel information:
+    Commit message: Merge tag 'parisc-for-6.1-1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/deller/parisc-linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/56381
+
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5525307
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - software RAID testing
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - software RAID testing
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
+al_clmulni]
+            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
+hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
+                  x86_64 - Networking bridge: sanity
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
+ree+0x53/0x80
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1359
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
