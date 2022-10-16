@@ -1,117 +1,131 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCEF7E2
-	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 06:52:46 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id x21-20020a5d9455000000b006bc1172e639so5277305ior.18
-        for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 23:52:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+T5aOHFBn0evAQz1vErQpfAFJ2574A0vi0Zz9LJdccA=;
-        b=i4LSukInZ0JH+otKqspvgag8Mhn/KGd3OD71uR+Jb/GLsx5G27HJFUQ98bDP2Np/xF
-         fw4aUOb92IkzvCAw6ofKkM8psiymt77d/Ry57Cj3SBv1w8C8F1TMsJm8bORpzCg8wgks
-         ygVRaLnV1doAeW8H+jZZmsfvq+BcwxXC7Zx9P+59XeKt1SXaMquElKl485baCVxcjXIQ
-         QV/2MAruhC8zdl7oUyXYJHG1VoLoGXv0LNSr27LmQc4CP5E0FYQ+7FofcacNdGZPgABF
-         Nh28eocZwum0ep44kbXMyMzCL4eEH/2SbNGoFWv52UkNwNXg+NGmzdGDqySVuBO7Xwhj
-         Sl+g==
-X-Gm-Message-State: ACrzQf0yPAqIXVWP6nXjhkIIo+Li3WAedQi1KPOvdDrgGBc2dO2gXjh9
-	SvFRAGYy76l5mHrDZfhsa1Dj3uFuRh5buo3hk+ej9eM/8vi4
-X-Google-Smtp-Source: AMsMyM6EUVKT4V8JbfjAjs94yP0uEUQFLuz12gSDUo05L3wQic671XTHtNh/yDdBKmYV/FRN+O2+batHaqElAZpScVs7iI2InzZv
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570E4ED8
+	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 13:03:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9B0C433D6;
+	Sun, 16 Oct 2022 13:03:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1665925404;
+	bh=AlMhoJR/gwF4fTaAgHcwWTWDmySoU0/SvBpsoS7+bOI=;
+	h=Subject:To:Cc:From:Date:From;
+	b=zLxFchi+PQ39oLimFeQ2qIyAl/fbJLI+8jCHNMo8s4AwmX9SX/HHG4rfc8nPNs7zd
+	 cwpacmK+ZI45BDfoUMw3ObzVjSva88vHfJ1AtCwVo1UIn1HjLLXb9a+bVhc2PEL583
+	 aKEHgmMAp1Vh6TU+tFz/rVEjmJd3M3AYaHuNELwE=
+Subject: Patch "hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO" has been added to the 5.10-stable tree
+To: gregkh@linuxfoundation.org,keescook@chromium.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,ndesaulniers@google.com,will@kernel.org
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Sun, 16 Oct 2022 15:04:06 +0200
+Message-ID: <16659254461882@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:341c:b0:6bc:1c3d:836e with SMTP id
- n28-20020a056602341c00b006bc1c3d836emr2163062ioz.24.1665903165488; Sat, 15
- Oct 2022 23:52:45 -0700 (PDT)
-Date: Sat, 15 Oct 2022 23:52:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000068cb2905eb214e9a@google.com>
-Subject: [syzbot] WARNING in btf_type_id_size
-From: syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com, 
-	song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-git tree:       bpf
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
-dashboard link: https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946 btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-Modules linked in:
-CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
-RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
-RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
-R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
-FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
- btf_check_all_types kernel/bpf/btf.c:4723 [inline]
- btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
- btf_parse kernel/bpf/btf.c:5026 [inline]
- btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
- bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
- __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
- __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0fbae41c69
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
-RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
-RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore 
 
 
+This is a note to let you know that I've just added the patch titled
+
+    hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO
+
+to the 5.10-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+
+The filename of the patch is:
+     hardening-avoid-harmless-clang-option-under-config_init_stack_all_zero.patch
+and it can be found in the queue-5.10 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From foo@baz Sun Oct 16 03:03:28 PM CEST 2022
+From: Kees Cook <keescook@chromium.org>
+Date: Tue, 14 Sep 2021 12:49:03 -0700
+Subject: hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO
+
+From: Kees Cook <keescook@chromium.org>
+
+commit f02003c860d921171be4a27e2893766eb3bc6871 upstream.
+
+Currently under Clang, CC_HAS_AUTO_VAR_INIT_ZERO requires an extra
+-enable flag compared to CC_HAS_AUTO_VAR_INIT_PATTERN. GCC 12[1] will
+not, and will happily ignore the Clang-specific flag. However, its
+presence on the command-line is both cumbersome and confusing. Due to
+GCC's tolerant behavior, though, we can continue to use a single Kconfig
+cc-option test for the feature on both compilers, but then drop the
+Clang-specific option in the Makefile.
+
+In other words, this patch does not change anything other than making the
+compiler command line shorter once GCC supports -ftrivial-auto-var-init=zero.
+
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a25e0b5e6ac8a77a71c229e0a7b744603365b0e9
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev
+Fixes: dcb7c0b9461c ("hardening: Clarify Kconfig text for auto-var-init")
+Suggested-by: Will Deacon <will@kernel.org>
+Link: https://lore.kernel.org/lkml/20210914102837.6172-1-will@kernel.org/
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Will Deacon <will@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ Makefile                   |    6 +++---
+ security/Kconfig.hardening |    5 ++++-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--- a/Makefile
++++ b/Makefile
+@@ -816,12 +816,12 @@ endif
+ 
+ # Initialize all stack variables with a zero value.
+ ifdef CONFIG_INIT_STACK_ALL_ZERO
+-# Future support for zero initialization is still being debated, see
+-# https://bugs.llvm.org/show_bug.cgi?id=45497. These flags are subject to being
+-# renamed or dropped.
+ KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
++ifdef CONFIG_CC_IS_CLANG
++# https://bugs.llvm.org/show_bug.cgi?id=45497
+ KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+ endif
++endif
+ 
+ DEBUG_CFLAGS	:=
+ 
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -23,13 +23,16 @@ config CC_HAS_AUTO_VAR_INIT_PATTERN
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
+ 
+ config CC_HAS_AUTO_VAR_INIT_ZERO
++	# GCC ignores the -enable flag, so we can test for the feature with
++	# a single invocation using the flag, but drop it as appropriate in
++	# the Makefile, depending on the presence of Clang.
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
+ 
+ choice
+ 	prompt "Initialize kernel stack variables at function entry"
+ 	default GCC_PLUGIN_STRUCTLEAK_BYREF_ALL if COMPILE_TEST && GCC_PLUGINS
+ 	default INIT_STACK_ALL_PATTERN if COMPILE_TEST && CC_HAS_AUTO_VAR_INIT_PATTERN
+-	default INIT_STACK_ALL_ZERO if CC_HAS_AUTO_VAR_INIT_PATTERN
++	default INIT_STACK_ALL_ZERO if CC_HAS_AUTO_VAR_INIT_ZERO
+ 	default INIT_STACK_NONE
+ 	help
+ 	  This option enables initialization of stack variables at
+
+
+Patches currently in stable-queue which might be from keescook@chromium.org are
+
+queue-5.10/hardening-avoid-harmless-clang-option-under-config_init_stack_all_zero.patch
+queue-5.10/hardening-remove-clang-s-enable-flag-for-ftrivial-auto-var-init-zero.patch
+queue-5.10/hardening-clarify-kconfig-text-for-auto-var-init.patch
