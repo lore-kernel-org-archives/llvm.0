@@ -1,795 +1,221 @@
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9292E2586
-	for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 17:31:11 +0000 (UTC)
-Date: Sat, 15 Oct 2022 17:30:56 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-	s=protonmail; t=1665855069; x=1666114269;
-	bh=v/dYh1TObv2Mc65vmbkjPbIpqNn1ni6stj7nuU4mFRg=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID;
-	b=JhP99IhxyMhw5WOwOsxd4tja/pU2t+cfG3Fu0U/zNpMxtRYrjpXCp/eUWHQAIALf6
-	 I5mTzkMxGwKI+xGwhRqlYKZzC+VzNQTH8GCDzSvBxI+i2mjZjNZ8hWsvss+FJzcbxO
-	 /Jq7TzKgbEGZzYJ5JTAm8Avkgasab0388LWFMjdQ=
-To: caleb@connolly.tech
-From: Caleb Connolly <caleb@connolly.tech>
-Cc: krzysztof.kozlowski@linaro.org, phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jeff LaBundy <jeff@labundy.com>, Konrad Dybcio <konrad.dybcio@somainline.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-Subject: [PATCH v7 2/2] input: add Qualcomm SPMI haptics driver
-Message-ID: <20221015172915.1436236-3-caleb@connolly.tech>
-Feedback-ID: 10753939:user:proton
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B004653
+	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 02:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1665888701;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ky/7WjoK5VPoCtvYq7AbkiLfoiDefYdp1XYZg+aVQ94=;
+	b=Ay6IrsGKfQLmY4y2QgXLMCambXrVDPmk5wZnG5qTNwi2tZTL7aJSQIRUXMcs0Zzs41h3QT
+	cqqOGh/E5xYGGlDWIYpz7N18wjR3AbOBAGY8JfhDdMw6A3pMsw2wvs0fIKmDsDDOpFOBT3
+	E3HRc0KqvRvG8T9cI79zllFDnKciM3s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-427-GpHJtT2wN865sGk809vuSQ-1; Sat, 15 Oct 2022 22:51:40 -0400
+X-MC-Unique: GpHJtT2wN865sGk809vuSQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43D4C3C11EA3
+	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 02:51:40 +0000 (UTC)
+Received: from [172.64.9.11] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 33986C3343C;
+	Sun, 16 Oct 2022 02:51:40 +0000 (UTC)
+From: cki-project@redhat.com
+To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
+ mainline.kernel.org-clang, 73344a3f)
+Date: Sun, 16 Oct 2022 02:51:40 -0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <66256.122101522514000173@us-mta-427.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Add support for the haptics found in pmi8998 and related PMICs.
-Based on the ff-memless interface. Currently this driver provides
-a partial implementation of hardware features.
+Hi, we tested your kernel and here are the results:
 
-This driver only supports LRAs (Linear Resonant Actuators) in the "buffer"
-mode with a single wave pattern.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Signed-off-by: Caleb Connolly <caleb@connolly.tech>
----
- drivers/input/misc/Kconfig                |  15 +
- drivers/input/misc/Makefile               |   1 +
- drivers/input/misc/qcom-pmi8998-haptics.c | 690 ++++++++++++++++++++++
- 3 files changed, 706 insertions(+)
- create mode 100644 drivers/input/misc/qcom-pmi8998-haptics.c
 
-diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-index a18ab7358d8f..608a64fa7914 100644
---- a/drivers/input/misc/Kconfig
-+++ b/drivers/input/misc/Kconfig
-@@ -186,6 +186,21 @@ config INPUT_PMIC8XXX_PWRKEY
- =09  To compile this driver as a module, choose M here: the
- =09  module will be called pmic8xxx-pwrkey.
+Kernel information:
+    Commit message: Merge tag 'asm-generic-fixes-6.1-1' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/arnd/asm-generic
 
-+config INPUT_QCOM_PMI8998_HAPTICS
-+=09tristate "Qualcomm SPMI HAPTICS"
-+=09depends on ARCH_QCOM || COMPILE_TEST
-+=09depends on MFD_PM8XXX || MFD_SPMI_PMIC || COMPILE_TEST
-+=09select INPUT_FF_MEMLESS
-+=09help
-+=09  This option enables support for the haptics found in pmi8998 and
-+=09  related PMICs. Based on the ff-memless interface.
-+
-+=09  This driver is for hardware too new for the INPUT_PM8XXX_VIBRATOR
-+=09  driver.
-+
-+=09  To compile this driver as module, choose M here: the
-+=09  module will be called qcom_pmi8998_haptics.
-+
- config INPUT_SPARCSPKR
- =09tristate "SPARC Speaker support"
- =09depends on PCI && SPARC64
-diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-index 28dfc444f0a9..039d0a97f2f4 100644
---- a/drivers/input/misc/Makefile
-+++ b/drivers/input/misc/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_INPUT_PMIC8XXX_PWRKEY)=09+=3D pmic8xxx-pwrke=
-y.o
- obj-$(CONFIG_INPUT_POWERMATE)=09=09+=3D powermate.o
- obj-$(CONFIG_INPUT_PWM_BEEPER)=09=09+=3D pwm-beeper.o
- obj-$(CONFIG_INPUT_PWM_VIBRA)=09=09+=3D pwm-vibra.o
-+obj-$(CONFIG_INPUT_QCOM_PMI8998_HAPTICS)+=3D qcom-pmi8998-haptics.o
- obj-$(CONFIG_INPUT_RAVE_SP_PWRBUTTON)=09+=3D rave-sp-pwrbutton.o
- obj-$(CONFIG_INPUT_RB532_BUTTON)=09+=3D rb532_button.o
- obj-$(CONFIG_INPUT_REGULATOR_HAPTIC)=09+=3D regulator-haptic.o
-diff --git a/drivers/input/misc/qcom-pmi8998-haptics.c b/drivers/input/misc=
-/qcom-pmi8998-haptics.c
-new file mode 100644
-index 000000000000..e9eec2d9de2d
---- /dev/null
-+++ b/drivers/input/misc/qcom-pmi8998-haptics.c
-@@ -0,0 +1,690 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022, Caleb Connolly <caleb@connolly.tech>
-+ * Qualcomm QPMI haptics driver for pmi8998 and related PMICs.
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/bitfield.h>
-+#include <linux/errno.h>
-+#include <linux/input.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/log2.h>
-+#include <linux/minmax.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/time.h>
-+#include <linux/types.h>
-+
-+// clang-format off
-+#define HAP_STATUS_1_REG=09=090x0A
-+#define HAP_BUSY_BIT=09=09=09BIT(1)
-+#define SC_FLAG_BIT=09=09=09BIT(3)
-+#define AUTO_RES_ERROR_BIT=09=09BIT(4)
-+
-+#define HAP_LRA_AUTO_RES_LO_REG=09=090x0B
-+#define HAP_LRA_AUTO_RES_HI_REG=09=090x0C
-+
-+#define HAP_EN_CTL_REG=09=09=090x46
-+#define HAP_EN_BIT=09=09=09BIT(7)
-+
-+#define HAP_EN_CTL2_REG=09=09=090x48
-+#define BRAKE_EN_BIT=09=09=09BIT(0)
-+
-+#define HAP_AUTO_RES_CTRL_REG=09=090x4B
-+#define AUTO_RES_EN_BIT=09=09=09BIT(7)
-+#define AUTO_RES_ERR_RECOVERY_BIT=09BIT(3)
-+#define AUTO_RES_EN_FLAG_BIT=09=09BIT(0)
-+
-+#define HAP_CFG1_REG=09=09=090x4C
-+#define HAP_ACT_TYPE_MASK=09=09BIT(0)
-+
-+#define HAP_CFG2_REG=09=09=090x4D
-+#define HAP_LRA_RES_TYPE_MASK=09=09BIT(0)
-+
-+#define HAP_SEL_REG=09=09=090x4E
-+#define HAP_WF_SOURCE_MASK=09=09GENMASK(5, 4)
-+#define HAP_WF_SOURCE_SHIFT=09=094
-+
-+#define HAP_LRA_AUTO_RES_REG=09=090x4F
-+#define LRA_AUTO_RES_MODE_MASK=09=09GENMASK(6, 4)
-+#define LRA_AUTO_RES_MODE_SHIFT=09=094
-+#define LRA_HIGH_Z_MASK=09=09=09GENMASK(3, 2)
-+#define LRA_HIGH_Z_SHIFT=09=092
-+#define LRA_RES_CAL_MASK=09=09GENMASK(1, 0)
-+#define HAP_RES_CAL_PERIOD_MIN=09=094
-+#define HAP_RES_CAL_PERIOD_MAX=09=0932
-+
-+#define HAP_VMAX_CFG_REG=09=090x51
-+#define HAP_VMAX_OVD_BIT=09=09BIT(6)
-+#define HAP_VMAX_MASK=09=09=09GENMASK(5, 1)
-+#define HAP_VMAX_SHIFT=09=09=091
-+
-+#define HAP_ILIM_CFG_REG=09=090x52
-+#define HAP_ILIM_SEL_MASK=09=09BIT(0)
-+#define HAP_ILIM_400_MA=09=09=090
-+#define HAP_ILIM_800_MA=09=09=091
-+
-+#define HAP_SC_DEB_REG=09=09=090x53
-+#define HAP_SC_DEB_MASK=09=09=09GENMASK(2, 0)
-+#define HAP_SC_DEB_CYCLES_MIN=09=090
-+#define HAP_DEF_SC_DEB_CYCLES=09=098
-+#define HAP_SC_DEB_CYCLES_MAX=09=0932
-+
-+#define HAP_RATE_CFG1_REG=09=090x54
-+#define HAP_RATE_CFG1_MASK=09=09GENMASK(7, 0)
-+#define HAP_RATE_CFG2_SHIFT=09=098 // As CFG2 is the most significant byte
-+
-+#define HAP_RATE_CFG2_REG=09=090x55
-+#define HAP_RATE_CFG2_MASK=09=09GENMASK(3, 0)
-+
-+#define HAP_SC_CLR_REG=09=09=090x59
-+#define SC_CLR_BIT=09=09=09BIT(0)
-+
-+#define HAP_BRAKE_REG=09=09=090x5C
-+#define HAP_BRAKE_PAT_MASK=09=090x3
-+
-+#define HAP_WF_REPEAT_REG=09=090x5E
-+#define WF_REPEAT_MASK=09=09=09GENMASK(6, 4)
-+#define WF_REPEAT_SHIFT=09=09=094
-+#define WF_REPEAT_MIN=09=09=091
-+#define WF_REPEAT_MAX=09=09=09128
-+#define WF_S_REPEAT_MASK=09=09GENMASK(1, 0)
-+#define WF_S_REPEAT_MIN=09=09=091
-+#define WF_S_REPEAT_MAX=09=09=098
-+
-+#define HAP_WF_S1_REG=09=09=090x60
-+#define HAP_WF_SIGN_BIT=09=09=09BIT(7)
-+#define HAP_WF_OVD_BIT=09=09=09BIT(6)
-+#define HAP_WF_SAMP_MAX=09=09=09GENMASK(5, 1)
-+#define HAP_WF_SAMPLE_LEN=09=098
-+
-+#define HAP_PLAY_REG=09=09=090x70
-+#define HAP_PLAY_BIT=09=09=09BIT(7)
-+#define HAP_PAUSE_BIT=09=09=09BIT(0)
-+
-+#define HAP_SEC_ACCESS_REG=09=090xD0
-+#define HAP_SEC_ACCESS_UNLOCK=09=090xA5
-+
-+#define HAP_TEST2_REG=09=09=090xE3
-+
-+
-+#define HAP_VMAX_MIN_MV=09=09=09116
-+#define HAP_VMAX_MAX_MV=09=09=093596
-+#define HAP_VMAX_MAX_MV_STRONG=09=093596
-+
-+#define HAP_WAVE_PLAY_RATE_MIN_US=090
-+#define HAP_WAVE_PLAY_RATE_MAX_US=0920475
-+#define HAP_WAVE_PLAY_TIME_MAX_MS=0915000
-+
-+#define AUTO_RES_ERR_POLL_TIME_NS=09(20 * NSEC_PER_MSEC)
-+#define HAPTICS_BACK_EMF_DELAY_US=0920000
-+
-+#define HAP_BRAKE_PAT_LEN=09=094
-+#define HAP_WAVE_SAMP_LEN=09=098
-+#define NUM_WF_SET=09=09=094
-+#define HAP_WAVE_SAMP_SET_LEN=09=09(HAP_WAVE_SAMP_LEN * NUM_WF_SET)
-+#define HAP_RATE_CFG_STEP_US=09=095
-+
-+#define SC_MAX_COUNT=09=09=095
-+#define SC_COUNT_RST_DELAY_US=09=091000000
-+
-+// Actuator types
-+#define HAP_TYPE_LRA=09=09=090
-+#define HAP_TYPE_ERM=09=09=091
-+
-+// LRA Wave type
-+#define HAP_WAVE_SINE=09=09=090
-+#define HAP_WAVE_SQUARE=09=09=091
-+
-+// Play modes
-+#define HAP_PLAY_DIRECT=09=09=090
-+#define HAP_PLAY_BUFFER=09=09=091
-+#define HAP_PLAY_AUDIO=09=09=092
-+#define HAP_PLAY_PWM=09=09=093
-+
-+#define HAP_PLAY_MAX=09=09=09HAP_PLAY_PWM
-+
-+// Auto resonance type
-+#define HAP_AUTO_RES_NONE=09=090
-+#define HAP_AUTO_RES_ZXD=09=091
-+#define HAP_AUTO_RES_QWD=09=092
-+#define HAP_AUTO_RES_MAX_QWD=09=093
-+#define HAP_AUTO_RES_ZXD_EOP=09=094
-+// clang-format on
-+
-+static const uint8_t default_brake_pattern[] =3D {
-+=090x3, 0x3, 0x3, 0x3, 0x3,
-+};
-+
-+static const uint8_t wave_sample_pattern[] =3D {
-+=090x7e, 0x7e, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28,
-+};
-+
-+/**
-+ * struct spmi_haptics - struct for spmi haptics data.
-+ *
-+ * @dev: Our device parent.
-+ * @regmap: Register map for the hardware block.
-+ * @input: The input device used to receive events.
-+ * @work: Work struct to play effects.
-+ * @base: Base address of the regmap.
-+ * @play_irq: Fired to load the next wave pattern.
-+ * @sc_irq: Short circuit irq.
-+ * @last_sc_time: Time since the short circuit IRQ last fired.
-+ * @sc_count: Number of times the short circuit IRQ has fired in this inte=
-rval.
-+ * @actuator_type: The type of actuator in use.
-+ * @wave_shape: The shape of the waves to use (sine or square).
-+ * @play_mode: The play mode to use (direct, buffer, pwm, audio).
-+ * @vmax: Max voltage to use when playing.
-+ * @current_limit: The current limit for this hardware (400mA or 800mA).
-+ * @play_wave_rate: The wave rate to use for this hardware.
-+ * @play_lock: Lock to be held when updating the hardware state.
-+ */
-+struct spmi_haptics {
-+=09struct device *dev;
-+=09struct regmap *regmap;
-+=09struct input_dev *input;
-+=09struct work_struct work;
-+=09uint32_t base;
-+
-+=09int play_irq;
-+=09int sc_irq;
-+=09ktime_t last_sc_time;
-+=09uint8_t sc_count;
-+
-+=09uint8_t actuator_type;
-+=09uint8_t wave_shape;
-+=09uint8_t play_mode;
-+=09uint32_t vmax;
-+=09uint32_t current_limit;
-+=09uint32_t play_wave_rate;
-+=09struct mutex play_lock;
-+};
-+
-+static int haptics_write_vmax(struct spmi_haptics *haptics)
-+{
-+=09uint8_t val =3D 0;
-+=09uint32_t vmax_mv =3D haptics->vmax;
-+
-+=09vmax_mv =3D clamp_t(uint32_t, vmax_mv, HAP_VMAX_MIN_MV, HAP_VMAX_MAX_MV=
-);
-+=09vmax_mv =3D DIV_ROUND_CLOSEST(vmax_mv, HAP_VMAX_MIN_MV);
-+
-+=09val =3D FIELD_PREP(HAP_VMAX_MASK, vmax_mv);
-+
-+=09return regmap_update_bits(haptics->regmap,
-+=09=09=09=09  haptics->base + HAP_VMAX_CFG_REG,
-+=09=09=09=09  HAP_VMAX_MASK | HAP_WF_OVD_BIT, val);
-+}
-+
-+static int haptics_module_enable(struct spmi_haptics *haptics, bool enable=
-)
-+{
-+=09return regmap_update_bits(haptics->regmap,
-+=09=09=09=09  haptics->base + HAP_EN_CTL_REG, HAP_EN_BIT,
-+=09=09=09=09  enable ? HAP_EN_BIT : 0);
-+}
-+
-+static int haptics_play(struct spmi_haptics *haptics, bool play)
-+{
-+=09return regmap_update_bits(haptics->regmap, haptics->base + HAP_PLAY_REG=
-,
-+=09=09=09=09  HAP_PLAY_BIT | HAP_PAUSE_BIT,
-+=09=09=09=09  play ? HAP_PLAY_BIT : 0);
-+}
-+
-+static bool is_haptics_module_enabled(struct spmi_haptics *haptics)
-+{
-+=09uint32_t val;
-+
-+=09regmap_read(haptics->regmap, haptics->base + HAP_EN_CTL_REG, &val);
-+=09return !!val;
-+}
-+
-+/*
-+ * This IRQ is fired to tell us to load the next wave sample set.
-+ * As we only currently support a single sample set, it's unused.
-+ */
-+static irqreturn_t haptics_play_irq(int irq, void *data)
-+{
-+=09struct spmi_haptics *haptics =3D data;
-+
-+=09dev_dbg(haptics->dev, "play_irq triggered");
-+
-+=09return IRQ_HANDLED;
-+}
-+
-+/*
-+ * Fires every ~50ms whilst the haptics are active.
-+ * If the SC_FLAG_BIT is set then that means there isn't a short circuit
-+ * and we just need to clear the IRQ to indicate that the device should
-+ * keep vibrating.
-+ *
-+ * Otherwise, it means a short circuit situation has occurred.
-+ */
-+static irqreturn_t haptics_sc_irq(int irq, void *data)
-+{
-+=09struct spmi_haptics *haptics =3D data;
-+=09int ret;
-+=09uint32_t val;
-+=09long sc_delta_time_us;
-+=09ktime_t temp;
-+
-+=09mutex_lock(&haptics->play_lock);
-+
-+=09ret =3D regmap_read(haptics->regmap, haptics->base + HAP_STATUS_1_REG,
-+=09=09=09  &val);
-+=09if (ret)
-+=09=09goto out;
-+
-+=09if (!(val & SC_FLAG_BIT)) {
-+=09=09haptics->sc_count =3D 0;
-+=09=09goto out;
-+=09}
-+
-+=09temp =3D ktime_get();
-+=09sc_delta_time_us =3D ktime_us_delta(temp, haptics->last_sc_time);
-+=09haptics->last_sc_time =3D temp;
-+
-+=09if (sc_delta_time_us > SC_COUNT_RST_DELAY_US)
-+=09=09haptics->sc_count =3D 0;
-+=09else
-+=09=09haptics->sc_count++;
-+
-+=09ret =3D regmap_update_bits(haptics->regmap,
-+=09=09=09=09 haptics->base + HAP_SC_CLR_REG, SC_CLR_BIT,
-+=09=09=09=09 SC_CLR_BIT);
-+=09if (ret)
-+=09=09goto out;
-+
-+=09if (haptics->sc_count > SC_MAX_COUNT) {
-+=09=09cancel_work_sync(&haptics->work);
-+=09=09dev_err(haptics->dev,
-+=09=09=09"Short circuit persists, disabling haptics\n");
-+=09=09ret =3D haptics_module_enable(haptics, false);
-+=09=09if (ret)
-+=09=09=09dev_err(haptics->dev, "Error disabling module, rc=3D%d\n",
-+=09=09=09=09ret);
-+=09}
-+
-+out:
-+=09mutex_unlock(&haptics->play_lock);
-+=09return IRQ_HANDLED;
-+}
-+
-+static int haptics_vibrate(struct spmi_haptics *haptics)
-+{
-+=09int ret;
-+
-+=09if (haptics->sc_count > SC_MAX_COUNT) {
-+=09=09dev_err(haptics->dev, "Can't play while in short circuit");
-+=09=09return -EINVAL;
-+=09}
-+
-+=09ret =3D haptics_write_vmax(haptics);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09ret =3D haptics_module_enable(haptics, true);
-+=09if (ret) {
-+=09=09dev_err(haptics->dev, "Error enabling module, ret=3D%d\n", ret);
-+=09=09return ret;
-+=09}
-+
-+=09ret =3D haptics_play(haptics, true);
-+=09if (ret) {
-+=09=09dev_err(haptics->dev, "Error enabling play, ret=3D%d\n", ret);
-+=09=09return ret;
-+=09}
-+
-+=09return ret;
-+}
-+
-+static int haptics_stop_vibrate(struct spmi_haptics *haptics)
-+{
-+=09int ret;
-+
-+=09ret =3D haptics_play(haptics, false);
-+=09if (ret) {
-+=09=09dev_err(haptics->dev, "Error disabling play, ret=3D%d\n", ret);
-+=09=09return ret;
-+=09}
-+
-+=09ret =3D haptics_module_enable(haptics, false);
-+=09if (ret) {
-+=09=09dev_err(haptics->dev, "Error disabling module, ret=3D%d\n", ret);
-+=09=09return ret;
-+=09}
-+
-+=09return ret;
-+}
-+
-+static void haptics_play_stop_work(struct work_struct *work)
-+{
-+=09struct spmi_haptics *haptics =3D
-+=09=09container_of(work, struct spmi_haptics, work);
-+
-+=09int ret;
-+
-+=09mutex_lock(&haptics->play_lock);
-+
-+=09if (!is_haptics_module_enabled(haptics) && haptics->vmax)
-+=09=09ret =3D haptics_vibrate(haptics);
-+=09else
-+=09=09ret =3D haptics_stop_vibrate(haptics);
-+=09if (ret)
-+=09=09dev_err(haptics->dev, "Error setting haptics, ret=3D%d", ret);
-+
-+=09mutex_unlock(&haptics->play_lock);
-+}
-+
-+static int spmi_haptics_play_effect(struct input_dev *dev, void *data,
-+=09=09=09=09    struct ff_effect *effect)
-+{
-+=09struct spmi_haptics *haptics =3D input_get_drvdata(dev);
-+=09uint32_t magnitude;
-+
-+=09dev_dbg(haptics->dev, "%s: Rumbling with strong: %d and weak: %d",
-+=09=09 __func__, effect->u.rumble.strong_magnitude,
-+=09=09 effect->u.rumble.weak_magnitude);
-+
-+=09magnitude =3D effect->u.rumble.strong_magnitude >> 8;
-+=09if (!magnitude)
-+=09=09magnitude =3D effect->u.rumble.weak_magnitude >> 10;
-+
-+=09if (!magnitude)
-+=09=09haptics->vmax =3D 0;
-+=09else
-+=09=09haptics->vmax =3D
-+=09=09=09((HAP_VMAX_MAX_MV - HAP_VMAX_MIN_MV) * magnitude) /
-+=09=09=09=09100 +
-+=09=09=09HAP_VMAX_MIN_MV;
-+
-+=09schedule_work(&haptics->work);
-+
-+=09return 0;
-+}
-+
-+/**
-+ * spmi_haptics_close - callback for input device close
-+ * @dev: input device pointer
-+ *
-+ * Turns off the vibrator.
-+ */
-+static void spmi_haptics_close(struct input_dev *dev)
-+{
-+=09struct spmi_haptics *haptics =3D input_get_drvdata(dev);
-+
-+=09cancel_work_sync(&haptics->work);
-+=09haptics->vmax =3D 0;
-+
-+=09if (is_haptics_module_enabled(haptics))
-+=09=09haptics_stop_vibrate(haptics);
-+}
-+
-+static int haptics_write_brake_pattern(struct spmi_haptics *haptics,
-+=09=09=09=09       const uint8_t *brake_pattern)
-+{
-+=09int ret, i;
-+=09uint8_t val =3D 0;
-+
-+=09for (i =3D HAP_BRAKE_PAT_LEN - 1; i >=3D 0; i--)
-+=09=09val |=3D FIELD_PREP(HAP_BRAKE_PAT_MASK, brake_pattern[i])
-+=09=09       << (i * 2);
-+
-+=09ret =3D regmap_update_bits(haptics->regmap, haptics->base + HAP_BRAKE_R=
-EG,
-+=09=09=09=09 0xff, val);
-+
-+=09return ret   ?:
-+=09=09       regmap_update_bits(haptics->regmap,
-+=09=09=09=09=09  haptics->base + HAP_EN_CTL2_REG,
-+=09=09=09=09=09  BRAKE_EN_BIT, BRAKE_EN_BIT);
-+}
-+
-+static int haptics_init(struct spmi_haptics *haptics)
-+{
-+=09int ret;
-+=09uint8_t val, mask;
-+=09uint16_t play_rate;
-+
-+=09ret =3D regmap_update_bits(haptics->regmap, haptics->base + HAP_CFG1_RE=
-G,
-+=09=09=09=09 HAP_ACT_TYPE_MASK, haptics->actuator_type);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09/*
-+=09 * Configure auto resonance
-+=09 * see qpnp_haptics_lra_auto_res_config downstream
-+=09 * This is greatly simplified.
-+=09 */
-+=09val =3D FIELD_PREP(LRA_RES_CAL_MASK, ilog2(32 / HAP_RES_CAL_PERIOD_MIN)=
-) |
-+=09      FIELD_PREP(LRA_AUTO_RES_MODE_MASK, HAP_AUTO_RES_ZXD_EOP) |
-+=09      FIELD_PREP(LRA_HIGH_Z_MASK, 1);
-+=09mask =3D LRA_AUTO_RES_MODE_MASK | LRA_HIGH_Z_MASK | LRA_RES_CAL_MASK;
-+
-+=09ret =3D regmap_update_bits(haptics->regmap,
-+=09=09=09=09 haptics->base + HAP_LRA_AUTO_RES_REG, mask,
-+=09=09=09=09 val);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09val =3D FIELD_PREP(HAP_WF_SOURCE_MASK, haptics->play_mode);
-+=09ret =3D regmap_update_bits(haptics->regmap, haptics->base + HAP_SEL_REG=
-,
-+=09=09=09=09 HAP_WF_SOURCE_MASK, val);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09ret =3D regmap_update_bits(haptics->regmap,
-+=09=09=09=09 haptics->base + HAP_ILIM_CFG_REG,
-+=09=09=09=09 HAP_ILIM_SEL_MASK, haptics->current_limit);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09/* Configure the debounce for short-circuit detection. */
-+=09ret =3D regmap_update_bits(haptics->regmap,
-+=09=09=09=09 haptics->base + HAP_SC_DEB_REG,
-+=09=09=09=09 HAP_SC_DEB_MASK, HAP_SC_DEB_CYCLES_MAX);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09ret =3D regmap_update_bits(haptics->regmap, haptics->base + HAP_CFG2_RE=
-G,
-+=09=09=09=09 HAP_LRA_RES_TYPE_MASK, haptics->wave_shape);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09/*
-+=09 * Configure RATE_CFG1 and RATE_CFG2 registers.
-+=09 * Note: For ERM (unsupported) these registers act as play rate and
-+=09 * for LRA these represent resonance period
-+=09 */
-+=09play_rate =3D haptics->play_wave_rate / HAP_RATE_CFG_STEP_US;
-+=09val =3D FIELD_PREP(HAP_RATE_CFG1_MASK, play_rate);
-+=09ret =3D regmap_update_bits(haptics->regmap,
-+=09=09=09=09 haptics->base + HAP_RATE_CFG1_REG,
-+=09=09=09=09 HAP_RATE_CFG1_MASK, val);
-+=09val =3D FIELD_PREP(HAP_RATE_CFG2_MASK, play_rate >> 8);
-+=09ret =3D ret   ?:
-+=09=09      regmap_update_bits(haptics->regmap,
-+=09=09=09=09=09 haptics->base + HAP_RATE_CFG2_REG,
-+=09=09=09=09=09 HAP_RATE_CFG1_MASK, val);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09ret =3D haptics_write_brake_pattern(haptics, default_brake_pattern);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09/* Currently this is the only supported play mode */
-+=09if (haptics->play_mode =3D=3D HAP_PLAY_BUFFER) {
-+=09=09/* zero repeats and zero sample repeats */
-+=09=09val =3D FIELD_PREP(WF_REPEAT_MASK, 0) |
-+=09=09      FIELD_PREP(WF_S_REPEAT_MASK, 0);
-+=09=09ret =3D regmap_update_bits(haptics->regmap,
-+=09=09=09=09=09 haptics->base + HAP_WF_REPEAT_REG,
-+=09=09=09=09=09 WF_REPEAT_MASK | WF_S_REPEAT_MASK,
-+=09=09=09=09=09 val);
-+=09=09if (ret)
-+=09=09=09return ret;
-+
-+=09=09ret =3D regmap_bulk_write(haptics->regmap,
-+=09=09=09=09=09haptics->base + HAP_WF_S1_REG,
-+=09=09=09=09=09wave_sample_pattern, HAP_WAVE_SAMP_LEN);
-+=09=09if (ret)
-+=09=09=09return ret;
-+=09}
-+
-+=09return 0;
-+}
-+
-+static int spmi_haptics_probe(struct platform_device *pdev)
-+{
-+=09struct spmi_haptics *haptics;
-+=09struct input_dev *input_dev;
-+=09int ret, irq;
-+
-+=09haptics =3D devm_kzalloc(&pdev->dev, sizeof(*haptics), GFP_KERNEL);
-+=09if (!haptics)
-+=09=09return -ENOMEM;
-+
-+=09haptics->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
-+=09if (!haptics->regmap)
-+=09=09return -ENODEV;
-+
-+=09haptics->dev =3D &pdev->dev;
-+
-+=09platform_set_drvdata(pdev, haptics);
-+
-+=09ret =3D device_property_read_u32(haptics->dev, "reg", &haptics->base);
-+=09if (ret)
-+=09=09return dev_err_probe(haptics->dev, ret,
-+=09=09=09=09     "Couldn't read base address");
-+
-+=09/* This is the only currently supported configuration, these values
-+=09 * are left to allow future additions
-+=09 */
-+=09haptics->actuator_type =3D HAP_TYPE_LRA;
-+=09haptics->play_mode =3D HAP_PLAY_BUFFER;
-+=09haptics->wave_shape =3D HAP_WAVE_SINE;
-+=09haptics->current_limit =3D HAP_ILIM_400_MA;
-+
-+=09ret =3D device_property_read_u32(haptics->dev, "qcom,wave-play-rate-us"=
-,
-+=09=09=09=09       &haptics->play_wave_rate);
-+=09if (ret)
-+=09=09return dev_err_probe(haptics->dev, ret,
-+=09=09=09=09     "qcom,wave-play-rate-us is required\n");
-+
-+=09INIT_WORK(&haptics->work, haptics_play_stop_work);
-+
-+=09ret =3D haptics_init(haptics);
-+=09if (ret)
-+=09=09return ret;
-+
-+=09input_dev =3D devm_input_allocate_device(&pdev->dev);
-+=09if (!input_dev)
-+=09=09return -ENOMEM;
-+
-+=09input_dev->name =3D "spmi_haptics";
-+=09input_dev->id.version =3D 1;
-+=09input_dev->close =3D spmi_haptics_close;
-+=09input_set_drvdata(input_dev, haptics);
-+
-+=09haptics->input =3D input_dev;
-+
-+=09/* In the future this should become FF_PERIODIC */
-+=09input_set_capability(haptics->input, EV_FF, FF_RUMBLE);
-+
-+=09ret =3D input_ff_create_memless(input_dev, NULL,
-+=09=09=09=09      spmi_haptics_play_effect);
-+=09if (ret)
-+=09=09return dev_err_probe(
-+=09=09=09&pdev->dev, ret,
-+=09=09=09"Couldn't register haptics as EV_FF device\n");
-+
-+=09ret =3D input_register_device(input_dev);
-+=09if (ret)
-+=09=09return dev_err_probe(&pdev->dev, ret,
-+=09=09=09=09     "Couldn't register input device\n");
-+
-+=09/* NOTE: the play IRQ is only used for buffer mode */
-+=09irq =3D platform_get_irq_byname(pdev, "play");
-+=09if (irq < 0) {
-+=09=09return dev_err_probe(&pdev->dev, irq,
-+=09=09=09=09     "Unable to get play irq\n");
-+=09}
-+=09ret =3D devm_request_threaded_irq(haptics->dev, irq, NULL,
-+=09=09=09=09=09haptics_play_irq, IRQF_ONESHOT,
-+=09=09=09=09=09"haptics_play_irq", haptics);
-+=09if (ret)
-+=09=09return dev_err_probe(haptics->dev, ret,
-+=09=09=09=09     "Couldn't request play irq\n");
-+
-+=09irq =3D platform_get_irq_byname(pdev, "short");
-+=09if (irq < 0)
-+=09=09return dev_err_probe(&pdev->dev, irq,
-+=09=09=09=09     "Unable to get short circut irq\n");
-+=09ret =3D devm_request_threaded_irq(haptics->dev, irq, NULL, haptics_sc_i=
-rq,
-+=09=09=09=09=09IRQF_ONESHOT, "haptics_short_irq",
-+=09=09=09=09=09haptics);
-+=09if (ret)
-+=09=09return dev_err_probe(haptics->dev, ret,
-+=09=09=09=09     "Couldn't request short circuit irq\n");
-+
-+=09mutex_init(&haptics->play_lock);
-+
-+=09return 0;
-+}
-+
-+static int __maybe_unused spmi_haptics_suspend(struct device *dev)
-+{
-+=09struct spmi_haptics *haptics =3D dev_get_drvdata(dev);
-+
-+=09cancel_work_sync(&haptics->work);
-+=09haptics_stop_vibrate(haptics);
-+
-+=09return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(spmi_haptics_pm_ops, spmi_haptics_suspend, NULL);
-+
-+static int spmi_haptics_remove(struct platform_device *pdev)
-+{
-+=09struct spmi_haptics *haptics =3D dev_get_drvdata(&pdev->dev);
-+
-+=09cancel_work_sync(&haptics->work);
-+=09mutex_destroy(&haptics->play_lock);
-+=09input_unregister_device(haptics->input);
-+
-+=09return 0;
-+}
-+
-+static void spmi_haptics_shutdown(struct platform_device *pdev)
-+{
-+=09struct spmi_haptics *haptics =3D dev_get_drvdata(&pdev->dev);
-+
-+=09cancel_work_sync(&haptics->work);
-+=09haptics_stop_vibrate(haptics);
-+}
-+
-+static const struct of_device_id spmi_haptics_match_table[] =3D {
-+=09{ .compatible =3D "qcom,pmi8998-haptics" },
-+=09{}
-+};
-+MODULE_DEVICE_TABLE(of, spmi_haptics_match_table);
-+
-+static struct platform_driver spmi_haptics_driver =3D {
-+=09.probe=09=09=3D spmi_haptics_probe,
-+=09.remove=09=09=3D spmi_haptics_remove,
-+=09.shutdown=09=3D spmi_haptics_shutdown,
-+=09.driver=09=09=3D {
-+=09=09.name=09=3D "spmi-haptics",
-+=09=09.pm=09=3D &spmi_haptics_pm_ops,
-+=09=09.of_match_table =3D spmi_haptics_match_table,
-+=09},
-+};
-+module_platform_driver(spmi_haptics_driver);
-+
-+MODULE_DESCRIPTION("spmi haptics driver using ff-memless framework");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Caleb Connolly <caleb@connolly.tech>");
---
-2.38.0
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/56391
 
+One or more kernel tests failed:
+
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5526503
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] WARNING: possible circular locking dependency det=
+ected: at: __flush_work+0xea/0x6b0 at: sugov_work+0x5f/0x90 powernow_k8
+            URL: https://lore.kernel.org/all/dada2033-1db5-4205-319b-0308db=
+ccd3b5@redhat.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - software RAID testing
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - Storage - software RAID testing
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
+al_clmulni]
+            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
+hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - cpu: perf: interrupt took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1034
+            Affected tests:
+                  x86_64 - stress: stress-ng - cpu-cache
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
+                  x86_64 - Networking bridge: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
+ write: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1047
+            Affected tests:
+                 ppc64le - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
