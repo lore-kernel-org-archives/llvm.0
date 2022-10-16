@@ -1,221 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B004653
-	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 02:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1665888701;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Ky/7WjoK5VPoCtvYq7AbkiLfoiDefYdp1XYZg+aVQ94=;
-	b=Ay6IrsGKfQLmY4y2QgXLMCambXrVDPmk5wZnG5qTNwi2tZTL7aJSQIRUXMcs0Zzs41h3QT
-	cqqOGh/E5xYGGlDWIYpz7N18wjR3AbOBAGY8JfhDdMw6A3pMsw2wvs0fIKmDsDDOpFOBT3
-	E3HRc0KqvRvG8T9cI79zllFDnKciM3s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-GpHJtT2wN865sGk809vuSQ-1; Sat, 15 Oct 2022 22:51:40 -0400
-X-MC-Unique: GpHJtT2wN865sGk809vuSQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43D4C3C11EA3
-	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 02:51:40 +0000 (UTC)
-Received: from [172.64.9.11] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 33986C3343C;
-	Sun, 16 Oct 2022 02:51:40 +0000 (UTC)
-From: cki-project@redhat.com
-To: llvm@lists.linux.dev
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.0.0,
- mainline.kernel.org-clang, 73344a3f)
-Date: Sun, 16 Oct 2022 02:51:40 -0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCEF7E2
+	for <llvm@lists.linux.dev>; Sun, 16 Oct 2022 06:52:46 +0000 (UTC)
+Received: by mail-io1-f72.google.com with SMTP id x21-20020a5d9455000000b006bc1172e639so5277305ior.18
+        for <llvm@lists.linux.dev>; Sat, 15 Oct 2022 23:52:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+T5aOHFBn0evAQz1vErQpfAFJ2574A0vi0Zz9LJdccA=;
+        b=i4LSukInZ0JH+otKqspvgag8Mhn/KGd3OD71uR+Jb/GLsx5G27HJFUQ98bDP2Np/xF
+         fw4aUOb92IkzvCAw6ofKkM8psiymt77d/Ry57Cj3SBv1w8C8F1TMsJm8bORpzCg8wgks
+         ygVRaLnV1doAeW8H+jZZmsfvq+BcwxXC7Zx9P+59XeKt1SXaMquElKl485baCVxcjXIQ
+         QV/2MAruhC8zdl7oUyXYJHG1VoLoGXv0LNSr27LmQc4CP5E0FYQ+7FofcacNdGZPgABF
+         Nh28eocZwum0ep44kbXMyMzCL4eEH/2SbNGoFWv52UkNwNXg+NGmzdGDqySVuBO7Xwhj
+         Sl+g==
+X-Gm-Message-State: ACrzQf0yPAqIXVWP6nXjhkIIo+Li3WAedQi1KPOvdDrgGBc2dO2gXjh9
+	SvFRAGYy76l5mHrDZfhsa1Dj3uFuRh5buo3hk+ej9eM/8vi4
+X-Google-Smtp-Source: AMsMyM6EUVKT4V8JbfjAjs94yP0uEUQFLuz12gSDUo05L3wQic671XTHtNh/yDdBKmYV/FRN+O2+batHaqElAZpScVs7iI2InzZv
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <66256.122101522514000173@us-mta-427.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6602:341c:b0:6bc:1c3d:836e with SMTP id
+ n28-20020a056602341c00b006bc1c3d836emr2163062ioz.24.1665903165488; Sat, 15
+ Oct 2022 23:52:45 -0700 (PDT)
+Date: Sat, 15 Oct 2022 23:52:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000068cb2905eb214e9a@google.com>
+Subject: [syzbot] WARNING in btf_type_id_size
+From: syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+syzbot found the following issue on:
 
+HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
+git tree:       bpf
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
+dashboard link: https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
 
-Kernel information:
-    Commit message: Merge tag 'asm-generic-fixes-6.1-1' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/arnd/asm-generic
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/56391
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
 
-One or more kernel tests failed:
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5526503
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] WARNING: possible circular locking dependency det=
-ected: at: __flush_work+0xea/0x6b0 at: sugov_work+0x5f/0x90 powernow_k8
-            URL: https://lore.kernel.org/all/dada2033-1db5-4205-319b-0308db=
-ccd3b5@redhat.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - software RAID testing
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - Storage - software RAID testing
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: stress: stress-ng - cpu: perf: interrupt took too long
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1034
-            Affected tests:
-                  x86_64 - stress: stress-ng - cpu-cache
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                   s390x - Networking bridge: sanity
-                  x86_64 - Networking bridge: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: [ppc64le] Boot test: tar: boot/vmlinux-kbuild-5.17.0: Cannot=
- write: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1047
-            Affected tests:
-                 ppc64le - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946 btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+Modules linked in:
+CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
+RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
+RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
+R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
+FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
+ btf_check_all_types kernel/bpf/btf.c:4723 [inline]
+ btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
+ btf_parse kernel/bpf/btf.c:5026 [inline]
+ btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
+ bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
+ __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
+ __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0fbae41c69
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
+RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
+RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
