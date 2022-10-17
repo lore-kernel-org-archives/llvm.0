@@ -1,114 +1,149 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74E033C1;
-	Mon, 17 Oct 2022 16:56:31 +0000 (UTC)
-Received: by mail-oi1-f174.google.com with SMTP id l5so12768456oif.7;
-        Mon, 17 Oct 2022 09:56:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032894699
+	for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 17:14:17 +0000 (UTC)
+Received: by mail-ua1-f43.google.com with SMTP id p4so4617138uao.0
+        for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 10:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3QLDhIRdz0sgMNmEZO3qAZB5Hcd6D723MgF6zWOXrA4=;
-        b=STJ4KtOxuHBiY8sqzmqjWG/We7ki/vkSyusspW0vuRIT9tn38Y2+iqy2suZjq6CSBy
-         EJWVkXcDvqJ5hiUWUjp3QKrIqROXmqHc6HoQO+SdtzACVthaU6alEcjt5fdWRupi2Ys4
-         CGIizvFeSsSIK8Pe38heAtsHmhHWYHRSEKEx7JnFheyRyzmPm8rpAYWAeo9xdxXe1QrL
-         YBxyNZK6Ow84BYACkEEKOyzR9S3Dlr0FUNRiV/SnWE2c0097jwgQ9TnMUEyPP6OjlBmc
-         g/ZGtMPJ6XNWLiE5SfhJzAcceqkQhS9UT3Ow2ruriepg18cj/u7LMHOyylk+jn3hkw66
-         eusA==
+        bh=CxWqumSKR3BuOjp+QhgYFQBAXUoNfkUfOpUq1HWbl1w=;
+        b=NRaKixeeXt339sxitZM7mXtcrOmvTuuZbF/O4pmY9sNzz8QzJqt3I/HP28ok/o6bKF
+         QS1ILGFmsPUL0yTzgbV+OaJrZNdINmskRdWBi09zrfXtg4222W2GIk28TCOmwVYZcgp7
+         /P66vUDajserDVUntWJE5goYXl+m8caF8TlBVS8+qcMp6fJY9+jsit/orphHHjWPdnYK
+         TORcADOobZV6uxiIjneRHf4jSrU11fQzUoss4PmgOpdXxtLodCDJqMoFog9yR2qTjbma
+         B+4rYy8utZjL5PqU4M5csXLWeSQGPa0h9Fz+PKBsQ41Cv8jZn0ManS0KCPFGekkVbeHN
+         beUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3QLDhIRdz0sgMNmEZO3qAZB5Hcd6D723MgF6zWOXrA4=;
-        b=J3hWx9CU9+RLZbkZIIjIM5Es7s8a7e1/8aeQyNwZRyeKLW+AH2yUG3+JG5psI02bAC
-         c50kexNtkAegJbnUF5qmjBuFLGaye0n8UPx6S4sLPNE3Q4fSnVzBCgKlZEE5YI+UeaPk
-         uBBfOFonEqSFhLKDfHgX/3CH6gb5A169c3Q6AlWwrakS1X/jkg+eUspr1Qy5gW8kIBLR
-         duUsXkJEqE083dx3LoCoCMSm+/jmgDQppM0EbC0BgXdwqMbXspBETJvDa95TVYCjaWkx
-         hu4h9i3aj3viB71dQt88nTEaMHN9MAnHdiXbRGfYaZG4QqGpkPV23g6CdfiolAnXdUm7
-         V2Qg==
-X-Gm-Message-State: ACrzQf1i3quED0Au4LMqpMD9TXsFpIsfgiq5BX0fy0P/Xe+DPaERdTYD
-	WpjZOohwqCcIweYR3zC7AHI5bI3yK4lwtJwzGrY=
-X-Google-Smtp-Source: AMsMyM69y3IS/obkTemFZFId5R/zGegZMQr+gk/q70dAfdIQn3OfAaogxMNkEHflvw8+jVeL43QchVYz2RTejG33v2I=
-X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id
- f18-20020a05680814d200b00354c733abd3mr5586270oiw.96.1666025791038; Mon, 17
- Oct 2022 09:56:31 -0700 (PDT)
+        bh=CxWqumSKR3BuOjp+QhgYFQBAXUoNfkUfOpUq1HWbl1w=;
+        b=dA/dxbYJwb8dKvgqOc6Esg/dboNbSAtPONyPofX3uHDKoW68/xlqxCumTPookq5r8u
+         lAiTe/iTjzAwXng0S8lab0mL7mLRFqQlX69zmurc/PD5dJaMXVa9p6bkT7C9E3sPlnh/
+         89paK+3icaqNQ/iUHNXiCoUuwYZP+VrLs/xyFTprRHjk57tYTfndSMiPKNNXMur6BqX8
+         VmxftB3QMRFPS6WYvTfK5aViVWCkQn5ByNPx6G4kGobbIeQ5s4sEg8fYYz0ImnM3r4ic
+         At8GTlhcycqFgeJD3wO+8RD7GlmiXE0RDYwWfYSTz1SEiQcHH5TJWaor7UfrbMK7XOe5
+         8gTw==
+X-Gm-Message-State: ACrzQf0asd9YFE0w3Ph5f3aRgd2kPP27t/eyn1fsKmQsxaX2coYeU0xs
+	x6g6o0pE3ErW0WNVnCrXKrSOwNQVawnVeemq2Mw/PQ==
+X-Google-Smtp-Source: AMsMyM4PgTCeLg8g3Eesqdsslve+dLMxFt87fZ3c3+2JP97PZO1tnMEsdM+iPBdJDBSl9z3FqXUVfkrc47q5R7G4t2M=
+X-Received: by 2002:ab0:70c6:0:b0:39e:ed14:806b with SMTP id
+ r6-20020ab070c6000000b0039eed14806bmr5184637ual.82.1666026856800; Mon, 17 Oct
+ 2022 10:14:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221017162837.3698-1-nathan@kernel.org>
-In-Reply-To: <20221017162837.3698-1-nathan@kernel.org>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 17 Oct 2022 12:56:19 -0400
-Message-ID: <CADnq5_P5e9nWWujT4f7TG_SQkvNA=MkwZJbuA=cWnDDCBqM5+w@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdkfd: Fix type of reset_type parameter in
- hqd_destroy() callback
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>, Kees Cook <keescook@chromium.org>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org, 
-	Sami Tolvanen <samitolvanen@google.com>
+References: <00000000000068cb2905eb214e9a@google.com> <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
+In-Reply-To: <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Mon, 17 Oct 2022 10:14:05 -0700
+Message-ID: <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in btf_type_id_size
+To: Stanislav Fomichev <sdf@google.com>
+Cc: syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>, 
+	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	netdev@vger.kernel.org, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
 
-Applied.  Thanks!
+Let's tell the bot about the fix
 
-Alex
+#syz fix: bpf: prevent decl_tag from being referenced in func_proto
 
-On Mon, Oct 17, 2022 at 12:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Mon, Oct 17, 2022 at 9:16 AM 'Stanislav Fomichev' via
+syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
 >
-> When booting a kernel compiled with CONFIG_CFI_CLANG on a machine with
-> an RX 6700 XT, there is a CFI failure in kfd_destroy_mqd_cp():
+> On Sat, Oct 15, 2022 at 11:52 PM syzbot
+> <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
+> > git tree:       bpf
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
+> >
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946 btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+> > Modules linked in:
+> > CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
+> > Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
+> > RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+> > RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
+> > RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
+> > R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
+> > R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
+> > FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
+> >  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
+> >  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
+> >  btf_parse kernel/bpf/btf.c:5026 [inline]
+> >  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
+> >  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
+> >  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
+> >  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
+> >  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
+> >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7f0fbae41c69
+> > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
+> > RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
+> > RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
+> > R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
+> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> >  </TASK>
 >
->   [   12.894543] CFI failure at kfd_destroy_mqd_cp+0x2a/0x40 [amdgpu] (target: hqd_destroy_v10_3+0x0/0x260 [amdgpu]; expected type: 0x8594d794)
->
-> Clang's kernel Control Flow Integrity (kCFI) makes sure that all
-> indirect call targets have a type that exactly matches the function
-> pointer prototype. In this case, hqd_destroy()'s third parameter,
-> reset_type, should have a type of 'uint32_t' but every implementation of
-> this callback has a third parameter type of 'enum kfd_preempt_type'.
->
-> Update the function pointer prototype to match reality so that there is
-> no more CFI violation.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1738
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->
-> No Fixes tag, as I could not pin down exactly when this started. I
-> suspect it is
->
-> Fixes: 70539bd79500 ("drm/amd: Update MEC HQD loading code for KFD")
->
-> but I did not want to add that without a second look. Feel free to add
-> it during patch application if it makes sense.
->
->  drivers/gpu/drm/amd/include/kgd_kfd_interface.h | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/include/kgd_kfd_interface.h b/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
-> index e85364dff4e0..5cb3e8634739 100644
-> --- a/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
-> +++ b/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
-> @@ -262,8 +262,9 @@ struct kfd2kgd_calls {
->                                 uint32_t queue_id);
->
->         int (*hqd_destroy)(struct amdgpu_device *adev, void *mqd,
-> -                               uint32_t reset_type, unsigned int timeout,
-> -                               uint32_t pipe_id, uint32_t queue_id);
-> +                               enum kfd_preempt_type reset_type,
-> +                               unsigned int timeout, uint32_t pipe_id,
-> +                               uint32_t queue_id);
->
->         bool (*hqd_sdma_is_occupied)(struct amdgpu_device *adev, void *mqd);
+> Will be addressed by
+> https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
 >
 >
-> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this issue, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+>
 > --
-> 2.38.0
->
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAKH8qBu%2BoT%2BBF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w%40mail.gmail.com.
