@@ -1,95 +1,93 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C99B33FB
-	for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 16:18:43 +0000 (UTC)
-Received: by mail-ed1-f52.google.com with SMTP id q19so16787759edd.10
-        for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 09:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EvKXXBfjBxozfV6WFzYGdtAGU5x1cXP77F9OEOiHjRA=;
-        b=hF2zG+QODFU7vhHtcL27fRDayxvbsN8P6jQWLQnMg+jXt4yc3MymyuXu/gGux8kTI1
-         0Zrhj4OCrvC5HA1Gaq4zgv3DgVeyC/S34yGYcYwTmo8ouI/Ail+VUQRwFI2mV2DZoZUv
-         H31iS/2OgtsBzHK76ThDDMx8h/4R68ZyRWspWPIM2swVIa6g0ufgzXGJQW8v7T/y1bZj
-         a6xjYRGYmtQndob/ZtBcIQHfjrZNScOcPt3bhi+HYh/OCqvt384HKOr1X8WSaCt5qwxv
-         2W7+mnYglhCAcBlzDfqgTybNZa61lWisHM7zcf+PDYKhaa0Ga8bQAkwlgbcgMb8Wm8K+
-         wc6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EvKXXBfjBxozfV6WFzYGdtAGU5x1cXP77F9OEOiHjRA=;
-        b=Uz3snfhu5xckj8zaFnejZNscMJGFbkILW9wta+rIp38YBsx5ABAJl03rtddWemuBiE
-         z9JEY/0TP3b+88jYes9n6Ug/QqP64Exl+y5EAfLBpqOuACFfTpTMTDt0aPyi8wuLf7s9
-         GepWWH/QDXXcqoEn77cieSbVfKvBAFqx/nv3/qD513MW1RpJDq2obOHnk+/zm7Nx5+hW
-         PunG8MAaBjliVP47BWeoMv5t1t3Qa1bZqmZd1gDahveZsfIJ/hWdsgEN5dK/de9vJ/dZ
-         +B5dO9Z254C/WxGahPt9nJJvD6mQBQV01rP4MGRfeNab/EGk6dgxDW/p1eRd5IYwfQ8U
-         iCyg==
-X-Gm-Message-State: ACrzQf3HzZxyUEmLW/4gI1/E0oWWmrZOO5yH4kbD1KkdVfJVDhqS2MIJ
-	MuaUebknWaqkxaqVQvHDjuHmlQ==
-X-Google-Smtp-Source: AMsMyM6ARby/6+Um7l8K2gj3ebnctRHo0Xc/NKdIW4tMZZYU4QtVwZMcJLLaa41J8jCUicQYTvhBHg==
-X-Received: by 2002:a05:6402:42d0:b0:457:d16e:283d with SMTP id i16-20020a05640242d000b00457d16e283dmr11053428edc.395.1666023521673;
-        Mon, 17 Oct 2022 09:18:41 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id et11-20020a056402378b00b0045c47b2a800sm7483488edb.67.2022.10.17.09.18.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 09:18:41 -0700 (PDT)
-Date: Mon, 17 Oct 2022 18:18:40 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10D24406;
+	Mon, 17 Oct 2022 16:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EAF4C433D6;
+	Mon, 17 Oct 2022 16:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1666024238;
+	bh=+SpiEDORkFBcvtJuSwSmQI53qufwZDro1hFbAgXXJlI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kIkJ65OoOuimfHE5lgKCTOr8YaTCINpC3k58nZUWbk0O1LxvnvJgVqN0zACazN+In
+	 l5PUBY9PStBYwqmM931aMeGvJdKrTIDQsTXZ+DtnJrE7F6r3MlarzC+G/OCKxGcIBW
+	 HWQ4lH24oQ1QwHa7WItQyjzSCGmXEXdT8Q51sngHB+uY/deraJQgPd+dwFmhPPVgfF
+	 fUbCS2G5m+odKPakxZC4ww8EhTprc1bN6GPvpIgJ9F4KEU6X1jAcJm+MU/P0dH0fob
+	 P64pWnQHb9UNw8loB62Yc1dVmgA1S2kMR37TvV5q1NDnwKKidf/WY+l2/64R9NVHuL
+	 srkY1nzun/+3A==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Felix Kuehling <Felix.Kuehling@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Dao Lu <daolu@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>,
-	Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] (attempt to) Fix RISC-V toolchain extension support
- detection
-Message-ID: <20221017161840.7o5tpsjox7klyvvs@kamzik>
-References: <20221006173520.1785507-1-conor@kernel.org>
- <20221017155103.4dt5uzmnlbtibqcn@kamzik>
- <Y0185O1zjyfv7WjN@spud>
+	Kees Cook <keescook@chromium.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] drm/amdkfd: Fix type of reset_type parameter in hqd_destroy() callback
+Date: Mon, 17 Oct 2022 09:28:38 -0700
+Message-Id: <20221017162837.3698-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0185O1zjyfv7WjN@spud>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 17, 2022 at 05:03:48PM +0100, Conor Dooley wrote:
-> On Mon, Oct 17, 2022 at 05:51:03PM +0200, Andrew Jones wrote:
-> > On Thu, Oct 06, 2022 at 06:35:19PM +0100, Conor Dooley wrote:
-> > 
-> > However, we could also drop the compiler and linker checking if we
-> > converted our use of cbo.* to the insn-def.h framework (I think Heiko once
-> > mentioned looking at doing that, but I'm not sure.) I'm looking at adding
-> > Zicboz support right now and for starters I've duplicated and modified
-> > these checks. But, I think I'll look into defining the instruction type
-> > needed for cbo.* and using insn-def instead.
-> 
-> What is the ETA of your zicboz support? Do you think these patches
-> should be applied to v6.1 & backported before being replaced by insn-def
-> when your zicboz support arrives? Or just wait for your zicboz series?
+When booting a kernel compiled with CONFIG_CFI_CLANG on a machine with
+an RX 6700 XT, there is a CFI failure in kfd_destroy_mqd_cp():
 
-I hope to have something posted by the end of this week, so if all things
-go well, it could land in 6.1. I think it's reasonable to merge your
-patches anyway, though, as they fix the current code and we don't know
-what rabbit holes I may fall in with my series yet.
+  [   12.894543] CFI failure at kfd_destroy_mqd_cp+0x2a/0x40 [amdgpu] (target: hqd_destroy_v10_3+0x0/0x260 [amdgpu]; expected type: 0x8594d794)
 
-Thanks,
-drew
+Clang's kernel Control Flow Integrity (kCFI) makes sure that all
+indirect call targets have a type that exactly matches the function
+pointer prototype. In this case, hqd_destroy()'s third parameter,
+reset_type, should have a type of 'uint32_t' but every implementation of
+this callback has a third parameter type of 'enum kfd_preempt_type'.
 
-> 
-> Trying to decide what status I should set for this in patchwork.
-> 
-> Thanks,
-> Conor.
-> 
+Update the function pointer prototype to match reality so that there is
+no more CFI violation.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1738
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+
+No Fixes tag, as I could not pin down exactly when this started. I
+suspect it is
+
+Fixes: 70539bd79500 ("drm/amd: Update MEC HQD loading code for KFD")
+
+but I did not want to add that without a second look. Feel free to add
+it during patch application if it makes sense.
+
+ drivers/gpu/drm/amd/include/kgd_kfd_interface.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/include/kgd_kfd_interface.h b/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
+index e85364dff4e0..5cb3e8634739 100644
+--- a/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
++++ b/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
+@@ -262,8 +262,9 @@ struct kfd2kgd_calls {
+ 				uint32_t queue_id);
+ 
+ 	int (*hqd_destroy)(struct amdgpu_device *adev, void *mqd,
+-				uint32_t reset_type, unsigned int timeout,
+-				uint32_t pipe_id, uint32_t queue_id);
++				enum kfd_preempt_type reset_type,
++				unsigned int timeout, uint32_t pipe_id,
++				uint32_t queue_id);
+ 
+ 	bool (*hqd_sdma_is_occupied)(struct amdgpu_device *adev, void *mqd);
+ 
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.0
+
