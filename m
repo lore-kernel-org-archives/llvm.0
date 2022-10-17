@@ -1,136 +1,95 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57F32F31
-	for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 16:16:36 +0000 (UTC)
-Received: by mail-il1-f176.google.com with SMTP id r20so6060409ilt.11
-        for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 09:16:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C99B33FB
+	for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 16:18:43 +0000 (UTC)
+Received: by mail-ed1-f52.google.com with SMTP id q19so16787759edd.10
+        for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 09:18:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WFrtH1nIceWDWjecFJq4RLnBMDwSO0i+CWv3MNMfQg4=;
-        b=jEv4jAYG5jOPL6GizracGgpmxqZQyzsHZgcpzsug0NOrifCD7ynawGMq1j/8U+khSs
-         IK6jqHG48I6xqj4p86ARYxnTkNWTeMD544onM0Tmh+B7yVzP6LqBvd+t8LWpVAz2u03h
-         gwzqmfrQRgOYbcZ//HNPJ0SFSO0UloTO5p/ZgM13oPHxq/Ox9E1wvs93dwVnJYZMa0pK
-         YyDLUWK6fjoMEYua124lgY+pDR/qn4tKgUomX2WOiYZG+sXkhcQsVfD+Eepqq+/MwBHE
-         eKF4pgsWvIYQql6EgCgIJtbBadLWyZnUWPEiQGHvvRYL0FKJxLy3MQ4DJrMdqlb82DvR
-         qFYw==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EvKXXBfjBxozfV6WFzYGdtAGU5x1cXP77F9OEOiHjRA=;
+        b=hF2zG+QODFU7vhHtcL27fRDayxvbsN8P6jQWLQnMg+jXt4yc3MymyuXu/gGux8kTI1
+         0Zrhj4OCrvC5HA1Gaq4zgv3DgVeyC/S34yGYcYwTmo8ouI/Ail+VUQRwFI2mV2DZoZUv
+         H31iS/2OgtsBzHK76ThDDMx8h/4R68ZyRWspWPIM2swVIa6g0ufgzXGJQW8v7T/y1bZj
+         a6xjYRGYmtQndob/ZtBcIQHfjrZNScOcPt3bhi+HYh/OCqvt384HKOr1X8WSaCt5qwxv
+         2W7+mnYglhCAcBlzDfqgTybNZa61lWisHM7zcf+PDYKhaa0Ga8bQAkwlgbcgMb8Wm8K+
+         wc6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WFrtH1nIceWDWjecFJq4RLnBMDwSO0i+CWv3MNMfQg4=;
-        b=6P5tQlzUO8l/x7zqt2mMf4Z3y4qJ3PxFmKsPoUbls4TspB391gFNYaktbTfecB1+hW
-         TRU4r8UWxQAKQss9eF3/Wmfjgzu+OfuMlNiXgyMcMd8VRqcDivtKghndJFLQGET7pJSQ
-         TiW7EzD22t9skpwVABrC+mMbTOOf6BjW+3wJzXaG2vU/gz52p5s8Fj9R3sygo8JNy7ln
-         npuQTB6yDci2MQgdvcNR/F2iupeTvoPA15/1e/RhDvhCSRzQPbzAxeVv7wFNFsYK79Or
-         5W/3qsMHOlJcJdaUn7ZaNbUTqlgMpDDAEoTe1aMPir3afDtR3AGJWxfbslLQRl2K9cNt
-         stNw==
-X-Gm-Message-State: ACrzQf3WxKRxNUH/bSZVoy4ZsNEe7a2n8skeWyQXDYHgNFLagP/1VxKM
-	8fRueE0Eak6jmcCNK2q5FT3D9Y9NTbUT3+ng36WmOg==
-X-Google-Smtp-Source: AMsMyM6D6ZH23UH1DDhYJy7DKaiHnY8WMVH8bWKCG92JRizQyoSfHpBC/EBhk/nhFNQJo/Ae2+BoF7KVbaMOZd8wlgk=
-X-Received: by 2002:a92:cc0b:0:b0:2f9:f3a9:c3e7 with SMTP id
- s11-20020a92cc0b000000b002f9f3a9c3e7mr4724220ilp.253.1666023395616; Mon, 17
- Oct 2022 09:16:35 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EvKXXBfjBxozfV6WFzYGdtAGU5x1cXP77F9OEOiHjRA=;
+        b=Uz3snfhu5xckj8zaFnejZNscMJGFbkILW9wta+rIp38YBsx5ABAJl03rtddWemuBiE
+         z9JEY/0TP3b+88jYes9n6Ug/QqP64Exl+y5EAfLBpqOuACFfTpTMTDt0aPyi8wuLf7s9
+         GepWWH/QDXXcqoEn77cieSbVfKvBAFqx/nv3/qD513MW1RpJDq2obOHnk+/zm7Nx5+hW
+         PunG8MAaBjliVP47BWeoMv5t1t3Qa1bZqmZd1gDahveZsfIJ/hWdsgEN5dK/de9vJ/dZ
+         +B5dO9Z254C/WxGahPt9nJJvD6mQBQV01rP4MGRfeNab/EGk6dgxDW/p1eRd5IYwfQ8U
+         iCyg==
+X-Gm-Message-State: ACrzQf3HzZxyUEmLW/4gI1/E0oWWmrZOO5yH4kbD1KkdVfJVDhqS2MIJ
+	MuaUebknWaqkxaqVQvHDjuHmlQ==
+X-Google-Smtp-Source: AMsMyM6ARby/6+Um7l8K2gj3ebnctRHo0Xc/NKdIW4tMZZYU4QtVwZMcJLLaa41J8jCUicQYTvhBHg==
+X-Received: by 2002:a05:6402:42d0:b0:457:d16e:283d with SMTP id i16-20020a05640242d000b00457d16e283dmr11053428edc.395.1666023521673;
+        Mon, 17 Oct 2022 09:18:41 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id et11-20020a056402378b00b0045c47b2a800sm7483488edb.67.2022.10.17.09.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 09:18:41 -0700 (PDT)
+Date: Mon, 17 Oct 2022 18:18:40 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Dao Lu <daolu@rivosinc.com>, Heiko Stuebner <heiko@sntech.de>,
+	Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] (attempt to) Fix RISC-V toolchain extension support
+ detection
+Message-ID: <20221017161840.7o5tpsjox7klyvvs@kamzik>
+References: <20221006173520.1785507-1-conor@kernel.org>
+ <20221017155103.4dt5uzmnlbtibqcn@kamzik>
+ <Y0185O1zjyfv7WjN@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <00000000000068cb2905eb214e9a@google.com>
-In-Reply-To: <00000000000068cb2905eb214e9a@google.com>
-From: Stanislav Fomichev <sdf@google.com>
-Date: Mon, 17 Oct 2022 09:16:24 -0700
-Message-ID: <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in btf_type_id_size
-To: syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, netdev@vger.kernel.org, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0185O1zjyfv7WjN@spud>
 
-On Sat, Oct 15, 2022 at 11:52 PM syzbot
-<syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of git://git.kernel...
-> git tree:       bpf
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946 btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> Modules linked in:
-> CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted 6.0.0-syzkaller-02734-g0326074ff465 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
-> RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
-> RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
-> R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-> R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
-> FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
->  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
->  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
->  btf_parse kernel/bpf/btf.c:5026 [inline]
->  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
->  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
->  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
->  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
->  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f0fbae41c69
-> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
-> RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
-> RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
-> R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
+On Mon, Oct 17, 2022 at 05:03:48PM +0100, Conor Dooley wrote:
+> On Mon, Oct 17, 2022 at 05:51:03PM +0200, Andrew Jones wrote:
+> > On Thu, Oct 06, 2022 at 06:35:19PM +0100, Conor Dooley wrote:
+> > 
+> > However, we could also drop the compiler and linker checking if we
+> > converted our use of cbo.* to the insn-def.h framework (I think Heiko once
+> > mentioned looking at doing that, but I'm not sure.) I'm looking at adding
+> > Zicboz support right now and for starters I've duplicated and modified
+> > these checks. But, I think I'll look into defining the instruction type
+> > needed for cbo.* and using insn-def instead.
+> 
+> What is the ETA of your zicboz support? Do you think these patches
+> should be applied to v6.1 & backported before being replaced by insn-def
+> when your zicboz support arrives? Or just wait for your zicboz series?
 
-Will be addressed by
-https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
+I hope to have something posted by the end of this week, so if all things
+go well, it could land in 6.1. I think it's reasonable to merge your
+patches anyway, though, as they fix the current code and we don't know
+what rabbit holes I may fall in with my series yet.
 
+Thanks,
+drew
 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> 
+> Trying to decide what status I should set for this in patchwork.
+> 
+> Thanks,
+> Conor.
+> 
