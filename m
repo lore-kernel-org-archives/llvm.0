@@ -1,176 +1,172 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB86F3FC2
-	for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 17:43:53 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-355bdeba45bso116578017b3.0
-        for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 10:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7tL4iHZcgAfm6m4eFT/wRjkCDpO+CYTn3CGNj+Lr9Y=;
-        b=sLc6qaMJaV75H51YmYYklched11hNG97Vf7CWqm9TMz70wa4lYR11PkBTz6szJHx6g
-         nNpzkz+p24x3hoIecPMfm1k+T78wjuTr20yrUmAZN27HN14Z2diougn222pAAqBhH+Uf
-         CApDD0YMg2+givSUalGe8kN9PebKaW8zhWp7ut5ESe4DKnilCvhZxryJWQsNlfcD+sz/
-         znRiFsG5loUuw666847sKfm1rTVLv4eAwD4AyBRdF2IXtK4u9OlhvI7y/j5fofw0dKvl
-         r56tzc9KCq87WXSnsJtYqGN96FABCs5NE8bvxDOzjeZjmpx364k1AF8owr5Fp+JT5LM+
-         wpjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7tL4iHZcgAfm6m4eFT/wRjkCDpO+CYTn3CGNj+Lr9Y=;
-        b=MqmvO8ANnGULM+N9aPJ41rQ9p4sAaKRkaOi60bDbzM3OV8QMrirfRjofiJY92dKrOV
-         /Ci/jYlvRG3+D4DbxC4853VSVQOqKZnK8q0jErkp34VfodRAxmHEHsy8U/Zaqcp1cx+u
-         +MyN1PSx8MqSUbDRhTbQ45Epu5lVtI+TAVknqM/vSI1swEtyenpSEWKANqgViOTi758g
-         5x2HrqUpUjBSlecIElBqlfIwtOXs4e0vC27/Hki4yeHuWNGBkzIaUliIlrS9qThpY+1f
-         cqYoj5p1W63njayDE1x93oAnWHcmPBgXdWP5f5T+ht6gXa4BXMf9LB0pFjVGzXOuOdYZ
-         raeA==
-X-Gm-Message-State: ACrzQf2PIjbSWQsb+4/L/U8eBtTiHgNWWXK6wMKUHEV8E+GVJpZgKNiO
-	5QZZs1HvwBl8MJ51GOHyBDxo1WQ=
-X-Google-Smtp-Source: AMsMyM7nVUa8XHJpaKrYavgobpehZ9R1wZ1J9WTOC/gBX26M5PyLNUfpn/Tj1UQ0NDs7nq9C5s125NQ=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a81:1908:0:b0:33c:7394:9ee1 with SMTP id
- 8-20020a811908000000b0033c73949ee1mr10321282ywz.408.1666028632833; Mon, 17
- Oct 2022 10:43:52 -0700 (PDT)
-Date: Mon, 17 Oct 2022 10:43:51 -0700
-In-Reply-To: <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED653FC2
+	for <llvm@lists.linux.dev>; Mon, 17 Oct 2022 17:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60D0C433C1;
+	Mon, 17 Oct 2022 17:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1666029149;
+	bh=S88/rQpRD5ijrffLRAlbuudyaI7Mm2rzjtnu226UW7Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=m5WqHKailhz+8wGIhAth9uYoHMheOrW3Wq9BK66YYNzL4s83AZAl420rIKAuOieWs
+	 uZ2yafeFIhj/SmoE89K6/rbrxVgHP+aRd+KbaAVMw6Bxzaf5zB4nIPsYqRSXLUfqvB
+	 5p40DTASXxWEv87KNHbnwyRK9J9DKzUDzxEgCQwnfbL6KHfYYmUDI8D5ZCEPGCKVzg
+	 CT83lLYJNgxNxK3OEgR8cQYsw9gdJ9tTzWg1MNcA4e4WUZJItu1Iol424ggpRKqZfd
+	 wsad4Q4+nW++qkFu64BWNBvEHgdSB8+6wLS4NUnTorCrkpWGyKcQR92B4LDSrIysA5
+	 rGFVNEwdXXaMA==
+Date: Mon, 17 Oct 2022 10:52:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, llvm@lists.linux.dev,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Apply 0a6de78cff60 to 5.15+
+Message-ID: <Y02WW7iIeWPFTV8L@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <00000000000068cb2905eb214e9a@google.com> <CAKH8qBu+oT+BF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w@mail.gmail.com>
- <CANp29Y5ZsUQ64iizRVQiuunGceH_gGTQbLrKRDZWYuSHRdazLQ@mail.gmail.com>
-Message-ID: <Y02UV5XnsWo+Zd7q@google.com>
-Subject: Re: [syzbot] WARNING in btf_type_id_size
-From: sdf@google.com
-To: Aleksandr Nogikh <nogikh@google.com>
-Cc: syzbot <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com>, 
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="lRArZorZLPlzaoQg"
+Content-Disposition: inline
 
-On 10/17, Aleksandr Nogikh wrote:
-> Let's tell the bot about the fix
 
-> #syz fix: bpf: prevent decl_tag from being referenced in func_proto
+--lRArZorZLPlzaoQg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thx! Wasn't sure syzkaller would accept that until the fix is actually
-pulled in.
+Hi Greg and Sasha,
 
-> On Mon, Oct 17, 2022 at 9:16 AM 'Stanislav Fomichev' via
-> syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
-> >
-> > On Sat, Oct 15, 2022 at 11:52 PM syzbot
-> > <syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    0326074ff465 Merge tag 'net-next-6.1' of  
-> git://git.kernel...
-> > > git tree:       bpf
-> > > console+strace:  
-> https://syzkaller.appspot.com/x/log.txt?x=1376ba52880000
-> > > kernel config:   
-> https://syzkaller.appspot.com/x/.config?x=796b7c2847a6866a
-> > > dashboard link:  
-> https://syzkaller.appspot.com/bug?extid=6280ebbcdba3e0c14fde
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU  
-> Binutils for Debian) 2.35.2
-> > > syz repro:       
-> https://syzkaller.appspot.com/x/repro.syz?x=15e182aa880000
-> > > C reproducer:    
-> https://syzkaller.appspot.com/x/repro.c?x=1677bfcc880000
-> > >
-> > > Downloadable assets:
-> > > disk image:  
-> https://storage.googleapis.com/syzbot-assets/7cc67ced256d/disk-0326074f.raw.xz
-> > > vmlinux:  
-> https://storage.googleapis.com/syzbot-assets/86a7be29267c/vmlinux-0326074f.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the  
-> commit:
-> > > Reported-by: syzbot+6280ebbcdba3e0c14fde@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 3609 at kernel/bpf/btf.c:1946  
-> btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> > > Modules linked in:
-> > > CPU: 0 PID: 3609 Comm: syz-executor361 Not tainted  
-> 6.0.0-syzkaller-02734-g0326074ff465 #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine,  
-> BIOS Google 09/22/2022
-> > > RIP: 0010:btf_type_id_size+0x2d5/0x9d0 kernel/bpf/btf.c:1946
-> > > Code: ef e8 7f 8e e4 ff 41 83 ff 0b 77 28 f6 44 24 10 18 75 3f e8 6d  
-> 91 e4 ff 44 89 fe bf 0e 00 00 00 e8 20 8e e4 ff e8 5b 91 e4 ff <0f> 0b 45  
-> 31 f6 e9 98 02 00 00 41 83 ff 12 74 18 e8 46 91 e4 ff 44
-> > > RSP: 0018:ffffc90003cefb40 EFLAGS: 00010293
-> > > RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> > > RDX: ffff8880259c0000 RSI: ffffffff81968415 RDI: 0000000000000005
-> > > RBP: ffff88801270ca00 R08: 0000000000000005 R09: 000000000000000e
-> > > R10: 0000000000000011 R11: 0000000000000000 R12: 0000000000000000
-> > > R13: 0000000000000011 R14: ffff888026ee6424 R15: 0000000000000011
-> > > FS:  000055555641b300(0000) GS:ffff8880b9a00000(0000)  
-> knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 0000000000f2e258 CR3: 000000007110e000 CR4: 00000000003506f0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  btf_func_proto_check kernel/bpf/btf.c:4447 [inline]
-> > >  btf_check_all_types kernel/bpf/btf.c:4723 [inline]
-> > >  btf_parse_type_sec kernel/bpf/btf.c:4752 [inline]
-> > >  btf_parse kernel/bpf/btf.c:5026 [inline]
-> > >  btf_new_fd+0x1926/0x1e70 kernel/bpf/btf.c:6892
-> > >  bpf_btf_load kernel/bpf/syscall.c:4324 [inline]
-> > >  __sys_bpf+0xb7d/0x4cf0 kernel/bpf/syscall.c:5010
-> > >  __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
-> > >  __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
-> > >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5067
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7f0fbae41c69
-> > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48  
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01  
-> f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > > RSP: 002b:00007ffc8aeb6228 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0fbae41c69
-> > > RDX: 0000000000000020 RSI: 0000000020000140 RDI: 0000000000000012
-> > > RBP: 00007f0fbae05e10 R08: 0000000000000000 R09: 0000000000000000
-> > > R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f0fbae05ea0
-> > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > >  </TASK>
-> >
-> > Will be addressed by
-> >  
-> https://lore.kernel.org/bpf/d1379e3f-a64d-8c27-9b77-f6de085ce498@meta.com/T/#u
-> >
-> >
-> > > ---
-> > > This report is generated by a bot. It may contain errors.
-> > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > > syzbot will keep track of this issue. See:
-> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > syzbot can test patches for this issue, for details see:
-> > > https://goo.gl/tpsmEJ#testing-patches
-> >
-> > --
-> > You received this message because you are subscribed to the Google  
-> Groups "syzkaller-bugs" group.
-> > To unsubscribe from this group and stop receiving emails from it, send  
-> an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit  
-> https://groups.google.com/d/msgid/syzkaller-bugs/CAKH8qBu%2BoT%2BBF6sA4PKxfUsj43O5BNSLzrdhirWOLJ0O8KbA3w%40mail.gmail.com.
+Please consider applying the following commits to 5.19 and 6.0:
+
+4f001a21080f ("Kconfig.debug: simplify the dependency of DEBUG_INFO_DWARF4/5")
+bb1435f3f575 ("Kconfig.debug: add toolchain checks for DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT")
+0a6de78cff60 ("lib/Kconfig.debug: Add check for non-constant .{s,u}leb128 support to DWARF5")
+
+The main change is the final one but the second patch is a prerequisite
+and a useful fix in its own right. The first change allows the second to
+apply cleanly and it is a good clean up as well.
+
+I have verified that they apply cleanly to those trees with 'patch -p1'.
+Attached is a manual backport for 5.15; the changes should not be
+necessary for older trees, as they do not have support for DWARF 5.
+
+If there are any problems or questions, please let me know.
+
+Cheers,
+Nathan
+
+--lRArZorZLPlzaoQg
+Content-Type: application/mbox
+Content-Disposition: attachment; filename="0a6de78cff60-5.15.mbox"
+Content-Transfer-Encoding: quoted-printable
+
+=46rom 3f3da9579a6e81b5c09fc8d876227065194943ac Mon Sep 17 00:00:00 2001=0A=
+=46rom: Masahiro Yamada <masahiroy@kernel.org>=0ADate: Wed, 5 Oct 2022 01:2=
+9:03 +0900=0ASubject: [PATCH 5.15 1/3] Kconfig.debug: simplify the dependen=
+cy of=0A DEBUG_INFO_DWARF4/5=0A=0Acommit 4f001a21080ff2e2f0e1c3692f5e119aed=
+bb3bc1 upstream.=0A=0ACommit c0a5c81ca9be ("Kconfig.debug: drop GCC 5+ vers=
+ion check for=0ADWARF5") could have cleaned up the code a bit more.=0A=0A"C=
+C_IS_CLANG &&" is unneeded. No functional change is intended.=0A=0ASigned-o=
+ff-by: Masahiro Yamada <masahiroy@kernel.org>=0AReviewed-by: Nathan Chancel=
+lor <nathan@kernel.org>=0A[nathan: Only apply to DWARF5, as 5.15 does not h=
+ave 32ef9e5054ec032]=0ASigned-off-by: Nathan Chancellor <nathan@kernel.org>=
+=0A---=0A lib/Kconfig.debug | 2 +-=0A 1 file changed, 1 insertion(+), 1 del=
+etion(-)=0A=0Adiff --git a/lib/Kconfig.debug b/lib/Kconfig.debug=0Aindex 7f=
+d3fa05379e..095156b70cbe 100644=0A--- a/lib/Kconfig.debug=0A+++ b/lib/Kconf=
+ig.debug=0A@@ -295,7 +295,7 @@ config DEBUG_INFO_DWARF4=0A =0A config DEBUG=
+_INFO_DWARF5=0A 	bool "Generate DWARF Version 5 debuginfo"=0A-	depends on !=
+CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >=3D=
+ 23502)))=0A+	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU && AS_VER=
+SION >=3D 23502)=0A 	depends on !DEBUG_INFO_BTF=0A 	help=0A 	  Generate DWA=
+RF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc=0A=0Abase-commit:=
+ a3f2f5ac9d61e973e383f17a95cf2aa384e2d0c4=0A-- =0A2.38.0=0A=0A=0AFrom 6e330=
+77ffa24e3839efbbe4e4dd357e262668869 Mon Sep 17 00:00:00 2001=0AFrom: Masahi=
+ro Yamada <masahiroy@kernel.org>=0ADate: Wed, 5 Oct 2022 01:29:04 +0900=0AS=
+ubject: [PATCH 5.15 2/3] Kconfig.debug: add toolchain checks for=0A DEBUG_I=
+NFO_DWARF_TOOLCHAIN_DEFAULT=0A=0Acommit bb1435f3f575b5213eaf27434efa3971f51=
+c01de upstream.=0A=0ACONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT does not giv=
+e explicit=0A-gdwarf-* flag. The actual DWARF version is up to the toolchai=
+n.=0A=0AThe combination of GCC and GAS works fine, and Clang with the integ=
+rated=0Aassembler is good too.=0A=0AThe combination of Clang and GAS is tri=
+cky, but at least, the -g flag=0Aworks for Clang <=3D13, which defaults to =
+DWARF v4.=0A=0AClang 14 switched its default to DWARF v5.=0A=0ANow, CONFIG_=
+DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT has the same issue as=0Aaddressed by com=
+mit 98cd6f521f10 ("Kconfig: allow explicit opt in to=0ADWARF v5").=0A=0ACON=
+FIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=3Dy for Clang >=3D 14 and=0AGAS < 2.=
+35 produces a ton of errors like follows:=0A=0A  /tmp/main-c2741c.s: Assemb=
+ler messages:=0A  /tmp/main-c2741c.s:109: Error: junk at end of line, first=
+ unrecognized character is `"'=0A  /tmp/main-c2741c.s:109: Error: file numb=
+er less than one=0A=0AAdd 'depends on' to check toolchains.=0A=0ASigned-off=
+-by: Masahiro Yamada <masahiroy@kernel.org>=0AReviewed-by: Nathan Chancello=
+r <nathan@kernel.org>=0A[nathan: Fix conflict due to lack of f9b3cd24578401=
+e]=0ASigned-off-by: Nathan Chancellor <nathan@kernel.org>=0A---=0A lib/Kcon=
+fig.debug | 1 +=0A 1 file changed, 1 insertion(+)=0A=0Adiff --git a/lib/Kco=
+nfig.debug b/lib/Kconfig.debug=0Aindex 095156b70cbe..646778e68f00 100644=0A=
+--- a/lib/Kconfig.debug=0A+++ b/lib/Kconfig.debug=0A@@ -274,6 +274,7 @@ cho=
+ice=0A =0A config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=0A 	bool "Rely on the =
+toolchain's implicit default DWARF version"=0A+	depends on !CC_IS_CLANG || =
+AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS_VERSION >=3D 23502=
+)=0A 	help=0A 	  The implicit default version of DWARF debug info produced =
+by a=0A 	  toolchain changes over time.=0A-- =0A2.38.0=0A=0A=0AFrom 5b99cc8=
+4231bc3887a7c24633f8d2c3fd6f97a58 Mon Sep 17 00:00:00 2001=0AFrom: Nathan C=
+hancellor <nathan@kernel.org>=0ADate: Fri, 14 Oct 2022 13:42:11 -0700=0ASub=
+ject: [PATCH 5.15 3/3] lib/Kconfig.debug: Add check for non-constant=0A .{s=
+,u}leb128 support to DWARF5=0A=0Acommit 0a6de78cff600cb991f2a1b7ed376935871=
+796a0 upstream.=0A=0AWhen building with a RISC-V kernel with DWARF5 debug i=
+nfo using clang=0Aand the GNU assembler, several instances of the following=
+ error appear:=0A=0A  /tmp/vgettimeofday-48aa35.s:2963: Error: non-constant=
+ .uleb128 is not supported=0A=0ADumping the .s file reveals these .uleb128 =
+directives come from=0A.debug_loc and .debug_ranges:=0A=0A  .Ldebug_loc0:=
+=0A          .byte   4                               # DW_LLE_offset_pair=
+=0A          .uleb128 .Lfunc_begin0-.Lfunc_begin0    #   starting offset=0A=
+          .uleb128 .Ltmp1-.Lfunc_begin0           #   ending offset=0A     =
+     .byte   1                               # Loc expr size=0A          .b=
+yte   90                              # DW_OP_reg10=0A          .byte   0  =
+                             # DW_LLE_end_of_list=0A=0A  .Ldebug_ranges0:=
+=0A          .byte   4                               # DW_RLE_offset_pair=
+=0A          .uleb128 .Ltmp6-.Lfunc_begin0           #   starting offset=0A=
+          .uleb128 .Ltmp27-.Lfunc_begin0          #   ending offset=0A     =
+     .byte   4                               # DW_RLE_offset_pair=0A       =
+   .uleb128 .Ltmp28-.Lfunc_begin0          #   starting offset=0A          =
+=2Euleb128 .Ltmp30-.Lfunc_begin0          #   ending offset=0A          .by=
+te   0                               # DW_RLE_end_of_list=0A=0AThere is an =
+outstanding binutils issue to support a non-constant operand=0Ato .sleb128 =
+and .uleb128 in GAS for RISC-V but there does not appear to=0Abe any moveme=
+nt on it, due to concerns over how it would work with=0Alinker relaxation.=
+=0A=0ATo avoid these build errors, prevent DWARF5 from being selected when=
+=0Ausing clang and an assembler that does not have support for these symbol=
+=0Adeltas, which can be easily checked in Kconfig with as-instr plus the=0A=
+small test program from the dwz test suite from the binutils issue.=0A=0ALi=
+nk: https://sourceware.org/bugzilla/show_bug.cgi?id=3D27215=0ALink: https:/=
+/github.com/ClangBuiltLinux/linux/issues/1719=0ASigned-off-by: Nathan Chanc=
+ellor <nathan@kernel.org>=0AReviewed-by: Nick Desaulniers <ndesaulniers@goo=
+gle.com>=0ASigned-off-by: Masahiro Yamada <masahiroy@kernel.org>=0A[nathan:=
+ Fix conflicts due to lack of f9b3cd24578401e]=0ASigned-off-by: Nathan Chan=
+cellor <nathan@kernel.org>=0A---=0A lib/Kconfig.debug | 9 +++++++--=0A 1 fi=
+le changed, 7 insertions(+), 2 deletions(-)=0A=0Adiff --git a/lib/Kconfig.d=
+ebug b/lib/Kconfig.debug=0Aindex 646778e68f00..1699b2124558 100644=0A--- a/=
+lib/Kconfig.debug=0A+++ b/lib/Kconfig.debug=0A@@ -208,6 +208,11 @@ config D=
+EBUG_BUGVERBOSE=0A =0A endmenu # "printk and dmesg options"=0A =0A+# Clang =
+is known to generate .{s,u}leb128 with symbol deltas with DWARF5, which=0A+=
+# some targets may not support: https://sourceware.org/bugzilla/show_bug.cg=
+i?id=3D27215=0A+config AS_HAS_NON_CONST_LEB128=0A+	def_bool $(as-instr,.ule=
+b128 .Lexpr_end4 - .Lexpr_start3\n.Lexpr_start3:\n.Lexpr_end4:)=0A+=0A menu=
+ "Compile-time checks and compiler options"=0A =0A config DEBUG_INFO=0A@@ -=
+274,7 +279,7 @@ choice=0A =0A config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=0A =
+	bool "Rely on the toolchain's implicit default DWARF version"=0A-	depends =
+on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VERSION < 140000 || (AS_IS_GNU && AS=
+_VERSION >=3D 23502)=0A+	depends on !CC_IS_CLANG || AS_IS_LLVM || CLANG_VER=
+SION < 140000 || (AS_IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LE=
+B128)=0A 	help=0A 	  The implicit default version of DWARF debug info produ=
+ced by a=0A 	  toolchain changes over time.=0A@@ -296,7 +301,7 @@ config DE=
+BUG_INFO_DWARF4=0A =0A config DEBUG_INFO_DWARF5=0A 	bool "Generate DWARF Ve=
+rsion 5 debuginfo"=0A-	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_IS_GNU =
+&& AS_VERSION >=3D 23502)=0A+	depends on !CC_IS_CLANG || AS_IS_LLVM || (AS_=
+IS_GNU && AS_VERSION >=3D 23502 && AS_HAS_NON_CONST_LEB128)=0A 	depends on =
+!DEBUG_INFO_BTF=0A 	help=0A 	  Generate DWARF v5 debug info. Requires binut=
+ils 2.35.2, gcc 5.0+ (gcc=0A-- =0A2.38.0=0A=0A
+--lRArZorZLPlzaoQg--
