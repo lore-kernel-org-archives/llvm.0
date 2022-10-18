@@ -1,209 +1,105 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93BC7B
-	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 09:56:09 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id h2so5975198plb.2
-        for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jtrYS4YHTHJyeV0BrKarMa2E7fQ5TkzCkIZIXsuNB6M=;
-        b=oenwaTPW1G/G0oYjiY2Jz+vgubsEzMHjnssLGIteFpvx1UHaicxfzkrTXcHfKNjqgr
-         H5GDYD8DIZsmoqWcOduHGD4UkJxy4uDmj2EHyhD3GGddJoR1x5FCwUlzeEnpJg5ofZ8b
-         p7bQ9+3Ym69YubrP9h+mGcRCyXp/kWwXpymLg=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66BB7B
+	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 10:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1666088604;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lGc1brklA5v9OUHTBe6S3k3fA4Qi2pTlNeYEp6W+HVI=;
+	b=J0Bt+KMig5bkKLegzPYOcqljEyOWYC7QFIqtz+VQreLjRAQC0s0u5kfPEtu36XJS+o+l+t
+	ksBKTZijcaLGXf9lYM8J5uEVUOin0j4jZxrQAunRfKQtH1QQRd4926LO7mG0vekXOyPMli
+	fIhHfLrLHjymTYCf17+VkDah4YTCZzw=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-636-KRFRPV2CMO-9Xk0VN-4-gA-1; Tue, 18 Oct 2022 06:23:23 -0400
+X-MC-Unique: KRFRPV2CMO-9Xk0VN-4-gA-1
+Received: by mail-pf1-f200.google.com with SMTP id s2-20020aa78282000000b00561ba8f77b4so7505470pfm.1
+        for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 03:23:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jtrYS4YHTHJyeV0BrKarMa2E7fQ5TkzCkIZIXsuNB6M=;
-        b=gXAVBIAfzxXgx+jCasalCe/k94EVt1vDyu6L1/GBw+Vkw1CK3jd/ouU93xPcoCl544
-         BwtEjYS5RfVBJ9Zx0HVxXCejP/krKwVw/9P94/Kb1xullGnSgP3+0m6Az4duqbxJi1gQ
-         ow2xdYGT5sOt/WS36XFPh0DsG4ECc3cj1UU2iZJaugbSIKAVjqfrfxEsvjpbB1z1rT5z
-         sAsUSe8TVRUGQF7SXMtr1gAccXzQWvG7ZbA97SJD6L5lGKHtYe76rQlu2jYqqmQV32ed
-         ex+1HEW4MXSOS0A4W7vF8r3FvJ4/iRwininWb7DsRFhc6WT/lE9HXb0ZHgC/14zigj7H
-         h3mg==
-X-Gm-Message-State: ACrzQf1+K25vtSQDyo+KYp0g9eXQRJL6iMO+YJ7f4q5SSgfV2omCYCXw
-	UsTBEyokCbNg+7wBeHIDc0Srmg==
-X-Google-Smtp-Source: AMsMyM5kBAOpMO4cIxI/xoGLpufUFikFXHqNkBnrcviabpH1rUnjV3XPBSpbn19uO3b0a9DH3TkvaA==
-X-Received: by 2002:a17:903:22d2:b0:17f:7dea:985f with SMTP id y18-20020a17090322d200b0017f7dea985fmr2216382plg.68.1666086969145;
-        Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa7970f000000b00561ed54aa53sm9031861pfg.97.2022.10.18.02.56.07
+        bh=lGc1brklA5v9OUHTBe6S3k3fA4Qi2pTlNeYEp6W+HVI=;
+        b=Q6ji56MBPmvmRiJoH5Hbgik8cONE01R6MD3Xw7IVQogsEQlvYZnRasP6Rwg6upN+2e
+         RLmbbY4VGzdwcz48zr2dQEt3ZPt2LavU6ErT2CQg4VHOd1iV2c38aPAQXHmO8yiU1Abt
+         C9AFQ3FBXlH1PT2/GJp129xOGiapTMPwjYodKPtvV4/vJ8iE6zA/nNUfv5gx9CS7LhlB
+         dxTRngCEhyLfgKhYQJFv+ANo3/DwpnlxCpEkp3IA8rNJ1KL6v+KKvHAVuN3urDl2lKaT
+         Z2px2MQ7Ds49JGXaR0afzGqUHFd5MIJLg6I1AGTOfV3ZI7MtJg7MSieTH34uDE+iYGUq
+         e+KQ==
+X-Gm-Message-State: ACrzQf19VH4+DWUowqJFvP5Jl0m9g2wqOVNBUYSXMr+Dam6MiLVYfdgH
+	8EZUURRqAhvqTv8Q4Mu4oOYKFzm7yJEc7dcHS3IDMIzD8w4YtIopLq3z2wyj6sb63kiMCkEmJp0
+	D8BRrQ2wTGvwY7g==
+X-Received: by 2002:a17:90b:4a8a:b0:20d:8a4d:c2ae with SMTP id lp10-20020a17090b4a8a00b0020d8a4dc2aemr36943057pjb.179.1666088602213;
+        Tue, 18 Oct 2022 03:23:22 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4yZEZ3zz/NaaPvomcA0q2fWZLeE26WLTAC0kzNafK9BiNR2Y6DRwutygGdqw7K1vCRk2VOgw==
+X-Received: by 2002:a17:90b:4a8a:b0:20d:8a4d:c2ae with SMTP id lp10-20020a17090b4a8a00b0020d8a4dc2aemr36943033pjb.179.1666088601967;
+        Tue, 18 Oct 2022 03:23:21 -0700 (PDT)
+Received: from zeus.flets-east.jp ([240b:10:83a2:bd00:6e35:f2f5:2e21:ae3a])
+        by smtp.gmail.com with ESMTPSA id l5-20020a17090a4d4500b00205d85cfb30sm11173373pjh.20.2022.10.18.03.23.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 02:56:08 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	David Ahern <dsahern@kernel.org>,
-	Dylan Yudaken <dylany@fb.com>,
-	Yajun Deng <yajun.deng@linux.dev>,
-	Petr Machata <petrm@nvidia.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	syzbot <syzkaller@googlegroups.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	netdev@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	"D. Wythe" <alibuda@linux.alibaba.com>,
-	Jeremy Kerr <jk@codeconstruct.com.au>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Menglong Dong <imagedong@tencent.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Congyu Liu <liu3101@purdue.edu>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Ziyang Xuan <william.xuanziyang@huawei.com>,
+        Tue, 18 Oct 2022 03:23:21 -0700 (PDT)
+From: Ryosuke Yasuoka <ryasuoka@redhat.com>
+To: elver@google.com,
+	dvyukov@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com
+Cc: Ryosuke Yasuoka <ryasuoka@redhat.com>,
+	kasan-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH][next] net: dev: Convert sa_data to flexible array in struct sockaddr
-Date: Tue, 18 Oct 2022 02:56:03 -0700
-Message-Id: <20221018095503.never.671-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	llvm@lists.linux.dev
+Subject: [PATCH] kcsan: Fix trivial typo in Kconfig help comments
+Date: Tue, 18 Oct 2022 19:22:54 +0900
+Message-Id: <20221018102254.2424506-1-ryasuoka@redhat.com>
+X-Mailer: git-send-email 2.32.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5049; h=from:subject:message-id; bh=rod5eHf0YQaVZ5sdwIzdd3C3vGobY6SuehBoBbg6GcI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTngzTHeW9kIfcHHQzkfp7D2VeT13DlZgTB42LZtK VyM9/qCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY054MwAKCRCJcvTf3G3AJjpoD/ 4mywSfiiYVC2vh0zMOE/MTSX2SRkfMVgE8MnDwc61EJGRB2o0fYwvty4chFUzQrZcR9YURMHRu9+86 /3CAxYYoQVJgwbwZi7zoYlb6NowRphiNorvQ/ny0q6bDOTwUzF1DbADlrMaVwRjsg0j02bOHSb6AQq WSOa+11Xtjmp/4JAczO9sk/06Zuh8S0Pm4ITZrQxoIydZZVLo2HujJ2wcKqAelUiCXHKVAR4d+YgmZ bbnRvO7WvnsPRy1tEKrBSTsi4HfGwkdFLTRxAwkptpcMWB8fYdqnlcBwiIUdcgNvMuKyJ2FFSV1+n1 Ygy7hah6Sj40CJw4QpRgNlcA+Qt8yK3Gr8zys8oNZ73vR9LcHTXsX5tkFVo/KRzoFsBfXFKL4ldLHw VxbjJrk8q2ZodJfmqfBs8y9x1RVuOjHYJL2Lw71G6klBfjHobULRfdJ9Sz64UvGteSGQcoEkR5ar18 TdHVxysdjUrKciYlOWQrCiU+lXt1lXV2qHydQEf61GM1EOPnItbikWumCcxezfsUgdgXD8CYsSLW4D 5Hh625MMZen1VjTSztbEibqJcNHj8BQMoARGjMlsTdVCBctf2HRwofrX51F9BYeO1cvM4gi+bAEOz+ d090jiMeXjVqaiTUsXHJlu89A/7PwgcfRWYuIBHv4MdK8vKMU6l/L41uMP/A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-One of the worst offenders of "fake flexible arrays" is struct sockaddr,
-as it is the classic example of why GCC and Clang have been traditionally
-forced to treat all trailing arrays as fake flexible arrays: in the
-distant misty past, sa_data became too small, and code started just
-treating it as a flexible array, even though it was fixed-size. The
-special case by the compiler is specifically that sizeof(sa->sa_data)
-and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
-do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
-it as a flexible array.
+Fix trivial typo in Kconfig help comments in KCSAN_SKIP_WATCH and
+KCSAN_SKIP_WATCH_RANDOMIZE
 
-However, the coming -fstrict-flex-arrays compiler flag will remove
-these special cases so that FORTIFY_SOURCE can gain coverage over all
-the trailing arrays in the kernel that are _not_ supposed to be treated
-as a flexible array. To deal with this change, convert sa_data to a true
-flexible array. To keep the structure size the same, move sa_data into
-a union with a newly introduced sa_data_min with the original size. The
-result is that FORTIFY_SOURCE can continue to have no idea how large
-sa_data may actually be, but anything using sizeof(sa->sa_data) must
-switch to sizeof(sa->sa_data_min).
-
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Dylan Yudaken <dylany@fb.com>
-Cc: Yajun Deng <yajun.deng@linux.dev>
-Cc: Petr Machata <petrm@nvidia.com>
-Cc: Hangbin Liu <liuhangbin@gmail.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: syzbot <syzkaller@googlegroups.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Ryosuke Yasuoka <ryasuoka@redhat.com>
 ---
- include/linux/socket.h |  5 ++++-
- net/core/dev.c         |  2 +-
- net/core/dev_ioctl.c   |  2 +-
- net/packet/af_packet.c | 10 +++++-----
- 4 files changed, 11 insertions(+), 8 deletions(-)
+ lib/Kconfig.kcsan | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index de3701a2a212..13c3a237b9c9 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -33,7 +33,10 @@ typedef __kernel_sa_family_t	sa_family_t;
+diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+index 47a693c45864..375575a5a0e3 100644
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -125,7 +125,7 @@ config KCSAN_SKIP_WATCH
+ 	default 4000
+ 	help
+ 	  The number of per-CPU memory operations to skip, before another
+-	  watchpoint is set up, i.e. one in KCSAN_WATCH_SKIP per-CPU
++	  watchpoint is set up, i.e. one in KCSAN_SKIP_WATCH per-CPU
+ 	  memory operations are used to set up a watchpoint. A smaller value
+ 	  results in more aggressive race detection, whereas a larger value
+ 	  improves system performance at the cost of missing some races.
+@@ -135,8 +135,8 @@ config KCSAN_SKIP_WATCH_RANDOMIZE
+ 	default y
+ 	help
+ 	  If instruction skip count should be randomized, where the maximum is
+-	  KCSAN_WATCH_SKIP. If false, the chosen value is always
+-	  KCSAN_WATCH_SKIP.
++	  KCSAN_SKIP_WATCH. If false, the chosen value is always
++	  KCSAN_SKIP_WATCH.
  
- struct sockaddr {
- 	sa_family_t	sa_family;	/* address family, AF_xxx	*/
--	char		sa_data[14];	/* 14 bytes of protocol address	*/
-+	union {
-+		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
-+		DECLARE_FLEX_ARRAY(char, sa_data);
-+	};
- };
- 
- struct linger {
-diff --git a/net/core/dev.c b/net/core/dev.c
-index fa53830d0683..0649826e5803 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8818,7 +8818,7 @@ EXPORT_SYMBOL(dev_set_mac_address_user);
- 
- int dev_get_mac_address(struct sockaddr *sa, struct net *net, char *dev_name)
- {
--	size_t size = sizeof(sa->sa_data);
-+	size_t size = sizeof(sa->sa_data_min);
- 	struct net_device *dev;
- 	int ret = 0;
- 
-diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
-index 7674bb9f3076..5cdbfbf9a7dc 100644
---- a/net/core/dev_ioctl.c
-+++ b/net/core/dev_ioctl.c
-@@ -342,7 +342,7 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
- 		if (ifr->ifr_hwaddr.sa_family != dev->type)
- 			return -EINVAL;
- 		memcpy(dev->broadcast, ifr->ifr_hwaddr.sa_data,
--		       min(sizeof(ifr->ifr_hwaddr.sa_data),
-+		       min(sizeof(ifr->ifr_hwaddr.sa_data_min),
- 			   (size_t)dev->addr_len));
- 		call_netdevice_notifiers(NETDEV_CHANGEADDR, dev);
- 		return 0;
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 6ce8dd19f33c..8c5b3da0c29f 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -3277,7 +3277,7 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr *uaddr,
- 			    int addr_len)
- {
- 	struct sock *sk = sock->sk;
--	char name[sizeof(uaddr->sa_data) + 1];
-+	char name[sizeof(uaddr->sa_data_min) + 1];
- 
- 	/*
- 	 *	Check legality
-@@ -3288,8 +3288,8 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr *uaddr,
- 	/* uaddr->sa_data comes from the userspace, it's not guaranteed to be
- 	 * zero-terminated.
- 	 */
--	memcpy(name, uaddr->sa_data, sizeof(uaddr->sa_data));
--	name[sizeof(uaddr->sa_data)] = 0;
-+	memcpy(name, uaddr->sa_data, sizeof(uaddr->sa_data_min));
-+	name[sizeof(uaddr->sa_data_min)] = 0;
- 
- 	return packet_do_bind(sk, name, 0, pkt_sk(sk)->num);
- }
-@@ -3561,11 +3561,11 @@ static int packet_getname_spkt(struct socket *sock, struct sockaddr *uaddr,
- 		return -EOPNOTSUPP;
- 
- 	uaddr->sa_family = AF_PACKET;
--	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data));
-+	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data_min));
- 	rcu_read_lock();
- 	dev = dev_get_by_index_rcu(sock_net(sk), READ_ONCE(pkt_sk(sk)->ifindex));
- 	if (dev)
--		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data));
-+		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data_min));
- 	rcu_read_unlock();
- 
- 	return sizeof(*uaddr);
+ config KCSAN_INTERRUPT_WATCHER
+ 	bool "Interruptible watchers" if !KCSAN_STRICT
 -- 
-2.34.1
+2.37.3
 
