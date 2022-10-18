@@ -1,137 +1,134 @@
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E114C72
-	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 18:29:45 +0000 (UTC)
-Date: Tue, 18 Oct 2022 18:29:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-	s=protonmail; t=1666117769; x=1666376969;
-	bh=39j/N8FEDTlg592aMy449d8TbNb26ue3BrX+9fClMEM=;
-	h=Date:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID;
-	b=Qpcad0zWnJwbQrjv1rdxAt5LKpcayscF7lm64ACGbl5l7l/uQayJSBgXpzh6Zc6vi
-	 520RxBhqtNNxC/RgCVhxYGnaSVaPqdl4vA9CsehNB/ULSbWdSsAwkt8hH8QmkLpB+X
-	 4hB2Wv+ASQsbEBztvIzLrPcTGiRC90f9SngAovCk=
-From: Caleb Connolly <caleb@connolly.tech>
-Cc: krzysztof.kozlowski@linaro.org, phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jeff LaBundy <jeff@labundy.com>, Konrad Dybcio <konrad.dybcio@somainline.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Rob Herring <robh+dt@kernel.org>, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH v7 1/2] dt-bindings: input: document Qualcomm PMI8998 haptics driver
-Message-ID: <e588abdb-6817-25cf-dd9e-be23044e1e94@connolly.tech>
-In-Reply-To: <20221015172915.1436236-2-caleb@connolly.tech>
-References: <20221015172915.1436236-1-caleb@connolly.tech> <20221015172915.1436236-2-caleb@connolly.tech>
-Feedback-ID: 10753939:user:proton
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364FB4C98
+	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 19:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 989C9C433C1;
+	Tue, 18 Oct 2022 19:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1666119998;
+	bh=NKf6ZfIA4pLEmJJICUPcObAU5l1GLYEskJ/yvBdGR50=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ms8EHjTPjTlkLtf4Bd8k0opKS41Fm20TqWqf5vn23t3uH/D48UCLncrh6UkJ4/ta0
+	 XToJOUDYWRd5hUtHiGhV5lYIj8VJadrwNmZwlxg8o7HcqarzCeotvu1H7koR/2Z93h
+	 eq/6CRkWymX1P/NGUUKJBe50bqZ7hkEHjMcbS2AHl1Zd5O8nNJK2na87ZsOYyz7xTN
+	 AJB/aXJpnsqgM5HrEhk7kGUnkQZRC2gP5pO6BScM8+uAJkAgRo9ZXCGzc5iyGFcj/l
+	 zuBTveaQ28y2Btm8hLU3oB1mYCFmTsuJ2stneUlyDZoahyZUq1k+LAnaj4F/Sr+sSE
+	 Tvamkdl57x4aA==
+Date: Tue, 18 Oct 2022 12:06:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-hardening@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fortify: Short-circuit known-safe calls to strscpy()
+Message-ID: <Y075PIwTnnYF3Ak7@dev-arch.thelio-3990X>
+References: <20221018083051.never.939-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018083051.never.939-kees@kernel.org>
 
+On Tue, Oct 18, 2022 at 01:32:51AM -0700, Kees Cook wrote:
+> Replacing compile-time safe calls of strcpy()-related functions with
+> strscpy() was always calling the full strscpy() logic when a builtin
+> would be better. For example:
+> 
+> 	char buf[16];
+> 	strcpy(buf, "yes");
+> 
+> would reduce to __builtin_memcpy(buf, "yes", 4), but not if it was:
+> 
+> 	strscpy(buf, yes, sizeof(buf));
+> 
+> Fix this by checking if all sizes are known at compile-time.
+> 
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
+I ran the following commands and the tests all passed:
 
-On 15/10/2022 18:30, Caleb Connolly wrote:
-> Add bindings for qcom PMIC PMI8998 haptics driver.
->
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+$ tools/testing/kunit/kunit.py run --arch arm64 --cross_compile aarch64-linux-gnu- strscpy
+
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 strscpy
+
+$ tools/testing/kunit/kunit.py run --arch x86_64 strscpy
+
+$ tools/testing/kunit/kunit.py run --arch x86_64 --make_options LLVM=1 strscpy
+
+$ tools/testing/kunit/kunit.py run --arch arm64 --cross_compile aarch64-linux-gnu- --kconfig_add CONFIG_FORTIFY_SOURCE=y strscpy
+
+$ tools/testing/kunit/kunit.py run --arch arm64 --kconfig_add CONFIG_FORTIFY_SOURCE=y --make_options LLVM=1 strscpy
+
+$ tools/testing/kunit/kunit.py run --arch x86_64 --kconfig_add CONFIG_FORTIFY_SOURCE=y strscpy
+
+$ tools/testing/kunit/kunit.py run --arch x86_64 --kconfig_add CONFIG_FORTIFY_SOURCE=y --make_options LLVM=1 strscpy
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
->   .../bindings/input/qcom,pmi8998-haptics.yaml  | 73 +++++++++++++++++++
->   1 file changed, 73 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/input/qcom,pmi8998=
--haptics.yaml
->
-> diff --git a/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics=
-.yaml b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
-> new file mode 100644
-> index 000000000000..d43324cceb89
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/qcom,pmi8998-haptics.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright 2020 Unisoc Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/qcom,pmi8998-haptics.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  include/linux/fortify-string.h | 10 ++++++++++
+>  lib/strscpy_kunit.c            | 13 +++++++++++++
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index aa1a50009632..c473adb55cf5 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -321,6 +321,16 @@ __FORTIFY_INLINE ssize_t strscpy(char * const POS p, const char * const POS q, s
+>  	if (__compiletime_lessthan(p_size, size))
+>  		__write_overflow();
+>  
+> +	/* Short-circuit for compile-time known-safe lengths. */
+> +	if (__compiletime_lessthan(p_size, SIZE_MAX)) {
+> +		len = __compiletime_strlen(q);
 > +
-> +title: Qualcomm PMI8998/PM660 Haptics
+> +		if (len < SIZE_MAX && __compiletime_lessthan(len, size)) {
+> +			__underlying_memcpy(p, q, len + 1);
+> +			return len;
+> +		}
+> +	}
 > +
-> +maintainers:
-> +  - Caleb Connolly <caleb@connolly.tech>
+>  	/*
+>  	 * This call protects from read overflow, because len will default to q
+>  	 * length if it smaller than size.
+> diff --git a/lib/strscpy_kunit.c b/lib/strscpy_kunit.c
+> index 98523f828d3a..a6b6344354ed 100644
+> --- a/lib/strscpy_kunit.c
+> +++ b/lib/strscpy_kunit.c
+> @@ -81,6 +81,8 @@ static void tc(struct kunit *test, char *src, int count, int expected,
+>  
+>  static void strscpy_test(struct kunit *test)
+>  {
+> +	char dest[8];
 > +
-> +description: |
-> +  Qualcomm SPMI haptics is a peripheral on some QTI PMICs. It supports l=
-inear resonant
-> +  actuators and eccentric rotating mass type haptics commonly found in m=
-obile devices.
-> +  It supports multiple sources of wave data such as an internal buffer, =
-direct play
-> +  (from kernel or userspace) as well as an audio output mode.
+>  	/*
+>  	 * tc() uses a destination buffer of size 6 and needs at
+>  	 * least 2 characters spare (one for null and one to check for
+> @@ -111,6 +113,17 @@ static void strscpy_test(struct kunit *test)
+>  	tc(test, "ab",   4, 2,	    2, 1, 1);
+>  	tc(test, "a",    4, 1,	    1, 1, 2);
+>  	tc(test, "",     4, 0,	    0, 1, 3);
 > +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,pmi8998-haptics
-> +          - qcom,pm660-charger
-
-I've just noticed this typo! Will respin and fix...
-
-> +          - qcom,pmi8996-haptics
-> +          - qcom,pmi8941-haptics
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: short
-> +      - const: play
-> +
-> +  qcom,wave-play-duration-us:
-> +    description: |
-> +      Wave sample duration in microseconds, 1/f where f
-> +      is the resonant frequency of the actuator.
-> +      This property is named qcom,wave-play-rate-us in
-> +      downstream kernels.
-> +    minimum: 0
-> +    maximum: 20475
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - qcom,wave-play-rate-us
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    spmi {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +      pmi8998_haptics: haptics@c000 {
-> +        compatible =3D "qcom,pmi8998-haptics";
-> +        reg =3D <0xc000>;
-> +
-> +        interrupts =3D <0x3 0xc0 0x0 IRQ_TYPE_EDGE_BOTH>,
-> +                     <0x3 0xc0 0x1 IRQ_TYPE_EDGE_BOTH>;
-> +        interrupt-names =3D "short", "play";
-> +
-> +        qcom,wave-play-rate-us =3D <4255>;
-> +      };
-> +    };
-> --
-> 2.38.0
->
-
---
-Kind Regards,
-Caleb
-
+> +	/* Compile-time-known source strings. */
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "", ARRAY_SIZE(dest)), 0);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "", 3), 0);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "", 1), 0);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "", 0), -E2BIG);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", ARRAY_SIZE(dest)), 5);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", 3), -E2BIG);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", 1), -E2BIG);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", 0), -E2BIG);
+> +	KUNIT_EXPECT_EQ(test, strscpy(dest, "This is too long", ARRAY_SIZE(dest)), -E2BIG);
+>  }
+>  
+>  static struct kunit_case strscpy_test_cases[] = {
+> -- 
+> 2.34.1
+> 
+> 
