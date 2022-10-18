@@ -1,203 +1,209 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAC67B
-	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 08:40:01 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id z97so19408622ede.8
-        for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 01:40:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93BC7B
+	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 09:56:09 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id h2so5975198plb.2
+        for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bk3gcbpb6ZYdoK0dmBi4jOV1xqzE9DhnWLfW4dnfw1o=;
-        b=bSckSaTpoDSYDnZKmrDGPhCnNoj7QmeLYurYpyqW/6AOT38+tutsL61JoVA1qAgC0R
-         9RELEFzEPRkv5++j+WqaqPJjgS1OIT7fKLEIJI86snUsL04wlj/16nrzEZaCqfLKL+0K
-         tl16JtlbvKcfnrPnppzAt2DpYWxzzakTLBOexPba+jG3jIf62KZnlMCDX6oG67LKNrEO
-         UpY5O909xFk/eJgzqQ+9rURKUoiUhZEmmy2ITxIS8ZnvnE+J8fbNimgclFIVwOHHHUyN
-         WPbiiC2sS4VxQqzSCPnGED/bqHy0HUmDNqK+ZXdqzDU4ZyTTPZiy9JDRN1nZkJEDLjls
-         Vo7A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jtrYS4YHTHJyeV0BrKarMa2E7fQ5TkzCkIZIXsuNB6M=;
+        b=oenwaTPW1G/G0oYjiY2Jz+vgubsEzMHjnssLGIteFpvx1UHaicxfzkrTXcHfKNjqgr
+         H5GDYD8DIZsmoqWcOduHGD4UkJxy4uDmj2EHyhD3GGddJoR1x5FCwUlzeEnpJg5ofZ8b
+         p7bQ9+3Ym69YubrP9h+mGcRCyXp/kWwXpymLg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Bk3gcbpb6ZYdoK0dmBi4jOV1xqzE9DhnWLfW4dnfw1o=;
-        b=TQwFGo9XqlEi+sxJKLHAOn1bG+E4p+LoAYQuacw4KPhwVtSuoSQFOiBjk3cDMAyi25
-         PvsVPOW4XUyOcAULYTnT9voTLc2TEb0276YY6DXS8gb9hS9xs9mrKnzjzLVUUDT9Wqog
-         xrRb47dLyfrBuGm+9xqaOUTw1/10aU0uKhgvGz8OT+Y4r/r6UVu5GdkxhDnzykG4np6L
-         XD/5oSyyWN239XIgFH41U38imfqN0aWVIrBMFMcw+GNKrynnYaFG8BJGGaaTlN7lmxlz
-         PW4bEv7eVdu+53Ov1xYs7q8ww2XlD7sYXrfZh9y1fPQPxMdWWWe0UjPQJ6r5biEyb5MB
-         pcJg==
-X-Gm-Message-State: ACrzQf1KWgDF/QV1NS+wY/rYHtzQgbR94sZUhlYSVEqoVQ2TmVP7Xabe
-	QkSOUdZ/ZGo18LcGE4JUm2XIajhthqkALJeugkA=
-X-Google-Smtp-Source: AMsMyM5TFQMq+6oIkQC4pJeiFkR3ENjx2BxdlwqxF+j7Pdn6PVIhM6Dsu/6Z3Fc7NqyONQQt4tF1oifJsx8m1bPhmUA=
-X-Received: by 2002:a05:6402:11c9:b0:45d:aa9b:5193 with SMTP id
- j9-20020a05640211c900b0045daa9b5193mr1599459edw.372.1666082399690; Tue, 18
- Oct 2022 01:39:59 -0700 (PDT)
+        bh=jtrYS4YHTHJyeV0BrKarMa2E7fQ5TkzCkIZIXsuNB6M=;
+        b=gXAVBIAfzxXgx+jCasalCe/k94EVt1vDyu6L1/GBw+Vkw1CK3jd/ouU93xPcoCl544
+         BwtEjYS5RfVBJ9Zx0HVxXCejP/krKwVw/9P94/Kb1xullGnSgP3+0m6Az4duqbxJi1gQ
+         ow2xdYGT5sOt/WS36XFPh0DsG4ECc3cj1UU2iZJaugbSIKAVjqfrfxEsvjpbB1z1rT5z
+         sAsUSe8TVRUGQF7SXMtr1gAccXzQWvG7ZbA97SJD6L5lGKHtYe76rQlu2jYqqmQV32ed
+         ex+1HEW4MXSOS0A4W7vF8r3FvJ4/iRwininWb7DsRFhc6WT/lE9HXb0ZHgC/14zigj7H
+         h3mg==
+X-Gm-Message-State: ACrzQf1+K25vtSQDyo+KYp0g9eXQRJL6iMO+YJ7f4q5SSgfV2omCYCXw
+	UsTBEyokCbNg+7wBeHIDc0Srmg==
+X-Google-Smtp-Source: AMsMyM5kBAOpMO4cIxI/xoGLpufUFikFXHqNkBnrcviabpH1rUnjV3XPBSpbn19uO3b0a9DH3TkvaA==
+X-Received: by 2002:a17:903:22d2:b0:17f:7dea:985f with SMTP id y18-20020a17090322d200b0017f7dea985fmr2216382plg.68.1666086969145;
+        Tue, 18 Oct 2022 02:56:09 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa7970f000000b00561ed54aa53sm9031861pfg.97.2022.10.18.02.56.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 02:56:08 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	David Ahern <dsahern@kernel.org>,
+	Dylan Yudaken <dylany@fb.com>,
+	Yajun Deng <yajun.deng@linux.dev>,
+	Petr Machata <petrm@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	syzbot <syzkaller@googlegroups.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	netdev@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	"D. Wythe" <alibuda@linux.alibaba.com>,
+	Jeremy Kerr <jk@codeconstruct.com.au>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Menglong Dong <imagedong@tencent.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Congyu Liu <liu3101@purdue.edu>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Ziyang Xuan <william.xuanziyang@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH][next] net: dev: Convert sa_data to flexible array in struct sockaddr
+Date: Tue, 18 Oct 2022 02:56:03 -0700
+Message-Id: <20221018095503.never.671-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202210181318.WUNV3QRv-lkp@intel.com> <CAD-N9QX8tHSePqzQ8QZEYmAy6XTV5DN1Q3C-s7YYeu304hi=YA@mail.gmail.com>
-In-Reply-To: <CAD-N9QX8tHSePqzQ8QZEYmAy6XTV5DN1Q3C-s7YYeu304hi=YA@mail.gmail.com>
-From: Dongliang Mu <mudongliangabcd@gmail.com>
-Date: Tue, 18 Oct 2022 16:37:57 +0800
-Message-ID: <CAD-N9QXRz0+YiirOp+3wZzddR1dg4_W69W4-yZgp2a_EriDKkQ@mail.gmail.com>
-Subject: Re: [linux-next:master 1304/1443] fs/jfs/jfs_dmap.c:196:23: warning:
- result of comparison of constant 8796093022201 with expression of type 'int'
- is always false
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
-	Linux Memory Management List <linux-mm@kvack.org>, Dave Kleikamp <dave.kleikamp@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5049; h=from:subject:message-id; bh=rod5eHf0YQaVZ5sdwIzdd3C3vGobY6SuehBoBbg6GcI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTngzTHeW9kIfcHHQzkfp7D2VeT13DlZgTB42LZtK VyM9/qCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY054MwAKCRCJcvTf3G3AJjpoD/ 4mywSfiiYVC2vh0zMOE/MTSX2SRkfMVgE8MnDwc61EJGRB2o0fYwvty4chFUzQrZcR9YURMHRu9+86 /3CAxYYoQVJgwbwZi7zoYlb6NowRphiNorvQ/ny0q6bDOTwUzF1DbADlrMaVwRjsg0j02bOHSb6AQq WSOa+11Xtjmp/4JAczO9sk/06Zuh8S0Pm4ITZrQxoIydZZVLo2HujJ2wcKqAelUiCXHKVAR4d+YgmZ bbnRvO7WvnsPRy1tEKrBSTsi4HfGwkdFLTRxAwkptpcMWB8fYdqnlcBwiIUdcgNvMuKyJ2FFSV1+n1 Ygy7hah6Sj40CJw4QpRgNlcA+Qt8yK3Gr8zys8oNZ73vR9LcHTXsX5tkFVo/KRzoFsBfXFKL4ldLHw VxbjJrk8q2ZodJfmqfBs8y9x1RVuOjHYJL2Lw71G6klBfjHobULRfdJ9Sz64UvGteSGQcoEkR5ar18 TdHVxysdjUrKciYlOWQrCiU+lXt1lXV2qHydQEf61GM1EOPnItbikWumCcxezfsUgdgXD8CYsSLW4D 5Hh625MMZen1VjTSztbEibqJcNHj8BQMoARGjMlsTdVCBctf2HRwofrX51F9BYeO1cvM4gi+bAEOz+ d090jiMeXjVqaiTUsXHJlu89A/7PwgcfRWYuIBHv4MdK8vKMU6l/L41uMP/A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 18, 2022 at 4:11 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> On Tue, Oct 18, 2022 at 1:50 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   4ca786ae6681b90b0ec3f4c55c89d12f835f8944
-> > commit: 920f4b7e923b35fd9d117fd3cb616b310cd41010 [1304/1443] fs: jfs: fix shift-out-of-bounds in dbAllocAG
-> > config: mips-randconfig-r005-20221017
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install mips cross compiling tool for clang build
-> >         # apt-get install binutils-mipsel-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=920f4b7e923b35fd9d117fd3cb616b310cd41010
-> >         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> >         git fetch --no-tags linux-next master
-> >         git checkout 920f4b7e923b35fd9d117fd3cb616b310cd41010
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/jfs/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> fs/jfs/jfs_dmap.c:196:23: warning: result of comparison of constant 8796093022201 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
-> >            if (bmp->db_agl2size > MAXMAPSIZE - L2MAXAG) {
-> >                ~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-> >    1 warning generated.
->
-> Hi Dave,
->
-> I did not double check the upper bound of db_agl2size. It seems the
-> upper bound should be L2MAXL2SIZE - L2MAXAG, other than MAXMAPSIZE -
-> L2MAXAG.
->
-> And L2MAXL2SIZE = L2BPERDMAP + 3 * L2LPERCTL = 13+3*10 = 43.
->
-> I will send a fixes commit.
+One of the worst offenders of "fake flexible arrays" is struct sockaddr,
+as it is the classic example of why GCC and Clang have been traditionally
+forced to treat all trailing arrays as fake flexible arrays: in the
+distant misty past, sa_data became too small, and code started just
+treating it as a flexible array, even though it was fixed-size. The
+special case by the compiler is specifically that sizeof(sa->sa_data)
+and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
+do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
+it as a flexible array.
 
-The fixes patch is here:
-https://marc.info/?l=jfs-discussion&m=166608184908883&w=2
+However, the coming -fstrict-flex-arrays compiler flag will remove
+these special cases so that FORTIFY_SOURCE can gain coverage over all
+the trailing arrays in the kernel that are _not_ supposed to be treated
+as a flexible array. To deal with this change, convert sa_data to a true
+flexible array. To keep the structure size the same, move sa_data into
+a union with a newly introduced sa_data_min with the original size. The
+result is that FORTIFY_SOURCE can continue to have no idea how large
+sa_data may actually be, but anything using sizeof(sa->sa_data) must
+switch to sizeof(sa->sa_data_min).
 
->
-> >
-> >
-> > vim +/int +196 fs/jfs/jfs_dmap.c
-> >
-> >    135
-> >    136  /*
-> >    137   * NAME:        dbMount()
-> >    138   *
-> >    139   * FUNCTION:    initializate the block allocation map.
-> >    140   *
-> >    141   *              memory is allocated for the in-core bmap descriptor and
-> >    142   *              the in-core descriptor is initialized from disk.
-> >    143   *
-> >    144   * PARAMETERS:
-> >    145   *      ipbmap  - pointer to in-core inode for the block map.
-> >    146   *
-> >    147   * RETURN VALUES:
-> >    148   *      0       - success
-> >    149   *      -ENOMEM - insufficient memory
-> >    150   *      -EIO    - i/o error
-> >    151   *      -EINVAL - wrong bmap data
-> >    152   */
-> >    153  int dbMount(struct inode *ipbmap)
-> >    154  {
-> >    155          struct bmap *bmp;
-> >    156          struct dbmap_disk *dbmp_le;
-> >    157          struct metapage *mp;
-> >    158          int i, err;
-> >    159
-> >    160          /*
-> >    161           * allocate/initialize the in-memory bmap descriptor
-> >    162           */
-> >    163          /* allocate memory for the in-memory bmap descriptor */
-> >    164          bmp = kmalloc(sizeof(struct bmap), GFP_KERNEL);
-> >    165          if (bmp == NULL)
-> >    166                  return -ENOMEM;
-> >    167
-> >    168          /* read the on-disk bmap descriptor. */
-> >    169          mp = read_metapage(ipbmap,
-> >    170                             BMAPBLKNO << JFS_SBI(ipbmap->i_sb)->l2nbperpage,
-> >    171                             PSIZE, 0);
-> >    172          if (mp == NULL) {
-> >    173                  err = -EIO;
-> >    174                  goto err_kfree_bmp;
-> >    175          }
-> >    176
-> >    177          /* copy the on-disk bmap descriptor to its in-memory version. */
-> >    178          dbmp_le = (struct dbmap_disk *) mp->data;
-> >    179          bmp->db_mapsize = le64_to_cpu(dbmp_le->dn_mapsize);
-> >    180          bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
-> >    181          bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
-> >    182          bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
-> >    183          if (!bmp->db_numag) {
-> >    184                  err = -EINVAL;
-> >    185                  goto err_release_metapage;
-> >    186          }
-> >    187
-> >    188          bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
-> >    189          bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
-> >    190          bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
-> >    191          bmp->db_aglevel = le32_to_cpu(dbmp_le->dn_aglevel);
-> >    192          bmp->db_agheight = le32_to_cpu(dbmp_le->dn_agheight);
-> >    193          bmp->db_agwidth = le32_to_cpu(dbmp_le->dn_agwidth);
-> >    194          bmp->db_agstart = le32_to_cpu(dbmp_le->dn_agstart);
-> >    195          bmp->db_agl2size = le32_to_cpu(dbmp_le->dn_agl2size);
-> >  > 196          if (bmp->db_agl2size > MAXMAPSIZE - L2MAXAG) {
-> >    197                  err = -EINVAL;
-> >    198                  goto err_release_metapage;
-> >    199          }
-> >    200
-> >    201          for (i = 0; i < MAXAG; i++)
-> >    202                  bmp->db_agfree[i] = le64_to_cpu(dbmp_le->dn_agfree[i]);
-> >    203          bmp->db_agsize = le64_to_cpu(dbmp_le->dn_agsize);
-> >    204          bmp->db_maxfreebud = dbmp_le->dn_maxfreebud;
-> >    205
-> >    206          /* release the buffer. */
-> >    207          release_metapage(mp);
-> >    208
-> >    209          /* bind the bmap inode and the bmap descriptor to each other. */
-> >    210          bmp->db_ipbmap = ipbmap;
-> >    211          JFS_SBI(ipbmap->i_sb)->bmap = bmp;
-> >    212
-> >    213          memset(bmp->db_active, 0, sizeof(bmp->db_active));
-> >    214
-> >    215          /*
-> >    216           * allocate/initialize the bmap lock
-> >    217           */
-> >    218          BMAP_LOCK_INIT(bmp);
-> >    219
-> >    220          return (0);
-> >    221
-> >    222  err_release_metapage:
-> >    223          release_metapage(mp);
-> >    224  err_kfree_bmp:
-> >    225          kfree(bmp);
-> >    226          return err;
-> >    227  }
-> >    228
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Dylan Yudaken <dylany@fb.com>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: Petr Machata <petrm@nvidia.com>
+Cc: Hangbin Liu <liuhangbin@gmail.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: syzbot <syzkaller@googlegroups.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/socket.h |  5 ++++-
+ net/core/dev.c         |  2 +-
+ net/core/dev_ioctl.c   |  2 +-
+ net/packet/af_packet.c | 10 +++++-----
+ 4 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index de3701a2a212..13c3a237b9c9 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -33,7 +33,10 @@ typedef __kernel_sa_family_t	sa_family_t;
+ 
+ struct sockaddr {
+ 	sa_family_t	sa_family;	/* address family, AF_xxx	*/
+-	char		sa_data[14];	/* 14 bytes of protocol address	*/
++	union {
++		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
++		DECLARE_FLEX_ARRAY(char, sa_data);
++	};
+ };
+ 
+ struct linger {
+diff --git a/net/core/dev.c b/net/core/dev.c
+index fa53830d0683..0649826e5803 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -8818,7 +8818,7 @@ EXPORT_SYMBOL(dev_set_mac_address_user);
+ 
+ int dev_get_mac_address(struct sockaddr *sa, struct net *net, char *dev_name)
+ {
+-	size_t size = sizeof(sa->sa_data);
++	size_t size = sizeof(sa->sa_data_min);
+ 	struct net_device *dev;
+ 	int ret = 0;
+ 
+diff --git a/net/core/dev_ioctl.c b/net/core/dev_ioctl.c
+index 7674bb9f3076..5cdbfbf9a7dc 100644
+--- a/net/core/dev_ioctl.c
++++ b/net/core/dev_ioctl.c
+@@ -342,7 +342,7 @@ static int dev_ifsioc(struct net *net, struct ifreq *ifr, void __user *data,
+ 		if (ifr->ifr_hwaddr.sa_family != dev->type)
+ 			return -EINVAL;
+ 		memcpy(dev->broadcast, ifr->ifr_hwaddr.sa_data,
+-		       min(sizeof(ifr->ifr_hwaddr.sa_data),
++		       min(sizeof(ifr->ifr_hwaddr.sa_data_min),
+ 			   (size_t)dev->addr_len));
+ 		call_netdevice_notifiers(NETDEV_CHANGEADDR, dev);
+ 		return 0;
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 6ce8dd19f33c..8c5b3da0c29f 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -3277,7 +3277,7 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr *uaddr,
+ 			    int addr_len)
+ {
+ 	struct sock *sk = sock->sk;
+-	char name[sizeof(uaddr->sa_data) + 1];
++	char name[sizeof(uaddr->sa_data_min) + 1];
+ 
+ 	/*
+ 	 *	Check legality
+@@ -3288,8 +3288,8 @@ static int packet_bind_spkt(struct socket *sock, struct sockaddr *uaddr,
+ 	/* uaddr->sa_data comes from the userspace, it's not guaranteed to be
+ 	 * zero-terminated.
+ 	 */
+-	memcpy(name, uaddr->sa_data, sizeof(uaddr->sa_data));
+-	name[sizeof(uaddr->sa_data)] = 0;
++	memcpy(name, uaddr->sa_data, sizeof(uaddr->sa_data_min));
++	name[sizeof(uaddr->sa_data_min)] = 0;
+ 
+ 	return packet_do_bind(sk, name, 0, pkt_sk(sk)->num);
+ }
+@@ -3561,11 +3561,11 @@ static int packet_getname_spkt(struct socket *sock, struct sockaddr *uaddr,
+ 		return -EOPNOTSUPP;
+ 
+ 	uaddr->sa_family = AF_PACKET;
+-	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data));
++	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data_min));
+ 	rcu_read_lock();
+ 	dev = dev_get_by_index_rcu(sock_net(sk), READ_ONCE(pkt_sk(sk)->ifindex));
+ 	if (dev)
+-		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data));
++		strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data_min));
+ 	rcu_read_unlock();
+ 
+ 	return sizeof(*uaddr);
+-- 
+2.34.1
+
