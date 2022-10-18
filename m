@@ -1,131 +1,203 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B247B
-	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 08:32:57 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id g28so13419101pfk.8
-        for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 01:32:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAC67B
+	for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 08:40:01 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id z97so19408622ede.8
+        for <llvm@lists.linux.dev>; Tue, 18 Oct 2022 01:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WMgE1fyjrJY9vSnvRMz8bHn2yTvJe/km5liUet6OTaw=;
-        b=YgTkaHRPQjsBsJNUHrik4HbQBzYewWyJ7ySyGTgdQ8p8w6U6zCfhpcFzjvfV59U62P
-         3Da9gAOT1L3WBT5PcqX0ssxUuWmOH60c71ylOkujiiZ20i/VeNuvModSnHqPKb6nc5ZZ
-         v/0FB6LL552bfW/aftPKoFJRAHyWo6Sg34ht0=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bk3gcbpb6ZYdoK0dmBi4jOV1xqzE9DhnWLfW4dnfw1o=;
+        b=bSckSaTpoDSYDnZKmrDGPhCnNoj7QmeLYurYpyqW/6AOT38+tutsL61JoVA1qAgC0R
+         9RELEFzEPRkv5++j+WqaqPJjgS1OIT7fKLEIJI86snUsL04wlj/16nrzEZaCqfLKL+0K
+         tl16JtlbvKcfnrPnppzAt2DpYWxzzakTLBOexPba+jG3jIf62KZnlMCDX6oG67LKNrEO
+         UpY5O909xFk/eJgzqQ+9rURKUoiUhZEmmy2ITxIS8ZnvnE+J8fbNimgclFIVwOHHHUyN
+         WPbiiC2sS4VxQqzSCPnGED/bqHy0HUmDNqK+ZXdqzDU4ZyTTPZiy9JDRN1nZkJEDLjls
+         Vo7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WMgE1fyjrJY9vSnvRMz8bHn2yTvJe/km5liUet6OTaw=;
-        b=qSbSc9FveeKpNFWmGUDZ8sqXzX0jYEG8vNeiQFqWOY92hlmwkIKBUVUL6ckoqKanX6
-         5vofr/ist/dhZGESgsdyUafLHGqkJcyfk7rzjZCpHF+1qJP4+p+NxMXXDLT20FJ4qlc4
-         9rzR49lJoFWL/cM8dlsPPRWpmTX3poFCOHd1SPxPxEWbjGMvzL8tGCktY1Ipmopq2zs6
-         ua+P4WeMMubQtq29Zi38fJhLautZEEJMAsEOYBGFsHllcNDSKb3HP/3rHfyg1xeANba5
-         KF7c5D6kQfXlOAeumKs9GQQGXusnwL8Lwg6SMG1N8acg6k4Porih9jPfl18l5MAAhKCp
-         sCIQ==
-X-Gm-Message-State: ACrzQf1c9OgS871+DRoQS+CbMOk6wYkrKbfcpVuFo4eO2SelqoRUv9IW
-	R0gc8jrfBp4H2zElSmBihh7nzg==
-X-Google-Smtp-Source: AMsMyM5vFszCXPViIzTCoQXJeqBBtRWDaVBsj5nCFCpJrmEX5X5wQFGFwCc7yT0rI3q+/X3a4I9Bbw==
-X-Received: by 2002:a05:6a00:238d:b0:563:b212:9257 with SMTP id f13-20020a056a00238d00b00563b2129257mr2052202pfc.21.1666081976812;
-        Tue, 18 Oct 2022 01:32:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s16-20020a17090a1c1000b0020a81cf4a9asm11077191pjs.14.2022.10.18.01.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 01:32:56 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: linux-hardening@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] fortify: Short-circuit known-safe calls to strscpy()
-Date: Tue, 18 Oct 2022 01:32:51 -0700
-Message-Id: <20221018083051.never.939-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        bh=Bk3gcbpb6ZYdoK0dmBi4jOV1xqzE9DhnWLfW4dnfw1o=;
+        b=TQwFGo9XqlEi+sxJKLHAOn1bG+E4p+LoAYQuacw4KPhwVtSuoSQFOiBjk3cDMAyi25
+         PvsVPOW4XUyOcAULYTnT9voTLc2TEb0276YY6DXS8gb9hS9xs9mrKnzjzLVUUDT9Wqog
+         xrRb47dLyfrBuGm+9xqaOUTw1/10aU0uKhgvGz8OT+Y4r/r6UVu5GdkxhDnzykG4np6L
+         XD/5oSyyWN239XIgFH41U38imfqN0aWVIrBMFMcw+GNKrynnYaFG8BJGGaaTlN7lmxlz
+         PW4bEv7eVdu+53Ov1xYs7q8ww2XlD7sYXrfZh9y1fPQPxMdWWWe0UjPQJ6r5biEyb5MB
+         pcJg==
+X-Gm-Message-State: ACrzQf1KWgDF/QV1NS+wY/rYHtzQgbR94sZUhlYSVEqoVQ2TmVP7Xabe
+	QkSOUdZ/ZGo18LcGE4JUm2XIajhthqkALJeugkA=
+X-Google-Smtp-Source: AMsMyM5TFQMq+6oIkQC4pJeiFkR3ENjx2BxdlwqxF+j7Pdn6PVIhM6Dsu/6Z3Fc7NqyONQQt4tF1oifJsx8m1bPhmUA=
+X-Received: by 2002:a05:6402:11c9:b0:45d:aa9b:5193 with SMTP id
+ j9-20020a05640211c900b0045daa9b5193mr1599459edw.372.1666082399690; Tue, 18
+ Oct 2022 01:39:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2706; h=from:subject:message-id; bh=TuV6DsCHn4YM1pzSIZxk5kOcXo+TKcB3VVIFFMdDAmw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjTmSy9TMK14Z6uFIMcZ/T8ujj2hXR4Xr/JigD6sMv 42vJH2iJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY05ksgAKCRCJcvTf3G3AJsPHD/ 9PrjfaHojf06MfJOXnvTmaDU+LsTURln+B94F70PVDLDd2Dav7dKtEGqNxJuG3bEbC6c5oEREbdQXK RrYPH2Wx5O8CtmmUwkaSiYIjjZc5y7Y3CfO2dbjGBNiFYD2jWESj5dkgWJLbibCkVHtiSGIoBO63oE fICz4Gy2XDEfxp+a2fPArCNgKzXW7QU7OBNE/2VdFn6mbVrCJhSZdhOKlS6HOh+IE+ma4n6dYL0IB7 e/MHsdfllNhhxqZa36zBSWiq6fz4DJjUJ4V7z/WQ4Agsj2mjiGVDSTM8MD8SII9Jz4Uh9TJmvnZExd SjY8asnB9rEAS3FXN+DQbm87gFf2jtHZOwOWs6klYMkR6cBtBsJ+OUM+FTzqOtfmlv0IQd47QraSFx Vr8GiqaOY+Pn9G/Rjpb+rjIFeJ4YMiY/lEia9QPmxU36+ML52uBrhAlNe/QsAVCXdBzZ500FRIIu/d uXFSZfQfoYkf8+mTlUo30HujO84nZ/0JVpYarc/JbJLynPuBQPsG0PGCoGJyA2/M3ZBiL8DF20TdXg x5JsNVPwhpcJOklcCegGs7A+kGhW6kvKCxOpEa99xZYzhSy3ozTqvxOY023eMoIcEhAwCeDxVVojFf NnVntHm6jMPdmeR5EH0vHa0d1lMBerG4BgLsbTXcTGmmSVYjBZWvusnKSSKQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <202210181318.WUNV3QRv-lkp@intel.com> <CAD-N9QX8tHSePqzQ8QZEYmAy6XTV5DN1Q3C-s7YYeu304hi=YA@mail.gmail.com>
+In-Reply-To: <CAD-N9QX8tHSePqzQ8QZEYmAy6XTV5DN1Q3C-s7YYeu304hi=YA@mail.gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
+Date: Tue, 18 Oct 2022 16:37:57 +0800
+Message-ID: <CAD-N9QXRz0+YiirOp+3wZzddR1dg4_W69W4-yZgp2a_EriDKkQ@mail.gmail.com>
+Subject: Re: [linux-next:master 1304/1443] fs/jfs/jfs_dmap.c:196:23: warning:
+ result of comparison of constant 8796093022201 with expression of type 'int'
+ is always false
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, kbuild-all@lists.01.org, 
+	Linux Memory Management List <linux-mm@kvack.org>, Dave Kleikamp <dave.kleikamp@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Replacing compile-time safe calls of strcpy()-related functions with
-strscpy() was always calling the full strscpy() logic when a builtin
-would be better. For example:
+On Tue, Oct 18, 2022 at 4:11 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+>
+> On Tue, Oct 18, 2022 at 1:50 PM kernel test robot <lkp@intel.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> > head:   4ca786ae6681b90b0ec3f4c55c89d12f835f8944
+> > commit: 920f4b7e923b35fd9d117fd3cb616b310cd41010 [1304/1443] fs: jfs: fix shift-out-of-bounds in dbAllocAG
+> > config: mips-randconfig-r005-20221017
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mipsel-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=920f4b7e923b35fd9d117fd3cb616b310cd41010
+> >         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> >         git fetch --no-tags linux-next master
+> >         git checkout 920f4b7e923b35fd9d117fd3cb616b310cd41010
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/jfs/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> fs/jfs/jfs_dmap.c:196:23: warning: result of comparison of constant 8796093022201 with expression of type 'int' is always false [-Wtautological-constant-out-of-range-compare]
+> >            if (bmp->db_agl2size > MAXMAPSIZE - L2MAXAG) {
+> >                ~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+> >    1 warning generated.
+>
+> Hi Dave,
+>
+> I did not double check the upper bound of db_agl2size. It seems the
+> upper bound should be L2MAXL2SIZE - L2MAXAG, other than MAXMAPSIZE -
+> L2MAXAG.
+>
+> And L2MAXL2SIZE = L2BPERDMAP + 3 * L2LPERCTL = 13+3*10 = 43.
+>
+> I will send a fixes commit.
 
-	char buf[16];
-	strcpy(buf, "yes");
+The fixes patch is here:
+https://marc.info/?l=jfs-discussion&m=166608184908883&w=2
 
-would reduce to __builtin_memcpy(buf, "yes", 4), but not if it was:
-
-	strscpy(buf, yes, sizeof(buf));
-
-Fix this by checking if all sizes are known at compile-time.
-
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/fortify-string.h | 10 ++++++++++
- lib/strscpy_kunit.c            | 13 +++++++++++++
- 2 files changed, 23 insertions(+)
-
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index aa1a50009632..c473adb55cf5 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -321,6 +321,16 @@ __FORTIFY_INLINE ssize_t strscpy(char * const POS p, const char * const POS q, s
- 	if (__compiletime_lessthan(p_size, size))
- 		__write_overflow();
- 
-+	/* Short-circuit for compile-time known-safe lengths. */
-+	if (__compiletime_lessthan(p_size, SIZE_MAX)) {
-+		len = __compiletime_strlen(q);
-+
-+		if (len < SIZE_MAX && __compiletime_lessthan(len, size)) {
-+			__underlying_memcpy(p, q, len + 1);
-+			return len;
-+		}
-+	}
-+
- 	/*
- 	 * This call protects from read overflow, because len will default to q
- 	 * length if it smaller than size.
-diff --git a/lib/strscpy_kunit.c b/lib/strscpy_kunit.c
-index 98523f828d3a..a6b6344354ed 100644
---- a/lib/strscpy_kunit.c
-+++ b/lib/strscpy_kunit.c
-@@ -81,6 +81,8 @@ static void tc(struct kunit *test, char *src, int count, int expected,
- 
- static void strscpy_test(struct kunit *test)
- {
-+	char dest[8];
-+
- 	/*
- 	 * tc() uses a destination buffer of size 6 and needs at
- 	 * least 2 characters spare (one for null and one to check for
-@@ -111,6 +113,17 @@ static void strscpy_test(struct kunit *test)
- 	tc(test, "ab",   4, 2,	    2, 1, 1);
- 	tc(test, "a",    4, 1,	    1, 1, 2);
- 	tc(test, "",     4, 0,	    0, 1, 3);
-+
-+	/* Compile-time-known source strings. */
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "", ARRAY_SIZE(dest)), 0);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "", 3), 0);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "", 1), 0);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "", 0), -E2BIG);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", ARRAY_SIZE(dest)), 5);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", 3), -E2BIG);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", 1), -E2BIG);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "Fixed", 0), -E2BIG);
-+	KUNIT_EXPECT_EQ(test, strscpy(dest, "This is too long", ARRAY_SIZE(dest)), -E2BIG);
- }
- 
- static struct kunit_case strscpy_test_cases[] = {
--- 
-2.34.1
-
+>
+> >
+> >
+> > vim +/int +196 fs/jfs/jfs_dmap.c
+> >
+> >    135
+> >    136  /*
+> >    137   * NAME:        dbMount()
+> >    138   *
+> >    139   * FUNCTION:    initializate the block allocation map.
+> >    140   *
+> >    141   *              memory is allocated for the in-core bmap descriptor and
+> >    142   *              the in-core descriptor is initialized from disk.
+> >    143   *
+> >    144   * PARAMETERS:
+> >    145   *      ipbmap  - pointer to in-core inode for the block map.
+> >    146   *
+> >    147   * RETURN VALUES:
+> >    148   *      0       - success
+> >    149   *      -ENOMEM - insufficient memory
+> >    150   *      -EIO    - i/o error
+> >    151   *      -EINVAL - wrong bmap data
+> >    152   */
+> >    153  int dbMount(struct inode *ipbmap)
+> >    154  {
+> >    155          struct bmap *bmp;
+> >    156          struct dbmap_disk *dbmp_le;
+> >    157          struct metapage *mp;
+> >    158          int i, err;
+> >    159
+> >    160          /*
+> >    161           * allocate/initialize the in-memory bmap descriptor
+> >    162           */
+> >    163          /* allocate memory for the in-memory bmap descriptor */
+> >    164          bmp = kmalloc(sizeof(struct bmap), GFP_KERNEL);
+> >    165          if (bmp == NULL)
+> >    166                  return -ENOMEM;
+> >    167
+> >    168          /* read the on-disk bmap descriptor. */
+> >    169          mp = read_metapage(ipbmap,
+> >    170                             BMAPBLKNO << JFS_SBI(ipbmap->i_sb)->l2nbperpage,
+> >    171                             PSIZE, 0);
+> >    172          if (mp == NULL) {
+> >    173                  err = -EIO;
+> >    174                  goto err_kfree_bmp;
+> >    175          }
+> >    176
+> >    177          /* copy the on-disk bmap descriptor to its in-memory version. */
+> >    178          dbmp_le = (struct dbmap_disk *) mp->data;
+> >    179          bmp->db_mapsize = le64_to_cpu(dbmp_le->dn_mapsize);
+> >    180          bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
+> >    181          bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
+> >    182          bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
+> >    183          if (!bmp->db_numag) {
+> >    184                  err = -EINVAL;
+> >    185                  goto err_release_metapage;
+> >    186          }
+> >    187
+> >    188          bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
+> >    189          bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
+> >    190          bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
+> >    191          bmp->db_aglevel = le32_to_cpu(dbmp_le->dn_aglevel);
+> >    192          bmp->db_agheight = le32_to_cpu(dbmp_le->dn_agheight);
+> >    193          bmp->db_agwidth = le32_to_cpu(dbmp_le->dn_agwidth);
+> >    194          bmp->db_agstart = le32_to_cpu(dbmp_le->dn_agstart);
+> >    195          bmp->db_agl2size = le32_to_cpu(dbmp_le->dn_agl2size);
+> >  > 196          if (bmp->db_agl2size > MAXMAPSIZE - L2MAXAG) {
+> >    197                  err = -EINVAL;
+> >    198                  goto err_release_metapage;
+> >    199          }
+> >    200
+> >    201          for (i = 0; i < MAXAG; i++)
+> >    202                  bmp->db_agfree[i] = le64_to_cpu(dbmp_le->dn_agfree[i]);
+> >    203          bmp->db_agsize = le64_to_cpu(dbmp_le->dn_agsize);
+> >    204          bmp->db_maxfreebud = dbmp_le->dn_maxfreebud;
+> >    205
+> >    206          /* release the buffer. */
+> >    207          release_metapage(mp);
+> >    208
+> >    209          /* bind the bmap inode and the bmap descriptor to each other. */
+> >    210          bmp->db_ipbmap = ipbmap;
+> >    211          JFS_SBI(ipbmap->i_sb)->bmap = bmp;
+> >    212
+> >    213          memset(bmp->db_active, 0, sizeof(bmp->db_active));
+> >    214
+> >    215          /*
+> >    216           * allocate/initialize the bmap lock
+> >    217           */
+> >    218          BMAP_LOCK_INIT(bmp);
+> >    219
+> >    220          return (0);
+> >    221
+> >    222  err_release_metapage:
+> >    223          release_metapage(mp);
+> >    224  err_kfree_bmp:
+> >    225          kfree(bmp);
+> >    226          return err;
+> >    227  }
+> >    228
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
