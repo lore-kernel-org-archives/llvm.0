@@ -1,118 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254167E
-	for <llvm@lists.linux.dev>; Wed, 19 Oct 2022 08:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D58CC433B5
-	for <llvm@lists.linux.dev>; Wed, 19 Oct 2022 08:15:48 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="D+ZvL1k/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1666167346;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nAmr2UAHuPsXegfCTI97bmAUTMlBsKIt74vgLb/46NU=;
-	b=D+ZvL1k/WanrhMOeR+CGRXuPU/IX9UV+tXpP0nBmAVeKqBZq0aZV7xPZfPG2OiONIW0mx0
-	xAkhMgP84/WjI9ijS4Wnf95X8rq3fF0LQJLvQkv8gUa2x29/gdGw9MUIgvDJ/9hk12uHjs
-	0LuPLiRK3yUgkt+hfZRwt1lYiSItt8c=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b518b078 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-	for <llvm@lists.linux.dev>;
-	Wed, 19 Oct 2022 08:15:46 +0000 (UTC)
-Received: by mail-vs1-f44.google.com with SMTP id h29so16984299vsq.9
-        for <llvm@lists.linux.dev>; Wed, 19 Oct 2022 01:15:45 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3o1Ooiba3HDCQ+fbUyywGpxLn3OZBCB6jHw77go3s03oxX31yG
-	uqm+lCH6+oVuvNuY3r2sjGqIZI0+kxfveTHbt1Q=
-X-Google-Smtp-Source: AMsMyM67WQuIFDSYsk+FN+WbsP3JkTTE10px/GF5LeSzwj0Zm8Srjifse7EFqjgFDwdSBmVrlKmmcEzev2nVJIhpyHY=
-X-Received: by 2002:a67:c297:0:b0:3a7:5f0c:54c4 with SMTP id
- k23-20020a67c297000000b003a75f0c54c4mr3705224vsj.76.1666167344375; Wed, 19
- Oct 2022 01:15:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AA92577
+	for <llvm@lists.linux.dev>; Wed, 19 Oct 2022 09:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1565FC433D7;
+	Wed, 19 Oct 2022 09:07:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1666170475;
+	bh=hzbiDCjgP4PWpxtEpRK2mCWbxYUpFdc6paCISbBKNxg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=aP5Zn1SK9z8B6dSkbPmRbDIJV1LQD90djpZKfjIU3I1+wtdJ5BJgZZfLLXMj5N8+c
+	 Xg8110o38O1r/XDeL/hytAl1Vct10HwUrEd5BYWG1K8gbkYkDHcxdmQb+Nlur5OOGe
+	 CK/fFgPIHb4EmUgwuGohz7I7ae5uY8spPvGuTtQY=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	David Gow <davidgow@google.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Sander Vanheule <sander@svanheule.net>,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.0 668/862] fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
+Date: Wed, 19 Oct 2022 10:32:35 +0200
+Message-Id: <20221019083319.471583012@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.0
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
+References: <20221019083249.951566199@linuxfoundation.org>
+User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202210191553.vO9rtKe5-lkp@intel.com> <87pmeol020.fsf@kernel.org>
- <CAHmME9qFKMLJiZa=pg9bnBWHSfbgP-+yimteL_t4sxuepQ6bAg@mail.gmail.com> <CAHmME9ocXJMTmCQfi1NY+zOw-r5VCe_Z48q5VJCZxR4Hj=1oZA@mail.gmail.com>
-In-Reply-To: <CAHmME9ocXJMTmCQfi1NY+zOw-r5VCe_Z48q5VJCZxR4Hj=1oZA@mail.gmail.com>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Wed, 19 Oct 2022 02:15:33 -0600
-X-Gmail-Original-Message-ID: <CAHmME9oeHMPjg5aCdv4d5pY_ue9ufgaS4FQkYRRWAX_E0zFtfw@mail.gmail.com>
-Message-ID: <CAHmME9oeHMPjg5aCdv4d5pY_ue9ufgaS4FQkYRRWAX_E0zFtfw@mail.gmail.com>
-Subject: Re: drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9439:15: warning:
- result of comparison of constant -7 with expression of type 'char' is always false
-To: Kalle Valo <kvalo@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, =?UTF-8?Q?Tomislav_Po=C5=BEega?= <pozega.tomislav@gmail.com>, 
-	llvm@lists.linux.dev, kbuild-all@lists.01.org, linux-kernel@vger.kernel.org, 
-	Daniel Golle <daniel@makrotopia.org>, linux-wireless@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 19, 2022 at 2:02 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> On Wed, Oct 19, 2022 at 1:59 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > On Wed, Oct 19, 2022 at 1:55 AM Kalle Valo <kvalo@kernel.org> wrote:
-> > >
-> > > + jason, linux-wireless
-> > >
-> > > kernel test robot <lkp@intel.com> writes:
-> > >
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > head:   aae703b02f92bde9264366c545e87cec451de471
-> > > > commit: dab902fe1d29dc0fa1dccc8d13dc89ffbf633881 wifi: rt2x00: add TX
-> > > > LOFT calibration for MT7620
-> > > > date:   4 weeks ago
-> > > > config: arm64-allmodconfig
-> > > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
-> > > > 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget
-> > > > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> > > > -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # install arm64 cross compiling tool for clang build
-> > > >         # apt-get install binutils-aarch64-linux-gnu
-> > > >         #
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dab902fe1d29dc0fa1dccc8d13dc89ffbf633881
-> > > >         git remote add linus
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > > >         git fetch --no-tags linus master
-> > > >         git checkout dab902fe1d29dc0fa1dccc8d13dc89ffbf633881
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
-> > > > O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
-> > > > drivers/net/wireless/ralink/rt2x00/ drivers/staging/media/
-> > > >
-> > > > If you fix the issue, kindly add following tag where applicable
-> > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All warnings (new ones prefixed by >>):
-> > > >
-> > > >>> drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9439:15: warning:
-> > > >> result of comparison of constant -7 with expression of type 'char'
-> > > >> is always false [-Wtautological-constant-out-of-range-compare]
-> > > >            gerr = (gerr < -0x07) ? -0x07 : (gerr > 0x05) ? 0x05 : gerr;
-> > > >                    ~~~~ ^ ~~~~~
-> > > >    drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9443:15: warning: result of comparison of constant -31 with expression of type 'char' is always false [-Wtautological-constant-out-of-range-compare]
-> > > >            perr = (perr < -0x1f) ? -0x1f : (perr > 0x1d) ? 0x1d : perr;
-> > > >                    ~~~~ ^ ~~~~~
-> > > >    2 warnings generated.
-> > >
-> > > I believe this patch should fix it:
-> > >
-> > > https://patchwork.kernel.org/project/linux-wireless/patch/20221018202734.140489-1-Jason@zx2c4.com/
-> > >
-> > > Jason, is my understanding correct?
-> >
-> > That's a different bug caused by the same pitfall: assuming char is
-> > signed. I'll send a patch for that function too.
->
->
-> Actually, maybe I should fix the whole file? Patch incoming.
+From: Kees Cook <keescook@chromium.org>
 
-Okay here's a v2 that handles it driver-wide:
-https://lore.kernel.org/linux-wireless/20221019081417.3402284-1-Jason@zx2c4.com/
-(Might take a few minutes to hit lore.)
+[ Upstream commit d07c0acb4f41cc42a0d97530946965b3e4fa68c1 ]
+
+With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we observe
+a runtime panic while running Android's Compatibility Test Suite's (CTS)
+android.hardware.input.cts.tests. This is stemming from a strlen()
+call in hidinput_allocate().
+
+__compiletime_strlen() is implemented in terms of __builtin_object_size(),
+then does an array access to check for NUL-termination. A quirk of
+__builtin_object_size() is that for strings whose values are runtime
+dependent, __builtin_object_size(str, 1 or 0) returns the maximum size
+of possible values when those sizes are determinable at compile time.
+Example:
+
+  static const char *v = "FOO BAR";
+  static const char *y = "FOO BA";
+  unsigned long x (int z) {
+      // Returns 8, which is:
+      // max(__builtin_object_size(v, 1), __builtin_object_size(y, 1))
+      return __builtin_object_size(z ? v : y, 1);
+  }
+
+So when FORTIFY_SOURCE is enabled, the current implementation of
+__compiletime_strlen() will try to access beyond the end of y at runtime
+using the size of v. Mixed with UBSAN_LOCAL_BOUNDS we get a fault.
+
+hidinput_allocate() has a local C string whose value is control flow
+dependent on a switch statement, so __builtin_object_size(str, 1)
+evaluates to the maximum string length, making all other cases fault on
+the last character check. hidinput_allocate() could be cleaned up to
+avoid runtime calls to strlen() since the local variable can only have
+literal values, so there's no benefit to trying to fortify the strlen
+call site there.
+
+Perform a __builtin_constant_p() check against index 0 earlier in the
+macro to filter out the control-flow-dependant case. Add a KUnit test
+for checking the expected behavioral characteristics of FORTIFY_SOURCE
+internals.
+
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Cc: David Gow <davidgow@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Sander Vanheule <sander@svanheule.net>
+Cc: linux-hardening@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Android Treehugger Robot
+Link: https://android-review.googlesource.com/c/kernel/common/+/2206839
+Co-developed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/linux/fortify-string.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index 3b401fa0f374..fce2fb2fc962 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -19,7 +19,8 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
+ 	unsigned char *__p = (unsigned char *)(p);		\
+ 	size_t __ret = (size_t)-1;				\
+ 	size_t __p_size = __builtin_object_size(p, 1);		\
+-	if (__p_size != (size_t)-1) {				\
++	if (__p_size != (size_t)-1 &&				\
++	    __builtin_constant_p(*__p)) {			\
+ 		size_t __p_len = __p_size - 1;			\
+ 		if (__builtin_constant_p(__p[__p_len]) &&	\
+ 		    __p[__p_len] == '\0')			\
+-- 
+2.35.1
+
+
+
