@@ -1,51 +1,204 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648623D62
-	for <llvm@lists.linux.dev>; Thu, 20 Oct 2022 16:54:42 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id c24so20856315plo.3
-        for <llvm@lists.linux.dev>; Thu, 20 Oct 2022 09:54:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B864A2B
+	for <llvm@lists.linux.dev>; Thu, 20 Oct 2022 16:57:03 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id p14so119145pfq.5
+        for <llvm@lists.linux.dev>; Thu, 20 Oct 2022 09:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=iwmr+UJH02VdnHkPjeD2d8o+gYnM5OcFatrpGwCGqDB7nAXaxPJUXxnInSfr9IGiX/
-         cvtDwQPlHvIojtkpiWTh4zuiy+Mi9WbLRwIfcBzCqU4+KO+7EYnlBo8FDTUUNdD7jeYk
-         5EPe0wg7j7MmCbbVumZ2f1LPLCnFFWT3Vh+azvK1cmlIJeom798LvQFoEZthzvOYgGJX
-         IjccnjaQEiZyI1npORpaxYs2P7RMdMCRtomWGV1mwBmbsvABmYydaRiKOt9FJ6eysDKQ
-         s0VjtmXlwQOQqX1+p8xPYtEJJc/amJ4gawPKkza3HMMAXPxD0C70O3CH1sbXUXjQLWGp
-         sLyA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFTq/WIK6eSikdDroXyqrv1nIA6ghmcz645Ab1OBKa0=;
+        b=s122gHWJxme/60Y80GhdZyHSn+u37v7Dxe/PvxdZbQEktqtueLTzy3bI0JLILZgcgK
+         le5IP/WkExo4YBDmthx2rBu6h4nupHYwTOUuoSIKadTmLD23dwPWc7EP2sna1vzz6P5t
+         ddwB6YBxyU2duwo/Rgi/1OweTMC+TmrMSr7iDqxnAfpvd9ZW4Cod0vC1DQDKRGtC1K41
+         FQwi2vL3RKu4UXLt9Lt2JHo9KhdU4imU/fLD4FxZiOkqYjMsPXPGanDwE/KGA/N8eyxQ
+         hJ3UQByyyRM/ak/unwfbUjnn6sSTApnW++sXhAfFnd4Coun2/l5Mq64PuAQOmLpBSYUH
+         KcWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=m7jhX8KyMtj1dej1pDmYRFw0DknwxyQVeTv6xZEVE69TS7gYgPQIht57huIywOBrvr
-         s9xFnksgi1mAABWkXKZoavVmfWGYItccgawY60Jcp0FDYhnoAJexUnejBZ+7UG92G/x2
-         HWsLzRVIww+/YwIt7JOGyBruPsQgtbnCs5TE2bY0LgtAW5IwbnEddWnq9F2pjAuP4D88
-         /sj2tJ0TdeSpue+3xeTkLqwQxCiUzbcE4o62LkhGfzb/COtdVPaOBexXZnY+rhESzKVu
-         J90PCM0RfBpAN3SOY/e27YkxMQgAVW23911237Z68VI3nrTxbLfopjfYFCMcQ+EF4qgt
-         2BZg==
-X-Gm-Message-State: ACrzQf1KJ39CRUo5QH4/7/rww7tDSDO9aZaoo87LAWbmA0Vx/bN333H4
-	a9gosFCuYbZg4+xAXHXtagvalRdzs/pWaPJTbX0Ih45j7Tb9CQ==
-X-Google-Smtp-Source: AMsMyM78YpF2Aw+TPsHcbSJ7yqf5bYdfZJJMs3I8sc8A9lBhk5GT/RFLA0ELItH4CS6XvU1DzTu2qFyyvRP2Lt+Xibo=
-X-Received: by 2002:a17:902:7786:b0:178:48c0:a083 with SMTP id
- o6-20020a170902778600b0017848c0a083mr15192735pll.125.1666284881611; Thu, 20
- Oct 2022 09:54:41 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wFTq/WIK6eSikdDroXyqrv1nIA6ghmcz645Ab1OBKa0=;
+        b=HZhdMRJcPp8sJQdRnYQjhP7EIs3W28DyIiZiQmLF3S4NQMxN2WnVRm2isl5AvSjnsG
+         Us7kPvEh6yyUF0zcgG1EsvQUtemYA9xNgdZ540wmRJDUKO3QMu0U8SUTx9o2IDVRK3CU
+         uF0Ezh3E0ERzxxDu59ape1BREnV4ONazSr6W0BVOn89iQLON0yz8K50UFw+VnNRPVKiF
+         zCLSzKXOIe8ShV4Ft0FBO27Z1SASNMmttBp+rZwBikpXbCZSx8hF25e8/eaoNRyRuYfT
+         zZoM7VIBWUz8XODheYKOXR267DwO9vKMPA6saGh0vT8IpwPgCENzhh0uHCu5H8nv97d/
+         sGZg==
+X-Gm-Message-State: ACrzQf1DbEpJ3tiNIGTbghX8GcQlA8tXOuxwzmtryDMXA36w6ADpaH2m
+	N6E2hyepW4ONb1QTiOmpAjDeoACQpr77Ff1xqoxPHQ==
+X-Google-Smtp-Source: AMsMyM5d4FWOqTGLKMSHpiNBsxeQQ0LFCBLSJ/TvWYGCHSF7ONwpPcd9LxWrjIVverUcXo/WdruHLPXC2uEEnDpe+2E=
+X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id
+ a145-20020a621a97000000b00562558712d6mr14672773pfa.37.1666285022897; Thu, 20
+ Oct 2022 09:57:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:13f0:b0:57d:879e:4a67 with HTTP; Thu, 20 Oct 2022
- 09:54:41 -0700 (PDT)
-From: mike williams <petyetgeta@gmail.com>
-Date: Thu, 20 Oct 2022 16:54:41 +0000
-Message-ID: <CAK8YFDcMe60cTbT83nirVZ3esJfMMPOEg_f7_+WinZyPjRGNHA@mail.gmail.com>
-Subject: Hi ?????????????????????????????????
-To: llvm@lists.linux.dev
+References: <DU0PR03MB8319B83F92372CA86A42C089F3289@DU0PR03MB8319.eurprd03.prod.outlook.com>
+ <CABCJKue6M4cXyTP9wgaBx0oZ+5K7sQna9UQF88Pxcknv-kzcMg@mail.gmail.com> <DU0PR03MB83196C180979F74ABEEB0562F32A9@DU0PR03MB8319.eurprd03.prod.outlook.com>
+In-Reply-To: <DU0PR03MB83196C180979F74ABEEB0562F32A9@DU0PR03MB8319.eurprd03.prod.outlook.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 20 Oct 2022 09:56:50 -0700
+Message-ID: <CAKwvOdncRqrTNqmiDhtkj74V4eU03FBgDr25H4+npwHYgrYQRw@mail.gmail.com>
+Subject: Re: Update15.x/kcfi to LLVM 15.0.3 (ZSTD + DWARFv5)
+To: "Sedat Dilek (DHL Supply Chain)" <sedat.dilek@dhl.com>, Fangrui Song <maskray@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>, clang-built-linux <llvm@lists.linux.dev>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000e3197505eb7a3614"
+
+--000000000000e3197505eb7a3614
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Oct 19, 2022 at 10:44 PM Sedat Dilek (DHL Supply Chain)
+<sedat.dilek@dhl.com> wrote:
+>
+> -----Urspr=C3=BCngliche Nachricht-----
+> Von: Sami Tolvanen <samitolvanen@google.com>
+> Gesendet: Dienstag, 18. Oktober 2022 18:00
+> An: Sedat Dilek (DHL Supply Chain) <sedat.dilek@dhl.com>
+> Betreff: Re: Update15.x/kcfi to LLVM 15.0.3
+>
+> On Tue, Oct 18, 2022 at 4:54 AM Sedat Dilek (DHL Supply Chain) <sedat.dil=
+ek@dhl.com> wrote:
+> >
+> [ CC Nick + Fangrui ]
+>
+> You happen to know or use the ZSTD cmake-option (see [1] and [2]) - came =
+in with changes post-15.0.2?
+>
+> AFAICS Fangrui Song had some patches to use ZSTD debug-compression with D=
+WARFv5.
+>
+> Unsure, if that combination is now possible in v15.0.3 or is a feature of=
+ LLVM-16.
+>
+> [3] says:
+>
+> [ lib/Kconfig.debug ]
+>
+> config DEBUG_INFO_COMPRESSED
+>         bool "Compressed debugging information"
+>         depends on $(cc-option,-gz=3Dzlib)
+>         depends on $(ld-option,--compress-debug-sections=3Dzlib)
+>         help
+>           Compress the debug information using zlib.  Requires GCC 5.0+ o=
+r Clang
+>           5.0+, binutils 2.26+, and zlib.
+>
+>           Users of dpkg-deb via scripts/package/builddeb may find an incr=
+ease in
+>           size of their debug .deb packages with this config set, due to =
+the
+>           debug info being compressed with zlib, then the object files be=
+ing
+>           recompressed with a different compression scheme. But this is s=
+till
+>           preferable to setting $KDEB_COMPRESS to "none" which would be e=
+ven
+>           larger.
+>
+> I am interested in the equivalent changes to cc-option/ld-option with ZST=
+D (usable with DWARFv5).
+
+Good idea.  It looks like there's still a blocker to using -gz=3Dzstd with =
+clang:
+$ clang -gz=3Dzstd -x c - < /dev/null
+clang-16: warning: cannot compress debug sections (zstd not enabled)
+[-Wdebug-compression-unavailable]
+
+https://github.com/facebook/zstd/issues/3271
+
+Attaching a WIP patch.
+
+>
+> Thanks.
+>
+> Best regards,
+> -Sedat-
+>
+> [1] https://github.com/llvm/llvm-project/commit/6fba7854a2f0b6b3899bb156c=
+1a0c4ae35c96e24
+> [2] https://github.com/llvm/llvm-project/commit/b4840279846e1eea44c3dca57=
+5395a90c9d77ca0
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/lib/Kconfig.debug#n315
+> [4] https://metadata.ftp-master.debian.org/changelogs//main/l/llvm-toolch=
+ain-15/llvm-toolchain-15_15.0.3-1~exp1_changelog
+>
+>
+>
 
 
+--=20
+Thanks,
+~Nick Desaulniers
+
+--000000000000e3197505eb7a3614
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-WIP-Makefile.debug-support-for-gz-zstd.patch"
+Content-Disposition: attachment; 
+	filename="0001-WIP-Makefile.debug-support-for-gz-zstd.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l9hb29yn0>
+X-Attachment-Id: f_l9hb29yn0
+
+RnJvbSBjOWNjZjg0YzFhM2ZjNzQyMTIzZGNjNmI3Nzg5MjA2NTA2MTkwMjYwIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBOaWNrIERlc2F1bG5pZXJzIDxuZGVzYXVsbmllcnNAZ29vZ2xl
+LmNvbT4KRGF0ZTogVGh1LCAyMCBPY3QgMjAyMiAwOTo1NDoyMiAtMDcwMApTdWJqZWN0OiBbUEFU
+Q0hdIFdJUDogTWFrZWZpbGUuZGVidWc6IHN1cHBvcnQgZm9yIC1nej16c3RkCgpNYWtlIERFQlVH
+X0lORk9fQ09NUFJFU1NFRCBhIGNob2ljZTsgREVCVUdfSU5GT19VTkNPTVBSRVNTRUQgaXMgdGhl
+CmRlZmF1bHQsIERFQlVHX0lORk9fQ09NUFJFU1NFRCB1c2VzIHpsaWIsIERFQlVHX0lORk9fQ09N
+UFJFU1NFRF9aU1RECnVzZXMgenN0ZC4KClRPRE86IG1lYXN1cmVtZW50cwoKTGluazogaHR0cHM6
+Ly9tYXNrcmF5Lm1lL2Jsb2cvMjAyMi0wOS0wOS16c3RkLWNvbXByZXNzZWQtZGVidWctc2VjdGlv
+bnMKTGluazogaHR0cHM6Ly9tYXNrcmF5Lm1lL2Jsb2cvMjAyMi0wMS0yMy1jb21wcmVzc2VkLWRl
+YnVnLXNlY3Rpb25zClN1Z2dlc3RlZC1ieTogU2VkYXQgRGlsZWsgKERITCBTdXBwbHkgQ2hhaW4p
+IDxzZWRhdC5kaWxla0BkaGwuY29tPgpTaWduZWQtb2ZmLWJ5OiBOaWNrIERlc2F1bG5pZXJzIDxu
+ZGVzYXVsbmllcnNAZ29vZ2xlLmNvbT4KLS0tCiBsaWIvS2NvbmZpZy5kZWJ1ZyAgICAgIHwgMjYg
+KysrKysrKysrKysrKysrKysrKysrKysrKy0KIHNjcmlwdHMvTWFrZWZpbGUuZGVidWcgfCAgNCAr
+KysrCiAyIGZpbGVzIGNoYW5nZWQsIDI5IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRp
+ZmYgLS1naXQgYS9saWIvS2NvbmZpZy5kZWJ1ZyBiL2xpYi9LY29uZmlnLmRlYnVnCmluZGV4IDNm
+YzdhYmZmYzdhYS4uNDA4NWFjNzdkYzEyIDEwMDY0NAotLS0gYS9saWIvS2NvbmZpZy5kZWJ1Zwor
+KysgYi9saWIvS2NvbmZpZy5kZWJ1ZwpAQCAtMzEyLDggKzMxMiwyMiBAQCBjb25maWcgREVCVUdf
+SU5GT19SRURVQ0VECiAJICBERUJVR19JTkZPIGJ1aWxkIGFuZCBjb21waWxlIHRpbWVzIGFyZSBy
+ZWR1Y2VkIHRvby4KIAkgIE9ubHkgd29ya3Mgd2l0aCBuZXdlciBnY2MgdmVyc2lvbnMuCiAKK2No
+b2ljZQorCXByb21wdCAiQ29tcHJlc3NlZCBEZWJ1ZyBpbmZvcm1hdGlvbiIKKwlkZXBlbmRzIG9u
+IERFQlVHX0tFUk5FTAorCWhlbHAKKwkgIENvbXByZXNzIHRoZSByZXN1bHRpbmcgZGVidWcgaW5m
+by4gUmVzdWx0cyBpbiBzbWFsbGVyIGRlYnVnIGluZm8gc2VjdGlvbnMsCisJICBidXQgcmVxdWly
+ZXMgdGhhdCBjb25zdW1lcnMgYXJlIGFibGUgdG8gZGVjb21wcmVzcyB0aGUgcmVzdWx0cy4KKwor
+CSAgSWYgdW5zdXJlLCBjaG9vc2UgREVCVUdfSU5GT19VTkNPTVBSRVNTRUQuCisKK2NvbmZpZyBE
+RUJVR19JTkZPX1VOQ09NUFJFU1NFRAorCWJvb2wgIkRvbid0IGNvbXByZXNzIGRlYnVnIGluZm9y
+bWF0aW9uIgorCWhlbHAKKwkgIERvbid0IGNvbXByZXNzIGRlYnVnIGluZm8gc2VjdGlvbnMuCisK
+IGNvbmZpZyBERUJVR19JTkZPX0NPTVBSRVNTRUQKLQlib29sICJDb21wcmVzc2VkIGRlYnVnZ2lu
+ZyBpbmZvcm1hdGlvbiIKKwlib29sICJDb21wcmVzcyBkZWJ1Z2dpbmcgaW5mb3JtYXRpb24gd2l0
+aCB6bGliIgogCWRlcGVuZHMgb24gJChjYy1vcHRpb24sLWd6PXpsaWIpCiAJZGVwZW5kcyBvbiAk
+KGxkLW9wdGlvbiwtLWNvbXByZXNzLWRlYnVnLXNlY3Rpb25zPXpsaWIpCiAJaGVscApAQCAtMzI3
+LDYgKzM0MSwxNiBAQCBjb25maWcgREVCVUdfSU5GT19DT01QUkVTU0VECiAJICBwcmVmZXJhYmxl
+IHRvIHNldHRpbmcgJEtERUJfQ09NUFJFU1MgdG8gIm5vbmUiIHdoaWNoIHdvdWxkIGJlIGV2ZW4K
+IAkgIGxhcmdlci4KIAorY29uZmlnIERFQlVHX0lORk9fQ09NUFJFU1NFRF9aU1RECisJYm9vbCAi
+Q29tcHJlc3MgZGVidWdnaW5nIGluZm9ybWF0aW9uIHdpdGggenN0ZCIKKwlkZXBlbmRzIG9uICQo
+Y2Mtb3B0aW9uLC1nej16c3RkKQorCWRlcGVuZHMgb24gJChsZC1vcHRpb24sLS1jb21wcmVzcy1k
+ZWJ1Zy1zZWN0aW9ucz16c3RkKQorCWhlbHAKKwkgIENvbXByZXNzIHRoZSBkZWJ1ZyBpbmZvcm1h
+dGlvbiB1c2luZyB6c3RkLiAgUmVxdWlyZXMgR0NDIDEzLjArIG9yIENsYW5nCisJICAxNi4wKywg
+YmludXRpbHMgMi40MCssIGFuZCB6c3RkLgorCitlbmRjaG9pY2UgIyAiQ29tcHJlc3NlZCBEZWJ1
+ZyBpbmZvcm1hdGlvbiIKKwogY29uZmlnIERFQlVHX0lORk9fU1BMSVQKIAlib29sICJQcm9kdWNl
+IHNwbGl0IGRlYnVnaW5mbyBpbiAuZHdvIGZpbGVzIgogCWRlcGVuZHMgb24gJChjYy1vcHRpb24s
+LWdzcGxpdC1kd2FyZikKZGlmZiAtLWdpdCBhL3NjcmlwdHMvTWFrZWZpbGUuZGVidWcgYi9zY3Jp
+cHRzL01ha2VmaWxlLmRlYnVnCmluZGV4IDMzMmM0ODZmNzA1Zi4uOGFjMzM3OWQyMjU1IDEwMDY0
+NAotLS0gYS9zY3JpcHRzL01ha2VmaWxlLmRlYnVnCisrKyBiL3NjcmlwdHMvTWFrZWZpbGUuZGVi
+dWcKQEAgLTMxLDYgKzMxLDEwIEBAIGlmZGVmIENPTkZJR19ERUJVR19JTkZPX0NPTVBSRVNTRUQK
+IERFQlVHX0NGTEFHUwkrPSAtZ3o9emxpYgogS0JVSUxEX0FGTEFHUwkrPSAtZ3o9emxpYgogS0JV
+SUxEX0xERkxBR1MJKz0gLS1jb21wcmVzcy1kZWJ1Zy1zZWN0aW9ucz16bGliCitlbHNlIGlmZGVm
+IENPTkZJR19ERUJVR19JTkZPX0NPTVBSRVNTRURfWlNURAorREVCVUdfQ0ZMQUdTCSs9IC1nej16
+c3RkCitLQlVJTERfQUZMQUdTCSs9IC1nej16c3RkCitLQlVJTERfTERGTEFHUwkrPSAtLWNvbXBy
+ZXNzLWRlYnVnLXNlY3Rpb25zPXpzdGQKIGVuZGlmCiAKIEtCVUlMRF9DRkxBR1MJKz0gJChERUJV
+R19DRkxBR1MpCi0tIAoyLjM4LjAuMTM1Lmc5MDg1MGEyMjExLWdvb2cKCg==
+--000000000000e3197505eb7a3614--
