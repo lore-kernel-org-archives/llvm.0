@@ -1,26 +1,38 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19BBD3C05
-	for <llvm@lists.linux.dev>; Fri, 21 Oct 2022 15:56:37 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96D9B1063;
-	Fri, 21 Oct 2022 08:56:37 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.6.231])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9017B3F792;
-	Fri, 21 Oct 2022 08:56:29 -0700 (PDT)
-Date: Fri, 21 Oct 2022 16:56:20 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: llvm@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Fangrui Song <maskray@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: kCFI && patchable-function-entry=M,N
-Message-ID: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282C63C05
+	for <llvm@lists.linux.dev>; Fri, 21 Oct 2022 16:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3DAC433D6;
+	Fri, 21 Oct 2022 16:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1666368373;
+	bh=d+RQViHBNozSfSewYG8uHxYw17M1OeSizbHCJSkl61U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dniWlnDt2TDtart5T4StcSPwOSyho0nRul66IBG3LH3nC8vGXY9km47vbS4jNWZoS
+	 dylRZ/Lu6ugaCdrOgWAGlA3fJ6ntguVx8HZDqVPeUQjn3oNeelq6Po4lYV0EhaWmVH
+	 SQhEfh1hAR2WPmX+3jwxD/Rc4LqLcrRpP6NdGjQgF81Lw4n2WmM87eYsmdKllEjNxt
+	 gjCfgkAK70/KoteWMqVlfq9F9LZPdL3A/54//IiA5a3JqLyAA+bT7A1I2b3lELMmmj
+	 yrBI3Zu6unqiWtGlD+1SeBaUlt40gV7jR+/JZiPxKdcZpB1iHgVue7fcZ+8EVvzlHB
+	 HV2WzNhN/7+EA==
+Date: Fri, 21 Oct 2022 09:06:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc: keescook@chromium.org, luc.vanoostenryck@gmail.com,
+	ndesaulniers@google.com, trix@redhat.com, dlatypov@google.com,
+	vitor@massaru.org, gustavoars@kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+	airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-sparse@vger.kernel.org, arnd@kernel.org, mchehab@kernel.org,
+	mauro.chehab@linux.intel.com
+Subject: Re: [PATCH v4] overflow: Introduce overflows_type() and
+ castable_to_type()
+Message-ID: <Y1LDctjps1M8MuK8@dev-arch.thelio-3990X>
+References: <20220926191109.1803094-1-keescook@chromium.org>
+ <20221021083333.646269-1-gwan-gyeong.mun@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -29,131 +41,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20221021083333.646269-1-gwan-gyeong.mun@intel.com>
 
-Hi,
+Hi Gwan-gyeong,
 
-For arm64, I'd like to use -fatchable-function-entry=M,N (where N > 0), for our
-ftrace implementation, which instruments *some* but not all functions.
-Unfortuntately, this doesn't play nicely with -fsanitize=kcfi, as instrumented
-and non-instrumented functions don't agree on where the type hash should live
-relative to the function entry point, making them incompatible with one another.
-AFAICT, there's no mechanism today to get them to agree.
+On Fri, Oct 21, 2022 at 11:33:33AM +0300, Gwan-gyeong Mun wrote:
+> From: Kees Cook <keescook@chromium.org>
+> 
+> Implement a robust overflows_type() macro to test if a variable or
+> constant value would overflow another variable or type. This can be
+> used as a constant expression for static_assert() (which requires a
+> constant expression[1][2]) when used on constant values. This must be
+> constructed manually, since __builtin_add_overflow() does not produce
+> a constant expression[3].
+> 
+> Additionally adds castable_to_type(), similar to __same_type(), but for
+> checking if a constant value would overflow if cast to a given type.
+> 
+> Add unit tests for overflows_type(), __same_type(), and castable_to_type()
+> to the existing KUnit "overflow" test.
+> 
+> [1] https://en.cppreference.com/w/c/language/_Static_assert
+> [2] C11 standard (ISO/IEC 9899:2011): 6.7.10 Static assertions
+> [3] https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html
+>     6.56 Built-in Functions to Perform Arithmetic with Overflow Checking
+>     Built-in Function: bool __builtin_add_overflow (type1 a, type2 b,
+> 
+> Cc: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: Daniel Latypov <dlatypov@google.com>
+> Cc: Vitor Massaru Iha <vitor@massaru.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Jani Nikula <jani.nikula@intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-hardening@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Co-developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Today we use -fatchable-function-entry=2, which happens to avoid this.
+<snip>
 
-For example, in the below, functions with N=0 expect the type hash to be placed
-4 bytes before the entry point, and functions with N=2 expect the type hash to
-be placed 12 bytes before the entry point.
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 161d6a724ff7..e061aad90539 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -376,6 +376,10 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
+>  obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
+>  obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
+>  obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
+> +# We're expecting to do a lot of "always true" or "always false" tests.
+> +ifdef CONFIG_CC_IS_CLANG
+> +CFLAGS_overflow_kunit.o += $(call cc-disable-warning, tautological-constant-out-of-range-compare)
 
-| % cat test.c
-| #define __notrace       __attribute__((patchable_function_entry(0, 0)))
-| 
-| void callee_patchable(void)
-| {
-| }
-| 
-| void __notrace callee_non_patchable(void)
-| {
-| }
-| 
-| typedef void (*callee_fn_t)(void);
-| 
-| void caller_patchable(callee_fn_t callee)
-| {
-|         callee();
-| }
-| 
-| void __notrace caller_non_patchable(callee_fn_t callee)
-| {
-|         callee();
-| }
-| % clang --target=aarch64-linux -c test.c -fpatchable-function-entry=2,2 -fsanitize=kcfi -O2
-| % aarch64-linux-objdump -d test.o
-| 
-| test.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <callee_patchable-0xc>:
-|    0:   a540670c        .word   0xa540670c
-|    4:   d503201f        nop
-|    8:   d503201f        nop
-| 
-| 000000000000000c <callee_patchable>:
-|    c:   d65f03c0        ret
-|   10:   a540670c        .word   0xa540670c
-| 
-| 0000000000000014 <callee_non_patchable>:
-|   14:   d65f03c0        ret
-|   18:   07d85f31        .word   0x07d85f31
-|   1c:   d503201f        nop
-|   20:   d503201f        nop
-| 
-| 0000000000000024 <caller_patchable>:
-|   24:   b85f4010        ldur    w16, [x0, #-12]
-|   28:   728ce191        movk    w17, #0x670c
-|   2c:   72b4a811        movk    w17, #0xa540, lsl #16
-|   30:   6b11021f        cmp     w16, w17
-|   34:   54000040        b.eq    3c <caller_patchable+0x18>  // b.none
-|   38:   d4304400        brk     #0x8220
-|   3c:   d61f0000        br      x0
-|   40:   07d85f31        .word   0x07d85f31
-| 
-| 0000000000000044 <caller_non_patchable>:
-|   44:   b85fc010        ldur    w16, [x0, #-4]
-|   48:   728ce191        movk    w17, #0x670c
-|   4c:   72b4a811        movk    w17, #0xa540, lsl #16
-|   50:   6b11021f        cmp     w16, w17
-|   54:   54000040        b.eq    5c <caller_non_patchable+0x18>  // b.none
-|   58:   d4304400        brk     #0x8220
-|   5c:   d61f0000        br      x0
+If you are going to wrap this in CONFIG_CC_IS_CLANG (which is good),
+drop the cc-disable-warning and just disable the warning directly.
 
-On arm64, I'd like to use -fpatchable-function-entry=4,2 on arm64, along with
--falign-functions=8, so that we can place a naturally-aligned 8-byte literal
-before the function (e.g. a pointer value). That allows us to implement an
-efficient per-callsite hook without hitting branch range limitations and/or
-requiring trampolines. I have a PoC that works without kCFI at:
+CFLAGS_overflow_kunit.o += -Wno-tautological-constant-out-of-range-compare
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
+All kernel supported clang versions support this warning so there is no
+point in checking for its existence before disabling it with
+cc-disable-warning. scripts/Makefile.extrawarn does this as well.
 
-I mentioned this in the #clangbuiltlinux IRQ channel, and Sami wrote up a
-github issue at: https://github.com/ClangBuiltLinux/linux/issues/1744
+> +endif
+>  obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+>  CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+>  obj-$(CONFIG_ST&ACKINIT_KUNIT_TEST) += stackinit_kunit.o
 
-Currently clang generates:
-
-| 	< HASH >
-| 	NOP
-| 	NOP
-| func:	BTI	// optional
-| 	NOP
-| 	NOP
-
-... and to make this consistent with non-instrumented functions, the
-non-instrumented functions would need pre-function padding before their hashes.
-
-For my use-case, it doesn't matter where the pre-function NOPs are placed
-relative to the type hash, so long as the location is consistent, and it might
-be nicer to have the option to place the pre-function NOPs before the hash,
-which would avoid needing to change non-instrumented functions (and save some
-space) e.g.
-
-| 	NOP
-| 	NOP
-| 	< HASH >
-| func:	BTI	// optional
-| 	NOP
-| 	NOP
-
-... but I understand that for x86, folk want the pre-function NOPs to
-fall-through into the body of the function.
-
-Is there any mechanism today that we could use to solve this, or could we
-extend clang to have some options to control this behaviour?
-
-It would also be helpful to have a symbol before both the hash and pre-function
-NOPs so that we can filter those out of probes patching (I see that x86 does
-this with the __cfi_function symbol).
-
-Thanks,
-Mark.
+Cheers,
+Nathan
