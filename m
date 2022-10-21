@@ -1,228 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048496110
-	for <llvm@lists.linux.dev>; Thu, 20 Oct 2022 22:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1666305660;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yqISHsosrrhqmOBLaPbxgN+9zRapPtqZBG8AWM2HY4s=;
-	b=eZxviSB2w5mr3aIHf+kEH/D9id0Wfb4JnFIW70TnQNjfUugGh+dCtO681ed/MrzzwvozNK
-	GNtytY9fM3I+EQ67r5+Acrs5Fw9Epy/wfKc6ZHUSyyhwXM6JMFJWvf4EjVAzXQmLL1oVQr
-	MPyu+vp8ZykjSNyrLxxnVQ23pUfpUTU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-318-eQNE6I69Os-fDbfWCajEjg-1; Thu, 20 Oct 2022 18:40:59 -0400
-X-MC-Unique: eQNE6I69Os-fDbfWCajEjg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E2B413811F2A
-	for <llvm@lists.linux.dev>; Thu, 20 Oct 2022 22:40:58 +0000 (UTC)
-Received: from [172.64.4.46] (unknown [10.30.34.51])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CD2292166B33;
-	Thu, 20 Oct 2022 22:40:58 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc1,
- mainline.kernel.org-clang, aae703b0)
-Date: Thu, 20 Oct 2022 22:40:58 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173707E
+	for <llvm@lists.linux.dev>; Fri, 21 Oct 2022 00:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666313579; x=1697849579;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=t8eukQQRNGfAZeDiwMZwSJzWT294/JgXyPrPo/qNp6g=;
+  b=LeXt2hy3R0ycuO5AdfIZVs02xjOmCu+L3wFWYI6G4pLlV0J85hQd0KgW
+   xTDOVIa7bRUbgZygA0mA9pjo6s3I1Y9o8eFIRt26mIkbH3g1zA3ADYgO1
+   X78Oy/0juTnyfdfYEJ/DuXjaVnPb6Wlz+ECrcY5c4x68bMrMmUr7h4XVq
+   L1Fw4xIVt5PUfgBglgOp2YZhE32hFZhyxmYM1EoMULPiOQLuK27BsOY63
+   s0rKfNKgYW79z7EwrbRq7d4iu3W0jlLb3GCpodTuffLJ50IJxtHHJvJpR
+   QOpmgKMkqX9al2nRHLnqqN9f1EEMvQIjCvRdAKd5DA2PTPt9yBzMYEBGP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="306868477"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="306868477"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:52:50 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="608037424"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="608037424"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.172.222]) ([10.249.172.222])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:52:42 -0700
+Subject: Re: [kbuild-all] Re: [PATCH] PCI: Remove unnecessary of_irq.h
+ includes
+To: Bjorn Helgaas <helgaas@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+ Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
+ Linus Walleij <linus.walleij@linaro.org>, llvm@lists.linux.dev,
+ Minghuan Lian <minghuan.Lian@nxp.com>,
+ Conor Dooley <conor.dooley@microchip.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
+ Toan Le <toan@os.amperecomputing.com>, linux-riscv@lists.infradead.org,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
+ Joyce Ooi <joyce.ooi@intel.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+ bcm-kernel-feedback-list@broadcom.com, linux-arm-kernel@lists.infradead.org,
+ Shawn Lin <shawn.lin@rock-chips.com>, Ray Jui <rjui@broadcom.com>,
+ linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
+ Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+ Michal Simek <monstr@monstr.eu>, kbuild-all@lists.01.org,
+ Scott Branden <sbranden@broadcom.com>,
+ Daire McNa mara <daire.mcnamara@microchip.com>,
+ linux-kernel@vger.kernel.org, Tom Joseph <tjoseph@cadence.com>,
+ linuxppc-dev@lists.ozlabs.org
+References: <20221020150731.GA121202@bhelgaas>
+From: "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <9ac1f194-cef3-68bf-25e2-4bc6c0dbefce@intel.com>
+Date: Fri, 21 Oct 2022 08:52:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <48603.122102018405900279@us-mta-318.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'for-6.1-rc1-tag' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/kdave/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/56900
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5598423
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                 ppc64le - LTP: openposix test suite
-                 ppc64le - CIFS Connectathon
-                 ppc64le - Networking bridge: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - software RAID testing
-                  x86_64 - Storage - swraid scsi_raid
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - Storage - swraid scsi_raid
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 - Boot test
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                 ppc64le - Networking bridge: sanity
-                   s390x - Networking bridge: sanity
-                  x86_64 - Networking bridge: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+In-Reply-To: <20221020150731.GA121202@bhelgaas>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 
 
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+On 10/20/2022 11:07 PM, Bjorn Helgaas wrote:
+> On Thu, Oct 20, 2022 at 10:13:10PM +0800, kernel test robot wrote:
+>> Hi Bjorn,
+>>
+>> I love your patch! Yet something to improve:
+>>
+>> [auto build test ERROR on helgaas-pci/next]
+>> [also build test ERROR on xilinx-xlnx/master rockchip/for-next linus/master v6.1-rc1 next-20221020]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Bjorn-Helgaas/PCI-Remove-unnecessary-of_irq-h-includes/20221020-100633
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+>> patch link:    https://lore.kernel.org/r/20221019195452.37606-1-helgaas%40kernel.org
+>> patch subject: [PATCH] PCI: Remove unnecessary of_irq.h includes
+>> config: s390-randconfig-r044-20221019
+>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # install s390 cross compiling tool for clang build
+>>          # apt-get install binutils-s390x-linux-gnu
+>>          # https://github.com/intel-lab-lkp/linux/commit/273a24b16a40ffd6a64c6c55aecbfae00a1cd996
+>>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>          git fetch --no-tags linux-review Bjorn-Helgaas/PCI-Remove-unnecessary-of_irq-h-includes/20221020-100633
+>>          git checkout 273a24b16a40ffd6a64c6c55aecbfae00a1cd996
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/
+> 
+> Maybe more user error?
+> 
+>    $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/
+>    Compiler will be installed in /home/bjorn/0day
+>    make --keep-going HOSTCC=/home/bjorn/0day/clang/bin/clang CC=/home/bjorn/0day/clang/bin/clang OBJCOPY=/usr/s390x-linux-gnu/bin/objcopy AR=llvm-ar NM=llvm-nm STRIP=llvm-strip OBJDUMP=llvm-objdump OBJSIZE=llvm-size READELF=llvm-readelf HOSTCXX=clang++ HOSTAR=llvm-ar CROSS_COMPILE=s390x-linux-gnu- --jobs=16 W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/
+>    make[1]: Entering directory '/home/bjorn/linux/build_dir'
+>      SYNC    include/config/auto.conf.cmd
+>      GEN     Makefile
+>    scripts/Kconfig.include:40: linker 's390x-linux-gnu-ld' not found
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Hi Bjorn,
 
+You may need to install the below package, or similar package for other OS:
+
+$ dpkg -S /usr/bin/s390x-linux-gnu-ld
+binutils-s390x-linux-gnu: /usr/bin/s390x-linux-gnu-ld
+
+ >>          # install s390 cross compiling tool for clang build
+ >>          # apt-get install binutils-s390x-linux-gnu
+
+Best Regards,
+Rong Chen
+
+>    make[3]: *** [../scripts/kconfig/Makefile:77: syncconfig] Error 1
+>    make[2]: *** [../Makefile:697: syncconfig] Error 2
+>    make[1]: *** [/home/bjorn/linux/Makefile:798: include/config/auto.conf.cmd] Error 2
+>    make[1]: Failed to remake makefile 'include/config/auto.conf.cmd'.
+>    make[1]: Failed to remake makefile 'include/config/auto.conf'.
+>      GEN     Makefile
+>    Error: kernelrelease not valid - run 'make prepare' to update it
+>    ../scripts/mkcompile_h: 19: s390x-linux-gnu-ld: not found
+>    make[1]: Target 'drivers/pci/controller/' not remade because of errors.
+>    make[1]: Leaving directory '/home/bjorn/linux/build_dir'
+>    make: *** [Makefile:231: __sub-make] Error 2
+>    make: Target 'drivers/pci/controller/' not remade because of errors.
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 
