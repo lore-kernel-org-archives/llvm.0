@@ -1,38 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185C27C
-	for <llvm@lists.linux.dev>; Sat, 22 Oct 2022 07:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25724C433C1;
-	Sat, 22 Oct 2022 07:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0697C
+	for <llvm@lists.linux.dev>; Sat, 22 Oct 2022 07:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C576EC433C1;
+	Sat, 22 Oct 2022 07:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1666425573;
-	bh=hzbiDCjgP4PWpxtEpRK2mCWbxYUpFdc6paCISbBKNxg=;
+	s=korg; t=1666425583;
+	bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mDrZeKLDuXuU9SGEfDqfISMNuvMjWQ5T2r+ThsxvajZw67xFR2nI+jpYlHd7xSaEJ
-	 0soQ2Eu4YGWUg75v0nF594EGklSJc9hMimMofwyRhVIRgie5cab2IGjlHyjZPRozqi
-	 aSbdX1B4YJMfnlX1DX5DTMqNe+Hcoyl3XwoAb484=
+	b=dGu4EJwt1fryvkeOa/wlOSwWhFLqJeu53nKg5tG9lvCj6w1EWH9rdtojEct1oN/qC
+	 atPDJ75O7wkR9mSVpM/Hicjzx5uzAv38i3QYToBmM2UOJXYDcfSokc6nWLob0BgVQm
+	 mHejx1tXFd65cnItFHP9H69C97kRMEv21oevnPLA=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	stable@vger.kernel.org,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	David Gow <davidgow@google.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Sander Vanheule <sander@svanheule.net>,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
 	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>,
 	Kees Cook <keescook@chromium.org>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 545/717] fortify: Fix __compiletime_strlen() under UBSAN_BOUNDS_LOCAL
-Date: Sat, 22 Oct 2022 09:27:04 +0200
-Message-Id: <20221022072522.458343012@linuxfoundation.org>
+Subject: [PATCH 5.19 548/717] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date: Sat, 22 Oct 2022 09:27:07 +0200
+Message-Id: <20221022072522.604305739@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -48,81 +44,55 @@ Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit d07c0acb4f41cc42a0d97530946965b3e4fa68c1 ]
+[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
 
-With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we observe
-a runtime panic while running Android's Compatibility Test Suite's (CTS)
-android.hardware.input.cts.tests. This is stemming from a strlen()
-call in hidinput_allocate().
+Clang is especially sensitive about argument type matching when using
+__overloaded functions (like memcmp(), etc). Help it see that function
+pointers are just "void *". Avoids this error:
 
-__compiletime_strlen() is implemented in terms of __builtin_object_size(),
-then does an array access to check for NUL-termination. A quirk of
-__builtin_object_size() is that for strings whose values are runtime
-dependent, __builtin_object_size(str, 1 or 0) returns the maximum size
-of possible values when those sizes are determinable at compile time.
-Example:
+arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
+                   if (!memcmp(prom_init, prom_init + mem, 32))
+                        ^~~~~~
+include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
 
-  static const char *v = "FOO BAR";
-  static const char *y = "FOO BA";
-  unsigned long x (int z) {
-      // Returns 8, which is:
-      // max(__builtin_object_size(v, 1), __builtin_object_size(y, 1))
-      return __builtin_object_size(z ? v : y, 1);
-  }
-
-So when FORTIFY_SOURCE is enabled, the current implementation of
-__compiletime_strlen() will try to access beyond the end of y at runtime
-using the size of v. Mixed with UBSAN_LOCAL_BOUNDS we get a fault.
-
-hidinput_allocate() has a local C string whose value is control flow
-dependent on a switch statement, so __builtin_object_size(str, 1)
-evaluates to the maximum string length, making all other cases fault on
-the last character check. hidinput_allocate() could be cleaned up to
-avoid runtime calls to strlen() since the local variable can only have
-literal values, so there's no benefit to trying to fortify the strlen
-call site there.
-
-Perform a __builtin_constant_p() check against index 0 earlier in the
-macro to filter out the control-flow-dependant case. Add a KUnit test
-for checking the expected behavioral characteristics of FORTIFY_SOURCE
-internals.
-
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: "Rafał Miłecki" <zajec5@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
 Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Tom Rix <trix@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc: David Gow <davidgow@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Sander Vanheule <sander@svanheule.net>
-Cc: linux-hardening@vger.kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>
 Cc: llvm@lists.linux.dev
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Android Treehugger Robot
-Link: https://android-review.googlesource.com/c/kernel/common/+/2206839
-Co-developed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/fortify-string.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/bcm47xx/prom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 3b401fa0f374..fce2fb2fc962 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -19,7 +19,8 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
- 	unsigned char *__p = (unsigned char *)(p);		\
- 	size_t __ret = (size_t)-1;				\
- 	size_t __p_size = __builtin_object_size(p, 1);		\
--	if (__p_size != (size_t)-1) {				\
-+	if (__p_size != (size_t)-1 &&				\
-+	    __builtin_constant_p(*__p)) {			\
- 		size_t __p_len = __p_size - 1;			\
- 		if (__builtin_constant_p(__p[__p_len]) &&	\
- 		    __p[__p_len] == '\0')			\
+diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
+index 0a63721d0fbf..5a33d6b48d77 100644
+--- a/arch/mips/bcm47xx/prom.c
++++ b/arch/mips/bcm47xx/prom.c
+@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
+ 			pr_debug("Assume 128MB RAM\n");
+ 			break;
+ 		}
+-		if (!memcmp(prom_init, prom_init + mem, 32))
++		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
+ 			break;
+ 	}
+ 	lowmem = mem;
+@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
+ 
+ 	off = EXTVBASE + __pa(off);
+ 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
+-		if (!memcmp(prom_init, (void *)(off + extmem), 16))
++		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
+ 			break;
+ 	}
+ 	extmem -= lowmem;
 -- 
 2.35.1
 
