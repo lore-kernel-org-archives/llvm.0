@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE367B
-	for <llvm@lists.linux.dev>; Sat, 22 Oct 2022 11:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25F57B
+	for <llvm@lists.linux.dev>; Sat, 22 Oct 2022 12:20:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1666438841;
+	s=mimecast20190719; t=1666441242;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=HWnyl04lc32Uvlm5Cq3nLbtERhxYOeaQDsp6wvgSrHY=;
-	b=T/LMimRkPI8zvUK1EaGq8xmgnYxCNgWv6MkOvX7mA2soWm8JITZqvGvVpKSdhjuacM7o5+
-	vXNoT7E1hiJVte9VT6S0wPYGBsYPtP7tqmKor8fZRHH3mASjq/JJPCaUDzrcxkGhNUvpRv
-	T0nU3g9Zr9G9A1JHE/klHI7Z96eaCqc=
+	bh=6AySRVFCfXn628KsyNyOgMdMe/QTrbF6WTwAYBu0KHA=;
+	b=ZeYdr+mENt7sOqeWqox/owyPX55mgWh43kQV/DFfNzI+4E8vckTUtZNXYAnXQ0/FtZhbZu
+	eIXf1C30//qnyBDVJhnexRUEh5ja2ctyPrP0mHU3ZwWHKK8wN5CVsTsuT+sDKMJfAmRSJx
+	MZ5YA6KuYB2K6RIBThaYmSr8v8furtE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-RCbE2AESMpGafS2wuNogZA-1; Sat, 22 Oct 2022 07:40:40 -0400
-X-MC-Unique: RCbE2AESMpGafS2wuNogZA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-636-wRXpYkv9Mu-JWZfw0-t0vw-1; Sat, 22 Oct 2022 08:20:40 -0400
+X-MC-Unique: wRXpYkv9Mu-JWZfw0-t0vw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3900629AA3B7
-	for <llvm@lists.linux.dev>; Sat, 22 Oct 2022 11:40:40 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9192C3806709
+	for <llvm@lists.linux.dev>; Sat, 22 Oct 2022 12:20:40 +0000 (UTC)
 Received: from [172.64.10.42] (unknown [10.30.33.69])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 249A917585;
-	Sat, 22 Oct 2022 11:40:40 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 81AE8C15BB2;
+	Sat, 22 Oct 2022 12:20:40 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc1,
- mainline.kernel.org-clang, bd8e9634)
-Date: Sat, 22 Oct 2022 11:40:40 -0000
+ mainline.kernel.org-clang, ed537795)
+Date: Sat, 22 Oct 2022 12:20:40 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <03775.122102207404000618@us-mta-479.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <81136.122102208204000426@us-mta-636.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,17 +52,17 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag '6.1-rc1-smb3-fixes' of git://git.samba.org/s=
-french/cifs-2.6
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/57118
+    https://datawarehouse.cki-project.org/kcidb/checkouts/57115
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5625724
+5625659
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -109,55 +109,15 @@ sk_device_t:s0 tclass=3Dblk_file
                   x86_64 - Storage - swraid scsi_raid
                   x86_64 - stress: stress-ng - cpu-cache
                   x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
                   x86_64 - xfstests - ext4
                   x86_64 - xfstests - xfs
                   x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                 ppc64le - Networking bridge: sanity
-                   s390x - Networking bridge: sanity
-                  x86_64 - Networking bridge: sanity
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - CIFS Connectathon
+                  x86_64 (debug) - Networking: igmp conformance test
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
         Issue: storage: targetcli basic: TypeError: set_chap() got an unexp=
 ected keyword argument 'return_output'
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -166,30 +126,93 @@ l-tests/-/issues/1156
                  aarch64 - Storage - targetcli basic
                  ppc64le - Storage - targetcli basic
                    s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
         Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
 ash
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1339
             Affected tests:
                  aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
                    s390x - kdump - sysrq-c
                    s390x - kdump - file-load
                   x86_64 - kdump - sysrq-c
                   x86_64 - kdump - file-load
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
         Issue: stress: stress-ng - memory: system hit OOM
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1425
             Affected tests:
                    s390x - stress: stress-ng - memory
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                 ppc64le - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - LTP: openposix test suite
         Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
 ed-arguments=E2=80=99
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -202,11 +225,6 @@ found
 l-tests/-/issues/1235
             Affected tests:
                  aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
 
 
 
