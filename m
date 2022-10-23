@@ -1,207 +1,224 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE36C7B
-	for <llvm@lists.linux.dev>; Sun, 23 Oct 2022 22:03:33 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id y26-20020a5d9b1a000000b006bc71505e97so5467827ion.16
-        for <llvm@lists.linux.dev>; Sun, 23 Oct 2022 15:03:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEBTrpeXkVsXvjjzgegY5RcjpLfMyyLXL7UFw1cR9Xs=;
-        b=1uk7i1xXuD3+RKRcVOA7iCGZyS3bb/IQuCr4hH4rWHSnTSXyApa3WexXHz5Fmxk75l
-         EIgOjE8x1aOlirJ2OrnKHIW6cPsHxyYicI6q9ObfLJ71dZx3FtZw039bqMY+RDvsMgL0
-         qETxQEDySXqEUQ9a1aExWXWXlc+9Pw4EuN/3fJSZCt32AV9f0srO+sifJ0q0AglHaoA7
-         DMAZ+E4O41ipJgJO5cgZZpmdXOdzICcWJO5LGQmpaCigbWZ7tx5jAcbP16C9oJuDiB5A
-         sF13J9IoxIFJbcv39ZhfNN2EgVomU2trCC2N9GekW2UOrGA0N5wZoOJS+Y3sZ6ndSgoi
-         xRdg==
-X-Gm-Message-State: ACrzQf2phM/1gm150AId+2td9lN6dmJlCATmJK2RGDDFdMV+B1Djq0G5
-	5GurKmQzoyDF74PEAaQhIL7/RqD6sqpYB+CCmWslrhxfS8r/
-X-Google-Smtp-Source: AMsMyM4TdIRARwRk8PNp14qV0Vtw+/fyLT9bTYzhlp7kKcO5uPvFa3xsNnii1J0SdifIvF4JOrj87ikyFocxfqU9Nm+v9itSkgIO
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B341367
+	for <llvm@lists.linux.dev>; Sun, 23 Oct 2022 23:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1666567841;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9leBtUCx77x34TrVAWpKa7FU8cRCKk72TmurH/f3iqc=;
+	b=CAD9/aovxmznBbZumnkxd6K7PPinrjZgYOFKQsh5PLwi4JNZ8Tjrvhldnqw9Z/hUlQbD1H
+	qt3/lYE8ZDjmghLTaJ8JOxwu4QVDAsGCFtSOGrqZg2XEpMoqTrD+GKIem8EJEAsm57Pmts
+	Y8QkqWs8RerX7/AfLKjwJw4Vbb4gQhk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-640-YEySTdjxOhyxgxcQP0GE5Q-1; Sun, 23 Oct 2022 19:30:40 -0400
+X-MC-Unique: YEySTdjxOhyxgxcQP0GE5Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A9E91C051A3
+	for <llvm@lists.linux.dev>; Sun, 23 Oct 2022 23:30:40 +0000 (UTC)
+Received: from [172.64.10.42] (unknown [10.30.33.69])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0637C2024CC0;
+	Sun, 23 Oct 2022 23:30:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc1,
+ mainline.kernel.org-clang, a7038524)
+Date: Sun, 23 Oct 2022 23:30:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:cc18:0:b0:374:507b:8c16 with SMTP id
- n24-20020a02cc18000000b00374507b8c16mr907052jap.296.1666562612824; Sun, 23
- Oct 2022 15:03:32 -0700 (PDT)
-Date: Sun, 23 Oct 2022 15:03:32 -0700
-In-Reply-To: <0000000000000eda7a05ebae986e@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000888f9a05ebbad8f3@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in hugetlb_fault
-From: syzbot <syzbot+1b27d7a2722eabc2c5d5@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <07391.122102319304000220@us-mta-640.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has found a reproducer for the following issue on:
+Hi, we tested your kernel and here are the results:
 
-HEAD commit:    4d48f589d294 Add linux-next specific files for 20221021
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=165e09b4880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2c4b7d600a5739a6
-dashboard link: https://syzkaller.appspot.com/bug?extid=1b27d7a2722eabc2c5d5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1546e96a880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123eabd2880000
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0c86bd0b39a0/disk-4d48f589.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/074059d37f1f/vmlinux-4d48f589.xz
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1b27d7a2722eabc2c5d5@syzkaller.appspotmail.com
+Kernel information:
+    Commit message: Merge tag 'perf_urgent_for_v6.1_rc2' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tip/tip
 
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
-BUG: KASAN: use-after-free in atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
-BUG: KASAN: use-after-free in is_rwsem_reader_owned kernel/locking/rwsem.c:193 [inline]
-BUG: KASAN: use-after-free in __down_read_common kernel/locking/rwsem.c:1262 [inline]
-BUG: KASAN: use-after-free in __down_read_common kernel/locking/rwsem.c:1255 [inline]
-BUG: KASAN: use-after-free in __down_read kernel/locking/rwsem.c:1269 [inline]
-BUG: KASAN: use-after-free in down_read+0x1d3/0x450 kernel/locking/rwsem.c:1511
-Read of size 8 at addr ffff88801263a508 by task syz-executor409/3698
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/57156
 
-CPU: 1 PID: 3698 Comm: syz-executor409 Not tainted 6.1.0-rc1-next-20221021-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:253 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:364
- kasan_report+0xbb/0x1f0 mm/kasan/report.c:464
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:72 [inline]
- atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
- is_rwsem_reader_owned kernel/locking/rwsem.c:193 [inline]
- __down_read_common kernel/locking/rwsem.c:1262 [inline]
- __down_read_common kernel/locking/rwsem.c:1255 [inline]
- __down_read kernel/locking/rwsem.c:1269 [inline]
- down_read+0x1d3/0x450 kernel/locking/rwsem.c:1511
- hugetlb_vma_lock_read mm/hugetlb.c:6889 [inline]
- hugetlb_fault+0x40a/0x2690 mm/hugetlb.c:5864
- follow_hugetlb_page+0x3f3/0x1700 mm/hugetlb.c:6374
- __get_user_pages+0x2be/0xee0 mm/gup.c:1081
- populate_vma_page_range+0x23d/0x320 mm/gup.c:1464
- __mm_populate+0x101/0x3a0 mm/gup.c:1578
- mm_populate include/linux/mm.h:2714 [inline]
- vm_mmap_pgoff+0x1fd/0x270 mm/util.c:525
- ksys_mmap_pgoff+0x1c3/0x5a0 mm/mmap.c:1458
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb24903a869
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fb248fec2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb24903a869
-RDX: 0000000000000003 RSI: 0000000000b36000 RDI: 0000000020000000
-RBP: 00007fb2490c23e8 R08: 00000000ffffffff R09: 0000000000000000
-R10: 0000000000068831 R11: 0000000000000246 R12: 00007fb2490c23e0
-R13: 00007fb2490c23ec R14: 00007fb248fec400 R15: 0000000000022000
- </TASK>
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5633976
 
-Allocated by task 3698:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- __kasan_unpoison_range-0xf/0x10
- ____kasan_slab_free-0xf/0x1c0
- kmalloc include/linux/slab.h:582 [inline]
- hugetlb_vma_lock_alloc.part.0+0x3f/0x130 mm/hugetlb.c:6999
- hugetlb_vma_lock_alloc mm/hugetlb.c:6755 [inline]
- hugetlb_reserve_pages+0xa3f/0xe80 mm/hugetlb.c:6624
- hugetlbfs_file_mmap+0x40c/0x5c0 fs/hugetlbfs/inode.c:167
- call_mmap include/linux/fs.h:2196 [inline]
- mmap_region+0x6bf/0x1c00 mm/mmap.c:2625
- do_mmap+0x825/0xf50 mm/mmap.c:1412
- vm_mmap_pgoff+0x1ab/0x270 mm/util.c:520
- ksys_mmap_pgoff+0x1c3/0x5a0 mm/mmap.c:1458
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                 ppc64le - LTP: openposix test suite
+                 ppc64le - CIFS Connectathon
+                 ppc64le - Networking bridge: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - software RAID testing
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
+al_clmulni]
+            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
+hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
+erification fio job on NVMeOF file-backed ns) get stuck
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1398
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - cpu: perf: interrupt took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1034
+            Affected tests:
+                  x86_64 - stress: stress-ng - cpu-cache
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                 ppc64le - Networking bridge: sanity
+                   s390x - Networking bridge: sanity
+                  x86_64 - Networking bridge: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                   s390x - CIFS Connectathon
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-Freed by task 3699:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- __kasan_unpoison_range-0xf/0x10
- kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1724 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1750
- slab_free mm/slub.c:3666 [inline]
- __kmem_cache_free+0xab/0x3b0 mm/slub.c:3679
- hugetlb_vma_lock_release mm/hugetlb.c:6944 [inline]
- kref_put include/linux/kref.h:65 [inline]
- __hugetlb_vma_unlock_write_put mm/hugetlb.c:6959 [inline]
- __hugetlb_vma_unlock_write_free mm/hugetlb.c:6967 [inline]
- __unmap_hugepage_range_final+0x2ad/0x340 mm/hugetlb.c:5223
- unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
- zap_page_range+0x38a/0x520 mm/memory.c:1762
- madvise_dontneed_single_vma mm/madvise.c:793 [inline]
- madvise_dontneed_free mm/madvise.c:876 [inline]
- madvise_vma_behavior+0xee8/0x1c50 mm/madvise.c:1015
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
- do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
- do_madvise mm/madvise.c:1432 [inline]
- __do_sys_madvise mm/madvise.c:1432 [inline]
- __se_sys_madvise mm/madvise.c:1430 [inline]
- __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-The buggy address belongs to the object at ffff88801263a500
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 8 bytes inside of
- 192-byte region [ffff88801263a500, ffff88801263a5c0)
 
-The buggy address belongs to the physical page:
-page:ffffea0000498e80 refcount:1 mapcount:0 mapping:0000000000000000 index:0xdead000000000100 pfn:0x1263a
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff888011841a00 dead000080100010 0000000000000000
-raw: dead000000000100 dead000000000122 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 1916075750, free_ts 0
- prep_new_page mm/page_alloc.c:2538 [inline]
- get_page_from_freelist+0x10b5/0x2d50 mm/page_alloc.c:4287
- __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5546
- alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2118
- alloc_pages+0x22f/0x270 mm/mempolicy.c:2280
- alloc_slab_page mm/slub.c:1794 [inline]
- allocate_slab+0x213/0x300 mm/slub.c:1939
- new_slab mm/slub.c:1992 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3185
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3284
- slab_alloc_node mm/slub.c:3369 [inline]
- __kmem_cache_alloc_node+0x191/0x3e0 mm/slub.c:3442
- kmalloc_trace+0x22/0x60 mm/slab_common.c:1046
- kmalloc include/linux/slab.h:582 [inline]
- kzalloc include/linux/slab.h:718 [inline]
- kset_create lib/kobject.c:937 [inline]
- kset_create_and_add+0x4b/0x1a0 lib/kobject.c:980
- devices_init+0x23/0xe1 drivers/base/core.c:3957
- driver_init+0x1b/0x48 drivers/base/init.c:26
- do_basic_setup init/main.c:1411 [inline]
- kernel_init_freeable+0x4e3/0x782 init/main.c:1634
- kernel_init+0x1a/0x1d0 init/main.c:1522
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-page_owner free stack trace missing
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
 
-Memory state around the buggy address:
- ffff88801263a400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88801263a480: 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88801263a500: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                      ^
- ffff88801263a580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff88801263a600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
