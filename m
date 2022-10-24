@@ -1,126 +1,184 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D90A441F
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 17:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F7BC433C1
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 17:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B2F441F
+	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 17:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2489C433C1;
+	Mon, 24 Oct 2022 17:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1666631300;
-	bh=w8GS0/IXGpCBIGFmh/uIswIITFQHhCJFbcyulouW26s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YaahfrujUzOyMhqHPxy+sOLhef/ceV1bhCh7O5OOc1mdC88yQOi1GDrzqx/LgUTaJ
-	 RYkUVzmN2R6VDFTzsBpTwPhZJrmjDssmlKppAvWkqxPrm/4WbcrrPZ+kX5OkumpJYU
-	 WgH/qRTOjg7DiJ4hXCCQhzhvHpWJefnkM7gYASNrRcp56fOJZ8+7U97hx92T/raFIF
-	 qkqAiCsoFwUQieNFnifyB1VPf9gKuNa1/hkbcI/M0AjS6hkm5pnIKRzkykxFoJ1PED
-	 D9ysYjzrvie4SOBkSnf1KrxdUwjledYHSuALfoLVh94TDmmTKBHnUpUWoVdi+7uFcm
-	 swdusg354i6+A==
-Received: by mail-ej1-f49.google.com with SMTP id n12so1185486eja.11
-        for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 10:08:20 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2eo7ixX1KQLNt/wkHvIP4HuRuUdGcOBzQ2980LHni1dyxpIxqD
-	VMusk5Sm+Fcib5pyRK5+DjFMfULB8J7pLjm4+eQ=
-X-Google-Smtp-Source: AMsMyM40/vi4ST/iWpZ0r91eWjW2hEKXf6OVws5NWjYVweSYjNn6fW38ap/cIlAKNckYBr/ZhEfPlU5VyhwrEsPyYIs=
-X-Received: by 2002:a17:906:58c6:b0:78d:b37f:5ce5 with SMTP id
- e6-20020a17090658c600b0078db37f5ce5mr29132484ejs.707.1666631299016; Mon, 24
- Oct 2022 10:08:19 -0700 (PDT)
+	s=k20201202; t=1666632597;
+	bh=7X3pyy5etiy2bIvntMxqiIcujpkGZ6SQvQR3em+OEfQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VcCpwZdkYFgbPQhi85iPPo1eyIBNpT/qYtnO8dl6duQouAJvMDFnaV6Sg+sAWAKor
+	 iwZUIVeLPcMvTVA22drsQzHuwAMQ21quscVSoiAmispWDZbxotN7F5hbajv9TWVuoB
+	 f3UrspGND75jdVosfeKHsLS6KedH4juXr+t80Xv8RMLY+owXOIiyFkJbojkeDJwnx6
+	 cUQTTXeJuKCUfoEKE7lfOn29DHjihFlUqVq0VWcpJmbZcnUPbsfyQ7/tJovhEgs49z
+	 zw1MRAFY38576I9Ko7E/Al/qYG0Z5BfYjKr5eUIUI3aJQbww/D6Du4PR05UXlr92EM
+	 U3LzfDEShaVXQ==
+Date: Mon, 24 Oct 2022 10:29:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Xin Li <xin3.li@intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, x86@kernel.org, keescook@chromium.org,
+	andrew.cooper3@citrix.com, hpa@zytor.com, peterz@infradead.org
+Subject: Re: [PATCH 1/1] kbuild: upgrade the orphan section warning to an
+ error if CONFIG_WERROR is set
+Message-ID: <Y1bLk47I4pyEmJVi@dev-arch.thelio-3990X>
+References: <20221022030519.9505-1-xin3.li@intel.com>
+ <20221022030519.9505-2-xin3.li@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202210211004.sOqZyVWM-lkp@intel.com> <CAMGffEnpQiYm94hJLYFXTOX7DNPrZDUERrz97QENsNuHVa5JEQ@mail.gmail.com>
-In-Reply-To: <CAMGffEnpQiYm94hJLYFXTOX7DNPrZDUERrz97QENsNuHVa5JEQ@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Mon, 24 Oct 2022 10:08:07 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6POWR8-My-jCaVetLV5puAA5rSPSnxGiAffGQmNYU5wg@mail.gmail.com>
-Message-ID: <CAPhsuW6POWR8-My-jCaVetLV5puAA5rSPSnxGiAffGQmNYU5wg@mail.gmail.com>
-Subject: Re: [song-md:md-next 6/6] drivers/md/md-bitmap.c:2541:12: warning:
- result of comparison of constant 4294967296 with expression of type 'unsigned
- long' is always false
-To: Jinpu Wang <jinpu.wang@ionos.com>
-Cc: kernel test robot <lkp@intel.com>, Florian-Ewald Mueller <florian-ewald.mueller@ionos.com>, llvm@lists.linux.dev, 
-	kbuild-all@lists.01.org, linux-raid@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221022030519.9505-2-xin3.li@intel.com>
 
-On Mon, Oct 24, 2022 at 7:31 AM Jinpu Wang <jinpu.wang@ionos.com> wrote:
->
-> On Fri, Oct 21, 2022 at 4:21 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-> > head:   c748adfcbe0bd0c760c68d78434a1dfc0344b6b6
-> > commit: c748adfcbe0bd0c760c68d78434a1dfc0344b6b6 [6/6] md/bitmap: Fix bitmap chunk size overflow issues
-> > config: i386-randconfig-a004
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=c748adfcbe0bd0c760c68d78434a1dfc0344b6b6
-> >         git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
-> >         git fetch --no-tags song-md md-next
-> >         git checkout c748adfcbe0bd0c760c68d78434a1dfc0344b6b6
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/md/md-bitmap.c:2541:12: warning: result of comparison of constant 4294967296 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-> >            if (csize >= (1ULL << (BITS_PER_BYTE *
-> >                ~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    1 warning generated.
-> >
-> Thx for catch it.
-> This can be fixed by:
-> diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
-> index 44f29cb1fde1..be9f3a768c9f 100644
-> --- a/drivers/md/md-bitmap.c
-> +++ b/drivers/md/md-bitmap.c
-> @@ -2538,7 +2538,7 @@ chunksize_store(struct mddev *mddev, const char
-> *buf, size_t len)
->         if (csize < 512 ||
->             !is_power_of_2(csize))
->                 return -EINVAL;
-> -       if (csize >= (1ULL << (BITS_PER_BYTE *
-> +       if (BITS_PER_LONG == 64 && csize >= (1ULL << (BITS_PER_BYTE *
->
-> Song, do you want a seperate fix or will you fold it into the patch itself?
+On Fri, Oct 21, 2022 at 08:05:19PM -0700, Xin Li wrote:
+> Andrew Cooper suggested upgrading the orphan section warning to a hard link
+> error. However Nathan Chancellor said outright turning the warning into an
+> error with no escape hatch might be too aggressive, as we have had these
+> warnings triggered by new compiler generated sections, and suggested turning
+> orphan sections into an error only if CONFIG_WERROR is set. Kees Cook echoed
+> and emphasized that the mandate from Linus is that we should avoid breaking
+> builds. It wrecks bisection, it causes problems across compiler versions, etc.
+> 
+> Thus upgrade the orphan section warning to a hard link error only if
+> CONFIG_WERROR is set.
+> 
+> Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Xin Li <xin3.li@intel.com>
 
-Please fold this in the patch and resend. I will replace the commit and force
-push to md-next.
+Thanks for the patch!
 
-Thanks,
-Song
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-> >
-> > vim +2541 drivers/md/md-bitmap.c
-> >
-> >   2526
-> >   2527  static ssize_t
-> >   2528  chunksize_store(struct mddev *mddev, const char *buf, size_t len)
-> >   2529  {
-> >   2530          /* Can only be changed when no bitmap is active */
-> >   2531          int rv;
-> >   2532          unsigned long csize;
-> >   2533          if (mddev->bitmap)
-> >   2534                  return -EBUSY;
-> >   2535          rv = kstrtoul(buf, 10, &csize);
-> >   2536          if (rv)
-> >   2537                  return rv;
-> >   2538          if (csize < 512 ||
-> >   2539              !is_power_of_2(csize))
-> >   2540                  return -EINVAL;
-> > > 2541          if (csize >= (1ULL << (BITS_PER_BYTE *
-> >   2542                  sizeof(((bitmap_super_t *)0)->chunksize))))
-> >   2543                  return -EOVERFLOW;
-> >   2544          mddev->bitmap_info.chunksize = csize;
-> >   2545          return len;
-> >   2546  }
-> >   2547
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+We could deduplicate the '$(if $(CONFIG_WERROR),error,warn)' logic if we
+hoisted it into Kconfig by having something like
+
+    config LD_ORPHAN_WARN_LEVEL
+        string
+        depends on LD_ORPHAN_WARN
+        default "error" if WERROR
+        default "warn"
+
+in init/Kconfig then using it everywhere like
+
+    --orphan-handling=$(CONFIG_LD_ORPHAN_WARN_LEVEL)
+
+but I will let others decide if they would prefer that over the
+direction we went here.
+
+Cheers,
+Nathan
+
+> ---
+>  Makefile                          | 2 +-
+>  arch/arm/boot/compressed/Makefile | 2 +-
+>  arch/arm64/kernel/vdso/Makefile   | 2 +-
+>  arch/arm64/kernel/vdso32/Makefile | 2 +-
+>  arch/x86/boot/compressed/Makefile | 2 +-
+>  init/Kconfig                      | 9 ++++++---
+>  6 files changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index f41ec8c8426b..b6716a64519f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1118,7 +1118,7 @@ endif
+>  # We never want expected sections to be placed heuristically by the
+>  # linker. All sections should be explicitly named in the linker script.
+>  ifdef CONFIG_LD_ORPHAN_WARN
+> -LDFLAGS_vmlinux += --orphan-handling=warn
+> +LDFLAGS_vmlinux += --orphan-handling=$(if $(CONFIG_WERROR),error,warn)
+>  endif
+>  
+>  # Align the bit size of userspace programs with the kernel
+> diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
+> index 41bcbb460fac..c97db8b14c4f 100644
+> --- a/arch/arm/boot/compressed/Makefile
+> +++ b/arch/arm/boot/compressed/Makefile
+> @@ -123,7 +123,7 @@ LDFLAGS_vmlinux += --no-undefined
+>  LDFLAGS_vmlinux += -X
+>  # Report orphan sections
+>  ifdef CONFIG_LD_ORPHAN_WARN
+> -LDFLAGS_vmlinux += --orphan-handling=warn
+> +LDFLAGS_vmlinux += --orphan-handling=$(if $(CONFIG_WERROR),error,warn)
+>  endif
+>  # Next argument is a linker script
+>  LDFLAGS_vmlinux += -T
+> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+> index 619e2dc7ee14..c8fcc06b5037 100644
+> --- a/arch/arm64/kernel/vdso/Makefile
+> +++ b/arch/arm64/kernel/vdso/Makefile
+> @@ -27,7 +27,7 @@ ldflags-y := -shared -soname=linux-vdso.so.1 --hash-style=sysv	\
+>  	     -Bsymbolic --build-id=sha1 -n $(btildflags-y)
+>  
+>  ifdef CONFIG_LD_ORPHAN_WARN
+> -  ldflags-y += --orphan-handling=warn
+> +  ldflags-y += --orphan-handling=$(if $(CONFIG_WERROR),error,warn)
+>  endif
+>  
+>  ldflags-y += -T
+> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+> index 36c8f66cad25..fa157366e814 100644
+> --- a/arch/arm64/kernel/vdso32/Makefile
+> +++ b/arch/arm64/kernel/vdso32/Makefile
+> @@ -104,7 +104,7 @@ VDSO_AFLAGS += -D__ASSEMBLY__
+>  VDSO_LDFLAGS += -Bsymbolic --no-undefined -soname=linux-vdso.so.1
+>  VDSO_LDFLAGS += -z max-page-size=4096 -z common-page-size=4096
+>  VDSO_LDFLAGS += -shared --hash-style=sysv --build-id=sha1
+> -VDSO_LDFLAGS += --orphan-handling=warn
+> +VDSO_LDFLAGS += --orphan-handling=$(if $(CONFIG_WERROR),error,warn)
+>  
+>  
+>  # Borrow vdsomunge.c from the arm vDSO
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 3a261abb6d15..a1a8bec61c10 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -68,7 +68,7 @@ KBUILD_LDFLAGS += $(call ld-option,--no-ld-generated-unwind-info)
+>  # address by the bootloader.
+>  LDFLAGS_vmlinux := -pie $(call ld-option, --no-dynamic-linker)
+>  ifdef CONFIG_LD_ORPHAN_WARN
+> -LDFLAGS_vmlinux += --orphan-handling=warn
+> +LDFLAGS_vmlinux += --orphan-handling=$(if $(CONFIG_WERROR),error,warn)
+>  endif
+>  LDFLAGS_vmlinux += -z noexecstack
+>  ifeq ($(CONFIG_LD_IS_BFD),y)
+> diff --git a/init/Kconfig b/init/Kconfig
+> index abf65098f1b6..8f4b838ece47 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -159,10 +159,12 @@ config WERROR
+>  	help
+>  	  A kernel build should not cause any compiler warnings, and this
+>  	  enables the '-Werror' (for C) and '-Dwarnings' (for Rust) flags
+> -	  to enforce that rule by default.
+> +	  to enforce that rule by default. Certain warnings from other tools
+> +	  such as the linker may be upgraded to errors with this option as
+> +	  well.
+>  
+> -	  However, if you have a new (or very old) compiler with odd and
+> -	  unusual warnings, or you have some architecture with problems,
+> +	  However, if you have a new (or very old) compiler or linker with odd
+> +	  and unusual warnings, or you have some architecture with problems,
+>  	  you may need to disable this config option in order to
+>  	  successfully build the kernel.
+>  
+> @@ -1454,6 +1456,7 @@ config LD_ORPHAN_WARN
+>  	def_bool y
+>  	depends on ARCH_WANT_LD_ORPHAN_WARN
+>  	depends on $(ld-option,--orphan-handling=warn)
+> +	depends on $(ld-option,--orphan-handling=error)
+>  
+>  config SYSCTL
+>  	bool
+> -- 
+> 2.34.1
+> 
+> 
