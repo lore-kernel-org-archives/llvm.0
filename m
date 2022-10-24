@@ -1,104 +1,100 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C7AC809
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 11:24:16 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22B21D6E;
-	Mon, 24 Oct 2022 04:24:22 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.7.186])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F3BF3F7B4;
-	Mon, 24 Oct 2022 04:24:13 -0700 (PDT)
-Date: Mon, 24 Oct 2022 12:24:11 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Fangrui Song <maskray@google.com>,
-	Joao Moreira <joao@overdrivepizza.com>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Kees Cook <keescook@chromium.org>,
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECED809
+	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 11:43:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301D3C433D7;
+	Mon, 24 Oct 2022 11:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1666611820;
+	bh=7Biv/RB4g1yWRQ3Ir7P+DO9H5qF3EuPehLJSXWw6ecI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bX28EBxgBImVJu8b/SIlKVAxg2F6Jy56EWEaH03Wv8cV/mc+yFwrHQ25Z4gZtKNns
+	 gJ08HLBEWxwN6YDthQjzzh6OO2MzJCy5PBf+Xb4/De199ZwNd3Ebaak12B79KTTHwg
+	 hMLpDDNtGKsxDpZ87ZEis9ev15qHqU3Blc+mafMI=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org,
+	Hauke Mehrtens <hauke@hauke-m.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: kCFI && patchable-function-entry=M,N
-Message-ID: <Y1Z12xuY9fDaHuCm@FVFF77S0Q05N>
-References: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N>
- <Y1QEzk/A41PKLEPe@hirez.programming.kicks-ass.net>
+	llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 124/159] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date: Mon, 24 Oct 2022 13:31:18 +0200
+Message-Id: <20221024112954.037994688@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
+User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1QEzk/A41PKLEPe@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 22, 2022 at 04:57:18PM +0200, Peter Zijlstra wrote:
-> On Fri, Oct 21, 2022 at 04:56:20PM +0100, Mark Rutland wrote:
-> > Hi,
-> > 
-> > For arm64, I'd like to use -fatchable-function-entry=M,N (where N > 0), for our
-> > ftrace implementation, which instruments *some* but not all functions.
-> > Unfortuntately, this doesn't play nicely with -fsanitize=kcfi, as instrumented
-> > and non-instrumented functions don't agree on where the type hash should live
-> > relative to the function entry point, making them incompatible with one another.
-> > AFAICT, there's no mechanism today to get them to agree.
-> > 
-> > Today we use -fatchable-function-entry=2, which happens to avoid this.
-> 
-> > ... but I understand that for x86, folk want the pre-function NOPs to
-> > fall-through into the body of the function.
-> 
-> Yep.
-> 
-> > Is there any mechanism today that we could use to solve this, or could we
-> > extend clang to have some options to control this behaviour?
-> 
-> So the main pain-point for you is differentiating between function with
-> notrace and those without it, right?
-> 
-> That is; suppose you (like x86) globally do:
-> -fpatchable-function-entry=4,2 to get a consistent function signature,
-> you're up a creek because you use the __patchable_function_entries
-> section to drive ftrace and now every function will have it.
-> 
-> So perhaps something like:
-> 
->  -fpatchable-function-entry=N,M,sectionname
-> 
-> would help, then you can have notrace be the same layout, except a
-> different section. Eg. something like:
-> 
->  #define notrace __attribute__((patchable_function_entry(4,2,__notrace_function_entries)))
+From: Kees Cook <keescook@chromium.org>
 
-FWIW, I think that'd work for me, and that was roughly my original proposal on
-IRC. My only concern with this approach is code size, since all uninstrumented
-functions gain some point less prefix NOPs.
+[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
 
-We can make that slghtly better as:
+Clang is especially sensitive about argument type matching when using
+__overloaded functions (like memcmp(), etc). Help it see that function
+pointers are just "void *". Avoids this error:
 
-#define notrace __attribute__((patchable_function_entry(2,2,__notrace_function_entries)))
+arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
+                   if (!memcmp(prom_init, prom_init + mem, 32))
+                        ^~~~~~
+include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
 
-... since we don't care about placing NOPs *within* the function
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: "Rafał Miłecki" <zajec5@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: llvm@lists.linux.dev
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/bcm47xx/prom.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> It does make the whole: CFLAGS_REMOVE_file.o = $(CC_FLAGS_FTRACE)
-> a bit of a pain, but I've long favoured removing all that and having
-> explitic notrace attributes on all relevant functions.
-> 
-> Then again; perhaps it could be made to work by ensuring CFLAGS starts
-> with:
-> 
->  -fpatchable-function-entry=4,2,__notrace_function_entries
-> 
-> and have CC_FLAGS_FTRACE include (and hence override with)
-> 
->  -fpatchable-function-entry=4,2,__ftrace_function_entries
-> 
-> assuming that with duplicate argument the last is effective.
+diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
+index 135a5407f015..d26d9a6f6ee7 100644
+--- a/arch/mips/bcm47xx/prom.c
++++ b/arch/mips/bcm47xx/prom.c
+@@ -85,7 +85,7 @@ static __init void prom_init_mem(void)
+ 			pr_debug("Assume 128MB RAM\n");
+ 			break;
+ 		}
+-		if (!memcmp(prom_init, prom_init + mem, 32))
++		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
+ 			break;
+ 	}
+ 	lowmem = mem;
+@@ -162,7 +162,7 @@ void __init bcm47xx_prom_highmem_init(void)
+ 
+ 	off = EXTVBASE + __pa(off);
+ 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
+-		if (!memcmp(prom_init, (void *)(off + extmem), 16))
++		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
+ 			break;
+ 	}
+ 	extmem -= lowmem;
+-- 
+2.35.1
 
-TBH, it'd be nice to move ftrace to the `CFLAGS_WHATEVER_obj.o := n` approach
-the other instrumentation uses, which IIUC would allow us to define different
-flags for the two cases (though I'll need to go check that).
 
-Thanks,
-Mark.
+
