@@ -1,37 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6F62590
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 12:14:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B90C433C1;
-	Mon, 24 Oct 2022 12:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533FB2590
+	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 12:19:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB55C433D6;
+	Mon, 24 Oct 2022 12:19:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1666613674;
-	bh=7Biv/RB4g1yWRQ3Ir7P+DO9H5qF3EuPehLJSXWw6ecI=;
+	s=korg; t=1666613974;
+	bh=s4PXUvrWJNB2JneVuy9c+iXwcUUBogwyTXM3UHtjRok=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ogyiw3UGYFWGThVXqst2NGh83VwNsxJntzA7X6mn7uksyyCdNZUphR9U8n5+53ikV
-	 fONNJ8o07u/tvwzRLMLSWR5IlMJ70gIXh582Mc2W2YwY9V7/rN/dxz/cRQVAoSS7/g
-	 8jWZH7QFOUecdvWtBgAhdnuA77H6mNCNfA2c5pV0=
+	b=ENRieYn5gjnLy2gkDBvHv0QCNvizhUdIBOD9HIH5vlJOlW+CuGCnIEx/idGNykN2j
+	 AKKHutCK8bHNnRnnZCEsO+lcpczm1AVkoOUtZcn6+aX9evS97+JwEv4fiR99hG870S
+	 i4rvlaaoRBkrMImnD2y6D1aNNqADgT7Y4tefpGSE=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	stable@vger.kernel.org,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
 	llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 186/255] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date: Mon, 24 Oct 2022 13:31:36 +0200
-Message-Id: <20221024113009.118456625@linuxfoundation.org>
+	Will Deacon <will@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.10 054/390] hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO
+Date: Mon, 24 Oct 2022 13:27:31 +0200
+Message-Id: <20221024113024.928307739@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,57 +40,75 @@ Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
+commit f02003c860d921171be4a27e2893766eb3bc6871 upstream.
 
-Clang is especially sensitive about argument type matching when using
-__overloaded functions (like memcmp(), etc). Help it see that function
-pointers are just "void *". Avoids this error:
+Currently under Clang, CC_HAS_AUTO_VAR_INIT_ZERO requires an extra
+-enable flag compared to CC_HAS_AUTO_VAR_INIT_PATTERN. GCC 12[1] will
+not, and will happily ignore the Clang-specific flag. However, its
+presence on the command-line is both cumbersome and confusing. Due to
+GCC's tolerant behavior, though, we can continue to use a single Kconfig
+cc-option test for the feature on both compilers, but then drop the
+Clang-specific option in the Makefile.
 
-arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
+In other words, this patch does not change anything other than making the
+compiler command line shorter once GCC supports -ftrivial-auto-var-init=zero.
 
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "Rafał Miłecki" <zajec5@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a25e0b5e6ac8a77a71c229e0a7b744603365b0e9
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
 Cc: llvm@lists.linux.dev
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
+Fixes: dcb7c0b9461c ("hardening: Clarify Kconfig text for auto-var-init")
+Suggested-by: Will Deacon <will@kernel.org>
+Link: https://lore.kernel.org/lkml/20210914102837.6172-1-will@kernel.org/
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Will Deacon <will@kernel.org>
 Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/bcm47xx/prom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Makefile                   |    6 +++---
+ security/Kconfig.hardening |    5 ++++-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index 135a5407f015..d26d9a6f6ee7 100644
---- a/arch/mips/bcm47xx/prom.c
-+++ b/arch/mips/bcm47xx/prom.c
-@@ -85,7 +85,7 @@ static __init void prom_init_mem(void)
- 			pr_debug("Assume 128MB RAM\n");
- 			break;
- 		}
--		if (!memcmp(prom_init, prom_init + mem, 32))
-+		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
- 			break;
- 	}
- 	lowmem = mem;
-@@ -162,7 +162,7 @@ void __init bcm47xx_prom_highmem_init(void)
+--- a/Makefile
++++ b/Makefile
+@@ -816,12 +816,12 @@ endif
  
- 	off = EXTVBASE + __pa(off);
- 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
--		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-+		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
- 			break;
- 	}
- 	extmem -= lowmem;
--- 
-2.35.1
-
+ # Initialize all stack variables with a zero value.
+ ifdef CONFIG_INIT_STACK_ALL_ZERO
+-# Future support for zero initialization is still being debated, see
+-# https://bugs.llvm.org/show_bug.cgi?id=45497. These flags are subject to being
+-# renamed or dropped.
+ KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
++ifdef CONFIG_CC_IS_CLANG
++# https://bugs.llvm.org/show_bug.cgi?id=45497
+ KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+ endif
++endif
+ 
+ DEBUG_CFLAGS	:=
+ 
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -23,13 +23,16 @@ config CC_HAS_AUTO_VAR_INIT_PATTERN
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
+ 
+ config CC_HAS_AUTO_VAR_INIT_ZERO
++	# GCC ignores the -enable flag, so we can test for the feature with
++	# a single invocation using the flag, but drop it as appropriate in
++	# the Makefile, depending on the presence of Clang.
+ 	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
+ 
+ choice
+ 	prompt "Initialize kernel stack variables at function entry"
+ 	default GCC_PLUGIN_STRUCTLEAK_BYREF_ALL if COMPILE_TEST && GCC_PLUGINS
+ 	default INIT_STACK_ALL_PATTERN if COMPILE_TEST && CC_HAS_AUTO_VAR_INIT_PATTERN
+-	default INIT_STACK_ALL_ZERO if CC_HAS_AUTO_VAR_INIT_PATTERN
++	default INIT_STACK_ALL_ZERO if CC_HAS_AUTO_VAR_INIT_ZERO
+ 	default INIT_STACK_NONE
+ 	help
+ 	  This option enables initialization of stack variables at
 
 
