@@ -1,100 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32127B
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 12:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0292C433C1;
-	Mon, 24 Oct 2022 12:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1666615848;
-	bh=sm/LDBBuPWty4rPPEEqovbTw/jWuPeNCGNYMtE2bPkU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SICE5gKSh18IRD7waSWDtMFrM8yps1JRTZXzBtKb3wkVN9yNDL+6c7nUVsPBpkDrl
-	 q9ylk1JW6Y64CFANhirzOIQW1QQooqcJLUDsFHLH2TsIAVHJG/tGIdqb+hNlyL7RVb
-	 SOb780poleLpZCa/j2V9ra1rRwUng+n63eHLe82c=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	stable@vger.kernel.org,
-	Hauke Mehrtens <hauke@hauke-m.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 407/530] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date: Mon, 24 Oct 2022 13:32:31 +0200
-Message-Id: <20221024113103.492757352@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
-User-Agent: quilt/0.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9D9A34
+	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 14:31:35 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id g1so16999381lfu.12
+        for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 07:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F2IB/YqNsoJ7/85EEnXA3FXFIsmny6HSt9BE0V8b/sw=;
+        b=V7D5i0I16TqWw8KBc4e4VaoSyQmMV28RZ1oaFy2dXXdCEftB8b7pO0EpY9QqTPBuoK
+         xhJXzNwWEwmB3CeN979zls034wvy5t57Dpc+TB1pKQEt1KM26vQDUsvryp3h9VjcOZ8O
+         OpJxxIQLwuehdGMaWhwf0P88Xz+7HQaYZEYL9d1h7MtbvI6nn2U9J1UCEU2H1q2sIfOz
+         irqmpu9cQgin4IEngc6Az56YZ5nPAQI89Gp54i7KUKoFVczcsIEzfpqSZyPFMnjlMEW8
+         nIStu8ttEIZ8i6Mf9HwomjmTITl8Ruu+E2wBhq6H5VFyoWQUYo+pvTypy5LplEkfWArx
+         Yyug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F2IB/YqNsoJ7/85EEnXA3FXFIsmny6HSt9BE0V8b/sw=;
+        b=DZOURA29Gm6Qgn/XReYHLnRZ+cGkuvPZ2SwOpSQqpySNTzHGoPbwC4ndfu0Dm14S8y
+         rCDG5/+Wv69ZcUd6dCUHCIqohRMFyE4xtRgvQGTyKB7ejgeSE/HABNEjpi9C25raB/1S
+         McTAt0A13qbmeqWyHZAL73A6WitjFYy3vQBDEDjoD6gyFNwisVmQ0rWJu2VVr9vVXeUL
+         46ji3zbZrXUqQLLhE7hV8PJk2rp+hXA9pLhZWGvoOByailQ8ficXQq+0yt5WN5RFFaeg
+         ipafsTQUMFkO1JkixEzMC87ZyTF1anUIXe5fZ2ujaKzAtLoU2rE0VjgpEh6/0iDC/V6A
+         bVvg==
+X-Gm-Message-State: ACrzQf056zq2KFyv51mGBMp0le4k27YraIOLm7Pu8rm4lZQ3iOlnS44j
+	lBADPySOD/xzMSoWl9uFig73BEifG5YKuB/OC2i7Cw==
+X-Google-Smtp-Source: AMsMyM5nBFXzvpi018zgtXpXdd+AbtPZS4QNH9xLwYEzI5psUs2D+ItgYIJqnLIOhDlvFny9BiyAv+K8cIV9/Fy5brM=
+X-Received: by 2002:a05:6512:108c:b0:4a2:a46d:1a1a with SMTP id
+ j12-20020a056512108c00b004a2a46d1a1amr13239812lfg.471.1666621891683; Mon, 24
+ Oct 2022 07:31:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <202210211004.sOqZyVWM-lkp@intel.com>
+In-Reply-To: <202210211004.sOqZyVWM-lkp@intel.com>
+From: Jinpu Wang <jinpu.wang@ionos.com>
+Date: Mon, 24 Oct 2022 16:31:20 +0200
+Message-ID: <CAMGffEnpQiYm94hJLYFXTOX7DNPrZDUERrz97QENsNuHVa5JEQ@mail.gmail.com>
+Subject: Re: [song-md:md-next 6/6] drivers/md/md-bitmap.c:2541:12: warning:
+ result of comparison of constant 4294967296 with expression of type 'unsigned
+ long' is always false
+To: kernel test robot <lkp@intel.com>, Song Liu <song@kernel.org>
+Cc: Florian-Ewald Mueller <florian-ewald.mueller@ionos.com>, llvm@lists.linux.dev, 
+	kbuild-all@lists.01.org, linux-raid@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Kees Cook <keescook@chromium.org>
+On Fri, Oct 21, 2022 at 4:21 AM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
+> head:   c748adfcbe0bd0c760c68d78434a1dfc0344b6b6
+> commit: c748adfcbe0bd0c760c68d78434a1dfc0344b6b6 [6/6] md/bitmap: Fix bitmap chunk size overflow issues
+> config: i386-randconfig-a004
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git/commit/?id=c748adfcbe0bd0c760c68d78434a1dfc0344b6b6
+>         git remote add song-md git://git.kernel.org/pub/scm/linux/kernel/git/song/md.git
+>         git fetch --no-tags song-md md-next
+>         git checkout c748adfcbe0bd0c760c68d78434a1dfc0344b6b6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/md/md-bitmap.c:2541:12: warning: result of comparison of constant 4294967296 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+>            if (csize >= (1ULL << (BITS_PER_BYTE *
+>                ~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1 warning generated.
+>
+Thx for catch it.
+This can be fixed by:
+diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
+index 44f29cb1fde1..be9f3a768c9f 100644
+--- a/drivers/md/md-bitmap.c
++++ b/drivers/md/md-bitmap.c
+@@ -2538,7 +2538,7 @@ chunksize_store(struct mddev *mddev, const char
+*buf, size_t len)
+        if (csize < 512 ||
+            !is_power_of_2(csize))
+                return -EINVAL;
+-       if (csize >= (1ULL << (BITS_PER_BYTE *
++       if (BITS_PER_LONG == 64 && csize >= (1ULL << (BITS_PER_BYTE *
 
-[ Upstream commit 0dedcf6e3301836eb70cfa649052e7ce4fcd13ba ]
-
-Clang is especially sensitive about argument type matching when using
-__overloaded functions (like memcmp(), etc). Help it see that function
-pointers are just "void *". Avoids this error:
-
-arch/mips/bcm47xx/prom.c:89:8: error: no matching function for call to 'memcmp'
-                   if (!memcmp(prom_init, prom_init + mem, 32))
-                        ^~~~~~
-include/linux/string.h:156:12: note: candidate function not viable: no known conversion from 'void (void)' to 'const void *' for 1st argument extern int memcmp(const void *,const void *,__kernel_size_t);
-
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "Rafał Miłecki" <zajec5@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202209080652.sz2d68e5-lkp@intel.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/bcm47xx/prom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/bcm47xx/prom.c b/arch/mips/bcm47xx/prom.c
-index 0a63721d0fbf..5a33d6b48d77 100644
---- a/arch/mips/bcm47xx/prom.c
-+++ b/arch/mips/bcm47xx/prom.c
-@@ -86,7 +86,7 @@ static __init void prom_init_mem(void)
- 			pr_debug("Assume 128MB RAM\n");
- 			break;
- 		}
--		if (!memcmp(prom_init, prom_init + mem, 32))
-+		if (!memcmp((void *)prom_init, (void *)prom_init + mem, 32))
- 			break;
- 	}
- 	lowmem = mem;
-@@ -159,7 +159,7 @@ void __init bcm47xx_prom_highmem_init(void)
- 
- 	off = EXTVBASE + __pa(off);
- 	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
--		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-+		if (!memcmp((void *)prom_init, (void *)(off + extmem), 16))
- 			break;
- 	}
- 	extmem -= lowmem;
--- 
-2.35.1
-
-
-
+Song, do you want a seperate fix or will you fold it into the patch itself?
+>
+> vim +2541 drivers/md/md-bitmap.c
+>
+>   2526
+>   2527  static ssize_t
+>   2528  chunksize_store(struct mddev *mddev, const char *buf, size_t len)
+>   2529  {
+>   2530          /* Can only be changed when no bitmap is active */
+>   2531          int rv;
+>   2532          unsigned long csize;
+>   2533          if (mddev->bitmap)
+>   2534                  return -EBUSY;
+>   2535          rv = kstrtoul(buf, 10, &csize);
+>   2536          if (rv)
+>   2537                  return rv;
+>   2538          if (csize < 512 ||
+>   2539              !is_power_of_2(csize))
+>   2540                  return -EINVAL;
+> > 2541          if (csize >= (1ULL << (BITS_PER_BYTE *
+>   2542                  sizeof(((bitmap_super_t *)0)->chunksize))))
+>   2543                  return -EOVERFLOW;
+>   2544          mddev->bitmap_info.chunksize = csize;
+>   2545          return len;
+>   2546  }
+>   2547
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
