@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECED809
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 11:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301D3C433D7;
-	Mon, 24 Oct 2022 11:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C84809
+	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 11:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735B4C433C1;
+	Mon, 24 Oct 2022 11:52:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1666611820;
+	s=korg; t=1666612345;
 	bh=7Biv/RB4g1yWRQ3Ir7P+DO9H5qF3EuPehLJSXWw6ecI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bX28EBxgBImVJu8b/SIlKVAxg2F6Jy56EWEaH03Wv8cV/mc+yFwrHQ25Z4gZtKNns
-	 gJ08HLBEWxwN6YDthQjzzh6OO2MzJCy5PBf+Xb4/De199ZwNd3Ebaak12B79KTTHwg
-	 hMLpDDNtGKsxDpZ87ZEis9ev15qHqU3Blc+mafMI=
+	b=zphT8N3lEmzRyWQCh+kWbXIaAtR5Djp+HSSF4tsRNJiC8pZLsO+ZZXx4ZD5Pz+lxr
+	 Ujx4VnnJluMgLMXENuyiy3Xz/PVPXjiAUsQpLTEEe8o+mliAXDjyZGOosHOwgrgVwX
+	 jfV+1QIrGEePQTnbF0CtSCyI0B1Mt4MdbUZm1Ghs=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -26,12 +26,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	kernel test robot <lkp@intel.com>,
 	Kees Cook <keescook@chromium.org>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 124/159] MIPS: BCM47XX: Cast memcmp() of function to (void *)
-Date: Mon, 24 Oct 2022 13:31:18 +0200
-Message-Id: <20221024112954.037994688@linuxfoundation.org>
+Subject: [PATCH 4.14 162/210] MIPS: BCM47XX: Cast memcmp() of function to (void *)
+Date: Mon, 24 Oct 2022 13:31:19 +0200
+Message-Id: <20221024113002.229290480@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
