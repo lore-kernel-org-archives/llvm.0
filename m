@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533FB2590
-	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 12:19:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB55C433D6;
-	Mon, 24 Oct 2022 12:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED912590
+	for <llvm@lists.linux.dev>; Mon, 24 Oct 2022 12:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B34AC433D6;
+	Mon, 24 Oct 2022 12:19:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1666613974;
-	bh=s4PXUvrWJNB2JneVuy9c+iXwcUUBogwyTXM3UHtjRok=;
+	s=korg; t=1666613976;
+	bh=6w1m8oTCk9uzWFr7+T1Vk2k2FAMBopqrgJZpxzytLWQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ENRieYn5gjnLy2gkDBvHv0QCNvizhUdIBOD9HIH5vlJOlW+CuGCnIEx/idGNykN2j
-	 AKKHutCK8bHNnRnnZCEsO+lcpczm1AVkoOUtZcn6+aX9evS97+JwEv4fiR99hG870S
-	 i4rvlaaoRBkrMImnD2y6D1aNNqADgT7Y4tefpGSE=
+	b=Y0CzeDKyCSEmCuUMjLnd+gUt73PzT0Ht9NdPR6jnPko1Ue8xaeegCz9kwvv7mlz06
+	 MpQw7p9BWqPXm+lsN+P/Cc4h2YNSx+yGZWNk+0LgPJEKEJIaJP6FgFSG88jSbJNPw9
+	 dJSunFrfrEvKwc/px0O9O+zOqRczaCBS9f5P3BlM=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: linux-kernel@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	stable@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	llvm@lists.linux.dev,
-	Will Deacon <will@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
 	Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.10 054/390] hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO
-Date: Mon, 24 Oct 2022 13:27:31 +0200
-Message-Id: <20221024113024.928307739@linuxfoundation.org>
+Subject: [PATCH 5.10 055/390] hardening: Remove Clangs enable flag for -ftrivial-auto-var-init=zero
+Date: Mon, 24 Oct 2022 13:27:32 +0200
+Message-Id: <20221024113024.968446156@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -40,75 +40,65 @@ Content-Transfer-Encoding: 8bit
 
 From: Kees Cook <keescook@chromium.org>
 
-commit f02003c860d921171be4a27e2893766eb3bc6871 upstream.
+commit 607e57c6c62c00965ae276902c166834ce73014a upstream.
 
-Currently under Clang, CC_HAS_AUTO_VAR_INIT_ZERO requires an extra
--enable flag compared to CC_HAS_AUTO_VAR_INIT_PATTERN. GCC 12[1] will
-not, and will happily ignore the Clang-specific flag. However, its
-presence on the command-line is both cumbersome and confusing. Due to
-GCC's tolerant behavior, though, we can continue to use a single Kconfig
-cc-option test for the feature on both compilers, but then drop the
-Clang-specific option in the Makefile.
+Now that Clang's -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+option is no longer required, remove it from the command line. Clang 16
+and later will warn when it is used, which will cause Kconfig to think
+it can't use -ftrivial-auto-var-init=zero at all. Check for whether it
+is required and only use it when so.
 
-In other words, this patch does not change anything other than making the
-compiler command line shorter once GCC supports -ftrivial-auto-var-init=zero.
-
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a25e0b5e6ac8a77a71c229e0a7b744603365b0e9
-
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
 Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-kbuild@vger.kernel.org
 Cc: llvm@lists.linux.dev
-Fixes: dcb7c0b9461c ("hardening: Clarify Kconfig text for auto-var-init")
-Suggested-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/lkml/20210914102837.6172-1-will@kernel.org/
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Will Deacon <will@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: f02003c860d9 ("hardening: Avoid harmless Clang option under CONFIG_INIT_STACK_ALL_ZERO")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Makefile                   |    6 +++---
- security/Kconfig.hardening |    5 ++++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ Makefile                   |    4 ++--
+ security/Kconfig.hardening |   14 ++++++++++----
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
 --- a/Makefile
 +++ b/Makefile
-@@ -816,12 +816,12 @@ endif
- 
+@@ -817,8 +817,8 @@ endif
  # Initialize all stack variables with a zero value.
  ifdef CONFIG_INIT_STACK_ALL_ZERO
--# Future support for zero initialization is still being debated, see
--# https://bugs.llvm.org/show_bug.cgi?id=45497. These flags are subject to being
--# renamed or dropped.
  KBUILD_CFLAGS	+= -ftrivial-auto-var-init=zero
-+ifdef CONFIG_CC_IS_CLANG
-+# https://bugs.llvm.org/show_bug.cgi?id=45497
+-ifdef CONFIG_CC_IS_CLANG
+-# https://bugs.llvm.org/show_bug.cgi?id=45497
++ifdef CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
++# https://github.com/llvm/llvm-project/issues/44842
  KBUILD_CFLAGS	+= -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
  endif
-+endif
- 
- DEBUG_CFLAGS	:=
- 
+ endif
 --- a/security/Kconfig.hardening
 +++ b/security/Kconfig.hardening
-@@ -23,13 +23,16 @@ config CC_HAS_AUTO_VAR_INIT_PATTERN
+@@ -22,11 +22,17 @@ menu "Memory initialization"
+ config CC_HAS_AUTO_VAR_INIT_PATTERN
  	def_bool $(cc-option,-ftrivial-auto-var-init=pattern)
  
- config CC_HAS_AUTO_VAR_INIT_ZERO
-+	# GCC ignores the -enable flag, so we can test for the feature with
-+	# a single invocation using the flag, but drop it as appropriate in
-+	# the Makefile, depending on the presence of Clang.
+-config CC_HAS_AUTO_VAR_INIT_ZERO
+-	# GCC ignores the -enable flag, so we can test for the feature with
+-	# a single invocation using the flag, but drop it as appropriate in
+-	# the Makefile, depending on the presence of Clang.
++config CC_HAS_AUTO_VAR_INIT_ZERO_BARE
++	def_bool $(cc-option,-ftrivial-auto-var-init=zero)
++
++config CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
++	# Clang 16 and later warn about using the -enable flag, but it
++	# is required before then.
  	def_bool $(cc-option,-ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang)
++	depends on !CC_HAS_AUTO_VAR_INIT_ZERO_BARE
++
++config CC_HAS_AUTO_VAR_INIT_ZERO
++	def_bool CC_HAS_AUTO_VAR_INIT_ZERO_BARE || CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER
  
  choice
  	prompt "Initialize kernel stack variables at function entry"
- 	default GCC_PLUGIN_STRUCTLEAK_BYREF_ALL if COMPILE_TEST && GCC_PLUGINS
- 	default INIT_STACK_ALL_PATTERN if COMPILE_TEST && CC_HAS_AUTO_VAR_INIT_PATTERN
--	default INIT_STACK_ALL_ZERO if CC_HAS_AUTO_VAR_INIT_PATTERN
-+	default INIT_STACK_ALL_ZERO if CC_HAS_AUTO_VAR_INIT_ZERO
- 	default INIT_STACK_NONE
- 	help
- 	  This option enables initialization of stack variables at
 
 
