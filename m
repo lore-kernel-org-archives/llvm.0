@@ -1,235 +1,164 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A4AA50
-	for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 09:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1666689055;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gCNsTdOq2Z7sHvupYgNwp4bSLaDCsOtltyVwfgn8/FE=;
-	b=G+4OzLAzcVea7AqnDrwwAPf48wx4K9F62fF9A2KCmJayX4ZJJ8b8sv5+2ge8HwIW89niTT
-	R+o+WHJmHJFwmTcO2pAhAR+0WLVtwq6efOFLgvssZsrab8mC2CBD1+fBAIqIACGhFjOttE
-	CQ0k84nXuxHkeZ6MLzeygBSEpIGYQoQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-510-qVAYpPmhO6iDZbB1_rrdsg-1; Tue, 25 Oct 2022 05:10:53 -0400
-X-MC-Unique: qVAYpPmhO6iDZbB1_rrdsg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D56521C05AFD
-	for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 09:10:52 +0000 (UTC)
-Received: from [172.64.0.97] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5A73BC15BAB;
-	Tue, 25 Oct 2022 09:10:52 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc2,
- mainline.kernel.org-clang, 337a0a0b)
-Date: Tue, 25 Oct 2022 09:10:52 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C94A5A
+	for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 09:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666689912; x=1698225912;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cZVdOL+Y/sIgt9URnXIc+Uzvf3DjHE6NPrlEW0X0vNQ=;
+  b=lJ91JRcTnp0u95bDfJLBVJdgmOBZwmQnFtHadbPqUOVeTtChz2xZ82nR
+   RSrnoahORYx4AoHd5xLd5ey990xhBV49Yaf7i4w2uTXzNvGpK7kF/u7GN
+   dPC9iSA4k+I+uGREtjCRBF/6jk/kLBEwX/mMIakAVkFynOPbt8BwDeKMX
+   IhhZKXS5FJUyAZFff7NKmk+WqOpQas/Zf6GwqMwMTqPu1XqgAVO9srqks
+   RldKVKz3iWqp9arLUaY4tgLO7cb/1IJXBy8lyD0f6Ux0CC0i6atioy0jH
+   ojHdEAvZK79BuWhXNzz7rn4x/p2Mw2CRMzK7QPTW8HKHv09OoeuyiwN3F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="307625398"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="307625398"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:25:11 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="626362928"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="626362928"
+Received: from arybkin-mobl1.ccr.corp.intel.com (HELO intel.com) ([10.252.44.231])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:25:09 -0700
+Date: Tue, 25 Oct 2022 11:25:06 +0200
+From: Andi Shyti <andi.shyti@linux.intel.com>
+To: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, andi.shyti@linux.intel.com,
+	anshuman.gupta@intel.com, intel-gfx@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/i915/hwmon: Fix a build error used with clang
+ compiler
+Message-ID: <Y1ercgaqQwfqt42U@ashyti-mobl2.lan>
+References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com>
+ <87mt9kppb6.wl-ashutosh.dixit@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <26013.122102505105300100@us-mta-510.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mt9kppb6.wl-ashutosh.dixit@intel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Ashutosh,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> > drivers/gpu/drm/i915/i915_hwmon.c:115:16: error: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((field_msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (field_msk)))' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
+> 
+> What is 18446744073709551615? You may want to limit the length of this line
+> or checkpatch doesn't complain?
 
+yeah! I am not a clang user, and this must be some ugly error
+output. I don't think it makes sense to break it, though.
 
-Kernel information:
-    Commit message: Merge tag 'net-6.1-rc3-1' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/netdev/net
+> >         bits_to_set = FIELD_PREP(field_msk, nval);
+> >                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+> >                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+> >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+> >                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+> >                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+> > ./include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> >                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+> > ./include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
+> >         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
+> >         __compiletime_assert(condition, msg, prefix, suffix)
+> >         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
+> >                 if (!(condition))                                       \
+> >
+> > Fixes: 99f55efb7911 ("drm/i915/hwmon: Power PL1 limit and TDP setting")
+> > Cc: Ashutosh Dixit <ashutosh.dixit@intel.com>
+> > Cc: Anshuman Gupta <anshuman.gupta@intel.com>
+> > Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> > Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> > ---
+> >  drivers/gpu/drm/i915/i915_hwmon.c | 12 +++---------
+> >  1 file changed, 3 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
+> > index 9e9781493025..782a621b1928 100644
+> > --- a/drivers/gpu/drm/i915/i915_hwmon.c
+> > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
+> > @@ -101,21 +101,16 @@ hwm_field_read_and_scale(struct hwm_drvdata *ddat, i915_reg_t rgadr,
+> >
+> >  static void
+> >  hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
+> > -			  u32 field_msk, int nshift,
+> > -			  unsigned int scale_factor, long lval)
+> > +			  int nshift, unsigned int scale_factor, long lval)
+> >  {
+> >	u32 nval;
+> > -	u32 bits_to_clear;
+> > -	u32 bits_to_set;
+> >
+> >	/* Computation in 64-bits to avoid overflow. Round to nearest. */
+> >	nval = DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_factor);
+> >
+> > -	bits_to_clear = field_msk;
+> > -	bits_to_set = FIELD_PREP(field_msk, nval);
+> > -
+> >	hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
+> > -					    bits_to_clear, bits_to_set);
+> > +					    PKG_PWR_LIM_1,
+> > +					    FIELD_PREP(PKG_PWR_LIM_1, nval));
+> 
+> I don't want to give up so easily. We might have future uses for the
+> function where we want field_msk to be passed into the function (rather
+> than set inside the function as in this patch).
+> 
+> Do we understand what clang is complaining about? And why this compiles
+> with gcc?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/57322
+Because we are not compiling the builtin functions with gcc but
+gcc has support for them. The FIELD_PREP checks if the first
+parameter is a constant:
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5654170
+	BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                 ppc64le - LTP: openposix test suite
-                 ppc64le - CIFS Connectathon
-                 ppc64le - Networking bridge: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - software RAID testing
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - Storage - software RAID testing
-                  x86_64 (debug) - LTP: openposix test suite
-                  x86_64 (debug) - CIFS Connectathon
-                  x86_64 (debug) - Networking: igmp conformance test
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Reboot test
-                  x86_64 (debug) - Boot test
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                 ppc64le - Networking bridge: sanity
-                   s390x - Networking bridge: sanity
-                  x86_64 - Networking bridge: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: [rawhide][s390x] avc:  denied  { transition } for  pid=3D135=
-5 comm=3D"runcon" path=3D"/usr/bin/true" dev=3D"dm-0" ino=3D17226318 sconte=
-xt=3Dsystem_u:system_r:unconfined_service_t:s0 tcontext=3Dunconfined_u:unco=
-nfined_r:unconfined_t:s0-s0:c0.c1023 tclass=3Dprocess permissive=3D1
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/5628421
-            Affected tests:
-                   s390x - Boot test
-                   s390x - Reboot test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+where _mask was our field_mask, but we ignore it. Apparently
+clang doesn't.
 
+If we want to stick to gcc only, then I still think the patch is
+correct for two reasons:
 
+  1. it's cleaner
+  2. we would get on with the job and if one day we will decide
+     to suppport builtin functions in gcc as well, we will sleep
+     peacefully :)
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+> Copying llvm@lists.linux.dev too.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+maybe llvm folks have a better opinion.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Thanks,
+Andi
 
+> Thanks.
+> --
+> Ashutosh
+> 
+> 
+> >  }
+> >
+> >  /*
+> > @@ -406,7 +401,6 @@ hwm_power_write(struct hwm_drvdata *ddat, u32 attr, int chan, long val)
+> >	case hwmon_power_max:
+> >		hwm_field_scale_and_write(ddat,
+> >					  hwmon->rg.pkg_rapl_limit,
+> > -					  PKG_PWR_LIM_1,
+> >					  hwmon->scl_shift_power,
+> >					  SF_POWER, val);
+> >		return 0;
+> > --
+> > 2.37.1
+> >
