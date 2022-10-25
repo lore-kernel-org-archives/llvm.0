@@ -1,67 +1,77 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AE12F2F
-	for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 20:24:02 +0000 (UTC)
-Received: by mail-qv1-f44.google.com with SMTP id ml12so8596473qvb.0
-        for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 13:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u11EWAKeLUJjTlcgljXJYk/tXJByUFK75HMgC2lMe7k=;
-        b=SQQuGKX2fxIJZySXey4OiS/VwQA6X75XgjJZiwbO2QDm1SqCfQClRfLEPmXTGtb7R8
-         Q/NJ3mX3dDATuQenL7R7QNaA+lx/kZtMfVTCGNYgq3iQOgkZ4yeq6uYWibwWjJLwOLtT
-         dqbTk00iEiLJ49eXdOUWPOcqvHWoNSIdBV1JBEFK9AK893TmXijWPQDHpZtbjom0H9SZ
-         YmPZtrnje63XQOh95NRocjV5keb7br7v+ugt++bPVfWOwruV0k+uUN9x5yBB+BOTweEl
-         +5OAjv48h4UC+UEuOf3LyByff+N7YzHn+QeYoH6z5gJ7kGhSVFrAVz89GGJLv9ZKxtRt
-         AyjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u11EWAKeLUJjTlcgljXJYk/tXJByUFK75HMgC2lMe7k=;
-        b=i/P6OEk7nZZq+A5ubZrgxQrvTjvtjVQ3HJHrfJazO9+THv6TqbUDvzKGuiwonpTw+u
-         PgsKqx8WPCrU14rjy+LMq7/baO/Lp/3g96FwW5tmKBEP4DPbR5zBAXYMZNNB4+SeVL85
-         HoJlS4qC++r8Vvc5D9m3MXCs+3rl766nwRlki32u/vyR8UDCFo4IQOliAfTFOUqP9r4O
-         UJOJ1JPYZNKhldXDlxeeTE5Z6PeraAWH8Db0H3RbU00JiQ1wuR1IjhTfz9TeF4fWjWB8
-         umIiriLH4vBHMqkSxlqk1++ge/RNOrME3imAY+qvNa1ZEsGTykI7W1zUVXo8GAx6Vtqx
-         hYZA==
-X-Gm-Message-State: ACrzQf0y76CP3U1n86RbCi2dTWeffkes4+A51tnq2dcp7T97YmLsdj9E
-	aGMH8Pz5ypgUYd49d56wA8yUqxNvpvKyWQ==
-X-Google-Smtp-Source: AMsMyM6PsF6KdDeegyUvkmj4HLJqUk4RCyc/VLSpaSVCQOeD9o5flGNTttvr0ss/q2yKmqA+/jOA5w==
-X-Received: by 2002:a17:902:db0b:b0:185:51cc:811a with SMTP id m11-20020a170902db0b00b0018551cc811amr40037503plx.85.1666729430027;
-        Tue, 25 Oct 2022 13:23:50 -0700 (PDT)
-Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id t4-20020a170902d14400b0017dd839f2a5sm1581616plt.38.2022.10.25.13.23.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 13:23:49 -0700 (PDT)
-Date: Tue, 25 Oct 2022 13:23:45 -0700
-From: Zach O'Keefe <zokeefe@google.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Gautam Menghani <gautammenghani201@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] mm/khugepaged: Initialize index and nr in collapse_file()
-Message-ID: <Y1hF0bQL6CbueBe/@google.com>
-References: <20221025173407.3423241-1-nathan@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D2BA35
+	for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93F39C433D7;
+	Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1666733416;
+	bh=sOpXMCe9LC1xfyUXh2lmcg/3x2PBBpExWr6Hng1hpAQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=i8wngfqK8cXmbc2Bn0/GH0lD40yiiXTzQzGaoftBx6FOZOqMNz1oG92AUzTKJtfTl
+	 +PDpYSNe3XbSTSKU8l5LBbV46pmxJhyThuIvEotpWbYqdJaCds48JMHC+sfG3evXVx
+	 sDvef30alWKmmKuwUyMRYX0bm1VJHPjv72iwDCQGohaUX9Ouiza3CjwjVyGYbUJtON
+	 0LKC38A65N1T53TjX4bmNcFe30fxMADlvL9DkhY9gy0mnEU6HQs3KkcCTpsaAxDT8d
+	 8jSMlseccyi94HZJWQFWw+TwqGruQqSC5IwqzOGEBizBsfK67q3jGZe/vIXzBpMz6g
+	 EGWSB2dlmasbA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73CCEE45192;
+	Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025173407.3423241-1-nathan@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] net: dev: Convert sa_data to flexible array in struct
+ sockaddr
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <166673341646.9987.5803101009027995896.git-patchwork-notify@kernel.org>
+Date: Tue, 25 Oct 2022 21:30:16 +0000
+References: <20221018095503.never.671-kees@kernel.org>
+In-Reply-To: <20221018095503.never.671-kees@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, axboe@kernel.dk, asml.silence@gmail.com,
+ dsahern@kernel.org, dylany@fb.com, yajun.deng@linux.dev, petrm@nvidia.com,
+ liuhangbin@gmail.com, leon@kernel.org, syzkaller@googlegroups.com,
+ willemb@google.com, pablo@netfilter.org, netdev@vger.kernel.org,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ alibuda@linux.alibaba.com, jk@codeconstruct.com.au, bigeasy@linutronix.de,
+ imagedong@tencent.com, kuniyu@amazon.com, liu3101@purdue.edu,
+ wsa+renesas@sang-engineering.com, william.xuanziyang@huawei.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
 
-Thanks for the fix, Nathan,
+Hello:
 
-Best,
-Zach
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Reviewed-by: Zach O'Keefe <zokeefe@google.com>
+On Tue, 18 Oct 2022 02:56:03 -0700 you wrote:
+> One of the worst offenders of "fake flexible arrays" is struct sockaddr,
+> as it is the classic example of why GCC and Clang have been traditionally
+> forced to treat all trailing arrays as fake flexible arrays: in the
+> distant misty past, sa_data became too small, and code started just
+> treating it as a flexible array, even though it was fixed-size. The
+> special case by the compiler is specifically that sizeof(sa->sa_data)
+> and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
+> do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
+> it as a flexible array.
+> 
+> [...]
+
+Here is the summary with links:
+  - [next] net: dev: Convert sa_data to flexible array in struct sockaddr
+    https://git.kernel.org/netdev/net-next/c/b5f0de6df6dc
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
