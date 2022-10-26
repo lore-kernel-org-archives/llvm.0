@@ -1,2447 +1,814 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E99EDF
-	for <llvm@lists.linux.dev>; Wed, 26 Oct 2022 05:35:20 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id ez6so13055046pjb.1
-        for <llvm@lists.linux.dev>; Tue, 25 Oct 2022 22:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ub87HXH9e4VxzP0AK2qyxXHHCyvH3uyP0jL6XfY6VhM=;
-        b=kEOpUaBOboa0u5BLmiKd+s6PivxfhEixRlOMGnBkmJbNANSFSWAAVfuar0q3RSNK7Z
-         nuzSp8Pym5hXAnYb6oNqxEWUQbtmFTHD/yq0Ub1t+jyywlg5qFOJiWo5bKsJtd5umCKI
-         /BFM2OWB3NJvsyQuLSkyzfdHrRY84mjEEGISRGYe9QwrZ8w3rP8pGiIiTD+I/qAZdXGk
-         YkomB21dWohMZ/ndog//8wjK3SpdUblqE5wXBr20njBsOsY0P7Hk2w3+Q1INl/PPevQh
-         38DJaLQ6+Z7KuTFKh7Z7TkPw9BgmKhA1b09QLvu28+mz+FaulLpcVgRG2sWcGT3L5d8F
-         Z29A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ub87HXH9e4VxzP0AK2qyxXHHCyvH3uyP0jL6XfY6VhM=;
-        b=yzisw5SWlWeh+l6H4DD9g8VOqj3Xs5jUW7Hnd0kUpaV2W6cGp2p0ptwIPv5rkdJsiN
-         1N0mzy1YZ1GeXGlr880U2sd1TeCxz7pvey6EN3PhVEFdNOswM2KBf1nI+LJeBBtKKaBw
-         faOtYAtHdaNN66JmQ5PcNMa+HE2uWjkXT8KSZXwYAl/6vLD8uXhXhNqD9KXMNMTA8Nvc
-         IKoxJHonZ5UHxfWeV6lsPj8vdR7DROjtCqcYx7JVXF7MRjiHALq75JTSrerwgjHk6OqS
-         OWaKqhM2IJSutMFT7yhPlvDp7ntd3gVUxDcRy4i1TFA9uqM5gwCXznnW6ME3JL3MHfIn
-         B6mA==
-X-Gm-Message-State: ACrzQf14WbFTjQhrMz2BkLn2aaLv/8RID8efgpX9ZpjyTykYOv7VULmn
-	/qFPusT5AzA1lpztaZ5VwFFb9rSQN4pC6HSf
-X-Google-Smtp-Source: AMsMyM7JY3nWaP9phyqVPC1UJTDr24Lt5xpD+UP4MdPHaL+hGBfScEaWpnLKKy1oSDDNps9slV+4sw==
-X-Received: by 2002:a17:902:c643:b0:186:9efc:67a1 with SMTP id s3-20020a170902c64300b001869efc67a1mr16192456pls.30.1666762518733;
-        Tue, 25 Oct 2022 22:35:18 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090341c600b001754e086eb3sm2055285ple.302.2022.10.25.22.35.18
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 22:35:18 -0700 (PDT)
-Message-ID: <6358c716.170a0220.4ea4a.4df0@mx.google.com>
-Date: Tue, 25 Oct 2022 22:35:18 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6327B;
+	Wed, 26 Oct 2022 07:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666767765; x=1698303765;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=p6X/Jp97DOfC6WYtti10no/X/gYkD41Z3Cn5ekPOdEc=;
+  b=HQHu1aJ0OyhxYywQ+TakOVc66qqbzfD2PVloVCIUesPRGmgqpOHz88J1
+   TUfBPZpoRVD9QBtJRbTfQ2Ib92Mxjm/Os2kPhYTQAaVpMVTK49gp0f4b6
+   81Z1/gReFBytln654eC4av05jD91a/WAkAbULNWHjkEOvVV8wLrBLP/cg
+   D5NSEI1OL2Hjp44lTGEaH0SIR7qAUp6BZJavSFmlJD/0TIRoJAF/BYwWy
+   MdCh6pdvcLvs3719Cwa1ksdJIZiTRCDW8S/dJtv9JpgCxdd52s56iI82G
+   wQ1voWH5RtCDwO4aq6tf1U1kZ4nhdiuIgBCvlPFP75C6T0L6YXr5gQLqY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="369943576"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="gz'50?scan'50,208,50";a="369943576"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 00:02:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="631906297"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="gz'50?scan'50,208,50";a="631906297"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 26 Oct 2022 00:02:42 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1onaR0-00077i-0a;
+	Wed, 26 Oct 2022 07:02:42 +0000
+Date: Wed, 26 Oct 2022 15:02:17 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [ammarfaizi2-block:bpf/bpf-next/master 1/1] ld.lld: error:
+ vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_status: .text+0x1a):
+ relocation R_RISCV_HI20 out of range: 535147 is not in [-524288, 524287];
+ references afs_debug
+Message-ID: <202210261512.UhJSKnfo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20221026
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master build: 234 builds: 12 failed, 222 passed, 158 errors,
- 128 warnings (next-20221026)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 234 builds: 12 failed, 222 passed, 158 errors, 128 warni=
-ngs (next-20221026)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20221026/
-
-Tree: next
-Branch: master
-Git Describe: next-20221026
-Git Commit: 60eac8672b5b6061ec07499c0f1b79f6d94311ce
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (clang-16) FAIL
-
-arm:
-    allmodconfig: (clang-16) FAIL
-    allmodconfig: (gcc-10) FAIL
-    corgi_defconfig: (gcc-10) FAIL
-    pxa_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-    s3c6400_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-
-riscv:
-    allnoconfig: (clang-16) FAIL
-    defconfig+CONFIG_EFI=3Dn: (clang-16) FAIL
-
-x86_64:
-    allmodconfig: (clang-16) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-    allmodconfig (clang-16): 3 errors, 1 warning
-    defconfig (clang-16): 1 error, 7 warnings
-    defconfig+CONFIG_ARM64_64K_PAGES=3Dy (clang-16): 1 error, 7 warnings
-    defconfig+arm64-chromebook (clang-13): 7 warnings
-
-arm:
-    allmodconfig (gcc-10): 23 errors, 1 warning
-    allmodconfig (clang-16): 17 errors, 13 warnings
-    aspeed_g5_defconfig (clang-16): 1 error, 10 warnings
-    corgi_defconfig (gcc-10): 74 errors, 6 warnings
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 6 =
-warnings
-    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
-): 6 warnings
-    keystone_defconfig (gcc-10): 1 warning
-    moxart_defconfig (gcc-10): 1 warning
-    multi_v5_defconfig (clang-16): 1 error
-    multi_v7_defconfig (clang-16): 1 error, 10 warnings
-    pxa_defconfig (gcc-10): 3 errors
-    rpc_defconfig (gcc-10): 2 errors
-    s3c6400_defconfig (gcc-10): 19 errors, 4 warnings
-    tct_hammer_defconfig (gcc-10): 1 warning
-    tegra_defconfig (gcc-10): 1 warning
-    viper_defconfig (gcc-10): 1 warning
-
-i386:
-    allnoconfig (clang-16): 1 error
-    i386_defconfig (clang-16): 1 error
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    ar7_defconfig (gcc-10): 1 warning
-    bmips_be_defconfig (gcc-10): 8 warnings
-    bmips_stb_defconfig (gcc-10): 8 warnings
-    fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 1 error
-    rb532_defconfig (gcc-10): 2 warnings
-    rs90_defconfig (gcc-10): 1 warning
-
-riscv:
-    allnoconfig (clang-16): 1 error
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    allmodconfig (clang-16): 3 errors, 10 warnings
-    allnoconfig (clang-16): 1 error
-    x86_64_defconfig (clang-16): 1 error
-
-Errors summary:
-
-    12   error: write on a pipe with no reader
-    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitializ=
-ed whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    2    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitializ=
-ed whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    2    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: =E2=80=98EV_SW=E2=
-=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: initializer eleme=
-nt is not constant
-    2    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: =E2=80=98SW_FRONT=
-_PROXIMITY=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: initializer eleme=
-nt is not constant
-    2    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: =E2=80=98EV_KEY=
-=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98PF_KEY=
-=E2=80=99?
-    2    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: initializer eleme=
-nt is not constant
-    2    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: =E2=80=98KEY_SUSP=
-END=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98PMS=
-G_SUSPEND=E2=80=99?
-    2    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: initializer eleme=
-nt is not constant
-    2    arch/arm/mach-s3c/mach-crag6410.c:194:12: error: =E2=80=98KEY_CAME=
-RA=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:193:12: error: =E2=80=98KEY_RIGH=
-T=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:192:12: error: =E2=80=98KEY_UP=
-=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:191:12: error: =E2=80=98KEY_LEFT=
-=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98KERN_A=
-LERT=E2=80=99?
-    2    arch/arm/mach-s3c/mach-crag6410.c:190:12: error: =E2=80=98KEY_DOWN=
-=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98KEY_RO=
-W=E2=80=99?
-    2    arch/arm/mach-s3c/mach-crag6410.c:188:12: error: =E2=80=98KEY_MEDI=
-A=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:187:12: error: =E2=80=98KEY_MENU=
-=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:186:12: error: =E2=80=98KEY_HELP=
-=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:185:12: error: =E2=80=98KEY_VOLU=
-MEDOWN=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:184:12: error: =E2=80=98KEY_HOME=
-=E2=80=99 undeclared here (not in a function)
-    2    arch/arm/mach-s3c/mach-crag6410.c:183:12: error: =E2=80=98KEY_VOLU=
-MEUP=E2=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-s3c/mach-crag6410.c:225:14: error: invalid applicati=
-on of 'sizeof' to an incomplete type 'struct gpio_keys_button[]'
-    1    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: use of undeclared=
- identifier 'EV_SW'
-    1    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: initialization of=
- =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Werror=3Dint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: use of undeclared=
- identifier 'SW_FRONT_PROXIMITY'
-    1    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: initialization of=
- =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Werror=3Dint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: use of undeclared=
- identifier 'EV_KEY'
-    1    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: initialization of=
- =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Werror=3Dint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: use of undeclared=
- identifier 'KEY_SUSPEND'
-    1    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: initialization of=
- =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Werror=3Dint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:199:17: error: invalid applicati=
-on of 'sizeof' to an incomplete type 'uint32_t[]' (aka 'unsigned int[]')
-    1    arch/arm/mach-s3c/mach-crag6410.c:194:12: error: use of undeclared=
- identifier 'KEY_CAMERA'
-    1    arch/arm/mach-s3c/mach-crag6410.c:193:12: error: use of undeclared=
- identifier 'KEY_RIGHT'
-    1    arch/arm/mach-s3c/mach-crag6410.c:192:12: error: use of undeclared=
- identifier 'KEY_UP'
-    1    arch/arm/mach-s3c/mach-crag6410.c:191:12: error: use of undeclared=
- identifier 'KEY_LEFT'
-    1    arch/arm/mach-s3c/mach-crag6410.c:190:12: error: use of undeclared=
- identifier 'KEY_DOWN'; did you mean 'SM_DOWN'?
-    1    arch/arm/mach-s3c/mach-crag6410.c:188:12: error: use of undeclared=
- identifier 'KEY_MEDIA'
-    1    arch/arm/mach-s3c/mach-crag6410.c:187:12: error: use of undeclared=
- identifier 'KEY_MENU'
-    1    arch/arm/mach-s3c/mach-crag6410.c:186:12: error: use of undeclared=
- identifier 'KEY_HELP'
-    1    arch/arm/mach-s3c/mach-crag6410.c:185:12: error: use of undeclared=
- identifier 'KEY_VOLUMEDOWN'
-    1    arch/arm/mach-s3c/mach-crag6410.c:184:12: error: use of undeclared=
- identifier 'KEY_HOME'
-    1    arch/arm/mach-s3c/mach-crag6410.c:183:12: error: use of undeclared=
- identifier 'KEY_VOLUMEUP'
-    1    arch/arm/mach-pxa/spitz.c:418:11: error: =E2=80=98EV_SW=E2=80=99 u=
-ndeclared here (not in a function)
-    1    arch/arm/mach-pxa/spitz.c:411:11: error: =E2=80=98KEY_SUSPEND=E2=
-=80=99 undeclared here (not in a function); did you mean =E2=80=98LED_SUSPE=
-NDED=E2=80=99?
-    1    arch/arm/mach-pxa/spitz.c:410:11: error: =E2=80=98EV_PWR=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:425:11: error: =E2=80=98SW_HEADPHONE_INS=
-ERT=E2=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:425:11: error: initializer element is no=
-t constant
-    1    arch/arm/mach-pxa/corgi.c:424:11: error: initializer element is no=
-t constant
-    1    arch/arm/mach-pxa/corgi.c:418:11: error: =E2=80=98SW_TABLET_MODE=
-=E2=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:418:11: error: initializer element is no=
-t constant
-    1    arch/arm/mach-pxa/corgi.c:417:11: error: initializer element is no=
-t constant
-    1    arch/arm/mach-pxa/corgi.c:411:11: error: =E2=80=98SW_LID=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:411:11: error: initializer element is no=
-t constant
-    1    arch/arm/mach-pxa/corgi.c:410:11: error: =E2=80=98EV_SW=E2=80=99 u=
-ndeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:410:11: error: initializer element is no=
-t constant
-    1    arch/arm/mach-pxa/corgi.c:371:12: error: =E2=80=98KEY_RIGHT=E2=80=
-=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:370:12: error: =E2=80=98KEY_DOWN=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98KEY_ROW=E2=
-=80=99?
-    1    arch/arm/mach-pxa/corgi.c:369:12: error: =E2=80=98KEY_LEFT=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98KERN_ALERT=
-=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:363:12: error: =E2=80=98KEY_SYSRQ=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98KERN_SYSRQ=
-=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:361:12: error: =E2=80=98KEY_UP=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:360:12: error: =E2=80=98KEY_COMMA=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98KEY_COL=E2=
-=80=99?
-    1    arch/arm/mach-pxa/corgi.c:359:12: error: =E2=80=98KEY_SPACE=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98QC_SPACE=E2=
-=80=99?
-    1    arch/arm/mach-pxa/corgi.c:358:12: error: =E2=80=98KEY_MINUS=E2=80=
-=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:357:12: error: =E2=80=98KEY_X=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:356:12: error: =E2=80=98KEY_Z=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:354:13: error: =E2=80=98KEY_LEFTSHIFT=E2=
-=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:353:12: error: =E2=80=98KEY_ENTER=E2=80=
-=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:352:12: error: =E2=80=98KEY_DOT=E2=80=99=
- undeclared here (not in a function); did you mean =E2=80=98KEY_ROW=E2=80=
-=99?
-    1    arch/arm/mach-pxa/corgi.c:351:12: error: =E2=80=98KEY_N=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:350:12: error: =E2=80=98KEY_B=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:349:12: error: =E2=80=98KEY_C=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:348:12: error: =E2=80=98KEY_D=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:347:12: error: =E2=80=98KEY_A=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:345:12: error: =E2=80=98KEY_RIGHTSHIFT=
-=E2=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:344:12: error: =E2=80=98KEY_L=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:343:12: error: =E2=80=98KEY_M=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:342:12: error: =E2=80=98KEY_H=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:341:12: error: =E2=80=98KEY_V=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:340:12: error: =E2=80=98KEY_F=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:339:12: error: =E2=80=98KEY_S=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:338:12: error: =E2=80=98KEY_W=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:336:12: error: =E2=80=98KEY_K=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:335:12: error: =E2=80=98KEY_J=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:334:12: error: =E2=80=98KEY_U=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:333:12: error: =E2=80=98KEY_G=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:332:12: error: =E2=80=98KEY_T=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:331:12: error: =E2=80=98KEY_E=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:330:12: error: =E2=80=98KEY_Q=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:329:12: error: =E2=80=98KEY_TAB=E2=80=99=
- undeclared here (not in a function); did you mean =E2=80=98KEY_VAL=E2=80=
-=99?
-    1    arch/arm/mach-pxa/corgi.c:328:12: error: =E2=80=98KEY_P=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:327:12: error: =E2=80=98KEY_O=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:326:12: error: =E2=80=98KEY_I=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:325:12: error: =E2=80=98KEY_8=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:324:12: error: =E2=80=98KEY_Y=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:323:12: error: =E2=80=98KEY_R=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:322:12: error: =E2=80=98KEY_4=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:321:12: error: =E2=80=98KEY_2=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:320:12: error: =E2=80=98KEY_BACKSPACE=E2=
-=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:319:12: error: =E2=80=98KEY_0=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:318:12: error: =E2=80=98KEY_9=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:317:12: error: =E2=80=98KEY_7=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:316:12: error: =E2=80=98KEY_6=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:315:12: error: =E2=80=98KEY_5=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:314:12: error: =E2=80=98KEY_3=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:313:12: error: =E2=80=98KEY_1=E2=80=99 u=
-ndeclared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:310:25: error: =E2=80=98KEY_F12=E2=80=99=
- undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:309:23: error: =E2=80=98KEY_F11=E2=80=99=
- undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:308:25: error: =E2=80=98KEY_F10=E2=80=99=
- undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:307:25: error: =E2=80=98KEY_LEFTALT=E2=
-=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:306:25: error: =E2=80=98KEY_LEFTCTRL=E2=
-=80=99 undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:305:27: error: =E2=80=98KEY_F8=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:304:29: error: =E2=80=98KEY_F7=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:303:28: error: =E2=80=98KEY_F6=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:302:25: error: =E2=80=98KEY_F5=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:301:24: error: =E2=80=98KEY_SUSPEND=E2=
-=80=99 undeclared here (not in a function); did you mean =E2=80=98LED_SUSPE=
-NDED=E2=80=99?
-    1    arch/arm/mach-pxa/corgi.c:300:26: error: =E2=80=98KEY_F4=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:299:23: error: =E2=80=98KEY_F3=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:298:27: error: =E2=80=98KEY_F2=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/mach-pxa/corgi.c:297:28: error: =E2=80=98KEY_F1=E2=80=99 =
-undeclared here (not in a function)
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    22   clang: warning: argument unused during compilation: '-march=3Darmv=
-7-a' [-Wunused-command-line-argument]
-    21   clang: warning: argument unused during compilation: '-march=3Darmv=
-6k' [-Wunused-command-line-argument]
-    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    8    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
-fined but not used [-Wunused-function]
-    3    mm/khugepaged.c:1729:7: warning: variable 'nr' is used uninitializ=
-ed whenever 'if' condition is true [-Wsometimes-uninitialized]
-    3    mm/khugepaged.c:1729:7: warning: variable 'index' is used uninitia=
-lized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    3    mm/khugepaged.c:1716:6: warning: variable 'nr' is used uninitializ=
-ed whenever 'if' condition is true [-Wsometimes-uninitialized]
-    3    mm/khugepaged.c:1716:6: warning: variable 'index' is used uninitia=
-lized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    3    mm/khugepaged.c:1710:8: note: initialize the variable 'nr' to sile=
-nce this warning
-    3    mm/khugepaged.c:1705:15: note: initialize the variable 'index' to =
-silence this warning
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    3    4 warnings generated.
-    2    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to s=
-ilence this warning
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_forma=
-t): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (=
-8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid=
-_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
-lt #size-cells value
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid=
-_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
-lt #address-cells value
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_fo=
-rmat): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid lengt=
-h (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2=
-, #size-cells =3D=3D 1)
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (s=
-pi_bus_reg): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
-ci_device_reg): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
-ci_device_bus_num): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i=
-2c_bus_reg): Failed prerequisite 'reg_format'
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
-y() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
-es .noinstr.text section
-    1    vmlinux.o: warning: objtool: get_cpu_entry_area+0x4: call to cea_o=
-ffset() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xad: call to memcpy()=
- leaves .noinstr.text section
-    1    fs/reiserfs/reiserfs.o: warning: objtool: replace_key+0x226: stack=
- state mismatch: cfa1=3D4+80 cfa2=3D4+96
-    1    drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: =
-csiphy_lanes_enable+0x494: sibling call from callable instruction with modi=
-fied stack frame
-    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
-t() falls through to next function __cfi_m5mols_enum_mbus_code()
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-    1    cc1: all warnings being treated as errors
-    1    arch/arm/mach-s3c/mach-crag6410.c:219:11: warning: initialization =
-of =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =
-=E2=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast=
- [-Wint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:217:11: warning: initialization =
-of =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =
-=E2=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast=
- [-Wint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:212:11: warning: initialization =
-of =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =
-=E2=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast=
- [-Wint-conversion]
-    1    arch/arm/mach-s3c/mach-crag6410.c:210:11: warning: initialization =
-of =E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =
-=E2=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast=
- [-Wint-conversion]
-    1    arch/arm/mach-pxa/corgi.c:425:11: warning: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =
-=E2=80=98const unsigned int *=E2=80=99} makes integer from pointer without =
-a cast [-Wint-conversion]
-    1    arch/arm/mach-pxa/corgi.c:424:11: warning: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =
-=E2=80=98const unsigned int *=E2=80=99} makes integer from pointer without =
-a cast [-Wint-conversion]
-    1    arch/arm/mach-pxa/corgi.c:418:11: warning: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =
-=E2=80=98const unsigned int *=E2=80=99} makes integer from pointer without =
-a cast [-Wint-conversion]
-    1    arch/arm/mach-pxa/corgi.c:417:11: warning: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =
-=E2=80=98const unsigned int *=E2=80=99} makes integer from pointer without =
-a cast [-Wint-conversion]
-    1    arch/arm/mach-pxa/corgi.c:411:11: warning: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =
-=E2=80=98const unsigned int *=E2=80=99} makes integer from pointer without =
-a cast [-Wint-conversion]
-    1    arch/arm/mach-pxa/corgi.c:410:11: warning: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =
-=E2=80=98const unsigned int *=E2=80=99} makes integer from pointer without =
-a cast [-Wint-conversion]
-    1    : warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    1    ..clangclang: warning: argument unused during compilation: '-march=
-=3Darmv6k' [-Wunused-command-line-argument]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 23 errors, 1 warning, 0 section =
-mismatches
-
-Errors:
-    arch/arm/mach-s3c/mach-crag6410.c:183:12: error: =E2=80=98KEY_VOLUMEUP=
-=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:184:12: error: =E2=80=98KEY_HOME=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:185:12: error: =E2=80=98KEY_VOLUMEDOW=
-N=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:186:12: error: =E2=80=98KEY_HELP=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:187:12: error: =E2=80=98KEY_MENU=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:188:12: error: =E2=80=98KEY_MEDIA=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:190:12: error: =E2=80=98KEY_DOWN=E2=
-=80=99 undeclared here (not in a function); did you mean =E2=80=98KEY_ROW=
-=E2=80=99?
-    arch/arm/mach-s3c/mach-crag6410.c:191:12: error: =E2=80=98KEY_LEFT=E2=
-=80=99 undeclared here (not in a function); did you mean =E2=80=98KERN_ALER=
-T=E2=80=99?
-    arch/arm/mach-s3c/mach-crag6410.c:192:12: error: =E2=80=98KEY_UP=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:193:12: error: =E2=80=98KEY_RIGHT=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:194:12: error: =E2=80=98KEY_CAMERA=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: =E2=80=98KEY_SUSPEND=
-=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98PMSG_S=
-USPEND=E2=80=99?
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=80=
-=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-Wer=
-ror=3Dint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: initializer element is=
- not constant
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: =E2=80=98EV_KEY=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98PF_KEY=E2=80=
-=99?
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=80=
-=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-Wer=
-ror=3Dint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: initializer element is=
- not constant
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: =E2=80=98SW_FRONT_PROX=
-IMITY=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=80=
-=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-Wer=
-ror=3Dint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: initializer element is=
- not constant
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: =E2=80=98EV_SW=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: initialization of =E2=
-=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=80=
-=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-Wer=
-ror=3Dint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: initializer element is=
- not constant
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-16) =E2=80=94 FAIL, 17 errors, 13 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    arch/arm/mach-s3c/mach-crag6410.c:183:12: error: use of undeclared iden=
-tifier 'KEY_VOLUMEUP'
-    arch/arm/mach-s3c/mach-crag6410.c:184:12: error: use of undeclared iden=
-tifier 'KEY_HOME'
-    arch/arm/mach-s3c/mach-crag6410.c:185:12: error: use of undeclared iden=
-tifier 'KEY_VOLUMEDOWN'
-    arch/arm/mach-s3c/mach-crag6410.c:186:12: error: use of undeclared iden=
-tifier 'KEY_HELP'
-    arch/arm/mach-s3c/mach-crag6410.c:187:12: error: use of undeclared iden=
-tifier 'KEY_MENU'
-    arch/arm/mach-s3c/mach-crag6410.c:188:12: error: use of undeclared iden=
-tifier 'KEY_MEDIA'
-    arch/arm/mach-s3c/mach-crag6410.c:190:12: error: use of undeclared iden=
-tifier 'KEY_DOWN'; did you mean 'SM_DOWN'?
-    arch/arm/mach-s3c/mach-crag6410.c:191:12: error: use of undeclared iden=
-tifier 'KEY_LEFT'
-    arch/arm/mach-s3c/mach-crag6410.c:192:12: error: use of undeclared iden=
-tifier 'KEY_UP'
-    arch/arm/mach-s3c/mach-crag6410.c:193:12: error: use of undeclared iden=
-tifier 'KEY_RIGHT'
-    arch/arm/mach-s3c/mach-crag6410.c:194:12: error: use of undeclared iden=
-tifier 'KEY_CAMERA'
-    arch/arm/mach-s3c/mach-crag6410.c:199:17: error: invalid application of=
- 'sizeof' to an incomplete type 'uint32_t[]' (aka 'unsigned int[]')
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: use of undeclared iden=
-tifier 'KEY_SUSPEND'
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: use of undeclared iden=
-tifier 'EV_KEY'
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: use of undeclared iden=
-tifier 'SW_FRONT_PROXIMITY'
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: use of undeclared iden=
-tifier 'EV_SW'
-    arch/arm/mach-s3c/mach-crag6410.c:225:14: error: invalid application of=
- 'sizeof' to an incomplete type 'struct gpio_keys_button[]'
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    ..clangclang: warning: argument unused during compilation: '-march=3Dar=
-mv6k' [-Wunused-command-line-argument]
-    : warning: argument unused during compilation: '-march=3Darmv6k' [-Wunu=
-sed-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 3 errors, 10 warnings, 0 se=
-ction mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-
-Warnings:
-    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
-oinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
-eaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb+0xad: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: get_cpu_entry_area+0x4: call to cea_offset=
-() leaves .noinstr.text section
-    fs/reiserfs/reiserfs.o: warning: objtool: replace_key+0x226: stack stat=
-e mismatch: cfa1=3D4+80 cfa2=3D4+96
-    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silenc=
-e this warning
-    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
-alls through to next function __cfi_m5mols_enum_mbus_code()
-    drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: csiph=
-y_lanes_enable+0x494: sibling call from callable instruction with modified =
-stack frame
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-16) =E2=80=94 FAIL, 3 errors, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized wh=
-enever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-
-Warnings:
-    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silenc=
-e this warning
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, clang-16) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sectio=
-n mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 10 warnings, 0=
- section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv6k' [=
--Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
-ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
-es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
-: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
- bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
-ze-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_bus_num): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
-ddress-cells value
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
-ize-cells value
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
-ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
-es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
-: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
- bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
-ze-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_bus_num): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
-ddress-cells value
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
-ize-cells value
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 FAIL, 74 errors, 6 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    arch/arm/mach-pxa/corgi.c:313:12: error: =E2=80=98KEY_1=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:314:12: error: =E2=80=98KEY_3=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:315:12: error: =E2=80=98KEY_5=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:316:12: error: =E2=80=98KEY_6=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:317:12: error: =E2=80=98KEY_7=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:318:12: error: =E2=80=98KEY_9=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:319:12: error: =E2=80=98KEY_0=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:320:12: error: =E2=80=98KEY_BACKSPACE=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:321:12: error: =E2=80=98KEY_2=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:322:12: error: =E2=80=98KEY_4=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:323:12: error: =E2=80=98KEY_R=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:324:12: error: =E2=80=98KEY_Y=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:325:12: error: =E2=80=98KEY_8=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:326:12: error: =E2=80=98KEY_I=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:327:12: error: =E2=80=98KEY_O=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:328:12: error: =E2=80=98KEY_P=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:329:12: error: =E2=80=98KEY_TAB=E2=80=99 unde=
-clared here (not in a function); did you mean =E2=80=98KEY_VAL=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:330:12: error: =E2=80=98KEY_Q=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:331:12: error: =E2=80=98KEY_E=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:332:12: error: =E2=80=98KEY_T=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:333:12: error: =E2=80=98KEY_G=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:334:12: error: =E2=80=98KEY_U=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:335:12: error: =E2=80=98KEY_J=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:336:12: error: =E2=80=98KEY_K=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:297:28: error: =E2=80=98KEY_F1=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:338:12: error: =E2=80=98KEY_W=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:339:12: error: =E2=80=98KEY_S=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:340:12: error: =E2=80=98KEY_F=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:341:12: error: =E2=80=98KEY_V=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:342:12: error: =E2=80=98KEY_H=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:343:12: error: =E2=80=98KEY_M=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:344:12: error: =E2=80=98KEY_L=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:345:12: error: =E2=80=98KEY_RIGHTSHIFT=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:298:27: error: =E2=80=98KEY_F2=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:347:12: error: =E2=80=98KEY_A=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:348:12: error: =E2=80=98KEY_D=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:349:12: error: =E2=80=98KEY_C=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:350:12: error: =E2=80=98KEY_B=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:351:12: error: =E2=80=98KEY_N=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:352:12: error: =E2=80=98KEY_DOT=E2=80=99 unde=
-clared here (not in a function); did you mean =E2=80=98KEY_ROW=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:353:12: error: =E2=80=98KEY_ENTER=E2=80=99 un=
-declared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:354:13: error: =E2=80=98KEY_LEFTSHIFT=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:308:25: error: =E2=80=98KEY_F10=E2=80=99 unde=
-clared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:356:12: error: =E2=80=98KEY_Z=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:357:12: error: =E2=80=98KEY_X=E2=80=99 undecl=
-ared here (not in a function); did you mean =E2=80=98KEY=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:358:12: error: =E2=80=98KEY_MINUS=E2=80=99 un=
-declared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:359:12: error: =E2=80=98KEY_SPACE=E2=80=99 un=
-declared here (not in a function); did you mean =E2=80=98QC_SPACE=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:360:12: error: =E2=80=98KEY_COMMA=E2=80=99 un=
-declared here (not in a function); did you mean =E2=80=98KEY_COL=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:361:12: error: =E2=80=98KEY_UP=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:299:23: error: =E2=80=98KEY_F3=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:363:12: error: =E2=80=98KEY_SYSRQ=E2=80=99 un=
-declared here (not in a function); did you mean =E2=80=98KERN_SYSRQ=E2=80=
-=99?
-    arch/arm/mach-pxa/corgi.c:306:25: error: =E2=80=98KEY_LEFTCTRL=E2=80=99=
- undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:307:25: error: =E2=80=98KEY_LEFTALT=E2=80=99 =
-undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:300:26: error: =E2=80=98KEY_F4=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:309:23: error: =E2=80=98KEY_F11=E2=80=99 unde=
-clared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:310:25: error: =E2=80=98KEY_F12=E2=80=99 unde=
-clared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:369:12: error: =E2=80=98KEY_LEFT=E2=80=99 und=
-eclared here (not in a function); did you mean =E2=80=98KERN_ALERT=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:370:12: error: =E2=80=98KEY_DOWN=E2=80=99 und=
-eclared here (not in a function); did you mean =E2=80=98KEY_ROW=E2=80=99?
-    arch/arm/mach-pxa/corgi.c:371:12: error: =E2=80=98KEY_RIGHT=E2=80=99 un=
-declared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:301:24: error: =E2=80=98KEY_SUSPEND=E2=80=99 =
-undeclared here (not in a function); did you mean =E2=80=98LED_SUSPENDED=E2=
-=80=99?
-    arch/arm/mach-pxa/corgi.c:302:25: error: =E2=80=98KEY_F5=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:303:28: error: =E2=80=98KEY_F6=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:304:29: error: =E2=80=98KEY_F7=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:305:27: error: =E2=80=98KEY_F8=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:410:11: error: =E2=80=98EV_SW=E2=80=99 undecl=
-ared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:410:11: error: initializer element is not con=
-stant
-    arch/arm/mach-pxa/corgi.c:411:11: error: =E2=80=98SW_LID=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:411:11: error: initializer element is not con=
-stant
-    arch/arm/mach-pxa/corgi.c:417:11: error: initializer element is not con=
-stant
-    arch/arm/mach-pxa/corgi.c:418:11: error: =E2=80=98SW_TABLET_MODE=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:418:11: error: initializer element is not con=
-stant
-    arch/arm/mach-pxa/corgi.c:424:11: error: initializer element is not con=
-stant
-    arch/arm/mach-pxa/corgi.c:425:11: error: =E2=80=98SW_HEADPHONE_INSERT=
-=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-pxa/corgi.c:425:11: error: initializer element is not con=
-stant
-
-Warnings:
-    arch/arm/mach-pxa/corgi.c:410:11: warning: initialization of =E2=80=98u=
-nsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =E2=80=98=
-const unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-pxa/corgi.c:411:11: warning: initialization of =E2=80=98u=
-nsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =E2=80=98=
-const unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-pxa/corgi.c:417:11: warning: initialization of =E2=80=98u=
-nsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =E2=80=98=
-const unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-pxa/corgi.c:418:11: warning: initialization of =E2=80=98u=
-nsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =E2=80=98=
-const unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-pxa/corgi.c:424:11: warning: initialization of =E2=80=98u=
-nsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =E2=80=98=
-const unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-pxa/corgi.c:425:11: warning: initialization of =E2=80=98u=
-nsigned int=E2=80=99 from =E2=80=98const uint32_t *=E2=80=99 {aka =E2=80=98=
-const unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section mismatches
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-16) =E2=80=94 PASS, 1 error, 7 warnings, 0 section =
-mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    mm/khugepaged.c:1729:7: warning: variable 'index' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1716:6: warning: variable 'index' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1705:15: note: initialize the variable 'index' to silen=
-ce this warning
-    mm/khugepaged.c:1729:7: warning: variable 'nr' is used uninitialized wh=
-enever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1716:6: warning: variable 'nr' is used uninitialized wh=
-enever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1710:8: note: initialize the variable 'nr' to silence t=
-his warning
-    4 warnings generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 1 er=
-ror, 7 warnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    mm/khugepaged.c:1729:7: warning: variable 'index' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1716:6: warning: variable 'index' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1705:15: note: initialize the variable 'index' to silen=
-ce this warning
-    mm/khugepaged.c:1729:7: warning: variable 'nr' is used uninitialized wh=
-enever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1716:6: warning: variable 'nr' is used uninitialized wh=
-enever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1710:8: note: initialize the variable 'nr' to silence t=
-his warning
-    4 warnings generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 FAIL, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 7 wa=
-rnings, 0 section mismatches
-
-Warnings:
-    mm/khugepaged.c:1729:7: warning: variable 'index' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1716:6: warning: variable 'index' is used uninitialized=
- whenever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1705:15: note: initialize the variable 'index' to silen=
-ce this warning
-    mm/khugepaged.c:1729:7: warning: variable 'nr' is used uninitialized wh=
-enever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1716:6: warning: variable 'nr' is used uninitialized wh=
-enever 'if' condition is true [-Wsometimes-uninitialized]
-    mm/khugepaged.c:1710:8: note: initialize the variable 'nr' to silence t=
-his warning
-    4 warnings generated.
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 1 error, 10 warnings, 0 =
-section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
-Warnings:
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
-[-Wunused-command-line-argument]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/mach-pxa/spitz.c:410:11: error: =E2=80=98EV_PWR=E2=80=99 undec=
-lared here (not in a function)
-    arch/arm/mach-pxa/spitz.c:411:11: error: =E2=80=98KEY_SUSPEND=E2=80=99 =
-undeclared here (not in a function); did you mean =E2=80=98LED_SUSPENDED=E2=
-=80=99?
-    arch/arm/mach-pxa/spitz.c:418:11: error: =E2=80=98EV_SW=E2=80=99 undecl=
-ared here (not in a function)
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 FAIL, 19 errors, 4 warnings, 0 se=
-ction mismatches
-
-Errors:
-    arch/arm/mach-s3c/mach-crag6410.c:183:12: error: =E2=80=98KEY_VOLUMEUP=
-=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:184:12: error: =E2=80=98KEY_HOME=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:185:12: error: =E2=80=98KEY_VOLUMEDOW=
-N=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:186:12: error: =E2=80=98KEY_HELP=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:187:12: error: =E2=80=98KEY_MENU=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:188:12: error: =E2=80=98KEY_MEDIA=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:190:12: error: =E2=80=98KEY_DOWN=E2=
-=80=99 undeclared here (not in a function); did you mean =E2=80=98KEY_ROW=
-=E2=80=99?
-    arch/arm/mach-s3c/mach-crag6410.c:191:12: error: =E2=80=98KEY_LEFT=E2=
-=80=99 undeclared here (not in a function); did you mean =E2=80=98KERN_ALER=
-T=E2=80=99?
-    arch/arm/mach-s3c/mach-crag6410.c:192:12: error: =E2=80=98KEY_UP=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:193:12: error: =E2=80=98KEY_RIGHT=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:194:12: error: =E2=80=98KEY_CAMERA=E2=
-=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: =E2=80=98KEY_SUSPEND=
-=E2=80=99 undeclared here (not in a function); did you mean =E2=80=98PMSG_S=
-USPEND=E2=80=99?
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: error: initializer element is=
- not constant
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: =E2=80=98EV_KEY=E2=80=
-=99 undeclared here (not in a function); did you mean =E2=80=98PF_KEY=E2=80=
-=99?
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: error: initializer element is=
- not constant
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: =E2=80=98SW_FRONT_PROX=
-IMITY=E2=80=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: error: initializer element is=
- not constant
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: =E2=80=98EV_SW=E2=80=
-=99 undeclared here (not in a function)
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: error: initializer element is=
- not constant
-
-Warnings:
-    arch/arm/mach-s3c/mach-crag6410.c:210:11: warning: initialization of =
-=E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:212:11: warning: initialization of =
-=E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:217:11: warning: initialization of =
-=E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-    arch/arm/mach-s3c/mach-crag6410.c:219:11: warning: initialization of =
-=E2=80=98unsigned int=E2=80=99 from =E2=80=98uint32_t *=E2=80=99 {aka =E2=
-=80=98unsigned int *=E2=80=99} makes integer from pointer without a cast [-=
-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:839:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----
-For more info write to <info@kernelci.org>
+Content-Type: multipart/mixed; boundary="PVbax34dtxBM7xVi"
+Content-Disposition: inline
+
+
+--PVbax34dtxBM7xVi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+CC: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+CC: "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
+CC: linux-kernel@vger.kernel.org
+TO: Alan Maguire <alan.maguire@oracle.com>
+CC: Andrii Nakryiko <andrii@kernel.org>
+
+tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
+head:   f3c51fe02c55bd944662714e5b91b96dc271ad9f
+commit: f3c51fe02c55bd944662714e5b91b96dc271ad9f [1/1] libbpf: Btf dedup identical struct test needs check for nested structs/arrays
+config: riscv-randconfig-r022-20221023 (attached as .config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/f3c51fe02c55bd944662714e5b91b96dc271ad9f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
+        git checkout f3c51fe02c55bd944662714e5b91b96dc271ad9f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_status: .text+0x1a): relocation R_RISCV_HI20 out of range: 535147 is not in [-524288, 524287]; references afs_debug
+   >>> referenced by fsclient.c:273 (fs/afs/fsclient.c:273)
+   >>> defined in vmlinux.a(fs/afs/main.o)
+--
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_status: .text+0x3e): relocation R_RISCV_HI20 out of range: 532208 is not in [-524288, 524287]; references afs_RXFSFetchStatus
+   >>> referenced by fsclient.c:278 (fs/afs/fsclient.c:278)
+   >>> defined in vmlinux.a(fs/afs/fsclient.o)
+--
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_status: .text+0x15c): relocation R_RISCV_HI20 out of range: 533553 is not in [-524288, 524287]; references .L.str
+   >>> referenced by fsclient.c:283 (fs/afs/fsclient.c:283)
+   >>> defined in vmlinux.a(fs/afs/fsclient.o)
+--
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_status: .text+0x164): relocation R_RISCV_HI20 out of range: 533960 is not in [-524288, 524287]; references .L__func__.afs_fs_fetch_status
+   >>> referenced by fsclient.c:283 (fs/afs/fsclient.c:283)
+   >>> defined in vmlinux.a(fs/afs/fsclient.o)
+--
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_data: .text+0x1ac): relocation R_RISCV_HI20 out of range: 535147 is not in [-524288, 524287]; references afs_debug
+   >>> referenced by fsclient.c:0 (fs/afs/fsclient.c:0)
+   >>> defined in vmlinux.a(fs/afs/main.o)
+--
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_data: .text+0x1d6): relocation R_RISCV_HI20 out of range: 532208 is not in [-524288, 524287]; references afs_RXFSFetchData
+   >>> referenced by fsclient.c:0 (fs/afs/fsclient.c:0)
+   >>> defined in vmlinux.a(fs/afs/fsclient.o)
+--
+>> ld.lld: error: vmlinux.a(fs/afs/fsclient.o):(function afs_fs_fetch_data: .text+0x2bc): relocation R_RISCV_HI20 out of range: 532208 is not in [-524288, 524287]; references afs_RXFSFetchData64
+   >>> referenced by fsclient.c:288 (fs/afs/fsclient.c:288)
+   >>> defined in vmlinux.a(fs/afs/fsclient.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+--PVbax34dtxBM7xVi
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
+
+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
+ELYF/l9cAgA=
+
+--PVbax34dtxBM7xVi--
