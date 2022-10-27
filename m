@@ -1,32 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3E97B
-	for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 22:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1908AC433D6;
-	Thu, 27 Oct 2022 22:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1666908032;
-	bh=FZ3JmBL7SiyPSruD0iHXcZmWmgHniHy0HHBvw5Er4VA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rPf/PMHF94BvAurwGGpgiZj4QFtHZWbhA8kjGYZu4qMcF/nV/zvYGw02b5ozQJDPP
-	 noJyuCpuDmPwNAhsotE2yEs2qymyOUX+5fNvOyiqpnCn8SruKYW/PTvL+7ROlPeQOA
-	 /Sytn20T+RrtbdFNA5OiDhe3rdsqEcwlKlVJ8cgYvbjc3dRsn5sRrpx1KnZKX6RAeF
-	 fzYeY8ymbKQcYCAhiBBDSBAKViGVNDrOTYsOKFvQTZmYs1Vq8QSjC0XZ7+Ch/jAyH/
-	 SX1WdaFv/O1Cd+KY9fw+1f4zUVnKIat/WrUpQR/SDy+ASjttQYdb4OVcwnUmxPzaxJ
-	 qfiHSvpFarpHQ==
-Date: Thu, 27 Oct 2022 23:00:27 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-	Conor Dooley <conor.dooley@microchip.com>, daolu@rivosinc.com,
-	heiko@sntech.de, guoren@kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/2] (attempt to) Fix RISC-V toolchain extension support
- detection
-Message-ID: <Y1r/e2iECt72m60/@spud>
-References: <Y1k9W6+EXgiL60uq@spud>
- <mhng-99b62de8-5b5c-48f7-bd01-bca2a5a26064@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03E27B;
+	Thu, 27 Oct 2022 22:25:20 +0000 (UTC)
+Received: by mail-oi1-f181.google.com with SMTP id o64so4171883oib.12;
+        Thu, 27 Oct 2022 15:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5TrIIhVZx5BXAQ8nT8vfvPQ7H/iZjq+OzPVDs0LA4cw=;
+        b=MAv6HPgqfMygKs4BTr7A1U9j44lASKl92+O5gK6Jduhv540AVv0A6qWGSZQPhfBPUR
+         yU/pzd5FIYlVg+ivxD0wlld9CLV4KLhTMg4HjhEzlozgEROj6wD2/V10aAh4aXQcP35U
+         BafnDpsvMD09E4SRDLfNlxZnDUA98DW/atAWsyjouJMoTF39YF5qUxKgT2HKGmoPvNs7
+         10teZts3aMs9T5wV9egaMWF493y0DsYnvC5tFR1v2iYOOeaO9k/0DcpjDm87935i1Xkv
+         jkbuDvE3yWYSOVKjh/2ivDegzeWuZMFR0claopai1LeNUuf33rzsByUqaqwVleAFccHR
+         dszw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5TrIIhVZx5BXAQ8nT8vfvPQ7H/iZjq+OzPVDs0LA4cw=;
+        b=flkUYq4UPF/DZ+v6PfyaqhNn4kexQir6uqb/dJht+giE8+2/MiF/ZBFSeX3kMVCCA5
+         nb6Om0bCep2FRdo7Vb9SlELXlSJ3i6Ylc01xwhETRzhNit8Su6J7ZKNvgg3QrJ9vRsyV
+         WYvAL9MZdQL2fyvw1D738MUF4uL7NfuP1Vs+GvADXMChB2WNF+rINVO311gDMbLaGot6
+         jJyjZSr2+oLr0KGNL8ElcOnMsjkYb+4TJK7tYEC4hWiCm8dedNH5N7dHXxvlmjlLb9Cq
+         aBGwGFHqKnyRjPZlnMj3fTlxtwl9N+J05sF/BQt4VXnPTRgyeR/XIckKs/oBsLfq37xj
+         lAjQ==
+X-Gm-Message-State: ACrzQf0+frsNg56doWu0xkWpNMvWjqKGbMYJ9VbMwrQlqyMPHatSwdTY
+	iiEikhKsVEcElYFiV7B+sfM=
+X-Google-Smtp-Source: AMsMyM4HyPKTVue/7qcHWPFRtfbuE/YEWKdjke4PrvWEFGKaDXaKoQo6j4ADz/XbbOo50/dADPB5vw==
+X-Received: by 2002:a05:6808:1495:b0:354:fff1:e0c7 with SMTP id e21-20020a056808149500b00354fff1e0c7mr6360344oiw.114.1666909519681;
+        Thu, 27 Oct 2022 15:25:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f6-20020a9d2c06000000b0063b24357269sm1009481otb.13.2022.10.27.15.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 15:25:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 27 Oct 2022 15:25:16 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH -next] hwmon: (smpro-hwmon) Add missing break in
+ smpro_is_visible()
+Message-ID: <20221027222516.GB3123386@roeck-us.net>
+References: <20221027195238.1789586-1-nathan@kernel.org>
+ <20221027210016.GA1938309@roeck-us.net>
+ <Y1ryPDF4CD+6gIMY@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,116 +62,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-99b62de8-5b5c-48f7-bd01-bca2a5a26064@palmer-ri-x1c9a>
+In-Reply-To: <Y1ryPDF4CD+6gIMY@dev-arch.thelio-3990X>
 
-On Thu, Oct 27, 2022 at 02:32:16PM -0700, Palmer Dabbelt wrote:
-> On Wed, 26 Oct 2022 06:59:55 PDT (-0700), Conor Dooley wrote:
-> > On Wed, Oct 26, 2022 at 06:48:32AM -0700, Palmer Dabbelt wrote:
-> > > On Thu, 06 Oct 2022 10:35:19 PDT (-0700), Conor Dooley wrote:
-> > > > From: Conor Dooley <conor.dooley@microchip.com>
-> > > >
-> > > > Hey,
-> > > > This came up due to a report from Kevin @ kernel-ci, who had been
-> > > > running a mixed configuration of GNU binutils and clang. Their compiler
-> > > > was relatively recent & supports Zicbom but binutils @ 2.35.2 did not.
-> > > >
-> > > > Our current checks for extension support only cover the compiler, but it
-> > > > appears to me that we need to check both the compiler & linker support
-> > > > in case of "pot-luck" configurations that mix different versions of
-> > > > LD,AS,CC etc.
-> > > >
-> > > > Linker support does not seem possible to actually check, since the ISA
-> > > > string is emitted into the object files - so I put in version checks for
-> > > > that. The checks have gotten a bit ugly since 32 & 64 bit support need
-> > > > to be checked independently but ahh well.
-> > > >
-> > > > As I was going, I fell into the trap of there being duplicated checks
-> > > > for CC support in both the Makefile and Kconfig, so as part of renaming
-> > > > the Kconfig symbol to TOOLCHAIN_HAS_FOO, I dropped the extra checks in
-> > > > the Makefile. This has the added advantage of the TOOLCHAIN_HAS_FOO
-> > > > symbol for Zihintpause appearing in .config.
-> > > >
-> > > > I pushed out a version of this that specificly checked for assember
-> > > > support for LKP to test & it looked /okay/ - but I did some more testing
-> > > > today and realised that this is redudant & have since dropped the as
-> > > > check.
-> > > >
-> > > > I tested locally with a fair few different combinations, to try and
-> > > > cover each of AS, LD, CC missing support for the extension.
-> > > >
-> > > > The one that I am left wondering about is Zicsr/Zifencei. Our Makefile
-> > > > has:
-> > > >
-> > > > > # Newer binutils versions default to ISA spec version 20191213 which moves some
-> > > > > # instructions from the I extension to the Zicsr and Zifencei extensions.
-> > > > > toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
-> > > > > riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-> > > >
-> > > > I'd like to also move that one to Kconfig rather than the Makefile so
-> > > > that, again, it shows up in .config etc. But as Zicsr/Zifencei do not
-> > > > appear to be emitted into the object files it's not a fix and can be a
-> > > > follow-on patch if my approach here is not entirely off-the-wall.
+On Thu, Oct 27, 2022 at 02:03:56PM -0700, Nathan Chancellor wrote:
+> On Thu, Oct 27, 2022 at 02:00:16PM -0700, Guenter Roeck wrote:
+> > On Thu, Oct 27, 2022 at 12:52:38PM -0700, Nathan Chancellor wrote:
+> > > Clang warns:
 > > > 
-> > > This is actually a different case: for Zicbom and Zihintpause the
-> > > instructions were added to the toolchain at the same time the extensions
-> > > were, for Zifencei and Zicsr the toolchain had the instructions before the
-> > > extension was defined (as they were in previous base ISAs).  So the
-> > > assembler always supports "fence.i", it's just a question of whether it also
-> > > needs another extension in march.
-> > 
-> > Yeah, that one isn't going to break the build. If the extra bit isn't
-> > emitted then the old linker doesn't care. Was more for whether we wanted
-> > it to be consistent with a symbol for everything that we can check
-> > easily after the fact.
-> > 
-> > > I'm not opposed to adding a Kconfig for it, but it's a slightly different
-> > > thing and I'm not sure the Kconfig really helps any because none of the
-> > > kernel sources need to understand the "the assembler doesn't support the
-> > > 'fence.i' instruction" case.
-> > 
-> > tbh beyond the OCD thing about being consistent I don't really care :)
-> > 
-> > > > I am not 100% on the LD/LLD versions that I picked, I went off of a
-> > > > `git branch -a --contains` of the first commits I found that with
-> > > > mention of the extension. Please scream if I got it wrong, I'm not
-> > > > overly familar with where to find this sort of info for the toolchains.
+> > >   drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+> > >           default:
+> > >           ^
+> > >   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
+> > >           default:
+> > >           ^
+> > >           break;
+> > >   1 error generated.
 > > > 
-> > > This LD version check is for the ISA string mismatches between objects?
-> > > IIRC we stopped failing on those in 2.38, from that point on we just guess
-> > > at a mix and allow linking anyway (largely because of that fence.i stuff).
+> > > Clang is a little more pedantic than GCC, which does not warn when
+> > > falling through to a case that is just break or return. Clang's version
+> > > is more in line with the kernel's own stance in deprecated.rst, which
+> > > states that all switch/case blocks must end in either break,
+> > > fallthrough, continue, goto, or return. Add the missing break to silence
+> > > the warning.
+> > > 
+> > > Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1751
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > >  drivers/hwmon/smpro-hwmon.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+> > > index ee54e21c2c12..667e88b6bae5 100644
+> > > --- a/drivers/hwmon/smpro-hwmon.c
+> > > +++ b/drivers/hwmon/smpro-hwmon.c
+> > > @@ -375,6 +375,7 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+> > >  				return 0;
+> > >  		break;
+> > >  		}
+> > > +		break;
 > > 
-> > idk, I wouldn't say "mismatches between objects". The
-> > _zicbom_zihintpause ends up in the object files and the linker doesnt
-> > understand that and aborts. The version checks are so that we don't
-> > emitt that string into object files where our linker doesn't support
-> > them. It only really matters for people that've got some sort of heavily
-> > mixed setup of things - which includes some CIs like Kernel CI.
+> > The alignment of the break; statement above is also bad, and a default:
+> > for switch (attr) is missing.
 > 
-> As of 87fdd7ac09b ("RISC-V: Stop reporting warnings for mismatched extension
-> versions"), we should be just ignoring these at link time -- unless I mixed
-> something up and we're still getting errors, in which case we should fix
-> binutils (and then make the check for whatever version that is).
+> Would you prefer those fixed in the same patch or a separate one?
 > 
-> Do you have an example of a link that's failing?  I attempted to construct
-> one in the test suite, but not sure if I'm just missing something...
 
-Following some discussion on IRC, settling for 2.38 as the gating
-version for Zicbom as logic was added there to stop erroring at all for
-unrecognised isa strings in objects as per Palmer's suggestion.
-
-Tested 2.38 w/:
-CONFIG_CC_IS_GCC=y
-CONFIG_GCC_VERSION=120100
-CONFIG_CLANG_VERSION=0
-CONFIG_AS_IS_GNU=y
-CONFIG_AS_VERSION=23900
-CONFIG_LD_IS_BFD=y
-CONFIG_LD_VERSION=23800
-CONFIG_LLD_VERSION=0
-
-and it does link properly. Folding in a 23800 instead of 23900 seems
-fair enough to me.
+Same patch, please. The resulting code is ultimately the same.
 
 Thanks,
-Conor.
+Guenter
 
+> > >  	default:
+> > >  		break;
+> > >  	}
+> > > 
+> > > base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
+> > > -- 
+> > > 2.38.1
+> > > 
