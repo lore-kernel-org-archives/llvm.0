@@ -1,186 +1,102 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560AD1C13
-	for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 18:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666895576; x=1698431576;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=bmQm0hnsktZC10zjzfxP6GEGbTeq9P7+PpzgV6BS8Nk=;
-  b=SJEx1U6nlBWWr77qJBSlnrYiAYo1uly8sBEPvZ0jKpUfFvO0CBAjkn+p
-   bw6BPztx3qqh1Dqi5GxyO6WleBVN98bE5AgmFhk93O7AspV+QbZYr7ZL3
-   HmEFdNKEIvfDUvF9thN6xi7zgAZ575OQ6a7EUt6Ynx751Axko30hZ+MDm
-   POzv1rHi5hInWFrD8T+SkPxzGKR0+XvHtzzD7/DZ68bBuGertuAjI6IAz
-   ycguD8DyhZ4Cx0FeSOn7vobvJkesm8MW4ysa5igklrhxLhUx2qtw03HlU
-   zOaFu/L15n4oMTfAqOTnF2eglrjKjt2SJ+xws3CsQRzdZzEg6oL3jrffR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="291608769"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="291608769"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 11:32:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="610468871"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="610468871"
-Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.68.192])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 11:32:54 -0700
-Date: Thu, 27 Oct 2022 11:32:54 -0700
-Message-ID: <875yg5xgkp.wl-ashutosh.dixit@intel.com>
-From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, anshuman.gupta@intel.com,
- intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH] drm/i915/hwmon: Fix a build error used with clang compiler
-In-Reply-To: <CAKwvOdmVJn8HvfF9WTnOAc+HsdJ4c1Tdck8E7Caky7AoCq4ZTA@mail.gmail.com>
-References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com>	<87mt9kppb6.wl-ashutosh.dixit@intel.com>	<Y1ercgaqQwfqt42U@ashyti-mobl2.lan>	<87ilk7pwrw.wl-ashutosh.dixit@intel.com>	<Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan>	<CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com>	<877d0lxl6s.wl-ashutosh.dixit@intel.com>	<CAKwvOdmVJn8HvfF9WTnOAc+HsdJ4c1Tdck8E7Caky7AoCq4ZTA@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59431C13
+	for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 19:03:29 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so2378331pji.0
+        for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 12:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u9re30L3Qf1nWwfY1dsIhAySAPn0ZrFVWEIZ6hesyg0=;
+        b=fnIImG0iDucSTCyvxGTxY3d9lDdBvL7ROo88gDYrVx3xsPfdBvt1S2y+w/INuTYEWz
+         FtNj8P0QY4I+xSWJssWO3K96FRG7Xcdw9VF/dwMA7x7XsCoenHjoq94xVVxrfqn1cvwG
+         VA5mWwTUi7/N9k0hUuttlg+nynQ7Fixhdd/to=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u9re30L3Qf1nWwfY1dsIhAySAPn0ZrFVWEIZ6hesyg0=;
+        b=UrhYymT5pqYwMTP8ln8pJ32k6DGH22rkjVdK2/MrwhirYfjvsQAs1sISzBRtDvwIb1
+         cLbYBqFRdZRaI/Q8FZJ8T3334gohS16OANfXnmGlRihn7fL4UZ7AE5MVPJLGNT3ef62u
+         nS/K3Hg1/qHQBO+VzJ9YkozruEs3l/pkiF9vh8KBrmcPVX5oZ8BfSJhgg4A2Q0I7w6xK
+         Ezjzc3tP3LCBou+S7OgTXbKiYsz4Ld8F0iNKYSnAtyYL5/LR+iTyCQSMOb/LquJbze3g
+         MluqQ4nXcuHsMthWXVmWlT4sBYXrO7ncRHAoO4ciy/pt8DA/LJHC6zcHvt7yVu9gMiMZ
+         JzBg==
+X-Gm-Message-State: ACrzQf2j2S2Tkf5IvoQBLlBo4LvF5zzUxFBxfUb/yAQg90kruNC152TS
+	UOfyvskBFX1R7+rsNNGjsJ9+Qg==
+X-Google-Smtp-Source: AMsMyM6uuk3qiJ1+V1Zd5xs1pexoyzJGJiyIkrfAYgcsIlVtEeXMZwR4mhWPlpFWNxoVtEGbOx9Oew==
+X-Received: by 2002:a17:902:f683:b0:184:d45b:a096 with SMTP id l3-20020a170902f68300b00184d45ba096mr49382092plg.23.1666897409281;
+        Thu, 27 Oct 2022 12:03:29 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x15-20020a17090a46cf00b0020a0571b354sm1276584pjg.57.2022.10.27.12.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 12:03:28 -0700 (PDT)
+Date: Thu, 27 Oct 2022 12:03:27 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Latypov <dlatypov@google.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>, Kees Cook <keescook@chromium.org>,
+	linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: [GIT PULL] hardening fixes for v6.1-rc3
+Message-ID: <202210271203.1CABE4152@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 27 Oct 2022 10:16:47 -0700, Nick Desaulniers wrote:
->
+Hi Linus,
 
-Hi Nick,
+Please pull these hardening fixes for v6.1-rc3.
 
-> Thanks, I can repro now.
->
-> I haven't detangled the macro soup, but I noticed:
->
-> 1. FIELD_PREP is defined in include/linux/bitfield.h which has the
-> following comment:
->  18  * Mask must be a compilation time constant.
+Thanks!
 
-I had comments about this here:
+-Kees
 
-https://lore.kernel.org/intel-gfx/87ilk7pwrw.wl-ashutosh.dixit@intel.com/
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-The relevant part being:
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
----- {quote} ----
-> > > ./include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-> > >                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+are available in the Git repository at:
 
-So clang seems to break here at this line in __BF_FIELD_CHECK (note ~0ull
-also occurs here):
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.1-rc3
 
-		BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >	\
-				 __bf_cast_unsigned(_reg, ~0ull),	\
-				 _pfx "type of reg too small for mask"); \
+for you to fetch changes up to 72c3ebea375c39413d02113758319b74ecd790bd:
 
-So it goes through previous checks including the "mask is not constant"
-check. As Nick Desaulniers mentions "__builtin_constant_p is evaluated
-after most optimizations have run" so by that time both compilers (gcc and
-clang) have figured out that even though _mask is coming in as function
-argument it is really the constant below:
+  overflow: Refactor test skips for Clang-specific issues (2022-10-25 14:57:42 -0700)
 
-#define   PKG_PWR_LIM_1		REG_GENMASK(14, 0)
+----------------------------------------------------------------
+hardening fixes for v6.1-rc3
 
-But it is not clear why clang chokes on this "type of reg too small for
-mask" check (and gcc doesn't) since everything is u32.
----- {end quote} ----
+- Fix older Clang vs recent overflow KUnit test additions. (Nick
+  Desaulniers, Kees Cook)
 
->
-> 2. hwm_field_scale_and_write only has one callsite.
->
-> The following patch works:
+- Fix kern-doc visibility for overflow helpers. (Kees Cook)
 
-If we need to fix it at our end yes we can come up with one of these
-patches. But we were hoping someone from clang/llvm can comment about the
-"type of reg too small for mask" stuff. If this is something which needs to
-be fixed in clang/llvm we probably don't want to hide the issue.
+----------------------------------------------------------------
+Kees Cook (2):
+      overflow: Fix kern-doc markup for functions
+      overflow: Refactor test skips for Clang-specific issues
 
->
-> ```
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c
-> b/drivers/gpu/drm/i915/i915_hwmon.c
-> index 9e9781493025..6ac29d90b92a 100644
-> --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> @@ -101,7 +101,7 @@ hwm_field_read_and_scale(struct hwm_drvdata *ddat,
-> i915_reg_t rgadr,
->
->  static void
->  hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
-> -                         u32 field_msk, int nshift,
-> +                         int nshift,
->                           unsigned int scale_factor, long lval)
->  {
->         u32 nval;
-> @@ -111,8 +111,8 @@ hwm_field_scale_and_write(struct hwm_drvdata
-> *ddat, i915_reg_t rgadr,
->         /* Computation in 64-bits to avoid overflow. Round to nearest. */
->         nval = DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_factor);
->
-> -       bits_to_clear = field_msk;
-> -       bits_to_set = FIELD_PREP(field_msk, nval);
-> +       bits_to_clear = PKG_PWR_LIM_1;
-> +       bits_to_set = FIELD_PREP(PKG_PWR_LIM_1, nval);
->
->         hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
->                                             bits_to_clear, bits_to_set);
-> @@ -406,7 +406,6 @@ hwm_power_write(struct hwm_drvdata *ddat, u32
-> attr, int chan, long val)
->         case hwmon_power_max:
->                 hwm_field_scale_and_write(ddat,
->                                           hwmon->rg.pkg_rapl_limit,
-> -                                         PKG_PWR_LIM_1,
->                                           hwmon->scl_shift_power,
->                                           SF_POWER, val);
->                 return 0;
-> ```
-> Though I'm not sure if you're planning to add further callsites of
-> hwm_field_scale_and_write with different field_masks?
+Nick Desaulniers (1):
+      overflow: disable failing tests for older clang versions
 
-I have reasons for keeping it this way, it's there in the link above if you
-are interested.
+ Documentation/core-api/kernel-api.rst |  6 +++++
+ Documentation/driver-api/basics.rst   |  3 ---
+ include/linux/overflow.h              | 38 ++++++++++++----------------
+ lib/overflow_kunit.c                  | 47 +++++++++++++++++++++++++++--------
+ 4 files changed, 58 insertions(+), 36 deletions(-)
 
->
-> Alternatively, (without the above diff),
->
-> ```
-> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> index c9be1657f03d..6f40f12bcf89 100644
-> --- a/include/linux/bitfield.h
-> +++ b/include/linux/bitfield.h
-> @@ -8,6 +8,7 @@
->  #define _LINUX_BITFIELD_H
->
->  #include <linux/build_bug.h>
-> +#include <linux/const.h>
->  #include <asm/byteorder.h>
->
->  /*
-> @@ -62,7 +63,7 @@
->
->  #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)                      \
->         ({                                                              \
-> -               BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-> +               BUILD_BUG_ON_MSG(!__is_constexpr(_mask),                \
->                                  _pfx "mask is not constant");          \
->                 BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");    \
->                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-> ```
-> will produce:
-> error: call to __compiletime_assert_407 declared with 'error'
-> attribute: FIELD_PREP: mask is not constant
->
-> I haven't tested if that change is also feasible (on top of fixing
-> this specific instance), but I think it might help avoid more of these
-> subtleties wrt. __builtin_constant_p that depende heavily on compiler,
-> compiler version, optimization level.
-
-Not disagreeing, can do something here if needed.
-
-Thanks.
---
-Ashutosh
+-- 
+Kees Cook
