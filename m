@@ -1,82 +1,80 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5599346A9
-	for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 16:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666889596; x=1698425596;
-  h=date:message-id:from:to:cc:subject:in-reply-to:
-   references:mime-version;
-  bh=6T7x4jJwqmK5MZM7cgbwCuG33VbCeGteESpIjt+iO+k=;
-  b=OZMhwExL8a4Y4dAY2AkdxY2n5qrwp1As2hk8VRu9SRMte104Xxr4dPBa
-   4/OFzDTZhkwWJTBK4PEUNEsiEzgQY0PW3XRyKHZg0jitvG6p9WxIHtQf1
-   +2X0mlF5kI1kEf1MiwUFWDLIf4NHU8oYm2J+qjZnDhv7eWD70Q22OsuZQ
-   oe1ty8wEDr6bv1bzm4JewY3M78TLDjJE9whuzZAFIaNoHniitCtJK2TKt
-   ZCbHDhaVTy7fYBFYFHCEw5FK8I5Th9hjybw+4d6Yq6HZ8cYw0jmsfhaX7
-   DuGJkH03BQvqP5mukPToTFLGKWTNmt1z4PK4J6vpzX3jjxHu7XV1zGKU6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="309974596"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="309974596"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:53:15 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="807519683"
-X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
-   d="scan'208";a="807519683"
-Received: from adixit-mobl.amr.corp.intel.com (HELO adixit-arch.intel.com) ([10.209.68.192])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 09:53:15 -0700
-Date: Thu, 27 Oct 2022 09:53:15 -0700
-Message-ID: <877d0lxl6s.wl-ashutosh.dixit@intel.com>
-From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, anshuman.gupta@intel.com,
- intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH] drm/i915/hwmon: Fix a build error used with clang compiler
-In-Reply-To: <CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com>
-References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com>	<87mt9kppb6.wl-ashutosh.dixit@intel.com>	<Y1ercgaqQwfqt42U@ashyti-mobl2.lan>	<87ilk7pwrw.wl-ashutosh.dixit@intel.com>	<Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan>	<CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
- Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BFF849B;
+	Thu, 27 Oct 2022 17:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=4hGgb27cTX++8isifWT9xPyeahfYycj+S4eTYQjsVes=; b=UIXAKxL/N5TusR3U8o8CQe+gjC
+	p2G6ER+peColdR9pM128fhsX0DOvtLDX2TMN0Pmc4sSSoiU0B4JbqYSULzqyMCYNNJTYsV5KpKODe
+	/ChrA+hiRQv+KYGcvqqJUdsi8tZaU2eWlYxw+YbFM7db9USrEyaj8AS6RHRjetx0fEz6Yz6W4Q819
+	h/xUJTjc9wn3KKQxJSAAjU0wdAVdfkF6uAZ6aJqTVjp85GtmaEGwLEfr9iGNKPaCuTkLrHZvCCJkx
+	piBuNIeC+hXM/TnAhd3vSRI9lqQBrFaI2wlocj1ePavmNPyTP+jIY2esdAyM8AKhLevWegSVfAsVN
+	+700HA9g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oo6Qw-006v8L-1u; Thu, 27 Oct 2022 17:12:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73B5E30029C;
+	Thu, 27 Oct 2022 19:12:45 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5CD632C450536; Thu, 27 Oct 2022 19:12:45 +0200 (CEST)
+Date: Thu, 27 Oct 2022 19:12:45 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: Re: [tip:perf/core 1/2] kernel/events/core.c:181:48: error:
+ redefinition of 'cpu_context' as different kind of symbol
+Message-ID: <Y1q8DcG09Z0PYXEf@hirez.programming.kicks-ass.net>
+References: <202210272227.jWuKg5y6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210272227.jWuKg5y6-lkp@intel.com>
 
-On Thu, 27 Oct 2022 09:35:24 -0700, Nick Desaulniers wrote:
->
+On Thu, Oct 27, 2022 at 10:03:53PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+> head:   dc39beffcfc19a8dd2a09c5818dcd1a4e9099033
+> commit: 983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c [1/2] perf: Rewrite core context handling
+> config: mips-randconfig-r024-20221026
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install mips cross compiling tool for clang build
+>         # apt-get install binutils-mips64el-linux-gnuabi64
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c
+>         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>         git fetch --no-tags tip perf/core
+>         git checkout 983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> kernel/events/core.c:181:48: error: redefinition of 'cpu_context' as different kind of symbol
+>    static DEFINE_PER_CPU(struct perf_cpu_context, cpu_context);
+>                                                   ^
+>    arch/mips/include/asm/mmu_context.h:106:19: note: previous definition is here
+>    static inline u64 cpu_context(unsigned int cpu, const struct mm_struct *mm)
 
-Hi Nick,
+*sigh*.. robot people.. this patch has sat in my queue.git for weeks now
+:/
 
-> On Tue, Oct 25, 2022 at 5:18 PM Andi Shyti <andi.shyti@linux.intel.com> wrote:
-> >
-> > Hi Ashutosh,
-> >
-> > > But I'd wait to hear from clang/llvm folks first.
-> >
-> > Yeah! Looking forward to getting some ideas :)
->
-> Gwan-gyeong, which tree and set of configs are necessary to reproduce
-> the observed warning?
->
-> Warnings are treated as errors, so I don't want this breaking our CI.
-
-The following or equivalent should do it:
-
-git clone https://anongit.freedesktop.org/git/drm/drm-tip
-git checkout drm-tip
-
-Kernel config:
-CONFIG_DRM_I915=m
-CONFIG_HWMON=y
-
-Files:
-drivers/gpu/drm/i915/i915_hwmon.c/.h
-
-Thanks for taking a look.
---
-Ashutosh
+anyway, lemme go fix, this shouldn't be hard.
