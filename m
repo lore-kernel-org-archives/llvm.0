@@ -1,165 +1,190 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1E0BA22;
-	Thu, 27 Oct 2022 04:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981B97B;
+	Thu, 27 Oct 2022 05:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666843657; x=1698379657;
+  t=1666847928; x=1698383928;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aTga8eoASt8Q3G3ujGs9SzmOS+Kq3+2zWYrJeO5ppys=;
-  b=HllYt8SRwvgql0wAxa3o96APMhEQePZIhaLdoy2AOUKo6IAos5H/vgWh
-   vXC/gAVrTD1o/Fd+JML8JYfcBIGo1Q4JJkZ6wga6qPw3Qyo32ZAJHt35J
-   mUk3YToKD2ueA7MOpYa5YMhgkmYZy6cPrFKYAQM5Tj+ySJDzKz/xoO2z7
-   5pP4EO+ikhY937LywqPC0UgBbT+rW+AMyu5Pbio7UEBXKti4go7LK79wQ
-   DaIBGG3z119Vxswje2GeXny1LqGwCe/vnzU/LqzkJpTyzyCAg8qHkEZYX
-   l0+EQV4WznKx7wvN69rvLvitH4gQRp4Evs2+HDOG26s+H5ozT/vPe7/Hb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="372336383"
+  bh=odgmwqLIWo7W0n7dGTSGUOPIHWwBpqtQgkXc8rn7yCU=;
+  b=iiVFSVKQ5fJU+NnOZzoC1lvLlDns+lqspdUEoTSqpQyIbM4HenP1WYJD
+   6+wjpv4RXl+eTu1m4kxo/TOMh/PfSiyWwe/QsXDpdDmHU4qfSdDbtJZJg
+   9jH/vozsO0a39I4N4trkva9n2sG24ZO3vCk1rKkSv/isNG4rInkA52iU0
+   ejacTE4ErWGkBhPin/ECfLSBYfcPu847DJxHXU6HPeP8Tz5tVDnZurTmr
+   FbwXnkPPW4RpIxq19lZxJr4M75L+uYh/kOidd9Xjyf1mtO/H9qzRy6uPk
+   6NMgxtlyjfQAU8L2P2so57TRG/Xh1y0oUldc6eHaXniECf6qs9r8670s1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="334759770"
 X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="372336383"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 21:07:36 -0700
+   d="scan'208";a="334759770"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 22:18:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="961475531"
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="721531133"
 X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="961475531"
+   d="scan'208";a="721531133"
 Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Oct 2022 21:07:33 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Oct 2022 22:18:37 -0700
 Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1onuB2-0008F9-2r;
-	Thu, 27 Oct 2022 04:07:32 +0000
-Date: Thu, 27 Oct 2022 12:06:57 +0800
+	id 1onvHo-0008It-1i;
+	Thu, 27 Oct 2022 05:18:36 +0000
+Date: Thu, 27 Oct 2022 13:17:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pantelis Antoniou <pantelis.antoniou@konsulko.com>
+To: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>,
-	Nava kishore Manne <nava.manne@xilinx.com>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 79/1123]
- drivers/of/configfs.c:134:9: warning: no previous prototype for function
- 'cfs_overlay_item_dtbo_read'
-Message-ID: <202210271207.pdth4fOP-lkp@intel.com>
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:xlnx_rebase_v5.15_LTS_2022.1_update 470/1123]
+ drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for
+ function 'jesd204_phy_set_speed'
+Message-ID: <202210271335.GOQViDxo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="gEQk2eTXNbeMLkfn"
+Content-Type: multipart/mixed; boundary="BXVg7jM8unygWmjO"
 Content-Disposition: inline
 
 
---gEQk2eTXNbeMLkfn
+--BXVg7jM8unygWmjO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Pantelis,
+Hi Shubhrajyoti,
 
 FYI, the error/warning still remains.
 
 tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
 head:   d38e05f19e17b5f64bc5e3b80a63b013a78bd6fd
-commit: 92450eff19894419e326623c7b720e83aeb57b96 [79/1123] OF: DT-Overlay configfs interface (v8)
+commit: 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486 [470/1123] misc: jesd204b: Add driver for Xilinx jesd204b
 config: hexagon-randconfig-r016-20221027
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/92450eff19894419e326623c7b720e83aeb57b96
+        # https://github.com/Xilinx/linux-xlnx/commit/4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
         git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
         git fetch --no-tags xilinx-xlnx xlnx_rebase_v5.15_LTS_2022.1_update
-        git checkout 92450eff19894419e326623c7b720e83aeb57b96
+        git checkout 4cf40e565c55a749ca7a7bbc7bc998fd3f3a2486
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/ drivers/gpu/drm/xlnx/ drivers/misc/ drivers/of/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/ drivers/gpu/drm/xlnx/ drivers/misc/jesd204b/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/of/configfs.c:134:9: warning: no previous prototype for function 'cfs_overlay_item_dtbo_read' [-Wmissing-prototypes]
-   ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-           ^
-   drivers/of/configfs.c:134:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-   ^
-   static 
->> drivers/of/configfs.c:156:9: warning: no previous prototype for function 'cfs_overlay_item_dtbo_write' [-Wmissing-prototypes]
-   ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-           ^
-   drivers/of/configfs.c:156:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
+   drivers/misc/jesd204b/jesd_phy.c:97:6: warning: variable 'pll' set but not used [-Wunused-but-set-variable]
+           int pll = st->pll;
+               ^
+>> drivers/misc/jesd204b/jesd_phy.c:172:6: warning: no previous prototype for function 'jesd204_phy_set_speed' [-Wmissing-prototypes]
+   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
+        ^
+   drivers/misc/jesd204b/jesd_phy.c:172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
    ^
    static 
    2 warnings generated.
 
 
-vim +/cfs_overlay_item_dtbo_read +134 drivers/of/configfs.c
+vim +/jesd204_phy_set_speed +172 drivers/misc/jesd204b/jesd_phy.c
 
-   133	
- > 134	ssize_t cfs_overlay_item_dtbo_read(struct config_item *item,
-   135					   void *buf, size_t max_count)
-   136	{
-   137		struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
-   138	
-   139		pr_debug("%s: buf=%p max_count=%zu\n", __func__, buf, max_count);
+    93	
+    94	static void read_plls(struct jesd204b_phy_state *st)
+    95	{
+    96		int i;
+  > 97		int pll = st->pll;
+    98		u32 no_of_common_drp_interfaces = 1;
+    99	
+   100		if (st->pll == CPLL)
+   101			no_of_common_drp_interfaces = jesd204b_phy_read(
+   102							st, NR_TRANS_DRP_INTERFACES);
+   103		else
+   104			no_of_common_drp_interfaces = jesd204b_phy_read(
+   105							st, NR_COMMON_DRP_INTERFACES);
+   106	
+   107		for (i = 0; i < no_of_common_drp_interfaces; i++) {
+   108			jesd204b_phy_write(st, CHANNEL_XCVR_SEL, i);
+   109			pll = jesd204b_phy_read(st, CHANNEL_XCVR_TXPLL);
+   110			pll = jesd204b_phy_read(st, CHANNEL_XCVR_RXPLL);
+   111		}
+   112	}
+   113	
+   114	static void configure_plls(struct jesd204b_phy_state *st, u32 pll)
+   115	{
+   116		int i;
+   117		u32 no_of_common_drp_interfaces;
+   118	
+   119		if (pll == CPLL)
+   120			no_of_common_drp_interfaces = jesd204b_phy_read(
+   121							st, NR_TRANS_DRP_INTERFACES);
+   122		else
+   123			no_of_common_drp_interfaces = jesd204b_phy_read(
+   124							st, NR_COMMON_DRP_INTERFACES);
+   125	
+   126		for (i = 0; i < no_of_common_drp_interfaces; i++) {
+   127			jesd204b_phy_write(st, CHANNEL_XCVR_SEL, i);
+   128			jesd204b_phy_write(st, CHANNEL_XCVR_TXPLL, pll);
+   129			jesd204b_phy_write(st, CHANNEL_XCVR_RXPLL, pll);
+   130		}
+   131	}
+   132	
+   133	static void configure_channel_drp(struct jesd204b_phy_state *st, u32 setting)
+   134	{
+   135		u32 i, j, addr, temp, no_of_common_drp_interfaces;
+   136		u32 no_channel_drp_reg = GTX7S_QPLL_NUM_CHANNEL_DRP_REGS;
+   137	
+   138		no_of_common_drp_interfaces = jesd204b_phy_read(
+   139						st, NR_TRANS_DRP_INTERFACES);
    140	
-   141		if (!overlay->dtbo)
-   142			return 0;
-   143	
-   144		/* copy if buffer provided */
-   145		if (buf) {
-   146			/* the buffer must be large enough */
-   147			if (overlay->dtbo_size > max_count)
-   148				return -ENOSPC;
+   141		if (st->pll == CPLL)
+   142			no_channel_drp_reg = GTX7S_CPLL_NUM_CHANNEL_DRP_REGS;
+   143		for (i = 0; i < no_of_common_drp_interfaces; i++) {
+   144			jesd204b_phy_write(st, CHANNEL_DRP_BASE, i);
+   145			for (j = 0; j < no_channel_drp_reg; j++) {
+   146				/* Get the register address */
+   147				if (st->pll == QPLL) {
+   148					addr = get_gtx7s_qpll_address_lut(j);
    149	
-   150			memcpy(buf, overlay->dtbo, overlay->dtbo_size);
-   151		}
+   150					/* Read the register */
+   151					temp = read_channel_drp_reg(st, addr);
    152	
-   153		return overlay->dtbo_size;
-   154	}
-   155	
- > 156	ssize_t cfs_overlay_item_dtbo_write(struct config_item *item,
-   157					    const void *buf, size_t count)
-   158	{
-   159		struct cfs_overlay_item *overlay = to_cfs_overlay_item(item);
-   160		int err;
+   153					temp &= (0xFFFF ^ (get_gtx7s_qpll_mask_lut(j)));
+   154					temp |= ((get_gtx7s_qpll_param_lut(j, setting)
+   155							<< get_gtx7s_qpll_offset_lut(j))
+   156							& get_gtx7s_qpll_mask_lut(j));
+   157				} else {
+   158					addr = get_gtx7s_cpll_address_lut(j);
+   159	
+   160					temp = read_channel_drp_reg(st, addr);
    161	
-   162		/* if it's set do not allow changes */
-   163		if (overlay->path[0] != '\0' || overlay->dtbo_size > 0)
-   164			return -EPERM;
-   165	
-   166		/* copy the contents */
-   167		overlay->dtbo = kmemdup(buf, count, GFP_KERNEL);
-   168		if (!overlay->dtbo)
-   169			return -ENOMEM;
-   170	
-   171		overlay->dtbo_size = count;
-   172	
-   173		err = create_overlay(overlay, overlay->dtbo);
-   174		if (err < 0)
-   175			goto out_err;
-   176	
-   177		return count;
-   178	
-   179	out_err:
-   180		kfree(overlay->dtbo);
-   181		overlay->dtbo = NULL;
-   182		overlay->dtbo_size = 0;
-   183	
-   184		return err;
-   185	}
-   186	
+   162					temp &= (0xFFFF ^ (get_gtx7s_cpll_mask_lut(j)));
+   163					temp |= ((get_gtx7s_cpll_param_lut(j, setting)
+   164							<< get_gtx7s_cpll_offset_lut(j))
+   165							& get_gtx7s_cpll_mask_lut(j));
+   166				}
+   167				write_channel_drp_reg(st, addr, temp);
+   168			}
+   169		}
+   170	}
+   171	
+ > 172	void jesd204_phy_set_speed(struct jesd204b_phy_state *st, u32 band)
+   173	{
+   174		/* make sure we have the correct PLL's selected. */
+   175		configure_channel_drp(st, band);
+   176	}
+   177	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---gEQk2eTXNbeMLkfn
+--BXVg7jM8unygWmjO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -1137,6 +1162,10 @@ CONFIG_HMC6352=y
 # CONFIG_DS1682 is not set
 # CONFIG_SRAM is not set
 CONFIG_XILINX_SDFEC=y
+CONFIG_XILINX_FLEX_PM=y
+CONFIG_XILINX_TRAFGEN=y
+CONFIG_XILINX_JESD204B=y
+CONFIG_XILINX_JESD204B_PHY=y
 # CONFIG_C2PORT is not set
 
 #
@@ -1461,6 +1490,7 @@ CONFIG_DP83848_PHY=y
 # CONFIG_DP83867_PHY is not set
 CONFIG_DP83869_PHY=y
 CONFIG_VITESSE_PHY=y
+CONFIG_XILINX_PHY=y
 CONFIG_XILINX_GMII2RGMII=y
 CONFIG_MDIO_DEVICE=y
 CONFIG_MDIO_BUS=y
@@ -4189,6 +4219,8 @@ CONFIG_COMMON_CLK_SI514=y
 CONFIG_COMMON_CLK_SI544=y
 # CONFIG_COMMON_CLK_SI570 is not set
 # CONFIG_COMMON_CLK_BM1880 is not set
+CONFIG_COMMON_CLK_SI5324=y
+# CONFIG_COMMON_CLK_IDT8T49N24X is not set
 # CONFIG_COMMON_CLK_CDCE706 is not set
 CONFIG_COMMON_CLK_CDCE925=y
 CONFIG_COMMON_CLK_CS2000_CP=y
@@ -4208,6 +4240,7 @@ CONFIG_COMMON_CLK_OXNAS=y
 # CONFIG_COMMON_CLK_VC5 is not set
 CONFIG_COMMON_CLK_MMP2_AUDIO=y
 # CONFIG_COMMON_CLK_FIXED_MMIO is not set
+CONFIG_COMMON_CLK_XLNX_CLKWZRD=y
 # CONFIG_CLK_ACTIONS is not set
 CONFIG_CLK_BAIKAL_T1=y
 CONFIG_CLK_BT1_CCU_PLL=y
@@ -5417,11 +5450,14 @@ CONFIG_INTEL_TH_PTI=y
 # end of HW tracing support
 
 CONFIG_FPGA=y
+CONFIG_FPGA_MGR_DEBUG_FS=y
 CONFIG_FPGA_MGR_SOCFPGA=y
 CONFIG_FPGA_MGR_SOCFPGA_A10=y
 CONFIG_ALTERA_PR_IP_CORE=y
 CONFIG_ALTERA_PR_IP_CORE_PLAT=y
 CONFIG_FPGA_MGR_ZYNQ_FPGA=y
+CONFIG_FPGA_MGR_ZYNQ_AFI_FPGA=y
+# CONFIG_XILINX_AFI_FPGA is not set
 CONFIG_FPGA_BRIDGE=y
 CONFIG_ALTERA_FREEZE_BRIDGE=y
 CONFIG_XILINX_PR_DECOUPLER=y
@@ -5917,6 +5953,8 @@ CONFIG_CRYPTO_DEV_QCE_ENABLE_ALL=y
 CONFIG_CRYPTO_DEV_QCE_SW_MAX_LEN=512
 CONFIG_CRYPTO_DEV_QCOM_RNG=y
 # CONFIG_CRYPTO_DEV_IMGTEC_HASH is not set
+CONFIG_CRYPTO_DEV_ZYNQMP_SHA3=y
+CONFIG_CRYPTO_DEV_XILINX_RSA=y
 CONFIG_CRYPTO_DEV_ZYNQMP_AES=y
 CONFIG_CRYPTO_DEV_VIRTIO=y
 # CONFIG_CRYPTO_DEV_SAFEXCEL is not set
@@ -6169,4 +6207,4 @@ CONFIG_CC_HAS_SANCOV_TRACE_PC=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---gEQk2eTXNbeMLkfn--
+--BXVg7jM8unygWmjO--
