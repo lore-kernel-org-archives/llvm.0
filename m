@@ -1,85 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A16146A6
-	for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 16:28:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6FCC433C1;
-	Thu, 27 Oct 2022 16:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1666888132;
-	bh=LtAbTc4oHjsc7CsB0RZFmCgJaDHyi66KNVvcsO+tF64=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dFAXjWPhTBNepjo+WzLlzFG3D5UjZlHgWEEbarhq/a31lrVSDOT7ryrgHXUbXJAYd
-	 ixOMMJsbagIxDOsHrkWrmJXg26V/MJNmYpk+GANFjjh+9Ekf1tm5Oyu/e+K0uvlyqR
-	 fs34N4xpVjUTSIj0PuhbRSuHqPQFEOAFy27gVqNSRqCS/Jtkn2nhFGiidFq+Hps1JY
-	 wBnUFa8sJax9y68bCUHljiUk38r34azGZ2kPlyRVf8mI59mneAvPQtGnhwbm2J2GCa
-	 p/Fd7roSVzCf1w9i2To3dyO9im8SMh7+btZZLXQ8vvIy3UXmHr3ZRrDbNbfU5r21TV
-	 ILd4153NyQ/1g==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and AR=llvm-ar
-Date: Fri, 28 Oct 2022 01:28:39 +0900
-Message-Id: <20221027162839.410720-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5BBBA57
+	for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 16:35:37 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id c24so2068749pls.9
+        for <llvm@lists.linux.dev>; Thu, 27 Oct 2022 09:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=urppZBfNFt0XJ3ZhcESG7TULR6plK7BmAb/zbSwQDp8=;
+        b=o3a3iNSMsWwMI8Y20Q1ZqbfszHCrda/DokFv8WT3R06YwqLHyCk3o7Q2VO4FBGfful
+         8/TYklRnQWmaJj6+zSLkIsIuIng1aBSUX3x1Kzmf20jb8DW5/3TsxhFN8LspTo28XrpI
+         AmdGSGrwARlf7D8rFYMgOSfvB40taSFGsydXRELdRv5Jdj8ftqly/Jyb2BKB4OiK5Wvz
+         VkWn40Fg50p5OjrJW/mGO4PCxzVWKPtdOnwnWIbprRjRBeF0yjfZ9Lem1fowKz8Q+A6j
+         dynGNplaXhtgFBB7eWEEBXoDPFDQiVtF5ELANn1RFUvfa+jlY65x95ttljaye2345fZs
+         QaKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=urppZBfNFt0XJ3ZhcESG7TULR6plK7BmAb/zbSwQDp8=;
+        b=dvq0kD7s5lGcBC65MXrFD5ezJrjUA8Xh4dGd38r3+a18I/OMUoMY0LYWofsdSM/Z0M
+         ZZJcbNGd68GC5J1Q86+4iENE0l0DU6GJwQjkSeabLOus07AOXh9xuBdlQ/XHhL14yt4O
+         D1sVlGF1aiTOWZUY1ArcMC7gF7TlJSBanpYyUqVS14TryJ+0ySp/H/Wn34SeaxOE5Bfr
+         XGMusyiyEEkWhnZ+5sFOVttKBGq8Bd6UmUb6k93Ojuk/0wDcbSnRWr3518RkNb2VExV7
+         qtRHTbS67dCXEZ+qYPBwhb0xK6YHzd5mSpvBwL7OZDZ20+I8EWOnNlvdCjuLi6UoHg8h
+         WHnQ==
+X-Gm-Message-State: ACrzQf1zs4utNJGmyY/A+qJyHYn6YuOBbOQ9sX1mgxsvC1wTEBuzkbw5
+	XGqv/18BjQtJAfIK1xRumneAmJW7bv9v68LNYD9o/g==
+X-Google-Smtp-Source: AMsMyM6It3+2j+zCgkl6u8Y+MHPUVoTqKr7o+Ow0VF1Q9QWhO8mAeIBq0NfhI8RqsxJEIFwO2j5pPV1V41nIRNdWByg=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr11113376pjb.102.1666888536691; Thu, 27
+ Oct 2022 09:35:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com>
+ <87mt9kppb6.wl-ashutosh.dixit@intel.com> <Y1ercgaqQwfqt42U@ashyti-mobl2.lan>
+ <87ilk7pwrw.wl-ashutosh.dixit@intel.com> <Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan>
+In-Reply-To: <Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 27 Oct 2022 09:35:24 -0700
+Message-ID: <CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com>
+Subject: Re: [PATCH] drm/i915/hwmon: Fix a build error used with clang compiler
+To: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>, anshuman.gupta@intel.com, 
+	intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Andi Shyti <andi.shyti@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
-  /usr/bin/ar terminated with signal 13 [Broken pipe]
+On Tue, Oct 25, 2022 at 5:18 PM Andi Shyti <andi.shyti@linux.intel.com> wrote:
+>
+> Hi Ashutosh,
+>
+> > But I'd wait to hear from clang/llvm folks first.
+>
+> Yeah! Looking forward to getting some ideas :)
 
-Nathan Chancellor reported the latest AR=llvm-ar shows
-  error: write on a pipe with no reader
+Gwan-gyeong, which tree and set of configs are necessary to reproduce
+the observed warning?
 
-The latter occurs since LLVM commit 51b557adc131 ("Add an error message
-to the default SIGPIPE handler").
-
-The resulting vmlinux is correct, but it is better to silence it.
-
-'head -n1' exits after reading the first line, so the pipe is closed.
-
-Use 'sed -n 1p' to eat the stream till the end.
-
-Fixes: 321648455061 ("kbuild: use obj-y instead extra-y for objects placed at the head")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1651
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
----
-
-Changes in v2:
-  - Update commit description to mention llvm-ar
-
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index e90bb2b38607..e9e7eff906a5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
-       cmd_ar_vmlinux.a = \
- 	rm -f $@; \
- 	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
--	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
-+	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
- 
- targets += vmlinux.a
- vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
+Warnings are treated as errors, so I don't want this breaking our CI.
 -- 
-2.34.1
-
+Thanks,
+~Nick Desaulniers
