@@ -1,60 +1,128 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9632F28E8
-	for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 16:25:19 +0000 (UTC)
-Received: by mail-il1-f200.google.com with SMTP id f15-20020a056e020b4f00b002fa34db70f0so5392956ilu.2
-        for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 09:25:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BD9320E;
+	Fri, 28 Oct 2022 18:14:34 +0000 (UTC)
+Received: by mail-qk1-f182.google.com with SMTP id a5so3959653qkl.6;
+        Fri, 28 Oct 2022 11:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mm2xmltH5cssbfoG7DhNPzMHrojXBex0FsFFvjiLnbA=;
+        b=Xh0pirw8ScVQtoFuI5mkHbYhfJdG7ft40xss/CBCZTY9wiS2Dig2U2910H0byfIZUd
+         0Kk/lZRwJex/UFE00dvJ99kwvcEd4TQlXXQoRP5NZO4Ws+4B5e8zJXd/WgYFgSXOf9xx
+         cGQ4sK19LeEjLg9/HBOBE663TkQx/TypJrlDJbw6kEzvnc0tNd/fZDzqcisL/bWD1Pa8
+         16c9AAY1qloOMzLecG7Fgs3vMVFDevT5Sd2Oh8ycPtM4BRU8KCPcmdWekodHqhSEoRRK
+         He4NDIIyCbDIZLQ7pz++5iHz4zk9Bbe0W4SJIz7khjQZsk7IoNt1KFX/zgpd8RZ/xM99
+         O9+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o0M2eNGrrFy1lqBx+Mbj7u6/ivikymdyJDCkEXUlOf4=;
-        b=YZbLDQEcmbiWyBI1ISN/IJDRCbTG/2EozLkpT/o2FqO8DnuKG7GDk6HwvDRK9U6ApL
-         ohnfyJjiGr5/S+rSW53bOR+mLVcVeIBavYXRG4KQ/cIz0xJLwYqWAz4dlm8AD/3Z80vW
-         lDgdrnZo6MbTzYjBMNMj4ZkJDS573L/vfDIwFFAcQ6mADyOIFIUN0765OF1Jc95FXnb7
-         h9SXRKktC0zoxEgUTecZjR4CingQdLuA5xUIOCKkQqaja6QIyrAy6YnAsUn0gTqvsTOJ
-         AFBPP89JhxJ1xgbOGx8loI1K9I3vulOyhgQFO8HL/IOErdX5MubWQM4LUja/zL3jY3Y3
-         513Q==
-X-Gm-Message-State: ACrzQf1Dl0tDzL3BYaU4hmZZWIICp8GuAj+xdJYi/7Li5Z6ybhMmxfMT
-	/5zacY7HyLxBGAMNSKVsdWTzPorOAkKapJugsyWQrf70QO4p
-X-Google-Smtp-Source: AMsMyM4+dAFAySyvCpcZ0y/ApLfH48HExaDis7YotuSsW4mMSrDjl7EZangPlAlQPtKflrLKT035o6bJhkEHpeYNzXQn4FKwZnPt
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mm2xmltH5cssbfoG7DhNPzMHrojXBex0FsFFvjiLnbA=;
+        b=NpGqlp2hbv25w165+nHzlbUxIL58KTPqjB6jQ+2gd5oGFAI4YQk4L/CLkrMyIn5EMR
+         fyQfBKRzHPJKkT1YxKInNlAL2+glM7DbV5wxxTIsaJMoeZcr4LvEJuwoigvwlMWEgQ9z
+         gFVMBje2l4OR4NZvaojZSTQS6mdiBGHL+JdxapCTttJMsYAUlyaYOcaiAB9/Gm2kDXTS
+         6L2T1ITRE4iPjaQ7gynsADEE8SaxcICEv9WoTozP8PTwjjwIewkz1OH94rHu7bAB//0T
+         QTCHju8N2Ge0dB26z7YmrjRwedZsQDSwgXxZgHC15SCs3DU2HEgN7E7KQfMP7AjCxWL7
+         ir4g==
+X-Gm-Message-State: ACrzQf3wCyds8e6h3cg9mCFzI2WXW7lSsqe83dZAL0iHMINFepoqiM1D
+	GgvQ3gH/ItPFyHYBUwqnsJY=
+X-Google-Smtp-Source: AMsMyM5PIYaZ3lwRrrkaNIKK5fx3FY37HHCsIo+hdulqZccPAIrDzgZN3BrmAexxzlNsEoFwwcXjHg==
+X-Received: by 2002:a05:620a:404c:b0:6da:ecec:a072 with SMTP id i12-20020a05620a404c00b006daececa072mr446116qko.358.1666980873506;
+        Fri, 28 Oct 2022 11:14:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y27-20020a37f61b000000b006cf19068261sm3271027qkj.116.2022.10.28.11.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 11:14:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 28 Oct 2022 11:14:30 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH -next v2] hwmon: (smpro-hwmon) Improve switch statments
+ in smpro_is_visible()
+Message-ID: <20221028181430.GA2079477@roeck-us.net>
+References: <20221027231611.3824800-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bee:b0:2fc:793c:aa5c with SMTP id
- y14-20020a056e021bee00b002fc793caa5cmr127203ilv.126.1666974318783; Fri, 28
- Oct 2022 09:25:18 -0700 (PDT)
-Date: Fri, 28 Oct 2022 09:25:18 -0700
-In-Reply-To: <CAKrof1NyNjozshnGPgxKHuBoKgnd79tC50M44UL_DfeVBad+Kw@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ef38d05ec1ab476@google.com>
-Subject: Re: [syzbot] WARNING in btrfs_block_rsv_release
-From: syzbot <syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com>
-To: 18801353760@163.com, clm@fb.com, dsterba@suse.com, josef@toxicpanda.com, 
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yin31149@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027231611.3824800-1-nathan@kernel.org>
 
-Hello,
+On Thu, Oct 27, 2022 at 04:16:12PM -0700, Nathan Chancellor wrote:
+> Clang warns:
+> 
+>   drivers/hwmon/smpro-hwmon.c:378:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>           default:
+>           ^
+>   drivers/hwmon/smpro-hwmon.c:378:2: note: insert 'break;' to avoid fall-through
+>           default:
+>           ^
+>           break;
+>   1 error generated.
+> 
+> Clang is a little more pedantic than GCC, which does not warn when
+> falling through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst, which
+> states that all switch/case blocks must end in either break,
+> fallthrough, continue, goto, or return.
+> 
+> Add the missing break to silence the warning. Additionally, adjust the
+> indentation of a break and add a default case to the inner switch
+> statement.
+> 
+> Fixes: a87456864cbb ("hwmon: Add Ampere's Altra smpro-hwmon driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1751
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Applied.
 
-Reported-and-tested-by: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com
+Thanks,
+Guenter
 
-Tested on:
-
-commit:         493ffd66 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=17bdd716880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-dashboard link: https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11e315ce880000
-
-Note: testing is done by a robot and is best-effort only.
+> ---
+> 
+> v2:
+> 
+>     * Add missing default case to inner switch statement (Guenter)
+>     * Fix indentation of break in inner switch statement (Guenter)
+>     * Reword commit message to include these changes
+> 
+> v1: https://lore.kernel.org/20221027195238.1789586-1-nathan@kernel.org/
+> 
+>  drivers/hwmon/smpro-hwmon.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 0ffb687b6508c36a17b99bdaf014b38532404182
+> 
+> diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+> index ee54e21c2c12..a76c49dd8438 100644
+> --- a/drivers/hwmon/smpro-hwmon.c
+> +++ b/drivers/hwmon/smpro-hwmon.c
+> @@ -373,8 +373,11 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+>  			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
+>  			if (ret || value == 0xFFFF)
+>  				return 0;
+> -		break;
+> +			break;
+> +		default:
+> +			break;
+>  		}
+> +		break;
+>  	default:
+>  		break;
+>  	}
