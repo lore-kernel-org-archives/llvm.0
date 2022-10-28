@@ -1,248 +1,204 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA1612286;
-	Fri, 28 Oct 2022 19:34:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8C512286;
+	Fri, 28 Oct 2022 19:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666985642; x=1698521642;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uREgiiiAWznAXSDaX23A9deMBjS8/nwBXt1ylTjVg4o=;
-  b=ByeQ5EkM2C9mZnENIg9fBIMnmzHNV/YIi1E7aye7jviUMCJliTAuyrJq
-   W58+d2BKRY2bB2o0VaegbLM9ti79OdgB16Ha+mj5qO+eSqn52b0ViAm6a
-   eOR3N0N2rkfCtUvRsco2TPBe0vlrakpyO9plC/OvCmRIDK3bhxUMXf2T0
-   P/TYqcl2ZxlVn/Rmk0Tr4Emw4D8UYO69Fu3np/umIlpngBKQ9gAmkahFk
-   89+zVaO4HCaUHjPJ9tRG6RynntDWgoChOI5Mi0j9cul6l+VZx1cYl9l9l
-   0Q5oTA0kN0jJn3/Z5wuyDDP24Q0NLz/bdJgDf0WtyoNLyWTggF2LwuWHq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="295984598"
+  t=1666986245; x=1698522245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fN49e2Hp3pklbdck3c7GbiaJxtMJytNedBX+/9lcBRE=;
+  b=Ds+QyqZUWjIbVioc/Tj10nUmv7NI9IxIbYeylkyI1+cmOz+pHIxV1hZ/
+   1tWBfcnkoeVwK7JQaykNxfnksnxpJsNenrY7A9TWNvEJDw8Ar4vquPsj4
+   lM+4tL3RvdoQkYAE9ospgVGsJ+mhsO/n8j4zqrZ2xvvhe9N6Lq6GGYGEf
+   l2YI5/H+naJI+YXMr2a92o12lnSb11oQrGYEv0ZeYNYh3pR0wUOL0TRQ+
+   9ZjLVFTqob1vf0kgtTMD1Chka7q8jk1wCm6Qy8Oe52veDQsPkxJpsQkCe
+   wF2ld5aKJHZC+0r0nk1LRE3PYWCGjxa33YF7e/DduRnRoRRTbqS/mWDYB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="307304705"
 X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
-   d="scan'208";a="295984598"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 12:34:01 -0700
+   d="scan'208";a="307304705"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 12:44:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="962138238"
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="775491392"
 X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
-   d="scan'208";a="962138238"
+   d="scan'208";a="775491392"
 Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Oct 2022 12:33:59 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 28 Oct 2022 12:44:00 -0700
 Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ooV79-000AAV-0I;
-	Fri, 28 Oct 2022 19:33:59 +0000
-Date: Sat, 29 Oct 2022 03:33:32 +0800
+	id 1ooVGp-000AAw-25;
+	Fri, 28 Oct 2022 19:43:59 +0000
+Date: Sat, 29 Oct 2022 03:43:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Yinbo Zhu <zhuyinbo@loongson.cn>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-viro 7/9]
- fs/cifs/file.c:4620:11: warning: variable 'rc' is uninitialized when used
- here
-Message-ID: <202210290320.JqMCcc3j-lkp@intel.com>
+	zhanghongchen <zhanghongchen@loongson.cn>,
+	Liu Peibao <liupeibao@loongson.cn>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: Re: [PATCH v8 1/2] thermal: loongson-2: add thermal management
+ support
+Message-ID: <202210290349.6tfFM0Il-lkp@intel.com>
+References: <20221028013532.10361-1-zhuyinbo@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="OReDjMDTawCvY3C5"
+Content-Type: multipart/mixed; boundary="6gEzDx8cj8aqS5Z4"
 Content-Disposition: inline
+In-Reply-To: <20221028013532.10361-1-zhuyinbo@loongson.cn>
 
 
---OReDjMDTawCvY3C5
+--6gEzDx8cj8aqS5Z4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-viro
-head:   66b4f2d4542c176ea7682dde9f3a59c9ad3f1f2a
-commit: 4d70b2b4e481f4343f02289e4ca5550824ddd904 [7/9] cifs: Change the I/O paths to use an iterator rather than a page list
+Hi Yinbo,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.1-rc2 next-20221028]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/thermal-loongson-2-add-thermal-management-support/20221028-093603
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20221028013532.10361-1-zhuyinbo%40loongson.cn
+patch subject: [PATCH v8 1/2] thermal: loongson-2: add thermal management support
 config: i386-randconfig-a002
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4d70b2b4e481f4343f02289e4ca5550824ddd904
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-viro
-        git checkout 4d70b2b4e481f4343f02289e4ca5550824ddd904
+        # https://github.com/intel-lab-lkp/linux/commit/d94e01f4aefe4c0ab05babe101f0a0ce53165456
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yinbo-Zhu/thermal-loongson-2-add-thermal-management-support/20221028-093603
+        git checkout d94e01f4aefe4c0ab05babe101f0a0ce53165456
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/cifs/file.c:4620:11: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
-                           return rc;
-                                  ^~
-   fs/cifs/file.c:4552:12: note: initialize the variable 'rc' to silence this warning
-           ssize_t rc, total_read = 0;
-                     ^
-                      = 0
-   1 warning generated.
+>> drivers/thermal/loongson2_thermal.c:136:48: error: variable has incomplete type 'const struct thermal_zone_of_device_ops'
+   static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+                                                  ^
+   drivers/thermal/loongson2_thermal.c:136:21: note: forward declaration of 'struct thermal_zone_of_device_ops'
+   static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+                       ^
+>> drivers/thermal/loongson2_thermal.c:177:14: error: implicit declaration of function 'devm_thermal_zone_of_sensor_register' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+                       ^
+   drivers/thermal/loongson2_thermal.c:177:14: note: did you mean 'devm_thermal_of_zone_register'?
+   include/linux/thermal.h:320:29: note: 'devm_thermal_of_zone_register' declared here
+   struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
+                               ^
+   2 errors generated.
 
 
-vim +/rc +4620 fs/cifs/file.c
+vim +136 drivers/thermal/loongson2_thermal.c
 
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4543  
-6e6e2b86c29c6f Long Li         2018-10-31  4544  static ssize_t __cifs_readv(
-6e6e2b86c29c6f Long Li         2018-10-31  4545  	struct kiocb *iocb, struct iov_iter *to, bool direct)
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4546  {
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4547  	size_t len;
-6e6e2b86c29c6f Long Li         2018-10-31  4548  	struct file *file = iocb->ki_filp;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4549  	struct cifs_sb_info *cifs_sb;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4550  	struct cifsFileInfo *cfile;
-6e6e2b86c29c6f Long Li         2018-10-31  4551  	struct cifs_tcon *tcon;
-6e6e2b86c29c6f Long Li         2018-10-31  4552  	ssize_t rc, total_read = 0;
-6e6e2b86c29c6f Long Li         2018-10-31  4553  	loff_t offset = iocb->ki_pos;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4554  	struct cifs_aio_ctx *ctx;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4555  
-6e6e2b86c29c6f Long Li         2018-10-31  4556  	/*
-6e6e2b86c29c6f Long Li         2018-10-31  4557  	 * iov_iter_get_pages_alloc() doesn't work with ITER_KVEC,
-6e6e2b86c29c6f Long Li         2018-10-31  4558  	 * fall back to data copy read path
-6e6e2b86c29c6f Long Li         2018-10-31  4559  	 * this could be improved by getting pages directly in ITER_KVEC
-6e6e2b86c29c6f Long Li         2018-10-31  4560  	 */
-6629400a2227c8 David Howells   2019-11-21  4561  	if (direct && iov_iter_is_kvec(to)) {
-6e6e2b86c29c6f Long Li         2018-10-31  4562  		cifs_dbg(FYI, "use non-direct cifs_user_readv for kvec I/O\n");
-6e6e2b86c29c6f Long Li         2018-10-31  4563  		direct = false;
-6e6e2b86c29c6f Long Li         2018-10-31  4564  	}
-6e6e2b86c29c6f Long Li         2018-10-31  4565  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4566  	len = iov_iter_count(to);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4567  	if (!len)
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4568  		return 0;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4569  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4570  	cifs_sb = CIFS_FILE_SB(file);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4571  	cfile = file->private_data;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4572  	tcon = tlink_tcon(cfile->tlink);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4573  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4574  	if (!tcon->ses->server->ops->async_readv)
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4575  		return -ENOSYS;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4576  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4577  	if ((file->f_flags & O_ACCMODE) == O_WRONLY)
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4578  		cifs_dbg(FYI, "attempting read on write only file instance\n");
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4579  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4580  	ctx = cifs_aio_ctx_alloc();
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4581  	if (!ctx)
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4582  		return -ENOMEM;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4583  
-4d70b2b4e481f4 David Howells   2022-01-24  4584  	ctx->pos	= offset;
-4d70b2b4e481f4 David Howells   2022-01-24  4585  	ctx->direct_io	= direct;
-4d70b2b4e481f4 David Howells   2022-01-24  4586  	ctx->len	= len;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4587  	ctx->cfile	= cifsFileInfo_get(cfile);
-4d70b2b4e481f4 David Howells   2022-01-24  4588  	ctx->nr_pinned_pages = 0;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4589  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4590  	if (!is_sync_kiocb(iocb))
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4591  		ctx->iocb = iocb;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4592  
-4d70b2b4e481f4 David Howells   2022-01-24  4593  	if (user_backed_iter(to)) {
-4d70b2b4e481f4 David Howells   2022-01-24  4594  		/*
-4d70b2b4e481f4 David Howells   2022-01-24  4595  		 * Duplicate IOVEC/UBUF-type iterators as they contain references to
-4d70b2b4e481f4 David Howells   2022-01-24  4596  		 * the calling process's virtual memory layout which won't be available
-4d70b2b4e481f4 David Howells   2022-01-24  4597  		 * in an async worker thread.  This also takes a ref on every folio
-4d70b2b4e481f4 David Howells   2022-01-24  4598  		 * involved and attaches them to ctx->bv[].
-4d70b2b4e481f4 David Howells   2022-01-24  4599  		 */
-4d70b2b4e481f4 David Howells   2022-01-24  4600  		rc = netfs_extract_user_iter(to, iov_iter_count(to), &ctx->iter);
-4d70b2b4e481f4 David Howells   2022-01-24  4601  		if (rc < 0) {
-4d70b2b4e481f4 David Howells   2022-01-24  4602  			kref_put(&ctx->refcount, cifs_aio_ctx_release);
-4d70b2b4e481f4 David Howells   2022-01-24  4603  			return rc;
-4d70b2b4e481f4 David Howells   2022-01-24  4604  		}
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4605  
-4d70b2b4e481f4 David Howells   2022-01-24  4606  		ctx->bv = (void *)ctx->iter.bvec;
-4d70b2b4e481f4 David Howells   2022-01-24  4607  		ctx->nr_pinned_pages = rc;
-4d70b2b4e481f4 David Howells   2022-01-24  4608  		ctx->should_dirty = true;
-4d70b2b4e481f4 David Howells   2022-01-24  4609  	} else if ((iov_iter_is_bvec(to) || iov_iter_is_kvec(to)) &&
-4d70b2b4e481f4 David Howells   2022-01-24  4610  		   !is_sync_kiocb(iocb)) {
-4d70b2b4e481f4 David Howells   2022-01-24  4611  		/*
-4d70b2b4e481f4 David Howells   2022-01-24  4612  		 * If the op is asynchronous, we need to copy the list attached
-4d70b2b4e481f4 David Howells   2022-01-24  4613  		 * to a BVEC/KVEC-type iterator, but we assume that the storage
-4d70b2b4e481f4 David Howells   2022-01-24  4614  		 * will be pinned by the caller; in any case, we may or may not
-4d70b2b4e481f4 David Howells   2022-01-24  4615  		 * be able to pin the pages, so we don't try.
-4d70b2b4e481f4 David Howells   2022-01-24  4616  		 */
-4d70b2b4e481f4 David Howells   2022-01-24  4617  		ctx->bv = (void *)dup_iter(&ctx->iter, to, GFP_KERNEL);
-4d70b2b4e481f4 David Howells   2022-01-24  4618  		if (!ctx->bv) {
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4619  			kref_put(&ctx->refcount, cifs_aio_ctx_release);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25 @4620  			return rc;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4621  		}
-4d70b2b4e481f4 David Howells   2022-01-24  4622  	} else {
-4d70b2b4e481f4 David Howells   2022-01-24  4623  		/*
-4d70b2b4e481f4 David Howells   2022-01-24  4624  		 * Otherwise, we just pass the iterator down as-is and rely on
-4d70b2b4e481f4 David Howells   2022-01-24  4625  		 * the caller to make sure the pages referred to by the
-4d70b2b4e481f4 David Howells   2022-01-24  4626  		 * iterator don't evaporate.
-4d70b2b4e481f4 David Howells   2022-01-24  4627  		 */
-4d70b2b4e481f4 David Howells   2022-01-24  4628  		ctx->iter = *to;
-6e6e2b86c29c6f Long Li         2018-10-31  4629  	}
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4630  
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4631  	if (direct) {
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4632  		rc = filemap_write_and_wait_range(file->f_inode->i_mapping,
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4633  						  offset, offset + len - 1);
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4634  		if (rc) {
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4635  			kref_put(&ctx->refcount, cifs_aio_ctx_release);
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4636  			return -EAGAIN;
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4637  		}
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4638  	}
-bb44c31cdcac10 Ronnie Sahlberg 2022-09-20  4639  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4640  	/* grab a lock here due to read response handlers can access ctx */
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4641  	mutex_lock(&ctx->aio_mutex);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4642  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4643  	rc = cifs_send_async_read(offset, len, cfile, cifs_sb, &ctx->list, ctx);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4644  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4645  	/* if at least one read request send succeeded, then reset rc */
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4646  	if (!list_empty(&ctx->list))
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4647  		rc = 0;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4648  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4649  	mutex_unlock(&ctx->aio_mutex);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4650  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4651  	if (rc) {
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4652  		kref_put(&ctx->refcount, cifs_aio_ctx_release);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4653  		return rc;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4654  	}
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4655  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4656  	if (!is_sync_kiocb(iocb)) {
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4657  		kref_put(&ctx->refcount, cifs_aio_ctx_release);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4658  		return -EIOCBQUEUED;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4659  	}
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4660  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4661  	rc = wait_for_completion_killable(&ctx->done);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4662  	if (rc) {
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4663  		mutex_lock(&ctx->aio_mutex);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4664  		ctx->rc = rc = -EINTR;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4665  		total_read = ctx->total_len;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4666  		mutex_unlock(&ctx->aio_mutex);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4667  	} else {
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4668  		rc = ctx->rc;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4669  		total_read = ctx->total_len;
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4670  	}
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4671  
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4672  	kref_put(&ctx->refcount, cifs_aio_ctx_release);
-6685c5e2d1acae Pavel Shilovsky 2017-04-25  4673  
-0165e8100be3b2 Al Viro         2014-02-04  4674  	if (total_read) {
-e6a7bcb4c489e3 Al Viro         2014-04-02  4675  		iocb->ki_pos += total_read;
-0165e8100be3b2 Al Viro         2014-02-04  4676  		return total_read;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  4677  	}
-0165e8100be3b2 Al Viro         2014-02-04  4678  	return rc;
-a70307eeeb25b8 Pavel Shilovsky 2010-12-14  4679  }
-a70307eeeb25b8 Pavel Shilovsky 2010-12-14  4680  
-
-:::::: The code at line 4620 was first introduced by commit
-:::::: 6685c5e2d1acae8e7d3b63b1a205f58420ce7150 CIFS: Add asynchronous read support through kernel AIO
-
-:::::: TO: Pavel Shilovsky <pshilov@microsoft.com>
-:::::: CC: Steve French <smfrench@gmail.com>
+   135	
+ > 136	static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+   137		.get_temp = loongson2_thermal_get_temp,
+   138		.set_trips = loongson2_thermal_set_trips,
+   139	};
+   140	
+   141	static int loongson2_thermal_probe(struct platform_device *pdev)
+   142	{
+   143		struct device *dev = &pdev->dev;
+   144		struct resource *res;
+   145		struct loongson2_thermal_data *data;
+   146		int ret;
+   147	
+   148		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   149		if (!data)
+   150			return -ENOMEM;
+   151	
+   152		data->pdev = pdev;
+   153		platform_set_drvdata(pdev, data);
+   154	
+   155		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   156		data->regs = devm_ioremap(dev, res->start, resource_size(res));
+   157		if (IS_ERR(data->regs))
+   158			return PTR_ERR(data->regs);
+   159	
+   160		/* get irq */
+   161		data->irq = platform_get_irq(pdev, 0);
+   162		if (data->irq < 0)
+   163			return data->irq;
+   164	
+   165		/* get id */
+   166		data->id = loongson2_thermal_get_sensor_id();
+   167		if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+   168			dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+   169					LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+   170			return -EINVAL;
+   171		}
+   172	
+   173		writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+   174	
+   175		loongson2_thermal_set(data, 0, 0, false);
+   176	
+ > 177		data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+   178								   data->id, data,
+   179								   &loongson2_of_thermal_ops);
+   180		if (IS_ERR(data->tzd)) {
+   181			ret = PTR_ERR(data->tzd);
+   182			data->tzd = NULL;
+   183			dev_err(&pdev->dev, "failed to register %d\n", ret);
+   184			return ret;
+   185		}
+   186	
+   187		ret = devm_request_threaded_irq(dev, data->irq,
+   188				loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+   189				IRQF_ONESHOT, "loongson2_thermal", data);
+   190		if (ret < 0) {
+   191			dev_err(dev, "failed to request alarm irq: %d\n", ret);
+   192			return ret;
+   193		}
+   194	
+   195		/*
+   196		 * Thermal_zone doesn't enable hwmon as default,
+   197		 * enable it here
+   198		 */
+   199		data->tzd->tzp->no_hwmon = false;
+   200		ret = thermal_add_hwmon_sysfs(data->tzd);
+   201		if (ret) {
+   202			dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
+   203			return ret;
+   204		}
+   205	
+   206		return 0;
+   207	}
+   208	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---OReDjMDTawCvY3C5
+--6gEzDx8cj8aqS5Z4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/i386 6.1.0-rc2 Kernel Configuration
+# Linux/i386 6.0.0 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -425,6 +381,7 @@ CONFIG_CGROUPS=y
 CONFIG_PAGE_COUNTER=y
 # CONFIG_CGROUP_FAVOR_DYNMODS is not set
 CONFIG_MEMCG=y
+CONFIG_MEMCG_SWAP=y
 CONFIG_MEMCG_KMEM=y
 # CONFIG_BLK_CGROUP is not set
 CONFIG_CGROUP_SCHED=y
@@ -876,8 +833,6 @@ CONFIG_HAVE_KVM_IRQCHIP=y
 CONFIG_HAVE_KVM_IRQFD=y
 CONFIG_HAVE_KVM_IRQ_ROUTING=y
 CONFIG_HAVE_KVM_DIRTY_RING=y
-CONFIG_HAVE_KVM_DIRTY_RING_TSO=y
-CONFIG_HAVE_KVM_DIRTY_RING_ACQ_REL=y
 CONFIG_HAVE_KVM_EVENTFD=y
 CONFIG_KVM_MMIO=y
 CONFIG_KVM_ASYNC_PF=y
@@ -1210,6 +1165,7 @@ CONFIG_USERFAULTFD=y
 # end of Memory Management options
 
 CONFIG_NET=y
+CONFIG_SKB_EXTENSIONS=y
 
 #
 # Networking options
@@ -1270,7 +1226,9 @@ CONFIG_IPV6_NDISC_NODETYPE=y
 # CONFIG_IPV6_RPL_LWTUNNEL is not set
 # CONFIG_IPV6_IOAM6_LWTUNNEL is not set
 # CONFIG_NETLABEL is not set
-# CONFIG_MPTCP is not set
+CONFIG_MPTCP=y
+CONFIG_INET_MPTCP_DIAG=y
+CONFIG_MPTCP_IPV6=y
 # CONFIG_NETWORK_SECMARK is not set
 # CONFIG_NETWORK_PHY_TIMESTAMPING is not set
 # CONFIG_NETFILTER is not set
@@ -2307,7 +2265,6 @@ CONFIG_KEYBOARD_ATKBD=y
 # CONFIG_KEYBOARD_MPR121 is not set
 # CONFIG_KEYBOARD_NEWTON is not set
 # CONFIG_KEYBOARD_OPENCORES is not set
-# CONFIG_KEYBOARD_PINEPHONE is not set
 # CONFIG_KEYBOARD_SAMSUNG is not set
 # CONFIG_KEYBOARD_STOWAWAY is not set
 # CONFIG_KEYBOARD_SUNKBD is not set
@@ -2479,7 +2436,6 @@ CONFIG_TOUCHSCREEN_SX8654=y
 # CONFIG_TOUCHSCREEN_TPS6507X is not set
 CONFIG_TOUCHSCREEN_ZET6223=m
 CONFIG_TOUCHSCREEN_ZFORCE=m
-# CONFIG_TOUCHSCREEN_COLIBRI_VF50 is not set
 # CONFIG_TOUCHSCREEN_ROHM_BU21023 is not set
 CONFIG_TOUCHSCREEN_IQS5XX=y
 # CONFIG_TOUCHSCREEN_ZINITIX is not set
@@ -2860,7 +2816,6 @@ CONFIG_GENERIC_PINCONF=y
 # CONFIG_DEBUG_PINCTRL is not set
 # CONFIG_PINCTRL_AMD is not set
 CONFIG_PINCTRL_AS3722=m
-# CONFIG_PINCTRL_CY8C95X0 is not set
 CONFIG_PINCTRL_EQUILIBRIUM=m
 # CONFIG_PINCTRL_MAX77620 is not set
 CONFIG_PINCTRL_MCP23S08_I2C=y
@@ -2869,7 +2824,6 @@ CONFIG_PINCTRL_MCP23S08=y
 # CONFIG_PINCTRL_MICROCHIP_SGPIO is not set
 # CONFIG_PINCTRL_OCELOT is not set
 # CONFIG_PINCTRL_PALMAS is not set
-CONFIG_PINCTRL_RK805=y
 # CONFIG_PINCTRL_SINGLE is not set
 CONFIG_PINCTRL_STMFX=m
 CONFIG_PINCTRL_SX150X=y
@@ -2955,6 +2909,7 @@ CONFIG_GPIO_WS16C48=y
 #
 # I2C GPIO expanders
 #
+# CONFIG_GPIO_ADP5588 is not set
 CONFIG_GPIO_ADNP=m
 CONFIG_GPIO_GW_PLD=m
 # CONFIG_GPIO_MAX7300 is not set
@@ -3136,7 +3091,6 @@ CONFIG_CHARGER_BQ2515X=y
 # CONFIG_CHARGER_BQ25890 is not set
 CONFIG_CHARGER_BQ25980=y
 CONFIG_CHARGER_BQ256XX=m
-# CONFIG_CHARGER_RK817 is not set
 CONFIG_CHARGER_SMB347=y
 # CONFIG_CHARGER_TPS65217 is not set
 CONFIG_BATTERY_GAUGE_LTC2941=y
@@ -3373,6 +3327,7 @@ CONFIG_INTEL_TCC_COOLING=m
 # end of Intel thermal drivers
 
 CONFIG_GENERIC_ADC_THERMAL=m
+CONFIG_LOONGSON2_THERMAL=y
 CONFIG_WATCHDOG=y
 CONFIG_WATCHDOG_CORE=y
 CONFIG_WATCHDOG_NOWAYOUT=y
@@ -3418,7 +3373,6 @@ CONFIG_ADVANTECH_WDT=m
 # CONFIG_ALIM1535_WDT is not set
 # CONFIG_ALIM7101_WDT is not set
 CONFIG_EBC_C384_WDT=m
-# CONFIG_EXAR_WDT is not set
 CONFIG_F71808E_WDT=y
 # CONFIG_SP5100_TCO is not set
 CONFIG_SBC_FITPC2_WATCHDOG=y
@@ -3553,7 +3507,7 @@ CONFIG_MFD_RETU=y
 CONFIG_MFD_RT5033=y
 # CONFIG_MFD_RT5120 is not set
 CONFIG_MFD_RC5T583=y
-CONFIG_MFD_RK808=y
+# CONFIG_MFD_RK808 is not set
 CONFIG_MFD_RN5T618=m
 # CONFIG_MFD_SEC_CORE is not set
 # CONFIG_MFD_SI476X_CORE is not set
@@ -3698,7 +3652,6 @@ CONFIG_REGULATOR_QCOM_SPMI=m
 # CONFIG_REGULATOR_QCOM_USB_VBUS is not set
 CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY=y
 CONFIG_REGULATOR_RC5T583=m
-CONFIG_REGULATOR_RK808=m
 CONFIG_REGULATOR_RN5T618=m
 CONFIG_REGULATOR_ROHM=m
 CONFIG_REGULATOR_RT4801=y
@@ -4664,7 +4617,6 @@ CONFIG_RTC_DRV_MAX8925=m
 # CONFIG_RTC_DRV_MAX8997 is not set
 CONFIG_RTC_DRV_MAX77686=m
 # CONFIG_RTC_DRV_NCT3018Y is not set
-CONFIG_RTC_DRV_RK808=m
 CONFIG_RTC_DRV_RS5C372=y
 # CONFIG_RTC_DRV_ISL1208 is not set
 CONFIG_RTC_DRV_ISL12022=m
@@ -4995,7 +4947,6 @@ CONFIG_COMMON_CLK_WM831X=m
 CONFIG_LMK04832=y
 # CONFIG_COMMON_CLK_MAX77686 is not set
 CONFIG_COMMON_CLK_MAX9485=m
-CONFIG_COMMON_CLK_RK808=m
 # CONFIG_COMMON_CLK_SI5341 is not set
 # CONFIG_COMMON_CLK_SI5351 is not set
 CONFIG_COMMON_CLK_SI514=m
@@ -5839,8 +5790,7 @@ CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
 # CONFIG_ANDROID_BINDER_IPC_SELFTEST is not set
 # end of Android
 
-CONFIG_DAX=m
-CONFIG_DEV_DAX=m
+# CONFIG_DAX is not set
 CONFIG_NVMEM=y
 CONFIG_NVMEM_SYSFS=y
 CONFIG_NVMEM_RMEM=m
@@ -6600,7 +6550,6 @@ CONFIG_DEBUG_KERNEL=y
 # Compile-time checks and compiler options
 #
 CONFIG_DEBUG_INFO=y
-CONFIG_AS_HAS_NON_CONST_LEB128=y
 # CONFIG_DEBUG_INFO_NONE is not set
 CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 # CONFIG_DEBUG_INFO_DWARF4 is not set
@@ -6707,7 +6656,6 @@ CONFIG_CC_HAS_KASAN_SW_TAGS=y
 CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
 CONFIG_HAVE_ARCH_KFENCE=y
 # CONFIG_KFENCE is not set
-CONFIG_HAVE_KMSAN_COMPILER=y
 # end of Memory Debugging
 
 # CONFIG_DEBUG_SHIRQ is not set
@@ -6781,7 +6729,6 @@ CONFIG_DEBUG_PLIST=y
 CONFIG_DEBUG_SG=y
 # CONFIG_DEBUG_NOTIFIERS is not set
 # CONFIG_BUG_ON_DATA_CORRUPTION is not set
-# CONFIG_DEBUG_MAPLE_TREE is not set
 # end of Debug kernel data structures
 
 CONFIG_DEBUG_CREDENTIALS=y
@@ -6974,4 +6921,4 @@ CONFIG_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---OReDjMDTawCvY3C5--
+--6gEzDx8cj8aqS5Z4--
