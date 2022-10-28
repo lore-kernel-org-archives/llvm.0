@@ -1,23 +1,57 @@
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F75A122AF
-	for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 21:22:23 +0000 (UTC)
-Received: from [192.168.1.103] (31.173.84.89) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 29 Oct
- 2022 00:07:06 +0300
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH] ata: pata_legacy: fix pdc20230_set_piomode()
-To: Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	<linux-ide@vger.kernel.org>
-CC: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, <llvm@lists.linux.dev>
-Organization: Open Mobile Platform
-Message-ID: <99d91d0e-d3fc-5492-ddca-6da6e65e1e89@omp.ru>
-Date: Sat, 29 Oct 2022 00:07:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816271FAE
+	for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 21:23:43 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id f9so5898288pgj.2
+        for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 14:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cs57GpHqiEaUWAQS4x0FdYfIt3gye0GQitfWQ5q7LSI=;
+        b=kcZLpIXF7fyFZVyjeIoJRf1KW7qkt5IfCDmxI6FIpKrDmPUchUvFwLlOQ5zCb6wkf2
+         yo2eUg6r6UTVSNgetW1t80iijaQWwZ59vCQwutKCCj2wsdZ/ZfGQ5pHbP5Lfr524w9Au
+         2xBw0PYyWpCQbgAJWajlZzP+l054n1GdzsBbI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Cs57GpHqiEaUWAQS4x0FdYfIt3gye0GQitfWQ5q7LSI=;
+        b=4MJZ/FyrIGl0F/eWr0RmNK8EMmqC4NKBpycYUwZrylh9ccw7O0F4O1DUJ+72VEekos
+         f+7cTa6C4xehAQcBsmCqqxAJKKiq4mP1SFT4/w40ymouQVAAriL7zERu93n/NxBvpsUh
+         mglTCQyOCbIGOXOgZ/mJFZ2Drrfal1KxL9NrTqnkQ6OvHj5TGUVCDKTTQomOHh462azD
+         rd9dbkhmPs7JddzGKrlNRHfpUIz8SdthabQH+Gr4rmPCH2Xjsdc0yIdYT+MO/K2jiKb3
+         Q8zIYBe1sLnyTeVXSLK165JPFx6LZ/PFJYbMiBZLTrP5ET8y9VTI1Wg+8IpguWoac6g0
+         h0Mw==
+X-Gm-Message-State: ACrzQf3M+CQCRZOHOYbO9plIwIDQrxG8mLZVePnT3MUxaS5faCzGB2FL
+	07oNZ8ApjeL5SMGc+/BuohiU8RA/Rt6cnw==
+X-Google-Smtp-Source: AMsMyM7UcvF2uCV+FwyTaTQtIG+fYtOv+V6Yk6R7YMfAgfg20rw4FNUE8cNCGefsLDsT5MXxeCbQBg==
+X-Received: by 2002:a63:ea4c:0:b0:46b:2772:40a4 with SMTP id l12-20020a63ea4c000000b0046b277240a4mr1301049pgk.342.1666992222956;
+        Fri, 28 Oct 2022 14:23:42 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170902e54400b001867fdec154sm3505586plf.224.2022.10.28.14.23.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 14:23:42 -0700 (PDT)
+From: Kees Cook <keescook@chromium.org>
+To: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-kbuild@vger.kernel.org,
+	xin3.li@intel.com,
+	llvm@lists.linux.dev
+Cc: Kees Cook <keescook@chromium.org>,
+	nathan@kernel.org,
+	hpa@zytor.com,
+	peterz@infradead.org,
+	andrew.cooper3@citrix.com
+Subject: Re: [PATCH v2 0/1] kbuild: upgrade the orphan section warning to an error if CONFIG_WERROR is set
+Date: Fri, 28 Oct 2022 14:23:21 -0700
+Message-Id: <166699219839.2165587.10773311882818616441.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221025073023.16137-1-xin3.li@intel.com>
+References: <20221025073023.16137-1-xin3.li@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -25,75 +59,24 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.84.89]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 10/28/2022 20:37:24
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 173322 [Oct 28 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.89 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info:
-	127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;31.173.84.89:7.7.3,7.4.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.89
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 10/28/2022 20:40:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 10/28/2022 6:31:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+Content-Transfer-Encoding: 8bit
 
-Clang gives a warning when compiling pata_legacy.c with 'make W=1' about
-the 'rt' local variable in pdc20230_set_piomode() being set but unused.
-Quite obviously, there is an outb() call missing to write back the updated
-variable. Moreover, checking the docs by Petr Soucek revealed that bitwise
-AND should have been done with a negated timing mask and the master/slave
-timing masks were swapped while updating...
+On Tue, 25 Oct 2022 00:30:22 -0700, Xin Li wrote:
+> Andrew Cooper suggested upgrading the orphan section warning to a hard link
+> error. However Nathan Chancellor said outright turning the warning into an
+> error with no escape hatch might be too aggressive, as we have had these
+> warnings triggered by new compiler generated sections, and suggested turning
+> orphan sections into an error only if CONFIG_WERROR is set. Kees Cook echoed
+> and emphasized that the mandate from Linus is that we should avoid breaking
+> builds. It wrecks bisection, it causes problems across compiler versions, etc.
+> 
+> [...]
 
-Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
-Reported-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Applied to for-next/hardening, thanks!
 
----
- drivers/ata/pata_legacy.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+[1/1] kbuild: upgrade the orphan section warning to an error if CONFIG_WERROR is set
+      https://git.kernel.org/kees/c/450301ceb4e6
 
-Index: libata/drivers/ata/pata_legacy.c
-===================================================================
---- libata.orig/drivers/ata/pata_legacy.c
-+++ libata/drivers/ata/pata_legacy.c
-@@ -315,9 +315,10 @@ static void pdc20230_set_piomode(struct
- 	outb(inb(0x1F4) & 0x07, 0x1F4);
- 
- 	rt = inb(0x1F3);
--	rt &= 0x07 << (3 * adev->devno);
-+	rt &= ~(0x07 << (3 * !adev->devno));
- 	if (pio)
--		rt |= (1 + 3 * pio) << (3 * adev->devno);
-+		rt |= (1 + 3 * pio) << (3 * !adev->devno);
-+	outb(rt, 0x1F3);
- 
- 	udelay(100);
- 	outb(inb(0x1F2) | 0x01, 0x1F2);
+-- 
+Kees Cook
+
