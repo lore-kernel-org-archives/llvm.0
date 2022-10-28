@@ -1,234 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E7023A3
-	for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 11:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1666954928;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=0LhPa+elxV0pwWsDmsnPTQzwtotO9IARJw/2dfMKdlc=;
-	b=BISEGV23tuIBR9lqZiowLRt9DPjjQqx1Kc6hsIpmXIpiQD6YKma6Z0fKNNuHy0VxkPoKgz
-	DWcugOWaIeoMSRaQKMmDX8hXBd8W3RydMYC2DBz2nBy6Iu3QOQf28Wi0ZXYDFrDAB3MLyf
-	m7IIC5YNs3+hYSqU1hQaVPZnsB3yNkM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-aXcQKLn3P8uVui-jV7wWag-1; Fri, 28 Oct 2022 07:02:07 -0400
-X-MC-Unique: aXcQKLn3P8uVui-jV7wWag-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 213C31C0755D
-	for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 11:01:52 +0000 (UTC)
-Received: from [172.64.0.97] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E110D2024CB7;
-	Fri, 28 Oct 2022 11:01:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc2,
- mainline.kernel.org-clang, 200204f5)
-Date: Fri, 28 Oct 2022 11:01:40 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DF223A3
+	for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 11:14:31 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id q1so4526484pgl.11
+        for <llvm@lists.linux.dev>; Fri, 28 Oct 2022 04:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hv0g7EGOUq68Yq0SA+NjNFklX51xpj0xTZ1f+KDWnY4=;
+        b=VLwqw1cOZGxQeEw/KHgIi4mhVi/teuWWiZFnWpKDiOkZn26ZYs2JJBml2pAJBtl0yg
+         Ayuy2VoIYj7rXmRGGh0noflUdBox6KIsDylZc39S7eNI/lY54yIqVW9xd6itJfoI9i2h
+         q9wybFJkBbfzl9rmto/WWNhTWj6vKynFrYTiVTGiYt8Oc+f35lY7ldQlW7A+GdTsJyVD
+         vVAjWF8fBBJMjkxM9dHkD56wp03PlOMbAEmvYu+Co7dG5YWrAYd40xBlx1wRNtImm7Xe
+         UdYzHxklfgKsllbmKSxmqJVfJLskUABg6TnU3Ft6PvhGr/5vy8EdA/U7hcxcLeXgZIS/
+         6ozw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hv0g7EGOUq68Yq0SA+NjNFklX51xpj0xTZ1f+KDWnY4=;
+        b=4arhU8x4VFDuU/Zcn6W1IlqTomZXGCqForqmD1UVf0V/cpf0dPH54kz/TTHgfbqXdY
+         qJDRJohCsLyuQnk2F/EXHqXS36IjjW7EaPVBWsL6+79f7JLXMkWoO4mQ1aNUexNYhnW5
+         jjbGeCH4vv0FUs72FUIwuxx2l/85z/9Nmy5awKPXWCTElA8boAVqd+ZtAawjWNU0sAr5
+         vmJ/EbGUkc5/vCxkjY2FpbhbLIC7qsy27YtkjkK/JX1MkwNWNR1fUXe+00ziatgrW+Nd
+         s+iek4zSizn0xjwV6N2OYBnd1yRy621AHnyT6WiGp8qxp88gZTYdcf20mI4O1hcTpNfZ
+         Jfgw==
+X-Gm-Message-State: ACrzQf2xPHKK7IQObdlXtGOxUgELenQbgelbpEg/qmzII9t4MoDUAD0t
+	4TfzOwLhOBmKMuKPEVWQVs4=
+X-Google-Smtp-Source: AMsMyM7sYgkzadDcAOlW3iik+M348TZs23XJacUCZM9oLC03Ox5sx0wEpCYDXvVOrY/gHi1pvyEuzQ==
+X-Received: by 2002:a63:5f03:0:b0:460:b08a:8c00 with SMTP id t3-20020a635f03000000b00460b08a8c00mr45389984pgb.142.1666955671222;
+        Fri, 28 Oct 2022 04:14:31 -0700 (PDT)
+Received: from localhost ([159.226.94.113])
+        by smtp.gmail.com with ESMTPSA id b17-20020a170902e95100b0017e9b820a1asm2822720pll.100.2022.10.28.04.14.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 04:14:30 -0700 (PDT)
+From: Hawkins Jiawei <yin31149@gmail.com>
+To: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com,
+	Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	yin31149@gmail.com,
+	18801353760@163.com,
+	llvm@lists.linux.dev
+Subject: Re: [syzbot] WARNING in btrfs_block_rsv_release
+Date: Fri, 28 Oct 2022 19:13:21 +0800
+Message-Id: <20221028111321.45437-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <0000000000002a909705eb841dda@google.com>
+References: <0000000000002a909705eb841dda@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <70457.122102807020701440@us-mta-611.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+Hi, 
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1025dd72880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+> dashboard link: https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d16e6e880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1672873c880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/df89d50ed284/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+> WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+> WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122 btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
+> Modules linked in:
+> CPU: 0 PID: 3612 Comm: syz-executor894 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:btrfs_space_info_update_bytes_may_use fs/btrfs/space-info.h:122 [inline]
+> RIP: 0010:btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+> RIP: 0010:block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+> RIP: 0010:btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
+> Code: 8b 7c 24 10 74 08 4c 89 f7 e8 2b 94 33 fe 49 8b 1e 48 89 df 48 8b 2c 24 48 89 ee e8 a9 2b e0 fd 48 39 eb 73 0b e8 5f 29 e0 fd <0f> 0b 31 db eb 25 e8 54 29 e0 fd 48 b8 00 00 00 00 00 fc ff df 41
+> RSP: 0000:ffffc90003baf9e8 EFLAGS: 00010293
+> RAX: ffffffff83a657f1 RBX: 00000000000d0000 RCX: ffff888020c59d80
+> RDX: 0000000000000000 RSI: 00000000000e0000 RDI: 00000000000d0000
+> RBP: 00000000000e0000 R08: ffffffff83a657e7 R09: fffffbfff1c19fde
+> R10: fffffbfff1c19fde R11: 1ffffffff1c19fdd R12: 1ffff11004f2190c
+> R13: 00000000000e0000 R14: ffff88802790c860 R15: 0000000000000000
+> FS:  000055555651b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f207ed54000 CR3: 0000000026ea2000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  btrfs_release_global_block_rsv+0x2f/0x250 fs/btrfs/block-rsv.c:463
+>  btrfs_free_block_groups+0xb67/0xfd0 fs/btrfs/block-group.c:4053
+>  close_ctree+0x6c5/0xbde fs/btrfs/disk-io.c:4710
+>  generic_shutdown_super+0x130/0x310 fs/super.c:491
+>  kill_anon_super+0x36/0x60 fs/super.c:1085
+>  btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
+>  deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+>  cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+>  task_work_run+0x146/0x1c0 kernel/task_work.c:177
+>  ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+>  ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+>  ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+>  syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:249
+>  syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:276
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+>  syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:294
+>  do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f694614c2f7
+> Code: 07 00 48 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffee1dcd8e8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a6
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f694614c2f7
+> RDX: 00007ffee1dcd9a9 RSI: 000000000000000a RDI: 00007ffee1dcd9a0
+> RBP: 00007ffee1dcd9a0 R08: 00000000ffffffff R09: 00007ffee1dcd780
+> R10: 000055555651c653 R11: 0000000000000206 R12: 00007ffee1dcea20
+> R13: 000055555651c5f0 R14: 00007ffee1dcd910 R15: 0000000000000004
+>  </TASK>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+According to my analysis, this bug seems to be related to
+btrfs_free_reserved_bytes()(Please correct me if I am wrong).
 
+To be more specific, in btrfs_new_extent_direct(), kernel will
+reserves space for extent by btrfs_reserve_extent(), and
+frees those space by btrfs_free_reserved_extent() if 
+btrfs_create_dio_extent() fails(such as inject_fault in the syzkaller)
 
-Kernel information:
-    Commit message: Merge tag 'fscrypt-for-linus' of git://git.kernel.org/p=
-ub/scm/fs/fscrypt/fscrypt
+Yet the problem is that when reserving space for extent, kernel will
+converts it from * ->bytes_may_use to ->bytes_reserved, in
+btrfs_add_reserved_bytes(). But in freeing those space,
+kernel does not convert it from ->bytes_reserved back to
+* ->bytes_may_use in btrfs_free_reserved_bytes(),
+which triggers the above warning.(Please correct me if I am wrong)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/57833
+So I think we can convert space from ->bytes_reserved back to
+* ->bytes_may_use in btrfs_free_reserved_bytes() to solve this bug,
+as below:
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5709817
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+master
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] RIP: 0010:clmul_polyval_update+0x3e9/0x5d0 [polyv=
-al_clmulni]
-            URL: https://lore.kernel.org/all/CA+QYu4oK8D-89QZnBC8eYS9TxOU48=
-hY5JazTvF=3D4N2qdeRepbw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                 ppc64le - LTP: openposix test suite
-                 ppc64le - CIFS Connectathon
-                 ppc64le - Networking bridge: sanity
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - software RAID testing
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking bridge: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking bridge: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
+index deebc8ddbd93..cb74fcbf7aaf 100644
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -3415,6 +3415,11 @@ void btrfs_free_reserved_bytes(struct btrfs_block_group *cache,
+ 	space_info->bytes_reserved -= num_bytes;
+ 	space_info->max_extent_size = 0;
+ 
++	trace_btrfs_space_reservation(cache->fs_info, "space_info",
++				      space_info->flags, -num_bytes, 1);
++	btrfs_space_info_update_bytes_may_use(cache->fs_info,
++					      space_info, num_bytes);
++
+ 	if (delalloc)
+ 		cache->delalloc_bytes -= num_bytes;
+ 	spin_unlock(&cache->lock);
