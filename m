@@ -1,79 +1,70 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7674F15B6;
-	Sat, 29 Oct 2022 00:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A5E15B3;
+	Sat, 29 Oct 2022 03:08:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667004460; x=1698540460;
+  t=1667012936; x=1698548936;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XrpSUQXAiYr+xtMSbLvc7Tft62B3RsP3So+TSBK8wz0=;
-  b=ZQG/rHw7CyJW4KNyZz6uROTWHS/qG6eatO4+96fXhnQUo40c5+/7KjjA
-   lpRmU1DayeR2QphfHqjrT5gmxtSj2C+EmuV2Va5vS9ID/opNoGDsE5JvO
-   gkg8notELoxo5PMrjA2Fy/ucanA76sLgfXiSoXNW3kvMdwdtZvMTwao97
-   Z91leYc61h+E3jn1nPckru526Rnn4BSTs+Y++oZT0O2mwHPdQygbTBwFo
-   i80Eh9Xr1t7wXmidfuM8LpZ6wLtGI7V/xj5jO/7Jgzn/aj96oJwOn3Oh6
-   aQnbFE93gusZnSSh4H9HTcBogAsJ3atA7kr2kulrPeFwOjicAdaeLlpQo
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="288337708"
+  bh=bcqBLl1rjqKXcVFe4iV3B/RBKOB3/YkMub8EbejHoXQ=;
+  b=U94p1wDUdcAaFNFvl6unwR6efGaLd0PwJ15LFSv9OiaJ2Xs2jJJNxbfM
+   bpsJ5jXLFl+fpuWKlnRdnr/jSYfbtzMGzVIBv9tmR5oOyxkLBB4nIZCkQ
+   v36q6EwObuSzR5DicSFg48OPDvh87YuuwbJuxWNFYxmvivOvA6/mA07b4
+   PE922s/yW0ewV7GUFdSULO9rrLXI+2zTL2a6BB4ZFoWM3THorx1kmjADS
+   lfBRCmvm/nDjGW6UwLvk4fNTl8PGDCf6r7UlXRi3UONfSdcHl147k90VJ
+   Qhg6GU7l4rJrF2f5S7pmeW3uaIoa9OikNnG0w27dxPIq6KmmpRnXvDBr+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="307359095"
 X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
-   d="scan'208";a="288337708"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 17:47:38 -0700
+   d="scan'208";a="307359095"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 20:08:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="878168169"
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="701953982"
 X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
-   d="scan'208";a="878168169"
+   d="scan'208";a="701953982"
 Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Oct 2022 17:47:35 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 28 Oct 2022 20:08:52 -0700
 Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ooa0c-000ANN-1Z;
-	Sat, 29 Oct 2022 00:47:34 +0000
-Date: Sat, 29 Oct 2022 08:46:59 +0800
+	id 1oocDL-000AV5-2s;
+	Sat, 29 Oct 2022 03:08:51 +0000
+Date: Sat, 29 Oct 2022 11:08:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chunfeng Yun <chunfeng.yun@mediatek.com>,
-	Kishon Vijay Abraham I <kishon@ti.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH RESEND v3 2/2] phy: mediatek: tphy: add debugfs files
-Message-ID: <202210290849.MsVBcy4w-lkp@intel.com>
-References: <20221025054233.9763-2-chunfeng.yun@mediatek.com>
+To: Emily Peri <eperi1024@gmail.com>, gregkh@linuxfoundation.org,
+	outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] staging: rtl8723bs: Replace ternary statement with min
+ function
+Message-ID: <202210291001.NBE3p86a-lkp@intel.com>
+References: <Y1neXqVYZ8mq8jH+@marshmallow>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="AdsGkLR9SQ6q5QG0"
+Content-Type: multipart/mixed; boundary="VluB109yDjMrOCLQ"
 Content-Disposition: inline
-In-Reply-To: <20221025054233.9763-2-chunfeng.yun@mediatek.com>
+In-Reply-To: <Y1neXqVYZ8mq8jH+@marshmallow>
 
 
---AdsGkLR9SQ6q5QG0
+--VluB109yDjMrOCLQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Chunfeng,
+Hi Emily,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.1-rc2 next-20221028]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on staging/staging-testing]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chunfeng-Yun/phy-core-add-debugfs-root/20221025-134424
-patch link:    https://lore.kernel.org/r/20221025054233.9763-2-chunfeng.yun%40mediatek.com
-patch subject: [PATCH RESEND v3 2/2] phy: mediatek: tphy: add debugfs files
+url:    https://github.com/intel-lab-lkp/linux/commits/Emily-Peri/staging-rtl8723bs-Replace-ternary-statement-with-min-function/20221027-092729
+patch link:    https://lore.kernel.org/r/Y1neXqVYZ8mq8jH%2B%40marshmallow
+patch subject: [PATCH] staging: rtl8723bs: Replace ternary statement with min function
 config: powerpc-allyesconfig
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
@@ -81,294 +72,185 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install powerpc cross compiling tool for clang build
         # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/6dae09cf2d77be80664d0ec84f631c6282fdb728
+        # https://github.com/intel-lab-lkp/linux/commit/c222133e1748e829da70718b25eccc968ab1a073
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chunfeng-Yun/phy-core-add-debugfs-root/20221025-134424
-        git checkout 6dae09cf2d77be80664d0ec84f631c6282fdb728
+        git fetch --no-tags linux-review Emily-Peri/staging-rtl8723bs-Replace-ternary-statement-with-min-function/20221027-092729
+        git checkout c222133e1748e829da70718b25eccc968ab1a073
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/phy/mediatek/ drivers/staging/rtl8723bs/ drivers/tty/serial/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/staging/rtl8723bs/ drivers/tty/serial/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:479:4: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                           mtk_phy_update_field(u2_banks->misc + U3P_MISC_REG1,
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:484:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_INTR_CAL, val);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:488:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_DISCTH, val);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:492:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_PRE_EMP, val);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
->> drivers/phy/mediatek/phy-mtk-tphy.c:556:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-           default:
-           ^~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:561:45: note: uninitialized use occurs here
-           seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-                                                      ^~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:524:9: note: initialize the variable 'val' to silence this warning
-           u32 val, tmp, max;
-                  ^
-                   = 0
->> drivers/phy/mediatek/phy-mtk-tphy.c:556:2: warning: variable 'max' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-           default:
-           ^~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:561:50: note: uninitialized use occurs here
-           seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-                                                           ^~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:524:19: note: initialize the variable 'max' to silence this warning
-           u32 val, tmp, max;
-                            ^
-                             = 0
-   drivers/phy/mediatek/phy-mtk-tphy.c:593:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(phyd + U3P_U3_PHYD_RSV,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:598:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(u3_banks->phya + U3P_U3_PHYA_REG0, P3A_RG_IEXT_INTR, val);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:602:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_TX_IMPEL, val);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:607:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-                   mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_RX_IMPEL, val);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-io.h:43:34: note: expanded from macro 'mtk_phy_update_field'
-           mtk_phy_update_bits(reg, mask_, FIELD_PREP(mask_, val)); \
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:357:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:345:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:337:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   drivers/phy/mediatek/phy-mtk-tphy.c:785:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask_), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask_)))' (aka 'unsigned long') is always false [-Wtautological-constant-out-of-range-compare]
-           mtk_phy_update_field(com + U3P_USBPHYACR5, PA5_RG_U2_HSTX_SRCTRL,
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:1554:40: warning: comparison of distinct pointer types ('typeof (wps_ielen) *' (aka 'unsigned int *') and 'typeof ((512)) *' (aka 'int *')) [-Wcompare-distinct-pointer-types]
+                           padapter->securitypriv.wps_ie_len = min(wps_ielen, MAX_WPS_IE_LEN);
+                                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/val +556 drivers/phy/mediatek/phy-mtk-tphy.c
+vim +1554 drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
 
-   518	
-   519	static int u3_phy_params_show(struct seq_file *sf, void *unused)
-   520	{
-   521		struct mtk_phy_instance *inst = sf->private;
-   522		const char *fname = file_dentry(sf->file)->d_iname;
-   523		struct u3phy_banks *u3_banks = &inst->u3_banks;
-   524		u32 val, tmp, max;
-   525		int ret;
-   526	
-   527		ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
-   528		if (ret < 0)
-   529			return ret;
-   530	
-   531		switch (ret) {
-   532		case U3P_EFUSE_EN:
-   533			tmp = readl(u3_banks->phyd + U3P_U3_PHYD_RSV);
-   534			val = !!(tmp & P3D_RG_EFUSE_AUTO_LOAD_DIS);
-   535			max = 1;
-   536			break;
-   537	
-   538		case U3P_EFUSE_INTR:
-   539			tmp = readl(u3_banks->phya + U3P_U3_PHYA_REG0);
-   540			val = FIELD_GET(P3A_RG_IEXT_INTR, tmp);
-   541			max = FIELD_MAX(P3A_RG_IEXT_INTR);
-   542			break;
-   543	
-   544		case U3P_EFUSE_TX_IMP:
-   545			tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL0);
-   546			val = FIELD_GET(P3D_RG_TX_IMPEL, tmp);
-   547			max = FIELD_MAX(P3D_RG_TX_IMPEL);
-   548			break;
-   549	
-   550		case U3P_EFUSE_RX_IMP:
-   551			tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL1);
-   552			val = FIELD_GET(P3D_RG_RX_IMPEL, tmp);
-   553			max = FIELD_MAX(P3D_RG_RX_IMPEL);
-   554			break;
-   555	
- > 556		default:
-   557			seq_printf(sf, "invalid, %d\n", ret);
-   558			break;
-   559		}
-   560	
-   561		seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
-   562	
-   563		return 0;
-   564	}
-   565	
+  1443	
+  1444	static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t ielen)
+  1445	{
+  1446		u8 *buf = NULL;
+  1447		int group_cipher = 0, pairwise_cipher = 0;
+  1448		int ret = 0;
+  1449		int wpa_ielen = 0;
+  1450		int wpa2_ielen = 0;
+  1451		u8 *pwpa, *pwpa2;
+  1452		u8 null_addr[] = {0, 0, 0, 0, 0, 0};
+  1453	
+  1454		if (!pie || !ielen) {
+  1455			/* Treat this as normal case, but need to clear WIFI_UNDER_WPS */
+  1456			_clr_fwstate_(&padapter->mlmepriv, WIFI_UNDER_WPS);
+  1457			goto exit;
+  1458		}
+  1459	
+  1460		if (ielen > MAX_WPA_IE_LEN+MAX_WPS_IE_LEN+MAX_P2P_IE_LEN) {
+  1461			ret = -EINVAL;
+  1462			goto exit;
+  1463		}
+  1464	
+  1465		buf = rtw_zmalloc(ielen);
+  1466		if (!buf) {
+  1467			ret =  -ENOMEM;
+  1468			goto exit;
+  1469		}
+  1470	
+  1471		memcpy(buf, pie, ielen);
+  1472	
+  1473		if (ielen < RSN_HEADER_LEN) {
+  1474			ret  = -1;
+  1475			goto exit;
+  1476		}
+  1477	
+  1478		pwpa = rtw_get_wpa_ie(buf, &wpa_ielen, ielen);
+  1479		if (pwpa && wpa_ielen > 0) {
+  1480			if (rtw_parse_wpa_ie(pwpa, wpa_ielen+2, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
+  1481				padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
+  1482				padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeWPAPSK;
+  1483				memcpy(padapter->securitypriv.supplicant_ie, &pwpa[0], wpa_ielen+2);
+  1484			}
+  1485		}
+  1486	
+  1487		pwpa2 = rtw_get_wpa2_ie(buf, &wpa2_ielen, ielen);
+  1488		if (pwpa2 && wpa2_ielen > 0) {
+  1489			if (rtw_parse_wpa2_ie(pwpa2, wpa2_ielen+2, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
+  1490				padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
+  1491				padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeWPA2PSK;
+  1492				memcpy(padapter->securitypriv.supplicant_ie, &pwpa2[0], wpa2_ielen+2);
+  1493			}
+  1494		}
+  1495	
+  1496		if (group_cipher == 0)
+  1497			group_cipher = WPA_CIPHER_NONE;
+  1498	
+  1499		if (pairwise_cipher == 0)
+  1500			pairwise_cipher = WPA_CIPHER_NONE;
+  1501	
+  1502		switch (group_cipher) {
+  1503		case WPA_CIPHER_NONE:
+  1504			padapter->securitypriv.dot118021XGrpPrivacy = _NO_PRIVACY_;
+  1505			padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled;
+  1506			break;
+  1507		case WPA_CIPHER_WEP40:
+  1508			padapter->securitypriv.dot118021XGrpPrivacy = _WEP40_;
+  1509			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+  1510			break;
+  1511		case WPA_CIPHER_TKIP:
+  1512			padapter->securitypriv.dot118021XGrpPrivacy = _TKIP_;
+  1513			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption2Enabled;
+  1514			break;
+  1515		case WPA_CIPHER_CCMP:
+  1516			padapter->securitypriv.dot118021XGrpPrivacy = _AES_;
+  1517			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption3Enabled;
+  1518			break;
+  1519		case WPA_CIPHER_WEP104:
+  1520			padapter->securitypriv.dot118021XGrpPrivacy = _WEP104_;
+  1521			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+  1522			break;
+  1523		}
+  1524	
+  1525		switch (pairwise_cipher) {
+  1526		case WPA_CIPHER_NONE:
+  1527			padapter->securitypriv.dot11PrivacyAlgrthm = _NO_PRIVACY_;
+  1528			padapter->securitypriv.ndisencryptstatus = Ndis802_11EncryptionDisabled;
+  1529			break;
+  1530		case WPA_CIPHER_WEP40:
+  1531			padapter->securitypriv.dot11PrivacyAlgrthm = _WEP40_;
+  1532			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+  1533			break;
+  1534		case WPA_CIPHER_TKIP:
+  1535			padapter->securitypriv.dot11PrivacyAlgrthm = _TKIP_;
+  1536			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption2Enabled;
+  1537			break;
+  1538		case WPA_CIPHER_CCMP:
+  1539			padapter->securitypriv.dot11PrivacyAlgrthm = _AES_;
+  1540			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption3Enabled;
+  1541			break;
+  1542		case WPA_CIPHER_WEP104:
+  1543			padapter->securitypriv.dot11PrivacyAlgrthm = _WEP104_;
+  1544			padapter->securitypriv.ndisencryptstatus = Ndis802_11Encryption1Enabled;
+  1545			break;
+  1546		}
+  1547	
+  1548		{/* handle wps_ie */
+  1549			uint wps_ielen;
+  1550			u8 *wps_ie;
+  1551	
+  1552			wps_ie = rtw_get_wps_ie(buf, ielen, NULL, &wps_ielen);
+  1553			if (wps_ie && wps_ielen > 0) {
+> 1554				padapter->securitypriv.wps_ie_len = min(wps_ielen, MAX_WPS_IE_LEN);
+  1555				memcpy(padapter->securitypriv.wps_ie, wps_ie, padapter->securitypriv.wps_ie_len);
+  1556				set_fwstate(&padapter->mlmepriv, WIFI_UNDER_WPS);
+  1557			} else {
+  1558				_clr_fwstate_(&padapter->mlmepriv, WIFI_UNDER_WPS);
+  1559			}
+  1560		}
+  1561	
+  1562		/* TKIP and AES disallow multicast packets until installing group key */
+  1563		if (padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_
+  1564			|| padapter->securitypriv.dot11PrivacyAlgrthm == _TKIP_WTMIC_
+  1565			|| padapter->securitypriv.dot11PrivacyAlgrthm == _AES_)
+  1566			/* WPS open need to enable multicast */
+  1567			/*  check_fwstate(&padapter->mlmepriv, WIFI_UNDER_WPS) == true) */
+  1568			rtw_hal_set_hwreg(padapter, HW_VAR_OFF_RCR_AM, null_addr);
+  1569	
+  1570	exit:
+  1571		kfree(buf);
+  1572		if (ret)
+  1573			_clr_fwstate_(&padapter->mlmepriv, WIFI_UNDER_WPS);
+  1574		return ret;
+  1575	}
+  1576	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---AdsGkLR9SQ6q5QG0
+--VluB109yDjMrOCLQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/powerpc 6.1.0-rc2 Kernel Configuration
+# Linux/powerpc 6.1.0-rc1 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 791a7ae1ba3efd6bca96338e10ffde557ba83920)"
 CONFIG_GCC_VERSION=0
@@ -13076,7 +12958,6 @@ CONFIG_PHY_MMP3_USB=y
 CONFIG_PHY_MMP3_HSIC=y
 CONFIG_PHY_MTK_PCIE=y
 CONFIG_PHY_MTK_TPHY=y
-CONFIG_PHY_MTK_TPHY_DEBUGFS=y
 CONFIG_PHY_MTK_UFS=y
 CONFIG_PHY_MTK_XSPHY=y
 CONFIG_PHY_MTK_HDMI=y
@@ -14779,4 +14660,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---AdsGkLR9SQ6q5QG0--
+--VluB109yDjMrOCLQ--
