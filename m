@@ -1,60 +1,61 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBC1612A;
-	Sun, 30 Oct 2022 11:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BBE2F38;
+	Sun, 30 Oct 2022 13:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667128165; x=1698664165;
+  t=1667136639; x=1698672639;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=phY4+ThDpJottJLdS1xlSGfL+4kiQHZZKcBeSuq3CiY=;
-  b=RdEVRoTZ0UlEAzsXa71thiKscyEpdDKRP6SsuFCXx9ceu6NOjzNnYghe
-   k6ajTQDbYSgYSq5SK8S5smD2DtHejctYxMbG+Ts7dgHrglTcq2vaH62Y3
-   8m0vYrYhNJ/ACLz83keCv+gXChgnOgYJhgmB8XFSQyIpenLFooLJUSG/I
-   5t6YrnNmR42BD151xkoy2CaDt21QTUungMYW6ihCP39zaUXItrhpphORR
-   7aXiP8Lvq6HpcLx6ZiRVJDEgxechfIbzmwkZFl0ZbanGZk2mNgSEEps7I
-   GnLveCTuDzV6dnaJKHAVwUdv9AGnTx4j6GI/UoVbGH3JZR0cgT7G/P1zg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="308736382"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="308736382"
+  bh=siBi5X6D00lN/hgJR1uiHbliL8HXyft3uaiXXH7oy1k=;
+  b=OgD0Cq0dZusgOmCwnUNXuYa/sh9sh4D65ttdDkx9dSmu1MxeimqYAg8R
+   sZD3+93pnkZ0k/5X9XuOgc/xAqPXzpWwkISIr1JnXBxUkUFlhD/Q4Pq1b
+   4eEe6nj0SE4ZPOAKoHkObcMoRNJUjCZFC9F1fJuSWFunAt82Qowh0WaOB
+   23tYcSdhi/p02Sh2G8dx5P/OmBHsvwExzyy5Z6gtzeKoiNLvRQFylSBTp
+   uZmbBbI0EVoajWr7rzfgSaJzZ6OcSjjQnKomk7abKHEEWmFbdbRs9nTbB
+   OXjXqmHOHozyb7jCv+rKpO2i09MGVBP5c40i6K1uW3uKLz2RF0Lz5UOds
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="289139349"
+X-IronPort-AV: E=Sophos;i="5.95,226,1661842800"; 
+   d="scan'208";a="289139349"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 04:09:24 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 06:30:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="611210200"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="611210200"
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="611230501"
+X-IronPort-AV: E=Sophos;i="5.95,226,1661842800"; 
+   d="scan'208";a="611230501"
 Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Oct 2022 04:09:21 -0700
+  by orsmga006.jf.intel.com with ESMTP; 30 Oct 2022 06:30:25 -0700
 Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1op6Bt-000BzM-0o;
-	Sun, 30 Oct 2022 11:09:21 +0000
-Date: Sun, 30 Oct 2022 19:08:26 +0800
+	id 1op8OO-000C5e-1J;
+	Sun, 30 Oct 2022 13:30:24 +0000
+Date: Sun, 30 Oct 2022 21:29:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:kvm-upstream-workaround 44/348]
- arch/s390/kvm/../../../virt/kvm/kvm_main.c:5132:13: error: redefinition of
- 'kvm_arch_hardware_disable'
-Message-ID: <202210301928.fh19iUTQ-lkp@intel.com>
+To: Chao Peng <chao.p.peng@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 54/348]
+ arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named
+ 'mmu_invalidate_in_progress' in 'struct kvm'
+Message-ID: <202210302101.yvf6zddR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="aXztVxYETCUrDUn9"
+Content-Type: multipart/mixed; boundary="5cm9NbZmAf/Z9EAn"
 Content-Disposition: inline
 
 
---aXztVxYETCUrDUn9
+--5cm9NbZmAf/Z9EAn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
 head:   96d08eb2172a477a147b65c14cc299ce64b72ff7
-commit: 5d21916b269216005bb84848dca67b29b4a9637a [44/348] KVM: x86: Delete kvm_arch_hardware_enable/disable()
+commit: d4aec75c8f5550916276019cef0d3ab3f26c8c87 [54/348] KVM: Register/unregister the guest private memory regions
 config: s390-randconfig-r044-20221030
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
 reproduce (this is a W=1 build):
@@ -62,10 +63,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel/tdx/commit/5d21916b269216005bb84848dca67b29b4a9637a
+        # https://github.com/intel/tdx/commit/d4aec75c8f5550916276019cef0d3ab3f26c8c87
         git remote add intel-tdx https://github.com/intel/tdx.git
         git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 5d21916b269216005bb84848dca67b29b4a9637a
+        git checkout d4aec75c8f5550916276019cef0d3ab3f26c8c87
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
@@ -73,7 +74,7 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
    In file included from arch/s390/kvm/../../../virt/kvm/kvm_main.c:18:
    In file included from include/linux/kvm_host.h:41:
@@ -156,7 +157,190 @@ All error/warnings (new ones prefixed by >>):
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesl(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
->> arch/s390/kvm/../../../virt/kvm/kvm_main.c:5132:6: warning: attribute declaration must precede definition [-Wignored-attributes]
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+                      ~~~  ^
+   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
+   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
+                                             ^
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+                      ~~~  ^
+   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
+   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
+                                                                        ^
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+                      ~~~  ^
+   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
+   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
+                                             ^
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+                      ~~~  ^
+   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
+   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
+                                                                        ^
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+                      ~~~  ^
+   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
+   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
+                                             ^
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:524:18: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+                      ~~~  ^
+   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
+   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
+                                                                        ^
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:525:8: error: no member named 'mmu_invalidate_range_start' in 'struct kvm'
+                   kvm->mmu_invalidate_range_start = start;
+                   ~~~  ^
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:526:8: error: no member named 'mmu_invalidate_range_end' in 'struct kvm'
+                   kvm->mmu_invalidate_range_end = end;
+                   ~~~  ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:537:8: error: no member named 'mmu_invalidate_range_start' in 'struct kvm'
+                   kvm->mmu_invalidate_range_start =
+                   ~~~  ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:538:13: error: no member named 'mmu_invalidate_range_start' in 'struct kvm'
+                           min(kvm->mmu_invalidate_range_start, start);
+                               ~~~  ^
+   include/linux/minmax.h:45:33: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                                         ^
+   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                            ^
+   include/linux/minmax.h:26:16: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                ^
+   include/linux/minmax.h:20:21: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                              ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:538:13: error: no member named 'mmu_invalidate_range_start' in 'struct kvm'
+                           min(kvm->mmu_invalidate_range_start, start);
+                               ~~~  ^
+   include/linux/minmax.h:45:33: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                                         ^
+   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                            ^
+   include/linux/minmax.h:26:43: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                                           ^
+   include/linux/minmax.h:23:19: note: expanded from macro '__no_side_effects'
+                   (__is_constexpr(x) && __is_constexpr(y))
+                                   ^
+   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:539:8: error: no member named 'mmu_invalidate_range_end' in 'struct kvm'
+                   kvm->mmu_invalidate_range_end =
+                   ~~~  ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:540:13: error: no member named 'mmu_invalidate_range_end' in 'struct kvm'
+                           max(kvm->mmu_invalidate_range_end, end);
+                               ~~~  ^
+   include/linux/minmax.h:52:33: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                         ^
+   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                            ^
+   include/linux/minmax.h:26:16: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                ^
+   include/linux/minmax.h:20:21: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                              ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:540:13: error: no member named 'mmu_invalidate_range_end' in 'struct kvm'
+                           max(kvm->mmu_invalidate_range_end, end);
+                               ~~~  ^
+   include/linux/minmax.h:52:33: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                                         ^
+   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                            ^
+   include/linux/minmax.h:26:43: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                                                           ^
+   include/linux/minmax.h:23:19: note: expanded from macro '__no_side_effects'
+                   (__is_constexpr(x) && __is_constexpr(y))
+                                   ^
+   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:551:7: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           kvm->mmu_invalidate_in_progress++;
+           ~~~  ^
+>> arch/s390/kvm/../../../virt/kvm/kvm_main.c:567:7: error: no member named 'mmu_invalidate_seq' in 'struct kvm'
+           kvm->mmu_invalidate_seq++;
+           ~~~  ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:574:7: error: no member named 'mmu_invalidate_in_progress' in 'struct kvm'
+           kvm->mmu_invalidate_in_progress--;
+           ~~~  ^
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:5290:6: warning: attribute declaration must precede definition [-Wignored-attributes]
    void __weak kvm_arch_hardware_disable(void)
         ^
    include/linux/compiler_attributes.h:373:56: note: expanded from macro '__weak'
@@ -165,13 +349,13 @@ All error/warnings (new ones prefixed by >>):
    arch/s390/include/asm/kvm_host.h:1026:20: note: previous definition is here
    static inline void kvm_arch_hardware_disable(void) {}
                       ^
->> arch/s390/kvm/../../../virt/kvm/kvm_main.c:5132:13: error: redefinition of 'kvm_arch_hardware_disable'
+   arch/s390/kvm/../../../virt/kvm/kvm_main.c:5290:13: error: redefinition of 'kvm_arch_hardware_disable'
    void __weak kvm_arch_hardware_disable(void)
                ^
    arch/s390/include/asm/kvm_host.h:1026:20: note: previous definition is here
    static inline void kvm_arch_hardware_disable(void) {}
                       ^
-   13 warnings and 1 error generated.
+   13 warnings and 18 errors generated.
 
 Kconfig warnings: (for reference only)
    WARNING: unmet direct dependencies detected for VIDEO_MEDIATEK_VPU
@@ -180,19 +364,71 @@ Kconfig warnings: (for reference only)
    - VIDEO_MEDIATEK_MDP3 [=m] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && (MTK_IOMMU [=y] || COMPILE_TEST [=y]) && VIDEO_DEV [=m] && (ARCH_MEDIATEK || COMPILE_TEST [=y]) && HAS_DMA [=y] && REMOTEPROC [=y]
 
 
-vim +/kvm_arch_hardware_disable +5132 arch/s390/kvm/../../../virt/kvm/kvm_main.c
+vim +524 arch/s390/kvm/../../../virt/kvm/kvm_main.c
 
-  5131	
-> 5132	void __weak kvm_arch_hardware_disable(void)
-  5133	{
-  5134	}
-  5135	
+   520	
+   521	static inline void update_invalidate_range(struct kvm *kvm, gfn_t start,
+   522								    gfn_t end)
+   523	{
+ > 524		if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+ > 525			kvm->mmu_invalidate_range_start = start;
+ > 526			kvm->mmu_invalidate_range_end = end;
+   527		} else {
+   528			/*
+   529			 * Fully tracking multiple concurrent ranges has diminishing
+   530			 * returns. Keep things simple and just find the minimal range
+   531			 * which includes the current and new ranges. As there won't be
+   532			 * enough information to subtract a range after its invalidate
+   533			 * completes, any ranges invalidated concurrently will
+   534			 * accumulate and persist until all outstanding invalidates
+   535			 * complete.
+   536			 */
+   537			kvm->mmu_invalidate_range_start =
+   538				min(kvm->mmu_invalidate_range_start, start);
+   539			kvm->mmu_invalidate_range_end =
+   540				max(kvm->mmu_invalidate_range_end, end);
+   541		}
+   542	}
+   543	
+   544	static void mark_invalidate_in_progress(struct kvm *kvm, gfn_t start, gfn_t end)
+   545	{
+   546		/*
+   547		 * The count increase must become visible at unlock time as no
+   548		 * spte can be established without taking the mmu_lock and
+   549		 * count is also read inside the mmu_lock critical section.
+   550		 */
+   551		kvm->mmu_invalidate_in_progress++;
+   552	}
+   553	
+   554	void kvm_mmu_invalidate_begin(struct kvm *kvm, gfn_t start, gfn_t end)
+   555	{
+   556		mark_invalidate_in_progress(kvm, start, end);
+   557		update_invalidate_range(kvm, start, end);
+   558	}
+   559	
+   560	void kvm_mmu_invalidate_end(struct kvm *kvm, gfn_t start, gfn_t end)
+   561	{
+   562		/*
+   563		 * This sequence increase will notify the kvm page fault that
+   564		 * the page that is going to be mapped in the spte could have
+   565		 * been freed.
+   566		 */
+ > 567		kvm->mmu_invalidate_seq++;
+   568		smp_wmb();
+   569		/*
+   570		 * The above sequence increase must be visible before the
+   571		 * below count decrease, which is ensured by the smp_wmb above
+   572		 * in conjunction with the smp_rmb in mmu_invalidate_retry().
+   573		 */
+   574		kvm->mmu_invalidate_in_progress--;
+   575	}
+   576	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---aXztVxYETCUrDUn9
+--5cm9NbZmAf/Z9EAn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -6876,4 +7112,4 @@ CONFIG_KCOV_IRQ_AREA_SIZE=0x40000
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---aXztVxYETCUrDUn9--
+--5cm9NbZmAf/Z9EAn--
