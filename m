@@ -1,96 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3516D443D
-	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 22:24:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E666C433D7;
-	Mon, 31 Oct 2022 22:24:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667255072;
-	bh=c430a9vtJ9VLpdvhysJooW/JnUHf5Y1ouH47JEN2P14=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WTWhq78uRNLiqVdI4TGtO46oG1p4v/zCTpBX8wI2zjC/49Ea74Bx/W3KE9TmaCzdF
-	 hxwiG13aeaNMJGIRuNr92vPbxk2TxonFCbZ1ucQ4wk+pL2aFBFyOWDzuUSV7nL3Laf
-	 6SE3mn0W61+oV9Uf3RpX26XUKDYq/sLpULaZOHlyffJZ6BvYyJHbNSxOLMTagKFUUN
-	 xlNnIDnqGganQImu8fzJCmlVWV/U0rB3e4qfbWnRjhV4VL6J+4gqlqdxRwOGP4lDHl
-	 F39PT3miQm9J2K8S4mc0WnZHEAtfLoORFJ3cTkRpf2FsrrK6XKSPlV+PCrCaq8vk9g
-	 sHy3KIFTr/27w==
-Date: Mon, 31 Oct 2022 15:24:30 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nathan Huckleberry <nhuck@google.com>
-Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
-	Hyun Kwon <hyun.kwon@xilinx.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Michal Simek <michal.simek@xilinx.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: xlnx: Fix return type of
- zynqmp_dp_connector_mode_valid
-Message-ID: <Y2BLHjC0q3rbIL0d@dev-arch.thelio-3990X>
-References: <20220913205600.155172-1-nhuck@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA298F76;
+	Mon, 31 Oct 2022 23:10:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C582BC433C1;
+	Mon, 31 Oct 2022 23:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1667257849;
+	bh=oea+DfSn2PZjsarkz1aPAd8kSD63FeuVEhn2xKVR+hE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LDPDYGRhcY0D8cYiAhlQo0Fkj9je1Vk1UG9GS3xOvoNNscyPkjNTLlyfKPyynNb80
+	 5VPNUurpmyeMkbJw43/YMY5GCTrtafcU7PFQBZZXMmcA1Kn3kFG41/9DU7l7fHI7ZK
+	 +UQFHtLXWWDBLqsfYnd9BklfamuUZunE21rihuzw=
+Date: Mon, 31 Oct 2022 16:10:48 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Liam Howlett <liam.howlett@oracle.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, Linux Memory Management List
+ <linux-mm@kvack.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Subject: Re: [ammarfaizi2-block:akpm/mm/mm-unstable 46/244]
+ lib/test_maple_tree.c:453:12: warning: result of comparison of constant
+ 4398046511104 with expression of type 'unsigned long' is always false
+Message-Id: <20221031161048.a2fd2ce1c210b9cd1a499cb4@linux-foundation.org>
+In-Reply-To: <202210301224.r9RDzf4K-lkp@intel.com>
+References: <202210301224.r9RDzf4K-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220913205600.155172-1-nhuck@google.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Sun, 30 Oct 2022 13:04:16 +0800 kernel test robot <lkp@intel.com> wrote:
 
-On Tue, Sep 13, 2022 at 01:56:00PM -0700, Nathan Huckleberry wrote:
-> The mode_valid field in drm_connector_helper_funcs is expected to be of
-> type
-> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
->                                      struct drm_display_mode *mode);
+> tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+> head:   eecc1f68b7ae1e677dd01b728e58de61a2f8ae71
+> commit: d9c0ca7c6a02830de65fbc684cf0be7e6510737c [46/244] maple_tree: reorganize testing to restore module testing
+> config: hexagon-allmodconfig
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ammarfaizi2/linux-block/commit/d9c0ca7c6a02830de65fbc684cf0be7e6510737c
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+>         git checkout d9c0ca7c6a02830de65fbc684cf0be7e6510737c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
 > 
-> The mismatched return type breaks forward edge kCFI since the underlying
-> function definition does not match the function hook definition.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 > 
-> The return type of zynqmp_dp_connector_mode_valid should be changed from
-> int to enum drm_mode_status.
+> All warnings (new ones prefixed by >>):
 > 
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-> ---
->  drivers/gpu/drm/xlnx/zynqmp_dp.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/xlnx/zynqmp_dp.c b/drivers/gpu/drm/xlnx/zynqmp_dp.c
-> index d14612b34796..f571b08d23d3 100644
-> --- a/drivers/gpu/drm/xlnx/zynqmp_dp.c
-> +++ b/drivers/gpu/drm/xlnx/zynqmp_dp.c
-> @@ -1352,8 +1352,9 @@ zynqmp_dp_connector_best_encoder(struct drm_connector *connector)
->  	return &dp->encoder;
->  }
->  
-> -static int zynqmp_dp_connector_mode_valid(struct drm_connector *connector,
-> -					  struct drm_display_mode *mode)
-> +static enum drm_mode_status
-> +zynqmp_dp_connector_mode_valid(struct drm_connector *connector,
-> +			       struct drm_display_mode *mode)
->  {
->  	struct zynqmp_dp *dp = connector_to_dp(connector);
->  	u8 max_lanes = dp->link_config.max_lanes;
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
-> 
+> >> lib/test_maple_tree.c:453:12: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+>                    if ((val == 4398046511104) || (val == ULONG_MAX))
+>                         ~~~ ^  ~~~~~~~~~~~~~
+>    lib/test_maple_tree.c:496:17: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+>                    else if ((val == 4398046511104) || (val == ULONG_MAX))
+>                              ~~~ ^  ~~~~~~~~~~~~~
+>    lib/test_maple_tree.c:182:19: warning: unused function 'not_empty' [-Wunused-function]
+>    static inline int not_empty(struct maple_node *node)
 
-Did this patch get lost somewhere? I do not see it picked up. It is
-needed to avoid a new WIP warning from clang for catching these CFI
-failures:
+Thanks.  A 32-bit build, I assume.
 
-drivers/gpu/drm/xlnx/zynqmp_dp.c:1396:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-        .mode_valid     = zynqmp_dp_connector_mode_valid,
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1 error generated.
-
-Cheers,
-Nathan
+Liam, what's with that 4398046511104?  Wouldn't 0x40000000000 be clearer?  
