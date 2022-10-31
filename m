@@ -1,113 +1,135 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1387E;
-	Mon, 31 Oct 2022 01:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8C317F3;
+	Mon, 31 Oct 2022 03:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667181473; x=1698717473;
+  t=1667186275; x=1698722275;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XylwIMa21FHwm65ozZXDLnx123A3Ft2I0lGNU0A18KU=;
-  b=BbCK2vWOSl7o0zQX25oxH8+aRrnxJDjp/cCNP0uBSiZ/fggVzmwL5r7s
-   uIBBKKMXcnLpopp3HfLC+oPS6aZOA7pI5Ilr7EIsatRLF2gRa473Gr0S0
-   0u0pvdwF2way+jTfIiFKLoDliLO5h1A6OgboooMHYTEzsYq6a/KNlcq+7
-   Zarf2gkfyX8uSTW/Vlcss+0oT1/jGtqbWjW+uYy1i3M4/nkF83DW67tYQ
-   0i+q3F6hl5tYHlxXN3WD0CK8vaXzUILIod0LqQh1zQmaxlC7+iiEWzHvi
-   ugLFT8pivZ1P1OsXs7Sp5kv/OmuPfS9aagvaRl46jADzZOd5vU9ghUFe+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="309885464"
+  bh=+GHKgPTVMh2wh927YT7tMV+dyTdFaeLn+TqgHLNqLLE=;
+  b=CuwvFFbHEXkVNLjEa2A6rISRI2LKguWflvjmj+Jw/KKjR1lvg1q8R+0M
+   uKrayeZvXNz36Vq6XSg1d2KbJvGtHxPYsHuXfaX4lMjZgtcdlgvDUzm8T
+   6HGMhBin62gVG3v0Bpq5QmTABAz52sH19OuoKjETZnhb04L++HA3y2AWz
+   5xT0fUW5V5YTgSA7RcKfnkIJnzyzc+YVsAHe99St970dg1LGlNZsYtw0O
+   QB32aLVxoOv56mdFzjyLS2lU7SvqIvboDE+IksFABl9rhYsqyQDYP7NtZ
+   FLf23zodRX8XYPk4Kv018LewVfYfmme417DojcRrM62OLMbGtThYvDVIl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="395123676"
 X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="309885464"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 18:57:51 -0700
+   d="scan'208";a="395123676"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 20:17:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="664619072"
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="666684433"
 X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="664619072"
+   d="scan'208";a="666684433"
 Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 30 Oct 2022 18:57:49 -0700
+  by orsmga001.jf.intel.com with ESMTP; 30 Oct 2022 20:17:51 -0700
 Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1opK3h-000CZk-0H;
-	Mon, 31 Oct 2022 01:57:49 +0000
-Date: Mon, 31 Oct 2022 09:56:57 +0800
+	id 1opLJ8-000Cd8-2a;
+	Mon, 31 Oct 2022 03:17:50 +0000
+Date: Mon, 31 Oct 2022 11:17:40 +0800
 From: kernel test robot <lkp@intel.com>
 To: Oded Gabbay <ogabbay@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ogabbay-accel:accel2 1/2] include/drm/drm_accel.h:18:6: warning: no
- previous prototype for function 'accel_core_exit'
-Message-ID: <202210310959.4mv1mmlj-lkp@intel.com>
+Subject: [ogabbay-accel:accel2 2/2] drivers/gpu/drm/drm_sysfs.c:487:17:
+ error: use of undeclared identifier 'accel_class'
+Message-ID: <202210311153.DIUWgobz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="yhIIbqH8N0W5KbBY"
+Content-Type: multipart/mixed; boundary="09G3Jf0RN92B6Brl"
 Content-Disposition: inline
 
 
---yhIIbqH8N0W5KbBY
+--09G3Jf0RN92B6Brl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git accel2
 head:   c9908e3664ecaf47e9bb8f6e3cc1967aff4edee4
-commit: db34697c30756436d7410064289f6110af45ac7b [1/2] drivers/accel: define kconfig and register a new major
+commit: c9908e3664ecaf47e9bb8f6e3cc1967aff4edee4 [2/2] drm: add dedicated minor for accelerator devices
 config: x86_64-randconfig-a004-20221031
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git/commit/?id=db34697c30756436d7410064289f6110af45ac7b
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git/commit/?id=c9908e3664ecaf47e9bb8f6e3cc1967aff4edee4
         git remote add ogabbay-accel https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git
         git fetch --no-tags ogabbay-accel accel2
-        git checkout db34697c30756436d7410064289f6110af45ac7b
+        git checkout c9908e3664ecaf47e9bb8f6e3cc1967aff4edee4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/drm_drv.c:38:
->> include/drm/drm_accel.h:18:6: warning: no previous prototype for function 'accel_core_exit' [-Wmissing-prototypes]
-   void accel_core_exit(void)
-        ^
-   include/drm/drm_accel.h:18:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void accel_core_exit(void)
-   ^
-   static 
->> include/drm/drm_accel.h:22:12: warning: no previous prototype for function 'accel_core_init' [-Wmissing-prototypes]
-   int __init accel_core_init(void)
-              ^
-   include/drm/drm_accel.h:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init accel_core_init(void)
-   ^
-   static 
-   2 warnings generated.
+>> drivers/gpu/drm/drm_sysfs.c:487:17: error: use of undeclared identifier 'accel_class'
+                   kdev->class = accel_class;
+                                 ^
+   1 error generated.
 
 
-vim +/accel_core_exit +18 include/drm/drm_accel.h
+vim +/accel_class +487 drivers/gpu/drm/drm_sysfs.c
 
-    17	
-  > 18	void accel_core_exit(void)
-    19	{
-    20	}
-    21	
-  > 22	int __init accel_core_init(void)
-    23	{
-    24		return 0;
-    25	}
-    26	
+   471	
+   472	struct device *drm_sysfs_minor_alloc(struct drm_minor *minor)
+   473	{
+   474		const char *minor_str;
+   475		struct device *kdev;
+   476		int r;
+   477	
+   478		kdev = kzalloc(sizeof(*kdev), GFP_KERNEL);
+   479		if (!kdev)
+   480			return ERR_PTR(-ENOMEM);
+   481	
+   482		device_initialize(kdev);
+   483	
+   484		if (minor->type == DRM_MINOR_ACCEL) {
+   485			minor_str = "accel%d";
+   486			kdev->devt = MKDEV(ACCEL_MAJOR, minor->index);
+ > 487			kdev->class = accel_class;
+   488			kdev->type = &accel_sysfs_device_minor;
+   489		} else {
+   490			if (minor->type == DRM_MINOR_RENDER)
+   491				minor_str = "renderD%d";
+   492			else
+   493				minor_str = "card%d";
+   494	
+   495			kdev->devt = MKDEV(DRM_MAJOR, minor->index);
+   496			kdev->class = drm_class;
+   497			kdev->type = &drm_sysfs_device_minor;
+   498		}
+   499	
+   500		kdev->parent = minor->dev->dev;
+   501		kdev->release = drm_sysfs_release;
+   502		dev_set_drvdata(kdev, minor);
+   503	
+   504		r = dev_set_name(kdev, minor_str, minor->index);
+   505		if (r < 0)
+   506			goto err_free;
+   507	
+   508		return kdev;
+   509	
+   510	err_free:
+   511		put_device(kdev);
+   512		return ERR_PTR(r);
+   513	}
+   514	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---yhIIbqH8N0W5KbBY
+--09G3Jf0RN92B6Brl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -6925,4 +6947,4 @@ CONFIG_HYPERV_TESTING=y
 # end of Rust hacking
 # end of Kernel hacking
 
---yhIIbqH8N0W5KbBY--
+--09G3Jf0RN92B6Brl--
