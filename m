@@ -1,43 +1,45 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10443321E
-	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 17:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667237220; x=1698773220;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=siXkABv8Hn+s95xOdhQdHSC+bKc3rcc2PtOfhvL/u44=;
-  b=Hryn532Gmi1Vh+rcSpq9i67niTuoKZzV6adtK7Lu/oUWXefvoTO263Ch
-   C8xEoitwrTSUJdKj3WmBLsFjWY2nTJCAAUHv9lafB3W7CyPyS74NsDn8W
-   q0S4phX83uY+zTyjGGDFyqnQSH/xWwlWNn3uaVQiQvXFAx/Kc26nHgXQ9
-   tuwWd8H640WGy+K77hS8/grpIxItjzx4afv+2eo1AFLSlPvmm/SvDg34b
-   8glOiNEGWEAfVi2dkJbI9vo3frsX2VWoX9AZiIRQynmJMejbKBtmWhNDS
-   xrbVl+P5keAdqTJJ2Uu5fVTYJkyUwkuLcIpLw4i2Et32SR1Cm5AGa59D2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="288670195"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="288670195"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 10:26:59 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="702595819"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="702595819"
-Received: from orsosgc001.jf.intel.com (HELO unerlige-ril.jf.intel.com) ([10.165.21.138])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 10:26:59 -0700
-From: Ashutosh Dixit <ashutosh.dixit@intel.com>
-To: intel-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org,
-	gwan-gyeong.mun@intel.com,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Andi Shyti <andi.shyti@intel.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E4633DF;
+	Mon, 31 Oct 2022 17:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38709C43147;
+	Mon, 31 Oct 2022 17:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1667237917;
+	bh=P9CiTbFkLwYXgkEJtoE1pjsCHoI48SKWU5aipbF3igg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=FWoSDZLAWEJZUT6mSbEXa8gW75M91KXEbFRnzgmaEPaVFzfP862DtwPc35OjioWj4
+	 vFG/stMP+8m/M+TkH6HKIlUgBQ9FYWXbSvARZmvo6To5gL70wjkOHX6orXCFjdBmhD
+	 xS/m5oOjcxexhDG0tJ+96hf9aJKgssVytSEDvVzMg410YPKKTf/58hEwcA+//8NAaI
+	 ryWnBKa99eryMwamtaxUrn3YJWkCCeFYU/JOEl99g9AZLhAraPxrxb6DOE7WZOSRb+
+	 9cp5p/hkjTkepOa4SW2CKlYlT5qRTftB9rkHvam03HxfVaTEAudlh4rLMtsk+F/ngt
+	 H77toNMvDffKQ==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	x86@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
-	ndesaulniers@google.com
-Subject: [PATCH] drm/i915/hwmon: Don't use FIELD_PREP
-Date: Mon, 31 Oct 2022 10:26:55 -0700
-Message-Id: <20221031172655.606165-1-ashutosh.dixit@intel.com>
-X-Mailer: git-send-email 2.38.0
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH bpf] bpf: Mark bpf_arch_init_dispatcher_early() as __init_or_module
+Date: Mon, 31 Oct 2022 10:38:19 -0700
+Message-Id: <20221031173819.2344270-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,64 +48,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-FIELD_PREP and REG_FIELD_PREP have checks requiring a compile time constant
-mask. When the mask comes in as the argument of a function these checks can
-can fail depending on the compiler (gcc vs clang), optimization level,
-etc. Use a simpler version of FIELD_PREP which skips these checks. The
-checks are not needed because the mask is formed using REG_GENMASK (so is
-actually a compile time constant).
+After commit dbe69b299884 ("bpf: Fix dispatcher patchable function entry
+to 5 bytes nop"), building kernel/bpf/dispatcher.c in certain
+configurations with LLVM's integrated assembler results in a known
+recordmcount bug:
 
-v2: Split REG_FIELD_PREP into a macro with checks and one without and use
-    the one without checks in i915_hwmon.c (Gwan-gyeong Mun)
+  Cannot find symbol for section 4: .init.text.
+  kernel/bpf/dispatcher.o: failed
 
-Bug: https://gitlab.freedesktop.org/drm/intel/-/issues/7354
-Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
+This occurs when there are only weak symbols in a particular section in
+the translation unit; in this case, bpf_arch_init_dispatcher_early() is
+marked '__weak __init' and it is the only symbol in the .init.text
+section. recordmcount expects there to be a symbol for a particular
+section but LLVM's integrated assembler (and GNU as after 2.37) do not
+generated section symbols. This has been worked around in the kernel
+before in commit 55d5b7dd6451 ("initramfs: fix clang build failure")
+and commit 6e7b64b9dd6d ("elfcore: fix building with clang").
+
+Fixing recordmcount has been brought up before but there is no clear
+solution that does not break ftrace outright.
+
+Unfortunately, working around this issue by removing the '__init' from
+bpf_arch_init_dispatcher_early() is not an option, as the x86 version of
+bpf_arch_init_dispatcher_early() calls text_poke_early(), which is
+marked '__init_or_module', meaning that when CONFIG_MODULES is disabled,
+bpf_arch_init_dispatcher_early() has to be marked '__init' as well to
+avoid a section mismatch warning from modpost.
+
+However, bpf_arch_init_dispatcher_early() can be marked
+'__init_or_module' as well, which would resolve the recordmcount warning
+for configurations that support modules (i.e., the vast majority of
+them) while not introducing any new warnings for all configurations. Do
+so to clear up the build failure for CONFIG_MODULES=y configurations.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/981
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/gpu/drm/i915/i915_hwmon.c    |  2 +-
- drivers/gpu/drm/i915/i915_reg_defs.h | 17 +++++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 2 +-
+ include/linux/bpf.h         | 2 +-
+ kernel/bpf/dispatcher.c     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-index 9e97814930254..ae435b035229a 100644
---- a/drivers/gpu/drm/i915/i915_hwmon.c
-+++ b/drivers/gpu/drm/i915/i915_hwmon.c
-@@ -112,7 +112,7 @@ hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
- 	nval = DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_factor);
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 00127abd89ee..4145939bbb6a 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -389,7 +389,7 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 	return ret;
+ }
  
- 	bits_to_clear = field_msk;
--	bits_to_set = FIELD_PREP(field_msk, nval);
-+	bits_to_set = __REG_FIELD_PREP(field_msk, nval);
+-int __init bpf_arch_init_dispatcher_early(void *ip)
++int __init_or_module bpf_arch_init_dispatcher_early(void *ip)
+ {
+ 	const u8 *nop_insn = x86_nops[5];
  
- 	hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
- 					    bits_to_clear, bits_to_set);
-diff --git a/drivers/gpu/drm/i915/i915_reg_defs.h b/drivers/gpu/drm/i915/i915_reg_defs.h
-index f1859046a9c48..dddacc8d48928 100644
---- a/drivers/gpu/drm/i915/i915_reg_defs.h
-+++ b/drivers/gpu/drm/i915/i915_reg_defs.h
-@@ -67,12 +67,17 @@
-  *
-  * @return: @__val masked and shifted into the field defined by @__mask.
-  */
--#define REG_FIELD_PREP(__mask, __val)						\
--	((u32)((((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) +	\
--	       BUILD_BUG_ON_ZERO(!__is_constexpr(__mask)) +		\
--	       BUILD_BUG_ON_ZERO((__mask) == 0 || (__mask) > U32_MAX) +		\
--	       BUILD_BUG_ON_ZERO(!IS_POWER_OF_2((__mask) + (1ULL << __bf_shf(__mask)))) + \
--	       BUILD_BUG_ON_ZERO(__builtin_choose_expr(__is_constexpr(__val), (~((__mask) >> __bf_shf(__mask)) & (__val)), 0))))
-+#define __REG_FIELD_PREP_CHK(__mask, __val) \
-+	(BUILD_BUG_ON_ZERO(!__is_constexpr(__mask)) + \
-+	 BUILD_BUG_ON_ZERO((__mask) == 0 || (__mask) > U32_MAX) + \
-+	 BUILD_BUG_ON_ZERO(!IS_POWER_OF_2((__mask) + (1ULL << __bf_shf(__mask)))) + \
-+	 BUILD_BUG_ON_ZERO(__builtin_choose_expr(__is_constexpr(__val), (~((__mask) >> __bf_shf(__mask)) & (__val)), 0)))
-+
-+#define __REG_FIELD_PREP(__mask, __val) \
-+	((u32)((((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask))))
-+
-+#define REG_FIELD_PREP(__mask, __val) \
-+	(__REG_FIELD_PREP(__mask, __val) + __REG_FIELD_PREP_CHK(__mask, __val))
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0566705c1d4e..4aa7bde406f5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -971,7 +971,7 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+ 					  struct bpf_attach_target_info *tgt_info);
+ void bpf_trampoline_put(struct bpf_trampoline *tr);
+ int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
+-int __init bpf_arch_init_dispatcher_early(void *ip);
++int __init_or_module bpf_arch_init_dispatcher_early(void *ip);
  
- /**
-  * REG_FIELD_GET() - Extract a u32 bitfield value
+ #define BPF_DISPATCHER_INIT(_name) {				\
+ 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index 04f0a045dcaa..e14a68e9a74f 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -91,7 +91,7 @@ int __weak arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int n
+ 	return -ENOTSUPP;
+ }
+ 
+-int __weak __init bpf_arch_init_dispatcher_early(void *ip)
++int __weak __init_or_module bpf_arch_init_dispatcher_early(void *ip)
+ {
+ 	return -ENOTSUPP;
+ }
+
+base-commit: 8bdc2acd420c6f3dd1f1c78750ec989f02a1e2b9
 -- 
-2.38.0
+2.38.1
 
