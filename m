@@ -1,149 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADFD33ED
-	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 17:58:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42533C433D6;
-	Mon, 31 Oct 2022 17:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F883C00
+	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 18:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB67C433C1;
+	Mon, 31 Oct 2022 18:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667239124;
-	bh=6k2VQy1WA5DlnNEe5C6X3CH+VCbSwygDOtxVDwcHUxQ=;
+	s=k20201202; t=1667240844;
+	bh=ysU1aPTGfdEz5odAft8BoDlg3O4d2ECMyJRKU6UM7+0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TG3DxQsxTlcQfXVv7G4OFe4KJMjGMhM0EI8q77eUAjnNDZPO3drtH5yiToccym/Ba
-	 MGUyKb0gPaJC5nmCymcOKRi4vmVrZsr9fvhxwV+HQptia9Jq3DToqW5xW2FXxxi+ma
-	 Jlt/XrBdfjs3zzz+4OFy3ZRqnbNzMjYLP5d9z7Lx1jwwzVMzClc0h5KTkg58RjnIQj
-	 dJO/i8/n6Mz8rQZqdMwS04c65w/rv83/xpRmtX/xDEsGeahktfvGEwO/4iICiUGaru
-	 0fXQwHH67hG4RWHhMspJxFALhErCWudYh2GKeOoQ70SYboE1TPhVyz/Qb5TTa21gNM
-	 ZsWLHtcqSAccA==
-Date: Tue, 1 Nov 2022 01:49:01 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Samuel Holland <samuel@sholland.org>,
-	Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH v2] riscv: jump_label: mark arguments as const to satisfy
- asm constraints
-Message-ID: <Y2AKjYEcIpvwxe7h@xhacker>
-References: <20221008145437.491-1-jszhang@kernel.org>
- <Y0bA8HUL9eC3Dp8C@wendy>
+	b=X+4t9iQNAuMOp5R+kn5W0/iDMkNQ7Q5pAytUREOILT9TWByk3Iqsvlm9EApkzvKEF
+	 iz+0wfKJxETwZqiD1H9pGsBFaGrhZRl0g0aiL8zNZ5apLzLUexGpj7hjHgOutB1wvk
+	 AQc0Q6txql3vRJn7sITC0HeJMWcDV+nCL756jxvi2l0hJ/Tk/MwQe+A/rnShiutJSB
+	 CA9sRmRmQF9iAur4Y//KwrooT10Hg5YdVTwA/YlcAVcx+Q2Dfg/1l1O72uVntgxynw
+	 KuMlbMNyFHNtxbA8qSKKu7onaNIlLyIyPpTNc8H9Uk75UNO9uHWEZDVoBCGfVJy/NA
+	 vy3GckwVtzpjQ==
+Date: Mon, 31 Oct 2022 11:27:21 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Oleksandr Tymoshenko <ovt@google.com>
+Cc: gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+	davem@davemloft.net, edumazet@google.com,
+	linux-kernel@vger.kernel.org, sashal@kernel.org,
+	stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
+ contexts
+Message-ID: <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
+References: <20221024113005.376059449@linuxfoundation.org>
+ <20221029011211.4049810-1-ovt@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0bA8HUL9eC3Dp8C@wendy>
+In-Reply-To: <20221029011211.4049810-1-ovt@google.com>
 
-On Wed, Oct 12, 2022 at 02:28:16PM +0100, Conor Dooley wrote:
-> Hey Jisheng,
+Hi Oleksandr,
 
-Hi Conor,
-
-> LKP reported an error that seems to only have gone to myself & Samuel,
-> but the branch it's complaining about is your v1:
-> https://lore.kernel.org/lkml/202210122123.Cc4FPShJ-lkp@intel.com/
+On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
+> Hello,
 > 
-> Any idea what the story is here?
-
-I tried the config in the link, I can reproduce the build error w/
-and w/o the my patch. So I think the root cause of the build error
-is a different story. I have a fix in local repo, will send it out
-soon.
-
-Thanks
-
+> This commit causes the following panic in kernel built with clang
+> (GCC build is not affected): 
 > 
-> Thanks,
-> Conor.
+> [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
+> [    8.330029] #PF: supervisor write access in kernel mode                                                                    
+> [    8.337263] #PF: error_code(0x0003) - permissions violation 
+> [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
+> [    8.354337] Oops: 0003 [#1] SMP PTI                
+> [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
+> [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
+> [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
+> [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
+> 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
+> [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
+> [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
+> [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
+> [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
+> [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
+> [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
+> [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
+> [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
+> [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
+> [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
+> [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
+> [    8.505443] Call Trace:                                                                                                    
+> [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
+> [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
+> [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
+> [    8.525003]  tcp_v4_connect+0x2c5/0x410
+> [    8.529858]  __inet_stream_connect+0xd7/0x360
+> [    8.535329]  ? _raw_spin_unlock+0xe/0x10
+> ... skipped ...
 > 
-> On Sat, Oct 08, 2022 at 10:54:37PM +0800, Jisheng Zhang wrote:
-> > Samuel reported that the static branch usage in cpu_relax() breaks
-> > building with CONFIG_CC_OPTIMIZE_FOR_SIZE:
-> > 
-> > In file included from <command-line>:
-> > ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
-> > ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0
-> > probably does not match constraints
-> >   285 | #define asm_volatile_goto(x...) asm goto(x)
-> >       |                                 ^~~
-> > ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
-> > 'asm_volatile_goto'
-> >    41 |         asm_volatile_goto(
-> >       |         ^~~~~~~~~~~~~~~~~
-> > ././include/linux/compiler_types.h:285:33: error: impossible constraint
-> > in 'asm'
-> >   285 | #define asm_volatile_goto(x...) asm goto(x)
-> >       |                                 ^~~
-> > ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro
-> > 'asm_volatile_goto'
-> >    41 |         asm_volatile_goto(
-> >       |         ^~~~~~~~~~~~~~~~~
-> > make[1]: *** [scripts/Makefile.build:249:
-> > arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
-> > make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
-> > 
-> > Maybe "-Os" prevents GCC from detecting that the key/branch arguments
-> > can be treated as constants and used as immediate operands. Inspired
-> > by x86's commit 864b435514b2("x86/jump_label: Mark arguments as const to
-> > satisfy asm constraints"), and as pointed out by Steven: "The "i"
-> > constraint needs to be a constant.", let's do similar modifications to
-> > riscv.
-> > 
-> > Tested by CC_OPTIMIZE_FOR_SIZE + gcc and CC_OPTIMIZE_FOR_SIZE + clang.
-> > 
-> > Link: https://lore.kernel.org/linux-riscv/20220922060958.44203-1-samuel@sholland.org/
-> > Link: https://lore.kernel.org/all/20210212094059.5f8d05e8@gandalf.local.home/
-> > Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
-> > Reported-by: Samuel Holland <samuel@sholland.org>
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > ---
-> > 
-> > since v1:
-> >  - add Reported-by, Reviewed-by, Fixes and Link tag
-> > 
-> >  arch/riscv/include/asm/jump_label.h | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-> > index 38af2ec7b9bf..6d58bbb5da46 100644
-> > --- a/arch/riscv/include/asm/jump_label.h
-> > +++ b/arch/riscv/include/asm/jump_label.h
-> > @@ -14,8 +14,8 @@
-> >  
-> >  #define JUMP_LABEL_NOP_SIZE 4
-> >  
-> > -static __always_inline bool arch_static_branch(struct static_key *key,
-> > -					       bool branch)
-> > +static __always_inline bool arch_static_branch(struct static_key * const key,
-> > +					       const bool branch)
-> >  {
-> >  	asm_volatile_goto(
-> >  		"	.option push				\n\t"
-> > @@ -35,8 +35,8 @@ static __always_inline bool arch_static_branch(struct static_key *key,
-> >  	return true;
-> >  }
-> >  
-> > -static __always_inline bool arch_static_branch_jump(struct static_key *key,
-> > -						    bool branch)
-> > +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
-> > +						    const bool branch)
-> >  {
-> >  	asm_volatile_goto(
-> >  		"	.option push				\n\t"
-> > -- 
-> > 2.37.2
-> > 
+> 
+> The root cause is the difference in __section macro semantics between 5.4 and
+> later LTS releases. On 5.4 it stringifies the argument so the ___done
+> symbol is created in a bogus section ".data.once", with double quotes:
+> 
+> % readelf -S vmlinux | grep data.once
+>   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
+
+Thanks for the report! The reason this does not happen in mainline is
+due to commit 33def8498fdd ("treewide: Convert macro and uses of
+__section(foo) to __section("foo")"), which came as a result of these
+issues:
+
+https://github.com/ClangBuiltLinux/linux/issues/619
+https://llvm.org/pr42950
+
+To keep stable from diverging, it would probably be best to pick
+33def8498fdd and fight through whatever conflicts there are. If that is
+not a suitable solution, the next best thing would be to remove the
+quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
+fix Oops for Clang-compiled kernels") for all instances of
+__section(...) or __attribute__((__section__(...))), which should
+resolve the specific problem you are seeing.
+
+In the future, please feel free to cc issues that you see with clang to
+llvm@lists.linux.dev so that we can chime in sooner :)
+
+Cheers,
+Nathan
