@@ -1,257 +1,350 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE89117F3
-	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 07:00:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1667199651;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=147i0AmysjDWyUTL5wvLKK+4aoPWxuio4OW3Qv6Kqg8=;
-	b=B4Kzu9gni8N1B81kxrkLAdorsWZsq/ZnMA6MZNn0+b5zykmViN7Azx6LqyBtk1v0bgvrax
-	WFe4rah4I3R9ZbM2/dQWhzGGejkbqye/F+HYvGuCqolFRVcDFPqkbQMDrHRkBiiKudUTRn
-	7YyYC4WFv1x591m8KdlV/sgbI7Ul/II=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-672-46Mr0YFkNjmDgXBrn3_3EQ-1; Mon, 31 Oct 2022 03:00:50 -0400
-X-MC-Unique: 46Mr0YFkNjmDgXBrn3_3EQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7EAC811E81
-	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 07:00:49 +0000 (UTC)
-Received: from [172.64.0.97] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B8BB340C2066;
-	Mon, 31 Oct 2022 07:00:49 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (27/389 SKIPPED): Test report for master
- (6.1.0-rc2, mainline.kernel.org-clang, b72018ab)
-Date: Mon, 31 Oct 2022 07:00:49 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D370117F4
+	for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 08:56:43 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so5357649pjk.1
+        for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 01:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+RjuB7U9jpo35XTlJMjyzkcx01WUajTAZdTqLvn43mY=;
+        b=KohAPqjSPutrK2Ck1FfjMUa7/cPQbGZ1M0NQoO8WPx7bC0XlMGPqN2ckYV5pK5jgmD
+         4HYeScBXAm7F+ACI8PFhruegykDr57Lte2m8MTHYfhClGURmAfkBZ8RkdUhXPiTDvABH
+         obZA2I+mzIZh6J4FM5Sf9T1B5RZyZge0UzBzFAl5cILhB81f19XEsqc+GmpS+jZr5Mcn
+         3yLnEx4SGeXH2x+lB7cQjWiZ+gNcO+exdHU/XCfGeNo3aAQ2J8+Y2SzH1p4c3peFzavH
+         T19k43ZylOFL2qdqJMHVvga1hWCUWxj1xcQ93XXFszfT7iWPyi8YDcymPZYiMXPaAwNm
+         xMwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+RjuB7U9jpo35XTlJMjyzkcx01WUajTAZdTqLvn43mY=;
+        b=kBZNcxG27qyK6cx5WiOOBd7NJEcPd8O9QxmVCyqwwyr5TTCZrTkfkuCaeBHr8ZuemB
+         byoo+1pAbTS8hiY0wkNN02o8jHzbn6prMhrhEnZgVVnln1J6JK8DvIovwiey8j3UouDk
+         W1o0/6IyIEqP/d58g6H4C6WF3qu2TrJRfMUIBeRGOnb4m/NEYnvpN2lSDFwc+Zw8jaFN
+         xcmeLznUMzqjgYa3TqgHEvhiFm6AGOMvy8mPGzhyKEDilNBfMjutidyhjwgOt/ujT0fz
+         aDqNKZzBgPDaoYYkp0CS8BujQht8Z9qjQiFPw5gZRYMjtkpmCiyXUhlY6Bkh18TaJ6Lr
+         zWmg==
+X-Gm-Message-State: ACrzQf33IZCjho53LZtkD+8pIb7TFLPsDgresMT6woQO/ajtTA/oaQdb
+	Qv+nvpwKBtpakvskskkkygQEEK0szdnjvVkW
+X-Google-Smtp-Source: AMsMyM4rwo9hMTlhR3enJ7I02QDmsz8J3aVekSwxD4S4yo1VwOAXLDaRKTyL5gnf9PxxO12RrF218A==
+X-Received: by 2002:a17:90a:ce81:b0:212:f61d:35c6 with SMTP id g1-20020a17090ace8100b00212f61d35c6mr13485745pju.243.1667206602953;
+        Mon, 31 Oct 2022 01:56:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170902e80700b00174f7d10a03sm3998663plg.86.2022.10.31.01.56.41
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 01:56:42 -0700 (PDT)
+Message-ID: <635f8dca.170a0220.1cc30.64d7@mx.google.com>
+Date: Mon, 31 Oct 2022 01:56:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <42750.122103103005000174@us-mta-672.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20221031
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 14 builds: 12 failed, 2 passed, 12 errors,
+ 10 warnings (next-20221031)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi, we tested your kernel and here are the results:
+next/master build: 14 builds: 12 failed, 2 passed, 12 errors, 10 warnings (=
+next-20221031)
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20221031/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Tree: next
+Branch: master
+Git Describe: next-20221031
+Git Commit: 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
-Kernel information:
-    Commit message: Merge tag 'fbdev-for-6.1-rc3' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/deller/linux-fbdev
+Build Failures Detected:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/58022
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook: (clang-13) FAIL
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: tools/include/uapi/linux/in.h:199:3: =
-error: type name requires a specifier or qualifier
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1451
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
-systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
-u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
-sk_device_t:s0 tclass=3Dblk_file
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                 aarch64 - LTP: openposix test suite
-                 aarch64 - CIFS Connectathon
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking: igmp conformance test
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 aarch64 - xfstests - ext4
-                 aarch64 - xfstests - xfs
-                 aarch64 - xfstests - btrfs
-                 ppc64le - LTP: openposix test suite
-                 ppc64le - CIFS Connectathon
-                 ppc64le - Networking bridge: sanity
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Storage - blktests - blk
-                   s390x - stress: stress-ng - cpu-cache
-                   s390x - stress: stress-ng - memory
-                   s390x - Storage - blktests - nvmeof-mp
-                   s390x - LTP: openposix test suite
-                   s390x - CIFS Connectathon
-                   s390x - Networking bridge: sanity
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - software RAID testing
-                  x86_64 - stress: stress-ng - cpu-cache
-                  x86_64 - stress: stress-ng - memory
-                  x86_64 - Storage - blktests - nvmeof-mp
-                  x86_64 - LTP: openposix test suite
-                  x86_64 - CIFS Connectathon
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking: igmp conformance test
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 - xfstests - ext4
-                  x86_64 - xfstests - xfs
-                  x86_64 - xfstests - btrfs
-                  x86_64 (debug) - Storage - software RAID testing
-                  x86_64 (debug) - LTP: openposix test suite
-                  x86_64 (debug) - CIFS Connectathon
-                  x86_64 (debug) - Networking: igmp conformance test
-                  x86_64 (debug) - Networking route: pmtu
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - xfstests - ext4
-                  x86_64 (debug) - xfstests - xfs
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
-0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1419
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                  x86_64 - LTP: openposix test suite
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1346
-            Affected tests:
-                 aarch64 - Networking bridge: sanity
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking bridge: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking bridge: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking bridge: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
+IL
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
+3) FAIL
 
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
 
+Errors and Warnings Detected:
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 1 error
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook (clang-13): 1 error
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook (clang-13): 1 error
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
+error, 5 warnings
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 1 error, 5 warnings
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook (clang-13): 1 error
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 1 error
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 1 error
 
+Errors summary:
+
+    12   ERROR: modpost: Section mismatches detected.
+
+Warnings summary:
+
+    10   clang: warning: argument unused during compilation: '-march=3Darmv=
+7-a' [-Wunused-command-line-argument]
+
+Section mismatches summary:
+
+    14   WARNING: modpost: vmlinux.o: section mismatch in reference: snd_so=
+c_init (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismat=
+ches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismat=
+ches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mism=
+atches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 FAIL, 1 error, 5 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Warnings:
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+    clang: warning: argument unused during compilation: '-march=3Darmv7-a' =
+[-Wunused-command-line-argument]
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatch=
+es
+
+Errors:
+    ERROR: modpost: Section mismatches detected.
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+    WARNING: modpost: vmlinux.o: section mismatch in reference: snd_soc_ini=
+t (section: .init.text) -> snd_soc_util_exit (section: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
