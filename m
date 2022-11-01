@@ -1,166 +1,108 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32A1160
-	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 00:27:28 +0000 (UTC)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A10AXsw009477;
-	Tue, 1 Nov 2022 00:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=m40wkIfxhRz/6SMH0Z2EoeEUVLdwP5OqfRDJ4shsHN4=;
- b=VcveSa25jOAOeiQlpDuPI8dU289dSINq0zHFJ3ER7STS+Z4EfYXQDTg4xbLRGKrrHs9b
- p9dRa4FWof6VKCMiMQetlVkpB+LBBmTX0RuxHebFwozz1hRLslzGjaqmXB46/1Oo6T5h
- Xg9unIezDNXj43XJz+I7Jnt0ppeMVxT80oiZzf2h+h4Tetcri6g8PUAzcGZbUJn8yM4K
- kKIljGNPNpjMCWpwKMuc3RsfYHDAUCUT9ICHQnRr+cjfWXYrBwR4S42g3ojRCk5FtnpT
- MSFqyvcgEUHiH8uyJoAVPJLtlHNeV/IhaYZjWll5S6PFv4mdWwCdU0XK/5uFxoDqxzID eA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kjjubrq33-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Nov 2022 00:27:21 +0000
-Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2A10RKch014545;
-	Tue, 1 Nov 2022 00:27:20 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3khdkx6v94-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Nov 2022 00:27:20 +0000
-Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A10QXTF013229;
-	Tue, 1 Nov 2022 00:27:20 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 2A10RKpC014539
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Nov 2022 00:27:20 +0000
-Received: from [10.249.23.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 31 Oct
- 2022 17:27:13 -0700
-Message-ID: <8b1da0e8-4c8d-2fb8-9c7c-58b56f4bdf0a@quicinc.com>
-Date: Mon, 31 Oct 2022 17:26:52 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F696365
+	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 04:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D99C433D6;
+	Tue,  1 Nov 2022 04:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1667278060;
+	bh=X3FkZQ/SbRqslJBljFtz6/3HOfW8eaIKfHU4UjbAKeY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xnI3lLFKGbBHWPQs7eVsS3wymsCTMcEXNAEZ/HnP3ie5kIeK0P0T6yK/pCobAB4h6
+	 rGZen9aG6EE/TQayi3O/lHIfibJwJ80UBW7el6AL4UZUyekyAZ6BXYZdUReVkif8DA
+	 +t27FInFPvlWcJND2RCqvvqZOWhLcWv2uLqyZj1k=
+Date: Tue, 1 Nov 2022 05:48:29 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Oleksandr Tymoshenko <ovt@google.com>, christophe.leroy@csgroup.eu,
+	davem@davemloft.net, edumazet@google.com,
+	linux-kernel@vger.kernel.org, sashal@kernel.org,
+	stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
+ contexts
+Message-ID: <Y2ClHT6FNL+DLfqP@kroah.com>
+References: <20221024113005.376059449@linuxfoundation.org>
+ <20221029011211.4049810-1-ovt@google.com>
+ <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm: Fix return type of
- mdp4_lvds_connector_mode_valid
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Nathan Chancellor
-	<nathan@kernel.org>,
-        Nathan Huckleberry <nhuck@google.com>
-CC: Dan Carpenter <error27@gmail.com>, <llvm@lists.linux.dev>,
-        Rob Clark
-	<robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie
-	<airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Nick Desaulniers
-	<ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20220913205551.155128-1-nhuck@google.com>
- <Y2BH7sx09nqwKNmt@dev-arch.thelio-3990X>
- <1c735bcc-d4f7-333f-58a5-e3f463bab10d@linaro.org>
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1c735bcc-d4f7-333f-58a5-e3f463bab10d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PjnCByUgn6zzL_J9m_AGqkPfO5ORQttJ
-X-Proofpoint-ORIG-GUID: PjnCByUgn6zzL_J9m_AGqkPfO5ORQttJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-31_22,2022-10-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 mlxlogscore=963 clxscore=1011 malwarescore=0 spamscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
 
-
-
-On 10/31/2022 5:24 PM, Dmitry Baryshkov wrote:
-> On 01/11/2022 01:10, Nathan Chancellor wrote:
->> On Tue, Sep 13, 2022 at 01:55:48PM -0700, Nathan Huckleberry wrote:
->>> The mode_valid field in drm_connector_helper_funcs is expected to be of
->>> type:
->>> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
->>>                                       struct drm_display_mode *mode);
->>>
->>> The mismatched return type breaks forward edge kCFI since the underlying
->>> function definition does not match the function hook definition.
->>>
->>> The return type of mdp4_lvds_connector_mode_valid should be changed from
->>> int to enum drm_mode_status.
->>>
->>> Reported-by: Dan Carpenter <error27@gmail.com>
->>> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
->>> Cc: llvm@lists.linux.dev
->>> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
->>> ---
->>>   drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c | 5 +++--
->>>   1 file changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c 
->>> b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
->>> index 7288041dd86a..7444b75c4215 100644
->>> --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
->>> +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
->>> @@ -56,8 +56,9 @@ static int mdp4_lvds_connector_get_modes(struct 
->>> drm_connector *connector)
->>>       return ret;
->>>   }
->>> -static int mdp4_lvds_connector_mode_valid(struct drm_connector 
->>> *connector,
->>> -                 struct drm_display_mode *mode)
->>> +static enum drm_mode_status
->>> +mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
->>> +                   struct drm_display_mode *mode)
->>>   {
->>>       struct mdp4_lvds_connector *mdp4_lvds_connector =
->>>               to_mdp4_lvds_connector(connector);
->>> -- 
->>> 2.37.2.789.g6183377224-goog
->>>
->>>
->>
->> Did this patch get lost somewhere? I do not see it picked up. It is
->> needed to avoid a new WIP warning from clang for catching these CFI
->> failures:
->>
->> drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c:89:16: error: 
->> incompatible function pointer types initializing 'enum drm_mode_status 
->> (*)(struct drm_connector *, struct drm_display_mode *)' with an 
->> expression of type 'int (struct drm_connector *, struct 
->> drm_display_mode *)' 
->> [-Werror,-Wincompatible-function-pointer-types-strict]
->>          .mode_valid = mdp4_lvds_connector_mode_valid,
->>                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> 1 error generated.
+On Mon, Oct 31, 2022 at 11:27:21AM -0700, Nathan Chancellor wrote:
+> Hi Oleksandr,
 > 
-> It will be picked into 6.1-rc and then propagate through the stable 
-> kernel updates.
+> On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
+> > Hello,
+> > 
+> > This commit causes the following panic in kernel built with clang
+> > (GCC build is not affected): 
+> > 
+> > [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
+> > [    8.330029] #PF: supervisor write access in kernel mode                                                                    
+> > [    8.337263] #PF: error_code(0x0003) - permissions violation 
+> > [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
+> > [    8.354337] Oops: 0003 [#1] SMP PTI                
+> > [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
+> > [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
+> > [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
+> > [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
+> > 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
+> > [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
+> > [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
+> > [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
+> > [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
+> > [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
+> > [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
+> > [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
+> > [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
+> > [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
+> > [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
+> > [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
+> > [    8.505443] Call Trace:                                                                                                    
+> > [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
+> > [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
+> > [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
+> > [    8.525003]  tcp_v4_connect+0x2c5/0x410
+> > [    8.529858]  __inet_stream_connect+0xd7/0x360
+> > [    8.535329]  ? _raw_spin_unlock+0xe/0x10
+> > ... skipped ...
+> > 
+> > 
+> > The root cause is the difference in __section macro semantics between 5.4 and
+> > later LTS releases. On 5.4 it stringifies the argument so the ___done
+> > symbol is created in a bogus section ".data.once", with double quotes:
+> > 
+> > % readelf -S vmlinux | grep data.once
+> >   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
 > 
-> Anyway:
+> Thanks for the report! The reason this does not happen in mainline is
+> due to commit 33def8498fdd ("treewide: Convert macro and uses of
+> __section(foo) to __section("foo")"), which came as a result of these
+> issues:
 > 
-> Fixes: 3e87599b68e7 ("drm/msm/mdp4: add LVDS panel support")
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> https://github.com/ClangBuiltLinux/linux/issues/619
+> https://llvm.org/pr42950
+> 
+> To keep stable from diverging, it would probably be best to pick
+> 33def8498fdd and fight through whatever conflicts there are. If that is
+> not a suitable solution, the next best thing would be to remove the
+> quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
+> fix Oops for Clang-compiled kernels") for all instances of
+> __section(...) or __attribute__((__section__(...))), which should
+> resolve the specific problem you are seeing.
 
-Yes, it was already merged to the -fixes tree and a PR with it was sent 
-out for 6.1-rc
+I think we should do the latter, fighting with all of the different
+section entries would be a pain.
 
-https://gitlab.freedesktop.org/drm/msm/-/commit/0b33a33bd15d5bab73b87152b220a8d0153a4587
+Unless someone beats me to it, I'll go make up a patch for this...
 
-> 
-> 
+thanks,
+
+greg k-h
