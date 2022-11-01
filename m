@@ -1,72 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA298F76;
-	Mon, 31 Oct 2022 23:10:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C582BC433C1;
-	Mon, 31 Oct 2022 23:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1667257849;
-	bh=oea+DfSn2PZjsarkz1aPAd8kSD63FeuVEhn2xKVR+hE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LDPDYGRhcY0D8cYiAhlQo0Fkj9je1Vk1UG9GS3xOvoNNscyPkjNTLlyfKPyynNb80
-	 5VPNUurpmyeMkbJw43/YMY5GCTrtafcU7PFQBZZXMmcA1Kn3kFG41/9DU7l7fHI7ZK
-	 +UQFHtLXWWDBLqsfYnd9BklfamuUZunE21rihuzw=
-Date: Mon, 31 Oct 2022 16:10:48 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Liam Howlett <liam.howlett@oracle.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
- GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, Linux Memory Management List
- <linux-mm@kvack.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Subject: Re: [ammarfaizi2-block:akpm/mm/mm-unstable 46/244]
- lib/test_maple_tree.c:453:12: warning: result of comparison of constant
- 4398046511104 with expression of type 'unsigned long' is always false
-Message-Id: <20221031161048.a2fd2ce1c210b9cd1a499cb4@linux-foundation.org>
-In-Reply-To: <202210301224.r9RDzf4K-lkp@intel.com>
-References: <202210301224.r9RDzf4K-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440B4160
+	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 00:24:32 +0000 (UTC)
+Received: by mail-lf1-f52.google.com with SMTP id j16so21601393lfe.12
+        for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 17:24:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+exwCng/IdD1MhFa/UI62X8vLjy6a/cFPmc8Y4Cwpo4=;
+        b=ZX7Wbo7qBX7YrGpC53w7yJrjIeHSz5R/Q0JB3s0DrLXFyyMcsZWhvz9kxFc1fTRGVX
+         1UNr/sAcfCjkOTxQqFPG/oDt1/Pl70qKWKlHCTtVW0MZidYgelZ/Oc1L57iM1xmpUJlD
+         Wt1smVGbaTFzvNMbZDEzWTKzMpx0fGzb5MHujwCEi1k5ZLafxxEj11bmqfMwKjvGluMq
+         YGeeVufSU21qY5TptNFTLgAwTW8kw5VJuuR6Qe3uh1tqpzRxxUtqL4HatzNxeZEEsP9N
+         LVzPIaCqLPro4g7RHObvDLerXGEnAMbi3OBBu1Q2l1ltFMkyDwtFDo/MSwAoaOWqiUOT
+         yi4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+exwCng/IdD1MhFa/UI62X8vLjy6a/cFPmc8Y4Cwpo4=;
+        b=6t7I23WyeKFIv8zmw3n3mx0QKFqrB4bJtoQOlIu9TR9ax1D+13xHer6KxUfM5O9Y3j
+         RNjYRQT7olnk4VcSXnTRoQpOUoyDc9vxl+lXFxYq64vznVwyRPxAcKdkrGZsxcLSqvd7
+         gDKZDUUUIjbsSI8L3OCrm6DnfANkme5c/BJIh+Qr7yF+qF5yWpsr57/N6iYlx7U7A/3J
+         SDTHxIUKNZWxgcjfR3Uq7o/TbY0VnVPilIzUxsaHtOxxvyQj9yovVEuPb5xa9ycvETyD
+         3wkrxzIVXh8fVHjazp5QBKh8GCYuo/NqzP+idEKz5zxQK+k5YiXZhXKWRTIOQhn6zKga
+         Zo5g==
+X-Gm-Message-State: ACrzQf17dNHMegJXcYti/x4caN1UcxaZ66TWQOTabEpiA1JWj9ltxDiv
+	c4dG77siMvHWMyiuuT9gqqmkWQ==
+X-Google-Smtp-Source: AMsMyM49VFM7BsrC16yPhi+5RzKjTIKFsvAPXuTCBAVOtXH6jc6RySVnNUgcAbutYcvcQpME4YGKnA==
+X-Received: by 2002:a05:6512:2314:b0:4a2:6c4a:4fb9 with SMTP id o20-20020a056512231400b004a26c4a4fb9mr6853631lfu.482.1667262270310;
+        Mon, 31 Oct 2022 17:24:30 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id d2-20020ac244c2000000b004a27d2ea029sm1472345lfm.172.2022.10.31.17.24.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 17:24:29 -0700 (PDT)
+Message-ID: <1c735bcc-d4f7-333f-58a5-e3f463bab10d@linaro.org>
+Date: Tue, 1 Nov 2022 03:24:29 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] drm/msm: Fix return type of
+ mdp4_lvds_connector_mode_valid
+Content-Language: en-GB
+To: Nathan Chancellor <nathan@kernel.org>,
+ Nathan Huckleberry <nhuck@google.com>
+Cc: Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+ Rob Clark <robdclark@gmail.com>, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, linux-arm-msm@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+References: <20220913205551.155128-1-nhuck@google.com>
+ <Y2BH7sx09nqwKNmt@dev-arch.thelio-3990X>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <Y2BH7sx09nqwKNmt@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Sun, 30 Oct 2022 13:04:16 +0800 kernel test robot <lkp@intel.com> wrote:
-
-> tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-> head:   eecc1f68b7ae1e677dd01b728e58de61a2f8ae71
-> commit: d9c0ca7c6a02830de65fbc684cf0be7e6510737c [46/244] maple_tree: reorganize testing to restore module testing
-> config: hexagon-allmodconfig
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/d9c0ca7c6a02830de65fbc684cf0be7e6510737c
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
->         git checkout d9c0ca7c6a02830de65fbc684cf0be7e6510737c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/
+On 01/11/2022 01:10, Nathan Chancellor wrote:
+> On Tue, Sep 13, 2022 at 01:55:48PM -0700, Nathan Huckleberry wrote:
+>> The mode_valid field in drm_connector_helper_funcs is expected to be of
+>> type:
+>> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+>>                                       struct drm_display_mode *mode);
+>>
+>> The mismatched return type breaks forward edge kCFI since the underlying
+>> function definition does not match the function hook definition.
+>>
+>> The return type of mdp4_lvds_connector_mode_valid should be changed from
+>> int to enum drm_mode_status.
+>>
+>> Reported-by: Dan Carpenter <error27@gmail.com>
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+>> Cc: llvm@lists.linux.dev
+>> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+>> index 7288041dd86a..7444b75c4215 100644
+>> --- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+>> +++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c
+>> @@ -56,8 +56,9 @@ static int mdp4_lvds_connector_get_modes(struct drm_connector *connector)
+>>   	return ret;
+>>   }
+>>   
+>> -static int mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
+>> -				 struct drm_display_mode *mode)
+>> +static enum drm_mode_status
+>> +mdp4_lvds_connector_mode_valid(struct drm_connector *connector,
+>> +			       struct drm_display_mode *mode)
+>>   {
+>>   	struct mdp4_lvds_connector *mdp4_lvds_connector =
+>>   			to_mdp4_lvds_connector(connector);
+>> -- 
+>> 2.37.2.789.g6183377224-goog
+>>
+>>
 > 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+> Did this patch get lost somewhere? I do not see it picked up. It is
+> needed to avoid a new WIP warning from clang for catching these CFI
+> failures:
 > 
-> All warnings (new ones prefixed by >>):
-> 
-> >> lib/test_maple_tree.c:453:12: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
->                    if ((val == 4398046511104) || (val == ULONG_MAX))
->                         ~~~ ^  ~~~~~~~~~~~~~
->    lib/test_maple_tree.c:496:17: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
->                    else if ((val == 4398046511104) || (val == ULONG_MAX))
->                              ~~~ ^  ~~~~~~~~~~~~~
->    lib/test_maple_tree.c:182:19: warning: unused function 'not_empty' [-Wunused-function]
->    static inline int not_empty(struct maple_node *node)
+> drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c:89:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>          .mode_valid = mdp4_lvds_connector_mode_valid,
+>                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 1 error generated.
 
-Thanks.  A 32-bit build, I assume.
+It will be picked into 6.1-rc and then propagate through the stable 
+kernel updates.
 
-Liam, what's with that 4398046511104?  Wouldn't 0x40000000000 be clearer?  
+Anyway:
+
+Fixes: 3e87599b68e7 ("drm/msm/mdp4: add LVDS panel support")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+
+-- 
+With best wishes
+Dmitry
+
