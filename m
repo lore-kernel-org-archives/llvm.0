@@ -1,121 +1,123 @@
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8380B365
-	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 06:04:15 +0000 (UTC)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-06.nifty.com with ESMTP id 2A15wIsg024280
-	for <llvm@lists.linux.dev>; Tue, 1 Nov 2022 14:58:18 +0900
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177]) (authenticated)
-	by conssluserg-03.nifty.com with ESMTP id 2A15viwV013598
-	for <llvm@lists.linux.dev>; Tue, 1 Nov 2022 14:57:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2A15viwV013598
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1667282265;
-	bh=gCNWBb2Eok8RLy3ONe6jfzn3xPMLs34Yqwb+SBG6Glw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=D+mq7Rhu/EH63zPTFNBDJZL5CdYxdPyLmxD/bi3q+5UT3u5QtlFu3E01kKBxaXeij
-	 MlK9kO8VB0s/Z//f9nboSrEvTkB8NVgsVcaxka57DPRbHyeVpjctVWychs0F7/2BvV
-	 Ab5cjUn2t7IMwy1I6TsCxSobnB0qcDZRsP/hxAaWaDOto4mtGTd0GlNh2NsJWZKbmf
-	 m4c3LuA6q/1LI6v/j9aMMmjCjxgm86QddRn8inU7ekmuNqZ1IjiOEGHlv+6Kp2odQ7
-	 gW3o5fPM5CQjtS/9Y4pOSVAPUvyrGEKeumgQcmGSJAK0Qwg8SsOkdsBSGqeLdpHONC
-	 xtrSr/Ux1PhJw==
-X-Nifty-SrcIP: [209.85.167.177]
-Received: by mail-oi1-f177.google.com with SMTP id v81so6302184oie.5
-        for <llvm@lists.linux.dev>; Mon, 31 Oct 2022 22:57:45 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0V9SsZSf/TbOxQ77YXqVpAUmXXhaiRo8I6hMfrDFM0+DcZgwGu
-	CMbRXloFKx1qCmYN9Yj+CNk3LSN8DHqzHUBr9uk=
-X-Google-Smtp-Source: AMsMyM7n8houcv2BWsa7QWJkxKzh5DKRqrh/PWmVCfZXKXtJA6KJU0/z+oQhzFQ2OKyMwHbCqc0ovVYaYJ3FTsTm2hI=
-X-Received: by 2002:a05:6808:1893:b0:359:f7c7:1caf with SMTP id
- bi19-20020a056808189300b00359f7c71cafmr6481270oib.194.1667282263919; Mon, 31
- Oct 2022 22:57:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356B5365
+	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 06:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F58FC433D6;
+	Tue,  1 Nov 2022 06:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1667283952;
+	bh=napdewLrb3t5WIcKUi9xqs4Fwl/BULh5tFF1lBTetR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jw6oocr2faDyhOUtmJkwUEKA6owOIzZ2W8qmslD3SWIEHcP5F6IbQwJJeCX9yDgFF
+	 qoAxO9XRk5xijhUsK7riuhKDXW3aXg5FZvDCDu2XnmZAS3YyAxzMxHA61lDJkCMowQ
+	 cDeSJ5jhk/xUzd/MIggG0D5tGKqjdP/XFEvyfyJs=
+Date: Tue, 1 Nov 2022 07:25:20 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Oleksandr Tymoshenko <ovt@google.com>, christophe.leroy@csgroup.eu,
+	davem@davemloft.net, edumazet@google.com,
+	linux-kernel@vger.kernel.org, sashal@kernel.org,
+	stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
+ contexts
+Message-ID: <Y2C70Gc5vcrRIsRr@kroah.com>
+References: <20221024113005.376059449@linuxfoundation.org>
+ <20221029011211.4049810-1-ovt@google.com>
+ <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
+ <Y2ClHT6FNL+DLfqP@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221020175655.1660864-1-ndesaulniers@google.com>
- <Y1GV9sHyODVmBbFW@dev-arch.thelio-3990X> <CA+icZUW2tFR=xjJEXJDNARW1yd_vjOOA1etF6aMN3Cx5ReFgmg@mail.gmail.com>
- <CAKwvOdn_mP8kVn5Bhe7bbC8R+VZxr8h02yWwKhvaTHW40ZJ_Uw@mail.gmail.com> <CAKwvOdkNBM2-pMm+fqzXpMxL5745p0Gzmw_+--P8RSqTk=v+VQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkNBM2-pMm+fqzXpMxL5745p0Gzmw_+--P8RSqTk=v+VQ@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 1 Nov 2022 14:57:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATrBDSLqBZFmWr5RA542pUVR=mieUSNVYXy8thkHS6w_A@mail.gmail.com>
-Message-ID: <CAK7LNATrBDSLqBZFmWr5RA542pUVR=mieUSNVYXy8thkHS6w_A@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.debug: support for -gz=zstd
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Fangrui Song <maskray@google.com>,
-        Sedat Dilek <sedat.dilek@dhl.com>,
-        Michal Marek <michal.lkml@markovi.net>, Nick Terrell <terrelln@fb.com>,
-        Tom Rix <trix@redhat.com>, Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Isabella Basso <isabbasso@riseup.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, sedat.dilek@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2ClHT6FNL+DLfqP@kroah.com>
 
-On Tue, Nov 1, 2022 at 3:49 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Mon, Oct 24, 2022 at 10:44 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Sun, Oct 23, 2022 at 8:46 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > On Thu, Oct 20, 2022 at 8:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > On Thu, Oct 20, 2022 at 10:56:49AM -0700, Nick Desaulniers wrote:
-> > > > > +config DEBUG_INFO_UNCOMPRESSED
-> > > > > +     bool "Don't compress debug information"
-> > > > > +     help
-> > > > > +       Don't compress debug info sections.
-> > > > > +
-> > > > >  config DEBUG_INFO_COMPRESSED
-> > >
-> > > Also, I prefer...
-> > >
-> > > DEBUG_INFO_COMPRESSED_NONE
-> > > DEBUG_INFO_COMPRESSED_ZLIB
-> > > DEBUG_INFO_COMPRESSED_ZSTD
-> > >
-> > > Following...
-> > >
-> > > $ ld.lld-16 -v
-> > > Debian LLD 16.0.0 (compatible with GNU linkers)
-> > >
-> > > $ ld.lld-16 --help | grep compress-debug-sections
-> > >  --compress-debug-sections=[none,zlib,zstd]
-> >
-> > It's a good suggestion, though I deliberately did not modify the
-> > identifier used for the existing DEBUG_INFO_COMPRESSED.  No defconfigs
-> > set DEBUG_INFO_COMPRESSED explicitly, but I think one issue with
-> > changing the identifier of existing kconfigs is that upon upgrading to
-> > newer kernel sources, if you run `make oldmodconfig` if you previously
-> > had DEBUG_INFO_COMPRESSED=y, kconfig doesn't know that that option has
-> > been renamed to DEBUG_INFO_COMPRESSED_ZLIB so it would be silently
-> > disabled, and image sizes would increase due to uncompressed debug
-> > info. That seems developer hostile.
-> >
-> > Masahiro, what are your thoughts on how to proceed? Should I change
-> > the pre-existing Kconfig identifier, or "let sleeping dogs lie?"
->
-> Hi Masahiro,
-> What are your thoughts on the above?
+On Tue, Nov 01, 2022 at 05:48:29AM +0100, Greg KH wrote:
+> On Mon, Oct 31, 2022 at 11:27:21AM -0700, Nathan Chancellor wrote:
+> > Hi Oleksandr,
+> > 
+> > On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
+> > > Hello,
+> > > 
+> > > This commit causes the following panic in kernel built with clang
+> > > (GCC build is not affected): 
+> > > 
+> > > [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
+> > > [    8.330029] #PF: supervisor write access in kernel mode                                                                    
+> > > [    8.337263] #PF: error_code(0x0003) - permissions violation 
+> > > [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
+> > > [    8.354337] Oops: 0003 [#1] SMP PTI                
+> > > [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
+> > > [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
+> > > [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
+> > > [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
+> > > 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
+> > > [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
+> > > [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
+> > > [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
+> > > [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
+> > > [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
+> > > [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
+> > > [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
+> > > [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
+> > > [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
+> > > [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
+> > > [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
+> > > [    8.505443] Call Trace:                                                                                                    
+> > > [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
+> > > [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
+> > > [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
+> > > [    8.525003]  tcp_v4_connect+0x2c5/0x410
+> > > [    8.529858]  __inet_stream_connect+0xd7/0x360
+> > > [    8.535329]  ? _raw_spin_unlock+0xe/0x10
+> > > ... skipped ...
+> > > 
+> > > 
+> > > The root cause is the difference in __section macro semantics between 5.4 and
+> > > later LTS releases. On 5.4 it stringifies the argument so the ___done
+> > > symbol is created in a bogus section ".data.once", with double quotes:
+> > > 
+> > > % readelf -S vmlinux | grep data.once
+> > >   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
+> > 
+> > Thanks for the report! The reason this does not happen in mainline is
+> > due to commit 33def8498fdd ("treewide: Convert macro and uses of
+> > __section(foo) to __section("foo")"), which came as a result of these
+> > issues:
+> > 
+> > https://github.com/ClangBuiltLinux/linux/issues/619
+> > https://llvm.org/pr42950
+> > 
+> > To keep stable from diverging, it would probably be best to pick
+> > 33def8498fdd and fight through whatever conflicts there are. If that is
+> > not a suitable solution, the next best thing would be to remove the
+> > quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
+> > fix Oops for Clang-compiled kernels") for all instances of
+> > __section(...) or __attribute__((__section__(...))), which should
+> > resolve the specific problem you are seeing.
+> 
+> I think we should do the latter, fighting with all of the different
+> section entries would be a pain.
+> 
+> Unless someone beats me to it, I'll go make up a patch for this...
+
+Can someone test the following patch:
 
 
-We renamed CONFIG options from time to time.
-We should strive to update in-tree defconfigs,
-but we did not care about external users very much.
-(we rely on "make oldconfig" showing new options
-and asking users for their choice.)
-
-So, I like Sedat's DEBUG_INFO_COMPRESSED_{ZLIB,ZSTD,NONE}.
-(and it is consist with CONFIG_INITRAMFS_COMPRESSION_*)
-
--- 
-Best Regards
-Masahiro Yamada
+diff --git a/include/linux/once.h b/include/linux/once.h
+index bb58e1c3aa03..3a6671d961b9 100644
+--- a/include/linux/once.h
++++ b/include/linux/once.h
+@@ -64,7 +64,7 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
+ #define DO_ONCE_SLOW(func, ...)						     \
+ 	({								     \
+ 		bool ___ret = false;					     \
+-		static bool __section(".data.once") ___done = false;	     \
++		static bool __section(.data.once) ___done = false;	     \
+ 		static DEFINE_STATIC_KEY_TRUE(___once_key);		     \
+ 		if (static_branch_unlikely(&___once_key)) {		     \
+ 			___ret = __do_once_slow_start(&___done);	     \
