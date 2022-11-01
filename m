@@ -1,116 +1,93 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF63E7E
-	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 10:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667300298; x=1698836298;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=0KjFrSr8sn7NcSjl6h9HOrPk/V+yjjIEf3GqsOMo5m0=;
-  b=CvqC32PNbjF9huAp7JPJoiu5+ichiRQadz4I2X08pMxSHK53ghMVq1am
-   BSf6VQAPNIrh1khlzKghEdi2T/za2Md2XiUO6dTGc7Q3ZmU+YTmLV8fYd
-   Ji8sLicLZloLMpeTlNEVOEOrWssY3yrcXGNTYLlH8xLnbkKObwZXCIVE5
-   bbrcPvtdWKYMgwOgflDWWvcxnimSMx+vwlUPvfY6EHQgWdnzNVcL36XIU
-   FL6AKWefc89v+FLv5mM00VHBF3qpvS9ZndLCeCON2BM5zdcjA7FoMA9SO
-   uGHKJ7pGoulq53LPUdbe9pTfQtTE7Zl63cpMU90+hyYaZGSHXca4h5MP4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="292413966"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="292413966"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:58:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="739290738"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="739290738"
-Received: from rsimofi-mobl.ger.corp.intel.com (HELO localhost) ([10.252.30.2])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:58:15 -0700
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Ashutosh Dixit <ashutosh.dixit@intel.com>, intel-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org, gwan-gyeong.mun@intel.com, Andi Shyti
- <andi.shyti@intel.com>, llvm@lists.linux.dev, ndesaulniers@google.com
-Subject: Re: [PATCH] drm/i915/hwmon: Don't use FIELD_PREP
-In-Reply-To: <20221031172655.606165-1-ashutosh.dixit@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221031172655.606165-1-ashutosh.dixit@intel.com>
-Date: Tue, 01 Nov 2022 12:58:13 +0200
-Message-ID: <87cza77xh6.fsf@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE4E7E
+	for <llvm@lists.linux.dev>; Tue,  1 Nov 2022 11:28:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24A6C433D7;
+	Tue,  1 Nov 2022 11:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1667302129;
+	bh=JMX0+L+kjPI4ze7HOqqWQD1de9VHVUvP+QHe6Mn7MB8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ZAEnADy11twRDuKz4PV3Qwkr1nQvNnzcIna+PG6ssHIRUPzU5PT7/M1fJWdxLV5WZ
+	 d0eIn+NupjgxSYjNYKGAJw6umrMt49BF+wMmoeiFTIcEbL/R/tGenu8Jj6PVYNqr4Y
+	 tM/7Y1jIPyVsYmJoojE753xu5OnM+e8ZPy3FA4t39PrtnqibaKbUQMIQURxJaG9EzM
+	 6tDCthHtyqPnsusnbTWYDaptrxV8S0rpqyuumJmR/h/SQHyDhC3nj7H7iN4A7WBvJo
+	 JbF4/YPTcrqx42YQyyoZQ0p0CJXFcVx+Q/ryGVhsx9gIdoRRjWbAAAXDtIF6gDu0ld
+	 obgHv0th1Bq9w==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Sasha Levin <sashal@kernel.org>,
+	Felix.Kuehling@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	ndesaulniers@google.com,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 28/34] drm/amdkfd: Fix type of reset_type parameter in hqd_destroy() callback
+Date: Tue,  1 Nov 2022 07:27:20 -0400
+Message-Id: <20221101112726.799368-28-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
+References: <20221101112726.799368-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Mon, 31 Oct 2022, Ashutosh Dixit <ashutosh.dixit@intel.com> wrote:
-> FIELD_PREP and REG_FIELD_PREP have checks requiring a compile time constant
-> mask. When the mask comes in as the argument of a function these checks can
-> can fail depending on the compiler (gcc vs clang), optimization level,
-> etc. Use a simpler version of FIELD_PREP which skips these checks. The
-> checks are not needed because the mask is formed using REG_GENMASK (so is
-> actually a compile time constant).
->
-> v2: Split REG_FIELD_PREP into a macro with checks and one without and use
->     the one without checks in i915_hwmon.c (Gwan-gyeong Mun)
+From: Nathan Chancellor <nathan@kernel.org>
 
-I frankly think you're solving the wrong problem here. See [1].
+[ Upstream commit e688ba3e276422aa88eae7a54186a95320836081 ]
 
-BR,
-Jani.
+When booting a kernel compiled with CONFIG_CFI_CLANG on a machine with
+an RX 6700 XT, there is a CFI failure in kfd_destroy_mqd_cp():
 
-[1] https://lore.kernel.org/r/87leov7yix.fsf@intel.com
+  [   12.894543] CFI failure at kfd_destroy_mqd_cp+0x2a/0x40 [amdgpu] (target: hqd_destroy_v10_3+0x0/0x260 [amdgpu]; expected type: 0x8594d794)
 
->
-> Bug: https://gitlab.freedesktop.org/drm/intel/-/issues/7354
-> Signed-off-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
-> ---
->  drivers/gpu/drm/i915/i915_hwmon.c    |  2 +-
->  drivers/gpu/drm/i915/i915_reg_defs.h | 17 +++++++++++------
->  2 files changed, 12 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-> index 9e97814930254..ae435b035229a 100644
-> --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> @@ -112,7 +112,7 @@ hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
->  	nval = DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_factor);
->  
->  	bits_to_clear = field_msk;
-> -	bits_to_set = FIELD_PREP(field_msk, nval);
-> +	bits_to_set = __REG_FIELD_PREP(field_msk, nval);
->  
->  	hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
->  					    bits_to_clear, bits_to_set);
-> diff --git a/drivers/gpu/drm/i915/i915_reg_defs.h b/drivers/gpu/drm/i915/i915_reg_defs.h
-> index f1859046a9c48..dddacc8d48928 100644
-> --- a/drivers/gpu/drm/i915/i915_reg_defs.h
-> +++ b/drivers/gpu/drm/i915/i915_reg_defs.h
-> @@ -67,12 +67,17 @@
->   *
->   * @return: @__val masked and shifted into the field defined by @__mask.
->   */
-> -#define REG_FIELD_PREP(__mask, __val)						\
-> -	((u32)((((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) +	\
-> -	       BUILD_BUG_ON_ZERO(!__is_constexpr(__mask)) +		\
-> -	       BUILD_BUG_ON_ZERO((__mask) == 0 || (__mask) > U32_MAX) +		\
-> -	       BUILD_BUG_ON_ZERO(!IS_POWER_OF_2((__mask) + (1ULL << __bf_shf(__mask)))) + \
-> -	       BUILD_BUG_ON_ZERO(__builtin_choose_expr(__is_constexpr(__val), (~((__mask) >> __bf_shf(__mask)) & (__val)), 0))))
-> +#define __REG_FIELD_PREP_CHK(__mask, __val) \
-> +	(BUILD_BUG_ON_ZERO(!__is_constexpr(__mask)) + \
-> +	 BUILD_BUG_ON_ZERO((__mask) == 0 || (__mask) > U32_MAX) + \
-> +	 BUILD_BUG_ON_ZERO(!IS_POWER_OF_2((__mask) + (1ULL << __bf_shf(__mask)))) + \
-> +	 BUILD_BUG_ON_ZERO(__builtin_choose_expr(__is_constexpr(__val), (~((__mask) >> __bf_shf(__mask)) & (__val)), 0)))
-> +
-> +#define __REG_FIELD_PREP(__mask, __val) \
-> +	((u32)((((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask))))
-> +
-> +#define REG_FIELD_PREP(__mask, __val) \
-> +	(__REG_FIELD_PREP(__mask, __val) + __REG_FIELD_PREP_CHK(__mask, __val))
->  
->  /**
->   * REG_FIELD_GET() - Extract a u32 bitfield value
+Clang's kernel Control Flow Integrity (kCFI) makes sure that all
+indirect call targets have a type that exactly matches the function
+pointer prototype. In this case, hqd_destroy()'s third parameter,
+reset_type, should have a type of 'uint32_t' but every implementation of
+this callback has a third parameter type of 'enum kfd_preempt_type'.
 
+Update the function pointer prototype to match reality so that there is
+no more CFI violation.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1738
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/include/kgd_kfd_interface.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/include/kgd_kfd_interface.h b/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
+index e85364dff4e0..5cb3e8634739 100644
+--- a/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
++++ b/drivers/gpu/drm/amd/include/kgd_kfd_interface.h
+@@ -262,8 +262,9 @@ struct kfd2kgd_calls {
+ 				uint32_t queue_id);
+ 
+ 	int (*hqd_destroy)(struct amdgpu_device *adev, void *mqd,
+-				uint32_t reset_type, unsigned int timeout,
+-				uint32_t pipe_id, uint32_t queue_id);
++				enum kfd_preempt_type reset_type,
++				unsigned int timeout, uint32_t pipe_id,
++				uint32_t queue_id);
+ 
+ 	bool (*hqd_sdma_is_occupied)(struct amdgpu_device *adev, void *mqd);
+ 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.35.1
+
