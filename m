@@ -1,174 +1,301 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944DC27718
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 21:30:10 +0000 (UTC)
-Received: by mail-qv1-f44.google.com with SMTP id mi9so13390105qvb.8
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 14:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NnhizWAIbi5qruvOMfkQD7JHf83kJnMNlqaH+GW5Vh0=;
-        b=QDdBEz1O25l6wo9j8kV5Sjmnbo1c3FXDV4OHpi1WeilJLJ5Z+VOzqW0FQ5cxaWwPp+
-         rrfQWNepZUUXSyKd1X8Hu8Eqi0blhQGKXmerRF4DuU6AQ3b/jqUcMkOyfVbsPhYnGKLs
-         1nK2/BEq403NTL0VW9SFzDitWTyJmAlcXR/QlT7KsSNC/xqEoTxG5VdewkDFCIp9q+K1
-         h81ZawANVfE0Ip2sP3p34JTqN+d1FE9G7pXbs7cO2NGWjJYZuvrLuwgNjpuhsOzOsXKw
-         qm82J9JF8p5KKnkvgDteUXWfixnKplnTEYOL2UgFW1Vv4P3WapBiGCT5xFdPB4ZdnzJ1
-         T9sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NnhizWAIbi5qruvOMfkQD7JHf83kJnMNlqaH+GW5Vh0=;
-        b=K68CXRDBXudvZp8YsFmUGZ1PnJ47pewHfoGcoZ/iqk7M4HlcXh9FhzbMuBCZtccxrS
-         JpBxSy3HkKh3ntCBTCU12NG1DdClaUKeCS4oObtGS6gxF/bfUbV+nmq7OM5vY4ltJkez
-         EQVDqkHaqncfTwOaOK3hukj+c8jT4ZqzO6kvi+HZBCbJd0q3M/jfGDEWAh6InrwN6eWo
-         c853y10cpxDdk13s+5lm7X3ZM2opCPUBbMZH1BKVHtmLv76pwX5ONbKwSSqUpO+/cAR1
-         YiBboF1RKqZJx+iczzLGRCVikKT+VCKY2ZOR2RjOiePa63Ptsuttnq8H87JPJ/Iqr7ry
-         sbog==
-X-Gm-Message-State: ACrzQf0dFCdk3tMTheQcbLaEagm1zSJOlVkOrdcUJVVZCAQp8HfKJtMZ
-	uST68YV7FS1RZB4mbToqOltL3A==
-X-Google-Smtp-Source: AMsMyM5b+7hwrgJkxmNhxObQT8swErvoEdNYJyoRn824mVM6oOxzwoYl3T/uGWd8STZXh4U9qyFLdw==
-X-Received: by 2002:a0c:9c8b:0:b0:4b1:ac82:5c50 with SMTP id i11-20020a0c9c8b000000b004b1ac825c50mr24036814qvf.15.1667424609463;
-        Wed, 02 Nov 2022 14:30:09 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id m11-20020ac8688b000000b0039a610a04b1sm7195595qtq.37.2022.11.02.14.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 14:30:08 -0700 (PDT)
-Date: Wed, 2 Nov 2022 17:30:06 -0400
-From: William Breathitt Gray <william.gray@linaro.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, linux-iio@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	Patrick Havelange <patrick.havelange@essensium.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Oleksij Rempel <linux@rempel-privat.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Julien Panis <jpanis@baylibre.com>,
-	David Lechner <david@lechnology.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-omap@vger.kernel.org
-Subject: Re: [PATCH 1/4] counter: Adjust final parameter type in function and
- signal callbacks
-Message-ID: <Y2LhXqZgOAxL47AT@fedora>
-References: <20221102172217.2860740-1-nathan@kernel.org>
- <202211021216.FF49E84C69@keescook>
- <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C0C27718
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 21:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1667424702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mTaMiw8SOlcbNuTA6GM1qp0APVLwOb95pH57r6UKY/M=;
+	b=L3Ku5LZKPez4hMOwApy2NnL1i8nxCBGXJzHezMAZsJmCVIkxt9uMbo9FKJd1lXY6ZdywTW
+	Y/DnN/uy30DsKRJYP8/ANe6lfeuKZbPFThG+4Z/sDxziY8dVoi2zBMFiTF78IGavX3iXyv
+	h2wfVql3d9AOuycJNm3nLqdr57sPNlI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-379-_qQzx-yeMOmfd6EsbIdziQ-1; Wed, 02 Nov 2022 17:31:41 -0400
+X-MC-Unique: _qQzx-yeMOmfd6EsbIdziQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EFF0F101A5AD
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 21:31:40 +0000 (UTC)
+Received: from [172.64.9.44] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D70F1111CB82;
+	Wed,  2 Nov 2022 21:31:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc3,
+ mainline.kernel.org-clang, 54917c90)
+Date: Wed, 02 Nov 2022 21:31:40 -0000
+CC: bgoncalv@redhat.com
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="HEJ7wVOWhWkBpraW"
-Content-Disposition: inline
-In-Reply-To: <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
-
-
---HEJ7wVOWhWkBpraW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <55097.122110217314100899@us-mta-379.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 02, 2022 at 01:23:51PM -0700, Nathan Chancellor wrote:
-> On Wed, Nov 02, 2022 at 12:21:23PM -0700, Kees Cook wrote:
-> > On Wed, Nov 02, 2022 at 10:22:14AM -0700, Nathan Chancellor wrote:
-> > > The ->signal_u32_read(), ->count_u32_read(), and ->count_u32_write()
-> > > callbacks in 'struct counter_comp' expect the final parameter to have=
- a
-> > > type of 'u32' or 'u32 *' but the ops functions that are being assigned
-> > > to those callbacks have an enumerated type as the final parameter. Wh=
-ile
-> > > these are compatible from an ABI perspective, they will fail the
-> > > aforementioned CFI checks.
-> > >=20
-> > > Adjust the type of the final parameter in the ->signal_read(),
-> > > ->function_read(), and ->function_write() callbacks in 'struct
-> > > counter_ops' and their implementations to match the prototypes in
-> > > 'struct counter_comp' to clear up these warnings and CFI failures.
-> >=20
-> > I don't understand these changes. Where do 'struct counter_comp'
-> > and 'struct counter_ops' get confused? I can only find matching
-> > ops/assignments/calls, so I must be missing something. This looks like
-> > a loss of CFI granularity instead of having wrappers added if there is
-> > an enum/u32 conversion needed somewhere.
->=20
-> Right, I am not the biggest fan of this change myself and it is entirely
-> possible that I am misreading the warnings from the commit message but I
-> do not see how
->=20
->         comp_node.comp.signal_u32_read =3D counter->ops->signal_read;
->=20
-> and
->=20
->         comp_node.comp.count_u32_read =3D counter->ops->function_read;
->=20
-> in counter_add_watch(),
->=20
->         comp.signal_u32_read =3D counter->ops->signal_read;
->=20
-> in counter_signal_attrs_create(), and
->=20
->         comp.count_u32_read =3D counter->ops->function_read;
->         comp.count_u32_write =3D counter->ops->function_write;
->=20
-> in counter_count_attrs_create() are currently safe under kCFI, since the
-> final parameter type of the prototypes in 'struct counter_ops' does not
-> match the final parameter type of the prototypes in 'struct
-> counter_comp'. I would expect the indirect calls in counter_get_data()
-> and counter_comp_u32_show() to fail currently.
->=20
-> I briefly looked at making the 'struct counter_comp' callbacks match the
-> 'struct counter_ops' ones but the COUNTER_COMP macros in
-> include/linux/counter.h made it seem like these callbacks might be used
-> by implementations that might use different enumerated types as the
-> final parameter. I can look a little closer to see if we can make
-> everything match.
->=20
-> I am not sure how wrappers would work here, I can take a look into how
-> feasible that is.
->=20
-> Cheers,
-> Nathan
+Hi, we tested your kernel and here are the results:
 
-The intention of the code here is to treat the last parameter as an
-makeshift generic; the u32 will always be some corresponding enum type
-provided by the driver. The expectation is for drivers to define
-components via respective COUNTER_COMP_* macros, such that the
-assignments of the *_u32_read/*_u32_write callbacks are abstracted away
-and the driver can treat the respective last parameter as of the desired
-enum type.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-For example, COUNTER_COMP_DIRECTION is expected to be used with enum
-counter_count_direction, COUNTER_COMP_POLARITY is expected to be used
-with enum counter_signal_polarity, etc.
 
-What would be nice is if there is a way to ensure the enum type of the
-last parameter of the callback provided to these COUNTER_COMP_* macros
-matches the particular respective COUNTER_COMP_* macro's expectation;
-e.g. we should get some sort of error if COUNTER_COMP_DIRECTION is used
-for a enum counter_signal_level, etc.
+Kernel information:
+    Commit message: Merge tag 'nolibc-urgent.2022.10.28a' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/paulmck/linux-rcu
 
-William Breathitt Gray
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/58275
 
---HEJ7wVOWhWkBpraW
-Content-Type: application/pgp-signature; name="signature.asc"
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5768506
 
------BEGIN PGP SIGNATURE-----
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: tools/include/uapi/linux/in.h:199:3: =
+error: type name requires a specifier or qualifier
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1451
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: (upstream) Cannot download, all mirrors were already tried w=
+ithout success
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5439024
+            Affected tests:
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                 aarch64 - Storage - software RAID testing
+                 aarch64 - stress: stress-ng - cpu-cache
+                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                 ppc64le - LTP: openposix test suite
+                 ppc64le - CIFS Connectathon
+                 ppc64le - Networking bridge: sanity
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - CIFS Connectathon
+                  x86_64 (debug) - Networking: igmp conformance test
+                  x86_64 (debug) - Networking route: pmtu
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: hit test timeout, aborting =
+it...
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1110
+            Affected tests:
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking bridge: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking bridge: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: [rawhide][s390x] avc:  denied  { transition } for  pid=3D135=
+5 comm=3D"runcon" path=3D"/usr/bin/true" dev=3D"dm-0" ino=3D17226318 sconte=
+xt=3Dsystem_u:system_r:unconfined_service_t:s0 tcontext=3Dunconfined_u:unco=
+nfined_r:unconfined_t:s0-s0:c0.c1023 tclass=3Dprocess permissive=3D1
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5628421
+            Affected tests:
+                   s390x - Boot test
+                   s390x - Reboot test
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY2LhXgAKCRC1SFbKvhIj
-K7ujAP4vYYp4QiiMKB8y1V9TP6m+SGeLI3IIjMY/y3kpizOZ5gD/XNnop9AeiGkp
-N0Emw/FK2KiTf7jlxG8uhVJCVgkrKQ8=
-=e2Hi
------END PGP SIGNATURE-----
 
---HEJ7wVOWhWkBpraW--
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
