@@ -1,466 +1,126 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE5A7C
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 06:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667370735; x=1698906735;
-  h=mime-version:content-transfer-encoding:in-reply-to:
-   references:cc:to:from:subject:message-id:date;
-  bh=JrCkN6j+stIgc9DlQIaeVXYqxXGpLNlrrltNN3dS+AY=;
-  b=NRO1BWCwt5hBdbF8cs22SksuFUwv7AwaB6dKymNQQARh+k8ITLAM0A6b
-   ArBtsP6zbK6j3sksLcX2iCFZZW/wbMS8QJVTuhnFmT8yOkcwqnszEzigt
-   a2Vd6pFY6p8/hxQXMkklC9bbVTreYd2iwSer9+Tcwqw+njqtcJn/gwUt1
-   2SVJCX0PUly93BHm+8HRDQv9t8mJxBFFhsklvRlAkivL97LJt9u6nnnPz
-   Xpq+7UlAWGwp5ElubtS3UVrloVd+Hp/InmkoBox25Tfg7aHU/L0NO/bHr
-   U+dEzcPROvQCaVTtF0iGEebjzYZrTyBtliGqNRJuylZJ0nM54hy1pML4W
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="289039313"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="289039313"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 23:32:14 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="723429687"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="723429687"
-Received: from ngorb-mobl.ger.corp.intel.com (HELO localhost) ([10.252.14.3])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 23:32:11 -0700
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFEB47C
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 07:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1667374516; x=1698910516;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gN0he4TZL938QunkKSJatD4ko7UmrpUeuZcG3bRDpUQ=;
+  b=SDV3Z1vGZ/xK9sgr7SaQrrjZ9niIOhMzLx22dbV+1Ix67bDDSjjxw+lE
+   jqJ8+gcP6JUh6Mjza/IkkO0d8wAsaV6eJqQrL3MBYNxqwI8zalJ2G9RAy
+   epr2L/Ifz8w84RnNCfQ2CVPHRHaNAuqbwXn0FnDa4MLlOoE+GE+big3lG
+   OT1fjsqKrlbWWXqAuJNZv0o+iNZsWel7sTVKYbxxuKaY/RoSoBFUpo8bu
+   yqgt5yGI2tEY1Na2tLlucmDNgwJWHjHYdORM0gOtEyznFf1TO+l3Nyugw
+   3DkqAUf/VvgADECDn/gmwacB4Ix9h2HeYrWvDoOOmIQnvevFjNTWBqJTS
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,232,1661788800"; 
+   d="scan'208";a="215292706"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Nov 2022 15:34:07 +0800
+IronPort-SDR: Z+AVJ069C6PAiCL5V1CT5xtS7qwYwW4pqqUTN3aE+Fhf9Wnihlw99oephhG3t3xpPJUAw5U0w7
+ GzbXC6iozHYfJp86kYTx9oD05vPhqofSdwusBYE0uaoJXP1GHxRTO2yFEWhEw3J+qFm1/0Lfmf
+ iBZ8UctpK5BtHoogmtcwlnK+mb5qey/UoFFf4YkO8dIal4KYt/wzdzAoqMGn7cWxMoF/CSVxSi
+ lp+j289sUhiitCOKmu7imZs0qqxZ2Z674i2MWbe72JyEigdKmjYiKalRVGeavCmE2A8s+oD7vO
+ y/tjfbriVo4vDL17aFBF9VVF
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Nov 2022 23:47:36 -0700
+IronPort-SDR: U5IdSczxd7p6Ph5s1hWUhW6bZvN5MibHcXQEWYhJ1jLgoD7gGnn1qUrzvyfS8vrc9fyY5Ps/lp
+ PFG8XDsadhpOPXVA8fLZo5J9ReC+1hHh24cYXKgwd5iIEw/rjo6qaX9IGvcODllN8dMYryKKmQ
+ jmuoGO/GHIzDPfYQgIPalXMOiAaMo/53lId4EwXqeVMTIzs+WasooAJX0fjDnmmTjm79OWnQ/S
+ LBQ9OiQ4WpvWjE8X2BOC2wku4XmKDIKcS3hvkcfAS00OcdBT8jY7tKLtnf5NnnbgwEu/052/hx
+ k0Q=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 00:34:07 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+	by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N2JYC2SGxz1RwqL
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 00:34:07 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+	reason="pass (just generated, assumed good)"
+	header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+	opensource.wdc.com; h=content-transfer-encoding:content-type
+	:in-reply-to:organization:from:references:to:content-language
+	:subject:user-agent:mime-version:date:message-id; s=dkim; t=
+	1667374446; x=1669966447; bh=gN0he4TZL938QunkKSJatD4ko7UmrpUeuZc
+	G3bRDpUQ=; b=VYeUnqnkUJ3f1IzDH3YyFtApmR8uZeVgq9y3kL/hVws6kcSxCq/
+	GWTyYl0h7dinNEXS50D8r5aMRZb4I0gvjQsiL3Y7jv0bPk8j5Ya6cp+8aNfiHHCe
+	82Yryvbm/I1BdKw2dvnUSf1FssQzBTQNcr0hSLWvz6Rh8dVxn/zyVkWcLVtG3Faz
+	XaPu82fHYSO8Yww66pjeBQK/GEJSQL8eUOYZYvtMSwQGJWlsuoS3SQ5xnmZ+R/O2
+	8Dsi9D3Jr7UHNyfGps4ROp8P914RM2fKdTXSZVhqGEdeXzvSISJHf14H+RXzEQpQ
+	BBtd6M238tmmOkLRf58VtLG3uzRuzjebAiA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+	by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id AKnZidYpsoDX for <llvm@lists.linux.dev>;
+	Wed,  2 Nov 2022 00:34:06 -0700 (PDT)
+Received: from [10.225.163.24] (unknown [10.225.163.24])
+	by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N2JY962hkz1RvLy;
+	Wed,  2 Nov 2022 00:34:05 -0700 (PDT)
+Message-ID: <c48606df-7956-2a28-8114-64ab46a04d05@opensource.wdc.com>
+Date: Wed, 2 Nov 2022 16:34:04 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <8735b89vz6.fsf@intel.com>
-References: <20221024210953.1572998-1-gwan-gyeong.mun@intel.com> <Y1ercgaqQwfqt42U@ashyti-mobl2.lan> <87ilk7pwrw.wl-ashutosh.dixit@intel.com> <Y1h8yn4QHI3aBlCe@ashyti-mobl2.lan> <CAKwvOdkpQvk31zbipLDPXfsDZ8FpGHs9t-+9JfFQO85Bs4h=wg@mail.gmail.com> <877d0lxl6s.wl-ashutosh.dixit@intel.com> <CAKwvOdmVJn8HvfF9WTnOAc+HsdJ4c1Tdck8E7Caky7AoCq4ZTA@mail.gmail.com> <875yg5xgkp.wl-ashutosh.dixit@intel.com> <c1c548f8-71a8-0d4d-d591-58a0cd5dac20@intel.com> <8735b89vz6.fsf@intel.com>
-Cc: intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-To: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, Jani Nikula <jani.nikula@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>
-From: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/hwmon: Fix a build error used with clang compiler
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Message-ID: <166737072744.4614.10758297029461955484@jlahtine-mobl.ger.corp.intel.com>
-User-Agent: alot/0.8.1
-Date: Wed, 02 Nov 2022 08:32:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] ata: pata_legacy: fix pdc20230_set_piomode()
+Content-Language: en-US
+To: Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ llvm@lists.linux.dev
+References: <99d91d0e-d3fc-5492-ddca-6da6e65e1e89@omp.ru>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <99d91d0e-d3fc-5492-ddca-6da6e65e1e89@omp.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Quoting Jani Nikula (2022-10-28 11:46:21)
-> On Fri, 28 Oct 2022, Gwan-gyeong Mun <gwan-gyeong.mun@intel.com> wrote:
-> > Resend, because some content was accidentally omitted from the previous=
-=20
-> > reply.
-> > Please ignore the previous email.
-> >
-> > Hi all,
-> >
-> > I should have written the original commit message more accurately, but =
+On 10/29/22 06:07, Sergey Shtylyov wrote:
+> Clang gives a warning when compiling pata_legacy.c with 'make W=1' about
+> the 'rt' local variable in pdc20230_set_piomode() being set but unused.
+> Quite obviously, there is an outb() call missing to write back the updated
+> variable. Moreover, checking the docs by Petr Soucek revealed that bitwise
+> AND should have been done with a negated timing mask and the master/slave
+> timing masks were swapped while updating...
+> 
+> Fixes: 669a5db411d8 ("[libata] Add a bunch of PATA drivers.")
+> Reported-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-> > it seems that it was written inaccurately.
-> >
-> > If the FIELD_PREP macro is expanded, the following macros are used.
-> >
-> > #define FIELD_PREP(_mask, _val)                                        =
-       \
-> >       ({                                                              \
-> >               __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-> >               ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask);   \
-> >       })
-> >
-> >
-> > #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)                     \
-> >       ({                                                              \
-> >               BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-> >                                _pfx "mask is not constant");          \
-> >               BUILD_BUG_ON_MSG((_mask) =3D=3D 0, _pfx "mask is zero"); =
-   \
-> >               BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-> >                                ~((_mask) >> __bf_shf(_mask)) & (_val) :=
- 0, \
-> >                                _pfx "value too large for the field"); \
-> >               BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-> >                                __bf_cast_unsigned(_reg, ~0ull),       \
-> >                                _pfx "type of reg too small for mask"); \
-> >               __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +                 \
-> >                                             (1ULL << __bf_shf(_mask)));=
- \
-> >       })
-> >
-> > Among them, a build error is generated by the lower part of the=20
-> > __BF_FIELD_CHECK() macro.
-> >
-> >               BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-> >                                __bf_cast_unsigned(_reg, ~0ull),       \
-> >                                _pfx "type of reg too small for mask"); \
-> >
-> >
-> > Here, if you apply an argument to this macro, it will look like the=20
-> > following.
-> >
-> > __bf_cast_unsigned(field_msk, field_msk) > __bf_cast_unsigned(0ULL, ~0u=
-ll)
-> >
-> > The result is always false because an unsigned int value of type=20
-> > field_msk is not always greater than the maximum value of unsigned long=
-=20
-> > long .
-> > So, a build error occurs due to the following part of the clang compile=
-r=20
-> > option.
-> >
-> > [-Werror,-Wtautological-constant-out-of-range-compare]
-> >
-> > You can simply override this warning in Clang by adding the build optio=
-n=20
-> > below, but this seems like a bad attempt
-> >
-> > i915/Makefile
-> > CFLAGS_i915_hwmon.o +=3D -Wno-tautological-constant-out-of-range-compare
-> >
-> > The easiest way to solve this is to use a constant value, not a=20
-> > variable, as an argument to FIELD_PREP.
-> >
-> > And since the REG_FIELD_PREP() macro suggested by Jani requires a const=
-=20
-> > expression as the first argument, it cannot be changed with this macro =
+Applied to for-6.1-fixes. Thanks !
 
-> > alone in the existing code, it must be changed to input a constant valu=
-e=20
-> > as shown below.
->=20
-> We've added REG_FIELD_PREP() precisely to avoid the problems with the
-> types and ranges, as we want it to operate on u32. It also uses
-> __is_constexpr() to avoid dependencies on compiler implementation and
-> optimizations.
->=20
-> Please use REG_FIELD_PREP() and a constant value. Maybe rethink the
-> interface if needed.
+> 
+> ---
+>  drivers/ata/pata_legacy.c |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> Index: libata/drivers/ata/pata_legacy.c
+> ===================================================================
+> --- libata.orig/drivers/ata/pata_legacy.c
+> +++ libata/drivers/ata/pata_legacy.c
+> @@ -315,9 +315,10 @@ static void pdc20230_set_piomode(struct
+>  	outb(inb(0x1F4) & 0x07, 0x1F4);
+>  
+>  	rt = inb(0x1F3);
+> -	rt &= 0x07 << (3 * adev->devno);
+> +	rt &= ~(0x07 << (3 * !adev->devno));
+>  	if (pio)
+> -		rt |= (1 + 3 * pio) << (3 * adev->devno);
+> +		rt |= (1 + 3 * pio) << (3 * !adev->devno);
+> +	outb(rt, 0x1F3);
+>  
+>  	udelay(100);
+>  	outb(inb(0x1F2) | 0x01, 0x1F2);
 
-Ashutosh and GG, can we get a fix for this merged ASAP. It's currently
-blocking the drm-intel-gt-next pull request.
+-- 
+Damien Le Moal
+Western Digital Research
 
-Regards, Joonas
-
->=20
-> BR,
-> Jani.
->=20
->=20
->=20
->=20
-> >
-> > diff --git a/drivers/gpu/drm/i915/i915_hwmon.c=20
-> > b/drivers/gpu/drm/i915/i915_hwmon.c
-> > index 08c921421a5f..abb3a194c548 100644
-> > --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> > +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> > @@ -101,7 +101,7 @@ hwm_field_read_and_scale(struct hwm_drvdata *ddat, =
-
-> > i915_reg_t rgadr,
-> >
-> >   static void
-> >   hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgadr,
-> > -                         const u32 field_msk, int nshift,
-> > +                         int nshift,
-> >                            unsigned int scale_factor, long lval)
-> >   {
-> >          u32 nval;
-> > @@ -111,8 +111,8 @@ hwm_field_scale_and_write(struct hwm_drvdata *ddat,=
-=20
-> > i915_reg_t rgadr,
-> >          /* Computation in 64-bits to avoid overflow. Round to nearest.=
- */
-> >          nval =3D DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_fact=
-or);
-> >
-> > -       bits_to_clear =3D field_msk;
-> > -       bits_to_set =3D REG_FIELD_PREP(field_msk, nval);
-> > +       bits_to_clear =3D PKG_PWR_LIM_1;
-> > +       bits_to_set =3D REG_FIELD_PREP(PKG_PWR_LIM_1, nval);
-> >
-> >          hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
-> >                                              bits_to_clear, bits_to_set=
-);
-> > @@ -406,7 +406,6 @@ hwm_power_write(struct hwm_drvdata *ddat, u32 attr,=
-=20
-> > int chan, long val)
-> >          case hwmon_power_max:
-> >                  hwm_field_scale_and_write(ddat,
-> >                                            hwmon->rg.pkg_rapl_limit,
-> > -                                         PKG_PWR_LIM_1,
-> >                                            hwmon->scl_shift_power,
-> >                                            SF_POWER, val);
-> >                  return 0;
-> >
-> >
-> >
-> > In addition, if there is no build problem regardless of the size of the=
-=20
-> > type as the first argument in FIELD_PREP, it is possible through the=20
-> > following modification.
-> > (Since this modification modifies include/linux/bitfield.h , I will sen=
-d=20
-> > it as a separate patch.
-> >    )
-> >
-> > However, it seems that we need to have Jani's confirm whether it is oka=
-y=20
-> > to use FIELD_PREP() instead of REG_FIELD_PREP() which is forced to u32 =
-
-> > return type in i915.
-> >
-> > diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> > index c9be1657f03d..6e96799b6f38 100644
-> > --- a/include/linux/bitfield.h
-> > +++ b/include/linux/bitfield.h
-> > @@ -9,7 +9,7 @@
-> >
-> >   #include <linux/build_bug.h>
-> >   #include <asm/byteorder.h>
-> > -
-> > +#include <linux/overflow.h>
-> >   /*
-> >    * Bitfield access macros
-> >    *
-> > @@ -69,7 +69,7 @@
-> >                                   ~((_mask) >> __bf_shf(_mask)) & (_val=
-)=20
-> > : 0, \
-> >                                   _pfx "value too large for the field")=
-; \
-> >                  BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >   =
-  \
-> > -                                __bf_cast_unsigned(_reg, ~0ull),      =
- \
-> > +                                __bf_cast_unsigned(_reg,=20
-> > type_max(__unsigned_scalar_typeof(_reg))),    \
-> >                                   _pfx "type of reg too small for mask"=
-); \
-> >                  __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +               =
-  \
-> >                                                (1ULL << __bf_shf(_mask)=
-)); \
-> > @@ -84,7 +84,7 @@
-> >    */
-> >   #define FIELD_MAX(_mask)                                             =
-  \
-> >          ({                                                            =
-  \
-> > -               __BF_FIELD_CHECK(_mask, 0ULL, 0ULL, "FIELD_MAX: ");    =
- \
-> > +               __BF_FIELD_CHECK(_mask,=20
-> > type_min(__unsigned_scalar_typeof(_mask)),=20
-> > type_min(__unsigned_scalar_typeof(_mask)), "FIELD_MAX: ");   \
-> >                  (typeof(_mask))((_mask) >> __bf_shf(_mask));          =
-  \
-> >          })
-> >
-> > @@ -97,7 +97,7 @@
-> >    */
-> >   #define FIELD_FIT(_mask, _val)                                       =
-  \
-> >          ({                                                            =
-  \
-> > -               __BF_FIELD_CHECK(_mask, 0ULL, 0ULL, "FIELD_FIT: ");    =
- \
-> > +               __BF_FIELD_CHECK(_mask,=20
-> > type_min(__unsigned_scalar_typeof(_mask)),=20
-> > type_min(__unsigned_scalar_typeof(_val)), "FIELD_FIT: ");    \
-> >                  !((((typeof(_mask))_val) << __bf_shf(_mask)) & ~(_mask=
-)); \
-> >          })
-> >
-> > @@ -111,7 +111,7 @@
-> >    */
-> >   #define FIELD_PREP(_mask, _val)=20
-> >           \
-> >          ({                                                            =
-  \
-> > -               __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");   =
- \
-> > +               __BF_FIELD_CHECK(_mask,=20
-> > type_min(__unsigned_scalar_typeof(_mask)), _val, "FIELD_PREP: ");      =
- \
-> >                  ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask); =
-  \
-> >          })
-> >
-> > @@ -125,7 +125,7 @@
-> >    */
-> >   #define FIELD_GET(_mask, _reg)                                       =
-  \
-> >          ({                                                            =
-  \
-> > -               __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");      =
- \
-> > +               __BF_FIELD_CHECK(_mask, _reg,=20
-> > type_min(__unsigned_scalar_typeof(_reg)), "FIELD_GET: "); \
-> >                  (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask))=
-; \
-> >          })
-> >
-> >
-> > Br,
-> >
-> > G.G.
-> >
-> > On 10/27/22 9:32 PM, Dixit, Ashutosh wrote:
-> >> On Thu, 27 Oct 2022 10:16:47 -0700, Nick Desaulniers wrote:
-> >>>
-> >>=20
-> >> Hi Nick,
-> >>=20
-> >>> Thanks, I can repro now.
-> >>>
-> >>> I haven't detangled the macro soup, but I noticed:
-> >>>
-> >>> 1. FIELD_PREP is defined in include/linux/bitfield.h which has the
-> >>> following comment:
-> >>>   18  * Mask must be a compilation time constant.
-> >>=20
-> >> I had comments about this here:
-> >>=20
-> >> https://lore.kernel.org/intel-gfx/87ilk7pwrw.wl-ashutosh.dixit@intel.c=
-om/
-> >>=20
-> >> The relevant part being:
-> >>=20
-> >> ---- {quote} ----
-> >>>>> ./include/linux/bitfield.h:71:53: note: expanded from macro '__BF_F=
-IELD_CHECK'
-> >>>>>                  BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) =
->     \
-> >>=20
-> >> So clang seems to break here at this line in __BF_FIELD_CHECK (note ~0=
-ull
-> >> also occurs here):
-> >>=20
-> >>              BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-> >>                               __bf_cast_unsigned(_reg, ~0ull),       \
-> >>                               _pfx "type of reg too small for mask"); \
-> >>=20
-> >> So it goes through previous checks including the "mask is not constant"
-> >> check. As Nick Desaulniers mentions "__builtin_constant_p is evaluated
-> >> after most optimizations have run" so by that time both compilers (gcc=
- and
-> >> clang) have figured out that even though _mask is coming in as function
-> >> argument it is really the constant below:
-> >>=20
-> >> #define   PKG_PWR_LIM_1              REG_GENMASK(14, 0)
-> >>=20
-> >> But it is not clear why clang chokes on this "type of reg too small for
-> >> mask" check (and gcc doesn't) since everything is u32.
-> >> ---- {end quote} ----
-> >>=20
-> >>>
-> >>> 2. hwm_field_scale_and_write only has one callsite.
-> >>>
-> >>> The following patch works:
-> >>=20
-> >> If we need to fix it at our end yes we can come up with one of these
-> >> patches. But we were hoping someone from clang/llvm can comment about =
-the
-> >> "type of reg too small for mask" stuff. If this is something which nee=
-ds to
-> >> be fixed in clang/llvm we probably don't want to hide the issue.
-> >>=20
-> >>>
-> >>> ```
-> >>> diff --git a/drivers/gpu/drm/i915/i915_hwmon.c
-> >>> b/drivers/gpu/drm/i915/i915_hwmon.c
-> >>> index 9e9781493025..6ac29d90b92a 100644
-> >>> --- a/drivers/gpu/drm/i915/i915_hwmon.c
-> >>> +++ b/drivers/gpu/drm/i915/i915_hwmon.c
-> >>> @@ -101,7 +101,7 @@ hwm_field_read_and_scale(struct hwm_drvdata *ddat,
-> >>> i915_reg_t rgadr,
-> >>>
-> >>>   static void
-> >>>   hwm_field_scale_and_write(struct hwm_drvdata *ddat, i915_reg_t rgad=
-r,
-> >>> -                         u32 field_msk, int nshift,
-> >>> +                         int nshift,
-> >>>                            unsigned int scale_factor, long lval)
-> >>>   {
-> >>>          u32 nval;
-> >>> @@ -111,8 +111,8 @@ hwm_field_scale_and_write(struct hwm_drvdata
-> >>> *ddat, i915_reg_t rgadr,
-> >>>          /* Computation in 64-bits to avoid overflow. Round to neares=
-t. */
-> >>>          nval =3D DIV_ROUND_CLOSEST_ULL((u64)lval << nshift, scale_fa=
-ctor);
-> >>>
-> >>> -       bits_to_clear =3D field_msk;
-> >>> -       bits_to_set =3D FIELD_PREP(field_msk, nval);
-> >>> +       bits_to_clear =3D PKG_PWR_LIM_1;
-> >>> +       bits_to_set =3D FIELD_PREP(PKG_PWR_LIM_1, nval);
-> >>>
-> >>>          hwm_locked_with_pm_intel_uncore_rmw(ddat, rgadr,
-> >>>                                              bits_to_clear, bits_to_s=
-et);
-> >>> @@ -406,7 +406,6 @@ hwm_power_write(struct hwm_drvdata *ddat, u32
-> >>> attr, int chan, long val)
-> >>>          case hwmon_power_max:
-> >>>                  hwm_field_scale_and_write(ddat,
-> >>>                                            hwmon->rg.pkg_rapl_limit,
-> >>> -                                         PKG_PWR_LIM_1,
-> >>>                                            hwmon->scl_shift_power,
-> >>>                                            SF_POWER, val);
-> >>>                  return 0;
-> >>> ```
-> >>> Though I'm not sure if you're planning to add further callsites of
-> >>> hwm_field_scale_and_write with different field_masks?
-> >>=20
-> >> I have reasons for keeping it this way, it's there in the link above i=
-f you
-> >> are interested.
-> >>=20
-> >>>
-> >>> Alternatively, (without the above diff),
-> >>>
-> >>> ```
-> >>> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> >>> index c9be1657f03d..6f40f12bcf89 100644
-> >>> --- a/include/linux/bitfield.h
-> >>> +++ b/include/linux/bitfield.h
-> >>> @@ -8,6 +8,7 @@
-> >>>   #define _LINUX_BITFIELD_H
-> >>>
-> >>>   #include <linux/build_bug.h>
-> >>> +#include <linux/const.h>
-> >>>   #include <asm/byteorder.h>
-> >>>
-> >>>   /*
-> >>> @@ -62,7 +63,7 @@
-> >>>
-> >>>   #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)                  =
-    \
-> >>>          ({                                                          =
-    \
-> >>> -               BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),       =
-   \
-> >>> +               BUILD_BUG_ON_MSG(!__is_constexpr(_mask),             =
-   \
-> >>>                                   _pfx "mask is not constant");      =
-    \
-> >>>                  BUILD_BUG_ON_MSG((_mask) =3D=3D 0, _pfx "mask is zer=
-o");    \
-> >>>                  BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?       =
-    \
-> >>> ```
-> >>> will produce:
-> >>> error: call to __compiletime_assert_407 declared with 'error'
-> >>> attribute: FIELD_PREP: mask is not constant
-> >>>
-> >>> I haven't tested if that change is also feasible (on top of fixing
-> >>> this specific instance), but I think it might help avoid more of these
-> >>> subtleties wrt. __builtin_constant_p that depende heavily on compiler,
-> >>> compiler version, optimization level.
-> >>=20
-> >> Not disagreeing, can do something here if needed.
-> >>=20
-> >> Thanks.
-> >> --
-> >> Ashutosh
->=20
-> --=20
-> Jani Nikula, Intel Open Source Graphics Center
