@@ -1,32 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4782B29A0
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE96C433C1;
-	Wed,  2 Nov 2022 19:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667417281;
-	bh=V99NLxJ1CDCsDjWVw5q4vkveJIgk3tjkI5VceymN/co=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ue9CFnS8VoJ6tE2L4PugKig1jik6FLf1TPSy6ukmoIcd4SGDw/xJxpfndt8isuMLz
-	 0SEYkArxfClPVmQr/5nrjAxBscJZG5jdke9prS736gnUDwCTm87EAV6Q1mKWbpWkHn
-	 xVBlONl1r1sBHrPHgy0BcuOKdm//X7MUHZy3or0ywjhzy3ul7Cbv8w6X+ET1z0Hjs/
-	 dYU+h7K04Dx38NhV8RBStlzaZzInMw2NpbYzcEtZUPOMaFoabxlcI4/nKpttT37VTF
-	 /N1VnRXvE8gndLvs+4DTCsoh6R7avGfydive79lfFVHAb3EfCrNic3BvFllDKEiBya
-	 KqygYaMs2qMOw==
-Date: Wed, 2 Nov 2022 12:27:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rongwei Zhang <pudh4418@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Ralf Baechle <ralf@linux-mips.org>,
-	Maxim Uvarov <muvarov@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] MIPS: fix duplicate definitions for exported symbols
-Message-ID: <Y2LEvg5PEdbAtQ3e@dev-arch.thelio-3990X>
-References: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB38324F4F
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:33:35 +0000 (UTC)
+Received: by mail-pj1-f54.google.com with SMTP id h14so17186065pjv.4
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Is8uxYlhyk8bBxYXj/AJ+5Ed7risnbmV/bZZuRONlGw=;
+        b=YgTo3g4CWnxassQXwnQGCJRK8UV2dkG1gd5qUAMt9TS//89B3+EgDk8JBHMqQRWbqE
+         SasIIt6rr9pasf/tRkH/JpmtucjEENqYnz4Ij31JPs/tyYvKfhh0Xab/ZL8Kv52Brl9z
+         k+6eHolz1b5J42Hw8E/CNYhE3n7UgliU9iEI8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Is8uxYlhyk8bBxYXj/AJ+5Ed7risnbmV/bZZuRONlGw=;
+        b=3jdgvuF7Ls5g6h9IsJaEyQFp834XqS2RFSObC4n2oE09Olxg7IawF4DZtys8hLCi/t
+         dtMPMvNyaPKP7X2fkAiZE7PgELYh68be2N6g5WsYQ5YFBs7LzhmY+IKh0UTB3T6V91Cw
+         YlZgKNBYigPBAVr0ADNKZ6+DLCwraUl4ItHBTMc44pCczdaQjxOB9Bb3W+m6a2wdUjph
+         fqAxVxl4/ASELeoYFVHRmmjq4m+Bn3qX6D9v1GV8f/w8moLa48VP0UmS9HcBBgH1e8KS
+         QeHueSo7Nvr7jgECL43wYp3GESOUy5+tImSw6s2mY2p16jpOrszMC3YpT3AtYa50xrcP
+         L7oQ==
+X-Gm-Message-State: ACrzQf02phCMeV8xgZ3EvDypCMJ5PKqchts7Y230Vwje2RwNUEhnEDUV
+	sLXBlquEJ6wKcrew33hnihxqXAzS3rkaVg==
+X-Google-Smtp-Source: AMsMyM53U0WVK/IltYw2wXUwLPZJui+ftOfV8T9ZqcZx2iahytioyLerdzpOUR84Yg1+mPoG2ixzFA==
+X-Received: by 2002:a17:902:7446:b0:186:a3a1:782d with SMTP id e6-20020a170902744600b00186a3a1782dmr26452013plt.76.1667417615186;
+        Wed, 02 Nov 2022 12:33:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b001811a197797sm8605891plp.194.2022.11.02.12.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 12:33:34 -0700 (PDT)
+Date: Wed, 2 Nov 2022 12:33:33 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+	luc.vanoostenryck@gmail.com, nathan@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com, dlatypov@google.com,
+	vitor@massaru.org, gustavoars@kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+	rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+	airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-sparse@vger.kernel.org, arnd@kernel.org, mchehab@kernel.org,
+	mauro.chehab@linux.intel.com
+Subject: Re: [PATCH v5] overflow: Introduce overflows_type() and
+ castable_to_type()
+Message-ID: <202211021233.02BF0D38@keescook>
+References: <20220926191109.1803094-1-keescook@chromium.org>
+ <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
+ <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,85 +62,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+In-Reply-To: <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
 
-On Wed, Nov 02, 2022 at 08:27:39PM +0800, Rongwei Zhang wrote:
-> Building with clang-14 fails with:
+On Wed, Nov 02, 2022 at 12:52:32PM +0100, Rasmus Villemoes wrote:
+> On 24/10/2022 22.11, Gwan-gyeong Mun wrote:
+> > From: Kees Cook <keescook@chromium.org>
+> > 
+> > Implement a robust overflows_type() macro to test if a variable or
+> > constant value would overflow another variable or type. This can be
+> > used as a constant expression for static_assert() (which requires a
+> > constant expression[1][2]) when used on constant values. This must be
+> > constructed manually, since __builtin_add_overflow() does not produce
+> > a constant expression[3].
+> > 
+> > Additionally adds castable_to_type(), similar to __same_type(), but for
+> > checking if a constant value would overflow if cast to a given type.
+> > 
 > 
-> AS      arch/mips/kernel/relocate_kernel.o
-> <unknown>:0: error: symbol 'kexec_args' is already defined
-> <unknown>:0: error: symbol 'secondary_kexec_args' is already defined
-> <unknown>:0: error: symbol 'kexec_start_address' is already defined
-> <unknown>:0: error: symbol 'kexec_indirection_page' is already defined
-> <unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
+> > +#define __overflows_type_constexpr(x, T) (			\
+> > +	is_unsigned_type(typeof(x)) ?				\
+> > +		(x) > type_max(typeof(T)) ? 1 : 0		\
+> > +	: is_unsigned_type(typeof(T)) ?				\
+> > +		(x) < 0 || (x) > type_max(typeof(T)) ? 1 : 0	\
+> > +		: (x) < type_min(typeof(T)) ||			\
+> > +		  (x) > type_max(typeof(T)) ? 1 : 0)
+> > +
 > 
-> It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
-> so there is no need to define these symbols again. Remove duplicated
-> symbol definitions.
-> 
-> Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
-> Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
+> Can't all these instances of "foo ? 1 : 0" be simplified to "foo"? That
+> would improve the readability of this thing somewhat IMO.
 
-Indeed. I had a similar diff when I looked into this late last year but
-I never got around to sending that diff.
+Oh, good point. :P I'll fix these.
 
-https://github.com/ClangBuiltLinux/linux/issues/1528#issuecomment-988235109
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-Thanks for the patch!
-
-> ---
->  arch/mips/kernel/relocate_kernel.S | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
-> index cfde14b48fd8..f5b2ef979b43 100644
-> --- a/arch/mips/kernel/relocate_kernel.S
-> +++ b/arch/mips/kernel/relocate_kernel.S
-> @@ -145,8 +145,7 @@ LEAF(kexec_smp_wait)
->   * kexec_args[0..3] are used to prepare register values.
->   */
->  
-> -kexec_args:
-> -	EXPORT(kexec_args)
-> +EXPORT(kexec_args)
->  arg0:	PTR_WD		0x0
->  arg1:	PTR_WD		0x0
->  arg2:	PTR_WD		0x0
-> @@ -159,8 +158,7 @@ arg3:	PTR_WD		0x0
->   * their registers a0-a3. secondary_kexec_args[0..3] are used
->   * to prepare register values.
->   */
-> -secondary_kexec_args:
-> -	EXPORT(secondary_kexec_args)
-> +EXPORT(secondary_kexec_args)
->  s_arg0: PTR_WD		0x0
->  s_arg1: PTR_WD		0x0
->  s_arg2: PTR_WD		0x0
-> @@ -171,19 +169,16 @@ kexec_flag:
->  
->  #endif
->  
-> -kexec_start_address:
-> -	EXPORT(kexec_start_address)
-> +EXPORT(kexec_start_address)
->  	PTR_WD		0x0
->  	.size		kexec_start_address, PTRSIZE
->  
-> -kexec_indirection_page:
-> -	EXPORT(kexec_indirection_page)
-> +EXPORT(kexec_indirection_page)
->  	PTR_WD		0
->  	.size		kexec_indirection_page, PTRSIZE
->  
->  relocate_new_kernel_end:
->  
-> -relocate_new_kernel_size:
-> -	EXPORT(relocate_new_kernel_size)
-> +EXPORT(relocate_new_kernel_size)
->  	PTR_WD		relocate_new_kernel_end - relocate_new_kernel
->  	.size		relocate_new_kernel_size, PTRSIZE
-> -- 
-> 2.38.1
-> 
+-- 
+Kees Cook
