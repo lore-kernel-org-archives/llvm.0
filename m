@@ -1,50 +1,55 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE36D24F47
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:07:03 +0000 (UTC)
-Received: by mail-pf1-f172.google.com with SMTP id z26so4107314pff.1
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:07:03 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D8624F48
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:08:01 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso2990262pjg.5
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:08:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Al21TcPJt8to6DKIHKPsHPs63wTLg/3m3c5X1IY9ZVk=;
-        b=OcMa2PXvffEHTQunOgnNyVVSveU1Xb65KX1gioYtZk3gy2NegHqZ67GKmvzpjPnDJl
-         zKfuWdA2xd3gYCvHb+t/2yRIVb2JA+hl9J9vsDf3NoLYr2nWYglOAJ7O3AmVFD3BBhXm
-         60sjC1gk9vHdyyZ1gOJyAbff5s4FGFzZCbOtY=
+        bh=vw1PeYfYrmcqxsdFm8vSKj6yNnyKJrjXBsCDkZ8l7vk=;
+        b=XNJLSicRjEN8rmTBOFq4nZjBNIwb3bfbU77PQOf7hvq7/KsYyf4RBy+5zc2UAJlGhc
+         TMgcRxRmNxosn3VWIIRRCpYt9DoDGwFFE5H6e1NdTJGJbA1bAcnhH8n7lpiKmKZMfShp
+         b+fHS0RnxesbdRP/UtHxZ3cWF55CBAMmG0h1c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Al21TcPJt8to6DKIHKPsHPs63wTLg/3m3c5X1IY9ZVk=;
-        b=sJoJtwGNP3FgYfApDDIqwNmx2aou9A3nO+LPP9+igECm4WH+07eri96HoA7CtQ8agg
-         YHAurmqhmhKYqYzOx1kagomOi/y0ovmYwRK8xTRqdExEuipDR19ySqf0byiBJv+wRkS0
-         hCyY773BpkY2YPt1R4q8HhVpFnjDau8FTQB5xB2/Yg85ra900PQwg8CkS0naILwS3EDQ
-         ytfqKCvD8OqJk/HVcEWAU20siPkaEsY8zr8Gg2Tyi5i7gPyAmuocMMT+krl/IVZQazsf
-         EbmGquvEx1k7GxtR5TQgOoTE+k0YWwdTpnsLt75R34c7WwCznfD+xTYYCRUI/ujARvCO
-         y1jA==
-X-Gm-Message-State: ACrzQf1kHgAwZejBjnw7Ba43hrn9uY6rwoizuPM6UKNrwyYkY+9LLzry
-	ETYsdYlIWUi7PLC4Y+O4DytwoQ==
-X-Google-Smtp-Source: AMsMyM7e7i+B4cU9w/Cyv/Fyf+gg4EoaUzMwpOjPVeEN10vhsy2lFnKC9AXyAPa+74dzy4vTvNDnfw==
-X-Received: by 2002:a05:6a00:140d:b0:528:5a5a:d846 with SMTP id l13-20020a056a00140d00b005285a5ad846mr27168744pfu.9.1667416023443;
-        Wed, 02 Nov 2022 12:07:03 -0700 (PDT)
+        bh=vw1PeYfYrmcqxsdFm8vSKj6yNnyKJrjXBsCDkZ8l7vk=;
+        b=GAcAY/AAxiNK3y8sDV9anqK/hcSKA+ZPqKT6jxGijfqLcW7klOzlhc+avovsqOmVKO
+         PBNT6/VknUxeGQDHwztM4frYsxXPbjOZ7xgWkK5dBTSd+1sMIXM78ybEgCw4r790MRVZ
+         3iEDPK+1WEXZW3ZUcl4FEkpcoLNYYQ3DfYg7qmC4c06VW9dfiG0msJb8P5nsvhwdqXtS
+         jTBPtQH+alrnbM/Q+9EKzfuCy5Dm2EtWeXlmWK2yi9vlltghRE5BHbdNlvXN7Dsbtc/p
+         KEuCKD4P3oJGI9QKfd2oE+1TmX7/mxo8IdpWf3c1t0+mUMHhgVaxfWGzifynk0bu6OjW
+         ZC5g==
+X-Gm-Message-State: ACrzQf1yNOfJwPsJfo9pErzfutxhw8NKJX8J7oh4Iy5ZEtbt6FXvxPOa
+	YBhinzzhoSmschQTRP8hX2cLgQ==
+X-Google-Smtp-Source: AMsMyM7I9I7fudr6NNXqLACM4CekbYXQHH71Q92LDGS3KIiSUx5BXYQkZEVhg3knX05G924q3TSVHA==
+X-Received: by 2002:a17:90a:3947:b0:213:ebeb:2cf3 with SMTP id n7-20020a17090a394700b00213ebeb2cf3mr16561908pjf.9.1667416081215;
+        Wed, 02 Nov 2022 12:08:01 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e64-20020a621e43000000b0056be7ac5261sm8822038pfe.163.2022.11.02.12.07.02
+        by smtp.gmail.com with ESMTPSA id h23-20020aa796d7000000b0056d2e716e01sm8015248pfq.139.2022.11.02.12.08.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:07:02 -0700 (PDT)
-Date: Wed, 2 Nov 2022 12:07:02 -0700
+        Wed, 02 Nov 2022 12:08:00 -0700 (PDT)
+Date: Wed, 2 Nov 2022 12:08:00 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
+Cc: Thomas Sailer <t.sailer@alumni.ethz.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-hams@vger.kernel.org, netdev@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
 	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: Re: [PATCH] HSI: ssi_protocol: Fix return type of ssip_pn_xmit()
-Message-ID: <202211021207.8F7604C860@keescook>
-References: <20221102160233.4042756-1-nathan@kernel.org>
+Subject: Re: [PATCH] hamradio: baycom_epp: Fix return type of
+ baycom_send_packet()
+Message-ID: <202211021207.E41AE398@keescook>
+References: <20221102160610.1186145-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,9 +58,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102160233.4042756-1-nathan@kernel.org>
+In-Reply-To: <20221102160610.1186145-1-nathan@kernel.org>
 
-On Wed, Nov 02, 2022 at 09:02:33AM -0700, Nathan Chancellor wrote:
+On Wed, Nov 02, 2022 at 09:06:10AM -0700, Nathan Chancellor wrote:
 > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 > indirect call targets are validated against the expected function
 > pointer prototype to make sure the call target is valid to help mitigate
@@ -64,19 +69,20 @@ On Wed, Nov 02, 2022 at 09:02:33AM -0700, Nathan Chancellor wrote:
 > proposed warning in clang aims to catch these at compile time, which
 > reveals:
 > 
->   drivers/hsi/clients/ssi_protocol.c:1053:20: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .ndo_start_xmit = ssip_pn_xmit,
->                             ^~~~~~~~~~~~
+>   drivers/net/hamradio/baycom_epp.c:1119:25: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit      = baycom_send_packet,
+>                                 ^~~~~~~~~~~~~~~~~~
 >   1 error generated.
 > 
 > ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> 'netdev_tx_t', not 'int'. Adjust the return type of ssip_pn_xmit() to
-> match the prototype's to resolve the warning and CFI failure.
-> Additionally, use the enum 'NETDEV_TX_OK' instead of a raw '0' for the
-> return value of ssip_pn_xmit().
+> 'netdev_tx_t', not 'int'. Adjust the return type of baycom_send_packet()
+> to match the prototype's to resolve the warning and CFI failure.
 > 
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Heh, this one was already using the enum for the argument to "return",
+too. :)
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
