@@ -1,284 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150093.outbound.protection.outlook.com [40.107.15.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8237ED
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 09:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550B4C4314D
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 09:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667380908;
-	bh=+6G9Z16Q17XA4hNmJQj+d3VGJ/WPDeI5Inl1wZwKjC0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SXCjTcq9gG+xGOVpMO6KNvSPI0lfr9/KZFoiDNTFz3q9Al/aHKvVjLV6SNkxoQTD8
-	 oG68fA1J78adjWfNoEXg8nVRT68wIiMNcj1IXAzjJcAzvIQkS+Vvg8amEex9+jfEkP
-	 sxXv2Mvswlh2vhSw08NbChZjx1v3LZ15v6h9m6pv6jHKFO+sRyA3tCT+ZcvCi4HF5h
-	 BBk+pTS2FjuBlv+QfGRHedc9MVMiB1nJrSX/k1maFeE/DPuJwzRo5rcLAMjH+9yrqi
-	 GcCn9epNn293LKDeeNUaR+NIfxOfxg2fUKrmNmQNGs9QHw50kk5OVOISO24PXCUORn
-	 xr2uQCLV6ATSQ==
-Received: by mail-lf1-f51.google.com with SMTP id bp15so27167667lfb.13
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 02:21:48 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2XsRsOIP1FvhkG3n2Db8zKR+8uZmrt5qBEKUHu2Ee76D/v54li
-	7oVM1IIlLET26m92japHr1qRf53wyUlv/4LEDUk=
-X-Google-Smtp-Source: AMsMyM55mTCxAdHvLvHFvBIGp3LFuEM2h/RMSgAb00FTUsU79Bk0i0rPtUySv31BzwusjnFxBx77j4dA81oel1TjoCQ=
-X-Received: by 2002:ac2:4d05:0:b0:4a7:7e1b:1c81 with SMTP id
- r5-20020ac24d05000000b004a77e1b1c81mr9761651lfi.110.1667380906244; Wed, 02
- Nov 2022 02:21:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2993D7ED
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 09:26:46 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XvNspOJz3i1Na89TXE1Ji9aoE8V1BCaIsGFjWTTZ7oVbkFwAOsKDAx4FLjBdTVJUNEthTw/j+LEJOAL/vOSfcD+mZmB4gSGXK5afuKEHh45V/7l/1to3YN5s0hwl+iEBq5HaGshs9M9KUqgc2cMkesTvzYMC2DLEsEQ6ZchZQXPtzfzizv4ZJQ+K/3j29o5vMAxKaz0ICkziiwq6q6BAOCzsMshlzVqxaBdC9CD2wExzuZN5tWijZWpZ/DLlnPAx/r0tnJw5soXBCUZNjZBDhuP6RzWMFnKJ8HzfFVg4zOREgFUYVB/Mk6dBCOw2EAwIaB3DY4MFwzWhaBrZUV+mLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8kAUC0bl2QROL8JD9dwS0CsoUN2T41FHjYnid0OGnGg=;
+ b=doI+PD6y8aaUNTjR61+ssy/Br+fR15xfVMAQAkNA7n4OfFP1rOOrO0/YEwQ7iqF36JmFPuyCOgm9RGB2YZm2j7rYpWTLh4s/6Fjxc/QZPEOE1i9z0jQYlcamEF+9kAwVgb2c/XysEE8adH68inkhQTmLy44mQN66RUYjZiBPoBL2Aa23xXMUU7h+srw7oaN9muT30PJECgSAwPsv2iSHvpHNZ5DG4NdU08z00E9XWkVvE0q6qMwkuHDaH4e/GaJDRA6nMqwu282MJ4zGp58pp8yrCsZ4NHWJG4qGCYDjX7C6hymGduQ+Mx3MsepH9im37AmLzZ8V4qHeYT6zAtx7+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8kAUC0bl2QROL8JD9dwS0CsoUN2T41FHjYnid0OGnGg=;
+ b=CTvRPpvhfewcbhiJFpStj8NQNWVx4ZjOFj0plUk9SYOI4MQVMwyr48625DY6RPlI/fOE3WeBkOTiTs8iRf+r9xx7KBBsw1nXtpiku7tGgMAtbjuO1aMGjrkQdq1L2GagMHLkbS7PuqAaA/w6F6i1o6AQrUPIJ4XeQ2v+PJEpDAU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:34a::22)
+ by DB9PR10MB5211.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:33f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 2 Nov
+ 2022 09:26:43 +0000
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::732f:4316:a0be:bdbc]) by DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::732f:4316:a0be:bdbc%3]) with mapi id 15.20.5769.016; Wed, 2 Nov 2022
+ 09:26:43 +0000
+Message-ID: <b0289429-8779-643a-07da-3cda83c8ca9d@prevas.dk>
+Date: Wed, 2 Nov 2022 10:26:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 4/6] string: Add __realloc_size hint to kmemdup()
+Content-Language: en-US
+To: Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+ Andy Shevchenko <andriy.shevchenko@intel.com>,
+ Paolo Abeni <pabeni@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ David Gow <davidgow@google.com>, Christoph Lameter <cl@linux.com>,
+ Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>,
+ Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+References: <20221101222520.never.109-kees@kernel.org>
+ <20221101223321.1326815-4-keescook@chromium.org>
+From: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+In-Reply-To: <20221101223321.1326815-4-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: OL1P279CA0035.NORP279.PROD.OUTLOOK.COM
+ (2603:10a6:e10:13::22) To DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:34a::22)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221102091308.11568-1-masahiroy@kernel.org>
-In-Reply-To: <20221102091308.11568-1-masahiroy@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 2 Nov 2022 10:21:35 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGzFEnUGkoD_JV6=mrKQ+eXLo=SYU8823mPezHZfY_FRQ@mail.gmail.com>
-Message-ID: <CAMj1kXGzFEnUGkoD_JV6=mrKQ+eXLo=SYU8823mPezHZfY_FRQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] kbuild: pass objects instead of archives to linker
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>, 
-	Michael Matz <matz@suse.de>, Kees Cook <keescook@chromium.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Fangrui Song <maskray@google.com>, 
-	Michal Marek <michal.lkml@markovi.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR10MB5266:EE_|DB9PR10MB5211:EE_
+X-MS-Office365-Filtering-Correlation-Id: 302d2995-5a07-4091-e6c0-08dabcb45af2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	eIY0aDzmL0PAhRo8Ms6gNG4AgemXBdDGUsa0jRWuSp/1/HRFXLDRTWD2ERzdAAAXbMxsgFhKlw5jsZAOBepYH0e2ZEyNN8uSzyyZkPvmbm8DBrOUk4w22XrZc89TXYaMwjB/y70BoTHpa5nftVtz7EzlIhFBPMng2z/QfZ5sQXDOFFW8g1/DVp5qt22cV8lQwiwgwIFo07ZNvA0zZfenYf6Brx1eLwJt+G/vQ4Ei6T0CKtdEN9TwC7fjg3BOtOZ6yGkzD9zppOe/JaqnyrNAr2c0E2/vEH6yTyqY3BuKAjF9WNPnzZCvXebgJg1jS8rOyZkC5KCtD44WGnKvxjYa3I+Q0beZH2NxLaKTxXXIB1dPtTnr2hOKwgAyMvwOll6Wt399PBd/DRV33d9r0FKJJH6GGljCZFVvvUIHIQeIlR8d8XCKt71DQcPGmFiU2TOSMcExediTU4LJZ2dAtZfKzL2s3RrIdf5p5PkRKJSnGXaXkVc4/Ks1CqQtBxJgcq18k9+c4SaTy066d0yLzGJiabqrxrLDnjViWEud7iTJZjbUCQ5yNzIChx42egxEj2hEBQwb5ufc2TLnQVRry+lGp6udAd/Bov62DXoSYI71HGSz/DKTAroCYqjbWBx8WadLrKskuix8dMY5cqHjVg1iDXTCNBDTtivw11HW17RYqU6jtMRnQi06a+8E+9QyosQ2fl5F4BOX8geSB897irneELlXoRKOFerNxQp93Y2FqnF6TSGkDhEP2YGT7LZ5T21BaqyFLl/eY6EhsW3KihIvvf+TSSCAre+k2KK501Vbxl1/hDgqa7/iLafqjDFkc/7BLbXewkgs0DS1PSLvHKsiii/ZPMS6z8kcvHw7z0nS4CQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(396003)(136003)(39850400004)(346002)(451199015)(86362001)(31696002)(31686004)(36756003)(38100700002)(38350700002)(4744005)(44832011)(2906002)(478600001)(52116002)(2616005)(6512007)(186003)(26005)(6506007)(66556008)(6486002)(966005)(7416002)(5660300002)(66946007)(41300700001)(316002)(8676002)(8976002)(110136005)(4326008)(66476007)(54906003)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bDNOblJwa243Qi9sZysrd0RlN1hPdk5PZVd1NDd0YjdYKzBTWEJrREw1RDNr?=
+ =?utf-8?B?SGtzWUVCRGNFNUttQzduamZ4Z2JFaHltSnc1ZFRhWFVhUU5BRkFpczVvUldD?=
+ =?utf-8?B?bCsrOEVmckNxdDduTjZZU3hQVVptZmY4RkU3SjUzOE1uWndSRWQwVVNsUWFQ?=
+ =?utf-8?B?WmNFZmREZVpFcFAwZUtTcWVqOTJpTTEwMTZ4SnZGTUlOZk11aTlsdVlab21m?=
+ =?utf-8?B?d0lsOWovb0xvcEtZdW5SMHNzVjZ4cXNUYlB1QnVQcE1QRmIrQmViQ3lJcllK?=
+ =?utf-8?B?M3U1cXYvRi9lSUE0YnJINWRKcS9wVGk0N0JpZTNCMmtBTmVBcmNBMzZBQ3FK?=
+ =?utf-8?B?L2w2ZDhkTExSOXNuRDk0YlQxUmhCK0RnR3pWcUJ3a2pVOWZraXc0bktLd25q?=
+ =?utf-8?B?MTNhOTdEYUF3eTlpZk1nZHNuWlRPVFBJS2U0ZDI3WkdCOWFnWXhnUmI2T0Nh?=
+ =?utf-8?B?NVdSMncwOWsyQ2had0c0cVEyY2pYTlVsS3k1WjRoUnkwaWkxSTk1a2crdFFP?=
+ =?utf-8?B?MXcrWDFFaU1aZzdOa0tZTHA4WXdFNkxHWVgwQWxjaS9RcVdZNzQ4dXpqcjk1?=
+ =?utf-8?B?REFheEsxWndLeU0zOThncWpSSU1HU00vMUdjdlIxR3ZnbFN5WlEyTkZTakwr?=
+ =?utf-8?B?WG9lWi9xeWRJLzd2V0EvTlpmc3N1ZTJLbE5ocGFXcm82d25OTVltemJROC93?=
+ =?utf-8?B?WitpVFpZU0pqYzFUZWNnem9wd3BURXZNSTBnUGRLUXpLQzRNZitoTDNwMVJ4?=
+ =?utf-8?B?aTNldGtNL08vWjFTUHpNZmZSZUwwS1JacmVqcUxab3JjKzIvaWh5WlRPMHRa?=
+ =?utf-8?B?V3NJRFZUZXFXTXE2Y0gwY0NjRk4yZnd5RG1hNDc5ZlNWeWxjNSsyQ3ZUN2w5?=
+ =?utf-8?B?cG9iamxFWmk4OXdOUFZNeVE2aTRsMlU0TkpRUVg5NjRGVjhSQ2wwVEVuSkZz?=
+ =?utf-8?B?anBqRkMvYnZDSW91dDVrbkZtNkp6QUNjQ0dtQzBWV2w4V0diZ1J1L2JScVla?=
+ =?utf-8?B?R3lCTGFXREMvSzZlY3FFZCt5a1MrWEZhK2NRaXJMUDdOdFJxOWdqSCtWSXRZ?=
+ =?utf-8?B?eE1XR1dyTzdFTklRekZxUHBRUnR2N1lnNzlRYkcxQzhTMHYwbDFoK25uYURi?=
+ =?utf-8?B?SGRrWnQrbS9jOTlnTkwxTWJWTS9mMjlJbVE5NWpRRStlWkRUaWpEOWFTYWZV?=
+ =?utf-8?B?d09QMHdPTlZ1T2FjeVJDRUloMHlORFgwVWNncGN3cTdTVHdrNG1YVW84ZWpa?=
+ =?utf-8?B?UG8yYWh5U3BIZWxBellQZUxFWW5WM0ZpeGthaUVMYmxnWUUwaGIzS1lkSkJP?=
+ =?utf-8?B?TjFvNXJjeTRCTlBzZUVlRE1ySUxiODBmK2ZQNHVoR1hUL0RpK0xpdkRacjMz?=
+ =?utf-8?B?VmJFM3dtb1AvMklkMjN4NGltYkdKL2tIWWY0RUdxZEFWU3kvKzlNbU84cXVz?=
+ =?utf-8?B?YkN0SXZkS2NkNExTZ1paZXE2bGovSEJZTmxXSEhHVEg2YTV0clAxeXhRQTVW?=
+ =?utf-8?B?YUVNQnZwSm4zVFRsSHRLZ1p4ekNmSWdjaWwzaGU5N0JTUnVPcDNubUV2NDhy?=
+ =?utf-8?B?Z1NsRUhrRjFlWWhzZGdQK0V6SjRSdEVaM1VvMmpTWk5STjhxUnN1emJMUE8z?=
+ =?utf-8?B?RHhieFRXcmJOWkpuMDcyRkk0UU9XTFZrUUtsSU1zTis1Vzk4NWg5SUR3TERC?=
+ =?utf-8?B?M2JmZnlqU0RBcUFGM0RyK0FFeC92SkIydGEvWDRxVG1GeUVLKzIyQmsrZHVW?=
+ =?utf-8?B?RUlWY21udmx3azh0WUV1eWZ4QWx4cGxjV2xac29wQ3ZJNm53TU5XdFhielc4?=
+ =?utf-8?B?bVdmRjJFUWdEYy84eVZCV0NVcXpyRlRNaWhzd05vdjlPQkZLY0ZxTHB3aG1u?=
+ =?utf-8?B?SWd2WS84Y2NpYUVjZ0JtQXNLK3ZCNGttTXhDOHd5TlV2UUY4RlFaZGo1b3pY?=
+ =?utf-8?B?MlhueFBmRXpBVGQ4S2ptUXA0WUpGczIxTGQ3akMrZ3ZBTnFPSmRWSEFUVHE4?=
+ =?utf-8?B?RVFwVloxa2dEdE15MjE4MUM3MTFoeG84MWdzOENpK3EvV2dPZjVZQ1BKQmRp?=
+ =?utf-8?B?ektZZXlWbWNLV242c1dLYjNTRGRMTVlLcHNOVG1XaHM5MEhWVTJWMGQveGpr?=
+ =?utf-8?B?VEh0S0tMTEtZZlhRZ29CTnJHemRtYWFHQVlCRmRCaTNUZFlkMG1WR1FKV1Ft?=
+ =?utf-8?B?MUE9PQ==?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 302d2995-5a07-4091-e6c0-08dabcb45af2
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 09:26:43.4849
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X/2MbWYp5jT+cn/MVKDm77U30eBYFwUWYw+3YX0u1f98et5dUrt2R+aMQG03Gp2hEY5QFe3cTWFL7XZj3CxTkIEYPC8fzeTmksckw5uhsok=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB5211
 
-Hello Masahiro,
+On 01/11/2022 23.33, Kees Cook wrote:
+> Add __realloc_size() hint to kmemdup() so the compiler can reason about
+> the length of the returned buffer. (These must not use __alloc_size,
+> since those include __malloc which says the contents aren't defined[1]).
+> 
+> [1] https://lore.kernel.org/linux-hardening/d199c2af-06af-8a50-a6a1-00eefa0b67b4@prevas.dk/
+> 
 
-On Wed, 2 Nov 2022 at 10:13, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> This is an experimental patch, driven by the feedback from Jiri Slaby
-> and Michael Matz. [1]
->
-> Michael Matz says:
->  "I know of no linker (outside LTO-like modes) that processes
->   archives in a different order than first-to-last-member (under
->   whole-archive), but that's not guaranteed anywhere. So relying on
->   member-order within archives is always brittle."
->
-> It is pretty easy to pass the list of objects instead of a thin archive
-> because the linker supports the '@file' syntax, where command line
-> arguments are read from 'file'.
->
+>  extern char *kstrndup(const char *s, size_t len, gfp_t gfp);
+> -extern void *kmemdup(const void *src, size_t len, gfp_t gfp) __alloc_size(2);
+> +extern void *kmemdup(const void *src, size_t len, gfp_t gfp) __realloc_size(2);
 
-Can you explain which problem is solved by doing this?
+What tree is this based on? I see that kmemdup() has grown that bogus
+__alloc_size in next-20221101, but in next-20221102 this commit seems to
+DTRT, namely
 
-If we can only produce a working kernel if each object is linked in
-the order it appears in the archive, I think we have bigger problems
-that need solving regardless. And for the .head.text objects that need
-to appear at the start of the binary image, I think the reported issue
-with __head annotated C functions on x86 needs to be addressed by
-getting rid of __head entirely (which seems to have been introduced
-without proper justification)
+-extern void *kmemdup(const void *src, size_t len, gfp_t gfp);
++extern void *kmemdup(const void *src, size_t len, gfp_t gfp)
+__realloc_size(2);
 
+(i.e. there should never be an intermediate commit where kmemdup has
+__alloc_size()).
 
-> Without this patch, the linker receives
->
->   --whole-archive vmlinux.a --no-whole-archive
->
-> With this patch, the linker will receive
->
->   @vmlinux.order
->
-> Here, vmlinux.order is a text file that lists built-in objects in the
-> correct link order.
->
-> I am not a toolchain expert. I just want to know if this makes any
-> difference from the linker perspective and from (non-upstreamed) GCC-LTO
-> perspective.
->
-> (I know this patch does not work for Clang LTO because I did not touch
-> scripts/generate_initcall_order.pl)
->
-> This patch may be unneeded because more correct patches were submitted [2]
-> but I am still curious about "thin archive vs direct object list".
->
-> [1]: https://lore.kernel.org/linux-kbuild/alpine.LSU.2.20.2210251210140.29399@wotan.suse.de/
-> [2]: https://lore.kernel.org/all/20221101161529.1634188-1-alexandr.lobakin@intel.com/
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  Makefile                                    | 21 ++++++++++-----------
->  scripts/Makefile.modpost                    |  5 +++--
->  scripts/Makefile.vmlinux_o                  |  6 +++---
->  scripts/clang-tools/gen_compile_commands.py | 21 ++++++++++++++++++++-
->  scripts/link-vmlinux.sh                     |  8 ++++----
->  5 files changed, 40 insertions(+), 21 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index e9e7eff906a5..511484a3dacb 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1213,19 +1213,18 @@ quiet_cmd_autoksyms_h = GEN     $@
->  $(autoksyms_h):
->         $(call cmd,autoksyms_h)
->
-> -# '$(AR) mPi' needs 'T' to workaround the bug of llvm-ar <= 14
-> -quiet_cmd_ar_vmlinux.a = AR      $@
-> -      cmd_ar_vmlinux.a = \
-> -       rm -f $@; \
-> -       $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> -       $(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
-> +quiet_cmd_vmlinux_order = GEN     $@
-> +      cmd_vmlinux_order = \
-> +       { $(foreach m, $(KBUILD_VMLINUX_OBJS), $(AR) t $m;) :; } > $(tmp-target) ; \
-> +       grep -F -f $(srctree)/scripts/head-object-list.txt $(tmp-target) > $@; \
-> +       grep -F -f $(srctree)/scripts/head-object-list.txt $(tmp-target) -v >> $@
->
-> -targets += vmlinux.a
-> -vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
-> -       $(call if_changed,ar_vmlinux.a)
-> +targets += vmlinux.order
-> +vmlinux.order: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
-> +       $(call if_changed,vmlinux_order)
->
->  PHONY += vmlinux_o
-> -vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
-> +vmlinux_o: vmlinux.order $(KBUILD_VMLINUX_LIBS)
->         $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_o
->
->  vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
-> @@ -2037,7 +2036,7 @@ quiet_cmd_gen_compile_commands = GEN     $@
->        cmd_gen_compile_commands = $(PYTHON3) $< -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
->
->  $(extmod_prefix)compile_commands.json: scripts/clang-tools/gen_compile_commands.py \
-> -       $(if $(KBUILD_EXTMOD),, vmlinux.a $(KBUILD_VMLINUX_LIBS)) \
-> +       $(if $(KBUILD_EXTMOD),, vmlinux.order $(KBUILD_VMLINUX_LIBS)) \
->         $(if $(CONFIG_MODULES), $(MODORDER)) FORCE
->         $(call if_changed,gen_compile_commands)
->
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index e41dee64d429..1d6847da39bd 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -70,12 +70,13 @@ quiet_cmd_vmlinux_objs = GEN     $@
->         for f in $(real-prereqs); do    \
->                 case $${f} in           \
->                 *libgcc.a) ;;           \
-> -               *) $(AR) t $${f} ;;     \
-> +               *.a) $(AR) t $${f} ;;   \
-> +               *) cat $${f} ;;         \
->                 esac                    \
->         done > $@
->
->  targets += .vmlinux.objs
-> -.vmlinux.objs: vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> +.vmlinux.objs: vmlinux.order $(KBUILD_VMLINUX_LIBS) FORCE
->         $(call if_changed,vmlinux_objs)
->
->  vmlinux.o-if-present := $(wildcard vmlinux.o)
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> index 0edfdb40364b..6eb07f2bb39f 100644
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -18,7 +18,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
->         $(PERL) $(real-prereqs) > $@
->
->  .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-> -               vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> +               vmlinux.order $(KBUILD_VMLINUX_LIBS) FORCE
->         $(call if_changed,gen_initcalls_lds)
->
->  targets := .tmp_initcalls.lds
-> @@ -48,7 +48,7 @@ quiet_cmd_ld_vmlinux.o = LD      $@
->        cmd_ld_vmlinux.o = \
->         $(LD) ${KBUILD_LDFLAGS} -r -o $@ \
->         $(addprefix -T , $(initcalls-lds)) \
-> -       --whole-archive vmlinux.a --no-whole-archive \
-> +       @vmlinux.order \
->         --start-group $(KBUILD_VMLINUX_LIBS) --end-group \
->         $(cmd_objtool)
->
-> @@ -57,7 +57,7 @@ define rule_ld_vmlinux.o
->         $(call cmd,gen_objtooldep)
->  endef
->
-> -vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> +vmlinux.o: $(initcalls-lds) vmlinux.order $(KBUILD_VMLINUX_LIBS) FORCE
->         $(call if_changed_rule,ld_vmlinux.o)
->
->  targets += vmlinux.o
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index d800b2c0af97..c8ba9f084bd0 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -57,7 +57,7 @@ def parse_arguments():
->      parser.add_argument('-a', '--ar', type=str, default='llvm-ar', help=ar_help)
->
->      paths_help = ('directories to search or files to parse '
-> -                  '(files should be *.o, *.a, or modules.order). '
-> +                  '(files should be *.o, *.a, or *.order). '
->                    'If nothing is specified, the current directory is searched')
->      parser.add_argument('paths', type=str, nargs='*', help=paths_help)
->
-> @@ -124,6 +124,23 @@ def cmdfiles_for_a(archive, ar):
->          yield to_cmdfile(obj)
->
->
-> +def cmdfiles_for_vmlinux_order(vmlinux_order):
-> +    """Generate the iterator of .cmd files associated with the vmlinux.order.
-> +
-> +    Parse the given vmlinux.order, and yield every .cmd file used to build the
-> +    contained modules.
-> +
-> +    Args:
-> +        vmlinux_order: The vmlinux.order file to parse
-> +
-> +    Yields:
-> +        The path to every .cmd file found
-> +    """
-> +    with open(vmlinux_order) as f:
-> +        for line in f:
-> +            yield to_cmdfile(line.rstrip())
-> +
-> +
->  def cmdfiles_for_modorder(modorder):
->      """Generate the iterator of .cmd files associated with the modules.order.
->
-> @@ -203,6 +220,8 @@ def main():
->              cmdfiles = cmdfiles_in_dir(path)
->          elif path.endswith('.a'):
->              cmdfiles = cmdfiles_for_a(path, ar)
-> +        elif path.endswith('vmlinux.order'):
-> +            cmdfiles = cmdfiles_for_vmlinux_order(path)
->          elif path.endswith('modules.order'):
->              cmdfiles = cmdfiles_for_modorder(path)
->          else:
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 918470d768e9..617ed443e377 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -3,15 +3,15 @@
->  #
->  # link vmlinux
->  #
-> -# vmlinux is linked from the objects in vmlinux.a and $(KBUILD_VMLINUX_LIBS).
-> -# vmlinux.a contains objects that are linked unconditionally.
-> +# vmlinux is linked from the objects in vmlinux.order and $(KBUILD_VMLINUX_LIBS).
-> +# vmlinux.order is a text file that contains objects that are linked unconditionally.
->  # $(KBUILD_VMLINUX_LIBS) are archives which are linked conditionally
->  # (not within --whole-archive), and do not require symbol indexes added.
->  #
->  # vmlinux
->  #   ^
->  #   |
-> -#   +--< vmlinux.a
-> +#   +--< vmlinux.order
->  #   |
->  #   +--< $(KBUILD_VMLINUX_LIBS)
->  #   |    +--< lib/lib.a + more
-> @@ -65,7 +65,7 @@ vmlinux_link()
->                 objs=vmlinux.o
->                 libs=
->         else
-> -               objs=vmlinux.a
-> +               objs=@vmlinux.order
->                 libs="${KBUILD_VMLINUX_LIBS}"
->         fi
->
-> --
-> 2.34.1
->
+Rasmus
+
