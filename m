@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F17633;
-	Wed,  2 Nov 2022 03:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112EBC433C1;
-	Wed,  2 Nov 2022 03:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FC0633;
+	Wed,  2 Nov 2022 03:48:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB6DC433C1;
+	Wed,  2 Nov 2022 03:47:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1667360582;
-	bh=NmtEPomvZfIFPZ553zqynoPG4Y4Jaq1jhTqxrWj45YA=;
+	s=korg; t=1667360880;
+	bh=60hRwRls4seBDB3M2+l4dhheVQby1AKKkJ+Kny1EYeE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=otfuT/NqD791oNoFSCOniyeCcVm5jsoe5BkbryS6bfv5Xn1JOTNYrV3smrZP/AZm0
-	 x4avlNOxhyBU52CdjsLY4jjSPGe3ja2eqQ2oz8HiQM0VxJbCBXVzBNOHAB70seko8y
-	 B+4MyAW4GwB/cB8Nv432wSbEX1zxabGZ583UjAgo=
+	b=UxGoINBWr/lZx2YZcNkk0zx2RTXMth9hwdQLcUkQ3hggEGTqAkl2JVXju2jWewc7Y
+	 RtNSBs9SNG8rzIxVo+9nP4LoR4voG9XeJxE3fCi3dEg/zDyoYEKyloh+8xZyF6l6Qh
+	 uv/KHEQicG+eMaBY93tB0S58xOsrHJzHhXbglZss=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -22,12 +22,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Abhinav Kumar <quic_abhinavk@quicinc.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 36/60] drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
-Date: Wed,  2 Nov 2022 03:34:57 +0100
-Message-Id: <20221102022052.263342405@linuxfoundation.org>
+Subject: [PATCH 4.9 26/44] drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
+Date: Wed,  2 Nov 2022 03:35:12 +0100
+Message-Id: <20221102022049.984750675@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102022051.081761052@linuxfoundation.org>
-References: <20221102022051.081761052@linuxfoundation.org>
+In-Reply-To: <20221102022049.017479464@linuxfoundation.org>
+References: <20221102022049.017479464@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,7 +69,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/msm/mdp/mdp4/mdp4_lvds_connector.c b/drivers/gpu/drm/msm/mdp/mdp4/mdp4_lvds_connector.c
-index e3b1c86b7aae..5c932b3fb831 100644
+index 353429b05733..905391ea55da 100644
 --- a/drivers/gpu/drm/msm/mdp/mdp4/mdp4_lvds_connector.c
 +++ b/drivers/gpu/drm/msm/mdp/mdp4/mdp4_lvds_connector.c
 @@ -71,8 +71,9 @@ static int mdp4_lvds_connector_get_modes(struct drm_connector *connector)
