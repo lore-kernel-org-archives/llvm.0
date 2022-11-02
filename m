@@ -1,238 +1,272 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2562108;
-	Wed,  2 Nov 2022 13:17:49 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HKp7ohdpxGQ5tb62wfeRVXRBiZy0sIRUuCfPhJNtmdfDYvVvXcQSfkdigct2RgVVGsG92Z5Wx5/cR2ZKdr/QxaBG6LvQFhegQ1jfPkGB9p2sssuYFdA67V5MR0uDC6TVlpFZ5L0HdnYi3w5lNgCt6RDFV0D/GmCTLgnzcdn59hLNlsBe+9FdKPhsN4NFvEWryhSr1tHmsHoYpp/8Zz8YRGZtLWT8wYwS3qfO1oX0quIoFLQMK9KWWkAdmezcTmACgrbUoC7pXTbk9kzq2xZyny3R7e845WchWA0Dxbl93F5gtnkD2k1AAw8xl5lrntDecIyLWTPwrRHm6VEPbfC5SA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NmRaQL7SXYCVJ75qusrjG5w/TI/0E8m49d8XBfoeFgE=;
- b=e7dmRfhdasc/Mu12WWoaV3HFlh/zTOPMxcC+pPLvD6HLGs77i843YNnAmNDFv/QIGfsknDaoCBGAMuM9ZekxBPH2l5duSodXSfanInzHQFiLwKgCHj3aPvq9LXhCN78GbQ2AjUm91TcLXB3aJPq0E3FA0CJ62y4vP6UScFvaRmRd/Tf02VuAClnkxiymY9ULLCg5a7/IacepcgR01+s/wqNMXsRkcj75HM1yq+/bTvFyc7GnS1CgqkbP8DQmFDoD2fFpwW8B8BKPEC2wZzRH1PC0OEdF5UV+QcnyyPfu5EGGn1WFb5zDmoOaI5D/UJ2P/QSgRlHC+uk8VHid67TSkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NmRaQL7SXYCVJ75qusrjG5w/TI/0E8m49d8XBfoeFgE=;
- b=mDWgRlzaHjI3g6A0GLd97zx5KWJQQtp7pLtFE/+o9Qaj3UKO5C0/CPWC/LFkk2P0a0W6pme/kU64+WEjFRnuuepqQlkCqKWSTQkIZh9LIFzZh8lxbiJ03Kd0ubbF05HePolpqS4HTCPnzipKdylLuykVhtypT1b5pQlLHJrNicsYFAs/OAu9fdjfhjEl5/100oR5susd0faMC+1+83R9NS7VAUnCFyMq+mJTZcRQBecKPtGM5B776lqDxi0SxZC+WY+WuN90uHD5t7yu+JpG8INavtFtHO1ahEugrqHbWimTbZUsSKG/ylF9S41JLsy7RYqbmmVjxt7OVPlhMgz5Pg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CO6PR12MB5396.namprd12.prod.outlook.com (2603:10b6:303:139::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Wed, 2 Nov
- 2022 13:17:46 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Wed, 2 Nov 2022
- 13:17:46 +0000
-Date: Wed, 2 Nov 2022 10:17:45 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 15/15] iommufd: Add a selftest
-Message-ID: <Y2Jt+WxNUwROJ8fN@nvidia.com>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <15-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <Y2GCV97lxEGwAuo6@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2GCV97lxEGwAuo6@Asurada-Nvidia>
-X-ClientProxiedBy: BL0PR05CA0022.namprd05.prod.outlook.com
- (2603:10b6:208:91::32) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5B4211F
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 13:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1667396505;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DrokicQ/AS6ycCNbtCJqnKl/3PsLRlFyTeamTMJz5c4=;
+	b=clXJXCn8PBWCFOC+yAfN8EIB5LfZvjujHgwhuY7LoHHi+XfX0Qqyl0gMBSNhQTMRt84k4p
+	MCZYQrLRc72MS5nqL9OItXqkInmv17JWG4s3m0hThBQ3fPgqUD3t20TeoBa5xDWOCy7Vu5
+	b8EG1aU+xw26PQjKNJwBHWUbT20ziYw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-eC2uxce7Pw6cpAQCoCfDZA-1; Wed, 02 Nov 2022 09:41:44 -0400
+X-MC-Unique: eC2uxce7Pw6cpAQCoCfDZA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4755F811E7A
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 13:41:43 +0000 (UTC)
+Received: from [172.64.5.27] (unknown [10.30.33.126])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 31CB5112D160;
+	Wed,  2 Nov 2022 13:41:43 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (27/389 SKIPPED): Test report for master
+ (6.1.0-rc3, mainline.kernel.org-clang, 8f71a2b3)
+Date: Wed, 02 Nov 2022 13:41:43 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CO6PR12MB5396:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e60d49f-bf36-414f-39b0-08dabcd4a232
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	pCD2pzrpKJ+alfJp5Gr3GaqvySVjOl7vmexgWDs6kb28GTYbO7siN2j0mszKCKGcjbGxxgRRqtf/rpUyu+qZuOUIG90AF+sGbA3Xf8/wnmlnqVQJ3F8mVOXfnHTGYsl6gmq4bVqhM8fAldArxDx385fNHiMXIidZKyXZTRksEuWQabwjuCSEJOlDcUvLPm+OHpXtaALo0TUwAQTwcLTZMNWrMq+xpEe5UoFWQsTKNUnFxTrLKn+C337TFlB1bLMzm8Wrk51tNMcEf/JHXPKmT4YIkTC7m6wHdENSrH+Cos4dAUA7ZHR3vX294kma4tv9RO4TOYJerzXiZ9kyemfIpXUVP2Hc4yetQXqql+gNgXe25SFFExjcqR2Hd5SFg5ITBfjrfAMYwpHQq8UtDYwEADYnBE6EDUmXyiCKVDWZDz9u2KFJ1gqCNM+o7Q/eHn131MfNXZtaO5o0SiXURe2o50IN+jHGniY3rxUEOkYYazv2ZRUDw5VmFA1imedbV/Xb284g8MTaUSASls5mI4cyxSLu8SXWjvYY5/XpwTksR8uN9X3b60FyBijd0n+n2820hxSmElJb4ZM4fXwtByF1q6HegkDwH6rxexC00Eg8GXuHjuYtJPfa9zm+HPZ0chOvnPapttqb7WgYaX4MFJ08xngDqX12gCOo3CuwdOmPfkjinnhGJf517gTd1+JiTgR8iVqlXJmLuAS+p9FdzqttjbJNTXdDvuSDNXrNbsKaGZttrwLf5VrfUuTk6dm14REf
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(366004)(396003)(346002)(451199015)(4326008)(6636002)(316002)(478600001)(54906003)(37006003)(66476007)(6486002)(6506007)(8676002)(66556008)(66946007)(26005)(5660300002)(7416002)(41300700001)(7406005)(8936002)(6862004)(38100700002)(36756003)(2906002)(86362001)(83380400001)(186003)(6512007)(2616005)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?lrYCHkcYO2XO5GJgH+cNCSJoDeyL5XcLBICN5ka4tMeDM1Es2ANxntkNMMK+?=
- =?us-ascii?Q?gEfHPcAjliaJXvsCniGIBBSAGNK10K0OEfaCDexPCOR5Nn+Vf3sGXoS+t56d?=
- =?us-ascii?Q?xE3P0rpxrCOKaP9h4wsYZGx8o4Zbk6PnJ3STJ/xmgK4TxZKfzoy2IOzU+hLm?=
- =?us-ascii?Q?qo0Gs2T2SKRPPsJOKKB3fk67aC43Kk52qM9sRYiQGcL2FlZR6cbSgbQ6cI15?=
- =?us-ascii?Q?u/dmFtf9q5OT/WHHYwvdNKzlnCgXDKgEtKi1CKbfGdIPjoAz30fBUo8jGtrM?=
- =?us-ascii?Q?DXQ51E9ERERDvy9XYCBi9IXO7aDODcjMhilUFRQuquoII5jiX57veNwmQP6L?=
- =?us-ascii?Q?XtDI8eRZym0jXfHVbwYNP/K/aMuQuZUdJlCf7UDLD5pM+/bfOPS8X7ClPSWq?=
- =?us-ascii?Q?kGtmoS++lTzPVZqzW7VWviJTnvgA7565Bg7bcqd2wXyUicztL6ceWDq7JeIY?=
- =?us-ascii?Q?9WpmBn68izYYFSxa90OoB0GyElQUycfa+JXy1LDP/I00qKDOwJJwSctdCzNP?=
- =?us-ascii?Q?Yp+wl486qhsItJEV46iKMryLCcB40M1a96qAEsAYGb0J6zpXvbkrR1w0ryLb?=
- =?us-ascii?Q?qpJxeIbchHTgvgsCWbNb7WwAyWIgcAsZwOL57hZ8YMLQi+2J3CpJbt+nUI5r?=
- =?us-ascii?Q?LU3FPqCRCcrf05IqHDuDgfdwFrsYeDViLO/JtA6GCBydIhjJz5+3Ea0NhKd2?=
- =?us-ascii?Q?+eOGrmpN5LRdp64CM3mY1aCSONIwWSpDlAbYyfBzUToKm3b8MSTmN+H9eT7H?=
- =?us-ascii?Q?a0uf4peEIWJaS/jP1R9HMWtl2QKNFK6UraRZTlRpwQFI7XqxQL4o4/U+YlQN?=
- =?us-ascii?Q?KFFoOWaoorVAMJi4nemq68MrU80fDZKCiKuoUvrCIMvOhz5SyW00vE4ZrYly?=
- =?us-ascii?Q?Xx8d6hpoEYgNpm6lfHm2Qq+nDzQ2cyL/M1AxzrKt07e3TKgAiOAi21CMpMGs?=
- =?us-ascii?Q?07zCs9sOgg6psRM5R4AyNtuXE9WiaqdW2pNvI7EpYm1balB6fQv4cc0pR2jB?=
- =?us-ascii?Q?5YF+KdBglK9Rf+Z7gYrdx4KEIdB5jLBkMm1QVgQXizU6/CZypOZwcXVYjerc?=
- =?us-ascii?Q?DM4Qb1OM0jRuavsTpIXTkxCzxGTdk63JM3IC81rsxBvzSgNxTggsri94k8i8?=
- =?us-ascii?Q?LqAxzkpYf7Tsz6mMwqNg74a2poLhBLT/93U7j59OftyVRTEHAQFFnN7gOVrr?=
- =?us-ascii?Q?YXibFBYfb9OYV6YR1Nt/RgXMOtdzCOA40wCQY14DpypZRnYMlkKCV3HS9/X+?=
- =?us-ascii?Q?m+L04TuF9zMtfRJTMBpG2b3/X78lqQwXFrM5xv/BGQEBVoGSIxAz+a+jMhic?=
- =?us-ascii?Q?VWcWWVQ0VQGkyU9k7ZTJKPes4QQ0DrMOUjzFBqqQnFJb8TNJ5FTLRVzwQnd3?=
- =?us-ascii?Q?+QIGWyieB8cn5MP1Adrb2vXnT6qlvzlmHx2uY7SMtL0bgx7Bz3aMUOOl2peq?=
- =?us-ascii?Q?JV0vC11Ze7ipApGfDNxOwnRB1rrspyWzeKaIy0s6OTiFDtpcjEwFVmRWSHR5?=
- =?us-ascii?Q?uw5WT2pNVpwX35DVD/1/XbGqWwSJxXdOno4JDLDOR76txrJe2uAyQd6AAD+r?=
- =?us-ascii?Q?J8PMKD4/LoIrxIqgzgg=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e60d49f-bf36-414f-39b0-08dabcd4a232
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 13:17:46.8510
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WjKXNYHXNHOXz9Y3PROSeaqNj70VRsDk/meElTlR1husRdvFHq1TXRCuZq4VHLGt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5396
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <96857.122110209414402090@us-mta-522.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 01, 2022 at 01:32:23PM -0700, Nicolin Chen wrote:
-> On Tue, Oct 25, 2022 at 03:12:24PM -0300, Jason Gunthorpe wrote:
->  
-> > diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-> 
-> > +static inline struct iommufd_hw_pagetable *
-> > +get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
-> > +		 struct mock_iommu_domain **mock)
-> > +{
-> > +	struct iommufd_hw_pagetable *hwpt;
-> > +	struct iommufd_object *obj;
-> > +
-> > +	obj = iommufd_get_object(ucmd->ictx, mockpt_id,
-> > +				 IOMMUFD_OBJ_HW_PAGETABLE);
-> > +	if (IS_ERR(obj))
-> > +		return ERR_CAST(obj);
-> > +	hwpt = container_of(obj, struct iommufd_hw_pagetable, obj);
-> > +	if (hwpt->domain->ops != mock_ops.default_domain_ops) {
-> > +		return ERR_PTR(-EINVAL);
-> > +		iommufd_put_object(&hwpt->obj);
-> 
-> Coverity reports that return is placed before iommufd_put_object.
+Hi, we tested your kernel and here are the results:
 
-I'm surprised no compiler warned about this!
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> 
-> > +static int iommufd_test_access_pages(struct iommufd_ucmd *ucmd,
-> > +				     unsigned int access_id, unsigned long iova,
-> > +				     size_t length, void __user *uptr,
-> > +				     u32 flags)
-> > +{
-> > +	struct iommu_test_cmd *cmd = ucmd->cmd;
-> > +	struct selftest_access_item *item;
-> > +	struct selftest_access *staccess;
-> > +	struct page **pages;
-> > +	size_t npages;
-> > +	int rc;
-> > +
-> > +	if (flags & ~MOCK_FLAGS_ACCESS_WRITE)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	staccess = iommufd_access_get(access_id);
-> > +	if (IS_ERR(staccess))
-> > +		return PTR_ERR(staccess);
-> > +
-> > +	npages = (ALIGN(iova + length, PAGE_SIZE) -
-> > +		  ALIGN_DOWN(iova, PAGE_SIZE)) /
-> > +		 PAGE_SIZE;
-> > +	pages = kvcalloc(npages, sizeof(*pages), GFP_KERNEL_ACCOUNT);
-> > +	if (!pages) {
-> > +		rc = -ENOMEM;
-> > +		goto out_put;
-> > +	}
-> > +
-> > +	rc = iommufd_access_pin_pages(staccess->access, iova, length, pages,
-> > +				      flags & MOCK_FLAGS_ACCESS_WRITE);
-> > +	if (rc)
-> > +		goto out_free_pages;
-> > +
-> > +	rc = iommufd_test_check_pages(
-> > +		uptr - (iova - ALIGN_DOWN(iova, PAGE_SIZE)), pages, npages);
-> > +	if (rc)
-> > +		goto out_unaccess;
-> > +
-> > +	item = kzalloc(sizeof(*item), GFP_KERNEL_ACCOUNT);
-> > +	if (!item) {
-> > +		rc = -ENOMEM;
-> > +		goto out_unaccess;
-> > +	}
-> > +
-> > +	item->iova = iova;
-> > +	item->length = length;
-> > +	spin_lock(&staccess->lock);
-> > +	item->id = staccess->next_id++;
-> > +	list_add_tail(&item->items_elm, &staccess->items);
-> > +	spin_unlock(&staccess->lock);
-> > +
-> > +	cmd->access_pages.out_access_item_id = item->id;
-> > +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-> > +	if (rc)
-> > +		goto out_free_item;
-> > +	goto out_free_pages;
-> > +
-> > +out_free_item:
-> > +	spin_lock(&staccess->lock);
-> > +	list_del(&item->items_elm);
-> > +	spin_unlock(&staccess->lock);
-> > +	kfree(item);
-> > +out_unaccess:
-> > +	iommufd_access_unpin_pages(staccess->access, iova, length);
-> > +out_free_pages:
-> > +	kvfree(pages);
-> 
-> Coverity reports a double free here, call trace:
-> 
-> [jumped from] rc = iommufd_access_pin_pages(..., pages, ...);
-> 	[in which] iopt_pages_add_access(..., out_pages, ...);
-> 		[then] iopt_pages_fill_xarray(..., out_pages);
-> 			[then] iopt_pages_fill_from_mm(..., out_pages);
-> 				[then] user->upages = out_pages + ...;
-> 				       pfn_reader_user_pin(user, ...);
-> 					[then] kfree(user->upages);
-> 					       return -EFAULT;
-> 
-> Should be the same potential issue in the other email.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Yes, looks like
+Kernel information:
+    Commit message: Merge tag 'docs-6.1-fixes' of git://git.lwn.net/linux
 
-Thanks,
-Jason
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/58281
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: tools/include/uapi/linux/in.h:199:3: =
+error: type name requires a specifier or qualifier
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1451
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [rawhide] avc:  denied  { write } for  pid=3D173647 comm=3D"=
+systemd-gpt-aut" name=3D"vda" dev=3D"devtmpfs" ino=3D321 scontext=3Dsystem_=
+u:system_r:systemd_gpt_generator_t:s0 tcontext=3Dsystem_u:object_r:fixed_di=
+sk_device_t:s0 tclass=3Dblk_file
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2134121
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - CIFS Connectathon
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking: igmp conformance test
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 aarch64 - xfstests - ext4
+                 aarch64 - xfstests - xfs
+                 aarch64 - xfstests - btrfs
+                 ppc64le - LTP: openposix test suite
+                 ppc64le - CIFS Connectathon
+                 ppc64le - Networking bridge: sanity
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - cpu-cache
+                   s390x - stress: stress-ng - memory
+                   s390x - Storage - blktests - nvmeof-mp
+                   s390x - LTP: openposix test suite
+                   s390x - CIFS Connectathon
+                   s390x - Networking bridge: sanity
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - software RAID testing
+                  x86_64 - Storage - swraid scsi_raid
+                  x86_64 - stress: stress-ng - cpu-cache
+                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - nvmeof-mp
+                  x86_64 - LTP: openposix test suite
+                  x86_64 - CIFS Connectathon
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking: igmp conformance test
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 - xfstests - xfs
+                  x86_64 - xfstests - btrfs
+                  x86_64 (debug) - Storage - software RAID testing
+                  x86_64 (debug) - Storage - swraid scsi_raid
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - CIFS Connectathon
+                  x86_64 (debug) - Networking: igmp conformance test
+                  x86_64 (debug) - Networking route: pmtu
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - xfstests - ext4
+                  x86_64 (debug) - xfstests - xfs
+                  x86_64 (debug) - xfstests - btrfs
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: hit test timeout, aborting =
+it...
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1110
+            Affected tests:
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: xfstests - nfsv4.2: RIP: 0010:nfs_init_fs_context+0x2a8/0x2f=
+0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1419
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - cpu: perf: interrupt took too long
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1034
+            Affected tests:
+                  x86_64 - stress: stress-ng - cpu-cache
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1346
+            Affected tests:
+                 aarch64 - Networking bridge: sanity
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking bridge: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking bridge: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking bridge: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
