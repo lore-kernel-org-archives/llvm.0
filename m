@@ -1,57 +1,45 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E3D24F56
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 20:01:28 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id v17so14592424plo.1
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 13:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=crDMk0R12pE4R+rJIlvy8EsGZM7TBfRAPYKWnpWAGHY=;
-        b=UK9/AZo0Gy9FmiPW3MCdfsBkfo+eIrkJ8azyv3CjPHoN4MhEkiNCR8PNH7yhFsYAOV
-         OcpJgIYxLNKdG/2WV1Ir7KHesKgC3PaVShkuvcivzT1/xw5yHoEnTL+CL4JhdOo7Cq6/
-         kZ7Q7PuO5Kq6Dkv2HcO0D8R73xSRLPR7rqXcY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=crDMk0R12pE4R+rJIlvy8EsGZM7TBfRAPYKWnpWAGHY=;
-        b=FEU9FaQmYxhc6wiYMi24qFufjNmKIbrH8Xsrou907i7T7chMNo/lt2TBIVub/u0lbj
-         DEiMvY38nOIpshJwplDPEeE6aKxThZ+gYIR59Mc/Cv8CoPKSh0j4kgJmRtTGZFIKPHH3
-         9f63SWgE1DEacrFYdhc9YCDK4Ehe0Uvdd86Ex1QKAvC2/LWKQ+IWhXQBpBhZeftK5dks
-         ztMIDkTfPv0/ShkRW3Pax7bgZOKAnecYdFnYs1VaApxcQsAfrxkkB/1XWJkRvcBpuAWQ
-         oJoXKLFB5W3vI9IV33gTHZ/2UI3sZ8DDWcfqLRH2wnr1R6EMMiMYh09M8H5STyJTa0i7
-         m0Dg==
-X-Gm-Message-State: ACrzQf1nw0iBg0RQvYxxO19JqJgRVmdH+fsuSUEMHOGzufKSBcnzBMYN
-	xOiHRr0zx/qZ+b4IiNsmPKnqgw==
-X-Google-Smtp-Source: AMsMyM6jJViHjLqCoTS++I8Qer6oLGbkwZ5YrvtcOzrUTmAZhCWRZ2VARz0FuIZVfUtOhdEVS0FtHA==
-X-Received: by 2002:a17:903:41ca:b0:186:a68e:c06d with SMTP id u10-20020a17090341ca00b00186a68ec06dmr25774406ple.61.1667419287620;
-        Wed, 02 Nov 2022 13:01:27 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z184-20020a6233c1000000b0056c47a5c34dsm8825142pfz.122.2022.11.02.13.01.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:01:27 -0700 (PDT)
-Date: Wed, 2 Nov 2022 13:01:26 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Heiko Carstens <hca@linux.ibm.com>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Alexandra Winter <wintera@linux.ibm.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
-	netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH 1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
-Message-ID: <202211021259.9169F5CBE@keescook>
-References: <20221102163252.49175-1-nathan@kernel.org>
- <Y2LJmr8gE2I7gOP5@osiris>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9060D29A0;
+	Wed,  2 Nov 2022 20:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31530C433C1;
+	Wed,  2 Nov 2022 20:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1667420634;
+	bh=SoPxowNL2wQMY8yb7AJeEyGxnbtrkZim847pUvBQbwE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LfjPqEtYXiCdkBLiD6Mb9K3XA51IVPUzGRUTvms6p8otl6PuFvxWJt1eNfolnsfMh
+	 8dOIiVYrNAvWUbc0eNesbhfxuTxND9PyOfr87g31Ntyy1O1D+CTiL0Ie98zFKhuL6L
+	 pQ6P5NPg9O9EYdY94YsL2yXqg36H/b9HAt0cdMS0OgSSvy64YmI0vtfYhObAcu3zvz
+	 dNfsvy2LS2sTnLtx58wwVQmNFpMeTJG42JD4GtztqHso9Ufxk1sH8tTONFs9g9eRjR
+	 Xm+yRgTchmBGh4Sk8fbw4WKFDXV+G1cCqTlkngWQBtrxjrVSY5vsGgYa9I9w0HKA3v
+	 fRU/uLjxEBNqQ==
+Date: Wed, 2 Nov 2022 13:23:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: William Breathitt Gray <william.gray@linaro.org>,
+	linux-iio@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	Patrick Havelange <patrick.havelange@essensium.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Oleksij Rempel <linux@rempel-privat.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Julien Panis <jpanis@baylibre.com>,
+	David Lechner <david@lechnology.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-omap@vger.kernel.org
+Subject: Re: [PATCH 1/4] counter: Adjust final parameter type in function and
+ signal callbacks
+Message-ID: <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
+References: <20221102172217.2860740-1-nathan@kernel.org>
+ <202211021216.FF49E84C69@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,29 +48,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2LJmr8gE2I7gOP5@osiris>
+In-Reply-To: <202211021216.FF49E84C69@keescook>
 
-On Wed, Nov 02, 2022 at 08:48:42PM +0100, Heiko Carstens wrote:
-> On Wed, Nov 02, 2022 at 09:32:50AM -0700, Nathan Chancellor wrote:
-> > should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
+On Wed, Nov 02, 2022 at 12:21:23PM -0700, Kees Cook wrote:
+> On Wed, Nov 02, 2022 at 10:22:14AM -0700, Nathan Chancellor wrote:
+> > The ->signal_u32_read(), ->count_u32_read(), and ->count_u32_write()
+> > callbacks in 'struct counter_comp' expect the final parameter to have a
+> > type of 'u32' or 'u32 *' but the ops functions that are being assigned
+> > to those callbacks have an enumerated type as the final parameter. While
+> > these are compatible from an ABI perspective, they will fail the
+> > aforementioned CFI checks.
+> > 
+> > Adjust the type of the final parameter in the ->signal_read(),
+> > ->function_read(), and ->function_write() callbacks in 'struct
+> > counter_ops' and their implementations to match the prototypes in
+> > 'struct counter_comp' to clear up these warnings and CFI failures.
 > 
-> Yes, s390 should select that :)
-> 
-> But, is there any switch or option I need to set when compiling clang,
-> so it knows about the kcfi sanitizer?
-> 
-> I get:
-> clang-16: error: unsupported option '-fsanitize=kcfi' for target 's390x-ibm-linux'
-> 
-> > clang --version
-> clang version 16.0.0 (https://github.com/llvm/llvm-project.git e02110e2ab4dd71b276e887483f0e6e286d243ed)
+> I don't understand these changes. Where do 'struct counter_comp'
+> and 'struct counter_ops' get confused? I can only find matching
+> ops/assignments/calls, so I must be missing something. This looks like
+> a loss of CFI granularity instead of having wrappers added if there is
+> an enum/u32 conversion needed somewhere.
 
-You'll need the "generic arch support": https://reviews.llvm.org/D135411
-which is _almost_ landed. Testing would be welcome, for sure!
+Right, I am not the biggest fan of this change myself and it is entirely
+possible that I am misreading the warnings from the commit message but I
+do not see how
 
-Sami, do you have any notes on what common things were needed to get
-arm64 and x86_64 booting under kCFI? My only oh-so-helpful notes are
-"keep CFI away from early boot code". :P
+        comp_node.comp.signal_u32_read = counter->ops->signal_read;
 
--- 
-Kees Cook
+and
+
+        comp_node.comp.count_u32_read = counter->ops->function_read;
+
+in counter_add_watch(),
+
+        comp.signal_u32_read = counter->ops->signal_read;
+
+in counter_signal_attrs_create(), and
+
+        comp.count_u32_read = counter->ops->function_read;
+        comp.count_u32_write = counter->ops->function_write;
+
+in counter_count_attrs_create() are currently safe under kCFI, since the
+final parameter type of the prototypes in 'struct counter_ops' does not
+match the final parameter type of the prototypes in 'struct
+counter_comp'. I would expect the indirect calls in counter_get_data()
+and counter_comp_u32_show() to fail currently.
+
+I briefly looked at making the 'struct counter_comp' callbacks match the
+'struct counter_ops' ones but the COUNTER_COMP macros in
+include/linux/counter.h made it seem like these callbacks might be used
+by implementations that might use different enumerated types as the
+final parameter. I can look a little closer to see if we can make
+everything match.
+
+I am not sure how wrappers would work here, I can take a look into how
+feasible that is.
+
+Cheers,
+Nathan
