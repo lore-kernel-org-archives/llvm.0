@@ -1,54 +1,52 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8A22F36;
-	Wed,  2 Nov 2022 18:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFD8C433C1;
-	Wed,  2 Nov 2022 18:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667414991;
-	bh=A9V26abd3ofhCXzboqJszcQ8NMZJoEJqgoBj4Pi/PF8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=n/eYUT5c1MXDySctcF4yD+cGNE9uiEyE8Yln6G6O7ESxBGrWOkD0qXBrIxP5D09tx
-	 rPet5rrxRJHAfe8hioWKZQ1iJusfCXAckHA7RwECS67arZyVDWKd/Y/QhKsTgKxco9
-	 fJcyq7ZBTJR3e2zg94+sL6bxDLT6dxqk7tFIHafdkuomMQJqTXrd+OVXW5rvQKWImI
-	 oxU70L8e/VzYhVf1rQFGdJuJdbFi82J56nqiMSJYPtdM3hZaUOdzHcN2Pl/6O88y+J
-	 /4ZlWQygHNWO8kJXUc+bgLLUB14i597HfGfy0iLluCcZoSYl5LjAUwo2LEgEWCJGVl
-	 WZQUaqh5TxuQw==
-Date: Wed, 2 Nov 2022 11:49:48 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Nicolin Chen <nicolinc@nvidia.com>, Lu Baolu <baolu.lu@linux.intel.com>,
-	bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 15/15] iommufd: Add a selftest
-Message-ID: <Y2K7zMvzrHmQJ1hk@dev-arch.thelio-3990X>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <15-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <Y2GCV97lxEGwAuo6@Asurada-Nvidia>
- <Y2Jt+WxNUwROJ8fN@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E1C2F36
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:06:35 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id b62so6668816pgc.0
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YLJw50A1K+KhusFBEa675+xxaU3caL5GDgA+x/6AGwQ=;
+        b=eanRVW/LBbSyQtTn8NWCZTTDAawhljklM58TSIe0LHlwW/gHbMD11JP3ckeaEe/msg
+         vmppBy0RmvOGmkJW6vTqFKB6oG4y+0rkYyOuCChrP4Sy/x03U/caHHgMIFnNNWlXRSYQ
+         MKBSw57TYyF6OcudfzZhtv+PDEccU/3X7mxRc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YLJw50A1K+KhusFBEa675+xxaU3caL5GDgA+x/6AGwQ=;
+        b=srjN7ePGf/rVNFy8hXAPRhr3k1kxE2kvLeEztyOkyam7n6WnieIolhOoen7+Un+xUb
+         9UNPWDtKWMcK2yS7G+NWg0f7cwHO/mp0lxye67Qk7v03yffWzJxuYCJsqBpm2t8WnR88
+         WTjfVOvfB7LLVa56HcJUPJPJWoil633VSp+SFXnqIRUvhPrTg1GmfEcki4ScAIXA7WFD
+         aMtgp6ccuZStPRbKd87AmiKqf6kbMbErGHxPKE2lOGjIljVixM0rMJrGIvNFzFmMko6Z
+         XCQbccAt8sxvSS5ijtViRkECShXQlErIyhZv/OvGXUlQZnQZV7SUvoHjr5azva8XNNF9
+         PoVg==
+X-Gm-Message-State: ACrzQf0/nvZti4FXjJpz8sH6LTy/kDNGwK3oQtUTmJ0hpJ2Ksv+k4PRY
+	qkwhvPkTo+d4qsuU+g/Hm0Ijxw==
+X-Google-Smtp-Source: AMsMyM5nOP7TB+tQ3IHpynS+a4tGqv36tuqeuJEkR1BO6kWK8sdX+uSJsUdso0ZtKCVhfl6YA8bm0g==
+X-Received: by 2002:a05:6a00:1688:b0:53b:4239:7c5c with SMTP id k8-20020a056a00168800b0053b42397c5cmr27219671pfc.81.1667415995509;
+        Wed, 02 Nov 2022 12:06:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b00186727e5f5csm8710774plg.248.2022.11.02.12.06.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 12:06:35 -0700 (PDT)
+Date: Wed, 2 Nov 2022 12:06:34 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+	dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] drm/meson: Fix return type of
+ meson_encoder_cvbs_mode_valid()
+Message-ID: <202211021206.F5C5954F66@keescook>
+References: <20221102155242.1927166-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,131 +55,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2Jt+WxNUwROJ8fN@nvidia.com>
+In-Reply-To: <20221102155242.1927166-1-nathan@kernel.org>
 
-On Wed, Nov 02, 2022 at 10:17:45AM -0300, Jason Gunthorpe wrote:
-> On Tue, Nov 01, 2022 at 01:32:23PM -0700, Nicolin Chen wrote:
-> > On Tue, Oct 25, 2022 at 03:12:24PM -0300, Jason Gunthorpe wrote:
-> >  
-> > > diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-> > 
-> > > +static inline struct iommufd_hw_pagetable *
-> > > +get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
-> > > +		 struct mock_iommu_domain **mock)
-> > > +{
-> > > +	struct iommufd_hw_pagetable *hwpt;
-> > > +	struct iommufd_object *obj;
-> > > +
-> > > +	obj = iommufd_get_object(ucmd->ictx, mockpt_id,
-> > > +				 IOMMUFD_OBJ_HW_PAGETABLE);
-> > > +	if (IS_ERR(obj))
-> > > +		return ERR_CAST(obj);
-> > > +	hwpt = container_of(obj, struct iommufd_hw_pagetable, obj);
-> > > +	if (hwpt->domain->ops != mock_ops.default_domain_ops) {
-> > > +		return ERR_PTR(-EINVAL);
-> > > +		iommufd_put_object(&hwpt->obj);
-> > 
-> > Coverity reports that return is placed before iommufd_put_object.
+On Wed, Nov 02, 2022 at 08:52:42AM -0700, Nathan Chancellor wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed. A
+> proposed warning in clang aims to catch these at compile time, which
+> reveals:
 > 
-> I'm surprised no compiler warned about this!
-
-clang does have -Wunreachable-code-return to try and flag issues like
-this but it is not on by default nor included in -Wall:
-
-https://clang.llvm.org/docs/DiagnosticsReference.html#wunreachable-code-return
-
-The fact it is included in -Wunreachable-code-aggressive makes me think
-that this might generate a lot of false positives around constructs such
-as
-
-    if (IS_ENABLED(CONFIG_...))
-        return ...;
-
-    return ...;
-
-but I have not actually tested it.
-
-> > > +static int iommufd_test_access_pages(struct iommufd_ucmd *ucmd,
-> > > +				     unsigned int access_id, unsigned long iova,
-> > > +				     size_t length, void __user *uptr,
-> > > +				     u32 flags)
-> > > +{
-> > > +	struct iommu_test_cmd *cmd = ucmd->cmd;
-> > > +	struct selftest_access_item *item;
-> > > +	struct selftest_access *staccess;
-> > > +	struct page **pages;
-> > > +	size_t npages;
-> > > +	int rc;
-> > > +
-> > > +	if (flags & ~MOCK_FLAGS_ACCESS_WRITE)
-> > > +		return -EOPNOTSUPP;
-> > > +
-> > > +	staccess = iommufd_access_get(access_id);
-> > > +	if (IS_ERR(staccess))
-> > > +		return PTR_ERR(staccess);
-> > > +
-> > > +	npages = (ALIGN(iova + length, PAGE_SIZE) -
-> > > +		  ALIGN_DOWN(iova, PAGE_SIZE)) /
-> > > +		 PAGE_SIZE;
-> > > +	pages = kvcalloc(npages, sizeof(*pages), GFP_KERNEL_ACCOUNT);
-> > > +	if (!pages) {
-> > > +		rc = -ENOMEM;
-> > > +		goto out_put;
-> > > +	}
-> > > +
-> > > +	rc = iommufd_access_pin_pages(staccess->access, iova, length, pages,
-> > > +				      flags & MOCK_FLAGS_ACCESS_WRITE);
-> > > +	if (rc)
-> > > +		goto out_free_pages;
-> > > +
-> > > +	rc = iommufd_test_check_pages(
-> > > +		uptr - (iova - ALIGN_DOWN(iova, PAGE_SIZE)), pages, npages);
-> > > +	if (rc)
-> > > +		goto out_unaccess;
-> > > +
-> > > +	item = kzalloc(sizeof(*item), GFP_KERNEL_ACCOUNT);
-> > > +	if (!item) {
-> > > +		rc = -ENOMEM;
-> > > +		goto out_unaccess;
-> > > +	}
-> > > +
-> > > +	item->iova = iova;
-> > > +	item->length = length;
-> > > +	spin_lock(&staccess->lock);
-> > > +	item->id = staccess->next_id++;
-> > > +	list_add_tail(&item->items_elm, &staccess->items);
-> > > +	spin_unlock(&staccess->lock);
-> > > +
-> > > +	cmd->access_pages.out_access_item_id = item->id;
-> > > +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-> > > +	if (rc)
-> > > +		goto out_free_item;
-> > > +	goto out_free_pages;
-> > > +
-> > > +out_free_item:
-> > > +	spin_lock(&staccess->lock);
-> > > +	list_del(&item->items_elm);
-> > > +	spin_unlock(&staccess->lock);
-> > > +	kfree(item);
-> > > +out_unaccess:
-> > > +	iommufd_access_unpin_pages(staccess->access, iova, length);
-> > > +out_free_pages:
-> > > +	kvfree(pages);
-> > 
-> > Coverity reports a double free here, call trace:
-> > 
-> > [jumped from] rc = iommufd_access_pin_pages(..., pages, ...);
-> > 	[in which] iopt_pages_add_access(..., out_pages, ...);
-> > 		[then] iopt_pages_fill_xarray(..., out_pages);
-> > 			[then] iopt_pages_fill_from_mm(..., out_pages);
-> > 				[then] user->upages = out_pages + ...;
-> > 				       pfn_reader_user_pin(user, ...);
-> > 					[then] kfree(user->upages);
-> > 					       return -EFAULT;
-> > 
-> > Should be the same potential issue in the other email.
+>   drivers/gpu/drm/meson/meson_encoder_cvbs.c:211:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .mode_valid = meson_encoder_cvbs_mode_valid,
+>                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
 > 
-> Yes, looks like
+> ->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
+> 'enum drm_mode_status', not 'int'. Adjust the return type of
+> meson_encoder_cvbs_mode_valid() to match the prototype's to resolve the
+> warning and CFI failure.
 > 
-> Thanks,
-> Jason
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+> Reported-by: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
