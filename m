@@ -1,55 +1,56 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D8724F48
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:08:31 +0000 (UTC)
-Received: by mail-pf1-f178.google.com with SMTP id 130so17263853pfu.8
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:08:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171A624F47
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:09:51 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id g24so17492243plq.3
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:09:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=btNV1F5raSfgVHS1/gKMO9RappBFKUG6No8ZOPbnTjE=;
-        b=WnF/CAavVaQFZ6hu1mucTiUFMFRH07YS8pP+nQhN6HJJeWng0qN/pqcGUZWF8DF3YJ
-         UKrrhCuT8pZe5efQKDQYbL4sl4O0d0Yq7dniUij9mlyoue48MfGSkAiZceOt6LH7Zyla
-         DMmq4Zy98pWpB2nYorJEhV8afi41FbMNfLd98=
+        bh=rceJbOCflyPx+m+jp0CiAofr11KjGzc/BosMfyINF6Q=;
+        b=nTYtdAKQoQK2ASSwLeh5CjtoKDvCTGPFgwhrrlZGkl2cUuG0T1larCOBHjiCgaxcl3
+         mR5tmneD4Ly087+iJQrS+9FP1EuHQvmT50wZQm/dGpkkC7/4t0AOPCgKmEPjs3N90ViO
+         ZDcJ6MKXWBsJMUwgYDBLNZZT7WVhJVj5MbCXU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=btNV1F5raSfgVHS1/gKMO9RappBFKUG6No8ZOPbnTjE=;
-        b=Mjj4HCY4bO2DyEWGuXgJ9WO+RIl+bKWt/Gj12jozCElaWsB+Trt9gP/i3rSOjmuPPv
-         EnQCNp9Nuj7rcFuK8L+/FCZ9QWrvPtI4SFOl3VoQlVe37b5BDHUGC7Y7jTo7kTxdpKMO
-         S/hZAk+IFYHnFK3JV2hjpNqq1DCxtPLzeo8D3ibIIcjTnbETKSIubv3AsTD2Uj+CLCiW
-         +9hi1IX5DK8rfB+lHANza1JCodrZtVCUqHt5EGGtJDIk6Dwzp1PucDZimi0Tom9i81pi
-         JqiR0upTQJln4C8DJSUN8WMsRLs7h4YzfZxGnx1vo53M6gvAgTXtdqLy0OQDIolulQZ1
-         Yvwg==
-X-Gm-Message-State: ACrzQf3Px1FXW02GNHnoD8KIgYQ0/z4RAIPTOa1HbEuKIGCUeYRzZF1S
-	bsqKjIg6DvVxqi2yPdPyoHh3Qg==
-X-Google-Smtp-Source: AMsMyM50I03PG/OQ4Z3UbjQlDLWWsbg4/BuY9JFwssVj3kEUSn2BZVgoliMdNU8wDNVwlvCFhiI/zg==
-X-Received: by 2002:a63:501f:0:b0:46f:a711:c455 with SMTP id e31-20020a63501f000000b0046fa711c455mr18062893pgb.402.1667416111214;
-        Wed, 02 Nov 2022 12:08:31 -0700 (PDT)
+        bh=rceJbOCflyPx+m+jp0CiAofr11KjGzc/BosMfyINF6Q=;
+        b=1dHzX67W8G9YYRgcc9WsIU+YhQ/j3wIG2pA5AokmpdGfRxkm9v8pMxq2WTi0qNoCal
+         sEdlI9elDL7QrUmKPa+sP2/4aXFxI7QocE3RnHembpyTzKc6E8V7BZa4+tyHDtVOCkWI
+         WSec4MEVKr4D1gj4yhzPqK+DuxmGl03/tmgsH+RAy13BdS/8g8/dxFe1SNVl8hOkAdOX
+         +/nNsWKOLvNluROPw+ls7smhi21M/yOnOfX/AYVe/5imDQsEm1CK8pwYlU1zQhFd1/Al
+         /TnwAYq4u8T+9YlHThehy7Jd3q+K4uld2y6vR2UKNlmjbiaFIR6aooXKsgwT6DaZrVJh
+         0REg==
+X-Gm-Message-State: ACrzQf2jECj7/Sjw6hFvB6a5lh4ihDb6zVxn0NpJoS4EeyEINNJ4MAJI
+	oe9vO1+zo7jEUHFaTRP7f74DaA==
+X-Google-Smtp-Source: AMsMyM5iaPa8jHtaXe8TTihPGNBmjZOrJkjawt950HiY8oyo6JC1DPwtgOaOwWhqRWTHHvmX+izChA==
+X-Received: by 2002:a17:903:1303:b0:186:969d:97cf with SMTP id iy3-20020a170903130300b00186969d97cfmr25743179plb.17.1667416190610;
+        Wed, 02 Nov 2022 12:09:50 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v20-20020a63f214000000b0045ff216a0casm4784265pgh.3.2022.11.02.12.08.30
+        by smtp.gmail.com with ESMTPSA id f3-20020a170902ce8300b001782a6fbcacsm8698407plg.101.2022.11.02.12.09.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:08:30 -0700 (PDT)
-Date: Wed, 2 Nov 2022 12:08:30 -0700
+        Wed, 02 Nov 2022 12:09:50 -0700 (PDT)
+Date: Wed, 2 Nov 2022 12:09:49 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: James Smart <james.smart@broadcom.com>,
-	Ram Vegesna <ram.vegesna@broadcom.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
+Cc: Alexandra Winter <wintera@linux.ibm.com>,
+	Wenjia Zhang <wenjia@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
 	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: Re: [PATCH] scsi: elx: libefc: Fix second parameter type in state
- callbacks
-Message-ID: <202211021208.055D396D8E@keescook>
-References: <20221102161906.2781508-1-nathan@kernel.org>
+Subject: Re: [PATCH 1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
+Message-ID: <202211021209.276A8BA@keescook>
+References: <20221102163252.49175-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,9 +59,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102161906.2781508-1-nathan@kernel.org>
+In-Reply-To: <20221102163252.49175-1-nathan@kernel.org>
 
-On Wed, Nov 02, 2022 at 09:19:06AM -0700, Nathan Chancellor wrote:
+On Wed, Nov 02, 2022 at 09:32:50AM -0700, Nathan Chancellor wrote:
 > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 > indirect call targets are validated against the expected function
 > pointer prototype to make sure the call target is valid to help mitigate
@@ -69,32 +70,19 @@ On Wed, Nov 02, 2022 at 09:19:06AM -0700, Nathan Chancellor wrote:
 > proposed warning in clang aims to catch these at compile time, which
 > reveals:
 > 
->   drivers/scsi/elx/libefc/efc_node.c:811:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->                   ctx->current_state = state;
->                                     ^ ~~~~~
->   drivers/scsi/elx/libefc/efc_node.c:878:21: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           node->nodedb_state = state;
->                             ^ ~~~~~
->   drivers/scsi/elx/libefc/efc_node.c:905:6: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' from 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') [-Werror,-Wincompatible-function-pointer-types-strict]
->                   pf = node->nodedb_state;
->                     ^ ~~~~~~~~~~~~~~~~~~
+>   drivers/s390/net/ctcm_main.c:1064:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit         = ctcm_tx,
+>                                     ^~~~~~~
+>   drivers/s390/net/ctcm_main.c:1072:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit         = ctcmpc_tx,
+>                                     ^~~~~~~~~
 > 
->   drivers/scsi/elx/libefc/efc_device.c:455:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->                   node->nodedb_state = __efc_d_init;
->                                     ^ ~~~~~~~~~~~~
-> 
->   drivers/scsi/elx/libefc/efc_sm.c:41:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->                   ctx->current_state = state;
->                                     ^ ~~~~~
-> 
-> The type of the second parameter in the prototypes of ->current_state()
-> and ->nodedb_state() ('u32') does not match the implementations, which
-> have a second parameter type of 'enum efc_sm_event'. Update the
-> prototypes to have the correct second parameter type, clearing up all
-> the warnings and CFI failures.
+> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+> 'netdev_tx_t', not 'int'. Adjust the return type of ctc{mp,}m_tx() to
+> match the prototype's to resolve the warning and potential CFI failure,
+> should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
 > 
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
