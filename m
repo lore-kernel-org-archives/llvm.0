@@ -1,52 +1,52 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E1C2F36
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:06:35 +0000 (UTC)
-Received: by mail-pg1-f179.google.com with SMTP id b62so6668816pgc.0
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:06:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064ED1EA01
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:06:51 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id io19so17472268plb.8
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:06:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YLJw50A1K+KhusFBEa675+xxaU3caL5GDgA+x/6AGwQ=;
-        b=eanRVW/LBbSyQtTn8NWCZTTDAawhljklM58TSIe0LHlwW/gHbMD11JP3ckeaEe/msg
-         vmppBy0RmvOGmkJW6vTqFKB6oG4y+0rkYyOuCChrP4Sy/x03U/caHHgMIFnNNWlXRSYQ
-         MKBSw57TYyF6OcudfzZhtv+PDEccU/3X7mxRc=
+        bh=71cIGVUi+2jVEjXbTMLP+sHbufV3ZHGsKiLlY1xVyE4=;
+        b=fjGGSl6TZGy6MhSeAlQ9V3XlMvK9/dKuFuRpy8Ew/54JsuPSu62uZ6R7xn5ia9d6mL
+         xmWYa3LxJrXqfZL52eFl4W2S7p0zWy5w3mpFGbEqxRpS4Jz1o7xWa7Czjp+BMc/29Ion
+         AObRStps16tXSHWBnfGNhb6ksTT8C1QPkW5mM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YLJw50A1K+KhusFBEa675+xxaU3caL5GDgA+x/6AGwQ=;
-        b=srjN7ePGf/rVNFy8hXAPRhr3k1kxE2kvLeEztyOkyam7n6WnieIolhOoen7+Un+xUb
-         9UNPWDtKWMcK2yS7G+NWg0f7cwHO/mp0lxye67Qk7v03yffWzJxuYCJsqBpm2t8WnR88
-         WTjfVOvfB7LLVa56HcJUPJPJWoil633VSp+SFXnqIRUvhPrTg1GmfEcki4ScAIXA7WFD
-         aMtgp6ccuZStPRbKd87AmiKqf6kbMbErGHxPKE2lOGjIljVixM0rMJrGIvNFzFmMko6Z
-         XCQbccAt8sxvSS5ijtViRkECShXQlErIyhZv/OvGXUlQZnQZV7SUvoHjr5azva8XNNF9
-         PoVg==
-X-Gm-Message-State: ACrzQf0/nvZti4FXjJpz8sH6LTy/kDNGwK3oQtUTmJ0hpJ2Ksv+k4PRY
-	qkwhvPkTo+d4qsuU+g/Hm0Ijxw==
-X-Google-Smtp-Source: AMsMyM5nOP7TB+tQ3IHpynS+a4tGqv36tuqeuJEkR1BO6kWK8sdX+uSJsUdso0ZtKCVhfl6YA8bm0g==
-X-Received: by 2002:a05:6a00:1688:b0:53b:4239:7c5c with SMTP id k8-20020a056a00168800b0053b42397c5cmr27219671pfc.81.1667415995509;
-        Wed, 02 Nov 2022 12:06:35 -0700 (PDT)
+        bh=71cIGVUi+2jVEjXbTMLP+sHbufV3ZHGsKiLlY1xVyE4=;
+        b=4I6f7GQBFOmolwP0htSZW/HO5iLsyqjB9yIh+LZ7W93jpJ9k3wbPMF4/KaY7C/Puwb
+         zXhAk+ZFAKLS9Ullb2ira1vGRC1z5JxJzOcZAv2bpoMMpJrYFhaFD1ycQ8IhtGTrfja/
+         /fCW0kLiV5qVwJ4XJwkNmofgZYPcJLRX8MpU7nFOC+6WDSlEJAHDZk9zz9pOh9LKdHm9
+         kflFGLlQt5RN/lp0bYmrG2DZm1V9baVuXfAMdU3MsUlfjQixmx5UPix3Zms65xn7kj57
+         K3AMD0WCSxnr8djHOJ3gSu32/sQSFpj4lLHEDbM78dFTtPPapT0DHZOO+oGJYKsmIMI1
+         +6Iw==
+X-Gm-Message-State: ACrzQf2vzfLSNN3FXX/81ScqPE5IBPgvviPp9rze4qwb25olHYxknY2r
+	708n9s8VQhvZc+LEzuYMlz5U3A==
+X-Google-Smtp-Source: AMsMyM7w0eDTA7/r8K67/N2jqI2Q9w/r0P434xSeZcahrG3KviKdGBv3lb4n7+RNP3OVrJqxGz8rXA==
+X-Received: by 2002:a17:90a:bf82:b0:214:6fd:90ec with SMTP id d2-20020a17090abf8200b0021406fd90ecmr11317834pjs.61.1667416011472;
+        Wed, 02 Nov 2022 12:06:51 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b00186727e5f5csm8710774plg.248.2022.11.02.12.06.35
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b0017da2798025sm8710635pls.295.2022.11.02.12.06.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:06:35 -0700 (PDT)
-Date: Wed, 2 Nov 2022 12:06:34 -0700
+        Wed, 02 Nov 2022 12:06:50 -0700 (PDT)
+Date: Wed, 2 Nov 2022 12:06:50 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+Cc: Alain Volmat <alain.volmat@foss.st.com>,
+	dri-devel@lists.freedesktop.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
 	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: Re: [PATCH] drm/meson: Fix return type of
- meson_encoder_cvbs_mode_valid()
-Message-ID: <202211021206.F5C5954F66@keescook>
-References: <20221102155242.1927166-1-nathan@kernel.org>
+Subject: Re: [PATCH] drm/sti: Fix return type of
+ sti_{dvo,hda,hdmi}_connector_mode_valid()
+Message-ID: <202211021206.1A488F29C@keescook>
+References: <20221102155623.3042869-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,9 +55,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102155242.1927166-1-nathan@kernel.org>
+In-Reply-To: <20221102155623.3042869-1-nathan@kernel.org>
 
-On Wed, Nov 02, 2022 at 08:52:42AM -0700, Nathan Chancellor wrote:
+On Wed, Nov 02, 2022 at 08:56:23AM -0700, Nathan Chancellor wrote:
 > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 > indirect call targets are validated against the expected function
 > pointer prototype to make sure the call target is valid to help mitigate
@@ -66,18 +66,22 @@ On Wed, Nov 02, 2022 at 08:52:42AM -0700, Nathan Chancellor wrote:
 > proposed warning in clang aims to catch these at compile time, which
 > reveals:
 > 
->   drivers/gpu/drm/meson/meson_encoder_cvbs.c:211:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .mode_valid = meson_encoder_cvbs_mode_valid,
+>   drivers/gpu/drm/sti/sti_hda.c:637:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .mode_valid = sti_hda_connector_mode_valid,
+>                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/gpu/drm/sti/sti_dvo.c:376:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .mode_valid = sti_dvo_connector_mode_valid,
+>                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/gpu/drm/sti/sti_hdmi.c:1035:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .mode_valid = sti_hdmi_connector_mode_valid,
 >                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
 > 
-> ->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
-> 'enum drm_mode_status', not 'int'. Adjust the return type of
-> meson_encoder_cvbs_mode_valid() to match the prototype's to resolve the
-> warning and CFI failure.
+> ->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
+> type of 'enum drm_mode_status', not 'int'. Adjust the return type of
+> sti_{dvo,hda,hdmi}_connector_mode_valid() to match the prototype's to
+> resolve the warning and CFI failure.
 > 
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
