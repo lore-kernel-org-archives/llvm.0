@@ -1,40 +1,40 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C089C6D18
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 15:42:55 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id d24so16954144pls.4
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 08:42:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BFF6D18
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 15:43:01 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id k22so16765961pfd.3
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 08:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbHhHvdRSfNW3M6lKiiBiHsy/aZHIegD8in6WLhhzSY=;
-        b=grx0sX1vyt4doXabEeN05DzVGZaktvYdcCfg6WGKYn2Um48Zgp2UMnzv9yxRjGlvDs
-         s02OzcMqRXmY81P844mFxCquKl032+JyuX8aVk9fGB0kVUT/d3ioGHRtH7AHRaujNbdw
-         65vnLvXCz2xWmb3ZUvb4RYrBdcrT6g2PSeo3Y=
+        bh=CbzfHUK/OIe01GljM+tYcwS2aLG1wlQhszOS90aIPbk=;
+        b=TnvBNqsScJgJGa9F6e4NUp0WnQSFcyWRX8Px7ptg6cO6ctt1BRBZcdYb69cwPtIwyN
+         QoHb48pAlpwFaQk7ewUS76qc4+cdspn2SEn24wD7ztEg1qPECfbSrnmQfKNybPMUuQua
+         osc2GMsfESHWanbfjNZictRM04i534QWu1ZfY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gbHhHvdRSfNW3M6lKiiBiHsy/aZHIegD8in6WLhhzSY=;
-        b=FTXz8WBwpTavr6j8wC2N5kyhHQTIvxWK3IUFWt3pE3xMyRzT8m2VRvuztPsx+OG7S1
-         BxGJ+KGw1F/K6hZdc2h0uCeQKBYpzFNpyTX0r27fxMii2zTz0aZAH4OvfNadUmImOR9d
-         jPJseaORMev5Le3J1AC2TlEsLR0uDWnIMHe3/G3IF+Ly0PM9R/6qvHj4XMT29sQytgLq
-         QFcdqZwRKQGz9tXAPkkcJ1v73yqFs3ISVCiISsh5dEqE9qWDsJHQR4R3JdjxOvyB+WXg
-         Q5grdjPUVdBQl0VXikHeJjKH6Pl5Rkc8UIuHnWGs8QvKNt4fejO2x1/aWiVbPHlcX/sm
-         S4kg==
-X-Gm-Message-State: ACrzQf2qKmd+8741iLzscTi3o18naWRcFL8UwZuOV54jbDwWh04RQFns
-	ZCdCFxsvkjfZJEkZeXvCIxGRKA==
-X-Google-Smtp-Source: AMsMyM5riCGdRLVGt8cheeiKjHf8n8+rR3sMc60dvYFpdMSefduVp5ovnjO/E9dJecAFytPwR3myDw==
-X-Received: by 2002:a17:902:720c:b0:186:fb90:573e with SMTP id ba12-20020a170902720c00b00186fb90573emr25604727plb.160.1667403775155;
-        Wed, 02 Nov 2022 08:42:55 -0700 (PDT)
+        bh=CbzfHUK/OIe01GljM+tYcwS2aLG1wlQhszOS90aIPbk=;
+        b=sBd5EhQoXPY1CHtHYUBt2bg2sf+aFcRW50EmoFe6n1la93Qwl9y0OYJYzQvmpyLpCx
+         qX3iR0A0jzmNZujvV6R1g0RvIEj/C7NtjTLLhwFXsDeFpNsQf9SeCmCoj2UZx6H4Tp20
+         Z12LG0NXPQJBBtRbfo3g6lOU/upuEYDeYHhb/4XMVwvtFWDMLtTkWJB0a9WkCb56jT/w
+         EhiTf4rhS+7POvGXYs+CZ263+4OsrgwHotbq8jowP/wl44O3qgAQu4KnHsmhpGAAPeiU
+         8z2o/ynfgg8fSbAHq4vvkhDH1UzHXowrpANC2aer2oMqrd3ffkFO41R7cGDIv1xhm+Ud
+         Rc8A==
+X-Gm-Message-State: ACrzQf2v4wv/2qsffH/FkcTGAZ2BF+2xUBRonvADIdfmm28UxQlTNMGS
+	KVcpvffwJWWw4d4+hI3w98m3lw==
+X-Google-Smtp-Source: AMsMyM7zf3RSyPAO0SeThAybZk/yt9Nw3pqPZ2/rk3+peKB5InTdiurM9tAyqpCR0+JSZHkWzA3xrw==
+X-Received: by 2002:a65:6b81:0:b0:461:4049:7df7 with SMTP id d1-20020a656b81000000b0046140497df7mr22347812pgw.593.1667403780934;
+        Wed, 02 Nov 2022 08:43:00 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b001885041d7b8sm47015pll.293.2022.11.02.08.42.54
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902650500b00186afd756edsm8431471plk.283.2022.11.02.08.43.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 08:42:54 -0700 (PDT)
-Date: Wed, 2 Nov 2022 08:42:54 -0700
+        Wed, 02 Nov 2022 08:43:00 -0700 (PDT)
+Date: Wed, 2 Nov 2022 08:42:59 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: Alex Deucher <alexander.deucher@amd.com>,
@@ -44,10 +44,11 @@ Cc: Alex Deucher <alexander.deucher@amd.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
 	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 1/2] drm/amdgpu: Fix type of second parameter in
- trans_msg() callback
-Message-ID: <202211020842.8F3ECD397@keescook>
+Subject: Re: [PATCH 2/2] drm/amdgpu: Fix type of second parameter in
+ odn_edit_dpm_table() callback
+Message-ID: <202211020842.8B8E29F8@keescook>
 References: <20221102152540.2389891-1-nathan@kernel.org>
+ <20221102152540.2389891-2-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,9 +57,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102152540.2389891-1-nathan@kernel.org>
+In-Reply-To: <20221102152540.2389891-2-nathan@kernel.org>
 
-On Wed, Nov 02, 2022 at 08:25:39AM -0700, Nathan Chancellor wrote:
+On Wed, Nov 02, 2022 at 08:25:40AM -0700, Nathan Chancellor wrote:
 > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 > indirect call targets are validated against the expected function
 > pointer prototype to make sure the call target is valid to help mitigate
@@ -67,18 +68,23 @@ On Wed, Nov 02, 2022 at 08:25:39AM -0700, Nathan Chancellor wrote:
 > proposed warning in clang aims to catch these at compile time, which
 > reveals:
 > 
->   drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c:412:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
->           .trans_msg = xgpu_ai_mailbox_trans_msg,
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:3008:29: error: incompatible function pointer types initializing 'int (*)(void *, uint32_t, long *, uint32_t)' (aka 'int (*)(void *, unsigned int, long *, unsigned int)') with an expression of type 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *, uint32_t)' (aka 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .odn_edit_dpm_table      = smu_od_edit_dpm_table,
+>                                      ^~~~~~~~~~~~~~~~~~~~~
 >   1 error generated.
 > 
->   drivers/gpu/drm/amd/amdgpu/mxgpu_nv.c:435:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
->           .trans_msg = xgpu_nv_mailbox_trans_msg,
->                       ^~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
+> There are only two implementations of ->odn_edit_dpm_table() in 'struct
+> amd_pm_funcs': smu_od_edit_dpm_table() and pp_odn_edit_dpm_table(). One
+> has a second parameter type of 'enum PP_OD_DPM_TABLE_COMMAND' and the
+> other uses 'u32'. Ultimately, smu_od_edit_dpm_table() calls
+> ->od_edit_dpm_table() from 'struct pptable_funcs' and
+> pp_odn_edit_dpm_table() calls ->odn_edit_dpm_table() from 'struct
+> pp_hwmgr_func', which both have a second parameter type of 'enum
+> PP_OD_DPM_TABLE_COMMAND'.
 > 
-> The type of the second parameter in the prototype should be 'enum
-> idh_request' instead of 'u32'. Update it to clear up the warnings.
+> Update the type parameter in both the prototype in 'struct amd_pm_funcs'
+> and pp_odn_edit_dpm_table() to 'enum PP_OD_DPM_TABLE_COMMAND', which
+> cleans up the warning.
 > 
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 > Reported-by: Sami Tolvanen <samitolvanen@google.com>
