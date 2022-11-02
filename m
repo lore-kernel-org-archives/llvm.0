@@ -1,52 +1,50 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064ED1EA01
-	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:06:51 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id io19so17472268plb.8
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:06:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE36D24F47
+	for <llvm@lists.linux.dev>; Wed,  2 Nov 2022 19:07:03 +0000 (UTC)
+Received: by mail-pf1-f172.google.com with SMTP id z26so4107314pff.1
+        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 12:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=71cIGVUi+2jVEjXbTMLP+sHbufV3ZHGsKiLlY1xVyE4=;
-        b=fjGGSl6TZGy6MhSeAlQ9V3XlMvK9/dKuFuRpy8Ew/54JsuPSu62uZ6R7xn5ia9d6mL
-         xmWYa3LxJrXqfZL52eFl4W2S7p0zWy5w3mpFGbEqxRpS4Jz1o7xWa7Czjp+BMc/29Ion
-         AObRStps16tXSHWBnfGNhb6ksTT8C1QPkW5mM=
+        bh=Al21TcPJt8to6DKIHKPsHPs63wTLg/3m3c5X1IY9ZVk=;
+        b=OcMa2PXvffEHTQunOgnNyVVSveU1Xb65KX1gioYtZk3gy2NegHqZ67GKmvzpjPnDJl
+         zKfuWdA2xd3gYCvHb+t/2yRIVb2JA+hl9J9vsDf3NoLYr2nWYglOAJ7O3AmVFD3BBhXm
+         60sjC1gk9vHdyyZ1gOJyAbff5s4FGFzZCbOtY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=71cIGVUi+2jVEjXbTMLP+sHbufV3ZHGsKiLlY1xVyE4=;
-        b=4I6f7GQBFOmolwP0htSZW/HO5iLsyqjB9yIh+LZ7W93jpJ9k3wbPMF4/KaY7C/Puwb
-         zXhAk+ZFAKLS9Ullb2ira1vGRC1z5JxJzOcZAv2bpoMMpJrYFhaFD1ycQ8IhtGTrfja/
-         /fCW0kLiV5qVwJ4XJwkNmofgZYPcJLRX8MpU7nFOC+6WDSlEJAHDZk9zz9pOh9LKdHm9
-         kflFGLlQt5RN/lp0bYmrG2DZm1V9baVuXfAMdU3MsUlfjQixmx5UPix3Zms65xn7kj57
-         K3AMD0WCSxnr8djHOJ3gSu32/sQSFpj4lLHEDbM78dFTtPPapT0DHZOO+oGJYKsmIMI1
-         +6Iw==
-X-Gm-Message-State: ACrzQf2vzfLSNN3FXX/81ScqPE5IBPgvviPp9rze4qwb25olHYxknY2r
-	708n9s8VQhvZc+LEzuYMlz5U3A==
-X-Google-Smtp-Source: AMsMyM7w0eDTA7/r8K67/N2jqI2Q9w/r0P434xSeZcahrG3KviKdGBv3lb4n7+RNP3OVrJqxGz8rXA==
-X-Received: by 2002:a17:90a:bf82:b0:214:6fd:90ec with SMTP id d2-20020a17090abf8200b0021406fd90ecmr11317834pjs.61.1667416011472;
-        Wed, 02 Nov 2022 12:06:51 -0700 (PDT)
+        bh=Al21TcPJt8to6DKIHKPsHPs63wTLg/3m3c5X1IY9ZVk=;
+        b=sJoJtwGNP3FgYfApDDIqwNmx2aou9A3nO+LPP9+igECm4WH+07eri96HoA7CtQ8agg
+         YHAurmqhmhKYqYzOx1kagomOi/y0ovmYwRK8xTRqdExEuipDR19ySqf0byiBJv+wRkS0
+         hCyY773BpkY2YPt1R4q8HhVpFnjDau8FTQB5xB2/Yg85ra900PQwg8CkS0naILwS3EDQ
+         ytfqKCvD8OqJk/HVcEWAU20siPkaEsY8zr8Gg2Tyi5i7gPyAmuocMMT+krl/IVZQazsf
+         EbmGquvEx1k7GxtR5TQgOoTE+k0YWwdTpnsLt75R34c7WwCznfD+xTYYCRUI/ujARvCO
+         y1jA==
+X-Gm-Message-State: ACrzQf1kHgAwZejBjnw7Ba43hrn9uY6rwoizuPM6UKNrwyYkY+9LLzry
+	ETYsdYlIWUi7PLC4Y+O4DytwoQ==
+X-Google-Smtp-Source: AMsMyM7e7i+B4cU9w/Cyv/Fyf+gg4EoaUzMwpOjPVeEN10vhsy2lFnKC9AXyAPa+74dzy4vTvNDnfw==
+X-Received: by 2002:a05:6a00:140d:b0:528:5a5a:d846 with SMTP id l13-20020a056a00140d00b005285a5ad846mr27168744pfu.9.1667416023443;
+        Wed, 02 Nov 2022 12:07:03 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b0017da2798025sm8710635pls.295.2022.11.02.12.06.50
+        by smtp.gmail.com with ESMTPSA id e64-20020a621e43000000b0056be7ac5261sm8822038pfe.163.2022.11.02.12.07.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:06:50 -0700 (PDT)
-Date: Wed, 2 Nov 2022 12:06:50 -0700
+        Wed, 02 Nov 2022 12:07:02 -0700 (PDT)
+Date: Wed, 2 Nov 2022 12:07:02 -0700
 From: Kees Cook <keescook@chromium.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alain Volmat <alain.volmat@foss.st.com>,
-	dri-devel@lists.freedesktop.org,
+Cc: Sebastian Reichel <sre@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
 	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: Re: [PATCH] drm/sti: Fix return type of
- sti_{dvo,hda,hdmi}_connector_mode_valid()
-Message-ID: <202211021206.1A488F29C@keescook>
-References: <20221102155623.3042869-1-nathan@kernel.org>
+Subject: Re: [PATCH] HSI: ssi_protocol: Fix return type of ssip_pn_xmit()
+Message-ID: <202211021207.8F7604C860@keescook>
+References: <20221102160233.4042756-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,9 +53,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102155623.3042869-1-nathan@kernel.org>
+In-Reply-To: <20221102160233.4042756-1-nathan@kernel.org>
 
-On Wed, Nov 02, 2022 at 08:56:23AM -0700, Nathan Chancellor wrote:
+On Wed, Nov 02, 2022 at 09:02:33AM -0700, Nathan Chancellor wrote:
 > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 > indirect call targets are validated against the expected function
 > pointer prototype to make sure the call target is valid to help mitigate
@@ -66,20 +64,16 @@ On Wed, Nov 02, 2022 at 08:56:23AM -0700, Nathan Chancellor wrote:
 > proposed warning in clang aims to catch these at compile time, which
 > reveals:
 > 
->   drivers/gpu/drm/sti/sti_hda.c:637:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .mode_valid = sti_hda_connector_mode_valid,
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/gpu/drm/sti/sti_dvo.c:376:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .mode_valid = sti_dvo_connector_mode_valid,
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/gpu/drm/sti/sti_hdmi.c:1035:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .mode_valid = sti_hdmi_connector_mode_valid,
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/hsi/clients/ssi_protocol.c:1053:20: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit = ssip_pn_xmit,
+>                             ^~~~~~~~~~~~
+>   1 error generated.
 > 
-> ->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
-> type of 'enum drm_mode_status', not 'int'. Adjust the return type of
-> sti_{dvo,hda,hdmi}_connector_mode_valid() to match the prototype's to
-> resolve the warning and CFI failure.
+> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+> 'netdev_tx_t', not 'int'. Adjust the return type of ssip_pn_xmit() to
+> match the prototype's to resolve the warning and CFI failure.
+> Additionally, use the enum 'NETDEV_TX_OK' instead of a raw '0' for the
+> return value of ssip_pn_xmit().
 > 
 > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
