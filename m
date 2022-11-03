@@ -1,84 +1,105 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC82586
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 14:35:16 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso5345538pjg.5
-        for <llvm@lists.linux.dev>; Thu, 03 Nov 2022 07:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XS5HY1qfVgPGBSCEvtrILQuPyjwIbVWvvdtLCE+QZb8=;
-        b=fVvojiGFj1F60Uhyp9tm0SgPb/u6SkwEkY3IydXdAR3HwpDfPgesAqcgO5VQ/dkokx
-         ey7yZ/uTqnyEqNVfWmm6PTYMEa9rSPLU4d0PtKu67Nmd4HFgLRJCrlzJ8hFPqzKWqjmr
-         zjx02vVHkGTlu1LlovYuFaD/mLjHbSwSc0V6F/4SM8x7LuKC+OlPYsOZKTiremVtx8Pt
-         Iu8Alb9812XeciNUXIURqJVF+E0Dflq9JLL3jjN6ICMWIpJ6ahknNAHmNY59L1YOlCS9
-         OEqvURyXuVPrIhKGDjIylR5ONYyWT8sKSqNCLOOGimLBmeKPToiN1w9ZE50En5J2f1RF
-         aR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XS5HY1qfVgPGBSCEvtrILQuPyjwIbVWvvdtLCE+QZb8=;
-        b=HGzQcYufeyD5LEYzQNJUi/tW0yAgalAcf8eRbSS1SaTx59SSRcMCtLHfNkalRRGdak
-         7LEXtcKPdfu5VojhEl8cHTsOjCxdPBH+TlJGK3A5lVGadTnqnyj4uEmF0OamgLQTnd2v
-         Ngdqwh30unRqN9AnXT2TnW8DtnsuyE3K7pzEFNkV7oEptnySNNmCe5qu+Wk7Vm4JWnFy
-         b4wqTMZ/EGgwWqktmfq6SSd81VtfvWQ65eBvFeBy0LEC4J7lWJbAsSrO7oHUGTER96KD
-         7TAn6p+WlcWXU9mej7fSljvpNTke9aqC6dSo95Acj1Jm5t39srnBf19XMKSyDMjm5OGK
-         FFRA==
-X-Gm-Message-State: ACrzQf03ZQa0BmqPt1uS3VAERVMZTaxE+e+ZizhaaZhIK/4muIFAzo5F
-	i9IIdphpMVSkRdGfUbOws8z6hw==
-X-Google-Smtp-Source: AMsMyM5w0DXrQ+5b0Dr2Z1FMuMyOv8pf3Ny7uqe9sbXAM4mpFFAfcxeKR3dcynMgqwoKNBhQcWHiKQ==
-X-Received: by 2002:a17:90b:3690:b0:213:c985:b5ee with SMTP id mj16-20020a17090b369000b00213c985b5eemr26188219pjb.192.1667486116041;
-        Thu, 03 Nov 2022 07:35:16 -0700 (PDT)
-Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id u9-20020a170902e80900b001868d4600b8sm739611plg.158.2022.11.03.07.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:35:15 -0700 (PDT)
-Date: Thu, 3 Nov 2022 20:05:13 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [vireshk-pm:opp/linux-next 6/7] drivers/opp/of.c:692:21:
- warning: variable 'ret' is used uninitialized whenever 'for' loop exits
- because its condition is false
-Message-ID: <20221103143513.7yh3odcwhmh3rqfx@vireshk-i7>
-References: <202211032146.8lAi6hQi-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9598E7481
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 14:48:18 +0000 (UTC)
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170]) (authenticated)
+	by conssluserg-03.nifty.com with ESMTP id 2A3ElfTs019029
+	for <llvm@lists.linux.dev>; Thu, 3 Nov 2022 23:47:41 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2A3ElfTs019029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1667486862;
+	bh=TuNM2rHD3sRB+ox8RBaC7f6+XLb7VfNR657ErBE+mys=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WsDBF+vxaUubH4L3pg4hCsLNJRA2ad7z+JyxDAwDCsnw4WCfmlGz/IsiJx4dCwBWU
+	 O0mwmUErZC029A8CUSnlaYrCQ2Q2iQf1VRwm48D+Cr38ir0LYnt6YLlUnkI825ec+6
+	 SaZj34joRpg76JodABZ/KHzlVUdZGEHMCwiWoYr1Nub3FmDWeZhUZQobHEsG4SuMnw
+	 q1II9bTPghm7f7aoiU5ABjjekGT7Grpy9layb533jmWrCUzLdGLgHgKUhWDIwhxsT4
+	 kWbdPixcXDHsfDm6JIxuymEmCTBpRWoXGYd0KSH8AZ9ah2wHt4nRJZzobKWXztZLeP
+	 5dIMv8WEFt3ng==
+X-Nifty-SrcIP: [209.85.167.170]
+Received: by mail-oi1-f170.google.com with SMTP id y67so2202169oiy.1
+        for <llvm@lists.linux.dev>; Thu, 03 Nov 2022 07:47:41 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0dzlEdlSteuldH8T56QrfDzsK/M7MKOx84jScAfL1pHarWvB91
+	ic6Z4ZE051Bx9gxEu3OesCyuM8e8n0hI8AcLPn0=
+X-Google-Smtp-Source: AMsMyM7JPIjX/GXktALqdrTv58HUSxC8FEw2P+dSoycFrGz43w7u0MQy2EthH5eypKbvFbnD5sDyGCVe0p+a3820dXE=
+X-Received: by 2002:a05:6808:1893:b0:359:f7c7:1caf with SMTP id
+ bi19-20020a056808189300b00359f7c71cafmr13748303oib.194.1667486860713; Thu, 03
+ Nov 2022 07:47:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211032146.8lAi6hQi-lkp@intel.com>
+References: <20221102091308.11568-1-masahiroy@kernel.org> <CAMj1kXGzFEnUGkoD_JV6=mrKQ+eXLo=SYU8823mPezHZfY_FRQ@mail.gmail.com>
+ <CAK7LNASjBm=WWpkSaL1+QuLokhnepUucvhYyP3CCeZYx6nOTHA@mail.gmail.com> <9fe8615c-fe31-ebf7-09bd-453fae189666@kernel.org>
+In-Reply-To: <9fe8615c-fe31-ebf7-09bd-453fae189666@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 3 Nov 2022 23:47:04 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATBuERrR4QvLzDNOw1TVmMP+2J=sJviihBdy8gF=CfA=w@mail.gmail.com>
+Message-ID: <CAK7LNATBuERrR4QvLzDNOw1TVmMP+2J=sJviihBdy8gF=CfA=w@mail.gmail.com>
+Subject: Re: [RFC PATCH] kbuild: pass objects instead of archives to linker
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>, linux-kbuild@vger.kernel.org,
+        Michael Matz <matz@suse.de>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 03-11-22, 21:29, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-> head:   5acd93462bff6c108d65802fd39f6002dfadd1a0
-> commit: bf7e6e072ed166c11c687200df53aec8d7446182 [6/7] OPP: Simplify opp_parse_supplies() by restructuring it
-> config: arm-randconfig-r023-20221102
-> compiler: clang version 15.0.4 (https://github.com/llvm/llvm-project 5c68a1cb123161b54b72ce90e7975d95a8eaf2a4)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=bf7e6e072ed166c11c687200df53aec8d7446182
->         git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
->         git fetch --no-tags vireshk-pm opp/linux-next
->         git checkout bf7e6e072ed166c11c687200df53aec8d7446182
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Nov 3, 2022 at 4:22 PM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> On 02. 11. 22, 10:44, Masahiro Yamada wrote:
+> > Jiri Slaby reported that the (not-upstreamed) GCC-LTO tree got broken
+> > due to 321648455061 ("kbuild: use obj-y instead extra-y for objects
+> > placed at the head")
+> >
+> > https://lore.kernel.org/linux-kbuild/ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org/
+> >
+> >
+> > I am not pretty sure because I did not check the downstream code.
+> >
+> >
+> > If I understood his report correctly, the reason for the breakage is
+> > because I put all objects into the thin archive, expecting
+> > the linker would preserve the object order in the archive.
+> >
+> > By specifying the object order directly in the command line,
+> > GCC-LTO should get back working again.
+>
+> ...
+>
+> > I think my patch is unneeded (hence RFC), but I just wanted to know
+> > if linkers (gnu ld and lld) see any difference.
+>
+> Yes, including your patch (instead of vmlinux.S and /compressed/*
+> changes) also fixes the issue. So the linker (gcc-ld) indeed respects
+> command line, but not order of objects in .a.
+>
 
-Fixed, thanks.
+
+Can I see your LTO implementation somewhere in public?
+
+
+I know Andy Kleen's GCC-LTO, the latest version is 5.13-ish.
+
+https://github.com/andikleen/linux-misc.git
+
+
+
+
+
+> thanks,
+> --
+> js
+> suse labs
+>
+
 
 -- 
-viresh
+Best Regards
+Masahiro Yamada
