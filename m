@@ -1,99 +1,87 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F0379C1
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 21:28:08 +0000 (UTC)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id B5E7B6602962;
-	Thu,  3 Nov 2022 21:28:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1667510886;
-	bh=Bo6jAy9n7EIhWM93CDe2w2Ldd+vTyxvumeVAJrhRaig=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b0WJzCft7a5ZU1yL7SAlojfM2J+IppIcj0zQTcbb8pxyMVeyXLAVv3qWzQjUhxd0e
-	 P3q4fyK3Bm2btG0ROUqy0jkxR0SxW02pdciQQpSYXkrL60pupIlzUHbUtUUGYD+q5E
-	 q/5sSIdsFObiLXgH8pP9g67nLHAceARjocg06/z+uSuzorjo8+0irx1w+s2Xk7Ujcm
-	 UmmS0Bem2aJVxw0Ze2BZe9WXhdDxw/F4R69QT7KGNtdrOAv1QcRnFZLSqeFQuBsIeJ
-	 Al6WX/lm8O5B8VtxsP5Wswwi+gN6GUK1lOSG47tPrma/eorY5/VVKIYKEtnKmOBlUa
-	 P73ztZIw+DJpw==
-Date: Thu, 3 Nov 2022 17:28:00 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: "Nancy.Lin" <nancy.lin@mediatek.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E07179C1;
+	Thu,  3 Nov 2022 22:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F362AC433C1;
+	Thu,  3 Nov 2022 22:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1667512853;
+	bh=dluWjDGdC07I/AD6wdKBCeMDMLBVhk113lXX5gZ2rXU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jn0hZf8zNkSiysdNZ/+wAaZ4b9wAQOT0WC2bjA6PPgFN5X+M1e34p3qgkaDkElxc1
+	 RZdDEBbZC57/diZc5DbFkwZdwCaSWXuM8htcBcV2+ENxOeEtl1MeUGWPO95mE8Yowp
+	 GkEwSBMYUr0dQKyrLCz+aGrT+M+u7ClGBvRvpb3NmiWg7hRFOlEmK4JJAw2jkIqprX
+	 wicnEA9/PspLYP5tUkcpsVGpYGLxCnaKBKjlcTOgWuPnUqKYwyFKVmyRJ0LTM63xzz
+	 +cFQIxDNcdjl1FeHLZbg+VoFXvQ1LG0Xjim+bdUSAsIE08LDJGwHIPGPQV3w+zr466
+	 /xBCm4fYp36sg==
+From: Nathan Chancellor <nathan@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	netdev@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	Yongqiang Niu <yongqiang.niu@mediatek.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev, singo.chang@mediatek.com,
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v27 6/7] drm/mediatek: add drm ovl_adaptor sub driver for
- MT8195
-Message-ID: <20221103212800.43nxlxpconqkasvc@notapiano>
-References: <20221103032610.9217-1-nancy.lin@mediatek.com>
- <20221103032610.9217-7-nancy.lin@mediatek.com>
+	Tom Rix <trix@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH net-next] net: ethernet: renesas: Fix return type of rswitch_start_xmit()
+Date: Thu,  3 Nov 2022 15:00:32 -0700
+Message-Id: <20221103220032.2142122-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221103032610.9217-7-nancy.lin@mediatek.com>
 
-On Thu, Nov 03, 2022 at 11:26:09AM +0800, Nancy.Lin wrote:
-> Add drm ovl_adaptor sub driver. Bring up ovl_adaptor sub driver if
-> the component exists in the path.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Change-Id: I0501f3c80e78ec8279366cba9c137a2edd7a852e
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.c     |  61 ++++-----
->  drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   2 +-
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c | 129 ++++++++++++--------
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  50 +++++++-
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c      |  78 ++++++------
->  drivers/gpu/drm/mediatek/mtk_drm_drv.h      |  12 +-
->  6 files changed, 209 insertions(+), 123 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> index 30dcb65d8a5a..ce5617ad04cb 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-[..]
->  int mtk_drm_crtc_create(struct drm_device *drm_dev,
-> -			const enum mtk_ddp_comp_id *path, unsigned int path_len,
-> +			const unsigned int *path, unsigned int path_len,
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-Hi Nancy,
+  drivers/net/ethernet/renesas/rswitch.c:1533:20: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .ndo_start_xmit = rswitch_start_xmit,
+                          ^~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-why is 'enum mtk_ddp_comp_id' being changed to 'unsigned int' throughout this
-patch? Was this intentional?
+->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+'netdev_tx_t', not 'int'. Adjust the return type of rswitch_start_xmit()
+to match the prototype's to resolve the warning and CFI failure.
 
-I saw that this change happened between v16 [1] and v17 [2], but I didn't see
-any reply or mention about this in the commit message or cover letter.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/ethernet/renesas/rswitch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Nícolas
+diff --git a/drivers/net/ethernet/renesas/rswitch.c b/drivers/net/ethernet/renesas/rswitch.c
+index 20df2020d3e5..f0168fedfef9 100644
+--- a/drivers/net/ethernet/renesas/rswitch.c
++++ b/drivers/net/ethernet/renesas/rswitch.c
+@@ -1390,7 +1390,7 @@ static int rswitch_stop(struct net_device *ndev)
+ 	return 0;
+ };
+ 
+-static int rswitch_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++static netdev_tx_t rswitch_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ {
+ 	struct rswitch_device *rdev = netdev_priv(ndev);
+ 	struct rswitch_gwca_queue *gq = rdev->tx_queue;
 
-[1] https://lore.kernel.org/all/20220318142009.2796-21-nancy.lin@mediatek.com/
-[2] https://lore.kernel.org/all/20220416020749.29010-20-nancy.lin@mediatek.com/
+base-commit: ef2dd61af7366e5a42e828fff04932e32eb0eacc
+-- 
+2.38.1
+
