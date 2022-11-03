@@ -1,290 +1,99 @@
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D702D806
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:38:29 +0000 (UTC)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-13ae8117023so839350fac.9
-        for <llvm@lists.linux.dev>; Wed, 02 Nov 2022 20:38:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WZCgXgFOCXchp8R83LT2Psxd0H5ojiq9RKAiaEDfp4g=;
-        b=kMHQ0ApyeUDXl9RotzmpyqCRGjKiWf/RyJGnk9YXfoidwX4eJqBA8VZIQw1UbxUYQv
-         APtxVSUeD7XpsPfp3R8LiGj/AMKbypg8z3NyDkU71qqCMMmQXB2TBxmRSuotsqOuYpHD
-         dnVCBQFjBABT7VdGYfraWry95YcyKJ5OBTPbYOuU6sbw/0UrPk5VVPviq6A4dN9wp3gW
-         e8BgMHa2Ciaj0STPQh1ojQLRtRdkrRgTnoRNmLYQRbaSVZ1AJnvm3/3Tn620LColIsyR
-         wewfy0sNX2F9QLx0et5tLcE4VBQTWemb5hR7E9igkDmtUPoLuS1kGEv1s9lRUxKhtMsY
-         9Yaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WZCgXgFOCXchp8R83LT2Psxd0H5ojiq9RKAiaEDfp4g=;
-        b=FxfKGkaoXbKh9Vh6aMWFKmLvxn7iqzE53UkyRoG21DMwgOVDbiXcTqXrh9zJiyRaib
-         fV1A5RuGrJgQxQfG5lUKdKKmVx/rITJAa+yhlUajUyxX9uZ+lUjOjygWiEaRuLUYd7UE
-         fppwHDabrDffE+4S6Ilj0pZT4XWbE3jB1VRXrgoYkAzg7w6ehaQDaIbo8+W712whU03c
-         TWXGMaaCzKN3egBOM38hdg6uFxVZxphKGt/KZHqVv3BdU9AN092vjQHV04XNVikwNVVG
-         1LMJoXayyDasVmBFlLiWULE5VRBU/N3NGwN1MMvyrLsvdPCTdRgZmlEJ4R+2VkRuOmug
-         VXrA==
-X-Gm-Message-State: ACrzQf0DBLxDELgZh5UJ+wIgP5Y+O/ufsPGauwJXdVu0tkIF4yUnll3H
-	+BkAbaSF+DwQkFaxvzeMSluNbw==
-X-Google-Smtp-Source: AMsMyM45S18LPBafWNbSrGc/eyKxtL/gexeI4ZqG8G6Zfie2F25d9ctK+K59+on4ZwFG9B1UFgzZJQ==
-X-Received: by 2002:a05:6870:ac0d:b0:13b:b9e7:e6d0 with SMTP id kw13-20020a056870ac0d00b0013bb9e7e6d0mr25323926oab.17.1667446708749;
-        Wed, 02 Nov 2022 20:38:28 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05680803b100b00354978180d8sm5247824oie.22.2022.11.02.20.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 20:38:27 -0700 (PDT)
-Date: Wed, 2 Nov 2022 23:38:24 -0400
-From: William Breathitt Gray <william.gray@linaro.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-iio@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	Patrick Havelange <patrick.havelange@essensium.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Oleksij Rempel <linux@rempel-privat.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Julien Panis <jpanis@baylibre.com>,
-	David Lechner <david@lechnology.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-omap@vger.kernel.org
-Subject: Re: [PATCH 1/4] counter: Adjust final parameter type in function and
- signal callbacks
-Message-ID: <Y2M3sGLdrL3uHU8X@fedora>
-References: <20221102172217.2860740-1-nathan@kernel.org>
- <202211021216.FF49E84C69@keescook>
- <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
- <202211021621.34241DC39@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA97C
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:40:29 +0000 (UTC)
+X-UUID: 3eb021bf95794b5e95e180cd29d35455-20221103
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=DiuYZjmUHw3nGyRgHo0u8gDUr2AHc+UIX7KzcQmjoFI=;
+	b=NixAQf4YiplbIJ94ak/MyK77FU3Z9Rgsff0F1uIVFxKJPd7Pf6tFs1ECiZWLsIUMvvwcs7GkY85BkuJCvOoc3IEVjZPG6OCZf+SmgE4YVwlsNu1W1omwvaP6VSzNMEH4GKVNTkgnMAagACA3HRwBLWoEkGP9OxX10lmqoJZLMew=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:137c1d6a-e61f-41e2-9e45-222e77e5ac26,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:100
+X-CID-INFO: VERSION:1.1.12,REQID:137c1d6a-e61f-41e2-9e45-222e77e5ac26,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+	N:quarantine,TS:100
+X-CID-META: VersionHash:62cd327,CLOUDID:42f47681-3116-4fbc-b86b-83475c3df513,B
+	ulkID:221103112517TJELCB4Y,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+	il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 3eb021bf95794b5e95e180cd29d35455-20221103
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+	with ESMTP id 1369606901; Thu, 03 Nov 2022 11:25:16 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 3 Nov 2022 11:25:15 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 11:25:15 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
+	<nfraprado@collabora.com>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v27 10/11] soc: mediatek: add mtk-mutex component - dp_intf1
+Date: Thu, 3 Nov 2022 11:25:11 +0800
+Message-ID: <20221103032512.9144-11-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221103032512.9144-1-nancy.lin@mediatek.com>
+References: <20221103032512.9144-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Z/0j4y7TVYG4hdqA"
-Content-Disposition: inline
-In-Reply-To: <202211021621.34241DC39@keescook>
+Content-Type: text/plain
+X-MTK: N
 
+Add mtk-mutex DDP_COMPONENT_DP_INTF1 component. The MT8195 vdosys1 path
+component contains ovl_adaptor, merge5, and dp_intf1. It is a preparation
+for adding support for MT8195 vdosys1 path component.
 
---Z/0j4y7TVYG4hdqA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-mutex.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Wed, Nov 02, 2022 at 04:22:32PM -0700, Kees Cook wrote:
-> On Wed, Nov 02, 2022 at 01:23:51PM -0700, Nathan Chancellor wrote:
-> > On Wed, Nov 02, 2022 at 12:21:23PM -0700, Kees Cook wrote:
-> > > On Wed, Nov 02, 2022 at 10:22:14AM -0700, Nathan Chancellor wrote:
-> > > > The ->signal_u32_read(), ->count_u32_read(), and ->count_u32_write()
-> > > > callbacks in 'struct counter_comp' expect the final parameter to ha=
-ve a
-> > > > type of 'u32' or 'u32 *' but the ops functions that are being assig=
-ned
-> > > > to those callbacks have an enumerated type as the final parameter. =
-While
-> > > > these are compatible from an ABI perspective, they will fail the
-> > > > aforementioned CFI checks.
-> > > >=20
-> > > > Adjust the type of the final parameter in the ->signal_read(),
-> > > > ->function_read(), and ->function_write() callbacks in 'struct
-> > > > counter_ops' and their implementations to match the prototypes in
-> > > > 'struct counter_comp' to clear up these warnings and CFI failures.
-> > >=20
-> > > I don't understand these changes. Where do 'struct counter_comp'
-> > > and 'struct counter_ops' get confused? I can only find matching
-> > > ops/assignments/calls, so I must be missing something. This looks like
-> > > a loss of CFI granularity instead of having wrappers added if there is
-> > > an enum/u32 conversion needed somewhere.
-> >=20
-> > Right, I am not the biggest fan of this change myself and it is entirely
-> > possible that I am misreading the warnings from the commit message but I
-> > do not see how
-> >=20
-> >         comp_node.comp.signal_u32_read =3D counter->ops->signal_read;
-> >=20
-> > and
-> >=20
-> >         comp_node.comp.count_u32_read =3D counter->ops->function_read;
-> >=20
-> > in counter_add_watch(),
-> >=20
-> >         comp.signal_u32_read =3D counter->ops->signal_read;
-> >=20
-> > in counter_signal_attrs_create(), and
-> >=20
-> >         comp.count_u32_read =3D counter->ops->function_read;
-> >         comp.count_u32_write =3D counter->ops->function_write;
-> >=20
-> > in counter_count_attrs_create() are currently safe under kCFI, since the
-> > final parameter type of the prototypes in 'struct counter_ops' does not
-> > match the final parameter type of the prototypes in 'struct
-> > counter_comp'. I would expect the indirect calls in counter_get_data()
-> > and counter_comp_u32_show() to fail currently.
-> >=20
-> > I briefly looked at making the 'struct counter_comp' callbacks match the
-> > 'struct counter_ops' ones but the COUNTER_COMP macros in
-> > include/linux/counter.h made it seem like these callbacks might be used
-> > by implementations that might use different enumerated types as the
-> > final parameter. I can look a little closer to see if we can make
-> > everything match.
-> >=20
-> > I am not sure how wrappers would work here, I can take a look into how
-> > feasible that is.
->=20
-> How about this? (I only did signal_read -- similar changes are needed
-> for function_read and function_write:
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index c1a33d52038e..41cba6aa0e83 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -602,6 +602,9 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+ 	case DDP_COMPONENT_DP_INTF0:
+ 		sof_id = MUTEX_SOF_DP_INTF0;
+ 		break;
++	case DDP_COMPONENT_DP_INTF1:
++		sof_id = MUTEX_SOF_DP_INTF1;
++		break;
+ 	default:
+ 		if (mtx->data->mutex_mod[id] < 32) {
+ 			offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
+@@ -642,6 +645,7 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+ 	case DDP_COMPONENT_DPI0:
+ 	case DDP_COMPONENT_DPI1:
+ 	case DDP_COMPONENT_DP_INTF0:
++	case DDP_COMPONENT_DP_INTF1:
+ 		writel_relaxed(MUTEX_SOF_SINGLE_MODE,
+ 			       mtx->regs +
+ 			       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg,
+-- 
+2.18.0
 
-The reason for the u32 type is that all the Counter enum components can
-make use of the same *_u32_read/*_u32_write calls; in other words, we
-don't have to handle each Counter enum read/write as unique.
-
-If you want to get rid of that design, then you'll need to create
-respective code paths for each Counter enum. See the comments inline
-below.
-
->=20
-> diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-c=
-hrdev.c
-> index 80acdf62794a..cb391b2498a6 100644
-> --- a/drivers/counter/counter-chrdev.c
-> +++ b/drivers/counter/counter-chrdev.c
-> @@ -38,6 +38,7 @@ struct counter_comp_node {
->  	a.device_u32_read =3D=3D b.device_u32_read || \
->  	a.count_u32_read =3D=3D b.count_u32_read || \
->  	a.signal_u32_read =3D=3D b.signal_u32_read || \
-> +	a.signal_read =3D=3D b.signal_read || \
->  	a.device_u64_read =3D=3D b.device_u64_read || \
->  	a.count_u64_read =3D=3D b.count_u64_read || \
->  	a.signal_u64_read =3D=3D b.signal_u64_read || \
-> @@ -54,6 +55,7 @@ struct counter_comp_node {
->  	comp.device_u32_read || \
->  	comp.count_u32_read || \
->  	comp.signal_u32_read || \
-> +	comp.signal_read || \
->  	comp.device_u64_read || \
->  	comp.count_u64_read || \
->  	comp.signal_u64_read || \
-> @@ -320,7 +322,7 @@ static int counter_add_watch(struct counter_device *c=
-onst counter,
->  			return -EINVAL;
-> =20
->  		comp_node.comp.type =3D COUNTER_COMP_SIGNAL_LEVEL;
-> -		comp_node.comp.signal_u32_read =3D counter->ops->signal_read;
-> +		comp_node.comp.signal_read =3D counter->ops->signal_read;
->  		break;
->  	case COUNTER_COMPONENT_COUNT:
->  		if (watch.component.scope !=3D COUNTER_SCOPE_COUNT)
-> @@ -530,6 +532,7 @@ static int counter_get_data(struct counter_device *co=
-nst counter,
->  	const size_t id =3D comp_node->component.id;
->  	struct counter_signal *const signal =3D comp_node->parent;
->  	struct counter_count *const count =3D comp_node->parent;
-> +	enum counter_signal_level level =3D 0;
->  	u8 value_u8 =3D 0;
->  	u32 value_u32 =3D 0;
->  	const struct counter_comp *ext;
-> @@ -569,8 +572,8 @@ static int counter_get_data(struct counter_device *co=
-nst counter,
->  			ret =3D comp->device_u32_read(counter, &value_u32);
->  			break;
->  		case COUNTER_SCOPE_SIGNAL:
-> -			ret =3D comp->signal_u32_read(counter, signal,
-> -						    &value_u32);
-> +			ret =3D comp->signal_read(counter, signal, &level);
-> +			value_u32 =3D level;
-
-This code path is for all Counter enum types currently; changing
-signal_u32_read to signal_read here will work for
-COUNTER_COMP_SIGNAL_LEVEL but break all the other Counter Signal enum
-types. Instead, you should duplicate this code with proper adjustments
-for each of the Counter enums in their own respective case blocks.
-
->  			break;
->  		case COUNTER_SCOPE_COUNT:
->  			ret =3D comp->count_u32_read(counter, count, &value_u32);
-> diff --git a/drivers/counter/counter-sysfs.c b/drivers/counter/counter-sy=
-sfs.c
-> index b9efe66f9f8d..07ce2543b70d 100644
-> --- a/drivers/counter/counter-sysfs.c
-> +++ b/drivers/counter/counter-sysfs.c
-> @@ -170,6 +170,7 @@ static ssize_t counter_comp_u32_show(struct device *d=
-ev,
->  	const struct counter_attribute *const a =3D to_counter_attribute(attr);
->  	struct counter_device *const counter =3D counter_from_dev(dev);
->  	const struct counter_available *const avail =3D a->comp.priv;
-> +	enum counter_signal_level level =3D 0;
->  	int err;
->  	u32 data =3D 0;
-> =20
-> @@ -178,7 +179,8 @@ static ssize_t counter_comp_u32_show(struct device *d=
-ev,
->  		err =3D a->comp.device_u32_read(counter, &data);
->  		break;
->  	case COUNTER_SCOPE_SIGNAL:
-> -		err =3D a->comp.signal_u32_read(counter, a->parent, &data);
-> +		err =3D a->comp.signal_read(counter, a->parent, &level);
-> +		data =3D level;
-
-Same issue as comment above: Counter Signal enums besides
-COUNTER_COMP_SIGNAL_LEVEL are possible.
-
->  		break;
->  	case COUNTER_SCOPE_COUNT:
->  		if (a->comp.type =3D=3D COUNTER_COMP_SYNAPSE_ACTION)
-> @@ -842,7 +844,7 @@ static int counter_signal_attrs_create(struct counter=
-_device *const counter,
-> =20
->  	/* Create main Signal attribute */
->  	comp =3D counter_signal_comp;
-> -	comp.signal_u32_read =3D counter->ops->signal_read;
-> +	comp.signal_read =3D counter->ops->signal_read;
->  	err =3D counter_attr_create(dev, cattr_group, &comp, scope, signal);
->  	if (err < 0)
->  		return err;
-> diff --git a/include/linux/counter.h b/include/linux/counter.h
-> index c41fa602ed28..3f1516076f20 100644
-> --- a/include/linux/counter.h
-> +++ b/include/linux/counter.h
-> @@ -169,6 +169,9 @@ struct counter_comp {
->  				      struct counter_count *count, u32 *val);
->  		int (*signal_u32_read)(struct counter_device *counter,
->  				       struct counter_signal *signal, u32 *val);
-> +		int (*signal_read)(struct counter_device *counter,
-> +				   struct counter_signal *signal,
-> +				   enum counter_signal_level *level);
->  		int (*device_u64_read)(struct counter_device *counter,
->  				       u64 *val);
->  		int (*count_u64_read)(struct counter_device *counter,
->=20
-> --=20
-> Kees Cook
-
-I'm not familiar with kCFI, but a better solution if possible would be
-to hint to the compiler the intention of the code here -- that we're
-intentionally type punning the last parameter in order to avoid
-duplicate code for each Counter enum because they are all handled the
-same way.
-
-William Breathitt Gray
-
---Z/0j4y7TVYG4hdqA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY2M3sAAKCRC1SFbKvhIj
-KyvXAP9PjHF2SFAGlc8+ZSJ83BGSWxiZaBEOozlM9Ub5fcInswD/cVEJDMoOq4d+
-8CYtwzAOKsqb7/lAIVWiVaEkA9STCQM=
-=FgB+
------END PGP SIGNATURE-----
-
---Z/0j4y7TVYG4hdqA--
