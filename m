@@ -1,105 +1,146 @@
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9598E7481
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 14:48:18 +0000 (UTC)
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170]) (authenticated)
-	by conssluserg-03.nifty.com with ESMTP id 2A3ElfTs019029
-	for <llvm@lists.linux.dev>; Thu, 3 Nov 2022 23:47:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2A3ElfTs019029
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1667486862;
-	bh=TuNM2rHD3sRB+ox8RBaC7f6+XLb7VfNR657ErBE+mys=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WsDBF+vxaUubH4L3pg4hCsLNJRA2ad7z+JyxDAwDCsnw4WCfmlGz/IsiJx4dCwBWU
-	 O0mwmUErZC029A8CUSnlaYrCQ2Q2iQf1VRwm48D+Cr38ir0LYnt6YLlUnkI825ec+6
-	 SaZj34joRpg76JodABZ/KHzlVUdZGEHMCwiWoYr1Nub3FmDWeZhUZQobHEsG4SuMnw
-	 q1II9bTPghm7f7aoiU5ABjjekGT7Grpy9layb533jmWrCUzLdGLgHgKUhWDIwhxsT4
-	 kWbdPixcXDHsfDm6JIxuymEmCTBpRWoXGYd0KSH8AZ9ah2wHt4nRJZzobKWXztZLeP
-	 5dIMv8WEFt3ng==
-X-Nifty-SrcIP: [209.85.167.170]
-Received: by mail-oi1-f170.google.com with SMTP id y67so2202169oiy.1
-        for <llvm@lists.linux.dev>; Thu, 03 Nov 2022 07:47:41 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0dzlEdlSteuldH8T56QrfDzsK/M7MKOx84jScAfL1pHarWvB91
-	ic6Z4ZE051Bx9gxEu3OesCyuM8e8n0hI8AcLPn0=
-X-Google-Smtp-Source: AMsMyM7JPIjX/GXktALqdrTv58HUSxC8FEw2P+dSoycFrGz43w7u0MQy2EthH5eypKbvFbnD5sDyGCVe0p+a3820dXE=
-X-Received: by 2002:a05:6808:1893:b0:359:f7c7:1caf with SMTP id
- bi19-20020a056808189300b00359f7c71cafmr13748303oib.194.1667486860713; Thu, 03
- Nov 2022 07:47:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326877488;
+	Thu,  3 Nov 2022 15:27:38 +0000 (UTC)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3F8ll6022285;
+	Thu, 3 Nov 2022 15:27:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6wCipEvp9ampmbBGbfyYVCsuiKJVysmr33s+ba/f0TY=;
+ b=kkdLZKt/C8bEnxBfn7+WFcjR9KsLMTHsA32/mFHkLI/Kpp7bSjbt+HXmHprWCGdi7E0d
+ TAZUAcL9abbpc+JZjvatlgh3zxkz8qmbdrphFAmwJPr9jDUWakpevwyRV0hMBnNqySHu
+ prpaG8OdU3AyYJ0WuN0IUaQziJssoT3F7PgnucBp6iId6HUXJ5DNB6uVKOWHTiygyptQ
+ HDPCT+wfZ02M9sNp/pVVSe/ZJ3bKU2qY4yTwKsaSum0bjqE1KIipKJXw3LkUcidlh+YT
+ WWAODkiR9Vx6v6ELllkGGy8A03zLYoVBVzN0TZNhdCVW21kB/vsblzgikRKm3dYDkC3f gQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmf9r2td1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Nov 2022 15:27:33 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3FA7fm030157;
+	Thu, 3 Nov 2022 15:27:32 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmf9r2tbt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Nov 2022 15:27:32 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+	by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3F5eI3014295;
+	Thu, 3 Nov 2022 15:27:30 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+	by ppma04fra.de.ibm.com with ESMTP id 3kgut8xqrh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Nov 2022 15:27:30 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+	by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3FRR0C6226564
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 3 Nov 2022 15:27:27 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E7F85AE04D;
+	Thu,  3 Nov 2022 15:27:26 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 76D29AE045;
+	Thu,  3 Nov 2022 15:27:26 +0000 (GMT)
+Received: from [9.152.224.241] (unknown [9.152.224.241])
+	by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+	Thu,  3 Nov 2022 15:27:26 +0000 (GMT)
+Message-ID: <7c5f70bd-c7a5-cf43-8ce9-f97dbba59a15@linux.ibm.com>
+Date: Thu, 3 Nov 2022 16:27:26 +0100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH 3/3] s390/lcs: Fix return type of lcs_start_xmit()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Wenjia Zhang <wenjia@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20221102163252.49175-1-nathan@kernel.org>
+ <20221102163252.49175-3-nathan@kernel.org>
+From: Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <20221102163252.49175-3-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0JkxIsgOHNAoaozpH7FELDEopzUm619D
+X-Proofpoint-ORIG-GUID: UgUdqCnUmOghft52R9yJJ-fHv2FECiVd
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221102091308.11568-1-masahiroy@kernel.org> <CAMj1kXGzFEnUGkoD_JV6=mrKQ+eXLo=SYU8823mPezHZfY_FRQ@mail.gmail.com>
- <CAK7LNASjBm=WWpkSaL1+QuLokhnepUucvhYyP3CCeZYx6nOTHA@mail.gmail.com> <9fe8615c-fe31-ebf7-09bd-453fae189666@kernel.org>
-In-Reply-To: <9fe8615c-fe31-ebf7-09bd-453fae189666@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 3 Nov 2022 23:47:04 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATBuERrR4QvLzDNOw1TVmMP+2J=sJviihBdy8gF=CfA=w@mail.gmail.com>
-Message-ID: <CAK7LNATBuERrR4QvLzDNOw1TVmMP+2J=sJviihBdy8gF=CfA=w@mail.gmail.com>
-Subject: Re: [RFC PATCH] kbuild: pass objects instead of archives to linker
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, linux-kbuild@vger.kernel.org,
-        Michael Matz <matz@suse.de>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-
-On Thu, Nov 3, 2022 at 4:22 PM Jiri Slaby <jirislaby@kernel.org> wrote:
->
-> On 02. 11. 22, 10:44, Masahiro Yamada wrote:
-> > Jiri Slaby reported that the (not-upstreamed) GCC-LTO tree got broken
-> > due to 321648455061 ("kbuild: use obj-y instead extra-y for objects
-> > placed at the head")
-> >
-> > https://lore.kernel.org/linux-kbuild/ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org/
-> >
-> >
-> > I am not pretty sure because I did not check the downstream code.
-> >
-> >
-> > If I understood his report correctly, the reason for the breakage is
-> > because I put all objects into the thin archive, expecting
-> > the linker would preserve the object order in the archive.
-> >
-> > By specifying the object order directly in the command line,
-> > GCC-LTO should get back working again.
->
-> ...
->
-> > I think my patch is unneeded (hence RFC), but I just wanted to know
-> > if linkers (gnu ld and lld) see any difference.
->
-> Yes, including your patch (instead of vmlinux.S and /compressed/*
-> changes) also fixes the issue. So the linker (gcc-ld) indeed respects
-> command line, but not order of objects in .a.
->
-
-
-Can I see your LTO implementation somewhere in public?
-
-
-I know Andy Kleen's GCC-LTO, the latest version is 5.13-ish.
-
-https://github.com/andikleen/linux-misc.git
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 mlxlogscore=999 suspectscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030101
 
 
 
+On 02.11.22 17:32, Nathan Chancellor wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed. A
+> proposed warning in clang aims to catch these at compile time, which
+> reveals:
+> 
+>   drivers/s390/net/lcs.c:2090:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit         = lcs_start_xmit,
+>                                     ^~~~~~~~~~~~~~
+>   drivers/s390/net/lcs.c:2097:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit         = lcs_start_xmit,
+>                                     ^~~~~~~~~~~~~~
+> 
+> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+> 'netdev_tx_t', not 'int'. Adjust the return type of lcs_start_xmit() to
+> match the prototype's to resolve the warning and potential CFI failure,
+> should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/s390/net/lcs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
+> index 84c8981317b4..4cbb9802bf22 100644
+> --- a/drivers/s390/net/lcs.c
+> +++ b/drivers/s390/net/lcs.c
+> @@ -1519,7 +1519,7 @@ lcs_txbuffer_cb(struct lcs_channel *channel, struct lcs_buffer *buffer)
+>  /*
+>   * Packet transmit function called by network stack
+>   */
+> -static int
+> +static netdev_tx_t
+>  __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
+>  		 struct net_device *dev)
+>  {
+> @@ -1582,7 +1582,7 @@ __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
+>  	return rc;
+>  }
+>  
+> -static int
+> +static netdev_tx_t
+>  lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>  {
+>  	struct lcs_card *card;
+
+Thanks a lot for the fix.
+Could you please also fix the indentation of these lines?
+With that:
+Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
 
 
-> thanks,
-> --
-> js
-> suse labs
->
-
-
--- 
-Best Regards
-Masahiro Yamada
