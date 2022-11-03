@@ -1,24 +1,24 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447297C
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:25:19 +0000 (UTC)
-X-UUID: ff76e89dae2f4b049d87bd552bae81b4-20221103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3432B804
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:25:20 +0000 (UTC)
+X-UUID: 1317c37759254562a384c5521ef83d64-20221103
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=0N51fkS4M4Fj0+621De0CJlc7z4Kpvdo03m8ggJ4l7E=;
-	b=Dc419T3j8QLz3MzlEPZz+JWcukR/o41IRe2L2SmBKF1lHrBSK+lE0ZEPbk9lZKX4hHiQF6LfVqIC04Ig2IvlVjSQwJFV+HFSdfrH1mAoej72VTepD4WISVtMXxW+YRnbDttv6Y6T+GqDPNlrAYib663cjstNWLpYIlUXjJXNS8s=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=DjZx3jHwTvPkmvcq9Ogc9K/zmJXacH2F8lrAT+jl+ps=;
+	b=fXkrMuWzMgHVgNUEAzxJ7zk2wwR5Ku9rM7oub2caynwOBj1CbgEjRAJ4ajV1sE4mKaXAz2L63HuU7VAzXDueg6EUikznmAe16FE6ES5F36ZWz8MY8NUJafDq0ndjzB+8MKd8202C3M+IrhSnrY9aGKXRIuzooXMnbemaqrNHqb4=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:1d26429f-a1e8-494c-87c8-dbcee8b529bc,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:62cd327,CLOUDID:fbf37681-3116-4fbc-b86b-83475c3df513,B
+X-CID-O-INFO: VERSION:1.1.12,REQID:8d7f5cd4-3bf6-44a4-a7f5-333c4eb0466d,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:fff37681-3116-4fbc-b86b-83475c3df513,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ff76e89dae2f4b049d87bd552bae81b4-20221103
+	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1317c37759254562a384c5521ef83d64-20221103
 Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1355314313; Thu, 03 Nov 2022 11:25:15 +0800
+	with ESMTP id 1026970837; Thu, 03 Nov 2022 11:25:15 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -41,9 +41,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v27 01/11] dt-bindings: arm: mediatek: mmsys: add vdosys1 compatible for MT8195
-Date: Thu, 3 Nov 2022 11:25:02 +0800
-Message-ID: <20221103032512.9144-2-nancy.lin@mediatek.com>
+Subject: [PATCH v27 05/11] soc: mediatek: refine code to use mtk_mmsys_update_bits API
+Date: Thu, 3 Nov 2022 11:25:06 +0800
+Message-ID: <20221103032512.9144-6-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221103032512.9144-1-nancy.lin@mediatek.com>
 References: <20221103032512.9144-1-nancy.lin@mediatek.com>
@@ -56,32 +56,107 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add vdosys1 mmsys compatible for MT8195 platform.
-
-For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
-2 different power domains, different clock drivers and different
-mediatek-drm drivers.
+Simplify code for update  mmsys reg.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Change-Id: I8065205ce44baa417f58176adaae9e1eefa6eadb
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Change-Id: I97f103153f08ada6f4e3582ad1fbe7f35e5190ba
 ---
- .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml      | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/soc/mediatek/mtk-mmsys.c | 45 ++++++++++++--------------------
+ 1 file changed, 16 insertions(+), 29 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-index 0711f1834fbd..67b6e1cbe418 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-@@ -48,7 +48,9 @@ properties:
-           - const: syscon
+diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+index 9a327eb5d9d7..135639f21c9b 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.c
++++ b/drivers/soc/mediatek/mtk-mmsys.c
+@@ -99,22 +99,27 @@ struct mtk_mmsys {
+ 	struct reset_controller_dev rcdev;
+ };
  
-       - items:
--          - const: mediatek,mt8195-vdosys0
-+          - enum:
-+            - mediatek,mt8195-vdosys0
-+            - mediatek,mt8195-vdosys1
-           - const: mediatek,mt8195-mmsys
-           - const: syscon
++static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
++{
++	u32 tmp;
++
++	tmp = readl_relaxed(mmsys->regs + offset);
++	tmp = (tmp & ~mask) | val;
++	writel_relaxed(tmp, mmsys->regs + offset);
++}
++
+ void mtk_mmsys_ddp_connect(struct device *dev,
+ 			   enum mtk_ddp_comp_id cur,
+ 			   enum mtk_ddp_comp_id next)
+ {
+ 	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+ 	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+-	u32 reg;
+ 	int i;
+ 
+ 	for (i = 0; i < mmsys->data->num_routes; i++)
+-		if (cur == routes[i].from_comp && next == routes[i].to_comp) {
+-			reg = readl_relaxed(mmsys->regs + routes[i].addr);
+-			reg &= ~routes[i].mask;
+-			reg |= routes[i].val;
+-			writel_relaxed(reg, mmsys->regs + routes[i].addr);
+-		}
++		if (cur == routes[i].from_comp && next == routes[i].to_comp)
++			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask,
++					      routes[i].val);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_connect);
+ 
+@@ -124,27 +129,14 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+ {
+ 	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+ 	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+-	u32 reg;
+ 	int i;
+ 
+ 	for (i = 0; i < mmsys->data->num_routes; i++)
+-		if (cur == routes[i].from_comp && next == routes[i].to_comp) {
+-			reg = readl_relaxed(mmsys->regs + routes[i].addr);
+-			reg &= ~routes[i].mask;
+-			writel_relaxed(reg, mmsys->regs + routes[i].addr);
+-		}
++		if (cur == routes[i].from_comp && next == routes[i].to_comp)
++			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask, 0);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+ 
+-static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
+-{
+-	u32 tmp;
+-
+-	tmp = readl_relaxed(mmsys->regs + offset);
+-	tmp = (tmp & ~mask) | val;
+-	writel_relaxed(tmp, mmsys->regs + offset);
+-}
+-
+ void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+ {
+ 	if (val)
+@@ -161,18 +153,13 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
+ {
+ 	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
+ 	unsigned long flags;
+-	u32 reg;
+ 
+ 	spin_lock_irqsave(&mmsys->lock, flags);
+ 
+-	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+-
+ 	if (assert)
+-		reg &= ~BIT(id);
++		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), 0);
+ 	else
+-		reg |= BIT(id);
+-
+-	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
++		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), BIT(id));
+ 
+ 	spin_unlock_irqrestore(&mmsys->lock, flags);
  
 -- 
 2.18.0
