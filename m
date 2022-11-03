@@ -1,34 +1,31 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A447C
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:26:17 +0000 (UTC)
-X-UUID: dd63e9f647fd43be918351fcd855b88d-20221103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2B4804
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:26:19 +0000 (UTC)
+X-UUID: c645eb1aef974af2945299eb458fe71a-20221103
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=1a6Cb6fVRwqRIlNNhhii2X0HxAo74K0vYRXlm96axS4=;
-	b=o5hstbBbXAk9H4jB2JMTClSO+hIzuEpf6W3rHng7yqhHNDmqmH+y3I0C7/2571zdn3VDcgmiWpqW+8AnCH5TO2UmSXV++zQgukSuI31287IgwsmvSm1OVk8a9h6cK/FGb4pCXdBine6YGk0wUEymmy3oi9cKkvyvc8z34V+X+Cg=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rDOgK5Ukj6Kqp6guWqZHpoQ9zAqLE+sUML9b37sssLU=;
+	b=RWjE2qZxaOg2ppNNOEAZT0YxCEAdHY3mnWwYwqkBg8zqXIdJWnYSvFuWeD7mtMZWStxE7sevSQacCtCMcgi+gweW89BnQlWnwphtyPrqBsOylgtLJd0glKkAmIIwyzCkYGWGLJecuWLk6TMt1uIHTcZ95xxshMc/z+pOWWLbxa0=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:86f0edbc-73a4-4bb9-b86c-92b2c85b8105,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:86f0edbc-73a4-4bb9-b86c-92b2c85b8105,IP:0,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-	:quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:d4fc7681-3116-4fbc-b86b-83475c3df513,B
-	ulkID:221103112613PNKPTUBY,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-	il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: dd63e9f647fd43be918351fcd855b88d-20221103
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.12,REQID:1d95cdfc-95d1-4646-8961-75098929c090,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:8ac46d90-1a78-4832-bd08-74b1519dcfbf,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: c645eb1aef974af2945299eb458fe71a-20221103
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 584316161; Thu, 03 Nov 2022 11:26:12 +0800
+	with ESMTP id 908084499; Thu, 03 Nov 2022 11:26:14 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 3 Nov 2022 11:26:11 +0800
+ 15.2.792.15; Thu, 3 Nov 2022 11:26:12 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 11:26:11 +0800
+ 15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 11:26:12 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
 	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
@@ -44,209 +41,113 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v27 0/7] Add MediaTek SoC DRM (vdosys1) support for mt8195
-Date: Thu, 3 Nov 2022 11:26:03 +0800
-Message-ID: <20221103032610.9217-1-nancy.lin@mediatek.com>
+Subject: [PATCH v27 4/7] drm/mediatek: add dma dev get function
+Date: Thu, 3 Nov 2022 11:26:07 +0800
+Message-ID: <20221103032610.9217-5-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221103032610.9217-1-nancy.lin@mediatek.com>
+References: <20221103032610.9217-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-MTK: N
 
-The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
-
-Add DRM and these modules support by the patches below:
-
-Changes in v27:
-- rebase to next-20221102
-- change mmsys compatible for mt8195 vdosys1
-  - base on jason's series[ref 1]
-- fix reviewer comment
-  - add error return code if no ovl_adaptor's comp found
-
-Changes in v26:
-- rebase to next-20220819
-- resend for patch corrupted in v25
-
-Changes in v25:
-- rebase to next-20220803
-
-Changes in v24:
-- fix ovl_adaptor binding issue (mtk_disp_ovl_adaptor.c)
-  - Since ovl_adaptor is an aggregated component, it should be bounded after
-    all its child components are bounded.
-- rebase to next-20220708
-
-Changes in v23:
-- separate[7] mmsys/mutex and drm patches into two series
-
-Changes in v22:
-- rebase to next-20220525
-- rebase to vdosys0 series v22
-- separate dts to a new patch
-
-Changes in v21:
-- fix reviewer comment
-  - fix rdma and ethdr binding doc and dts
-
-Changes in v20:
-- fix reviewer comment
-  - update mmsys update bit api name
-  - add mtk_mmsys_update_bits error message if lose gce property
-  - list all mt8195 vdosys1 reset bits
-
-Changes in v19:
-- fix reviewer comment
-  - separate mt8195 mmsys component to a new patch
-  - separate mt8195 vdo0 and vdo1 routing table
-  - separate mmsys_write_reg api to a new patch and simplify write reg code
-  - separate mmsys 64 bit reset to a new patch
-  - separate mtk-mutex dp_intf1 component to a new patch
-
-Changes in v18:
-- fix reviewer comment
-  - fix rdma binding doc
-  - fix ethdr binding doc
-  - refine mmsys config cmdq support
-  - refine merge reset control flow, get reset control in probe function
-  - add ethdr reset control error handling and remove dbg log
-- rebase to vdosys0 series v20 (ref [5])
-
-Changes in v17:
-- fix reviewer comment in v16
-  - separate ovl adaptor comp in mtk-mmsys and mtk-mutex
-  - separate mmsys config API
-  - move mdp_rdma binding yaml
-- fix ovl adaptor pm runtime get sync timing issue
-- rebase to vdosys0 series v19 (ref [5])
-- rebase to [7] for modify vblank register change
-
-Changes in v16:
-- fix reviewer comment in v 15
-  - fix mtk_drm_ddp_comp.c alignment
-  - fix vdosys0 mmsys num before adding vdosys1 patch
-
-Changes in v15:
-- fix ethdr uppercase hex number in dts
-
-Changes in v14:
-- remove MTK_MMSYS 64 bit dependency
-- add ethdr.yaml back and fix dt_schema check fail
-
-Resend v13
-- add related maintainer in maillist
-
-Changes in v13:
-- fix reviewer comment in v12
-  - fix rdma dt-binding format
-  - fix dts node naming
-- fix 32 bit build error
-  - modify 64bit dependency for mtk-mmsys
-- rebase to vdosys0 series v16. (ref [5])
-
-Changes in v12:
-- fix reviewer comment in v11
-  - modify mbox index
-  - refine dma dev for ovl_adaptor sub driver
-
-Changes in v11:
-- remove ethdr vblank spin lock
-- refine ovl_adaptor print message
-
-Changes in v10:
-- refine ethdr reset control using devm_reset_control_array_get_optional_exclusive
-- fix ovl_adaptor mtk_ovl_adaptor_clk_enable error handle issue
-
-Changes in v9:
-- rebase on kernel-5.16-rc1
-- rebase on vdosys0 series v13. (ref [5])
-- fix ovl_adaptor sub driver is brought up unintentionally
-- fix clang build test fail- duplicate ethdr/mdp_rdma init_module/cleanup_module symbol issue 
-
-Changes in v8:
-- separate merge async reset to new patch.
-- separate drm ovl_adaptor sub driver to new patch.
-- fix reviewer comment in v7.
-
-Changes in v7:
-- rebase on vdosys0 series v12 (ref[5])
-- add dma description in ethdr binding document.
-- refine vdosys1 bit definition of mmsys routing table.
-- separate merge modification into 3 pathces.
-- separate mutex modification into 2 patches.
-- add plane color coding for mdp_rdma csc.
-- move mdp_rdma pm control to ovl_adaptor.
-- fix reviewer comment in v6.
-
-Changes in v6:
-- rebase on kernel-5.15-rc1.
-- change mbox label to gce0 for dts node of vdosys1.
-- modify mmsys reset num for mt8195.
-- rebase on vdosys0 series v10. (ref [5])
-- use drm to bring up ovl_adaptor driver.
-- move drm iommu/mutex check from kms init to drm bind.
-- modify rdma binding doc location. (Documentation/devicetree/bindings/arm/)
-- modify for reviewer's comment in v5.
-
-Changes in v5:
-- add mmsys reset controller reference.
-
-Changes in v4:
-- use merge common driver for merge1~4.
-- refine ovl_adaptor rdma driver.
-- use ovl_adaptor ddp_comp function instead of ethdr.
-- modify for reviewer's comment in v3.
-
-Changes in v3:
-- modify for reviewer's comment in v2.
-- add vdosys1 2 pixels align limit.
-- add mixer odd offset support.
-
-Changes in v2:
-- Merge PSEUDO_OVL and ETHDR into one DRM component.
-- Add mmsys config API for vdosys1 hardware setting.
-- Add mmsys reset control using linux reset framework.
+This is a preparation for adding support for the ovl_adaptor sub driver
+Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
+dma_dev_get function for getting representative dma dev in ovl_adaptor.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 15 +++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  8 ++++++++
+ 3 files changed, 24 insertions(+)
 
-This series are based on the following patch:
-[1] Change mmsys compatible for mt8195 mediatek-drm
-    20220927152704.12018-1-jason-jh.lin@mediatek.com
-[2] Add MediaTek SoC(vdosys1) support for mt8195
-    20220819061011.7672-1-nancy.lin@mediatek.com
-
-Nancy.Lin (7):
-  dt-bindings: mediatek: add ethdr definition for mt8195
-  drm/mediatek: add ETHDR support for MT8195
-  drm/mediatek: add ovl_adaptor support for MT8195
-  drm/mediatek: add dma dev get function
-  drm/mediatek: modify mediatek-drm for mt8195 multi mmsys support
-  drm/mediatek: add drm ovl_adaptor sub driver for MT8195
-  drm/mediatek: add mediatek-drm of vdosys1 support for MT8195
-
- .../display/mediatek/mediatek,ethdr.yaml      | 188 ++++++
- drivers/gpu/drm/mediatek/Makefile             |   2 +
- drivers/gpu/drm/mediatek/mtk_disp_drv.h       |  26 +
- .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 533 ++++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  96 ++--
- drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   6 +-
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   | 129 +++--
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  58 +-
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 362 ++++++++----
- drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  24 +-
- drivers/gpu/drm/mediatek/mtk_ethdr.c          | 370 ++++++++++++
- drivers/gpu/drm/mediatek/mtk_ethdr.h          |  26 +
- 12 files changed, 1625 insertions(+), 195 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
- create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
- create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.c
- create mode 100644 drivers/gpu/drm/mediatek/mtk_ethdr.h
-
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index 112615817dcb..78e20f604158 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -58,6 +58,7 @@ struct mtk_drm_crtc {
+ #endif
+ 
+ 	struct device			*mmsys_dev;
++	struct device			*dma_dev;
+ 	struct mtk_mutex		*mutex;
+ 	unsigned int			ddp_comp_nr;
+ 	struct mtk_ddp_comp		**ddp_comp;
+@@ -865,6 +866,13 @@ static int mtk_drm_crtc_init_comp_planes(struct drm_device *drm_dev,
+ 	return 0;
+ }
+ 
++struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc)
++{
++	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
++
++	return mtk_crtc->dma_dev;
++}
++
+ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+ 			const enum mtk_ddp_comp_id *path, unsigned int path_len)
+ {
+@@ -953,6 +961,13 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+ 			return ret;
+ 	}
+ 
++	/*
++	 * Default to use the first component as the dma dev.
++	 * In the case of ovl_adaptor sub driver, it needs to use the
++	 * dma_dev_get function to get representative dma dev.
++	 */
++	mtk_crtc->dma_dev = mtk_ddp_comp_dma_dev_get(&priv->ddp_comp[path[0]]);
++
+ 	ret = mtk_drm_crtc_init(drm_dev, mtk_crtc, pipe);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+index cb9a36c48d4f..f5a6e80c5265 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+@@ -22,5 +22,6 @@ int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
+ 			     struct mtk_plane_state *state);
+ void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
+ 			       struct drm_atomic_state *plane_state);
++struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc);
+ 
+ #endif /* MTK_DRM_CRTC_H */
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+index 2d0052c23dcb..364f3f7f59fa 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+@@ -71,6 +71,7 @@ struct mtk_ddp_comp_funcs {
+ 	void (*bgclr_in_off)(struct device *dev);
+ 	void (*ctm_set)(struct device *dev,
+ 			struct drm_crtc_state *state);
++	struct device * (*dma_dev_get)(struct device *dev);
+ };
+ 
+ struct mtk_ddp_comp {
+@@ -203,6 +204,13 @@ static inline void mtk_ddp_ctm_set(struct mtk_ddp_comp *comp,
+ 		comp->funcs->ctm_set(comp->dev, state);
+ }
+ 
++static inline struct device *mtk_ddp_comp_dma_dev_get(struct mtk_ddp_comp *comp)
++{
++	if (comp->funcs && comp->funcs->dma_dev_get)
++		return comp->funcs->dma_dev_get(comp->dev);
++	return comp->dev;
++}
++
+ int mtk_ddp_comp_get_id(struct device_node *node,
+ 			enum mtk_ddp_comp_type comp_type);
+ unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
 -- 
 2.18.0
 
