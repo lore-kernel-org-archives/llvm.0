@@ -1,75 +1,84 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6543C7470;
-	Thu,  3 Nov 2022 14:28:47 +0000 (UTC)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 24DEE6602959;
-	Thu,  3 Nov 2022 14:28:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1667485725;
-	bh=b8oSMj3yGGmLDr9TfZfA5XfxYOJnyYMiLdl3fi78Qd8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=djeisnEtlWVdAM4+wcw30lEKMXQ47/OtybhWyHJyjt805gbTvf80rxPhka6O510M+
-	 yCXWtCduQ+6hKRGhs/ofI1XRTu2ZVOF5lPdUtwOW+kuHS9CS5d6MriXeAYTIW21sJT
-	 D2a/FBw8kdoMCGoNvmUmMIW68VCX9ef0t+Pz+EexYVFCHBjmJv+tpwg/6LTe75XDB2
-	 5nh3hgVXyx2euEA7vVedvRkIr3aVIWOHZU08CegpGfT/YzCYYtb6orMi5Q5VZZQJWF
-	 456yqFncyxZeAwXB3iI71Tb4QDwYVVsLHhz8/fV4pndNYL19Rx4lpgpBc73sA4cQeN
-	 nOrqHw4hpKLPQ==
-Message-ID: <31098aba-ef89-d083-d8cd-3553d3cc8cde@collabora.com>
-Date: Thu, 3 Nov 2022 15:28:43 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC82586
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 14:35:16 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso5345538pjg.5
+        for <llvm@lists.linux.dev>; Thu, 03 Nov 2022 07:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XS5HY1qfVgPGBSCEvtrILQuPyjwIbVWvvdtLCE+QZb8=;
+        b=fVvojiGFj1F60Uhyp9tm0SgPb/u6SkwEkY3IydXdAR3HwpDfPgesAqcgO5VQ/dkokx
+         ey7yZ/uTqnyEqNVfWmm6PTYMEa9rSPLU4d0PtKu67Nmd4HFgLRJCrlzJ8hFPqzKWqjmr
+         zjx02vVHkGTlu1LlovYuFaD/mLjHbSwSc0V6F/4SM8x7LuKC+OlPYsOZKTiremVtx8Pt
+         Iu8Alb9812XeciNUXIURqJVF+E0Dflq9JLL3jjN6ICMWIpJ6ahknNAHmNY59L1YOlCS9
+         OEqvURyXuVPrIhKGDjIylR5ONYyWT8sKSqNCLOOGimLBmeKPToiN1w9ZE50En5J2f1RF
+         aR/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XS5HY1qfVgPGBSCEvtrILQuPyjwIbVWvvdtLCE+QZb8=;
+        b=HGzQcYufeyD5LEYzQNJUi/tW0yAgalAcf8eRbSS1SaTx59SSRcMCtLHfNkalRRGdak
+         7LEXtcKPdfu5VojhEl8cHTsOjCxdPBH+TlJGK3A5lVGadTnqnyj4uEmF0OamgLQTnd2v
+         Ngdqwh30unRqN9AnXT2TnW8DtnsuyE3K7pzEFNkV7oEptnySNNmCe5qu+Wk7Vm4JWnFy
+         b4wqTMZ/EGgwWqktmfq6SSd81VtfvWQ65eBvFeBy0LEC4J7lWJbAsSrO7oHUGTER96KD
+         7TAn6p+WlcWXU9mej7fSljvpNTke9aqC6dSo95Acj1Jm5t39srnBf19XMKSyDMjm5OGK
+         FFRA==
+X-Gm-Message-State: ACrzQf03ZQa0BmqPt1uS3VAERVMZTaxE+e+ZizhaaZhIK/4muIFAzo5F
+	i9IIdphpMVSkRdGfUbOws8z6hw==
+X-Google-Smtp-Source: AMsMyM5w0DXrQ+5b0Dr2Z1FMuMyOv8pf3Ny7uqe9sbXAM4mpFFAfcxeKR3dcynMgqwoKNBhQcWHiKQ==
+X-Received: by 2002:a17:90b:3690:b0:213:c985:b5ee with SMTP id mj16-20020a17090b369000b00213c985b5eemr26188219pjb.192.1667486116041;
+        Thu, 03 Nov 2022 07:35:16 -0700 (PDT)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170902e80900b001868d4600b8sm739611plg.158.2022.11.03.07.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 07:35:15 -0700 (PDT)
+Date: Thu, 3 Nov 2022 20:05:13 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [vireshk-pm:opp/linux-next 6/7] drivers/opp/of.c:692:21:
+ warning: variable 'ret' is used uninitialized whenever 'for' loop exits
+ because its condition is false
+Message-ID: <20221103143513.7yh3odcwhmh3rqfx@vireshk-i7>
+References: <202211032146.8lAi6hQi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] drm/mediatek: Fix return type of
- mtk_hdmi_bridge_mode_valid()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>
-Cc: dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Kees Cook <keescook@chromium.org>, Sami Tolvanen <samitolvanen@google.com>,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, patches@lists.linux.dev
-References: <20221102154712.540548-1-nathan@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221102154712.540548-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211032146.8lAi6hQi-lkp@intel.com>
 
-Il 02/11/22 16:47, Nathan Chancellor ha scritto:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
+On 03-11-22, 21:29, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+> head:   5acd93462bff6c108d65802fd39f6002dfadd1a0
+> commit: bf7e6e072ed166c11c687200df53aec8d7446182 [6/7] OPP: Simplify opp_parse_supplies() by restructuring it
+> config: arm-randconfig-r023-20221102
+> compiler: clang version 15.0.4 (https://github.com/llvm/llvm-project 5c68a1cb123161b54b72ce90e7975d95a8eaf2a4)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=bf7e6e072ed166c11c687200df53aec8d7446182
+>         git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+>         git fetch --no-tags vireshk-pm opp/linux-next
+>         git checkout bf7e6e072ed166c11c687200df53aec8d7446182
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
 > 
->    drivers/gpu/drm/mediatek/mtk_hdmi.c:1407:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->            .mode_valid = mtk_hdmi_bridge_mode_valid,
->                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 error generated.
-> 
-> ->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
-> 'enum drm_mode_status', not 'int'. Adjust the return type of
-> mtk_hdmi_bridge_mode_valid() to match the prototype's to resolve the
-> warning and CFI failure.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixed, thanks.
 
+-- 
+viresh
