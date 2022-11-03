@@ -1,26 +1,26 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2B4804
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:26:19 +0000 (UTC)
-X-UUID: c645eb1aef974af2945299eb458fe71a-20221103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F31B807
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 03:26:20 +0000 (UTC)
+X-UUID: cc0330b65bef4b988d3dc6dac21b8071-20221103
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rDOgK5Ukj6Kqp6guWqZHpoQ9zAqLE+sUML9b37sssLU=;
-	b=RWjE2qZxaOg2ppNNOEAZT0YxCEAdHY3mnWwYwqkBg8zqXIdJWnYSvFuWeD7mtMZWStxE7sevSQacCtCMcgi+gweW89BnQlWnwphtyPrqBsOylgtLJd0glKkAmIIwyzCkYGWGLJecuWLk6TMt1uIHTcZ95xxshMc/z+pOWWLbxa0=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=XNpyGlgBl9SZPhFeKALEIhFld+lzd+Z0HIMWFtYFTLM=;
+	b=lEBgTJpvWe+Z+OCPptrhBWAbXCcT9I+VDwnu7eT2TMm2Br2XtOMlVQ4uKQbxB20ffbFP+mSWsb6J8a0R8IQDBngpogcjl4WLszY/0a5UO5IG2Z7H3qtnR0MNZ0hW4WgLMsmVDzSAEmH7fnNmnVRmUCLjD7Hg+leXvAssj2QftBo=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:1d95cdfc-95d1-4646-8961-75098929c090,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:8ac46d90-1a78-4832-bd08-74b1519dcfbf,B
+X-CID-O-INFO: VERSION:1.1.12,REQID:1775d60f-af44-46e0-a0d0-54e5f4d73f46,IP:0,U
+	RL:25,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:8bc46d90-1a78-4832-bd08-74b1519dcfbf,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c645eb1aef974af2945299eb458fe71a-20221103
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+X-UUID: cc0330b65bef4b988d3dc6dac21b8071-20221103
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 908084499; Thu, 03 Nov 2022 11:26:14 +0800
+	with ESMTP id 1546231628; Thu, 03 Nov 2022 11:26:13 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Thu, 3 Nov 2022 11:26:12 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -28,12 +28,12 @@ Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 11:26:12 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
 	<nfraprado@collabora.com>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
 	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
 	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -41,9 +41,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v27 4/7] drm/mediatek: add dma dev get function
-Date: Thu, 3 Nov 2022 11:26:07 +0800
-Message-ID: <20221103032610.9217-5-nancy.lin@mediatek.com>
+Subject: [PATCH v27 1/7] dt-bindings: mediatek: add ethdr definition for mt8195
+Date: Thu, 3 Nov 2022 11:26:04 +0800
+Message-ID: <20221103032610.9217-2-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221103032610.9217-1-nancy.lin@mediatek.com>
 References: <20221103032610.9217-1-nancy.lin@mediatek.com>
@@ -56,98 +56,212 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-This is a preparation for adding support for the ovl_adaptor sub driver
-Ovl_adaptor is a DRM sub driver, which doesn't have dma dev. Add
-dma_dev_get function for getting representative dma dev in ovl_adaptor.
+Add vdosys1 ETHDR definition.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-Reviewed-by: AngeloGioachino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 ---
- drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 15 +++++++++++++++
- drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |  1 +
- drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |  8 ++++++++
- 3 files changed, 24 insertions(+)
+ .../display/mediatek/mediatek,ethdr.yaml      | 188 ++++++++++++++++++
+ 1 file changed, 188 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-index 112615817dcb..78e20f604158 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-@@ -58,6 +58,7 @@ struct mtk_drm_crtc {
- #endif
- 
- 	struct device			*mmsys_dev;
-+	struct device			*dma_dev;
- 	struct mtk_mutex		*mutex;
- 	unsigned int			ddp_comp_nr;
- 	struct mtk_ddp_comp		**ddp_comp;
-@@ -865,6 +866,13 @@ static int mtk_drm_crtc_init_comp_planes(struct drm_device *drm_dev,
- 	return 0;
- }
- 
-+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc)
-+{
-+	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+new file mode 100644
+index 000000000000..3b11e47a8834
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+@@ -0,0 +1,188 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/mediatek/mediatek,ethdr.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	return mtk_crtc->dma_dev;
-+}
++title: MediaTek Ethdr Device
 +
- int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 			const enum mtk_ddp_comp_id *path, unsigned int path_len)
- {
-@@ -953,6 +961,13 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
- 			return ret;
- 	}
- 
-+	/*
-+	 * Default to use the first component as the dma dev.
-+	 * In the case of ovl_adaptor sub driver, it needs to use the
-+	 * dma_dev_get function to get representative dma dev.
-+	 */
-+	mtk_crtc->dma_dev = mtk_ddp_comp_dma_dev_get(&priv->ddp_comp[path[0]]);
++maintainers:
++  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
++  - Philipp Zabel <p.zabel@pengutronix.de>
 +
- 	ret = mtk_drm_crtc_init(drm_dev, mtk_crtc, pipe);
- 	if (ret < 0)
- 		return ret;
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-index cb9a36c48d4f..f5a6e80c5265 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-@@ -22,5 +22,6 @@ int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
- 			     struct mtk_plane_state *state);
- void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
- 			       struct drm_atomic_state *plane_state);
-+struct device *mtk_drm_crtc_dma_dev_get(struct drm_crtc *crtc);
- 
- #endif /* MTK_DRM_CRTC_H */
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-index 2d0052c23dcb..364f3f7f59fa 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-@@ -71,6 +71,7 @@ struct mtk_ddp_comp_funcs {
- 	void (*bgclr_in_off)(struct device *dev);
- 	void (*ctm_set)(struct device *dev,
- 			struct drm_crtc_state *state);
-+	struct device * (*dma_dev_get)(struct device *dev);
- };
- 
- struct mtk_ddp_comp {
-@@ -203,6 +204,13 @@ static inline void mtk_ddp_ctm_set(struct mtk_ddp_comp *comp,
- 		comp->funcs->ctm_set(comp->dev, state);
- }
- 
-+static inline struct device *mtk_ddp_comp_dma_dev_get(struct mtk_ddp_comp *comp)
-+{
-+	if (comp->funcs && comp->funcs->dma_dev_get)
-+		return comp->funcs->dma_dev_get(comp->dev);
-+	return comp->dev;
-+}
++description:
++  ETHDR (ET High Dynamic Range) is a MediaTek internal HDR engine and is
++  designed for HDR video and graphics conversion in the external display path.
++  It handles multiple HDR input types and performs tone mapping, color
++  space/color format conversion, and then combine different layers,
++  output the required HDR or SDR signal to the subsequent display path.
++  This engine is composed of two video frontends, two graphic frontends,
++  one video backend and a mixer. ETHDR has two DMA function blocks, DS and ADL.
++  These two function blocks read the pre-programmed registers from DRAM and
++  set them to HW in the v-blanking period.
 +
- int mtk_ddp_comp_get_id(struct device_node *node,
- 			enum mtk_ddp_comp_type comp_type);
- unsigned int mtk_drm_find_possible_crtc_by_comp(struct drm_device *drm,
++properties:
++  compatible:
++    const: mediatek,mt8195-disp-ethdr
++
++  reg:
++    maxItems: 7
++
++  reg-names:
++    items:
++      - const: mixer
++      - const: vdo_fe0
++      - const: vdo_fe1
++      - const: gfx_fe0
++      - const: gfx_fe1
++      - const: vdo_be
++      - const: adl_ds
++
++  interrupts:
++    maxItems: 1
++
++  iommus:
++    minItems: 1
++    maxItems: 2
++
++  clocks:
++    items:
++      - description: mixer clock
++      - description: video frontend 0 clock
++      - description: video frontend 1 clock
++      - description: graphic frontend 0 clock
++      - description: graphic frontend 1 clock
++      - description: video backend clock
++      - description: autodownload and menuload clock
++      - description: video frontend 0 async clock
++      - description: video frontend 1 async clock
++      - description: graphic frontend 0 async clock
++      - description: graphic frontend 1 async clock
++      - description: video backend async clock
++      - description: ethdr top clock
++
++  clock-names:
++    items:
++      - const: mixer
++      - const: vdo_fe0
++      - const: vdo_fe1
++      - const: gfx_fe0
++      - const: gfx_fe1
++      - const: vdo_be
++      - const: adl_ds
++      - const: vdo_fe0_async
++      - const: vdo_fe1_async
++      - const: gfx_fe0_async
++      - const: gfx_fe1_async
++      - const: vdo_be_async
++      - const: ethdr_top
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    items:
++      - description: video frontend 0 async reset
++      - description: video frontend 1 async reset
++      - description: graphic frontend 0 async reset
++      - description: graphic frontend 1 async reset
++      - description: video backend async reset
++
++  reset-names:
++    items:
++      - const: vdo_fe0_async
++      - const: vdo_fe1_async
++      - const: gfx_fe0_async
++      - const: gfx_fe1_async
++      - const: vdo_be_async
++
++  mediatek,gce-client-reg:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: The register of display function block to be set by gce.
++      There are 4 arguments in this property, gce node, subsys id, offset and
++      register size. The subsys id is defined in the gce header of each chips
++      include/dt-bindings/gce/<chip>-gce.h, mapping to the register of display
++      function block.
++    items:
++      items:
++        - description: phandle of GCE
++        - description: GCE subsys id
++        - description: register offset
++        - description: register size
++    minItems: 7
++    maxItems: 7
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++  - power-domains
++  - resets
++  - mediatek,gce-client-reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8195-clk.h>
++    #include <dt-bindings/gce/mt8195-gce.h>
++    #include <dt-bindings/memory/mt8195-memory-port.h>
++    #include <dt-bindings/power/mt8195-power.h>
++    #include <dt-bindings/reset/mt8195-resets.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        hdr-engine@1c114000 {
++                compatible = "mediatek,mt8195-disp-ethdr";
++                reg = <0 0x1c114000 0 0x1000>,
++                      <0 0x1c115000 0 0x1000>,
++                      <0 0x1c117000 0 0x1000>,
++                      <0 0x1c119000 0 0x1000>,
++                      <0 0x1c11a000 0 0x1000>,
++                      <0 0x1c11b000 0 0x1000>,
++                      <0 0x1c11c000 0 0x1000>;
++                reg-names = "mixer", "vdo_fe0", "vdo_fe1", "gfx_fe0", "gfx_fe1",
++                            "vdo_be", "adl_ds";
++                mediatek,gce-client-reg = <&gce0 SUBSYS_1c11XXXX 0x4000 0x1000>,
++                                          <&gce0 SUBSYS_1c11XXXX 0x5000 0x1000>,
++                                          <&gce0 SUBSYS_1c11XXXX 0x7000 0x1000>,
++                                          <&gce0 SUBSYS_1c11XXXX 0x9000 0x1000>,
++                                          <&gce0 SUBSYS_1c11XXXX 0xa000 0x1000>,
++                                          <&gce0 SUBSYS_1c11XXXX 0xb000 0x1000>,
++                                          <&gce0 SUBSYS_1c11XXXX 0xc000 0x1000>;
++                clocks = <&vdosys1 CLK_VDO1_DISP_MIXER>,
++                         <&vdosys1 CLK_VDO1_HDR_VDO_FE0>,
++                         <&vdosys1 CLK_VDO1_HDR_VDO_FE1>,
++                         <&vdosys1 CLK_VDO1_HDR_GFX_FE0>,
++                         <&vdosys1 CLK_VDO1_HDR_GFX_FE1>,
++                         <&vdosys1 CLK_VDO1_HDR_VDO_BE>,
++                         <&vdosys1 CLK_VDO1_26M_SLOW>,
++                         <&vdosys1 CLK_VDO1_HDR_VDO_FE0_DL_ASYNC>,
++                         <&vdosys1 CLK_VDO1_HDR_VDO_FE1_DL_ASYNC>,
++                         <&vdosys1 CLK_VDO1_HDR_GFX_FE0_DL_ASYNC>,
++                         <&vdosys1 CLK_VDO1_HDR_GFX_FE1_DL_ASYNC>,
++                         <&vdosys1 CLK_VDO1_HDR_VDO_BE_DL_ASYNC>,
++                         <&topckgen CLK_TOP_ETHDR>;
++                clock-names = "mixer", "vdo_fe0", "vdo_fe1", "gfx_fe0", "gfx_fe1",
++                              "vdo_be", "adl_ds", "vdo_fe0_async", "vdo_fe1_async",
++                              "gfx_fe0_async", "gfx_fe1_async","vdo_be_async",
++                              "ethdr_top";
++                power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
++                iommus = <&iommu_vpp M4U_PORT_L3_HDR_DS>,
++                         <&iommu_vpp M4U_PORT_L3_HDR_ADL>;
++                interrupts = <GIC_SPI 517 IRQ_TYPE_LEVEL_HIGH 0>; /* disp mixer */
++                resets = <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE0_DL_ASYNC>,
++                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_FE1_DL_ASYNC>,
++                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE0_DL_ASYNC>,
++                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_GFX_FE1_DL_ASYNC>,
++                         <&vdosys1 MT8195_VDOSYS1_SW1_RST_B_HDR_VDO_BE_DL_ASYNC>;
++                reset-names = "vdo_fe0_async", "vdo_fe1_async", "gfx_fe0_async",
++                              "gfx_fe1_async", "vdo_be_async";
++        };
++    };
++...
 -- 
 2.18.0
 
