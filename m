@@ -1,73 +1,118 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADCF29A8
-	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 21:03:23 +0000 (UTC)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 226E06602946;
-	Thu,  3 Nov 2022 21:03:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1667509401;
-	bh=V56w4IKznjfuluhA6fSqo5+nAAWn0dApHy/TY9w79jE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NBDxFm4mr3csQUybIFz6G8NVG3xGYl5esnOpE/eqWpP9gCja7xQavnK4b5gi1XIUc
-	 7NnK3ZmYRS8LblLRQQnY/MCmj6IT7TBhpaxZO0VOJTZGQYbNZsReicy0HO/YiPVM0f
-	 BukU7YNF8lWGC4g97/IxrFWtMGj56uH4a+fLrRWddhmjcRrSTeFFiy4IJwUYlbUWaB
-	 yPIQ/OUvDxt7PCkarmBvnKioNvpgUEXSGanRypyDIr1evtuXZmyZS0urJtkgmB0fkg
-	 FvA9xFkb3m/2wZ5Nnr1YTYcktbMqqAE3Af66MWebop77thtljgybt5r2ATLu56Z7P/
-	 f8A+qx4NTc1rw==
-Date: Thu, 3 Nov 2022 17:03:15 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: "Nancy.Lin" <nancy.lin@mediatek.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
-	Yongqiang Niu <yongqiang.niu@mediatek.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev, singo.chang@mediatek.com,
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v27 2/7] drm/mediatek: add ETHDR support for MT8195
-Message-ID: <20221103210315.lm2d3n4uolra44no@notapiano>
-References: <20221103032610.9217-1-nancy.lin@mediatek.com>
- <20221103032610.9217-3-nancy.lin@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6576F24F21
+	for <llvm@lists.linux.dev>; Thu,  3 Nov 2022 21:08:10 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id h9-20020a25e209000000b006cbc4084f2eso3147361ybe.23
+        for <llvm@lists.linux.dev>; Thu, 03 Nov 2022 14:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vvJEJ264ZheXx0sRztLACOjB54er/SHBBGAWfYziuwo=;
+        b=pHqZDfEPOxY8hOzsv0ouJgt30fhvGw5PosROhzkdc1wNlLZejPwtw/j/LOA1O65C8k
+         iJPybw/i/OoSblImCWxePOGCIurF3kagPrykiNc9hGc6ZEWWvBgpTDC0ciWZXALyi6Mf
+         6glfoWS2F/0lTZ0vd/a8NBbZ9fpB5+y3dNg9IyVc8p07YlJe1cZEJEFOlBDciVUhSN4h
+         tc52nPRj220IevYk7H930WzB40mbb2liyaXp7Gt06HDWYtciiV9uXv35jBldzdiVvnKy
+         ax1c9kpDUYPYZw6C1npkZ6+kZrfMnATwGmIw1TPzs+G2SKl86SuRYr6NCSpa/E0zN+pz
+         af5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vvJEJ264ZheXx0sRztLACOjB54er/SHBBGAWfYziuwo=;
+        b=WhyJd35F0+ran0aO5O2GAoBCbcy9qGZPCn+FV3YCKGM7uRDwIho0KNHY/+3QXAMefs
+         yKFk13+Xhiwg2TjDXTKfeeC6+kBMQeg4Xx0Of4fw2QMYNybGf7MRYp7qy/IzY7HAxHCa
+         VEAKCH+davrdth0pbKkJ+xjvhozuDXXBVkfqV9M4e4q/hESMwNWUQ5xnYlDYvsGWJdCo
+         5jtXvqOW9STGiyXTI/QGSW6vvgHn/Rv1Pqwp19+5sRfCbSMGFFSj7CswhjCScYGTOYiu
+         nS3N6EFP+B1hZ6Da/xo1i5t8twCQPOAThRCdPyczuUDLx2Xiyhs+a9dzVfFAhHisyhty
+         juAQ==
+X-Gm-Message-State: ACrzQf1UF59MXeGzWB+huBjTNdp8SiMmntcH2RNZPA4Toww7J7kwpDac
+	AyY+bR+wr045SMiHJzx5eMfkmYqA7W6+W0E5vDk=
+X-Google-Smtp-Source: AMsMyM7HL+cBwLBXfUsLE3QPRvIhyBIZEBDNxBkQ7jAWm3oNaDcj+Q8ZbLfaubygdDcO1gjU9WTkL8+ZbADPJA+rCuA=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:33e8:ddbf:583c:50a8])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:bccf:0:b0:6cb:83c8:4ceb with SMTP
+ id l15-20020a25bccf000000b006cb83c84cebmr182458ybm.635.1667509689312; Thu, 03
+ Nov 2022 14:08:09 -0700 (PDT)
+Date: Thu,  3 Nov 2022 14:07:48 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103032610.9217-3-nancy.lin@mediatek.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1667509668; l=2763;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=YqhBGxVFdvGLXPPYHWaXapaJALaw752j4veZvStNY7I=;
+ b=C3CRtilMk0sQ0zoZnXPAuoWsu/v9ne9Gyvj9hg24XVyEmTOudrkm8wYpJxnWniDnk1IQbEI02x60
+ 4jnYEXMEBr5PyTn2KFYcbiz7JnkH96J7jomce+uNV2WyYwqdbimW
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221103210748.1343090-1-ndesaulniers@google.com>
+Subject: [PATCH] x86/msr-index: make SPEC_CTRL_IBRS assembler-portable
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Tom Rix <trix@redhat.com>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Daniel Sneddon <daniel.sneddon@linux.intel.com>, Sandipan Das <sandipan.das@amd.com>, 
+	Huang Rui <ray.huang@amd.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel-team@android.com, Nick Desaulniers <ndesaulniers@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 03, 2022 at 11:26:05AM +0800, Nancy.Lin wrote:
-[..]
-> --- /dev/null
-> +++ b/drivers/gpu/drm/mediatek/mtk_ethdr.h
-[..]
-> +void mtk_ethdr_unregister_vblank_cb(struct device *dev);
-> +void mtk_ethdr_enable_vblank(struct device *dev);
-> +void mtk_ethdr_disable_vblank(struct device *dev);
-> +#endif
-> +
+GNU binutils' assembler (GAS) didn't support L suffixes on immediates
+until binutils 2.28 release. Building arch/x86/entry/entry_64.S with GAS
+v2.27 will produce the following assembler errors:
 
-As warned by git when applying the patch, you have an extra new line at the end
-here.
+  arch/x86/entry/entry_64.S: Assembler messages:
+  arch/x86/entry/entry_64.S:308: Error: found 'L', expected: ')'
+  arch/x86/entry/entry_64.S:308: Error: found 'L', expected: ')'
+  arch/x86/entry/entry_64.S:308: Error: junk `L<<(0)))' after expression
+  arch/x86/entry/entry_64.S:596: Error: found 'L', expected: ')'
+  arch/x86/entry/entry_64.S:596: Error: found 'L', expected: ')'
+  arch/x86/entry/entry_64.S:596: Error: junk `L<<(0)))' after expression
 
-Applying: drm/mediatek: add ETHDR support for MT8195
-.git/rebase-apply/patch:454: new blank line at EOF.
-+
-warning: 1 line adds whitespace errors.
+These come from the use of the preprocessor defined SPEC_CTRL_IBRS in
+the IBRS_ENTER and IBRS_EXIT assembler macros. SPEC_CTRL_IBRS was using
+the BIT macros from include/linux/bits.h which are only portable between
+C and assembler for assemblers such as GAS v2.28 (or newer) or clang
+because they use the L suffixes for immediate operands, which older GAS
+releases cannot parse. The kernel still supports GAS v2.23 and newer
+(and older for branches of stable). Let's expand the value of
+SPEC_CTRL_IBRS in place so that assemblers don't have issues parsing the
+value.
+
+Fixes: 2dbb887e875b ("x86/entry: Add kernel IBRS implementation")
+Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Some other ideas considered:
+* Use U64_C from include/asm-generic/int-ll64.h rather than BIT for the
+  value of SPEC_CTRL_IBRS.
+  * Do so for the entirety of arch/x86/include/asm/msr-index.h or just
+    SPEC_CTRL_IBRS? include/asm-generic/int-ll64.h doesn't define a UL
+    suffix; add one?
+* Make include/linux/bits.h assembler-portable (for older assemblers)
+  via the use of include/asm-generic/int-ll64.h.
+
+ arch/x86/include/asm/msr-index.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 10ac52705892..0192d853136c 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -46,7 +46,7 @@
+ #define MSR_TEST_CTRL_SPLIT_LOCK_DETECT		BIT(MSR_TEST_CTRL_SPLIT_LOCK_DETECT_BIT)
+ 
+ #define MSR_IA32_SPEC_CTRL		0x00000048 /* Speculation Control */
+-#define SPEC_CTRL_IBRS			BIT(0)	   /* Indirect Branch Restricted Speculation */
++#define SPEC_CTRL_IBRS			1	   /* Indirect Branch Restricted Speculation */
+ #define SPEC_CTRL_STIBP_SHIFT		1	   /* Single Thread Indirect Branch Predictor (STIBP) bit */
+ #define SPEC_CTRL_STIBP			BIT(SPEC_CTRL_STIBP_SHIFT)	/* STIBP mask */
+ #define SPEC_CTRL_SSBD_SHIFT		2	   /* Speculative Store Bypass Disable bit */
+-- 
+2.38.1.431.g37b22c650d-goog
+
