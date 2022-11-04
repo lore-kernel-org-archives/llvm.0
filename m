@@ -1,112 +1,100 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5137C;
-	Fri,  4 Nov 2022 12:14:34 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.nyi.internal (Postfix) with ESMTP id 8FB615C00D4;
-	Fri,  4 Nov 2022 08:14:33 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Fri, 04 Nov 2022 08:14:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-	 h=cc:cc:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1667564073; x=1667650473; bh=LO
-	vDsVoLUrJplt7gXkyiR2uvQtrZHCbVkz23HdeHqBk=; b=MgCnkNNsc2RwT9vAP2
-	J1v+Uh/lUWbvL0Ga5wdbMdyzbiJJd5fH4EGe9xn1W73Ru17KKfHmsUJfhO+j4860
-	XIm8wIHVGRtfX3Z8LKRsjeiL/BaAatMeY4Jei1yl9rE/XmsmlEpYpKZKP/Gba0eR
-	l11EJPd5OMWLvhHJH7nUmxAyGih/dlq9+7H/Vmf6PF7medwHRS9zPQnvgw7VJI3I
-	gxeMhBpT/qiYQnSzWudT1qQMh2WFtPiKuLRUk835uJbGjefBJQOdes+1FeIIo4+K
-	pjgHhp5V8sTTgLqW/R9+CkfQ9r4+6cXRU0lfuNhQLzjLiXWbQkdXBWCp8BFf4l1q
-	ZcJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1667564073; x=1667650473; bh=LOvDsVoLUrJplt7gXkyiR2uvQtrZ
-	HCbVkz23HdeHqBk=; b=WpOZxiKPf21643x0WifBh4fllIEwkLQ7YtRhog81v83N
-	Dt409D0nE3k8YfNpAT9OkzP95u0kv2Vg3h7Zu5n4Wp1g6qJQ9clmjI3VBThxRt4q
-	JsyX5V7Bj089jcYKtDutaQY8mbaOZEKZ1d+bw+xliIWjVqKrhfgqcdzgorcduLyy
-	ybH4qdsz4uZWUKBVDWQe6rtCuvwDRMHFkht9ewDE+xyqjQ1lEHBX0L7pySlrP6rr
-	uzn/5jtbZv9ByI2HikH+Ej9E4b7f0bFG+DTIHRVHsfATb/T2InDeEcJnvtetGWdp
-	brkCa0k4eT/aXKfAQgLNspcccEPU0Ec60l0iokpjeQ==
-X-ME-Sender: <xms:KQJlY7dTe4Rtvt30dVgzOFrj1Gd5c5TsZhG8DtjfJaEezBNINQ1Ryg>
-    <xme:KQJlYxMrY1wXfTszObbjhAr3xSJ1sLlWW7hxBIjO4i7q-kxW6-UTB0dcA2i_NmBEs
-    w2f5LwUKQMQ-lsNeCY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugdefhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpedvueetjeegtedvfeetteelheekhfehhfefudelteehtedvvdefhedugeej
-    hffgvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtghomhdpgh
-    hithhhuhgsuhhsvghrtghonhhtvghnthdrtghomhenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:KQJlY0jB0JUMAKYLC9S3HJ2POWUHoRORWPaYk-4koZaKb2mx9lKEEQ>
-    <xmx:KQJlY89nzDpZG2YI1GyxRvUMZyjOCnm2bhEm5jhLOXG6avY1l-lSWw>
-    <xmx:KQJlY3vxYx9NkzsJNQeX3yELhJaspfFEPHKP28O8TrVXG2UVcVEr-w>
-    <xmx:KQJlYw6Tbydu6conV-5ny90eMrIT3JEWj8yT23jv1WaxpFyitODrmQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 61052A6007C; Fri,  4 Nov 2022 08:14:33 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1E479F4;
+	Fri,  4 Nov 2022 13:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=NZcAnqvDjSNkq2gCiAOT480bUX9fIe4Gq8EsgSqTn1s=; b=TQQdin8PPtPt5FHlN0+RzjwONL
+	9NsCTgPD2cGlvHptFNU4iSHzqrADXyBJ3KrC6DK1Q8sULNREMSuVmt5dKVs7GltKH2u/eISEvFsLd
+	PJQDk9WJN7e7GuMz8JK3EIeciL7dnk6gKYOSDX4vDeYo600wTXYxVVP28ain6CeA0sOCGZzJQVWWl
+	RCjn7I/CPWAy8Rr11oMbViG1FnhOlF1vSSGeTmsKwdfnQq20xoKM5U0HM5cZ9fWt2XjdbnuJoMIq1
+	qQ/89tusedFCCvwEmUJYLb1oZP2yCUKGWtUcZBIeHRl2OXGLb2BNkzS5rmgBowfblbrt8HvS1PMzq
+	EotR/0xw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1oqwIh-008ya5-4g; Fri, 04 Nov 2022 12:59:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BBE9C300137;
+	Fri,  4 Nov 2022 13:59:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 9EF58201E232E; Fri,  4 Nov 2022 13:59:57 +0100 (CET)
+Date: Fri, 4 Nov 2022 13:59:57 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Chen, Rong A" <rong.a.chen@intel.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: Re: [tip:perf/core 1/2] kernel/events/core.c:181:48: error:
+ redefinition of 'cpu_context' as different kind of symbol
+Message-ID: <Y2UMzdf9EDN1z5Ym@hirez.programming.kicks-ass.net>
+References: <202210272227.jWuKg5y6-lkp@intel.com>
+ <Y1q8DcG09Z0PYXEf@hirez.programming.kicks-ass.net>
+ <cafa4dbc-0801-9675-a508-6c6c1073cc5d@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <c56bcb20-9ea9-43ac-9528-db62d01ad072@app.fastmail.com>
-In-Reply-To: <202211041947.EOX4mt7V-lkp@intel.com>
-References: <202211041947.EOX4mt7V-lkp@intel.com>
-Date: Fri, 04 Nov 2022 13:14:13 +0100
-From: "Sven Peter" <sven@svenpeter.dev>
-To: "kernel test robot" <lkp@intel.com>, "Arnd Bergmann" <arnd@arndb.de>
-Cc: clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject: Re: drivers/soc/apple/rtkit.c:947:38: warning: cast from 'void (*)(struct
- apple_rtkit *)' to 'void (*)(void *)' converts to incompatible function type
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cafa4dbc-0801-9675-a508-6c6c1073cc5d@intel.com>
 
-Hi,
+On Fri, Nov 04, 2022 at 02:08:48PM +0800, Chen, Rong A wrote:
+> 
+> 
+> On 10/28/2022 1:12 AM, Peter Zijlstra wrote:
+> > On Thu, Oct 27, 2022 at 10:03:53PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+> > > head:   dc39beffcfc19a8dd2a09c5818dcd1a4e9099033
+> > > commit: 983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c [1/2] perf: Rewrite core context handling
+> > > config: mips-randconfig-r024-20221026
+> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+> > > reproduce (this is a W=1 build):
+> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >          chmod +x ~/bin/make.cross
+> > >          # install mips cross compiling tool for clang build
+> > >          # apt-get install binutils-mips64el-linux-gnuabi64
+> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c
+> > >          git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+> > >          git fetch --no-tags tip perf/core
+> > >          git checkout 983bd8543b5ab8e9a2870ae258bccd4ce7a22c7c
+> > >          # save the config file
+> > >          mkdir build_dir && cp config build_dir/.config
+> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > > > > kernel/events/core.c:181:48: error: redefinition of 'cpu_context' as different kind of symbol
+> > >     static DEFINE_PER_CPU(struct perf_cpu_context, cpu_context);
+> > >                                                    ^
+> > >     arch/mips/include/asm/mmu_context.h:106:19: note: previous definition is here
+> > >     static inline u64 cpu_context(unsigned int cpu, const struct mm_struct *mm)
+> > 
+> > *sigh*.. robot people.. this patch has sat in my queue.git for weeks now
+> > :/
+> 
+> Hi Peter,
+> 
+> Sorry about that, I checked the internal reports, the error was first
+> found on Oct 14, but it's blocked due to commit id changed in the same
+> branch, we'll enhance the check logic to avoid blocking such cases.
 
-On Fri, Nov 4, 2022, at 13:04, kernel test robot wrote:
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
-> master
-> head:   ee6050c8af96bba2f81e8b0793a1fc2f998fcd20
-> commit: 9bd1d9a0d8bb1a549831fd98fcc3105960f7068b soc: apple: Add RTKit 
-> IPC library
-> date:   6 months ago
-> config: s390-randconfig-r002-20221104
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
-> 2bbafe04fe785a9469bea5a3737f8d7d3ce4aca2)
-> reproduce (this is a W=1 build):
->         wget 
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
-> -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9bd1d9a0d8bb1a549831fd98fcc3105960f7068b
->         git remote add linus 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 9bd1d9a0d8bb1a549831fd98fcc3105960f7068b
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 
-> O=build_dir ARCH=s390 SHELL=/bin/bash drivers/soc/apple/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
+Ah, since I maintain my patches in quilt series and I re-generate my git
+trees from that, I very frequently force-push stuff -- even when nothing
+changes for a particular tree.
 
-Thanks for the report, this instance is especially brain-dead since
-apple_rtkit_free isn't even used outside of rtkit.c.
-I'll send a fix later as well.
+Basically my script wipes the entire git repository, takes a new tip
+clone and applies my quilt series to appropriate branchs and pushes the
+whole thing out.
 
-
-Sven
+So yeah, please don't let that block reports.
