@@ -1,238 +1,181 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE6CAD25
-	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 19:58:54 +0000 (UTC)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A4JGkrx008395;
-	Fri, 4 Nov 2022 19:58:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=aMqQQWzE6QrDvHBLONghM7biH9mUG+hEgNcbo3baRH0=;
- b=fBZl4RsWIKF4L4YX4L4X6hFf0a0B9ZHUbBW/0Pi01v+EekFvenhXiaIuDW1oFieixuwQ
- NR/pUhXz+Pcz6WmzMaibrTxK7GTJbvNitfiLnra3N9BPc5FFiMy4TnUy7v5vvLtvQVn1
- 5m0v4fXq6bYOHwlylpAqOcjCC5nQORXIun1Qb/VuVp8hrLiNRQZZYYwQgifJBh8hrbc+
- EiISz3pwS7b1NT5dja0Smdwaq+y81sCAtaRum0KLaRUhHDx8ItwyhB+TcqIylA8FC3jw
- eqZ73DOVe1bqdpYmcgMzPs7nt6TdqUHMU+ccvzYpGaxJYNU4AcMcqZP1XPevttByiM8z 9g== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kn6je0bsg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Nov 2022 19:58:43 +0000
-Received: from pps.filterd (NASANPPMTA04.qualcomm.com [127.0.0.1])
-	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4Ju20X031478;
-	Fri, 4 Nov 2022 19:58:42 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NASANPPMTA04.qualcomm.com (PPS) with ESMTPS id 3km9ttuwu1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Nov 2022 19:58:42 +0000
-Received: from NASANPPMTA04.qualcomm.com (NASANPPMTA04.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A4JwTrE001663;
-	Fri, 4 Nov 2022 19:58:41 GMT
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (PPS) with ESMTPS id 2A4JwfFx001751
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Nov 2022 19:58:41 +0000
-Received: from [10.216.46.236] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 4 Nov 2022
- 12:58:39 -0700
-Message-ID: <fda57ad1-bc92-a7ae-53a0-47c2a8467c47@quicinc.com>
-Date: Sat, 5 Nov 2022 01:28:34 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB6B803
+	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 21:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1667597239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YoZ/g2DAWgongxe9b4hSKenV+1Uju4Pu+Tb56vnaUnc=;
+	b=R5qXdn4/ROs0a31Nugp8QCj91mutlPU8ZyZB23KwDlHTG/ktZHObxnAvnFQK5pdSQ0nlAb
+	k4WJCVgIkOg1RWZ5WeoXBOMGUVM411E4t+DX9WOrBVqaZlGSk2mtzG0M7q45NM5OHhrtrg
+	I9ZljvwNrHlOHH1gl09/C3wc3OKTnjU=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-634-X7GTRt4WNFOtXVB6KhqYyw-1; Fri, 04 Nov 2022 17:27:16 -0400
+X-MC-Unique: X7GTRt4WNFOtXVB6KhqYyw-1
+Received: by mail-il1-f197.google.com with SMTP id n8-20020a056e02100800b00300906a2170so4611686ilj.2
+        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 14:27:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YoZ/g2DAWgongxe9b4hSKenV+1Uju4Pu+Tb56vnaUnc=;
+        b=Y5L+51Blei4h+xqUX3SemwRDrDxrSz46CWbIYu2hCQrIRYqTt+Xe/nmnttwEB04acF
+         g/f1RBHF9FJQk9ZGlF0OsKHb4oZA4StVs6GWVmK2gSyEO4Q2xZ7XXTrsrJrYrkHJQjwA
+         qwE3K3Aj3DsHGKJt/kOZyBa6irrbIEee/iYTCn+4uKn5g8mUPWYO+vUOi09v38nQcMKl
+         1k46jx/RBHRHGeKU0oOhBsoiAIlq3KAt7yuryzd/xxt5xYjz0YCG+MaBrrc9IlrAjmPu
+         nNXF/+yjtM496/1zokS9g0OTqWt9JWhFArgU/Bq9XJ8+yZ7vDI8EllZLhYHQE1+uV4pq
+         jTPw==
+X-Gm-Message-State: ACrzQf1/XEpNGaOMBqJ3s7MB5Wao5ze8/MOAWczAGiR/M9WBclnIkRqU
+	bjWKiE56MhpMOk+v901HhryRYd0/T2FjZxCTtifkqEHTnPJf8XnVj0Zu9U5idMrmBlut7jK476k
+	sm+Vuyv9xtjftzQ==
+X-Received: by 2002:a05:6e02:214f:b0:2fb:cffb:3182 with SMTP id d15-20020a056e02214f00b002fbcffb3182mr22382706ilv.161.1667597236148;
+        Fri, 04 Nov 2022 14:27:16 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6xntdoFJKVfpeppsLDlrkfZ0zh5SfnW45NbHgq32Vi/+W9JWLm/9wuAT8FlOqwG8d2w81aMQ==
+X-Received: by 2002:a05:6e02:214f:b0:2fb:cffb:3182 with SMTP id d15-20020a056e02214f00b002fbcffb3182mr22382662ilv.161.1667597235835;
+        Fri, 04 Nov 2022 14:27:15 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id 67-20020a020a46000000b003636c046e73sm30446jaw.95.2022.11.04.14.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 14:27:15 -0700 (PDT)
+Date: Fri, 4 Nov 2022 15:27:13 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org, Jonathan
+ Corbet <corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>, Kevin Tian
+ <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Miguel
+ Ojeda <ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Shuah Khan
+ <shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>, Chaitanya
+ Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck <cohuck@redhat.com>, Daniel
+ Jordan <daniel.m.jordan@oracle.com>, David Gibson
+ <david@gibson.dropbear.id.au>, Eric Auger <eric.auger@redhat.com>, Eric
+ Farman <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>, Joao Martins
+ <joao.m.martins@oracle.com>, kvm@vger.kernel.org, Matthew Rosato
+ <mjrosato@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>, Nicolin
+ Chen <nicolinc@nvidia.com>, Niklas Schnelle <schnelle@linux.ibm.com>,
+ Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>, Yi Liu
+ <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 00/15] IOMMUFD Generic interface
+Message-ID: <20221104152713.3ae1c409.alex.williamson@redhat.com>
+In-Reply-To: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] gcov: clang: fix the buffer overflow issue
-Content-Language: en-US
-To: Nick Desaulniers <ndesaulniers@google.com>
-CC: <oberpar@linux.ibm.com>, <nathan@kernel.org>, <trix@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <1667568213-26227-1-git-send-email-quic_mojha@quicinc.com>
- <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com>
-From: Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SnZxO1DIp_SrsK0HY1J06e8qR-sthahK
-X-Proofpoint-GUID: SnZxO1DIp_SrsK0HY1J06e8qR-sthahK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-04_11,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 spamscore=0 mlxscore=0 clxscore=1015
- adultscore=0 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211040122
 
-Hi Nick,
+On Tue, 25 Oct 2022 15:12:09 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Thanks for looking into this.
-
-On 11/4/2022 11:18 PM, Nick Desaulniers wrote:
-> On Fri, Nov 4, 2022 at 6:23 AM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->>
->> Currently, in clang version of gcov code when module is getting removed
->> gcov_info_add() incorrectly adds the sfn_ptr->counter to all the
->> dst->functions and it result in the kernel panic in below crash report.
->> Fix this by properly handling it.
->>
->> [    8.899094][  T599] Unable to handle kernel write to read-only memory at virtual address ffffff80461cc000
->> [    8.899100][  T599] Mem abort info:
->> [    8.899102][  T599]   ESR = 0x9600004f
->> [    8.899103][  T599]   EC = 0x25: DABT (current EL), IL = 32 bits
->> [    8.899105][  T599]   SET = 0, FnV = 0
->> [    8.899107][  T599]   EA = 0, S1PTW = 0
->> [    8.899108][  T599]   FSC = 0x0f: level 3 permission fault
->> [    8.899110][  T599] Data abort info:
->> [    8.899111][  T599]   ISV = 0, ISS = 0x0000004f
->> [    8.899113][  T599]   CM = 0, WnR = 1
->> [    8.899114][  T599] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000ab8de000
->> [    8.899116][  T599] [ffffff80461cc000] pgd=18000009ffcde003, p4d=18000009ffcde003, pud=18000009ffcde003, pmd=18000009ffcad003, pte=00600000c61cc787
->> [    8.899124][  T599] Internal error: Oops: 9600004f [#1] PREEMPT SMP
->> [    8.899265][  T599] Skip md ftrace buffer dump for: 0x1609e0
->> ....
->> ..,
->> [    8.899544][  T599] CPU: 7 PID: 599 Comm: modprobe Tainted: G S         OE     5.15.41-android13-8-g38e9b1af6bce #1
->> [    8.899547][  T599] Hardware name: XXX (DT)
->> [    8.899549][  T599] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
->> [    8.899551][  T599] pc : gcov_info_add+0x9c/0xb8
->> [    8.899557][  T599] lr : gcov_event+0x28c/0x6b8
->> [    8.899559][  T599] sp : ffffffc00e733b00
->> [    8.899560][  T599] x29: ffffffc00e733b00 x28: ffffffc00e733d30 x27: ffffffe8dc297470
->> [    8.899563][  T599] x26: ffffffe8dc297000 x25: ffffffe8dc297000 x24: ffffffe8dc297000
->> [    8.899566][  T599] x23: ffffffe8dc0a6200 x22: ffffff880f68bf20 x21: 0000000000000000
->> [    8.899569][  T599] x20: ffffff880f68bf00 x19: ffffff8801babc00 x18: ffffffc00d7f9058
->> [    8.899572][  T599] x17: 0000000000088793 x16: ffffff80461cbe00 x15: 9100052952800785
->> [    8.899575][  T599] x14: 0000000000000200 x13: 0000000000000041 x12: 9100052952800785
->> [    8.899577][  T599] x11: ffffffe8dc297000 x10: ffffffe8dc297000 x9 : ffffff80461cbc80
->> [    8.899580][  T599] x8 : ffffff8801babe80 x7 : ffffffe8dc2ec000 x6 : ffffffe8dc2ed000
->> [    8.899583][  T599] x5 : 000000008020001f x4 : fffffffe2006eae0 x3 : 000000008020001f
->> [    8.899586][  T599] x2 : ffffff8027c49200 x1 : ffffff8801babc20 x0 : ffffff80461cb3a0
->> [    8.899589][  T599] Call trace:
->> [    8.899590][  T599]  gcov_info_add+0x9c/0xb8
->> [    8.899592][  T599]  gcov_module_notifier+0xbc/0x120
->> [    8.899595][  T599]  blocking_notifier_call_chain+0xa0/0x11c
->> [    8.899598][  T599]  do_init_module+0x2a8/0x33c
->> [    8.899600][  T599]  load_module+0x23cc/0x261c
->> [    8.899602][  T599]  __arm64_sys_finit_module+0x158/0x194
->> [    8.899604][  T599]  invoke_syscall+0x94/0x2bc
->> [    8.899607][  T599]  el0_svc_common+0x1d8/0x34c
->> [    8.899609][  T599]  do_el0_svc+0x40/0x54
->> [    8.899611][  T599]  el0_svc+0x94/0x2f0
->> [    8.899613][  T599]  el0t_64_sync_handler+0x88/0xec
->> [    8.899615][  T599]  el0t_64_sync+0x1b4/0x1b8
->> [    8.899618][  T599] Code: f905f56c f86e69ec f86e6a0f 8b0c01ec (f82e6a0c)
->> [    8.899620][  T599] ---[ end trace ed5218e9e5b6e2e6 ]---
->>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->> ---
->>   kernel/gcov/clang.c | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
->> index cbb0bed..0aabb9a 100644
->> --- a/kernel/gcov/clang.c
->> +++ b/kernel/gcov/clang.c
->> @@ -271,15 +271,20 @@ int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)
->>    */
->>   void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)
->>   {
->> -       struct gcov_fn_info *dfn_ptr;
->> -       struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
->> -                       struct gcov_fn_info, head);
+> [
+> At this point everything is done and I will start putting this work into a
+> git tree and into linux-next with the intention of sending it during the
+> next merge window.
 > 
-> Hi Mukesh,
-> Thanks for the report and patch!
-> 
-> Looking closer at the existing implementation, it looks curious to me
-> that we use list_first_entry_or_null() since that may return NULL,
-> which we never check for.  I'm curious if that's safe to remove?
-> Probably, since we haven't had any issues reported thus far.
-> 
->> +       struct gcov_fn_info *sfn_ptr;
->> +       struct gcov_fn_info *dfn_ptr = list_first_entry_or_null(
->> +                       &dst->functions, struct gcov_fn_info, head);
->>
->> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->> +       list_for_each_entry(sfn_ptr, &src->functions, head) {
-> 
-> This seems to be iterating BOTH src and dest, whereas previously we
-> were only iterating dest AFAICT.  Is this correct?  Seems to be a
-> change of behavior, at the least, which seems orthogonal to fixing the
-> panic.
+> I intend to focus the next several weeks on more intensive QA to look at
+> error flows and other things. Hopefully including syzkaller if I'm lucky
+> ]
 
-Can you just check the implementation here once ?
+In case this one hasn't been reported yet (with IOMMUFD_VFIO_CONTAINER):
 
-https://elixir.bootlin.com/linux/v6.1-rc3/source/kernel/gcov/gcc_4_7.c#L241
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc3+ #133 Tainted: G            E     
+------------------------------------------------------
+qemu-system-x86/1731 is trying to acquire lock:
+ffff90d3f5fe3e08 (&iopt->iova_rwsem){++++}-{3:3}, at: iopt_map_pages.part.0+0x85/0xe0 [iommufd]
 
-By looking at the above link clang version does not seem to doing right ?
+but task is already holding lock:
+ffff90d3f5fe3d18 (&iopt->domains_rwsem){.+.+}-{3:3}, at: iopt_map_pages.part.0+0x18/0xe0 [iommufd]
 
-> 
-> Otherwise it sounds like we could just add NULL ptr checks against
-> sfn_ptr outside the loop, and against dfn_ptr inside the loop.
-> Something like this?
-> ```
-> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
-> index cbb0bed958ab..5d4cb801aa9c 100644
-> --- a/kernel/gcov/clang.c
-> +++ b/kernel/gcov/clang.c
-> @@ -275,10 +275,13 @@ void gcov_info_add(struct gcov_info *dst, struct
-> gcov_info *src)
->          struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
->                          struct gcov_fn_info, head);
-> 
-> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
-> -               u32 i;
-> +       if (!sfn_ptr)
-> +               return;
-> 
-> -               for (i = 0; i < sfn_ptr->num_counters; i++)
-> +       list_for_each_entry(dfn_ptr, &dst->functions, head) {
-> +               if (!dfn_ptr)
-> +                       continue;
-> +               for (u32 i = 0, e = sfn_ptr->num_counters; i != e; ++i)
->                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
->          }
->   }
-> ```
-> Can you test the above hunk or comment on whether it addresses the issue?
+which lock already depends on the new lock.
 
 
-BTW, it just handles NUL pointer issue and not the one which is 
-mentioned here.
+the existing dependency chain (in reverse order) is:
 
-"Unable to handle kernel write to read-only memory at virtual address 
-ffffff80461cc000"
+-> #1 (&iopt->domains_rwsem){.+.+}-{3:3}:
+       down_read+0x2d/0x40
+       iommufd_vfio_ioctl+0x2cc/0x640 [iommufd]
+       iommufd_fops_ioctl+0x14e/0x190 [iommufd]
+       __x64_sys_ioctl+0x8b/0xc0
+       do_syscall_64+0x3b/0x90
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
--Mukesh
+-> #0 (&iopt->iova_rwsem){++++}-{3:3}:
+       __lock_acquire+0x10dc/0x1da0
+       lock_acquire+0xc2/0x2d0
+       down_write+0x2b/0xd0
+       iopt_map_pages.part.0+0x85/0xe0 [iommufd]
+       iopt_map_user_pages+0x179/0x1d0 [iommufd]
+       iommufd_vfio_ioctl+0x216/0x640 [iommufd]
+       iommufd_fops_ioctl+0x14e/0x190 [iommufd]
+       __x64_sys_ioctl+0x8b/0xc0
+       do_syscall_64+0x3b/0x90
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> 
->>                  u32 i;
->>
->> +               if (!dfn_ptr)
->> +                       return;
->> +
->>                  for (i = 0; i < sfn_ptr->num_counters; i++)
->>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
->> +
->> +               dfn_ptr = list_next_entry(dfn_ptr, head);
->>          }
->>   }
->>
->> --
->> 2.7.4
->>
-> 
-> 
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&iopt->domains_rwsem);
+                               lock(&iopt->iova_rwsem);
+                               lock(&iopt->domains_rwsem);
+  lock(&iopt->iova_rwsem);
+
+ *** DEADLOCK ***
+
+2 locks held by qemu-system-x86/1731:
+ #0: ffff90d3f5fe3c70 (&obj->destroy_rwsem){.+.+}-{3:3}, at: get_compat_ioas+0x2b/0x90 [iommufd]
+ #1: ffff90d3f5fe3d18 (&iopt->domains_rwsem){.+.+}-{3:3}, at: iopt_map_pages.part.0+0x18/0xe0 [iommufd]
+
+stack backtrace:
+CPU: 0 PID: 1731 Comm: qemu-system-x86 Tainted: G            E      6.1.0-rc3+ #133
+Hardware name: System manufacturer System Product Name/P8H67-M PRO, BIOS 3904 04/27/2013
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x56/0x73
+ check_noncircular+0xd6/0x100
+ ? lock_is_held_type+0xe2/0x140
+ __lock_acquire+0x10dc/0x1da0
+ lock_acquire+0xc2/0x2d0
+ ? iopt_map_pages.part.0+0x85/0xe0 [iommufd]
+ ? lock_release+0x137/0x2d0
+ down_write+0x2b/0xd0
+ ? iopt_map_pages.part.0+0x85/0xe0 [iommufd]
+ iopt_map_pages.part.0+0x85/0xe0 [iommufd]
+ iopt_map_user_pages+0x179/0x1d0 [iommufd]
+ iommufd_vfio_ioctl+0x216/0x640 [iommufd]
+ iommufd_fops_ioctl+0x14e/0x190 [iommufd]
+ __x64_sys_ioctl+0x8b/0xc0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd1eee7c17b
+Code: 0f 1e fa 48 8b 05 1d ad 0c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ed ac 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffd9787b9a8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd1eee7c17b
+RDX: 00007ffd9787b9e0 RSI: 0000000000003b71 RDI: 000000000000001c
+RBP: 00007ffd9787ba10 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000000c0000 R11: 0000000000000206 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
