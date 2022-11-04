@@ -1,87 +1,74 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F858469
-	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 16:26:41 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id e129so4788010pgc.9
-        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 09:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vl/MFnMZWToBmu5A4jVqt8zL5+NKQFzCISCwYnVAW2Y=;
-        b=PQdq7E71ycg0gOwLD2lncqKFIIQ9DNU4sK+LFxXU88WpDYN733tfqEj0iR4vZAKh+g
-         2GtEi07IMbGTx89JVyqW4en1DSpSnQMnEIa+QpF0SrRorfxokN3/mjlenOYRMuvs7gt2
-         jK8rhBVoUDPH1SMbGkSvEpbV6Q3+FPC4k7nEc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vl/MFnMZWToBmu5A4jVqt8zL5+NKQFzCISCwYnVAW2Y=;
-        b=DnuHFaJnbq5prghSt/ndoH5aJH599PGq0A+cyDY5Jix6bJzx8yxoH86qjimz6Jbwl+
-         8ajqC94+5QezLG9HGi6azGd2oNU4SCP9CrzlCNSmhxi/HS/CpjpgnHXBl+QEHRRIPKVZ
-         1kKfqR+qE8DsdmdbbHdHZJkHwTy0mtTgyWDT9Fvun+zEH1ZAHSLuW8qG0mQnZW2wWFJS
-         CV3wH6PElbQuRM9GgEwcabLabf7ynYFW3e2OsPdVhHsHUpTyK2mjYz0px1DA125/amDe
-         YcCdyJj1MHyINNx/5YtIsFZlNzsJRSuw/ALrHQZUgfzEMj5l2wIaJQpbaKDQboqBfuJl
-         6R6w==
-X-Gm-Message-State: ACrzQf1wmFibaNtTAN9pHKPP8Rq40wZsMcYGqy6F9OdJ1JntNy5Abh1j
-	j47e/xyJw7RgaG24VVZ5Qu41eyhB2hSXIg==
-X-Google-Smtp-Source: AMsMyM4cVgTe4Ak7y9MLEhk5QYQz3506Yk94FQT+AjVk3TLswCnDvtG5MCqa67zwxU1riSTtyNk/6g==
-X-Received: by 2002:a05:6a00:993:b0:56c:80f6:db5 with SMTP id u19-20020a056a00099300b0056c80f60db5mr36279550pfg.45.1667579200953;
-        Fri, 04 Nov 2022 09:26:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c16-20020a170902d49000b0017854cee6ebsm2921403plg.72.2022.11.04.09.26.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 09:26:40 -0700 (PDT)
-Date: Fri, 4 Nov 2022 09:26:39 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [GIT PULL] hardening fix for v6.1-rc4
-Message-ID: <202211040926.0E7BBDB1@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDE08471;
+	Fri,  4 Nov 2022 17:07:05 +0000 (UTC)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+	id C86EE1C09F0; Fri,  4 Nov 2022 18:06:57 +0100 (CET)
+Date: Fri, 4 Nov 2022 18:06:57 +0100
+From: Pavel Machek <pavel@denx.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+	Nathan Huckleberry <nhuck@google.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.10 38/91] drm/msm: Fix return type of
+ mdp4_lvds_connector_mode_valid
+Message-ID: <20221104170657.GA29426@duo.ucw.cz>
+References: <20221102022055.039689234@linuxfoundation.org>
+ <20221102022056.117630968@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="pWyiEgJYm5f9v55/"
+Content-Disposition: inline
+In-Reply-To: <20221102022056.117630968@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+
+
+--pWyiEgJYm5f9v55/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+Hi!
 
-Please pull this tiny kernel hardening fix for v6.1-rc4.
+> [ Upstream commit 0b33a33bd15d5bab73b87152b220a8d0153a4587 ]
+>=20
+> The mode_valid field in drm_connector_helper_funcs is expected to be of
+> type:
+> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+>                                      struct drm_display_mode *mode);
+>=20
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+>=20
+> The return type of mdp4_lvds_connector_mode_valid should be changed from
+> int to enum drm_mode_status.
 
-Thanks!
+We don't have kCFI in 5.10, IIRC, so we should not need this.
 
--Kees
+Best regards,
+								Pavel
+--=20
+ 'DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk'
+ 'HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany'
 
-The following changes since commit 72c3ebea375c39413d02113758319b74ecd790bd:
 
-  overflow: Refactor test skips for Clang-specific issues (2022-10-25 14:57:42 -0700)
+--pWyiEgJYm5f9v55/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-are available in the Git repository at:
+-----BEGIN PGP SIGNATURE-----
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.1-rc4
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY2VGsQAKCRAw5/Bqldv6
+8miTAKCwgANXY1Qwqo4vzF6TVQRFA47IZQCfRYhkOffY6b9C13WBkOr/T+JszJc=
+=KT8s
+-----END PGP SIGNATURE-----
 
-for you to fetch changes up to 6f7630b1b5bc672b54c1285ee6aba752b446672c:
-
-  fortify: Capture __bos() results in const temp vars (2022-10-28 16:07:01 -0700)
-
-----------------------------------------------------------------
-kernel hardening fix for v6.1-rc4
-
-- Correctly report struct member size on memcpy overflow (Kees Cook)
-
-----------------------------------------------------------------
-Kees Cook (1):
-      fortify: Capture __bos() results in const temp vars
-
- include/linux/fortify-string.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
--- 
-Kees Cook
+--pWyiEgJYm5f9v55/--
