@@ -1,151 +1,238 @@
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2044.outbound.protection.outlook.com [40.107.96.44])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2407CAD25;
-	Fri,  4 Nov 2022 19:42:18 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RF/t5KGxJUnp/j+9yubWGsoN+He7TCccFSaGIv648fvfmsvmYBFmTn588iBkxUHWEunGwwFMdXyr5aMLS5WOdV/1xw4R7XYPt5N7iuAji05QsL/m+OYPG5fg0Ab+AQZgHqYT0+cEfd4Cgfk1VVv9xfeneWf5DCfd1rsLiGWvH1ojTvjh/EW61rPiK/6AVW6bNjR4Ep/NTWBqrEBP3vFbNrO1wy8PMtVEUOiU5PYJBn7DyNym03rEoweXwohbnwMJj/jCGZnBjKPBEzDHhi7dIUqlOaA+dqOGpMQLvR0oJjLS6Kjml8Z4H3LYG9YA3g9i8E8UIzHv9gOYJr5Ww94C2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fbMEoeVkrrujqXBvUGz2hBHXQEM8qxATzmNaEy8OBDU=;
- b=IHXKLmL+ieNLwlXXK0JUohxk08QaIi5ouMzIvhUkDe0gVwtFx3i8asVluEVrdCVRHCbH+wJf+c8ShpEi6v/+KGwAsBhTUz8HvKE5Pz4vPTvOsKgFkhN+KxsMs0/eHh7zWIiktBvPhktSiT1XV0iSO5Br6iWf2wHqXxi2tMWaSceg/poHHTRHq4rwLZFDcEP07efpTRhfMiUnCYEJ4ywpDfUWUWFYfdVUShYCsAnTHP/0nYlR60XIwDG/Z8tgpA/EtGMSFqSDyk4aeVBac8HPzg641ZBkgdV4oS/hD+6fZxVt7UEl6Nz096459gU7qlFiT/nmdiTEs06zHzyiIOiKxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fbMEoeVkrrujqXBvUGz2hBHXQEM8qxATzmNaEy8OBDU=;
- b=MP2QVQHyV1pqMC2VuxAWEB456CabZlhDjsKajBgZ++OYZvx09PheSkr4YWCQthYjg+mLWooRMVmse+mZ51TWjBfUrbJZV4IjtNwoCJjQHbHMYt7toSGvJQwIYRIiADni+9ST+De6HbeAO3gfAElhSfGD+vfmOEY9i4zeoBQohQY+elbAGm4xQ6fWW9xcDrsMxaUQXcf7btk3T+eWwdRxzrvkhG7x95X2+du3BtumP/xqIhE/1ytp7t6unSHJkRDYcEl6twlMyy6/kSXWDPb0+mS05dmfpvjWSbD0D4c7BvylO0E/3aom6JdmZFFiwvoRJ7XwWGinxfvPfC32RpU53A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA1PR12MB5640.namprd12.prod.outlook.com (2603:10b6:806:238::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Fri, 4 Nov
- 2022 19:42:16 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Fri, 4 Nov 2022
- 19:42:16 +0000
-Date: Fri, 4 Nov 2022 16:42:14 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	"Martins, Joao" <joao.m.martins@oracle.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	"Liu, Yi L" <yi.l.liu@intel.com>,
-	Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 15/15] iommufd: Add a selftest
-Message-ID: <Y2VrFuToyJwU93WR@nvidia.com>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <15-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <Y2RkXV+q0Q6bdTde@nvidia.com>
- <BN9PR11MB52769FA78CA8B7FD3DB7595E8C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52769FA78CA8B7FD3DB7595E8C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: MN2PR18CA0029.namprd18.prod.outlook.com
- (2603:10b6:208:23c::34) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE6CAD25
+	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 19:58:54 +0000 (UTC)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A4JGkrx008395;
+	Fri, 4 Nov 2022 19:58:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aMqQQWzE6QrDvHBLONghM7biH9mUG+hEgNcbo3baRH0=;
+ b=fBZl4RsWIKF4L4YX4L4X6hFf0a0B9ZHUbBW/0Pi01v+EekFvenhXiaIuDW1oFieixuwQ
+ NR/pUhXz+Pcz6WmzMaibrTxK7GTJbvNitfiLnra3N9BPc5FFiMy4TnUy7v5vvLtvQVn1
+ 5m0v4fXq6bYOHwlylpAqOcjCC5nQORXIun1Qb/VuVp8hrLiNRQZZYYwQgifJBh8hrbc+
+ EiISz3pwS7b1NT5dja0Smdwaq+y81sCAtaRum0KLaRUhHDx8ItwyhB+TcqIylA8FC3jw
+ eqZ73DOVe1bqdpYmcgMzPs7nt6TdqUHMU+ccvzYpGaxJYNU4AcMcqZP1XPevttByiM8z 9g== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kn6je0bsg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 04 Nov 2022 19:58:43 +0000
+Received: from pps.filterd (NASANPPMTA04.qualcomm.com [127.0.0.1])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2A4Ju20X031478;
+	Fri, 4 Nov 2022 19:58:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by NASANPPMTA04.qualcomm.com (PPS) with ESMTPS id 3km9ttuwu1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 04 Nov 2022 19:58:42 +0000
+Received: from NASANPPMTA04.qualcomm.com (NASANPPMTA04.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A4JwTrE001663;
+	Fri, 4 Nov 2022 19:58:41 GMT
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA04.qualcomm.com (PPS) with ESMTPS id 2A4JwfFx001751
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 04 Nov 2022 19:58:41 +0000
+Received: from [10.216.46.236] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 4 Nov 2022
+ 12:58:39 -0700
+Message-ID: <fda57ad1-bc92-a7ae-53a0-47c2a8467c47@quicinc.com>
+Date: Sat, 5 Nov 2022 01:28:34 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA1PR12MB5640:EE_
-X-MS-Office365-Filtering-Correlation-Id: fa79764b-d442-4044-e654-08dabe9cad3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	IELeb8cKVz5CAUM5ecrepwGPVfO7iAU91sKueH2EwnvktC6SuX5q7mA86bu/CykHJ1stztYIMz5heWcYci6Mm7c7+JQ791mPN7py6NXva145Ag9GeBwGtbsV9xHnMlBwx2cPHPcng+dcxHerUXqZC/iy1YUWecc4/ZrAub4y4UUpSQxDz3Dpr8z9n/azA04cAqBWUgQMgywKZ7gORNRdCFBzmz9ojfpbnux3CTA7RosWF2DvIsde2wrmlkca2/tt2qsInA0QURb8AmAx6W7be+hYi8M16qOmyLi1VBZqt6Di7zOAR+M9PqA3wuOM6W7KXMb9satpHy7CBECyMLvZFcLRI03c8vmIWT8euIPcdh0Bby7onbu5sJtMLED7mOIkIPqW9Z/Ey2okNgZ0Lt2uImVaEvzFUkIcVOBVucGBpQGh3SNxxTUVdglrcFb01oJp2/AaNpf9dC+mYwSGy1f1n0C0FIHK2rQK6EcdKcW8ZvZzpklhfC/wBDj79s933V4ppm1kGJ39plxulh0BZ1c+3NRSELeFNgdfxbfc59PMCobwvosVddGb/5EhdrYbwVotF/ZPE3dgmOfvzNANQE84Dy8/Y8qWZO75gP8eR0hAHRFemKYkCdcKuY5Izz1mgeTUy/0VaLSHviNS5yW0LOXmWj+pS91ByAHbhFDR4xKxcFCMzn75sBrT0KKvYc+Y5HdEApVjtKAm6J62z6ZvZU3vVw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(346002)(136003)(366004)(451199015)(6486002)(478600001)(54906003)(6916009)(316002)(6506007)(4326008)(8676002)(86362001)(66946007)(66556008)(66476007)(41300700001)(2906002)(26005)(6512007)(4744005)(38100700002)(8936002)(186003)(83380400001)(36756003)(7416002)(5660300002)(2616005)(7406005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4l+n+GjHGDYcqsy8npVSctdu34AbHYMQJOH8lYGTGz2ZXXTHjdtfCAU2h1aD?=
- =?us-ascii?Q?0qRP64kMgD6fg3uhBL4TlTBceXjFr1i5b9Vlx+TbHD4etRHIPvTt0aV0NZYt?=
- =?us-ascii?Q?2OZ4tsYxBEdx7GHKGxF/HvkLjRTqWiZ96imYwaZON3kP6gnqs7ugely9/tPP?=
- =?us-ascii?Q?GfGI0oBG2rWEZBFwINUbfGiWng0utAlZytHCkTdjI6QgSP+C3UX19hVOEBZ1?=
- =?us-ascii?Q?Xfjd6FIMFvjJpeZzQDb31kC8gZZbYCVDgimo14UZ53S9BRYwbgYm3IzANApJ?=
- =?us-ascii?Q?Rv6GaQVQWjWpgdjY5iSjqonRZRpUWfKWfKgkiP9xX0/SJK5ruNtuOhh/DGl0?=
- =?us-ascii?Q?Zp/cbFSN7cAoon/IXBG8qgDTXBD43BP+Sd8DQIyPXXgaYq8YwmDc2vkyjNXB?=
- =?us-ascii?Q?7zgliYL7Es60uc8d5+6LjibizLRaZ2L4N0XXtqbs0A5a5wvO9nQJHr5k50vj?=
- =?us-ascii?Q?/ZjDXnFi/Hvs7PfOIIeQxTH4ec8N+RwzkgawNrZOykOMnq0r5sUluD6Xe9RG?=
- =?us-ascii?Q?s++CPb4V++FHQNI5n9b0TBNVfoaGTTePgwg4p08xznk7IgrJpbSl91gGVs45?=
- =?us-ascii?Q?SZ4Kt2HsoZHnFIMEVyYinqUOKR0DZ39yzz62Tt8HS8wRZXjqfLIRDcz2PQey?=
- =?us-ascii?Q?B7tq+KCZqFU5C3R3uwdt0v1qtM0kS6daYCOlTwK6qZBjE2bRJ6xU3o1LT+li?=
- =?us-ascii?Q?lk9AtMZ2sZlq52c2yL82eTHIOtCHsOQvnk3Zm2JiDssrm3ihmwNo87CxL03n?=
- =?us-ascii?Q?ikL0QsSXW8lZSY6Ko3i5qyT8jhK10kkQhpWzuPaP3js2te3Ug1W5MzlYscgd?=
- =?us-ascii?Q?6CeQ8vaIOmAgmrkqnh7VI83L+LpXRiK9RwUbaDqT6dkNfish2tMMBlvlsinj?=
- =?us-ascii?Q?kQ8jsOzCfWX9WgYgD9wJtN4C9SxOvr++j72MZ6ygeIXCVAfSf7/ajfB5NPM9?=
- =?us-ascii?Q?Z//kYh3Iqpzf9RvSwEZk7rH1Obrl62u0VjE5WCmOUFvRiXPyxv+K+nU15Heh?=
- =?us-ascii?Q?H9V4CQqwIBCY8wUPSCPuamSUtw+oKYVeQc/E2TKK2OP+9hT9tuwvVeOYWcje?=
- =?us-ascii?Q?auqxdQN50CXZ5znZZHPN1+Gzy9vbWnbYm3KJkfkxRj3f9/0lsN1n5+Lh+ORW?=
- =?us-ascii?Q?zu32vNL8p5dPAKyfTy4AQzspcGPOC+iGFEVvm7lHIRcSvnts45DVBNUIb+Tw?=
- =?us-ascii?Q?oEjTxTJM8UXihI5BkbdYkMdVyUNKifMYUmFyjH6fdc5pPUkX2iq5njfzsEwQ?=
- =?us-ascii?Q?0nKOxg5diIaseBn6lpoOw5BKMXpMgqyys3Sjid9bdNgSuUFdExXpRGyT1wsW?=
- =?us-ascii?Q?raner3sJUIDxb2AXWgHCYp0WPE6XuaH+t0Ff2/DuIwhUe74t4yD40/owTUrX?=
- =?us-ascii?Q?Zo/9/1Jgr82KvIPUFzxibXUSv4VuI0pk6iwN/7aAGhHohVE6wyBMSm91MiaV?=
- =?us-ascii?Q?Su1h/UB2MeAWSLggS2Hs7Szb5im/1ijP3DsIc+szDxQEp4+Ln/zpioyzDmEB?=
- =?us-ascii?Q?uqiS5jMGTQlLCi7uq7YjpagQVOeSUb+1CGxT7oioPoLs/cJFatG2IedcSX4L?=
- =?us-ascii?Q?4zRXjbz+PrzO1rJfnMo=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa79764b-d442-4044-e654-08dabe9cad3b
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 19:42:15.9249
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EPGhiqp1t26oPsvFu89Owxp0u+brLHriXEBQgreTgsFwCyRuIYLctpZicTgCbOrL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5640
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] gcov: clang: fix the buffer overflow issue
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+CC: <oberpar@linux.ibm.com>, <nathan@kernel.org>, <trix@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <1667568213-26227-1-git-send-email-quic_mojha@quicinc.com>
+ <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com>
+From: Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SnZxO1DIp_SrsK0HY1J06e8qR-sthahK
+X-Proofpoint-GUID: SnZxO1DIp_SrsK0HY1J06e8qR-sthahK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-04_11,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 mlxscore=0 clxscore=1015
+ adultscore=0 bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211040122
 
-On Fri, Nov 04, 2022 at 05:43:29AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Friday, November 4, 2022 9:01 AM
-> > 
-> > The only way I can see to solve this is to hold a serializing lock
-> > across iommufd_access_pin_pages() so that neither
-> > iommufd_test_access_unmap() can progress until both the pin is
-> > completed and the record of the pin is stored.
+Hi Nick,
+
+Thanks for looking into this.
+
+On 11/4/2022 11:18 PM, Nick Desaulniers wrote:
+> On Fri, Nov 4, 2022 at 6:23 AM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+>>
+>> Currently, in clang version of gcov code when module is getting removed
+>> gcov_info_add() incorrectly adds the sfn_ptr->counter to all the
+>> dst->functions and it result in the kernel panic in below crash report.
+>> Fix this by properly handling it.
+>>
+>> [    8.899094][  T599] Unable to handle kernel write to read-only memory at virtual address ffffff80461cc000
+>> [    8.899100][  T599] Mem abort info:
+>> [    8.899102][  T599]   ESR = 0x9600004f
+>> [    8.899103][  T599]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [    8.899105][  T599]   SET = 0, FnV = 0
+>> [    8.899107][  T599]   EA = 0, S1PTW = 0
+>> [    8.899108][  T599]   FSC = 0x0f: level 3 permission fault
+>> [    8.899110][  T599] Data abort info:
+>> [    8.899111][  T599]   ISV = 0, ISS = 0x0000004f
+>> [    8.899113][  T599]   CM = 0, WnR = 1
+>> [    8.899114][  T599] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000ab8de000
+>> [    8.899116][  T599] [ffffff80461cc000] pgd=18000009ffcde003, p4d=18000009ffcde003, pud=18000009ffcde003, pmd=18000009ffcad003, pte=00600000c61cc787
+>> [    8.899124][  T599] Internal error: Oops: 9600004f [#1] PREEMPT SMP
+>> [    8.899265][  T599] Skip md ftrace buffer dump for: 0x1609e0
+>> ....
+>> ..,
+>> [    8.899544][  T599] CPU: 7 PID: 599 Comm: modprobe Tainted: G S         OE     5.15.41-android13-8-g38e9b1af6bce #1
+>> [    8.899547][  T599] Hardware name: XXX (DT)
+>> [    8.899549][  T599] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+>> [    8.899551][  T599] pc : gcov_info_add+0x9c/0xb8
+>> [    8.899557][  T599] lr : gcov_event+0x28c/0x6b8
+>> [    8.899559][  T599] sp : ffffffc00e733b00
+>> [    8.899560][  T599] x29: ffffffc00e733b00 x28: ffffffc00e733d30 x27: ffffffe8dc297470
+>> [    8.899563][  T599] x26: ffffffe8dc297000 x25: ffffffe8dc297000 x24: ffffffe8dc297000
+>> [    8.899566][  T599] x23: ffffffe8dc0a6200 x22: ffffff880f68bf20 x21: 0000000000000000
+>> [    8.899569][  T599] x20: ffffff880f68bf00 x19: ffffff8801babc00 x18: ffffffc00d7f9058
+>> [    8.899572][  T599] x17: 0000000000088793 x16: ffffff80461cbe00 x15: 9100052952800785
+>> [    8.899575][  T599] x14: 0000000000000200 x13: 0000000000000041 x12: 9100052952800785
+>> [    8.899577][  T599] x11: ffffffe8dc297000 x10: ffffffe8dc297000 x9 : ffffff80461cbc80
+>> [    8.899580][  T599] x8 : ffffff8801babe80 x7 : ffffffe8dc2ec000 x6 : ffffffe8dc2ed000
+>> [    8.899583][  T599] x5 : 000000008020001f x4 : fffffffe2006eae0 x3 : 000000008020001f
+>> [    8.899586][  T599] x2 : ffffff8027c49200 x1 : ffffff8801babc20 x0 : ffffff80461cb3a0
+>> [    8.899589][  T599] Call trace:
+>> [    8.899590][  T599]  gcov_info_add+0x9c/0xb8
+>> [    8.899592][  T599]  gcov_module_notifier+0xbc/0x120
+>> [    8.899595][  T599]  blocking_notifier_call_chain+0xa0/0x11c
+>> [    8.899598][  T599]  do_init_module+0x2a8/0x33c
+>> [    8.899600][  T599]  load_module+0x23cc/0x261c
+>> [    8.899602][  T599]  __arm64_sys_finit_module+0x158/0x194
+>> [    8.899604][  T599]  invoke_syscall+0x94/0x2bc
+>> [    8.899607][  T599]  el0_svc_common+0x1d8/0x34c
+>> [    8.899609][  T599]  do_el0_svc+0x40/0x54
+>> [    8.899611][  T599]  el0_svc+0x94/0x2f0
+>> [    8.899613][  T599]  el0t_64_sync_handler+0x88/0xec
+>> [    8.899615][  T599]  el0t_64_sync+0x1b4/0x1b8
+>> [    8.899618][  T599] Code: f905f56c f86e69ec f86e6a0f 8b0c01ec (f82e6a0c)
+>> [    8.899620][  T599] ---[ end trace ed5218e9e5b6e2e6 ]---
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>>   kernel/gcov/clang.c | 13 +++++++++----
+>>   1 file changed, 9 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
+>> index cbb0bed..0aabb9a 100644
+>> --- a/kernel/gcov/clang.c
+>> +++ b/kernel/gcov/clang.c
+>> @@ -271,15 +271,20 @@ int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)
+>>    */
+>>   void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)
+>>   {
+>> -       struct gcov_fn_info *dfn_ptr;
+>> -       struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
+>> -                       struct gcov_fn_info, head);
 > 
-> same as gvt does which maintains an internal mapping cache and
-> conducts pin/unmap with cache update under the mutex protection.
+> Hi Mukesh,
+> Thanks for the report and patch!
+> 
+> Looking closer at the existing implementation, it looks curious to me
+> that we use list_first_entry_or_null() since that may return NULL,
+> which we never check for.  I'm curious if that's safe to remove?
+> Probably, since we haven't had any issues reported thus far.
+> 
+>> +       struct gcov_fn_info *sfn_ptr;
+>> +       struct gcov_fn_info *dfn_ptr = list_first_entry_or_null(
+>> +                       &dst->functions, struct gcov_fn_info, head);
+>>
+>> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
+>> +       list_for_each_entry(sfn_ptr, &src->functions, head) {
+> 
+> This seems to be iterating BOTH src and dest, whereas previously we
+> were only iterating dest AFAICT.  Is this correct?  Seems to be a
+> change of behavior, at the least, which seems orthogonal to fixing the
+> panic.
 
-Yeah, that does actually look OK
+Can you just check the implementation here once ?
 
-Jason
+https://elixir.bootlin.com/linux/v6.1-rc3/source/kernel/gcov/gcc_4_7.c#L241
+
+By looking at the above link clang version does not seem to doing right ?
+
+> 
+> Otherwise it sounds like we could just add NULL ptr checks against
+> sfn_ptr outside the loop, and against dfn_ptr inside the loop.
+> Something like this?
+> ```
+> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
+> index cbb0bed958ab..5d4cb801aa9c 100644
+> --- a/kernel/gcov/clang.c
+> +++ b/kernel/gcov/clang.c
+> @@ -275,10 +275,13 @@ void gcov_info_add(struct gcov_info *dst, struct
+> gcov_info *src)
+>          struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
+>                          struct gcov_fn_info, head);
+> 
+> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
+> -               u32 i;
+> +       if (!sfn_ptr)
+> +               return;
+> 
+> -               for (i = 0; i < sfn_ptr->num_counters; i++)
+> +       list_for_each_entry(dfn_ptr, &dst->functions, head) {
+> +               if (!dfn_ptr)
+> +                       continue;
+> +               for (u32 i = 0, e = sfn_ptr->num_counters; i != e; ++i)
+>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
+>          }
+>   }
+> ```
+> Can you test the above hunk or comment on whether it addresses the issue?
+
+
+BTW, it just handles NUL pointer issue and not the one which is 
+mentioned here.
+
+"Unable to handle kernel write to read-only memory at virtual address 
+ffffff80461cc000"
+
+-Mukesh
+
+> 
+>>                  u32 i;
+>>
+>> +               if (!dfn_ptr)
+>> +                       return;
+>> +
+>>                  for (i = 0; i < sfn_ptr->num_counters; i++)
+>>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
+>> +
+>> +               dfn_ptr = list_next_entry(dfn_ptr, head);
+>>          }
+>>   }
+>>
+>> --
+>> 2.7.4
+>>
+> 
+> 
