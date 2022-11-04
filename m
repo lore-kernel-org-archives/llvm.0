@@ -1,88 +1,173 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4188AD21
-	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 19:16:59 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id b21so5751307plc.9
-        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 12:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uwf9cNrPS5Rc31CwAis9I5k42+w3JYRmcdVU7DdGiu4=;
-        b=N6TFAIctV4hgpYE38ZyX/b+J/o7aIK0+cR8rBnXD24Pic0BLxQcHU237p09FZeLrX9
-         6yj0AmbLE6V1HcPmWLID7VETZlaV+M9dng3VlpfIN3WNRO3xTYAAiE2momLGKWMNEkhQ
-         G4VT1cqNjnQ6Oe4tlUOO1WbSzvJVPgeHtyRA8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uwf9cNrPS5Rc31CwAis9I5k42+w3JYRmcdVU7DdGiu4=;
-        b=wLTUvwNgrwkzfhlmUBAzLaEM4QJ1hJOHSPWtNxUFMAraA1JUzoheVu3pxuy/SeJIZU
-         yz24FIggRdWcizVj4xy1aEiwoykf/y6A7xi5/HzxvU6uEFtoJJt57yQh7rOXZ8GakHFq
-         8HFmb9Y9vQiefl9mPDA9nF2fnlhv3IBJy+5wZpoaF3DQsvkuf7pMDJ0c58kexTJokPnZ
-         1pgeXpryyQ2zXSMtMENb9sKP2FUH8vi2yJtArB6otG2YQrzAh7HkXf/3P4OOwGlQuPN4
-         ghZwavGtwJn/wGcp9j56UaWWRAV9UuLF2GeebvnCCDZAFJoLNlkWBufZ7CD2A3ymJFBp
-         haEA==
-X-Gm-Message-State: ACrzQf1kwjYKRjecGGm6WEirD/+5vkz7RsmLyQexoXth31d1l0KHdq5M
-	yCXl1vV5uIBAfD06ZzyxXRqtMQ==
-X-Google-Smtp-Source: AMsMyM723xbKuDkCJ7wXLAB+SxhuL5RfQWSJSVDW6OhzUsKHC44G/DKWPnsbHUAvL7N0/sG7WSCPRg==
-X-Received: by 2002:a17:902:8693:b0:17a:f71:98fd with SMTP id g19-20020a170902869300b0017a0f7198fdmr37053238plo.25.1667589419426;
-        Fri, 04 Nov 2022 12:16:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e38-20020a631e26000000b0046497308480sm74704pge.77.2022.11.04.12.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 12:16:58 -0700 (PDT)
-Date: Fri, 4 Nov 2022 12:16:57 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E72AD22;
+	Fri,  4 Nov 2022 19:25:43 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fG/sa/f5G+Cx88ylfezt9R7IjJ+Vlh46C1RTYX6LR1Ob3XmnWO74zjiffbgEqj0DCIbPfd0E1fYUG5j7zEbuRJ8/PsS+aEDeI8jsLpXXvuwbmvX4RVkURWqihP5WDtnIeN94AKfJnQxZDq/FIfqToXQCPyotmK3HFji1v/JGBl32E1VEPBxZ6h6W2dmLMggcIb2Tcfnof7oHzSGHqFIYQ8seg8Od3qH6j7XhlPda0OqB2wgHaxiz/PuCG+XTSRd3qyKjhATCferMsN0kXIil0vNYGpJotTKYwfch8JvQm6gqCHA7gNpP2uPZksGKxvXWfwRCjYJQvn3YOUJMt1oujw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5tu930OvuFu3jUn0EKruj8z7OPgPu9liMfZeXGy8qZo=;
+ b=NU0S6ba+3W29Axpe6TuMsMPlxY5hqznzKrnsa7gRkB1d9E+PdTtWMQ0zCUM9hJY2ovmq/c3DCcMrpo1uBt/IVlP2JuNNaQ6BlYra8LussY6cWSOkVmKS1g/BLKaSMXXJne0t1Lsmj13SOFWvwygbU406efcu6hs37oabSqBs9avTDVvEiamrbd95ybPcdaB8ggIu2YwqnxxhGkkzsDhhI17AKSzBEf3EGhNd3gnNlfc9mXpVBUd5qhoCkpKx0ABbNoSS4NXxOnqkG9qyprw8Yw0/vIxdCr/fxGfM6fKhBPwXCzBCFq1URnlusZruNl2+DQfI2+3Nn6A5jtGFzE6wwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5tu930OvuFu3jUn0EKruj8z7OPgPu9liMfZeXGy8qZo=;
+ b=hhEBYTJnwInl1s3HayOV4a5LvCPn7gfecC9hDQwHhKm235znCA69/DysEXmHtIUb9/Y5RoaQhouE5nrM25yZ0eQ8kYq/XtsKw/rITTGNmYBfhoDpHEi0zJVClwtWalGQvYUA3DIB7rYD/RGQi9NowPwaqRosDeEHBSY94dbl5eBoEf+vRc2KFmIpXwzeWzUqmoQPHS7lrkwdezsjzmQUYijkuSDbmiWo+9IDNvxzy+u8oXJUFLzjq31txDRUCtqQZ2bgrKUz2mfDXzzN//GaXXbMtnJcnMyfxV1+BLTUdA7UfZiyuM8yx+l5GsquKSmUG2V/YptGb91mJC7Rxk/2IQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CH2PR12MB4311.namprd12.prod.outlook.com (2603:10b6:610:a8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
+ 2022 19:25:41 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Fri, 4 Nov 2022
+ 19:25:41 +0000
+Date: Fri, 4 Nov 2022 16:25:40 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	Joerg Roedel <joro@8bytes.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH net-next] net: ethernet: renesas: Fix return type of
- rswitch_start_xmit()
-Message-ID: <202211041216.AEE2A8A353@keescook>
-References: <20221103220032.2142122-1-nathan@kernel.org>
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	David Gibson <david@gibson.dropbear.id.au>,
+	Eric Auger <eric.auger@redhat.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	"Martins, Joao" <joao.m.martins@oracle.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+	"Liu, Yi L" <yi.l.liu@intel.com>,
+	Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 01/15] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
+Message-ID: <Y2VnNJYQfQwfKiwl@nvidia.com>
+References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <1-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <BN9PR11MB5276F41D50FFAFFCC8186B238C389@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276F41D50FFAFFCC8186B238C389@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MN2PR02CA0004.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::17) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103220032.2142122-1-nathan@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH2PR12MB4311:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7ab9e5c-9a8f-4249-85c4-08dabe9a5c8c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	RYof3kHT/5xG1v5dpE9hfFOlu7hv//WpwOdSMdPx/xJFG7EHEGRFl2mAwulqTHw2MgJJ7VlboY5xOSfdDSZcRbHfAkBhBJ4gsTk/oSxfuPQ2qyv/6X4GLh5p4Z4fcxDVkjVH/vjnfZKO6brgmULLYMieQwxJwZATcNDvowLE9Pv+w4PA3mJi4is5QTJ507n09rp2X/pMwV8aleR3Ud70c4PohZ6k/iSA/eOMsqJrnX8KPk2rRdeGVw0z8Oa4NdbmAZJ5sFGU3oNv0dcOtqRaJH0oq/AEvViHbC7UC9Hyz/0q0+Rp57jL/vZqIRm59dDVYxk5Q6PVuAvGATF26V1vctRYz2J7DH/y9EAUnn+7TIkXg+hzta+qERxpMCPzOImd8J+meQNY/MrUAWeIEfM5QIGZmh1KSvo3DEngnqpimSvKhSjJpvg7M6aUy+x8Ge2K1/Ik32pShbb9rBDsAIWzXULdV78R0rI5dW51pxNr6KFhnBSp7LXK+P/uKplrJM/y14W+eNJMmVqWinPShVuMdRcpcGEaNDEWbeMwpO0XIDykAS+GOpsacQbTQkfsPm8dCNZx02N6d5Xv8GemqZozFsbQ+qryeBHzFCOhIxECAry0fSIX+wnk6eYhog//AttWNxDki/L7Er8ncS4etOWhsq3sCnlYrla7JZrsKu+UEKXomgBxFaeLVeQA5qBiRzn55h9Ta2C9GZ/KfBSZ1TZ2GQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199015)(38100700002)(36756003)(8936002)(66556008)(8676002)(86362001)(41300700001)(4326008)(26005)(66946007)(7416002)(7406005)(5660300002)(316002)(66476007)(54906003)(6916009)(4744005)(2906002)(2616005)(186003)(478600001)(6486002)(6512007)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?yyFyQvaMpZGct7Hne/EZj9HxjaAFYkbmqox4swBGXMNhDXE59WyZwvAYX3rq?=
+ =?us-ascii?Q?zr6AIONCYyDh+cx4nU3jKlpWkf+8ccEfiOyq/R3gWdwTaNPkkP3yW/Es3IVe?=
+ =?us-ascii?Q?8rvZKh4jlOyuawe3ifyV5VJoFh/IL/Ddo9X2hTqQmeFoUXnZ9a3uLSzRs9Ta?=
+ =?us-ascii?Q?x9xHBBgXyFsnGvSqoJ3xoEfQxhAc5tmlJn0iWs2AJMNThMJdrmVTFihlKyhS?=
+ =?us-ascii?Q?56AAeykQidtQtuP9ZfPYYvvMzSCI0x6s4fecpAKj26zHiO318OLI+j1DoFEA?=
+ =?us-ascii?Q?9wkmYS8OfhYqvBpKIm/C29BrH8R+CAO1jrFDaD8PwHCRaDq4onKqANQfUXOH?=
+ =?us-ascii?Q?UGLKkq/dgz1GmwjQCC9aKGKXUP3TIJmTGn/COPJixjFkxPkUvIjXx7x8+FEL?=
+ =?us-ascii?Q?fE+ylNmoIjMkUPGRl3usObVLfVIXchsvP58NL44KsLVwCBXd+qDEbbITYCWD?=
+ =?us-ascii?Q?rZlBarcXvdPI2KBS7MlvMylhqvcp8gA26Lst4LLdGthMJpfRbwkao1x4T/y+?=
+ =?us-ascii?Q?7kmC0dvaxxoedfzQumwR4MPt5K3/2ccsHRUaFe3dVa9cbY426vHNCsypFlA7?=
+ =?us-ascii?Q?YCLssfSItOMkZkI2zAWBrAnw0Fir5oZh1xgXBT5hNOEfPYf2nUwxTCse87yR?=
+ =?us-ascii?Q?0uSvrrdxbzauE3lddlyqByb+klg8ZAJrAXD26D7ua3rNzFAJq5XPIQTloE40?=
+ =?us-ascii?Q?mQeNhIy8Pur6zFdYQDZ4/mXbEzTV8nJSzALwZRnzzRR2AZ8jcvoDVVrUi1hZ?=
+ =?us-ascii?Q?O9ARNSKDXl4EkLNWwKCNQJ+2k9KOevxHKT0N0wfuwUTtGb90qxn80rysMqDI?=
+ =?us-ascii?Q?JAyUGCe6vEAU8qt5Alio7fbVNfL/lpxDhJjKZI5KNn08oPB/tWNvfx40mnmZ?=
+ =?us-ascii?Q?Lbhx9dEFUHAIwdAjTOOslb3ROT/ejR5sFP3lYMHd11BCMii7YwZJCdJtqmwq?=
+ =?us-ascii?Q?UeuF47n8ovK3PhEJtHxNGaERUAiy5hfbwcNUH6fQVKhTkyEtbD0RMxd9Ps6+?=
+ =?us-ascii?Q?vtf06lCoeXqg6vYRQJBZejwprcR7PA9gaUiVaokZA923HI26yqeNtf+01VZu?=
+ =?us-ascii?Q?BqCKBylnl0NnIyXJfFNSkBhbqSpfp0evfJ8U9Py6SZASoXjzki5gJFz/3+jJ?=
+ =?us-ascii?Q?moVFT8lOTzPLOsvIxGK36hAyCSaA0Jn6lDfkQ5rpAQVLO6mMoU3n0D1sN6er?=
+ =?us-ascii?Q?9LWSr59oxf/U/BKwrtJFf7UtPpcIeE57s3AHVzAw88Odg1nmSE+xc1UXeLPW?=
+ =?us-ascii?Q?yITkhSpuNFx6CuQ1+VUjt0rqD9Jr5myV5EQZqLzoXaOWe74aMpOD378ZQjqc?=
+ =?us-ascii?Q?PwzsH52w3i3YCXYNsaWxc1jNmAQpV82vRQpsgu+vB9l0x00ngmy/u6dzlAk2?=
+ =?us-ascii?Q?eDTgbej1azJw0W5s31lMhnCJtpFpbcEIp8AWJO2PT2brCcmx2QRKu4JA5ntZ?=
+ =?us-ascii?Q?gFLMBl6leKQlobxQq0mUqBJ1qtKAJm3XAwmypu8yNRvUXLky4ElVSF/98/mu?=
+ =?us-ascii?Q?Xfd8sGKndnXXHJQ39KpbAggIC8fejV98aTJrH+36laE3Ys5e2lRO1GiksUX7?=
+ =?us-ascii?Q?L3Er2ESuzuUzf6u5Wk0=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7ab9e5c-9a8f-4249-85c4-08dabe9a5c8c
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 19:25:41.5956
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ffrl3EKxzoH1cRMlzzCtTQKxmSOCRc0kXL8VuFk1f/OF31YHYuS2S4UOIup/iGEb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4311
 
-On Thu, Nov 03, 2022 at 03:00:32PM -0700, Nathan Chancellor wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
+On Thu, Nov 03, 2022 at 05:03:01AM +0000, Tian, Kevin wrote:
+> > @@ -4458,7 +4458,11 @@ static bool intel_iommu_capable(struct device
+> > *dev, enum iommu_cap cap)
+> >  		return irq_remapping_enabled == 1;
+> >  	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
+> >  		return dmar_platform_optin();
+> > +	if (cap == IOMMU_CAP_ENFORCE_CACHE_COHERENCY) {
+> > +		struct device_domain_info *info = dev_iommu_priv_get(dev);
+> > 
+> > +		return ecap_sc_support(info->iommu->ecap);
+> > +	}
+> >  	return false;
+> >  }
 > 
->   drivers/net/ethernet/renesas/rswitch.c:1533:20: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .ndo_start_xmit = rswitch_start_xmit,
->                           ^~~~~~~~~~~~~~~~~~
->   1 error generated.
-> 
-> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> 'netdev_tx_t', not 'int'. Adjust the return type of rswitch_start_xmit()
-> to match the prototype's to resolve the warning and CFI failure.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> use switch/case while making this change.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Done:
 
--- 
-Kees Cook
+static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
+{
+	struct device_domain_info *info = dev_iommu_priv_get(dev);
+
+	switch (cap) {
+	case IOMMU_CAP_CACHE_COHERENCY:
+		return true;
+	case IOMMU_CAP_INTR_REMAP:
+		return irq_remapping_enabled == 1;
+	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+		return dmar_platform_optin();
+	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
+		return ecap_sc_support(info->iommu->ecap);
+	default:
+		return false;
+	}
+}
+
+Thanks,
+Jason
