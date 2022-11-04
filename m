@@ -1,53 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5ACB2F3C
-	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 22:46:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 549DEC433C1;
-	Fri,  4 Nov 2022 22:46:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667601997;
-	bh=Y0WP8JgTAS/F0y/ZkKGWdKIlTWOq7gBKnMnzDzuDO40=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=TfEsUo5Zh6T0GNm2EuCGzUi1NGQd3anhZDNCh1pgHXSfd6NdnLr5738/nmsVFesJq
-	 RLekrQ0nZHdbIYh0KAkhXPGl/S6HjFwwgqEfnWsOfUwkIrQcnFFQ8M/sI/TtSfR/qV
-	 vybJkxaMcnexZsAd4tXBRKAn44EFb9zvbp+6gMU5Pv13gsPiyidejFKL4ompdF3OOC
-	 XVAtSj8gBq1UewfVn5PmVVjPXpozcnPdhmApCNd6y57boYRjxF1ldDmy3L34TxLleR
-	 xPxXi8d3zFfEUXqxzYOHvPOB5/O6nOZc4oQQaA3Ki0k/0kqRUhY0QsCbdrS20dXY5j
-	 /K9QuSiXVKh+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42F8EE270FB;
-	Fri,  4 Nov 2022 22:46:37 +0000 (UTC)
-Subject: Re: [GIT PULL] hardening fix for v6.1-rc4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <202211040926.0E7BBDB1@keescook>
-References: <202211040926.0E7BBDB1@keescook>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <202211040926.0E7BBDB1@keescook>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.1-rc4
-X-PR-Tracked-Commit-Id: 6f7630b1b5bc672b54c1285ee6aba752b446672c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bd745027438a854e2d7c124032e9ad4aa389e153
-Message-Id: <166760199727.25569.10949830136990958125.pr-tracker-bot@kernel.org>
-Date: Fri, 04 Nov 2022 22:46:37 +0000
-To: Kees Cook <keescook@chromium.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, "Dr. David Alan Gilbert" <linux@treblig.org>, Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B512F3C
+	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 22:50:23 +0000 (UTC)
+Received: by mail-il1-f197.google.com with SMTP id a14-20020a921a0e000000b003016bfa7e50so1338654ila.16
+        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 15:50:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQUV465XYKy6BEOy3Swc3M1CyT3Q1DkqUbMYNjsBM7w=;
+        b=Dh2u5ocJm6AyXavnK+tdD54YtYrotmt7vSR/SatXW4LxjBQebeb49HzdTlr10j6bbn
+         Imlxp8Bjb8I85Q9ZoBg5iT8oY55Of01gIhh5saHeGfYd3IQNQQLgwSmXQMyCmWHAbioj
+         EdoSkwRySESWUqKQeNNWofquHnjmI7iBERlCbXpW0QqDVWI0YfI/L8qNHwz1u8Iv+phq
+         BBE1+Z9UCH88OkS3Q96x5zP/w9Br9y6KNkO28AcZfq/U+bNuLbxmiZ1bNArCILGK64TM
+         z5LWxw99SVG5SO/v3q/Y/t75yXFiBXZuMLWdbjjVxkHXl+DeZyLKpbu54ZfgD5XPRTJO
+         g7uQ==
+X-Gm-Message-State: ACrzQf2b7o6BNh3yVO90IPdjjIoG8+Y5aksIKyykf+U0LCOrH/KDh95Q
+	coPKJP0xdVCk9nUlT08UR73+5aLZrNK6wCKPwDT2BZRddaT5
+X-Google-Smtp-Source: AMsMyM5nTnIogJYJ095mPEs92Yep38gpfi+2iOs4VSUyK/pRUwAakFTI8laAK2zkHMNKd64/tVLlrFqFcjq22AiZc4BVcdLyhALO
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:2107:b0:375:ddb:54c0 with SMTP id
+ n7-20020a056638210700b003750ddb54c0mr21194896jaj.244.1667602223078; Fri, 04
+ Nov 2022 15:50:23 -0700 (PDT)
+Date: Fri, 04 Nov 2022 15:50:23 -0700
+In-Reply-To: <0000000000009da4c705dcb87735@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002227cf05ecace68c@google.com>
+Subject: Re: [syzbot] WARNING in check_map_prog_compatibility
+From: syzbot <syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org, 
+	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	martin.lau@linux.dev, memxor@gmail.com, nathan@kernel.org, 
+	ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com, 
+	song@kernel.org, songliubraving@fb.com, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-The pull request you sent on Fri, 4 Nov 2022 09:26:39 -0700:
+syzbot suspects this issue was fixed by commit:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.1-rc4
+commit 34dd3bad1a6f1dc7d18ee8dd53f1d31bffd2aee8
+Author: Alexei Starovoitov <ast@kernel.org>
+Date:   Fri Sep 2 21:10:47 2022 +0000
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bd745027438a854e2d7c124032e9ad4aa389e153
+    bpf: Relax the requirement to use preallocated hash maps in tracing progs.
 
-Thank you!
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1599d319880000
+start commit:   200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1b664fba5e66c4bf
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3f8d4df1e1981a97abb
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165415a7080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1716f705080000
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: bpf: Relax the requirement to use preallocated hash maps in tracing progs.
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
