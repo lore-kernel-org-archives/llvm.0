@@ -1,210 +1,225 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445018469
-	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 16:00:52 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id j17-20020a5d93d1000000b006bcdc6b49cbso3288460ioo.22
-        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 09:00:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kAtg1ws9gFpsv1LTsb4VFM2twH9JbH6Kcf5UmQN9wc8=;
-        b=pMYYG+rGjnNcXF4AZZNfMD+HCBxsHpkozxskkzA0xl+qGjFC18GV/pPxbns/gPJFYO
-         hZthpj8MRHJSe8IFMT8qPneyMcI+JTbOCfxEtg6dPuXCyrY7lWHuTIUKwiapNjzOACRV
-         c9IzfZE0TQDctn+a+xwZJEzN7ZUd9n+v4pCvC5uKrf0CN3KMXpJK2Gtt8oQm0BoGT1sk
-         9i20UGnVeaUNdarc3dSxAGwo5QghMhX+Vt7iMJ2X1iTNxkJCbgYZDqfOEvZl9SJDVlLE
-         bmslz2rwuANAw8wEhnx2atHneRlsbX3wQ+DpdvIz/QTEX6OmObYp3POxcLpguxmr4Pfx
-         8dfQ==
-X-Gm-Message-State: ACrzQf3tWfw/4/eD/zeCxIY3j9xj5z1dAQB3GT853XSWR6nNnIsY+qp9
-	lTewp13VNhp/BrQPAb0QCJ9/bBoP1I7hyBkB+2/hy/WOVYvM
-X-Google-Smtp-Source: AMsMyM5am3Rxwvz49DUq+nJBgEFZoznmAZ5XU8/ZJOx3Jvd0uzKuzo1Kd2BzkTd9P24g9c54ZUYY38XSVIREvaLepF090rANIpgP
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3068469;
+	Fri,  4 Nov 2022 16:04:55 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LjnP2Hq17rrslLseMkaakxBUplfGH7mqVHSO0PWJnCOca0pTdjn1xOUZy+yhEy1SQCxNiop+4F8iLxd4s0BiyoTNP1YWncPlJtXRofFg5onIKDJHugYt8bl8c/5Js/q0WUkqIn2IhqfcaZSX1NkWSFYyyeE/EHm0WmEJCR84oUIP37/4crKiJ9JY8BoJRq3Rg7pGqPLlbYrQbWChmUvtj5kJif9VrHaM88C+pVPC4g4RbVf5nQTXz4DhwVZxTHlliQpubfbqKEza+q/Ez/2QcO0vrQmTYWnr8wbztGWJxLWSppXsgprZndxe1xCsK2luQuIynPBvcMcHCZabJlA8ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P8iKWNXnm7gLelKKKiyt8WiVc9Y6d2JEJZpQJCvFzhE=;
+ b=ZD3quxzYW+4C81Jeb+B6q2JUaYlrov0DxUom9QDpgigcxxbzxF3YC8ih8eOsEdMqJbZsK8Mz04HWAexYe7KFYUJ0lecosYt9hmAHZOIdLZNt2+bhLUu8JX1EQ1kIHOjkRti2EWaqG77VSW8N9qpZgXV2NQ5M3IbHNqqkK5WF9hzHKy3IclX7yV0/Am+tdYhl8D6EMpykbvu2BcpBVbKju5xYp7nkhX8tycgfQ07sZOFFDVOwfZLUX4L1y3TjJ4yiuFmiduKs9HOg+GPkDS/20PVvazEoS7w0hjfKlDh9fTeLUXyFjuMiRW6+dfZUFJvLrwD/Iloz7Znf/zazf22ISQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P8iKWNXnm7gLelKKKiyt8WiVc9Y6d2JEJZpQJCvFzhE=;
+ b=WAkzSt2nUImYqbCsR8+8XgrkHvlJ+AIn8sFsYeulfEBp3YHQOC2jUeRHrx0cYScP7TIbGwRuJWdodaOMXH1l9SrpKgcqeKmG+ytY6EQT9tlcW6dM/v7P17zccNqPX/GloDYbwHtOy0zID7By0C9fvo1Tl3DKC3YF5UhEMNFzdPGpRNr2IE3tscS14tXjSJeNgHgm3EBu9lXhVgf9FLPgOb5KIc3PhdRtMTG5uidFUgnLWrU178vjiEAU6rH95Qj9Mj1B4+tX7+yPfogEYeu1PQsfyuIV0DPvAaV8xtRLc0WQbG05OGToBQhHbM4HVSjz0BckkGz+EWtU+vrF4lnftQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Fri, 4 Nov
+ 2022 16:04:53 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Fri, 4 Nov 2022
+ 16:04:52 +0000
+Date: Fri, 4 Nov 2022 13:04:51 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc: Alex Williamson <alex.williamson@redhat.com>,
+	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	David Gibson <david@gibson.dropbear.id.au>,
+	Eric Auger <eric.auger@redhat.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 8/15] iommufd: Algorithms for PFN storage
+Message-ID: <Y2U4I+xOFe5pCXtY@nvidia.com>
+References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <8-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+X-ClientProxiedBy: BL1P221CA0001.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::12) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:690a:0:b0:6c6:9bb1:a4c7 with SMTP id
- e10-20020a6b690a000000b006c69bb1a4c7mr21849185ioc.92.1667577651424; Fri, 04
- Nov 2022 09:00:51 -0700 (PDT)
-Date: Fri, 04 Nov 2022 09:00:51 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008c742d05eca72d4d@google.com>
-Subject: [syzbot] possible deadlock in hugetlb_fault
-From: syzbot <syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5874:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81d83cac-466d-4117-6445-08dabe7e4ee1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	kZUViWMiVdV4rzRT6i1CrO8WKO/OJV5IBqpZksxMEcD3aITEDgquV+kK4Zecggh6G4OLKIdhP9yBxHol/McAqvKt0ILHF/d8nQqyXG59lH/P+iN6moaP+SWX37cNxRgkQyGKwMteLKWN14paw9PIUiqBW83i7DJRfVrt9DXOgg48w3KBvvSVivlgH0fYplQwjd+jFQReUsPXy+zB90YULHrXeoc0uCbx35gKbB9E1UEjl9yKTf6hrGbywtp5HeU1OU8L47kmm8q13TxP8IUqDITU1NjnP0Cd7Z+w5AusxRbFAqFuLD2HEK1ppVNUoUuN/bLra76kqCGM41RVUf/ylG6Qr+jZaCOtHQOYwOmVqUrGUugF+XjuYyWmpvLfkCtG4UgRE+jvbQymhraaWCAOVyO3/72fDly3S4teaLOFQgcAVIp158lYgfxTxKv9DemF7PsGn8VqH1J8tgY9BPRXBzIs4k6o/lbOi/JppqC0Zio/dh6kUeD5R3bFF1Wh2F8+OA9uxdd5dB0GdHTa4HxLxQPAjdxBsTUUnCifiVJIVTluaAiEnZeh0lI83koeVEoRACmeof4RWH+UCbSTBZNrDxhP8RGsterLhbAD4W9/euEP8ilcdlANr+aQS2sf1v8lpYUHYbajDSbrZhRdHBUoUZzbOB+uWyu1/QW0qeZTjDt6hYniiFV159xpZOlgRwKNvmiUJVcTjQbMRVbLNk43rkR/IS84Awlxe62jjkdLUaz8jZ+adlUIn4TRsYdJb/ELtGCgT+Z5SzHqo4ytPxJbwQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(366004)(396003)(136003)(39860400002)(451199015)(7406005)(7416002)(4326008)(66476007)(66556008)(2906002)(8676002)(86362001)(5660300002)(36756003)(66946007)(316002)(921005)(6506007)(38100700002)(26005)(110136005)(2616005)(186003)(54906003)(6512007)(6486002)(478600001)(83380400001)(41300700001)(8936002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qKyAr/T/DE0gGy33B7TXPlXrm3a9QyTFOLie8R5hZJ/86XAjOIz1dZfaYSE8?=
+ =?us-ascii?Q?hSGFUA8X6up5CS14LxlETBOuUd+vQeLmUk7RZMlfACKCbTfCagMRxGdUUWqz?=
+ =?us-ascii?Q?RqwK2HDS+bwsO8eExdfMKfatiJgfhP/EtmA7vS+Cr1OW3VytgqIKyiawBLre?=
+ =?us-ascii?Q?uAw5DT8G6ohfP/PkcDPX1Fgdbf+DQkSSwKt0RscwQKLShjhon/5PzoE3DCvK?=
+ =?us-ascii?Q?XO1X0t4RmPr42jS2ctvXA4dUc3MEi6oeyZsoF2MM4uUJVWHRTpJqhrUQxo+N?=
+ =?us-ascii?Q?bwMj0yvy8UQePxrWiUWc6onZP/mOnZO6uXRHNwc2F0LgjhPvPIqWep3bQ59i?=
+ =?us-ascii?Q?FUnu6oLyEQbPWltBQEYk5M+aY1WryvLNeXzNop5aolSJprz9hI6wOGdCKja9?=
+ =?us-ascii?Q?i5DNojTiOPt2VaJi6G7lAeMRbLlojZUS9JmPNkqxSuCHbAARbepdq9Xx0+5W?=
+ =?us-ascii?Q?cgJefNSVW3JVAdn3rY8/SJ7vTxuyFkPN+pSnImw8DWe9VObrhq5BpktOmA2C?=
+ =?us-ascii?Q?glZx6v4uUyVxULfV/qkYH2t9pPIk+ZDq4Llwjs95MoDK1wJ0USYnkYLfPPjY?=
+ =?us-ascii?Q?JMFUTHpqIJ/juX6WgXM4NnuVJx3zeOtj84vTPuAb3oL5W1nqAa6zZqiyriaK?=
+ =?us-ascii?Q?UaH5raQo+lGrEwGK1yOhC2ryAFLnbX9z7XcsfuJ/d7fq3tcxH90U04vdHNux?=
+ =?us-ascii?Q?lrpRF02j/8ZKk1uDE+oTc1mVoRICXWbuPJt/rZkdaxxfqrBzAeo4S7qAn/DE?=
+ =?us-ascii?Q?q0bKkHF6z/dSxvZU3/bHNwzTxN0ea+q07X63/d6inno/pNO4q5TSfkVo32wU?=
+ =?us-ascii?Q?Wbw4e19fryBfgJIPXln76sNr4K0X7wWjMyeyPrrZkJ7jZN1Scw6UATtMjxq+?=
+ =?us-ascii?Q?tR17lMZ9WcRdY/Ci4tOJwJ37J59zr8TGLGa/Nj8skLF6Y++mVTERUvXEh6aM?=
+ =?us-ascii?Q?ErbyVhOQ5n926PZps0bDDmY25QrwHqu5l4YLwlhqYiLkEdYI8a8C+lg9beJL?=
+ =?us-ascii?Q?dL1GNECvdvgAlmBCiYvIRKrK7BJ1BGbzDslYrBYMdSIbB6hH085pO5dPoxxN?=
+ =?us-ascii?Q?E44f6OA0qAdq428VmaySNLUp83oX0DRs+oycUHNFLXL1QdROA/9Crk6edhGx?=
+ =?us-ascii?Q?koKcwVxrewEof4SqpWl118yCIu24+tTEERjaaNMvwqdli6z8cTqtMrV9yGTZ?=
+ =?us-ascii?Q?7+bLCBXQa7+MDIZYhyXH3Spvqj6WhZTU0m5+5KpqUiWJu1yGed/4omsQkpWV?=
+ =?us-ascii?Q?LWfePG5Z1o3GM9763BQTN3y6ZIIU89DEdAA+Wk5ab9YjAQKW+ey2+35hvjrK?=
+ =?us-ascii?Q?Sa/GtaUGIe8UZCEf8HpmJmM/ZLA/Eh21zmVlGFNyGXqAMs+k5nr6y7wxBkNI?=
+ =?us-ascii?Q?Q0keLguwK4cv43KN9aJoWpeAPjLvYCix3laMKdbGZasSlOWPvhsB8+kdYGzm?=
+ =?us-ascii?Q?p3QZ3jakLmaxv+swtIJu63SkWRklKQqTZQxr2zx/8G4DJA/3A9Txycxku3mI?=
+ =?us-ascii?Q?uXMBON2WaXHIb0ftUmRTZKGHKvLMtzDAlos1bF6jPRonlrIMtNTjSuktN76+?=
+ =?us-ascii?Q?WPIamnJyenwjheIFgG4=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81d83cac-466d-4117-6445-08dabe7e4ee1
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 16:04:52.6615
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 15RjbKC68DNxORjonkx0NXoXiFNH6Ew3SCUhwZj9P5YMmwhXzclayxMABkfA+pBv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5874
 
-Hello,
+On Tue, Oct 25, 2022 at 03:12:17PM -0300, Jason Gunthorpe wrote:
+> +/**
+> + * iopt_pages_unfill_xarray() - Update the xarry after removing an access
+> + * @pages: The pages to act on
+> + * @start_index: Starting PFN index
+> + * @last_index: Last PFN index
+> + *
+> + * Called when an iopt_pages_access is removed, removes pages from the itree.
+> + * The access should already be removed from the access_itree.
+> + */
+> +void iopt_pages_unfill_xarray(struct iopt_pages *pages,
+> +			      unsigned long start_index,
+> +			      unsigned long last_index)
+> +{
+> +	struct interval_tree_double_span_iter span;
+> +	u64 backup[BATCH_BACKUP_SIZE];
+> +	struct pfn_batch batch;
+> +	bool batch_inited = false;
+> +
+> +	lockdep_assert_held(&pages->mutex);
+> +
+> +	interval_tree_for_each_double_span(&span, &pages->access_itree,
+> +					   &pages->domains_itree, start_index,
+> +					   last_index) {
+> +		if (!span.is_used) {
+> +			if (!batch_inited) {
+> +				batch_init_backup(&batch,
+> +						  last_index - start_index + 1,
+> +						  backup, sizeof(backup));
+> +				batch_inited = true;
+> +			}
+> +			batch_from_xarray_clear(&batch, &pages->pinned_pfns,
+> +						span.start_hole,
+> +						span.last_hole);
+> +			batch_unpin(&batch, pages, 0, batch.total_pfns);
+> +			batch_clear(&batch);
 
-syzbot found the following issue on:
+Syzkaller, and then the nth test suite found this - the required loop
+around the 'batch_from' is missing. The normal test suite should have
+found this, but it turns out it is using huge pages, and not enough of
+them to overfill even the limited batch.
 
-HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=137d52ca880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d080a4bd239918dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=ca56f14c500045350f93
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+Testing also showed that batch overflow accidently zerod an xarray
+entry that was not actually stored. Thus this:
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b4f72e7a4c11/disk-f2f32f8a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3f88997ad7c9/vmlinux-f2f32f8a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b4b5b3963e2d/bzImage-f2f32f8a.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0 Not tainted
-------------------------------------------------------
-syz-executor.2/5665 is trying to acquire lock:
-ffff88801c74c298 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5645
-
-but task is already holding lock:
-ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_vma_lock_read mm/hugetlb.c:6816 [inline]
-ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_fault+0x40a/0x2060 mm/hugetlb.c:5859
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&vma_lock->rw_sema){++++}-{3:3}:
-       down_write+0x90/0x220 kernel/locking/rwsem.c:1562
-       hugetlb_vma_lock_write mm/hugetlb.c:6834 [inline]
-       __unmap_hugepage_range_final+0x97/0x340 mm/hugetlb.c:5202
-       unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
-       unmap_vmas+0x21e/0x370 mm/memory.c:1733
-       exit_mmap+0x189/0x7a0 mm/mmap.c:3090
-       __mmput+0x128/0x4c0 kernel/fork.c:1185
-       mmput+0x5c/0x70 kernel/fork.c:1207
-       exit_mm kernel/exit.c:516 [inline]
-       do_exit+0xa39/0x2a20 kernel/exit.c:807
-       do_group_exit+0xd0/0x2a0 kernel/exit.c:950
-       get_signal+0x21a1/0x2430 kernel/signal.c:2858
-       arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
-       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
-       exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
-       syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
-       __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
-       do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
--> #0 (&mm->mmap_lock#2){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
-       lock_acquire kernel/locking/lockdep.c:5668 [inline]
-       lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
-       __might_fault mm/memory.c:5646 [inline]
-       __might_fault+0x104/0x170 mm/memory.c:5639
-       _copy_from_user+0x25/0x170 lib/usercopy.c:13
-       copy_from_user include/linux/uaccess.h:161 [inline]
-       snd_rawmidi_kernel_write1+0x366/0x880 sound/core/rawmidi.c:1549
-       snd_rawmidi_write+0x273/0xbb0 sound/core/rawmidi.c:1618
-       vfs_write+0x2d7/0xdd0 fs/read_write.c:582
-       ksys_write+0x1e8/0x250 fs/read_write.c:637
-       do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
-       __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
-       do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
-       entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&vma_lock->rw_sema);
-                               lock(&mm->mmap_lock#2);
-                               lock(&vma_lock->rw_sema);
-  lock(&mm->mmap_lock#2);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.2/5665:
- #0: ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_vma_lock_read mm/hugetlb.c:6816 [inline]
- #0: ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_fault+0x40a/0x2060 mm/hugetlb.c:5859
-
-stack backtrace:
-CPU: 1 PID: 5665 Comm: syz-executor.2 Not tainted 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
- __might_fault mm/memory.c:5646 [inline]
- __might_fault+0x104/0x170 mm/memory.c:5639
- _copy_from_user+0x25/0x170 lib/usercopy.c:13
- copy_from_user include/linux/uaccess.h:161 [inline]
- snd_rawmidi_kernel_write1+0x366/0x880 sound/core/rawmidi.c:1549
- snd_rawmidi_write+0x273/0xbb0 sound/core/rawmidi.c:1618
- vfs_write+0x2d7/0xdd0 fs/read_write.c:582
- ksys_write+0x1e8/0x250 fs/read_write.c:637
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-RIP: 0023:0xf7fad549
-Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-RSP: 002b:00000000f7f875cc EFLAGS: 00000296 ORIG_RAX: 0000000000000004
-RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 0000000020000000
-RDX: 00000000c86ade39 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
-   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
-   a:	10 06                	adc    %al,(%rsi)
-   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
-  10:	10 07                	adc    %al,(%rdi)
-  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
-  16:	10 08                	adc    %cl,(%rax)
-  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
-  1c:	00 00                	add    %al,(%rax)
-  1e:	00 00                	add    %al,(%rax)
-  20:	00 51 52             	add    %dl,0x52(%rcx)
-  23:	55                   	push   %rbp
-  24:	89 e5                	mov    %esp,%ebp
-  26:	0f 34                	sysenter
-  28:	cd 80                	int    $0x80
-* 2a:	5d                   	pop    %rbp <-- trapping instruction
-  2b:	5a                   	pop    %rdx
-  2c:	59                   	pop    %rcx
-  2d:	c3                   	retq
-  2e:	90                   	nop
-  2f:	90                   	nop
-  30:	90                   	nop
-  31:	90                   	nop
-  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index da95b28b41772c..3640f83f57069b 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -479,10 +479,11 @@ static void batch_from_xarray_clear(struct pfn_batch *batch, struct xarray *xa,
+ 		entry = xas_next(&xas);
+ 		if (xas_retry(&xas, entry))
+ 			continue;
+-		xas_store(&xas, NULL);
+ 		WARN_ON(!xa_is_value(entry));
+-		if (!batch_add_pfn(batch, xa_to_value(entry)) ||
+-		    start_index == last_index)
++		if (!batch_add_pfn(batch, xa_to_value(entry)))
++			break;
++		xas_store(&xas, NULL);
++		if (start_index == last_index)
+ 			break;
+ 		start_index++;
+ 	}
+@@ -1407,6 +1408,20 @@ void iopt_area_unfill_domains(struct iopt_area *area, struct iopt_pages *pages)
+ 	mutex_unlock(&pages->mutex);
+ }
+ 
++static void iopt_pages_unpin_xarray(struct pfn_batch *batch,
++				    struct iopt_pages *pages,
++				    unsigned long start_index,
++				    unsigned long end_index)
++{
++	while (start_index <= end_index) {
++		batch_from_xarray_clear(batch, &pages->pinned_pfns, start_index,
++					end_index);
++		batch_unpin(batch, pages, 0, batch->total_pfns);
++		start_index += batch->total_pfns;
++		batch_clear(batch);
++	}
++}
++
+ /**
+  * iopt_pages_unfill_xarray() - Update the xarry after removing an access
+  * @pages: The pages to act on
+@@ -1437,11 +1452,8 @@ void iopt_pages_unfill_xarray(struct iopt_pages *pages,
+ 						  backup, sizeof(backup));
+ 				batch_inited = true;
+ 			}
+-			batch_from_xarray_clear(&batch, &pages->pinned_pfns,
+-						span.start_hole,
++			iopt_pages_unpin_xarray(&batch, pages, span.start_hole,
+ 						span.last_hole);
+-			batch_unpin(&batch, pages, 0, batch.total_pfns);
+-			batch_clear(&batch);
+ 		} else if (span.is_used == 2) {
+ 			/* Covered by a domain */
+ 			clear_xarray(&pages->pinned_pfns, span.start_used,
