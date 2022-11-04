@@ -1,193 +1,119 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from terminus.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF5610FA;
-	Fri,  4 Nov 2022 10:00:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667556029; x=1699092029;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=gQwwB1X1/9G4/YYk46bj7YzOPQSmB5R7/HHWoyPMHxg=;
-  b=UtZXALTMPwI01W3yNKJMYLEleNyJMlg4UPvpJglr0pwP7bb7MOdfj5Io
-   kGzJOlgp3vtHR0gWR2xlC3yvsxOZRAL1dMrFmHoHOWgMTk2Zizn2RFFTQ
-   NVZGUytEfHw2vJmLb4Wk7TOdy2tdl+6fcsKUkYjph1nlhD1S4ujIJziEM
-   9buWhQ96wRjUCvcyLFm4LdGRafMwVztflu6DYgvRtZkUCAw+yzTjZsp5K
-   LZr+cbR5vqRU6nes0pLnN3/KMHK+N34+qbyeNxITVPIvrgmEk4UIn1WN0
-   lC0yep7ecwp9Ye/LPKwVpo9Xf2O4Ki3sAqomo3JY3ceU4OonF+V9nRGJ2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="289647980"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="289647980"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 03:00:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="629673077"
-X-IronPort-AV: E=Sophos;i="5.96,137,1665471600"; 
-   d="scan'208";a="629673077"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 04 Nov 2022 03:00:28 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 03:00:27 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 4 Nov 2022 03:00:26 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Fri, 4 Nov 2022 03:00:26 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Fri, 4 Nov 2022 03:00:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RRgl9UZP9otpIKwcE8/mgFCceAoJEdlLVgxryjDb9qtXLB2rZvSuK0n/cdC2oVfU8lDdF39pbC715QE3M1amvClot0k5FpQN4rqjtrhbh8N28JY3EnovlQRsz6nyQIBhM9uxPXrFeGN23n97vx+ZVUKtxTJKUUUzUFym6r48bq+bjG0wiQmwKUqIquo6IqBr16bFEoMt1TWQX7zIAmxorDgb1QrcMekUHYjcKVkuTlEB1R9OAJfNIZfm1I4MiLLKO4+0sliAOciCeTEmi1rPPdtZo6RyodX8HZvok3yJuHb7AJNQdFOnEbOIPeZriEo4SbkA1MYiTF4RHkTALBCOwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gQwwB1X1/9G4/YYk46bj7YzOPQSmB5R7/HHWoyPMHxg=;
- b=LgrLn9Jh8FoWOUIGjadUCINqOjEGMgpX8ZqGgAgnHjZPEfqNexQWda3OTUGATttCV7hC4d3viV/9L+5MqoLUtKx19re0UECEYDpAlifwW2cn5rl7/ahxsAj5x7UYPUte5yLeSeMySKjCCesIdzQ6SvJlJfcz7HF/5S6T9cVymQA87endqgGngfUSmiyBk8zgBG9F8S6U0FRI2PkypB6qvsWO8C2aJDOYnm8o/X3VlSWSrlCzT8uYT/3G/NIK0dMsSnTK3ndsh2f30Fhjp5cg8y4zbqkoJwatsQLa1K3OR20tSJExe9ZRmSC53xSTxzmGa3+1SCeY9Lzy6T8IkAVYIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by PH7PR11MB5863.namprd11.prod.outlook.com (2603:10b6:510:135::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
- 2022 10:00:24 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::737e:211a:bb53:4cd7]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::737e:211a:bb53:4cd7%5]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 10:00:24 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, Lu Baolu <baolu.lu@linux.intel.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, Joerg Roedel
-	<joro@8bytes.org>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda
-	<ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Shuah Khan
-	<shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-CC: Alex Williamson <alex.williamson@redhat.com>, Chaitanya Kulkarni
-	<chaitanyak@nvidia.com>, Cornelia Huck <cohuck@redhat.com>, Daniel Jordan
-	<daniel.m.jordan@oracle.com>, David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>, Eric Farman <farman@linux.ibm.com>,
-	"Jason Wang" <jasowang@redhat.com>, Jean-Philippe Brucker
-	<jean-philippe@linaro.org>, "Martins, Joao" <joao.m.martins@oracle.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, Matthew Rosato
-	<mjrosato@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>, Nicolin Chen
-	<nicolinc@nvidia.com>, "Niklas Schnelle" <schnelle@linux.ibm.com>, Shameerali
- Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>, "Liu, Yi L"
-	<yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: RE: [PATCH v3 11/15] iommufd: Add a HW pagetable object
-Thread-Topic: [PATCH v3 11/15] iommufd: Add a HW pagetable object
-Thread-Index: AQHY6J1wkejA0Ad3VEK0+/DX7xfUhK4uljBA
-Date: Fri, 4 Nov 2022 10:00:23 +0000
-Message-ID: <BN9PR11MB52762F734CF358C48FDFCB1C8C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <11-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-In-Reply-To: <11-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB5863:EE_
-x-ms-office365-filtering-correlation-id: 8c026233-2711-45e2-ffef-08dabe4b643e
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zaLT7W+s/gHqyF5mgiBbbLWNnsTRvI6E8hcZoRqfuIrLlGaHjeSmp4PK1EwDmV0u5aaCVoPGW1q+7m0eLnaSLkp7LB4rwegs/hByNQUK273nBJRpVLzoJRLKy4LEqx0juWs03I+Ne1IRvCdbZkP9Nz98LM3yMNJRM4dzTFF4Wp2yoBDhKm+Z5UjpHP4WiLW1/sS0LYQ2zFxxN+AuZ2cwWh3xUB6NGAgQS2GO+gDi1FDt7PSHB5DnQBpNQmFNJTwNrRzYBljXLtcBoYc/LnrhxZHQr4dgFOfKGFJD3Oc5Z3oUUZOLnrkLMyGBOKYmGwvKgNe69Pdj7TTmsEKkXrJH/NriNFxBBdxH8ohPfGEoo5KkALIVGZvYJIzu5SuwienIdNYJgn64j3AR27Oq0vkIJLU8hC+34e5vVILbPgW3fg3EbiD/Z/ROt+OqZssJeYNGeY/3bJOE21MBuQtc+oh4iZf+vBYWpYYLOTZtnzVuAuBpwKXKcfzOxMTl4HmEzHHMdYssliGZHgI8FPoJY5dZCPu3gQgNXQZHxkvMn0yu0Bi+85Z4jGTGnNKjxIco57+99xXCgA9aTNOeewW7M6Jmp8j6n8ADA1vuTEKCvwLjBsCZyx8XiO9jWdiBnTAThs5yv4U/vbrnuepsvpVi8nO6zYySo3CgLBCL+6qemWwlozICFU0veUX+UYcPR2i3QluMN388YH6ldH62J0SwVswIMxHn9H42VtOYd9fIlqPgx2fVSSwA82BcbM+mKdJ4s5NJc0tfUzunHJyq0ahycxprS5H2b/r90iwt1Jr0LeXgiNI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(396003)(136003)(39860400002)(366004)(451199015)(33656002)(7406005)(7416002)(55016003)(82960400001)(4326008)(8936002)(41300700001)(5660300002)(316002)(52536014)(54906003)(71200400001)(66446008)(7696005)(66476007)(2906002)(64756008)(38070700005)(76116006)(122000001)(38100700002)(6506007)(186003)(110136005)(26005)(66946007)(9686003)(86362001)(921005)(66556008)(478600001)(8676002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?a1uGAb0fbnRd/KtMZ6hobw3JX+A3MOUel8Y51edFHIS3yhxLnEPEGySP4Vzn?=
- =?us-ascii?Q?6fLB/vU/p7yZfCTph5rqfOu7nKezshlXLHQBOon/Qz/EJnb4DuQ5IIaNSUEV?=
- =?us-ascii?Q?vpDckZC8iYxrezpe7PiDPZU3GGQb46stY2G3/jBQGDSxB8Zu2bxytt+PZmcJ?=
- =?us-ascii?Q?7z0EzGgvhenpNL08RJp5seM1QAlH13g4kGfPSa6yo+nHCGGCgT9gedlnA/T+?=
- =?us-ascii?Q?rjunRq4FpPoyDwPFSdt0QskpqtzfM7jH9lwo4TRpluE0Qsdyov2WxsMn/VsU?=
- =?us-ascii?Q?ZcFb6gY1Y5a3WuhyvFsXHj90yXVybvq+YpuZaPzKLLU6lzcDufrInsvNWEbj?=
- =?us-ascii?Q?d2ec3pLpe7sQ6JQS2FUdagMRI2mz3rlz8qoGNKvY0LpZ9UlPhhB16rgqU0xC?=
- =?us-ascii?Q?54fwA+XD1drpeb/DM1EquITuqSusAGblA7qiGD/nHU1H3b4iaIXeXVyW/2PQ?=
- =?us-ascii?Q?L3F3xEpdRhBcLK9GWHybgk/8fC9XBgDPMtbgy88gAFwRW9dyaTlrRBYlw42R?=
- =?us-ascii?Q?slV8tMtf6fdoJ2QV4uJZTZ2Ay0rBrMoejX58LUeJ7p4mmZApW0eVfD1erMJr?=
- =?us-ascii?Q?MB9HgQQdbYYLL08VwaxJq0q4Z4tBRt/ZzGwNeBvXQUnXPwyKakRPi7tNMeHX?=
- =?us-ascii?Q?wqcpy88I/OLeVzxtVELJJjgGBjRkdlAcz1WTlu05k9qTfa2Jw9dMpsW1qRbX?=
- =?us-ascii?Q?j21fV2AOcwR4w+zcfsXuVejP2wGoXrlYgu8IVaJDEEI+5tbv6w5eh1vl3nE1?=
- =?us-ascii?Q?SyI+cdmVghH0B/WDuXa5IHZAspt8oCOUH4WdHX3ZbWQUuTnP89Bukq9NMEQE?=
- =?us-ascii?Q?7MGdOeRSWKwZnIrBTe4JyNola2DBPlccVNJkWK5RK5bi7zikpMEPV8tehOMf?=
- =?us-ascii?Q?hg9LZf/01qhz6VlHPwMFVxFaRtIzNwuBm04HyVtGZ/5GF4Ka7URtNlwGb0cX?=
- =?us-ascii?Q?V9Vfqv1z7J2b1edzXkaPIV5/8yjkq8LlYWrharTGfi9S7CdjktVJ3ucQNYc4?=
- =?us-ascii?Q?TyUVxKRJG3oybNiSzLUG3HLiFvDRCzr7Le9wDsJnd+dlU4TRkM2/Fob0uSDF?=
- =?us-ascii?Q?JoONOLkoponUnBnxgGeocZq1s45L5BNLyvm7xSgTC7pB2PX0TlkDWKssSqKj?=
- =?us-ascii?Q?qfg4DejLCGAOk8gZ3ARRWQBIdTaJzZ/58MbP6fbDFlqHK9po9hoatJspWm39?=
- =?us-ascii?Q?KcQH6g2q7HMf+sLao4oX/Cw/4uaF5951iANdCqZpVvYgkM6p36nGa5X02T83?=
- =?us-ascii?Q?7MzuU/vqwQ4YjvcKstqoU8o9bXOBdkFHBXNCBj9MePGzolXDY5aPqp2bwAZ8?=
- =?us-ascii?Q?sOUVLKWLTu3HeP4abAe2Gh0ZQVwPcO9JNaVzT4EGsVuKDX9LCmGWPwQSfr/b?=
- =?us-ascii?Q?HlAUMDysyn4RP31JN/AbzMDS6f+Ou3BSl5qDAW3bsIr/dt1UH/iijrXJWjUn?=
- =?us-ascii?Q?BeiGb4Cobxd9OlZs2RUu1qul7EvMXmZ5ypCgd2vflfKAP/6/7ChDOVNdWqad?=
- =?us-ascii?Q?CCLxUfzvYcBN23dq1o1+S5e2uZgzplxm8ct3n3J0NIKxxiAbZNCPL+uk4azJ?=
- =?us-ascii?Q?mvmbxkcXGyZ9hY7L728brVxkVO+CNaeCVCafs+3C?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6334410FA
+	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 10:28:33 +0000 (UTC)
+Received: from [127.0.0.1] ([73.223.250.219])
+	(authenticated bits=0)
+	by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2A49tesY459569
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 4 Nov 2022 02:55:40 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2A49tesY459569
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2022100601; t=1667555742;
+	bh=GMykekS6UT+64FHMnJytNF1rVJ41762+wMQF3coXt5w=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=cCP1BfDlsLy/7X1UhKle+R1Nf9QUSB1VEcFwPlbDIMoZHDKIPMa/do+ZfC+IemQ3G
+	 fA95HmQaVdnoATfgmSoKC0HD7JuhkDwO3PuYrOnvoQdqb//CXm0FPCUErxgjuwKpLI
+	 v/6/3zK3N6RpBKO3xazx8Lqm7SMzUtU1G1qdytJRwq00DIcGIVwng1eEHKX5efAz8e
+	 n21kvyl573MEB/1NkndR/GbTU0LkUhLKM+OOx5N7rcg441998/XUu1Lty7QRWVLLhQ
+	 FrNFUlSIuaKeeatNGQPXDof3dR4RyR08KMGyt188T4yPaLiLkd4g5ZLUdBO159AWis
+	 GyLr0cDrk0Cfg==
+Date: Fri, 04 Nov 2022 02:55:37 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC: x86@kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>, Huang Rui <ray.huang@amd.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        kernel-team@android.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] x86/msr-index: make SPEC_CTRL_IBRS assembler-portable
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221103210748.1343090-1-ndesaulniers@google.com>
+References: <20221103210748.1343090-1-ndesaulniers@google.com>
+Message-ID: <94597E96-D4FB-4312-8F8B-473AAC0503F7@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c026233-2711-45e2-ffef-08dabe4b643e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 10:00:23.9552
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PO7ZNqkfCPnw51JGV8m0tJU59rKU3B4O+35oBd9hUsv+EiUaRZzQD7Kfy2hzCgpDiSpTpKTwEUdlhej91stmrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5863
-X-OriginatorOrg: intel.com
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Wednesday, October 26, 2022 2:12 AM
->=20
-> The hw_pagetable object exposes the internal struct iommu_domain's to
-> userspace. An iommu_domain is required when any DMA device attaches to
-> an
-> IOAS to control the io page table through the iommu driver.
->=20
-> For compatibility with VFIO the hw_pagetable is automatically created whe=
+On November 3, 2022 2:07:48 PM PDT, Nick Desaulniers <ndesaulniers@google=
+=2Ecom> wrote:
+>GNU binutils' assembler (GAS) didn't support L suffixes on immediates
+>until binutils 2=2E28 release=2E Building arch/x86/entry/entry_64=2ES wit=
+h GAS
+>v2=2E27 will produce the following assembler errors:
+>
+>  arch/x86/entry/entry_64=2ES: Assembler messages:
+>  arch/x86/entry/entry_64=2ES:308: Error: found 'L', expected: ')'
+>  arch/x86/entry/entry_64=2ES:308: Error: found 'L', expected: ')'
+>  arch/x86/entry/entry_64=2ES:308: Error: junk `L<<(0)))' after expressio=
 n
-> a DMA device is attached to the IOAS. If a compatible iommu_domain
-> already
-> exists then the hw_pagetable associated with it is used for the
-> attachment.
->=20
-> In the initial series there is no iommufd uAPI for the hw_pagetable
-> object. The next patch provides driver facing APIs for IO page table
-> attachment that allows drivers to accept either an IOAS or a hw_pagetable
-> ID and for the driver to return the hw_pagetable ID that was auto-selecte=
-d
-> from an IOAS. The expectation is the driver will provide uAPI through its
-> own FD for attaching its device to iommufd. This allows userspace to lear=
+>  arch/x86/entry/entry_64=2ES:596: Error: found 'L', expected: ')'
+>  arch/x86/entry/entry_64=2ES:596: Error: found 'L', expected: ')'
+>  arch/x86/entry/entry_64=2ES:596: Error: junk `L<<(0)))' after expressio=
 n
-> the mapping of devices to iommu_domains and to override the automatic
-> attachment.
+>
+>These come from the use of the preprocessor defined SPEC_CTRL_IBRS in
+>the IBRS_ENTER and IBRS_EXIT assembler macros=2E SPEC_CTRL_IBRS was using
+>the BIT macros from include/linux/bits=2Eh which are only portable betwee=
+n
+>C and assembler for assemblers such as GAS v2=2E28 (or newer) or clang
+>because they use the L suffixes for immediate operands, which older GAS
+>releases cannot parse=2E The kernel still supports GAS v2=2E23 and newer
+>(and older for branches of stable)=2E Let's expand the value of
+>SPEC_CTRL_IBRS in place so that assemblers don't have issues parsing the
+>value=2E
+>
+>Fixes: 2dbb887e875b ("x86/entry: Add kernel IBRS implementation")
+>Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation=2Eorg>
+>Signed-off-by: Nick Desaulniers <ndesaulniers@google=2Ecom>
+>---
+>Some other ideas considered:
+>* Use U64_C from include/asm-generic/int-ll64=2Eh rather than BIT for the
+>  value of SPEC_CTRL_IBRS=2E
+>  * Do so for the entirety of arch/x86/include/asm/msr-index=2Eh or just
+>    SPEC_CTRL_IBRS? include/asm-generic/int-ll64=2Eh doesn't define a UL
+>    suffix; add one?
+>* Make include/linux/bits=2Eh assembler-portable (for older assemblers)
+>  via the use of include/asm-generic/int-ll64=2Eh=2E
+>
+> arch/x86/include/asm/msr-index=2Eh | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/arch/x86/include/asm/msr-index=2Eh b/arch/x86/include/asm/ms=
+r-index=2Eh
+>index 10ac52705892=2E=2E0192d853136c 100644
+>--- a/arch/x86/include/asm/msr-index=2Eh
+>+++ b/arch/x86/include/asm/msr-index=2Eh
+>@@ -46,7 +46,7 @@
+> #define MSR_TEST_CTRL_SPLIT_LOCK_DETECT		BIT(MSR_TEST_CTRL_SPLIT_LOCK_DE=
+TECT_BIT)
 >=20
-> The future HW specific interface will allow userspace to create
-> hw_pagetable objects using iommu_domains with IOMMU driver specific
-> parameters. This infrastructure will allow linking those domains to IOAS'=
-s
-> and devices.
->=20
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> #define MSR_IA32_SPEC_CTRL		0x00000048 /* Speculation Control */
+>-#define SPEC_CTRL_IBRS			BIT(0)	   /* Indirect Branch Restricted Specula=
+tion */
+>+#define SPEC_CTRL_IBRS			1	   /* Indirect Branch Restricted Speculation =
+*/
+> #define SPEC_CTRL_STIBP_SHIFT		1	   /* Single Thread Indirect Branch Pre=
+dictor (STIBP) bit */
+> #define SPEC_CTRL_STIBP			BIT(SPEC_CTRL_STIBP_SHIFT)	/* STIBP mask */
+> #define SPEC_CTRL_SSBD_SHIFT		2	   /* Speculative Store Bypass Disable b=
+it */
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Let's fix the macro instead=2E
