@@ -1,79 +1,203 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BBB2591
-	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 16:20:36 +0000 (UTC)
-Received: by mail-ed1-f41.google.com with SMTP id v27so11683892eda.1
-        for <llvm@lists.linux.dev>; Sat, 05 Nov 2022 09:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=srQ3lTh3ov/uW1CynRa0KjN77ReKbgwHiOujQ3nMVGI=;
-        b=P0kLwQwYClIZzoWMQF0niGOEZY4ILluvbFpoIzNEfGSiaBf5YEbKrtilG8yOZt23rS
-         A9Vn4TNmkIG8F/Z4HcJKJDpzol0995YgFK9jc/y9B+yZZWZv3sE6Q+tDvgndaqqA8tUa
-         GBpk7naq0m1IqFdv0pbGxcfdRsz4I9XaPo0zt2YVWaQFjQ16FTBxaHdpFw/y0izCcaEf
-         oSaYqWxONukSWy28TM0SRTQyooBPLQeQKL1DxvUuvEI00eHM33jFhETT2xm6tzTXGmwY
-         O1RaLVhp/FW7yx2zx0x9KAWRtwguiW83/3ZEaOUVaVPx4HoKCop39fY8BUTvITaxccsp
-         st1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=srQ3lTh3ov/uW1CynRa0KjN77ReKbgwHiOujQ3nMVGI=;
-        b=skvpbEK4LX7ikC4Kc53DEpjGvhYKOIRSpJxI7cZcMs2IBazud8LmfFbQDlak6zqJB0
-         qnxgPwSWOB6YRT8PvZrfhwQhjg4fA5FTB+De2Vsixd4hnvCwnwfdRSYwpd+Ybi9DkjGb
-         4RuTXrqtaRKRMqC1RMExY4dxT8YbLZ8sfdLcMvX9tc4HhbIngoabq7DleKwIhNNA7ukG
-         38H/KJcnFlJzEpM2RlqzBABrurEQzVGvJSPijw/mm5IPfnDKcONLULDJ4M7oh4ZbyFJW
-         kkJP2PCPjROh6DKZG0S57IT8huYfhllycrYN3wbW49Em2CxzlcINmgF1xzFKWAbTkdid
-         jkCg==
-X-Gm-Message-State: ACrzQf0Glqz6CApScRrfwGDpRqnt8pGA2XCiC45BqqYAPZrkbrNSeCFw
-	EBlwT8jjMU+8Ka9lb46QDLJYno5xZ6cRD//oopU=
-X-Google-Smtp-Source: AMsMyM7zSz2xzkf30t95QCMUe/+35Au5IQDfWUWwp1tGv7KynUmdAkPytr6E2YTxR4NYApaYSEmfEf0uMjZO7JpmzeE=
-X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id
- ev6-20020a056402540600b004521560f9d4mr41547613edb.333.1667665234700; Sat, 05
- Nov 2022 09:20:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063292F2C
+	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 17:01:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1667667703;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iBifSbdhiADCSphSAaZpqeAW5mlq4rRNtsd9N/e3eoA=;
+	b=eqWpNMSW/tJZp86hgmlymHMfbKS6FxVMOk1RJVJEOuaOmxe+GM9OdFyw0MVf4UQAol1UrM
+	L/jxyhoRVlfdYgFdCfCWFTkWyx51bNmURXNwrbA0e/vMPvzmh6ScXYvgtbI0OlLmUlhG5Q
+	lGoNuaNaWnAlXWkJHxuY82hS84YFfvk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-18-xaHubyRaP4-tFIsyQnn47Q-1; Sat, 05 Nov 2022 13:01:41 -0400
+X-MC-Unique: xaHubyRaP4-tFIsyQnn47Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A47BE2999B4F
+	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 17:01:41 +0000 (UTC)
+Received: from [172.64.9.44] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 927C140C2064;
+	Sat,  5 Nov 2022 17:01:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc3,
+ mainline.kernel.org-clang, b208b9fb)
+Date: Sat, 05 Nov 2022 17:01:41 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221105025146.238209-1-horenchuang@bytedance.com>
-In-Reply-To: <20221105025146.238209-1-horenchuang@bytedance.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 5 Nov 2022 09:20:23 -0700
-Message-ID: <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/4] Add BPF htab map's used size for monitoring
-To: "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Jiri Olsa <olsajiri@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
-	Quentin Monnet <quentin@isovalent.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Joanne Koong <joannelkoong@gmail.com>, Kui-Feng Lee <kuifeng@fb.com>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Maxim Mikityanskiy <maximmi@nvidia.com>, 
-	Hao Xiang <hao.xiang@bytedance.com>, Punit Agrawal <punit.agrawal@bytedance.com>, 
-	Yifei Ma <yifeima@bytedance.com>, Xiaoning Ding <xiaoning.ding@bytedance.com>, 
-	bpf <bpf@vger.kernel.org>, Ho-Ren Chuang <horenc@vt.edu>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <80789.122110513014100283@us-mta-18.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 4, 2022 at 7:52 PM Ho-Ren (Jack) Chuang
-<horenchuang@bytedance.com> wrote:
->
-> Hello everyone,
->
-> We have prepared patches to address an issue from a previous discussion.
-> The previous discussion email thread is here: https://lore.kernel.org/all/CAADnVQLBt0snxv4bKwg1WKQ9wDFbaDCtZ03v1-LjOTYtsKPckQ@mail.gmail.com/
+Hi, we tested your kernel and here are the results:
 
-Rephrasing what was said earlier.
-We're not keeping the count of elements in a preallocated hash map
-and we are not going to add one.
-The bpf prog needs to do the accounting on its own if it needs
-this kind of statistics.
-Keeping the count for non-prealloc is already significant performance
-overhead. We don't trade performance for stats.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/58839
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5843047
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: FAIL: do_net_forwarding_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1318
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1319
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - tc
+        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
+test_progs_run' (Expected 0, got 1)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1322
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: selinux-policy: serge-testsuite: hit test timeout, aborting =
+it...
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1110
+            Affected tests:
+                  x86_64 (debug) - selinux-policy: serge-testsuite
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please tag it at https://d=
+atawarehouse.cki-project.org .
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+If you don't have permissions to tag an issue, you can contact the CKI team=
+ or
+test maintainers.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
