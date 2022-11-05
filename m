@@ -1,24 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2558D1113;
-	Sat,  5 Nov 2022 02:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4152C43144;
-	Sat,  5 Nov 2022 02:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667616016;
-	bh=LvVJwvczjJn+XP0eZyC5ywkLqnY9k7dQh7bidNRFIDk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kdJVTst15IypdLHD05BX/IGowCb1ppXWfh1RC32sJbWJUuVMc47ErKhk8XIoi6AqK
-	 uPXPSTa/xGlMtycNK80ycQtWCMy+p62FYNAo9nCjCLLMDalYuAzN7npXAxf51drwYV
-	 Qb7MTTStcuwRlPmyU2xekf3KdfEuE9e69Ai+QnsKJkQYnAlYUNTawFHVI1jabn3Kb9
-	 laNnFljHJQXUBhaN/spCFkgpYTQjDZuKUtG9F06khuRfTF/gaEsou34zucEAQfKBWP
-	 REC7/XU0pwkVIbFN4VCWn1FuzfNPRHpIZmubYIyBfrBddhO2+SqN8K2YpxVeTidZk+
-	 mAKK/xay8MaNA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB3C8E6BAC0;
-	Sat,  5 Nov 2022 02:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5F71113
+	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 02:52:27 +0000 (UTC)
+Received: by mail-qv1-f53.google.com with SMTP id u7so4622455qvn.13
+        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 19:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eCxoN6ChgDmmemcuz37gCvFaemxJyQ9HSvlBAAP7JaU=;
+        b=Knez7Hwb0qj9NP8+cMkRu09v3XcaTT/OuAB32+CgReZn9N6VuUDh5A7MQnYd0QYlyq
+         sp4nR+UWrN9ZQ0UnOb3uUhABMcgDHku50dFtVXLS1fR4Jjb2FGobmqsSemV7tRIuPSuj
+         LLgId/2ET+lNwnPjlilXkO7Mrv7qA5OTmHnKncWQVSFWga2m8tbk9TYvkTGIuSxV0Lcq
+         zBxUO4Tt4d8Rszj/H5ZncVG3mq/tBwI3LAk6IpTvI65p6RqE0ZVYAkom/OJV7UKDqaW6
+         zYvWy+t8C4d7k5nyj6w59YMItGnaC44wAgREV+33Cr4oukyfobzKYvSlMx8CQJNGmrm3
+         IY9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eCxoN6ChgDmmemcuz37gCvFaemxJyQ9HSvlBAAP7JaU=;
+        b=qUMnluEgMBYS70IDFRWwR8ONvWDj228QpNKc5WTNXORxbfg8xcnJW5J9lTZ/+bQWzt
+         bluWgSMQzMAo/dpnY4cO8FwyOsuKs5XYC3zybY+txoCJWqx/Tane6b1qgAaJAP4pvHlm
+         vPrAYWG138qeii+U2OF+oIfAHvM1q6muNYlGhglMGyQ4fF798fVPhGA2ScL/oqCfI0Vz
+         Yt1nU134PuNGPnf073UFZra7D8SR9EiucCqfm1RR5YcFpaA6DObbuKG0O9cEGmrKbsC+
+         X8ZcQFJPRdl6jljU2wfkYHg08mlbX8wuHyjfL8lFADh7hZ9ElLy443k5Fk7wnZYDRnM3
+         W26g==
+X-Gm-Message-State: ACrzQf35AhexjiBXpUr21lar12FBgh9SLfOXjxtxS/v6W1lGp0h/I7+9
+	WIsn0ye4pMdAfedkmgJeA/kMeA==
+X-Google-Smtp-Source: AMsMyM4ctHoEVWbAHu4jYCHa+grjBWnoHI2F2RZoHtqG5w/u5hIltFKx/Hp46ujqIz/N2RnPzMf73w==
+X-Received: by 2002:a0c:e2d4:0:b0:4bb:5902:922c with SMTP id t20-20020a0ce2d4000000b004bb5902922cmr34764425qvl.57.1667616746264;
+        Fri, 04 Nov 2022 19:52:26 -0700 (PDT)
+Received: from 192-168-53-12.byted.org ([130.44.212.119])
+        by smtp.gmail.com with ESMTPSA id ay14-20020a05620a178e00b006bb366779a4sm805905qkb.6.2022.11.04.19.52.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 19:52:25 -0700 (PDT)
+From: "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jiri Olsa <olsajiri@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Kui-Feng Lee <kuifeng@fb.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Maxim Mikityanskiy <maximmi@nvidia.com>,
+	Hao Xiang <hao.xiang@bytedance.com>,
+	Punit Agrawal <punit.agrawal@bytedance.com>,
+	Yifei Ma <yifeima@bytedance.com>,
+	Xiaoning Ding <xiaoning.ding@bytedance.com>,
+	bpf@vger.kernel.org
+Cc: Ho-Ren Chuang <horenc@vt.edu>,
+	Ho-Ren Chuang <horenchuang@bytedance.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v1 0/4] Add BPF htab map's used size for monitoring
+Date: Sat,  5 Nov 2022 02:51:42 +0000
+Message-Id: <20221105025146.238209-1-horenchuang@bytedance.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,45 +82,53 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: ethernet: renesas: Fix return type of
- rswitch_start_xmit()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <166761601669.5821.12760894848990416491.git-patchwork-notify@kernel.org>
-Date: Sat, 05 Nov 2022 02:40:16 +0000
-References: <20221103220032.2142122-1-nathan@kernel.org>
-In-Reply-To: <20221103220032.2142122-1-nathan@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, s.shtylyov@omp.ru, yoshihiro.shimoda.uh@renesas.com,
- netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- ndesaulniers@google.com, trix@redhat.com, keescook@chromium.org,
- samitolvanen@google.com, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- patches@lists.linux.dev
 
-Hello:
+Hello everyone,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+We have prepared patches to address an issue from a previous discussion.
+The previous discussion email thread is here: https://lore.kernel.org/all/CAADnVQLBt0snxv4bKwg1WKQ9wDFbaDCtZ03v1-LjOTYtsKPckQ@mail.gmail.com/
 
-On Thu,  3 Nov 2022 15:00:32 -0700 you wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
-> 
-> [...]
+This patch series adds a new field "used_entries" to struct bpf_map_info
+and keeps tracking the "count" field in bpf_htab in both the preallocated
+and non-preallocated cases.
 
-Here is the summary with links:
-  - [net-next] net: ethernet: renesas: Fix return type of rswitch_start_xmit()
-    https://git.kernel.org/netdev/net-next/c/8e0aa1ff44ca
+bpftool is modified to report the newly added "used_entries" field in
+struct bpf_map_info and to mark pre-allocated htab maps with "*".
+These make it easier to view the current memory situation of a hashmap.
 
-You are awesome, thank you!
+We have added a new interface function map_get_used_elem in bpf_map_ops
+to provide an abstraction layer so that other map type implementations can
+support the "used_entries" attribute in a future change.
+
+A concurrency testing for pre-allocated and dynamically allocated
+htab maps is introduced to test the correctness and performance of
+htab map's used size.
+
+Existing unit tests are integrated to test the correctness of
+htab map's used size.
+
+Thank you,
+
+Ho-Ren (Jack) Chuang (4):
+  bpf: Support reporting BPF htab map's used size for monitoring
+  bpftool: Add tools support to show BPF htab map's used size
+  samples/bpf: Add concurrency testing for BPF htab map's used size
+  selftests/bpf: Add unit tests for BPF htab map's used size
+
+ include/linux/bpf.h                     |   1 +
+ include/uapi/linux/bpf.h                |   1 +
+ kernel/bpf/hashtab.c                    |  19 +++
+ kernel/bpf/syscall.c                    |   2 +
+ samples/bpf/Makefile                    |   4 +
+ samples/bpf/test_map_used_kern.c        |  65 ++++++++
+ samples/bpf/test_map_used_user.c        | 204 ++++++++++++++++++++++++
+ tools/bpf/bpftool/map.c                 |   9 +-
+ tools/include/uapi/linux/bpf.h          |   1 +
+ tools/testing/selftests/bpf/test_maps.c |  74 ++++++++-
+ 10 files changed, 377 insertions(+), 3 deletions(-)
+ create mode 100644 samples/bpf/test_map_used_kern.c
+ create mode 100644 samples/bpf/test_map_used_user.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Ho-Ren (Jack) Chuang
 
