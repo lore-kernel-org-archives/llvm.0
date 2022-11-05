@@ -1,105 +1,160 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD24DBA34
-	for <llvm@lists.linux.dev>; Fri,  4 Nov 2022 23:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95437F;
+	Sat,  5 Nov 2022 00:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667606364; x=1699142364;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hbMbA2gtORlmZXrbEO3nvATlX8xycbXUes0wIx18t3s=;
-  b=CW18EgI9otytfue6OMiFIbx32E9WIYOpY+Wv//GsD6M3Wr7LhYeVEOQ0
-   j/o3XAzfhncp+GsPryZXe+lQ2+Xyryzdih6Kmmn4KfhiFaKbGVnNL/7MT
-   j1B4Cs87qsnPiBbZV4l3Jq4PfOVJ98tYNYk9ux04ymUmFqNECKaVUl77c
-   c8wwcZfDDCPlLLptZrE3ys903bbA6GH2DL9maps89eXcS2gtlP52XXebk
-   jZ088BMoY9/PjklETP3eAHWjVGMSIz2W89a4TPm0+6Jk2dtvn8OejPhTa
-   u3e+vFv8GtSIFNPPkcxcY6yJWynEIdts0thCntc2ot+784WVQIVTr/5Ir
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="289827750"
+  t=1667606855; x=1699142855;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SK2sI5aDoV9/etevfTVRBjvDW9ZuCS66qUATN3sgJBw=;
+  b=ayEmehNwuQ/zjz1ydkXJ7oAEdaPl42r03VNwDT7lLUrh21bhAA46/DbQ
+   0YLA0aRb1FjWYgpb7tJmwiz8i3Xud/6tgHQFfN0XgRX970+dsMXfvCQlX
+   poPUIRZXR+yEPpvr1xFh3R9c/UqHkD3WyPa17HmkUzNCAMX2hC6+YpKQy
+   ayNN+yKvjMwBdnddCX0K6jH7VoRaFHsa1O/RK/sK6ZpEEm7AbNk05ZhcY
+   1xtW3Vdg3u3X4N6/74dkes1/vQLezkGF4YVkFbDdxtee3DSii9GwKeUfQ
+   a7E6ncv8pgiDv3TKNhSCPHXXJ6IfstaUVLV6V5xQHBF6GTV6TAUywMu/z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="290491523"
 X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
-   d="scan'208";a="289827750"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 16:59:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="880470963"
+   d="scan'208";a="290491523"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 17:07:35 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="760501944"
 X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
-   d="scan'208";a="880470963"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 04 Nov 2022 16:59:21 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id C79D6F7; Sat,  5 Nov 2022 01:59:44 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Vincent Knecht <vincent.knecht@mailoo.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for devm_add_action_or_rest()
-Date: Sat,  5 Nov 2022 01:59:40 +0200
-Message-Id: <20221104235940.74044-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+   d="scan'208";a="760501944"
+Received: from ztao-mobl.ccr.corp.intel.com (HELO [10.254.213.180]) ([10.254.213.180])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 17:07:26 -0700
+Message-ID: <2d2b467b-da07-2b96-27c9-569b727dd8c9@linux.intel.com>
+Date: Sat, 5 Nov 2022 08:07:24 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Cc: baolu.lu@linux.intel.com, Alex Williamson <alex.williamson@redhat.com>,
+ Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
+ <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>,
+ David Gibson <david@gibson.dropbear.id.au>,
+ Eric Auger <eric.auger@redhat.com>, Eric Farman <farman@linux.ibm.com>,
+ Jason Wang <jasowang@redhat.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+ Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>,
+ Niklas Schnelle <schnelle@linux.ibm.com>,
+ Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+ Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 14/15] iommufd: vfio container FD ioctl compatibility
+To: Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+References: <14-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <14-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Clang complains that devm_add_action() takes a parameter with a wrong type:
+On 2022/10/26 2:12, Jason Gunthorpe wrote:
+> +static int iommufd_fill_cap_iova(struct iommufd_ioas *ioas,
+> +				 struct vfio_info_cap_header __user *cur,
+> +				 size_t avail)
+> +{
+> +	struct vfio_iommu_type1_info_cap_iova_range __user *ucap_iovas =
+> +		container_of(cur,
+> +			     struct vfio_iommu_type1_info_cap_iova_range __user,
+> +			     header);
+> +	struct vfio_iommu_type1_info_cap_iova_range cap_iovas = {
+> +		.header = {
+> +			.id = VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE,
+> +			.version = 1,
+> +		},
+> +	};
+> +	struct interval_tree_span_iter span;
 
-warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-    err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1 warning generated.
+Intel 0day robot reported:
 
-It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
-non-devm ordering") missed two things:
-- while mention devm_add_action_or_reset() the actual change got
-  devm_add_action() call by unknown reason
-- strictly speaking the parameter is not compatible by type
+commit: 954c5e0297d664c7f46c628b3151567b53afe153 [14/15] iommufd: vfio 
+container FD ioctl compatibility
+config: m68k-randconfig-s053-20221104 (attached as .config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce:
+         wget 
+https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+-O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # apt-get install sparse
+         # sparse version: v0.6.4-39-gce1a6720-dirty
+         git remote add internal-blu2-usb 
+git://bee.sh.intel.com/git/blu2/usb.git
+         git fetch --no-tags internal-blu2-usb iommu/iommufd/v3
+         git checkout 954c5e0297d664c7f46c628b3151567b53afe153
+         # save the config file
+         mkdir build_dir && cp config build_dir/.config
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross 
+C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k 
+SHELL=/bin/bash drivers/iommu/iommufd/
 
-Fix both issues by switching to devm_add_action_or_reset() and adding a
-wrapper for mutex_destroy() call.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/leds/leds-is31fl319x.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+sparse warnings: (new ones prefixed by >>)
+ >> drivers/iommu/iommufd/vfio_compat.c:294:17: sparse: sparse: cast 
+removes address space '__user' of expression
 
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index 52b59b62f437..6f94ad83e066 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -494,6 +494,11 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
- 	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
- }
- 
-+static void is31f1319x_mutex_destroy(void *lock)
-+{
-+	mutex_destroy(lock);
-+}
-+
- static int is31fl319x_probe(struct i2c_client *client)
- {
- 	struct is31fl319x_chip *is31;
-@@ -510,7 +515,7 @@ static int is31fl319x_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	mutex_init(&is31->lock);
--	err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
-+	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
- 	if (err)
- 		return err;
- 
--- 
-2.35.1
+vim +/__user +294 drivers/iommu/iommufd/vfio_compat.c
 
+    288	
+    289	static int iommufd_fill_cap_iova(struct iommufd_ioas *ioas,
+    290					 struct vfio_info_cap_header __user *cur,
+    291					 size_t avail)
+    292	{
+    293		struct vfio_iommu_type1_info_cap_iova_range __user *ucap_iovas =
+  > 294			container_of(cur,
+    295				     struct vfio_iommu_type1_info_cap_iova_range __user,
+    296				     header);
+    297		struct vfio_iommu_type1_info_cap_iova_range cap_iovas = {
+    298			.header = {
+    299				.id = VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE,
+    300				.version = 1,
+    301			},
+    302		};
+    303		struct interval_tree_span_iter span;
+    304	
+    305		interval_tree_for_each_span(&span, &ioas->iopt.reserved_itree, 0,
+    306					    ULONG_MAX) {
+    307			struct vfio_iova_range range;
+    308	
+    309			if (!span.is_hole)
+    310				continue;
+    311			range.start = span.start_hole;
+    312			range.end = span.last_hole;
+    313			if (avail >= struct_size(&cap_iovas, iova_ranges,
+    314						 cap_iovas.nr_iovas + 1) &&
+    315			    copy_to_user(&ucap_iovas->iova_ranges[cap_iovas.nr_iovas],
+    316					 &range, sizeof(range)))
+    317				return -EFAULT;
+    318			cap_iovas.nr_iovas++;
+    319		}
+    320		if (avail >= struct_size(&cap_iovas, iova_ranges, 
+cap_iovas.nr_iovas) &&
+    321		    copy_to_user(ucap_iovas, &cap_iovas, sizeof(cap_iovas)))
+    322			return -EFAULT;
+    323		return struct_size(&cap_iovas, iova_ranges, cap_iovas.nr_iovas);
+    324	}
+    325	
+
+Best regards,
+baolu
