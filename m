@@ -1,218 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACF810E6
-	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 14:30:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1667658641;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RJ8wMUoKPIh2vHgNvTaKOy5hCzPMc/TocOFjB0Z0kN4=;
-	b=cpe9L0D3Cynti738I/jBTizYUiHVEi9UHYl0joAJ/CeI9JFzaFPfdMBUgdKYXdhnjHVui+
-	Y8RCtxoDB9yyV8s0B2Ok6UvfcHVItG9HmrytPx6ffXflkXxGA7dGB4u2O/W+SLsiyM5XN3
-	IW3R89TFKdnGGVoDe7iOnuLzHb9derE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-lESIcmWoNLqAUJEGBLUShw-1; Sat, 05 Nov 2022 10:30:40 -0400
-X-MC-Unique: lESIcmWoNLqAUJEGBLUShw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA0FF811E75
-	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 14:30:39 +0000 (UTC)
-Received: from [172.64.9.44] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B58FB4EA62;
-	Sat,  5 Nov 2022 14:30:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc3,
- mainline.kernel.org-clang, 64c3dd0b)
-Date: Sat, 05 Nov 2022 14:30:39 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CE02591
+	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 16:07:53 +0000 (UTC)
+Received: by mail-il1-f200.google.com with SMTP id w13-20020a056e021c8d00b00300ad5b16a0so5743604ill.7
+        for <llvm@lists.linux.dev>; Sat, 05 Nov 2022 09:07:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P26Tufb5libRVNtGMj36dstv5Fz34ZnElPMtb6a0Uhg=;
+        b=3cqHIYSqqpfuUrPwpBc6P9f5Syc1ZG2lc9i8JMEbsM8kdSno55EqqBd4WwQbNKDPAF
+         k6SkBVGbeENekmNMeOLciWI9caZZ3CALu7p5LdWyrjgrBOeadvcCQo+9K6ONh1TiuA4r
+         /gp3K21yppYKFqocPiv9bHZxhwkig+tac7gkqO4IzYoCLKI4mG02gU/Ki2VNDskazGTm
+         Q/C7e9k0LM5xHakD+RQI+/k1Dk8MIepXOSjmtsqhwZkwI1qqJv+UFgupBbcCUVQbIXM2
+         mqT0ajMD0qXr/YZgubGPE4nw4GJJp6XkPdgimR8ekSiGkIWm4nIdhMyDn4/uUNGWuamD
+         IeCQ==
+X-Gm-Message-State: ACrzQf0X+/YUMVjzoPPFGOQCniYfBh6s5hG/umTYsvMa4YD8exBCPI3M
+	FnZf4Nmbsm4caWU+Uh5JEYlBBRycyeT45UhE/3mgDED6cBP0
+X-Google-Smtp-Source: AMsMyM7lzq/wnhZ5p4mooUUvzr2G8b1Tq6lQpd394TA+Q9lfRqzxbCflqbEUFzamGIu7GMPo/cN1i+qiUBA0Md2c2SYELM6iIYft
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <04303.122110510304000253@us-mta-587.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6638:1210:b0:375:4aa6:ff85 with SMTP id
+ n16-20020a056638121000b003754aa6ff85mr21924002jas.227.1667664472862; Sat, 05
+ Nov 2022 09:07:52 -0700 (PDT)
+Date: Sat, 05 Nov 2022 09:07:52 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000082754e05ecbb641e@google.com>
+Subject: [syzbot] WARNING in ext4_enable_quotas
+From: syzbot <syzbot+77524f55898ea618bfad@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+syzbot found the following issue on:
 
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=14db1719880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=77524f55898ea618bfad
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-Kernel information:
-    Commit message: Merge tag 'xfs-6.1-fixes-4' of git://git.kernel.org/pub=
-/scm/fs/xfs/xfs-linux
+Unfortunately, I don't have any reproducer for this issue yet.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/58833
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5842008
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+77524f55898ea618bfad@syzkaller.appspotmail.com
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+EXT4-fs (loop1): orphan cleanup on readonly fs
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(!key)
+WARNING: CPU: 1 PID: 14778 at kernel/locking/lockdep.c:4831 lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
+Modules linked in:
+CPU: 1 PID: 14778 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
+lr : lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
+sp : ffff800013533980
+x29: ffff800013533990 x28: ffff80000cb99126 x27: ffff8000135339c4
+x26: ffff0001156798e0 x25: ffff000115679908 x24: 0000000000000001
+x23: ffff8000135339d0 x22: ffff80000ee2b000 x21: 0000000000000000
+x20: 0000000000000002 x19: ffff0001156798e0 x18: 000000000000034b
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
+x11: 000000000001b6e9 x10: ffff80001b6ed000 x9 : 3b94ef2414331b00
+x8 : 3b94ef2414331b00 x7 : 4e5241575f534b43 x6 : ffff80000819545c
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000019
+Call trace:
+ lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
+ lockdep_set_quota_inode fs/ext4/super.c:6677 [inline]
+ ext4_quota_enable fs/ext4/super.c:6787 [inline]
+ ext4_enable_quotas+0x1ac/0x378 fs/ext4/super.c:6814
+ ext4_orphan_cleanup+0x23c/0x8ec fs/ext4/orphan.c:432
+ __ext4_fill_super+0x34a4/0x36d4 fs/ext4/super.c:5378
+ ext4_fill_super+0x100/0x2d8 fs/ext4/super.c:5517
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+ ext4_get_tree+0x28/0x38 fs/ext4/super.c:5547
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+irq event stamp: 977
+hardirqs last  enabled at (977): [<ffff800008161dac>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1367 [inline]
+hardirqs last  enabled at (977): [<ffff800008161dac>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4942
+hardirqs last disabled at (976): [<ffff80000bfc0a34>] __schedule+0x84/0x5a0 kernel/sched/core.c:6393
+softirqs last  enabled at (200): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (198): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
+EXT4-fs warning (device loop1): ext4_enable_quotas:6821: Failed to enable quota tracking (type=0, err=-13). Please run e2fsck to fix.
+EXT4-fs (loop1): Cannot turn on quotas: error -13
+EXT4-fs error (device loop1): ext4_orphan_get:1419: comm syz-executor.1: bad orphan inode 11
+EXT4-fs (loop1): Remounting filesystem read-only
+ext4_test_bit(bit=10, block=3) = 0
+EXT4-fs (loop1): mounted filesystem without journal. Quota mode: writeback.
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
