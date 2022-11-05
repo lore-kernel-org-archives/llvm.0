@@ -1,160 +1,186 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95437F;
-	Sat,  5 Nov 2022 00:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667606855; x=1699142855;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SK2sI5aDoV9/etevfTVRBjvDW9ZuCS66qUATN3sgJBw=;
-  b=ayEmehNwuQ/zjz1ydkXJ7oAEdaPl42r03VNwDT7lLUrh21bhAA46/DbQ
-   0YLA0aRb1FjWYgpb7tJmwiz8i3Xud/6tgHQFfN0XgRX970+dsMXfvCQlX
-   poPUIRZXR+yEPpvr1xFh3R9c/UqHkD3WyPa17HmkUzNCAMX2hC6+YpKQy
-   ayNN+yKvjMwBdnddCX0K6jH7VoRaFHsa1O/RK/sK6ZpEEm7AbNk05ZhcY
-   1xtW3Vdg3u3X4N6/74dkes1/vQLezkGF4YVkFbDdxtee3DSii9GwKeUfQ
-   a7E6ncv8pgiDv3TKNhSCPHXXJ6IfstaUVLV6V5xQHBF6GTV6TAUywMu/z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="290491523"
-X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
-   d="scan'208";a="290491523"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 17:07:35 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="760501944"
-X-IronPort-AV: E=Sophos;i="5.96,139,1665471600"; 
-   d="scan'208";a="760501944"
-Received: from ztao-mobl.ccr.corp.intel.com (HELO [10.254.213.180]) ([10.254.213.180])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 17:07:26 -0700
-Message-ID: <2d2b467b-da07-2b96-27c9-569b727dd8c9@linux.intel.com>
-Date: Sat, 5 Nov 2022 08:07:24 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE951101
+	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 01:09:41 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id p12so875627plq.4
+        for <llvm@lists.linux.dev>; Fri, 04 Nov 2022 18:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZRKTfzUgUmUoDMmXtLNWbH1d7SRg9NOYtTV2ieREGk=;
+        b=WEeQ3oedxebSq3TylgaXd4uhHZ9fSf85t4y+VbXKEnRu/7HDBOu+78DX1+z7CCi5y7
+         iXRQ9RG1+Zg01X1PRF7ztSjuRtPSWejAzJyKjVmW5vQBGjgN+PSGGvaFgNrjYR/yHXLH
+         sn53T4Ne/NmwBRYJ5cRZM4YACVxoe+c7TnndsA9ak7FT4Nk/uRjxeR9Kgv2Ji9Kwf4GZ
+         ZSwkypKIL9HoKD6Va65PrJYvi1yFVSeWLvEEoMsWeLDq5B7KPzuGinuq4ql9AMXKXWPu
+         tMeggNh/G7KLz4CDnMCUtPkiNqH/satSpu6aMojsrEmZbKZLfg2X2ZK94qwSx3yGOOOC
+         l90A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UZRKTfzUgUmUoDMmXtLNWbH1d7SRg9NOYtTV2ieREGk=;
+        b=uaPfoSPjO9IwOZRve+RkqLzmd3q6dPOeemvFf4KlJiwmYvt7SifeuXo/rwWRcclYhq
+         mbIJS9wdkoQvOFwdNTP92TL+EgrneYfwV5gMAFsalkG3tBL9+aoFuA3szszVyG18iO1u
+         nSTe8gs8CsRSoCKmSzw3Zx6/eaoWRxbIncYhSzF6YF7OLkYLhI0zc8MXEJJYCDgICwIj
+         EjoBmdVnxtxxkTPmagRe4sQInrUwkwSHhWSuWy2l31gEkZNpkxqaRx4QPM+L/kdF5AmN
+         S7XvpQBdZx6973VMUd41WT7UCnXJctUrc/i/I5uWJRQ0AMdLIxOKmGdGqi2IOX8qtcfe
+         ibSw==
+X-Gm-Message-State: ACrzQf0E+uf6gP3eVHDuifJvGUVY4EvMDmeMsteEREKhyZtj33sBzhuJ
+	h1FTiuP99VKmLE6hAtP4/a4=
+X-Google-Smtp-Source: AMsMyM7rn2BtRhnzi3h+OsA0B40E06ImoWbABI8HcmyJhN73GZyM7ao3+XvXzCg/8TYVD9EkwCIrNg==
+X-Received: by 2002:a17:90a:ba85:b0:212:d644:fc28 with SMTP id t5-20020a17090aba8500b00212d644fc28mr39973129pjr.72.1667610581148;
+        Fri, 04 Nov 2022 18:09:41 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id u7-20020a63ef07000000b004393c5a8006sm310615pgh.75.2022.11.04.18.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 18:09:40 -0700 (PDT)
+Date: Sat, 5 Nov 2022 10:09:32 +0900
+From: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+	David Gow <davidgow@google.com>,
+	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/6] slab: Provide functional __alloc_size() hints to
+ kmalloc_trace*()
+Message-ID: <Y2W3zEcMd82B0O1I@hyeyoo>
+References: <20221101222520.never.109-kees@kernel.org>
+ <20221101223321.1326815-3-keescook@chromium.org>
+ <Y2PNVUzHWCg765ml@hyeyoo>
+ <202211041121.2F1639D2@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Cc: baolu.lu@linux.intel.com, Alex Williamson <alex.williamson@redhat.com>,
- Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
- <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>,
- David Gibson <david@gibson.dropbear.id.au>,
- Eric Auger <eric.auger@redhat.com>, Eric Farman <farman@linux.ibm.com>,
- Jason Wang <jasowang@redhat.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
- Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S. Tsirkin"
- <mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>,
- Niklas Schnelle <schnelle@linux.ibm.com>,
- Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
- Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 14/15] iommufd: vfio container FD ioctl compatibility
-To: Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
- iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-References: <14-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <14-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202211041121.2F1639D2@keescook>
 
-On 2022/10/26 2:12, Jason Gunthorpe wrote:
-> +static int iommufd_fill_cap_iova(struct iommufd_ioas *ioas,
-> +				 struct vfio_info_cap_header __user *cur,
-> +				 size_t avail)
-> +{
-> +	struct vfio_iommu_type1_info_cap_iova_range __user *ucap_iovas =
-> +		container_of(cur,
-> +			     struct vfio_iommu_type1_info_cap_iova_range __user,
-> +			     header);
-> +	struct vfio_iommu_type1_info_cap_iova_range cap_iovas = {
-> +		.header = {
-> +			.id = VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE,
-> +			.version = 1,
-> +		},
-> +	};
-> +	struct interval_tree_span_iter span;
+On Fri, Nov 04, 2022 at 11:22:42AM -0700, Kees Cook wrote:
+> On Thu, Nov 03, 2022 at 11:16:53PM +0900, Hyeonggon Yoo wrote:
+> > On Tue, Nov 01, 2022 at 03:33:11PM -0700, Kees Cook wrote:
+> > > Since GCC cannot apply the __alloc_size attributes to inlines[1], all
+> > > allocator inlines need to explicitly call into extern functions that
+> > > contain a size argument. Provide these wrappers that end up just
+> > > ignoring the size argument for the actual allocation.
+> > > 
+> > > This allows CONFIG_FORTIFY_SOURCE=y to see all various dynamic allocation
+> > > sizes under GCC 12+ and all supported Clang versions.
+> > > 
+> > > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+> > > 
+> > > Cc: Vlastimil Babka <vbabka@suse.cz>
+> > > Cc: Christoph Lameter <cl@linux.com>
+> > > Cc: Pekka Enberg <penberg@kernel.org>
+> > > Cc: David Rientjes <rientjes@google.com>
+> > > Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> > > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > > Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> > > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > > Cc: linux-mm@kvack.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  include/linux/slab.h |  8 ++++++--
+> > >  mm/slab_common.c     | 14 ++++++++++++++
+> > >  2 files changed, 20 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > > index 970e9504949e..051d86ca31a8 100644
+> > > --- a/include/linux/slab.h
+> > > +++ b/include/linux/slab.h
+> > > @@ -442,6 +442,8 @@ static_assert(PAGE_SHIFT <= 20);
+> > >  
+> > >  void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
+> > >  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
+> > > +void *kmem_cache_alloc_sized(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > +			     __assume_slab_alignment __alloc_size(3);
+> > >  void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+> > >  			   gfp_t gfpflags) __assume_slab_alignment __malloc;
+> > >  void kmem_cache_free(struct kmem_cache *s, void *objp);
+> > > @@ -469,6 +471,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node) __assume_kmalloc_alignm
+> > >  							 __alloc_size(1);
+> > >  void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t flags, int node) __assume_slab_alignment
+> > >  									 __malloc;
+> > > +void *kmem_cache_alloc_node_sized(struct kmem_cache *s, gfp_t flags, int node, size_t size)
+> > > +				  __assume_slab_alignment __alloc_size(4);
+> > >  
+> > >  #ifdef CONFIG_TRACING
+> > >  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > @@ -482,7 +486,7 @@ void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
+> > >  static __always_inline __alloc_size(3)
+> > >  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
+> > >  {
+> > > -	void *ret = kmem_cache_alloc(s, flags);
+> > > +	void *ret = kmem_cache_alloc_sized(s, flags, size);
+> > >  
+> > >  	ret = kasan_kmalloc(s, ret, size, flags);
+> > >  	return ret;
+> > > @@ -492,7 +496,7 @@ static __always_inline __alloc_size(4)
+> > >  void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
+> > >  			 int node, size_t size)
+> > >  {
+> > > -	void *ret = kmem_cache_alloc_node(s, gfpflags, node);
+> > > +	void *ret = kmem_cache_alloc_node_sized(s, gfpflags, node, size);
+> > >  
+> > >  	ret = kasan_kmalloc(s, ret, size, gfpflags);
+> > >  	return ret;
+> > > diff --git a/mm/slab_common.c b/mm/slab_common.c
+> > > index 33b1886b06eb..5fa547539a6a 100644
+> > > --- a/mm/slab_common.c
+> > > +++ b/mm/slab_common.c
+> > > @@ -1457,6 +1457,20 @@ size_t ksize(const void *objp)
+> > >  }
+> > >  EXPORT_SYMBOL(ksize);
+> > >  
+> > > +/* Wrapper so __alloc_size() can see the actual allocation size. */
+> > > +void *kmem_cache_alloc_sized(struct kmem_cache *s, gfp_t flags, size_t size)
+> > > +{
+> > > +	return kmem_cache_alloc(s, flags);
+> > > +}
+> > > +EXPORT_SYMBOL(kmem_cache_alloc_sized);
+> > > +
+> > > +/* Wrapper so __alloc_size() can see the actual allocation size. */
+> > > +void *kmem_cache_alloc_node_sized(struct kmem_cache *s, gfp_t flags, int node, size_t size)
+> > > +{
+> > > +	return kmem_cache_alloc_node(s, flags, node);
+> > > +}
+> > > +EXPORT_SYMBOL(kmem_cache_alloc_node_sized);
+> > 
+> > The reason that we have two implementations of kmalloc_trace*
+> > depending on CONFIG_TRACING is to save additional function call when
+> > CONFIG_TRACING is not set.
+> > 
+> > With this patch there is no reason to keep both.
+> > So let's drop #ifdefs and use single implementation in mm/slab_common.c.
+> 
+> Okay, I'll respin...
+> 
+> -- 
+> Kees Cook
 
-Intel 0day robot reported:
+Oh, it seems Vlastimil already did that.
+Maybe simply drop this patch in next spin?
 
-commit: 954c5e0297d664c7f46c628b3151567b53afe153 [14/15] iommufd: vfio 
-container FD ioctl compatibility
-config: m68k-randconfig-s053-20221104 (attached as .config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce:
-         wget 
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
--O ~/bin/make.cross
-         chmod +x ~/bin/make.cross
-         # apt-get install sparse
-         # sparse version: v0.6.4-39-gce1a6720-dirty
-         git remote add internal-blu2-usb 
-git://bee.sh.intel.com/git/blu2/usb.git
-         git fetch --no-tags internal-blu2-usb iommu/iommufd/v3
-         git checkout 954c5e0297d664c7f46c628b3151567b53afe153
-         # save the config file
-         mkdir build_dir && cp config build_dir/.config
-         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross 
-C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k 
-SHELL=/bin/bash drivers/iommu/iommufd/
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/commit/?h=slab/for-6.1-rc4/fixes&id=eb4940d4adf590590a9d0c47e38d2799c2ff9670
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-sparse warnings: (new ones prefixed by >>)
- >> drivers/iommu/iommufd/vfio_compat.c:294:17: sparse: sparse: cast 
-removes address space '__user' of expression
-
-vim +/__user +294 drivers/iommu/iommufd/vfio_compat.c
-
-    288	
-    289	static int iommufd_fill_cap_iova(struct iommufd_ioas *ioas,
-    290					 struct vfio_info_cap_header __user *cur,
-    291					 size_t avail)
-    292	{
-    293		struct vfio_iommu_type1_info_cap_iova_range __user *ucap_iovas =
-  > 294			container_of(cur,
-    295				     struct vfio_iommu_type1_info_cap_iova_range __user,
-    296				     header);
-    297		struct vfio_iommu_type1_info_cap_iova_range cap_iovas = {
-    298			.header = {
-    299				.id = VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE,
-    300				.version = 1,
-    301			},
-    302		};
-    303		struct interval_tree_span_iter span;
-    304	
-    305		interval_tree_for_each_span(&span, &ioas->iopt.reserved_itree, 0,
-    306					    ULONG_MAX) {
-    307			struct vfio_iova_range range;
-    308	
-    309			if (!span.is_hole)
-    310				continue;
-    311			range.start = span.start_hole;
-    312			range.end = span.last_hole;
-    313			if (avail >= struct_size(&cap_iovas, iova_ranges,
-    314						 cap_iovas.nr_iovas + 1) &&
-    315			    copy_to_user(&ucap_iovas->iova_ranges[cap_iovas.nr_iovas],
-    316					 &range, sizeof(range)))
-    317				return -EFAULT;
-    318			cap_iovas.nr_iovas++;
-    319		}
-    320		if (avail >= struct_size(&cap_iovas, iova_ranges, 
-cap_iovas.nr_iovas) &&
-    321		    copy_to_user(ucap_iovas, &cap_iovas, sizeof(cap_iovas)))
-    322			return -EFAULT;
-    323		return struct_size(&cap_iovas, iova_ranges, cap_iovas.nr_iovas);
-    324	}
-    325	
-
-Best regards,
-baolu
+-- 
+Hyeonggon
