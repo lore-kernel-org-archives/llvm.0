@@ -1,130 +1,79 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CE02591
-	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 16:07:53 +0000 (UTC)
-Received: by mail-il1-f200.google.com with SMTP id w13-20020a056e021c8d00b00300ad5b16a0so5743604ill.7
-        for <llvm@lists.linux.dev>; Sat, 05 Nov 2022 09:07:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BBB2591
+	for <llvm@lists.linux.dev>; Sat,  5 Nov 2022 16:20:36 +0000 (UTC)
+Received: by mail-ed1-f41.google.com with SMTP id v27so11683892eda.1
+        for <llvm@lists.linux.dev>; Sat, 05 Nov 2022 09:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=srQ3lTh3ov/uW1CynRa0KjN77ReKbgwHiOujQ3nMVGI=;
+        b=P0kLwQwYClIZzoWMQF0niGOEZY4ILluvbFpoIzNEfGSiaBf5YEbKrtilG8yOZt23rS
+         A9Vn4TNmkIG8F/Z4HcJKJDpzol0995YgFK9jc/y9B+yZZWZv3sE6Q+tDvgndaqqA8tUa
+         GBpk7naq0m1IqFdv0pbGxcfdRsz4I9XaPo0zt2YVWaQFjQ16FTBxaHdpFw/y0izCcaEf
+         oSaYqWxONukSWy28TM0SRTQyooBPLQeQKL1DxvUuvEI00eHM33jFhETT2xm6tzTXGmwY
+         O1RaLVhp/FW7yx2zx0x9KAWRtwguiW83/3ZEaOUVaVPx4HoKCop39fY8BUTvITaxccsp
+         st1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P26Tufb5libRVNtGMj36dstv5Fz34ZnElPMtb6a0Uhg=;
-        b=3cqHIYSqqpfuUrPwpBc6P9f5Syc1ZG2lc9i8JMEbsM8kdSno55EqqBd4WwQbNKDPAF
-         k6SkBVGbeENekmNMeOLciWI9caZZ3CALu7p5LdWyrjgrBOeadvcCQo+9K6ONh1TiuA4r
-         /gp3K21yppYKFqocPiv9bHZxhwkig+tac7gkqO4IzYoCLKI4mG02gU/Ki2VNDskazGTm
-         Q/C7e9k0LM5xHakD+RQI+/k1Dk8MIepXOSjmtsqhwZkwI1qqJv+UFgupBbcCUVQbIXM2
-         mqT0ajMD0qXr/YZgubGPE4nw4GJJp6XkPdgimR8ekSiGkIWm4nIdhMyDn4/uUNGWuamD
-         IeCQ==
-X-Gm-Message-State: ACrzQf0X+/YUMVjzoPPFGOQCniYfBh6s5hG/umTYsvMa4YD8exBCPI3M
-	FnZf4Nmbsm4caWU+Uh5JEYlBBRycyeT45UhE/3mgDED6cBP0
-X-Google-Smtp-Source: AMsMyM7lzq/wnhZ5p4mooUUvzr2G8b1Tq6lQpd394TA+Q9lfRqzxbCflqbEUFzamGIu7GMPo/cN1i+qiUBA0Md2c2SYELM6iIYft
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=srQ3lTh3ov/uW1CynRa0KjN77ReKbgwHiOujQ3nMVGI=;
+        b=skvpbEK4LX7ikC4Kc53DEpjGvhYKOIRSpJxI7cZcMs2IBazud8LmfFbQDlak6zqJB0
+         qnxgPwSWOB6YRT8PvZrfhwQhjg4fA5FTB+De2Vsixd4hnvCwnwfdRSYwpd+Ybi9DkjGb
+         4RuTXrqtaRKRMqC1RMExY4dxT8YbLZ8sfdLcMvX9tc4HhbIngoabq7DleKwIhNNA7ukG
+         38H/KJcnFlJzEpM2RlqzBABrurEQzVGvJSPijw/mm5IPfnDKcONLULDJ4M7oh4ZbyFJW
+         kkJP2PCPjROh6DKZG0S57IT8huYfhllycrYN3wbW49Em2CxzlcINmgF1xzFKWAbTkdid
+         jkCg==
+X-Gm-Message-State: ACrzQf0Glqz6CApScRrfwGDpRqnt8pGA2XCiC45BqqYAPZrkbrNSeCFw
+	EBlwT8jjMU+8Ka9lb46QDLJYno5xZ6cRD//oopU=
+X-Google-Smtp-Source: AMsMyM7zSz2xzkf30t95QCMUe/+35Au5IQDfWUWwp1tGv7KynUmdAkPytr6E2YTxR4NYApaYSEmfEf0uMjZO7JpmzeE=
+X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id
+ ev6-20020a056402540600b004521560f9d4mr41547613edb.333.1667665234700; Sat, 05
+ Nov 2022 09:20:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1210:b0:375:4aa6:ff85 with SMTP id
- n16-20020a056638121000b003754aa6ff85mr21924002jas.227.1667664472862; Sat, 05
- Nov 2022 09:07:52 -0700 (PDT)
-Date: Sat, 05 Nov 2022 09:07:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082754e05ecbb641e@google.com>
-Subject: [syzbot] WARNING in ext4_enable_quotas
-From: syzbot <syzbot+77524f55898ea618bfad@syzkaller.appspotmail.com>
-To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	tytso@mit.edu
+References: <20221105025146.238209-1-horenchuang@bytedance.com>
+In-Reply-To: <20221105025146.238209-1-horenchuang@bytedance.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 5 Nov 2022 09:20:23 -0700
+Message-ID: <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/4] Add BPF htab map's used size for monitoring
+To: "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Jiri Olsa <olsajiri@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, 
+	Quentin Monnet <quentin@isovalent.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Joanne Koong <joannelkoong@gmail.com>, Kui-Feng Lee <kuifeng@fb.com>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Maxim Mikityanskiy <maximmi@nvidia.com>, 
+	Hao Xiang <hao.xiang@bytedance.com>, Punit Agrawal <punit.agrawal@bytedance.com>, 
+	Yifei Ma <yifeima@bytedance.com>, Xiaoning Ding <xiaoning.ding@bytedance.com>, 
+	bpf <bpf@vger.kernel.org>, Ho-Ren Chuang <horenc@vt.edu>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+On Fri, Nov 4, 2022 at 7:52 PM Ho-Ren (Jack) Chuang
+<horenchuang@bytedance.com> wrote:
+>
+> Hello everyone,
+>
+> We have prepared patches to address an issue from a previous discussion.
+> The previous discussion email thread is here: https://lore.kernel.org/all/CAADnVQLBt0snxv4bKwg1WKQ9wDFbaDCtZ03v1-LjOTYtsKPckQ@mail.gmail.com/
 
-syzbot found the following issue on:
-
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=14db1719880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=77524f55898ea618bfad
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+77524f55898ea618bfad@syzkaller.appspotmail.com
-
-EXT4-fs (loop1): orphan cleanup on readonly fs
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(!key)
-WARNING: CPU: 1 PID: 14778 at kernel/locking/lockdep.c:4831 lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
-Modules linked in:
-CPU: 1 PID: 14778 Comm: syz-executor.1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
-lr : lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
-sp : ffff800013533980
-x29: ffff800013533990 x28: ffff80000cb99126 x27: ffff8000135339c4
-x26: ffff0001156798e0 x25: ffff000115679908 x24: 0000000000000001
-x23: ffff8000135339d0 x22: ffff80000ee2b000 x21: 0000000000000000
-x20: 0000000000000002 x19: ffff0001156798e0 x18: 000000000000034b
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
-x11: 000000000001b6e9 x10: ffff80001b6ed000 x9 : 3b94ef2414331b00
-x8 : 3b94ef2414331b00 x7 : 4e5241575f534b43 x6 : ffff80000819545c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000019
-Call trace:
- lockdep_init_map_type+0x284/0x2fc kernel/locking/lockdep.c:4831
- lockdep_set_quota_inode fs/ext4/super.c:6677 [inline]
- ext4_quota_enable fs/ext4/super.c:6787 [inline]
- ext4_enable_quotas+0x1ac/0x378 fs/ext4/super.c:6814
- ext4_orphan_cleanup+0x23c/0x8ec fs/ext4/orphan.c:432
- __ext4_fill_super+0x34a4/0x36d4 fs/ext4/super.c:5378
- ext4_fill_super+0x100/0x2d8 fs/ext4/super.c:5517
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ext4_get_tree+0x28/0x38 fs/ext4/super.c:5547
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-irq event stamp: 977
-hardirqs last  enabled at (977): [<ffff800008161dac>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1367 [inline]
-hardirqs last  enabled at (977): [<ffff800008161dac>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4942
-hardirqs last disabled at (976): [<ffff80000bfc0a34>] __schedule+0x84/0x5a0 kernel/sched/core.c:6393
-softirqs last  enabled at (200): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (198): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-EXT4-fs warning (device loop1): ext4_enable_quotas:6821: Failed to enable quota tracking (type=0, err=-13). Please run e2fsck to fix.
-EXT4-fs (loop1): Cannot turn on quotas: error -13
-EXT4-fs error (device loop1): ext4_orphan_get:1419: comm syz-executor.1: bad orphan inode 11
-EXT4-fs (loop1): Remounting filesystem read-only
-ext4_test_bit(bit=10, block=3) = 0
-EXT4-fs (loop1): mounted filesystem without journal. Quota mode: writeback.
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Rephrasing what was said earlier.
+We're not keeping the count of elements in a preallocated hash map
+and we are not going to add one.
+The bpf prog needs to do the accounting on its own if it needs
+this kind of statistics.
+Keeping the count for non-prealloc is already significant performance
+overhead. We don't trade performance for stats.
