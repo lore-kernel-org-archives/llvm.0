@@ -1,99 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCC728EC;
-	Sun,  6 Nov 2022 15:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AF1C433D6;
-	Sun,  6 Nov 2022 15:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06C429CA
+	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 17:04:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 182A5C433C1;
+	Sun,  6 Nov 2022 17:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667748313;
-	bh=lZ9gOuIK/p/+AxLeA6qMbQ9qzDHEck1QexyR55L+9Dk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=c2y2LmsiNGpYap3pOrD5SdXfqIiha/uI8LpSIwt1cVR3iAeWm5IzMw4DEag7FexRL
-	 3psNGNKKApsOtEiNsGcFeMu0R2mf2KZSwsitsraVEfq0o4d79YzVhLtBkU03JbTfcb
-	 tko2Vmg+0BFDkqO8h48ldic8vzZoQX6nS+ygnGRGB5ALgOc8wmtP6+RhbbmaNPCzcA
-	 HDAdsOZC/0GownoZBG5hrHFU3fOZmuOcJrfvG2/i+jYXWtPZacVeYGScnDfan+Ghut
-	 kllEULi5d/JA5tUXwDLZQqptHULr1suHpqQEVo/LIMSdebhcQyfg2+QOl5zQHgJWMO
-	 l5Y2sUzyxDiAQ==
-Date: Sun, 6 Nov 2022 15:25:03 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>, lars@metafoo.de,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, jdelvare@suse.com,
- linux@roeck-us.net, linux-hwmon@vger.kernel.org, rajat.khandelwal@intel.com
-Subject: Re: [PATCH v7] iio: temperature: Add driver support for Maxim
- MAX30208
-Message-ID: <20221106152503.2f7e9f7f@jic23-huawei>
-In-Reply-To: <202211041434.J9y1aows-lkp@intel.com>
-References: <20221101174409.316447-1-rajat.khandelwal@linux.intel.com>
-	<202211041434.J9y1aows-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+	s=k20201202; t=1667754262;
+	bh=GdteqiEM8KhePySDa5CMNW0mw5EsYx6q1uaviAFStn4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ANwWSzuIQlVm4URp98abOuVuotVyJrzp1x/6iKVYtgfawfPxf67mBcxYIXnTtZa++
+	 GcpET7MRR6YRyIpWsruhmkOYaKZ+q7QFWkPMre6ULq1tyeJQUMlB9wvPE6t4e8Cpei
+	 2Xqgh4pg1Y+8FN8rCcsCSysZ3cEOVbqBlwD2yotA2QsX6y7tMQi76jPN1q7kxyn/qt
+	 YTPyNkCGXQ1MkSazhvGsyzY0+ywji7T1EmzrEmzKOvYKByInxTE/rWP6y4h4y6HNPN
+	 E/fYyassSkXrLLgaa+edj6kbF8tIDg8AXXzruq7s9Ypvp3wx7IQw2EjGSwpVDD1Sge
+	 1KlK5MovJChqQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	usama.anjum@collabora.com,
+	guillaume.tucker@collabora.com,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.0 16/30] selftests/futex: fix build for clang
+Date: Sun,  6 Nov 2022 12:03:28 -0500
+Message-Id: <20221106170345.1579893-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221106170345.1579893-1-sashal@kernel.org>
+References: <20221106170345.1579893-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Fri, 4 Nov 2022 14:50:33 +0800
-kernel test robot <lkp@intel.com> wrote:
+From: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
 
-> Hi Rajat,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on jic23-iio/togreg]
-> [also build test WARNING on linus/master v6.1-rc3 next-20221104]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Rajat-Khandelwal/iio-temperature-Add-driver-support-for-Maxim-MAX30208/20221101-102308
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-> patch link:    https://lore.kernel.org/r/20221101174409.316447-1-rajat.khandelwal%40linux.intel.com
-> patch subject: [PATCH v7] iio: temperature: Add driver support for Maxim MAX30208
-> config: riscv-randconfig-c006-20221103
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://github.com/intel-lab-lkp/linux/commit/2375dabd39957ad8e80878c5604eda8a9f73932d
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Rajat-Khandelwal/iio-temperature-Add-driver-support-for-Maxim-MAX30208/20221101-102308
->         git checkout 2375dabd39957ad8e80878c5604eda8a9f73932d
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/block/ drivers/iio/temperature/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/iio/temperature/max30208.c:195:36: warning: unused variable 'max30208_acpi_match' [-Wunused-const-variable]  
->    static const struct acpi_device_id max30208_acpi_match[] = {
->                                       ^
->    1 warning generated.
-> 
-See review comments on v6 that said to drop the use of ACPI_PTR(). It's not worth
-the fiddly handling to save a trivial amount of data.
+[ Upstream commit 03cab65a07e083b6c1010fbc8f9b817e9aca75d9 ]
 
-Jonathan
+Don't use the test-specific header files as source files to force a
+target dependency, as clang will complain if more than one source file
+is used for a compile command with a single '-o' flag.
 
-> 
-> vim +/max30208_acpi_match +195 drivers/iio/temperature/max30208.c
-> 
->    194	
->  > 195	static const struct acpi_device_id max30208_acpi_match[] = {  
->    196		{ "MAX30208" },
->    197		{ }
->    198	};
->    199	MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
->    200	
-> 
+Use the proper Makefile variables instead as defined in
+tools/testing/selftests/lib.mk.
+
+Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+Reviewed-by: André Almeida <andrealmeid@igalia.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/futex/functional/Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index 732149011692..5a0e0df8de9b 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -3,11 +3,11 @@ INCLUDES := -I../include -I../../ -I../../../../../usr/include/
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
+ LDLIBS := -lpthread -lrt
+ 
+-HEADERS := \
++LOCAL_HDRS := \
+ 	../include/futextest.h \
+ 	../include/atomic.h \
+ 	../include/logging.h
+-TEST_GEN_FILES := \
++TEST_GEN_PROGS := \
+ 	futex_wait_timeout \
+ 	futex_wait_wouldblock \
+ 	futex_requeue_pi \
+@@ -24,5 +24,3 @@ TEST_PROGS := run.sh
+ top_srcdir = ../../../../..
+ DEFAULT_INSTALL_HDR_PATH := 1
+ include ../../lib.mk
+-
+-$(TEST_GEN_FILES): $(HEADERS)
+-- 
+2.35.1
 
