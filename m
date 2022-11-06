@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F013209
-	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 17:07:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B027AC433D6;
-	Sun,  6 Nov 2022 17:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797EC3209
+	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 17:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3BBFC433D6;
+	Sun,  6 Nov 2022 17:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667754420;
+	s=k20201202; t=1667754439;
 	bh=7r+6km4b+vXIeOkkyXEJz4P9pHvEd5OlxAOs/eJBiio=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R8m9ar81dl3sKRiwxID2wb+ZY5u8d0HXD9ZZrnEM84AqZsCrn7tRSq+pEG0X+BLek
-	 JwDPFovoDK8Gnc2TjBfo5J8ehXCUZpb27YnSr1NHd94UotyCdh0dlI4eaYfZ1AVsGl
-	 GRYUSRBPD/bPZiP0Yici43BEKhNpfwcelaOSTXUBgxykYSs9D0IhHeaUL+DgFWC8AL
-	 1o18WlI0RXnwU8smxaq6EAdddL0vnSCHj5djfHLO1ZRZurqQ9xTIg6v0Ma+Jp8K3GX
-	 e8B3VyrNz8RCAC09n6KSoPqfvQlOvjRJ4Cx4BPiY/fbyswNjWorSJqShXsDd4qAvbs
-	 6NMYJoczYomZQ==
+	b=AXrzHXFysPkYlWMRhgoHsoAnvHGFrozEFd10vqxzHAx9FRpHUMOKdsC14v46JkKSw
+	 pCyEwhe73E3WVOt71DzCyjhQQ2ZALxcv3Obi+k+ZnnjmzIdPGqaOB5jPDcBUYuut5i
+	 dvzV/SVT9JROaRHdbSiPV72507eWNvilgwNKuNKzyLimUb462ycHYeWYzNsL5ieZbT
+	 t745mOnBgNKtw1WS2umnOazbxtT/K+Ub0kNNSA1YQYhLmjTa70zAICk/w+XyFMwS10
+	 p61BdoxYuhpI6CPGbzVbCeqt859bWXSvlo8jD3HBki4HWwnMHP6ZkyYLwCcjN6YPqR
+	 wPFyIMlPiZEzQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -31,12 +31,12 @@ Cc: =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
 	guillaume.tucker@collabora.com,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 10/12] selftests/futex: fix build for clang
-Date: Sun,  6 Nov 2022 12:06:34 -0500
-Message-Id: <20221106170637.1580802-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 5/7] selftests/futex: fix build for clang
+Date: Sun,  6 Nov 2022 12:07:02 -0500
+Message-Id: <20221106170705.1580963-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221106170637.1580802-1-sashal@kernel.org>
-References: <20221106170637.1580802-1-sashal@kernel.org>
+In-Reply-To: <20221106170705.1580963-1-sashal@kernel.org>
+References: <20221106170705.1580963-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
