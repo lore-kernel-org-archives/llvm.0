@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06C429CA
-	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 17:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 182A5C433C1;
-	Sun,  6 Nov 2022 17:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1573209
+	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 17:05:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A586C433C1;
+	Sun,  6 Nov 2022 17:05:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667754262;
-	bh=GdteqiEM8KhePySDa5CMNW0mw5EsYx6q1uaviAFStn4=;
+	s=k20201202; t=1667754342;
+	bh=hcWqM5dE67uuplVflQAGo4eIRyUeZr2rhyv1ReIeg28=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ANwWSzuIQlVm4URp98abOuVuotVyJrzp1x/6iKVYtgfawfPxf67mBcxYIXnTtZa++
-	 GcpET7MRR6YRyIpWsruhmkOYaKZ+q7QFWkPMre6ULq1tyeJQUMlB9wvPE6t4e8Cpei
-	 2Xqgh4pg1Y+8FN8rCcsCSysZ3cEOVbqBlwD2yotA2QsX6y7tMQi76jPN1q7kxyn/qt
-	 YTPyNkCGXQ1MkSazhvGsyzY0+ywji7T1EmzrEmzKOvYKByInxTE/rWP6y4h4y6HNPN
-	 E/fYyassSkXrLLgaa+edj6kbF8tIDg8AXXzruq7s9Ypvp3wx7IQw2EjGSwpVDD1Sge
-	 1KlK5MovJChqQ==
+	b=VrIgxV+vhKScTMsk8WsOz1N/avaOEpw5zrKQ8l56PpGrpYtrIB5TCHublgGdXH+Tx
+	 5LYmZWLJbwRLZ79OYQctqm1zlBO7FrusOD8PecEBkRmw3UW5WMWjvjiP11zJe7bHxw
+	 FgyreaRoAdMVXKkmzrHs3Doo8QrhN0nSvoRTi7EXcMIQSkJmsS09HXzf3iCH9Dz7Oo
+	 N0Ir5/A3YfzFMXQtGIQVvv0LBEqnfczB+CBBD4UU5t5t2ragMIEG09/tWvuXJUiVVO
+	 HRmpUJVXCZPu33ApYnzzK2zscPn93BLgP0p588XIulbiNH8i+2xMgF5zOm29Qlaiya
+	 8GwDzZBKozEiQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -31,12 +31,12 @@ Cc: =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
 	guillaume.tucker@collabora.com,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 16/30] selftests/futex: fix build for clang
-Date: Sun,  6 Nov 2022 12:03:28 -0500
-Message-Id: <20221106170345.1579893-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 13/18] selftests/futex: fix build for clang
+Date: Sun,  6 Nov 2022 12:05:02 -0500
+Message-Id: <20221106170509.1580304-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221106170345.1579893-1-sashal@kernel.org>
-References: <20221106170345.1579893-1-sashal@kernel.org>
+In-Reply-To: <20221106170509.1580304-1-sashal@kernel.org>
+References: <20221106170509.1580304-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,11 +68,11 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 732149011692..5a0e0df8de9b 100644
+index bd1fec59e010..ece2e38fbb0b 100644
 --- a/tools/testing/selftests/futex/functional/Makefile
 +++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -3,11 +3,11 @@ INCLUDES := -I../include -I../../ -I../../../../../usr/include/
- CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
+@@ -4,11 +4,11 @@ INCLUDES := -I../include -I../../ -I../../../../../usr/include/ \
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
  LDLIBS := -lpthread -lrt
  
 -HEADERS := \
@@ -87,7 +87,7 @@ index 732149011692..5a0e0df8de9b 100644
  	futex_requeue_pi \
 @@ -24,5 +24,3 @@ TEST_PROGS := run.sh
  top_srcdir = ../../../../..
- DEFAULT_INSTALL_HDR_PATH := 1
+ KSFT_KHDR_INSTALL := 1
  include ../../lib.mk
 -
 -$(TEST_GEN_FILES): $(HEADERS)
