@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26D8187F
-	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 05:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8D97F
+	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 08:01:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1667711496;
+	s=mimecast20190719; t=1667721701;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=O3YGX1RtFj+jdcm7pRCOmq8ogKYRUGCKNiMN3AGtasg=;
-	b=Z8Y6hc9rcx4vlwaY7xTo3A+lTmTHFzYwBVLoXgjItxdwmZLEK00m6hyPVfJxQUzt4JD5M1
-	TtEOlurv0m1dLEq9T8qavnRzyRVmBGAD4OvHxQHpMjxLic6O74b88FKpn5AoFIoxdvVat8
-	Ju1txrwJXwIZO0W3NAyXmvq2RYC+i/8=
+	bh=Rb80DQXn/IGNMXkP3fAF7U92IDwolZ0aMHwQ7ddfP+8=;
+	b=HazXtSBCGex52Ke7ZPqDkMHZYI22bc/MNHZu5sKnXtPZljvCeq6hE6wd5riXG8AQszx0am
+	O5ns7wuWe+1MCH/HWUvptPvCPquKUgR7rH+JcA57ioUv/8lb7a7QKNqJBdjw560eitv2Y9
+	iEP4i8AV5LWJuhnFpffGTVlhvyFZI0I=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-374-YQnSKxsRP_i7inZh8y5evQ-1; Sun, 06 Nov 2022 01:11:35 -0400
-X-MC-Unique: YQnSKxsRP_i7inZh8y5evQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-543-CyczB26ANmyN8vNZ92qIXQ-1; Sun, 06 Nov 2022 03:01:40 -0500
+X-MC-Unique: CyczB26ANmyN8vNZ92qIXQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3BEC3185A78F
-	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 05:11:35 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00B82811E67
+	for <llvm@lists.linux.dev>; Sun,  6 Nov 2022 08:01:40 +0000 (UTC)
 Received: from [172.64.9.44] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 260A117595;
-	Sun,  6 Nov 2022 05:11:35 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E348A477F5E;
+	Sun,  6 Nov 2022 08:01:39 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc3,
- mainline.kernel.org-clang, 4869f575)
-Date: Sun, 06 Nov 2022 05:11:35 -0000
+ mainline.kernel.org-clang, 2f5065a0)
+Date: Sun, 06 Nov 2022 08:01:39 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <81745.122110601113500276@us-mta-374.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <78106.122110603014000620@us-mta-543.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,29 +52,29 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'block-6.1-2022-11-05' of git://git.kernel.dk=
-/linux
+    Commit message: Merge tag 'acpi-6.1-rc4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/rafael/linux-pm
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/58858
+    https://datawarehouse.cki-project.org/kcidb/checkouts/58862
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5847005
+5848255
 
     We also see the following known issues which are not related to your ch=
 anges:
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
         Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
 teger expression expected
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
             Affected tests:
                   x86_64 (debug) - Networking socket: fuzz
         Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
@@ -121,6 +121,23 @@ test_progs_run' (Expected 0, got 1)
 l-tests/-/issues/1322
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
         Issue: Storage block - storage fio numa: Performance comparison: mi=
 n:40535 * 1.15 < max:81259
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
@@ -151,23 +168,11 @@ l-tests/-/issues/1339
                    s390x - kdump - file-load
                   x86_64 - kdump - sysrq-c
                   x86_64 - kdump - file-load
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
+        Issue: stress: stress-ng - memory: system hit OOM
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
+l-tests/-/issues/1425
             Affected tests:
-                   s390x - Storage - blktests - blk
+                   s390x - stress: stress-ng - memory
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
