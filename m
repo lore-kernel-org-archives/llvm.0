@@ -1,39 +1,39 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D8F2580
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23A228E2
 	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 07:23:02 +0000 (UTC)
-X-UUID: 86d8cce3d72e4199a00f135e51b761a3-20221107
+X-UUID: 765db0c288f047c4ace491280b51e2c4-20221107
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=SpiJHeVl1K93PVjQS/sCYbzlG0svFBv6Moxjre7ZVAI=;
-	b=pn0XapToXRTZRQgPUk4IS/5hTPQJCYL5GrJIjRN4tpbCQnqHUZOZlR40j4tUGYe3R7BYKUoxoxzJWZGtH0eMwLIIUOInAqZxfW+I/ekUOy92N6hydx0uz/DR66uJxHL5En+arAAWxQhkFpxlv74hEIyXZQKwEAemNcvbzenTvpE=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Zl6V9NspgsGfzrmuUb4ZMV2GJDP2vfpuLiC4LNtcCQk=;
+	b=GOlOzdqtopvRz5UaG7o39g2/m7NoH3R9eY/pnfvuPHAdcB+K30U3bT2pHHMeo1G1fgQUf2xA55lcw7nJx/Qx16P3oQASgzIwgAZX6FMTJBbrBn4/cj+J4UlvmMzhKrQdXLbxiBTSEU/G8/wQxnrWRNAf1z14pzFPLMscx2JH22Q=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:6bdc8c14-0fe8-4720-aaf4-e9a724229316,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:af36e0f3-a19e-4b45-8bfe-6a73c93611e9,B
+X-CID-O-INFO: VERSION:1.1.12,REQID:675b6d4d-d606-4869-a049-95b5096b8f3f,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:62cd327,CLOUDID:bd69a4eb-84ac-4628-a416-bc50d5503da6,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 86d8cce3d72e4199a00f135e51b761a3-20221107
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+X-UUID: 765db0c288f047c4ace491280b51e2c4-20221107
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
 	(envelope-from <nancy.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1289445313; Mon, 07 Nov 2022 15:22:47 +0800
+	with ESMTP id 1697165608; Mon, 07 Nov 2022 15:22:48 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 7 Nov 2022 15:22:46 +0800
+ 15.2.792.15; Mon, 7 Nov 2022 15:22:47 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 7 Nov 2022 15:22:46 +0800
+ 15.2.792.15 via Frontend Transport; Mon, 7 Nov 2022 15:22:47 +0800
 From: Nancy.Lin <nancy.lin@mediatek.com>
 To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
- Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp
+ Zabel <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, AngeloGioacchino
+ Del Regno <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
 	<nfraprado@collabora.com>
-CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
 	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
 	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -41,9 +41,9 @@ CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
 	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
 	<singo.chang@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v28 03/11] soc: mediatek: add mtk-mmsys ethdr and mdp_rdma components
-Date: Mon, 7 Nov 2022 15:22:35 +0800
-Message-ID: <20221107072243.15748-4-nancy.lin@mediatek.com>
+Subject: [PATCH v28 09/11] soc: mediatek: mmsys: add reset control for MT8195 vdosys1
+Date: Mon, 7 Nov 2022 15:22:41 +0800
+Message-ID: <20221107072243.15748-10-nancy.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221107072243.15748-1-nancy.lin@mediatek.com>
 References: <20221107072243.15748-1-nancy.lin@mediatek.com>
@@ -56,8 +56,9 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Add new mmsys component: ethdr_mixer and mdp_rdma. These components will
-use in mt8195 vdosys1.
+MT8195 vdosys1 has more than 32 reset bits and a different reset base
+than other chips. Add the number of reset bits and reset base in mmsys
+private data.
 
 Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -65,30 +66,35 @@ Reviewed-by: CK Hu <ck.hu@mediatek.com>
 Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 ---
- include/linux/soc/mediatek/mtk-mmsys.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/soc/mediatek/mt8195-mmsys.h | 1 +
+ drivers/soc/mediatek/mtk-mmsys.c    | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-index 16ac0e5847f0..127f1b888ace 100644
---- a/include/linux/soc/mediatek/mtk-mmsys.h
-+++ b/include/linux/soc/mediatek/mtk-mmsys.h
-@@ -28,7 +28,16 @@ enum mtk_ddp_comp_id {
- 	DDP_COMPONENT_DSI1,
- 	DDP_COMPONENT_DSI2,
- 	DDP_COMPONENT_DSI3,
-+	DDP_COMPONENT_ETHDR_MIXER,
- 	DDP_COMPONENT_GAMMA,
-+	DDP_COMPONENT_MDP_RDMA0,
-+	DDP_COMPONENT_MDP_RDMA1,
-+	DDP_COMPONENT_MDP_RDMA2,
-+	DDP_COMPONENT_MDP_RDMA3,
-+	DDP_COMPONENT_MDP_RDMA4,
-+	DDP_COMPONENT_MDP_RDMA5,
-+	DDP_COMPONENT_MDP_RDMA6,
-+	DDP_COMPONENT_MDP_RDMA7,
- 	DDP_COMPONENT_MERGE0,
- 	DDP_COMPONENT_MERGE1,
- 	DDP_COMPONENT_MERGE2,
+diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
+index 454944a9409c..a6652ae63431 100644
+--- a/drivers/soc/mediatek/mt8195-mmsys.h
++++ b/drivers/soc/mediatek/mt8195-mmsys.h
+@@ -75,6 +75,7 @@
+ #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 << 16)
+ #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			(3 << 16)
+ 
++#define MT8195_VDO1_SW0_RST_B					0x1d0
+ #define MT8195_VDO1_MERGE0_ASYNC_CFG_WD				0xe30
+ #define MT8195_VDO1_HDRBE_ASYNC_CFG_WD				0xe70
+ #define MT8195_VDO1_HDR_TOP_CFG					0xd00
+diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+index 78601372512f..5278edd032c6 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.c
++++ b/drivers/soc/mediatek/mtk-mmsys.c
+@@ -90,6 +90,8 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
+ 	.clk_driver = "clk-mt8195-vdo1",
+ 	.routes = mmsys_mt8195_vdo1_routing_table,
+ 	.num_routes = ARRAY_SIZE(mmsys_mt8195_vdo1_routing_table),
++	.sw0_rst_offset = MT8195_VDO1_SW0_RST_B,
++	.num_resets = 64,
+ };
+ 
+ static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
 -- 
 2.18.0
 
