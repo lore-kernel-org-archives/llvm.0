@@ -1,217 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADBBBA55
-	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 13:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1667828505;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5fh9m4T4DaZWFhTt/1YSDXdw/Kam51enQMZEAVtVugk=;
-	b=BdW7wtPnQ/xaGr2IZY1gM5RZMr4ewjOHTrbsxJF245xgtf8ZRMArLfm/j3zlN8KQInXH86
-	ptgHd0rsm4RCvUmjYgPjFJqzntG/KlmXth5rXr0nKL3PKn9iZS98eRCPjribkOu5TUh9N6
-	c8WaDiXg2cC8wa/zQEWd18aoSoea7dQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-247-7HjXHx7UMRmtQtNANe8iNw-1; Mon, 07 Nov 2022 08:41:44 -0500
-X-MC-Unique: 7HjXHx7UMRmtQtNANe8iNw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6A27811E87
-	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 13:41:43 +0000 (UTC)
-Received: from [172.64.10.36] (unknown [10.30.33.69])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id BC2642166B29;
-	Mon,  7 Nov 2022 13:41:43 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (27/389 SKIPPED): Test report for master
- (6.1.0-rc3, mainline.kernel.org-clang, 16c7a368)
-Date: Mon, 07 Nov 2022 13:41:43 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9453BA55;
+	Mon,  7 Nov 2022 14:14:49 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GISWsmNVChXyvb3l2Uh1/BMRowJ96QphPAT24kdst3B9YDb8uG4BNnbMni5mPzfLLcXMsWO+Zq+aCaM97qc+3bjNe3EJ+vAFhqSVEkDsT9J8rDDj0Cnt4P2u8DIsEbO2G7VRkx1KOVoRDA6+7Il2jgapSAKB++zp3zoZ4yM9Np4/fQf39yEN6u2nY3dShBPj7I8kpVt7KL1MgMtBndLmR0nNoZo7yioHmxyc+osYDeEGw8dHpT89x/Scjq9/EXxVpLnNIGeOM104ZilUD8abScHNrdxWdX1gv07JctukeGQnLnhc/TggZy4p/G8fQA+LYhjwtKU8kUM/VcN3huxHaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xXgttaQfHltxyMWGO+zM6VumXbijN+cyWbgQHN5Qn8g=;
+ b=UWmd1OXihNdj1+9DDEJtY7BR1uttHnb9SVRvsflMsGxOMMzdBORPZWktJkAcNK1cKt1SCnT1Pw4xeoq/iLpyht01ylP+UAUvBcbqfRFcnyC4/sY1n+iUfPE8CfiB+RWwFtzv17P+VySr57t7sJGfXRbtk2mP6VCy4CszfpGdlv5w6IbZbIz2cWxtr/RM1A1Fh0HjYbT27OzsKi1PWM8uOtSBZlWjKZ9OaLDYRvqmqXWunxv5irEKBscRd1CWJhX0aiw5OMXHnCDrN0M8iaXxMp5bM5RqrjdviegGga0TJ++ffrEeCtblC4bzNVpopgBO4nUeec9qh/QmKCZt8hYelQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xXgttaQfHltxyMWGO+zM6VumXbijN+cyWbgQHN5Qn8g=;
+ b=n1ZGI09t12fbKQfamEqS68Nu+gfk2go2JqgHXP0xpk3F79IhsamsqNrJIYgHsUpsHGQYHHQzGB/QTXfrukmtwOClK927KUEJus0uPx0MrlVi02CptQDFbMgLrT0T8yYzQy/JJKt0q+CnhmaAwbwwSmOu4RdBN1A6QvAFZb/IxZ/i5Y+7ctv7xkErIq/I29sJYaKCFCkdC0WQqRGrVRvUmfCjVO7SAPHKoC6tZZ8NzBUU6qyfgbePJhmXYPM3TBmOw1iQF+ZtFlZdLC1FJM85um9QpCA22ep3fxPPa8zs72DzrqiJbHyuzfaFMzPuJdh9MvcDWIqIYuMjX/KSxDjCXg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 14:14:46 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
+ 14:14:46 +0000
+Date: Mon, 7 Nov 2022 10:14:45 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Baolu Lu <baolu.lu@linux.intel.com>
+Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	David Gibson <david@gibson.dropbear.id.au>,
+	Eric Auger <eric.auger@redhat.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 12/15] iommufd: Add kAPI toward external drivers for
+ physical devices
+Message-ID: <Y2kS1d8GUvdNQqVe@nvidia.com>
+References: <12-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <b43a183f-b06a-6abb-0ec8-498e2a62f92d@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b43a183f-b06a-6abb-0ec8-498e2a62f92d@linux.intel.com>
+X-ClientProxiedBy: BL1PR13CA0433.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <92999.122110708414400449@us-mta-247.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4388:EE_
+X-MS-Office365-Filtering-Correlation-Id: 21c9224c-3e35-4ffd-af81-08dac0ca6c5f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	U0sSzzRC4gJGucIzt1Afudy31Ee2i5cjnHvF5w7woeyylHBPAC9Ny0Z4jk3xG5j56rPJHqsqMChOstBIxTg0GzFjATku+pIO5kqflIsNRrIgJ+yeJXIUDgZihywE4wFbrTbddYhltn8MbH08Xdu8AEpoRSyd/VjMqsTMPhpCX3lbDFwgcOKXfHAbqvM/ZIOUe916HzKcvAyzE3R5OukxYXQc4MC+B21Ii40q4DkBW4MFwW0utyEotQaARED09QjQWUQHIYzSbMcOKPyq2qLYmhTIyATJlaFSpuI4xikL/Sdl9RDTB4/ZNgGMifktHtIKTIAZFM/mKqYHk8HUMjzgSIuOZLI7jGc/WM9mW0PKcKtsZ4fuJSclFnGKcSpaj79mKCLDTVrstryJ/O19jNy0OHY+y1C7bS0kAhVlwiIOrihPDxbAeEoHqWQEfQVhYtWrDK2HJCAVP4pcSMCKNnscMXm6pQ985sV3OZ3XKaomCHDBoBFc6RbY6mSLjXrUAn4735w44Xgihxr0at5Zu0WA+DUgbt3mZLDfJXcCFL6c8ygoJSE9WeNKQ2Q6oF6/ai+V0RUrM2euq04fZG+mZfbZjkUtT02wVVEc01XNvh9xY8+G/e507g1Qlj2Tle8RM/NFX7vdsT826ZS4kPTvr1sXrnai51AmBR7CWXWNXUQmjUSFKMKrw50PkFejpnTCTJmLSaVDNT64XM0rT4U+nnvpnA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199015)(36756003)(86362001)(4744005)(2906002)(26005)(6512007)(186003)(2616005)(83380400001)(6506007)(66946007)(4326008)(66556008)(8676002)(66476007)(6916009)(54906003)(478600001)(316002)(7406005)(7416002)(8936002)(5660300002)(6486002)(41300700001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?h4QnparRh973IgdavJC7ZBZDJ9R+RglwoJW/fYZmEYJbt+wK3LGiQn7XRz7u?=
+ =?us-ascii?Q?uanyZrHQsU1UVxVVJlY2tntMHsjMx6Gd6w4WJB39YkfHXjt+vqTPYbd4s4jt?=
+ =?us-ascii?Q?UpQS4NeCJQTE/bMgH2yyNx4XzE0aPLKn5Q9Eenz6PgX7s0s7Zoz5rjkxIspX?=
+ =?us-ascii?Q?IMT9HghEBgGjbe/zU4gWOOhyI0HbiBTL9ER8iUFXym4+QXk5AMi00d3z8/n2?=
+ =?us-ascii?Q?OZnp4M/rHs9d6+2ynZwCEYcVtgmUokX2eIkIXuwrpM+94ixznsQs8dGXI1u0?=
+ =?us-ascii?Q?kzywhg7/EXTQylkt35RtPROGc6UKZZCT+H1go/N7Tc3mFo0bRSUmvgpTjQiI?=
+ =?us-ascii?Q?8tSymqzoAMweTBYqIgrbKL/NBPOUBrZ0EE1kCDA2AWGODzfwK5ix4uezCsGR?=
+ =?us-ascii?Q?IDps1vwVY4LVmqtk6fxAgL/zEd3L4p96LVTe6JRUt8/BfrVPMrsxzrmuWf5d?=
+ =?us-ascii?Q?70ZNPvhMlPG+cQqbnoUs+wATQGw5uLsiX9jTPuuRgX0U7qqyyIjrkOUN0XGS?=
+ =?us-ascii?Q?wItGNq/LEtp8YVszyEdRHrVN5e958wwkPWqjhocNIZJGhhzxNyEXxsbcHTdc?=
+ =?us-ascii?Q?xVDlDo4nWftp/ILW1w14+gb+XB3LkLBl3FRQt+mn3P6QUpafOO61407Sott/?=
+ =?us-ascii?Q?NDTQXaIYRbqoMGCZgxW1fSo36uH85mgcTOcZ84+u/ndO5fUrXbwcknoklG1Q?=
+ =?us-ascii?Q?/GBP3Epi9EN9co8iOXZcVmvU5PKEBdWahxgNJ1oTL0hVYmlKEhMdSNq2495f?=
+ =?us-ascii?Q?9lo/zT7hWvf15xtj/3wvXGAbxwLPyhXgrFawWGxMpu0IEIBOlLnqEeNdC/NG?=
+ =?us-ascii?Q?hm8DoIG8PHpvnysvYT5NeV9NTG2BwMU3JN4MHaL+RycBIwAS2YLW2nzqTuR0?=
+ =?us-ascii?Q?nVYlBMpi1Bdi0cSGdHURMhBoNOoKS2diRo/nooxW9jsIYhVsDcr2LICTwcMr?=
+ =?us-ascii?Q?bca+ZDAp8aKp3Y5akYIg2KHO4qZXF1zWJBVvR0JEuHtxfp82F5aXH3kRYlar?=
+ =?us-ascii?Q?72CkUXOM37D+EBu0779B+Mgm0rynA0EbudPuVqdgTzt/sod/cLUrCsd4+c8J?=
+ =?us-ascii?Q?34ls3Fl3OjEqfVt4BuRd8X6lAZ8RwyJlO5ZhVKg+HucT3+15srwTSGzz7mJ+?=
+ =?us-ascii?Q?bULXFGDAI4ZKUHf8ovGlODmw+2ks4Crwy3T+eDQIoHy9YCB9EkHZi38jLfp/?=
+ =?us-ascii?Q?JwyK6UFfPfHAAHSBvw+asgzzAOzlQ+OnKG6bzjyonEodg4hUSvZlnUqGgymA?=
+ =?us-ascii?Q?zbo24WGNpB8Smbx0bxXR0LHsxxUXANaEhkNKnP0Sw5h/O8MsMEQ17d4dQd0P?=
+ =?us-ascii?Q?+EMVQ1ePyBh99GbLPLsSuQRG/gFkVkPJqA12hmziH6nCZdXV0OpWxT1LuztM?=
+ =?us-ascii?Q?SRNi2BNKC0JN/O0AxYEkGakJWKqtdeCJXoJofCz8TTCR0EQfbqjxBqvb65dd?=
+ =?us-ascii?Q?ESsr7qF/xQrGkawM+N6LVzzP9lOPxmPwOukZVP6fWWZWfvisUKpIGn0aPS1K?=
+ =?us-ascii?Q?p48fcZDawyvH+hMJ/FA9Mdv2kK24RFJ0bytFnoh9RVRZVGbegZPmjVmSLTw5?=
+ =?us-ascii?Q?MW9bxMal8WA7aGgXzT4=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21c9224c-3e35-4ffd-af81-08dac0ca6c5f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 14:14:46.3307
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v1QBQTXj3fIxBpwkjVGkLrg8ab1AGmdoJTwMkoAM7nnCzFCuF9/ql5HBN/FzkWXN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4388
 
-Hi, we tested your kernel and here are the results:
+On Sat, Oct 29, 2022 at 03:19:36PM +0800, Baolu Lu wrote:
+> > +		rc = iommufd_device_do_attach(idev, hwpt, flags);
+> > +		refcount_dec(&hwpt->obj.users);
+> > +		if (rc) {
+> > +			/*
+> > +			 * FIXME: Requires the series to return EINVAL for
+> > +			 * incompatible domain attaches.
+> > +			 */
+> > +			if (rc == -EINVAL)
+> > +				continue;
+> > +			goto out_unlock;
+> > +		}
+> > +		goto out_unlock;
+> 
+> Can the above code be simplified as:
+> 
+> 		if (rc == -EINVAL)
+> 			continue;
+> 		goto out_unlock;
+> ?
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Done
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'cxl-fixes-for-6.1-rc4' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/cxl/cxl
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/58892
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: tools/include/uapi/linux/in.h:199:3: =
-error: type name requires a specifier or qualifier
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1451
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage - blktests - nvme-tcp: nvme/013 (run mkfs and data v=
-erification fio job on NVMeOF file-backed ns) get stuck
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1398
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Thanks,
+Jason
