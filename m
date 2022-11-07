@@ -1,203 +1,258 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9B4184F
-	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 06:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1667803239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dkoCVQJl5oAV8kTQnTtFTbAqrvNZEu8SD3zO7HOx2D4=;
-	b=S+DCDPr0ECmjzs1zaV5A/3f2r54HNMDTlfYSAnFkfrSd5Dg4qfjtvU7O/M8Lqw+EpbEf0M
-	Lgr621p6urvQl0WaLSz4WfTqzYsUiqW2s8BU0d3hmd93aTxrvfJF4zCGvRxvx9j1lSfwEA
-	UwKAbpvrbVajc/qOeWuxMbBZMN5ZFp4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-IFANs_s_N9C4PjYPkyNkEw-1; Mon, 07 Nov 2022 01:40:38 -0500
-X-MC-Unique: IFANs_s_N9C4PjYPkyNkEw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 483EE185A78F
-	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 06:40:38 +0000 (UTC)
-Received: from [172.64.9.44] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2EF721121314;
-	Mon,  7 Nov 2022 06:40:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (64/389 SKIPPED): Test report for master
- (6.1.0-rc3, mainline.kernel.org-clang, 089d1c31)
-Date: Mon, 07 Nov 2022 06:40:38 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D24C2563
+	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 07:22:58 +0000 (UTC)
+X-UUID: 5c4166737db14bf08cc8729c9d85ed1b-20221107
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=7BQfFOc/Ww5ynheszVbguGlWPLH6LySZBDi86lddvh0=;
+	b=qyvCH5iMO2qdjdNZ1ErI9VBuPT9ohu1tZYMuf1dMxeArjHY0ZKnhxPW8EwG7unn/M4jCbpzQozCnA8nFu6oDDpuSqid4Z+33dpsEYY7tcvbqH2nNHLZwftzDd47XwzCvKwLM0LIoPoI+nQVjNolMys2+fqTZagm1MuzT8/uIZeg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:22b20657-5160-4a61-a994-8b5410b06276,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:8d69a4eb-84ac-4628-a416-bc50d5503da6,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 5c4166737db14bf08cc8729c9d85ed1b-20221107
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+	(envelope-from <nancy.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1049336712; Mon, 07 Nov 2022 15:22:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 7 Nov 2022 15:22:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 7 Nov 2022 15:22:47 +0800
+From: Nancy.Lin <nancy.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, <wim@linux-watchdog.org>, "AngeloGioacchino
+ Del Regno" <angelogioacchino.delregno@collabora.com>, <linux@roeck-us.net>,
+	<nfraprado@collabora.com>
+CC: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Nancy . Lin" <nancy.lin@mediatek.com>, "jason-jh . lin"
+	<jason-jh.lin@mediatek.com>, Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <llvm@lists.linux.dev>,
+	<singo.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v28 07/11] soc: mediatek: add cmdq support of mtk-mmsys config API for mt8195 vdosys1
+Date: Mon, 7 Nov 2022 15:22:39 +0800
+Message-ID: <20221107072243.15748-8-nancy.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221107072243.15748-1-nancy.lin@mediatek.com>
+References: <20221107072243.15748-1-nancy.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <52761.122110701403800131@us-mta-148.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK: N
 
-Hi, we tested your kernel and here are the results:
+Add cmdq support for mtk-mmsys config API.
+The mmsys config register settings need to take effect with the other
+HW settings(like OVL_ADAPTOR...) at the same vblanking time.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If we use CPU to write the mmsys reg, we can't guarantee all the
+settings can be written in the same vblanking time.
+Cmdq is used for this purpose. We prepare all the related HW settings
+in one cmdq packet. The first command in the packet is "wait stream done",
+and then following with all the HW settings. After the cmdq packet is
+flush to GCE HW. The GCE waits for the "stream done event" to coming
+and then starts flushing all the HW settings. This can guarantee all
+the settings flush in the same vblanking.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-mmsys.c       | 59 ++++++++++++++++++--------
+ include/linux/soc/mediatek/mtk-mmsys.h | 15 +++++--
+ 2 files changed, 53 insertions(+), 21 deletions(-)
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/58883
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: tools/include/uapi/linux/in.h:199:3: =
-error: type name requires a specifier or qualifier
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1451
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: FAIL: do_net_forwarding_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1318
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-        Issue: kselftests upstream - tc: FAIL: do_tc-testing_config
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1319
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - tc
-        Issue: kselftests upstream - bpf_test_progs: FAIL: Command 'do_bpf_=
-test_progs_run' (Expected 0, got 1)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1322
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: IBM System X3250 M4 - kernel: irq 16: nobody cared (try boot=
-ing with the "irqpoll" option)
-            URL: https://redhat.service-now.com/surl.do?n=3DRITM1202693
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                  x86_64 - CIFS Connectathon
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please tag it at https://d=
-atawarehouse.cki-project.org .
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-If you don't have permissions to tag an issue, you can contact the CKI team=
- or
-test maintainers.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+index 6040a3cff6f8..1bd2f8e45d85 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.c
++++ b/drivers/soc/mediatek/mtk-mmsys.c
+@@ -97,12 +97,27 @@ struct mtk_mmsys {
+ 	const struct mtk_mmsys_driver_data *data;
+ 	spinlock_t lock; /* protects mmsys_sw_rst_b reg */
+ 	struct reset_controller_dev rcdev;
++	struct cmdq_client_reg cmdq_base;
+ };
+ 
+-static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
++static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val,
++				  struct cmdq_pkt *cmdq_pkt)
+ {
+ 	u32 tmp;
+ 
++#if IS_REACHABLE(CONFIG_MTK_CMDQ)
++	if (cmdq_pkt) {
++		if (mmsys->cmdq_base.size == 0) {
++			pr_err("mmsys lose gce property, failed to update mmsys bits with cmdq");
++			return;
++		}
++		cmdq_pkt_write_mask(cmdq_pkt, mmsys->cmdq_base.subsys,
++				    mmsys->cmdq_base.offset + offset, val,
++				    mask);
++		return;
++	}
++#endif
++
+ 	tmp = readl_relaxed(mmsys->regs + offset);
+ 	tmp = (tmp & ~mask) | (val & mask);
+ 	writel_relaxed(tmp, mmsys->regs + offset);
+@@ -119,7 +134,7 @@ void mtk_mmsys_ddp_connect(struct device *dev,
+ 	for (i = 0; i < mmsys->data->num_routes; i++)
+ 		if (cur == routes[i].from_comp && next == routes[i].to_comp)
+ 			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask,
+-					      routes[i].val);
++					      routes[i].val, NULL);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_connect);
+ 
+@@ -133,42 +148,45 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+ 
+ 	for (i = 0; i < mmsys->data->num_routes; i++)
+ 		if (cur == routes[i].from_comp && next == routes[i].to_comp)
+-			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask, 0);
++			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask, 0, NULL);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+ 
+-void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height)
++void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height,
++				  struct cmdq_pkt *cmdq_pkt)
+ {
+ 	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MERGE0_ASYNC_CFG_WD + 0x10 * idx,
+-			      ~0, height << 16 | width);
++			      ~0, height << 16 | width, cmdq_pkt);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_merge_async_config);
+ 
+-void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height)
++void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height,
++			  struct cmdq_pkt *cmdq_pkt)
+ {
+ 	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_HDRBE_ASYNC_CFG_WD, ~0,
+-			      be_height << 16 | be_width);
++			      be_height << 16 | be_width, cmdq_pkt);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_hdr_config);
+ 
+ void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
+-			       u8 mode, u32 biwidth)
++			       u8 mode, u32 biwidth, struct cmdq_pkt *cmdq_pkt)
+ {
+ 	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+ 
+ 	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_ALPHA + (idx - 1) * 4, ~0,
+-			      alpha << 16 | alpha);
++			      alpha << 16 | alpha, cmdq_pkt);
+ 	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_HDR_TOP_CFG, BIT(19 + idx),
+-			      alpha_sel << (19 + idx));
++			      alpha_sel << (19 + idx), cmdq_pkt);
+ 	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
+-			      GENMASK(31, 16) | GENMASK(1, 0), biwidth << 16 | mode);
++			      GENMASK(31, 16) | GENMASK(1, 0), biwidth << 16 | mode, cmdq_pkt);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_config);
+ 
+-void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap)
++void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap,
++				     struct cmdq_pkt *cmdq_pkt)
+ {
+ 	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
+-			      BIT(4), channel_swap << 4);
++			      BIT(4), channel_swap << 4, cmdq_pkt);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_channel_swap);
+ 
+@@ -176,10 +194,10 @@ void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+ {
+ 	if (val)
+ 		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+-				      DPI_RGB888_DDR_CON, DPI_FORMAT_MASK);
++				      DPI_RGB888_DDR_CON, DPI_FORMAT_MASK, NULL);
+ 	else
+ 		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+-				      DPI_RGB565_SDR_CON, DPI_FORMAT_MASK);
++				      DPI_RGB565_SDR_CON, DPI_FORMAT_MASK, NULL);
+ }
+ EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_dpi_fmt_config);
+ 
+@@ -192,9 +210,9 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
+ 	spin_lock_irqsave(&mmsys->lock, flags);
+ 
+ 	if (assert)
+-		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), 0);
++		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), 0, NULL);
+ 	else
+-		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), BIT(id));
++		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), BIT(id), NULL);
+ 
+ 	spin_unlock_irqrestore(&mmsys->lock, flags);
+ 
+@@ -262,6 +280,13 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	mmsys->data = of_device_get_match_data(&pdev->dev);
++
++#if IS_REACHABLE(CONFIG_MTK_CMDQ)
++	ret = cmdq_dev_get_client_reg(dev, &mmsys->cmdq_base, 0);
++	if (ret)
++		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
++#endif
++
+ 	platform_set_drvdata(pdev, mmsys);
+ 
+ 	clks = platform_device_register_data(&pdev->dev, mmsys->data->clk_driver,
+diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+index a4708859c188..37296146ac5a 100644
+--- a/include/linux/soc/mediatek/mtk-mmsys.h
++++ b/include/linux/soc/mediatek/mtk-mmsys.h
+@@ -6,6 +6,10 @@
+ #ifndef __MTK_MMSYS_H
+ #define __MTK_MMSYS_H
+ 
++#include <linux/mailbox_controller.h>
++#include <linux/mailbox/mtk-cmdq-mailbox.h>
++#include <linux/soc/mediatek/mtk-cmdq.h>
++
+ enum mtk_ddp_comp_id;
+ struct device;
+ 
+@@ -75,13 +79,16 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+ 
+ void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val);
+ 
+-void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height);
++void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width,
++				  int height, struct cmdq_pkt *cmdq_pkt);
+ 
+-void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height);
++void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height,
++			  struct cmdq_pkt *cmdq_pkt);
+ 
+ void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
+-			       u8 mode, u32 biwidth);
++			       u8 mode, u32 biwidth, struct cmdq_pkt *cmdq_pkt);
+ 
+-void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap);
++void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap,
++				     struct cmdq_pkt *cmdq_pkt);
+ 
+ #endif /* __MTK_MMSYS_H */
+-- 
+2.18.0
 
