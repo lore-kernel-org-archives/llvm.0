@@ -1,78 +1,73 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6D228E2
-	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 11:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667819463; x=1699355463;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=osqOlVd9Zlo/C60qv2PnE4vOKO4mByuvaWgk1xnsyHU=;
-  b=IG5PB92exL2l4G2aLBI6neoXoOMW8Uiwrq0BIgE2Unpveh0GCEH95cNe
-   4YT9/mZBcfAy4qU7Shx1ZZ3PATlVLieGBPCVe3uj0gglv8UY27LuCe3aR
-   hEWr/5nWLirdPb8cJSIc6qJL6L5zpgd4Ngmj1tUmdC0q2npV5P0+cS1eH
-   Emg7/B8Aq53/6olnhOi4raGy9zBJX2TXrKd7oIVKJnwnCd1ln+VLfY4FB
-   Q6gm90/Q9CwZY3NI23gogzf4i3VJNB4hA47+YPs22jsef379eccuIT2xx
-   0OpxrdY4JL6RHUOzeCrR0FQ538J7P9/nxGEDh10aUOb0Tu0ZihimpXk1B
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297877331"
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="297877331"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 03:11:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="778452254"
-X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
-   d="scan'208";a="778452254"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Nov 2022 03:11:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1os01q-008bSw-2e;
-	Mon, 07 Nov 2022 13:10:58 +0200
-Date: Mon, 7 Nov 2022 13:10:58 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Vincent Knecht <vincent.knecht@mailoo.org>
-Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
- devm_add_action_or_rest()
-Message-ID: <Y2jnwgdUiFYjyXvE@smile.fi.intel.com>
-References: <20221104235940.74044-1-andriy.shevchenko@linux.intel.com>
- <5f1a31ba4a53f8461bad7747ae09e73fcfe0af1c.camel@mailoo.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499E128E2;
+	Mon,  7 Nov 2022 11:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7564C433D7;
+	Mon,  7 Nov 2022 11:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1667820616;
+	bh=cb5dwF1IkVJGTe7DJ/2CzobyMHYTx1Umgpq8tkUo5gg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=fctU8VtyolVdVacrOmVTViNNfTvD18i913KCEdGAPe+oFAn8E9NNd6N0CNdHqxMid
+	 9hEE7yUBTiDemhThutRDgauAD5EfUaU+EPnOf3uE7Vyqy8Su4H/ofWS/Bzu2CbDJ3N
+	 GVX1tg1dTF34tDFUbiZdylq/aTP9yLXMHCbqkM9vdMaOVT6xqE0PlQofCw6yglsSKH
+	 lRPlppywZwhAaY9WudtVoBXGKDiKt5lbmKZM85b9X344jUPEpPRg4c3Ah2EVUY6gX7
+	 Gha9XdBmnl/zkDb9am1IIhBRTQ41VNdmrGSAgu/8yELjliCzOFnxuIvGElaQ43h+WN
+	 LgjJjGQA0lS9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA490C41671;
+	Mon,  7 Nov 2022 11:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5f1a31ba4a53f8461bad7747ae09e73fcfe0af1c.camel@mailoo.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Subject: Re: [PATCH v2 1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <166782061582.15100.14489619331442535139.git-patchwork-notify@kernel.org>
+Date: Mon, 07 Nov 2022 11:30:15 +0000
+References: <20221103170130.1727408-1-nathan@kernel.org>
+In-Reply-To: <20221103170130.1727408-1-nathan@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: wintera@linux.ibm.com, wenjia@linux.ibm.com, hca@linux.ibm.com,
+ gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+ svens@linux.ibm.com, linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, keescook@chromium.org,
+ samitolvanen@google.com, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ patches@lists.linux.dev
 
-On Sat, Nov 05, 2022 at 01:37:55PM +0100, Vincent Knecht wrote:
-> Le samedi 05 novembre 2022 à 01:59 +0200, Andy Shevchenko a écrit :
+Hello:
 
-...
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> LED still works fine after applying this patch,
-> also after rmmod'ing and modprobe'ing again.
-> Please let me know if something else should be tested.
-> Thank you !
+On Thu,  3 Nov 2022 10:01:28 -0700 you wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed. A
+> proposed warning in clang aims to catch these at compile time, which
+> reveals:
+> 
+> [...]
 
-Thank you very much for testing, I believe it's comprehensive what you have
-done already.
+Here is the summary with links:
+  - [v2,1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
+    https://git.kernel.org/netdev/net-next/c/aa5bf80c3c06
+  - [v2,2/3] s390/netiucv: Fix return type of netiucv_tx()
+    https://git.kernel.org/netdev/net-next/c/88d86d18d7cf
+  - [v2,3/3] s390/lcs: Fix return type of lcs_start_xmit()
+    https://git.kernel.org/netdev/net-next/c/bb16db839365
 
-> Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
-
+You are awesome, thank you!
 -- 
-With Best Regards,
-Andy Shevchenko
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
