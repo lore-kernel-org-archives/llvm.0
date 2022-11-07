@@ -1,69 +1,78 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8AD2F3E
-	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 10:48:19 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id f23-20020a6b5117000000b006dbd4e6a5abso659651iob.17
-        for <llvm@lists.linux.dev>; Mon, 07 Nov 2022 02:48:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9HymTYv1Z6I3VvgCZ0iLRhqEFf+ukVe1UdjyszgmAxI=;
-        b=tYEG2fX9J/GEE9cqKqYyjQIvZWsmQTvCUiY0LLZpBslWVjutxp+BbbelNDvifxDNwc
-         f8Y3arNf8BFMshz9CSSqOcD6BnG/SqA+3xoFZQ/YE4B484h8mcc2mLOlCtZAr8+EV5H9
-         txwaZyNiEqxVZQ5S6vRWMQ6L7ZSEkOLc5mSlbW3sVvasLYgMv+BlorwHChzabyVZXo//
-         nC7xXtYnllTyra2Zc1oifOXJr8aeeQx+btF4CUDVn+B5mCAKiaHENZhINYVmhw2N0Rb2
-         8EmR7OXlrtR73oBzgCXH2ABAh53fbc+Sy7ePC56EVsO9QzqxR3suyIbP/77pnO7ANjXf
-         xOUA==
-X-Gm-Message-State: ANoB5pm85EhSEAnJPH/Fil1aBHzTFJhmu3a37ZfXsqK7KTyybXony63q
-	WLLeN7F5Yv5Se248MYVm6h6P0KZPrFcp38NOgqqnbIXPTb54
-X-Google-Smtp-Source: AA0mqf7r1E4MKid00wX0yDhGFAGS6Xo1k+8PsoDNvQMQNAUP6OuSDpJhigPiU3WHs+JavxGKKAry0mzKRG/vb8O76Qox/AZOd5qM
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6D228E2
+	for <llvm@lists.linux.dev>; Mon,  7 Nov 2022 11:11:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667819463; x=1699355463;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=osqOlVd9Zlo/C60qv2PnE4vOKO4mByuvaWgk1xnsyHU=;
+  b=IG5PB92exL2l4G2aLBI6neoXoOMW8Uiwrq0BIgE2Unpveh0GCEH95cNe
+   4YT9/mZBcfAy4qU7Shx1ZZ3PATlVLieGBPCVe3uj0gglv8UY27LuCe3aR
+   hEWr/5nWLirdPb8cJSIc6qJL6L5zpgd4Ngmj1tUmdC0q2npV5P0+cS1eH
+   Emg7/B8Aq53/6olnhOi4raGy9zBJX2TXrKd7oIVKJnwnCd1ln+VLfY4FB
+   Q6gm90/Q9CwZY3NI23gogzf4i3VJNB4hA47+YPs22jsef379eccuIT2xx
+   0OpxrdY4JL6RHUOzeCrR0FQ538J7P9/nxGEDh10aUOb0Tu0ZihimpXk1B
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297877331"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="297877331"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 03:11:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="778452254"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="778452254"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Nov 2022 03:11:00 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1os01q-008bSw-2e;
+	Mon, 07 Nov 2022 13:10:58 +0200
+Date: Mon, 7 Nov 2022 13:10:58 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Vincent Knecht <vincent.knecht@mailoo.org>
+Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
+ devm_add_action_or_rest()
+Message-ID: <Y2jnwgdUiFYjyXvE@smile.fi.intel.com>
+References: <20221104235940.74044-1-andriy.shevchenko@linux.intel.com>
+ <5f1a31ba4a53f8461bad7747ae09e73fcfe0af1c.camel@mailoo.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1565:b0:302:c61:4c38 with SMTP id
- k5-20020a056e02156500b003020c614c38mr4401538ilu.76.1667818098935; Mon, 07 Nov
- 2022 02:48:18 -0800 (PST)
-Date: Mon, 07 Nov 2022 02:48:18 -0800
-In-Reply-To: <000000000000dc81b705a0af279c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000564bd705ecdf291f@google.com>
-Subject: Re: [syzbot] WARNING in bpf_check (3)
-From: syzbot <syzbot+245129539c27fecf099a@syzkaller.appspotmail.com>
-To: andrii@kernel.org, andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org, 
-	clang-built-linux@googlegroups.com, daniel@iogearbox.net, davem@davemloft.net, 
-	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev, 
-	memxor@gmail.com, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, shanavas@crystalwater.ae, 
-	song@kernel.org, songliubraving@fb.com, syzkaller-bugs@googlegroups.com, 
-	tglx@linutronix.de, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5f1a31ba4a53f8461bad7747ae09e73fcfe0af1c.camel@mailoo.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-syzbot suspects this issue was fixed by commit:
+On Sat, Nov 05, 2022 at 01:37:55PM +0100, Vincent Knecht wrote:
+> Le samedi 05 novembre 2022 à 01:59 +0200, Andy Shevchenko a écrit :
 
-commit 34dd3bad1a6f1dc7d18ee8dd53f1d31bffd2aee8
-Author: Alexei Starovoitov <ast@kernel.org>
-Date:   Fri Sep 2 21:10:47 2022 +0000
+...
 
-    bpf: Relax the requirement to use preallocated hash maps in tracing progs.
+> LED still works fine after applying this patch,
+> also after rmmod'ing and modprobe'ing again.
+> Please let me know if something else should be tested.
+> Thank you !
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1232e176880000
-start commit:   506357871c18 Merge tag 'spi-fix-v6.0-rc4' of git://git.ker..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1b95a17a5bfb1521
-dashboard link: https://syzkaller.appspot.com/bug?extid=245129539c27fecf099a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10940477080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177e8f43080000
+Thank you very much for testing, I believe it's comprehensive what you have
+done already.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+> Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
 
-#syz fix: bpf: Relax the requirement to use preallocated hash maps in tracing progs.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
