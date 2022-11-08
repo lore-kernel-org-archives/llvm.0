@@ -1,168 +1,188 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227198BF5;
-	Tue,  8 Nov 2022 17:29:55 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b9slzge+P0vbEtpIJeiRYiFgVXouvZYSSPqIt2i3aETtx5Pn+ybieOD8MGAQyDCUoK3LEdlbe20Le63wplSBWVRc6TOJKnloGUwra+t6BXku0CGoMEEizWRVxHoguzVoJ+V+xAJfgKu7BDPAyi/qVcf9tD3aXWu74teTVKDxscWsxKIHikdjmRyrZ5TEV7eWDj0DUhNX3Ofj0ZB1wOoWc7GWOo7daSGA5WaF3mycYSbmowU2jkzhyhZrH0o2r30alma0TayoZLfC8U4qhu3OwYVF3w5KDVi6MiH7GQ//1BQdpNJddK4+l0y5eecyyK5gTtW8u4iLQ5xNoHvu/jSdfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I+w3+zwj93c2hKaRG4vJzUcOyhcWKvRv87j3AjqupI0=;
- b=ElzJ0E+AKG1cl/zx2DUOVyZ/jE44TgU7+RvmQN0ddO1BXlYjYEie51oLfGNcKcgytA6VKgxzahPFDgtQJa9VGxVYGV2YIfWicze0t6pZpHNUXeuc/3BhS79Ovq/HdpkRip8DB0XJFVWWWOgeOy25zzprfBbFbgkj2IextnOsS2CN5myJejQsdG/KXZiYQok4hQ0V124cl6J+fvtjhpQmikjwVSCfurXpsrqNe9Y7eUfONmIJiJT6CyNORyJqV7/q3AZQjDwqQ2YEmwXqzxJGz9Abq8m/DNYKS/MzU6q9dAGmbM9XSS7GtzTtzQ+xPdriAVsVWNk3oLpQ0L1ESPGOTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I+w3+zwj93c2hKaRG4vJzUcOyhcWKvRv87j3AjqupI0=;
- b=OI8CoNoOLTqaEUT+syHCkrTmRT95Fzd26mJzS0m7h2NNDPE7ZeWaSk2bAg5VqD6APQjkDxerm5PtyGxbSMDjB7JnXnNRBu248kS8BVdoEkItAnFdwtHeEJVlDGvZ+j1asarSeqCBlPF3BUnoeAN+iss/0re2odqeTM+u7LZIuPJLGzvfPEXqshKU9cZkKWOxSZ+RMFfEhf+49KZ0DTIhJcLTJW2me0WxGb/MrghcYSX1vcZcszIJedDUqoACJo5C/O13SK7BxhAd7G6eH0olzdxsX9YSD3Yg2/q2l430/m1rbUeUjLOq8Fw+e+ut6ZkKcl9q1YyOFKiPc/QxC/q2NQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ0PR12MB6712.namprd12.prod.outlook.com (2603:10b6:a03:44e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.23; Tue, 8 Nov
- 2022 17:29:54 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 17:29:54 +0000
-Date: Tue, 8 Nov 2022 13:29:53 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	"Martins, Joao" <joao.m.martins@oracle.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	"Liu, Yi L" <yi.l.liu@intel.com>,
-	Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 10/15] iommufd: IOCTLs for the io_pagetable
-Message-ID: <Y2qSEVu91SOfvVmO@nvidia.com>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <10-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <BN9PR11MB52765289F880B8A7297077318C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y2kd/Ptt0iR6SGsh@nvidia.com>
- <BN9PR11MB5276706B744018EC6E36E1128C3F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276706B744018EC6E36E1128C3F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: MN2PR15CA0064.namprd15.prod.outlook.com
- (2603:10b6:208:237::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA55A8C17
+	for <llvm@lists.linux.dev>; Tue,  8 Nov 2022 17:37:23 +0000 (UTC)
+Received: by mail-wm1-f52.google.com with SMTP id 187-20020a1c02c4000000b003cf9c3f3b80so4683138wmc.0
+        for <llvm@lists.linux.dev>; Tue, 08 Nov 2022 09:37:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lL7ib0fQfHAIVHKNMEUfuV2w/rUMbmu/eMiez+EADGc=;
+        b=YT8bDUSuYGlX0nSv0Gmye3eRq5y7UbhWrZlTinDOm2D4cvZMf0uBi7FXOD/RD83xQD
+         ftEA8Oy9SJ2khn9xHaudJCfy0C5C8+J1XVTe/TZJqrUQboYjz9T+6Auu5BcqxQMiJCk9
+         UdOU0NgLAak/vV5X9oK8gPFcxQyRDiTPOq0WF1zieFiXoksfSP6SM7MuznRRMKFDeSTs
+         vr4uFMd5goEZAPH8EnCKiqptmLyIk0JdgcQYHSmHAS5ZLUJ+8z37Ot2CbG4HKOMt1Rje
+         80KqeqTvSDNFxAUoK0/7qt428CD+a2206fRXAs2pSszQXryGl280+QJPRi/VyEnH3o53
+         /AXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lL7ib0fQfHAIVHKNMEUfuV2w/rUMbmu/eMiez+EADGc=;
+        b=Mn4g8TPvjL8+xBoXfcIvI9QglAA3gvwi91VGKYl24okiSooYjcJogKFUWhNaSOs0Ir
+         gCQgTs2jktZUFMybSxufqm+11yZKeOxYrVHAt/kxGeklGEJOUotInlFovtdc/AwGmRWC
+         8/xZUaiM7IDyhifklvBfqP2pxILSxAnU1HEnbsuY2yECQ1jP3CpXSPCPt/NbgAhNxKdo
+         aBTkfQBBGHHyQXfOEgGbIeJCU47VcYdZn3UCjciMROP6hYSgynoD3BFJF68RC68hkETB
+         LP+NqHzyyTVwA7NzvVWBeUgi9J2qMhyKJqsxqaOXbleAAhid1+pPRE0FCFfBfJud6BVv
+         iniQ==
+X-Gm-Message-State: ACrzQf3yIVFd6l9DlviafeNXwI8tl/Tqz390NBs3K8s6MkU6LTNAXBe7
+	CeHKFgHJJJ1IClaNc57UMlo=
+X-Google-Smtp-Source: AMsMyM4ZRxL1bJwjZOpkyyyJeMjJb4TNMK6d9bQf6wA8GOKPj1utSTr6/nojgUJfPKlu3A5LPUB2tA==
+X-Received: by 2002:a05:600c:4ecf:b0:3cf:8762:1a67 with SMTP id g15-20020a05600c4ecf00b003cf87621a67mr24970726wmq.41.1667929042011;
+        Tue, 08 Nov 2022 09:37:22 -0800 (PST)
+Received: from [192.168.0.25] ([37.222.251.204])
+        by smtp.gmail.com with ESMTPSA id v18-20020a5d4b12000000b002365f326037sm13165230wrq.63.2022.11.08.09.37.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 09:37:20 -0800 (PST)
+Message-ID: <58d55016-afc7-e560-32cf-8228794b5752@gmail.com>
+Date: Tue, 8 Nov 2022 18:37:19 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB6712:EE_
-X-MS-Office365-Filtering-Correlation-Id: e034aa1b-2e73-4d1b-13ab-08dac1aed93f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	szo+3HO3bqs3toT9tIp5NDeqA/CaKwIFJyvPBAy6Zh0KNLD7ffNHISteQik7t73upX/gKgvbBpq7BGeNF1hC2wfFkQwU1Yp3cebd+jnvvvDeUjsYX7n+9se30H9iZdztc2hkFRIfrQJcaRIGV87MwqhiSr2tem4bFnXtRKpHFDoVkMizYTG7YKWVt6KJZ/vLfVrQEamkMEue/q6/RT/vQQPSlhye8UVSYvW39UlADqNTlY0WF+iVw4l4YPlKl0Ckkh8FghZmGz17DitsQzOe5Sle3SrWFbuGXgpM2SyyWm3/AwEy5ua/KYtOKkVhTAfIw0CcHOnACkQSOKgaT9SzD8hCRsma87T+kewozk9lu5cWF1Z/gizhcJ4hl8LhYgg9Cu3RMV5b31LFBwz02zDj0y2v1RDr84O0BbmDKoRXQgU+QD58bo1WQbiYA1bn4eFtib62a8nGLt7580GbRRAymjhIkLJrAofv4fzjWGJHRi7+91O1VgwmKRFlS9CdU0slbs+YkObSsSyT6fFowRAfvO6stsJohYxT5Dm468Sw42AyBYzu+IEKWRJA5iWDXzvAnDSY3AKA0GoMqPJ1T7Xdq85h0Umatv7ZJp2DBSYnNMLlV3RbsHr8qb+2XC2EPBihF7jab1RmuQwfm7xUiaFkJ/GSP40VSMxSa+Y3m/UfhKhOl1vLwucAj5r/2WKg3DYs4Y29jW2P51EKs26hLRa6LQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199015)(186003)(478600001)(2906002)(7406005)(5660300002)(316002)(41300700001)(6916009)(8936002)(66556008)(66476007)(54906003)(6486002)(7416002)(66946007)(38100700002)(86362001)(4326008)(83380400001)(26005)(8676002)(6512007)(6506007)(2616005)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4oowAwkn1Vr9yfrzfqoiHlOPQ5z5IjOg2frC1x3zLDXcn7un1kKhgnm5e3C3?=
- =?us-ascii?Q?NB0VU6JRPN2wtZlIp+MwUQ6VdqCUSJLhqEyj4+2F9GF1jZJO9j9+v1QFMA/B?=
- =?us-ascii?Q?+GFV5nOhpwo8Grk9+yLbZQr0/RYgJqNObN5imbOkWFCKRZ9PRlj6LPZNQvvu?=
- =?us-ascii?Q?EKUp0wqgikbGotm9/9jxcCqMfYHodvawFECYylBIaagAPlntgtc0iS+sxDRv?=
- =?us-ascii?Q?cIZqiir3TaI75OkjxLaYdhiYT4q4Tx/1bHvzZJ0aZa1pfgdEoV8ZdIpkX4TJ?=
- =?us-ascii?Q?Dy3tsYEgcgunsr4KD8FI0ePu+O6DVRJVWqBYa/zfiVjli+0EBkaXShJeNmsE?=
- =?us-ascii?Q?ETeQNnLRpixeYbAB+r14QP8Rsyn5iAhD7qfTdi4XhLbv+uKc5LaH+LvWyAzB?=
- =?us-ascii?Q?+KaPavI6PKb7pZ6raPkh3WMu+e0RELGTI1LgE/dpy8hV1zzm+xnyB7PHvjwA?=
- =?us-ascii?Q?VRek9JB9m6B9vz0+LPs4bpQ6i1lzc+2Px54PeppFVuuiy/LUe9kb+YiB2iX7?=
- =?us-ascii?Q?o6pkC26HNN8MiBFChOKa5MIheh+r5EkcsGhJ/GO5XlFJoYLTwguC24poh1sO?=
- =?us-ascii?Q?wvItTtNXfEig7zWSopACytq6lYbq+iP+gk8yG0hjIrJZmBfQZQf+7sB4i277?=
- =?us-ascii?Q?kt9RFey6DqkcfLBlI820bG5ArpT5AFNjYFsa9IAd4Db1vZSisYk+7o7iDWQP?=
- =?us-ascii?Q?8VmsO3SYDZxK33IDKJH5NS+oouqZT2zjyRVl/uAcr/azv8IlUNpC89h8AQMq?=
- =?us-ascii?Q?WdHvSaSIjYq99nQRwN1txQo8yLZnjhdjNQncFM2IPhl8Yoj1oxd213mNanW1?=
- =?us-ascii?Q?fOp2Ob7yvkA4Lyr/HQMtyYLTmEMjkfV897dweG5peFN4oRYfMNO8YdnUBlkS?=
- =?us-ascii?Q?Cb+i3GU34YvV7SGPqHsLVVBvMtyVRazZWoaHSdPmsPrM/G9CR9t2GO3tuRkF?=
- =?us-ascii?Q?lLaC4fDbGtnHtgteZaIENr2d3mBCVkFuPIwMjDp73uTe3am8bTn7Y9zDfXij?=
- =?us-ascii?Q?SDR5BDqUAXdEEuvPSKsLKU+0AJNOKUmlO2eWFEgq9tGBaIC1hX0Eq58fmfxs?=
- =?us-ascii?Q?pIVSkk6BtoXTcG7PmTnO8glZLCTNeKwBa0HQoesYD/ye7aZPKr7VhfdJIqlL?=
- =?us-ascii?Q?qAysQtaZhn/U2eyd9Q/ck3bOtSFY62jb4faiFpXkolNCoZrNF159CG4Tjr6Z?=
- =?us-ascii?Q?fWhBTZPZJCx0C76tOO9BTq2q9HNBDj7SH0lGgGLIOeTXrFUx9mSeG+2DUMjr?=
- =?us-ascii?Q?tzz3X8Ym+22rXSydZRYYSRQs+d5qtTJANbOn6A78vfKL59aDyYj+r6fYauUY?=
- =?us-ascii?Q?K7HtL6AAgAaZEjYP5rJMYnA9aL7H9GYN9SiBKLfOsJuqFwkdsIQuHML9tHRS?=
- =?us-ascii?Q?xUkoh4nsL/LaJ7GLyjKvXpfCJUiN6g+dGfcWUlRtUpRYAcsDHwkB5wsKFGKx?=
- =?us-ascii?Q?Ar5Zi/Omk2MX9f9q4HBINtfRldmeZLjqkMrFJod7gwhfcM0p31kke8HPwoi5?=
- =?us-ascii?Q?xINbDxqyGVNsXz3N9pKO4wKHEIthWf3vToxaZ8PyUtbp2A04VuqTNmlwjwz7?=
- =?us-ascii?Q?zubJBOQP81taS253uYA=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e034aa1b-2e73-4d1b-13ab-08dac1aed93f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 17:29:54.1481
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YlWOPDwudFZ4Hs+uke30CPgeR09+aVNxze4+zlgrn5nP2KVw2Xj50s/XUj63xieC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6712
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v28 05/11] soc: mediatek: refine code to use
+ mtk_mmsys_update_bits API
+Content-Language: en-US
+To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux@roeck-us.net, nfraprado@collabora.com
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+ Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev, singo.chang@mediatek.com,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221107072243.15748-1-nancy.lin@mediatek.com>
+ <20221107072243.15748-6-nancy.lin@mediatek.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221107072243.15748-6-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 08, 2022 at 02:05:20AM +0000, Tian, Kevin wrote:
-> > The concept was the allow list only really impacts domain
-> > attachment. When a user uses FIXED they have to know what they are
+
+
+On 07/11/2022 08:22, Nancy.Lin wrote:
+> Simplify code for update  mmsys reg.
 > 
-> it also impacts automatic IOVA
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>   drivers/soc/mediatek/mtk-mmsys.c | 45 ++++++++++++--------------------
+>   1 file changed, 16 insertions(+), 29 deletions(-)
 > 
-> > doing. There is not a good reason to deny the user to use any IOVA
-> > that is not restricted by the reserved list.
-> 
-> I just didn't get why different restrictions are applied to automatics vs.
-> fixed allocation.
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index 9a327eb5d9d7..73c8bd27e6ae 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -99,22 +99,27 @@ struct mtk_mmsys {
+>   	struct reset_controller_dev rcdev;
+>   };
+>   
+> +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
+> +{
+> +	u32 tmp;
+> +
+> +	tmp = readl_relaxed(mmsys->regs + offset);
+> +	tmp = (tmp & ~mask) | (val & mask);
 
-Because it isn't a restriction on allocation, it is a restriction on
-domain attachment. (and this is a bit confusing and subtle, but it is
-what it was built for)
+I'm not sure about the change in the implementation of mtk_mmsys_update_bits(). 
+Nicolas tried to explain it to me on IRC but I wasn't totally convincing. As we 
+have to go for at least another round of this patches, I'd like to get a clear 
+understanding while it is needed that val bits are set to 1 in the mask.
 
-The purpose is to allow the IOMMU driver to allocate a domain with
-knowledge of what the user would like to do. For instance a small
-allowed range may allow the driver to allocate fewer hops in the IO
-page table, and a create a domain with a smaller aperture.
+Regards,
+Matthias
 
-"automatic" is supposed to find a good IOVA that is the best IOVA for
-that mapping. We have defined the best IOVA as one that doesn't reach
-into areas that future domains are allowed to mark as reserved.
-
-fixed can do anything legal, including violate the allowances if it
-wants. This just means a future domain attachment might fail. Domain's
-won't look at any currently mapped IOVA, only the allowance ranges
-when they size themselves.
-
-Jason
+> +	writel_relaxed(tmp, mmsys->regs + offset);
+> +}
+> +
+>   void mtk_mmsys_ddp_connect(struct device *dev,
+>   			   enum mtk_ddp_comp_id cur,
+>   			   enum mtk_ddp_comp_id next)
+>   {
+>   	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+>   	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+> -	u32 reg;
+>   	int i;
+>   
+>   	for (i = 0; i < mmsys->data->num_routes; i++)
+> -		if (cur == routes[i].from_comp && next == routes[i].to_comp) {
+> -			reg = readl_relaxed(mmsys->regs + routes[i].addr);
+> -			reg &= ~routes[i].mask;
+> -			reg |= routes[i].val;
+> -			writel_relaxed(reg, mmsys->regs + routes[i].addr);
+> -		}
+> +		if (cur == routes[i].from_comp && next == routes[i].to_comp)
+> +			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask,
+> +					      routes[i].val);
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_connect);
+>   
+> @@ -124,27 +129,14 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   {
+>   	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+>   	const struct mtk_mmsys_routes *routes = mmsys->data->routes;
+> -	u32 reg;
+>   	int i;
+>   
+>   	for (i = 0; i < mmsys->data->num_routes; i++)
+> -		if (cur == routes[i].from_comp && next == routes[i].to_comp) {
+> -			reg = readl_relaxed(mmsys->regs + routes[i].addr);
+> -			reg &= ~routes[i].mask;
+> -			writel_relaxed(reg, mmsys->regs + routes[i].addr);
+> -		}
+> +		if (cur == routes[i].from_comp && next == routes[i].to_comp)
+> +			mtk_mmsys_update_bits(mmsys, routes[i].addr, routes[i].mask, 0);
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>   
+> -static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
+> -{
+> -	u32 tmp;
+> -
+> -	tmp = readl_relaxed(mmsys->regs + offset);
+> -	tmp = (tmp & ~mask) | val;
+> -	writel_relaxed(tmp, mmsys->regs + offset);
+> -}
+> -
+>   void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+>   {
+>   	if (val)
+> @@ -161,18 +153,13 @@ static int mtk_mmsys_reset_update(struct reset_controller_dev *rcdev, unsigned l
+>   {
+>   	struct mtk_mmsys *mmsys = container_of(rcdev, struct mtk_mmsys, rcdev);
+>   	unsigned long flags;
+> -	u32 reg;
+>   
+>   	spin_lock_irqsave(&mmsys->lock, flags);
+>   
+> -	reg = readl_relaxed(mmsys->regs + mmsys->data->sw0_rst_offset);
+> -
+>   	if (assert)
+> -		reg &= ~BIT(id);
+> +		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), 0);
+>   	else
+> -		reg |= BIT(id);
+> -
+> -	writel_relaxed(reg, mmsys->regs + mmsys->data->sw0_rst_offset);
+> +		mtk_mmsys_update_bits(mmsys, mmsys->data->sw0_rst_offset, BIT(id), BIT(id));
+>   
+>   	spin_unlock_irqrestore(&mmsys->lock, flags);
+>   
