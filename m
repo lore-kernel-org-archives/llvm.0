@@ -1,83 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF868BF9
-	for <llvm@lists.linux.dev>; Tue,  8 Nov 2022 18:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79BFC433D6;
-	Tue,  8 Nov 2022 18:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1667932830;
-	bh=jjF5Yq9ooqSu67PuLpajmGKnq/YI9I38yCrZ+QF9xZE=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9A28BFA
+	for <llvm@lists.linux.dev>; Tue,  8 Nov 2022 19:10:23 +0000 (UTC)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 820AC6600368;
+	Tue,  8 Nov 2022 19:10:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1667934616;
+	bh=+x4MJ+AKsMXulMyAxgCPfV7Jwz5088uT1madjdL8Tz8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KZ6foW7RZBnob6gVPZtIrJJitq3jOcU+nBe2WkHctOKYtOQCBSY075bEAbQFXqCjQ
-	 XlEWSch7hROb/9RaSzzx0oQnKSRUMUJ7WC2P0MSi4jzCw3oPYRms6QaoBmltptA0IO
-	 eCgqshcOF3sWgXCVK8Hcc1/oweHVGST4EK772VvU88G9iOlp9ospIliYzHFYcCCGrA
-	 ccs3jvVz6H5Maot5k/LYW0vMy65PO5XGwdOSowZCyA1gidYaZvqO8nZ0RcQNsmysA+
-	 EMCgL7VfIZ6Bkof7EawCjcLRfN5tke8FYJMeUDLWch8D8BBG/iNYDdZs8FkcItPDbB
-	 y0JFcCOqKsjxg==
-Date: Tue, 8 Nov 2022 11:40:28 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/4] ARM: use .arch directives instead of assembler
- command line flags
-Message-ID: <Y2qinCG/Bmq9zGCK@dev-arch.thelio-3990X>
-References: <20221014201354.3190007-1-ndesaulniers@google.com>
- <20221014201354.3190007-3-ndesaulniers@google.com>
- <Y2qgTyFcPdnNfkpj@dev-arch.thelio-3990X>
- <Y2qhzhgLIiDD0EI9@shell.armlinux.org.uk>
+	b=BRDC25qS/b9DoOMeS9+X1xOhzrYzjJ0K+UMCDrdd5CzVCjVAppxTOHAWslva/SSu9
+	 NL9nUjDGzLJZJpr+wMKKP9RIdrM7AaUWuJfEeWZRCIHN+eHEUsnb0EvACqTkv6W8Jp
+	 4dntC6xlVsxRTOCRGoipLyVa4zRcMfGQzTqKM8Xn/11GTIkxDal0kLBGUkDnUBwt+t
+	 +opiUMga30d7GKHUBZAWoImtcmjGW1RVtmNOskstabT0EELCuWZ8LQoeA2XFkk7XEc
+	 teXnZwEdUPUZsMHtlNFFRq4f+Nf7dSENPvwVC6XuyIdlKeqZTtnXW2daF6ybhkdotC
+	 41306fZsagfkQ==
+Date: Tue, 8 Nov 2022 14:10:08 -0500
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux@roeck-us.net, David Airlie <airlied@linux.ie>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>,
+	Yongqiang Niu <yongqiang.niu@mediatek.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev, singo.chang@mediatek.com,
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v28 04/11] soc: mediatek: add mtk-mmsys support for
+ mt8195 vdosys1
+Message-ID: <20221108191008.lsasjskm7tzvpa42@notapiano>
+References: <20221107072243.15748-1-nancy.lin@mediatek.com>
+ <20221107072243.15748-5-nancy.lin@mediatek.com>
+ <90d8dfb1-2a37-e79a-b912-c77076e493c6@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y2qhzhgLIiDD0EI9@shell.armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <90d8dfb1-2a37-e79a-b912-c77076e493c6@gmail.com>
 
-On Tue, Nov 08, 2022 at 06:37:02PM +0000, Russell King (Oracle) wrote:
-> On Tue, Nov 08, 2022 at 11:30:39AM -0700, Nathan Chancellor wrote:
-> > I noticed that this series appears to be partially applied in
-> > next-20221108:
-> > 
-> > 59247fe730db ARM: 9265/1: pass -march= only to compiler
-> > bc21212c5564 ARM: 9264/1: only use -mtp=cp15 for the compiler
-> > 5aa4860eb50f ARM: 9262/1: remove lazy evaluation in Makefile
-> > 
-> > This patch (submitted as 9263/1) is needed by 9265/1; without it, builds
-> > are going to break:
-> > 
-> > https://builds.tuxbuild.com/2HGSpQMAKxJuaMAz2ZZc1UgUvvu/build.log
-> > 
-> > Was there a problem with applying this patch or just an oversight? It
-> > would be great to get this whole series applied so that we can turn
-> > -Wunused-command-line-argument into a hard error.
+On Tue, Nov 08, 2022 at 06:46:54PM +0100, Matthias Brugger wrote:
+> On 07/11/2022 08:22, Nancy.Lin wrote:
+[..]
+> > --- a/drivers/soc/mediatek/mtk-mmsys.c
+> > +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> > @@ -80,6 +80,12 @@ static const struct mtk_mmsys_driver_data mt8195_vdosys0_driver_data = {
+> >   	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+> >   };
+> > +static const struct mtk_mmsys_driver_data mt8195_vdosys1_driver_data = {
+> > +	.clk_driver = "clk-mt8195-vdo1",
+> > +	.routes = mmsys_mt8195_vdo1_routing_table,
+> > +	.num_routes = ARRAY_SIZE(mmsys_mt8195_vdo1_routing_table),
+> > +};
+> > +
+> >   static const struct mtk_mmsys_driver_data mt8365_mmsys_driver_data = {
+> >   	.clk_driver = "clk-mt8365-mm",
+> >   	.routes = mt8365_mmsys_routing_table,
+> > @@ -292,6 +298,10 @@ static const struct of_device_id of_match_mtk_mmsys[] = {
+> >   		.compatible = "mediatek,mt8195-vdosys0",
+> >   		.data = &mt8195_vdosys0_driver_data,
 > 
-> Patching 9263/1...
-> git apply --whitespace=fix -p1 --index --check > /tmp/pdb.726086 2>&1
-> exited with non-zero status: 256
-> error: patch failed: arch/arm/mach-mvebu/Makefile:1
-> error: arch/arm/mach-mvebu/Makefile: patch does not apply
-> 
-> The problem appears to be:
-> 
-> 84fc86360623 ARM: make ARCH_MULTIPLATFORM user-visible
-> 
-> which is not in my misc branch. I've applied your patch using GNU
-> patch with a fuzz of 2, and the resulting diff looks sensible. I'll
-> push it out later this evening.
-> 
-> Thanks for the heads-up.
+> It seems we are missing a patch in the series. vdosys0 also correct was
+> never introduced in the driver...
 
-Perfect, thanks a lot for the quick response! I figured it was something
-like that. I will keep an eye out for any additional breakage and follow
-up with patches or additional emails as necessary.
+Hi Matthias,
 
-Cheers,
-Nathan
+as mentioned in the cover letter, this series is based on the series "Change
+mmsys compatible for mt8195 mediatek-drm" [1], which introduces vdosys0. This
+compatible entry specifically is added on patch 3 of that series [2].
+
+[1] https://lore.kernel.org/all/20220927152704.12018-1-jason-jh.lin@mediatek.com/
+[2] https://lore.kernel.org/all/20220927152704.12018-4-jason-jh.lin@mediatek.com/
+
+Thanks,
+Nícolas
+
+> 
+> >   	},
+> > +	{
+> > +		.compatible = "mediatek,mt8195-vdosys1",
+> > +		.data = &mt8195_vdosys1_driver_data,
+> > +	},
+> >   	{
+> >   		.compatible = "mediatek,mt8365-mmsys",
+> >   		.data = &mt8365_mmsys_driver_data,
