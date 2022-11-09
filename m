@@ -1,2293 +1,302 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D7C257B
-	for <llvm@lists.linux.dev>; Wed,  9 Nov 2022 07:28:13 +0000 (UTC)
-Received: by mail-pg1-f175.google.com with SMTP id s196so15505121pgs.3
-        for <llvm@lists.linux.dev>; Tue, 08 Nov 2022 23:28:13 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D9E257B;
+	Wed,  9 Nov 2022 08:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667981206; x=1699517206;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=MuPgx4wuo9NDNIc3xsdEZHQSSp2zRaXkRO2yz1ph2Mg=;
+  b=zydLusUI9kra/7ArhsoNWMOSNZE8w4mOVNwzNNCWoJqaTp4MwSesdjyl
+   dSEWfGk+SB0Z5ZB8uVw30fjGaJ9u5wQY2Td3+KbIIn15h/kCQ+hjFAij7
+   X2F9eWbBylfpgq9XN2NgMXv8d8Kkx5zmlpdYnIpcHvUmzh3yBeDDRDRGo
+   hLW7W/g5+SdSLRYxXFXB8yZlTRC6GhChw5aY216oFcQQAQAAprh0JmKUM
+   K8etWxVEBnZGKIgSA8ZGJjdmC9wXw3kJgxZLpc8pF4m4C0qmqlv6KnLUI
+   OZCFZ11JiwF+/4F/pH4H0in2nSs2cIAlAyyvwI63PV+FkF8OXQTdUoV2i
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="188223997"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Nov 2022 01:06:45 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 9 Nov 2022 01:06:44 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 9 Nov 2022 01:06:44 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n6DdK9og6HcFm79wbYdWomorfH7IGvGMMN+OIbLot3rFaR96emDVFH9tTdjGYXKHSnLKYa2k/qmskI1n90dz0RD6albzKJrwxZ4zit9hods/ibN1CRJBRgiOWckDH2Wt2ah+xRnsR6hiq4B7TRs3d/a5BOfJPz6oIZdTeXjxPLgTDJ4YENldgc5ZkpQ1QaHntYP8ut/DFs1NlH7kK8C4psB4LDbrKMfl98IBHDsQM1l25tcj0emjgpAMRJvvqjGz6EdIrfynf6H30oQa72ZrSRdz5thhOzAob2/jPOG4AAfFaJdbjxYhyyTF3zxHHuWpYelQ1nqMpiiyuOZnXCqdFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MuPgx4wuo9NDNIc3xsdEZHQSSp2zRaXkRO2yz1ph2Mg=;
+ b=NZB7cY0HQAqxw1ef4D1bIWzgwZQxKaULhZ3/BazKcAf8zEQZ9kqabuhJoUpuZj7ygMTEwYWHZ2ODvLvfTkVn8mqATpCeNYkZewy54q4oRRqv2412iYEyZPT/sMZY0vrke+OCZXSYAC9MoQ6MU4JAZ2hiHL1AN4Mf5hrCzoXgzc4a7gCzOT5RKJEqDLToqmL+5QQYaR1qNdlsctp7ko0SZZcjkOniYXHtFEO4A9dsxgYuxcISW/hn+C1qjbT9P6uAofDtbSbD/qup/8b7nEtJsZfTtNX3NZ2DJF9t7Y0t4qDPcKWsg4lil3dK64vHyd73zpkKuZPEesu2eXPSr97FIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EMTrgf1cgfn29bBMaN8e4vkWSO2qHk+yktUHWr0GOE=;
-        b=XWCD59T1F5xn6Zi8XpvE6BXvzzebjIY/GVAWhUBR8w5ETBrhhk8oGWVDBGQNZ85wrX
-         dppNvkh+Fqubo6bfJx2XgIn1yeWE90/N0ad5ik8Qp1aOvh96Wj2KiYammvsj3Fdb2X1q
-         KS7hzvB96UnyZShzC2HjTB2dShSKdahiAzVT4yoe8huq1q+NdnRzA9qFpPcaYKQpkBoO
-         u4XBCoKYcwIm5zd69P2TwU6MlBDQZyS3fe0IOxFKv4s5DJ4I17QF2zpoJMqWK7WH2R5q
-         AHBIcLTiPQJpQfNOdVJWO0XhDrTCNTH4Tu3ljnDEt3OsIIL5l2GBkY5m5oZM5D9eoNQl
-         VH6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7EMTrgf1cgfn29bBMaN8e4vkWSO2qHk+yktUHWr0GOE=;
-        b=xHRcWIKkTc0YUYmDHSMX5Pbn4LHgGZSkgOmp5C9apU0/X+oUbyZrdDn7uRFpfkSzNj
-         J1JM8wy3Ig8HObWe5RUJueW0KJ8QHcQ1l90t8f1FKkAiv4954PXrnS8IU819Ws/Tj6pu
-         2CzTFFXfcPPKIOqcv8YjvFj4dm3lDzi94ZkoU8F5DL7V9w+BOcrUnlZJDMngJ2Kr7/n1
-         QOG+SrL5XQjB+zaxefCXj1sYBtpSdR/uzGu+uQH31Ss5GOeT7P8gAgoUmSWMar3NXO2C
-         2rz2i14TW32NG2lgECzW+FkDzLsBl6mlSF6ZSCX0oEG2e1RPE9+6DDo0jLPxRWaVXneD
-         sGzA==
-X-Gm-Message-State: ACrzQf2xonIcr4or+MTZZyadJcrPWSrODUypnnGD4ZgRIKVZgJHRXvCC
-	8yOLmE+B0M042oXRWca0Uh5m01URnJK/BHc9
-X-Google-Smtp-Source: AMsMyM53k4vfJnLMiCZ7aaJDYLp8ubX0QRNfoFK/140vLHRvg2JLyRIcBgU7CLrg+KKQFoBB5EmaPQ==
-X-Received: by 2002:a63:1c52:0:b0:470:a4a:66b3 with SMTP id c18-20020a631c52000000b004700a4a66b3mr32411289pgm.573.1667978890894;
-        Tue, 08 Nov 2022 23:28:10 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b0018544ad1e8esm8327971plc.238.2022.11.08.23.28.09
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 23:28:10 -0800 (PST)
-Message-ID: <636b568a.170a0220.d8987.dc04@mx.google.com>
-Date: Tue, 08 Nov 2022 23:28:10 -0800 (PST)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MuPgx4wuo9NDNIc3xsdEZHQSSp2zRaXkRO2yz1ph2Mg=;
+ b=WnEJhT4goKlM3vwZfuwy6hIr/JiqwxONt+ZMlFQkhGz1O0nhpcswv6Rbg70HVhyrk/4uN1HPmHgMoGoKVaOtkb5xqYC3Vwcs6LKGyB2wHKtNCcHSHXmEXjvnkekGbbygGHOX123mBe4cCBoZcr2xcH6q2peZYAqiQf8Ucz8JNm4=
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
+ PH0PR11MB5191.namprd11.prod.outlook.com (2603:10b6:510:3e::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5791.26; Wed, 9 Nov 2022 08:06:42 +0000
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::626d:ef37:c13f:1c4b]) by DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::626d:ef37:c13f:1c4b%4]) with mapi id 15.20.5791.026; Wed, 9 Nov 2022
+ 08:06:42 +0000
+From: <Tudor.Ambarus@microchip.com>
+To: <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
+Subject: Re: [PATCH v2] dmaengine: drivers: Use
+ devm_platform_ioremap_resource()
+Thread-Topic: [PATCH v2] dmaengine: drivers: Use
+ devm_platform_ioremap_resource()
+Thread-Index: AQHY878LbpZzmOa79kmHJcnM/N08GK42POYA
+Date: Wed, 9 Nov 2022 08:06:42 +0000
+Message-ID: <4320dbae-6882-5929-9bc0-537b53c454c0@microchip.com>
+References: <20221108121837.540293-1-tudor.ambarus@microchip.com>
+ <202211090648.UbazrOYz-lkp@intel.com>
+In-Reply-To: <202211090648.UbazrOYz-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR11MB6479:EE_|PH0PR11MB5191:EE_
+x-ms-office365-filtering-correlation-id: cd14035c-844f-41b4-b66b-08dac229563a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: unrFxMJ3uxE2T766lrVhLvWG8zU1ux5aqqhYUGN2MvZROrbKCr9dVYnjjDO5EmjqtXeMePE352+fPOXL9pVmDTAzj+G/X/LBUeQvTv9GcZ7cMx83mBgm/5eB72BDQkmxEGL7Y0kEZx7UxOPLyfaKWRWYtp73g+eCbj+UtQzxlHvg/JZH/BckN5ETiHVxgzMLg6fcEa6kjfePTkJJTlwdPSyCjQU+RHeBEhi4mwQIAnOrkR4RmmXzoLCNz1Y5cVC4xXKnY++RlGzjHBoKxLdXauL9+WGXR4hkEZwwA8vj78QD7izNTUrcPH2tGNp/ynSNdjuoQbIMhOd5Gg6evJyjO4Zwml8Qn8sgL/Ts0dyrYmpzDjGyEFdDldpT5Qd6MOoORUULiAu++Cl1waWyCqbGy/dPn76o5gb2vZL/mQ+cY8G20fMzguuTn22KjOmV6Sm7ePdMULm/UxVCgo9MBfQXI79Ry2DiNC5omdeMGUDP9KMw92S5qn8btq75xD2hnCd+d83SlU2KEZpzMSJZeC2qjddixOrWyLSiZSSgOeQ5SCyC5ezbv9X415CEps+NJmNvuwKgDmmAeCdRYCOPOv1ien1JaqzGw5gc22dI+OdNkmBNA7EtvEWb2rfdR5Lg2rbFCcelxuXw48Oa8Hq/7ZZ75WulSiX4QJzt3ENoW5Pin82oUr/P6EkP4pikeqsI1Xrh0OtbxC2YRRfleDvCdNHsGdOxMx0uqHNFIEmcZaId9GxyihoQJx1uHkFlUhVFYebF14zrk2icIEUhcSx4YYnWe9Eu15pXiv/79ZyiwdZyfxIc4lUjQHuA14kTu3yeBiVlHVB4CFoGKGs7AY4PL0faWQStFPCIPfcyMG5HSKuW5nPbwkxEhmrRDQMwctXoeEMdcsRu/0edR9rSpUsknldsPw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199015)(6506007)(26005)(2616005)(6512007)(83380400001)(38100700002)(122000001)(5660300002)(53546011)(186003)(2906002)(54906003)(6916009)(966005)(6486002)(41300700001)(71200400001)(478600001)(8936002)(4326008)(8676002)(76116006)(316002)(66946007)(64756008)(66446008)(66556008)(91956017)(31686004)(66476007)(36756003)(38070700005)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VmhFZ0trcktqOE1YdnorRE5lYS9JcCt2RmZ3ZEhOMi85TDVxODVZS3Zuc2p1?=
+ =?utf-8?B?S0xIZjQ2OWsrUXgzSFZSTklxb0IycGtpcFRvUVBrUXRoV01nTndVcGUyMkEv?=
+ =?utf-8?B?ZzNCMWF5UEptaFFadVByajl0THlUNGdodXF4Z0lsTDhIZnhzWXd1eHdwUE9u?=
+ =?utf-8?B?Zzh3c01VUVlwVnNTOGlvMjNwZXdpTi91dE9obWluMWtGNVNZVTM0NnJ4L1ZJ?=
+ =?utf-8?B?N0Z3dEllWGc4VUN5VU1IeElXend0WGtJeHd6a1RLcHlmRUx6dEYxczVjZHpi?=
+ =?utf-8?B?Skl2WURhUkR6ckhENXduelFEbUlKUmREcHEzMjZSdlJCTjlDQkRKa2svUlhp?=
+ =?utf-8?B?ZWEraW12djVWQjluaU5LODBQNFdBVlJ1TXhvL25veDRKWWY4VG5RWFVRTGo3?=
+ =?utf-8?B?Z0xsQWQvU054SFZIN216WXNTVmlzTFl4cHh3ZTAvMjdRcllhQmFIdzZoZ29D?=
+ =?utf-8?B?Ty9lNXY0Z3d4YTVTd293RnU4cWd3TTVOOTJEUTV2WkRkTnRmeVpuZHhSQi9L?=
+ =?utf-8?B?ZGoyQWNxcHR0bmdCNFlId0RYQ0dNOW9aYUxuV1pLbzFBLzhYUS9PeVBKUUov?=
+ =?utf-8?B?aVQxWWJ6a0IwOENCY1FtMGZZYituM20wSzZPOGlKdmNGVk1TL2FUYStQZENk?=
+ =?utf-8?B?RkFaNUFqclh6M1IyTFdOUm1oUGhHUEFIY1dNNGFwUWFVZlN2a2d6YkltdEtP?=
+ =?utf-8?B?WVZndDJrbXRBM3cwNTVIVHFxbnlUemlOUi9yOGhEczl1YnVyTkhwV1NpeG11?=
+ =?utf-8?B?OHdua1BuZ2dMRHJ2YXMwOEVxZ0FSakVtU2RhTlBzR05iWXBGQ1MzaTNqUnFW?=
+ =?utf-8?B?b1ZneHRzNTV3MEdBZmI2ajNXVTNVbU01NjFqdkJQY0huV0FVd08zOTVEWmMv?=
+ =?utf-8?B?TEFtYmZZRWlwdU93YVNQRVFJYmlKSzZaejRLaVRrREZDN2FEYjVIZkZKQzh1?=
+ =?utf-8?B?UjdVWDh0L1gwdXd1R3lBTkNtYmkzcGkxaU9Cb0Y3QndRckNUQzBxUTVvRjBp?=
+ =?utf-8?B?blIyUFFSbmJod1luWU93YnJ1RTBkdmo3dDI3SGljdWovUnNxNnNWZDRBTHZX?=
+ =?utf-8?B?VGUyWUZTZXRPUVpRdm9Pb0d4THFTT2hpQVBvM0VVeUNFNS8rYUNON2RRRWRl?=
+ =?utf-8?B?NUg4WmRjWjBRb0JRMUZzYjhkNjZia3FyNXRLZ0wwd1d6Rnd6ZjdoZFY5WVFG?=
+ =?utf-8?B?RWh1NXpQSWlhUE9TZVQ5cVpMaFNxQk5YbjlOYVF5azlUbGI0RWxNamNFRVlU?=
+ =?utf-8?B?OHNNb2NNRmRkMnNoVzAxSTc5SUoxYjBkSnZ6a0h5cFJSaGtObTRweUNITFlC?=
+ =?utf-8?B?ZElKU0RhWmt3MFBhWjl6MjRzc3B6b0NWRXNUYlYwSWhYc3N6NFRtOGZUVnl5?=
+ =?utf-8?B?MjNia1RpWCtMb09UR2RNTWdyN2llL1Bud3QrT0NQSXNXa2thVmpQUVM0RWJa?=
+ =?utf-8?B?YkRtOFVZYzA0UjdlVk1abS9JOWlpUzVGZ1NraWxzTzNJM1ZPSlVsWEIvMjFQ?=
+ =?utf-8?B?Sk02VlRKM3c5Y3Y4YS9jcFRkTm1RaHBaOXhuZHVMSFdiYk5XUHdUV2RQNmFO?=
+ =?utf-8?B?a2VDVU11K0dPcjZ0eVNmTVZsa1h4SERkUkNRdW1SL3NGUnJ0UWR4UlI4VC9V?=
+ =?utf-8?B?eDFERVhBQmR5WHcreGRCaEk1VGVySVhONndOeVdyaG83c1FRZldqY3lqc2Vh?=
+ =?utf-8?B?bEU0dWFDa24ranQ0RjBITCtERTdpTm50R2pnTm4vanlPakdpS1FGQ0ZDNnNZ?=
+ =?utf-8?B?S0gxLys1Z3FNdG9tcHE3QVhUMTlyN0t5QWZ0bnEwRlNDdHRXQ3h0dGN4RU9p?=
+ =?utf-8?B?U0swckhrcUlUZVAyL21zNVhTb1FPQUZoTmZzdk1CYTNxdjY2SjBtd1BuUkR0?=
+ =?utf-8?B?Sm1zYVp5RmM3SzN1VHNLbXQrTlpXeFU3RXVGbXBBUm1pZmVHV3pHd1lSRFhz?=
+ =?utf-8?B?TGdzZUJsaWliZVlDdnEzblVFT2RmTVA5ZG1DK1I3aDZ3cUxDVnNId3JteStj?=
+ =?utf-8?B?NUtrZFdDUURjZ1k4YTdMdTcrTW9HeW5LL0RXL0FZczdhWmc5eHVPOU1temJD?=
+ =?utf-8?B?L2p5cE4xV095YjkvN0V3OU9TYmdTZGFnd1lKODRiTVAyUE1pekFjWFZHN1Nx?=
+ =?utf-8?B?TDdqVjNvQ2VqMzIyOXFMMnRnbmFKNElVbDlyeHhPZDBMT3p6Y0ZmRUhjV0hm?=
+ =?utf-8?B?Tmc9PQ==?=
 Content-Type: text/plain; charset="utf-8"
+Content-ID: <AA0F97C2E134E34CA60CBA0D1A44F618@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20221109
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master build: 234 builds: 19 failed, 215 passed, 25 errors,
- 579 warnings (next-20221109)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 234 builds: 19 failed, 215 passed, 25 errors, 579 warnin=
-gs (next-20221109)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20221109/
-
-Tree: next
-Branch: master
-Git Describe: next-20221109
-Git Commit: 94db6b12c18d7cf7c5726dbe816c2248494a778d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arm:
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
-IL
-    allmodconfig: (clang-16) FAIL
-    allmodconfig: (gcc-10) FAIL
-    mini2440_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-    s3c2410_defconfig: (gcc-10) FAIL
-    s3c6400_defconfig: (gcc-10) FAIL
-    tct_hammer_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
-    i386_defconfig: (clang-16) FAIL
-
-mips:
-    decstation_64_defconfig: (gcc-10) FAIL
-
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook: (clang-13) FAIL
-    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
--chromebook: (clang-13) FAIL
-    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
-chromebook: (clang-13) FAIL
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
-) FAIL
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
-book: (clang-13) FAIL
-    x86_64_defconfig+x86-chromebook: (clang-13) FAIL
-    allmodconfig: (clang-16) FAIL
-    x86_64_defconfig: (clang-16) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-    allmodconfig (gcc-10): 1 error
-    allmodconfig (clang-16): 1 error
-    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
-error
-    imxrt_defconfig (gcc-10): 51 warnings
-    keystone_defconfig (gcc-10): 1 warning
-    lpc18xx_defconfig (gcc-10): 53 warnings
-    milbeaut_m10v_defconfig (gcc-10): 79 warnings
-    mini2440_defconfig (gcc-10): 1 error
-    moxart_defconfig (gcc-10): 1 warning
-    mps2_defconfig (gcc-10): 50 warnings
-    multi_v7_defconfig (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 1 warni=
-ng
-    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 1 warning
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 124 warnings
-    multi_v7_defconfig+debug (gcc-10): 1 warning
-    multi_v7_defconfig+kselftest (gcc-10): 1 warning
-    rpc_defconfig (gcc-10): 2 errors
-    s3c2410_defconfig (gcc-10): 1 error
-    s3c6400_defconfig (gcc-10): 1 error
-    sp7021_defconfig (gcc-10): 65 warnings
-    stm32_defconfig (gcc-10): 47 warnings
-    tct_hammer_defconfig (gcc-10): 1 error
-    tegra_defconfig (gcc-10): 2 warnings
-    vf610m4_defconfig (gcc-10): 46 warnings
-    viper_defconfig (gcc-10): 1 warning
-
-i386:
-    allmodconfig (clang-16): 3 errors, 1 warning
-    i386_defconfig (clang-16): 1 error, 1 warning
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    ar7_defconfig (gcc-10): 1 warning
-    bmips_be_defconfig (gcc-10): 8 warnings
-    bmips_stb_defconfig (gcc-10): 8 warnings
-    fuloong2e_defconfig (gcc-10): 1 error
-    lemote2f_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 1 error
-    rb532_defconfig (gcc-10): 2 warnings
-    rs90_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    allmodconfig (clang-16): 1 error, 9 warnings
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook (clang-13): 1 error, 1 warning
-    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
--chromebook (clang-13): 1 error, 1 warning
-    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
-chromebook (clang-13): 1 error, 1 warning
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
-: 1 error, 1 warning
-    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
-book (clang-13): 1 error, 1 warning
-    x86_64_defconfig (clang-16): 1 error, 1 warning
-    x86_64_defconfig+x86-chromebook (clang-13): 1 error, 1 warning
-
-Errors summary:
-
-    10   drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is un=
-initialized when used here [-Werror,-Wuninitialized]
-    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    3    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_dat=
-a/dma-s3c24xx.h: No such file or directory
-    2    arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/d=
-ma-s3c24xx.h: No such file or directory
-    1    drivers/pwm/pwm-tegra.c:148:53: error: signed shift result (0x3B9A=
-CA0000) requires 39 bits to represent, but 'long' only has 32 bits [-Werror=
-,-Wshift-overflow]
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3583:12: error: =
-stack frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-=
-Wframe-larger-than]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:143=
-6:12: error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_g=
-et_power_profile_mode' [-Werror,-Wframe-larger-than]
-    1    arch/arm/mach-s3c/devs.c:32:10: fatal error: 'linux/platform_data/=
-dma-s3c24xx.h' file not found
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    514  <command-line>: warning: "__thumb2__" redefined
-    10   drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variabl=
-e 'ret' to silence this warning
-    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    8    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=98100000=
-0000 << 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=
-=80=99 only has 32 bits [-Wshift-overflow=3D]
-    7    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
-fined but not used [-Wunused-function]
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_forma=
-t): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (=
-8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid=
-_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
-lt #size-cells value
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid=
-_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
-lt #address-cells value
-    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_fo=
-rmat): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid lengt=
-h (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2=
-, #size-cells =3D=3D 1)
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (s=
-pi_bus_reg): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
-ci_device_reg): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
-ci_device_bus_num): Failed prerequisite 'reg_format'
-    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i=
-2c_bus_reg): Failed prerequisite 'reg_format'
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcp=
-y() leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leav=
-es .noinstr.text section
-    1    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy()=
- leaves .noinstr.text section
-    1    vmlinux.o: warning: objtool: __sev_get_ghcb+0xad: call to memcpy()=
- leaves .noinstr.text section
-    1    fs/reiserfs/reiserfs.o: warning: objtool: replace_key+0x226: stack=
- state mismatch: cfa1=3D4+80 cfa2=3D4+96
-    1    drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: =
-csiphy_lanes_enable+0x494: sibling call from callable instruction with modi=
-fied stack frame
-    1    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fm=
-t() falls through to next function __cfi_m5mols_get_frame_desc()
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
-ismatches
-
-Errors:
-    arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3=
-c24xx.h: No such file or directory
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-16) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/mach-s3c/devs.c:32:10: fatal error: 'linux/platform_data/dma-s=
-3c24xx.h' file not found
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 3 errors, 1 warning, 0 sectio=
-n mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1436:12:=
- error: stack frame size (1028) exceeds limit (1024) in 'smu_v13_0_7_get_po=
-wer_profile_mode' [-Werror,-Wframe-larger-than]
-    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3583:12: error: stack=
- frame size (1072) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wfram=
-e-larger-than]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 1 error, 9 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .n=
-oinstr.text section
-    vmlinux.o: warning: objtool: vc_switch_off_ist+0xbe: call to memcpy() l=
-eaves .noinstr.text section
-    vmlinux.o: warning: objtool: fixup_bad_iret+0x36: call to memset() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_get_ghcb+0xad: call to memcpy() leav=
-es .noinstr.text section
-    vmlinux.o: warning: objtool: __sev_put_ghcb+0x35: call to memcpy() leav=
-es .noinstr.text section
-    fs/reiserfs/reiserfs.o: warning: objtool: replace_key+0x226: stack stat=
-e mismatch: cfa1=3D4+80 cfa2=3D4+96
-    drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
-alls through to next function __cfi_m5mols_get_frame_desc()
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-    drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: csiph=
-y_lanes_enable+0x494: sibling call from callable instruction with modified =
-stack frame
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
-ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
-es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
-: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
- bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
-ze-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_bus_num): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
-ddress-cells value
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
-ize-cells value
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 8 warnings, 0 =
-section mismatches
-
-Warnings:
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
-ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
-es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
-: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
- bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
-ze-cells =3D=3D 1)
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
-vice_bus_num): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
-s_reg): Failed prerequisite 'reg_format'
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
-ddress-cells value
-    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.21-121.6: Warning (avoid_defa=
-ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
-ize-cells value
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 FAIL, 1 error, 0 warnings, 0 section mismatches
-
-Errors:
-    drivers/pwm/pwm-tegra.c:148:53: error: signed shift result (0x3B9ACA000=
-0) requires 39 bits to represent, but 'long' only has 32 bits [-Werror,-Wsh=
-ift-overflow]
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
-smatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
-smatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
-matches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-16) =E2=80=94 FAIL, 1 error, 1 warning, 0 secti=
-on mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 51 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 53 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 79 warnings=
-, 0 section mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
-tion mismatches
-
-Errors:
-    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_data/dma=
--s3c24xx.h: No such file or directory
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 50 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1=
- warning, 0 section mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 124 warnings, 0 section mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warn=
-ing, 0 section mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_data/dma=
--s3c24xx.h: No such file or directory
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
-ion mismatches
-
-Errors:
-    arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3=
-c24xx.h: No such file or directory
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 65 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 47 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_data/dma=
--s3c24xx.h: No such file or directory
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/pwm/pwm-tegra.c:148:53: warning: result of =E2=80=981000000000 =
-<< 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99=
- only has 32 bits [-Wshift-overflow=3D]
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 46 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
- but not used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 FAIL, 1 error, 1 warning, 0 s=
-ection mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error,=
- 1 warning, 0 section mismatches
-
-Errors:
-    drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uniniti=
-alized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 're=
-t' to silence this warning
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----
-For more info write to <info@kernelci.org>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd14035c-844f-41b4-b66b-08dac229563a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2022 08:06:42.2326
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6z6fJYSYDeMjnUUq3KFWmw3kdNqPIkaSi710EMDzFAS9+dFTvm6594SsuC8b4GlG+VQqkjGdzXUUXKDU+6yVp6vymaBHQhesa0WlFhUKJck=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5191
+
+T24gMTEvOS8yMiAwMDoxMCwga2VybmVsIHRlc3Qgcm9ib3Qgd3JvdGU6DQo+IEVYVEVSTkFMIEVN
+QUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtu
+b3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gSGkgVHVkb3IsDQoNCkhpIQ0KDQo+IA0KPiBJ
+IGxvdmUgeW91ciBwYXRjaCEgWWV0IHNvbWV0aGluZyB0byBpbXByb3ZlOg0KDQpZZXAgdGhlIGVy
+cm9ycyBhcmUgdmFsaWQuIFdpbGwgZml4IHRoZW0sIHJlY2hlY2sgdGhlIGVudGlyZSBwYXRjaA0K
+YW5kIHNlbmQgYSBuZXcgdmVyc2lvbiBvZiBpdC4NCg0KVGhhbmtzIQ0KdGENCg0KPiANCj4gW2F1
+dG8gYnVpbGQgdGVzdCBFUlJPUiBvbiB2a291bC1kbWFlbmdpbmUvbmV4dF0NCj4gW2Fsc28gYnVp
+bGQgdGVzdCBFUlJPUiBvbiBzaGF3bmd1by9mb3ItbmV4dCBhdG9yZ3VlLXN0bTMyL3N0bTMyLW5l
+eHQgbGludXMvbWFzdGVyIHY2LjEtcmM0IG5leHQtMjAyMjExMDhdDQo+IFtJZiB5b3VyIHBhdGNo
+IGlzIGFwcGxpZWQgdG8gdGhlIHdyb25nIGdpdCB0cmVlLCBraW5kbHkgZHJvcCB1cyBhIG5vdGUu
+DQo+IEFuZCB3aGVuIHN1Ym1pdHRpbmcgcGF0Y2gsIHdlIHN1Z2dlc3QgdG8gdXNlICctLWJhc2Un
+IGFzIGRvY3VtZW50ZWQgaW4NCj4gaHR0cHM6Ly9naXQtc2NtLmNvbS9kb2NzL2dpdC1mb3JtYXQt
+cGF0Y2gjX2Jhc2VfdHJlZV9pbmZvcm1hdGlvbl0NCj4gDQo+IHVybDogICAgaHR0cHM6Ly9naXRo
+dWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0cy9UdWRvci1BbWJhcnVzL2RtYWVuZ2lu
+ZS1kcml2ZXJzLVVzZS1kZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2UvMjAyMjExMDgtMjAy
+MDM4DQo+IGJhc2U6ICAgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5l
+bC9naXQvdmtvdWwvZG1hZW5naW5lLmdpdCBuZXh0DQo+IHBhdGNoIGxpbms6ICAgIGh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL3IvMjAyMjExMDgxMjE4MzcuNTQwMjkzLTEtdHVkb3IuYW1iYXJ1cyU0
+MG1pY3JvY2hpcC5jb20NCj4gcGF0Y2ggc3ViamVjdDogW1BBVENIIHYyXSBkbWFlbmdpbmU6IGRy
+aXZlcnM6IFVzZSBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2UoKQ0KPiBjb25maWc6IHJp
+c2N2LXJhbmRjb25maWctcjAzMy0yMDIyMTEwOA0KPiBjb21waWxlcjogY2xhbmcgdmVyc2lvbiAx
+Ni4wLjAgKGh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdCA0NjNkYTQ1ODkyZTJk
+MmEyNjIyNzdiOTFiOTZmNWY4YzA1ZGMyNWQwKQ0KPiByZXByb2R1Y2UgKHRoaXMgaXMgYSBXPTEg
+YnVpbGQpOg0KPiAgICAgICAgIHdnZXQgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29t
+L2ludGVsL2xrcC10ZXN0cy9tYXN0ZXIvc2Jpbi9tYWtlLmNyb3NzIC1PIH4vYmluL21ha2UuY3Jv
+c3MNCj4gICAgICAgICBjaG1vZCAreCB+L2Jpbi9tYWtlLmNyb3NzDQo+ICAgICAgICAgIyBpbnN0
+YWxsIHJpc2N2IGNyb3NzIGNvbXBpbGluZyB0b29sIGZvciBjbGFuZyBidWlsZA0KPiAgICAgICAg
+ICMgYXB0LWdldCBpbnN0YWxsIGJpbnV0aWxzLXJpc2N2LWxpbnV4LWdudQ0KPiAgICAgICAgICMg
+aHR0cHM6Ly9naXRodWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0L2U3NDBjM2Q1NTZi
+NGRiZDE4OTRjYTMxNTY5MjRiZjkxNmZkZjg0NDUNCj4gICAgICAgICBnaXQgcmVtb3RlIGFkZCBs
+aW51eC1yZXZpZXcgaHR0cHM6Ly9naXRodWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgNCj4gICAg
+ICAgICBnaXQgZmV0Y2ggLS1uby10YWdzIGxpbnV4LXJldmlldyBUdWRvci1BbWJhcnVzL2RtYWVu
+Z2luZS1kcml2ZXJzLVVzZS1kZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2UvMjAyMjExMDgt
+MjAyMDM4DQo+ICAgICAgICAgZ2l0IGNoZWNrb3V0IGU3NDBjM2Q1NTZiNGRiZDE4OTRjYTMxNTY5
+MjRiZjkxNmZkZjg0NDUNCj4gICAgICAgICAjIHNhdmUgdGhlIGNvbmZpZyBmaWxlDQo+ICAgICAg
+ICAgbWtkaXIgYnVpbGRfZGlyICYmIGNwIGNvbmZpZyBidWlsZF9kaXIvLmNvbmZpZw0KPiAgICAg
+ICAgIENPTVBJTEVSX0lOU1RBTExfUEFUSD0kSE9NRS8wZGF5IENPTVBJTEVSPWNsYW5nIG1ha2Uu
+Y3Jvc3MgVz0xIE89YnVpbGRfZGlyIEFSQ0g9cmlzY3YgU0hFTEw9L2Jpbi9iYXNoIGRyaXZlcnMv
+ZG1hLyBtbS8NCj4gDQo+IElmIHlvdSBmaXggdGhlIGlzc3VlLCBraW5kbHkgYWRkIGZvbGxvd2lu
+ZyB0YWcgd2hlcmUgYXBwbGljYWJsZQ0KPiB8IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2Jv
+dCA8bGtwQGludGVsLmNvbT4NCj4gDQo+IEFsbCBlcnJvcnMgKG5ldyBvbmVzIHByZWZpeGVkIGJ5
+ID4+KToNCj4gDQo+Pj4gZHJpdmVycy9kbWEvbW1wX3BkbWEuYzoxMDM5OjQ2OiBlcnJvcjogaW5j
+b21wYXRpYmxlIHBvaW50ZXIgdHlwZXMgcGFzc2luZyAnc3RydWN0IG1tcF9wZG1hX2RldmljZSAq
+JyB0byBwYXJhbWV0ZXIgb2YgdHlwZSAnc3RydWN0IHBsYXRmb3JtX2RldmljZSAqJyBbLVdlcnJv
+ciwtV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQ0KPiAgICAgICAgICAgIHBkZXYtPmJhc2Ug
+PSBkZXZtX3BsYXRmb3JtX2lvcmVtYXBfcmVzb3VyY2UocGRldiwgMCk7DQo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBefn5+DQo+ICAgIGlu
+Y2x1ZGUvbGludXgvcGxhdGZvcm1fZGV2aWNlLmg6NzA6NTY6IG5vdGU6IHBhc3NpbmcgYXJndW1l
+bnQgdG8gcGFyYW1ldGVyICdwZGV2JyBoZXJlDQo+ICAgIGRldm1fcGxhdGZvcm1faW9yZW1hcF9y
+ZXNvdXJjZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KPiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0KPiAgICAxIGVycm9y
+IGdlbmVyYXRlZC4NCj4gLS0NCj4+PiBkcml2ZXJzL2RtYS9zdG0zMi1kbWEuYzoxNjU0OjI4OiBl
+cnJvcjogdXNlIG9mIHVuZGVjbGFyZWQgaWRlbnRpZmllciAncmVzJw0KPiAgICAgICAgICAgICAg
+ICAgICAgY2hhbi0+bWRtYV9jb25maWcuaWZjciA9IHJlcy0+c3RhcnQ7DQo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0KPiAgICAxIGVycm9yIGdlbmVyYXRl
+ZC4NCj4gDQo+IA0KPiB2aW0gKzEwMzkgZHJpdmVycy9kbWEvbW1wX3BkbWEuYw0KPiANCj4gICAx
+MDE5DQo+ICAgMTAyMCAgc3RhdGljIGludCBtbXBfcGRtYV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1f
+ZGV2aWNlICpvcCkNCj4gICAxMDIxICB7DQo+ICAgMTAyMiAgICAgICAgICBzdHJ1Y3QgbW1wX3Bk
+bWFfZGV2aWNlICpwZGV2Ow0KPiAgIDEwMjMgICAgICAgICAgY29uc3Qgc3RydWN0IG9mX2Rldmlj
+ZV9pZCAqb2ZfaWQ7DQo+ICAgMTAyNCAgICAgICAgICBzdHJ1Y3QgbW1wX2RtYV9wbGF0ZGF0YSAq
+cGRhdGEgPSBkZXZfZ2V0X3BsYXRkYXRhKCZvcC0+ZGV2KTsNCj4gICAxMDI1ICAgICAgICAgIGlu
+dCBpLCByZXQsIGlycSA9IDA7DQo+ICAgMTAyNiAgICAgICAgICBpbnQgZG1hX2NoYW5uZWxzID0g
+MCwgaXJxX251bSA9IDA7DQo+ICAgMTAyNyAgICAgICAgICBjb25zdCBlbnVtIGRtYV9zbGF2ZV9i
+dXN3aWR0aCB3aWR0aHMgPQ0KPiAgIDEwMjggICAgICAgICAgICAgICAgICBETUFfU0xBVkVfQlVT
+V0lEVEhfMV9CWVRFICAgfCBETUFfU0xBVkVfQlVTV0lEVEhfMl9CWVRFUyB8DQo+ICAgMTAyOSAg
+ICAgICAgICAgICAgICAgIERNQV9TTEFWRV9CVVNXSURUSF80X0JZVEVTOw0KPiAgIDEwMzANCj4g
+ICAxMDMxICAgICAgICAgIHBkZXYgPSBkZXZtX2t6YWxsb2MoJm9wLT5kZXYsIHNpemVvZigqcGRl
+diksIEdGUF9LRVJORUwpOw0KPiAgIDEwMzIgICAgICAgICAgaWYgKCFwZGV2KQ0KPiAgIDEwMzMg
+ICAgICAgICAgICAgICAgICByZXR1cm4gLUVOT01FTTsNCj4gICAxMDM0DQo+ICAgMTAzNSAgICAg
+ICAgICBwZGV2LT5kZXYgPSAmb3AtPmRldjsNCj4gICAxMDM2DQo+ICAgMTAzNyAgICAgICAgICBz
+cGluX2xvY2tfaW5pdCgmcGRldi0+cGh5X2xvY2spOw0KPiAgIDEwMzgNCj4+IDEwMzkgICAgICAg
+ICAgcGRldi0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZShwZGV2LCAwKTsN
+Cj4gICAxMDQwICAgICAgICAgIGlmIChJU19FUlIocGRldi0+YmFzZSkpDQo+ICAgMTA0MSAgICAg
+ICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKHBkZXYtPmJhc2UpOw0KPiAgIDEwNDINCj4gICAx
+MDQzICAgICAgICAgIG9mX2lkID0gb2ZfbWF0Y2hfZGV2aWNlKG1tcF9wZG1hX2R0X2lkcywgcGRl
+di0+ZGV2KTsNCj4gICAxMDQ0ICAgICAgICAgIGlmIChvZl9pZCkgew0KPiAgIDEwNDUgICAgICAg
+ICAgICAgICAgICAvKiBQYXJzZSBuZXcgYW5kIGRlcHJlY2F0ZWQgZG1hLWNoYW5uZWxzIHByb3Bl
+cnRpZXMgKi8NCj4gICAxMDQ2ICAgICAgICAgICAgICAgICAgaWYgKG9mX3Byb3BlcnR5X3JlYWRf
+dTMyKHBkZXYtPmRldi0+b2Zfbm9kZSwgImRtYS1jaGFubmVscyIsDQo+ICAgMTA0NyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmZG1hX2NoYW5uZWxzKSkNCj4gICAx
+MDQ4ICAgICAgICAgICAgICAgICAgICAgICAgICBvZl9wcm9wZXJ0eV9yZWFkX3UzMihwZGV2LT5k
+ZXYtPm9mX25vZGUsICIjZG1hLWNoYW5uZWxzIiwNCj4gICAxMDQ5ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmZG1hX2NoYW5uZWxzKTsNCj4gICAxMDUwICAg
+ICAgICAgIH0gZWxzZSBpZiAocGRhdGEgJiYgcGRhdGEtPmRtYV9jaGFubmVscykgew0KPiAgIDEw
+NTEgICAgICAgICAgICAgICAgICBkbWFfY2hhbm5lbHMgPSBwZGF0YS0+ZG1hX2NoYW5uZWxzOw0K
+PiAgIDEwNTIgICAgICAgICAgfSBlbHNlIHsNCj4gICAxMDUzICAgICAgICAgICAgICAgICAgZG1h
+X2NoYW5uZWxzID0gMzI7ICAgICAgLyogZGVmYXVsdCAzMiBjaGFubmVsICovDQo+ICAgMTA1NCAg
+ICAgICAgICB9DQo+ICAgMTA1NSAgICAgICAgICBwZGV2LT5kbWFfY2hhbm5lbHMgPSBkbWFfY2hh
+bm5lbHM7DQo+ICAgMTA1Ng0KPiAgIDEwNTcgICAgICAgICAgZm9yIChpID0gMDsgaSA8IGRtYV9j
+aGFubmVsczsgaSsrKSB7DQo+ICAgMTA1OCAgICAgICAgICAgICAgICAgIGlmIChwbGF0Zm9ybV9n
+ZXRfaXJxX29wdGlvbmFsKG9wLCBpKSA+IDApDQo+ICAgMTA1OSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgaXJxX251bSsrOw0KPiAgIDEwNjAgICAgICAgICAgfQ0KPiAgIDEwNjENCj4gICAxMDYy
+ICAgICAgICAgIHBkZXYtPnBoeSA9IGRldm1fa2NhbGxvYyhwZGV2LT5kZXYsIGRtYV9jaGFubmVs
+cywgc2l6ZW9mKCpwZGV2LT5waHkpLA0KPiAgIDEwNjMgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIEdGUF9LRVJORUwpOw0KPiAgIDEwNjQgICAgICAgICAgaWYgKHBkZXYtPnBoeSA9
+PSBOVUxMKQ0KPiAgIDEwNjUgICAgICAgICAgICAgICAgICByZXR1cm4gLUVOT01FTTsNCj4gICAx
+MDY2DQo+ICAgMTA2NyAgICAgICAgICBJTklUX0xJU1RfSEVBRCgmcGRldi0+ZGV2aWNlLmNoYW5u
+ZWxzKTsNCj4gICAxMDY4DQo+ICAgMTA2OSAgICAgICAgICBpZiAoaXJxX251bSAhPSBkbWFfY2hh
+bm5lbHMpIHsNCj4gICAxMDcwICAgICAgICAgICAgICAgICAgLyogYWxsIGNoYW4gc2hhcmUgb25l
+IGlycSwgZGVtdXggaW5zaWRlICovDQo+ICAgMTA3MSAgICAgICAgICAgICAgICAgIGlycSA9IHBs
+YXRmb3JtX2dldF9pcnEob3AsIDApOw0KPiAgIDEwNzIgICAgICAgICAgICAgICAgICByZXQgPSBk
+ZXZtX3JlcXVlc3RfaXJxKHBkZXYtPmRldiwgaXJxLCBtbXBfcGRtYV9pbnRfaGFuZGxlciwNCj4g
+ICAxMDczICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJUlFGX1NIQVJF
+RCwgInBkbWEiLCBwZGV2KTsNCj4gICAxMDc0ICAgICAgICAgICAgICAgICAgaWYgKHJldCkNCj4g
+ICAxMDc1ICAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiAgIDEwNzYgICAg
+ICAgICAgfQ0KPiAgIDEwNzcNCj4gICAxMDc4ICAgICAgICAgIGZvciAoaSA9IDA7IGkgPCBkbWFf
+Y2hhbm5lbHM7IGkrKykgew0KPiAgIDEwNzkgICAgICAgICAgICAgICAgICBpcnEgPSAoaXJxX251
+bSAhPSBkbWFfY2hhbm5lbHMpID8gMCA6IHBsYXRmb3JtX2dldF9pcnEob3AsIGkpOw0KPiAgIDEw
+ODAgICAgICAgICAgICAgICAgICByZXQgPSBtbXBfcGRtYV9jaGFuX2luaXQocGRldiwgaSwgaXJx
+KTsNCj4gICAxMDgxICAgICAgICAgICAgICAgICAgaWYgKHJldCkNCj4gICAxMDgyICAgICAgICAg
+ICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiAgIDEwODMgICAgICAgICAgfQ0KPiAgIDEw
+ODQNCj4gICAxMDg1ICAgICAgICAgIGRtYV9jYXBfc2V0KERNQV9TTEFWRSwgcGRldi0+ZGV2aWNl
+LmNhcF9tYXNrKTsNCj4gICAxMDg2ICAgICAgICAgIGRtYV9jYXBfc2V0KERNQV9NRU1DUFksIHBk
+ZXYtPmRldmljZS5jYXBfbWFzayk7DQo+ICAgMTA4NyAgICAgICAgICBkbWFfY2FwX3NldChETUFf
+Q1lDTElDLCBwZGV2LT5kZXZpY2UuY2FwX21hc2spOw0KPiAgIDEwODggICAgICAgICAgZG1hX2Nh
+cF9zZXQoRE1BX1BSSVZBVEUsIHBkZXYtPmRldmljZS5jYXBfbWFzayk7DQo+ICAgMTA4OSAgICAg
+ICAgICBwZGV2LT5kZXZpY2UuZGV2ID0gJm9wLT5kZXY7DQo+ICAgMTA5MCAgICAgICAgICBwZGV2
+LT5kZXZpY2UuZGV2aWNlX2FsbG9jX2NoYW5fcmVzb3VyY2VzID0gbW1wX3BkbWFfYWxsb2NfY2hh
+bl9yZXNvdXJjZXM7DQo+ICAgMTA5MSAgICAgICAgICBwZGV2LT5kZXZpY2UuZGV2aWNlX2ZyZWVf
+Y2hhbl9yZXNvdXJjZXMgPSBtbXBfcGRtYV9mcmVlX2NoYW5fcmVzb3VyY2VzOw0KPiAgIDEwOTIg
+ICAgICAgICAgcGRldi0+ZGV2aWNlLmRldmljZV90eF9zdGF0dXMgPSBtbXBfcGRtYV90eF9zdGF0
+dXM7DQo+ICAgMTA5MyAgICAgICAgICBwZGV2LT5kZXZpY2UuZGV2aWNlX3ByZXBfZG1hX21lbWNw
+eSA9IG1tcF9wZG1hX3ByZXBfbWVtY3B5Ow0KPiAgIDEwOTQgICAgICAgICAgcGRldi0+ZGV2aWNl
+LmRldmljZV9wcmVwX3NsYXZlX3NnID0gbW1wX3BkbWFfcHJlcF9zbGF2ZV9zZzsNCj4gICAxMDk1
+ICAgICAgICAgIHBkZXYtPmRldmljZS5kZXZpY2VfcHJlcF9kbWFfY3ljbGljID0gbW1wX3BkbWFf
+cHJlcF9kbWFfY3ljbGljOw0KPiAgIDEwOTYgICAgICAgICAgcGRldi0+ZGV2aWNlLmRldmljZV9p
+c3N1ZV9wZW5kaW5nID0gbW1wX3BkbWFfaXNzdWVfcGVuZGluZzsNCj4gICAxMDk3ICAgICAgICAg
+IHBkZXYtPmRldmljZS5kZXZpY2VfY29uZmlnID0gbW1wX3BkbWFfY29uZmlnOw0KPiAgIDEwOTgg
+ICAgICAgICAgcGRldi0+ZGV2aWNlLmRldmljZV90ZXJtaW5hdGVfYWxsID0gbW1wX3BkbWFfdGVy
+bWluYXRlX2FsbDsNCj4gICAxMDk5ICAgICAgICAgIHBkZXYtPmRldmljZS5jb3B5X2FsaWduID0g
+RE1BRU5HSU5FX0FMSUdOXzhfQllURVM7DQo+ICAgMTEwMCAgICAgICAgICBwZGV2LT5kZXZpY2Uu
+c3JjX2FkZHJfd2lkdGhzID0gd2lkdGhzOw0KPiAgIDExMDEgICAgICAgICAgcGRldi0+ZGV2aWNl
+LmRzdF9hZGRyX3dpZHRocyA9IHdpZHRoczsNCj4gICAxMTAyICAgICAgICAgIHBkZXYtPmRldmlj
+ZS5kaXJlY3Rpb25zID0gQklUKERNQV9NRU1fVE9fREVWKSB8IEJJVChETUFfREVWX1RPX01FTSk7
+DQo+ICAgMTEwMyAgICAgICAgICBwZGV2LT5kZXZpY2UucmVzaWR1ZV9ncmFudWxhcml0eSA9IERN
+QV9SRVNJRFVFX0dSQU5VTEFSSVRZX0RFU0NSSVBUT1I7DQo+ICAgMTEwNA0KPiAgIDExMDUgICAg
+ICAgICAgaWYgKHBkZXYtPmRldi0+Y29oZXJlbnRfZG1hX21hc2spDQo+ICAgMTEwNiAgICAgICAg
+ICAgICAgICAgIGRtYV9zZXRfbWFzayhwZGV2LT5kZXYsIHBkZXYtPmRldi0+Y29oZXJlbnRfZG1h
+X21hc2spOw0KPiAgIDExMDcgICAgICAgICAgZWxzZQ0KPiAgIDExMDggICAgICAgICAgICAgICAg
+ICBkbWFfc2V0X21hc2socGRldi0+ZGV2LCBETUFfQklUX01BU0soNjQpKTsNCj4gICAxMTA5DQo+
+ICAgMTExMCAgICAgICAgICByZXQgPSBkbWFfYXN5bmNfZGV2aWNlX3JlZ2lzdGVyKCZwZGV2LT5k
+ZXZpY2UpOw0KPiAgIDExMTEgICAgICAgICAgaWYgKHJldCkgew0KPiAgIDExMTIgICAgICAgICAg
+ICAgICAgICBkZXZfZXJyKHBkZXYtPmRldmljZS5kZXYsICJ1bmFibGUgdG8gcmVnaXN0ZXJcbiIp
+Ow0KPiAgIDExMTMgICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiAgIDExMTQgICAgICAg
+ICAgfQ0KPiAgIDExMTUNCj4gICAxMTE2ICAgICAgICAgIGlmIChvcC0+ZGV2Lm9mX25vZGUpIHsN
+Cj4gICAxMTE3ICAgICAgICAgICAgICAgICAgLyogRGV2aWNlLXRyZWUgRE1BIGNvbnRyb2xsZXIg
+cmVnaXN0cmF0aW9uICovDQo+ICAgMTExOCAgICAgICAgICAgICAgICAgIHJldCA9IG9mX2RtYV9j
+b250cm9sbGVyX3JlZ2lzdGVyKG9wLT5kZXYub2Zfbm9kZSwNCj4gICAxMTE5ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbW1wX3BkbWFfZG1hX3hsYXRl
+LCBwZGV2KTsNCj4gICAxMTIwICAgICAgICAgICAgICAgICAgaWYgKHJldCA8IDApIHsNCj4gICAx
+MTIxICAgICAgICAgICAgICAgICAgICAgICAgICBkZXZfZXJyKCZvcC0+ZGV2LCAib2ZfZG1hX2Nv
+bnRyb2xsZXJfcmVnaXN0ZXIgZmFpbGVkXG4iKTsNCj4gICAxMTIyICAgICAgICAgICAgICAgICAg
+ICAgICAgICBkbWFfYXN5bmNfZGV2aWNlX3VucmVnaXN0ZXIoJnBkZXYtPmRldmljZSk7DQo+ICAg
+MTEyMyAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gICAxMTI0ICAgICAg
+ICAgICAgICAgICAgfQ0KPiAgIDExMjUgICAgICAgICAgfQ0KPiAgIDExMjYNCj4gICAxMTI3ICAg
+ICAgICAgIHBsYXRmb3JtX3NldF9kcnZkYXRhKG9wLCBwZGV2KTsNCj4gICAxMTI4ICAgICAgICAg
+IGRldl9pbmZvKHBkZXYtPmRldmljZS5kZXYsICJpbml0aWFsaXplZCAlZCBjaGFubmVsc1xuIiwg
+ZG1hX2NoYW5uZWxzKTsNCj4gICAxMTI5ICAgICAgICAgIHJldHVybiAwOw0KPiAgIDExMzAgIH0N
+Cj4gICAxMTMxDQo+IA0KPiAtLQ0KPiAwLURBWSBDSSBLZXJuZWwgVGVzdCBTZXJ2aWNlDQo+IGh0
+dHBzOi8vMDEub3JnL2xrcA0KDQotLSANCkNoZWVycywNCnRhDQoNCg==
