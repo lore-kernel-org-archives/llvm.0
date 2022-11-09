@@ -1,296 +1,91 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6A8EBEE
-	for <llvm@lists.linux.dev>; Wed,  9 Nov 2022 16:07:30 +0000 (UTC)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A9Fx5GA026190;
-	Wed, 9 Nov 2022 16:07:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=sN2B9PY00YJrHj0UbPQOPc4u68FcxaU7L88WDPKBDdM=;
- b=X5sYheskljdEDNl8Y6AC4+51nuVG8BUy43MXP7JwGjxZAkg8kNOw4u+wSgZ8s6AD4svv
- nqBI5Qfy8MfbJvvS/PwBbiT81qHoCxNJImv/Tsz2DVP+sFAAk5nm6KU2epsMLNgN6dDo
- yZTLNvVn/KT5iJDnk3LnfIrjy8PgXjErnRnyBUpbxyRFKasAtQx/0Fa7T5qYtvczjSCM
- SqlZb2izAMZv55FeGk8Iz/JbAT2w/awDd7m34p514xDuAgxKVRDErXVaHOnMyOo5tMeD
- SqwRufEEwJr1EPWcTRB9mrJ3r+uyqSpQAZBZ8TYe33lWMb103/rdhVOAvZF5uJZxpW2W Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krfb1ga7c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Nov 2022 16:07:22 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A9G1DO0006719;
-	Wed, 9 Nov 2022 16:07:21 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krfb1ga60-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Nov 2022 16:07:21 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-	by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A9G62mB006013;
-	Wed, 9 Nov 2022 16:07:19 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-	by ppma05fra.de.ibm.com with ESMTP id 3krcbr06sm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Nov 2022 16:07:19 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-	by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A9G7t2v51577116
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 9 Nov 2022 16:07:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0D08D4C044;
-	Wed,  9 Nov 2022 16:07:17 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B0B7F4C040;
-	Wed,  9 Nov 2022 16:07:16 +0000 (GMT)
-Received: from [9.171.72.210] (unknown [9.171.72.210])
-	by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-	Wed,  9 Nov 2022 16:07:16 +0000 (GMT)
-Message-ID: <faf8d9cd-b0aa-838a-2f06-25bcf0d6a908@linux.ibm.com>
-Date: Wed, 9 Nov 2022 17:07:16 +0100
-Subject: Re: [PATCH] gcov: clang: fix the buffer overflow issue
-To: Nick Desaulniers <ndesaulniers@google.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Cc: nathan@kernel.org, trix@redhat.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <1667568213-26227-1-git-send-email-quic_mojha@quicinc.com>
- <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com>
- <fda57ad1-bc92-a7ae-53a0-47c2a8467c47@quicinc.com>
- <CAKwvOdmJcmnKWNSFkzCPKmJ5eVDqJ5u631hWWmEQNwPszMg_Kg@mail.gmail.com>
-Content-Language: en-US
-From: Peter Oberparleiter <oberpar@linux.ibm.com>
-In-Reply-To: <CAKwvOdmJcmnKWNSFkzCPKmJ5eVDqJ5u631hWWmEQNwPszMg_Kg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: f-iJxmbzaGXOcyXxxTtM2oRLTIDA11Py
-X-Proofpoint-GUID: cGWp5zMgu09gAuU7GNUleYbFMVBHZ5kW
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3E717C2;
+	Wed,  9 Nov 2022 16:34:08 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id 05595320095C;
+	Wed,  9 Nov 2022 11:34:07 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 09 Nov 2022 11:34:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm3; t=1668011647; x=1668098047; bh=vf6slSTLfl
+	XSo7HmunYNB3fD2m+0dPwzrqQNVxEXyyE=; b=AGw/EkF6ZaIg5rtWkoZtyufz3h
+	uyJXvcyoHntQW5xAs193MV0uABNYhXJB6tUhQgVwMwnfHAQiXW0FjybkJQ7BaotP
+	eVxLeoWc7Lg7GVSI9R7RvTN0h2So91cX14MCjufShnMskxdzdmowkZyQSvVcDrhf
+	7JCH3hJLK7d6z0oJvHFrBWkXBixhV6OYLgv6+cuaCQA5exhabR3PFp/uKP/m2EzJ
+	CbvJXuTUrG8PeMgjYK1M7PO4fWwgOVFYVqTIq6m9VPP0rPK15OaNanDHPyIoL2LF
+	TBtjmGTlH05b/XOinj1GTlokbvwsUe9y7iuORVc/Ly40RXujT1xZFLTcLT7w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1668011647; x=1668098047; bh=vf6slSTLflXSo7HmunYNB3fD2m+0
+	dPwzrqQNVxEXyyE=; b=eULJb+3r0jKVFOLc+5ORm9kMw0tXRw2QubwIwBdyTBvU
+	HnU3v19Y+crxsNfgYOzJqlhaZeCo/QRKOC5Ct58E3OqDNFEj/DQvGiJ4AjqUZ/Vr
+	ItMUPZEx0B5Xaa1+lKsYpXJE8JVqMTy39QW9ibXDndQOmsfyDwpVpIKeyDID0L6r
+	aOJp2zVed/aNbB6asLtoMVmvaXOrazgEMk7T1k7RQNy2ujbyH1te6erCp0QuDtyo
+	7PXawHiw6mTJ/9kslSiqHso5ttViudByr3Zo245mXH1d+w9nrGHgKAoCwfyrSXQO
+	adrfbI4PUs2h9sgvNZNCu/aT7gnD+9dkido/QKsWVw==
+X-ME-Sender: <xms:f9ZrY45-vl4veTSc-0wkgznrjWwRlkgzDp9ntAfykWg4LHf3KX0qJQ>
+    <xme:f9ZrY56SrZOoYMLRi3rWgnJra2XmAQ8ynVgHBRVz4n6AlLvl9XWNH8m_8bFUMqHw0
+    e7DOiUI_S5urM3U0x4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkjghffffhvfevufgtsehttd
+    ertderredtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegr
+    rhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepvefhffeltdegheeffffhtdegvdehje
+    dtgfekueevgfduffettedtkeekueefhedunecuffhomhgrihhnpehkvghrnhgvlhdrohhr
+    ghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:f9ZrY3e5qfeY9Q37mZHf_OsOle_3drWvdIIuwE2WngictA80uT-_Jg>
+    <xmx:f9ZrY9JNfGDrekyVNYDRoC8B8QuwzhoA0zPnSJMiDQ6tlIIPPSJvtQ>
+    <xmx:f9ZrY8KSs9js0RcdRaDTSdnt2VtR_y8w_Udv-9KN23ij8-gz3RGRdA>
+    <xmx:f9ZrYzV2IegOVsptMxVPRF5PVppVjLtxqDsCgveDhINAm8NnyuYWbg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 1034DB60086; Wed,  9 Nov 2022 11:34:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- clxscore=1011 mlxscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090122
+Mime-Version: 1.0
+Message-Id: <aea446bf-0f06-4636-9ebc-acc2bdc0c30e@app.fastmail.com>
+In-Reply-To: <202211092229.qTe1ff7F-lkp@intel.com>
+References: <202211092229.qTe1ff7F-lkp@intel.com>
+Date: Wed, 09 Nov 2022 17:33:46 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "kernel test robot" <lkp@intel.com>,
+ "Yoshihiro Shimoda" <yoshihiro.shimoda.uh@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Linux Memory Management List" <linux-mm@kvack.org>
+Subject: Re: [linux-next:master 4222/6614] rswitch.c:undefined reference to
+ `ptp_clock_index'
+Content-Type: text/plain
 
-On 07.11.2022 20:38, Nick Desaulniers wrote:
-> On Fri, Nov 4, 2022 at 12:58 PM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->> On 11/4/2022 11:18 PM, Nick Desaulniers wrote:
->>> On Fri, Nov 4, 2022 at 6:23 AM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->>>>
->>>> Currently, in clang version of gcov code when module is getting removed
->>>> gcov_info_add() incorrectly adds the sfn_ptr->counter to all the
->>>> dst->functions and it result in the kernel panic in below crash report.
->>>> Fix this by properly handling it.
->>>>
->>>> [    8.899094][  T599] Unable to handle kernel write to read-only memory at virtual address ffffff80461cc000
->>>> [    8.899100][  T599] Mem abort info:
->>>> [    8.899102][  T599]   ESR = 0x9600004f
->>>> [    8.899103][  T599]   EC = 0x25: DABT (current EL), IL = 32 bits
->>>> [    8.899105][  T599]   SET = 0, FnV = 0
->>>> [    8.899107][  T599]   EA = 0, S1PTW = 0
->>>> [    8.899108][  T599]   FSC = 0x0f: level 3 permission fault
->>>> [    8.899110][  T599] Data abort info:
->>>> [    8.899111][  T599]   ISV = 0, ISS = 0x0000004f
->>>> [    8.899113][  T599]   CM = 0, WnR = 1
->>>> [    8.899114][  T599] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000ab8de000
->>>> [    8.899116][  T599] [ffffff80461cc000] pgd=18000009ffcde003, p4d=18000009ffcde003, pud=18000009ffcde003, pmd=18000009ffcad003, pte=00600000c61cc787
->>>> [    8.899124][  T599] Internal error: Oops: 9600004f [#1] PREEMPT SMP
->>>> [    8.899265][  T599] Skip md ftrace buffer dump for: 0x1609e0
->>>> ....
->>>> ..,
->>>> [    8.899544][  T599] CPU: 7 PID: 599 Comm: modprobe Tainted: G S         OE     5.15.41-android13-8-g38e9b1af6bce #1
->>>> [    8.899547][  T599] Hardware name: XXX (DT)
->>>> [    8.899549][  T599] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
->>>> [    8.899551][  T599] pc : gcov_info_add+0x9c/0xb8
->>>> [    8.899557][  T599] lr : gcov_event+0x28c/0x6b8
->>>> [    8.899559][  T599] sp : ffffffc00e733b00
->>>> [    8.899560][  T599] x29: ffffffc00e733b00 x28: ffffffc00e733d30 x27: ffffffe8dc297470
->>>> [    8.899563][  T599] x26: ffffffe8dc297000 x25: ffffffe8dc297000 x24: ffffffe8dc297000
->>>> [    8.899566][  T599] x23: ffffffe8dc0a6200 x22: ffffff880f68bf20 x21: 0000000000000000
->>>> [    8.899569][  T599] x20: ffffff880f68bf00 x19: ffffff8801babc00 x18: ffffffc00d7f9058
->>>> [    8.899572][  T599] x17: 0000000000088793 x16: ffffff80461cbe00 x15: 9100052952800785
->>>> [    8.899575][  T599] x14: 0000000000000200 x13: 0000000000000041 x12: 9100052952800785
->>>> [    8.899577][  T599] x11: ffffffe8dc297000 x10: ffffffe8dc297000 x9 : ffffff80461cbc80
->>>> [    8.899580][  T599] x8 : ffffff8801babe80 x7 : ffffffe8dc2ec000 x6 : ffffffe8dc2ed000
->>>> [    8.899583][  T599] x5 : 000000008020001f x4 : fffffffe2006eae0 x3 : 000000008020001f
->>>> [    8.899586][  T599] x2 : ffffff8027c49200 x1 : ffffff8801babc20 x0 : ffffff80461cb3a0
->>>> [    8.899589][  T599] Call trace:
->>>> [    8.899590][  T599]  gcov_info_add+0x9c/0xb8
->>>> [    8.899592][  T599]  gcov_module_notifier+0xbc/0x120
->>>> [    8.899595][  T599]  blocking_notifier_call_chain+0xa0/0x11c
->>>> [    8.899598][  T599]  do_init_module+0x2a8/0x33c
->>>> [    8.899600][  T599]  load_module+0x23cc/0x261c
->>>> [    8.899602][  T599]  __arm64_sys_finit_module+0x158/0x194
->>>> [    8.899604][  T599]  invoke_syscall+0x94/0x2bc
->>>> [    8.899607][  T599]  el0_svc_common+0x1d8/0x34c
->>>> [    8.899609][  T599]  do_el0_svc+0x40/0x54
->>>> [    8.899611][  T599]  el0_svc+0x94/0x2f0
->>>> [    8.899613][  T599]  el0t_64_sync_handler+0x88/0xec
->>>> [    8.899615][  T599]  el0t_64_sync+0x1b4/0x1b8
->>>> [    8.899618][  T599] Code: f905f56c f86e69ec f86e6a0f 8b0c01ec (f82e6a0c)
->>>> [    8.899620][  T599] ---[ end trace ed5218e9e5b6e2e6 ]---
->>>>
->>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>> ---
->>>>   kernel/gcov/clang.c | 13 +++++++++----
->>>>   1 file changed, 9 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
->>>> index cbb0bed..0aabb9a 100644
->>>> --- a/kernel/gcov/clang.c
->>>> +++ b/kernel/gcov/clang.c
->>>> @@ -271,15 +271,20 @@ int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)
->>>>    */
->>>>   void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)
->>>>   {
->>>> -       struct gcov_fn_info *dfn_ptr;
->>>> -       struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
->>>> -                       struct gcov_fn_info, head);
->>>
->>> Hi Mukesh,
->>> Thanks for the report and patch!
->>>
->>> Looking closer at the existing implementation, it looks curious to me
->>> that we use list_first_entry_or_null() since that may return NULL,
->>> which we never check for.  I'm curious if that's safe to remove?
->>> Probably, since we haven't had any issues reported thus far.
->>>
->>>> +       struct gcov_fn_info *sfn_ptr;
->>>> +       struct gcov_fn_info *dfn_ptr = list_first_entry_or_null(
->>>> +                       &dst->functions, struct gcov_fn_info, head);
->>>>
->>>> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->>>> +       list_for_each_entry(sfn_ptr, &src->functions, head) {
->>>
->>> This seems to be iterating BOTH src and dest, whereas previously we
->>> were only iterating dest AFAICT.  Is this correct?  Seems to be a
->>> change of behavior, at the least, which seems orthogonal to fixing the
->>> panic.
->>
->> Can you just check the implementation here once ?
->>
->> https://elixir.bootlin.com/linux/v6.1-rc3/source/kernel/gcov/gcc_4_7.c#L241
->>
->> By looking at the above link clang version does not seem to doing right ?
-> 
-> Oh, indeed, the GCC variant is looping over BOTH src+dest together,
-> then the counters.
-> 
-> I expect this patch to change the counter values, but I suspect they
-> haven't been correct previously and we've only noticed whether
-> branches were taken vs not.
+On Wed, Nov 9, 2022, at 15:21, kernel test robot wrote:
+> tree:   
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
+> master
+):
+>
+>    s390x-linux-ld: DWARF error: could not find abbrev number 4453
+>    drivers/net/ethernet/renesas/rswitch.o: in function `rswitch_get_ts_info':
+>>> rswitch.c:(.text+0x2a28): undefined reference to `ptp_clock_index'
+>    s390x-linux-ld: DWARF error: could not find abbrev number 11
+>    drivers/net/ethernet/renesas/rcar_gen4_ptp.o: in function 
+> `rcar_gen4_ptp_register':
+>>> rcar_gen4_ptp.c:(.text+0xd6): undefined reference to `ptp_clock_register'
+>    s390x-linux-ld: drivers/net/ethernet/renesas/rcar_gen4_ptp.o: in 
+> function `rcar_gen4_ptp_unregister':
+>>> rcar_gen4_ptp.c:(.text+0x198): undefined reference to `ptp_clock_unregister'
 
-It seems that you need the following to force this issue:
-- gcov_persists=1 on the kernel command line
-- unload of a kernel module
-- have an object file compiled into the kernel module where the first
-  function has more basic blocks transitions than later functions
+This usually means the driver needs an extra Kconfig dependency:
 
-> Thanks for the patch.
-> 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Peter, can you pick this up?
-
-While this patch works correctly, it seems to contain changes that are
-not necessary to fix the underlying problem.
-
-The null-pointer check for !dfn_ptr in the loop body should not be
-required because both lists are guaranteed to contain the same number of
-elements (via a previous call to gcov_info_is_compatible()). As a
-result, if dfn_ptr is null because dst->functions is empty, the loop
-body will never be called because src->functions is also empty.
-
-Also I don't understand why the patch changes the roles of dfn_ptr and
-sfn_ptr - it should have no functional effect if you iterate over
-src->functions or dst->functions.
-
-The only required change seems to be the addition of the list_next_entry
-statement for the non-loop-variable (sfn_ptr in the original code
-version) to the end of the loop body. Without it, gcov_info_add() tries
-to add counters of the very first function to the counter-arrays of all
-other functions. This will cause the reported out-of-bounds write error
-in case later functions in an object file provide fewer counts than the
-first function.
-
-@Mukesh: Please test if the minimal change outlined above also fixes the
-problem you are seeing, and if it does, please send an updated patch.
-
-Thanks!
-
-> 
->>
->>>
->>> Otherwise it sounds like we could just add NULL ptr checks against
->>> sfn_ptr outside the loop, and against dfn_ptr inside the loop.
->>> Something like this?
->>> ```
->>> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
->>> index cbb0bed958ab..5d4cb801aa9c 100644
->>> --- a/kernel/gcov/clang.c
->>> +++ b/kernel/gcov/clang.c
->>> @@ -275,10 +275,13 @@ void gcov_info_add(struct gcov_info *dst, struct
->>> gcov_info *src)
->>>          struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
->>>                          struct gcov_fn_info, head);
->>>
->>> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->>> -               u32 i;
->>> +       if (!sfn_ptr)
->>> +               return;
->>>
->>> -               for (i = 0; i < sfn_ptr->num_counters; i++)
->>> +       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->>> +               if (!dfn_ptr)
->>> +                       continue;
->>> +               for (u32 i = 0, e = sfn_ptr->num_counters; i != e; ++i)
->>>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
->>>          }
->>>   }
->>> ```
->>> Can you test the above hunk or comment on whether it addresses the issue?
->>
->>
->> BTW, it just handles NUL pointer issue and not the one which is
->> mentioned here.
->>
->> "Unable to handle kernel write to read-only memory at virtual address
->> ffffff80461cc000"
->>
->> -Mukesh
->>
->>>
->>>>                  u32 i;
->>>>
->>>> +               if (!dfn_ptr)
->>>> +                       return;
->>>> +
->>>>                  for (i = 0; i < sfn_ptr->num_counters; i++)
->>>>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
->>>> +
->>>> +               dfn_ptr = list_next_entry(dfn_ptr, head);
->>>>          }
->>>>   }
->>>>
->>>> --
->>>> 2.7.4
->>>>
->>>
->>>
-> 
-> 
-> 
-
--- 
-Peter Oberparleiter
-Linux on IBM Z Development - IBM Germany R&D
-
+       depends on PTP_1588_CLOCK_OPTIONAL
