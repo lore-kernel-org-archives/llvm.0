@@ -1,173 +1,74 @@
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CE81FA4;
-	Thu, 10 Nov 2022 13:46:00 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 1A8975C01C7;
-	Thu, 10 Nov 2022 08:45:59 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 10 Nov 2022 08:45:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1668087959; x=
-	1668174359; bh=19++3Vi/MimtPuuPOkXfPImCVesnLn5qoCUVppmD3sc=; b=K
-	pt6mtxrmqu8dYU5O8qXui74BmqL5Y+eS9OXO8wQObK73ULI8UV7CjAmOZ+8e1L5P
-	ZXBemJgycQNpr9Ynu0Nm1iU5Mapcij/Rz9uVJ404m2G61yxeo5Fzmw6gXAxRhChw
-	KtMxZoeSTFdNmPivpkV4h9fUtqRzA0nWDwz91W2V9bd3u/LYXdlxjQLZwlYVTXOV
-	nB9NW+DRv4GX4gNVws2w3rwojBl2tU1jV3lEMLZ44tPBIyW7l33ZQwcTu7VlHpi3
-	nBmrWBfN7kzOzZLBs9wWw5Okegoe/QqPQzLujhmw3gkiIX2hG5lUFppG0Aib5mRt
-	IgsweDBxzTv6HKC2wL1TQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668087959; x=
-	1668174359; bh=19++3Vi/MimtPuuPOkXfPImCVesnLn5qoCUVppmD3sc=; b=G
-	VyxyVl8Gvb030ftFEXyVojDyEl99IDEwlHrekl6WoJhWjqPcvf0L7XS+5BdSWQoh
-	KIJDHLe3LwFXXBnGxHecUpzxnkQHTgJSeMLWG+r5DEtlZh+nqD/wZYUlzZTA1K2a
-	kmPirOQ50Y1ERc9YJgBwqiArTSr1OSakFTZahTmSJtVJ7OZXX35Dsw6T5bcuImvN
-	0PenvxUS/EPOKngxhQfzXx0EdI2DkurY4wQ/efmdVqOhsEdtXahevi8J5leuTYjb
-	43acr8ev7Vzc+GfW6pR62YhhEhwgg/cpgrDUmh+MOyo7sZGM30bH2ZD7HdLAbqr1
-	pe+D17FZkNv8hcikHEQQA==
-X-ME-Sender: <xms:lgBtY4mwwLcZ13VTE3P0unfzN6z67qCnD59miR8M_6BYaJJ0b4EWNA>
-    <xme:lgBtY31c6C-dDgA3YTwDfOQjuyLq0CsmKo9E4YU-Bh2dz3YXhP1jCFk3yBJfuveA3
-    aBKGbffK-QXbPyUe8A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggdehjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
-    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:lgBtY2oHpMlhxgops79KmpbdN3ul2qupJ9ljsgXlrf3j0281bXQqcQ>
-    <xmx:lgBtY0nQG0CK1oUa7iVv5FQhv0lq5r0c2gD1l9EZ1yJlzVlJ6B6QbQ>
-    <xmx:lgBtY20JidY8m5YltRT2hWb2hvxqe-RTW9SFNgl27Mc3tMqiMb4LJw>
-    <xmx:lwBtYwpKzzI9UilXf38wfcQgPaHaoouKcHdxeQWUBzYqedcDvSb4_w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 52E30B60086; Thu, 10 Nov 2022 08:45:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02834366
+	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 14:31:56 +0000 (UTC)
+Received: by mail-pj1-f42.google.com with SMTP id h14so1648537pjv.4
+        for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 06:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yKZ49Hq5cxRBRGuGWZmrWmyUCChzQiTYq0wPx6wHlvc=;
+        b=EHHqa2wvLN4L0h+BDA+s7vsVb5mNPysYohstSXuowrBlnagzJejUduUwbh+UwOJGma
+         sPx4kJMLuI/Sf5LBbDMOPEtM8+HvB+lA5eUWBNSuFFS6a/c0nCaYcGxerABB3rMzLRDY
+         npaxx1QtDVmujfUgvXcRQclUJek9MYBes323s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yKZ49Hq5cxRBRGuGWZmrWmyUCChzQiTYq0wPx6wHlvc=;
+        b=uAexQQo/L5ZWkSrz/EIDF1sF9DVoNJ02DJqldjQFLXHmrl+OMKwM1t85UPqjc5DAyj
+         Cd1VKPpBH0EoUmWOlZ/LW73V459JCdCZuyBxx8sTLcw32TqTDLs5deWPz2OK6GRsVvss
+         +x/KvkQvC48rw1YqOtkxw5MNTDyG6yvsj3EvlEG1t+NxNroD4QEBfHbXEv9SeMHTI58u
+         0jUnp5zWy9ncz3zGZLDZuTxcr1YKUDhkIWKYmgUPFzA2O8sCSkFGP6If7LPJ46dyfobV
+         QzhpbzflNrjYYFTgcKwzWlAXahxteiQvB6GvYJ8TiJufjMuOBZR+TdRzobGQ8yZKKa9D
+         R0uA==
+X-Gm-Message-State: ACrzQf1J4JP66uhb4xMzk+wNb/AF1jUgjbSjQ5mxspaGMliroORj4qXc
+	3tiNux1jnjecSYnQLovxL+Oo5g==
+X-Google-Smtp-Source: AMsMyM5FM6+Inj4VnlE00+/2ySDhZb9ew7QK2Sfkx1aMTS/XaSkyEbT5L3/ntwCsotmKq8D+ABCOoQ==
+X-Received: by 2002:a17:90a:784c:b0:213:5b03:62e with SMTP id y12-20020a17090a784c00b002135b03062emr65667417pjl.241.1668090716334;
+        Thu, 10 Nov 2022 06:31:56 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:2129:96b6:e6b9:b930])
+        by smtp.gmail.com with ESMTPSA id p189-20020a6229c6000000b0056c08c87196sm10192940pfp.48.2022.11.10.06.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 06:31:55 -0800 (PST)
+Date: Thu, 10 Nov 2022 23:31:51 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Minchan Kim <minchan@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nitin Gupta <ngupta@vflare.org>,
+	Suleiman Souhlal <suleiman@google.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCHv5 04/13] zram: Introduce recompress sysfs knob
+Message-ID: <Y20LV+1jJMZ2FFnM@google.com>
+References: <20221109115047.2921851-1-senozhatsky@chromium.org>
+ <20221109115047.2921851-5-senozhatsky@chromium.org>
+ <Y2z4DbuYgDJ/v8u+@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <97c529f2-c5a2-4ed6-89eb-c79f020e9d0c@app.fastmail.com>
-In-Reply-To: 
- <CAHJ8P3+g7dr3PBZFQCD5HQLZ2b0WHe=b6Jt7ha1o7mqZJ7_-BQ@mail.gmail.com>
-References: <1667889638-9106-1-git-send-email-zhiguo.niu@unisoc.com>
- <202211101659.j9z9jLHv-lkp@intel.com>
- <88fce16b-5092-4246-8bbf-23f2c03224f3@app.fastmail.com>
- <CAHJ8P3+g7dr3PBZFQCD5HQLZ2b0WHe=b6Jt7ha1o7mqZJ7_-BQ@mail.gmail.com>
-Date: Thu, 10 Nov 2022 14:45:31 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Zhiguo Niu" <niuzhiguo84@gmail.com>
-Cc: "kernel test robot" <lkp@intel.com>, "zhiguo.niu" <zhiguo.niu@unisoc.com>,
- jaegeuk@kernel.org, chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH V2] f2fs: fix atgc bug on issue in 32bits platform
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2z4DbuYgDJ/v8u+@dev-arch.thelio-3990X>
 
-On Thu, Nov 10, 2022, at 11:20, Zhiguo Niu wrote:
-> Arnd Bergmann <arnd@arndb.de> =E4=BA=8E2022=E5=B9=B411=E6=9C=8810=E6=97=
-=A5=E5=91=A8=E5=9B=9B 17:07=E5=86=99=E9=81=93=EF=BC=9A
->> On Thu, Nov 10, 2022, at 09:33, kernel test robot wrote:
->> > base:  =20
->> > https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git=20
->> > dev-test
->> > patch link:   =20
->> > https://lore.kernel.org/r/1667889638-9106-1-git-send-email-zhiguo.n=
-iu%40unisoc.com
->> > patch subject: [PATCH V2] f2fs: fix atgc bug on issue in 32bits pla=
-tform
->> > All warnings (new ones prefixed by >>):
->> >
->> >    In file included from fs/f2fs/gc.c:22:
->> >>> fs/f2fs/gc.h:65:2: warning: field  within 'struct victim_entry' i=
-s less aligned than 'union victim_entry::(anonymous at fs/f2fs/gc.h:65:2=
-)' and is usually due to 'struct victim_entry' being packed, which can l=
-ead to unaligned accesses [-Wunaligned-access]
->> >            union {
->>=20
->> It looks like the problem is the extra unqualified __packed annotation
->> inside of 'struct rb_entry'.=20
-> yes, I agree, but this modification is about the following commit:
-> f2fs: fix memory alignment to support 32bit=20
-> (48046cb55d208eae67259887b29b3097bcf44caf=EF=BC=89
+On (22/11/10 06:09), Nathan Chancellor wrote:
+[..]
+> drivers/block/zram/zram_drv.c:1894:10: note: initialize the variable 'err' to silence this warning
+>                 int err;
+>                        ^
+>                         = 0
+> 7 errors generated.
+> 
+> Is the fix just to initialize err to 0 as it suggests or should there be
+> a different fix?
 
-Ah, I see. So in this case, the line
-
-        en =3D (struct extent_node *)f2fs_lookup_rb_tree_ret(&et->root,
-
-requires the second field of 'struct extent_node' to be
-in the same place as the corresponding field of 'struct rb_entry'.
-
-This seems harmless then, though I would have put the __packed
-annotation on the 'key' member instead of the union to
-better document what is going on. Ideally the casts between
-structures should not be used at all, but I don't know if
-changing f2fs for this would involve a major rewrite of that
-code.
-
-> so I think is the following modifiction more better?=20
->
-> @@ -68,7 +68,7 @@ struct victim_entry {
->
->                         unsigned int segno;         /* segment No. */
->
->                 };
->
->                 struct victim_info vi;       /* victim info */
->
-> -       };
->
-> +      } __packed;
-
-So here is the construct with
-
-        ve =3D (struct victim_entry *)re;
-
-that relies on vi->mtime to overlay re->key, right?
-
-I'm not sure why there is a union in victim_entry, it would
-be a little easier without that. Clearly both sides
-of the union need the same alignment constraints, so
-you could annotate the two 'mtime' members as __packed,
-which gives the anonymous struct and the struct victim_info
-32-bit alignment and avoids the warning. Having the=20
-__packed at the end of the structure or union would
-result in only single-byte alignment for structure
-and not solve the problem that the compiler warns about.
-
-The other alternative is to revert rb_entry back to
-having 64-bit alignment on the key, but then also mark
-extent_node as requiring the same alignment on the
-'extent_info' member for consistency:
-
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -580,11 +580,11 @@ struct rb_entry {
-                        unsigned int len;       /* length of the entry */
-                };
-                unsigned long long key;         /* 64-bits key */
--       } __packed;
-+       };
- };
-=20
- struct extent_info {
--       unsigned int fofs;              /* start offset in a file */
-+       unsigned int fofs __aligned(8); /* start offset in a file */
-        unsigned int len;               /* length of the extent */
-        u32 blk;                        /* start block address of the ex=
-tent */
- #ifdef CONFIG_F2FS_FS_COMPRESSION
-
-      Arnd
+Yes, that's the correct fix. Thanks for catching this. We had "err = 0"
+in v4 of this patch set, but it somehow didn't make it to v5.
