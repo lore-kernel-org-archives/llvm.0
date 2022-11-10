@@ -1,86 +1,65 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DF62F23;
-	Thu, 10 Nov 2022 15:10:20 +0000 (UTC)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id A5B6C37E;
-	Thu, 10 Nov 2022 15:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A5B6C37E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1668093019; bh=mBBbrMtJ5EuS0waUjuX4ugyR94/nkClQDPlg7UQzF8Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=fMIg9GgJX6Yi1LkwBsIBU6h2mwkmwarirOjb/su2PGoW6AQeQJK3eTJId6Wxgil4l
-	 Isz1r9IqAHVjwMQEAXh8FUAe/HP+Qnx00HR8yjoI8ICNEAIL1PP8ePz3X2Plh48pxF
-	 s14Sz9HSryXXL1Xt55tLGvXFHkHGn8kzD3QGaojQbuyZ+o9OimM08WYil3dA9eYvcO
-	 Z9yBE7PlH6ZqDTWq62s3OReyeP7aOtfgGZsa4h6ndsxoAM2vv6kfJr+Ns8aLZIP4Fo
-	 X3/yxLKBIz/ZczuKvT46AUTA3r/AK+YM0HL8BIbykjzoBQY2TLNel2Aj3/ZswAkEM4
-	 W97k7Z43jx6jw==
-From: Jonathan Corbet <corbet@lwn.net>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, bpf@vger.kernel.org, David
- Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev, Joerg Roedel
- <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, Tom Rix
- <trix@redhat.com>, Will Deacon <will@kernel.org>, Alex Williamson
- <alex.williamson@redhat.com>, Lu Baolu <baolu.lu@linux.intel.com>,
- Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
- <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>, David
- Gibson <david@gibson.dropbear.id.au>, Eric Auger <eric.auger@redhat.com>,
- Eric Farman <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>, Joao Martins
- <joao.m.martins@oracle.com>, kvm@vger.kernel.org, Matthew Rosato
- <mjrosato@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>, Nicolin
- Chen <nicolinc@nvidia.com>, Niklas Schnelle <schnelle@linux.ibm.com>,
- Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>, Yi Liu
- <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 04/17] iommufd: Document overview of iommufd
-In-Reply-To: <Y20QotPsxivvV53l@nvidia.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <4-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <Y2zE0zfnQ7mt740i@debian.me> <87v8nmhnkl.fsf@meer.lwn.net>
- <Y20QotPsxivvV53l@nvidia.com>
-Date: Thu, 10 Nov 2022 08:10:19 -0700
-Message-ID: <87r0yahmlg.fsf@meer.lwn.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3532F23
+	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 15:18:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DBCC433C1;
+	Thu, 10 Nov 2022 15:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1668093500;
+	bh=P1veQsKG59JRNLlKHFjt59W4QFwwnV8LOv0rq5XQ56w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PypWXxbwE2Wx2kOKCsexwtBMj8zgdFyua7vGiENW2rNoaz2AQR9Fu/UvXmZ6eAZql
+	 MOITHP6LTJcUZA7uNxVFVBlHKMNIsYkNSRCVS6qLfHkV0/jxJHz7QMKhxY6Y/ZCtJn
+	 P7bt0RGOpexvl/NMzf1Kmj3BF+w0tEkb3t37OcBt1eti/URlyqAYXrD5nO36iUSaTm
+	 ixzfD732dRYISonQIEHuTx8Nq+1vEoAy7ejxrB3JYcotl+TrakRX4E1YGEp4XLFI31
+	 q5xEWcjTqnlfP1M8aQqVp+48kEONe43RBIEh7Rnf0lcTHiqv3hKtL+gLTl+6fFt4ec
+	 hwi8diJlyS4Xg==
+Date: Thu, 10 Nov 2022 08:18:18 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
+	Suleiman Souhlal <suleiman@google.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCHv5 04/13] zram: Introduce recompress sysfs knob
+Message-ID: <Y20WOnvkJ3xL7hq/@dev-arch.thelio-3990X>
+References: <20221109115047.2921851-1-senozhatsky@chromium.org>
+ <20221109115047.2921851-5-senozhatsky@chromium.org>
+ <Y2z4DbuYgDJ/v8u+@dev-arch.thelio-3990X>
+ <Y20LV+1jJMZ2FFnM@google.com>
+ <Y20NAX4R6RgRpWnE@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y20NAX4R6RgRpWnE@google.com>
 
-Jason Gunthorpe <jgg@nvidia.com> writes:
+On Thu, Nov 10, 2022 at 11:38:57PM +0900, Sergey Senozhatsky wrote:
+> On (22/11/10 23:31), Sergey Senozhatsky wrote:
+> > On (22/11/10 06:09), Nathan Chancellor wrote:
+> > [..]
+> > > drivers/block/zram/zram_drv.c:1894:10: note: initialize the variable 'err' to silence this warning
+> > >                 int err;
+> > >                        ^
+> > >                         = 0
+> > > 7 errors generated.
+> > > 
+> > > Is the fix just to initialize err to 0 as it suggests or should there be
+> > > a different fix?
+> > 
+> > Yes, that's the correct fix. Thanks for catching this. We had "err = 0"
+> > in v4 of this patch set, but it somehow didn't make it to v5.
+> 
+> Nathan, I just sent a simple one-liner patch. If you don't mind,
+> may we ask Andrew to take it as a fixup (folded) patch?
 
-> On Thu, Nov 10, 2022 at 07:49:14AM -0700, Jonathan Corbet wrote:
->
->> The *real* problem, methinks, is that the directives are added in patch 4
->> of the series, but the documentation doesn't show up until later.  So
->> the real fix would be to simply move this patch down.  Or just not worry
->> about it, since it all works out in the end and nobody will be bisecting
->> a docs build.
->
-> That is half the problem, the other is this:
->
-> https://lore.kernel.org/r/0-v1-c80e152ce63b+12-kdoc_export_ns_jgg@nvidia.com
->
-> Since even after the whole series the EXPORT_NS functions don't parse
-> properly. I'm going to put this patch before the doc patch and ignore
-> the bisection problem.
->
-> I'd like someone to say they are happy with the perl :)
+Yup, sounds like a plan to me, thanks for the quick response and fix!
 
-I'm not happy with *any* perl! :)
-
-I've been sitting on that patch because I was under the impression
-another version was coming - was that wrong?
-
-Thanks,
-
-jon
+Cheers,
+Nathan
