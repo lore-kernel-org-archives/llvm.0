@@ -1,105 +1,71 @@
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB9B185E
-	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 11:19:29 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 9D16F320098B;
-	Thu, 10 Nov 2022 06:19:28 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 10 Nov 2022 06:19:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1668079168; x=1668165568; bh=ifZN531fzx
-	PIHpouo1jQhbXOb4J2WZNSWkifMSSVh3E=; b=ne56sfpcT3artr2/7NJnzJEjN0
-	F5tkTkzDlaKG9724FgTB44TBUDWflpp8g2U6+t9akmZWmoZvP11n8dtdGFDGC+BK
-	jspUpHMXJc+CDwYyI1D37pZhQvw7qqrylbEj5fQYA1eDGxIPyudYJcGiC6wpBHCJ
-	teNuNk+JnrXlu0Q0yQkkGsAhRkA45VjVp1CvWkHXKAKOoaSzgjjIg6nGhwNz+rWg
-	bVedmmdGCb4nXyqHRuqwl6IwkMIb/vaHFZK5DDcg1vv5BuDGgG5CnHff83Gd1st/
-	HU9KWhxlUw8X9xiSRLz2lkUMcQ6G8g7JAJbdcE6+M+M1iyQPEDst9xKgeCgw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1668079168; x=1668165568; bh=ifZN531fzxPIHpouo1jQhbXOb4J2
-	WZNSWkifMSSVh3E=; b=H7lRNj/NuqS2C1LPDQC7+8fZBQ5mfW/Lzab9TIbFiFQm
-	QshBT2TQikLFLZLp5VpLypf7IKh4stvWY2iCxnQvvSKWS7yBoO6xJfHbHyrQMXAy
-	5QBI8NU0Cv9B+r9vAJHB6igjSCRWHeqa+wvFYdDwxoqW4hJGihWq8pP1Fpe48LnU
-	ML2BEtWiCm1F5kKV4B//v2/nTrf+npWuclDoH/twG2ACoFOT2gK/rS+Xe0mvX5JB
-	NrOWHUmZlPecCijbTp5RuR+/9XlPW5xoYNqtMhJVH3aW7+00c2xasMlCWH+nmEfk
-	SyNMUJD6Rlc1GQ07+F9ZbKWEMrO+6+MaHFKpMSYqVg==
-X-ME-Sender: <xms:P95sY00hH0O2gdQJun6oM5iLKvBIbC8SheUITxBZi7xUMbi0mWYRfg>
-    <xme:P95sY_F3Hk3ggGbBC7p0gSp_0B1f3hG3uL43obHntxofpPIadVKJhP_IFtRBM7Tbx
-    iV8xBN5Oo5dfT1HCKk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QN5sY87vR70_oaYCYPgr-MC_Y17ufZphvA3nd4Yrw2VhwxOQjYv0Mw>
-    <xmx:QN5sY92a3zPY2aXwUKfazgi_vW_oEGuokHF-9fN4UVevnpCFyYe-Vw>
-    <xmx:QN5sY3FCV6FSx3U8shiRaBhJa1R6XxemA0mcoKSixNDwBf7osiOB7A>
-    <xmx:QN5sY23gSX2bWJKfm51kKplkjDoXgUfDR4fxeYOZoxmELriFdTFbfA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DC451B60086; Thu, 10 Nov 2022 06:19:27 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB212185E;
+	Thu, 10 Nov 2022 11:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5CBA2C433D7;
+	Thu, 10 Nov 2022 11:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1668080415;
+	bh=y2vgPIMu86Bp5vTOCEE12crQig4E8T9TYe9fzBClcvk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UywrG+6lhWYi01frg6TS8PH8RwgaZVmEvwqf0rMckbrT2iVUKXfwhtaPZXKWVru6m
+	 k/DmmzcDPtCKrRzhSAFbcGP8SOaXd9CC2TPAgpzgbZhWnNgnvTnEPwtiwDmV8yC2Vq
+	 3IAB7GUmsGOtbNe4pSSObfu1bAmiHqsY/m+3qWsPM4fVe/3RGFxFBZW2Wi9krWz5E9
+	 hng2dKVhxZqxjD83BhFKVznXzU0r7VC8XZ/KFn1jPhOKGk27Y/o179yOxlrdBootEc
+	 jbRlk0CzV/gMpPIFMLBUlKUt368jFPVAPb2oQFYPVxnttoOQK+7F/HwmuVn9hltv+S
+	 HO0XhUa5NUEdw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3838FC395FD;
+	Thu, 10 Nov 2022 11:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <f22ea97e-9d76-4c8b-a0c9-698db6e69a9f@app.fastmail.com>
-In-Reply-To: 
- <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
-References: 
- <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
-Date: Thu, 10 Nov 2022 12:19:07 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
- "open list" <linux-kernel@vger.kernel.org>,
- linux-next <linux-next@vger.kernel.org>, lkft-triage@lists.linaro.org,
- llvm@lists.linux.dev
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Linux PM" <linux-pm@vger.kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Stuart Hayes" <stuart.w.hayes@gmail.com>
-Subject: Re: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized
- when used here [-Werror,-Wuninitialized]
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] net: mana: Fix return type of mana_start_xmit()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <166808041522.12004.5463540474559850111.git-patchwork-notify@kernel.org>
+Date: Thu, 10 Nov 2022 11:40:15 +0000
+References: <20221109002629.1446680-1-nathan@kernel.org>
+In-Reply-To: <20221109002629.1446680-1-nathan@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+ wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, keescook@chromium.org,
+ samitolvanen@google.com, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ patches@lists.linux.dev, nhuck@google.com, error27@gmail.com
 
-On Thu, Nov 10, 2022, at 12:14, Naresh Kamboju wrote:
-> [Please ignore email this if it is already reported]
->
-> Kernel build warning noticed on x86_64 with clang toolchain [1].
-> Build failures noticed from next-20221108 .. next-20221110.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
-> CC=clang
-> drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
-> uninitialized when used here [-Werror,-Wuninitialized]
->         acpi_cpufreq_online = ret;
->                               ^~~
-> drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
-> 'ret' to silence this warning
->         int ret;
->                ^
->                 = 0
-> 1 error generated.
+Hello:
 
-This is caused by 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs"),
-which removes the initialization of this variable.
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-      Arnd
+On Tue,  8 Nov 2022 17:26:30 -0700 you wrote:
+> From: Nathan Huckleberry <nhuck@google.com>
+> 
+> The ndo_start_xmit field in net_device_ops is expected to be of type
+> netdev_tx_t (*ndo_start_xmit)(struct sk_buff *skb, struct net_device *dev).
+> 
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition. A new
+> warning in clang will catch this at compile time:
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3] net: mana: Fix return type of mana_start_xmit()
+    https://git.kernel.org/netdev/net-next/c/0c9ef08a4d0f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
