@@ -1,164 +1,116 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D152A1873
-	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 13:12:06 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso4209108wmb.0
-        for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 05:12:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VpyhbGYLbgqQGq84zDVWwGbjefm7SUvj9DOXzK2A1TU=;
-        b=GHpriBMOXDvxvsugPbxR5FDEgGCUeAbYXuJ84U68kvkH74Cel95enwLZfFymDlsBaa
-         zqqULN8YDsOhxTxoGbSM1Z+noOnr9D/oABkpXkxLHwMZyqnq6c00QKTjk3n3Ndu7l9XA
-         ccw4xcfiBWQGR1Cbm1JULkcCG6VN6ESFbltpm8/2XvB2cxZikH8bJc2vZSf1fDHkpQF+
-         XsVOD63wVvX5JElC7bwKyd57nkpmhNG8sBsU9Lli43eOU29NQVU2sbMoKR/sAUj7BBsH
-         Md7T/Njj4G34P8GBPFZnYNfBgh87isM3RC+Tp6Ad11DZHkyuu4q4FubblOaZSFKs2Kf7
-         bOzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VpyhbGYLbgqQGq84zDVWwGbjefm7SUvj9DOXzK2A1TU=;
-        b=8CkYHjOwreULdBmYVy8cvAnFDOkasl/p7LFIUJA++7XVumvyrLnTh/+AKqT8c0pZMv
-         q5qQqcmuVv55G9NU4532iW8W4tsW9wBLTzyOi+n/qrlVbyhFrwvSh6Sh8jUVMpD0T8BP
-         u1TR1ywYrRfIYQoBKrEldXDcwWTHFtsMQiIUkLW7/0FL29ZP8wFQA2qjRA9sJijdtsFa
-         aVA7aqZ4v8T/oYZrzhRXkj5qpVGWgEM0VD23jorlpVJgWUC3LqTi3M5zRDRx2B4TzQh4
-         q5kYY7hiBA5d34K/SnVOX+Ndmu9zEh52RghManeaZSMmpFjShBQbQoiugdpOh2yh6C3Y
-         lLmg==
-X-Gm-Message-State: ACrzQf1Vhn8r1rItYu3xQURv7JuOSimhNymT4k0QDJgmTZJAVcthf5tL
-	wnBcATo+1xRvqcu232PfeP4=
-X-Google-Smtp-Source: AMsMyM51TiWHud25bbxeDq7lKiBIwAVbUfDhjw64VUwKMxy4sQuEHhWs+GPnR0/ficWwxEYJhbBqwQ==
-X-Received: by 2002:a7b:c455:0:b0:3cf:6817:297d with SMTP id l21-20020a7bc455000000b003cf6817297dmr42433341wmi.152.1668085924859;
-        Thu, 10 Nov 2022 05:12:04 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id j13-20020adfea4d000000b0023bb7e4b8b1sm16058508wrn.82.2022.11.10.05.12.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 05:12:03 -0800 (PST)
-Message-ID: <aa7cab9c-8fe2-b42e-84ba-1aeb79d50190@gmail.com>
-Date: Thu, 10 Nov 2022 14:12:01 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EBA1873
+	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 13:27:31 +0000 (UTC)
+X-UUID: 8997b60076dc475ead787c84b95da564-20221110
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ISjS9vItpte95t/ScfBBhnWRioYpdTc4gkkpbIxsuts=;
+	b=Td92RnqcYXUGSYJ8yLrZhJoFfgYHczI+hY0t+MsNgWA5S3S9Cdx4Cj2WwkQtv0onZoUP1P3Sr6qUacxhe+4i0gylsPL4VDSJDEed65eWw4xOZIbpO4Kg1o+05H4cfpGLX+adQFZn8Mjd0P8YnygLGeHQ3vv1NSfBIg67pxhUqck=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:241461dc-c833-40a3-ab01-ba0679151898,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:95
+X-CID-INFO: VERSION:1.1.12,REQID:241461dc-c833-40a3-ab01-ba0679151898,IP:0,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+	:quarantine,TS:95
+X-CID-META: VersionHash:62cd327,CLOUDID:4a86315d-100c-4555-952b-a62c895efded,B
+	ulkID:221110212721OY81UAOK,BulkQuantity:0,Recheck:0,SF:28|17|19|48,TC:nil,
+	Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8997b60076dc475ead787c84b95da564-20221110
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+	(envelope-from <chunfeng.yun@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1587391723; Thu, 10 Nov 2022 21:27:20 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 10 Nov 2022 21:27:19 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 10 Nov 2022 21:27:18 +0800
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+To: Vinod Koul <vkoul@kernel.org>
+CC: Chunfeng Yun <chunfeng.yun@mediatek.com>, Kishon Vijay Abraham I
+	<kishon@ti.com>, Matthias Brugger <matthias.bgg@gmail.com>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+	<trix@redhat.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Eddie Hung <eddie.hung@mediatek.com>, Tianping Fang
+	<tianping.fang@mediatek.com>
+Subject: [PATCH v4 2/3] phy: core: add debugfs root
+Date: Thu, 10 Nov 2022 21:27:15 +0800
+Message-ID: <20221110132716.12294-2-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221110132716.12294-1-chunfeng.yun@mediatek.com>
+References: <20221110132716.12294-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v28 05/11] soc: mediatek: refine code to use
- mtk_mmsys_update_bits API
-Content-Language: en-US
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux@roeck-us.net, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- "jason-jh . lin" <jason-jh.lin@mediatek.com>,
- Yongqiang Niu <yongqiang.niu@mediatek.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev, singo.chang@mediatek.com,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221107072243.15748-1-nancy.lin@mediatek.com>
- <20221107072243.15748-6-nancy.lin@mediatek.com>
- <58d55016-afc7-e560-32cf-8228794b5752@gmail.com>
- <20221108194351.u63k4mqzq3bkhpl7@notapiano>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221108194351.u63k4mqzq3bkhpl7@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
+Add a debugfs root for phy class, then phy drivers can add debugfs files
+under this folder.
 
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2~v4: no changes
+---
+ drivers/phy/phy-core.c  | 6 ++++++
+ include/linux/phy/phy.h | 2 ++
+ 2 files changed, 8 insertions(+)
 
-On 08/11/2022 20:43, Nícolas F. R. A. Prado wrote:
-> On Tue, Nov 08, 2022 at 06:37:19PM +0100, Matthias Brugger wrote:
->>
->>
->> On 07/11/2022 08:22, Nancy.Lin wrote:
->>> Simplify code for update  mmsys reg.
->>>
->>> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
->>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> Reviewed-by: CK Hu <ck.hu@mediatek.com>
->>> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
->>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>> ---
->>>    drivers/soc/mediatek/mtk-mmsys.c | 45 ++++++++++++--------------------
->>>    1 file changed, 16 insertions(+), 29 deletions(-)
->>>
->>> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
->>> index 9a327eb5d9d7..73c8bd27e6ae 100644
->>> --- a/drivers/soc/mediatek/mtk-mmsys.c
->>> +++ b/drivers/soc/mediatek/mtk-mmsys.c
->>> @@ -99,22 +99,27 @@ struct mtk_mmsys {
->>>    	struct reset_controller_dev rcdev;
->>>    };
->>> +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
->>> +{
->>> +	u32 tmp;
->>> +
->>> +	tmp = readl_relaxed(mmsys->regs + offset);
->>> +	tmp = (tmp & ~mask) | (val & mask);
->>
->> I'm not sure about the change in the implementation of
->> mtk_mmsys_update_bits(). Nicolas tried to explain it to me on IRC but I
->> wasn't totally convincing. As we have to go for at least another round of
->> this patches, I'd like to get a clear understanding while it is needed that
->> val bits are set to 1 in the mask.
-> 
-> The point here was to make sure that mtk_mmsys_update_bits() didn't allow
-> setting bits outside of the mask, since that's never what you want: the entire
-> point of having a mask is to specify the bits that should be updated (and the
-> ones that should be kept unchanged). So for example if you had
-> 
-> mask = 0x0ff0
-> val  = 0x00ff
-> 
-> the previous implementation would happily overwrite the 4 least significant bits
-> on the destination register, despite them not being present in the mask, which
-> is wrong.
-> 
-> This wrong behavior could easily lead to hard to trace bugs as soon as a badly
-> formatted/wrong val is passed and an unrelated bit updated due to the mask being
-> ignored.
-> 
-> For reference, _regmap_update_bits() does the same masking of the value [1].
-> 
-> That said, given that this function already existed and was just being moved,
-> it would've been cleaner to make this change in a separate commit.
-> 
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index d93ddf1262c5..2f9f69190519 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/module.h>
+ #include <linux/err.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+@@ -1204,6 +1205,9 @@ void devm_of_phy_provider_unregister(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_of_phy_provider_unregister);
+ 
++struct dentry *phy_debug_root;
++EXPORT_SYMBOL_GPL(phy_debug_root);
++
+ /**
+  * phy_release() - release the phy
+  * @dev: the dev member within phy
+@@ -1233,6 +1237,8 @@ static int __init phy_core_init(void)
+ 
+ 	phy_class->dev_release = phy_release;
+ 
++	phy_debug_root = debugfs_create_dir("phy", NULL);
++
+ 	return 0;
+ }
+ device_initcall(phy_core_init);
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index b1413757fcc3..c398749d49b9 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -205,6 +205,8 @@ struct phy_lookup {
+ #define devm_of_phy_provider_register_full(dev, children, xlate) \
+ 	__devm_of_phy_provider_register(dev, children, THIS_MODULE, xlate)
+ 
++extern struct dentry *phy_debug_root;
++
+ static inline void phy_set_drvdata(struct phy *phy, void *data)
+ {
+ 	dev_set_drvdata(&phy->dev, data);
+-- 
+2.18.0
 
-Would have been better, but we can leave it as it.
-
-Regards,
-Matthias
-
-> [1] https://elixir.bootlin.com/linux/latest/source/drivers/base/regmap/regmap.c#L3122
-> 
-> Thanks,
-> Nícolas
-> 
->>
->> Regards,
->> Matthias
->>
->>> +	writel_relaxed(tmp, mmsys->regs + offset);
->>> +}
-> [..]
->>> -static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
->>> -{
->>> -	u32 tmp;
->>> -
->>> -	tmp = readl_relaxed(mmsys->regs + offset);
->>> -	tmp = (tmp & ~mask) | val;
->>> -	writel_relaxed(tmp, mmsys->regs + offset);
->>> -}
->>> -
-> [..]
