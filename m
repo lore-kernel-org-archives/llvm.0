@@ -1,113 +1,153 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EBC2119
-	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 20:46:28 +0000 (UTC)
-Received: by mail-pf1-f173.google.com with SMTP id 140so1612425pfz.6
-        for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 12:46:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=94TsYS9Lhx3savK/i0rFKWoF2OB6Clo4zum9Q7WKAV8=;
-        b=QkagP8ACYR8CagjP1G4Y5wJdFJ+jYesXPOL5g2+j1fUnp1hkvLCMFRVI4ER/b/Z4mD
-         y4j1EEZ9lHH1umfNxhML7hgO8CrD6hGaW+rezADHqexqePWUNB/Xr2fjmDOWqnFkEUbv
-         X/wPF8DR34roo3Eytdk9XCQHJT80DCQ6LagvkAiE4uI7BLF3Q1hj/TsNvym4lH0/IidO
-         Hk3F/KyLZiM2zsutznNdhHeSDs1fdiHxGYAXVxzjG1VOPv/4hYjHDMNIlJkrO2xEsXO/
-         f6jcN4bd6HS1qoAJcUrknp8vuUgDY1k4ZKYNzLfqeCrrFYmyWg4m5Cqa4q/9NHVSDuWA
-         EA9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=94TsYS9Lhx3savK/i0rFKWoF2OB6Clo4zum9Q7WKAV8=;
-        b=uEhy52p7hIQwhXoZvh8oOeBsBoBnCp/KjPvpMzANffbDkzsP2TmG/0XFNb3DPMx8Wt
-         eA9Qd7+/7CXcLiBnFBFOfC0gzBCnbk2p+So/UuSYvY81NjUdAH+6o8D97qrqTN57sfd0
-         gOciTI7k73DafMY+dpwrOEK5XmvxEahFoF4cUPkJ+cviiGCAXdw0aedG5Pdk2jCM+lTG
-         n7zkvKn90xWrhx4MXT4Nz/Twn4cF98aYXZHMeKIR0hP6pbBkqobecYVJcms4cPSkG3+G
-         8VOqYZCKuJjFaI7jPmXNhGfTtROKCaTfQ+tO8/0z/yLL0pFRMvMgHrMRBzVVvfmOtwbH
-         GgrA==
-X-Gm-Message-State: ACrzQf2rEzydrOIWR8Iu8W9MwtQl7IomAr5xblVlOEAOabMolFCc5pmb
-	+kg2vA07v9J8mwWgN9yxUu3qJiWdPhq8mnqECMvr3w==
-X-Google-Smtp-Source: AMsMyM6lWyNpiBMuUpIxE8MbdlCB9fhr4E+gnLs9ulGDCERUWsGS/HRwd7uPd6QgpzzzWpmoyYXNSBqYsniomAJw+RU=
-X-Received: by 2002:a05:6a00:1a4a:b0:56d:98e3:4df8 with SMTP id
- h10-20020a056a001a4a00b0056d98e34df8mr3400650pfv.37.1668113187475; Thu, 10
- Nov 2022 12:46:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EC52119
+	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 20:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347CEC433C1;
+	Thu, 10 Nov 2022 20:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1668113443;
+	bh=+Guk1PkqtF3DpNjrdmxtlIWa68p9aMRWj4vAUJaMUvo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=atcUOoui1uX1GR5cDuSN2A9FTOxwO2+gcf/ddhU6byVh6QfoC4TApGFTzNnmGMBPw
+	 9Ho+rb2YsPI1r7E3M8liPiJ1QK3IF0yP3TngZJaWTmGrxtrqt5ChUqg/u3YVqrv/4B
+	 qf1JIh4YI+6EoxAJKOjm6A9ZghuXKcincJLqmwtv62IFWGUJ5QQyTdUg0065uvOBlA
+	 pKBZBqq3/qrD6oLiwez66anLmsi2MyX7NUMhG2qQV/S10kv7q6RZVsk7CpJRLSjwbA
+	 SUotMk7wSwSCXJGRXvZZ+zHr+PPWiFqxt9VA2MFXKslIX5EevPY+jri/pkTS9PQLSg
+	 cIhFKSIsITOfA==
+Date: Thu, 10 Nov 2022 13:50:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: huyd12@chinatelecom.cn
+Cc: guoj17@chinatelecom.cn, peterz@infradead.org, mingo@redhat.com,
+	will@kernel.org, tglx@linutronix.de, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, longman@redhat.com,
+	boqun.feng@gmail.com, linux-kernel@vger.kernel.org, hpa@zytor.com,
+	ndesaulniers@google.com, trix@redhat.com, llvm@lists.linux.dev
+Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH] locking: fix
+ kernel/locking/ inline asm error
+Message-ID: <Y21kIPpDl2Ra0VB/@dev-arch.thelio-3990X>
+References: <20221108060126.2505-1-guoj17@chinatelecom.cn>
+ <Y2rayPgDfL2NYcjQ@dev-arch.thelio-3990X>
+ <001d01d8f4eb$f0f37a90$d2da6fb0$@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221109000306.1407357-1-nathan@kernel.org>
-In-Reply-To: <20221109000306.1407357-1-nathan@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 10 Nov 2022 12:46:16 -0800
-Message-ID: <CAKwvOdkxLXLna0cfkA8ay54vU0NwMj2AFR8CZg3pgpvqOKeXjw@mail.gmail.com>
-Subject: Re: [PATCH] x86/vdso: Conditionally export __vdso_sgx_enter_enclave
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <001d01d8f4eb$f0f37a90$d2da6fb0$@chinatelecom.cn>
 
-On Tue, Nov 8, 2022 at 4:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Recently, ld.lld moved from '--undefined-version' to
-> '--no-undefined-version' as the default, which breaks building the vDSO
-> when CONFIG_X86_SGX is not set:
->
->   ld.lld: error: version script assignment of 'LINUX_2.6' to symbol '__vdso_sgx_enter_enclave' failed: symbol not defined
->
-> __vdso_sgx_enter_enclave is only included in the vDSO when
-> CONFIG_X86_SGX is set. Only export it if it will be present in the final
-> object, which clears up the error.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1756
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->
-> It would be nice if this could be picked up for an -rc release but I
-> won't argue otherwise.
+On Thu, Nov 10, 2022 at 06:05:13PM +0800, huyd12@chinatelecom.cn wrote:
+> 
+> Thanks your comments, 
+> And if any concern to apply it on upstream?
 
-Sounds like the lld change got reverted, so this is less urgent now,
-but the change still LGTM regardless. Thanks for the patch!
+Unfortunately, I am not the one who gets to make that decision; one of
+the maintainers of this file will have to pick it up, assuming they see
+no issue with it.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Fixes: 8466436952017 ("x86/vdso: Implement a vDSO for Intel SGX enclave call")
+Cheers,
+Nathan
 
-
->
-> Alternatively, we could add '--undefined-version' to the vDSO ldflags
-> but this does not seem unreasonable to me.
->
->  arch/x86/entry/vdso/vdso.lds.S | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-> index 4bf48462fca7..e8c60ae7a7c8 100644
-> --- a/arch/x86/entry/vdso/vdso.lds.S
-> +++ b/arch/x86/entry/vdso/vdso.lds.S
-> @@ -27,7 +27,9 @@ VERSION {
->                 __vdso_time;
->                 clock_getres;
->                 __vdso_clock_getres;
-> +#ifdef CONFIG_X86_SGX
->                 __vdso_sgx_enter_enclave;
-> +#endif
->         local: *;
->         };
->  }
->
-> base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
-> --
-> 2.38.1
->
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+> -----邮件原件-----
+> 发件人: nathan@kernel.org <nathan@kernel.org> 
+> 发送时间: 2022年11月9日 6:40
+> 收件人: guoj17@chinatelecom.cn
+> 抄送: peterz@infradead.org; mingo@redhat.com; will@kernel.org;
+> tglx@linutronix.de; bp@alien8.de; dave.hansen@linux.intel.com;
+> x86@kernel.org; longman@redhat.com; boqun.feng@gmail.com; linux-kernel@vger.
+> kernel.org; hpa@zytor.com; ndesaulniers@google.com; trix@redhat.com;
+> llvm@lists.linux.dev; huyd12@chinatelecom.cn
+> 主题: Re: [PATCH] locking: fix kernel/locking/ inline asm error
+> 
+> On Tue, Nov 08, 2022 at 02:01:26PM +0800, guoj17@chinatelecom.cn wrote:
+> > From: Guo Jin <guoj17@chinatelecom.cn>
+> > 
+> > When compiling linux 6.1.0-rc3 configured with CONFIG_64BIT=y and 
+> > CONFIG_PARAVIRT_SPINLOCKS=y on x86_64 using LLVM 11.0, an error: 
+> > "<inline asm> error: changed section flags for .spinlock.text, 
+> > expected:: 0x6" occurred.
+> > 
+> > The reason is the .spinlock.text in kernel/locking/qspinlock.o is used 
+> > many times, but its flags are omitted in subsequent use.
+> > 
+> > LLVM 11.0 assembler didn't permit to
+> > leave out flags in subsequent uses of the same sections.
+> > 
+> > So this patch adds the corresponding flags to avoid above error.
+> > 
+> > Signed-off-by: Guo Jin <guoj17@chinatelecom.cn>
+> 
+> Right, my reverse bisect tells me that this error was fixed by [1] in LLVM,
+> which landed in 12.0.0 and was backported to LLVM 11.0.1 [2].
+> 
+> We could bump the minimum supported version of LLVM for building the kernel
+> to 11.0.1 over this, just to avoid further issues like this down the road,
+> as the kernel will always be adding new sections for various things. That
+> change would not appear to be disruptive, as all the major distros either
+> have 11.0.1 or newer or older than the current minimum of 11.0.0, so they
+> need to get clang from elsewhere already.
+> 
+> archlinux:latest: clang version 14.0.6
+> 
+> debian:oldoldstable-slim: clang version 3.8.1-24 (tags/RELEASE_381/final)
+> debian:oldstable-slim: clang version 7.0.1-8+deb10u2
+> (tags/RELEASE_701/final)
+> debian:stable-slim: Debian clang version 11.0.1-2
+> debian:testing-slim: Debian clang version 14.0.6-2
+> debian:unstable-slim: Debian clang version 14.0.6-7
+> 
+> fedora:35: clang version 13.0.1 (Fedora 13.0.1-1.fc35)
+> fedora:latest: clang version 14.0.5 (Fedora 14.0.5-1.fc36)
+> fedora:rawhide: clang version 15.0.4 (Fedora 15.0.4-1.fc38)
+> 
+> opensuse/leap:15: clang version 13.0.1
+> opensuse/leap:latest: clang version 13.0.1
+> opensuse/tumbleweed:latest: clang version 15.0.3
+> 
+> ubuntu:bionic: clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
+> ubuntu:focal: clang version 10.0.0-4ubuntu1
+> ubuntu:latest: Ubuntu clang version 14.0.0-1ubuntu1
+> ubuntu:kinetic: Ubuntu clang version 15.0.2-1
+> ubuntu:rolling: Ubuntu clang version 15.0.2-1
+> ubuntu:devel: Ubuntu clang version 15.0.2-1
+> 
+> At the same time, you are clearly using LLVM 11.0.0, so I think this is a
+> reasonable fix in the immediate term.
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> [1]:
+> https://github.com/llvm/llvm-project/commit/1deff4009e0ae661b03682901bf69322
+> 97ce7ea1
+> [2]:
+> https://github.com/llvm/llvm-project/commit/700baa009dc685a0adc5f94d258be4ae
+> 24742471
+> 
+> > ---
+> >  arch/x86/include/asm/qspinlock_paravirt.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/include/asm/qspinlock_paravirt.h 
+> > b/arch/x86/include/asm/qspinlock_paravirt.h
+> > index 60ece592b220..dbb38a6b4dfb 100644
+> > --- a/arch/x86/include/asm/qspinlock_paravirt.h
+> > +++ b/arch/x86/include/asm/qspinlock_paravirt.h
+> > @@ -37,7 +37,7 @@
+> __PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath,
+> ".spinlock.text");
+> >   *   rsi = lockval           (second argument)
+> >   *   rdx = internal variable (set to 0)
+> >   */
+> > -asm    (".pushsection .spinlock.text;"
+> > +asm    (".pushsection .spinlock.text, \"ax\";"
+> >  	".globl " PV_UNLOCK ";"
+> >  	".type " PV_UNLOCK ", @function;"
+> >  	".align 4,0x90;"
+> > --
+> > 2.25.1
+> > 
+> 
