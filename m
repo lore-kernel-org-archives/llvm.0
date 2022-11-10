@@ -1,127 +1,171 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38988625;
-	Thu, 10 Nov 2022 09:31:04 +0000 (UTC)
-Received: by mail-pf1-f174.google.com with SMTP id k22so1463640pfd.3;
-        Thu, 10 Nov 2022 01:31:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1EvpDdZ4hxcipg3MQAInCVCspubJ3uS0BC6hXCLOf3U=;
-        b=VLao0cXkAY92G2p1UszK3LD1hHzo5JKXYUXoOGc1CU/6NqeHnqjaxahdLAW55ynq6a
-         HW0ColHyQXlrfep5aM4JgxTYFd2eJ9eYp4eHMWRExB5lH9CotPkKJ9gBt6CcKWf+b7+b
-         LLErN5sw4qWqixwC3GqNeRDh6EwxVLM2ESzeOLCQgXOV93rn0vFlmOpW49YWoQqPXCzR
-         3lIi3Z1cdaapAKGETVC9o0nlnAogohAPpHpLQ65KW6UIImwCiYBJYT9IAm4PcvmA4xpg
-         AXrKN7MZyLeG7vZcizsK2unw6/+ZQ1EWybqZ2gnqROoGVHcuFu61S0JkGf/zsuy+fATw
-         h+rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1EvpDdZ4hxcipg3MQAInCVCspubJ3uS0BC6hXCLOf3U=;
-        b=ZabSlXotEUDJf3TKOhkWDGGkhmExXbZJ4jqQO8pSNVrhVCKhQMHiDul7ZVrf2M4kFe
-         ZVtlac6DW31lNava7+F0B+O2Msb+1CthkVjq4HtXUf116gNf10e7kWGOBZhLvdnd9U0x
-         SoJmnQjEJNxrGHlh3wliepaQSUh/XCkGkveLuA4JLxgbH9YhKdfd/WYfbVZ5Me38pZRa
-         9IzGRjWTH3hTnbtZe2RiYm2xnbPEqmGx1z9xEJIj5GEbmEBpj8/qt6KCVtVw6XCw7aLf
-         ryja5jVZkOl+IpD/5/ada0PqNShvTPUzWm54n2/0Le3u2DZYHFsNQpSjQpKoFWy1TN/2
-         IVkQ==
-X-Gm-Message-State: ACrzQf0GYl0cn3SxZLmWGHt/OUzTO/NHqQ9mBJWUDFWRfnJ44W1aUhy2
-	tFbI9MZ1wyPMntqk0pqcy6w=
-X-Google-Smtp-Source: AMsMyM78iiI/P+DpqpOA4p4lxe7GrKwstfV8mS9lP7o9wCPkGkzc4m7eiJTeoMbliQXRPEaHy5Nm5w==
-X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id a145-20020a621a97000000b00562558712d6mr62997671pfa.37.1668072663634;
-        Thu, 10 Nov 2022 01:31:03 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id l3-20020a17090a384300b00213c7cf21c0sm2677928pjf.5.2022.11.10.01.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 01:31:03 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-	id A3B96104223; Thu, 10 Nov 2022 16:30:59 +0700 (WIB)
-Date: Thu, 10 Nov 2022 16:30:59 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 04/17] iommufd: Document overview of iommufd
-Message-ID: <Y2zE0zfnQ7mt740i@debian.me>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <4-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.219])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05337138C
+	for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 10:15:20 +0000 (UTC)
+HMM_SOURCE_IP:172.18.0.188:58510.456354312
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-10.133.8.199 (unknown [172.18.0.188])
+	by chinatelecom.cn (HERMES) with SMTP id F38C12800D9;
+	Thu, 10 Nov 2022 18:05:13 +0800 (CST)
+X-189-SAVE-TO-SEND: huyd12@chinatelecom.cn
+Received: from  ([10.133.8.199])
+	by app0023 with ESMTP id faa22b8ad1a34afc97177a92b20272eb for boqun.feng@gmail.com;
+	Thu, 10 Nov 2022 18:05:33 CST
+X-Transaction-ID: faa22b8ad1a34afc97177a92b20272eb
+X-Real-From: huyd12@chinatelecom.cn
+X-Receive-IP: 10.133.8.199
+X-MEDUSA-Status: 0
+Sender: huyd12@chinatelecom.cn
+From: <huyd12@chinatelecom.cn>
+To: <nathan@kernel.org>,
+	<guoj17@chinatelecom.cn>
+Cc: <peterz@infradead.org>,
+	<mingo@redhat.com>,
+	<will@kernel.org>,
+	<tglx@linutronix.de>,
+	<bp@alien8.de>,
+	<dave.hansen@linux.intel.com>,
+	<x86@kernel.org>,
+	<longman@redhat.com>,
+	<boqun.feng@gmail.com>,
+	<linux-kernel@vger.kernel.org>,
+	<hpa@zytor.com>,
+	<ndesaulniers@google.com>,
+	<trix@redhat.com>,
+	<llvm@lists.linux.dev>
+References: <20221108060126.2505-1-guoj17@chinatelecom.cn> <Y2rayPgDfL2NYcjQ@dev-arch.thelio-3990X>
+In-Reply-To: <Y2rayPgDfL2NYcjQ@dev-arch.thelio-3990X>
+Subject: =?gb2312?B?u9i4tDogW1BBVENIXSBsb2NraW5nOiBmaXgga2VybmVsL2xvY2tpbg==?=
+	=?gb2312?B?Zy8gaW5saW5lIGFzbSBlcnJvcg==?=
+Date: Thu, 10 Nov 2022 18:05:13 +0800
+Message-ID: <001d01d8f4eb$f0f37a90$d2da6fb0$@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+Content-Type: text/plain;
+	charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKFEmH8zKzDbyVrnMB6jnsnqOop9AI9ItAUrM3JQRA=
+Content-Language: zh-cn
 
-On Mon, Nov 07, 2022 at 08:48:57PM -0400, Jason Gunthorpe wrote:
-> From: Kevin Tian <kevin.tian@intel.com>
-> 
-> Add iommufd into the documentation tree, and supply initial documentation.
-> Much of this is linked from code comments by kdoc.
-> 
 
-The patch also exposes htmldocs warnings as Stephen Rothwell has
-reported on linux-next [1] due to the copyright comments mistaken for
-kernel-doc comments, so I have applied the fixup:
+Thanks your comments,=20
+And if any concern to apply it on upstream?
 
----- >8 ----
+Yadi
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 536a34d099968d..76b3761a89423e 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/* Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
-+/*
-+ * Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
-  */
- #include <linux/iommufd.h>
- #include <linux/slab.h>
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 1eeb326f74f005..fc4c80ec0511f4 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/* Copyright (C) 2021 Intel Corporation
-+/*
-+ * Copyright (C) 2021 Intel Corporation
-  * Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
-  *
-  * iommufd provides control over the IOMMU HW objects created by IOMMU kernel
+-----=D3=CA=BC=FE=D4=AD=BC=FE-----
+=B7=A2=BC=FE=C8=CB: nathan@kernel.org <nathan@kernel.org>=20
+=B7=A2=CB=CD=CA=B1=BC=E4: 2022=C4=EA11=D4=C29=C8=D5 6:40
+=CA=D5=BC=FE=C8=CB: guoj17@chinatelecom.cn
+=B3=AD=CB=CD: peterz@infradead.org; mingo@redhat.com; will@kernel.org;
+tglx@linutronix.de; bp@alien8.de; dave.hansen@linux.intel.com;
+x86@kernel.org; longman@redhat.com; boqun.feng@gmail.com; =
+linux-kernel@vger.
+kernel.org; hpa@zytor.com; ndesaulniers@google.com; trix@redhat.com;
+llvm@lists.linux.dev; huyd12@chinatelecom.cn
+=D6=F7=CC=E2: Re: [PATCH] locking: fix kernel/locking/ inline asm error
 
-Thanks.
+On Tue, Nov 08, 2022 at 02:01:26PM +0800, guoj17@chinatelecom.cn wrote:
+> From: Guo Jin <guoj17@chinatelecom.cn>
+>=20
+> When compiling linux 6.1.0-rc3 configured with CONFIG_64BIT=3Dy and=20
+> CONFIG_PARAVIRT_SPINLOCKS=3Dy on x86_64 using LLVM 11.0, an error:=20
+> "<inline asm> error: changed section flags for .spinlock.text,=20
+> expected:: 0x6" occurred.
+>=20
+> The reason is the .spinlock.text in kernel/locking/qspinlock.o is used =
 
--- 
-An old man doll... just what I always wanted! - Clara
+> many times, but its flags are omitted in subsequent use.
+>=20
+> LLVM 11.0 assembler didn't permit to
+> leave out flags in subsequent uses of the same sections.
+>=20
+> So this patch adds the corresponding flags to avoid above error.
+>=20
+> Signed-off-by: Guo Jin <guoj17@chinatelecom.cn>
+
+Right, my reverse bisect tells me that this error was fixed by [1] in =
+LLVM,
+which landed in 12.0.0 and was backported to LLVM 11.0.1 [2].
+
+We could bump the minimum supported version of LLVM for building the =
+kernel
+to 11.0.1 over this, just to avoid further issues like this down the =
+road,
+as the kernel will always be adding new sections for various things. =
+That
+change would not appear to be disruptive, as all the major distros =
+either
+have 11.0.1 or newer or older than the current minimum of 11.0.0, so =
+they
+need to get clang from elsewhere already.
+
+archlinux:latest: clang version 14.0.6
+
+debian:oldoldstable-slim: clang version 3.8.1-24 =
+(tags/RELEASE_381/final)
+debian:oldstable-slim: clang version 7.0.1-8+deb10u2
+(tags/RELEASE_701/final)
+debian:stable-slim: Debian clang version 11.0.1-2
+debian:testing-slim: Debian clang version 14.0.6-2
+debian:unstable-slim: Debian clang version 14.0.6-7
+
+fedora:35: clang version 13.0.1 (Fedora 13.0.1-1.fc35)
+fedora:latest: clang version 14.0.5 (Fedora 14.0.5-1.fc36)
+fedora:rawhide: clang version 15.0.4 (Fedora 15.0.4-1.fc38)
+
+opensuse/leap:15: clang version 13.0.1
+opensuse/leap:latest: clang version 13.0.1
+opensuse/tumbleweed:latest: clang version 15.0.3
+
+ubuntu:bionic: clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
+ubuntu:focal: clang version 10.0.0-4ubuntu1
+ubuntu:latest: Ubuntu clang version 14.0.0-1ubuntu1
+ubuntu:kinetic: Ubuntu clang version 15.0.2-1
+ubuntu:rolling: Ubuntu clang version 15.0.2-1
+ubuntu:devel: Ubuntu clang version 15.0.2-1
+
+At the same time, you are clearly using LLVM 11.0.0, so I think this is =
+a
+reasonable fix in the immediate term.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+[1]:
+https://github.com/llvm/llvm-project/commit/1deff4009e0ae661b03682901bf69=
+322
+97ce7ea1
+[2]:
+https://github.com/llvm/llvm-project/commit/700baa009dc685a0adc5f94d258be=
+4ae
+24742471
+
+> ---
+>  arch/x86/include/asm/qspinlock_paravirt.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/include/asm/qspinlock_paravirt.h=20
+> b/arch/x86/include/asm/qspinlock_paravirt.h
+> index 60ece592b220..dbb38a6b4dfb 100644
+> --- a/arch/x86/include/asm/qspinlock_paravirt.h
+> +++ b/arch/x86/include/asm/qspinlock_paravirt.h
+> @@ -37,7 +37,7 @@
+__PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath,
+".spinlock.text");
+>   *   rsi =3D lockval           (second argument)
+>   *   rdx =3D internal variable (set to 0)
+>   */
+> -asm    (".pushsection .spinlock.text;"
+> +asm    (".pushsection .spinlock.text, \"ax\";"
+>  	".globl " PV_UNLOCK ";"
+>  	".type " PV_UNLOCK ", @function;"
+>  	".align 4,0x90;"
+> --
+> 2.25.1
+>=20
+
