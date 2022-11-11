@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361E962A
-	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 02:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852D3C433C1;
-	Fri, 11 Nov 2022 02:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EF362A
+	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 02:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC00C433B5;
+	Fri, 11 Nov 2022 02:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668134169;
-	bh=8YAxI68VBNqC4Yhe+Mh1bkW30W4rhNNYDmWMxDWvRMo=;
+	s=k20201202; t=1668134174;
+	bh=YHxZlplJYFwobsY6XzCxLP+nTe0K3MkcAJaglIz46QQ=;
 	h=From:To:Cc:Subject:Date:From;
-	b=gHlNTSyGphI6KqN/tViuRZp7IjrNyx/raQT+Bk+LTLaRAgTJBxMOyS0ZKOvLlCZOd
-	 hsqwl7Jo7gndzO8sePOtHGFMzyLuWWKeFQMLOGvpTie/YYHOkhWi3q6HpI0N+IpBiw
-	 WFKZXP6XPjBJUfKWUxjpqvdmYrXvV9Qd0IETQ8XXeiRdjcxUhhUsWl3VsvllQPT6jQ
-	 ti7sVQNqzpMKquscmaGsRJLcnzp3HlduRS749sotg38dxL87cPVoIQ+0dvCgSzx8E7
-	 X5Wg+JJzYTxChBjYWM2paGEQnzwU6KMx0NMOdEbPyl61B3E0TKPX7SG6momIKaxcBI
-	 ECUrUT35D7B4w==
+	b=ZDKzJwk+OHJ2cRxR51HMBHxNVvSarDaD4Q6vxJkwLgjWgUoAS12NyR3VBqW16kJBt
+	 7UoV1cUR3H2WPhoAcYxsmR9AZluL3EdLRcHqKH01WwpC0IvKLPlX3gFbrP9/ONA/2o
+	 /rgyj0CsJkZza0d/IlaiExwR4jiSXY0BpK+Po80FOv2ShkNHBiBSZPQKEbbPDJosjb
+	 lGhET2Evid4YOffs9t3XfFajDL53WdaJIqqtJ5QmXe/dr2KsYv6kixlXGR5R8dOmBZ
+	 q6qv9CiRl3LFKODdk5Umd/JWhv+wVeR68Zua/urxqu78wOfxvmDIpiuF21lznxDvfX
+	 xC7p+ELQw1dhQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -31,9 +31,9 @@ Cc: Nathan Huckleberry <nhuck@google.com>,
 	ndesaulniers@google.com,
 	dri-devel@lists.freedesktop.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 1/2] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
-Date: Thu, 10 Nov 2022 21:36:04 -0500
-Message-Id: <20221111023605.228202-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 1/2] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
+Date: Thu, 10 Nov 2022 21:36:10 -0500
+Message-Id: <20221111023611.228238-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/imx/imx-tve.c b/drivers/gpu/drm/imx/imx-tve.c
-index c22c3e6e9b7a..c4d67fc54c0b 100644
+index 9ae515f3171e..372582df6008 100644
 --- a/drivers/gpu/drm/imx/imx-tve.c
 +++ b/drivers/gpu/drm/imx/imx-tve.c
-@@ -243,8 +243,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
+@@ -254,8 +254,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
  	return ret;
  }
  
