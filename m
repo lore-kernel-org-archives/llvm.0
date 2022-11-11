@@ -1,107 +1,244 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB555652
-	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 07:02:31 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id o7so3723495pjj.1
-        for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 23:02:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fOUPI2HSi+pvD6Q+zBNwercPei7ZAzC0wrzHEy7HnN8=;
-        b=EDT1lqYZM+7Alg4LuZdDBeMDJuE5ND0y4fnYVJyXonjVuqSNlK+cbY/n5QF+bTmfxM
-         0zBP6GJpt/qUXFZucNS1O2IbL4kvtSBS3HaeMjoLihAeavBJG02as1TC4CKPFdyPZTje
-         hEJe0QJ7Rh/25xfbxlCOoWafCXtw+L/5voZldDL+tvgQA9RhzerhmX1ofKAHxTlm3CNs
-         ijQHyXwf8LtoaVh0b3lAfu44iXImaxEFcbnAqLBWLveWlfTHOv76ewEYHzuIuFx/dXGT
-         almUmRHDbPHYQA45vn8QYXotGakH8sctQ/grqsdu3LtGJNL+utKD+8HuU3G32TggwXeB
-         vbmg==
-X-Gm-Message-State: ANoB5pm2Vyj7YNHj4TPMQV74fm2ugvA/iFPdl4ng/bEv3da4k5t3YNKL
-	FIGc8Vr/TrUdorJE/pfpnDbmr22JNds+m5PICF4=
-X-Google-Smtp-Source: AA0mqf44hY4oy4yK+oBHgzJpJaRLRF7tiuLNug/OgdxFe5ZpSsyu8v23Ye5hX4Sd3WmRiwNRal6WtKvNr0JAVNuhQzM=
-X-Received: by 2002:a17:902:b609:b0:186:ac81:2aa9 with SMTP id
- b9-20020a170902b60900b00186ac812aa9mr1335007pls.95.1668150151316; Thu, 10 Nov
- 2022 23:02:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FAD652
+	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 08:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1668153698;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5kSPgEITjf+1zxEHLAQo4Y3vXoeqgbBqmUxtPXC4NpE=;
+	b=bT/bie4Axc1bR/LgEBWGCxT9Sf3V2KKk3Kn/JEHUOQ6aKei2+wkCtb4qd947Cche3iFZSp
+	c6vYfddrNQm6IK98eCL1XtUPbQnRPOSOnUEHJUKyDy2lIbFCRLxjm06o2/UOsFs7agqs5u
+	XSy4gb3cm/bNkmA2FnBEXs98E42s4hU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-62-EoAp4aYMNi2c1FrLBLDCng-1; Fri, 11 Nov 2022 03:01:37 -0500
+X-MC-Unique: EoAp4aYMNi2c1FrLBLDCng-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B67CE29DD988
+	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 08:01:36 +0000 (UTC)
+Received: from [172.64.10.36] (unknown [10.30.33.69])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9219B112131B;
+	Fri, 11 Nov 2022 08:01:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc4,
+ mainline.kernel.org-clang, 1767a722)
+Date: Fri, 11 Nov 2022 08:01:36 -0000
+To: jstancek@redhat.com, mm-qe@redhat.com, bgoncalv@redhat.com,
+ llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
- <20221106095106.849154-3-mailhol.vincent@wanadoo.fr> <CAKwvOdmN2==9tG0fxRO8K-eAJudeemaKUuhJEAuGHc=P8GpGwA@mail.gmail.com>
- <CAMZ6RqKRP3cp=FhpA6DkKNKjgRV2ak18k=Ad-mnBPkT++gARCA@mail.gmail.com> <Y23DIRG60iaei7Ft@yury-laptop>
-In-Reply-To: <Y23DIRG60iaei7Ft@yury-laptop>
-From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date: Fri, 11 Nov 2022 16:02:20 +0900
-Message-ID: <CAMZ6Rq+qm=hVdWw=MSgBJ2qLbkCxG10v5yUH7hpGDOvq2QBOuA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] x86/asm/bitops: Use __builtin_clz*() to evaluate
- constant expressions
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Borislav Petkov <bp@suse.de>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <04095.122111103013700125@us-mta-62.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri. 11 nov. 2022 =C3=A0 12:36, Yury Norov <yury.norov@gmail.com> a =C3=
-=A9crit :
-> On Fri, Nov 11, 2022 at 10:57:17AM +0900, Vincent MAILHOL wrote:
-> > On Fri. 11 Nov. 2022 at 04:01, Nick Desaulniers <ndesaulniers@google.co=
-m> wrote:
-> > > On Sun, Nov 6, 2022 at 1:51 AM Vincent Mailhol
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > >
-> > > >  #ifdef CONFIG_X86_64
-> > > > -static __always_inline int fls64(__u64 x)
-> > > > +static __always_inline int constant_fls64(u64 x)
-> > > > +{
-> > > > +       BUILD_BUG_ON(sizeof(unsigned long long) !=3D sizeof(x));
-> > >
-> > > Thanks for the patches! They LGTM; but why do we need this BUILD_BUG_=
-ON here?
-> >
-> > There is no absolute need for sure.
-> >
-> > Call this a paranoiac check and you will be correct. My reasoning for s=
-till
-> > using it is that:
-> >
-> >   1/ It is a compile time check, so no runtime penalty.
-> >   2/ Strictly speaking, the C standard doesn't guarantee 'u64' and
-> >      'unsigned long long int' to be the same (and you can argue that in=
- clang
-> >      and gcc long long is always 64 bits on all platforms and one more =
-time
-> >      you will be correct).
-> >   3/ It serves as a documentation to say: "hey I am using the clz long =
-long
-> >      version on a u64 and I know what I am doing."
-> >
-> > If you want me to remove it, OK for me. Let me know.
->
-> In fact, compiler's typecheck would be more strict than your BUG().
-> For example, your check allows pointers, but compiler will complain.
+Hi, we tested your kernel and here are the results:
 
-Here, x is a scalar, so in that specific case, it is equivalent. But
-the compiler type check is more explicit and more natural because it
-would work if ported to other contexts as you pointed. So it is a good
-idea.
-
-The check would become:
-        static_assert(__builtin_types_compatible_p(typeof(x),
-                                                   unsigned long long int))=
-;
-
-Alternatively, we could use the assert_arg_type() macro from
-https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/irq_sta=
-ck.h#L126
-which does exactly the same thing.
-
-But in such a case, it would be better to first move assert_arg_type()
-to a more appropriate header (maybe linux/build_bug.h ?)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Yours sincerely,
-Vincent Mailhol
+Kernel information:
+    Commit message: Merge tag 'for-6.1-rc4-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/59519
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5925534
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5926558
+          x86_64 (debug) - LTP: openposix test suite
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5926568
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - software RAID testing: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1382
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream - net: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1463
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                 ppc64le - kdump - sysrq-c
+                 ppc64le - kdump - file-load
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
+            Affected tests:
+                 aarch64 - Boot test
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
