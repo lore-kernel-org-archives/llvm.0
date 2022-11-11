@@ -1,185 +1,107 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0011563D;
-	Fri, 11 Nov 2022 06:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668146879; x=1699682879;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=d5yZWoMlToNZSX/A8rxAmzkQL5ESf2iWZxC/9H7pVh4=;
-  b=O4qEm/k9z8Nq+ZNvzNjVJ5rVHASEYpTtGeqmslxIHRGn0s6vaPbJ77zI
-   iPXcd4QMTYFabqq6yP8MufPVCqicwi9GSJLmznaz0oBi++QaSEObbzEse
-   Fjc7UyUMd78aB1za+rplZtehR55+dqSAW+xnGmO4ehaJynXjhUIrfjx3d
-   PV2jMgMNDzUX1Iq5RS8lD948nTp9xNlLzpOQCH2Elm0bKq6qP40ExtxKE
-   ew1EygQyP3jgdDX+S/ePRunS4rVwQx2e4BRjEyuQCm0IhNExwmAJccTbW
-   PpO35vQtxiL3Qm6+7kPzmVGOclOW2beFdCCwdQmmjXtkcNWl1438nrmjd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="313319739"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="313319739"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 22:07:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="668710003"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="668710003"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 10 Nov 2022 22:07:57 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 22:07:57 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 10 Nov 2022 22:07:57 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 10 Nov 2022 22:07:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rof9BxUJ7CfbT1OfFAGXi0WvigeLskmppK4kYU31ZXZtYX8QKofi+RomvD/hzrgQ5DogFRF470Xd9BFzHAwuaCEhyyl5B8v0irauT6jopf8Z2Qc6TgKomqxekitM/zLjbLTyaYAUR04VrQ3RnwsD6Q//plstLVdxKQ+0hLysFmi7vQlhhM9pX94O2hj/7Rkz5e4UIxrZXqrrUPdhAmmYwwHNAgUR5RbX64ze7Nm+H97FeUBEQgqNa2R6t4UDILyHbRBAh/wHUs7s+OwxguS/eZBPyB7VzflXAh8Y1BYaT+PjGzZeYB5xIZFTdc8qFF47Yzv/SNK0LkCICVPlHzMn/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mq33Sww7ibERyJgr3OJ1IT8S0DZKqTkmVWJ7AqMVCsw=;
- b=LWNqxoBUVxym1Sgqz02abhGODOIS/Wb1oLjwQ6VNiZ+PPkaoWdC10hk8i8MC3wqIM3pNvynu5ttttjYZGj+maoQY5CpOC63wyQyLcAwgymtyf//cG3TDDE+E9wNHAu/TnsDi4t7QFK5hn6AnEeKl2yqrkyP8wpUn/jS1Olb8N7PCqrdfSWWmquduoF1jn9Kd/6L3/Nfwv2OGtWxLSLVGeoAoW5DtILSvmZWX607a2cbEMysEw1qIfkmcymYTRe64DAIEpEqYKYTj5NPGxHodEG0VcngGfNeu4tkvAuQ8Tio7PiS9vg9t8DHR9bMFnf0waH8ACCPeCG0bzEXagHPvmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
- by DM8PR11MB5686.namprd11.prod.outlook.com (2603:10b6:8:21::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
- 2022 06:07:46 +0000
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::7a7f:9d68:b0ec:1d04]) by BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::7a7f:9d68:b0ec:1d04%7]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
- 06:07:46 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, David Woodhouse
-	<dwmw2@infradead.org>, "iommu@lists.linux.dev" <iommu@lists.linux.dev>, Joerg
- Roedel <joro@8bytes.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Suravee
- Suthikulpanit <suravee.suthikulpanit@amd.com>, Tom Rix <trix@redhat.com>,
-	Will Deacon <will@kernel.org>
-CC: Alex Williamson <alex.williamson@redhat.com>, Lu Baolu
-	<baolu.lu@linux.intel.com>, Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>, Daniel Jordan
-	<daniel.m.jordan@oracle.com>, David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>, Eric Farman <farman@linux.ibm.com>, Jason
- Wang <jasowang@redhat.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	"Martins, Joao" <joao.m.martins@oracle.com>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S.
- Tsirkin" <mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>, Niklas
- Schnelle <schnelle@linux.ibm.com>, "Shameerali Kolothum Thodi"
-	<shameerali.kolothum.thodi@huawei.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
-	Keqian Zhu <zhukeqian1@huawei.com>
-Subject: RE: [PATCH v4 05/17] iommufd: File descriptor, context, kconfig and
- makefiles
-Thread-Topic: [PATCH v4 05/17] iommufd: File descriptor, context, kconfig and
- makefiles
-Thread-Index: AQHY8wv2NwaD3LlVDEq28pbGBQQkia45QZ/w
-Date: Fri, 11 Nov 2022 06:07:46 +0000
-Message-ID: <BL1PR11MB527180BB98A24D6F1BA04BA98C009@BL1PR11MB5271.namprd11.prod.outlook.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <5-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-In-Reply-To: <5-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|DM8PR11MB5686:EE_
-x-ms-office365-filtering-correlation-id: 456ddb1a-88a8-44bb-c309-08dac3ab0dce
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: y6+UagZKNSbtRMiXJtPzqbcV207eAj4wkQe+dAN+R59/eylQdzCB6LlV7KFwb4KG3kQl3sQwQb+x7AxOCw19maP/nDPBb0fIUK+X+OflvMpMtd6CTmia30IXl4kFx0aF5/h0wiPYThS0n7lTED0x+dlVctaPUmRjGJhSJfu5JCeo19FWwCuT5jfPVjFDts0oy7wQV90xr/aa8vIbwy7OdgApx4Cf8dVPLBvk4zLO342JYL+m8CuLu6ZA1QOQ48TvI7iBkdHkq/mRtAqk5MjzBYiCGn1voHfChuDCJAOIyg+gOGPvHFYOmFh3fhCo1DTIcwGIkUOyUD6t7JHPDhcUGjFOD8XQuH2AWezxm+cd/dIqsoHr+UgJSdsqvpuv+ZVbTp2aTzBtbuQhPOhRlnuK7a0ORvcNLBwOm6Kghp+dLFYKB3gTJxs639w+DjkDqLak8F18/z/znDH82RCoxcTSRy2/SEI/KN2fFAcnAiq+rVSgwbat4V5EPsLnuh9NbYM/+vU6V3KIMCy0/AXvc2pXSGWTQDeIJeMEaDysDvv7bWjWPkxjjiIalVKDU9uDCvgLH1eumQW9C1Iyp/4v7Iv+R3RQvEIPEza5cPGSoYSEj/zEAhzvBjlLDVWRvvfHnmonG0dG0vZf90OwQ6Af4nx3spJmzocwenndmVf3lk5UbBsWP4YO9kPnaLn2nckwovvtzIqgXs/ACni6dLmdRZgZCDiFCmZPTyP27o6nYo2loAbpNCjLo3dQq/euE6FgRAok9DeApVluD4GZYj3Q8m9rrHCa17KBUTNn2EcIxZD0DH0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199015)(86362001)(478600001)(71200400001)(76116006)(316002)(66446008)(66476007)(64756008)(9686003)(7696005)(4326008)(26005)(6506007)(8676002)(4744005)(52536014)(7406005)(5660300002)(41300700001)(186003)(7416002)(110136005)(8936002)(54906003)(122000001)(82960400001)(2906002)(66946007)(55016003)(33656002)(38070700005)(66556008)(921005)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BWxiMQr8LuxduOBi1liiMKBpVJaYGLur+8m1Yyevts1N4n9h0THIz4tB8SDd?=
- =?us-ascii?Q?rPPVvBA8Py1o7do/WcFTQAh9ciPON+baJgQ2jhaB6pPAMattJ6XWsq4Mts1L?=
- =?us-ascii?Q?B0YT7YK5VVmnOdHvZjY53XndD3Ka5zSvfwLe1NkR7gYOli20JXlquZaA0ilj?=
- =?us-ascii?Q?2iq2+Cmc9NYhNNkwCVk+QoPVnXMkhUGqwPfWkPlK7YCZUjxfeBimHr+N6RW+?=
- =?us-ascii?Q?zsMk/SMjQks2nfHmglvxgnvYBYoG6wKXGqwxYcQieBelEngKlJPivCQdDqt7?=
- =?us-ascii?Q?Sw/vXUyx2ARG2fIEtzX/RounAPS9YyrO7nCwcZYtliNvTlr+6CxxInrZ+2iI?=
- =?us-ascii?Q?ba8lAYSDZwgu1VGkZZcVJnlf2IohIg/dh3PXRLrWZjF3OVq2bK9AM4DBKcaD?=
- =?us-ascii?Q?RTIbItUSFbGveAiCpgVatUHnkBS88qq5bzlEMCLj5xFPju1zDlqRr3GxXl/B?=
- =?us-ascii?Q?ILJTGO/4V9PIjPsG/USoqkkHs/p1xFefCiwz5mmJ54B/sBKWHDSbs11/fR7l?=
- =?us-ascii?Q?GTViYW9qQljt4jYz82lZpwxGP0SOkq7VIcm7nfAyHnA/hGOTUmAAT/IImtp+?=
- =?us-ascii?Q?81femCTPY4d4BP5ZsrzkxD08D6jd4y9EjHaT2kWU2TjCM2lSCqgyjrld0siz?=
- =?us-ascii?Q?0yWFTO+NaH7BHUSdjIyutZ1lGI8CTlU4Rg4Ghh1ZnRcw80eAD3OOmEnyY7zx?=
- =?us-ascii?Q?sXRqSq2pjhg4c1nDvVKO9J65H4T/ApmiX6i+TfcVDXLZ5ezOVzMyyNsDBUbg?=
- =?us-ascii?Q?Z38IaMyYuUPEzUm7a25ZgRaqwfcLFZr4lJodqH+9Uwpe1O67oUTCIbaCB2ax?=
- =?us-ascii?Q?91Qm0FeTXOGS9ryYQkAZ6rUTg0sl+1q4x6e/eJq4RHF6zm9/Pjox/dXS0ajg?=
- =?us-ascii?Q?CUtm1LxcYp6QFboyyZr5A9mzEZfGOgqUusplxPCeRApRox2jJvL5JUdeKTxU?=
- =?us-ascii?Q?dUGpYkvSr2DSUOBc1F2KD6QwRsBcA3L0uBWqbRlmFNDnWNHSanR7vf6m/JGM?=
- =?us-ascii?Q?Gncv7yC1XbOB9AvRVOvSuS8TO7miK94/a5icBfNKdi5MqV6HqtBBmZftJAop?=
- =?us-ascii?Q?VTen+jIaeZlRNUkrmABLYwmR0usDY56tTRgSLscVU9coi/zXPXHZD6MpwL6O?=
- =?us-ascii?Q?1SOC30WvmLsNjGMsJc2qaoWqV/YC4PcM4xQbSXM3YbDsxYB+yDezhcayHW1q?=
- =?us-ascii?Q?sJovWVD7+hBUN7bzHytSLrXpY42VPK+k+wFW1WzGMURF74J0TMu3RjK7Ebub?=
- =?us-ascii?Q?VHM7bP3+YEYUNiPMirNgHilrA5yegWnc3mCFSUhsfWILgPHC8b9WaKFXNEuz?=
- =?us-ascii?Q?umwT9yTFjEN0rh1aEurlV2GN2qD+hHerb4ee7sU14K3K8MV4TALQDGCA7Sj0?=
- =?us-ascii?Q?uVhswkEbBErexXnbLiiWE3IXAOdNd+e5dZl2EXUd4J4DnVTlApmXFt3BBcDK?=
- =?us-ascii?Q?U3JrpSnbsztuKhhOQcVdbHfKYLdKUpKpXLcZVSitOxwINuURtD38Tx1wLTuN?=
- =?us-ascii?Q?Dx8EIghmAPPAPylPJzLxQLoDZRMLtxd+sI3u3cQiUCvSEVqWtsenSKJtWoeU?=
- =?us-ascii?Q?V/xTPNXkbTWEvicaGcRPbgf2R+E7rMzzqzLlL4fd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB555652
+	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 07:02:31 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id o7so3723495pjj.1
+        for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 23:02:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fOUPI2HSi+pvD6Q+zBNwercPei7ZAzC0wrzHEy7HnN8=;
+        b=EDT1lqYZM+7Alg4LuZdDBeMDJuE5ND0y4fnYVJyXonjVuqSNlK+cbY/n5QF+bTmfxM
+         0zBP6GJpt/qUXFZucNS1O2IbL4kvtSBS3HaeMjoLihAeavBJG02as1TC4CKPFdyPZTje
+         hEJe0QJ7Rh/25xfbxlCOoWafCXtw+L/5voZldDL+tvgQA9RhzerhmX1ofKAHxTlm3CNs
+         ijQHyXwf8LtoaVh0b3lAfu44iXImaxEFcbnAqLBWLveWlfTHOv76ewEYHzuIuFx/dXGT
+         almUmRHDbPHYQA45vn8QYXotGakH8sctQ/grqsdu3LtGJNL+utKD+8HuU3G32TggwXeB
+         vbmg==
+X-Gm-Message-State: ANoB5pm2Vyj7YNHj4TPMQV74fm2ugvA/iFPdl4ng/bEv3da4k5t3YNKL
+	FIGc8Vr/TrUdorJE/pfpnDbmr22JNds+m5PICF4=
+X-Google-Smtp-Source: AA0mqf44hY4oy4yK+oBHgzJpJaRLRF7tiuLNug/OgdxFe5ZpSsyu8v23Ye5hX4Sd3WmRiwNRal6WtKvNr0JAVNuhQzM=
+X-Received: by 2002:a17:902:b609:b0:186:ac81:2aa9 with SMTP id
+ b9-20020a170902b60900b00186ac812aa9mr1335007pls.95.1668150151316; Thu, 10 Nov
+ 2022 23:02:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 456ddb1a-88a8-44bb-c309-08dac3ab0dce
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2022 06:07:46.4668
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zI1oDXa+5nj0rDwnp94ff9gWsjMj8T7IeLv5OnE5i1NLpoihxYJ+TbY8Fooawn4cxuLkt1u8sRiNc84wpoKroQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5686
-X-OriginatorOrg: intel.com
+References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
+ <20221106095106.849154-3-mailhol.vincent@wanadoo.fr> <CAKwvOdmN2==9tG0fxRO8K-eAJudeemaKUuhJEAuGHc=P8GpGwA@mail.gmail.com>
+ <CAMZ6RqKRP3cp=FhpA6DkKNKjgRV2ak18k=Ad-mnBPkT++gARCA@mail.gmail.com> <Y23DIRG60iaei7Ft@yury-laptop>
+In-Reply-To: <Y23DIRG60iaei7Ft@yury-laptop>
+From: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date: Fri, 11 Nov 2022 16:02:20 +0900
+Message-ID: <CAMZ6Rq+qm=hVdWw=MSgBJ2qLbkCxG10v5yUH7hpGDOvq2QBOuA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] x86/asm/bitops: Use __builtin_clz*() to evaluate
+ constant expressions
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Borislav Petkov <bp@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Tuesday, November 8, 2022 8:49 AM
->=20
-> This is the basic infrastructure of a new miscdevice to hold the iommufd
-> IOCTL API.
->=20
-> It provides:
->  - A miscdevice to create file descriptors to run the IOCTL interface ove=
-r
->=20
->  - A table based ioctl dispatch and centralized extendable pre-validation
->    step
->=20
->  - An xarray mapping userspace ID's to kernel objects. The design has
->    multiple inter-related objects held within in a single IOMMUFD fd
->=20
->  - A simple usage count to build a graph of object relations and protect
->    against hostile userspace racing ioctls
->=20
-> The only IOCTL provided in this patch is the generic 'destroy any object
-> by handle' operation.
->=20
-> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+On Fri. 11 nov. 2022 =C3=A0 12:36, Yury Norov <yury.norov@gmail.com> a =C3=
+=A9crit :
+> On Fri, Nov 11, 2022 at 10:57:17AM +0900, Vincent MAILHOL wrote:
+> > On Fri. 11 Nov. 2022 at 04:01, Nick Desaulniers <ndesaulniers@google.co=
+m> wrote:
+> > > On Sun, Nov 6, 2022 at 1:51 AM Vincent Mailhol
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > >
+> > > >  #ifdef CONFIG_X86_64
+> > > > -static __always_inline int fls64(__u64 x)
+> > > > +static __always_inline int constant_fls64(u64 x)
+> > > > +{
+> > > > +       BUILD_BUG_ON(sizeof(unsigned long long) !=3D sizeof(x));
+> > >
+> > > Thanks for the patches! They LGTM; but why do we need this BUILD_BUG_=
+ON here?
+> >
+> > There is no absolute need for sure.
+> >
+> > Call this a paranoiac check and you will be correct. My reasoning for s=
+till
+> > using it is that:
+> >
+> >   1/ It is a compile time check, so no runtime penalty.
+> >   2/ Strictly speaking, the C standard doesn't guarantee 'u64' and
+> >      'unsigned long long int' to be the same (and you can argue that in=
+ clang
+> >      and gcc long long is always 64 bits on all platforms and one more =
+time
+> >      you will be correct).
+> >   3/ It serves as a documentation to say: "hey I am using the clz long =
+long
+> >      version on a u64 and I know what I am doing."
+> >
+> > If you want me to remove it, OK for me. Let me know.
+>
+> In fact, compiler's typecheck would be more strict than your BUG().
+> For example, your check allows pointers, but compiler will complain.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Here, x is a scalar, so in that specific case, it is equivalent. But
+the compiler type check is more explicit and more natural because it
+would work if ported to other contexts as you pointed. So it is a good
+idea.
+
+The check would become:
+        static_assert(__builtin_types_compatible_p(typeof(x),
+                                                   unsigned long long int))=
+;
+
+Alternatively, we could use the assert_arg_type() macro from
+https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/irq_sta=
+ck.h#L126
+which does exactly the same thing.
+
+But in such a case, it would be better to first move assert_arg_type()
+to a more appropriate header (maybe linux/build_bug.h ?)
+
+
+Yours sincerely,
+Vincent Mailhol
