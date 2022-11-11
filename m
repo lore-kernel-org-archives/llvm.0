@@ -1,173 +1,93 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4A662A
-	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 03:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668135835; x=1699671835;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=GRXEf78bZ0payp2y9lAiI+ovSSORYQAuFyQxgGMWLuM=;
-  b=MZD4lMsfIqD1Vg3XSSvA8+y6/VVG+bCbwF71TnmJibGr71AoCgcgXfE/
-   B/RNhEci6aJU8hFj8O026mCmT+EPFW3/XZLcdovItizJrCCkkw/9RXQ5Y
-   xEBaeor/Ye4UdOBygtBD/dy0SLu/I6dHH+e3jBTktQ5xXSdjo1k4PA1yu
-   dPN3BXhbfqX7BNnF+CUK82o7Ssjtt2qnANg+vlv8LUQj9tocMVLFMbilh
-   HICd6fxCu9BXaZD0bgVi88EsTWxdK4PRvswtnVLNyo9cy4LNxzTea1UyY
-   maW+y4zbPrap0QneZGh5ljl5MM3fVwn02UbBtctFg4WGn1RtMg1BC9w2N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="397805171"
-X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="397805171"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:03:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="780026691"
-X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="780026691"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Nov 2022 19:03:27 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 19:03:27 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 10 Nov 2022 19:03:27 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 10 Nov 2022 19:03:27 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k15cLGqUSCcV44DN+/itVIeXrNr5mEqAHiUMC/AX1ESPMa5gzz8/LrUXGGJ+6QDD59bos7TfVyT5oyp3qxAIxmcpfFyPAYCzus7dWdtnUwFCy4Sz59ljwX6Z/zCK40T/H9IjvgzoLyd7O1k8UKilIbzeTWcMyjAycpeWOiPl8rhRIQYweon5dMCVPM0c1ZoE8S0efM1TCphxGzoScNHgXQyDwhDqwzofqAIjrnemBYiaJY0wJ5IKRrIm3I0GZNPVDnr4HOtdA7X9HoEse+9Sg5Ms1FWG1nnbzKTCBlrcYzY3B6iz4x7S1fqgUYI7Rh2eJLkl+ffKT409dRgFhzzhWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GRXEf78bZ0payp2y9lAiI+ovSSORYQAuFyQxgGMWLuM=;
- b=CKFjPt60G6WQinBPUc8CHC6bD+zNDo+ojd70ZTHglR+/2Uxq7NQ+VYJ+d08awnJQS5uPQcwdLDI7r/VFd47CyEg9/2mASqmPWJzVjMxFdIFMKPKOxiiN8zW5eUb2I7VuMYqbSu7OhitgNMWDYkyUyCh94hm0yp5wd0FSQ1IHywVJ4EZHeDc+6/KFYzxkxwQ0XdEjHvdB4YrTf47DjOngxve4qYGjEdi5+h57Ulx7T/6c2/9t2l9cIXFfsH6ja+eFJN2OamB80KctGpwkMODAoQnk2EtmO6mBfqCfOwWHwlx0L2vDELgm0NiLUsbjeUzAPcBvu2WWB0qPB2zCkLW+OA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN6PR1101MB2161.namprd11.prod.outlook.com
- (2603:10b6:405:52::15) by DS0PR11MB7262.namprd11.prod.outlook.com
- (2603:10b6:8:13c::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Fri, 11 Nov
- 2022 03:03:25 +0000
-Received: from BN6PR1101MB2161.namprd11.prod.outlook.com
- ([fe80::40a1:5197:e1df:bb6c]) by BN6PR1101MB2161.namprd11.prod.outlook.com
- ([fe80::40a1:5197:e1df:bb6c%11]) with mapi id 15.20.5813.013; Fri, 11 Nov
- 2022 03:03:23 +0000
-From: "Li, Xin3" <xin3.li@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-CC: Peter Zijlstra <peterz@infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"hpa@zytor.com" <hpa@zytor.com>, "Christopherson,, Sean" <seanjc@google.com>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, "Tian, Kevin"
-	<kevin.tian@intel.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Kees Cook
-	<keescook@chromium.org>
-Subject: RE: [RESEND PATCH 2/6] x86/traps: add a system interrupt table for
- system interrupt dispatch
-Thread-Topic: [RESEND PATCH 2/6] x86/traps: add a system interrupt table for
- system interrupt dispatch
-Thread-Index: AQHY9M85Yu9uY6afW02HaiePlaJ2sq432uWAgAC2DaCAAAq8AIAADReAgAAaLxCAABbMgIAALlwQ
-Date: Fri, 11 Nov 2022 03:03:22 +0000
-Message-ID: <BN6PR1101MB2161713681B883834D2A6B1FA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
-References: <20221110061545.1531-1-xin3.li@intel.com>
- <20221110061545.1531-3-xin3.li@intel.com>
- <Y2y8obdYDXo9vlH/@hirez.programming.kicks-ass.net>
- <BN6PR1101MB21619E2092AFF048422C6311A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <BN6PR1101MB2161DDABE8095ADC95B8BC73A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y21pVXipq4lRiDMf@dev-arch.thelio-3990X>
- <BN6PR1101MB216109C51162ABB27C8AA735A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y22Sa9N7DU+JQoeQ@dev-arch.thelio-3990X>
-In-Reply-To: <Y22Sa9N7DU+JQoeQ@dev-arch.thelio-3990X>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-dlp-product: dlpe-windows
-dlp-version: 11.6.500.17
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR1101MB2161:EE_|DS0PR11MB7262:EE_
-x-ms-office365-filtering-correlation-id: ba688f60-d6d4-447c-4c0b-08dac3914b73
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4QhttEKbm7cYDmY/vLB9HJLFOGQJtgt0/0qbSoOF6fNfFFTw2WaBmomPIxvFl8XUhdf4IFlCKS7QJW5PO9WbyfpJxIVjbpKqTzzExfIdW2t9F1KlOWZEj5ClkK6+8BPEWQVO+L+MXLge7cXU7n7p7LiYg1CuA6BStgoeu14uK3cT18YxChlH7xaPdBH54L0GwTrVYvOTBg0JsyCIVnyWtKEq8mNvB/VL2/69J1diTI7eWU0bhoEJD4dTg3TO2Df4PMAkt+QwwGGkZspla7VMJ1yYl3iSG9ZhiCvbcokxhmGlBCxr+LbzFzJ1hK+WYmJGWxbG4BcriIyqTx25g9FEhbnsVwwLcUtb2+D7NvK3nWXtLjfE/B82y8d/B0vYTNEijTKu4UOiEC1azJ7OK6wb6k4yoc7xicdqcGo4OazXf1sr/wwQM3KuNv6T8vzcReLA9VaGuafhlCx6+ng4M5E0b9bJSy+Gfc8M2PzUP5nj4I+UyLtm4jzciHq/2EfpQJHoa1QxkeB5car305k2RgojrVcGse6iVnwIMVvd/7GWeXMk4nFUJIKov7mk5gOarVVKNAzjBPeOLY2i81E6IsB8KQuClyq5QOi3HH8oKYWruUnNfms2x+gbJaI8sWAAe4/97vorJjDg4Q1vOaedxLY2SYFqA6M3AfPm5qJrYi8UgEBrSBb2oL1xuyf356cCiM92d6AFsQgEdyFtYXRBSbaxu8XbESkT+76EaBvzYMQAsn5FztU/wy9htiwaPp0uzz1CkHQPffa6h88nNgR8ZSz/sQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1101MB2161.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199015)(5660300002)(4744005)(9686003)(7416002)(7696005)(6506007)(83380400001)(26005)(33656002)(186003)(478600001)(71200400001)(2906002)(8676002)(66476007)(66556008)(64756008)(41300700001)(76116006)(6916009)(38070700005)(122000001)(66446008)(316002)(52536014)(54906003)(86362001)(8936002)(38100700002)(82960400001)(66946007)(4326008)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cnar5LpWb9fexgMBiAW9vE55/uIJOAIExg1FxnCRbPB8sThbRoouOu8C92wS?=
- =?us-ascii?Q?vhK544pZbxgDQqNMHtvxZQG5SFqRLr83qPDWD1y6U3/BsgqSyK7LOnjqGICT?=
- =?us-ascii?Q?WPq1zwaSImVUSEu2eV4n7CiQDvlPRFaEZJK0WpcC0b68qHn7pnBr+ieYdLLO?=
- =?us-ascii?Q?M7wgDIdpSsn6dYEd7frz1/yWhnqN2wYXxL5x6M+eS/KWYxw7EaONaCjkhGtx?=
- =?us-ascii?Q?38KrBDVue7OjQCtNkpK89JWJ82OKxvlJGnCVO9K9nW8lYLC4bYRvfU9IECnB?=
- =?us-ascii?Q?Q54BTsRGoVvFPfbsaovlN/POvokB40u5OlfRlLjqVALztGNTxz+hBEOePZf/?=
- =?us-ascii?Q?JzF+9orl3FjdVBy2xFhbpfWywseWfWHEzzh8J6lLGSURDCVhJZbdfQFOrpus?=
- =?us-ascii?Q?1nY8NkZscm5mQFZmMXm/3x6HdIq2eAKZ8cq55WQbqcLlLVWwZUMb8Y+VtUDk?=
- =?us-ascii?Q?T0w4qg2TOMJCGjabQJJYoL801HF664RJF/Yu7Oz9EgFEC1Uac4vzt0WfK6jn?=
- =?us-ascii?Q?ITjVREB9t9nf+niTv4Uk9a2nDU5XLCHM7MxnrHJB9spR8bJ0QXdBc7NNcTqI?=
- =?us-ascii?Q?A0FO4/F0vq6KdKrdg5rIXiSetuLd+KOP6mnJDA8Dl5UyeDDq1nfHt9I11RWb?=
- =?us-ascii?Q?divuEGudOEqaKZ/Ccg9GXoh5bqkj/vIL8eYsYsIQFBp5HeJk0wZfw0hGgv4B?=
- =?us-ascii?Q?tOjxMGLg5OoWN1ydUBuWVrZg4Ik9jWOWGf77CvuDSv18RdFnLsQ/rH0VcJji?=
- =?us-ascii?Q?b/rPXLlxMzJkDYjYRJf4jsD0TkSjJle33CqAEjRT2U5Jh3M1V1lE4N4m4mKQ?=
- =?us-ascii?Q?W60LfTSiXXrBB12M94mXgvZvZSieBAZYnSOmLt1El77MsvXCKdp07FJM6+zh?=
- =?us-ascii?Q?n7+AEKO9jvq8woolE7IFw+AKLi4VnWx6w2xRaOd7fAWuDN7FjHrplnEZNeLk?=
- =?us-ascii?Q?fAEKFr/CVPV3zmu/dpOB0g9Jiou6vkYSKDOjrz7AKlEVgMJa0ANbxzMoLIro?=
- =?us-ascii?Q?Oh8bzEqWrPuRksXifGTonK07pDNwUE6PhssHAr6TeY+iI34P/XwUFYljiAJa?=
- =?us-ascii?Q?yMmm5FHXbF9HDQStb6YutUJl758MN0XGbXJyyqCt2UgDUeAD95vkr2G64Fdl?=
- =?us-ascii?Q?BsQvPPxxl8rhXcDYLkKTaSweUdHy68DkJOyTJAfWnxd8lTA+nynAnAMlDM8+?=
- =?us-ascii?Q?+tHE42ZrULkkeTddI72ZqdJEqtlNM2cUAbRgE9QXewCFWsvbge2Ym87pn+Ki?=
- =?us-ascii?Q?X5wA4+AgmTr7c4b0n+2x9c0OMmT/xwWKXo5R2QP9JKwBFtwTinTBQbKiAVWK?=
- =?us-ascii?Q?GijYQ5GotBjySK7tGbdYsC8qz0RR9N1Uo1MvqMtwttHJnQa1yo755ILH3ZRp?=
- =?us-ascii?Q?+CxlDRRm1LXh7MM4+VJkohg5K6vB9bKGka7nzti3cMXc4uaLPJ7YVdcUQw60?=
- =?us-ascii?Q?keYrMp+wa+D/hNTLRki7kLRV7Qqpf84nlHcOuas2lkduEZLUYPf8LYL+0iEm?=
- =?us-ascii?Q?2ywG3JfQxNc0wmyERCg3LbWKBwHDt64T5iP1+fp65Xqc7k+qJ+OmJ64jkif7?=
- =?us-ascii?Q?CKKcm0BXcvfHqLGz4Uo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3236D62A
+	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 03:36:04 +0000 (UTC)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-13c569e5ff5so4282060fac.6
+        for <llvm@lists.linux.dev>; Thu, 10 Nov 2022 19:36:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5DLwFbcaXxTI8kikK3HOdCc4Gv3JptkdKvwplZAgy8k=;
+        b=OYIyNKzRqiJ/IBm8jZEy1s86exNHopq9GLHeciOSXKsdvehkCc8rSKpiF5j26lRNzV
+         wi4KrlsK09NARYT1dUkCG3vjOSa/2PLVbszy+5yt38Oa3/AqUUllaY5LECI55EC7l3Uz
+         vtZEvB9GmAuQGXDjKQt52o9BIMvAGfHCaShiLzpEB9PlMuiYEniy+5zJElpjT6GeFxLQ
+         fYJw0cOTdNJ+kqYaboV8hg5tXKkL7ykXTHejmprag7k5wUHPYhls2eD12EINTBzeG1Fs
+         wvC8VabL9eVdqNn6cilcR+SR/58QfqBe7llnHnqJbLuyGlMKHNXRxPyuD7Tyli3M2vpV
+         8HAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5DLwFbcaXxTI8kikK3HOdCc4Gv3JptkdKvwplZAgy8k=;
+        b=uGKo+jvHYwxRoPJvJvL4H6Q5ucGcdWkdFSFTMvZmmIlcv4lm3Zbn8dU45/ukGMRZX/
+         28PNMx5YTdAtWl1+4toYXY7N9n4qYTAiv4ObShjZyx85GuaJIy05gFCY1IfJmGKUhvj+
+         GpS2iO8lBipKwbD1xoucVkKuvmvv6TAnI1fSMgJ7Dd5QvpXHQ5aQgj5kxYhe6V+r1J/F
+         akCLV6vMTPGbWt0Oyp+h1epydEMvYxjU6/PCcxrVwwW9TAXtGKJi+xVNH94a/cjetHav
+         qFe/1EZ4tjTfygpodZRV+erUGrdi+IaFIKp51xWzVr4/72Q20nnkmDuExfPhwN5tVAI9
+         cV/w==
+X-Gm-Message-State: ACrzQf1hHKYWQ8MAHFOeelvUrOwHxBMagEGqXIpGCE8uCT0lS1bXiuOR
+	5h6LwlCQpg+9OGJfH2elLck=
+X-Google-Smtp-Source: AMsMyM6xUVKjYV9avOHlFJglZ7Y6zjTj1Snpe5pE9oJ3XB087NLGOAAOX7OfDjtllBmrcuuYjpQakQ==
+X-Received: by 2002:a05:6870:2a43:b0:13b:c2c7:8c54 with SMTP id jd3-20020a0568702a4300b0013bc2c78c54mr2732710oab.242.1668137763127;
+        Thu, 10 Nov 2022 19:36:03 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id h24-20020a9d6f98000000b00661b46cc26bsm578495otq.9.2022.11.10.19.36.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 19:36:02 -0800 (PST)
+Date: Thu, 10 Nov 2022 19:36:01 -0800
+From: Yury Norov <yury.norov@gmail.com>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH v1 2/2] x86/asm/bitops: Use __builtin_clz*() to evaluate
+ constant expressions
+Message-ID: <Y23DIRG60iaei7Ft@yury-laptop>
+References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
+ <20221106095106.849154-3-mailhol.vincent@wanadoo.fr>
+ <CAKwvOdmN2==9tG0fxRO8K-eAJudeemaKUuhJEAuGHc=P8GpGwA@mail.gmail.com>
+ <CAMZ6RqKRP3cp=FhpA6DkKNKjgRV2ak18k=Ad-mnBPkT++gARCA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR1101MB2161.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba688f60-d6d4-447c-4c0b-08dac3914b73
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2022 03:03:22.9555
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LscdlzNAQN4vJ07jOqrI2aLsvrjvUia6GvWm07XKXRyyrCcE0OmlNGXdtFHlreYBxGSKe3QLYBpwEOchgY6DvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7262
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKRP3cp=FhpA6DkKNKjgRV2ak18k=Ad-mnBPkT++gARCA@mail.gmail.com>
 
-> > > Well, the entire point of the warning that you are disabling here is
-> > > to catch potential CFI failures at compile time, rather than run
-> > > time :)
+On Fri, Nov 11, 2022 at 10:57:17AM +0900, Vincent MAILHOL wrote:
+> On Fri. 11 Nov. 2022 at 04:01, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > On Sun, Nov 6, 2022 at 1:51 AM Vincent Mailhol
+> > <mailhol.vincent@wanadoo.fr> wrote:
+> > >
+> > >  #ifdef CONFIG_X86_64
+> > > -static __always_inline int fls64(__u64 x)
+> > > +static __always_inline int constant_fls64(u64 x)
+> > > +{
+> > > +       BUILD_BUG_ON(sizeof(unsigned long long) != sizeof(x));
 > >
-> > Oh, of course I didn't intend to be opposed to CFI.
->=20
-> Oh, I apologize if I gave the impression that you were, I did not mean to=
- put
-> words in your mouth! I was just giving additional context as to why we ha=
-ve
-> that warning enable and how we use it to help catch potential run time fa=
-ilures
-> at compile time, which does not require running CFI to keep CFI happy.
+> > Thanks for the patches! They LGTM; but why do we need this BUILD_BUG_ON here?
+> 
+> There is no absolute need for sure.
+> 
+> Call this a paranoiac check and you will be correct. My reasoning for still
+> using it is that:
+> 
+>   1/ It is a compile time check, so no runtime penalty.
+>   2/ Strictly speaking, the C standard doesn't guarantee 'u64' and
+>      'unsigned long long int' to be the same (and you can argue that in clang
+>      and gcc long long is always 64 bits on all platforms and one more time
+>      you will be correct).
+>   3/ It serves as a documentation to say: "hey I am using the clz long long
+>      version on a u64 and I know what I am doing."
+> 
+> If you want me to remove it, OK for me. Let me know.
 
-No, I don't feel impression at all :), maybe just a little bit upset that
-I didn't realize it at the beginning.
-
-I actually appreciate you provided additional context into this thread.
-Xin
+In fact, compiler's typecheck would be more strict than your BUG().
+For example, your check allows pointers, but compiler will complain.
