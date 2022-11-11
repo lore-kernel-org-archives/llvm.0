@@ -1,108 +1,57 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB4124F2E;
-	Fri, 11 Nov 2022 15:51:20 +0000 (UTC)
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.201])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N836C0vygz683hj;
-	Fri, 11 Nov 2022 23:49:07 +0800 (CST)
-Received: from lhrpeml100002.china.huawei.com (7.191.160.241) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 16:51:17 +0100
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml100002.china.huawei.com (7.191.160.241) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 15:51:16 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2375.031;
- Fri, 11 Nov 2022 15:51:16 +0000
-From: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, David Woodhouse
-	<dwmw2@infradead.org>, "iommu@lists.linux.dev" <iommu@lists.linux.dev>, Joerg
- Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda
-	<ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Shuah Khan
-	<shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-CC: Alex Williamson <alex.williamson@redhat.com>, Lu Baolu
-	<baolu.lu@linux.intel.com>, Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>, Daniel Jordan
-	<daniel.m.jordan@oracle.com>, David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>, Eric Farman <farman@linux.ibm.com>, Jason
- Wang <jasowang@redhat.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Joao Martins <joao.m.martins@oracle.com>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S.
- Tsirkin" <mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>, Niklas
- Schnelle <schnelle@linux.ibm.com>, Yi Liu <yi.l.liu@intel.com>, zhukeqian
-	<zhukeqian1@huawei.com>
-Subject: RE: [PATCH v4 00/17] IOMMUFD Generic interface
-Thread-Topic: [PATCH v4 00/17] IOMMUFD Generic interface
-Thread-Index: AQHY8wv6WqOaN9m/WUKJgvcZCnpZkK454qzg
-Date: Fri, 11 Nov 2022 15:51:16 +0000
-Message-ID: <3a20e56423f544dab312bca1bcb56ce4@huawei.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-In-Reply-To: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9DDE24F2E
+	for <llvm@lists.linux.dev>; Fri, 11 Nov 2022 15:55:16 +0000 (UTC)
+Received: from uucp (helo=alpha)
+	by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+	id 1otVcD-00037d-00; Fri, 11 Nov 2022 16:06:45 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id D41D1C116A; Fri, 11 Nov 2022 16:03:35 +0100 (CET)
+Date: Fri, 11 Nov 2022 16:03:35 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Rongwei Zhang <pudh4418@gmail.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>, Maxim Uvarov <muvarov@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] MIPS: fix duplicate definitions for exported symbols
+Message-ID: <20221111150335.GA13465@alpha.franken.de>
+References: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
+On Wed, Nov 02, 2022 at 08:27:39PM +0800, Rongwei Zhang wrote:
+> Building with clang-14 fails with:
+> 
+> AS      arch/mips/kernel/relocate_kernel.o
+> <unknown>:0: error: symbol 'kexec_args' is already defined
+> <unknown>:0: error: symbol 'secondary_kexec_args' is already defined
+> <unknown>:0: error: symbol 'kexec_start_address' is already defined
+> <unknown>:0: error: symbol 'kexec_indirection_page' is already defined
+> <unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
+> 
+> It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
+> so there is no need to define these symbols again. Remove duplicated
+> symbol definitions.
+> 
+> Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
+> Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
+> ---
+>  arch/mips/kernel/relocate_kernel.S | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
 
+applied to mips-fixes.
 
-> -----Original Message-----
-> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
-> Sent: 08 November 2022 00:49
-> To: bpf@vger.kernel.org; Jonathan Corbet <corbet@lwn.net>; David
-> Woodhouse <dwmw2@infradead.org>; iommu@lists.linux.dev; Joerg Roedel
-> <joro@8bytes.org>; Kevin Tian <kevin.tian@intel.com>;
-> linux-doc@vger.kernel.org; linux-kselftest@vger.kernel.org;
-> llvm@lists.linux.dev; Nathan Chancellor <nathan@kernel.org>; Nick
-> Desaulniers <ndesaulniers@google.com>; Miguel Ojeda <ojeda@kernel.org>;
-> Robin Murphy <robin.murphy@arm.com>; Shuah Khan <shuah@kernel.org>;
-> Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>; Tom Rix
-> <trix@redhat.com>; Will Deacon <will@kernel.org>
-> Cc: Alex Williamson <alex.williamson@redhat.com>; Lu Baolu
-> <baolu.lu@linux.intel.com>; Chaitanya Kulkarni <chaitanyak@nvidia.com>;
-> Cornelia Huck <cohuck@redhat.com>; Daniel Jordan
-> <daniel.m.jordan@oracle.com>; David Gibson
-> <david@gibson.dropbear.id.au>; Eric Auger <eric.auger@redhat.com>; Eric
-> Farman <farman@linux.ibm.com>; Jason Wang <jasowang@redhat.com>;
-> Jean-Philippe Brucker <jean-philippe@linaro.org>; Joao Martins
-> <joao.m.martins@oracle.com>; kvm@vger.kernel.org; Matthew Rosato
-> <mjrosato@linux.ibm.com>; Michael S. Tsirkin <mst@redhat.com>; Nicolin
-> Chen <nicolinc@nvidia.com>; Niklas Schnelle <schnelle@linux.ibm.com>;
-> Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>; Yi
-> Liu <yi.l.liu@intel.com>; zhukeqian <zhukeqian1@huawei.com>
-> Subject: [PATCH v4 00/17] IOMMUFD Generic interface
-[...]
->=20
-> - Userspace page tables aka 'nested translation' for ARM and Intel iommu
->   drivers:
->   https://github.com/nicolinc/iommufd/commits/iommufd_nesting
+Thomas.
 
-Hi Eric/Yi/Nicolin,
-
-Could you please provide a latest Kernel/Qemu branch for the ARM nesting su=
-pport?
-The above link points to Yi's git, but not sure which one is latest/stable =
-to=20
-have a play.
-
-Thanks,
-Shameer
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
