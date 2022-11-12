@@ -1,230 +1,202 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393B5EA4
-	for <llvm@lists.linux.dev>; Sat, 12 Nov 2022 11:21:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1668252096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5AMEZT/WZ4rPsG3AFvSqKVnZpQYnK/FJ6a25g/mtnxQ=;
-	b=FdeoqEzaeDxfcbA0zjbD5Qa8rNKJgxSHVAMwmpcso/xKDW5S2cI6TYsCUlyQ+5SG1BULKW
-	OEKLTQME3k9sfB9NZ2+jJ+wnXwCPcJYt+gBKCdQBoZpIvx2PBcXHlOYvLpbZsZBv4mQXgG
-	isffQVWN8cfHZZNY748sOQbrQmdYNRo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-189-SkJUpljDNbiduXhuAYsJYw-1; Sat, 12 Nov 2022 06:21:35 -0500
-X-MC-Unique: SkJUpljDNbiduXhuAYsJYw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FE85185A78F
-	for <llvm@lists.linux.dev>; Sat, 12 Nov 2022 11:21:35 +0000 (UTC)
-Received: from [172.64.9.24] (unknown [10.30.34.55])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0AED0568D3;
-	Sat, 12 Nov 2022 11:21:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc4,
- mainline.kernel.org-clang, f9bbe0c9)
-Date: Sat, 12 Nov 2022 11:21:35 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AE0EA4
+	for <llvm@lists.linux.dev>; Sat, 12 Nov 2022 11:33:54 +0000 (UTC)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-13be3ef361dso7898648fac.12
+        for <llvm@lists.linux.dev>; Sat, 12 Nov 2022 03:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WASCqpyvqTm+dApPzLLpG5uSd0cYKz/p7aAYyPpSOpA=;
+        b=KPJ6yFkZKRkSqS18fYn4wljLLnYH3FoKmPdA1ZzCpfMBv/7Ghu00p9WXCSuVMllSAm
+         zSnslFVl7KEqOFPsdb6RxIP367K7wMZemLPouHvCg5TiQoDSHObt+mjwv34JRXYz2sDV
+         QJq6eUg8mC3tBA4jjCkr+/49yZ8j6r/6rdsPHhfHD0Uqu3z6tXQx488LMlpjv2Vvm9mQ
+         4wYRV5Z8OkvDYn5JlcmnuU9gdAPZtw+QQtEUh9YblqoF+ox5iClfR+S2OW4UM0ppH92N
+         4sn6zgpgAHHUu0wD2hqEY1+Kqh8efIM0TO4dawjLVhX9SQz3CjAK+QW6O/okveDXI8kW
+         zNZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WASCqpyvqTm+dApPzLLpG5uSd0cYKz/p7aAYyPpSOpA=;
+        b=Z3kAGXQ1qEjzYhg4y8082/f+EbFBc3Uz3xtv+n7FCUG2fZ2B2mIuFGp3+dqeMr6fgp
+         dth+68UYJoYZBAL4+pMDBFcph3+AKSJdChwE8PzIbU6ZUmoTR8xa6+P2AV0mP75iB/BJ
+         BW4Wg5hp/b8viacynHTIYWjjZpzSoSenMeRZaR9WQo9oIq1Civgmtr03XQ08igfQsCyq
+         dFR5RTbSSDI6CjdqDKcSiQGwB/xpO+y41vP0cZJDaKQgSFd5hJ/DIGo59mrSjVyTK5E9
+         6tDrP8nIJgO6OkstyK2thhe5yt147yhzs2dG0WBADEnDwsB019Tb17fRK5lRINaR2omh
+         dwZw==
+X-Gm-Message-State: ANoB5pknUzC1DuRrpR7ATH2TcJYA6RBeR9KTWiGKCHL5qP43T14WdaOA
+	mSek6eqTci4mvLV+TE1F/4ZOveopHetRTFsx8azSGg==
+X-Google-Smtp-Source: AA0mqf62+3HHHLHpNEGtlSIB1lmYHVaJFGhn9LzjKDGNPJozU69O7z77G+ONY2C2YSm2bcKnzvaQ/fbw1pd6gYu7h1o=
+X-Received: by 2002:a05:6870:bf0b:b0:13c:7d1c:5108 with SMTP id
+ qh11-20020a056870bf0b00b0013c7d1c5108mr3023850oab.282.1668252833334; Sat, 12
+ Nov 2022 03:33:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <47979.122111206213500221@us-mta-189.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <0000000000008c742d05eca72d4d@google.com> <Y27jxKoo1BmgbDbl@monkey>
+ <c7646d97-c04b-7795-a6f8-a6523945f89c@huawei.com>
+In-Reply-To: <c7646d97-c04b-7795-a6f8-a6523945f89c@huawei.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Sat, 12 Nov 2022 12:33:41 +0100
+Message-ID: <CACT4Y+ZWNV6ApzEv0UrsF2T8JWmXez_-H-EGMii-S_2JbXv07Q@mail.gmail.com>
+Subject: Re: [syzbot] possible deadlock in hugetlb_fault
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>, 
+	syzbot <syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com>, 
+	akpm@linux-foundation.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Sat, 12 Nov 2022 at 05:02, 'Miaohe Lin' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+> On 2022/11/12 8:07, Mike Kravetz wrote:
+> > On 11/04/22 09:00, syzbot wrote:
+> >> Hello,
+> >>
+> >> syzbot found the following issue on:
+> >>
+> >> HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
+> >> git tree:       upstream
+> >> console output: https://syzkaller.appspot.com/x/log.txt?x=137d52ca880000
+> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=d080a4bd239918dd
+> >> dashboard link: https://syzkaller.appspot.com/bug?extid=ca56f14c500045350f93
+> >> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> >> userspace arch: i386
+> >>
+> >> Unfortunately, I don't have any reproducer for this issue yet.
+> >>
+> >> Downloadable assets:
+> >> disk image: https://storage.googleapis.com/syzbot-assets/b4f72e7a4c11/disk-f2f32f8a.raw.xz
+> >> vmlinux: https://storage.googleapis.com/syzbot-assets/3f88997ad7c9/vmlinux-f2f32f8a.xz
+> >> kernel image: https://storage.googleapis.com/syzbot-assets/b4b5b3963e2d/bzImage-f2f32f8a.xz
+> >>
+> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> >> Reported-by: syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com
+> >>
+> >> ======================================================
+> >> WARNING: possible circular locking dependency detected
+> >> 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0 Not tainted
+> >> ------------------------------------------------------
+> >> syz-executor.2/5665 is trying to acquire lock:
+> >> ffff88801c74c298 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5645
+> >>
+> >> but task is already holding lock:
+> >> ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_vma_lock_read mm/hugetlb.c:6816 [inline]
+> >> ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_fault+0x40a/0x2060 mm/hugetlb.c:5859
+> >>
+> >> which lock already depends on the new lock.
+> >>
+> >>
+> >> the existing dependency chain (in reverse order) is:
+> >>
+> >> -> #1 (&vma_lock->rw_sema){++++}-{3:3}:
+> >>        down_write+0x90/0x220 kernel/locking/rwsem.c:1562
+> >>        hugetlb_vma_lock_write mm/hugetlb.c:6834 [inline]
+> >>        __unmap_hugepage_range_final+0x97/0x340 mm/hugetlb.c:5202
+> >>        unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
+> >>        unmap_vmas+0x21e/0x370 mm/memory.c:1733
+> >>        exit_mmap+0x189/0x7a0 mm/mmap.c:3090
+> >>        __mmput+0x128/0x4c0 kernel/fork.c:1185
+> >>        mmput+0x5c/0x70 kernel/fork.c:1207
+> >>        exit_mm kernel/exit.c:516 [inline]
+> >>        do_exit+0xa39/0x2a20 kernel/exit.c:807
+> >>        do_group_exit+0xd0/0x2a0 kernel/exit.c:950
+> >>        get_signal+0x21a1/0x2430 kernel/signal.c:2858
+> >>        arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+> >>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+> >>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+> >>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+> >>        syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+> >>        __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
+> >>        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+> >>        entry_SYSENTER_compat_after_hwframe+0x70/0x82
+> >>
+> >> -> #0 (&mm->mmap_lock#2){++++}-{3:3}:
+> >>        check_prev_add kernel/locking/lockdep.c:3097 [inline]
+> >>        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+> >>        validate_chain kernel/locking/lockdep.c:3831 [inline]
+> >>        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+> >>        lock_acquire kernel/locking/lockdep.c:5668 [inline]
+> >>        lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
+> >>        __might_fault mm/memory.c:5646 [inline]
+> >>        __might_fault+0x104/0x170 mm/memory.c:5639
+> >>        _copy_from_user+0x25/0x170 lib/usercopy.c:13
+> >>        copy_from_user include/linux/uaccess.h:161 [inline]
+> >>        snd_rawmidi_kernel_write1+0x366/0x880 sound/core/rawmidi.c:1549
+> >>        snd_rawmidi_write+0x273/0xbb0 sound/core/rawmidi.c:1618
+> >>        vfs_write+0x2d7/0xdd0 fs/read_write.c:582
+> >>        ksys_write+0x1e8/0x250 fs/read_write.c:637
+> >>        do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+> >>        __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+> >>        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+> >>        entry_SYSENTER_compat_after_hwframe+0x70/0x82
+> >>
+> >> other info that might help us debug this:
+> >>
+> >>  Possible unsafe locking scenario:
+> >>
+> >>        CPU0                    CPU1
+> >>        ----                    ----
+> >>   lock(&vma_lock->rw_sema);
+> >>                                lock(&mm->mmap_lock#2);
+> >>                                lock(&vma_lock->rw_sema);
+> >>   lock(&mm->mmap_lock#2);
+> >
+> > I may not be reading the report correctly, but I can not see how we acquire the
+> > hugetlb vma_lock before trying to acquire mmap_lock in stack 0.  We would not
+> > acquire the vma_lock until we enter hugetlb fault processing (not in the stack).
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+The unlock of vma_lock is conditional:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/hugetlb.c?id=f2f32f8af2b0ca9d619e5183eae3eed431793baf#n6840
 
+and the condition is:
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.1-4' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/cel/linux
+static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
+{
+    return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
+         vma->vm_private_data;
+}
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/59667
+Is it possible that the condition has changed between vma lock and unlock?
+What mutexes protect vma->vm_flags/vm_private_data?
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-5947052
+That would make the report perfectly sensible.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
-le
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/914
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream - net: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1463
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+FWIW the test case that was running is this, that's the syscalls that
+were running concurrently:
+
+07:56:56 executing program 2:
+r0 = syz_open_dev$sndmidi(&(0x7f0000000040), 0x2, 0x141101)
+r1 = dup(r0)
+setsockopt$inet_sctp_SCTP_I_WANT_MAPPED_V4_ADDR(r1, 0x84, 0xc,
+&(0x7f0000000080), 0x4) (async)
+write$6lowpan_enable(r1, &(0x7f0000000000)='0', 0xc86ade39) (async)
+mmap(&(0x7f0000000000/0xb36000)=nil, 0xb36000, 0x3, 0x68831,
+0xffffffffffffffff, 0x0) (async)
+madvise(&(0x7f0000000000/0x600000)=nil, 0x600003, 0x4) (async, rerun: 32)
+mremap(&(0x7f00007a0000/0x3000)=nil, 0x3000, 0x2000, 0x7,
+&(0x7f0000835000/0x2000)=nil) (rerun: 32)
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> > Adding Miaohe Lin on Cc due to previous help with vma_lock potential deadlock
+> > situations.  Miaohe, does this make sense to you?
+> >
+>
+> Hi Mike,
+>   This doesn't make sense for me too. Stack #1 shows that syz-executor is releasing
+> its address space while stack #0 shows another thread is serving the write syscall.
+> In this case, mm->mm_users is 0 and all threads in this process should be serving
+> do_exit()? But I could be easily wrong. Also I can't see how vma_lock is locked before
+> trying to acquire mmap_lock in above stacks. Might this be a false positive?
