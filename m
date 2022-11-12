@@ -1,62 +1,62 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE058A23;
-	Sat, 12 Nov 2022 07:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEEF7B;
+	Sat, 12 Nov 2022 09:03:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668236559; x=1699772559;
+  t=1668243823; x=1699779823;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HBHJtiM4WwwMOhcrjHIM5cNcM17xQxb6DJnH6ZJkM/Y=;
-  b=kgU932hafyATicmyjrRAEFB/xNE3pbH8qIStj6/s+Wy8hExqzcDpSrPC
-   Sww2nfShHpz8Ofqy2qe71mhGZx9lLiIyk83NdcaL2LUd/5hzSo9Nf/3ME
-   lqpWdUayM+vULPNUmi3gFosED83xgD0oXbwd51UYWWgt53THkxWp4g7xC
-   0VzOCDxWkd1Z4BABx21YBK7wZZgzpSSvg2n/kMVWod9+O/KIobCQytqHm
-   qtXriNoRaMiWOS+B6IqvYsm9DhaPmpJtLNVWWi4s7SlNni5cuA35ue98k
-   vkv9kQvBRpextdkFzpa/Nj5bf0vzw5VVapZq9q11DS9MJOP7ifzpF/ke8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="292109480"
-X-IronPort-AV: E=Sophos;i="5.96,158,1665471600"; 
-   d="scan'208";a="292109480"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 23:02:38 -0800
+  bh=KiM7B09ucytAOXshgta+igrrIrsFMa3in8TuAydHgt0=;
+  b=nEYjE7My1iBtBfBPPcrtU9PT6MqRX+9PKY81wPl1f8kKXFJIVP3tjBpP
+   42i4+EW2sfK6gnw4+MWqy3e4UW6StBvEa/4LwrVQ/F4EPFmNGHQKueNbV
+   LUK2+HeTWOkHeVKbz6SD3ycwclyoZYbe5yrEdXCC3tP/RnYpA3HIaP2Lj
+   +a7Gs15rMFsnfN3sBgS7qrwM5qAiVXcPyprdCMRNO60D2eIw608PUFrM1
+   7pTBrhx5LHFxj2+/zeYrqAtS3ACHwiSzCe7HIfkHX5JUmcf2n0WEKQT41
+   XjvHQDR4Gxjo24VoN+UVAyIgqkGbtqNN9mrdBqGXtTbbpcPIpl0iqTzBb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="291436426"
+X-IronPort-AV: E=Sophos;i="5.96,159,1665471600"; 
+   d="scan'208";a="291436426"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2022 01:03:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="882959691"
-X-IronPort-AV: E=Sophos;i="5.96,158,1665471600"; 
-   d="scan'208";a="882959691"
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="637805055"
+X-IronPort-AV: E=Sophos;i="5.96,159,1665471600"; 
+   d="scan'208";a="637805055"
 Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Nov 2022 23:02:36 -0800
+  by orsmga002.jf.intel.com with ESMTP; 12 Nov 2022 01:03:39 -0800
 Received: from kbuild by e783503266e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1otkXD-0004fl-2J;
-	Sat, 12 Nov 2022 07:02:35 +0000
-Date: Sat, 12 Nov 2022 15:02:18 +0800
+	id 1otmQM-0004k5-2i;
+	Sat, 12 Nov 2022 09:03:38 +0000
+Date: Sat, 12 Nov 2022 17:03:35 +0800
 From: kernel test robot <lkp@intel.com>
 To: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Jiri Pirko <jiri@nvidia.com>
-Subject: [jpirko-mlxsw:jiri_devel_dpll_v2 16/23]
- drivers/net/ethernet/intel/ice/ice_synce.c:32:9: error: call to undeclared
- function 'ice_aq_set_input_pin_cfg'; ISO C99 and later do not support
+Subject: [jpirko-mlxsw:jiri_devel_dpll_v2 17/23]
+ drivers/net/ethernet/intel/ice/ice_synce.c:367:8: error: call to undeclared
+ function 'ice_aq_set_cgu_ref_prio'; ISO C99 and later do not support
  implicit function declarations
-Message-ID: <202211121454.ZpzVYG41-lkp@intel.com>
+Message-ID: <202211121644.MzJQdCE4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="h+3Cmj3YGuz9wk3Q"
+Content-Type: multipart/mixed; boundary="W7JKEi5kgYVpUGQK"
 Content-Disposition: inline
 
 
---h+3Cmj3YGuz9wk3Q
+--W7JKEi5kgYVpUGQK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_dpll_v2
 head:   4f9d63922667fca0cd80522245caff2b00de3b9b
-commit: 544ad20aa40ae0dbe168f499040bc95633089755 [16/23] ice: implement dpll interface to control cgu
+commit: d1186cfef29c1d35e96cb6423fa2c5fd784358ef [17/23] ice: add dpll device source priority and selection mode
 config: riscv-randconfig-r006-20221111
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 463da45892e2d2a262277b91b96f5f8c05dc25d0)
 reproduce (this is a W=1 build):
@@ -64,10 +64,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/jpirko/linux_mlxsw/commit/544ad20aa40ae0dbe168f499040bc95633089755
+        # https://github.com/jpirko/linux_mlxsw/commit/d1186cfef29c1d35e96cb6423fa2c5fd784358ef
         git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
         git fetch --no-tags jpirko-mlxsw jiri_devel_dpll_v2
-        git checkout 544ad20aa40ae0dbe168f499040bc95633089755
+        git checkout d1186cfef29c1d35e96cb6423fa2c5fd784358ef
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/intel/ice/ drivers/net/ethernet/mscc/
@@ -94,7 +94,7 @@ All errors (new ones prefixed by >>):
    drivers/net/ethernet/intel/ice/ice_synce.c:31:11: error: use of undeclared identifier 'ICE_AQC_SET_CGU_IN_CFG_FLG1_UPDATE_FREQ'
                    flags = ICE_AQC_SET_CGU_IN_CFG_FLG1_UPDATE_FREQ;
                            ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:32:9: error: call to undeclared function 'ice_aq_set_input_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:32:9: error: call to undeclared function 'ice_aq_set_input_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    ret = ice_aq_set_input_pin_cfg(&pf->hw, id, flags,
                          ^
    drivers/net/ethernet/intel/ice/ice_synce.c:32:9: note: did you mean 'ice_aq_set_phy_cfg'?
@@ -104,7 +104,7 @@ All errors (new ones prefixed by >>):
    drivers/net/ethernet/intel/ice/ice_synce.c:37:4: error: use of undeclared identifier 'ICE_AQC_SET_CGU_OUT_CFG_UPDATE_FREQ'
                            ICE_AQC_SET_CGU_OUT_CFG_UPDATE_FREQ;
                            ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:38:9: error: call to undeclared function 'ice_aq_set_output_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:38:9: error: call to undeclared function 'ice_aq_set_output_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    ret = ice_aq_set_output_pin_cfg(&pf->hw, id, flags, src_sel,
                          ^
    drivers/net/ethernet/intel/ice/ice_synce.c:88:32: error: use of undeclared identifier 'ICE_CGU_STATE_LOCKED'
@@ -113,99 +113,101 @@ All errors (new ones prefixed by >>):
    drivers/net/ethernet/intel/ice/ice_synce.c:89:32: error: use of undeclared identifier 'ICE_CGU_STATE_LOCKED_HO_ACQ'
                  pf->synce.dpll_state == ICE_CGU_STATE_LOCKED_HO_ACQ ?
                                          ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:312:9: error: call to undeclared function 'ice_aq_get_input_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> drivers/net/ethernet/intel/ice/ice_synce.c:367:8: error: call to undeclared function 'ice_aq_set_cgu_ref_prio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = ice_aq_set_cgu_ref_prio(&pf->hw, se->dpll_idx, idx, priov);
+                 ^
+   drivers/net/ethernet/intel/ice/ice_synce.c:412:9: error: call to undeclared function 'ice_aq_get_input_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    ret = ice_aq_get_input_pin_cfg(hw, pin, NULL, NULL, NULL, NULL,
                          ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:312:9: note: did you mean 'ice_aq_get_link_info'?
+   drivers/net/ethernet/intel/ice/ice_synce.c:412:9: note: did you mean 'ice_aq_get_link_info'?
    drivers/net/ethernet/intel/ice/ice_common.h:142:1: note: 'ice_aq_get_link_info' declared here
    ice_aq_get_link_info(struct ice_port_info *pi, bool ena_lse,
    ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:315:9: error: call to undeclared function 'ice_aq_get_output_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:415:9: error: call to undeclared function 'ice_aq_get_output_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    ret = ice_aq_get_output_pin_cfg(hw, pin, NULL, NULL, freq,
                          ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:393:8: error: call to undeclared function 'ice_cgu_get_pin_types_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:493:8: error: call to undeclared function 'ice_cgu_get_pin_types_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    ts = ice_cgu_get_pin_types_supported(hw, pin_idx, input);
                         ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:438:4: error: call to undeclared function 'ice_cgu_get_pin_num_types_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:538:4: error: call to undeclared function 'ice_cgu_get_pin_num_types_supported'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                            ice_cgu_get_pin_num_types_supported(hw, i, input);
                            ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:441:10: error: call to undeclared function 'ice_aq_get_cgu_ref_prio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:541:10: error: call to undeclared function 'ice_aq_get_cgu_ref_prio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                            ret = ice_aq_get_cgu_ref_prio(hw, dpll_idx, i,
                                  ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:445:10: error: call to undeclared function 'ice_aq_get_input_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:545:10: error: call to undeclared function 'ice_aq_get_input_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                            ret = ice_aq_get_input_pin_cfg(hw, i, NULL, NULL,
                                  ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:451:10: error: call to undeclared function 'ice_aq_get_output_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:551:10: error: call to undeclared function 'ice_aq_get_output_pin_cfg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                            ret = ice_aq_get_output_pin_cfg(hw, i, &pins[i].flags,
                                  ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:470:35: error: variable has incomplete type 'struct ice_aqc_get_cgu_abilities'
+   drivers/net/ethernet/intel/ice/ice_synce.c:570:35: error: variable has incomplete type 'struct ice_aqc_get_cgu_abilities'
            struct ice_aqc_get_cgu_abilities abilities;
                                             ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:470:9: note: forward declaration of 'struct ice_aqc_get_cgu_abilities'
+   drivers/net/ethernet/intel/ice/ice_synce.c:570:9: note: forward declaration of 'struct ice_aqc_get_cgu_abilities'
            struct ice_aqc_get_cgu_abilities abilities;
                   ^
->> drivers/net/ethernet/intel/ice/ice_synce.c:475:8: error: call to undeclared function 'ice_aq_get_cgu_abilities'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/net/ethernet/intel/ice/ice_synce.c:575:8: error: call to undeclared function 'ice_aq_get_cgu_abilities'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
            ret = ice_aq_get_cgu_abilities(hw, &abilities);
                  ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:552:31: error: variable has incomplete type 'enum ice_cgu_state'
+   drivers/net/ethernet/intel/ice/ice_synce.c:652:31: error: variable has incomplete type 'enum ice_cgu_state'
                                           enum ice_cgu_state last_state)
                                                              ^
    drivers/net/ethernet/intel/ice/ice_synce.h:50:7: note: forward declaration of 'enum ice_cgu_state'
            enum ice_cgu_state dpll_state;
                 ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:557:8: error: call to undeclared function 'ice_get_cgu_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = ice_get_cgu_state(&pf->hw, se->dpll_idx, last_state,
-                 ^
-   drivers/net/ethernet/intel/ice/ice_synce.c:557:8: note: did you mean 'ice_get_vf_stats'?
-   drivers/net/ethernet/intel/ice/ice_sriov.h:154:1: note: 'ice_get_vf_stats' declared here
-   ice_get_vf_stats(struct net_device __always_unused *netdev,
-   ^
    fatal error: too many errors emitted, stopping now [-ferror-limit=]
    20 errors generated.
 
 
-vim +/ice_aq_set_input_pin_cfg +32 drivers/net/ethernet/intel/ice/ice_synce.c
+vim +/ice_aq_set_cgu_ref_prio +367 drivers/net/ethernet/intel/ice/ice_synce.c
 
-    11	
-    12	/**
-    13	 * ice_synce_set_freq
-    14	 * @pf: Board private structure
-    15	 * @id: pin index
-    16	 * @freq: frequency
-    17	 * @input: input or output pin
-    18	 *
-    19	 * Set frequency of given pin.
-    20	 * Return:
-    21	 * * 0 - OK
-    22	 * * negative - error
-    23	 */
-    24	static int ice_synce_set_freq(struct ice_pf *pf, u8 id, u32 freq, bool input)
-    25	{
-    26		u8 flags, src_sel = 0;
-    27		s32 phase = 0;
-    28		int ret;
-    29	
-    30		if (input) {
-    31			flags = ICE_AQC_SET_CGU_IN_CFG_FLG1_UPDATE_FREQ;
-  > 32			ret = ice_aq_set_input_pin_cfg(&pf->hw, id, flags,
-    33						       pf->synce.inputs[id].flags,
-    34						       freq, phase);
-    35		} else {
-    36			flags = pf->synce.outputs[id].flags |
-    37				ICE_AQC_SET_CGU_OUT_CFG_UPDATE_FREQ;
-  > 38			ret = ice_aq_set_output_pin_cfg(&pf->hw, id, flags, src_sel,
-    39							freq, phase);
-    40		}
-    41	
-    42		return ret;
-    43	}
-    44	
+   340	
+   341	/**
+   342	 * ice_synce_set_source_prio
+   343	 * @dpll: registered dpll pointer
+   344	 * @id: source index
+   345	 * @prio: expected priority value
+   346	 *
+   347	 * dpll subsystem callback.
+   348	 * Set source priority value.
+   349	 * Return:
+   350	 * * 0 - success
+   351	 * * negative - failure
+   352	 */
+   353	static int ice_synce_set_source_prio(struct dpll_device *dpll, int id, int prio)
+   354	{
+   355		struct ice_pf *pf = dpll_priv(dpll);
+   356		struct ice_synce *se = &pf->synce;
+   357		u8 idx = (u8)id, priov = (u8)prio;
+   358		int ret;
+   359	
+   360		if (priov > ICE_SYNCE_PRIO_MAX)
+   361			return -EINVAL;
+   362	
+   363		if (idx >= pf->synce.num_inputs)
+   364			return -EINVAL;
+   365	
+   366		mutex_lock(&pf->synce.lock);
+ > 367		ret = ice_aq_set_cgu_ref_prio(&pf->hw, se->dpll_idx, idx, priov);
+   368		if (!ret)
+   369			se->inputs[idx].prio = priov;
+   370		mutex_unlock(&pf->synce.lock);
+   371		if (ret)
+   372			dev_dbg(ice_pf_to_dev(pf),
+   373				"err:%d %s failed to set pin prio:%u on pin:%u\n",
+   374				ret, ice_aq_str(pf->hw.adminq.sq_last_status),
+   375				priov, idx);
+   376	
+   377		return ret;
+   378	}
+   379	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---h+3Cmj3YGuz9wk3Q
+--W7JKEi5kgYVpUGQK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -7999,4 +8001,4 @@ CONFIG_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---h+3Cmj3YGuz9wk3Q--
+--W7JKEi5kgYVpUGQK--
