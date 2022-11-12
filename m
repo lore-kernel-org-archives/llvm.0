@@ -1,86 +1,217 @@
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146E363C4;
-	Sat, 12 Nov 2022 18:11:12 +0000 (UTC)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 401AD1FE6;
-	Sat, 12 Nov 2022 18:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1668276499;
-	bh=WKw6oiLpuQLfeOWVraEU9DSKkxzz8QF9fxnqbchto+8=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=n5/O+59IXyqVt3DW9Pz9b3pGvXAgUcYH7sNaOKxWqTGquD6VvmYU2K613xXBrtBAi
-	 31a6JQvE0wdJdvttQ98mm1ewm1e6TwQcyHSXGhppCD5GyxJwBDcDkFAlfqBUW/ltP1
-	 C8IdAYtkidfUVNIkJ/jxVxtQlSxXWT+v7lgMblpQ=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-	by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 05C7B26;
-	Sat, 12 Nov 2022 18:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1668276671;
-	bh=WKw6oiLpuQLfeOWVraEU9DSKkxzz8QF9fxnqbchto+8=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=fAuIQhwD7B0rPF/XzLU2Tta9W8xaRvI7IkwpIKr8MxlDHfxE3CXIuKUXcLpoJ2VIM
-	 yM5IWlxQdy32hrV0wV3RwupXvRXr8nEJrQn+oCKgI44luoAB719VnNImIcAbluwXai
-	 fvgoKIAKgTTHb8Pekf93zQmyczGENXGkrPWxkYUc=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Sat, 12 Nov 2022 21:11:10 +0300
-Message-ID: <b9ef96f3-724e-1696-3f22-d5e89cbd927d@paragon-software.com>
-Date: Sat, 12 Nov 2022 21:11:10 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F383063C4
+	for <llvm@lists.linux.dev>; Sat, 12 Nov 2022 18:11:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1668276693;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xeIWVzBtamMajqSzQXs7ci3g0+FFCUvmjawjkjSdAQ0=;
+	b=XxvU2Iy4RV4P48VLYZGjG2ac0YE1xUYLhXzHoZKvkJQ/iooGpuf2f4E1lyZeCjqLkCLUpZ
+	JVn9ZzgutwHReYIIjYpwvamk9BKfDcvzSbvqscWPmxxypB5ymzHCwhhf/s6DkSYMAcrxsf
+	7DyWgrHHtwQ5wKn8DH61m0k8C8Yjufc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-CA6qc2biPIm5z86ojuyj3A-1; Sat, 12 Nov 2022 13:11:32 -0500
+X-MC-Unique: CA6qc2biPIm5z86ojuyj3A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD6843806700
+	for <llvm@lists.linux.dev>; Sat, 12 Nov 2022 18:11:31 +0000 (UTC)
+Received: from [172.64.9.24] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BB9FBC15BA4;
+	Sat, 12 Nov 2022 18:11:31 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc4,
+ mainline.kernel.org-clang, d7c2b1f6)
+Date: Sat, 12 Nov 2022 18:11:31 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next v2 2/2] fs/ntfs3: Eliminate unnecessary ternary
- operator in ntfs_d_compare()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	<ntfs3@lists.linux.dev>, <llvm@lists.linux.dev>, <patches@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>
-References: <20221004232359.285685-1-nathan@kernel.org>
- <20221004232359.285685-2-nathan@kernel.org>
-From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20221004232359.285685-2-nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <17644.122111213113200125@us-mta-335.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'mm-hotfixes-stable-2022-11-11' of git://git.=
+kernel.org/pub/scm/linux/kernel/git/akpm/mm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/59715
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5955151
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream - net: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1463
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                 aarch64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
+p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
+om_score_adj=3D1000
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1214
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
 
-On 10/5/22 02:23, Nathan Chancellor wrote:
-> 'a == b ? 0 : 1' is logically equivalent to 'a != b'.
-> 
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> 
-> v2: New patch.
-> 
->   fs/ntfs3/namei.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
-> index 5d3a6ce3f05f..6b0d2c01d6ff 100644
-> --- a/fs/ntfs3/namei.c
-> +++ b/fs/ntfs3/namei.c
-> @@ -432,7 +432,7 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
->   	/* First try fast implementation. */
->   	for (;;) {
->   		if (!lm--)
-> -			return len1 == len2 ? 0 : 1;
-> +			return len1 != len2;
->   
->   		if ((c1 = *n1++) == (c2 = *n2++))
->   			continue;
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Thank you for your work, applied!
-First patch was already applied.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
