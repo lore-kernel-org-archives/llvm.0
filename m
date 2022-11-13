@@ -1,165 +1,213 @@
-Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AA91110
-	for <llvm@lists.linux.dev>; Sun, 13 Nov 2022 12:25:37 +0000 (UTC)
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-05.nifty.com with ESMTP id 2ADCL3ZY011856
-	for <llvm@lists.linux.dev>; Sun, 13 Nov 2022 21:21:03 +0900
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47]) (authenticated)
-	by conssluserg-06.nifty.com with ESMTP id 2ADCKpng022942
-	for <llvm@lists.linux.dev>; Sun, 13 Nov 2022 21:20:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2ADCKpng022942
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1668342052;
-	bh=KQYMcQ8jyCMguJ5gunXZ5HdXL7ZJ1Kcn3ixoiC6kUSQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=yhqpitGJQ8FQwYg9kz0GRzkATS45oGtEerUKlTpvXagoEVXFjFhaR3Cgi8s8SSkdZ
-	 1RJPdtiq5Zfg6DdNHD9eMDsw5hfZRffCB+jmaiz3Cgod6bdlVb70uODD6U2MmTTyqX
-	 +NORRfrywCVy77nm8tBjq8uC23HCENwQay7IQrmRxZ+S7RSd5U4gq0erkdXx/et5HZ
-	 1ck16MBW05e6wf9Apr/n94mg+zMG8pA6teQlltimHwWyxHDMeC7obCtgbE4py5egQ3
-	 G1EbTvpXKigretY9fvy5PzAiTpPqioZBy6EJi2hUqrnIYtYAtAQQm6qcRpopbpTsDA
-	 4VB5n558ZDHWQ==
-X-Nifty-SrcIP: [209.85.210.47]
-Received: by mail-ot1-f47.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso5282664otn.0
-        for <llvm@lists.linux.dev>; Sun, 13 Nov 2022 04:20:51 -0800 (PST)
-X-Gm-Message-State: ANoB5pkDqnhqVBLOdBiyBBDVyAIdkBlbAoqOsPmCIzH/NQh9QQs+tA3k
-	HgheEXQ+kDf7HP1mp/+KA5/6NKhjNhL+7/o4q/E=
-X-Google-Smtp-Source: AA0mqf7Ak1td9ZHTtIIvy5gbQpT6D9VV2glo01Ebzq37Ls700skUqQzE+cxSwsEqe5ri6T8fVlzXTVrPkBnh2QaKiMA=
-X-Received: by 2002:a05:6830:109:b0:661:8d9e:1959 with SMTP id
- i9-20020a056830010900b006618d9e1959mr4762382otp.225.1668342050599; Sun, 13
- Nov 2022 04:20:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750BE1374
+	for <llvm@lists.linux.dev>; Sun, 13 Nov 2022 13:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1668346240;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oBiu68+8jzf0vnnPA5NQLpBVT2r8heJANVGB5HZWVVI=;
+	b=H+GoLyXJdwfybdDDWGCSVUWfj8y968AfytoZrgAmmDyhn5wBS/oOHTfMcl2Q450M7Tp83U
+	GhcG6e5d+oKRwUbaQGbLQVLmmv94tSN4vHjNvQh0SV/6rm2kwTpyLfnzyjVPjlkYgRPzMU
+	iH3xgP1LIPW+wZH664WcJdFR1bM4Z+8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-88-_fLKHH4dP7yXw5ptxjmGBw-1; Sun, 13 Nov 2022 08:30:38 -0500
+X-MC-Unique: _fLKHH4dP7yXw5ptxjmGBw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80DC3811E67
+	for <llvm@lists.linux.dev>; Sun, 13 Nov 2022 13:30:38 +0000 (UTC)
+Received: from [172.64.9.24] (unknown [10.30.34.55])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6E94E49BB60;
+	Sun, 13 Nov 2022 13:30:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc4,
+ mainline.kernel.org-clang, fef7fd48)
+Date: Sun, 13 Nov 2022 13:30:38 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221113111525.3762483-1-masahiroy@kernel.org> <20221113111525.3762483-3-masahiroy@kernel.org>
-In-Reply-To: <20221113111525.3762483-3-masahiroy@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 13 Nov 2022 21:20:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQiwNB6GQ1kt9ig7TCDJkZBd5M=8PWkd0xM6KjHj0W9PA@mail.gmail.com>
-Message-ID: <CAK7LNAQiwNB6GQ1kt9ig7TCDJkZBd5M=8PWkd0xM6KjHj0W9PA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kbuild: warn objects shared among multiple modules
-To: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>, Nicolas Schier <nicolas@fjasle.eu>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <07774.122111308303800223@us-mta-88.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 13, 2022 at 8:15 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> If an object is shared among multiple modules, some of them are
-> configured as 'm', but the others as 'y', the shared object is
-> linked to the modules and vmlinux. This is a potential issue because
-> the expected CFLAGS are different between modules and builtins.
->
-> Commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
-> reported that this could be even more fatal in some cases such as
-> Clang LTO.
->
-> That commit fixed lib/zlib/zstd_{compress,decompress}, but there are
-> still more instances of breakage.
->
-> This commit adds a W=1 warning for shared objects, so that the kbuild
-> test robot, which provides build tests with W=1, will avoid a new
-> breakage slipping in.
->
-> Quick compile tests on v6.1-rc4 detected the following:
->
+Hi, we tested your kernel and here are the results:
 
-Also
-
-    scripts/Makefile.build:252: ./drivers/block/rnbd/Makefile:
-rnbd-common.o is added to multiple modules: rnbd-client rnbd-server
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: cn10k_cpt.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: otx2_cptlf.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: otx2_cpt_mbox_common.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/edac/Makefile: skx_common.o is added to multiple modules: i10nm_edac skx_edac
-> scripts/Makefile.build:252: ./drivers/gpu/drm/bridge/imx/Makefile: imx-ldb-helper.o is added to multiple modules: imx8qm-ldb imx8qxp-ldb
-> scripts/Makefile.build:252: ./drivers/mfd/Makefile: rsmu_core.o is added to multiple modules: rsmu-i2c rsmu-spi
-> scripts/Makefile.build:252: ./drivers/mtd/tests/Makefile: mtd_test.o is added to multiple modules: mtd_nandbiterrs mtd_oobtest mtd_pagetest mtd_readtest mtd_speedtest mtd_stresstest mtd_subpagetest mtd_torturetest
-> scripts/Makefile.build:252: ./drivers/net/dsa/ocelot/Makefile: felix.o is added to multiple modules: mscc_felix mscc_seville
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn23xx_pf_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn23xx_vf_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn66xx_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn68xx_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: lio_core.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: lio_ethtool.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_droq.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_mailbox.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_mem_ops.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_nic.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: request_manager.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: response_manager.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefile: dpaa2-mac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefile: dpmac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc_cbdr.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc_ethtool.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_cmd.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_rss.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_tqp_stats.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/Makefile: otx2_dcbnl.o is added to multiple modules: rvu_nicpf rvu_nicvf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/Makefile: otx2_devlink.o is added to multiple modules: rvu_nicpf rvu_nicvf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ale.o is added to multiple modules: keystone_netcp keystone_netcp_ethss ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ethtool.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_priv.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_sl.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: davinci_cpdma.o is added to multiple modules: ti_cpsw ti_cpsw_new ti_davinci_emac
-> scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile: common.o is added to multiple modules: intel_skl_int3472_discrete intel_skl_int3472_tps68470
-> scripts/Makefile.build:252: ./sound/soc/codecs/Makefile: wcd-clsh-v2.o is added to multiple modules: snd-soc-wcd9335 snd-soc-wcd934x snd-soc-wcd938x
->
-> Once all the warnings are fixed, it can become an error irrespective of
-> W= option.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/Makefile.build | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 37cf88d076e8..799df12b53f3 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -222,6 +222,10 @@ endif
->
->  cmd_check_local_export = $(srctree)/scripts/check-local-export $@
->
-> +ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-> +cmd_warn_shared_object = $(if $(word 2, $(modname-multi)),$(warning $(kbuild-file): $*.o is added to multiple modules: $(modname-multi)))
-> +endif
-> +
->  define rule_cc_o_c
->         $(call cmd_and_fixdep,cc_o_c)
->         $(call cmd,gen_ksymdeps)
-> @@ -231,6 +235,7 @@ define rule_cc_o_c
->         $(call cmd,gen_objtooldep)
->         $(call cmd,gen_symversions_c)
->         $(call cmd,record_mcount)
-> +       $(call cmd,warn_shared_object)
->  endef
->
->  define rule_as_o_S
-> @@ -239,6 +244,7 @@ define rule_as_o_S
->         $(call cmd,check_local_export)
->         $(call cmd,gen_objtooldep)
->         $(call cmd,gen_symversions_S)
-> +       $(call cmd,warn_shared_object)
->  endef
->
->  # Built-in and composite module parts
-> --
-> 2.34.1
->
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/59740
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+5958364
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 - xfstests - ext4
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream - net: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1463
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
--- 
-Best Regards
-Masahiro Yamada
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
