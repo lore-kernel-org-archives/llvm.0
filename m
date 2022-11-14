@@ -1,237 +1,333 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1991C4C6A
-	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 13:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9234C70
+	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 13:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1668431306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	s=mimecast20190719; t=1668432832;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+RATmLDqy4Cb3/OcvezxdmIEs6SpBnhwsQ/KyFcaC8s=;
-	b=HlDIQtv50WJ9414i6XrUhkVRuTmOYu5yXxQLbdPkt+AGCEG258Vxem31k3ZqDcRXLPadOP
-	xX623oEK9yNytA6DywpviG30IOQpfxdEl3h7FBSCdhzGKIf6J/o79ShURQlGlbk5kB6C0b
-	rRK6NnhgfUgAFZA+mLEm15tAQUuDGPI=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=9QiRkAJtis8qNtWpCrUk39hYQOMQJJ4HZJSB08SnAc8=;
+	b=hvX+aBfN2p6fsbzjKq4BoE1XBDmGrfWh51U7rpozRYGFhTS663OdXiLB0brsnX8blpd59g
+	sOl3u621ntmfF8BcoQyOKCXVdOET79hBIx5mD+QjzV+mIqJXejGEIfbfL2pkpaHus3xxom
+	4oFYSIz6jWy6485zU1bFG18Cws+kzm8=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-dQ79vL5xO2yuxMhnO0vyug-1; Mon, 14 Nov 2022 08:08:25 -0500
-X-MC-Unique: dQ79vL5xO2yuxMhnO0vyug-1
-Received: by mail-pg1-f200.google.com with SMTP id 138-20020a630290000000b004708e8a8dcfso5806401pgc.11
-        for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 05:08:24 -0800 (PST)
+ us-mta-673-p_FGiTljM6-EPZole_Su1Q-1; Mon, 14 Nov 2022 08:33:49 -0500
+X-MC-Unique: p_FGiTljM6-EPZole_Su1Q-1
+Received: by mail-qk1-f198.google.com with SMTP id q14-20020a05620a0d8e00b006ef0350dae1so10950113qkl.12
+        for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 05:33:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+RATmLDqy4Cb3/OcvezxdmIEs6SpBnhwsQ/KyFcaC8s=;
-        b=aQ+0fSAxH6blnuZPI+sOnGiBWR8mYlBOvF3/vF2pK3bWTaUZN4DXNuqiBXL8JQmd7t
-         +MA0VwtCRuk65SSdI6kUI0a1jTODR/Il9WwltrsgyrB1DOWSMOA3mxMoY9AH0IHEF9zl
-         adLgfdfkHL7gpi0cGosppLKaZQVKsKGz76yLGMF0SY3GKehPkQ/btjlZIPXz7Ud7wA5D
-         4XHrvhjH+PgcDBXpIvD1626TQKHE2osac+mTFKk/+/GmNI0Paan5dKUXDqw72X5GJqh1
-         V0cwFQbVbVma2L8vI1tT8bkJ593QPocp69opYVjOC2SfYCWgT8xlPuUaf88NC363knK4
-         OuNg==
-X-Gm-Message-State: ANoB5plmf72DJUKMC0tU8Nv0biRSGkwzhNjp0aEDc9hHjiUyjVpJxrkl
-	ygYLV8Z26YYZ7lkeBg9K/DE9k9Nq4qJFZV8DmN5z/UNs5G9Y68oWgg9TZbQ+agdtjyqDpkmqYqt
-	ROtpA6DWc3LDW7g==
-X-Received: by 2002:a17:903:26c6:b0:178:b4b7:d74d with SMTP id jg6-20020a17090326c600b00178b4b7d74dmr13500425plb.83.1668431303961;
-        Mon, 14 Nov 2022 05:08:23 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7ob3Ev+cayEQvYpWckntbw+lZQjPtkPLBPRk6Vc4NEjns+KhCv3GjW+SN4cqEFsbDBtq/xsg==
-X-Received: by 2002:a17:903:26c6:b0:178:b4b7:d74d with SMTP id jg6-20020a17090326c600b00178b4b7d74dmr13500391plb.83.1668431303643;
-        Mon, 14 Nov 2022 05:08:23 -0800 (PST)
-Received: from [10.72.12.148] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id m1-20020a17090ade0100b0020dc318a43esm6479211pjv.25.2022.11.14.05.08.17
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9QiRkAJtis8qNtWpCrUk39hYQOMQJJ4HZJSB08SnAc8=;
+        b=XWIJTB2OUAH17NYsbgePMxvBmoXBrBat0tC5fvALHFWIEBIJfs0FS7fSgd8DAJomu+
+         9gFyph+Urs4pkgaV2jzGzAbra0oJeNDqAIdTxkgJClLqBCJdULllp8F9ik1+IOQGfEo1
+         N2Ogvu6cGhSUbemw5m/WiTpEEvWbg7bQtF6NSPjehcNoxBf++oQTolP+2XCJSIQ3hBek
+         sEl7pCwkn8AIO1kcSZRGfoDLFJXcuqE7glUkiWugUNpjJfxMhg7rt81V2h/+0iN8gAPj
+         2S4byCFN27bovM9yNpsfcvF3XEPmm5uI+Ca+ydPtsyauB9/xSajdO4rs87wLgqeD1nO7
+         MaCQ==
+X-Gm-Message-State: ANoB5pniCdeGmJe4ZajMq1tdNyTTzoT+2ML32fZntkVObq/LY5eSUDUO
+	5sorjrHl67XrvUItVSVTyQbhVSUAzQ6MzZ0N5ULZtzyVes4QkMtyGu698ayF8hi3XlbWQDcAMGZ
+	i9svL0Ir8QQN++g==
+X-Received: by 2002:a05:622a:2443:b0:3a5:2de8:37d3 with SMTP id bl3-20020a05622a244300b003a52de837d3mr12190343qtb.217.1668432829247;
+        Mon, 14 Nov 2022 05:33:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5MtlcI6o1/58VPaBjE0NvLA0zMfucHakDiba3NqKYYzSgAMOW+iPLhGMgIOTkcfylqwMLaJw==
+X-Received: by 2002:a05:622a:2443:b0:3a5:2de8:37d3 with SMTP id bl3-20020a05622a244300b003a52de837d3mr12190293qtb.217.1668432828927;
+        Mon, 14 Nov 2022 05:33:48 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id v12-20020ac8748c000000b0039c37a7914csm5641393qtq.23.2022.11.14.05.33.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 05:08:23 -0800 (PST)
-Subject: Re: [PATCH 2/2 v2] ceph: use a xarray to record all the opened files
- for each inode
-To: kernel test robot <lkp@intel.com>, ceph-devel@vger.kernel.org,
- jlayton@kernel.org, idryomov@gmail.com, viro@zeniv.linux.org.uk
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lhenriques@suse.de,
- mchangir@redhat.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
-References: <20221114051901.15371-3-xiubli@redhat.com>
- <202211141614.dhSgZRvB-lkp@intel.com>
-From: Xiubo Li <xiubli@redhat.com>
-Message-ID: <a7243d03-da3a-8df5-1c5c-b4540fb1a91a@redhat.com>
-Date: Mon, 14 Nov 2022 21:08:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 14 Nov 2022 05:33:48 -0800 (PST)
+Message-ID: <e1f7fe9c-5201-3fea-a354-bb79c06ddb4c@redhat.com>
+Date: Mon, 14 Nov 2022 14:33:41 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202211141614.dhSgZRvB-lkp@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v4 02/17] iommu: Add device-centric DMA ownership
+ interfaces
+To: Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
+ Jonathan Corbet <corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
+ iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc: Alex Williamson <alex.williamson@redhat.com>,
+ Lu Baolu <baolu.lu@linux.intel.com>,
+ Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
+ <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>,
+ David Gibson <david@gibson.dropbear.id.au>,
+ Eric Farman <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+ Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>,
+ Niklas Schnelle <schnelle@linux.ibm.com>,
+ Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+ Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <2-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+From: Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <2-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi
+Hi,
+On 11/8/22 01:48, Jason Gunthorpe wrote:
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+>
+> These complement the group interfaces used by VFIO and are for use by
+> iommufd. The main difference is that multiple devices in the same group
+> can all share the ownership by passing the same ownership pointer.
+>
+> Move the common code into shared functions.
+>
+> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/iommu/iommu.c | 124 +++++++++++++++++++++++++++++++++---------
+>  include/linux/iommu.h |  12 ++++
+>  2 files changed, 110 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 6ca377f4fbf9e9..4cb14e44e40f83 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -3108,41 +3108,52 @@ static int __iommu_group_alloc_blocking_domain(struct iommu_group *group)
+>  	return 0;
+>  }
+>  
+> +static int __iommu_take_dma_ownership(struct iommu_group *group, void *owner)
+> +{
+> +	int ret;
+> +
+> +	if (WARN_ON(!owner))
+> +		return -EINVAL;
+> +
+> +	if ((group->domain && group->domain != group->default_domain) ||
+> +	    !xa_empty(&group->pasid_array))
+> +		return -EBUSY;
+> +
+> +	ret = __iommu_group_alloc_blocking_domain(group);
+> +	if (ret)
+> +		return ret;
+> +	ret = __iommu_group_set_domain(group, group->blocking_domain);
+> +	if (ret)
+> +		return ret;
+> +
+> +	group->owner = owner;
+> +	group->owner_cnt++;
+> +	return 0;
+> +}
+> +
+>  /**
+>   * iommu_group_claim_dma_owner() - Set DMA ownership of a group
+>   * @group: The group.
+>   * @owner: Caller specified pointer. Used for exclusive ownership.
+>   *
+> - * This is to support backward compatibility for vfio which manages
+> - * the dma ownership in iommu_group level. New invocations on this
+> - * interface should be prohibited.
+> + * This is to support backward compatibility for vfio which manages the dma
+> + * ownership in iommu_group level. New invocations on this interface should be
+> + * prohibited. Only a single owner may exist for a group.
+>   */
+>  int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
+>  {
+>  	int ret = 0;
+>  
+> +	if (WARN_ON(!owner))
+> +		return -EINVAL;
+> +
+>  	mutex_lock(&group->mutex);
+>  	if (group->owner_cnt) {
+>  		ret = -EPERM;
+>  		goto unlock_out;
+> -	} else {
+> -		if ((group->domain && group->domain != group->default_domain) ||
+> -		    !xa_empty(&group->pasid_array)) {
+> -			ret = -EBUSY;
+> -			goto unlock_out;
+> -		}
+> -
+> -		ret = __iommu_group_alloc_blocking_domain(group);
+> -		if (ret)
+> -			goto unlock_out;
+> -
+> -		ret = __iommu_group_set_domain(group, group->blocking_domain);
+> -		if (ret)
+> -			goto unlock_out;
+> -		group->owner = owner;
+>  	}
+>  
+> -	group->owner_cnt++;
+> +	ret = __iommu_take_dma_ownership(group, owner);
+>  unlock_out:
+>  	mutex_unlock(&group->mutex);
+>  
+> @@ -3151,30 +3162,91 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
+>  EXPORT_SYMBOL_GPL(iommu_group_claim_dma_owner);
+>  
+>  /**
+> - * iommu_group_release_dma_owner() - Release DMA ownership of a group
+> - * @group: The group.
+> + * iommu_device_claim_dma_owner() - Set DMA ownership of a device
+> + * @dev: The device.
+> + * @owner: Caller specified pointer. Used for exclusive ownership.
+>   *
+> - * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
+> + * Claim the DMA ownership of a device. Multiple devices in the same group may
+> + * concurrently claim ownership if they present the same owner value. Returns 0
+> + * on success and error code on failure
+>   */
+> -void iommu_group_release_dma_owner(struct iommu_group *group)
+> +int iommu_device_claim_dma_owner(struct device *dev, void *owner)
+>  {
+> -	int ret;
+> +	struct iommu_group *group = iommu_group_get(dev);
+> +	int ret = 0;
+> +
+> +	if (!group)
+> +		return -ENODEV;
+>  
+>  	mutex_lock(&group->mutex);
+> +	if (group->owner_cnt) {
+> +		if (group->owner != owner) {
+> +			ret = -EPERM;
+> +			goto unlock_out;
+> +		}
+> +		group->owner_cnt++;
+> +		goto unlock_out;
+> +	}
+> +
+> +	ret = __iommu_take_dma_ownership(group, owner);
+> +unlock_out:
+> +	mutex_unlock(&group->mutex);
+> +	iommu_group_put(group);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_device_claim_dma_owner);
+> +
+> +static void __iommu_release_dma_ownership(struct iommu_group *group)
+> +{
+> +	int ret;
+> +
+>  	if (WARN_ON(!group->owner_cnt || !group->owner ||
+>  		    !xa_empty(&group->pasid_array)))
+> -		goto unlock_out;
+> +		return;
+>  
+>  	group->owner_cnt = 0;
+>  	group->owner = NULL;
+>  	ret = __iommu_group_set_domain(group, group->default_domain);
+>  	WARN(ret, "iommu driver failed to attach the default domain");
+> +}
+>  
+> -unlock_out:
+> +/**
+> + * iommu_group_release_dma_owner() - Release DMA ownership of a group
+> + * @group: The group.
+> + *
+> + * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
+> + */
+> +void iommu_group_release_dma_owner(struct iommu_group *group)
+> +{
+> +	mutex_lock(&group->mutex);
+> +	__iommu_release_dma_ownership(group);
+>  	mutex_unlock(&group->mutex);
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_group_release_dma_owner);
+>  
+> +/**
+> + * iommu_device_release_dma_owner() - Release DMA ownership of a device
+> + * @group: The device.
+@dev: the device
+> + *
+> + * Release the DMA ownership claimed by iommu_device_claim_dma_owner().
+> + */
+> +void iommu_device_release_dma_owner(struct device *dev)
+> +{
+> +	struct iommu_group *group = iommu_group_get(dev);
+> +
+> +	mutex_lock(&group->mutex);
+> +	if (group->owner_cnt > 1) {
+> +		group->owner_cnt--;
+> +		goto unlock_out;
+> +	}
+> +	__iommu_release_dma_ownership(group);
+> +unlock_out:
+> +	mutex_unlock(&group->mutex);
 
-Thanks for reporting this.
+if (group->owner_cnt > 1)
 
-I will fix it in the next version.
+	group->owner_cnt--;
+else
+	__iommu_release_dma_ownership(group);
 
-- Xiubo
+mutex_unlock(&group->mutex);
 
-On 14/11/2022 16:54, kernel test robot wrote:
-> Hi,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on ceph-client/testing]
-> [also build test WARNING on ceph-client/for-linus linus/master v6.1-rc5 next-20221111]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/xiubli-redhat-com/ceph-fix-the-use-after-free-bug-for-file_lock/20221114-132233
-> base:   https://github.com/ceph/ceph-client.git testing
-> patch link:    https://lore.kernel.org/r/20221114051901.15371-3-xiubli%40redhat.com
-> patch subject: [PATCH 2/2 v2] ceph: use a xarray to record all the opened files for each inode
-> config: hexagon-randconfig-r041-20221114
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 463da45892e2d2a262277b91b96f5f8c05dc25d0)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/232cc8f1dbeddb308946202a7c67ee4d20451ae7
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review xiubli-redhat-com/ceph-fix-the-use-after-free-bug-for-file_lock/20221114-132233
->          git checkout 232cc8f1dbeddb308946202a7c67ee4d20451ae7
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ceph/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->     In file included from fs/ceph/locks.c:8:
->     In file included from fs/ceph/super.h:8:
->     In file included from include/linux/backing-dev.h:16:
->     In file included from include/linux/writeback.h:13:
->     In file included from include/linux/blk_types.h:10:
->     In file included from include/linux/bvec.h:10:
->     In file included from include/linux/highmem.h:12:
->     In file included from include/linux/hardirq.h:11:
->     In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/hexagon/include/asm/io.h:334:
->     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __raw_readb(PCI_IOBASE + addr);
->                               ~~~~~~~~~~ ^
->     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->                                                             ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->     #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->                                                       ^
->     In file included from fs/ceph/locks.c:8:
->     In file included from fs/ceph/super.h:8:
->     In file included from include/linux/backing-dev.h:16:
->     In file included from include/linux/writeback.h:13:
->     In file included from include/linux/blk_types.h:10:
->     In file included from include/linux/bvec.h:10:
->     In file included from include/linux/highmem.h:12:
->     In file included from include/linux/hardirq.h:11:
->     In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/hexagon/include/asm/io.h:334:
->     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->                                                             ~~~~~~~~~~ ^
->     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->     #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->                                                       ^
->     In file included from fs/ceph/locks.c:8:
->     In file included from fs/ceph/super.h:8:
->     In file included from include/linux/backing-dev.h:16:
->     In file included from include/linux/writeback.h:13:
->     In file included from include/linux/blk_types.h:10:
->     In file included from include/linux/bvec.h:10:
->     In file included from include/linux/highmem.h:12:
->     In file included from include/linux/hardirq.h:11:
->     In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->     In file included from include/asm-generic/hardirq.h:17:
->     In file included from include/linux/irq.h:20:
->     In file included from include/linux/io.h:13:
->     In file included from arch/hexagon/include/asm/io.h:334:
->     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             __raw_writeb(value, PCI_IOBASE + addr);
->                                 ~~~~~~~~~~ ^
->     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->                                                           ~~~~~~~~~~ ^
->     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->             __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->                                                           ~~~~~~~~~~ ^
->>> fs/ceph/locks.c:66:6: warning: variable 'fi' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->             if (val == CEPH_FILP_AVAILABLE) {
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
->     fs/ceph/locks.c:79:14: note: uninitialized use occurs here
->             atomic_dec(&fi->num_locks);
->                         ^~
->     fs/ceph/locks.c:66:2: note: remove the 'if' if its condition is always true
->             if (val == CEPH_FILP_AVAILABLE) {
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     fs/ceph/locks.c:47:27: note: initialize the variable 'fi' to silence this warning
->             struct ceph_file_info *fi;
->                                      ^
->                                       = NULL
->     7 warnings generated.
->
->
-> vim +66 fs/ceph/locks.c
->
->      42	
->      43	static void ceph_fl_release_lock(struct file_lock *fl)
->      44	{
->      45		struct inode *inode = fl->fl_u.ceph_fl.fl_inode;
->      46		struct ceph_inode_info *ci;
->      47		struct ceph_file_info *fi;
->      48		void *val;
->      49	
->      50		/*
->      51		 * If inode is NULL it should be a request file_lock,
->      52		 * nothing we can do.
->      53		 */
->      54		if (!inode)
->      55			return;
->      56	
->      57		ci = ceph_inode(inode);
->      58	
->      59		/*
->      60		 * For Posix-style locks, it may race between filp_close()s,
->      61		 * and it's possible that the 'file' memory pointed by
->      62		 * 'fl->fl_file' has been released. If so just skip it.
->      63		 */
->      64		rcu_read_lock();
->      65		val = xa_load(&ci->i_opened_files, (unsigned long)fl->fl_file);
->    > 66		if (val == CEPH_FILP_AVAILABLE) {
->      67			fi = fl->fl_file->private_data;
->      68			atomic_dec(&fi->num_locks);
->      69		}
->      70		rcu_read_unlock();
->      71	
->      72		if (atomic_dec_and_test(&ci->i_filelock_ref)) {
->      73			/* clear error when all locks are released */
->      74			spin_lock(&ci->i_ceph_lock);
->      75			ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
->      76			spin_unlock(&ci->i_ceph_lock);
->      77		}
->      78		iput(inode);
->      79		atomic_dec(&fi->num_locks);
->      80	}
->      81	
->
+iommu_group_put(group);
+
+> +	iommu_group_put(group);
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_device_release_dma_owner);
+> +
+>  /**
+>   * iommu_group_dma_owner_claimed() - Query group dma ownership status
+>   * @group: The group.
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index a09fd32d8cc273..1690c334e51631 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -707,6 +707,9 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
+>  void iommu_group_release_dma_owner(struct iommu_group *group);
+>  bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>  
+> +int iommu_device_claim_dma_owner(struct device *dev, void *owner);
+> +void iommu_device_release_dma_owner(struct device *dev);
+> +
+>  struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
+>  					    struct mm_struct *mm);
+>  int iommu_attach_device_pasid(struct iommu_domain *domain,
+> @@ -1064,6 +1067,15 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+>  	return false;
+>  }
+>  
+> +static inline void iommu_device_release_dma_owner(struct device *dev)
+> +{
+> +}
+> +
+> +static inline int iommu_device_claim_dma_owner(struct device *dev, void *owner)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+>  static inline struct iommu_domain *
+>  iommu_sva_domain_alloc(struct device *dev, struct mm_struct *mm)
+>  {
+Besides
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
+
+Eric
 
