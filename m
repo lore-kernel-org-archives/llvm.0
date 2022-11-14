@@ -1,89 +1,203 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1B679F3
-	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 17:53:23 +0000 (UTC)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AEHr3it015824
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Nov 2022 12:53:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1668448387; bh=0oY2FHq6aam4ViqDXvERuEDXT+lWMYAi0k7t0ceXGtY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=T9jIyOKT6a9ZXBo5B45dK908bfA8wWFMu1z6LujbTJTlNSMlBf8ZzOQ+et6xCQ6x0
-	 xTzBiiWDsrbYShdtJ3r4k6VkH2LITjVbkBSGaa2kDDJqKgnt7HI5TaouvAvBwOpLI0
-	 CFD41/h4aBfC9r6k77/89pKxwDzXc4lyZfo4uzvnMKmgICxhgWMTDSiCBYThAyuOLF
-	 JneBERVwGpadBtlN0oncGjkfbXJLpIzXxH0hTiCrKcbB2fMO8IcQLLtDWERVg3VpRH
-	 HTjy5zGARrPldeCwcFuRuhNxGDCsamEAZ2ZTb/qWl+R9wducW5cOLKcH7JrjlF792k
-	 3YxI3FaICDjNQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id C5C4615C34C3; Mon, 14 Nov 2022 12:53:03 -0500 (EST)
-Date: Mon, 14 Nov 2022 12:53:03 -0500
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Waiman Long <longman@redhat.com>
-Cc: syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Chao Yu <chao@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
-Message-ID: <Y3KAfyQOf6GvEo/x@mit.edu>
-References: <0000000000006a74dd05e9931449@google.com>
- <000000000000073a4a05ed620676@google.com>
- <Y3Jb1Wcs/mQlZP32@mit.edu>
- <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F72979F3
+	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 18:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1668448899;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=t+tQCdSCa0Se/HUhnc3XsR71m7bONmHygBBiieJn4lQ=;
+	b=bNEdyP3SaQ3kjiIK3O1Aptt4suP1xt4XCgUIEuUBoX5aDWVzPukVRZH6QjSSES0ZpO2kOv
+	9LyBcmlrkIKDlHmZj5WD5nvvvnux2UEvFgk9Jwz5igZLT5RtyW9RT2KxwBlgq4vtJTtGPc
+	PgUn8b0YJuqhSbbLciLjXsT8YAnyVog=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-gdl214qTMbOGe5VcIocHSQ-1; Mon, 14 Nov 2022 13:01:38 -0500
+X-MC-Unique: gdl214qTMbOGe5VcIocHSQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB96F811E7A
+	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 18:01:37 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id ABA4D40E9783;
+	Mon, 14 Nov 2022 18:01:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (27/383 SKIPPED): Test report for master
+ (6.1.0-rc4, mainline.kernel.org-clang, af7a0568)
+Date: Mon, 14 Nov 2022 18:01:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <41058.122111413013800709@us-mta-651.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 14, 2022 at 11:21:33AM -0500, Waiman Long wrote:
-> 
-> lockdep_set_subclass() should be translated into a call to
-> lockdep_init_map_type():
-> 
-> #define lockdep_set_subclass(lock, sub)                                 \
->         lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key,
-> sub,\
-> (lock)->dep_map.wait_type_inner,          \
-> (lock)->dep_map.wait_type_outer,          \
->                               (lock)->dep_map.lock_type)
-> 
-> All memory access should be within the bound of the given "&ei->i_data_sem".
-> Also lockdep_init_map_type() is not in the stack trace. So it is not a
-> problem within this lockdep_init_map_type() function. So is it possible that
-> the given inode pointer is invalid?
+Hi, we tested your kernel and here are the results:
 
-Well, the inode pointer would be coming from iget().  And since this
-is coming from ext4 mount operation, we would be getting a fresh inode
-that should be freshly allocated.  So the possibilities which comes to
-mind is some kind of use-after-free (probbly in f2fs) that was
-smashing the inode itself, such that ei->i_data_sem was pointing off
-into la-la-land, or in the inode cache's internal data srtuctures.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-The reason why I would assume it would be in f2fs is I *assume*
-syzkaller would have pruned down the test case enough to remove the
-messing around with mounting the invalid f2fs file system.  But the
-other mystery here is why didn't KASAN report the use-after-free (if
-that it is what it was) in the thousands of f2fs mount and
-unmount operations before it finally triggered?
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Anyway, I plan to ignore this Syzkaller unless report Syzkaller (or
-someone else) can come up with a more minimal/reliable reproducer.  (I
-mean, we could open a bug, but with kind of reproducer, it would get
-prioritized P3 or P4 and ignored for years until it finally got closed
-in a buganizer bankruptcy, so I figured I would just skip a few steps.  :-)
+Kernel information:
+    Commit message: Merge tag 'mips-fixes_6.1_1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/mips/linux
 
-Cheers,
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/59748
 
-						- Ted
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
