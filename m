@@ -1,162 +1,204 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD116748D;
-	Mon, 14 Nov 2022 16:58:21 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D1vSSvPmTykC/W3BMOxZHdSbYtsR3FuR7uP1fIq9A4sHBoh8wKrE9u5yhHa4ddDy8Tnz/5+noIgCr/OtPq2aOSxQnsOmHDKOcbaMrK4zvqD6fZx515PqabICJDAxLMXURqvlgwhZ4wJnvO488cRVKbb9EhWJEcfEKDCY8odBbZFBZJEq+YBDSlv9yHqxHPmG06EZBhIr6PpJi9Rm5cO3Q/jvMlJvsd9qZ6KtyRUO9oMsROEXQfdoN8e6axEZLssPMJp9qNuIGCwca+Cr5jpetJxvzwxsToXzTw2uyx7xyWoT4ZqKCbChlhp4c+YEj/j2IZV1KnRSQXXdznnip5zQ3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0FCnV8AOIg3Eor0RIpyCg0CPcN8MMlsrqZc4PVD/HQs=;
- b=LuYQ6hNx06z3fcUcpRvJO1TQa7sOm0OtOcLnlDgkVy3C+DN+GoClH+Nqs8dbXrwmNoJpPlxtnlMQV+CT0aEIJ0RRZRs69zIrynQgTBaF+Do3Ht9KZwAPU22/wY2vt1aYmCgieSQGwYFTYVPhinTGoyd+NgUTsyUfBeU0UUu48LVZ/eHafqvzqR4twjPRodwzfwWEdxMQxA5TNWhZhEr6Or32ye910JDvZpCor+4+AKAZaWJQRS1WfirfrPI32iMvh2fh4JyU8zMVIRyV4h5FBakU3Svj6S7o5EIKssR44mKDhhj/NX6zL2fqGfUolU+H7E5R0t+tRazMJh0mbJBO+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0FCnV8AOIg3Eor0RIpyCg0CPcN8MMlsrqZc4PVD/HQs=;
- b=dN7Sj+DMnGE39sjMAANXZg8Ybq/LHKQ4lmoH2d6skn1v3pGfc+mIcwY6T4LJ/mCwuYzE9cjv1YTV+3OFeOfUrDFjyv1jhddimw8QXHQEKHn1IPgk78G9dvv2Oc57HxqCuu4NXol133U6jzRbuG6hF8g1D5UgQIAAP3XcxFGFjMQ9R1yU/ckCyS5lfhfVLQOvwJ4fGqz8ATEVV+slJzZ4qi7l9P7pBTM6yg76V7S3nuphf5LTsMrk/QcEKukW0msff3dh/DaH8qG19ocecSya5KC48mUgZ6FsVxYENe03k5WF3vBRYentBWx3akEUR2ne/V0mtxPlss4amvcB9qSUtw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW4PR12MB7438.namprd12.prod.outlook.com (2603:10b6:303:219::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
- 2022 16:58:20 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
- 16:58:20 +0000
-Date: Mon, 14 Nov 2022 12:58:18 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Eric Auger <eric.auger@redhat.com>
-Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 02/17] iommu: Add device-centric DMA ownership
- interfaces
-Message-ID: <Y3Jzqv/8WtT0LtHx@nvidia.com>
-References: <2-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <e1f7fe9c-5201-3fea-a354-bb79c06ddb4c@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1f7fe9c-5201-3fea-a354-bb79c06ddb4c@redhat.com>
-X-ClientProxiedBy: MN2PR16CA0058.namprd16.prod.outlook.com
- (2603:10b6:208:234::27) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD2079C9
+	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 17:20:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1668446439;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Vre+yolhMU/cI4YIGUpjGC4bdl+GBGanaiYsD8nIqwY=;
+	b=gEMNTSj1/a3E6OwbH4+CLi3C8bJGj3HfIf7zxd0gNywPYc0I6MbaU8c5FYNp9DkC6x7S/s
+	JPGrpp5Ybrxe7y/J1dUfEamYE10GVk9PkoEWNHD6D6DEmEmLK+1iv+TCFM4G0JsnJguoMa
+	4vdwiC/qjMHSh+ZYaJssRnQS+hwRKAQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-228-Z0LXQrpXM8ecHThXBcfthQ-1; Mon, 14 Nov 2022 12:20:37 -0500
+X-MC-Unique: Z0LXQrpXM8ecHThXBcfthQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DCAF1C06EEC
+	for <llvm@lists.linux.dev>; Mon, 14 Nov 2022 17:20:37 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 75BD249BB60;
+	Mon, 14 Nov 2022 17:20:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (27/383 SKIPPED): Test report for master
+ (6.1.0-rc5, mainline.kernel.org-clang, 094226ad)
+Date: Mon, 14 Nov 2022 17:20:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB7438:EE_
-X-MS-Office365-Filtering-Correlation-Id: 40e58839-0b4e-4ab2-09e9-08dac6616ebf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	pxe3mJHW1eBRYbaZd/Hd0K4MEoOkSTKPcNO9nkhednsE4I/OyaTnWz+TLXsVk3nl4AuLqX6VkHGLDGKeKc8lE8c3XU50vkVV9wn+GqVCaFhU5F/NbSIOvhTLRrNq/K13k8pBeO033oBxrsBG8VNoliPziIcLsSK0960n1vOntBoQ5hES03TyKnQBsxYXtlLhG0FLz5HMSsjVOXXp1Uix6dVBONAVVRCwcw8jyXSx46QTYD3DAhB7/W4nMs2iDFR+xzOeYL6KZqMvdw3CFKqFsCP/uZyKi4tJG4FVWMm1G49C9gynrHx4Rc2VhGhiU7YzKvHb085yOUxdIf6SJNekTNndLZ30U8r11ayoEfP6/SOK4QdVOy+iLzHfnVXKVdSwKo6yNZkNhTaX2vGrwk7HZYBJ1H+crUIr0Nm65SSYa1uS4nLQBgBQjtNqrPhi7lJp1056uso6HIkMOL+aKCPm5sbBGrQMc0nznKkbXglLFfCvQhYbcHwQX/+fIGiuyyekgzxesRz66Fxm/JRPsK5jILlDiYJt90GCF7gM7nJM8BJPlhucwuf6joycsLAVHTnt8OEcS2PEImaAEzkaafTHmIGPWXZP/7BdK6mYv9cDon8QbogEwK+JMcxMty7JpJJhfZLA9cHVmOvaKKhQDk+kq4EScNb7SXJMKohLtPRp4+XR8uUgNhSL+A7CHbUzveEE/lkpcW8dMB2Vt/VMQhj7pw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199015)(186003)(6512007)(83380400001)(26005)(2616005)(6506007)(38100700002)(4744005)(5660300002)(2906002)(7416002)(7406005)(6486002)(478600001)(8676002)(66946007)(8936002)(66556008)(66476007)(4326008)(41300700001)(316002)(6916009)(54906003)(36756003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?awGhBOZ+XkiVTDp/jwgUPeomShnhJXE3tmE6MUHyjJn8aJAdrqngGoMj/7LE?=
- =?us-ascii?Q?gyofGSLWiDGCu3dhSibBenovG980HSUAajbcIOqsIhzR3T71BkHKIaP55SnB?=
- =?us-ascii?Q?ugrCi7wyhwWacdcsz8rpfqiz1vVndWHOMpzLopvl9n1nuGAxOdymgK2eYRql?=
- =?us-ascii?Q?BWC8G/xF6elDf5CIX3FuJd3e9mTWDO3nZW6xW72ZvfCUuvND9zWOmsbGfsck?=
- =?us-ascii?Q?TkKveJwPEFStJmSO9NqNdhAZW5kWteQhbNDWVew5esT0Is0x3Z1IWEBvW8eY?=
- =?us-ascii?Q?JTlZZxZXe+70Uzg97RjwImew6hpTsNLTTsN3SkMlzVpc0ovj7M1Uj+WLByCk?=
- =?us-ascii?Q?m2aHAE6jIrl2c4y5Y/FVqJ1DYKB964Z8pF5/9GDPrmqdLwruLofWcujsWH2m?=
- =?us-ascii?Q?MnURdq+LPBoKLziJa1irQYEf4UbJE1mAXbIV9qQ/i2A7+CYvAuR3wCSUfUCz?=
- =?us-ascii?Q?Q1g9pUUaOIfw68cKJNitkRAEN9NU1jvqoz41Jd9eznB8NFGdomBD27sYoUII?=
- =?us-ascii?Q?CoadnN0brXFN0MVG0Xqo3ZvRTAcP3KsCN5ctUKcLKeGke+1DeKUS+/obXlAQ?=
- =?us-ascii?Q?F+/ms5MHH6ny+IbKS3cMNy++HWN+DGM/yw3AjSS+eaStaztdr/1GF0KJxYPJ?=
- =?us-ascii?Q?ILwaBVZZtHZB45n5rchhbxIuy7i7bVY9zAggJUN5bPOde834iHD5l8LUdIcs?=
- =?us-ascii?Q?9p6aGxe6NE665AIZILW1C89NFnqVY5eI9sLR0uBDCFLrIR1PXaDYCliYZAE3?=
- =?us-ascii?Q?n5LmlwXiS14wew7g+G+DfybsmQBlPBmAdpug8r6wdHf6TmCVVqMDfuGSl87n?=
- =?us-ascii?Q?s9+dLUUHsiB6EOTiUCKZnx3ZvGWypiQmUXBa0Pd1OsSglAGPbDcpS4UkA3rg?=
- =?us-ascii?Q?bND3+xOllmAZpSLfl3R6k6qQ/Mp9K9ZYl6YCVa4CMtFR9eiVjqhTUi96iOMe?=
- =?us-ascii?Q?d+Mf+nNM8Bas+EZnj1ptTEdc8oHo/uq9ErRjVKgMQdRtJwxmYR+mLu4d6BGN?=
- =?us-ascii?Q?6jK85BvqV2PXuvKydV0TcVNT6N9dXwN7SNTQTU2glr7+qVjeik0rGqa2iWnn?=
- =?us-ascii?Q?Wt7C3ZKDaCalyTsXOyfnSI0L+HCR5wvAnsKTBdmFwbrfAkCI5BgMBpyKrDA9?=
- =?us-ascii?Q?wsiHxOMm8+aBgVnM8pOO0H/RslFzNk9/pF4Bov298G7Ta3xqtBlbvQ2dpCCx?=
- =?us-ascii?Q?r0DdbpJxZhplxJ0LHq1GU+9wdNTharYlxFcVYGPnqJ6rsZ15hmgo0iM+9EWk?=
- =?us-ascii?Q?T6hCrZHLv6/RgLOOLfkj7i1iRV2U+PizlfSWjZT51bbFYeIIIJ6NdOCq8yKm?=
- =?us-ascii?Q?3BDMiJQNANYmtoNuAN8Rze7KwYAhxtlMF6C/Ky0s9iErXvhNwcs7UwzTIqhq?=
- =?us-ascii?Q?LfYJfpVVjV3FU31M0zVnavGr3NpUW/B8hpChD568eYrxeWJTvMcm2ChC8aYd?=
- =?us-ascii?Q?QeO2IadSPwlVj20PnmmTo97hulJRDTK3h39OwFg/JrzSoU+MAbqAHsiBw/QK?=
- =?us-ascii?Q?lwE9MNPyjbJlNwX7X3INp5kxNPkMyUr/lCx/tq7YteJvMleTBy19GR7ydHyI?=
- =?us-ascii?Q?qU5nYeVxbX6DMkF3VvQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40e58839-0b4e-4ab2-09e9-08dac6616ebf
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 16:58:20.0205
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G0zl+YsVYJbDAq+thGHQ74iRdmoJ6srMgX5wcyED7y+CLen2d3gtsc9em6P7MbGx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7438
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <03945.122111412203701611@us-mta-228.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 14, 2022 at 02:33:41PM +0100, Eric Auger wrote:
-> > +/**
-> > + * iommu_device_release_dma_owner() - Release DMA ownership of a device
-> > + * @group: The device.
-> @dev: the device
-> > + *
-> > + * Release the DMA ownership claimed by iommu_device_claim_dma_owner().
-> > + */
-> > +void iommu_device_release_dma_owner(struct device *dev)
-> > +{
-> > +	struct iommu_group *group = iommu_group_get(dev);
-> > +
-> > +	mutex_lock(&group->mutex);
-> > +	if (group->owner_cnt > 1) {
-> > +		group->owner_cnt--;
-> > +		goto unlock_out;
-> > +	}
-> > +	__iommu_release_dma_ownership(group);
-> > +unlock_out:
-> > +	mutex_unlock(&group->mutex);
-> 
-> if (group->owner_cnt > 1)
-> 
-> 	group->owner_cnt--;
-> else
-> 	__iommu_release_dma_ownership(group);
-> 
-> mutex_unlock(&group->mutex);
-> 
-> iommu_group_put(group);
+Hi, we tested your kernel and here are the results:
 
-Sure, thanks
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Jason
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Linux 6.1-rc5
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/59761
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: selftests: net: psock_snd.sh: Resource temporarily unavailab=
+le
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/914
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream - net: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1463
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
