@@ -1,185 +1,140 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CADD52D
-	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 18:51:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1668624697;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PAADxB9wVIp/sPvls3w1pBTjqgT/rrzz4AkRy94Zqxs=;
-	b=XxN4wu5GXuB+HvHgPdOVHycSBwBzz+H/c2pPjz4GrcbmrAuvM4CyoTgpB7cqwG/NccFPI6
-	Xo5f0OlXoSf+jfyckHA2cjlV4ikfm2BGBrjCGrY+FBGL/S6dUEuYO1F/JZuXSh5zZ8PZoB
-	vIlklYtYGsgh4VcVOfZCr1hO0G+2FOQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-M2mQgf-YPCiQFJOYOybI4g-1; Wed, 16 Nov 2022 13:51:36 -0500
-X-MC-Unique: M2mQgf-YPCiQFJOYOybI4g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59DB9185A7A3
-	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 18:51:35 +0000 (UTC)
-Received: from [172.64.11.29] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 443B02166B29;
-	Wed, 16 Nov 2022 18:51:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (81/383 SKIPPED): Test report for master
- (6.1.0-rc5, mainline.kernel.org-clang, 59d0d52c)
-Date: Wed, 16 Nov 2022 18:51:35 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DBDD52D
+	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 19:01:00 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id s196so17557956pgs.3
+        for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 11:01:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V+m20rR3qhKhCrc29Q5gHN0J/IycK26+ExfyYRWAbxM=;
+        b=oPjKBUJip/NbE0rH0KF9GTjzHqfPLWKTiHey//bhup5ED99PU9TNEQMSrYZgx5MCBN
+         7IwZmAtSSdsfFSKdujd1ZdetFBP20bZRhPbT9qXb1ZF7vkOshGLYSWApXRY6aIPn/yog
+         O7VytRKfLSQaXk8Uol773dYXc+9VGmQoWCPTc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V+m20rR3qhKhCrc29Q5gHN0J/IycK26+ExfyYRWAbxM=;
+        b=SpkmEvNTObO9I5jXDrvXWrCXiWepilDI1ybpHIFxnXW0U42Bm+USYoS2fITD6/MzUC
+         3/hPClfQvRtN1tgkS2s427ZQW++4VSvTtpajIKgMI0Jd33PeQFSBYaxIU2o7aaH2j70f
+         Ih97hG6lJ6tRYQss8m2Pqa8hRqDHC3kbfDWfa5eD3TSe3SSZpBycJm7eUdGmvngkvqfO
+         1D9a0VQ/bLCVbNs1OKV7puuNOdYx2ppHIr1C55BLBqoQ3C+TZtwqFcj2L1abFRVLK4Cy
+         5HS3pEDUjYYdQ8OiaRzHf6d8BNXR9jkHZpcF8oHITsgKHaaa80pQzxli3cAHlEFk0IYr
+         CuGA==
+X-Gm-Message-State: ANoB5pli9sIHPImTCN5xDZpDFaBWQv9gGncF6IK4mhm+3BVojSIDV4IR
+	d2SrYDzJttpTWtprHFl7j1YuUH8NtsbyIA==
+X-Google-Smtp-Source: AA0mqf4p6evEu4ZN/N8pP4qI1fAjq39YR/zQPw1X1lUbbEqe/ZUAu/HpErifB2QIOfINRYqX5Sg4RA==
+X-Received: by 2002:a63:b5b:0:b0:46e:a4ed:467e with SMTP id a27-20020a630b5b000000b0046ea4ed467emr21973376pgl.319.1668625260178;
+        Wed, 16 Nov 2022 11:01:00 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id z19-20020a630a53000000b00476db6fe510sm2287032pgk.75.2022.11.16.11.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 11:00:59 -0800 (PST)
+Date: Wed, 16 Nov 2022 11:00:58 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and
+ AR=llvm-ar
+Message-ID: <202211161056.1B9611A@keescook>
+References: <20221027162839.410720-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <25315.122111613513600851@us-mta-39.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027162839.410720-1-masahiroy@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Oct 28, 2022 at 01:28:39AM +0900, Masahiro Yamada wrote:
+> Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
+>   /usr/bin/ar terminated with signal 13 [Broken pipe]
+> 
+> Nathan Chancellor reported the latest AR=llvm-ar shows
+>   error: write on a pipe with no reader
+> 
+> The latter occurs since LLVM commit 51b557adc131 ("Add an error message
+> to the default SIGPIPE handler").
+> 
+> The resulting vmlinux is correct, but it is better to silence it.
+> 
+> 'head -n1' exits after reading the first line, so the pipe is closed.
+> 
+> Use 'sed -n 1p' to eat the stream till the end.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I think this is wrong because it needlessly consumes CPU time. SIGPIPE
+is _needed_ to stop a process after we found what we needed, but it's up
+to the caller (the shell here) to determine what to do about it.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Similarly, that LLVM commit is wrong -- tools should _not_ catch their
+own SIGPIPEs. They should be caught by their callers.
 
-Kernel information:
-    Commit message: AMerge tag 'netfs-fixes-20221115' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/dhowells/linux-fs
+For example, see:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/60026
+$ seq 10000 | head -n1
+1
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Internal Network Outage
-            URL: https://docs.cki-project.org/failures/#internal-network-ou=
-tage
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (upstream) Cannot download, all mirrors were already tried w=
-ithout success
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/5439024
-            Affected tests:
-                  x86_64 (debug) - xfstests - ext4
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1339
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-                 ppc64le - kdump - sysrq-c
-                   s390x - kdump - sysrq-c
-                   s390x - kdump - file-load
-                  x86_64 - kdump - sysrq-c
-                  x86_64 - kdump - file-load
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
-Objects remaining in bio-152 on __kmem_cache_shutdown()
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1255
-            Affected tests:
-                   s390x - Storage - swraid simple_reshape
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+^^^ no warnings from the shell (caller of "seq")
+And you can see it _is_ being killed by SIGPIPE:
 
+$ strace seq 1000 | head -n1
+...
+write(1, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14"..., 8192) = 8192
+1
+write(1, "\n1861\n1862\n1863\n1864\n1865\n1866\n1"..., 4096) = -1 EPIPE (Broken pipe)
+--- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=3503448, si_uid=1000} ---
++++ killed by SIGPIPE +++
 
+If we use "sed -n 1p" seq will continue to run, consuming needless time
+and CPU resources.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+So, I strongly think this is the wrong solution. SIGPIPE should be
+ignored for ar, and LLVM should _not_ catch its own SIGPIPE.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+-Kees
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> 
+> Fixes: 321648455061 ("kbuild: use obj-y instead extra-y for objects placed at the head")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1651
+> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> 
+> Changes in v2:
+>   - Update commit description to mention llvm-ar
+> 
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index e90bb2b38607..e9e7eff906a5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
+>        cmd_ar_vmlinux.a = \
+>  	rm -f $@; \
+>  	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
+> -	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
+> +	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
+>  
+>  targets += vmlinux.a
+>  vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
+> -- 
+> 2.34.1
+> 
 
+-- 
+Kees Cook
