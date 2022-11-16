@@ -1,73 +1,94 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43857C;
-	Wed, 16 Nov 2022 00:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3706C7C;
+	Wed, 16 Nov 2022 02:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668565848; x=1700101848;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Q4qAvnHrqG31qMRXkVeU4p3RgUxPq+15RUMLcdgl9TY=;
+  b=ZGUB9iwg2ridFGIjV+SEWBVEmCKxXFIz+HyyaKFee6xnDJeKWG5W1TDd
+   N6mNpi5CpexrtnYppvl+e42m8624R8P/qqQJmKJU6Mt25M+sqZTBgDb2n
+   zYDJ2LZkk1Z1E6y0dI0BBU83mYFHom+Ne4gHYt+Jf8wodZoFXzt4xZ7Kg
+   qXCI/Drfj0oxJwwknd/agPJT9eZEHirzXSME7KYzrqIeTiPaxG8VJqoGj
+   0glz9FvUclx6z/CMWyoTw12mg9+gEunA/ibyYA/NvncsxWN6dERJeQz5b
+   5fMkrwgkqL+26srvjQSk5yYG1W/PppJMrZSl+swkJ2OncJRnB3f0ByzLg
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="310054579"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="310054579"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 18:30:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="764145857"
+X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
+   d="scan'208";a="764145857"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga004.jf.intel.com with ESMTP; 15 Nov 2022 18:30:47 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 18:30:46 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 15 Nov 2022 18:30:46 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 15 Nov 2022 18:30:46 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IpYtDCTuiExP+wQMJ4R6T1t75EpvmGVCtMfesOZuE9lnr/+n0KzZYsy4foplCxcNeOql5Fw2zY5UpZpV//uVDAEx5xw6Abj50ehQqO0UlMMmJNUjDaCFHN6DN5jIZcP/gx/CblGtDdJTvnFF3BlyREXIKPV49yE/dv4nh2nUzolHmuz37MKcxB4JdaN+p9rMlwTEpzFqxcK2n1+4VtTcThz35xWHOM47vi867fwTXGtbYlN7iHzgEOTq58ivAm+HoltDEWls8Z4O8SRAbC1VZju6tpAaf0PmrFD9X35ir7VOzj2NwfK+IBsU55PQZ/8rHF3Vg5ZeWGXkO024L8zJ4g==
+ b=aqfGCR7eSw9kpfYmTQjloSE5sSJ1+NsdvY/XggXpEFcxOgiHGug0aBAl9EODJ/Ogz+Z5k0NZ2427pvNH/Q18rnt1I3aCgrLIwA6pkf+o1Y1Q/lUMvgH9xvSLLeH46bYVvK15cWeqiu7K1eXoocKbbZLRkdyJmBdoM+0JtWbOl9MavpV+YBI56jq4s8Jj31Z1ouxfqDBQgElZAQ2djIjM+77+NIZGHcN9vJE372ZI7QdM84qJ7KBniuoJ+/ULkYLcgLG5UYdvUErryF4XeFdB+6pxMmYNKVYZLBamte93EsjesLPJQlbq+XFCbqOuigMb3PvYwsNuvNT2ZvOJaKt+BQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EoPzmKITWQdQEVa4vtpaY+kjZxM9RiRFhzdvixg6M7Y=;
- b=ZAnVwSjELDTX3UoEf1BjjYDoybsuwyw2zh799GpeJWuvL9GykQvIstd2TYt73Q6Sxx285lqxHrQYo8XmXtNc6UR4xHdNSPBLSknQkdb45esRM6K32jOPxuR0EjGBYW7tzUkfQ3JFSphezthyF7kmJvN2Tg+zstTvpLQ1fxS0JWxIytBEDcI7ojOtFr8sd075a/M5i+OEegiMpIM2cPR+zs32cx1TdzJpdSPjcqpGDpVtJavlz4uscT2q13YAUz+iITv5a4AMWwu468Of/Ukfaz1Uy8qtENu0lWf/9hlNwYIatu3QOupf2Pi6Lw7D56/kpnYqTTnES2467/MioIAtbQ==
+ bh=4VKs/flcCnWOenf4V2UNsfylSxatu6Zt0UU7lBRgvLE=;
+ b=dxLvUH05qt2VeFMC4eqqWJ1Xf5bEGu87y6jKau933aX3T01Se5h5j80bWGPXkAeFvSPNg3jRLVm4dohVtvhbH+qAYIsFoQr+znu6uv+NVZZobdDzrbpru/4woHlwF3pklJIZrZnghL0yv2ZIAhkhMcn1git5VYUlDetweUIOigSfGVBSZDZk/O0GVMUTKD5KOMLZXGjhiAQfGVA74oXd7cg4I/wo6ErNMh7NCcADanbtOs5sUeHB+F7GScU9gqaABb8uuejnHkRFW6r3/sFVq8/ZNnK1I1s0ifQNep1T/kPdKV3oMx/fWvB7yo7h/z2M5Ez7Fq//DsBechWTepB3NA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EoPzmKITWQdQEVa4vtpaY+kjZxM9RiRFhzdvixg6M7Y=;
- b=lmEBVEeNVw8+sGEq33nSywBa9p6ccc0X8LM5x+GD8UyvKfheV38i5ciTLTvZfPyzDcp9JYUv+G3p5MpAWXAphXb+rGTglc104xfIOmkkETQyx9+e/MIb9XmFI6zFVwbf0NORF0Ka5LQ2+13T3zyHta2mBS4Gubis7GCHer0eVXrJDmVrZnI69ndbaUOXl2FlQ4lsakmUjX9RcDdf+zCGf/uNhYgPcAjzAgoNKaU4a7QT9g64EIR2i10rGbrrwAMA+fZB597AX6rxEJKHa8jeIM3VvBJYRogON/p/LdBb/JpTVROJwvjX/FRxQ2uTauNPnYZFXMeudH0GzHG/RXEDRg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW4PR12MB6729.namprd12.prod.outlook.com (2603:10b6:303:1ed::15) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH8PR11MB7047.namprd11.prod.outlook.com (2603:10b6:510:215::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Wed, 16 Nov
- 2022 00:32:45 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 00:32:45 +0000
-Date: Tue, 15 Nov 2022 20:32:44 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Wed, 16 Nov
+ 2022 02:30:38 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::737e:211a:bb53:4cd7]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::737e:211a:bb53:4cd7%5]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 02:30:38 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, Joerg Roedel
+	<joro@8bytes.org>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
 	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	David Gibson <david@gibson.dropbear.id.au>,
-	Eric Auger <eric.auger@redhat.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	"Martins, Joao" <joao.m.martins@oracle.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	Matthew Rosato <mjrosato@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-	"Liu, Yi L" <yi.l.liu@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda
+	<ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Shuah Khan
+	<shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>, Alex Williamson
+	<alex.williamson@redhat.com>, Lu Baolu <baolu.lu@linux.intel.com>, "Chaitanya
+ Kulkarni" <chaitanyak@nvidia.com>, Cornelia Huck <cohuck@redhat.com>, "Daniel
+ Jordan" <daniel.m.jordan@oracle.com>, David Gibson
+	<david@gibson.dropbear.id.au>, Eric Auger <eric.auger@redhat.com>, "Eric
+ Farman" <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, "Martins, Joao"
+	<joao.m.martins@oracle.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S. Tsirkin"
+	<mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>, Niklas Schnelle
+	<schnelle@linux.ibm.com>, Shameerali Kolothum Thodi
+	<shameerali.kolothum.thodi@huawei.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
 	Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 09/17] iommufd: Data structure to provide IOVA to PFN
+Subject: RE: [PATCH v4 09/17] iommufd: Data structure to provide IOVA to PFN
  mapping
-Message-ID: <Y3QvrFSqqxcT6I8A@nvidia.com>
+Thread-Topic: [PATCH v4 09/17] iommufd: Data structure to provide IOVA to PFN
+ mapping
+Thread-Index: AQHY8wv9weOL8WzpqkSvohFTeBt9pK499F6QgADXp4CAAIydYIAAyJuAgACOkcCAAA/8AIAAICfw
+Date: Wed, 16 Nov 2022 02:30:38 +0000
+Message-ID: <BN9PR11MB5276D8FD2991EB987680487F8C079@BN9PR11MB5276.namprd11.prod.outlook.com>
 References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
  <9-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
  <BN9PR11MB527638FCF4A1351DBA1A644E8C059@BN9PR11MB5276.namprd11.prod.outlook.com>
@@ -75,200 +96,104 @@ References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
  <BN9PR11MB5276CAB38B1691983A20B1D18C049@BN9PR11MB5276.namprd11.prod.outlook.com>
  <Y3Oqq74bKsQo1YMH@nvidia.com>
  <BN9PR11MB52763671DBCFA976C0038E6A8C079@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52763671DBCFA976C0038E6A8C079@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: MN2PR06CA0008.namprd06.prod.outlook.com
- (2603:10b6:208:23d::13) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+ <Y3QvrFSqqxcT6I8A@nvidia.com>
+In-Reply-To: <Y3QvrFSqqxcT6I8A@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH8PR11MB7047:EE_
+x-ms-office365-filtering-correlation-id: 420c432f-242a-422a-e337-08dac77a8c7d
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GWxwfBuqhX8COpsy3lQnnmDDduDjzgidgisrXEwzZUXvMYZyEeVhFg2Hg2AuOqkPFmiiUa1gieGx4T+CLu2diQOaqz2ZYVw69xSeOXAvuB5RwwzMTj6WkEq6a3uJfBcuj64VsKdb4KONtWibEl4FKx7qGwz7pT8ZtdVJKH/ZxIfuW8GysUhq+oNUbJ1ch7KKcQHna+mYSuoRUTAGo2J4rYI/Q7oDEbprNAPT085WedfJ0t+NFZSCborZf5PMXgBshpdlI/8mhg10InGHlBUhLVN5wMDfLPSDaKRbr5DI1OmzTcG7cABdeIFjn2OMe6rJmSGTVc0gQPMGfKTBHbZNzlqt9bXu3dC1K3Z7ytvaq3Fp5XkXDmd9XQqYIMGsxVgp+Wk2edKEpIA4zH7bC9CFCwU69qxE9UPg+U5cCB3S7oRfSseipzhS9cDQZ+MH2B69wjJyghhRI6k1CCzQ3qmP0eOnN71FJRzLQRHqvIxMmafcNua2yesYzcJEC2UlrkwM6PZ3eE39jW3B29Hm/hJtMt+Y5UQWGapo8zoYadfohWv/tT8q50ZJ3H7Vwzu8eoDc4+OUndf9Pe1DS7atJNgBddaNS7iFNxN0ZDPRTYOboinEQJZqwMP7Orp0gg4HdeJCqAJP11Kka3tue4zYYwpjw37WDhPErAeFQzY8Z+9iAVANhLyfEbnG5OdKYpiLtFU6Eh277MXAgVE6J5IVn5LoTJ+UPYQpBBR46lr2WbO0lS1Ei3sxqvAV+knK9CO+U0sXZx19WoAFHnvIwBHQ7uGz0Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(346002)(39860400002)(376002)(136003)(451199015)(7696005)(2906002)(4326008)(66556008)(64756008)(66446008)(8676002)(66476007)(316002)(26005)(9686003)(76116006)(38100700002)(7416002)(66946007)(7406005)(8936002)(186003)(6506007)(41300700001)(52536014)(38070700005)(122000001)(86362001)(82960400001)(33656002)(5660300002)(55016003)(478600001)(71200400001)(6916009)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/bP2MsEM9nJVD13DwmpHaFJp5Feyh7G+aec6xlLh07ioDDcm5Zbc83ZhS3Cg?=
+ =?us-ascii?Q?S3E/5Fad9F7ABE2YWOrIr3bzSFhdZIOQqHlG8/3b8vZHYg69iiC2M1rPiBuv?=
+ =?us-ascii?Q?46I0puIG8x13wGSIBdktlIXjUvV9qk/iIaw8W7JjGdxEL+06XT7NC0Jy/PK9?=
+ =?us-ascii?Q?FgIP5zKGC7hPO4RMrKAsdJ9rcKVMpHaSH23JGy/4a48pKUwgE2w63gi5b3aA?=
+ =?us-ascii?Q?1p6zk+t0KRTQp23w5DPpvmvRFCQY8852u4Gh1+SnlbucoRxQYjswXISpVsOt?=
+ =?us-ascii?Q?Uwtu/9sC/QfMjVk8PdY0BcXgJmVjesZZvUlZq9i0F9tDtD/tv13303BL1vIY?=
+ =?us-ascii?Q?CAYFw8jPlprsfHoWV+0FAnbI7lji3wY6DFXYSN1rprVHpxx12/WtZHTPZGok?=
+ =?us-ascii?Q?bRXN25xp3WwCqAloOp72zYYE2ltnFUsEHd1rsPLDlTnYH8gIQkNcHGvu4LkO?=
+ =?us-ascii?Q?cCpUKNJaA8e4JmaNjbvoVAcMsg+IES0r4QX44lOSrTDm0gFflorK1zcUT88m?=
+ =?us-ascii?Q?F0mkwGv20G4gMB1ofUBGkw+we5nfyTetax0sxNIXroE+1Zkz96dYSyKzwnq+?=
+ =?us-ascii?Q?rkf9QgwN7uXaPLKwZLld4PUhQnZWTcxias8HoVlOC8RhcZkMWxtr8w947fre?=
+ =?us-ascii?Q?0lTQQx6nfnpiOrh3BhT7OfayUyZJlm0Q+xE94lvM0WRCXlLc3GIXCBEUiIgj?=
+ =?us-ascii?Q?9PdFbNUbXveWfpE2GZfpR4EYdAp/wQ55EonTiIHBusRYoIS3JzyA5qiUNRh5?=
+ =?us-ascii?Q?3Hcm09Gh6RyFyCat5sKvZj+dAaFj2a7+7eJGxDeLbeAHEfz/irj7dTJQoqhI?=
+ =?us-ascii?Q?ao5Dm2TB4A2l2jVTRoNTsr373yGgR4meTzUiPqHNIkkqRn8cw4UxCwOwdg57?=
+ =?us-ascii?Q?Pn4F63zg7jl6K6cJNeMdJjrNajKMhPq/kgacBJPyHVaghm8VixGQPCKPQpfR?=
+ =?us-ascii?Q?LGO/yHkmFKnoZ+NJFb130ndSgjvATeXgQe61DDMMde0YyacO6YqujplKQhJV?=
+ =?us-ascii?Q?ZPG1IyfgAFpb2LOTSK3zYzDB0DtMJ6JF4cRnhlJ3l57hW9UMISdYm0KcC/x1?=
+ =?us-ascii?Q?TKLj9EJ/O1AuJOIaUA1mF/USTSsqvBYR6t1mbMp474thhPRzji1gj0YPz9FP?=
+ =?us-ascii?Q?2/3I0m0FZORnX37XyvkQkn5a3gUexLIS4CrwPb0DipUuM9blp57KGoxPQhG1?=
+ =?us-ascii?Q?3YmR5/Cs2r/LfYSe2XMSOWOgrLN7IMhM1/ImwtNRKKpey3qHJ5/ZGSYlG2RM?=
+ =?us-ascii?Q?sDVmu1pmUKElivj2yDQD/ZehzwZqYLDulsI3YVvtiAysoYDBhX0zUUTWByf+?=
+ =?us-ascii?Q?70m76cF7dFye6ERjLq5RBmuwcsELiKGUTPYeOHjY0LQNGQ7MG9rH9WfIm9+e?=
+ =?us-ascii?Q?MUJ1KDbxn+2exjxsL1826oLGt6GQ6M8w1H+ALMF8ZPrCLcXSs4B7dYZsPyW7?=
+ =?us-ascii?Q?wJSOdFSLUUBL4wzRCrUKlZpTb17vY8lwDpQk+w+C0O0l7pq0kDEiid6ecqD5?=
+ =?us-ascii?Q?usoeQmtJKeXeXDRKdWGjwciRFw8pZWS+5P6pMXXG6tgMdkQf50EoA2jlkxct?=
+ =?us-ascii?Q?JkOw9Ci+egHq+vpVvzDorIIQx7hpxml0YpFatew+?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6729:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae580299-3983-4f4e-bb6b-08dac76a1472
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	FxqeFi0GC3N42E5HmuJSdsA7vWA69xCPYwDto7ZLyI8vR8Nv0fT/SGsnfPS1Zzgij0aF+y3s1FL/0z3EWKW+J3Omn4deYLhs5CcSrDtudRFIgVAxFax9qgkD9enfjyAfTQtgoKBtX161DWeoZj4ntiLtknUrbGeRAjE85AF0T/fynOQQ3ktWyUdu/CeLAJDnpV6XMhIBhBWDM8k7T499NlWV+ULs2LXBH8ngVHc90R9kyTrUTztamuRv1/l8qGxvMPCRuD+iNnhRdC3l6ZQWGL3d+tL45t8xIj2sM3jaWaGo8xU7P+zn8lZm9AtTo7EOadADRb8C61nSTnPzfkh4lWMhox2bgxqfC897Wu/iGvij/lxMZtpoUuZJ2/6UgU5uZ3fEjQt8wqn95B2dSCPRVhO7gPX1RCoOgrhVRJJmjs8Ih5XHnr2zrRicEPB5eAF9C0o5rdKWPrZ2ZukINKiRfqlKSscz/rUOxO66Flb9aATpBFX+yRGdVXq1R83QVno98yDVpGXbXdOHX/ZGg+x5SDSCjJx0d+DYGW1yM5/9WUr4IhJFvn2gQVelzYst5RSJyzmXEQlzuBto6P5418Flu6b/hnzzc02660sm9NVvTrep7swo6O//xAUBWv5jrWXTJf+u0ir0cTRL598IPXXkej3Zrbby79WBRWYRkrD/XRMsX86xHYk3aloviXXpZeROYIqiFRIvL/xBsdCcpi1Z/A==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199015)(478600001)(6486002)(54906003)(86362001)(6916009)(38100700002)(316002)(7416002)(7406005)(83380400001)(6506007)(8936002)(186003)(2616005)(5660300002)(66556008)(66946007)(4326008)(41300700001)(8676002)(36756003)(66476007)(2906002)(6512007)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Lz/L7JIuekRltsZsF9mpi+XN/bwFASzbCZP8knOE59IMvGKuCfkKJbIS834X?=
- =?us-ascii?Q?+lFRudssu2IUueWR/D/brFZjnX/7vyNHbykJ8RQuqVtpqS+pP7uKmgUPbbWA?=
- =?us-ascii?Q?9kWdhOb5zGCViGtryD+mQPWUH5XftH9NqIy8F++cQyJWd1uEXECRD0xh8gq7?=
- =?us-ascii?Q?11TQxRz+oPPVDCtCdr/GYOuzJymQfY6Vi5FbuKHQ5Qi93RvDgTQGjK3gdJ3t?=
- =?us-ascii?Q?DHDHM3LwfBgYy5P4BIUfEMQPJKTNZRCHHGr6eTbVRvp84ly54kvbALe0ymsG?=
- =?us-ascii?Q?BZqgNHf9XjOVzwObGV8+YUgsXNt1IM9LIju0GHEVekzALdIZ2S7UuRRB2HYb?=
- =?us-ascii?Q?/dTHl2Jn5ZjwzN/r8xCKFT/qi7ck7KtkpJob5HHIVhnY/cR+hVp//RepY/7M?=
- =?us-ascii?Q?iuGPQu8UZ0FMJpxhzPWiEbSPy/UiwJIif8SOIQ0ksmq5COTh4K2llTXBPT7a?=
- =?us-ascii?Q?Fiwajba0DvUXvnPOFqEw5oA28rsGGAjBbNZUnF72u5Pdl7YHe4JoCwy92QVX?=
- =?us-ascii?Q?xwnSp92gTfGjf1CVT2Xg/p3VuyBRpi7N5DwSy9NCexbyar5IbUGCeZYDDM0v?=
- =?us-ascii?Q?NKaeaLAcQY6KpYWOXhxDeeq/DyoibHzWT3bklzNrg/ICa3+VbPaNa4e38EHF?=
- =?us-ascii?Q?ivZgrEGo98s+z7VPOTHY0F7pycMvQpNATNZOjiQwXE7mpucWERhWvsUNWF22?=
- =?us-ascii?Q?g1RtJrWznFK4CTueMJQRyGIZSp1vdya9udjWUUs40xBY+H14XsCHvXaIZsWf?=
- =?us-ascii?Q?SEi+8cmedfl2RpQwG+E6laV/Vdm276EVQP7Ww+Dwm+6MKMV+2D4vaUupv9Q3?=
- =?us-ascii?Q?q0uNpPJ7Zq/C9qE8w/aKH9z9CzxrPOtvHUUMWlKlvqWVdb1hESl9dcv/88qB?=
- =?us-ascii?Q?7yZA2/UYop7a/qX1UDdoV/wvVTOvHNewZLhb/7OSMb6ZiZoNVm0YsrzVAAx/?=
- =?us-ascii?Q?lbLIsEsJ9i31C+GIb6yjpuDnNZFap3oargGDAfvEd+uArZDIg/GcbgK7ueSQ?=
- =?us-ascii?Q?RCelqY+hFq6b3cswVp2Wjj9Lo2PdogQJ/VBjsAL+dp4AkFaCFxPwzXDVe6Wh?=
- =?us-ascii?Q?6KnezKnkEYgCg7s7J74XO/n7XsDS6Z+6UzOLvgGx1qt5pH77H7XkdhfTVzPL?=
- =?us-ascii?Q?oDZVaFDCpW0r4doeCO8RjsVzww1X1+Sw6iGjPW8PMUxs2J0+/KOxloAOsBiS?=
- =?us-ascii?Q?Ef8FZEWEBGteDMJAtDbw7AUSYYmdN1p1f0IRZv6V/7XtMmqh4bY609y2vfR9?=
- =?us-ascii?Q?DkeXa+bHyuEHVxUXX0sQtuOkvhuUxPzRkrX8texfD1UII+pTq3UY8d84hjDy?=
- =?us-ascii?Q?x3lUTq8MM4aphC3pCWz5ctWCmJYAiOgspVOzXLxbwfAql5Av7+cHnVg/sa9V?=
- =?us-ascii?Q?sWxSTM9nZrhyT5GwSMGFcdgV057XpNfV+GoNX04Yetyw7lpLYTCi+GaeOVxh?=
- =?us-ascii?Q?x5Hk7GuM8LVkvawH5TIFIr1MkaEb0BVznikID71+nPCx+NHNyK1mGBEe46Tv?=
- =?us-ascii?Q?N066zNpBDWIDK998ekkytD32xGup0tjedx63TWDuacPokM+5x3oV0qmPDGDS?=
- =?us-ascii?Q?LvKDynxX9yJCLYOiqhE=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae580299-3983-4f4e-bb6b-08dac76a1472
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 00:32:45.2225
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 420c432f-242a-422a-e337-08dac77a8c7d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Nov 2022 02:30:38.3188
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5Hmf5ild6CTdGGIUioOvJbKTaeSOYiZoE4IYBN5WXB1qV0x3j1qhpJJccgn+kwv5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6729
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zZwEPId9nhZ6boQTYzgYixmhi92VdjQ8KcCJAq+cycVmIYuSDVCVbPVRsHrQd5N/KsRL38kRTi+nphOdyzTsaA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7047
+X-OriginatorOrg: intel.com
 
-On Wed, Nov 16, 2022 at 12:09:52AM +0000, Tian, Kevin wrote:
-
-> > > > 0 is commonly used as an errant value for uninitialized things. We
-> > > > don't automatically map it into a process mm because it can cause
-> > > > security problems if we don't trap a bogus 0/NULL pointer reference.
-> > > >
-> > > > The same logic applies here too, the allocator should not return 0 to
-> > > > reserve it as an unmapped IOVA page to catch bugs.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Wednesday, November 16, 2022 8:33 AM
+> > > This is the comment:
 > > >
-> > > CPU doesn't reference IOVA. Where do such bugs exist?
-> > 
-> > SW is always buggy and SW programs the DMA address, so it could leave
-> > a 0 behind or something during the programming.
-> 
-> address 0 is never a bug in DMA to IOVA. if it is, it will be out of the
-> aperture or in the reserved IOVA list. 
-
-It is a SW bug in the sense that 0 is commonly an uninitialized value or
-uninitialized memory.
-
-> DMA API is also a auto-iova scheme from driver p.o.v while it doesn't
-> impose any restriction on address 0.
-
-It probably shouldn't do that. It also allocates -1ULL which causes
-real bugs too. :(
-
- 
-> > > > > > +		if (!__alloc_iova_check_used(&allowed_span, length,
-> > > > > > +					     iova_alignment,
-> > page_offset))
-> > > > > > +			continue;
-> > > > > > +
-> > > > > > +		interval_tree_for_each_span(&area_span, &iopt-
-> > >area_itree,
-> > > > > > +					    allowed_span.start_used,
-> > > > > > +					    allowed_span.last_used) {
-> > > > > > +			if (!__alloc_iova_check_hole(&area_span,
-> > length,
-> > > > > > +						     iova_alignment,
-> > > > > > +						     page_offset))
-> > > > > > +				continue;
-> > > > > > +
-> > > > > > +
-> > 	interval_tree_for_each_span(&reserved_span,
-> > > > > > +						    &iopt-
-> > >reserved_itree,
-> > > > > > +
-> > area_span.start_used,
-> > > > > > +
-> > area_span.last_used) {
-> > > > > > +				if (!__alloc_iova_check_hole(
-> > > > > > +					    &reserved_span, length,
-> > > > > > +					    iova_alignment,
-> > page_offset))
-> > > > > > +					continue;
-> > > > >
-> > > > > this could be simplified by double span.
-> > > >
-> > > > It is subtly not compatible, the double span looks for used areas.
-> > > > This is looking for a used area in the allowed_itree, a hole in the
-> > > > area_itree, and a hole in the reserved_itree.
+> > > /*
+> > >  * This is part of the VFIO compatibility support for VFIO_TYPE1_IOMM=
+U.
+> > > That
+> > >  * mode permits splitting a mapped area up, and then one of the split=
+s is
+> > >  * unmapped. Doing this normally would cause us to violate our invari=
+ant
+> of
+> > >  * pairing map/unmap. Thus, to support old VFIO compatibility disable
+> > > support
+> > >  * for batching consecutive PFNs. All PFNs mapped into the iommu are
+> done
+> > > in
+> > >  * PAGE_SIZE units, not larger or smaller.
+> > >  */
+> > > static int batch_iommu_map_small(struct iommu_domain *domain,
+> > > 				 unsigned long iova, phys_addr_t paddr,
+> > > 				 size_t size, int prot)
 > > >
-> > > the inner two loops can be replaced by double span, since both
-> > > are skipping used areas.
-> > 
-> > The 2nd loop is looking for a used on allowed and the 3rd loop is
-> > looking for a hole in reserved. To fix it we'd have to invert allowed
-> > to work like reserved - which complicates the uAPI code.
-> 
-> The 1st loop finds an allowed range which can hold requested length
-> 
-> The 2nd loop finds an *unused* hole in the allowed range
-> 
-> The 3rd loop further looks for a hole in reserved.
-> 
-> last two both try to find a hole.
+> >
+> > I meant a comment in iopt_calculate_iova_alignment().
+>=20
+> How about "see batch_iommu_map_small()" ?
+>=20
 
-Ooh, OK, I read that in the wrong order, you know I looked at this
-many times to see if it could use the double span..
+yes, that works.
 
-Ugh that is a pain, the double_span.h isn't setup for two .c files to
-use it.
+btw is there a better name to reflect strict PAGE_SIZE only?
 
-Anyhow, so like this:
-
-	interval_tree_for_each_span(&allowed_span, &iopt->allowed_itree,
-				    PAGE_SIZE, ULONG_MAX - PAGE_SIZE) {
-		if (RB_EMPTY_ROOT(&iopt->allowed_itree.rb_root)) {
-			allowed_span.start_used = PAGE_SIZE;
-			allowed_span.last_used = ULONG_MAX - PAGE_SIZE;
-			allowed_span.is_hole = false;
-		}
-
-		if (!__alloc_iova_check_used(&allowed_span, length,
-					     iova_alignment, page_offset))
-			continue;
-
-		interval_tree_for_each_double_span(
-			&used_span, &iopt->reserved_itree, &iopt->area_itree,
-			allowed_span.start_used, allowed_span.last_used) {
-			if (!__alloc_iova_check_hole(&used_span, length,
-						     iova_alignment,
-						     page_offset))
-				continue;
-
-			*iova = used_span.start_hole;
-			return 0;
-		}
-	}
-
-
-> > This is the comment:
-> > 
-> > /*
-> >  * This is part of the VFIO compatibility support for VFIO_TYPE1_IOMMU.
-> > That
-> >  * mode permits splitting a mapped area up, and then one of the splits is
-> >  * unmapped. Doing this normally would cause us to violate our invariant of
-> >  * pairing map/unmap. Thus, to support old VFIO compatibility disable
-> > support
-> >  * for batching consecutive PFNs. All PFNs mapped into the iommu are done
-> > in
-> >  * PAGE_SIZE units, not larger or smaller.
-> >  */
-> > static int batch_iommu_map_small(struct iommu_domain *domain,
-> > 				 unsigned long iova, phys_addr_t paddr,
-> > 				 size_t size, int prot)
-> > 
-> 
-> I meant a comment in iopt_calculate_iova_alignment().
-
-How about "see batch_iommu_map_small()" ?
-
-Jason
+disable_large_pages literally implies no >PAGE_SIZE alignment. This is the
+confusion easily raised why it also refers to no subpage alignment.
