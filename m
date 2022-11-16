@@ -1,52 +1,32 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DBDD52D
-	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 19:01:00 +0000 (UTC)
-Received: by mail-pg1-f172.google.com with SMTP id s196so17557956pgs.3
-        for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 11:01:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+m20rR3qhKhCrc29Q5gHN0J/IycK26+ExfyYRWAbxM=;
-        b=oPjKBUJip/NbE0rH0KF9GTjzHqfPLWKTiHey//bhup5ED99PU9TNEQMSrYZgx5MCBN
-         7IwZmAtSSdsfFSKdujd1ZdetFBP20bZRhPbT9qXb1ZF7vkOshGLYSWApXRY6aIPn/yog
-         O7VytRKfLSQaXk8Uol773dYXc+9VGmQoWCPTc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+m20rR3qhKhCrc29Q5gHN0J/IycK26+ExfyYRWAbxM=;
-        b=SpkmEvNTObO9I5jXDrvXWrCXiWepilDI1ybpHIFxnXW0U42Bm+USYoS2fITD6/MzUC
-         3/hPClfQvRtN1tgkS2s427ZQW++4VSvTtpajIKgMI0Jd33PeQFSBYaxIU2o7aaH2j70f
-         Ih97hG6lJ6tRYQss8m2Pqa8hRqDHC3kbfDWfa5eD3TSe3SSZpBycJm7eUdGmvngkvqfO
-         1D9a0VQ/bLCVbNs1OKV7puuNOdYx2ppHIr1C55BLBqoQ3C+TZtwqFcj2L1abFRVLK4Cy
-         5HS3pEDUjYYdQ8OiaRzHf6d8BNXR9jkHZpcF8oHITsgKHaaa80pQzxli3cAHlEFk0IYr
-         CuGA==
-X-Gm-Message-State: ANoB5pli9sIHPImTCN5xDZpDFaBWQv9gGncF6IK4mhm+3BVojSIDV4IR
-	d2SrYDzJttpTWtprHFl7j1YuUH8NtsbyIA==
-X-Google-Smtp-Source: AA0mqf4p6evEu4ZN/N8pP4qI1fAjq39YR/zQPw1X1lUbbEqe/ZUAu/HpErifB2QIOfINRYqX5Sg4RA==
-X-Received: by 2002:a63:b5b:0:b0:46e:a4ed:467e with SMTP id a27-20020a630b5b000000b0046ea4ed467emr21973376pgl.319.1668625260178;
-        Wed, 16 Nov 2022 11:01:00 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z19-20020a630a53000000b00476db6fe510sm2287032pgk.75.2022.11.16.11.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 11:00:59 -0800 (PST)
-Date: Wed, 16 Nov 2022 11:00:58 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29606D53E
+	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 19:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDBEC433B5;
+	Wed, 16 Nov 2022 19:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1668627251;
+	bh=PY1YWCuGuthzJzRW4kQrX+eJXbcYGVqknk9wcGmeP8s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n/laLDUGBG2NPNvbDU8UiAdIjL6xbML6f0Zuk4V05XoOHwITkCMbtmKVCQmJOs64J
+	 3M6myFNNrKh6OyT6fqZpODve0dZBZr9aBWfAjo5DDmcP23NCrl9T2OW3AUK2NN8XPU
+	 Xq+roVn5Rob7Hies4wqwRU8ybASvRUwUMQBE6qHGs0VkFe1AdPtsVE31zptmc//t9S
+	 I/3oREsbLWWRiIX6Rnz1kRDB8JmCeD/o0oriaQDvK1CLEg+rrXqHnoV8USOcPFxzUB
+	 moTnxsDFH4X8fYL/IJExW68OLoxCBZjmBUMEgo83K91JZgYjycsBH/Klh6Sak3l4rK
+	 4shETiVQOwKmQ==
+Date: Wed, 16 Nov 2022 12:34:09 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Stuart Hayes <stuart.w.hayes@gmail.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and
- AR=llvm-ar
-Message-ID: <202211161056.1B9611A@keescook>
-References: <20221027162839.410720-1-masahiroy@kernel.org>
+Subject: Re: [PATCH] cpufreq: ACPI: Remove unused variables
+ 'acpi_cpufreq_online' and 'ret'
+Message-ID: <Y3U7MWezkc8aizuo@dev-arch.thelio-3990X>
+References: <20221108170103.3375832-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,86 +35,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027162839.410720-1-masahiroy@kernel.org>
+In-Reply-To: <20221108170103.3375832-1-nathan@kernel.org>
 
-On Fri, Oct 28, 2022 at 01:28:39AM +0900, Masahiro Yamada wrote:
-> Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
->   /usr/bin/ar terminated with signal 13 [Broken pipe]
+Hi all,
+
+Small ping, was there an issue with this change? It seems pretty
+straight forward to me and it is wreaking havoc on our build matrix due
+to -Werror.
+
+Cheers,
+Nathan
+
+On Tue, Nov 08, 2022 at 10:01:03AM -0700, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> Nathan Chancellor reported the latest AR=llvm-ar shows
->   error: write on a pipe with no reader
+>   drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+>           acpi_cpufreq_online = ret;
+>                                 ^~~
+>   drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 'ret' to silence this warning
+>           int ret;
+>                 ^
+>                   = 0
+>   1 error generated.
 > 
-> The latter occurs since LLVM commit 51b557adc131 ("Add an error message
-> to the default SIGPIPE handler").
+> Both ret and acpi_cpufreq_online are now unused so they can be safely
+> removed, clearing up the warning.
 > 
-> The resulting vmlinux is correct, but it is better to silence it.
-> 
-> 'head -n1' exits after reading the first line, so the pipe is closed.
-> 
-> Use 'sed -n 1p' to eat the stream till the end.
-
-I think this is wrong because it needlessly consumes CPU time. SIGPIPE
-is _needed_ to stop a process after we found what we needed, but it's up
-to the caller (the shell here) to determine what to do about it.
-
-Similarly, that LLVM commit is wrong -- tools should _not_ catch their
-own SIGPIPEs. They should be caught by their callers.
-
-For example, see:
-
-$ seq 10000 | head -n1
-1
-
-^^^ no warnings from the shell (caller of "seq")
-And you can see it _is_ being killed by SIGPIPE:
-
-$ strace seq 1000 | head -n1
-...
-write(1, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14"..., 8192) = 8192
-1
-write(1, "\n1861\n1862\n1863\n1864\n1865\n1866\n1"..., 4096) = -1 EPIPE (Broken pipe)
---- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=3503448, si_uid=1000} ---
-+++ killed by SIGPIPE +++
-
-If we use "sed -n 1p" seq will continue to run, consuming needless time
-and CPU resources.
-
-So, I strongly think this is the wrong solution. SIGPIPE should be
-ignored for ar, and LLVM should _not_ catch its own SIGPIPE.
-
--Kees
-
-> 
-> Fixes: 321648455061 ("kbuild: use obj-y instead extra-y for objects placed at the head")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1651
-> Reported-by: Jiri Slaby <jirislaby@kernel.org>
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Fixes: 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1757
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
+>  drivers/cpufreq/acpi-cpufreq.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> Changes in v2:
->   - Update commit description to mention llvm-ar
-> 
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index e90bb2b38607..e9e7eff906a5 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
->        cmd_ar_vmlinux.a = \
->  	rm -f $@; \
->  	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> -	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
-> +	$(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index c8fdfcf659e6..74ef0e05ff7b 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -953,12 +953,8 @@ static struct cpufreq_driver acpi_cpufreq_driver = {
+>  	.attr		= acpi_cpufreq_attr,
+>  };
 >  
->  targets += vmlinux.a
->  vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
-> -- 
-> 2.34.1
+> -static enum cpuhp_state acpi_cpufreq_online;
+> -
+>  static void __init acpi_cpufreq_boost_init(void)
+>  {
+> -	int ret;
+> -
+>  	if (!(boot_cpu_has(X86_FEATURE_CPB) || boot_cpu_has(X86_FEATURE_IDA))) {
+>  		pr_debug("Boost capabilities not present in the processor\n");
+>  		return;
+> @@ -966,8 +962,6 @@ static void __init acpi_cpufreq_boost_init(void)
+>  
+>  	acpi_cpufreq_driver.set_boost = set_boost;
+>  	acpi_cpufreq_driver.boost_enabled = boost_state(0);
+> -
+> -	acpi_cpufreq_online = ret;
+>  }
+>  
+>  static int __init acpi_cpufreq_init(void)
 > 
-
--- 
-Kees Cook
+> base-commit: 21cdb6c18f85fe538ca8740bc79f11fbe08d0197
+> -- 
+> 2.38.1
+> 
