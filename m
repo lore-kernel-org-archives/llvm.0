@@ -1,141 +1,137 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E172CA4
-	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 23:12:09 +0000 (UTC)
-Received: by mail-pg1-f174.google.com with SMTP id q71so348717pgq.8
-        for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 15:12:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03C415C92
+	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 23:16:39 +0000 (UTC)
+Received: by mail-qt1-f179.google.com with SMTP id z6so126395qtv.5
+        for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 15:16:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lOpUt4MEJD12Cx7f2vbHFt5WAvFTf2t/WiLzrqLvSWE=;
-        b=DIlI543KOUa7IEfy+QPTu5triJKIlMWH2SLf+ZUpGlw7Cbt+AtaIPQ6401eYKCACSq
-         M/orPGBoXiCcalGNKWlsY7xgn5CPX1tqN+bw2DtWJtQC2Zy0xii7b3bkJiL00eqA3y+l
-         uNcLndMqQtdewduelBatcW1vbHZM2aw+vE19i4sFnzegEnA0xxRmuUkifWwASF7NILHB
-         9nh631rIt8XQMdlB0DjEazJzWrlp9qheZyCXOYHusv8eYqvdarIrQubBVI4A1SagTKk9
-         GRKPAZtfcy7WRE4C/X9mf6pNGEFEl4chz9AhjQTl6zFz1j+U6o6XGgd9foKWvLsBFbQT
-         edkA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E5ndd7ei1Io74IlQNCg2RVaEkTuSWT2qBGbUwsf9a6A=;
+        b=qu9xX9JFKy5ec+Zn86JfnVrvTPOeTV6dVLitbqBNEV5H6OxO3M0ZkQrwKxLpYVE60d
+         eh6dQbJmCtqv4299RJrP2Q4UVMtWv32gv5yIg4cwNS5IEd39y+miraEXBhsHgJjGLrQR
+         yZEU6OEj32doL+QijPBX46ZSEkDtKBC0XVYkSGr5s+1yrSHp0IRU6s54ZJ80arhH17GA
+         V1bttUa9WhFN1zSiIHm7Iphq3w1jQGOeVV+a9pAHqpGJ/Gddoj2EqgxAT5VOz6rjns3q
+         eghi64+NCseYt02+rf7IYkPuyqMzDFdKdglbAXbpvdG2h8CSgvQc5E6Q7vMsLu+WF3nu
+         /6vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lOpUt4MEJD12Cx7f2vbHFt5WAvFTf2t/WiLzrqLvSWE=;
-        b=jyjN9MzUAvsty679n7oCRBwCEPUWKDvToKUgFcVVYOFX8d82c5qHFkP/NmL4RA+4Mz
-         XhFh3/GCNqG3n7OwYfyV+3/Xmc79XxD7SRphYJb8fOShKgHci8ZWsArEhptMZkXrXSx+
-         3R+ESqDo0to5X+K5DkjcjjdfwDoUY6F2B2tqolQ31sbChLRdMlOt2L0BJEC3pmRMZfv/
-         oTf5MalXHtkFFC0EzFx+1FxyatqFmNNpPvMKbIsfxOSNLk8KRB9WrRxKjnpSCmGVaqPZ
-         LxBVlbM+sf+C0IB5ZqNeHuSfWMuxzJBE9IzU8rygGOV8WvZbHJ9lSWXRVk2WGPuoZci1
-         +g3w==
-X-Gm-Message-State: ANoB5pmL8ePWBXL7dSyy05OOD0H2ceG+JmURCs+HEVA+RrPShHkpBxZY
-	936Q/HxcLa0XYqXSzfzhCESKONY8NZrNDCnJACZNDQ==
-X-Google-Smtp-Source: AA0mqf43ki7XjbQ2ZiztfxEjqkL5NoA1N+7JHmbpV5rb8PW1UOPdvdRwzl+zbjSFf1fz965IGQwQwJlG5HJ9Yak2ZFY=
-X-Received: by 2002:a62:1a05:0:b0:56c:1277:d056 with SMTP id
- a5-20020a621a05000000b0056c1277d056mr295541pfa.23.1668640328441; Wed, 16 Nov
- 2022 15:12:08 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E5ndd7ei1Io74IlQNCg2RVaEkTuSWT2qBGbUwsf9a6A=;
+        b=oguZB2JbyzPMUiCrJRgAjDroruhSOKDmw4S801PYNY0ZuuWQ7tAPgaEmiWT3iFGyzX
+         G/iK/Bf6ngMkeP3LqeAUDUl12rGDdM16+VwqhNRl/yrDou3omuERZrNnZOdOWBZhSW5S
+         X+usE9rjQeFdGam8nWpTMjAJewM1Y5Yv0e8tJB2Nbc3VzN0gbwmRnXj3IYKsdt+6EQDk
+         x922ZBU3t360wdZ+mzj4xuOObIH/pSEhtQFNjUOtRFPuhHy6dny9lo9fwCy5WIRpXH59
+         WcDMiCceTN8F+M+kLCZyieZt5cFRJEskgWk9oiRuesW9nSLOGljLpTuAF2ZEvTgdOzt6
+         +shg==
+X-Gm-Message-State: ANoB5plSu6N3wtS+HPgHYyjci4IGeGzEPj37E9SgTVz4UwHq2MWOeWkN
+	gzhDAp9uWrYlIG01o/HD/Fg=
+X-Google-Smtp-Source: AA0mqf6NoC0bvV/GDfS29nJWFyzAeHkUloMtVDeDFqpmF9D05opjhaNqxB7WK5ftx8vvcDmG0BIz9w==
+X-Received: by 2002:ac8:738b:0:b0:3a4:f6ab:6670 with SMTP id t11-20020ac8738b000000b003a4f6ab6670mr144692qtp.283.1668640598547;
+        Wed, 16 Nov 2022 15:16:38 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id e7-20020ac84b47000000b0039953dcc480sm9430138qts.88.2022.11.16.15.16.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 15:16:38 -0800 (PST)
+Message-ID: <15631f6a-dae6-b996-6e74-1bf7304b30a0@gmail.com>
+Date: Wed, 16 Nov 2022 15:16:32 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: kbuild: check the minimum compiler version in Kconfig
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Paul Gortmaker <paul.gortmaker@windriver.com>,
+ Nathan Chancellor <natechancellor@gmail.com>, ojeda@kernel.org,
+ sedat.dilek@gmail.com, clang-built-linux <llvm@lists.linux.dev>,
+ Manoj Gupta <manojgupta@google.com>
 References: <fe18ed06-12f1-1dcb-71ee-aec5a5d656ea@gmail.com>
  <CAKwvOdnx_hyf=3DZtU_P8icWa07jf1+baNgM9MBh_ojE-EK5=A@mail.gmail.com>
- <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com> <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
-In-Reply-To: <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 16 Nov 2022 15:11:57 -0800
-Message-ID: <CAKwvOdmP+VgjsJGuvuC9q3RbwpqUwoNg6cyv3f5SjAqLc2K3_Q@mail.gmail.com>
-Subject: Re: kbuild: check the minimum compiler version in Kconfig
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	Paul Gortmaker <paul.gortmaker@windriver.com>, Nathan Chancellor <natechancellor@gmail.com>, 
-	ojeda@kernel.org, sedat.dilek@gmail.com, 
-	clang-built-linux <llvm@lists.linux.dev>, Manoj Gupta <manojgupta@google.com>
-Content-Type: text/plain; charset="UTF-8"
+ <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com>
+ <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
+ <CAKwvOdmP+VgjsJGuvuC9q3RbwpqUwoNg6cyv3f5SjAqLc2K3_Q@mail.gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAKwvOdmP+VgjsJGuvuC9q3RbwpqUwoNg6cyv3f5SjAqLc2K3_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 16, 2022 at 3:10 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Nov 16, 2022 at 2:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> > On 11/16/22 14:48, Nick Desaulniers wrote:
-> > > On Wed, Nov 16, 2022 at 1:48 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> > >>
-> > >> Hi Masahiro, Nick,
-> > >>
-> > >> The compiler version check performed with
-> > >> aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum
-> > >> compiler version in Kconfig") can be defeated and prevent running the
-> > >> *config targets if specifying LLVM=1 on the command line, in that way:
-> > >>
-> > >> BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images
-> > >> LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C
-> > >> /local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom
-> > >> HOSTCC="/usr/bin/gcc"
-> > >> HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache
-> > >> /usr/bin/gcc -O2
-> > >> -I/local/users/fainelli/buildroot-llvm/output/arm64/host/include
-> > >> -DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib
-> > >> -Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib"
-> > >> ARCH=arm64
-> > >> INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target
-> > >> CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-"
-> > >> WERROR=0
-> > >> DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod
-> > >> INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
-> > >>     UPD     scripts/kconfig/mconf-cfg
-> > >>     HOSTCC  scripts/kconfig/mconf.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/checklist.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/inputbox.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/menubox.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/textbox.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/util.o
-> > >>     HOSTCC  scripts/kconfig/lxdialog/yesno.o
-> > >>     HOSTLD  scripts/kconfig/mconf
-> > >> ***
-> > >> *** Compiler is too old.
-> > >> ***   Your Clang version:    10.0.0
-> > >> ***   Minimum Clang version: 10.0.1
-> > >> ***
-> > >> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
-> > >>
-> > >> Here, the compiler check is actually checking the host compiler clang
-> > >> version installed on my Ubuntu 20.04 system, as opposed to the cross
-> > >> compiler clang version that is being used.
-> > >
-> > > LLVM=1 will use `clang` as found by your $PATH.  Where did you express
-> > > to make what the "cross compiler clang version" is? (And why do you
-> > > set HOSTCC three times)
-> >
-> > We are setting CROSS_COMPILE to express the cross compiler clang prefix
-> > to use.
->
-> Can you try setting CLANG_PREFIX rather than CROSS_COMPILE (to the same value)?
->
-> CLANG_PREFIX=/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-
+On 11/16/22 15:11, Nick Desaulniers wrote:
+> On Wed, Nov 16, 2022 at 3:10 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>>
+>> On Wed, Nov 16, 2022 at 2:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>
+>>> On 11/16/22 14:48, Nick Desaulniers wrote:
+>>>> On Wed, Nov 16, 2022 at 1:48 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>>>
+>>>>> Hi Masahiro, Nick,
+>>>>>
+>>>>> The compiler version check performed with
+>>>>> aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum
+>>>>> compiler version in Kconfig") can be defeated and prevent running the
+>>>>> *config targets if specifying LLVM=1 on the command line, in that way:
+>>>>>
+>>>>> BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images
+>>>>> LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C
+>>>>> /local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom
+>>>>> HOSTCC="/usr/bin/gcc"
+>>>>> HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache
+>>>>> /usr/bin/gcc -O2
+>>>>> -I/local/users/fainelli/buildroot-llvm/output/arm64/host/include
+>>>>> -DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib
+>>>>> -Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib"
+>>>>> ARCH=arm64
+>>>>> INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target
+>>>>> CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-"
+>>>>> WERROR=0
+>>>>> DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod
+>>>>> INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
+>>>>>      UPD     scripts/kconfig/mconf-cfg
+>>>>>      HOSTCC  scripts/kconfig/mconf.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/checklist.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/inputbox.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/menubox.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/textbox.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/util.o
+>>>>>      HOSTCC  scripts/kconfig/lxdialog/yesno.o
+>>>>>      HOSTLD  scripts/kconfig/mconf
+>>>>> ***
+>>>>> *** Compiler is too old.
+>>>>> ***   Your Clang version:    10.0.0
+>>>>> ***   Minimum Clang version: 10.0.1
+>>>>> ***
+>>>>> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
+>>>>>
+>>>>> Here, the compiler check is actually checking the host compiler clang
+>>>>> version installed on my Ubuntu 20.04 system, as opposed to the cross
+>>>>> compiler clang version that is being used.
+>>>>
+>>>> LLVM=1 will use `clang` as found by your $PATH.  Where did you express
+>>>> to make what the "cross compiler clang version" is? (And why do you
+>>>> set HOSTCC three times)
+>>>
+>>> We are setting CROSS_COMPILE to express the cross compiler clang prefix
+>>> to use.
+>>
+>> Can you try setting CLANG_PREFIX rather than CROSS_COMPILE (to the same value)?
+>>
+>> CLANG_PREFIX=/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-
+> 
+> sorry, I meant LLVM_PREFIX
 
-sorry, I meant LLVM_PREFIX
-
->
->
-> >
-> > Setting HOSTCC three times is done by buildroot, it does it through make
-> > flags, and then variables passed to make etc. clearly we could change
-> > that, but that's out of scope is not it?
-> > --
-> > Florian
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
+Same results unfortunately.
 -- 
-Thanks,
-~Nick Desaulniers
+Florian
+
