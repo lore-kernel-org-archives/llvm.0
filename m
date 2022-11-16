@@ -1,123 +1,128 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6C412290
-	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 22:07:51 +0000 (UTC)
-Received: by mail-pf1-f169.google.com with SMTP id 130so18768601pfu.8
-        for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 14:07:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D52CA4
+	for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 23:11:11 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id m14so92965pji.0
+        for <llvm@lists.linux.dev>; Wed, 16 Nov 2022 15:11:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=USUBJEQYr7zCoXTygKbEoAl5/bOlE5sjNcmPMMnNO+I=;
-        b=aOXRrMzLYEFxRa8SaRW4Ih90tXTtmdiLlMY5L9fwgvk5ZkEvOJPwSUwRFH0VVe0KNX
-         Tf7RQspv3rT5ZdHZwrc2/gApQJqkPiCcet8AWh1asaTK6+tRSU0QJ9WlaBD3CZ1nrUfF
-         RLbgixYHaOds9zuQVBWGzWco4eawNq4P2jfKY=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6/uZ+ThofFLV0o5Tr1f+GtX311JSydF+TNhDZdXxL+Y=;
+        b=sw25RevSzPxyBTlqYrV7fZBs1zlbP4R/PRdnjJiozTdyYdVEgfjiN6sq3QvpQnKmYb
+         A9KrAmO8LUSsUg9QWILrOJIZQgbJD3EVfVq/OTKCiRW+0hMAAfGBQS+8d8bOwO5P86A9
+         cQ+ULosSAcn8mGQ7oWXdMyc5kh+hHkbH5qY/aMafHKvBy6BYXeV7TWVZ0YbdBFnu8PKV
+         7mBB3IvjzV9Xx6ODVxqv8/Lhkl55Bke5K7MmTUJUiC8vbHuU/oqeWqf+TjU6T/zkzr3e
+         ztN78L8GLBHOc2ZDEo2a2Vhq0gUVbwv0fiQChVobCObCzPTMp+YcuufmUN0GBPORipUS
+         /1pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=USUBJEQYr7zCoXTygKbEoAl5/bOlE5sjNcmPMMnNO+I=;
-        b=6euKsl4RiRJhLfwvAIyhyVIWyw+Sgv7LVZ4vLVt8NnwL1akJryvRyXB8BIgTmWviK8
-         3yNKxNfzA7SdGEfosFQp6phupdNe6VEed3W+TuxPoFm9wsa7Wa2LXVRLSiw5/KSlKaMv
-         lzSk5/uuRO+PmJyjNBuGLqlIzRpJ1PyRo2RjHPj2aOgmxt2iEFUpKjybBwudDLIIweY2
-         PbnEHRmJxdR53qGyzBIs5jpBQTHPk8mBvxsEhw4tW6Lwkzg9OEBnMPQZzv0+V1tk+UaI
-         69NsR9+d9weu8bNLkAjJN94Qe0fXvlu8QtODmotw1Z+o/uuNgMtb4G6zalJgSwzjST9R
-         jzmA==
-X-Gm-Message-State: ANoB5pkIvsU9AuehyHL3Zy0Klz2Jstpe+b6vy/cs0aG0hrcsoBvZolsP
-	aK6VMiJvOENk+JFFE6KiQEj5+w==
-X-Google-Smtp-Source: AA0mqf64K5vUgue30E5gIXBgliS7kLgA+JyCtiS271x1i8ctDHfLG/fqrQchGdWFMA8s4VGWRw5BnA==
-X-Received: by 2002:a63:535e:0:b0:43c:7da:e64b with SMTP id t30-20020a63535e000000b0043c07dae64bmr22822743pgl.231.1668636470644;
-        Wed, 16 Nov 2022 14:07:50 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090a450b00b001fd76f7a0d1sm2093989pjg.54.2022.11.16.14.07.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 14:07:50 -0800 (PST)
-Date: Wed, 16 Nov 2022 14:07:49 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and
- AR=llvm-ar
-Message-ID: <202211161406.EF075E28E9@keescook>
-References: <20221027162839.410720-1-masahiroy@kernel.org>
- <202211161056.1B9611A@keescook>
- <CAK7LNATWbvpovH8qsGMX-5-31QiQ6pjKNnm+YEDEqr4io1hrSw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6/uZ+ThofFLV0o5Tr1f+GtX311JSydF+TNhDZdXxL+Y=;
+        b=Iq3VGBNDcgiOt95dFzB7lSFK4PgRuncsWARieNH5ONc5vuGLmCDwcFfsZeJIIeNABK
+         eUJ4qLyIbkykKszuH+Lbdy2lM+Baa3rDWmWg++k6cppSiV54MsFjf+rGOmhS2jcDckDA
+         ydTOaYKqhXBg809udTuh+nv1o+P8fA9KkMYtJIkeU6aiZSwgpwzL4Sdzn9vLs6fAsIpD
+         1aEiJYgERVHwKEtrNsBOmNi5tS2X/VCzYvAaLih88k/4ObnauPjoyCLD7nkt8Oa9OMLT
+         nXwkWSQ6Jn1h+sQyNsL1T/hFgMJyVI39e4YafTd2XM5B2djipDEvBMJDNKagmWLxDvOs
+         KCgA==
+X-Gm-Message-State: ANoB5plhTaYQf0gb0nAFf/bkOeCAaMGOwQprM8QCvacVVgnBy2IQXibd
+	a/4uzDqW06hAP1CO7h8Dq0fFjQEPE0SjEHM32CD9DQ==
+X-Google-Smtp-Source: AA0mqf48zuVhwaeoLsQEIGf5w3oJzTf0ujy22FczYj0b6cnG2AKtGbnjwBM+ICv/7pf79Sub2eMPb5g2VP+rcm7A7SY=
+X-Received: by 2002:a17:902:7086:b0:186:de87:7ffd with SMTP id
+ z6-20020a170902708600b00186de877ffdmr34381plk.94.1668640270546; Wed, 16 Nov
+ 2022 15:11:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNATWbvpovH8qsGMX-5-31QiQ6pjKNnm+YEDEqr4io1hrSw@mail.gmail.com>
+References: <fe18ed06-12f1-1dcb-71ee-aec5a5d656ea@gmail.com>
+ <CAKwvOdnx_hyf=3DZtU_P8icWa07jf1+baNgM9MBh_ojE-EK5=A@mail.gmail.com> <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com>
+In-Reply-To: <d7e0fbca-7e9d-fbe2-6f8c-6e60a78f56df@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 16 Nov 2022 15:10:59 -0800
+Message-ID: <CAKwvOdnNA7pFGNuord-yiArE55oPNCCwCOHdrVQiRiATtYC23g@mail.gmail.com>
+Subject: Re: kbuild: check the minimum compiler version in Kconfig
+To: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	Paul Gortmaker <paul.gortmaker@windriver.com>, Nathan Chancellor <natechancellor@gmail.com>, 
+	ojeda@kernel.org, sedat.dilek@gmail.com, 
+	clang-built-linux <llvm@lists.linux.dev>, Manoj Gupta <manojgupta@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 17, 2022 at 05:37:31AM +0900, Masahiro Yamada wrote:
-> On Thu, Nov 17, 2022 at 4:01 AM Kees Cook <keescook@chromium.org> wrote:
+On Wed, Nov 16, 2022 at 2:56 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 11/16/22 14:48, Nick Desaulniers wrote:
+> > On Wed, Nov 16, 2022 at 1:48 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> >>
+> >> Hi Masahiro, Nick,
+> >>
+> >> The compiler version check performed with
+> >> aec6c60a01d3a3170242d6a99372a388e1136dc6 ("kbuild: check the minimum
+> >> compiler version in Kconfig") can be defeated and prevent running the
+> >> *config targets if specifying LLVM=1 on the command line, in that way:
+> >>
+> >> BR_BINARIES_DIR=/local/users/fainelli/buildroot-llvm/output/arm64/images
+> >> LLVM=1 LLVM_IAS=1 PKG_CONFIG_PATH="" /usr/bin/make -j49 -C
+> >> /local/users/fainelli/buildroot-llvm/output/arm64/build/linux-custom
+> >> HOSTCC="/usr/bin/gcc"
+> >> HOSTCC="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/ccache
+> >> /usr/bin/gcc -O2
+> >> -I/local/users/fainelli/buildroot-llvm/output/arm64/host/include
+> >> -DNDEBUG -L/local/users/fainelli/buildroot-llvm/output/arm64/host/lib
+> >> -Wl,-rpath,/local/users/fainelli/buildroot-llvm/output/arm64/host/lib"
+> >> ARCH=arm64
+> >> INSTALL_MOD_PATH=/local/users/fainelli/buildroot-llvm/output/arm64/target
+> >> CROSS_COMPILE="/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-"
+> >> WERROR=0
+> >> DEPMOD=/local/users/fainelli/buildroot-llvm/output/arm64/host/sbin/depmod
+> >> INSTALL_MOD_STRIP=1 HOSTCC="/usr/bin/gcc" menuconfig
+> >>     UPD     scripts/kconfig/mconf-cfg
+> >>     HOSTCC  scripts/kconfig/mconf.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/checklist.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/inputbox.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/menubox.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/textbox.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/util.o
+> >>     HOSTCC  scripts/kconfig/lxdialog/yesno.o
+> >>     HOSTLD  scripts/kconfig/mconf
+> >> ***
+> >> *** Compiler is too old.
+> >> ***   Your Clang version:    10.0.0
+> >> ***   Minimum Clang version: 10.0.1
+> >> ***
+> >> scripts/Kconfig.include:44: Sorry, this compiler is not supported.
+> >>
+> >> Here, the compiler check is actually checking the host compiler clang
+> >> version installed on my Ubuntu 20.04 system, as opposed to the cross
+> >> compiler clang version that is being used.
 > >
-> > On Fri, Oct 28, 2022 at 01:28:39AM +0900, Masahiro Yamada wrote:
-> > > Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
-> > >   /usr/bin/ar terminated with signal 13 [Broken pipe]
-> > >
-> > > Nathan Chancellor reported the latest AR=llvm-ar shows
-> > >   error: write on a pipe with no reader
-> > >
-> > > The latter occurs since LLVM commit 51b557adc131 ("Add an error message
-> > > to the default SIGPIPE handler").
-> > >
-> > > The resulting vmlinux is correct, but it is better to silence it.
-> > >
-> > > 'head -n1' exits after reading the first line, so the pipe is closed.
-> > >
-> > > Use 'sed -n 1p' to eat the stream till the end.
-> >
-> > I think this is wrong because it needlessly consumes CPU time. SIGPIPE
-> > is _needed_ to stop a process after we found what we needed, but it's up
-> > to the caller (the shell here) to determine what to do about it.
-> >
-> > Similarly, that LLVM commit is wrong -- tools should _not_ catch their
-> > own SIGPIPEs. They should be caught by their callers.
-> >
-> > For example, see:
-> >
-> > $ seq 10000 | head -n1
-> > 1
-> >
-> > ^^^ no warnings from the shell (caller of "seq")
-> > And you can see it _is_ being killed by SIGPIPE:
-> >
-> > $ strace seq 1000 | head -n1
-> > ...
-> > write(1, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14"..., 8192) = 8192
-> > 1
-> > write(1, "\n1861\n1862\n1863\n1864\n1865\n1866\n1"..., 4096) = -1 EPIPE (Broken pipe)
-> > --- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=3503448, si_uid=1000} ---
-> > +++ killed by SIGPIPE +++
-> >
-> > If we use "sed -n 1p" seq will continue to run, consuming needless time
-> > and CPU resources.
-> >
-> > So, I strongly think this is the wrong solution. SIGPIPE should be
-> > ignored for ar, and LLVM should _not_ catch its own SIGPIPE.
-> >
-> > -Kees
-> 
-> 
-> I thought of this - it is just wasting CPU time,
-> but I did not come up with a better idea on the kbuild side.
-> 
-> I do not want to use 2>/dev/null because it may hide
-> non-SIGPIPE (i.e. real) errors.
+> > LLVM=1 will use `clang` as found by your $PATH.  Where did you express
+> > to make what the "cross compiler clang version" is? (And why do you
+> > set HOSTCC three times)
+>
+> We are setting CROSS_COMPILE to express the cross compiler clang prefix
+> to use.
 
-Yes, I've opened an upstream LLVM bug for this:
-https://github.com/llvm/llvm-project/issues/59037
+Can you try setting CLANG_PREFIX rather than CROSS_COMPILE (to the same value)?
 
--- 
-Kees Cook
+CLANG_PREFIX=/local/users/fainelli/buildroot-llvm/output/arm64/host/bin/aarch64-linux-
+
+
+>
+> Setting HOSTCC three times is done by buildroot, it does it through make
+> flags, and then variables passed to make etc. clearly we could change
+> that, but that's out of scope is not it?
+> --
+> Florian
+>
+
+
+--
+Thanks,
+~Nick Desaulniers
