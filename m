@@ -1,66 +1,60 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E38915C9A;
-	Wed, 16 Nov 2022 23:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1819B15A5;
+	Thu, 17 Nov 2022 01:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668642147; x=1700178147;
+  t=1668648871; x=1700184871;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DNSgvQsa6894kwie8VbtBSBYJqt5uiP1iSHeOyl95xU=;
-  b=KiSOZ/14oMfnRuRkabQ/3gJVhnH8dqAuxPDubtGgkbZIMMyvrDBOEhBt
-   EyO1h4xK6zSI0j/l5SX8kGjkf/hbyVClpu2XwH/Uo5pN7z/pL/3rrNi2+
-   PvHP8kP1gnIOS5fG9B+f/JdSejQjUQdRWZvM+JtA8vWS2UFVjNhUELflz
-   RPt/F6puRjbym8JH15XgcDSKEldgZJky3lVB07XaAs560sEuGvtYKU1Es
-   5EG43AzRi1DPeGW2DuQjmQdi7AAei22WQxb61UHA0VmHOied4G4+TmrN4
-   4PIybaRF8/HZTlr6d9s6FB3iiLjw2NfLS6S09lUJ61ozRaqb6MrC57wwz
+  bh=lOvP9OfhOQqQCJROLhsS1JVmfYYGRSiGxntS9HIaGeE=;
+  b=mUskTWjkHyA5++L/sAIGvMXM+kn0rSoJhctybYiPyQIVlR4ZccjhDQs7
+   0VOPa20yoXzd/xg0HARTFN1+EziuARUSvvL54EjGzrycF3oxEw4221biA
+   RYvTUw5EX53SMn4xMLStmIINnaFXk1M+gQkFgT1khivJkVMRbqThr1h8/
+   XR2kQsG7bQnNB6TJ3FHCjS47s3A33g7Qa2x0SI+cE+SlfZkoWwi18iZ57
+   HPNPVCZEUKw5ImQryBgq0ncs0ZeaqcFh18kUkUrntfQQarTmMu2xtnM3V
+   YZtleebpPUdaaV1E+tnkFfea9ivIjFjaJ9sb2+LbzH/NWM68V90N/i9f7
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="296063580"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="310352679"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="296063580"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:42:26 -0800
+   d="scan'208";a="310352679"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 17:34:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="703079054"
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="814315800"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="703079054"
+   d="scan'208";a="814315800"
 Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Nov 2022 15:42:24 -0800
+  by orsmga005.jf.intel.com with ESMTP; 16 Nov 2022 17:34:27 -0800
 Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ovS2x-0002qp-2Y;
-	Wed, 16 Nov 2022 23:42:23 +0000
-Date: Thu, 17 Nov 2022 07:42:20 +0800
+	id 1ovTnP-0002vh-05;
+	Thu, 17 Nov 2022 01:34:27 +0000
+Date: Thu, 17 Nov 2022 09:33:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brian Norris <briannorris@chromium.org>
+To: Sven Peter <sven@svenpeter.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [linux-next:master 5070/8327]
- drivers/mmc/host/sdhci-brcmstb.c:181:34: warning: unused variable
- 'sdhci_brcm_of_match'
-Message-ID: <202211170718.17HvMDsh-lkp@intel.com>
+	Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/170-atcphy 5/5] drivers/phy/apple/atc.c:1568:6:
+ warning: variable 'ret' set but not used
+Message-ID: <202211170939.2vIiAW1H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="dSuRzNU0qCusfJUy"
+Content-Type: multipart/mixed; boundary="wbX4wUpQX0iCmdLp"
 Content-Disposition: inline
 
 
---dSuRzNU0qCusfJUy
+--wbX4wUpQX0iCmdLp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Brian,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   15f3bff12cf6a888ec2ad39652828c60e6836b3d
-commit: b4619aac26fa33f8bd85cada87fa3195336a4aeb [5070/8327] mmc: sdhci-brcmstb: Allow building with COMPILE_TEST
+tree:   https://github.com/AsahiLinux/linux bits/170-atcphy
+head:   adcaf36b61fbf7a574a6b30ab67695ce8daabb3f
+commit: adcaf36b61fbf7a574a6b30ab67695ce8daabb3f [5/5] WIP: phy: apple: Add Apple Type-C PHY
 config: s390-randconfig-c005-20221116
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 463da45892e2d2a262277b91b96f5f8c05dc25d0)
 reproduce (this is a W=1 build):
@@ -68,20 +62,21 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b4619aac26fa33f8bd85cada87fa3195336a4aeb
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout b4619aac26fa33f8bd85cada87fa3195336a4aeb
+        # https://github.com/AsahiLinux/linux/commit/adcaf36b61fbf7a574a6b30ab67695ce8daabb3f
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/170-atcphy
+        git checkout adcaf36b61fbf7a574a6b30ab67695ce8daabb3f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/mmc/host/ drivers/phy/ drivers/soc/qcom/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/phy/apple/ drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/mmc/host/sdhci-brcmstb.c:8:
+   In file included from drivers/phy/apple/atc.c:15:
+   In file included from include/linux/iopoll.h:14:
    In file included from include/linux/io.h:13:
    In file included from arch/s390/include/asm/io.h:75:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -96,7 +91,8 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
    #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
                                                         ^
-   In file included from drivers/mmc/host/sdhci-brcmstb.c:8:
+   In file included from drivers/phy/apple/atc.c:15:
+   In file included from include/linux/iopoll.h:14:
    In file included from include/linux/io.h:13:
    In file included from arch/s390/include/asm/io.h:75:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -108,7 +104,8 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
    #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
                                                         ^
-   In file included from drivers/mmc/host/sdhci-brcmstb.c:8:
+   In file included from drivers/phy/apple/atc.c:15:
+   In file included from include/linux/iopoll.h:14:
    In file included from include/linux/io.h:13:
    In file included from arch/s390/include/asm/io.h:75:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -138,40 +135,55 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesl(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
->> drivers/mmc/host/sdhci-brcmstb.c:181:34: warning: unused variable 'sdhci_brcm_of_match' [-Wunused-const-variable]
-   static const struct of_device_id sdhci_brcm_of_match[] = {
-                                    ^
+>> drivers/phy/apple/atc.c:1568:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+           int ret = 0;
+               ^
    13 warnings generated.
 
 
-vim +/sdhci_brcm_of_match +181 drivers/mmc/host/sdhci-brcmstb.c
+vim +/ret +1568 drivers/phy/apple/atc.c
 
-78ab82fdb65c70 Al Cooper 2020-01-13  180  
-78ab82fdb65c70 Al Cooper 2020-01-13 @181  static const struct of_device_id sdhci_brcm_of_match[] = {
-78ab82fdb65c70 Al Cooper 2020-01-13  182  	{ .compatible = "brcm,bcm7425-sdhci", .data = &match_priv_7425 },
-78ab82fdb65c70 Al Cooper 2020-01-13  183  	{ .compatible = "brcm,bcm7445-sdhci", .data = &match_priv_7445 },
-78ab82fdb65c70 Al Cooper 2020-01-13  184  	{ .compatible = "brcm,bcm7216-sdhci", .data = &match_priv_7216 },
-78ab82fdb65c70 Al Cooper 2020-01-13  185  	{},
-78ab82fdb65c70 Al Cooper 2020-01-13  186  };
-78ab82fdb65c70 Al Cooper 2020-01-13  187  
-
-:::::: The code at line 181 was first introduced by commit
-:::::: 78ab82fdb65c703fa21db348c50c3f3eae773d62 mmc: sdhci-brcmstb: Add ability to use HS400ES transfer mode
-
-:::::: TO: Al Cooper <alcooperx@gmail.com>
-:::::: CC: Ulf Hansson <ulf.hansson@linaro.org>
+  1563	
+  1564	static int atcphy_usb3_power_on(struct phy *phy)
+  1565	{
+  1566		struct apple_atcphy *atcphy = phy_get_drvdata(phy);
+  1567		enum atcphy_pipehandler_state state;
+> 1568		int ret = 0;
+  1569	
+  1570		mutex_lock(&atcphy->lock);
+  1571	
+  1572		atcphy->dwc3_online = true;
+  1573		state = atcphy_modes[atcphy->mode].pipehandler_state;
+  1574		switch (state) {
+  1575		case ATCPHY_PIPEHANDLER_STATE_USB2:
+  1576		case ATCPHY_PIPEHANDLER_STATE_USB3:
+  1577			ret = atcphy_configure_pipehandler(atcphy, state);
+  1578			break;
+  1579	
+  1580		case ATCPHY_PIPEHANDLER_STATE_INVALID:
+  1581		default:
+  1582			dev_warn(atcphy->dev, "Invalid state %d in usb3_set_phy\n",
+  1583				 state);
+  1584			ret = -EINVAL;
+  1585		}
+  1586	
+  1587		mutex_unlock(&atcphy->lock);
+  1588	
+  1589		return 0;
+  1590	}
+  1591	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---dSuRzNU0qCusfJUy
+--wbX4wUpQX0iCmdLp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/s390 6.1.0-rc4 Kernel Configuration
+# Linux/s390 6.1.0-rc5 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 463da45892e2d2a262277b91b96f5f8c05dc25d0)"
 CONFIG_GCC_VERSION=0
@@ -3074,7 +3086,6 @@ CONFIG_MMC_CQHCI=y
 CONFIG_MMC_HSQ=y
 CONFIG_MMC_TOSHIBA_PCI=y
 CONFIG_MMC_BCM2835=y
-CONFIG_MMC_SDHCI_BRCMSTB=y
 # CONFIG_MMC_SDHCI_XENON is not set
 CONFIG_MMC_OWL=y
 CONFIG_MMC_LITEX=y
@@ -3808,6 +3819,7 @@ CONFIG_PHY_PISTACHIO_USB=y
 CONFIG_PHY_CAN_TRANSCEIVER=y
 CONFIG_PHY_SUN4I_USB=y
 # CONFIG_PHY_SUN9I_USB is not set
+CONFIG_PHY_APPLE_ATC=y
 
 #
 # PHY drivers for Broadcom platforms
@@ -4798,4 +4810,4 @@ CONFIG_KCOV_IRQ_AREA_SIZE=0x40000
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---dSuRzNU0qCusfJUy--
+--wbX4wUpQX0iCmdLp--
