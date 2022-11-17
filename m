@@ -1,37 +1,37 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5AC6138;
-	Thu, 17 Nov 2022 15:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A746135;
+	Thu, 17 Nov 2022 16:17:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668699425; x=1700235425;
+  t=1668701829; x=1700237829;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TDtdJbjP7mUBCgO7ym6GooTrmkrqWuHbDInoVogb18U=;
-  b=H/uyLZyc/Ec44zHViG986KVBrOzvTVGD+NvzgFGL94qkFiuqRjXICjuN
-   R34rbtnNeXY2K+REe4lUdAe3tmmuU0vOjhPDhhHt+Urm9iXTrb/E466Xn
-   CKGKtg8F/9jhwvD3kX7TxBDhrTTt0iA0jeRwcZKQ8mmC1i6uCxoav8iK0
-   2vsXFshRjxoTD18rkJ8s6+bgHxnYtRJ9xDpEOJaL0ua7ubVZcgjqMBhJ+
-   OZCf+faoRB60XBAlQ4t5hm+waoFuAg/hm9wh+vfdGxyvSwK+PgksY4tXV
-   jNPnt9jIdm/XTaEADLrLK8l2533voeUlg4J8yYG2rfttbk6StBWOtKk1p
+  bh=8undL7KzKAl0UxD6cZWukGzq+7QBXO4GCGPZGhTCm4k=;
+  b=NFekWbN8fzRCZg6BmTH0yaImCfqAlYx0Ft8OIUDFqgZuFgnu3VCqCNeA
+   QY/9wTrGm5wJ2wBguGRcV076VadvSvZJvnf3KdIgX++9GnkhcsYm/Ul+z
+   GjWdOW0qYptSxrVArTlQfprk0K8g6YME8QQY/uQtI/cSFeze8X8ZfjIse
+   7mH5v7zwe1qz7d1KhKVCDowc/N9sIPJoi4cn+XH0mHAgJCThSIUrcEaBV
+   fCAdcjaCyJ+QNAip6xwEQragrSQ/dkPAK3EiQMmeX0jVtUxdYf2y5TX6r
+   mLgjSLjRKByJdaT1EFW+I1YIczCm4sCbcxG1J/PZ7TM0W+sqFOtIC/uec
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="314028967"
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="296257121"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="314028967"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 07:37:04 -0800
+   d="scan'208";a="296257121"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 08:17:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="764801674"
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="590673587"
 X-IronPort-AV: E=Sophos;i="5.96,171,1665471600"; 
-   d="scan'208";a="764801674"
+   d="scan'208";a="590673587"
 Received: from lkp-server01.sh.intel.com (HELO 55744f5052f8) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Nov 2022 07:37:00 -0800
+  by orsmga003.jf.intel.com with ESMTP; 17 Nov 2022 08:17:02 -0800
 Received: from kbuild by 55744f5052f8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ovgwl-0000Q7-2c;
-	Thu, 17 Nov 2022 15:36:59 +0000
-Date: Thu, 17 Nov 2022 23:36:35 +0800
+	id 1ovhZV-0000Rf-2S;
+	Thu, 17 Nov 2022 16:17:01 +0000
+Date: Fri, 18 Nov 2022 00:17:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
 	Bjorn Andersson <andersson@kernel.org>,
@@ -44,21 +44,21 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 	linux-phy@lists.infradead.org
-Subject: Re: [PATCH 03/10] phy: qcom-qmp-ufs: Add SM8550 support
-Message-ID: <202211172343.7oHsunQL-lkp@intel.com>
-References: <20221116120157.2706810-4-abel.vesa@linaro.org>
+Subject: Re: [PATCH 05/10] phy: qualcomm: qmp-usb: Add support for SM8550
+Message-ID: <202211180049.Ny6Gb2Vw-lkp@intel.com>
+References: <20221116120157.2706810-6-abel.vesa@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="BIHcbi/gsYv/6zkp"
+Content-Type: multipart/mixed; boundary="p8OxTLzsKhQe7b65"
 Content-Disposition: inline
-In-Reply-To: <20221116120157.2706810-4-abel.vesa@linaro.org>
+In-Reply-To: <20221116120157.2706810-6-abel.vesa@linaro.org>
 
 
---BIHcbi/gsYv/6zkp
+--p8OxTLzsKhQe7b65
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -73,17 +73,17 @@ And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/phy-qualcomm-Add-support-for-SM8550/20221116-200911
-patch link:    https://lore.kernel.org/r/20221116120157.2706810-4-abel.vesa%40linaro.org
-patch subject: [PATCH 03/10] phy: qcom-qmp-ufs: Add SM8550 support
+patch link:    https://lore.kernel.org/r/20221116120157.2706810-6-abel.vesa%40linaro.org
+patch subject: [PATCH 05/10] phy: qualcomm: qmp-usb: Add support for SM8550
 config: hexagon-randconfig-r033-20221117
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project bbe6bd724a6335e497c7edaed191d37a828d0390)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c04d61d614f07f34f61ca0bd3d7343a57d01c356
+        # https://github.com/intel-lab-lkp/linux/commit/eb1385667254498e16435a8edd51824cd384e6ec
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Abel-Vesa/phy-qualcomm-Add-support-for-SM8550/20221116-200911
-        git checkout c04d61d614f07f34f61ca0bd3d7343a57d01c356
+        git checkout eb1385667254498e16435a8edd51824cd384e6ec
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/phy/qualcomm/
@@ -93,7 +93,7 @@ If you fix the issue, kindly add following tag where applicable
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:10:
+   In file included from drivers/phy/qualcomm/phy-qcom-qmp-usb.c:10:
    In file included from include/linux/io.h:13:
    In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -105,7 +105,7 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
                                                      ^
-   In file included from drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:10:
+   In file included from drivers/phy/qualcomm/phy-qcom-qmp-usb.c:10:
    In file included from include/linux/io.h:13:
    In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -114,7 +114,7 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
                                                      ^
-   In file included from drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:10:
+   In file included from drivers/phy/qualcomm/phy-qcom-qmp-usb.c:10:
    In file included from include/linux/io.h:13:
    In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -126,25 +126,27 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
->> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:553:38: warning: unused variable 'sm8550_ufsphy_hs_b_serdes' [-Wunused-const-variable]
-   static const struct qmp_phy_init_tbl sm8550_ufsphy_hs_b_serdes[] = {
-                                        ^
+>> drivers/phy/qualcomm/phy-qcom-qmp-usb.c:1673:27: warning: unused variable 'qmp_v4_sm8550_clk_l' [-Wunused-const-variable]
+   static const char * const qmp_v4_sm8550_clk_l[] = {
+                             ^
    7 warnings generated.
 
 
-vim +/sm8550_ufsphy_hs_b_serdes +553 drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+vim +/qmp_v4_sm8550_clk_l +1673 drivers/phy/qualcomm/phy-qcom-qmp-usb.c
 
-   552	
- > 553	static const struct qmp_phy_init_tbl sm8550_ufsphy_hs_b_serdes[] = {
-   554		QMP_PHY_INIT_CFG(QSERDES_V3_COM_VCO_TUNE_MAP, 0x44),
-   555	};
-   556	
+  1672	
+> 1673	static const char * const qmp_v4_sm8550_clk_l[] = {
+  1674		"aux_clk", "pipe_clk", "pipe_clk_mux",
+  1675		"pipe_clk_ext_src", "ref_clk_src",
+  1676		"ref_clk", "com_aux_clk"
+  1677	};
+  1678	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---BIHcbi/gsYv/6zkp
+--p8OxTLzsKhQe7b65
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -5557,4 +5559,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---BIHcbi/gsYv/6zkp--
+--p8OxTLzsKhQe7b65--
