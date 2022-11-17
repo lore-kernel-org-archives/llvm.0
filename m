@@ -1,81 +1,121 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1561CA467
-	for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 22:51:49 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id u6-20020a17090a5e4600b0021881a8d264so1048812pji.4
-        for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 14:51:49 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974B2A464
+	for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 23:19:25 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id 6so3475729pgm.6
+        for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 15:19:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VsJCHrbdA/8xBK+FwpkLQd0Vpot4PJyQ0+YuLOFb5ug=;
-        b=pTjz7gNdBT8RN8+RtgT+xL5auev0FvBO9YOSaU3P9JChlH/BQwf5eeAUx8Gh5cZxfR
-         48JPZw1PcZRczw33xA5iwcCyfd2dmgyCt0R0XH84aSGkd+rTJllIOnyLeXLFMzRHmXh0
-         J4S7Hk5NCsCtUfHMamYLPy0hTzphxTpDv02auUqn7j/C6zWTXBK3dqeUEvBry6TX214/
-         7jNtRRvSxJSkmvQI72pj38bIgZtyg+6kveSDejcZk5vbFIelQHCygf5GV60/9KMURAHI
-         WMMViEpP1m3d5aPSjwxu+vHQk8qyBTkcFO7DxWYKVq+v1Z0Ily3QrigxC6OK2Kj4dLCD
-         Jjng==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBG7oyaijsCs+AkyB480R7surFEt7JkA2k2VbS/kZYQ=;
+        b=JchDDL5/DOlP6j9lUMlspTqgaFV4s9nwIJAsn96fhlHO8vmv5OjKer7ndNaH2Cz7xY
+         angRwTwMUaQhTZSFCg5SSReYBynCN5+lVd/BZbbmZmTbg32Qo/D4UYmdS5qJQ4EuCLtb
+         LRcO4Rhcd6sxfjWlyGEHMkaxsvRbTcjQPJJxg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VsJCHrbdA/8xBK+FwpkLQd0Vpot4PJyQ0+YuLOFb5ug=;
-        b=p4pF6mR0YZQCVRaz7G6WDXTlhLSZ8L7yc4WvvXulkBh9xwru0OvG60zBu0IihlCE7t
-         mE0oy48UiJMar8OqWKWOxfvGD4Teloe8C03lZj8fvo57+qjeBCNVUeQSA8cXzgy1wKFi
-         kcFGxVADW0R6Q0vPu4v7Do8YqHudCUVqsaTT02yagHN8audyk2xAKdSVxYAW67Q7eb5f
-         ruomNnpynHdDcfmwaDFupcIY66X1eErzE90/VyxCUHx7uA0P0PtO9OwEjDXZv6SdbCEL
-         qUkm+pOpS+Wwyyrz2+B3rjLZkhKlbjUF5pzJ4xxAMg2XsPbdMu5fecsXEutQa18SpH1+
-         zaKw==
-X-Gm-Message-State: ANoB5pl7IutjoeYT4bxxX9JtbhSQVkg0EBFhkGyYAUJzYrfHVZ+WB2KY
-	D9KfXtLKjEcfYP1pJLyasybpXjA5rsBG5qdHXPYVnw==
-X-Google-Smtp-Source: AA0mqf67vPPzluRI+XlzkgbR8xb3UntQ1E82cFrLyRnnBgAER6CWMYERHA+OL7EI9rQe7Fxda54moa8+K/I1TRjN1qQ=
-X-Received: by 2002:a17:90a:ab84:b0:213:343:9873 with SMTP id
- n4-20020a17090aab8400b0021303439873mr10841158pjq.102.1668725509260; Thu, 17
- Nov 2022 14:51:49 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SBG7oyaijsCs+AkyB480R7surFEt7JkA2k2VbS/kZYQ=;
+        b=eevuwgpJ9u8dg98RFc9Cec4yO1e1IqrdzlHgs7ogRx5CLLZA2hPC2zLLT2fy6h4Yle
+         XwBuofHOIoq7h/rKpPHB0cL36TGiaiDJAApHSNPDF9dM3vDXSxZfQMqzVIlMeoJXGwka
+         HhFQs4YX+OFKIyg9vF6ol37zqHpZz4eAK3SMYz/wuZ9wD7ZgHpxoUJTnRLwqqXVG0Ks6
+         f5j7bv3KjHoKoOGCuWbta+OhkANp2foRBgiGl7A9yOSnnvtBmg6jcHYqUy4wrcF17Hwa
+         +E6juFdw2fTUJUjoAZ97YMeSJfKQv85NpELp0LyHZGGKv8ka67UadOjAkbFeER0NkYws
+         +v7w==
+X-Gm-Message-State: ANoB5pkjFJfXPzFifVbVz+KB0zkD4GrducMlzU3qVtl6NfdqNiBwJGaP
+	+Y1QLyd2Wd1eJScXd2FNpMFZVQ==
+X-Google-Smtp-Source: AA0mqf5gYHTV4d1cJmSvcoc5/KxPzeS1y0Zb1fIaJiX9fjzOdUIlsRe1Bo/bjk0EkMpAHBf2HyMu/w==
+X-Received: by 2002:a65:4c88:0:b0:477:55c:3ff4 with SMTP id m8-20020a654c88000000b00477055c3ff4mr4055311pgt.442.1668727164990;
+        Thu, 17 Nov 2022 15:19:24 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 135-20020a62178d000000b0056ba6952e40sm1684386pfx.181.2022.11.17.15.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 15:19:24 -0800 (PST)
+Date: Thu, 17 Nov 2022 15:19:23 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
+	dri-devel@lists.freedesktop.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Sami Tolvanen <samitolvanen@google.com>,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] drm/fsl-dcu: Fix return type of
+ fsl_dcu_drm_connector_mode_valid()
+Message-ID: <202211171518.88D58BBE@keescook>
+References: <20221102154215.78059-1-nathan@kernel.org>
+ <Y3K7GbHAMZPdY243@distrobox-ZFeO0pwFho.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221114225719.1657174-1-nathan@kernel.org> <CAKwvOdn67r3ZYb5XZkae3i5797GGV3=8=nLC7kT2d4On3OEm5A@mail.gmail.com>
- <Y3aMxfhBw9YsWiKr@dev-arch.thelio-3990X>
-In-Reply-To: <Y3aMxfhBw9YsWiKr@dev-arch.thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 17 Nov 2022 14:51:37 -0800
-Message-ID: <CAKwvOdmYO0_m3+uWHe_C=7y1zgePQzc27Kd6Pep7Ja_pgbNPZw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Drop '-mthumb' from AFLAGS_ISA
-To: Nathan Chancellor <nathan@kernel.org>, Sylvestre Ledru <sylvestre@debian.org>
-Cc: Serge Guelton <sguelton@mozilla.com>, Russell King <linux@armlinux.org.uk>, 
-	Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	"kernelci.org bot" <bot@kernelci.org>, Sylvestre Ledru <sylvestre@mozilla.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3K7GbHAMZPdY243@distrobox-ZFeO0pwFho.thelio-3990X>
 
-On Thu, Nov 17, 2022 at 11:34 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Nov 17, 2022 at 11:15:09AM -0800, Nick Desaulniers wrote:
-> > On Mon, Nov 14, 2022 at 2:58 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Fixes: 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler")
-> > > Link: htps://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/blob/17354b030ac4252ff6c5e9d01f4eba28bd406b2d/debian/patches/930008-arm.diff
-> >
-> > Would you mind using
-> > https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/blob/snapshot/debian/patches/930008-arm.diff
-> > as the link instead? The link on this commit message is a diff against
-> > llvm-14, not ToT which is currently llvm-16; the context is quite
-> > different as the logic moved source files completely.  Though it does
-> > look like Sylvestre has not yet cut a 16 branch for debian's patches.
->
-> I would rather use an actual hash to reduce the risk of the link going
-> stale from either a branch rename or file rename/removal. I can use a
-> hash from the snapshot branch instead, if that would work for you?
+On Mon, Nov 14, 2022 at 03:03:05PM -0700, Nathan Chancellor wrote:
+> Hi all,
+> 
+> On Wed, Nov 02, 2022 at 08:42:15AM -0700, Nathan Chancellor wrote:
+> > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> > indirect call targets are validated against the expected function
+> > pointer prototype to make sure the call target is valid to help mitigate
+> > ROP attacks. If they are not identical, there is a failure at run time,
+> > which manifests as either a kernel panic or thread getting killed. A
+> > proposed warning in clang aims to catch these at compile time, which
+> > reveals:
+> > 
+> >   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c:74:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+> >           .mode_valid = fsl_dcu_drm_connector_mode_valid,
+> >                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   1 error generated.
+> > 
+> > ->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
+> > type of 'enum drm_mode_status', not 'int'. Adjust the return type of
+> > fsl_dcu_drm_connector_mode_valid() to match the prototype's to resolve
+> > the warning and CFI failure.
+> > 
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+> > Reported-by: Sami Tolvanen <samitolvanen@google.com>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+> > index 4d4a715b429d..2c2b92324a2e 100644
+> > --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+> > +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+> > @@ -60,8 +60,9 @@ static int fsl_dcu_drm_connector_get_modes(struct drm_connector *connector)
+> >  	return drm_panel_get_modes(fsl_connector->panel, connector);
+> >  }
+> >  
+> > -static int fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
+> > -					    struct drm_display_mode *mode)
+> > +static enum drm_mode_status
+> > +fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
+> > +				 struct drm_display_mode *mode)
+> >  {
+> >  	if (mode->hdisplay & 0xf)
+> >  		return MODE_ERROR;
+> > 
+> > base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+> > -- 
+> > 2.38.1
+> > 
+> > 
+> 
+> Could someone please pick this up so that it makes 6.2? We would like
+> to try and get this warning turned on so that it can catch more
+> potential run time issues at compile time but that can only happen when
+> all the warnings are fixed.
 
-It doesn't matter much to me; I trust your judgement; you pick.
-Perhaps that depends if the snapshot branch has stable SHAs or whether
-they change over time? Maybe Sylvestre can comment on that.
+I'll pick this up tomorrow if no one else snags it. :)
+
 -- 
-Thanks,
-~Nick Desaulniers
+Kees Cook
