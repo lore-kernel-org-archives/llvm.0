@@ -1,145 +1,96 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBD38F69
-	for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 22:04:12 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-36bf9c132f9so31484047b3.8
-        for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 14:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/8tcV65NVEwS5qyaLKJ1YnmWVyteYUi8du6gRZPUlk=;
-        b=Kgx6EoNMCudu+OzIdeTfFZaqIVftUAqRW1zo0L+decJ8pEy4/MJC04RnVF7B3KaSZ0
-         9DK6SxFeAkYNS2w805K2pZXeMVzoTc9+n6i2fomVEFwYh2ahmKGbpB2ptalb+xwgnM+v
-         1ylGsq+GKD4GqKY+1TF2ywPbbApmanEIDMq5tcF3WNAgugTiNNfif10EuJfPJgvXpQ6G
-         7DeyxMVQCZjmmpaJM90lNPVsHLhy/uLYINj6B+GbWvdd6u1xI+83ksDlrJ5xrJCL4O8O
-         iQDbVQKNrBr/EN9pK3y4nLsiMZ4yZ/q7eFSymuqkuEkcNrP8HCciHbuAMrDf+BvQnlM4
-         /3AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/8tcV65NVEwS5qyaLKJ1YnmWVyteYUi8du6gRZPUlk=;
-        b=Um/Vt4iaXor5iCEGGLn48FN6WgbLKK7ye7uek72XRKUv0qNMZNM7A32UKFOn1y1pAG
-         C2ljx8oVu7nEwcJZri7SA4go+Ll5ST2pppXwIBxonBPKGCS1i6MllWFJ0ZoDp2lPw/kI
-         hWkqX7mB8Dimw+R8peCVpMONwaX009V3cmXZhhGkFTTf7l7ApmcdoqyQB0AxqjSWk7he
-         Aeh/CnkWeWw1xdNAcrVGSWXWQ2TilMX/g46hbdiCFNgWXxMyX1S7MVPf3Lc7c5oKw+4u
-         l7ot3pcKo+76o2a8R6CAOY0gzURmQ6nrNar6WyHbLYftF+a2ZUC9VydvGcP6km8X8fop
-         dQpw==
-X-Gm-Message-State: ANoB5pmRJWJ83AWOc4A/lY81eakc9yFUoSSvo4CMeqRtZ2thXxipnMDV
-	tKHvhC4c9fOJqVVAH8t80zBeKI+fJTnx
-X-Google-Smtp-Source: AA0mqf7f9uYuv+sECCaA6Z/0/AsoZl7kJghOPmb+2nYwt/3QoCFFtTtSJNqhE82ndbER0iOxyM86EmFaLBS8
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3f1e:c462:d6b8:fba8])
- (user=irogers job=sendgmr) by 2002:a81:5d5:0:b0:36a:d4df:c6b6 with SMTP id
- 204-20020a8105d5000000b0036ad4dfc6b6mr3879537ywf.18.1668722651796; Thu, 17
- Nov 2022 14:04:11 -0800 (PST)
-Date: Thu, 17 Nov 2022 14:03:39 -0800
-In-Reply-To: <20221117220339.341290-1-irogers@google.com>
-Message-Id: <20221117220339.341290-4-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7978F69
+	for <llvm@lists.linux.dev>; Thu, 17 Nov 2022 22:12:35 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4NCvCQ0h9qz4x1T;
+	Fri, 18 Nov 2022 09:06:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1668722819;
+	bh=ubzMaTeqc2N8hOGbp/joqdOXRMohY2fnfb5NRDEwpwU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LtczShpY+5xR9TzvTUkamSbhgrVOkMH9PDdezEssYPItKv0chL/QXpZEVSVRv7gEC
+	 qL0IRFVLh19U2k2fUMGbnlbG59TuTpNKQtn08E+lofuxAHsvL37LA1weNGMTK2IMgd
+	 P+sovcBv9hFj94JsqHlfgQ0Y4Gwh/2NllrEBeE0iFIeS4uAveNEoLlSTfcHazO11tL
+	 QbAiKPNgj3MaVD7ekp0RVNW9H7yMrxOVrKG8J83LYnpkiWJ3gA1Z+R8x5fwCd5ouKn
+	 Rdwxdgw6xfXzB38r5Mpj72/sDgsCWVYLOmnTWYIn5r1ZsxiWltwRdz320vmCidLjc8
+	 LYRsw7qwGjHow==
+Date: Fri, 18 Nov 2022 09:06:36 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Maxime Ripard <maxime@cerno.tech>,
+ llvm@lists.linux.dev
+Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
+ tree
+Message-ID: <20221118090636.00bfc293@canb.auug.org.au>
+In-Reply-To: <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
+References: <20221116105702.746ce3cf@canb.auug.org.au>
+	<Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20221117220339.341290-1-irogers@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Subject: [PATCH v1 3/3] objtool: Alter how HOSTCC is forced
-From: Ian Rogers <irogers@google.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Stephane Eranian <eranian@google.com>, Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/cORwCokXw/BRPsMTVykVrdV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
-happens after tools/scripts/Makefile.include is included, meaning
-flags are set assuming say CC is gcc, but then it can be later set to
-HOSTCC which may be clang. tools/scripts/Makefile.include is needed
-for host set up and common macros in objtool's Makefile. Rather than
-override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
-libsubcmd builds and the linkage step. This means the Makefiles don't
-see things like CC changing and tool flag determination, and similar,
-work properly. To avoid mixing CFLAGS from different compilers just
-the objtool CFLAGS are determined. HOSTCFLAGS is added to these so
-that command line flags can add to the CFLAGS.
+--Sig_/cORwCokXw/BRPsMTVykVrdV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/objtool/Makefile | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+Hi Nathan,
 
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 6b6c20ba5160..c9992d73617f 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -2,16 +2,12 @@
- include ../scripts/Makefile.include
- include ../scripts/Makefile.arch
- 
--# always use the host compiler
--AR	 = $(HOSTAR)
--CC	 = $(HOSTCC)
--LD	 = $(HOSTLD)
--
- ifeq ($(srctree),)
- srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
-+MAKE = make -S
- LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
- ifneq ($(OUTPUT),)
-   LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-@@ -36,13 +32,20 @@ INCLUDES := -I$(srctree)/tools/include \
- 	    -I$(srctree)/tools/objtool/include \
- 	    -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
- 	    -I$(LIBSUBCMD_OUTPUT)/include
--WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
--CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
--LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
-+WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-+OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
-+OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
- 
- # Allow old libelf to be used:
- elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
--CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-+OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-+
-+# Always want host compilation.
-+HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
-+		  LD="$(HOSTLD)" AR="$(HOSTAR)"
-+BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
-+			LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
-+			AR="$(HOSTAR)"
- 
- AWK = awk
- MKDIR = mkdir
-@@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
- 
- $(OBJTOOL_IN): fixdep FORCE
- 	$(Q)$(CONFIG_SHELL) ./sync-check.sh
--	$(Q)$(MAKE) $(build)=objtool
-+	$(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
-+
- 
- $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
--	$(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
-+	$(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
- 
- 
- $(LIBSUBCMD_OUTPUT):
-@@ -77,6 +81,7 @@ $(LIBSUBCMD_OUTPUT):
- $(LIBSUBCMD): fixdep FORCE $(LIBSUBCMD_OUTPUT)
- 	$(Q)$(MAKE) -C $(LIBSUBCMD_DIR) O=$(LIBSUBCMD_OUTPUT) \
- 		DESTDIR=$(LIBSUBCMD_DESTDIR) prefix= \
-+		$(HOST_OVERRIDES) \
- 		$@ install_headers
- 
- $(LIBSUBCMD)-clean:
--- 
-2.38.1.584.g0f3c55d4c2-goog
+On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org> wr=
+ote:
+>
+> This resolution is not quite right, as pointed out by clang:
+>=20
+>     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi' is =
+uninitialized when used here [-Werror,-Wuninitialized]
+>             mutex_lock(&vc4_hdmi->mutex);
+>                         ^~~~~~~~
+>     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
+>     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+>                                                ^~~~
+>     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the variable =
+'vc4_hdmi' to silence this warning
+>             struct vc4_hdmi *vc4_hdmi;
+>                                      ^
+>                                       =3D NULL
+>     1 error generated.
+>=20
+> Obviously, the assignment of vc4_hdmi should be before mutex_lock().
 
+Thanks for pointing that out (silly me :-) ).  I have fixed up the
+resolution for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cORwCokXw/BRPsMTVykVrdV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN2sGwACgkQAVBC80lX
+0GwqVgf7BKhwAejB2647+YTzGJFG5ESClma/Q+FqHOzAU5APyVxww5lrT7m+1h+w
+l+jNOiRIU9g4WG7zOHY7MW/cOYUSCDv1XmuK4JBhI+JnMffY7vt8FxnDYYFvDiE9
+VHgYmM/uzu6VgWBjp4pV+bHmqbE0zkMSVeUd9fI8qmkuzydCSWu1wiYx3ihXaTLw
+1gWzctWRm+7eQMVgPI09oV2ev1VbDXh5xkzjh11Fuj02he89O0eVUt9XVJkUB0SZ
+4MGRrU0SKUx5SulxF7G2ELKYI/fJVz0tTbkPxLVUfY2MGMxQWbgZVHqJwDtZNs2c
+y3B3jrqzs40nAcfF7CQ/7qTj18mr6g==
+=qG1K
+-----END PGP SIGNATURE-----
+
+--Sig_/cORwCokXw/BRPsMTVykVrdV--
