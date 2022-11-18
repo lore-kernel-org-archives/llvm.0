@@ -1,95 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24F317E8
-	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 03:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5972C433C1;
-	Fri, 18 Nov 2022 03:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FF37C;
+	Fri, 18 Nov 2022 08:23:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2842C4347C;
+	Fri, 18 Nov 2022 08:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668742747;
-	bh=b5Ciezt8/hFEbDXdb8acMLPYQDDy/7lEA3tkZKMdX6w=;
-	h=From:To:Cc:Subject:Date:From;
-	b=FpA9tixOUEdwKECfANNO1oO5psY3Tvy5RB3aGnSKSSlUp/n/Jb53jmCQMYIFidDN8
-	 MRIz7aw7DD5AyDU1VMDRMTleOsi3zOGjtw4jDFayfrnjN94QEdZmjlTtClACm1Y9Nc
-	 d68qWdWmCGMvdZ6XPBaMitLNoPQUpE1gXaWwSJumrVLkiSi3sQAmCbpRrsm/kflT+M
-	 2cK9h9djnhwss8Ow7heQRCzLM4TEvHJQq2F4MTCE4XZs49jBuA7pa9nWdGMfqbApXV
-	 +cxXD3PhNR/4weFJDOFBYra7s+Udlw6E0HVaReAUIkxvIW3TptWT7hKvRyRPiPgPw0
-	 Z5GlG8Prs1uqw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	llvm@lists.linux.dev
-Subject: [PATCH net-next] netlink: remove the flex array from struct nlmsghdr
-Date: Thu, 17 Nov 2022 19:39:03 -0800
-Message-Id: <20221118033903.1651026-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.38.1
+	s=k20201202; t=1668759828;
+	bh=RbDbFSd/O/kkuqAwCEYXS++FCu2lD+vL0uZz/en/z8A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EnX4MQzpFvSowZDbAhP6YdzD0ibzg1FApy3ULvM6l66peZGFdNYNKywPlHv0ddmi5
+	 mbg8MJM06F7X6Zac3ojju6iaNVw7Lzc8q9gpG4p3vLKMHzTIpQuNJHGQPly+HLyMrl
+	 PBYDjHMyl04yRNwxhujP325+7pI0JzCU6CGXw8ZPPFhUEf0/T1snMZH2EB0h/gYGgj
+	 aHpfmyWYh23Isr1bnZFDWDERAEULddEoaueEeRQQ6oGfzjdpRLiaMgRW4C3pVcMDPZ
+	 H03Qgm2r/icLf0CERvh+Y/Y0qotS2p37toRuB91ERqi85MSVaReKO/4QEirDnscS8c
+	 E65QwfWiZvOiA==
+Received: by mail-ed1-f54.google.com with SMTP id f7so6106746edc.6;
+        Fri, 18 Nov 2022 00:23:48 -0800 (PST)
+X-Gm-Message-State: ANoB5ploir4m1lGel4N1dAMkA1mDt5ia35hQ5SubO6qQ/ZNDzAuYMCWp
+	XzLy6D4xlpDDwYpffEQTTOnMLKWTCsYP63w5/Uc=
+X-Google-Smtp-Source: AA0mqf4cDIGpzBF2DuuXidU/Q5w0FiW7QZgD7Xl9Sj3h1v21L3KMXYs7xFzxNSjcbImx7/ok00xbbSmTAs8YvzC5zgg=
+X-Received: by 2002:a05:6402:3785:b0:461:e598:e0bb with SMTP id
+ et5-20020a056402378500b00461e598e0bbmr5362428edb.21.1668759826917; Fri, 18
+ Nov 2022 00:23:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221118003057.3223394-1-nathan@kernel.org>
+In-Reply-To: <20221118003057.3223394-1-nathan@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 18 Nov 2022 09:23:34 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHgAZeG9ntSQnuV7Ta+-b9__=Z2y2x0+u3LnSRbJR_FNw@mail.gmail.com>
+Message-ID: <CAMj1kXHgAZeG9ntSQnuV7Ta+-b9__=Z2y2x0+u3LnSRbJR_FNw@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: Drop '-mthumb' from AFLAGS_ISA
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, 
+	"kernelci.org bot" <bot@kernelci.org>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-I've added a flex array to struct nlmsghdr in
-commit 738136a0e375 ("netlink: split up copies in the ack construction")
-to allow accessing the data easily. It leads to warnings with clang,
-if user space wraps this structure into another struct and the flex
-array is not at the end of the container.
+On Fri, 18 Nov 2022 at 01:34, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> When building with CONFIG_THUMB2_KERNEL=y + a version of clang from
+> Debian using CROSS_COMPILE=arm-linux-gnueabihf-, the following warning
+> occurs frequently:
+>
+>   <built-in>:383:9: warning: '__thumb2__' macro redefined [-Wmacro-redefined]
+>   #define __thumb2__ 2
+>           ^
+>   <built-in>:353:9: note: previous definition is here
+>   #define __thumb2__ 1
+>           ^
+>   1 warning generated.
+>
+> Debian carries a downstream patch that changes the default CPU of the
+> arm-linux-gnueabihf target from 'arm1176jzf-s' (v6) to 'cortex-a7' (v7).
+> As a result, '-mthumb' defines both '__thumb__' and '__thumb2__'. The
+> define of '__thumb2__' via the command line was purposefully added to
+> catch a situation like this.
+>
+> In a similar vein as commit 26b12e084bce ("ARM: 9264/1: only use
+> -mtp=cp15 for the compiler"), do not add '-mthumb' to AFLAGS_ISA, as it
+> is already passed to the assembler via '-Wa,-mthumb' and '__thumb2__' is
+> already defined for preprocessing.
+>
+> Fixes: 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler")
+> Link: https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/raw/622dbcbd40b316ed3905a2d25d9623544a06e6b1/debian/patches/930008-arm.diff
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/20221114023927.GA685@u2004-local/
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: nathan@kernel.org
-CC: ndesaulniers@google.com
-CC: trix@redhat.com
-CC: llvm@lists.linux.dev
----
- include/uapi/linux/netlink.h | 2 --
- net/netlink/af_netlink.c     | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-diff --git a/include/uapi/linux/netlink.h b/include/uapi/linux/netlink.h
-index 5da0da59bf01..e2ae82e3f9f7 100644
---- a/include/uapi/linux/netlink.h
-+++ b/include/uapi/linux/netlink.h
-@@ -48,7 +48,6 @@ struct sockaddr_nl {
-  * @nlmsg_flags: Additional flags
-  * @nlmsg_seq:   Sequence number
-  * @nlmsg_pid:   Sending process port ID
-- * @nlmsg_data:  Message payload
-  */
- struct nlmsghdr {
- 	__u32		nlmsg_len;
-@@ -56,7 +55,6 @@ struct nlmsghdr {
- 	__u16		nlmsg_flags;
- 	__u32		nlmsg_seq;
- 	__u32		nlmsg_pid;
--	__u8		nlmsg_data[];
- };
- 
- /* Flags values */
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 9ebdf3262015..d73091f6bb0f 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2514,7 +2514,7 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 		if (!nlmsg_append(skb, nlmsg_len(nlh)))
- 			goto err_bad_put;
- 
--		memcpy(errmsg->msg.nlmsg_data, nlh->nlmsg_data,
-+		memcpy(nlmsg_data(&errmsg->msg), nlmsg_data(nlh),
- 		       nlmsg_len(nlh));
- 	}
- 
--- 
-2.38.1
-
+> ---
+> v2:
+>   * Add Nick's review and test tags.
+>   * Call out explicitly that CROSS_COMPILE=arm-linux-gnueabihf- is
+>     needed to reproduce this issue in commit message (Nick).
+>   * Fix dead link in commit message (Nick).
+>   * Use the snapshot branch for the patch link, as the diff is more up
+>     to date against upstream LLVM (Nick).
+> v1: https://lore.kernel.org/20221114225719.1657174-1-nathan@kernel.org/
+>  arch/arm/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index 357f0d9b8607..d1ebb746ff40 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -131,8 +131,9 @@ endif
+>  AFLAGS_NOWARN  :=$(call as-option,-Wa$(comma)-mno-warn-deprecated,-Wa$(comma)-W)
+>
+>  ifeq ($(CONFIG_THUMB2_KERNEL),y)
+> -CFLAGS_ISA     :=-mthumb -Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
+> +CFLAGS_ISA     :=-Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
+>  AFLAGS_ISA     :=$(CFLAGS_ISA) -Wa$(comma)-mthumb -D__thumb2__=2
+> +CFLAGS_ISA     +=-mthumb
+>  else
+>  CFLAGS_ISA     :=$(call cc-option,-marm,) $(AFLAGS_NOWARN)
+>  AFLAGS_ISA     :=$(CFLAGS_ISA)
+>
+> base-commit: 0c52591d22e99759da3793f19249bbf45ad742bd
+> --
+> 2.38.1
+>
