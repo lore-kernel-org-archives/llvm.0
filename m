@@ -1,71 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E115617C2
-	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 00:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EE3C433D6;
-	Fri, 18 Nov 2022 00:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81430182;
+	Fri, 18 Nov 2022 00:34:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862D4C433D6;
+	Fri, 18 Nov 2022 00:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1668729670;
-	bh=ov1dwfKlY10jlyvvrILEMTGZym5hMBZuKYP5HTVbbNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jUV6xj2ZuGt6gS++XzvZWg0g4N5kX3l4CCDn+/3k2C9z8oqImtI0RiS453F7mzV7s
-	 /i8YeU0Zk/s8iJXQZvkZ6VIwOVUccL/fB18s6uWeB5TNua5NHVLUQcG5c7g3lwD14I
-	 8Jqpt6YpzqDz7axweXGMZ0ccO8JOc2xAcPv93xP/E/hb/dTFiKsoQ4w++pKZjAtYEK
-	 elqG3Gz2r/BxmLl/PYwBnq6HveJstEV2yXkKHe9rQMIiGcSH/mM6UsBKQvXKyw0b+4
-	 lUDo3Np0l8usOfpNZ6bY7az78OiFW1/7dNoUFwg0kK1zJKH9f5UD7Xjq08EDHn3Vgp
-	 D4no7ZB6I5rHQ==
-Date: Thu, 17 Nov 2022 17:01:08 -0700
+	s=k20201202; t=1668731691;
+	bh=a0oKk28hds48kvk6Cz1Ecd3DjivBxBqAMGmz4lfIwe4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XOJgf8LyVo1gwHHADtM1ZldXG1S4EAISytDHFJcoF77pKw2K0aBcVPC5GpdlRZ/B4
+	 RuPR9xMKrMuekXmx88N+xR5iYOt6bH4ryXUVRVtlXs+IDXzdZH5+ZFGBzzfZalpygX
+	 UqDWt4l9ZmQDX06U/BkG70QDjXa0SnCC65Cy7kqluRJj4iI5FBQ4peNtD2ll6KBixB
+	 RSlaj6HdB1/5nLIyQ7H6k0LURYn+RMFE0Py4IyrpchjCJDVlL/U+rMcjnqP7yjLdar
+	 rlj4hSAOtm5G44eWrMINBWgejuoE7MqdAJ3nv5pG+zi+3jDRvetvUIS8Gx8MF3CZR7
+	 WfWX1dzSVbTIA==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Intel Graphics <intel-gfx@lists.freedesktop.org>,
-	DRI <dri-devel@lists.freedesktop.org>,
-	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Maxime Ripard <maxime@cerno.tech>, llvm@lists.linux.dev
-Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
- tree
-Message-ID: <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
-References: <20221116105702.746ce3cf@canb.auug.org.au>
- <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
- <20221118090636.00bfc293@canb.auug.org.au>
+To: Russell King <linux@armlinux.org.uk>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	"kernelci.org bot" <bot@kernelci.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2] ARM: Drop '-mthumb' from AFLAGS_ISA
+Date: Thu, 17 Nov 2022 17:30:58 -0700
+Message-Id: <20221118003057.3223394-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118090636.00bfc293@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 18, 2022 at 09:06:36AM +1100, Stephen Rothwell wrote:
-> Hi Nathan,
-> 
-> On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > This resolution is not quite right, as pointed out by clang:
-> > 
-> >     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi' is uninitialized when used here [-Werror,-Wuninitialized]
-> >             mutex_lock(&vc4_hdmi->mutex);
-> >                         ^~~~~~~~
-> >     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
-> >     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
-> >                                                ^~~~
-> >     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the variable 'vc4_hdmi' to silence this warning
-> >             struct vc4_hdmi *vc4_hdmi;
-> >                                      ^
-> >                                       = NULL
-> >     1 error generated.
-> > 
-> > Obviously, the assignment of vc4_hdmi should be before mutex_lock().
-> 
-> Thanks for pointing that out (silly me :-) ).  I have fixed up the
-> resolution for today.
+When building with CONFIG_THUMB2_KERNEL=y + a version of clang from
+Debian using CROSS_COMPILE=arm-linux-gnueabihf-, the following warning
+occurs frequently:
 
-Great, thank you so much! One less warning to worry about :)
+  <built-in>:383:9: warning: '__thumb2__' macro redefined [-Wmacro-redefined]
+  #define __thumb2__ 2
+          ^
+  <built-in>:353:9: note: previous definition is here
+  #define __thumb2__ 1
+          ^
+  1 warning generated.
 
-Cheers,
-Nathan
+Debian carries a downstream patch that changes the default CPU of the
+arm-linux-gnueabihf target from 'arm1176jzf-s' (v6) to 'cortex-a7' (v7).
+As a result, '-mthumb' defines both '__thumb__' and '__thumb2__'. The
+define of '__thumb2__' via the command line was purposefully added to
+catch a situation like this.
+
+In a similar vein as commit 26b12e084bce ("ARM: 9264/1: only use
+-mtp=cp15 for the compiler"), do not add '-mthumb' to AFLAGS_ISA, as it
+is already passed to the assembler via '-Wa,-mthumb' and '__thumb2__' is
+already defined for preprocessing.
+
+Fixes: 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler")
+Link: https://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/raw/622dbcbd40b316ed3905a2d25d9623544a06e6b1/debian/patches/930008-arm.diff
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+v2:
+  * Add Nick's review and test tags.
+  * Call out explicitly that CROSS_COMPILE=arm-linux-gnueabihf- is
+    needed to reproduce this issue in commit message (Nick).
+  * Fix dead link in commit message (Nick).
+  * Use the snapshot branch for the patch link, as the diff is more up
+    to date against upstream LLVM (Nick).
+v1: https://lore.kernel.org/20221114225719.1657174-1-nathan@kernel.org/
+ arch/arm/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 357f0d9b8607..d1ebb746ff40 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -131,8 +131,9 @@ endif
+ AFLAGS_NOWARN	:=$(call as-option,-Wa$(comma)-mno-warn-deprecated,-Wa$(comma)-W)
+ 
+ ifeq ($(CONFIG_THUMB2_KERNEL),y)
+-CFLAGS_ISA	:=-mthumb -Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
++CFLAGS_ISA	:=-Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
+ AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb -D__thumb2__=2
++CFLAGS_ISA	+=-mthumb
+ else
+ CFLAGS_ISA	:=$(call cc-option,-marm,) $(AFLAGS_NOWARN)
+ AFLAGS_ISA	:=$(CFLAGS_ISA)
+
+base-commit: 0c52591d22e99759da3793f19249bbf45ad742bd
+-- 
+2.38.1
+
