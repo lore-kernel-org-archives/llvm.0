@@ -1,118 +1,127 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098DFA492
-	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 21:36:05 +0000 (UTC)
-Date: Fri, 18 Nov 2022 21:35:48 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1668807358; x=1669066558;
-	bh=pJNx7ZnlloAIzR3yB2yGQaGebDKuZEQyHZ8pRqv1kDw=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=b2qCuWmRkoB5W1UQ7IPpk0U3I8c7VvCJ4D2+UxqyUEh54ahOLCplBQBnfwy1uuomy
-	 M5SUQd+oGXYcK8HS+xnBWhVA7jmfn2jKQMKDYAVS1K1+d2OdUpupNtE4lekIi6Za90
-	 QKJMgdsXN9rm9RUv53BLYEYXCPrZQR2U6Cbbg0BrMNLQZmQ7EO/gawObydr6aQRAJc
-	 0Q0YQmjRW79WnuvHmdwZB4maiP87VZhLtrznC4P0pBCBapiJ7ccXtnpAzvxprZ82A7
-	 Th0yfqSCAu3IZP+WlRrvnLLtB91rsTgPXcIV1t8Kp4jZOExxzHjEvVfqsE1k57oaQk
-	 5P6F9J+9v52RA==
-To: Masahiro Yamada <masahiroy@kernel.org>
-From: Alexander Lobakin <alobakin@pm.me>
-Cc: Alexander Lobakin <alobakin@pm.me>, linux-kbuild@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Nick Terrell <terrelln@fb.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] kbuild: warn objects shared among multiple modules
-Message-ID: <20221118212839.148107-1-alobakin@pm.me>
-In-Reply-To: <20221118191551.66448-2-masahiroy@kernel.org>
-References: <20221118191551.66448-1-masahiroy@kernel.org> <20221118191551.66448-2-masahiroy@kernel.org>
-Feedback-ID: 22809121:user:proton
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53649EBE0
+	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 23:23:54 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so9604914pjs.4
+        for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 15:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iXVai3qFJ8ArPGICNTEIcWXEgGfS3utWJbObwOpoeVU=;
+        b=NFSHO2ZSUb7w5MpWfNQrsU6nV0aGbmYOYqFMaJCHcOg3hTAKqC5IykbTpcmUt3u6Lv
+         6eDmhrGA8AAvTeKdSzoVKbV8EbdQ6Ut0tRnph4lQ+iKQaHrc3CmGHkcgGJ3FJJP1u4ma
+         r16CmGxHUb+rqEorMytkj4G5ymQJbwaIyVGgw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iXVai3qFJ8ArPGICNTEIcWXEgGfS3utWJbObwOpoeVU=;
+        b=wx3YDGoXAa3BJRkpCk5DOMufudW8kKE5DeAj4V1dZtPHn5BoHKdSGFND4uTp6hbhbU
+         BowJpae9J9TzWu3T21FzXsYzpa+gW+qVoW5t79rG7fwb6SYrxSxCjPVkIXIySsz1GUKX
+         vynb1d6Gtb7dAGZN0JqlXfvG6P/ulQq580MaDEwK0AOypJJVaV/k9KP+EBXBTUHA1H9n
+         rnsR6gDH+pW7byUkTATaigcqcnJN3hSPg0Y48K7mhV5Anuy9IuBXknRR/n19Vj7H5OS2
+         Dg0xKJ6Hmiqi+HO2NhMeO3TdXkd7l5q9MlOXS7LB9Xu9fXbNLt4nXjD+nO2ScqGRqFbB
+         Cc/g==
+X-Gm-Message-State: ANoB5pnL+30bbhsaXFZn7Do5g9JHrbZ7cs3S/yYD2m/6iq+2vG03wbbA
+	FvlRVmMgQZy3rhSkcK6onmSuug==
+X-Google-Smtp-Source: AA0mqf462QZsPtBpPocdQx/0dVxSHHjjHXfgSRPni9vR4Gor5GuDpiFouzua+89j8xLUx81aVbqNJw==
+X-Received: by 2002:a17:90a:6547:b0:213:d08f:a483 with SMTP id f7-20020a17090a654700b00213d08fa483mr9914547pjs.21.1668813833817;
+        Fri, 18 Nov 2022 15:23:53 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t8-20020a1709027fc800b00186c37270f6sm4294533plb.24.2022.11.18.15.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 15:23:53 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Jaroslav Kysela <perex@perex.cz>
+Cc: Kees Cook <keescook@chromium.org>,
+	kernel test robot <lkp@intel.com>,
+	Takashi Iwai <tiwai@suse.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	alsa-devel@alsa-project.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+Date: Fri, 18 Nov 2022 15:23:50 -0800
+Message-Id: <20221118232346.never.380-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2388; h=from:subject:message-id; bh=LT8LvayoodyeGcJJmotl0W7abaTXyRbApRilntoVIaM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjeBQGxl97XSZ/V131zxWG6VCVlDXD5V6MNXIDGf3M dU2HgY2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3gUBgAKCRCJcvTf3G3AJpNYD/ 970LXJu9T/r8J1MdqoqIR+muUaph3v/3r/JnVdIrugZjYUdZroQAGmvpKjF0NaevA5Rz+pYN8ejlBj QCPPFn5ld4zzw7miWLwRD05VvEonWs3fDK6yDqlRABnzMMa9TT0lLFvtxsLxoBMT5s9qf//qz59Q4C kJlTlPyMuRoTP6U3rbnw5ZbjkL1XWiQCUtIds/ZuIZk+lZU8qDtP0jBWfl2GpVsvXReyulyp7AkqbL pv+uGEb/ka/nhxaU7+4bse+EhIbJZ6d4hfuwkwjv6eAgbXjPV0cNc6D9/dKU2W7cvi6bD6bwwY9Z1F kHfxdJvYbQ+B+MTlG3O2mqN22daWBExivwMVg0gqOIyyUle1c4UceAT9IPZXOO5Ytvb3sHAdi3FySz riUxg7OnQoqX4ZuaEAiRtaeIKXp71OaAM2dSFQfZBwB0EkiG+fC5uN3Cs4g0nRt+irHwt1KKCnF/I9 owyMxTCpvATaqHdA3h+cfpn9xjWayAWEFTkd1duwlgCx9gT72iAKCzpDSaVEY1pzHHI+Ln3obru+it k9bsAVVu6S6l/VCU9Ul5sP6yxcHNx/SCeproJkeKDuNgk42tk8FP0RNs9P4BNVvqwszpuwfSwHuLqM exJ4TGIXwDqUUOs4vVncpMokhUYJqkBaLE55d9yYRqhWomued0koClDyDE1A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 19 Nov 2022 04:15:51 +0900
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed.
 
-> If an object is shared among multiple modules, amd some of them are
-> configured as 'm', but the others as 'y', the shared object is built
-> as modular, then linked to the modules and vmlinux. This is a potential
-> issue because the expected CFLAGS are different between modules and
-> builtins.
->
-> Commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
-> reported that this could be even more fatal in some cases such as
-> Clang LTO.
->
-> That commit fixed lib/zlib/zstd_{compress,decompress}, but there are
-> still more instances of breakage.
->
-> This commit adds a W=3D1 warning for shared objects, so that the kbuild
-> test robot, which provides build tests with W=3D1, will avoid a new
-> breakage slipping in.
->
-> Quick compile tests on v6.1-rc4 detected the following:
+seq_copy_in_user() and seq_copy_in_kernel() did not have prototypes
+matching snd_seq_dump_func_t. Adjust this and remove the casts. There
+are not resulting binary output differences.
 
-For the series:
+This was found as a result of Clang's new -Wcast-function-type-strict
+flag, which is more sensitive than the simpler -Wcast-function-type,
+which only checks for type width mismatches.
 
-Reviewed-and-tested-by: Alexander Lobakin <alobakin@pm.me>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: alsa-devel@alsa-project.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ sound/core/seq/seq_memory.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-[...]
-
-> Once all the warnings are fixed, it can become an error irrespective of
-> W=3D option.
-
-BTW I've fixed most of these (the ones that get build on typical
-x86_64 distroconfig) during my local tests, basing off your WIP
-tree. I could send a series if you wish.
-
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> Changes in v2:
->   - Add drivers/block/rnbd/Makefile for commit log
->
->  scripts/Makefile.build | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 37cf88d076e8..799df12b53f3 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -222,6 +222,10 @@ endif
->
->  cmd_check_local_export =3D $(srctree)/scripts/check-local-export $@
->
-> +ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-> +cmd_warn_shared_object =3D $(if $(word 2, $(modname-multi)),$(warning $(=
-kbuild-file): $*.o is added to multiple modules: $(modname-multi)))
-> +endif
-> +
->  define rule_cc_o_c
->  =09$(call cmd_and_fixdep,cc_o_c)
->  =09$(call cmd,gen_ksymdeps)
-> @@ -231,6 +235,7 @@ define rule_cc_o_c
->  =09$(call cmd,gen_objtooldep)
->  =09$(call cmd,gen_symversions_c)
->  =09$(call cmd,record_mcount)
-> +=09$(call cmd,warn_shared_object)
->  endef
->
->  define rule_as_o_S
-> @@ -239,6 +244,7 @@ define rule_as_o_S
->  =09$(call cmd,check_local_export)
->  =09$(call cmd,gen_objtooldep)
->  =09$(call cmd,gen_symversions_S)
-> +=09$(call cmd,warn_shared_object)
->  endef
->
->  # Built-in and composite module parts
-> --
-> 2.34.1
-
-Thanks,
-Olek
+diff --git a/sound/core/seq/seq_memory.c b/sound/core/seq/seq_memory.c
+index b7aee23fc387..47ef6bc30c0e 100644
+--- a/sound/core/seq/seq_memory.c
++++ b/sound/core/seq/seq_memory.c
+@@ -113,15 +113,19 @@ EXPORT_SYMBOL(snd_seq_dump_var_event);
+  * expand the variable length event to linear buffer space.
+  */
+ 
+-static int seq_copy_in_kernel(char **bufptr, const void *src, int size)
++static int seq_copy_in_kernel(void *ptr, void *src, int size)
+ {
++	char **bufptr = ptr;
++
+ 	memcpy(*bufptr, src, size);
+ 	*bufptr += size;
+ 	return 0;
+ }
+ 
+-static int seq_copy_in_user(char __user **bufptr, const void *src, int size)
++static int seq_copy_in_user(void *ptr, void *src, int size)
+ {
++	char __user **bufptr = ptr;
++
+ 	if (copy_to_user(*bufptr, src, size))
+ 		return -EFAULT;
+ 	*bufptr += size;
+@@ -151,8 +155,7 @@ int snd_seq_expand_var_event(const struct snd_seq_event *event, int count, char
+ 		return newlen;
+ 	}
+ 	err = snd_seq_dump_var_event(event,
+-				     in_kernel ? (snd_seq_dump_func_t)seq_copy_in_kernel :
+-				     (snd_seq_dump_func_t)seq_copy_in_user,
++				     in_kernel ? seq_copy_in_kernel : seq_copy_in_user,
+ 				     &buf);
+ 	return err < 0 ? err : newlen;
+ }
+-- 
+2.34.1
 
