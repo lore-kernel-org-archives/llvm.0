@@ -1,155 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C2A29B0
-	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 09:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1668762579;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xeXTZcuI1CLep2o2KomhSyxmx0lROJCn0LGc6rXRQUg=;
-	b=WDSjix57dIS09eUzcMvKyyhPWtqRQc+ZPCReSjXwArB/M2dBxrmEaXFb3gFLZiBFoz3FSm
-	o9ahOzD/LG7rIG8jnQqg52uy+PAv4Z2yDknruFNDs6bd+pLZMs/DxWDX3rAt+XG6XVJScM
-	ZtAC3zIaIA5/Ax2Po4BSG6huqLPeevI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-665-L-Eh7h90OcybpriSnfoyYQ-1; Fri, 18 Nov 2022 04:09:30 -0500
-X-MC-Unique: L-Eh7h90OcybpriSnfoyYQ-1
-Received: by mail-wm1-f71.google.com with SMTP id i133-20020a1c3b8b000000b003cffc0a69afso1783077wma.9
-        for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 01:09:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xeXTZcuI1CLep2o2KomhSyxmx0lROJCn0LGc6rXRQUg=;
-        b=eYyZZjeYFOk+/OOujqRsjlR6KKlwuN7T7xwoomDSiUf9M50G2MqURj4DuAkKnAKioR
-         cjH6BSlyivmJgeZaEOvnLMfLvd3wszcnep/n+Tj1xDmOBkx01dubmKjIQ77UUhT8Q5Go
-         Rz6fNiY5E1ufOSaNSisPSjcjwfG5hpf4skgdG33lHnnoCJ6x5xMQBsRBovuy0HwieWoY
-         u0CaemHSAkrpdmoekedKojBV9TzKCXCgu0XcL/NXu8dLPzcmFRYMyxnM8EZoi23tFeAv
-         eZVfN3pIq6/BysAEXQwu8p3KkEL70n5L12Zo6QYevxtIjq6S27/rxDx24FPYfy5rSm/B
-         jrNg==
-X-Gm-Message-State: ANoB5plzgFXT/ZoqnNQ6DbVi5+3YlSOghJ/fBn/NE92pbHR31q/wuL6Y
-	/l/1N+0YqomloOrHwsNq13GvmrilW4vFpgNBEIIYoESg+s3zErkf2/EgVQeg4ILPv6vb2EppUS+
-	Wdw7hLbR5zFmnEQ==
-X-Received: by 2002:a05:600c:1e1a:b0:3cf:7959:d8be with SMTP id ay26-20020a05600c1e1a00b003cf7959d8bemr4452079wmb.85.1668762569743;
-        Fri, 18 Nov 2022 01:09:29 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7jsIC1kyZP02uLsDpFgwzo/jh+9BTiREaq3zKB0f5w8O4mQu6CokrtkacAoWZxpUfLgP9J7g==
-X-Received: by 2002:a05:600c:1e1a:b0:3cf:7959:d8be with SMTP id ay26-20020a05600c1e1a00b003cf7959d8bemr4452051wmb.85.1668762569479;
-        Fri, 18 Nov 2022 01:09:29 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id p6-20020a5d48c6000000b00241a8a5bc11sm2955443wrs.80.2022.11.18.01.09.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 01:09:28 -0800 (PST)
-Message-ID: <569b4eeb-792a-9ad6-d52e-555f987bc7f7@redhat.com>
-Date: Fri, 18 Nov 2022 10:09:26 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4932CA2
+	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 09:20:24 +0000 (UTC)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.nyi.internal (Postfix) with ESMTP id 523F45C0513;
+	Fri, 18 Nov 2022 04:20:23 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 18 Nov 2022 04:20:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1668763223; x=1668849623; bh=4n4DR4UwM1
+	0Hw+UX/vwcqMHSZCvbtAN5htQFeot9k0s=; b=LYNeULVFAebnqpXOJpHXpNjDeY
+	XS0flPyOKrAZxKsh4iQc0ZI5EJvqg/vL6nqEYs2k4HELn5ioOaZASWxsOBDZz8Nk
+	U05AvRz/anebMho0GIoFAUzeWR1Q6yHnU5KvMD1nZOe9dV2tCagLqZhi0JH3vmc1
+	LtG7PYqX4CR6zcupd+XfXf2RZZ7wky/8sxvaKpgnawNa9PBoZU0XWNLEBuTHrV+i
+	Dt9H/w54YuWeBAsGdv+QQNxbSMV265i4e6LiwviudQHCQc9zv90hT1Vw/cIQoosB
+	PtT0UHFH6679yAOFMWv+pSsE8UAUuA6b3otS69gmmKEp0Hw2aMEydArXGhHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1668763223; x=1668849623; bh=4n4DR4UwM10Hw+UX/vwcqMHSZCvb
+	tAN5htQFeot9k0s=; b=dYtPEl3UgKwY4kyD4AclEMrQ2EtGmLPlA68TpselZHFF
+	9u8LIdlGK0KAGUzTewj5FC9HO3MG39VuhRI9zm+ur9hWzfEkDlRNbeU9sL2qLVmh
+	l6v/t6vop4T3uI8/LivxEaQyaJWmgtH9aYewlRAVb8j7ag0mz4E2v7cI7LOh6voh
+	/brht4rf2zmC395EH+IGCIHNyyZpNURecjznZ6jIAtZY+V15ds2359kF8IrdJwYr
+	zHvtZDwHd6wq7ElS1IfwH7Sjao5l6JXsJ8P2Sy4Soqpn0N1m+w5WBYvMwhs8l3kn
+	cOdGElnKuyTbwsdFDvebzfpfudJciGUooy4nSwbV2w==
+X-ME-Sender: <xms:Vk53Y-mYyWluu8ptma9_HbxzN6V0WEpT_zpG02A8sZ0p4Td9uapCrw>
+    <xme:Vk53Y12N-XZjh3vrK1cA6dPEI_PelFPLODYnhhJEBfbWIzdJieuCywjCJIfyyG9mX
+    2VuecYVem3sERPMWKc>
+X-ME-Received: <xmr:Vk53Y8oWX8yXhLN6ibFL6-YdpceVsXUpxT1bIWXFHrJ2u2si28bNZ-uOdYrR9x4V3rXXjRoq3c5mHX3uzb1vPUDmQtq3o5DOQaedOjnVGNt49w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgddtvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:Vk53YymcEeZCWCnz6mZOA7HIRDHqvrJ3RJhYNSBbdApXSrbN5jJdLQ>
+    <xmx:Vk53Y80X3IftNfwIwF5-yOrZ4Hj2t-qhk6Nplx_5Me_yOEJ2DXcITw>
+    <xmx:Vk53Y5vs-s38Diftjkj7piocKdDWJO3Q2-Af4vCMmlWqcY_7cI1Emw>
+    <xmx:V053Y1HYD8gWp49Ur4aXLMO6qjTii50h3ivR-O1mqw55YOZ9nRnksQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Nov 2022 04:20:22 -0500 (EST)
+Date: Fri, 18 Nov 2022 10:20:20 +0100
+From: Maxime Ripard <maxime@cerno.tech>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Intel Graphics <intel-gfx@lists.freedesktop.org>,
+	DRI <dri-devel@lists.freedesktop.org>,
+	=?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
+ tree
+Message-ID: <20221118092020.nhvjomvwwryb7j3n@houat>
+References: <20221116105702.746ce3cf@canb.auug.org.au>
+ <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
+ <20221118090636.00bfc293@canb.auug.org.au>
+ <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v5 07/19] kernel/user: Allow user::locked_vm to be usable
- for iommufd
-To: Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
- iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
- Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-Cc: Anthony Krowiak <akrowiak@linux.ibm.com>,
- Alex Williamson <alex.williamson@redhat.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Lu Baolu <baolu.lu@linux.intel.com>,
- Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
- <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>,
- David Gibson <david@gibson.dropbear.id.au>,
- Eric Farman <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Jason Herne <jjherne@linux.ibm.com>, Joao Martins
- <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
- Lixiao Yang <lixiao.yang@intel.com>, Matthew Rosato
- <mjrosato@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>,
- Nicolin Chen <nicolinc@nvidia.com>, Halil Pasic <pasic@linux.ibm.com>,
- Niklas Schnelle <schnelle@linux.ibm.com>,
- Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
- Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-References: <7-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
-From: Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <7-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="utkgyjtezkaepsh6"
+Content-Disposition: inline
+In-Reply-To: <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
 
-Hi Jason,
 
-On 11/16/22 22:00, Jason Gunthorpe wrote:
-> Following the pattern of io_uring, perf, skb, and bpf iommfd will use
-> user->locked_vm for accounting pinned pages. Ensure the value is included
-> in the struct and export free_uid() as iommufd is modular.
->
-> user->locked_vm is the good accounting to use for ulimit because it is
-> per-user, and the security sandboxing of locked pages is not supposed to
-> be per-process. Other places (vfio, vdpa and infiniband) have used
-> mm->pinned_vm and/or mm->locked_vm for accounting pinned pages, but this
-> is only per-process and inconsistent with the new FOLL_LONGTERM users in
-> the kernel.
->
-> Concurrent work is underway to try to put this in a cgroup, so everything
-> can be consistent and the kernel can provide a FOLL_LONGTERM limit that
-> actually provides security.
->
-> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
-> Tested-by: Yi Liu <yi.l.liu@intel.com>
-> Tested-by: Lixiao Yang <lixiao.yang@intel.com>
-> Tested-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+--utkgyjtezkaepsh6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Eric Auger <eric.auger@redhat.com>
+On Thu, Nov 17, 2022 at 05:01:08PM -0700, Nathan Chancellor wrote:
+> On Fri, Nov 18, 2022 at 09:06:36AM +1100, Stephen Rothwell wrote:
+> > Hi Nathan,
+> >=20
+> > On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org=
+> wrote:
+> > >
+> > > This resolution is not quite right, as pointed out by clang:
+> > >=20
+> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+> > >             mutex_lock(&vc4_hdmi->mutex);
+> > >                         ^~~~~~~~
+> > >     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_=
+lock'
+> > >     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+> > >                                                ^~~~
+> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the varia=
+ble 'vc4_hdmi' to silence this warning
+> > >             struct vc4_hdmi *vc4_hdmi;
+> > >                                      ^
+> > >                                       =3D NULL
+> > >     1 error generated.
+> > >=20
+> > > Obviously, the assignment of vc4_hdmi should be before mutex_lock().
+> >=20
+> > Thanks for pointing that out (silly me :-) ).  I have fixed up the
+> > resolution for today.
+>=20
+> Great, thank you so much! One less warning to worry about :)
 
-Eric
-> ---
->  include/linux/sched/user.h | 2 +-
->  kernel/user.c              | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/sched/user.h b/include/linux/sched/user.h
-> index f054d0360a7533..4cc52698e214e2 100644
-> --- a/include/linux/sched/user.h
-> +++ b/include/linux/sched/user.h
-> @@ -25,7 +25,7 @@ struct user_struct {
->  
->  #if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
->  	defined(CONFIG_NET) || defined(CONFIG_IO_URING) || \
-> -	defined(CONFIG_VFIO_PCI_ZDEV_KVM)
-> +	defined(CONFIG_VFIO_PCI_ZDEV_KVM) || IS_ENABLED(CONFIG_IOMMUFD)
->  	atomic_long_t locked_vm;
->  #endif
->  #ifdef CONFIG_WATCH_QUEUE
-> diff --git a/kernel/user.c b/kernel/user.c
-> index e2cf8c22b539a7..d667debeafd609 100644
-> --- a/kernel/user.c
-> +++ b/kernel/user.c
-> @@ -185,6 +185,7 @@ void free_uid(struct user_struct *up)
->  	if (refcount_dec_and_lock_irqsave(&up->__count, &uidhash_lock, &flags))
->  		free_user(up, flags);
->  }
-> +EXPORT_SYMBOL_GPL(free_uid);
->  
->  struct user_struct *alloc_uid(kuid_t uid)
->  {
+I actually did the same conflict resolution in drm-tip. I've fixed it up
+too, thanks for your report :)
 
+Maxime
+
+--utkgyjtezkaepsh6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3dOVAAKCRDj7w1vZxhR
+xa2fAQD933QJY5E3XRwJGvMvYIALowd4qIYtQyxBCrk/Zo2bTQEAiLYk8Ij68h6E
+CzpNCMHNSYp+43IPN7VzU0UqzQpvawk=
+=GyeM
+-----END PGP SIGNATURE-----
+
+--utkgyjtezkaepsh6--
