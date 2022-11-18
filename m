@@ -1,134 +1,218 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4932CA2
-	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 09:20:24 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.nyi.internal (Postfix) with ESMTP id 523F45C0513;
-	Fri, 18 Nov 2022 04:20:23 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 18 Nov 2022 04:20:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1668763223; x=1668849623; bh=4n4DR4UwM1
-	0Hw+UX/vwcqMHSZCvbtAN5htQFeot9k0s=; b=LYNeULVFAebnqpXOJpHXpNjDeY
-	XS0flPyOKrAZxKsh4iQc0ZI5EJvqg/vL6nqEYs2k4HELn5ioOaZASWxsOBDZz8Nk
-	U05AvRz/anebMho0GIoFAUzeWR1Q6yHnU5KvMD1nZOe9dV2tCagLqZhi0JH3vmc1
-	LtG7PYqX4CR6zcupd+XfXf2RZZ7wky/8sxvaKpgnawNa9PBoZU0XWNLEBuTHrV+i
-	Dt9H/w54YuWeBAsGdv+QQNxbSMV265i4e6LiwviudQHCQc9zv90hT1Vw/cIQoosB
-	PtT0UHFH6679yAOFMWv+pSsE8UAUuA6b3otS69gmmKEp0Hw2aMEydArXGhHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1668763223; x=1668849623; bh=4n4DR4UwM10Hw+UX/vwcqMHSZCvb
-	tAN5htQFeot9k0s=; b=dYtPEl3UgKwY4kyD4AclEMrQ2EtGmLPlA68TpselZHFF
-	9u8LIdlGK0KAGUzTewj5FC9HO3MG39VuhRI9zm+ur9hWzfEkDlRNbeU9sL2qLVmh
-	l6v/t6vop4T3uI8/LivxEaQyaJWmgtH9aYewlRAVb8j7ag0mz4E2v7cI7LOh6voh
-	/brht4rf2zmC395EH+IGCIHNyyZpNURecjznZ6jIAtZY+V15ds2359kF8IrdJwYr
-	zHvtZDwHd6wq7ElS1IfwH7Sjao5l6JXsJ8P2Sy4Soqpn0N1m+w5WBYvMwhs8l3kn
-	cOdGElnKuyTbwsdFDvebzfpfudJciGUooy4nSwbV2w==
-X-ME-Sender: <xms:Vk53Y-mYyWluu8ptma9_HbxzN6V0WEpT_zpG02A8sZ0p4Td9uapCrw>
-    <xme:Vk53Y12N-XZjh3vrK1cA6dPEI_PelFPLODYnhhJEBfbWIzdJieuCywjCJIfyyG9mX
-    2VuecYVem3sERPMWKc>
-X-ME-Received: <xmr:Vk53Y8oWX8yXhLN6ibFL6-YdpceVsXUpxT1bIWXFHrJ2u2si28bNZ-uOdYrR9x4V3rXXjRoq3c5mHX3uzb1vPUDmQtq3o5DOQaedOjnVGNt49w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrhedtgddtvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:Vk53YymcEeZCWCnz6mZOA7HIRDHqvrJ3RJhYNSBbdApXSrbN5jJdLQ>
-    <xmx:Vk53Y80X3IftNfwIwF5-yOrZ4Hj2t-qhk6Nplx_5Me_yOEJ2DXcITw>
-    <xmx:Vk53Y5vs-s38Diftjkj7piocKdDWJO3Q2-Af4vCMmlWqcY_7cI1Emw>
-    <xmx:V053Y1HYD8gWp49Ur4aXLMO6qjTii50h3ivR-O1mqw55YOZ9nRnksQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Nov 2022 04:20:22 -0500 (EST)
-Date: Fri, 18 Nov 2022 10:20:20 +0100
-From: Maxime Ripard <maxime@cerno.tech>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Intel Graphics <intel-gfx@lists.freedesktop.org>,
-	DRI <dri-devel@lists.freedesktop.org>,
-	=?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: linux-next: manual merge of the drm-misc tree with the origin
- tree
-Message-ID: <20221118092020.nhvjomvwwryb7j3n@houat>
-References: <20221116105702.746ce3cf@canb.auug.org.au>
- <Y3ZvffZiR+SgtY6h@dev-arch.thelio-3990X>
- <20221118090636.00bfc293@canb.auug.org.au>
- <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB5433ED
+	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 13:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1668778302;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YwgBlEM/mibdo63u9+RPAv0bti+Pt2IKrnaQa96XXwo=;
+	b=XOagym3TTe85N08K2yaNOv6f4UkBoaxLjH0uvvz4TOIvtk3YdaC0acMAwkyc0CfgKtOZfk
+	QEIZ3ACfmEMZBCD5CuQ4vkBYmARp+o/FGUbTmN5wEruzcMVfXhnN0Px+VR7oOLYA/rcQt+
+	RTWNs48XY54xXm7Pm8mfSlHiwOO6pwQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-597-bc-72r0ZNzecMghxfzRctA-1; Fri, 18 Nov 2022 08:31:41 -0500
+X-MC-Unique: bc-72r0ZNzecMghxfzRctA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45788293248A
+	for <llvm@lists.linux.dev>; Fri, 18 Nov 2022 13:31:41 +0000 (UTC)
+Received: from [172.64.11.29] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 325EAC15BA8;
+	Fri, 18 Nov 2022 13:31:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc5,
+ mainline.kernel.org-clang, 81ac2565)
+Date: Fri, 18 Nov 2022 13:31:41 -0000
+To: llvm@lists.linux.dev, jishi@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="utkgyjtezkaepsh6"
-Content-Disposition: inline
-In-Reply-To: <Y3bLRLDCrd7KYqom@dev-arch.thelio-3990X>
-
-
---utkgyjtezkaepsh6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <26233.122111808314100367@us-mta-597.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 17, 2022 at 05:01:08PM -0700, Nathan Chancellor wrote:
-> On Fri, Nov 18, 2022 at 09:06:36AM +1100, Stephen Rothwell wrote:
-> > Hi Nathan,
-> >=20
-> > On Thu, 17 Nov 2022 10:29:33 -0700 Nathan Chancellor <nathan@kernel.org=
-> wrote:
-> > >
-> > > This resolution is not quite right, as pointed out by clang:
-> > >=20
-> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:351:14: error: variable 'vc4_hdmi'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-> > >             mutex_lock(&vc4_hdmi->mutex);
-> > >                         ^~~~~~~~
-> > >     ./include/linux/mutex.h:187:44: note: expanded from macro 'mutex_=
-lock'
-> > >     #define mutex_lock(lock) mutex_lock_nested(lock, 0)
-> > >                                                ^~~~
-> > >     drivers/gpu/drm/vc4/vc4_hdmi.c:322:27: note: initialize the varia=
-ble 'vc4_hdmi' to silence this warning
-> > >             struct vc4_hdmi *vc4_hdmi;
-> > >                                      ^
-> > >                                       =3D NULL
-> > >     1 error generated.
-> > >=20
-> > > Obviously, the assignment of vc4_hdmi should be before mutex_lock().
-> >=20
-> > Thanks for pointing that out (silly me :-) ).  I have fixed up the
-> > resolution for today.
->=20
-> Great, thank you so much! One less warning to worry about :)
+Hi, we tested your kernel and here are the results:
 
-I actually did the same conflict resolution in drm-tip. I've fixed it up
-too, thanks for your report :)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Maxime
 
---utkgyjtezkaepsh6
-Content-Type: application/pgp-signature; name="signature.asc"
+Kernel information:
+    Commit message: Merge tag 'nfsd-6.1-5' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/cel/linux
 
------BEGIN PGP SIGNATURE-----
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/60290
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3dOVAAKCRDj7w1vZxhR
-xa2fAQD933QJY5E3XRwJGvMvYIALowd4qIYtQyxBCrk/Zo2bTQEAiLYk8Ij68h6E
-CzpNCMHNSYp+43IPN7VzU0UqzQpvawk=
-=GyeM
------END PGP SIGNATURE-----
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+          x86_64 (debug) - Networking socket: fuzz
+                   Issue: BUG: sleeping function called from invalid contex=
+t at include/linux/percpu-rwsem.h:49
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+4274
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6019985
+          x86_64 (debug) - L2TP basic test
+                   Issue: BUG: sleeping function called from invalid contex=
+t at include/linux/percpu-rwsem.h:49
+                          https://bugzilla.redhat.com/show_bug.cgi?id=3D198=
+4274
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6019996
 
---utkgyjtezkaepsh6--
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6019680
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1479
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - forwarding
+                  x86_64 (debug) - kselftests upstream - tc
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+                  x86_64 - Networking MACsec: sanity
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1339
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+                   s390x - kdump - sysrq-c
+                   s390x - kdump - file-load
+                  x86_64 - kdump - sysrq-c
+                  x86_64 - kdump - file-load
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
