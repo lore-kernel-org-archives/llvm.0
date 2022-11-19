@@ -1,34 +1,34 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D892CA6
-	for <llvm@lists.linux.dev>; Sat, 19 Nov 2022 15:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BFC1382
+	for <llvm@lists.linux.dev>; Sat, 19 Nov 2022 16:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1668871242;
+	s=mimecast20190719; t=1668875498;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=JjEy7Xi/upaH+16UTu266DDB+AgbyQ0dxsWOsv54dSc=;
-	b=TIhAsPM8GE5tL16UKVJs0ly0oYM0nGDGvxMBxVXSaCAzgQgXvuR/g42h0IzF194QaCGGzj
-	1wg3JYFng+jSdvi2o9HT5z8gGjtcAqaL8qfclfZCiNx2Qr4ef1z0ySO7kue4BTFcSQbhJ9
-	E0kuTiCxDOCd5yz2FwodeyMF/0yjiGQ=
+	bh=htQMx1UzfxnCGerlEuLdhG5SJ/CFRO7yODRW+Oyvw+Q=;
+	b=PgFtod1/1aP6TBNt+8lhmFhxoM/YDOJZpNe/jZ6leIOp+qwUr0BsUc4xJr5CMYShgueXbE
+	8BFahiSJcgQMAt28vbogr1pbLJPjxBOnRQLK3bnKXew+ZWjR7fZBidjGd73dLlKhM36WXY
+	pIEYfILeLkKDc+eXmZznsMwIT6fgWpY=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-287-93kyG8-TP2y-gwyogyOc3w-1; Sat, 19 Nov 2022 10:20:40 -0500
-X-MC-Unique: 93kyG8-TP2y-gwyogyOc3w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-553-AoXlKG6aPEKD7J7L0qftVw-1; Sat, 19 Nov 2022 11:31:37 -0500
+X-MC-Unique: AoXlKG6aPEKD7J7L0qftVw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C82638041CE
-	for <llvm@lists.linux.dev>; Sat, 19 Nov 2022 15:20:40 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55972299E757
+	for <llvm@lists.linux.dev>; Sat, 19 Nov 2022 16:31:37 +0000 (UTC)
 Received: from [172.64.11.29] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3C946C15BAB;
-	Sat, 19 Nov 2022 15:20:40 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 466B9477F55;
+	Sat, 19 Nov 2022 16:31:37 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc5,
- mainline.kernel.org-clang, bf5003a0)
-Date: Sat, 19 Nov 2022 15:20:40 -0000
+ mainline.kernel.org-clang, fe24a97c)
+Date: Sat, 19 Nov 2022 16:31:37 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <21464.122111910204000179@us-mta-287.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <62266.122111911313701277@us-mta-553.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,17 +52,17 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'zonefs-6.1-rc6' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/dlemoal/zonefs
+    Commit message: Merge tag 'input-for-v6.1-rc5' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/dtor/input
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/60528
+    https://datawarehouse.cki-project.org/kcidb/checkouts/60529
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6044112
+6044962
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -83,11 +83,34 @@ e/linux/percpu-rwsem.h:49
 l-tests/-/issues/1449
             Affected tests:
                   x86_64 (debug) - Networking socket: fuzz
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 aarch64 - Firmware test suite
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking MACsec: sanity
+                  x86_64 - Networking cki netfilter test
+                  x86_64 - ALSA PCM loopback test
+                  x86_64 - Storage - SCSI VPD
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
         Issue: Networking route: pmtu: Cannot find device "veth0_client"
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
             Affected tests:
                  aarch64 - Networking MACsec: sanity
                  ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
                   x86_64 - Networking MACsec: sanity
                   x86_64 (debug) - L2TP basic test
         Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
@@ -104,50 +127,14 @@ l-tests/-/issues/1473
                   x86_64 (debug) - kselftests upstream - tc
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                  x86_64 - Storage - blktests - nvmeof-mp
         Issue: Networking MACsec: sanity: Cannot find device "dummy0"
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1306
             Affected tests:
                  aarch64 - Networking MACsec: sanity
                  ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
                   x86_64 - Networking MACsec: sanity
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
         Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
 ash
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -158,6 +145,12 @@ l-tests/-/issues/1339
                    s390x - kdump - file-load
                   x86_64 - kdump - sysrq-c
                   x86_64 - kdump - file-load
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
         Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
 ainted 6.1.0-rc3
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
