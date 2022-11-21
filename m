@@ -1,66 +1,67 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1370410786;
-	Mon, 21 Nov 2022 21:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16A11079F;
+	Mon, 21 Nov 2022 23:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669066841; x=1700602841;
+  t=1669074104; x=1700610104;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1qhpUl60TaDTUPxIdwzME4BroTpPZluyjoocCH5h87U=;
-  b=hQx2VvKnmQikhtZySyaxQGA89jqj0K/zBOyPPWtRoLRSpKPMzPb1Wd/Q
-   w4RGmjv1I7aMHnELD2l9uGSpfCUoj1Wh4uhm0O5hme+YXiUVE0hAkzIBE
-   gG9VUU8pnZUm27+vXeF7maGKfMoFyfvGhP/1tWIohiN/J+aCJ3i1uBatP
-   sjsXfZiMduxEVhFTXKH9h3ErdOOrnPM5roWZ5z2fk/V2Wvs+ogRpEwnM7
-   qTDiB2uQ56uJYGBUktGCYLFSXfB3uac51Y8L5JCT/iMTIIXGqUyltdS5l
-   T18SIb2wGTi1ytq3uh2Mps9eGGHL779OM9wFN1qwFtydeT14p5I0RulRx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="377926606"
+  bh=+owlKHnSuOgl3GV0uxQeDHVubq6PdIiE2OXq3f1V+dg=;
+  b=gGefiQVWrs0QFsJs/x7behijGWFEVM1JYoB9HLXYbFAiFugyQ3KGhsX6
+   Huwp0SO8mP7yK520Kceuu5MmIBlBwgZ052FCmH5YGp/Akg1PJq14jrV0k
+   gTZVBkhfOm8QCu9drp0orhBqhWN2ZzMoL4RsApzH+E8Dp5eOpzMOmRz8H
+   0ozWhrgB7Wy0GUmJPG0Xs1Jmglo+eBtQUnopUUSX/somFXHFtu5qZs/eg
+   yVl36/zg4kCufF52G1xsPjVC1rX4RF/tU4ghIVHgpxFLJCxHYyLbdl2u8
+   pTE5WxjmJ7esLKq/4yMB5KJqAVEeGhQCmkBc2/ETjhB5brsDY9uUS0l4K
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="399977543"
 X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="377926606"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:40:40 -0800
+   d="scan'208";a="399977543"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 15:41:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="783600467"
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="886304156"
 X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="783600467"
+   d="scan'208";a="886304156"
 Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Nov 2022 13:40:37 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 21 Nov 2022 15:41:41 -0800
 Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oxEWr-0000lt-0O;
-	Mon, 21 Nov 2022 21:40:37 +0000
-Date: Tue, 22 Nov 2022 05:39:57 +0800
+	id 1oxGQ0-0000qt-2Q;
+	Mon, 21 Nov 2022 23:41:40 +0000
+Date: Tue, 22 Nov 2022 07:41:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Yan <andy.yan@rock-chips.com>
+To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-	Sascha Hauer <s.hauer@pengutronix.de>
-Subject: drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused
- variable 'vop2_dt_match'
-Message-ID: <202211220534.oOsKlYtB-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/verisilicon/hantro_drv.c:618:34: warning:
+ unused variable 'of_hantro_match'
+Message-ID: <202211220742.btWbepFZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="3rgTB2agoPfMyiR3"
+Content-Type: multipart/mixed; boundary="svfIHcln9NEXVO52"
 Content-Disposition: inline
 
 
---3rgTB2agoPfMyiR3
+--svfIHcln9NEXVO52
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Andy,
+Hi Ezequiel,
 
-FYI, the error/warning still remains.
+First bad commit (maybe != root cause):
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
-commit: 604be85547ce4d61b89292d2f9a78c721b778c16 drm/rockchip: Add VOP2 driver
-date:   7 months ago
+commit: fbb6c848dd89786fe24856ee6b5e773910ded29c media: destage Hantro VPU driver
+date:   3 months ago
 config: s390-randconfig-c005-20221121
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project af8c49dc1ec44339d915d988ffe0f38da68ca0e7)
 reproduce (this is a W=1 build):
@@ -68,29 +69,31 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=604be85547ce4d61b89292d2f9a78c721b778c16
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbb6c848dd89786fe24856ee6b5e773910ded29c
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 604be85547ce4d61b89292d2f9a78c721b778c16
+        git checkout fbb6c848dd89786fe24856ee6b5e773910ded29c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/rockchip/ drivers/media/platform/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/verisilicon/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:16:
-   In file included from drivers/gpu/drm/rockchip/rockchip_drm_vop2.h:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
    In file included from include/linux/io.h:13:
    In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __raw_readb(PCI_IOBASE + addr);
                              ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
@@ -99,13 +102,15 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
    #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
                                                         ^
-   In file included from drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:16:
-   In file included from drivers/gpu/drm/rockchip/rockchip_drm_vop2.h:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
    In file included from include/linux/io.h:13:
    In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
@@ -114,72 +119,95 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
    #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
                                                         ^
-   In file included from drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:16:
-   In file included from drivers/gpu/drm/rockchip/rockchip_drm_vop2.h:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
    In file included from include/linux/io.h:13:
    In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writeb(value, PCI_IOBASE + addr);
                                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            readsb(PCI_IOBASE + addr, buffer, count);
                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            readsw(PCI_IOBASE + addr, buffer, count);
                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            readsl(PCI_IOBASE + addr, buffer, count);
                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesb(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesw(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesl(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
->> drivers/gpu/drm/rockchip/rockchip_vop2_reg.c:248:34: warning: unused variable 'vop2_dt_match' [-Wunused-const-variable]
-   static const struct of_device_id vop2_dt_match[] = {
+>> drivers/media/platform/verisilicon/hantro_drv.c:618:34: warning: unused variable 'of_hantro_match' [-Wunused-const-variable]
+   static const struct of_device_id of_hantro_match[] = {
                                     ^
    13 warnings generated.
 
 
-vim +/vop2_dt_match +248 drivers/gpu/drm/rockchip/rockchip_vop2_reg.c
+vim +/of_hantro_match +618 drivers/media/platform/verisilicon/hantro_drv.c
 
-   247	
- > 248	static const struct of_device_id vop2_dt_match[] = {
-   249		{
-   250			.compatible = "rockchip,rk3566-vop",
-   251			.data = &rk3566_vop,
-   252		}, {
-   253			.compatible = "rockchip,rk3568-vop",
-   254			.data = &rk3568_vop,
-   255		}, {
-   256		},
-   257	};
-   258	MODULE_DEVICE_TABLE(of, vop2_dt_match);
-   259	
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  617  
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12 @618  static const struct of_device_id of_hantro_match[] = {
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  619  #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
+fb7cb344b96938 drivers/staging/media/hantro/hantro_drv.c             Paul Kocialkowski  2021-07-19  620  	{ .compatible = "rockchip,px30-vpu",   .data = &px30_vpu_variant, },
+4f34591568e7a1 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  621  	{ .compatible = "rockchip,rk3036-vpu", .data = &rk3036_vpu_variant, },
+78bb1ae5472cab drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  622  	{ .compatible = "rockchip,rk3066-vpu", .data = &rk3066_vpu_variant, },
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  623  	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+4b898fedeb26c4 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  624  	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+4b898fedeb26c4 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  625  	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+6f1ae821a6c4aa drivers/staging/media/hantro/hantro_drv.c             Nicolas Frattaroli 2022-06-12  626  	{ .compatible = "rockchip,rk3568-vepu", .data = &rk3568_vepu_variant, },
+5f6bfab6da6531 drivers/staging/media/hantro/hantro_drv.c             Piotr Oniszczuk    2022-02-14  627  	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  628  #endif
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  629  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+cf1abc501a5c76 drivers/staging/media/hantro/hantro_drv.c             Adam Ford          2022-01-25  630  	{ .compatible = "nxp,imx8mm-vpu-g1", .data = &imx8mm_vpu_g1_variant, },
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  631  	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+6971efb70ac3e4 drivers/staging/media/hantro/hantro_drv.c             Adam Ford          2022-01-25  632  	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
+45040f67504195 drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard  2021-06-03  633  	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  634  #endif
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  635  #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  636  	{ .compatible = "microchip,sama5d4-vdec", .data = &sama5d4_vdec_variant, },
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  637  #endif
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  638  #ifdef CONFIG_VIDEO_HANTRO_SUNXI
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  639  	{ .compatible = "allwinner,sun50i-h6-vpu-g2", .data = &sunxi_vpu_variant, },
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  640  #endif
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  641  	{ /* sentinel */ }
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  642  };
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  643  MODULE_DEVICE_TABLE(of, of_hantro_match);
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  644  
+
+:::::: The code at line 618 was first introduced by commit
+:::::: a29add8c9bb29dfa8dc47c71b2702e9cc4f332a6 media: rockchip/vpu: rename from rockchip to hantro
+
+:::::: TO: Philipp Zabel <p.zabel@pengutronix.de>
+:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---3rgTB2agoPfMyiR3
+--svfIHcln9NEXVO52
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/s390 5.18.0-rc5 Kernel Configuration
+# Linux/s390 6.0.0-rc1 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project af8c49dc1ec44339d915d988ffe0f38da68ca0e7)"
 CONFIG_GCC_VERSION=0
@@ -225,7 +253,6 @@ CONFIG_KERNEL_GZIP=y
 # CONFIG_KERNEL_UNCOMPRESSED is not set
 CONFIG_DEFAULT_INIT=""
 CONFIG_DEFAULT_HOSTNAME="(none)"
-CONFIG_SWAP=y
 CONFIG_SYSVIPC=y
 CONFIG_WATCH_QUEUE=y
 CONFIG_CROSS_MEMORY_ATTACH=y
@@ -249,6 +276,8 @@ CONFIG_SPARSE_IRQ=y
 
 CONFIG_GENERIC_TIME_VSYSCALL=y
 CONFIG_GENERIC_CLOCKEVENTS=y
+CONFIG_CONTEXT_TRACKING=y
+CONFIG_CONTEXT_TRACKING_IDLE=y
 
 #
 # Timers subsystem
@@ -294,10 +323,6 @@ CONFIG_TREE_RCU=y
 # CONFIG_RCU_EXPERT is not set
 CONFIG_SRCU=y
 CONFIG_TREE_SRCU=y
-CONFIG_TASKS_RCU_GENERIC=y
-CONFIG_TASKS_RCU=y
-CONFIG_TASKS_RUDE_RCU=y
-CONFIG_TASKS_TRACE_RCU=y
 CONFIG_RCU_STALL_COMMON=y
 CONFIG_RCU_NEED_SEGCBLIST=y
 # end of RCU Subsystem
@@ -313,7 +338,9 @@ CONFIG_IKCONFIG=y
 CONFIG_ARCH_SUPPORTS_NUMA_BALANCING=y
 CONFIG_CC_HAS_INT128=y
 CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough"
+CONFIG_GCC12_NO_ARRAY_BOUNDS=y
 CONFIG_CGROUPS=y
+CONFIG_CGROUP_FAVOR_DYNMODS=y
 # CONFIG_MEMCG is not set
 # CONFIG_BLK_CGROUP is not set
 CONFIG_CGROUP_SCHED=y
@@ -334,6 +361,7 @@ CONFIG_SCHED_AUTOGROUP=y
 # CONFIG_RELAY is not set
 # CONFIG_BLK_DEV_INITRD is not set
 # CONFIG_BOOT_CONFIG is not set
+# CONFIG_INITRAMFS_PRESERVE_MTIME is not set
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
 # CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
 CONFIG_SYSCTL_EXCEPTION_TRACE=y
@@ -359,7 +387,6 @@ CONFIG_MEMBARRIER=y
 CONFIG_KALLSYMS=y
 CONFIG_KALLSYMS_ALL=y
 CONFIG_KALLSYMS_BASE_RELATIVE=y
-CONFIG_USERFAULTFD=y
 CONFIG_KCMP=y
 # CONFIG_RSEQ is not set
 # CONFIG_EMBEDDED is not set
@@ -372,12 +399,6 @@ CONFIG_PC104=y
 # CONFIG_PERF_EVENTS is not set
 # end of Kernel Performance Events And Counters
 
-CONFIG_VM_EVENT_COUNTERS=y
-CONFIG_COMPAT_BRK=y
-# CONFIG_SLAB is not set
-# CONFIG_SLUB is not set
-CONFIG_SLOB=y
-CONFIG_SHUFFLE_PAGE_ALLOCATOR=y
 CONFIG_PROFILING=y
 CONFIG_TRACEPOINTS=y
 # end of General setup
@@ -436,7 +457,6 @@ CONFIG_HZ=300
 CONFIG_SCHED_HRTICK=y
 CONFIG_KEXEC=y
 # CONFIG_KEXEC_FILE is not set
-CONFIG_ARCH_RANDOM=y
 # CONFIG_KERNEL_NOBP is not set
 CONFIG_RELOCATABLE=y
 # CONFIG_RANDOMIZE_BASE is not set
@@ -522,6 +542,7 @@ CONFIG_HAVE_ARCH_JUMP_LABEL=y
 CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE=y
 CONFIG_MMU_GATHER_TABLE_FREE=y
 CONFIG_MMU_GATHER_RCU_TABLE_FREE=y
+CONFIG_MMU_GATHER_MERGE_VMAS=y
 CONFIG_MMU_GATHER_NO_GATHER=y
 CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
 CONFIG_HAVE_CMPXCHG_LOCAL=y
@@ -574,7 +595,6 @@ CONFIG_HAVE_GCC_PLUGINS=y
 CONFIG_RT_MUTEXES=y
 CONFIG_BASE_SMALL=0
 # CONFIG_MODULES is not set
-CONFIG_MODULES_TREE_LOOKUP=y
 CONFIG_BLOCK=y
 # CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
 CONFIG_BLK_DEV_BSG_COMMON=y
@@ -658,6 +678,36 @@ CONFIG_BINFMT_MISC=y
 #
 # Memory Management options
 #
+CONFIG_ZPOOL=y
+CONFIG_SWAP=y
+CONFIG_ZSWAP=y
+# CONFIG_ZSWAP_DEFAULT_ON is not set
+CONFIG_ZSWAP_COMPRESSOR_DEFAULT_DEFLATE=y
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZO is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_842 is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4 is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4HC is not set
+# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD is not set
+CONFIG_ZSWAP_COMPRESSOR_DEFAULT="deflate"
+# CONFIG_ZSWAP_ZPOOL_DEFAULT_ZBUD is not set
+CONFIG_ZSWAP_ZPOOL_DEFAULT_Z3FOLD=y
+# CONFIG_ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is not set
+CONFIG_ZSWAP_ZPOOL_DEFAULT="z3fold"
+CONFIG_ZBUD=y
+CONFIG_Z3FOLD=y
+CONFIG_ZSMALLOC=y
+CONFIG_ZSMALLOC_STAT=y
+
+#
+# SLAB allocator options
+#
+# CONFIG_SLAB is not set
+# CONFIG_SLUB is not set
+CONFIG_SLOB=y
+# end of SLAB allocator options
+
+CONFIG_SHUFFLE_PAGE_ALLOCATOR=y
+CONFIG_COMPAT_BRK=y
 CONFIG_SPARSEMEM=y
 CONFIG_SPARSEMEM_EXTREME=y
 CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
@@ -667,9 +717,9 @@ CONFIG_HAVE_FAST_GUP=y
 CONFIG_MEMORY_ISOLATION=y
 CONFIG_EXCLUSIVE_SYSTEM_RAM=y
 CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
+CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
 CONFIG_MEMORY_HOTPLUG=y
 CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
-CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
 # CONFIG_MEMORY_HOTREMOVE is not set
 CONFIG_SPLIT_PTLOCK_CPUS=4
 CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK=y
@@ -689,32 +739,17 @@ CONFIG_CMA_DEBUG=y
 CONFIG_CMA_DEBUGFS=y
 # CONFIG_CMA_SYSFS is not set
 CONFIG_CMA_AREAS=7
-CONFIG_ZSWAP=y
-CONFIG_ZSWAP_COMPRESSOR_DEFAULT_DEFLATE=y
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZO is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_842 is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4 is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4HC is not set
-# CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD is not set
-CONFIG_ZSWAP_COMPRESSOR_DEFAULT="deflate"
-# CONFIG_ZSWAP_ZPOOL_DEFAULT_ZBUD is not set
-CONFIG_ZSWAP_ZPOOL_DEFAULT_Z3FOLD=y
-# CONFIG_ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is not set
-CONFIG_ZSWAP_ZPOOL_DEFAULT="z3fold"
-# CONFIG_ZSWAP_DEFAULT_ON is not set
-CONFIG_ZPOOL=y
-CONFIG_ZBUD=y
-CONFIG_Z3FOLD=y
-CONFIG_ZSMALLOC=y
-CONFIG_ZSMALLOC_STAT=y
 CONFIG_DEFERRED_STRUCT_PAGE_INIT=y
 CONFIG_PAGE_IDLE_FLAG=y
 CONFIG_IDLE_PAGE_TRACKING=y
 CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
 CONFIG_ZONE_DMA=y
+CONFIG_GET_FREE_REGION=y
+CONFIG_VM_EVENT_COUNTERS=y
 CONFIG_PERCPU_STATS=y
 CONFIG_GUP_TEST=y
 CONFIG_ARCH_HAS_PTE_SPECIAL=y
+CONFIG_USERFAULTFD=y
 
 #
 # Data Access Monitoring
@@ -750,6 +785,7 @@ CONFIG_PCI_DEBUG=y
 CONFIG_PCI_STUB=y
 CONFIG_PCI_PF_STUB=y
 CONFIG_PCI_ATS=y
+CONFIG_PCI_DOE=y
 CONFIG_PCI_IOV=y
 # CONFIG_PCI_PRI is not set
 # CONFIG_PCI_PASID is not set
@@ -826,6 +862,7 @@ CONFIG_PCI_ENDPOINT=y
 # CONFIG_PCI_ENDPOINT_CONFIGFS is not set
 CONFIG_PCI_EPF_TEST=y
 # CONFIG_PCI_EPF_NTB is not set
+CONFIG_PCI_EPF_VNTB=y
 # end of PCI Endpoint
 
 #
@@ -839,6 +876,7 @@ CONFIG_CXL_PCI=y
 # CONFIG_CXL_MEM_RAW_COMMANDS is not set
 # CONFIG_CXL_MEM is not set
 CONFIG_CXL_PORT=y
+CONFIG_CXL_REGION=y
 CONFIG_PCCARD=y
 CONFIG_PCMCIA=y
 CONFIG_PCMCIA_LOAD_CIS=y
@@ -874,9 +912,13 @@ CONFIG_DEVTMPFS_SAFE=y
 #
 CONFIG_FW_LOADER=y
 CONFIG_FW_LOADER_PAGED_BUF=y
+CONFIG_FW_LOADER_SYSFS=y
 CONFIG_EXTRA_FIRMWARE=""
 # CONFIG_FW_LOADER_USER_HELPER is not set
 CONFIG_FW_LOADER_COMPRESS=y
+# CONFIG_FW_LOADER_COMPRESS_XZ is not set
+CONFIG_FW_LOADER_COMPRESS_ZSTD=y
+CONFIG_FW_UPLOAD=y
 # end of Firmware loader
 
 CONFIG_WANT_DEV_COREDUMP=y
@@ -908,6 +950,7 @@ CONFIG_QCOM_EBI2=y
 CONFIG_MHI_BUS=y
 # CONFIG_MHI_BUS_DEBUG is not set
 # CONFIG_MHI_BUS_PCI_GENERIC is not set
+# CONFIG_MHI_BUS_EP is not set
 # end of Bus devices
 
 #
@@ -923,6 +966,7 @@ CONFIG_MHI_BUS=y
 CONFIG_ARM_SCPI_PROTOCOL=y
 # CONFIG_ARM_SCPI_POWER_DOMAIN is not set
 CONFIG_FIRMWARE_MEMMAP=y
+CONFIG_MTK_ADSP_IPC=y
 CONFIG_QCOM_SCM=y
 # CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT is not set
 CONFIG_BCM47XX_NVRAM=y
@@ -952,6 +996,7 @@ CONFIG_PARPORT_NOT_PC=y
 #
 # NVME Support
 #
+CONFIG_NVME_COMMON=y
 CONFIG_NVME_CORE=y
 CONFIG_BLK_DEV_NVME=y
 # CONFIG_NVME_MULTIPATH is not set
@@ -959,11 +1004,13 @@ CONFIG_BLK_DEV_NVME=y
 # CONFIG_NVME_HWMON is not set
 CONFIG_NVME_FABRICS=y
 CONFIG_NVME_FC=y
+CONFIG_NVME_AUTH=y
 CONFIG_NVME_TARGET=y
 # CONFIG_NVME_TARGET_PASSTHRU is not set
 # CONFIG_NVME_TARGET_LOOP is not set
 CONFIG_NVME_TARGET_FC=y
 # CONFIG_NVME_TARGET_FCLOOP is not set
+# CONFIG_NVME_TARGET_AUTH is not set
 # end of NVME Support
 
 #
@@ -1256,6 +1303,7 @@ CONFIG_INPUT_DA9063_ONKEY=y
 # CONFIG_INPUT_ADXL34X is not set
 CONFIG_INPUT_IQS269A=y
 # CONFIG_INPUT_IQS626A is not set
+# CONFIG_INPUT_IQS7222 is not set
 CONFIG_INPUT_CMA3000=y
 CONFIG_INPUT_CMA3000_I2C=y
 CONFIG_INPUT_DRV260X_HAPTICS=y
@@ -1403,12 +1451,14 @@ CONFIG_HW_RANDOM_OMAP3_ROM=y
 # CONFIG_HW_RANDOM_VIRTIO is not set
 CONFIG_HW_RANDOM_NOMADIK=y
 CONFIG_HW_RANDOM_STM32=y
+CONFIG_HW_RANDOM_POLARFIRE_SOC=y
 CONFIG_HW_RANDOM_MESON=y
 CONFIG_HW_RANDOM_MTK=y
 CONFIG_HW_RANDOM_S390=y
 CONFIG_HW_RANDOM_EXYNOS=y
 # CONFIG_HW_RANDOM_NPCM is not set
 # CONFIG_HW_RANDOM_XIPHERA is not set
+# CONFIG_HW_RANDOM_CN10K is not set
 CONFIG_APPLICOM=y
 
 #
@@ -1438,6 +1488,7 @@ CONFIG_SCLP_VT220_TTY=y
 # CONFIG_SCLP_VT220_CONSOLE is not set
 # CONFIG_HMC_DRV is not set
 # CONFIG_SCLP_OFB is not set
+CONFIG_S390_UV_UAPI=y
 # CONFIG_S390_TAPE is not set
 # CONFIG_VMCP is not set
 # CONFIG_MONWRITER is not set
@@ -1539,7 +1590,7 @@ CONFIG_I2C_MT65XX=y
 CONFIG_I2C_MT7621=y
 # CONFIG_I2C_MV64XXX is not set
 CONFIG_I2C_MXS=y
-# CONFIG_I2C_NPCM7XX is not set
+# CONFIG_I2C_NPCM is not set
 CONFIG_I2C_OCORES=y
 CONFIG_I2C_OMAP=y
 CONFIG_I2C_OWL=y
@@ -1551,6 +1602,7 @@ CONFIG_I2C_PXA=y
 CONFIG_I2C_QCOM_CCI=y
 CONFIG_I2C_QUP=y
 CONFIG_I2C_RIIC=y
+# CONFIG_I2C_RZV2M is not set
 # CONFIG_I2C_S3C2410 is not set
 CONFIG_I2C_SH_MOBILE=y
 CONFIG_I2C_SIMTEC=y
@@ -1627,6 +1679,7 @@ CONFIG_PTP_1588_CLOCK_OPTIONAL=y
 # end of PTP clock support
 
 CONFIG_PINCTRL=y
+CONFIG_GENERIC_PINCTRL_GROUPS=y
 CONFIG_PINMUX=y
 CONFIG_PINCONF=y
 CONFIG_GENERIC_PINCONF=y
@@ -1656,6 +1709,8 @@ CONFIG_PINCTRL_PXA=y
 CONFIG_PINCTRL_PXA25X=y
 # CONFIG_PINCTRL_PXA27X is not set
 CONFIG_PINCTRL_MSM=y
+CONFIG_PINCTRL_SC7280_LPASS_LPI=y
+CONFIG_PINCTRL_SM8250_LPASS_LPI=y
 # CONFIG_PINCTRL_SM8350 is not set
 CONFIG_PINCTRL_LPASS_LPI=y
 
@@ -1685,6 +1740,7 @@ CONFIG_PINCTRL_PFC_R8A779F0=y
 # CONFIG_PINCTRL_PFC_R8A77980 is not set
 # CONFIG_PINCTRL_PFC_R8A77970 is not set
 CONFIG_PINCTRL_PFC_R8A779A0=y
+# CONFIG_PINCTRL_PFC_R8A779G0 is not set
 # CONFIG_PINCTRL_PFC_R8A7740 is not set
 # CONFIG_PINCTRL_PFC_R8A73A4 is not set
 # CONFIG_PINCTRL_PFC_R8A77470 is not set
@@ -1921,6 +1977,7 @@ CONFIG_SENSORS_AS370=y
 # CONFIG_SENSORS_ASC7621 is not set
 # CONFIG_SENSORS_AXI_FAN_CONTROL is not set
 # CONFIG_SENSORS_ARM_SCPI is not set
+CONFIG_SENSORS_ASB100=y
 CONFIG_SENSORS_ASPEED=y
 CONFIG_SENSORS_ATXP1=y
 CONFIG_SENSORS_BT1_PVT=y
@@ -1936,6 +1993,7 @@ CONFIG_SENSORS_F71805F=y
 # CONFIG_SENSORS_F71882FG is not set
 # CONFIG_SENSORS_F75375S is not set
 # CONFIG_SENSORS_MC13783_ADC is not set
+CONFIG_SENSORS_FSCHMD=y
 CONFIG_SENSORS_FTSTEUTATES=y
 # CONFIG_SENSORS_GL518SM is not set
 CONFIG_SENSORS_GL520SM=y
@@ -1947,6 +2005,7 @@ CONFIG_SENSORS_IBMAEM=y
 CONFIG_SENSORS_IT87=y
 CONFIG_SENSORS_JC42=y
 # CONFIG_SENSORS_POWR1220 is not set
+# CONFIG_SENSORS_LAN966X is not set
 # CONFIG_SENSORS_LINEAGE is not set
 CONFIG_SENSORS_LTC2945=y
 CONFIG_SENSORS_LTC2947=y
@@ -1995,7 +2054,9 @@ CONFIG_SENSORS_LM95245=y
 CONFIG_SENSORS_PC87360=y
 CONFIG_SENSORS_PC87427=y
 CONFIG_SENSORS_NCT6683=y
+CONFIG_SENSORS_NCT6775_CORE=y
 CONFIG_SENSORS_NCT6775=y
+CONFIG_SENSORS_NCT6775_I2C=y
 CONFIG_SENSORS_NCT7802=y
 CONFIG_SENSORS_NCT7904=y
 CONFIG_SENSORS_NPCM7XX=y
@@ -2074,7 +2135,6 @@ CONFIG_THERMAL_GOV_BANG_BANG=y
 CONFIG_THERMAL_GOV_USER_SPACE=y
 CONFIG_DEVFREQ_THERMAL=y
 CONFIG_THERMAL_EMULATION=y
-# CONFIG_THERMAL_MMIO is not set
 # CONFIG_K3_THERMAL is not set
 CONFIG_ROCKCHIP_THERMAL=y
 CONFIG_RCAR_THERMAL=y
@@ -2123,7 +2183,6 @@ CONFIG_TEGRA30_TSENSOR=y
 # end of Qualcomm thermal drivers
 
 CONFIG_SPRD_THERMAL=y
-# CONFIG_KHADAS_MCU_FAN_THERMAL is not set
 CONFIG_WATCHDOG=y
 CONFIG_WATCHDOG_CORE=y
 # CONFIG_WATCHDOG_NOWAYOUT is not set
@@ -2189,12 +2248,14 @@ CONFIG_DIGICOLOR_WATCHDOG=y
 CONFIG_LPC18XX_WATCHDOG=y
 CONFIG_RENESAS_WDT=y
 CONFIG_RENESAS_RZAWDT=y
+CONFIG_RENESAS_RZN1WDT=y
 # CONFIG_RENESAS_RZG2LWDT is not set
 # CONFIG_ASPEED_WATCHDOG is not set
 CONFIG_SPRD_WATCHDOG=y
 CONFIG_VISCONTI_WATCHDOG=y
 # CONFIG_MSC313E_WATCHDOG is not set
 CONFIG_APPLE_WATCHDOG=y
+# CONFIG_SUNPLUS_WATCHDOG is not set
 CONFIG_ALIM7101_WDT=y
 # CONFIG_SC520_WDT is not set
 # CONFIG_I6300ESB_WDT is not set
@@ -2426,6 +2487,7 @@ CONFIG_REGULATOR_RT4801=y
 CONFIG_REGULATOR_RT4831=y
 CONFIG_REGULATOR_RT5033=y
 # CONFIG_REGULATOR_RT5190A is not set
+# CONFIG_REGULATOR_RT5759 is not set
 # CONFIG_REGULATOR_RT6160 is not set
 CONFIG_REGULATOR_RT6245=y
 # CONFIG_REGULATOR_RTQ2134 is not set
@@ -2556,7 +2618,6 @@ CONFIG_DVB_DDBRIDGE_MSIENABLE=y
 CONFIG_DVB_PLUTO2=y
 CONFIG_DVB_PT1=y
 CONFIG_DVB_PT3=y
-# CONFIG_DVB_BUDGET_CORE is not set
 CONFIG_RADIO_ADAPTERS=y
 CONFIG_RADIO_MAXIRADIO=y
 CONFIG_RADIO_SAA7706H=y
@@ -2636,6 +2697,7 @@ CONFIG_VIDEO_TEGRA_VDE=y
 CONFIG_VIDEO_IMX_MIPI_CSIS=y
 # CONFIG_VIDEO_IMX_PXP is not set
 # CONFIG_VIDEO_MX2_EMMAPRP is not set
+CONFIG_VIDEO_DW100=y
 CONFIG_VIDEO_IMX8_JPEG=y
 
 #
@@ -2685,6 +2747,15 @@ CONFIG_VIDEO_STM32_DMA2D=y
 # CONFIG_VIDEO_TI_VPE is not set
 
 #
+# Verisilicon media platform drivers
+#
+CONFIG_VIDEO_HANTRO=y
+CONFIG_VIDEO_HANTRO_IMX8M=y
+CONFIG_VIDEO_HANTRO_SAMA5D4=y
+# CONFIG_VIDEO_HANTRO_ROCKCHIP is not set
+CONFIG_VIDEO_HANTRO_SUNXI=y
+
+#
 # VIA media platform drivers
 #
 
@@ -2711,8 +2782,6 @@ CONFIG_MEDIA_COMMON_OPTIONS=y
 CONFIG_TTPCI_EEPROM=y
 CONFIG_VIDEO_TVEEPROM=y
 CONFIG_DVB_B2C2_FLEXCOP=y
-CONFIG_VIDEO_SAA7146=y
-CONFIG_VIDEO_SAA7146_VV=y
 CONFIG_SMS_SIANO_MDTV=y
 CONFIG_VIDEOBUF2_CORE=y
 CONFIG_VIDEOBUF2_V4L2=y
@@ -3042,6 +3111,7 @@ CONFIG_DVB_DUMMY_FE=y
 #
 # Graphics support
 #
+CONFIG_APERTURE_HELPERS=y
 CONFIG_IMX_IPUV3_CORE=y
 CONFIG_DRM=y
 CONFIG_DRM_MIPI_DSI=y
@@ -3129,6 +3199,7 @@ CONFIG_DRM_IMX=y
 CONFIG_DRM_ETNAVIV=y
 CONFIG_DRM_ETNAVIV_THERMAL=y
 CONFIG_DRM_HISI_HIBMC=y
+CONFIG_DRM_LOGICVC=y
 CONFIG_DRM_BOCHS=y
 CONFIG_DRM_CIRRUS_QEMU=y
 CONFIG_DRM_SIMPLEDRM=y
@@ -3235,6 +3306,7 @@ CONFIG_FB_MB862XX_I2C=y
 CONFIG_FB_BROADSHEET=y
 CONFIG_FB_SSD1307=y
 CONFIG_FB_SM712=y
+CONFIG_FB_OMAP_LCD_H3=y
 CONFIG_MMP_DISP=y
 CONFIG_MMP_FB=y
 # end of Frame buffer Devices
@@ -3247,6 +3319,7 @@ CONFIG_LCD_PLATFORM=y
 CONFIG_BACKLIGHT_CLASS_DEVICE=y
 # CONFIG_BACKLIGHT_KTD253 is not set
 # CONFIG_BACKLIGHT_LM3533 is not set
+# CONFIG_BACKLIGHT_OMAP1 is not set
 CONFIG_BACKLIGHT_PWM=y
 CONFIG_BACKLIGHT_MAX8925=y
 # CONFIG_BACKLIGHT_QCOM_WLED is not set
@@ -3437,6 +3510,12 @@ CONFIG_MMC_TOSHIBA_PCI=y
 # CONFIG_MMC_BCM2835 is not set
 CONFIG_MMC_OWL=y
 CONFIG_MMC_LITEX=y
+CONFIG_SCSI_UFSHCD=y
+CONFIG_SCSI_UFS_BSG=y
+CONFIG_SCSI_UFS_HPB=y
+CONFIG_SCSI_UFS_HWMON=y
+# CONFIG_SCSI_UFSHCD_PCI is not set
+# CONFIG_SCSI_UFSHCD_PLATFORM is not set
 # CONFIG_MEMSTICK is not set
 CONFIG_NEW_LEDS=y
 CONFIG_LEDS_CLASS=y
@@ -3477,6 +3556,7 @@ CONFIG_LEDS_TCA6507=y
 # CONFIG_LEDS_TLC591XX is not set
 CONFIG_LEDS_LM355x=y
 CONFIG_LEDS_OT200=y
+# CONFIG_LEDS_IS31FL319X is not set
 
 #
 # LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THINGM)
@@ -3496,6 +3576,10 @@ CONFIG_LEDS_AS3645A=y
 CONFIG_LEDS_LM3601X=y
 # CONFIG_LEDS_RT8515 is not set
 # CONFIG_LEDS_SGM3140 is not set
+
+#
+# RGB LED drivers
+#
 
 #
 # LED Triggers
@@ -3587,6 +3671,7 @@ CONFIG_VFIO_PLATFORM_AMDXGBE_RESET=y
 # CONFIG_VFIO_MDEV is not set
 CONFIG_IRQ_BYPASS_MANAGER=y
 CONFIG_VIRT_DRIVERS=y
+CONFIG_VIRTIO_ANCHOR=y
 CONFIG_VIRTIO=y
 CONFIG_VIRTIO_PCI_LIB=y
 CONFIG_VIRTIO_MENU=y
@@ -3736,11 +3821,6 @@ CONFIG_STAGING=y
 CONFIG_RTS5208=y
 # CONFIG_FB_SM750 is not set
 CONFIG_STAGING_MEDIA=y
-CONFIG_VIDEO_HANTRO=y
-CONFIG_VIDEO_HANTRO_IMX8M=y
-CONFIG_VIDEO_HANTRO_SAMA5D4=y
-# CONFIG_VIDEO_HANTRO_ROCKCHIP is not set
-CONFIG_VIDEO_HANTRO_SUNXI=y
 CONFIG_VIDEO_IMX_MEDIA=y
 
 #
@@ -3754,14 +3834,31 @@ CONFIG_VIDEO_MESON_VDEC=y
 # CONFIG_VIDEO_OMAP4 is not set
 CONFIG_VIDEO_ROCKCHIP_VDEC=y
 CONFIG_VIDEO_SUNXI=y
-# CONFIG_VIDEO_ZORAN is not set
+CONFIG_STAGING_MEDIA_DEPRECATED=y
+CONFIG_VIDEO_SAA7146=y
+CONFIG_VIDEO_SAA7146_VV=y
 CONFIG_DVB_AV7110=y
 # CONFIG_DVB_AV7110_OSD is not set
 CONFIG_DVB_SP8870=y
+CONFIG_VIDEO_HEXIUM_GEMINI=y
+# CONFIG_VIDEO_HEXIUM_ORION is not set
+CONFIG_VIDEO_MXB=y
+# CONFIG_DVB_BUDGET_CORE is not set
 # CONFIG_FIREWIRE_SERIAL is not set
-# CONFIG_UNISYSSPAR is not set
 # CONFIG_MOST_COMPONENTS is not set
 CONFIG_FIELDBUS_DEV=y
+CONFIG_VME_BUS=y
+
+#
+# VME Bridge Drivers
+#
+CONFIG_VME_TSI148=y
+CONFIG_VME_FAKE=y
+
+#
+# VME Device Drivers
+#
+CONFIG_VME_USER=y
 CONFIG_GOLDFISH=y
 # CONFIG_GOLDFISH_PIPE is not set
 # CONFIG_CHROME_PLATFORMS is not set
@@ -3769,6 +3866,7 @@ CONFIG_MELLANOX_PLATFORM=y
 CONFIG_MLXREG_HOTPLUG=y
 CONFIG_MLXREG_IO=y
 CONFIG_MLXREG_LC=y
+# CONFIG_NVSW_SN2201 is not set
 # CONFIG_OLPC_XO175 is not set
 # CONFIG_SURFACE_PLATFORMS is not set
 # CONFIG_COMMON_CLK is not set
@@ -3790,6 +3888,7 @@ CONFIG_BCM2835_TIMER=y
 CONFIG_BCM_KONA_TIMER=y
 # CONFIG_DAVINCI_TIMER is not set
 # CONFIG_DIGICOLOR_TIMER is not set
+CONFIG_OMAP_DM_TIMER=y
 # CONFIG_DW_APB_TIMER is not set
 CONFIG_FTTMR010_TIMER=y
 CONFIG_IXP4XX_TIMER=y
@@ -3798,6 +3897,7 @@ CONFIG_OWL_TIMER=y
 # CONFIG_RDA_TIMER is not set
 # CONFIG_SUN4I_TIMER is not set
 CONFIG_TEGRA_TIMER=y
+CONFIG_TEGRA186_TIMER=y
 CONFIG_VT8500_TIMER=y
 # CONFIG_NPCM7XX_TIMER is not set
 # CONFIG_ASM9260_TIMER is not set
@@ -3822,11 +3922,9 @@ CONFIG_RENESAS_OSTM=y
 # CONFIG_SH_TIMER_TMU is not set
 # CONFIG_EM_TIMER_STI is not set
 # CONFIG_CLKSRC_PXA is not set
-# CONFIG_H8300_TMR8 is not set
-# CONFIG_H8300_TMR16 is not set
-# CONFIG_H8300_TPU is not set
 # CONFIG_TIMER_IMX_SYS_CTR is not set
 # CONFIG_CLKSRC_ST_LPC is not set
+# CONFIG_GXP_TIMER is not set
 CONFIG_MSC313E_TIMER=y
 CONFIG_MICROCHIP_PIT64B=y
 # end of Clock Source drivers
@@ -3912,6 +4010,8 @@ CONFIG_MESON_MX_SOCINFO=y
 #
 # Apple SoC drivers
 #
+CONFIG_APPLE_RTKIT=y
+CONFIG_APPLE_SART=y
 # end of Apple SoC drivers
 
 #
@@ -3938,6 +4038,11 @@ CONFIG_SOC_BCM63XX=y
 # NXP/Freescale QorIQ SoC drivers
 #
 # end of NXP/Freescale QorIQ SoC drivers
+
+#
+# fujitsu SoC drivers
+#
+# end of fujitsu SoC drivers
 
 #
 # i.MX SoC drivers
@@ -3987,6 +4092,7 @@ CONFIG_QCOM_SOCINFO=y
 # CONFIG_QCOM_SPM is not set
 CONFIG_QCOM_STATS=y
 # CONFIG_QCOM_WCNSS_CTRL is not set
+CONFIG_QCOM_ICC_BWMON=y
 # end of Qualcomm SoC drivers
 
 CONFIG_SOC_RENESAS=y
@@ -4008,6 +4114,7 @@ CONFIG_SYSC_R8A7792=y
 CONFIG_SYSC_R8A77980=y
 CONFIG_SYSC_R8A77970=y
 CONFIG_SYSC_R8A779A0=y
+CONFIG_SYSC_R8A779G0=y
 CONFIG_SYSC_RMOBILE=y
 # CONFIG_SYSC_R8A77470 is not set
 CONFIG_SYSC_R8A7745=y
@@ -4046,6 +4153,7 @@ CONFIG_DEVFREQ_GOV_PASSIVE=y
 #
 # CONFIG_ARM_EXYNOS_BUS_DEVFREQ is not set
 CONFIG_ARM_IMX_BUS_DEVFREQ=y
+CONFIG_ARM_MEDIATEK_CCI_DEVFREQ=y
 CONFIG_PM_DEVFREQ_EVENT=y
 # CONFIG_DEVFREQ_EVENT_EXYNOS_NOCP is not set
 CONFIG_DEVFREQ_EVENT_EXYNOS_PPMU=y
@@ -4089,29 +4197,13 @@ CONFIG_NTB_TOOL=y
 CONFIG_NTB_PERF=y
 CONFIG_NTB_MSI_TEST=y
 CONFIG_NTB_TRANSPORT=y
-CONFIG_VME_BUS=y
-
-#
-# VME Bridge Drivers
-#
-CONFIG_VME_TSI148=y
-CONFIG_VME_FAKE=y
-
-#
-# VME Board Drivers
-#
-# CONFIG_VMIVME_7805 is not set
-
-#
-# VME Device Drivers
-#
-CONFIG_VME_USER=y
 CONFIG_PWM=y
 CONFIG_PWM_SYSFS=y
 CONFIG_PWM_DEBUG=y
 # CONFIG_PWM_BCM2835 is not set
 # CONFIG_PWM_BERLIN is not set
 CONFIG_PWM_BRCMSTB=y
+CONFIG_PWM_CLK=y
 CONFIG_PWM_CLPS711X=y
 CONFIG_PWM_DWC=y
 CONFIG_PWM_EP93XX=y
@@ -4154,23 +4246,23 @@ CONFIG_MADERA_IRQ=y
 CONFIG_RENESAS_INTC_IRQPIN=y
 CONFIG_RENESAS_IRQC=y
 # CONFIG_RENESAS_RZA1_IRQC is not set
+CONFIG_RENESAS_RZG2L_IRQC=y
 CONFIG_SL28CPLD_INTC=y
 CONFIG_TS4800_IRQ=y
 # CONFIG_INGENIC_TCU_IRQ is not set
-# CONFIG_RENESAS_H8S_INTC is not set
 # CONFIG_IRQ_UNIPHIER_AIDET is not set
 CONFIG_MESON_IRQ_GPIO=y
 CONFIG_IMX_IRQSTEER=y
 # CONFIG_IMX_INTMUX is not set
 CONFIG_EXYNOS_IRQ_COMBINER=y
-# CONFIG_LOONGSON_PCH_PIC is not set
-# CONFIG_LOONGSON_PCH_MSI is not set
 # CONFIG_MST_IRQ is not set
 CONFIG_MCHP_EIC=y
+# CONFIG_SUNPLUS_SP7021_INTC is not set
 # end of IRQ chip support
 
 # CONFIG_IPACK_BUS is not set
 CONFIG_RESET_CONTROLLER=y
+CONFIG_RESET_A10SR=y
 # CONFIG_RESET_ATH79 is not set
 # CONFIG_RESET_AXS10X is not set
 CONFIG_RESET_BCM6345=y
@@ -4194,8 +4286,11 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
 CONFIG_RESET_SIMPLE=y
 # CONFIG_RESET_SOCFPGA is not set
 # CONFIG_RESET_STARFIVE_JH7100 is not set
+CONFIG_RESET_SUNPLUS=y
 # CONFIG_RESET_SUNXI is not set
+CONFIG_RESET_TI_SCI=y
 CONFIG_RESET_TI_SYSCON=y
+# CONFIG_RESET_TI_TPS380X is not set
 CONFIG_RESET_TN48M_CPLD=y
 CONFIG_RESET_ZYNQ=y
 CONFIG_COMMON_RESET_HI3660=y
@@ -4258,7 +4353,10 @@ CONFIG_USB4_DEBUGFS_WRITE=y
 #
 # Android
 #
-# CONFIG_ANDROID is not set
+CONFIG_ANDROID_BINDER_IPC=y
+CONFIG_ANDROID_BINDERFS=y
+CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
+# CONFIG_ANDROID_BINDER_IPC_SELFTEST is not set
 # end of Android
 
 CONFIG_DAX=y
@@ -4270,6 +4368,7 @@ CONFIG_NVMEM_IMX_OCOTP=y
 CONFIG_NVMEM_LPC18XX_OTP=y
 CONFIG_NVMEM_MXS_OCOTP=y
 # CONFIG_MTK_EFUSE is not set
+# CONFIG_MICROCHIP_OTPC is not set
 CONFIG_NVMEM_NINTENDO_OTP=y
 # CONFIG_QCOM_QFPROM is not set
 # CONFIG_NVMEM_SPMI_SDAM is not set
@@ -4288,6 +4387,7 @@ CONFIG_NVMEM_RMEM=y
 CONFIG_NVMEM_BRCM_NVRAM=y
 # CONFIG_NVMEM_LAYERSCAPE_SFP is not set
 # CONFIG_NVMEM_SUNPLUS_OCOTP is not set
+# CONFIG_NVMEM_APPLE_EFUSES is not set
 
 #
 # HW tracing support
@@ -4307,12 +4407,6 @@ CONFIG_FPGA_MGR_SOCFPGA_A10=y
 CONFIG_FPGA_MGR_ZYNQMP_FPGA=y
 # CONFIG_FPGA_MGR_VERSAL_FPGA is not set
 CONFIG_TEE=y
-
-#
-# TEE drivers
-#
-# end of TEE drivers
-
 CONFIG_PM_OPP=y
 # CONFIG_SIOX is not set
 CONFIG_SLIMBUS=y
@@ -4322,6 +4416,7 @@ CONFIG_INTERCONNECT_IMX=y
 # CONFIG_INTERCONNECT_IMX8MM is not set
 CONFIG_INTERCONNECT_IMX8MN=y
 CONFIG_INTERCONNECT_IMX8MQ=y
+CONFIG_INTERCONNECT_IMX8MP=y
 CONFIG_INTERCONNECT_QCOM_OSM_L3=y
 CONFIG_INTERCONNECT_SAMSUNG=y
 # CONFIG_INTERCONNECT_EXYNOS is not set
@@ -4336,6 +4431,7 @@ CONFIG_MOST=y
 CONFIG_MOST_CDEV=y
 CONFIG_PECI=y
 CONFIG_PECI_CPU=y
+# CONFIG_HTE is not set
 # end of Device Drivers
 
 #
@@ -4516,6 +4612,12 @@ CONFIG_IO_WQ=y
 CONFIG_KEYS=y
 CONFIG_KEYS_REQUEST_CACHE=y
 # CONFIG_PERSISTENT_KEYRINGS is not set
+CONFIG_TRUSTED_KEYS=y
+# CONFIG_TRUSTED_KEYS_TEE is not set
+
+#
+# No trust source selected!
+#
 CONFIG_ENCRYPTED_KEYS=y
 # CONFIG_USER_DECRYPTED_DATA is not set
 CONFIG_KEY_DH_OPERATIONS=y
@@ -4542,6 +4644,10 @@ CONFIG_INIT_STACK_ALL_PATTERN=y
 CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
 # CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
 # end of Memory initialization
+
+CONFIG_CC_HAS_RANDSTRUCT=y
+CONFIG_RANDSTRUCT_NONE=y
+# CONFIG_RANDSTRUCT_FULL is not set
 # end of Kernel hardening options
 # end of Security options
 
@@ -4618,10 +4724,12 @@ CONFIG_CRYPTO_ECB=y
 CONFIG_CRYPTO_LRW=y
 # CONFIG_CRYPTO_OFB is not set
 # CONFIG_CRYPTO_PCBC is not set
+CONFIG_CRYPTO_XCTR=y
 CONFIG_CRYPTO_XTS=y
 # CONFIG_CRYPTO_KEYWRAP is not set
 CONFIG_CRYPTO_NHPOLY1305=y
 CONFIG_CRYPTO_ADIANTUM=y
+CONFIG_CRYPTO_HCTR2=y
 CONFIG_CRYPTO_ESSIV=y
 
 #
@@ -4637,40 +4745,52 @@ CONFIG_CRYPTO_XCBC=y
 #
 CONFIG_CRYPTO_CRC32C=y
 CONFIG_CRYPTO_CRC32=y
+CONFIG_CRYPTO_CRC32_S390=y
 CONFIG_CRYPTO_XXHASH=y
 CONFIG_CRYPTO_BLAKE2B=y
-# CONFIG_CRYPTO_BLAKE2S is not set
 CONFIG_CRYPTO_CRCT10DIF=y
 CONFIG_CRYPTO_CRC64_ROCKSOFT=y
 CONFIG_CRYPTO_GHASH=y
+CONFIG_CRYPTO_POLYVAL=y
 CONFIG_CRYPTO_POLY1305=y
 CONFIG_CRYPTO_MD4=y
 CONFIG_CRYPTO_MD5=y
 CONFIG_CRYPTO_MICHAEL_MIC=y
 CONFIG_CRYPTO_RMD160=y
 CONFIG_CRYPTO_SHA1=y
+CONFIG_CRYPTO_SHA512_S390=y
+CONFIG_CRYPTO_SHA1_S390=y
 CONFIG_CRYPTO_SHA256=y
+CONFIG_CRYPTO_SHA256_S390=y
 CONFIG_CRYPTO_SHA512=y
 # CONFIG_CRYPTO_SHA3 is not set
+# CONFIG_CRYPTO_SHA3_256_S390 is not set
+CONFIG_CRYPTO_SHA3_512_S390=y
 CONFIG_CRYPTO_SM3=y
+# CONFIG_CRYPTO_SM3_GENERIC is not set
 CONFIG_CRYPTO_STREEBOG=y
 CONFIG_CRYPTO_WP512=y
+CONFIG_CRYPTO_GHASH_S390=y
 
 #
 # Ciphers
 #
 CONFIG_CRYPTO_AES=y
 # CONFIG_CRYPTO_AES_TI is not set
+CONFIG_CRYPTO_AES_S390=y
 CONFIG_CRYPTO_BLOWFISH=y
 CONFIG_CRYPTO_BLOWFISH_COMMON=y
 # CONFIG_CRYPTO_CAMELLIA is not set
 # CONFIG_CRYPTO_CAST5 is not set
 # CONFIG_CRYPTO_CAST6 is not set
 # CONFIG_CRYPTO_DES is not set
+# CONFIG_CRYPTO_DES_S390 is not set
 CONFIG_CRYPTO_FCRYPT=y
 CONFIG_CRYPTO_CHACHA20=y
+# CONFIG_CRYPTO_CHACHA_S390 is not set
+# CONFIG_CRYPTO_ARIA is not set
 CONFIG_CRYPTO_SERPENT=y
-# CONFIG_CRYPTO_SM4 is not set
+# CONFIG_CRYPTO_SM4_GENERIC is not set
 CONFIG_CRYPTO_TWOFISH=y
 CONFIG_CRYPTO_TWOFISH_COMMON=y
 
@@ -4703,17 +4823,7 @@ CONFIG_ZCRYPT_DEBUG=y
 CONFIG_ZCRYPT_MULTIDEVNODES=y
 CONFIG_PKEY=y
 # CONFIG_CRYPTO_PAES_S390 is not set
-CONFIG_CRYPTO_SHA1_S390=y
-CONFIG_CRYPTO_SHA256_S390=y
-CONFIG_CRYPTO_SHA512_S390=y
-# CONFIG_CRYPTO_SHA3_256_S390 is not set
-CONFIG_CRYPTO_SHA3_512_S390=y
-# CONFIG_CRYPTO_DES_S390 is not set
-CONFIG_CRYPTO_AES_S390=y
-# CONFIG_CRYPTO_CHACHA_S390 is not set
 # CONFIG_S390_PRNG is not set
-CONFIG_CRYPTO_GHASH_S390=y
-CONFIG_CRYPTO_CRC32_S390=y
 # CONFIG_CRYPTO_DEV_EXYNOS_RNG is not set
 CONFIG_CRYPTO_DEV_S5P=y
 CONFIG_CRYPTO_DEV_EXYNOS_HASH=y
@@ -4723,6 +4833,14 @@ CONFIG_CRYPTO_DEV_ATMEL_TDES=y
 CONFIG_CRYPTO_DEV_ATMEL_I2C=y
 CONFIG_CRYPTO_DEV_ATMEL_ECC=y
 CONFIG_CRYPTO_DEV_ATMEL_SHA204A=y
+CONFIG_CRYPTO_DEV_QAT=y
+# CONFIG_CRYPTO_DEV_QAT_DH895xCC is not set
+CONFIG_CRYPTO_DEV_QAT_C3XXX=y
+# CONFIG_CRYPTO_DEV_QAT_C62X is not set
+# CONFIG_CRYPTO_DEV_QAT_4XXX is not set
+CONFIG_CRYPTO_DEV_QAT_DH895xCCVF=y
+# CONFIG_CRYPTO_DEV_QAT_C3XXXVF is not set
+CONFIG_CRYPTO_DEV_QAT_C62XVF=y
 CONFIG_CRYPTO_DEV_CPT=y
 CONFIG_CAVIUM_CPT=y
 # CONFIG_CRYPTO_DEV_NITROX_CNN55XX is not set
@@ -4794,10 +4912,11 @@ CONFIG_CRYPTO_LIB_POLY1305_RSIZE=1
 CONFIG_CRYPTO_LIB_POLY1305_GENERIC=y
 CONFIG_CRYPTO_LIB_POLY1305=y
 # CONFIG_CRYPTO_LIB_CHACHA20POLY1305 is not set
+CONFIG_CRYPTO_LIB_SHA1=y
 CONFIG_CRYPTO_LIB_SHA256=y
-CONFIG_CRYPTO_LIB_SM3=y
 # end of Crypto library routines
 
+CONFIG_LIB_MEMNEQ=y
 CONFIG_CRC_CCITT=y
 CONFIG_CRC16=y
 CONFIG_CRC_T10DIF=y
@@ -4874,14 +4993,16 @@ CONFIG_GENERIC_GETTIMEOFDAY=y
 CONFIG_GENERIC_VDSO_TIME_NS=y
 CONFIG_SG_SPLIT=y
 CONFIG_SG_POOL=y
+CONFIG_MEMREGION=y
 CONFIG_ARCH_STACKWALK=y
 CONFIG_STACKDEPOT=y
-CONFIG_STACK_HASH_ORDER=20
 CONFIG_REF_TRACKER=y
 CONFIG_SBITMAP=y
 CONFIG_PARMAN=y
 CONFIG_OBJAGG=y
 # end of Library routines
+
+CONFIG_POLYNOMIAL=y
 
 #
 # Kernel hacking
@@ -4978,6 +5099,7 @@ CONFIG_ARCH_HAS_DEBUG_WX=y
 CONFIG_GENERIC_PTDUMP=y
 # CONFIG_PTDUMP_DEBUGFS is not set
 # CONFIG_DEBUG_OBJECTS is not set
+CONFIG_SHRINKER_DEBUG=y
 CONFIG_HAVE_DEBUG_KMEMLEAK=y
 CONFIG_DEBUG_KMEMLEAK=y
 CONFIG_DEBUG_KMEMLEAK_MEM_POOL_SIZE=16000
@@ -5008,7 +5130,6 @@ CONFIG_PANIC_TIMEOUT=0
 CONFIG_DETECT_HUNG_TASK=y
 CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=120
 # CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
-CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE=0
 # CONFIG_WQ_WATCHDOG is not set
 # end of Debug Oops, Lockups and Hangs
 
@@ -5045,7 +5166,6 @@ CONFIG_LOCK_TORTURE_TEST=y
 CONFIG_WW_MUTEX_SELFTEST=y
 # CONFIG_SCF_TORTURE_TEST is not set
 CONFIG_CSD_LOCK_WAIT_DEBUG=y
-CONFIG_PROVE_CXL_LOCKING=y
 # end of Lock Debugging (spinlocks, mutexes, etc...)
 
 CONFIG_TRACE_IRQFLAGS=y
@@ -5075,6 +5195,7 @@ CONFIG_RCU_SCALE_TEST=y
 # CONFIG_RCU_TORTURE_TEST is not set
 CONFIG_RCU_REF_SCALE_TEST=y
 CONFIG_RCU_CPU_STALL_TIMEOUT=21
+CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=0
 # CONFIG_RCU_TRACE is not set
 # CONFIG_RCU_EQS_DEBUG is not set
 # end of RCU Debugging
@@ -5163,4 +5284,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---3rgTB2agoPfMyiR3--
+--svfIHcln9NEXVO52--
