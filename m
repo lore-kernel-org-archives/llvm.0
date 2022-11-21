@@ -1,243 +1,198 @@
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8D8EC0
-	for <llvm@lists.linux.dev>; Mon, 21 Nov 2022 10:45:34 +0000 (UTC)
-Received: by mail-il1-f199.google.com with SMTP id s1-20020a056e021a0100b003026adad6a9so8431396ild.18
-        for <llvm@lists.linux.dev>; Mon, 21 Nov 2022 02:45:34 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF50EC0
+	for <llvm@lists.linux.dev>; Mon, 21 Nov 2022 10:51:47 +0000 (UTC)
+Received: by mail-io1-f71.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so5229147iob.7
+        for <llvm@lists.linux.dev>; Mon, 21 Nov 2022 02:51:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4XxqWtN23g37X5FE/Dv6J+437LjF+0nMYA6IbqWTuxs=;
-        b=W8APC7ZHnVwXCh4oPQmQKKZgZag4dIKHCt5gXmCbz45g8fJhhbefvV98JS5Vcmeur5
-         xMqpbm6c9yuOXV6/bRTw6bXhVe2VplatPV57LUCzyHwwECCRRcXYrN1KJ32ZOFcm41/Y
-         o5ZNDr7jkMlqKNe3mMEJY/CUdZdd8S5GEg/zPP3OrOmHPN7cyd1tD1Nu4ujoFgLm2jsA
-         bd9BjXZCSrxYgtduQw7wysVSPrRsuWSDe9Hj4z2ZXEcviOoHfy2LTJCGWhqFF26iW74J
-         tFUb+qze/g+p8QNM8ZLxjWn8bmVlQ6oyJ5Q+8xcEOpI89woLHkyI0kxSKk9deOTSCE/x
-         iAQQ==
-X-Gm-Message-State: ANoB5pm/MuEh1mEAqOOxSDBPpXNc+HhzY4Bfaijf5UZoBJwRkCSlUs2W
-	KD4vg9LEffJaqtsGqSn8uyykM9UIR0FORPYW1pCi4JBGjvrf
-X-Google-Smtp-Source: AA0mqf5gP7TlhrTBNsvz1dtOSofzKGvxDAY8reRuK4/gTDrOU3wJlNsrjxkEFGrmOgjBHEZXJcBJH5FeMmkc5BDTIVBtmv5NEJ7m
+        bh=VlR91O3sKtfJHpoCCZxI4C6b8jSkUV7GoF1cYAWIbwo=;
+        b=X9dcBEsUqLNWQZzkqhJdx3bfrSTj6umsxtpqZhsrILJLKAp9bDqOcoRjPoCuMBofa4
+         yBMGgcoaKdPCZd/CkIRhBQl0tuiKKfanV1bLOfSrxwupjCdEB8/MH9ZYlPoSBh4SYQOH
+         YVuUEToIo8clHB2uJ4ySIiZPVvJQsZToTJieEK3t25NoRQ7LY/9yKXnJWEpx8+LFYwT2
+         zE9adglbeL3IRMvKoqsjly/FadzjsCzLw3kCXsHoj+Sy2Pz3GMp/9IXmHx9lziaiLYqj
+         R9pXUkZUWIhZQkxrCFgy7xTinux7aYl5hc34SRQ0mohR2rk5rRZj+C+nZG2LRi+nYd2D
+         9bow==
+X-Gm-Message-State: ANoB5pm5/gYDpCkrowbwsU4h825ZzLFHNOC56/1RIkWkn9GL3CqeQapM
+	CxxPp+rRvhoXgYA7MvuBmq31/4fVXC7n9jdSSj77GOQQ6kDJ
+X-Google-Smtp-Source: AA0mqf4KmVpqm5fP/UBwUNslxcIGj8Mu1KHRzAz+fhMEpZTVwfT5KpWhUV4VfpC8xDjvT+WdMxulvLVv5YiVXD7uqOZNlK+y2K/t
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:3f60:0:b0:375:2d83:f970 with SMTP id
- c32-20020a023f60000000b003752d83f970mr7588624jaf.205.1669027533529; Mon, 21
- Nov 2022 02:45:33 -0800 (PST)
-Date: Mon, 21 Nov 2022 02:45:33 -0800
+X-Received: by 2002:a05:6638:345:b0:363:a7e9:194b with SMTP id
+ x5-20020a056638034500b00363a7e9194bmr8213654jap.122.1669027906702; Mon, 21
+ Nov 2022 02:51:46 -0800 (PST)
+Date: Mon, 21 Nov 2022 02:51:46 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041a69905edf8c1e3@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in __unmap_hugepage_range_final
-From: syzbot <syzbot+12c0b1ffb9f94668586f@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	nathan@kernel.org, ndesaulniers@google.com, songmuchun@bytedance.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Message-ID: <0000000000007fd4eb05edf8d74d@google.com>
+Subject: [syzbot] WARNING: locking bug in writeback_single_inode
+From: syzbot <syzbot+3ac57409fb0bec311927@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    81e7cfa3a9eb Merge tag 'erofs-for-6.1-rc6-fixes' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=165645be880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=11d3fa0b3feb5055
-dashboard link: https://syzkaller.appspot.com/bug?extid=12c0b1ffb9f94668586f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
+HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1143d819880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ac57409fb0bec311927
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17437209880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c6d64e880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8b37d56c44e6/disk-81e7cfa3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/73cad2fe5bfa/vmlinux-81e7cfa3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/961f30b0f25b/bzImage-81e7cfa3.xz
+disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b7cda1fc67db/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+12c0b1ffb9f94668586f@syzkaller.appspotmail.com
+Reported-by: syzbot+3ac57409fb0bec311927@syzkaller.appspotmail.com
 
-==================================================================
-BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
-Read of size 8 at addr ffff888077f35e38 by task syz-executor.4/18398
-
-CPU: 1 PID: 18398 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-00015-g81e7cfa3a9eb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:284 [inline]
- print_report+0x15e/0x461 mm/kasan/report.c:395
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:495
- __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
- _raw_spin_lock_irq+0x36/0x50 kernel/locking/spinlock.c:170
- rwsem_down_write_slowpath+0x657/0x12e0 kernel/locking/rwsem.c:1194
- __down_write_common kernel/locking/rwsem.c:1305 [inline]
- __down_write_common kernel/locking/rwsem.c:1302 [inline]
- __down_write kernel/locking/rwsem.c:1314 [inline]
- down_write+0x1e8/0x220 kernel/locking/rwsem.c:1563
- hugetlb_vma_lock_write mm/hugetlb.c:6838 [inline]
- __unmap_hugepage_range_final+0x9b/0x350 mm/hugetlb.c:5202
- unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
- zap_page_range+0x392/0x530 mm/memory.c:1762
- madvise_dontneed_single_vma mm/madvise.c:793 [inline]
- madvise_dontneed_free mm/madvise.c:886 [inline]
- madvise_vma_behavior+0x12df/0x2050 mm/madvise.c:1025
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1250
- do_madvise.part.0+0x24a/0x340 mm/madvise.c:1429
- do_madvise mm/madvise.c:1442 [inline]
- __do_sys_madvise mm/madvise.c:1442 [inline]
- __se_sys_madvise mm/madvise.c:1440 [inline]
- __x64_sys_madvise+0x117/0x150 mm/madvise.c:1440
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fe427c8b639
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fe428987168 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 00007fe427dac120 RCX: 00007fe427c8b639
-RDX: 0000000000000004 RSI: 0000000000800000 RDI: 0000000020800000
-RBP: 00007fe427ce6ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff480924af R14: 00007fe428987300 R15: 0000000000022000
- </TASK>
-
-Allocated by task 18391:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- ____kasan_kmalloc mm/kasan/common.c:330 [inline]
- __kasan_kmalloc+0xa3/0xb0 mm/kasan/common.c:380
- kmalloc include/linux/slab.h:553 [inline]
- hugetlb_vma_lock_alloc.part.0+0x3f/0x130 mm/hugetlb.c:6930
- hugetlb_vma_lock_alloc mm/hugetlb.c:6686 [inline]
- hugetlb_reserve_pages+0xa43/0xe90 mm/hugetlb.c:6555
- hugetlbfs_file_mmap+0x410/0x5c0 fs/hugetlbfs/inode.c:167
- call_mmap include/linux/fs.h:2196 [inline]
- mmap_region+0x6c3/0x1dd0 mm/mmap.c:2625
- do_mmap+0x831/0xf60 mm/mmap.c:1412
- vm_mmap_pgoff+0x1af/0x280 mm/util.c:520
- ksys_mmap_pgoff+0x1c7/0x5a0 mm/mmap.c:1458
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 18396:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x13b/0x1a0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:177 [inline]
- __cache_free mm/slab.c:3389 [inline]
- __do_kmem_cache_free mm/slab.c:3585 [inline]
- __kmem_cache_free+0xcd/0x3b0 mm/slab.c:3592
- hugetlb_vma_lock_release mm/hugetlb.c:6875 [inline]
- kref_put include/linux/kref.h:65 [inline]
- __hugetlb_vma_unlock_write_put mm/hugetlb.c:6890 [inline]
- __hugetlb_vma_unlock_write_free mm/hugetlb.c:6898 [inline]
- __unmap_hugepage_range_final+0x2b1/0x350 mm/hugetlb.c:5215
- unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
- zap_page_range+0x392/0x530 mm/memory.c:1762
- madvise_dontneed_single_vma mm/madvise.c:793 [inline]
- madvise_dontneed_free mm/madvise.c:886 [inline]
- madvise_vma_behavior+0x12df/0x2050 mm/madvise.c:1025
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1250
- do_madvise.part.0+0x24a/0x340 mm/madvise.c:1429
- do_madvise mm/madvise.c:1442 [inline]
- __do_sys_madvise mm/madvise.c:1442 [inline]
- __se_sys_madvise mm/madvise.c:1440 [inline]
- __x64_sys_madvise+0x117/0x150 mm/madvise.c:1440
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888077f35e00
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 56 bytes inside of
- 192-byte region [ffff888077f35e00, ffff888077f35ec0)
-
-The buggy address belongs to the physical page:
-page:ffffea0001dfcd40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x77f35
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea0001f70ac8 ffffea00005e87c8 ffff888012040000
-raw: 0000000000000000 ffff888077f35000 0000000100000010 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x3420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_HARDWALL|__GFP_THISNODE), pid 16305, tgid 16297 (syz-executor.0), ts 943277514051, free_ts 941060075554
- prep_new_page mm/page_alloc.c:2539 [inline]
- get_page_from_freelist+0x10b5/0x2d50 mm/page_alloc.c:4288
- __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5555
- __alloc_pages_node include/linux/gfp.h:223 [inline]
- kmem_getpages mm/slab.c:1363 [inline]
- cache_grow_begin+0x75/0x360 mm/slab.c:2570
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2943
- ____cache_alloc mm/slab.c:3019 [inline]
- ____cache_alloc mm/slab.c:3002 [inline]
- __do_cache_alloc mm/slab.c:3202 [inline]
- slab_alloc_node mm/slab.c:3250 [inline]
- __kmem_cache_alloc_node+0x44a/0x510 mm/slab.c:3549
- kmalloc_trace+0x26/0x60 mm/slab_common.c:1045
- kmalloc include/linux/slab.h:553 [inline]
- kzalloc include/linux/slab.h:689 [inline]
- push_stack+0x77/0x560 kernel/bpf/verifier.c:1282
- check_cond_jmp_op kernel/bpf/verifier.c:10233 [inline]
- do_check kernel/bpf/verifier.c:12460 [inline]
- do_check_common+0x643f/0xcc80 kernel/bpf/verifier.c:14652
- do_check_main kernel/bpf/verifier.c:14715 [inline]
- bpf_check+0x88dc/0xb8e0 kernel/bpf/verifier.c:15285
- bpf_prog_load+0x1543/0x2220 kernel/bpf/syscall.c:2605
- __sys_bpf+0x1436/0x4f40 kernel/bpf/syscall.c:4965
- __do_sys_bpf kernel/bpf/syscall.c:5069 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5067 [inline]
- __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5067
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x65c/0xd90 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x1d/0x4d0 mm/page_alloc.c:3483
- slab_destroy mm/slab.c:1615 [inline]
- slabs_destroy+0x85/0xc0 mm/slab.c:1635
- cache_flusharray mm/slab.c:3360 [inline]
- ___cache_free+0x2ac/0x3d0 mm/slab.c:3423
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x4f/0x1a0 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x184/0x210 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slab.c:3257 [inline]
- kmem_cache_alloc_node+0x28f/0x580 mm/slab.c:3537
- __alloc_skb+0x214/0x300 net/core/skbuff.c:497
- alloc_skb_fclone include/linux/skbuff.h:1317 [inline]
- tcp_stream_alloc_skb+0x3c/0x580 net/ipv4/tcp.c:862
- tcp_connect+0xd1b/0x4240 net/ipv4/tcp_output.c:3855
- tcp_v4_connect+0x19ad/0x2580 net/ipv4/tcp_ipv4.c:333
- __inet_stream_connect+0x69e/0xed0 net/ipv4/af_inet.c:665
- inet_stream_connect+0x57/0xa0 net/ipv4/af_inet.c:729
- __sys_connect_file+0x153/0x1a0 net/socket.c:1976
- io_connect+0x3cc/0x720 io_uring/net.c:1429
-
-Memory state around the buggy address:
- ffff888077f35d00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888077f35d80: 00 fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888077f35e00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff888077f35e80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff888077f35f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
+loop0: detected capacity change from 0 to 8226
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 1 PID: 30056 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4729 [inline]
+WARNING: CPU: 1 PID: 30056 at kernel/locking/lockdep.c:231 __lock_acquire+0x2b0/0x3084 kernel/locking/lockdep.c:5005
+Modules linked in:
+CPU: 1 PID: 30056 Comm: syz-executor132 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+pc : __lock_acquire+0x2b0/0x3084 kernel/locking/lockdep.c:5005
+lr : hlock_class kernel/locking/lockdep.c:231 [inline]
+lr : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+lr : __lock_acquire+0x298/0x3084 kernel/locking/lockdep.c:5005
+sp : ffff8000141c37c0
+x29: ffff8000141c38a0 x28: 0000000000000001 x27: ffff0000cd731a68
+x26: ffff0000cabb3a2f x25: ffff0000cd732470 x24: 0000000000000000
+x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff5600124b28ca x18: 0000000000000202
+x17: ffff8001f1cdd000 x16: ffff80000dc18158 x15: ffff0000cd731a40
+x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d96cfd0
+x11: ff808000081c6510 x10: ffff80000ddda198 x9 : 24fb2561f6434100
+x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000c0b2b74
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
+Call trace:
+ check_wait_context kernel/locking/lockdep.c:4729 [inline]
+ __lock_acquire+0x2b0/0x3084 kernel/locking/lockdep.c:5005
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ writeback_single_inode+0x44/0x54c fs/fs-writeback.c:1676
+ write_inode_now+0xb0/0xdc fs/fs-writeback.c:2736
+ iput_final fs/inode.c:1734 [inline]
+ iput+0x1e4/0x324 fs/inode.c:1773
+ ntfs_fill_super+0xc30/0x14a4 fs/ntfs3/super.c:1278
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x890 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 2649
+hardirqs last  enabled at (2649): [<ffff800008165fe4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (2649): [<ffff800008165fe4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (2648): [<ffff80000c0afb1c>] __schedule+0x84/0x594 kernel/sched/core.c:6402
+softirqs last  enabled at (1848): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (1821): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel NULL pointer dereference at virtual address 00000000000000b8
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=00000001101ea000
+[00000000000000b8] pgd=0800000112a3a003, p4d=0800000112a3a003, pud=0800000111e89003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 30056 Comm: syz-executor132 Tainted: G        W          6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+pc : __lock_acquire+0x2d0/0x3084 kernel/locking/lockdep.c:5005
+lr : hlock_class kernel/locking/lockdep.c:231 [inline]
+lr : check_wait_context kernel/locking/lockdep.c:4729 [inline]
+lr : __lock_acquire+0x298/0x3084 kernel/locking/lockdep.c:5005
+sp : ffff8000141c37c0
+x29: ffff8000141c38a0 x28: 0000000000000001 x27: ffff0000cd731a68
+x26: ffff0000cabb3a2f x25: ffff0000cd732470 x24: 0000000000000000
+x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff5600124b28ca x18: 0000000000000202
+x17: ffff8001f1cdd000 x16: ffff80000dc18158 x15: ffff0000cd731a40
+x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d96cfd0
+x11: ff808000081c6510 x10: ffff80000ddda198 x9 : 00000000000408ca
+x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff80000c0b2b74
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
+Call trace:
+ hlock_class kernel/locking/lockdep.c:222 [inline]
+ check_wait_context kernel/locking/lockdep.c:4730 [inline]
+ __lock_acquire+0x2d0/0x3084 kernel/locking/lockdep.c:5005
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ writeback_single_inode+0x44/0x54c fs/fs-writeback.c:1676
+ write_inode_now+0xb0/0xdc fs/fs-writeback.c:2736
+ iput_final fs/inode.c:1734 [inline]
+ iput+0x1e4/0x324 fs/inode.c:1773
+ ntfs_fill_super+0xc30/0x14a4 fs/ntfs3/super.c:1278
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x890 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: d002e1ca 91056210 9106614a b9400329 (3942e114) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	d002e1ca 	adrp	x10, 0x5c3a000
+   4:	91056210 	add	x16, x16, #0x158
+   8:	9106614a 	add	x10, x10, #0x198
+   c:	b9400329 	ldr	w9, [x25]
+* 10:	3942e114 	ldrb	w20, [x8, #184] <-- trapping instruction
 
 
 ---
@@ -247,3 +202,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
