@@ -1,185 +1,149 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08224107A1
-	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 18:19:29 +0000 (UTC)
-Received: by mail-wr1-f46.google.com with SMTP id b12so12180349wrn.2
-        for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 10:19:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7+NeFEY2WVIgcrUr3NoTkWHcfGCIrIwhotT6Jrtod2Y=;
-        b=ZK+M8yPUIZ4sIeWiZIA2M5vb5zFOBeL1KYdHkTuWnUgdYtnHcb166sVL3mkLSj9UHm
-         yL3957vuJKQWfUDkretgiX5dPzyz/eiAdJKrI7f74tb99mUF/h9cman0/ZRYG5HoVDTn
-         4fD1sJa8dyU82rg2eIKsJm6iWbChauBUm5t6zCG9eMjOJNWqBaIwz6eCxvj/3RN1rZ7e
-         eiJJSw0GoIj0llVsXvy1hS79OOT/IlAkHSw+TV1OOnWsEuebAlnyr08xaOzjNuffmj9G
-         F5Dh3hVtUUiE/CDIM66r0sWHmFDRfEzOLC0BHo1NqF/lFX7bfC+NzVcORYVg4pNlE3M3
-         4+GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7+NeFEY2WVIgcrUr3NoTkWHcfGCIrIwhotT6Jrtod2Y=;
-        b=ZQa9Ze5AWGdgK96RQiOqTpV4yCc17eXCbPLtjRQpglOEokrjITeW5/QTomeQXGJgbZ
-         tfrED4Z3e7QxIW7lEAH1fr2f2jFxaqmyn0obopREG/zIgToee75om3r+/M8CCSC5+JAJ
-         9UNQaJh6XpCzqcZBP79s3IidY2e44/abLGihJUYVollcjbGDqeepT8c4E4wADhhnBRUs
-         ekm2QX4VQGa4RCX6txukn9PIv8lbhLWx7oPIUlNLcXwQb9woTd1GK2b3BzZ0YWLpzFeQ
-         C+gYJ+dAJi37xab4cC4sRn9cx7KV3fgxi/U9SMkJdZPuQpTTEx+bdyaZjVJcGGY4dxi1
-         p3wA==
-X-Gm-Message-State: ANoB5plZDBi7xwXa0dm5SvRpIOUN4O3qBZ0LxYHuv9BZ8Y1S3TKY9ygv
-	OM59p5CM4H83K+ojLHl7fdw0bMVDFb7ruO2baHLXTA==
-X-Google-Smtp-Source: AA0mqf5Buf2m1gXIj5mIbebwZYnYcplPQWRX5FCIOG4mckd9Ybq3GvjfFybXcBY5m2KnEN/ft4mHRso6eZGq7/zNO3M=
-X-Received: by 2002:a5d:4acd:0:b0:236:d8f8:b87d with SMTP id
- y13-20020a5d4acd000000b00236d8f8b87dmr7748966wrs.343.1669141167930; Tue, 22
- Nov 2022 10:19:27 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4D33222
+	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 19:08:32 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B5D91FB;
+	Tue, 22 Nov 2022 11:08:38 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9865B3F73B;
+	Tue, 22 Nov 2022 11:08:30 -0800 (PST)
+Message-ID: <fd8d8fef-99a7-9bc3-48b5-674bca365fee@arm.com>
+Date: Tue, 22 Nov 2022 19:08:23 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221122001125.765003-1-irogers@google.com> <20221122001125.765003-2-irogers@google.com>
- <Y3xwzWWhfEJb7NW4@bergen.fjasle.eu>
-In-Reply-To: <Y3xwzWWhfEJb7NW4@bergen.fjasle.eu>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 22 Nov 2022 10:19:15 -0800
-Message-ID: <CAP-5=fXfwSMCXcRXDS_m5LVsf9h2wBeK8mMvbovbh5nGmFLr3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] tools lib subcmd: Add install target
-To: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Stephane Eranian <eranian@google.com>, Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+Content-Language: en-GB
+To: Anshuman Khandual <anshuman.khandual@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20221118053102.500216-1-anshuman.khandual@arm.com>
+ <Y3pS5fdZ3MdLZ00t@dev-arch.thelio-3990X>
+ <fd67eca3-59f4-4455-e3db-ba853c3f949b@arm.com>
+ <Y3tuxzl54BvG406t@FVFF77S0Q05N.cambridge.arm.com>
+ <5b69ff03-1694-bae6-3312-a63273be4073@arm.com>
+ <05b6ea24-1135-bcaf-a24e-c0bcbf14101e@arm.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <05b6ea24-1135-bcaf-a24e-c0bcbf14101e@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 21, 2022 at 10:48 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Mon 21 Nov 2022 16:11:22 GMT, Ian Rogers wrote:
-> > This allows libsubcmd to be installed as a dependency.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/lib/subcmd/Makefile | 49 +++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 49 insertions(+)
-> >
-> > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> > index 8f1a09cdfd17..e96566f8991c 100644
-> > --- a/tools/lib/subcmd/Makefile
-> > +++ b/tools/lib/subcmd/Makefile
-> > @@ -17,6 +17,15 @@ RM =3D rm -f
-> >
-> >  MAKEFLAGS +=3D --no-print-directory
-> >
-> > +INSTALL =3D install
-> > +
-> > +# Use DESTDIR for installing into a different root directory.
-> > +# This is useful for building a package. The program will be
-> > +# installed in this directory as if it was the root directory.
-> > +# Then the build tool can move it later.
-> > +DESTDIR ?=3D
-> > +DESTDIR_SQ =3D '$(subst ','\'',$(DESTDIR))'
-> > +
-> >  LIBFILE =3D $(OUTPUT)libsubcmd.a
-> >
-> >  CFLAGS :=3D -ggdb3 -Wall -Wextra -std=3Dgnu99 -fPIC
-> > @@ -48,6 +57,18 @@ CFLAGS +=3D $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
-> >
-> >  SUBCMD_IN :=3D $(OUTPUT)libsubcmd-in.o
-> >
-> > +ifeq ($(LP64), 1)
-> > +  libdir_relative =3D lib64
-> > +else
-> > +  libdir_relative =3D lib
-> > +endif
-> > +
-> > +prefix ?=3D
-> > +libdir =3D $(prefix)/$(libdir_relative)
-> > +
-> > +# Shell quotes
-> > +libdir_SQ =3D $(subst ','\'',$(libdir))
-> > +
-> >  all:
-> >
-> >  export srctree OUTPUT CC LD CFLAGS V
-> > @@ -61,6 +82,34 @@ $(SUBCMD_IN): FORCE
-> >  $(LIBFILE): $(SUBCMD_IN)
-> >       $(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(SUBCMD_IN)
-> >
-> > +define do_install_mkdir
-> > +     if [ ! -d '$(DESTDIR_SQ)$1' ]; then             \
-> > +             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$1'; \
-> > +     fi
-> > +endef
-> > +
-> > +define do_install
-> > +     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> > +             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> > +     fi;                                             \
-> > +     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> > +endef
-> > +
-> > +install_lib: $(LIBFILE)
-> > +     $(call QUIET_INSTALL, $(LIBFILE)) \
-> > +             $(call do_install_mkdir,$(libdir_SQ)); \
-> > +             cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
-> > +
->
-> Sorry for being late.
->
-> Is there a specific reason why you do not use 'mkdir -p
-> $(DESTDIR)/$(2); cp $(1) $(2)' or 'install $(addprefix -m,$(3)) -D $(1)
-> $(2)' for the install rules (cp.  scripts/Makefile.{dtb,mod}inst)?
->
-> I think you could get rid of mkdir calls and the ..._SQ handling when
-> using one of them.
+On 2022-11-22 03:13, Anshuman Khandual wrote:
+> 
+> 
+> On 11/21/22 19:26, Robin Murphy wrote:
+>> On 2022-11-21 12:27, Mark Rutland wrote:
+>>> On Mon, Nov 21, 2022 at 11:00:42AM +0530, Anshuman Khandual wrote:
+>>>> Hello Nathan,
+>>>>
+>>>> Thanks for the report.
+>>>>
+>>>> On 11/20/22 21:46, Nathan Chancellor wrote:
+>>>>> Hi Anshuman,
+>>>
+>>>>> I just bisected a boot failure in our QEMU-based continuous integration
+>>>>> setup to this change as commit 9ed2b4616d4e ("arm64/mm: Drop redundant
+>>>>> BUG_ON(!pgtable_alloc)") in the arm64 tree. There is no output so the
+>>>>> panic clearly happens early at boot. If I move back to the previous
+>>>>> commit and add a WARN_ON() like so:
+>>>>>
+>>>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+>>>>> index d386033a074c..9280a92ff920 100644
+>>>>> --- a/arch/arm64/mm/mmu.c
+>>>>> +++ b/arch/arm64/mm/mmu.c
+>>>>> @@ -383,6 +383,7 @@ static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
+>>>>>        phys &= PAGE_MASK;
+>>>>>        addr = virt & PAGE_MASK;
+>>>>>        end = PAGE_ALIGN(virt + size);
+>>>>> +    WARN_ON(!pgtable_alloc);
+>>>>>          do {
+>>>>>            next = pgd_addr_end(addr, end);
+>>>>>
+>>>>> I do see some stacktraces. I have attached the boot log from QEMU.
+>>>>>
+>>>>> If there is any additional information I can provide or patches I can
+>>>>> test, I am more than happy to do so.
+>>>>
+>>>> There are couple of instances, where __create_pgd_mapping() function gets called
+>>>> without a valid pgtable alloc function (NULL is passed on instead), as it is not
+>>>> expected to allocate page table pages, during the mapping process. The following
+>>>> change after this patch should solve the reported problem.
+>>>>
+>>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+>>>> index 9ea8e9039992..a00563122fcb 100644
+>>>> --- a/arch/arm64/mm/mmu.c
+>>>> +++ b/arch/arm64/mm/mmu.c
+>>>> @@ -42,6 +42,7 @@
+>>>>    #define NO_BLOCK_MAPPINGS      BIT(0)
+>>>>    #define NO_CONT_MAPPINGS       BIT(1)
+>>>>    #define NO_EXEC_MAPPINGS       BIT(2)  /* assumes FEAT_HPDS is not used */
+>>>> +#define NO_ALLOC_MAPPINGS      BIT(3)  /* does not allocate page table pages */
+>>>>      int idmap_t0sz __ro_after_init;
+>>>>    @@ -380,7 +381,7 @@ static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
+>>>>           phys &= PAGE_MASK;
+>>>>           addr = virt & PAGE_MASK;
+>>>>           end = PAGE_ALIGN(virt + size);
+>>>> -       BUG_ON(!pgtable_alloc);
+>>>> +       BUG_ON(!(flags & NO_ALLOC_MAPPINGS) && !pgtable_alloc);
+>>>>             do {
+>>>>                   next = pgd_addr_end(addr, end);
+>>>> @@ -453,7 +454,7 @@ static void __init create_mapping_noalloc(phys_addr_t phys, unsigned long virt,
+>>>>                   return;
+>>>>           }
+>>>>           __create_pgd_mapping(init_mm.pgd, phys, virt, size, prot, NULL,
+>>>> -                            NO_CONT_MAPPINGS);
+>>>> +                            NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
+>>>>    }
+>>>>      void __init create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+>>>> @@ -481,7 +482,7 @@ static void update_mapping_prot(phys_addr_t phys, unsigned long virt,
+>>>>           }
+>>>>             __create_pgd_mapping(init_mm.pgd, phys, virt, size, prot, NULL,
+>>>> -                            NO_CONT_MAPPINGS);
+>>>> +                            NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
+>>>>             /* flush the TLBs after updating live kernel mappings */
+>>>>           flush_tlb_kernel_range(virt, virt + size);
+>>>
+>>> This is now more complicated than what we had originally, and it doesn't catch
+>>> the case where the caller sets NO_ALLOC_MAPPINGS but the callee ends up needing
+>>> to perform an allocation, which the old code would have caught.
+>>
+>> Well, it's still "caught" as such - all that BUG_ON(!pgtable_alloc) does in these cases is encode the source location in the backtrace, vs. having to decode it (if necessary) from the LR in a backtrace from immediately dereferencing pgtable_alloc(). If that happens before the user has a console up then the difference is moot anyway.
+> 
+> Agreed, also the fact that certain callers are sure about no page table page allocation
+> would be required (hence they just pass "NULL" for pgtable_alloc function), needs to be
+> notified appropriately when page page table creation stumbles upon a pxd_none().
+> 
+> if (pxd_none(pmd)) {
+> 	BUG_ON(flags & NO_ALLOC_MAPPINGS);
+> }
+> 
+> Although there are might be an argument that all erstwhile BUG_ON(!pgtable_alloc) has
+> replacements with BUG_ON(flags & NO_ALLOC_MAPPINGS), but there is a subtle difference.
+> It captures the fact (in a rather structured manner), that caller made a choice with
+> NO_ALLOC_MAPPINGS but called __create_pgd_mapping() on a page table, where intermediate
+> page table page alloc would still be required. IMHO adding that explicit structure here
+> via the new flag NO_ALLOC_MAPPINGS makes sense.
 
-Thanks for the feedback! Perhaps we can merge this as being consistent
-with existing approaches:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/lib/perf/Makefile#n185
-and then refactor as you say.
+Hmm, I dunno, it seems clear enough to me that the callers which do not 
+intend to allocate indicate that by passing a NULL allocator callback. 
+Personally I don't see the benefit in adding code to make all those 
+callers redundantly encode their intent twice over just so that we can 
+also add code to catch them out and crash if they don't. Weren't you 
+trying to clean up redundancy?
 
-> > +install_headers:
-> > +     $(call QUIET_INSTALL, headers) \
->
-> Unlikely, but if one of the install commands fails, you probably want
-> make to exit with an error.  Might you want to add 'set -e; \' here?
-
-Possibly. Again, I think we should aim for consistency and do this as
-a follow up.
+As I say I think any BUG_ON() has very limited value as documentation 
+where the only way to proceed is by dereferencing NULL in an 
+identifiable manner anyway, but that's largely a matter of taste and I 
+know others might disagree.
 
 Thanks,
-Ian
-
-> Kind regards,
-> Nicolas
->
->
-> > +             $(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644=
-); \
-> > +             $(call do_install,help.h,$(prefix)/include/subcmd,644); \
-> > +             $(call do_install,pager.h,$(prefix)/include/subcmd,644); =
-\
-> > +             $(call do_install,parse-options.h,$(prefix)/include/subcm=
-d,644); \
-> > +             $(call do_install,run-command.h,$(prefix)/include/subcmd,=
-644);
-> > +
-> > +install: install_lib install_headers
-> > +
-> >  clean:
-> >       $(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
-> >       find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*=
-.o.d | xargs $(RM)
-> > --
-> > 2.38.1.584.g0f3c55d4c2-goog
->
-> --
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
+Robin.
