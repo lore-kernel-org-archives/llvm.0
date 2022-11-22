@@ -1,55 +1,48 @@
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2123.outbound.protection.outlook.com [40.107.113.123])
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2109.outbound.protection.outlook.com [40.107.114.109])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2675F6FD1
-	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 14:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E69F7468;
+	Tue, 22 Nov 2022 15:17:17 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XsMF2nKZLjb5KZrsxckN2ysfEYafWvSAYMSlAdkaBbMNKMJEv7ujsZFKHtbiu0wM8jZ11ypbB530K94QSmPiiNHBde1K3Pls+34H0qqTlVI1Y13VWsCORjIXkQhfVH/rt0iSMXnv9MVCGqAKvVHucxwvAlIKifAXbk/uQJspO9PBXs/i2RSvuWbHy2jVN6GCsZtItwNrLDa+AqApKXef24A3c/klVX7TfAA9ZUaWhGXwp7kDHrXzf/zb/pVWD/kcbvS+L+RUp3dJPAZ9C4xHp5UwbJa5xz7pjwzVgSoPfxwrQaBev4yV1OmIVj28OoXqysnscuzqGfeozadD7pRfjQ==
+ b=aKO0f4xD2FxdGYDf9+kXaQ2PQByXmK9CnRnfkZG7J45a+YXL6n5YKKlH2ABynTffon9RDVEP4pP5EvcZ6ZtEbkLX324qIs99e5SifgXt5HlwBIX09h43EX4FwSkBndP0k6hVz57wOPF3JoqLSc8EJmp6uZIPbdG9pHkw0jbtrh+WMAKMg6dBdQP17n+zZcmQ840T6CFezxcfAAJF9CpMqy8HBPcswSTcjiIRFBYLd37TPyCyCUliNibHdyrmwXEaCwGxdBY/eu+6oS8KfXcaU5Xv+8B6WRtSx7ZJj6ToBQEJlEhiFoZogFYJ/kPpJdkSYG2H2fzBvf6YHsBTB5wUag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S9qVmWHR98x8o+pJfo2aVUgx9NWfGuPIXnHxohrjKRY=;
- b=nFXLpp++P9ltdiRpPxqMbvs1KobG27JKsYK+hhD81wu0ixkYg3IJS7iRJVo7YTGX50vvomH9giRiB1CKL6AcXWEAnUc2gOIPJxkvuZtqLMwVDbwARIikw0bvbUmwcN1GaGUTI9t4/JWpX5fOagjuqHtAtgcL64MhS7pL4qhGC+JF+ODDbr/GmZkSSZSHF2/jv+L5RrUZKvs7jKiMWoNs4H/mtobmXROAB5bQzexqH/yC4y9CXJlgqtHztLJ1NGemtZ/zoH22wybd0rTRnog5w9YKzZ8HLc1s0GNBQMWpXymiZXrMAnNPLDrK8CxYS+xekKwfPRUVzxnh0S0XJrEhYA==
+ bh=2TcA3nb6AuzCTlDNcIe1Ib4TIzY6RggAaKhAytm6ubQ=;
+ b=X7cVBrGBxVfrLJyut5RSHD75rITZCLlxlc89Z9mJuwg4ZsFrhh+q+2cqYe0PUVVQ6gB2zWNUvwBVi6hxKeTmJ3uQmFh2qc/KLKQiAHQtXiyTMervQE8MnlexlpWYUvszmD9v6kMMqrel+fHVDFrNScOEwBQ7t5/iMiFgLCd361ZrY4YNXeT4NjqghUAX7Lkk0Cpi3AAIigmqBibJAkuNxSczfBwGcp9FeX51tyJ79Fe7WrYFQEU2YyLuZj5JK+wy1EDDeQO7gkq3UIq1MVoG8ZzBa09/HMkQBRlT11PBIonFyMumdMwOgd/9oVOR9xFCKgJ4SQxV+Js0swtGho1gBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S9qVmWHR98x8o+pJfo2aVUgx9NWfGuPIXnHxohrjKRY=;
- b=XfOxchjWA+LqAHrP/NKHhayhbECe4VskXclCQPUzkvmWFisbIKkqnSaD3GRHo3HmmLA120WHHaLdjEPMmddgibBRyJ2/c+N8kGnR31f7T5adLOezTSuLki5MitemRKTi+Oe0PGQfBvma5uqg7BDc46Oeg9Y9yN9QAnoaxd0lLM4=
+ bh=2TcA3nb6AuzCTlDNcIe1Ib4TIzY6RggAaKhAytm6ubQ=;
+ b=QwxE6B152BYnRo36WN/n/vJPbELriNmokdwd5UUymfzltZN7UqRmmjViL5yY8atpqxxwn50yc4VAEQ0UXMWpFMCg4uxOLuFj8nRenA3SZp+CtnPAyXsu3byWhIkdVnN6u2SvIBFH1NccWLQvsid+90hKoGKuW1uiRL6O7AfmKX8=
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYWPR01MB8347.jpnprd01.prod.outlook.com (2603:1096:400:160::7) with
+ by TYWPR01MB9987.jpnprd01.prod.outlook.com (2603:1096:400:1e3::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
- 2022 14:12:16 +0000
+ 2022 15:17:15 +0000
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::2cfb:38d2:d52e:c8a3]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::2cfb:38d2:d52e:c8a3%5]) with mapi id 15.20.5834.015; Tue, 22 Nov 2022
- 14:12:16 +0000
+ 15:17:15 +0000
 From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>, Robin Murphy
-	<robin.murphy@arm.com>, Mark Rutland <mark.rutland@arm.com>
-CC: Nathan Chancellor <nathan@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Andrew Morton
-	<akpm@linux-foundation.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
-Thread-Topic: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
-Thread-Index:
- AQHY+w/c1mbDSQruokW0nryDLsaO8q5IAM6AgADd3QCAAHSNgIAAGLsAgADeswCAALfCAA==
-Date: Tue, 22 Nov 2022 14:12:16 +0000
+To: kernel test robot <lkp@intel.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, Linux Memory
+ Management List <linux-mm@kvack.org>, Laurent Pinchart
+	<laurent.pinchart+renesas@ideasonboard.com>
+Subject: RE: [linux-next:master 5636/9540] ld.lld: error: undefined symbol:
+ drm_of_get_data_lanes_count_ep
+Thread-Topic: [linux-next:master 5636/9540] ld.lld: error: undefined symbol:
+ drm_of_get_data_lanes_count_ep
+Thread-Index: AQHY/na3KLfEYVdzLkqNRabEqSQ13a5LDIog
+Date: Tue, 22 Nov 2022 15:17:15 +0000
 Message-ID:
- <OS0PR01MB59226915D333B47338B0239C860D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221118053102.500216-1-anshuman.khandual@arm.com>
- <Y3pS5fdZ3MdLZ00t@dev-arch.thelio-3990X>
- <fd67eca3-59f4-4455-e3db-ba853c3f949b@arm.com>
- <Y3tuxzl54BvG406t@FVFF77S0Q05N.cambridge.arm.com>
- <5b69ff03-1694-bae6-3312-a63273be4073@arm.com>
- <05b6ea24-1135-bcaf-a24e-c0bcbf14101e@arm.com>
-In-Reply-To: <05b6ea24-1135-bcaf-a24e-c0bcbf14101e@arm.com>
+ <OS0PR01MB59222B2AADF54D1E41D81897860D9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <202211222131.H2kT55xh-lkp@intel.com>
+In-Reply-To: <202211222131.H2kT55xh-lkp@intel.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -57,47 +50,46 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB8347:EE_
-x-ms-office365-filtering-correlation-id: 337814c4-72c9-46cb-8b95-08dacc938f45
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB9987:EE_
+x-ms-office365-filtering-correlation-id: 87276a57-11dd-4b20-0dfe-08dacc9ca338
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info:
- Hu8KNm7EzKYysRJjP76d842zmoKxeyNFbL2eNHTxf90xnnNxllJo33GUc/+tPMuXmdIiaLd1B0RcVQ5pkSNSCJKaSNU3Za8VCTvQpUMqXf4zARkqx+AmXFavSiDPWD4v3hvw36cGD4SwDQlZ0pLLsErBxZ7MiVJJ+lozcDcgTzbItzxn+cPdExHWL5oPpVC25YcujhDUao73mMtM6eJF1KjUT83FxQP9OPgLYjRp4G7ahYe/blh90w+/hXB7gKn7bj3Wdj0eVKKUs2do3dYeftbLMmxNXU7AhP62LLrcT/iBuqYDUIWyb+6Y7m4Qdg0P6E7gihFm5uUotAjV0PMsZrsidCpv+0duZS4vvNf56KJjtROleqhDAIxjGUKw9Y4WpFcP665kqJ4qLzbxbmbbMWm94GOkQcmyc4ZMGX5eT97SBmRZvD7ECFhcZ6U+JadCr032nPMbRr6+Z7WoZA6CqHEn5ZaaMZoUrvVIYRJ8q0SCLHw4VRVkGTHvHVTzNwPcjHBGWHLwKWjXMWG28MiCh9wi/UhAeJdlAInyOd5PjJRc0CqbLFRz0mzTkLE6yoJ3Hvb0G9cT7gR/1XkHs9poiMcCONbFZhO1or3Xp7gEYGWM8fBInyP31Bct7XfD6zC7avsXzF0UpDUVvn/VLQAv/NGPBx+sdLO/rdD9Ibf3EgiCOLtVdJ4ewzj9CoJdgQxr/HrSBpPJ139FzVt5RlSNuAkj7K8lQnAfQnfvEQZz5vI=
+ EXm9O9THHkaAabaLCU1gvfJ885gfDx2MhKjlVpcMErmor6tf6fU1036asOpG/I7UUnF23CAGMhDUk+FyDBmT+CWQUz4MWqx1uQjfHOnlqrxjyWZv91a4CM3VWRxgcAVN/gPrrsZ1zzSkZYgRBhKqwX93GsGwIxO6TIdYE9ZmVZBxK8R4yhYd2KoCgZu6ekAoyKPIirvdV16+rOauw3ID8UNqLRLGxmUvuCPn3qz+i4JzNnIxH70HK+tHsCcE/9MLnHgSeU59LEo8gpb/32E6M4ujdzu4ZnC3fxAdS5M97ltFmur3ChDUXZL6Ix7TipbfpEuivrgP3SCxXjWoAw6E3MgBH3MsvghCW15rmvjljcsyPTYEL0P/sYXl5QoCumqxDKD5DMniMZi6d3HU6Rf1N3QFAXvXcrQdoMN+aliWbn+dFRoHS82T0K8wakU84uPZlMzSJ9iBOgkKJ3iryCAaH/iFQssHsys3GuWAlfp8/2M10R0/w5qoQi5Du6b92WBUoJrDwtVJMqsB3QztNyX7YK4Kgewhfw7+EaF3ZjJzL/D9NOyoA8TOrcIfk92CWzLh+hgVNQmASBtCZmY+LNqdVrJyhstKO6fpHSKF/xdQudN1F5dJ5RiAA+0pme7s2CLqCfoMjhzzq0/BSwtNcyfQHaBHy8x3a9rKrSXRD6bBEc6plYkHjCEgK8i2dn4k+NFEC81tJc39hjT1p22nertCgEAbZInwz6gv+K+e0Xcp5ig=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(451199015)(110136005)(33656002)(53546011)(7416002)(7696005)(6506007)(26005)(316002)(9686003)(8936002)(54906003)(52536014)(64756008)(5660300002)(66556008)(76116006)(4326008)(8676002)(41300700001)(66446008)(186003)(38100700002)(122000001)(2906002)(55016003)(83380400001)(4001150100001)(38070700005)(66946007)(66476007)(86362001)(966005)(478600001)(45080400002)(71200400001);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199015)(122000001)(86362001)(41300700001)(38100700002)(66476007)(38070700005)(2906002)(52536014)(6916009)(478600001)(8936002)(5660300002)(55016003)(7696005)(6506007)(4326008)(76116006)(66446008)(9686003)(66556008)(66946007)(8676002)(316002)(54906003)(186003)(26005)(966005)(71200400001)(64756008)(33656002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?RYywq2NVJ7ur9YdUes8pjnqPaJBlem22ttvYWxEu4ERTqjFjg9nVYnMBI3?=
- =?iso-8859-1?Q?aEzU4Yhb5yMasE8M8m7ENqAhm4nrAKeSFFnThA+xg8Jf4zFzyJtzMrWwCj?=
- =?iso-8859-1?Q?7StlRx+62cv55c64rDF8b/IsJz6T1a4LIZV29jTbLVZOBJnvoYsET+1j22?=
- =?iso-8859-1?Q?5Zwd4W4HCQbk+QxP08lEUn3Xv68RbRK4HWmdYDCU767riOLrfadehdFHJP?=
- =?iso-8859-1?Q?Ww3D7I4bzz/nDJc5pXkiWtHN22yjtFMDYLvq1TA0/eBmUgPZgmwQtfY3eo?=
- =?iso-8859-1?Q?/6q5ONV3qhJxuLUc+upT+PTWjWHZIoWq1Km2+zeO9GCdoPb22LNjM79KXH?=
- =?iso-8859-1?Q?aKdNlvpsmxv16DjSWSbdGg9e8f2O2nkeeha1gUeP/mk3zGql6+n1DKYW3J?=
- =?iso-8859-1?Q?RaTSiEfqir5tAyZh2JtpQ6efeeGp0FF56SqEP7vZLixK5FKzhhUtjufBEk?=
- =?iso-8859-1?Q?+5NnWtRB5lMGOroBagM7a81p23DRDv2nYwHxyczzxTscLHeM2Y6oAxwepx?=
- =?iso-8859-1?Q?R1cdmXlcFmIA6DNO3pfc4SRMZaqDdIdyUIN1R6a3sie+i54QAmyTXnakF5?=
- =?iso-8859-1?Q?mSD1kUD24DnquI6xdKlGq+2/i8B5En9HWtvI8KmSbOhUwplcQwmfxXKzJd?=
- =?iso-8859-1?Q?dQnYSGUMwWvE+rC48JADVXUjPihWEYGGYM5xXw3pjad5v81ao3i1XHWTy6?=
- =?iso-8859-1?Q?tn1cbUloM+lHh9A8HGgxa2rt7sOY7jdMJApl1MFYxr3KKiY/UU8Pqib1gT?=
- =?iso-8859-1?Q?nFPYMpp71jDKfp+L/yNgbVYgzJCnGol4pbufn3tf0P4UaxhEmCUKgybpJO?=
- =?iso-8859-1?Q?8BuV7ZTyiEdQV9vNecIvToQ79ZZril5GAELXevBpniL7XlaL7ExD/0g4IZ?=
- =?iso-8859-1?Q?KV3UjcdFHRFJDlcv0pgRp0bOEblj3Ou0wuRXiQWnFywN3VCIQmPVPk24Wh?=
- =?iso-8859-1?Q?sgc21wx7u1R37fIAjv/QOTRnUr6bpQ4UVcBS4+Ap7fj/mlLWQD7CskPrfv?=
- =?iso-8859-1?Q?VDu5ZuTi68t84dV8WbzqupFtg4fvWJglrOUWkFpLT4L0KNrwzylX5nTJRu?=
- =?iso-8859-1?Q?Oa4CU16Km63xUs+O0+CoDkRTCB52LnzvhaaqjOyTlVrTH47UIIgt8/D2Z6?=
- =?iso-8859-1?Q?OienACeY0m87AxWfF1o8VNKJYFocteC8/qszk39Cq3vsbqErZD0ulkccQR?=
- =?iso-8859-1?Q?Qwel0hWAIv0RFivN7mjW7jV/hbAJXI2O2+6ieIU3EGE4IHFtkJs4RdYvip?=
- =?iso-8859-1?Q?NLT0DmmZ8lT4mCL9YddHMF1z/7Im21ItFc/50GIVy7WIWpB3fnn0gQEGmS?=
- =?iso-8859-1?Q?V/gBr1VTyjg3hXr0ztfyjzJMJDUPUb5Sy3Xk6T7Js5yY+0Mn3ohE/vEAwj?=
- =?iso-8859-1?Q?F5WJqHBfNlZqt2xDHsFSWmUyS+DY4d8WvFI0mg65d0ikq2pu2EhhkAdbAB?=
- =?iso-8859-1?Q?NgcfcG82iOJXpLgYBMWoQCGBa+B/b2zsJdiKgfASv/9mHoBhTR0faHZ2Nf?=
- =?iso-8859-1?Q?J3DpvKBicGkCzACF+F9KfYfAOHmcVgw134L/olhDrXWTXmA5IExftuu1oC?=
- =?iso-8859-1?Q?m0gXLS5GSYK4E8Tp8SsYt1B46tARimjSgH7CR5sLEI2VptMSjJ12qOOlov?=
- =?iso-8859-1?Q?1qfo/8EHZsYIl8FmQ2tK2FFJSCsvrN8NHu4UEMY7rJRgmFKcgNYKy83w?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
+ =?us-ascii?Q?UzwtvTOBUxNNC+nuAZI8zimYCdYIA0iFV41n5DDn2SnD61CinoqU33HmWg38?=
+ =?us-ascii?Q?vcrw4yJAk2zGGUmC7/qyKOOvEbvAeMimt82+vMAw3FcsJ+Rhb12xwsVS2+Of?=
+ =?us-ascii?Q?6qoGsWf4c5/k9tRX+9sX+nnZ2m81YQ4RY4WsHoUmRuxS6A2pBqPXBVzZtvTi?=
+ =?us-ascii?Q?qn5vh7els+KgQY06LaLEwgMw25TR7TMHBKXAXbMFG2frZQzxCpQewLihpXdd?=
+ =?us-ascii?Q?5zO8bb2wZAoo/1WA4jZ3WMVLdmUF2wkRG9zt3as0zxLcSSPqrLOfyhHJONAF?=
+ =?us-ascii?Q?+PCxzuWyB+H6CHHZxX1IsKtOHIwRiyRYM0x1dfMyny/pziIRWJonechCAxsO?=
+ =?us-ascii?Q?AIAx0Kc1uLZ8EUVAPapXaknMsunVWygXS8JMf6dAdViIly4v8Jnfgj34+Lzp?=
+ =?us-ascii?Q?tgPS/K0/RsB6n1wooTdsVxo0GJzDzS8AcK1V3cRfLvqd9UrYcvdovwDR30bd?=
+ =?us-ascii?Q?YsgSdM4fBchDLo2BkX3YnwGV0MMTBdS1guKds+i/l6S30QJRhH2UiPqKyzWT?=
+ =?us-ascii?Q?CCysImWqC5lRX36COHYj5Bw2fOLqtzenRm0hzAueFRYcfEsIFeg2NqfsdPqH?=
+ =?us-ascii?Q?UoDMXXMGbb89UlCOZuGfNm4H7Xu3sxLDzCtRlU4XqJdmz9vum6uaXzpUHVbz?=
+ =?us-ascii?Q?Gzw6CcOJ+Lmwsv6q3UY+bbkiNWOXtUJLXH9zwYV4u6TpVUBZPTYW54+RjCxk?=
+ =?us-ascii?Q?98lixMk6nzrwyIHvbJRvXNltrC8PgPcpWQpVseGAdS3jFZtKoqz4dMNZMbfK?=
+ =?us-ascii?Q?ebSGaA3Fx2iuCv1VadvE1V2/u4IEnVwsGne247SKo7+HFPa7Tzx4TdyKmILX?=
+ =?us-ascii?Q?pYG73uAQZp0OAKlYy4+y/adimArxorL7Q9r/iMsmhRTBVmTHaKMUkkSXIOjI?=
+ =?us-ascii?Q?ehjb6xVmDKb8/6CnBMgjYHzVa8OJ2212YxvfvanLF6Xna4iTmnwLCCR9zGbR?=
+ =?us-ascii?Q?iVg916tvxH2/crAfsXidaW7DAmswvsiy1QCyTrHOeNMN+0ubiNd2TbUs1r9e?=
+ =?us-ascii?Q?eis3jfpRjcw/gaDcX8d+245ufHKYkob5sdO8JiT+EZDjzj8pm9jdoMoKVZbm?=
+ =?us-ascii?Q?t8BVJhrxhEke4pkyq/XgWPQUi8MtfuDTzhntYJuTfRkjfzaSW4rYewrEfjqM?=
+ =?us-ascii?Q?e6ZuZv93Bzkn5Zi/rud6g/3M+3Zga85Jy5kOX4qAZFvQhGQ8mT5H+4hQHgs5?=
+ =?us-ascii?Q?i4270yxk0/AzzHPx2MjBiy1/RpgAz9GIg28OH0q51b/yatpf6H4dQE1oX2nJ?=
+ =?us-ascii?Q?sQEqAy0A2wo/+n3332WLdoZzxRWHFWeHmR9lgwHuPmoHkC8X2Dl24mH/ROiY?=
+ =?us-ascii?Q?jjH4LwAEkW9WxDM9xXtetoEWiZe48T7eIbKoGr5ZHfrV4Mx4WjJWSyQSuWM9?=
+ =?us-ascii?Q?ixPw7dLFDgTOuEG4y4iccyHIpNxiaHq/eAlmrFW9xiNJPkxUOpsI5lYXm3iA?=
+ =?us-ascii?Q?9OqlOVmJAnzuJCxt2NuVy6fsBx97yeRTHByCGHzEMb065Ob5m/cUeYFyFW26?=
+ =?us-ascii?Q?e2yo6h5cuKGcjcWYPZ1cl4oxhO86vI0ZT21tTnK9S0lozjLUHwBYi3GPXUfT?=
+ =?us-ascii?Q?Ai1kuZDIR4u+tRWfhwOxfcaeGT6XSeqWZ7Y0G1kXhFQ8GULRvTy+xjvWWSnX?=
+ =?us-ascii?Q?Og=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -108,161 +100,103 @@ MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 337814c4-72c9-46cb-8b95-08dacc938f45
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 14:12:16.1836
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87276a57-11dd-4b20-0dfe-08dacc9ca338
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2022 15:17:15.1358
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4tyty2riXUYEGiB+znyG+jbVHiK5oG6RKlF/v6qmdisINDWWhBLx2bQOGdhg0MmQ/zRw6TvFKhLTrtyMklKZxTpXpxQFQjtxaaPoLHT6tXc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8347
+X-MS-Exchange-CrossTenant-userprincipalname: lc7B2y0SxLM/dHwVS4jg1mKNaiZJNHc/l6HsiZb7x7WzECUyjOl1v4W1My8kGdTcTmGZPPipmVJccLaEKfz4PPAoWsk/0d/E8gMkXHKbzIA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9987
 
-Hi All,
+Hi kernel test robot,
 
-> Subject: Re: [PATCH] arm64/mm: Drop redundant BUG_ON(!pgtable_alloc)
+> Subject: [linux-next:master 5636/9540] ld.lld: error: undefined symbol:
+> drm_of_get_data_lanes_count_ep
 >=20
+> tree:
 >=20
+> head:   771a207d1ee9f38da8c0cee1412228f18b900bac
+> commit: 7a043f978ed1433bddb088a732e9bb91501ebd76 [5636/9540] drm: rcar-
+> du: Add RZ/G2L DSI driver
+> config: arm64-randconfig-r026-20221122
+> compiler: clang version 16.0.0
+> reproduce (this is a W=3D1 build):
+>         wget
+-O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         #
+>         git remote add linux-next
+>         git fetch --no-tags linux-next master
+>         git checkout 7a043f978ed1433bddb088a732e9bb91501ebd76
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1
+> O=3Dbuild_dir ARCH=3Darm64 SHELL=3D/bin/bash
 >=20
-> On 11/21/22 19:26, Robin Murphy wrote:
-> > On 2022-11-21 12:27, Mark Rutland wrote:
-> >> On Mon, Nov 21, 2022 at 11:00:42AM +0530, Anshuman Khandual wrote:
-> >>> Hello Nathan,
-> >>>
-> >>> Thanks for the report.
-> >>>
-> >>> On 11/20/22 21:46, Nathan Chancellor wrote:
-> >>>> Hi Anshuman,
-> >>
-> >>>> I just bisected a boot failure in our QEMU-based continuous
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+> >> ld.lld: error: undefined symbol: drm_of_get_data_lanes_count_ep
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_probe) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: drm_bridge_attach
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_attach) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol:
+> drm_atomic_get_new_connector_for_encoder
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_atomic_enable) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: devm_drm_of_get_bridge
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_host_attach) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: drm_bridge_add
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_host_attach) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: drm_bridge_remove
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_host_detach) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol:
+> drm_atomic_helper_bridge_duplicate_state
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_bridge_ops) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol:
+> drm_atomic_helper_bridge_destroy_state
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_bridge_ops) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: drm_atomic_helper_bridge_reset
+>    >>> referenced by rzg2l_mipi_dsi.c
+>    >>>               drivers/gpu/drm/rcar-
+> du/rzg2l_mipi_dsi.o:(rzg2l_mipi_dsi_bridge_ops) in archive vmlinux.a
 
-This patch created boot failure on RZ/G2L platforms as well.
-Reverting the patch fixed the boot failure.
+I was able to reproduce the issue and the same fix[1], will fix the issue
+here for clang compiler as well. Can you please apply [1] to avoid
+repeatedly sending the same issue for different compilers on the kernel tes=
+t robot?
+
+[1] https://lore.kernel.org/linux-renesas-soc/Y3wVLU01mHp2zozI@pendragon.id=
+easonboard.com/T/#t
 
 Cheers,
 Biju
-
-> >>>> integration setup to this change as commit 9ed2b4616d4e ("arm64/mm:
-> >>>> Drop redundant
-> >>>> BUG_ON(!pgtable_alloc)") in the arm64 tree. There is no output so
-> >>>> the panic clearly happens early at boot. If I move back to the
-> >>>> previous commit and add a WARN_ON() like so:
-> >>>>
-> >>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
-> >>>> d386033a074c..9280a92ff920 100644
-> >>>> --- a/arch/arm64/mm/mmu.c
-> >>>> +++ b/arch/arm64/mm/mmu.c
-> >>>> @@ -383,6 +383,7 @@ static void __create_pgd_mapping_locked(pgd_t
-> >>>> *pgdir, phys_addr_t phys,
-> >>>> =A0=A0=A0=A0=A0 phys &=3D PAGE_MASK;
-> >>>> =A0=A0=A0=A0=A0 addr =3D virt & PAGE_MASK;
-> >>>> =A0=A0=A0=A0=A0 end =3D PAGE_ALIGN(virt + size);
-> >>>> +=A0=A0=A0 WARN_ON(!pgtable_alloc);
-> >>>> =A0 =A0=A0=A0=A0=A0 do {
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 next =3D pgd_addr_end(addr, end);
-> >>>>
-> >>>> I do see some stacktraces. I have attached the boot log from QEMU.
-> >>>>
-> >>>> If there is any additional information I can provide or patches I
-> >>>> can test, I am more than happy to do so.
-> >>>
-> >>> There are couple of instances, where __create_pgd_mapping() function
-> >>> gets called without a valid pgtable alloc function (NULL is passed
-> >>> on instead), as it is not expected to allocate page table pages,
-> >>> during the mapping process. The following change after this patch
-> should solve the reported problem.
-> >>>
-> >>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
-> >>> 9ea8e9039992..a00563122fcb 100644
-> >>> --- a/arch/arm64/mm/mmu.c
-> >>> +++ b/arch/arm64/mm/mmu.c
-> >>> @@ -42,6 +42,7 @@
-> >>> =A0 #define NO_BLOCK_MAPPINGS=A0=A0=A0=A0=A0 BIT(0)
-> >>> =A0 #define NO_CONT_MAPPINGS=A0=A0=A0=A0=A0=A0 BIT(1)
-> >>> =A0 #define NO_EXEC_MAPPINGS=A0=A0=A0=A0=A0=A0 BIT(2)=A0 /* assumes F=
-EAT_HPDS is not
-> >>> used */
-> >>> +#define NO_ALLOC_MAPPINGS=A0=A0=A0=A0=A0 BIT(3)=A0 /* does not alloc=
-ate page
-> >>> +table pages */
-> >>> =A0 =A0 int idmap_t0sz __ro_after_init;
-> >>> =A0 @@ -380,7 +381,7 @@ static void __create_pgd_mapping_locked(pgd_t
-> >>> *pgdir, phys_addr_t phys,
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 phys &=3D PAGE_MASK;
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 addr =3D virt & PAGE_MASK;
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 end =3D PAGE_ALIGN(virt + size);
-> >>> -=A0=A0=A0=A0=A0=A0 BUG_ON(!pgtable_alloc);
-> >>> +=A0=A0=A0=A0=A0=A0 BUG_ON(!(flags & NO_ALLOC_MAPPINGS) && !pgtable_a=
-lloc);
-> >>> =A0 =A0=A0=A0=A0=A0=A0=A0=A0 do {
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 next =3D pgd_addr_en=
-d(addr, end); @@ -453,7 +454,7 @@
-> >>> static void __init create_mapping_noalloc(phys_addr_t phys, unsigned
-> >>> long virt,
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return;
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 }
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 __create_pgd_mapping(init_mm.pgd, phys, virt=
-, size, prot,
-> >>> NULL,
-> >>> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS);
-> >>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
-> >>> =A0 }
-> >>> =A0 =A0 void __init create_pgd_mapping(struct mm_struct *mm, phys_add=
-r_t
-> >>> phys, @@ -481,7 +482,7 @@ static void
-> >>> update_mapping_prot(phys_addr_t phys, unsigned long virt,
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 }
-> >>> =A0 =A0=A0=A0=A0=A0=A0=A0=A0 __create_pgd_mapping(init_mm.pgd, phys, =
-virt, size, prot,
-> >>> NULL,
-> >>> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS);
-> >>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 NO_CONT_MAPPINGS | NO_ALLOC_MAPPINGS);
-> >>> =A0 =A0=A0=A0=A0=A0=A0=A0=A0 /* flush the TLBs after updating live ke=
-rnel mappings */
-> >>> =A0=A0=A0=A0=A0=A0=A0=A0 flush_tlb_kernel_range(virt, virt + size);
-> >>
-> >> This is now more complicated than what we had originally, and it
-> >> doesn't catch the case where the caller sets NO_ALLOC_MAPPINGS but
-> >> the callee ends up needing to perform an allocation, which the old
-> code would have caught.
-> >
-> > Well, it's still "caught" as such - all that BUG_ON(!pgtable_alloc)
-> does in these cases is encode the source location in the backtrace, vs.
-> having to decode it (if necessary) from the LR in a backtrace from
-> immediately dereferencing pgtable_alloc(). If that happens before the
-> user has a console up then the difference is moot anyway.
->=20
-> Agreed, also the fact that certain callers are sure about no page table
-> page allocation would be required (hence they just pass "NULL" for
-> pgtable_alloc function), needs to be notified appropriately when page
-> page table creation stumbles upon a pxd_none().
->=20
-> if (pxd_none(pmd)) {
-> 	BUG_ON(flags & NO_ALLOC_MAPPINGS);
-> }
->=20
-> Although there are might be an argument that all erstwhile
-> BUG_ON(!pgtable_alloc) has replacements with BUG_ON(flags &
-> NO_ALLOC_MAPPINGS), but there is a subtle difference.
-> It captures the fact (in a rather structured manner), that caller made a
-> choice with NO_ALLOC_MAPPINGS but called __create_pgd_mapping() on a
-> page table, where intermediate page table page alloc would still be
-> required. IMHO adding that explicit structure here via the new flag
-> NO_ALLOC_MAPPINGS makes sense.
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> https://jpn01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Flists.=
-i
-> nfradead.org%2Fmailman%2Flistinfo%2Flinux-arm-
-> kernel&amp;data=3D05%7C01%7Cbiju.das.jz%40bp.renesas.com%7Cbcd488ff5f5c44=
-a
-> aaf3708dacc387479%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C638046840
-> 104902697%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLC
-> JBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DF%2B3%2F2E583sYk=
-S
-> Z2bYIUN6HmHO7aGD5KT2EuGCE8MY2w%3D&amp;reserved=3D0
