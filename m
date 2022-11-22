@@ -1,108 +1,2321 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD6F10FC
-	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 09:08:41 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id z192so16621540yba.0
-        for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 01:08:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1033C10FC
+	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 09:32:11 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id 136so13623777pga.1
+        for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 01:32:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kOWylR3pFDf7/iXRlM9MtBiVx3OCX5Q16RmYl/Duvpc=;
-        b=m2uhLbeZ0IvOt+TJn8j6XJHO5vN1TSxjVNIzabIvnTdb6SyowH+kexPolXKdL2zU5g
-         5UYfs+BV5XSWttveP/L/5B20wrefHf8yMpma5OVTOk5vNmKqZs5VNYGNOijmRWQAzVAL
-         b9NHWH6iiUJZiStgkkuc9V6T8zmfM3DFOVbTnbado9gvOZoaXNcjY0m6PIawJyFm/Qqe
-         iF2jyaqdzxu04pK8JUfpXA+ZhroZcEZlTmRI/7n+SORbm5oE3sNidqHjSjUvvf6EOR9M
-         Lqw3gcc7qM3yrQFMOjkdQWDRR5NWqRRE8wpbG4YrODrVu9KpqIYTKIKgFSPMZaCN84RI
-         mIjw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=eaVYaWPXCHx571T1as7F/p+67JcaS72hZIU6vANxasQ=;
+        b=zmYnkNS+eYcFJ/joUHrj+3EPCKjZH1GzWpNQdaUP3qNuKUwmTV0vZznf0c+5lH1j4o
+         Goi/2egZT4Ypgkxtyiq+P2O5OLX020nI8R1q4gzk2p86mhqLokLUq7GktCGX1Jt8kNjJ
+         h7yAAtRwui7pjjNbWMkQY4vI0N0mayWnp7+Qly0HMQLkHq1LEEi5ASuf0eOdAY1n7pKn
+         aY8D88GN1/ABLyJYAOBRoxxarb1QWJaP3ms73qhaA2NG1en4CBrT1xGyGjJmLUFmnvAY
+         /3R1+iQeUgdB0hc9Ou2WsQ/jmU81aYQeZjSZ1atc8Yzk7SutYdsndvftB1gWHh7optHO
+         fUDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kOWylR3pFDf7/iXRlM9MtBiVx3OCX5Q16RmYl/Duvpc=;
-        b=wGRO0RZcjwGwMcaDYlkaeDAxtxXlLoXzZPlvkj0nER56vPFdOW74IyafjkZf74SaDG
-         h+TT8oCiKDeFX0DCU131ClljHIqKz2CWEtGv83P+6WPeX2QLlydqq4DJeNZBMlD6Md34
-         hney7BoDzjadV2SezLvmYDbm9wKCx4S0Qf9XgS/Zi6lmTCnzA1vjtByLPoErMNLWKXkq
-         r7wrHzWjl+yQDQf0vECYv0eJHNei9ASADMBCWtWObuY6iGXKKOXyAHXCr0qRcCxKtgq9
-         Zt9f2fHu3Zkw/+W0594NdfrZUFUEmxnGgCnKJuJuAWynDd+yCg1K0RxLSP84yaYW6v7O
-         YBjw==
-X-Gm-Message-State: ANoB5pmnD4CcEBmw+Rbz228k3XD5/38ofjEwBU3zcvOwY7V1QcN2eTrP
-	hcCvABI5pd4cl/InJaZX+2HTi+NbzmQ4ZmicNqNLUA==
-X-Google-Smtp-Source: AA0mqf6GSa8pMJKCbBfaOwHcNLUDn2z/mEKkuoq4i2UxurDiU9eW1iF2AMMY9G/K7R3Gu53wMUF4iPxqWznv/Gn9P5o=
-X-Received: by 2002:a25:9d8f:0:b0:6d0:155f:aa9e with SMTP id
- v15-20020a259d8f000000b006d0155faa9emr2687662ybp.448.1669108119939; Tue, 22
- Nov 2022 01:08:39 -0800 (PST)
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eaVYaWPXCHx571T1as7F/p+67JcaS72hZIU6vANxasQ=;
+        b=20kyAgTmW9HC3XCN4N0HkAckCpz256054si41cPHO6T2pOw5H6FhiEmcC89Snj/XW/
+         rq9UUxgrr3tZp2L6pP7wlG0RBFrT/IBLXuhM1ajmR8Rvz7fTtOLUENTNborCWg11sPwX
+         4eUukeTxmFm9UmUq7hgMmfVLCgDm04nept3yhysP97MMFzzBKLpkmS86M40v7s84AC4x
+         0hjxAZEd4rvN6BtKrH9NN/h2qXgM8IXC5KGl45MoFBsJcpgMlE/s4sNdaI+VDG4MWpaH
+         G+1gtfZpfApSLUnMS+S+a5ENefgw4AsXiMrWDSnD04irmAyr0tGWhDw5Okd8nPVbmVMm
+         citQ==
+X-Gm-Message-State: ANoB5pnReD9830Elyfj1bmQSBnE50MeYcQaqXF7r+g/ZWlSqYp2UYDa2
+	7iwhYioyD2cKAOM9mRC4Uh7dEIgxLE3uhfM34QQ=
+X-Google-Smtp-Source: AA0mqf48WzmLuhxBcTFEfSHIk9RHXEMPXfCypzEn+UiR0rHoKfozk6YRsruy8npDulEq83srEhrE+Q==
+X-Received: by 2002:a63:1111:0:b0:46f:f93b:ddc8 with SMTP id g17-20020a631111000000b0046ff93bddc8mr6162247pgl.389.1669109529664;
+        Tue, 22 Nov 2022 01:32:09 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 189-20020a6218c6000000b0056299fd2ba2sm10190424pfy.162.2022.11.22.01.32.08
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 01:32:08 -0800 (PST)
+Message-ID: <637c9718.620a0220.588b7.f7ae@mx.google.com>
+Date: Tue, 22 Nov 2022 01:32:08 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 22 Nov 2022 14:38:28 +0530
-Message-ID: <CA+G9fYvCWwndXdsvuW7iJ25wgfN6_iMY-OC_z6ufSwiJkzFFMw@mail.gmail.com>
-Subject: next-20221122: tinyconfig: ppc n s390: kernel/printk/printk.c:95:1:
- error: type specifier missing, defaults to 'int'; ISO C99 and later do not
- support implicit int [-Werror,-Wimplicit-int]
-To: open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, 
-	lkft-triage@lists.linaro.org
-Cc: Nathan Chancellor <nathan@kernel.org>, John Ogness <john.ogness@linutronix.de>, 
-	Petr Mladek <pmladek@suse.com>, Sergey Senozhatsky <senozhatsky@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Kernel: next-20221122
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: next
+Subject: next/master build: 214 builds: 18 failed, 196 passed, 58 errors,
+ 511 warnings (next-20221122)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Today's Linux next 20221122 tag clang-15 tinyconfig builds fails on
-powerpc and s390 architectures.
+next/master build: 214 builds: 18 failed, 196 passed, 58 errors, 511 warnin=
+gs (next-20221122)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20221122/
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=0 ARCH=s390
-CROSS_COMPILE=s390x-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-clang'
+Tree: next
+Branch: master
+Git Describe: next-20221122
+Git Commit: 771a207d1ee9f38da8c0cee1412228f18b900bac
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-kernel/printk/printk.c:95:1: error: type specifier missing, defaults
-to 'int'; ISO C99 and later do not support implicit int
-[-Werror,-Wimplicit-int]
-DEFINE_STATIC_SRCU(console_srcu);
-^
-int
-kernel/printk/printk.c:95:20: error: a parameter list without types is
-only allowed in a function definition
-DEFINE_STATIC_SRCU(console_srcu);
-                   ^
-kernel/printk/printk.c:261:29: error: use of undeclared identifier
-'console_srcu'
-                     srcu_read_lock_held(&console_srcu));
-                                          ^
-kernel/printk/printk.c:288:33: error: use of undeclared identifier
-'console_srcu'
-        return srcu_read_lock_nmisafe(&console_srcu);
-                                       ^
-kernel/printk/printk.c:300:28: error: use of undeclared identifier
-'console_srcu'
-        srcu_read_unlock_nmisafe(&console_srcu, cookie);
-                                  ^
-kernel/printk/printk.c:3122:20: error: use of undeclared identifier
-'console_srcu'
-        synchronize_srcu(&console_srcu);
-                          ^
-kernel/printk/printk.c:3469:20: error: use of undeclared identifier
-'console_srcu'
-        synchronize_srcu(&console_srcu);
-                          ^
-kernel/printk/printk.c:3521:20: error: use of undeclared identifier
-'console_srcu'
-        synchronize_srcu(&console_srcu);
-                          ^
-8 errors generated.
+Build Failures Detected:
 
-log:
-https://builds.tuxbuild.com/2HtTqOb2b83eGTzpS4bjLf59Agd/
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-Build history:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221122/testrun/13121925/suite/build/test/clang-15-tinyconfig/history/
+arm64:
+    allmodconfig: (clang-16) FAIL
 
---
-Linaro LKFT
-https://lkft.linaro.org
+arm:
+    allmodconfig: (clang-16) FAIL
+    allmodconfig: (gcc-10) FAIL
+    lpc18xx_defconfig: (gcc-10) FAIL
+    mini2440_defconfig: (gcc-10) FAIL
+    moxart_defconfig: (gcc-10) FAIL
+    mps2_defconfig: (gcc-10) FAIL
+    rpc_defconfig: (gcc-10) FAIL
+    s3c2410_defconfig: (gcc-10) FAIL
+    s3c6400_defconfig: (gcc-10) FAIL
+    stm32_defconfig: (gcc-10) FAIL
+    tct_hammer_defconfig: (gcc-10) FAIL
+
+i386:
+    allmodconfig: (clang-16) FAIL
+
+mips:
+    bcm63xx_defconfig: (gcc-10) FAIL
+    decstation_64_defconfig: (gcc-10) FAIL
+
+sparc:
+    tinyconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-16) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+
+arm64:
+    allmodconfig (clang-16): 8 errors
+    defconfig (clang-16): 9 warnings
+
+arm:
+    allmodconfig (gcc-10): 1 error
+    allmodconfig (clang-16): 9 errors
+    aspeed_g5_defconfig (clang-16): 9 warnings
+    imxrt_defconfig (gcc-10): 51 warnings
+    keystone_defconfig (gcc-10): 1 warning
+    lpc18xx_defconfig (gcc-10): 1 error, 13 warnings
+    milbeaut_m10v_defconfig (gcc-10): 79 warnings
+    mini2440_defconfig (gcc-10): 1 error
+    moxart_defconfig (gcc-10): 1 error, 2 warnings
+    mps2_defconfig (gcc-10): 1 error, 10 warnings
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 123 warnings
+    rpc_defconfig (gcc-10): 2 errors
+    s3c2410_defconfig (gcc-10): 1 error
+    s3c6400_defconfig (gcc-10): 1 error
+    sp7021_defconfig (gcc-10): 65 warnings
+    stm32_defconfig (gcc-10): 1 error, 46 warnings
+    tct_hammer_defconfig (gcc-10): 1 error
+    tegra_defconfig (gcc-10): 1 warning
+    vf610m4_defconfig (gcc-10): 47 warnings
+    viper_defconfig (gcc-10): 1 warning
+
+i386:
+    allmodconfig (clang-16): 8 errors
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+    32r2el_defconfig+debug (gcc-10): 1 warning
+    32r2el_defconfig+kselftest (gcc-10): 1 warning
+    ar7_defconfig (gcc-10): 1 warning
+    bcm63xx_defconfig (gcc-10): 1 error, 1 warning
+    bmips_be_defconfig (gcc-10): 11 warnings
+    bmips_stb_defconfig (gcc-10): 11 warnings
+    fuloong2e_defconfig (gcc-10): 1 error
+    lemote2f_defconfig (gcc-10): 1 error
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+    rb532_defconfig (gcc-10): 2 warnings
+    rs90_defconfig (gcc-10): 1 warning
+
+riscv:
+    defconfig+CONFIG_EFI=3Dn (clang-16): 9 warnings
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 4 warnings
+    sparc64_defconfig+debug (gcc-10): 2 warnings
+    sparc64_defconfig+kselftest (gcc-10): 2 warnings
+    tinyconfig (gcc-10): 8 errors, 4 warnings
+
+x86_64:
+    allmodconfig (clang-16): 8 errors
+
+Errors summary:
+
+    5    io_uring/io_uring.c:498:3: error: implicit declaration of function=
+ =E2=80=98eventfd_signal_mask=E2=80=99; did you mean =E2=80=98eventfd_signa=
+l=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+    4    kernel/bpf/verifier.c:8955:31: error: array index 7 is past the en=
+d of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-W=
+array-bounds]
+    4    kernel/bpf/verifier.c:8950:31: error: array index 6 is past the en=
+d of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-W=
+array-bounds]
+    4    kernel/bpf/verifier.c:8942:24: error: array index 5 is past the en=
+d of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-W=
+array-bounds]
+    4    kernel/bpf/verifier.c:8690:25: error: array index 6 is past the en=
+d of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-W=
+array-bounds]
+    4    kernel/bpf/verifier.c:8447:19: error: array index 5 is past the en=
+d of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-W=
+array-bounds]
+    4    kernel/bpf/verifier.c:8200:23: error: array index 6 is past the en=
+d of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-W=
+array-bounds]
+    4    kernel/bpf/verifier.c:15221:23: error: array index 7 is past the e=
+nd of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-=
+Warray-bounds]
+    4    kernel/bpf/verifier.c:15220:30: error: array index 6 is past the e=
+nd of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-=
+Warray-bounds]
+    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    3    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_dat=
+a/dma-s3c24xx.h: No such file or directory
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    kernel/printk/printk.c:95:1: error: type defaults to =E2=80=98int=
+=E2=80=99 in declaration of =E2=80=98DEFINE_STATIC_SRCU=E2=80=99 [-Werror=
+=3Dimplicit-int]
+    1    kernel/printk/printk.c:3521:20: error: =E2=80=98console_srcu=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98console_=
+setup=E2=80=99?
+    1    kernel/printk/printk.c:3469:20: error: =E2=80=98console_srcu=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98console_=
+setup=E2=80=99?
+    1    kernel/printk/printk.c:3122:20: error: =E2=80=98console_srcu=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98console_=
+setup=E2=80=99?
+    1    kernel/printk/printk.c:300:28: error: =E2=80=98console_srcu=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98console_=
+sem=E2=80=99?
+    1    kernel/printk/printk.c:289:1: error: control reaches end of non-vo=
+id function [-Werror=3Dreturn-type]
+    1    kernel/printk/printk.c:288:33: error: =E2=80=98console_srcu=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98console_=
+sem=E2=80=99?
+    1    kernel/printk/printk.c:261:29: error: =E2=80=98console_srcu=E2=80=
+=99 undeclared (first use in this function); did you mean =E2=80=98console_=
+sem=E2=80=99?
+    1    arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/d=
+ma-s3c24xx.h: No such file or directory
+    1    arch/arm/mach-s3c/devs.c:32:10: fatal error: 'linux/platform_data/=
+dma-s3c24xx.h' file not found
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+    1    .../arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_da=
+ta/dma-s3c24xx.h: No such file or directory
+
+Warnings summary:
+
+    431  <command-line>: warning: "__thumb2__" redefined
+    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    7    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 de=
+fined but not used [-Wunused-function]
+    6    cc1: some warnings being treated as errors
+    3    kernel/bpf/verifier.c:8955:31: warning: array index 7 is past the =
+end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-=
+bounds]
+    3    kernel/bpf/verifier.c:8950:31: warning: array index 6 is past the =
+end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-=
+bounds]
+    3    kernel/bpf/verifier.c:8690:25: warning: array index 6 is past the =
+end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-=
+bounds]
+    3    kernel/bpf/verifier.c:8447:19: warning: array index 5 is past the =
+end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-=
+bounds]
+    3    kernel/bpf/verifier.c:8200:23: warning: array index 6 is past the =
+end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-=
+bounds]
+    3    kernel/bpf/verifier.c:15221:23: warning: array index 7 is past the=
+ end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray=
+-bounds]
+    3    kernel/bpf/verifier.c:15220:30: warning: array index 6 is past the=
+ end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray=
+-bounds]
+    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    3    8 warnings generated.
+    2    kernel/bpf/verifier.c:8942:24: warning: array index 5 is past the =
+end of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-=
+bounds]
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_forma=
+t): /ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (=
+8 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
+lt #size-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on defau=
+lt #address-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_forma=
+t): /ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 by=
+tes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #=
+size-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid=
+_default_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #=
+address-cells value
+    2    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_fo=
+rmat): /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid lengt=
+h (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2=
+, #size-cells =3D=3D 1)
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (s=
+pi_bus_reg): Failed prerequisite 'reg_format'
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
+ci_device_reg): Failed prerequisite 'reg_format'
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (p=
+ci_device_bus_num): Failed prerequisite 'reg_format'
+    2    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i=
+2c_bus_reg): Failed prerequisite 'reg_format'
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    kernel/printk/printk.c:95:1: warning: parameter names (without typ=
+es) in function declaration
+    1    kernel/printk/printk.c:95:1: warning: data definition has no type =
+or storage class
+    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
+s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
+-overflow=3D]
+    1    :8942:24: warning: array index 5 is past the end of the array (tha=
+t has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bounds]
+
+Section mismatches summary:
+
+    9    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch i=
+n reference: init_module (section: .init.text) -> cc_debugfs_global_fini (s=
+ection: .exit.text)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-16) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    kernel/bpf/verifier.c:8200:23: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8447:19: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8690:25: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8942:24: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8950:31: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8955:31: error: array index 7 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:15220:30: error: array index 6 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+    kernel/bpf/verifier.c:15221:23: error: array index 7 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section m=
+ismatches
+
+Errors:
+    .../arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dm=
+a-s3c24xx.h: No such file or directory
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-16) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    kernel/bpf/verifier.c:8200:23: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8447:19: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8690:25: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8942:24: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8950:31: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8955:31: error: array index 7 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:15220:30: error: array index 6 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+    kernel/bpf/verifier.c:15221:23: error: array index 7 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (i386, clang-16) =E2=80=94 FAIL, 8 errors, 0 warnings, 0 secti=
+on mismatches
+
+Errors:
+    kernel/bpf/verifier.c:8200:23: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8447:19: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8690:25: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8942:24: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8950:31: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8955:31: error: array index 7 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:15220:30: error: array index 6 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+    kernel/bpf/verifier.c:15221:23: error: array index 7 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, clang-16) =E2=80=94 FAIL, 9 errors, 0 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    arch/arm/mach-s3c/devs.c:32:10: fatal error: 'linux/platform_data/dma-s=
+3c24xx.h' file not found
+    kernel/bpf/verifier.c:8200:23: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8447:19: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8690:25: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8942:24: error: array index 5 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8950:31: error: array index 6 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:8955:31: error: array index 7 is past the end of =
+the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warray=
+-bounds]
+    kernel/bpf/verifier.c:15220:30: error: array index 6 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+    kernel/bpf/verifier.c:15221:23: error: array index 7 is past the end of=
+ the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Werror,-Warra=
+y-bounds]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 9 warnings, 0=
+ section mismatches
+
+Warnings:
+    kernel/bpf/verifier.c:8200:23: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8447:19: warning: array index 5 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8690:25: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8942:24: warning: array index 5 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8950:31: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8955:31: warning: array index 7 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:15220:30: warning: array index 6 is past the end =
+of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-boun=
+ds]
+    kernel/bpf/verifier.c:15221:23: warning: array index 7 is past the end =
+of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-boun=
+ds]
+    8 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sect=
+ion mismatches
+
+Errors:
+    io_uring/io_uring.c:498:3: error: implicit declaration of function =E2=
+=80=98eventfd_signal_mask=E2=80=99; did you mean =E2=80=98eventfd_signal=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 11 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 bytes) =
+(#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
+es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
+: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
+ bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
+ze-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_bus_num): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #addre=
+ss-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #size-=
+cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
+ddress-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
+ize-cells value
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 11 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:115.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/timer@0:reg: property has invalid length (8 bytes) =
+(#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:120.5-22: Warning (reg_format): /=
+ubus/timer-mfd@10000080/watchdog@1c:reg: property has invalid length (8 byt=
+es) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:111.4-35: Warning (ranges_format)=
+: /ubus/timer-mfd@10000080:ranges: "ranges" property has invalid length (12=
+ bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, #si=
+ze-cells =3D=3D 1)
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (pci_de=
+vice_bus_num): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (i2c_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268-comtrend-vr-3032u.dtb: Warning (spi_bu=
+s_reg): Failed prerequisite 'reg_format'
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #addre=
+ss-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:113.12-116.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/timer@0: Relying on default #size-=
+cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #a=
+ddress-cells value
+    arch/mips/boot/dts/brcm/bcm63268.dtsi:118.21-126.6: Warning (avoid_defa=
+ult_addr_size): /ubus/timer-mfd@10000080/watchdog@1c: Relying on default #s=
+ize-cells value
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-16) =E2=80=94 PASS, 0 errors, 9 warnings, 0 section=
+ mismatches
+
+Warnings:
+    kernel/bpf/verifier.c:8200:23: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8447:19: warning: array index 5 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8690:25: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    :8942:24: warning: array index 5 is past the end of the array (that has=
+ type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bounds]
+    kernel/bpf/verifier.c:8950:31: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8955:31: warning: array index 7 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:15220:30: warning: array index 6 is past the end =
+of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-boun=
+ds]
+    kernel/bpf/verifier.c:15221:23: warning: array index 7 is past the end =
+of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-boun=
+ds]
+    8 warnings generated.
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_EFI=3Dn (riscv, clang-16) =E2=80=94 PASS, 0 errors, 9 warn=
+ings, 0 section mismatches
+
+Warnings:
+    kernel/bpf/verifier.c:8200:23: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8447:19: warning: array index 5 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8690:25: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8942:24: warning: array index 5 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8950:31: warning: array index 6 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:8955:31: warning: array index 7 is past the end o=
+f the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-bound=
+s]
+    kernel/bpf/verifier.c:15220:30: warning: array index 6 is past the end =
+of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-boun=
+ds]
+    kernel/bpf/verifier.c:15221:23: warning: array index 7 is past the end =
+of the array (that has type 'u32[5]' (aka 'unsigned int[5]')) [-Warray-boun=
+ds]
+    8 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
+s, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: drivers/crypto/ccree/ccree.o: section mismatch in ref=
+erence: init_module (section: .init.text) -> cc_debugfs_global_fini (sectio=
+n: .exit.text)
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 51 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
+ction mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 13 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    io_uring/io_uring.c:498:3: error: implicit declaration of function =E2=
+=80=98eventfd_signal_mask=E2=80=99; did you mean =E2=80=98eventfd_signal=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 79 warnings=
+, 0 section mismatches
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sec=
+tion mismatches
+
+Errors:
+    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_data/dma=
+-s3c24xx.h: No such file or directory
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 secti=
+on mismatches
+
+Errors:
+    io_uring/io_uring.c:498:3: error: implicit declaration of function =E2=
+=80=98eventfd_signal_mask=E2=80=99; did you mean =E2=80=98eventfd_signal=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    cc1: some warnings being treated as errors
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 10 warnings, 0 sectio=
+n mismatches
+
+Errors:
+    io_uring/io_uring.c:498:3: error: implicit declaration of function =E2=
+=80=98eventfd_signal_mask=E2=80=99; did you mean =E2=80=98eventfd_signal=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 123 warnings, 0 section mismatches
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
+bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
+flow=3D]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_data/dma=
+-s3c24xx.h: No such file or directory
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3=
+c24xx.h: No such file or directory
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 65 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
+nings, 0 section mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 46 warnings, 0 secti=
+on mismatches
+
+Errors:
+    io_uring/io_uring.c:498:3: error: implicit declaration of function =E2=
+=80=98eventfd_signal_mask=E2=80=99; did you mean =E2=80=98eventfd_signal=E2=
+=80=99? [-Werror=3Dimplicit-function-declaration]
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    cc1: some warnings being treated as errors
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: linux/platform_data/dma=
+-s3c24xx.h: No such file or directory
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 FAIL, 8 errors, 4 warnings, 0 section =
+mismatches
+
+Errors:
+    kernel/printk/printk.c:95:1: error: type defaults to =E2=80=98int=E2=80=
+=99 in declaration of =E2=80=98DEFINE_STATIC_SRCU=E2=80=99 [-Werror=3Dimpli=
+cit-int]
+    kernel/printk/printk.c:261:29: error: =E2=80=98console_srcu=E2=80=99 un=
+declared (first use in this function); did you mean =E2=80=98console_sem=E2=
+=80=99?
+    kernel/printk/printk.c:288:33: error: =E2=80=98console_srcu=E2=80=99 un=
+declared (first use in this function); did you mean =E2=80=98console_sem=E2=
+=80=99?
+    kernel/printk/printk.c:300:28: error: =E2=80=98console_srcu=E2=80=99 un=
+declared (first use in this function); did you mean =E2=80=98console_sem=E2=
+=80=99?
+    kernel/printk/printk.c:3122:20: error: =E2=80=98console_srcu=E2=80=99 u=
+ndeclared (first use in this function); did you mean =E2=80=98console_setup=
+=E2=80=99?
+    kernel/printk/printk.c:3469:20: error: =E2=80=98console_srcu=E2=80=99 u=
+ndeclared (first use in this function); did you mean =E2=80=98console_setup=
+=E2=80=99?
+    kernel/printk/printk.c:3521:20: error: =E2=80=98console_srcu=E2=80=99 u=
+ndeclared (first use in this function); did you mean =E2=80=98console_setup=
+=E2=80=99?
+    kernel/printk/printk.c:289:1: error: control reaches end of non-void fu=
+nction [-Werror=3Dreturn-type]
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/printk/printk.c:95:1: warning: data definition has no type or st=
+orage class
+    kernel/printk/printk.c:95:1: warning: parameter names (without types) i=
+n function declaration
+    cc1: some warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 47 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+    <command-line>: warning: "__thumb2__" redefined
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/coredump.c:842:12: warning: =E2=80=98dump_emit_page=E2=80=99 defined=
+ but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
+0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
+ warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>
