@@ -1,45 +1,70 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from antelope.elm.relay.mailchannels.net (antelope.elm.relay.mailchannels.net [23.83.212.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5F06FD1
-	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 15:48:52 +0000 (UTC)
-Received: by mail-wr1-f50.google.com with SMTP id i12so21483505wrb.0
-        for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 07:48:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iejRpG5xmG3AVT59k2korzV+i4h+JxFeIQ6F9nhVYVE=;
-        b=ERJaFk4RY2JkFY1qv6TQODE0AZ/ynMZlyKjqpHHZeLeGVUineTumgeSDCVdaBTDoCE
-         k3JFmtpqgr2rwK2uCB+hzbXD4Lu+hEHgql6SJVCdw7yOg3rP2YZgXzJaDpEvv9VMzxEO
-         envg5y6jmXVxTExN5qMcUhLl8tIAoNNfOCRXBoBRGS/MqWlfpz9kH9EYVqDHKh/deueG
-         J9CNjTwJ5Bt6sLbAhD3sUZWhQF/yFlSocEihRmiNKnnbgdfeB+fWGAMd6rFZkji9ZWfB
-         FDhyCf+fte3sj9Ss2mq8SnVDVPA45GnYCwfS2Gj/tGOYAEEbE2XxgXL9OmhNnlXIzQf1
-         FVwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iejRpG5xmG3AVT59k2korzV+i4h+JxFeIQ6F9nhVYVE=;
-        b=eRnXjwHfwehcwSjyvv33u5sQxyspiftSftnj9FBFHPxFLq2+ZsVXurCaL640npVpFi
-         rc+nUmMt1ck34ej8+/prgtKL1poKylHvc8G4zS9+lx0tU0z2VGYvYYU+wcjgN9SM/T/b
-         eT098fLkkq/T10sK4ZbcQmFmukMJuo0Xq1EJoTkJpbP3s4XZiwK+mfwmuJpRkAtNc6S6
-         rcjqOoQ7c1fE3doSomvLSdjzjEajuJLKWmFavu/OoBDSQbW3EpP5TvVxoXoyKAzV0qpF
-         xnbwcgOlPpy0+wgOd2KT8avwVJL/dnW7QbuTpOPFSgdQ4Fx4nypgnW93HNM/IfeLpt6E
-         BVAg==
-X-Gm-Message-State: ANoB5pnqKNLKvf7Oy29Lnmvl8HtUtg5qu3/iyb86Jdlex3QBmMGvpw6h
-	hOa9+8Ms5uutSnP67D/QyGM=
-X-Google-Smtp-Source: AA0mqf5NEgw8nrH93u2bY10c05fdm/Tx+wCnuYxy3cVf0cNE/5kLDJeWbVYnyzre7ISbHsO3k7PUGQ==
-X-Received: by 2002:adf:e84f:0:b0:22e:37c1:b225 with SMTP id d15-20020adfe84f000000b0022e37c1b225mr13795647wrn.428.1669132130446;
-        Tue, 22 Nov 2022 07:48:50 -0800 (PST)
-Received: from [192.168.0.25] ([37.222.251.204])
-        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b0022e36c1113fsm14161625wrd.13.2022.11.22.07.48.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 07:48:48 -0800 (PST)
-Message-ID: <a5464d62-bb42-5bdf-e49e-5c3edef4b09b@gmail.com>
-Date: Tue, 22 Nov 2022 16:48:45 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04D4ED0
+	for <llvm@lists.linux.dev>; Tue, 22 Nov 2022 16:55:59 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id B42BB3C0F8C;
+	Tue, 22 Nov 2022 10:20:41 +0000 (UTC)
+Received: from pdx1-sub0-mail-a305.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 149133C0A9D;
+	Tue, 22 Nov 2022 10:20:41 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1669112441; a=rsa-sha256;
+	cv=none;
+	b=l991j0ndctJJAKL1CVEFkMOfzSlZbXoH4aEl45t+N1uBz+AoZM1z7jfRm//9LSbSHJvWoF
+	XzFkbnMVzACZm7nHJsFzo9z/zvwFsrlOMDgyseEN7hvNBsuHCKIfGrAAAi5/E26ZA8uE7z
+	PTpuBb4s7yxk9BwUXwibZiDvLZCxRIqXsyfGYumANtU+z0Qn4B/a2yaMOx+gRjFrDrDxDT
+	bQv/OemMdBEFv/s21+cH+nPiPCsCJsy2VSa1KVFO1HSRbLvnPGyfl/sIgUoIqrs+ilMOpU
+	M/Z+JwnslOxXc2wOdKVfHlOChRuMVzD8EgiiWSIgX+uZY5L/9EQUc+EoE4BXdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1669112441;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=qiPhbkwAI/xsCItHsFRuVip1BIcjDwn1WOh9E0WKWWA=;
+	b=kjTb1EHAOocHKzoSaje4LBfxjDyL6VuYdhVcYqhUDiUKcPKtFDklNTBuvNuBY2Fc6Dd1Ju
+	u17lmk1LjdA3lifCpK34jDej+ASHl6DpkCufC6KiVixeqDOzY0sXmmw8NcS2DmtVZxOme1
+	adYylYcFjatCWzuWTqnH22zOAkfR215L8ygV++Ho30+4QNpgmRvNOQY9DTVvI4N/qydn3w
+	xCPOjsjk+URGWc7eQng8ZvC0CPBRhLVdhymW0XI1cECjBmLVAxWTZ2ef63MRtQ5r3S8kqw
+	ocyzxqfyCvhM9m8KqtG5cLXyDl5dFXX9sjnu2eWmw1VtRezGl+HC/c2Y2JU7ww==
+ARC-Authentication-Results: i=1;
+	rspamd-64c57ffbcf-gmhf8;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=siddhesh@gotplt.org
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MailChannels-Auth-Id: dreamhost
+X-Vacuous-Robust: 5419300679b2401a_1669112441516_4245864710
+X-MC-Loop-Signature: 1669112441516:1950271019
+X-MC-Ingress-Time: 1669112441516
+Received: from pdx1-sub0-mail-a305.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.116.179.81 (trex/6.7.1);
+	Tue, 22 Nov 2022 10:20:41 +0000
+Received: from [192.168.0.182] (bras-base-toroon4834w-grc-23-76-68-24-147.dsl.bell.ca [76.68.24.147])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: siddhesh@gotplt.org)
+	by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4NGgJ71dRvzSB;
+	Tue, 22 Nov 2022 02:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gotplt.org;
+	s=dreamhost; t=1669112440;
+	bh=qiPhbkwAI/xsCItHsFRuVip1BIcjDwn1WOh9E0WKWWA=;
+	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+	b=wJxTewb1A8WOR3hcBGdT/BQJa4rCcOq2EPVtOuauuy4Nn1tL60H1eWIEZt0ztOo9f
+	 6qVD+rx2fNDVRlpaK8+lITQ+H1ZxUdeIvfuS7vtAy9PMaMc4eKK7SXzt/jC3U6oVEp
+	 SU2LOHhwikC3m+Qu+9zf8BiCkOkjtZKoYagndAeU4FdapikRsUGEdESeiT4S4iLjrJ
+	 uc+6UyEyG+aM5ONt/TM7PO/eK2ZXcff42739Jr0uCyCYnQe+epC8KJcphDPpR2OTZI
+	 5t+/Qd0LlOvaaY21NpGfVH6DRlWVgfOfiaoehn8YZdmObYYuQ7n91xleGrzYENC74/
+	 jpjLBabVpnvrg==
+Message-ID: <0da67f73-dd73-7e6d-74c2-14aec5d79902@gotplt.org>
+Date: Tue, 22 Nov 2022 05:20:37 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,245 +72,58 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v28 01/11] dt-bindings: arm: mediatek: mmsys: add vdosys1
- compatible for MT8195
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 4/4] fortify: Use __builtin_dynamic_object_size() when
+ available
 Content-Language: en-US
-To: =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
- "robh+dt@kernel.org" <robh+dt@kernel.org>,
- =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= <Jason-JH.Lin@mediatek.com>,
- "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
- "linux@roeck-us.net" <linux@roeck-us.net>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
- "angelogioacchino.delregno@collabora.com"
- <angelogioacchino.delregno@collabora.com>,
- "nfraprado@collabora.com" <nfraprado@collabora.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= <Singo.Chang@mediatek.com>,
- "nathan@kernel.org" <nathan@kernel.org>,
- =?UTF-8?B?WW9uZ3FpYW5nIE5pdSAo54mb5rC45by6KQ==?=
- <yongqiang.niu@mediatek.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "daniel@ffwll.ch" <daniel@ffwll.ch>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- Project_Global_Chrome_Upstream_Group
- <Project_Global_Chrome_Upstream_Group@mediatek.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "airlied@linux.ie"
- <airlied@linux.ie>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "ndesaulniers@google.com" <ndesaulniers@google.com>
-References: <20221107072243.15748-1-nancy.lin@mediatek.com>
- <20221107072243.15748-2-nancy.lin@mediatek.com>
- <c6297a1c-e282-4a18-f16c-fa2df08b440a@gmail.com>
- <f6d7eaa0b7e2a3ed6567692616ebc1304500806c.camel@mediatek.com>
- <fd6c1299-4ac9-6d51-247f-3a7b7e39052b@gmail.com>
- <de21390898759ce979da8d2ae76a93982f59c149.camel@mediatek.com>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <de21390898759ce979da8d2ae76a93982f59c149.camel@mediatek.com>
+To: Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
+Cc: Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ llvm@lists.linux.dev, Juergen Gross <jgross@suse.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, linux-kernel@vger.kernel.org
+References: <20220920192202.190793-1-keescook@chromium.org>
+ <20220920192202.190793-5-keescook@chromium.org>
+From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+In-Reply-To: <20220920192202.190793-5-keescook@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+On 2022-09-20 15:22, Kees Cook wrote:
+> Since the commits starting with c37495d6254c ("slab: add __alloc_size
+> attributes for better bounds checking"), the compilers have runtime
+> allocation size hints available in some places. This was immediately
+> available to CONFIG_UBSAN_BOUNDS, but CONFIG_FORTIFY_SOURCE needed
+> updating to explicitly make use the hints via the associated
+> __builtin_dynamic_object_size() helper. Detect and use the builtin when
+> it is available, increasing the accuracy of the mitigation. When runtime
+> sizes are not available, __builtin_dynamic_object_size() falls back to
+> __builtin_object_size(), leaving the existing bounds checking unchanged.
+> 
+> Additionally update the VMALLOC_LINEAR_OVERFLOW LKDTM test to make the
+> hint invisible, otherwise the architectural defense is not exercised
+> (the buffer overflow is detected in the memset() rather than when it
+> crosses the edge of the allocation).
+> 
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Siddhesh Poyarekar <siddhesh@gotplt.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: linux-hardening@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>   drivers/misc/lkdtm/heap.c           | 1 +
+>   include/linux/compiler_attributes.h | 5 +++++
+>   include/linux/fortify-string.h      | 7 +++++++
+>   3 files changed, 13 insertions(+)
 
+Hi Kees,
 
-On 22/11/2022 11:51, Nancy Lin (林欣螢) wrote:
-> Dear Matthias,
-> 
-> Thanks for the review.
-> 
-> On Thu, 2022-11-10 at 14:10 +0100, Matthias Brugger wrote:
->> 
->> On 09/11/2022 06:10, Jason-JH Lin (林睿祥) wrote:
->> > On Tue, 2022-11-08 at 18:46 +0100, Matthias Brugger wrote:
->> > > 
->> > > On 07/11/2022 08:22, Nancy.Lin wrote:
->> > > > Add vdosys1 mmsys compatible for MT8195 platform.
->> > > > 
->> > > > For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines
->> > > > binding
->> > > > to
->> > > > 2 different power domains, different clock drivers and
->> > > > different
->> > > > mediatek-drm drivers.
->> > > > 
->> > > > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
->> > > > Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> > > > ---
->> > > >  
->> > > > .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml      |
->> > > > 4
->> > > > +++-
->> > > >   1 file changed, 3 insertions(+), 1 deletion(-)
->> > > > 
->> > > > diff --git
->> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->> > > > .yam
->> > > > l
->> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->> > > > .yam
->> > > > l
->> > > > index 0711f1834fbd..aaabe2196185 100644
->> > > > ---
->> > > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->> > > > .yam
->> > > > l
->> > > > +++
->> > > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys
->> > > > .yam
->> > > > l
->> > > > @@ -48,7 +48,9 @@ properties:
->> > > >             - const: syscon
->> > > >   
->> > > >         - items:
->> > > > -          - const: mediatek,mt8195-vdosys0
->> > > > +          - enum:
->> > > > +              - mediatek,mt8195-vdosys0
->> > > > +              - mediatek,mt8195-vdosys1
->> > > >             - const: mediatek,mt8195-mmsys
->> > > >             - const: syscon
->> > > >   
->> > > 
->> > > I think we had that several times already:
->> > > 
->> > 
->> > 
-> https://lore.kernel.org/all/6bbe9527-ae48-30e0-fb45-519223a744d7@linaro.org/
->> > > 
->> > > We will something like this, but please check that this does not
->> > > give
->> > > any 
->> > > errors/warnings:
->> > > 
->> > > diff --git
->> > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.y
->> > > aml 
->> > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.y
->> > > aml
->> > > index eb451bec23d3d..8e9c4f4d7c389 100644
->> > > ---
->> > > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.y
->> > > aml
->> > > +++
->> > > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.y
->> > > aml
->> > > @@ -32,13 +32,22 @@ properties:
->> > >                 - mediatek,mt8183-mmsys
->> > >                 - mediatek,mt8186-mmsys
->> > >                 - mediatek,mt8192-mmsys
->> > > -              - mediatek,mt8195-mmsys
->> > >                 - mediatek,mt8365-mmsys
->> > >             - const: syscon
->> > >         - items:
->> > >             - const: mediatek,mt7623-mmsys
->> > >             - const: mediatek,mt2701-mmsys
->> > >             - const: syscon
->> > > +      - items:
->> > > +          - const: mediatek,mt8195-vdosys0
->> > > +          - const: syscon
->> > > +      - items:
->> > > +          - const: mediatek,mt8195-vdosys1
->> > > +          - const: syscon
->> > > +      - items:
->> > > +          - const: mediatek,mt8195-mmsys
->> > > +          - const: syscon
->> > > +      deprecated: true
->> > > 
->> > >     reg:
->> > >       maxItems: 1
->> > 
->> > Hi Matthias,
->> > 
->> > As the vdosys0 previous reviewed patch:
->> > 
->> > 
-> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20220927152704.12018-2-jason-jh.lin@mediatek.com/__;!!CTRNKA9wMg0ARbw!zRdbIyyAsfqob2kapMAcKYATAguhEV0x0qE5cTOAcWUNhzeAbMHzZoos_2QzUCxS$
->> >  
->> > Should I modify the vdosys0 items format like your example?
->> > 
->> > Or should vdosys1 add items format like vdosys0's previous patch?
->> >      - items:
->> >          - const: mediatek,mt8195-vdosys1
->> >          - const: mediatek,mt8195-mmsys
->> >          - const: syscon
->> > 
->> 
->> No, vdosys1 must not have mediatek,mt8195-mmsys fallback.
->> 
->> Regards,
->> Matthias
->> 
-> 
-> I will fix it and add the following vdosys1 binding base on [1].
-> 
->        - description: vdosys0 and vdosys1 are 2 display HW pipelines,
->                       so mt8195 binding should be deprecated.
->          deprecated: true
->          items:
->            - const: mediatek,mt8195-mmsys
->            - const: syscon
->        - items:
->            - const: mediatek,mt7623-mmsys
->            - const: mediatek,mt2701-mmsys
->            - const: syscon
->        - items:
->            - const: mediatek,mt8195-vdosys0
->            - const: mediatek,mt8195-mmsys
->            - const: syscon
->   +    - items:
->   +        - const: mediatek,mt8195-vdosys1
->   +        - const: syscon
-> 
+Circling back on this, I noticed that all but this patch got pulled into 
+Linus' tree.  Is there a reason why this has been held back?
 
-Looks good, thanks
-Matthias
-
-> [1]
-> https://kernel.googlesource.com/pub/scm/linux/kernel/git/matthias.bgg/linux/+/b237efd47df7d25b78c306e90b97c5aa0ff4c4fc/Documentation/devicetree/bindings/arm/mediatek/mediatek%2Cmmsys.yaml
-> 
-> Regards,
-> Nancy
-> 
-> 
->> > Regards,
->> > Jason-JH.Lin
->> > 
->> > 
->> > 
->> > ************* MEDIATEK Confidentiality Notice
->> >   ********************
->> > The information contained in this e-mail message (including any
->> > attachments) may be confidential, proprietary, privileged, or
->> > otherwise
->> > exempt from disclosure under applicable laws. It is intended to be
->> > conveyed only to the designated recipient(s). Any use,
->> > dissemination,
->> > distribution, printing, retaining or copying of this e-mail
->> > (including its
->> > attachments) by unintended recipient(s) is strictly prohibited and
->> > may
->> > be unlawful. If you are not an intended recipient of this e-mail,
->> > or believe
->> >   
->> > that you have received this e-mail in error, please notify the
->> > sender
->> > immediately (by replying to this e-mail), delete any and all copies
->> > of
->> > this e-mail (including any attachments) from your system, and do
->> > not
->> > disclose the content of this e-mail to any other person. Thank you!
->> 
->> 
-> 
-> ************* MEDIATEK Confidentiality Notice ********************
-> The information contained in this e-mail message (including any
-> attachments) may be confidential, proprietary, privileged, or otherwise
-> exempt from disclosure under applicable laws. It is intended to be
-> conveyed only to the designated recipient(s). Any use, dissemination,
-> distribution, printing, retaining or copying of this e-mail (including its
-> attachments) by unintended recipient(s) is strictly prohibited and may
-> be unlawful. If you are not an intended recipient of this e-mail, or believe
-> that you have received this e-mail in error, please notify the sender
-> immediately (by replying to this e-mail), delete any and all copies of
-> this e-mail (including any attachments) from your system, and do not
-> disclose the content of this e-mail to any other person. Thank you!
+Thanks,
+Sid
