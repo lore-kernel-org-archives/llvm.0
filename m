@@ -1,119 +1,107 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563BF1877;
-	Wed, 23 Nov 2022 08:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367241C03;
+	Wed, 23 Nov 2022 08:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669191129; x=1700727129;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ATBLU5yWhG35bxdvahh4Hm/FstdMW+3EslzjlXrFYvA=;
-  b=J5UXCVczOEa0yVgZrKOxaQP1wHXluYEiP7hz08dfiDjOPa/tFdorG6yb
-   131/E/2C0CD73MeMH8X5m28ZiFw6VBPyZryATcKU87VRK4pjTpttzEHAd
-   ANeZEs71E9jkJdZ2bBWkmmGaFh1yRPbtMel7pRgLZYvXD1rjhUFIw1KGM
-   M6AN6tTgWg2JLQrU+h7PzoH+Q64FzQRr7cwmyj4i7oFFzVenn4JcrjluO
-   OAfnqQIZsyXwVkciXpcxj+/9UmS9URwd1f61/8Am0AUv03zMRxadRV+Wu
-   Ei3ubDlN62wvwbRo8AZXFlkNQoV59GNDUdNUco3+vDq0qUB1Oku1EjBWw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="378267342"
+  t=1669191731; x=1700727731;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rlalr3qAn1hXhZ4Yofei/dl4pO7a9Tol3RoCdgJa7Vk=;
+  b=GZAy71kn8LT/NAQQgclW7bT2oHW6dY0jUVz3MLy/lG3jLiO7CwdNABDG
+   pd1DsEblUmpFvzs5uF4mKI85axTmu33YR7vBswwtfHkkACTz8iy4XeZcK
+   7whJr2TMNLHQiZq/va4jFT8xT0kmlZscnvgsGRTtYndPRRWyI3NiKV8qO
+   9g9L4IOZINtyj5kkbwmg1m9w9pG2cG9kdPeh0/lFXvav9aga6m+KRkq4r
+   Wd032XXc0zs3Sspf+Zb3AtjPHGyQR2CyE5gDBMsmhFcFUar8FL5eNbMou
+   Se+q9sKwnDOf3btLomfAr8ThWgnqkWdcyFvAHvXl5VYJYVI+yQcfivYik
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="340889647"
 X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="378267342"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 00:12:08 -0800
+   d="scan'208";a="340889647"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 00:22:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="641707619"
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="672788381"
 X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="641707619"
+   d="scan'208";a="672788381"
 Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Nov 2022 00:12:03 -0800
+  by orsmga008.jf.intel.com with ESMTP; 23 Nov 2022 00:22:03 -0800
 Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1oxkrS-0002U5-0q;
-	Wed, 23 Nov 2022 08:12:02 +0000
-Date: Wed, 23 Nov 2022 16:11:45 +0800
+	id 1oxl18-0002V1-2X;
+	Wed, 23 Nov 2022 08:22:02 +0000
+Date: Wed, 23 Nov 2022 16:21:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Vernet <void@manifault.com>
+To: Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexei Starovoitov <ast@kernel.org>
-Subject: [linux-next:master 9653/10068] kernel/bpf/helpers.c:2005:40:
- warning: multiple unsequenced modifications to 'idx'
-Message-ID: <202211231611.bcjNMNY4-lkp@intel.com>
+	openbmc@lists.ozlabs.org, avifishman70@gmail.com,
+	tmaimon77@gmail.com, tali.perry1@gmail.com, kwliu@nuvoton.com,
+	kflin@nuvoton.com, Marvin Lin <milkfafa@gmail.com>
+Subject: Re: [PATCH v7 6/7] media: uapi: Add controls for NPCM video driver
+Message-ID: <202211231617.HVv6XWcR-lkp@intel.com>
+References: <20221122085724.3245078-7-milkfafa@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="HGbhE1fBMvxuW6un"
+Content-Type: multipart/mixed; boundary="SH1KNeBRAo3bhIum"
 Content-Disposition: inline
+In-Reply-To: <20221122085724.3245078-7-milkfafa@gmail.com>
 
 
---HGbhE1fBMvxuW6un
+--SH1KNeBRAo3bhIum
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   736b6d81d93cf61a0601af90bd552103ef997b3f
-commit: fda01efc61605af7c6fa03c4109f14d59c9228b7 [9653/10068] bpf: Enable cgroups to be used as kptrs
+Hi Marvin,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on robh/for-next linus/master v6.1-rc6]
+[cannot apply to sailus-media-tree/streams next-20221122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Marvin-Lin/Support-Nuvoton-NPCM-Video-Capture-Encode-Engine/20221122-170020
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20221122085724.3245078-7-milkfafa%40gmail.com
+patch subject: [PATCH v7 6/7] media: uapi: Add controls for NPCM video driver
 config: x86_64-randconfig-a006-20221121
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=fda01efc61605af7c6fa03c4109f14d59c9228b7
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout fda01efc61605af7c6fa03c4109f14d59c9228b7
+        # https://github.com/intel-lab-lkp/linux/commit/f1cf93e5b035a1d9798ee2a7288c9c4c1c68b79a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Marvin-Lin/Support-Nuvoton-NPCM-Video-Capture-Encode-Engine/20221122-170020
+        git checkout f1cf93e5b035a1d9798ee2a7288c9c4c1c68b79a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/helpers.c:2005:40: warning: multiple unsequenced modifications to 'idx' [-Wunsequenced]
-                           .btf_id       = generic_dtor_ids[idx++],
-                                                               ^
+   In file included from <built-in>:1:
+>> ./usr/include/linux/npcm-video.h:30:39: warning: // comments are not allowed in this language [-Wcomment]
+           V4L2_NPCM_CAPTURE_MODE_COMPLETE = 0, // COMPLETE mode
+                                                ^
    1 warning generated.
-
-
-vim +/idx +2005 kernel/bpf/helpers.c
-
-  1999	
-  2000	static int __init kfunc_init(void)
-  2001	{
-  2002		int ret, idx = 0;
-  2003		const struct btf_id_dtor_kfunc generic_dtors[] = {
-  2004			{
-> 2005				.btf_id       = generic_dtor_ids[idx++],
-  2006				.kfunc_btf_id = generic_dtor_ids[idx++]
-  2007			},
-  2008	#ifdef CONFIG_CGROUPS
-  2009			{
-  2010				.btf_id       = generic_dtor_ids[idx++],
-  2011				.kfunc_btf_id = generic_dtor_ids[idx++]
-  2012			},
-  2013	#endif
-  2014		};
-  2015	
-  2016		ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
-  2017		ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
-  2018		ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
-  2019		ret = ret ?: register_btf_id_dtor_kfuncs(generic_dtors,
-  2020							  ARRAY_SIZE(generic_dtors),
-  2021							  THIS_MODULE);
-  2022		return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &common_kfunc_set);
-  2023	}
-  2024	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---HGbhE1fBMvxuW6un
+--SH1KNeBRAo3bhIum
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -549,7 +537,6 @@ CONFIG_ACPI_PROCESSOR_IDLE=y
 CONFIG_ACPI_PROCESSOR=m
 CONFIG_ACPI_PROCESSOR_AGGREGATOR=m
 CONFIG_ACPI_THERMAL=m
-CONFIG_ACPI_PLATFORM_PROFILE=y
 CONFIG_ACPI_CUSTOM_DSDT_FILE=""
 CONFIG_ARCH_HAS_ACPI_TABLE_UPGRADE=y
 # CONFIG_ACPI_TABLE_UPGRADE is not set
@@ -655,7 +642,8 @@ CONFIG_AS_TPAUSE=y
 #
 CONFIG_GENERIC_ENTRY=y
 CONFIG_KPROBES=y
-# CONFIG_JUMP_LABEL is not set
+CONFIG_JUMP_LABEL=y
+# CONFIG_STATIC_KEYS_SELFTEST is not set
 # CONFIG_STATIC_CALL_SELFTEST is not set
 CONFIG_OPTPROBES=y
 CONFIG_UPROBES=y
@@ -1875,11 +1863,11 @@ CONFIG_NET_VENDOR_MICREL=y
 # CONFIG_KSZ884X_PCI is not set
 CONFIG_NET_VENDOR_MICROCHIP=y
 # CONFIG_LAN743X is not set
-# CONFIG_VCAP is not set
 CONFIG_NET_VENDOR_MICROSEMI=y
 CONFIG_NET_VENDOR_MICROSOFT=y
 CONFIG_NET_VENDOR_MYRI=y
 # CONFIG_MYRI10GE is not set
+# CONFIG_FEALNX is not set
 CONFIG_NET_VENDOR_NI=y
 # CONFIG_NI_XGE_MANAGEMENT_ENET is not set
 CONFIG_NET_VENDOR_NATSEMI=y
@@ -2267,8 +2255,8 @@ CONFIG_TCG_TIS_ST33ZP24=m
 CONFIG_TCG_TIS_ST33ZP24_I2C=m
 CONFIG_TELCLOCK=y
 # CONFIG_XILLYBUS is not set
-# CONFIG_RANDOM_TRUST_CPU is not set
-# CONFIG_RANDOM_TRUST_BOOTLOADER is not set
+CONFIG_RANDOM_TRUST_CPU=y
+CONFIG_RANDOM_TRUST_BOOTLOADER=y
 # end of Character devices
 
 #
@@ -4131,7 +4119,7 @@ CONFIG_FUJITSU_LAPTOP=m
 CONFIG_GPD_POCKET_FAN=y
 # CONFIG_HP_ACCEL is not set
 CONFIG_WIRELESS_HOTKEY=y
-CONFIG_HP_WMI=y
+# CONFIG_HP_WMI is not set
 # CONFIG_IBM_RTL is not set
 CONFIG_SENSORS_HDAPS=m
 CONFIG_THINKPAD_LMI=y
@@ -5991,4 +5979,4 @@ CONFIG_ARCH_USE_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---HGbhE1fBMvxuW6un--
+--SH1KNeBRAo3bhIum--
