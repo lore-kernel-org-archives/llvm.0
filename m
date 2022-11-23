@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334911C26;
-	Wed, 23 Nov 2022 09:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85729C433D7;
-	Wed, 23 Nov 2022 09:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C145F1C29;
+	Wed, 23 Nov 2022 09:14:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BEAFC433D6;
+	Wed, 23 Nov 2022 09:14:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1669194453;
-	bh=VKtslqoKsQzbcRMmB1dvqG0AfN7VDOZ3O3RF399DhHE=;
+	s=korg; t=1669194848;
+	bh=PEHzwfO/VIiHVS3KPMtQeWVmGCOUzoW4YxeEJJBvGXo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FiCkJDpRgiLOfolYIbs1htUayu3Ckn612wJJfhrnV9T1XOXGujfjdEkf8O18WJMLv
-	 0i+WTMII2aNuiwTFHlUaJ7WY2Rg4WRmcAH1xkapYF28T/6Ib33+UZ5/KKbO9Lb/8op
-	 ZSpM3weioClX7n8PnHpwXa6bpHN0nj66mahx0kNU=
+	b=ztK9fU/AktMg2LwtgZWqKk4puqvo2AOk8/xwzCA7vwNBdgJwmtFWRp72DSPAu497s
+	 ATw5JRykUM3dTUZWCLrx5QCVb3deUMrGU2l11M/uXT9RdubnsGSWXHjMKhrqgV4XmI
+	 hS+pCyI3HCTe3i+T1vcZxBS0uKLGGUywtOtCZmcw=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -23,12 +23,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Fabio Estevam <festevam@gmail.com>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 051/114] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
-Date: Wed, 23 Nov 2022 09:50:38 +0100
-Message-Id: <20221123084553.896519510@linuxfoundation.org>
+Subject: [PATCH 5.4 078/156] drm/imx: imx-tve: Fix return type of imx_tve_connector_mode_valid
+Date: Wed, 23 Nov 2022 09:50:35 +0100
+Message-Id: <20221123084600.825057559@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123084551.864610302@linuxfoundation.org>
-References: <20221123084551.864610302@linuxfoundation.org>
+In-Reply-To: <20221123084557.816085212@linuxfoundation.org>
+References: <20221123084557.816085212@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/imx/imx-tve.c b/drivers/gpu/drm/imx/imx-tve.c
-index c19c1dfbfcdc..de3996fe90be 100644
+index f91c3eb7697b..cc300ed456e1 100644
 --- a/drivers/gpu/drm/imx/imx-tve.c
 +++ b/drivers/gpu/drm/imx/imx-tve.c
-@@ -243,8 +243,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
+@@ -237,8 +237,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
  	return ret;
  }
  
