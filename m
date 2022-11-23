@@ -1,148 +1,117 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00E733C1
-	for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 20:37:56 +0000 (UTC)
-Received: from leknes.fjasle.eu ([46.142.96.241]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MN5Nt-1ofaIS20t3-00J19c; Wed, 23 Nov 2022 21:37:25 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(Client did not present a certificate)
-	by leknes.fjasle.eu (Postfix) with ESMTPS id C03043C0EF;
-	Wed, 23 Nov 2022 21:37:23 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-	id 012A31C7; Wed, 23 Nov 2022 21:37:19 +0100 (CET)
-Date: Wed, 23 Nov 2022 21:37:19 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/5] kbuild: implement {gcc,clang}-min-version only
- with built-in functions
-Message-ID: <Y36Ef3ie05YO1moS@bergen.fjasle.eu>
-References: <20221123151828.509565-1-masahiroy@kernel.org>
- <20221123151828.509565-2-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3119133C1
+	for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 21:18:59 +0000 (UTC)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45]) (authenticated)
+	by conssluserg-03.nifty.com with ESMTP id 2ANLIZwn019534
+	for <llvm@lists.linux.dev>; Thu, 24 Nov 2022 06:18:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2ANLIZwn019534
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1669238316;
+	bh=JaNFLVtpV/R2YcJ5P3G75gE6eDlCUl66VDKvTIO+Uto=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Nm4BQHt/aNubjM0c0XRsqsGCStBmXbgMiUQduWj4yG/7odqRlLtx3FB/UqvtEuuml
+	 D94xgG8JGi8Wzl9hK9CSZOAWhaPUMp2HFrfzMh7Sl9qhcSp0whk8sgwZgoSG3ixeU3
+	 ITYjV5becHZGev8v59yUYNCnaPnt55Z+JQX8M5DON5mMIafwhXTJYQKCJ1kIOSywQ1
+	 k0sX61l3Bd1hpRMrTi56qUxwQytnU8FfpE1FISy9kO4Hq/PgTwmW3XgKJdsZw/VCH1
+	 Mo7KhZkDkaXJooN19rr6atSI/LvVcpjm2WWdOIibv1j/En8Qm6ikYX3WVdSR9OBpwZ
+	 ZlBLjJgmnszRg==
+X-Nifty-SrcIP: [209.85.160.45]
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-13bd2aea61bso22345203fac.0
+        for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 13:18:36 -0800 (PST)
+X-Gm-Message-State: ANoB5pkF9T7iulfVAeVyI4XIEYXEJxYymHdvGpNzDE5LEAnMAAxFZOcd
+	LWfy30TKCm8M9drVTpwGeMVa+vLiiKh5usc6WUs=
+X-Google-Smtp-Source: AA0mqf5+9n103gtVjj2U0+Y5pS++GUYYMT8oQPohQ8QyssNwg8NbY1AtMDegi1EXNw5mYeZhkWoEM+JWSjjEDJ2ODjA=
+X-Received: by 2002:a05:6870:ea8e:b0:13b:a31f:45fd with SMTP id
+ s14-20020a056870ea8e00b0013ba31f45fdmr19803930oap.194.1669238315233; Wed, 23
+ Nov 2022 13:18:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="PpEkvchnOzhLX3fl"
-Content-Disposition: inline
-In-Reply-To: <20221123151828.509565-2-masahiroy@kernel.org>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:na8JOkgmRkyUHvQjG/nRKFVayFT0XtmW2jpmkJ4MzytkAMKrjAH
- bFyEPQjPoHJZfuROM8VIYVHGbFRcLPdiwCD/kOoJC8mQJb2Vpo4o6I8tyVyXi+00JhPzs0a
- RRnOfVhFouQuHJU3dOm3U+YGkwsP8YKVrWqad1za0MriHGs0564j4yJfEEPfou/waOmBjuz
- 1h3pnPYz2Gp8KKWi1Fkog==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W4207Z2qFVU=:RWzvvS9FK2+3aPke4dDHhe
- ts/nLPAIKuTEO1RP61E7BNJe9YIpnhEk4IrlvN+U4LdLFOAr62x3KjaU/9Q+TpEjTY2EfIoRa
- NhG2R1DdUYEBn6lw1o7OMjfTRzncTvomPK61/nAKQAdEt9I1cksY5rQSPt4APbQvgpVh4qnQo
- H33lh44pLsC+o7rvY8oiGGbDWDNhhNPlOW5ZLBcPGl4jZkAUaQf60vh/3u0jd5KOHlb1lYiAM
- cYJzQmBv6/m6AG0wYz+i6H6xJWdDE8B/n9vz/Zj1whSqu8btbXGluI+y3uoco40V+ZRXIbWRM
- vm8kZlvvRgIH8LtTh/exD7INIzWneETN2Yg6K1VDOE4LcQUR/zjPsSJ1rBcCgYaqd82o+stSt
- 4hAfT51tDUsB+2mG8ajhdw/cVjDOZ7ABVair4kKxJ2iZvEM4HvASgcFpYJ+kT2g0nRKdBbRRG
- kG8vaEfWaoyW/09447RaSF1I2+igwknMmzsbfELS2aRPkdXrnzNi8EtSvFdwp0vJaTqOFpXIQ
- qm1VritI8/YRFQC+IuCEXHMGgLgpvKtH/5GgacyCeleTt68tMBLuipwALoE5KmoMgG8cfLwYy
- 2d65fui17a89xlzsfbGse2fTLAMPDzpbJoW8HybAoeLAZHhqBpfCE2jO3ApC7mGacpelWrti9
- jaeMQ1NTF6px2ZyzW5p2UE6f6DUnL3x/cFYVpmGpAVgyuv/26IjiNMHcuSJz5mTzYjMXgQZ5d
- t25Telvu2+8iQExsqTN0tCLX+G/HJg91W2DebSln0P8taSSLvBJOUrqcmldJU+vNBX2GRmtOj
- Zz9eVBp
+References: <20221123151828.509565-1-masahiroy@kernel.org> <20221123151828.509565-2-masahiroy@kernel.org>
+ <Y36Ef3ie05YO1moS@bergen.fjasle.eu>
+In-Reply-To: <Y36Ef3ie05YO1moS@bergen.fjasle.eu>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 24 Nov 2022 06:17:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT+aNeG6FDdQw8=ZUpmbVUjr9DgwMMF4gOCTczECMTRGA@mail.gmail.com>
+Message-ID: <CAK7LNAT+aNeG6FDdQw8=ZUpmbVUjr9DgwMMF4gOCTczECMTRGA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] kbuild: implement {gcc,clang}-min-version only
+ with built-in functions
+To: Nicolas Schier <nicolas@fjasle.eu>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+
+On Thu, Nov 24, 2022 at 5:37 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Thu 24 Nov 2022 00:18:25 GMT, Masahiro Yamada wrote:
+> > Converting clang-min-version is straightforward because the versions
+> > are always 6-digit.
+> >
+> > gcc-min-version is somewhat tricky because the minimal GCC version
+> > is GCC 5.2; prepend '0' to the version that is less than 10 so that
+> > test-ge is always passed with 6-digit versions.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> > Changes in v2:
+> >   - Covert gcc-min-version in a different way
+> >
+> >  scripts/Makefile.compiler | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> > index 20d353dcabfb..cd75f81e88ef 100644
+> > --- a/scripts/Makefile.compiler
+> > +++ b/scripts/Makefile.compiler
+> > @@ -63,11 +63,15 @@ cc-disable-warning = $(call try-run,\
+> >
+> >  # gcc-min-version
+> >  # Usage: cflags-$(call gcc-min-version, 70100) += -foo
+> > -gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
+> > +
+> > +# Preprend 0 to the version that is less than 10 so test-ge works.
+> > +gcc-min-version = $(call test-ge, \
+> > +                  $(or $(filter 1%, $(CONFIG_GCC_VERSION)), 0$(CONFIG_GCC_VERSION)), \
+> > +                  $(or $(filter 1%, $1), 0$(strip $1)))
+>
+> Hm, this silently expects a gcc version < 20, which we should expect in
+> about seven-eight years [1].   I am thinking about the possibility of
+> silent (but unlikely) breaks when someone in far future uses a gcc 20
+> against a kernel with this line.  Probably we should not care about
+> that today, yet, right?
+
+Yeah, I thought of it.
+
+It depends on which of the following two will happen first.
+
+ (a) We raise the min gcc version to 10.0.0 and remove this hack
+ (b) GCC 20 is released
+
+I am guessing (a) will occur first, so we do not need to care about (b).
 
 
---PpEkvchnOzhLX3fl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If (b) happens first, we will need to add "2%".
+It means that the window of supported GCC versions will get larger than 10.
+Presumably, we do not want to support such a wide range of compiler
+versions.
 
-On Thu 24 Nov 2022 00:18:25 GMT, Masahiro Yamada wrote:
-> Converting clang-min-version is straightforward because the versions
-> are always 6-digit.
->=20
-> gcc-min-version is somewhat tricky because the minimal GCC version
-> is GCC 5.2; prepend '0' to the version that is less than 10 so that
-> test-ge is always passed with 6-digit versions.
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
-> Changes in v2:
->   - Covert gcc-min-version in a different way
->=20
->  scripts/Makefile.compiler | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index 20d353dcabfb..cd75f81e88ef 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -63,11 +63,15 @@ cc-disable-warning =3D $(call try-run,\
-> =20
->  # gcc-min-version
->  # Usage: cflags-$(call gcc-min-version, 70100) +=3D -foo
-> -gcc-min-version =3D $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo=
- y)
-> +
-> +# Preprend 0 to the version that is less than 10 so test-ge works.
-> +gcc-min-version =3D $(call test-ge, \
-> +                  $(or $(filter 1%, $(CONFIG_GCC_VERSION)), 0$(CONFIG_GC=
-C_VERSION)), \
-> +                  $(or $(filter 1%, $1), 0$(strip $1)))
 
-Hm, this silently expects a gcc version < 20, which we should expect in=20
-about seven-eight years [1].   I am thinking about the possibility of=20
-silent (but unlikely) breaks when someone in far future uses a gcc 20=20
-against a kernel with this line.  Probably we should not care about=20
-that today, yet, right?
+GCC 5.1 was released in 2015.
+So, the current window of GCC versions is 7 years.
+I hope it will not get even larger...
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-[1]: https://gcc.gnu.org/develop.html#timeline
 
-> =20
->  # clang-min-version
->  # Usage: cflags-$(call clang-min-version, 110000) +=3D -foo
-> -clang-min-version =3D $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && =
-echo y)
-> +clang-min-version =3D $(call test-ge, $(CONFIG_CLANG_VERSION), $1)
-> =20
->  # ld-option
->  # Usage: KBUILD_LDFLAGS +=3D $(call ld-option, -X, -Y)
-> --=20
-> 2.34.1
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
 
---PpEkvchnOzhLX3fl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmN+hHsACgkQB1IKcBYm
-EmkAThAA5+mKXEmPVZ/5RESfzp3+FMom6bTBouBT+hf2t8aQp6PYzzdFgjnq0hWw
-WbRBrNHqFOSkLJQkL2mo3YfZIORaaLtpOk9VSHWphc7LVQq4rmZGLznJwa4lmhDa
-R54r9pY16ywl660NjlJaL/rsMrTDsizYbs2Aj3fccjqa8js9aekVZ0uyuaIruaYG
-pvWT4VljvowG6YO97KLILsdqJklPd0+YLA/tzBJ/qGacaEzyvGN0ljGO4nLYnWuB
-5xmjW/JTKjUs5JrkNNcYZP9T3QB7u/AmRVp4IcRIOAZ8K/iV+pdWG06+XFB1kmoO
-80B/9sKTCUGtjgxPqmKAGgYd2tGV2vCHRUPs2LVExbYlbRiwKumDrySidSec5Wjs
-5YNjryPS7MyQftL7glG3CeEUB2Xw5IGEbb21rlChS3Q4IlLsBIqlmT9UjPgqz0r+
-F5jnTtnoEx/Lk6WM8a8jUKjxGIrGaiDwFeY+KWVikBPuuzx08JRlVbD/zg155du1
-9F3rpiIlO1OrwWzucaiW2PYrkpUqA8I8XMVBn5d5CtRtxVeQ3aXU081bn68xyM9y
-FzS38YJDMrWfzj6j0wMVYCZb3F1wv97mJBoy7X2+xiq/oEUJmH0B/x/zo/yhZRbi
-W1Q/+L5DygbN11q/1paxAhAIXPxBbFQNWLHvT3Yg3d1dJk21ihY=
-=gMci
------END PGP SIGNATURE-----
-
---PpEkvchnOzhLX3fl--
+-- 
+Best Regards
+Masahiro Yamada
