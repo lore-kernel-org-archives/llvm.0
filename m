@@ -1,77 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDD77E
-	for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 14:33:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD86C4347C
-	for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 14:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24667E
+	for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 15:19:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D24C433C1;
+	Wed, 23 Nov 2022 15:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1669213988;
-	bh=DNznwhHONJufkLNZpLKNvqDpPV1Ij4Mx/vGWHZOPeIg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EIPmfLJUisrkKvHe2iXo90ZexYgcz9YRxZ5hujwxkEOBzqpfrOl0slvAaPLtmeW/Q
-	 s0Pe1Hc/CZg+Bm47ytXRZ3qjsssILr4ZaBCHYGXcdAIhV7NLVbr3U7PgjcWTPwVmgp
-	 ifqVcob7YblDcx8JdyzVFmj3YX3sWhY3BLOoPehaSM71z01V4Yk8wxTWYHuhVXSa9S
-	 lA9WhlQVDzeu838yzpS7gVQog/yah5NrGoABAo/pRv+WPtcSwOY8MuoDruw+8yZN28
-	 pZm87NpjmOgdkchVZEQAz0k/5G3FhSOF6LxL6BWZ0L9WEZYr9KrjCbWzY+evPscEBE
-	 wTP4dH6aB15uA==
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3691e040abaso176006817b3.9
-        for <llvm@lists.linux.dev>; Wed, 23 Nov 2022 06:33:08 -0800 (PST)
-X-Gm-Message-State: ANoB5pldZq3w4Ja4RbuIkBHJ7VSRGHDjSmmrdBomWDOnjl3GDxZNAjLp
-	66lMrrSzJzSlfwFCYo7OtFjNV9FpydTqv/8SqFw=
-X-Google-Smtp-Source: AA0mqf528dbACy5MPaO6kowlGrU/IPBlyMm2GRODCjj7QCP1NDH1c23yv+yf1nivorEacclKYJ8ZO7+2q/eUX43qiNQ=
-X-Received: by 2002:a0d:c542:0:b0:370:2d8c:8193 with SMTP id
- h63-20020a0dc542000000b003702d8c8193mr8500076ywd.221.1669213987310; Wed, 23
- Nov 2022 06:33:07 -0800 (PST)
+	s=k20201202; t=1669216761;
+	bh=3H3vMqUsQmNXXkdqKJfmgSW/egj9FDENfVTPaP6+qAM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mbr1ML+rZ3tuUOMFTKOQ2+nl9SQroYHL+XVO/LMgRLCB6TAIXFMQe/N7MyaetbGQb
+	 xb8vfny9wHaFPR5n0mHPInD7BleStI5tVIiPWx2yanhnepMZrzN/ilLOAElKsO7W5k
+	 +5JHMl5yV6ctya8eve2bERbyI6Q/yICSK5SA2mNVQVuEeDZ7OMWea22uwJLksdyH6q
+	 AtLXqW+EjzAr0RPmjJOXM/4rq/azUddFYDgdWj2mPbw8FKoG0p3LV+mSmd1WxTXwhu
+	 oCyfP4udqnktAdYvrurVK/FWzw1cAJCtwhUAWaPV9bxI1uWbufb/3mDc/1bTt/KK9W
+	 Y1IghW53EKlFA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	x86@kernel.org
+Subject: [PATCH v2 1/5] kbuild: add test-{le,ge,lt,gt} macros
+Date: Thu, 24 Nov 2022 00:18:24 +0900
+Message-Id: <20221123151828.509565-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221123085640.103084-1-marpagan@redhat.com>
-In-Reply-To: <20221123085640.103084-1-marpagan@redhat.com>
-From: Oded Gabbay <ogabbay@kernel.org>
-Date: Wed, 23 Nov 2022 16:32:41 +0200
-X-Gmail-Original-Message-ID: <CAFCwf12yeyMb3WgCPqb8sFUk5PmzrXU=sCf3oWG9FKdCCS_S1w@mail.gmail.com>
-Message-ID: <CAFCwf12yeyMb3WgCPqb8sFUk5PmzrXU=sCf3oWG9FKdCCS_S1w@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs/gaudi2: added memset for the cq_size register
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 23, 2022 at 10:59 AM Marco Pagani <marpagan@redhat.com> wrote:
->
-> The clang-analyzer reported a warning: "Value stored to
-> 'cq_size_addr' is never read".
->
-> The cq_size register of dcore0 is not being zeroed using
-> gaudi2_memset_device_lbw(), along with the other cq_* registers,
-> even though the corresponding cq_size_addr variable is set.
->
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/misc/habanalabs/gaudi2/gaudi2.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-> index 65e6cae6100a..05f30adefb32 100644
-> --- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-> +++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-> @@ -9165,6 +9165,7 @@ static void gaudi2_restore_user_sm_registers(struct hl_device *hdev)
->         gaudi2_memset_device_lbw(hdev, cq_lbw_data_addr, size, 0);
->         gaudi2_memset_device_lbw(hdev, cq_base_l_addr, size, 0);
->         gaudi2_memset_device_lbw(hdev, cq_base_h_addr, size, 0);
-> +       gaudi2_memset_device_lbw(hdev, cq_size_addr, size, 0);
->
->         cq_lbw_l_addr = mmDCORE0_SYNC_MNGR_GLBL_LBW_ADDR_L_0 + DCORE_OFFSET;
->         cq_lbw_h_addr = mmDCORE0_SYNC_MNGR_GLBL_LBW_ADDR_H_0 + DCORE_OFFSET;
-> --
-> 2.38.1
->
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Applied to -next.
-Thanks,
-Oded
+Because GNU Make is only able to handle strings, it is very hard to
+perform arighmetic in Makefiles.
+
+When we compare two integers, we invokes shell. One example is in the
+top Makefile:
+
+  ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
+
+This is more expensive than using built-in functions since it forks a
+process.
+
+If we know the two have the same number of digits, we can do better.
+
+This commit adds four macros, test-le, test-ge, test-lt, test-gt.
+
+$(call test-lt, A, B) is evaluated to 'y' if A is less than B, or
+empty otherwise. This will replace $(call shell test A -lt B).
+
+Again, the limitation is that A and B must have the same number of
+digits because these macros are based on $(sort ) function.
+
+  $(call test-lt, 1, 9)    -->  y        (Works!)
+  $(call test-lt, 10, 9)   -->  y        (Not work...)
+
+To make the latter work, you need to add '0' prefix to align the number
+of digits:
+
+  $(call test-lt, 10, 09)  -->  empty    (Works!)
+
+Actually, we can live with this limitation in many places. As for the
+example above, we know $(CONFIG_LLD_VERSION) is 6-digits because the
+minimal supported version of LLVM is 11.0.0.
+
+So, the shell invocation can be replaced with more efficient code:
+
+  ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+
+Of course, this assumption will break when LLVM 100 is released, but it
+will be far in the future.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+(no changes since v1)
+
+ Makefile               |  2 +-
+ arch/riscv/Makefile    |  2 +-
+ arch/x86/Makefile      |  2 +-
+ scripts/Kbuild.include | 10 ++++++++++
+ 4 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6f846b1f2618..eb80332f7b51 100644
+--- a/Makefile
++++ b/Makefile
+@@ -986,7 +986,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
+ # Check for frame size exceeding threshold during prolog/epilog insertion
+ # when using lld < 13.0.0.
+ ifneq ($(CONFIG_FRAME_WARN),0)
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+ KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
+ endif
+ endif
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 0d13b597cb55..faf2c2177094 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -37,7 +37,7 @@ else
+ endif
+ 
+ ifeq ($(CONFIG_LD_IS_LLD),y)
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
+ 	KBUILD_CFLAGS += -mno-relax
+ 	KBUILD_AFLAGS += -mno-relax
+ ifndef CONFIG_AS_IS_LLVM
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 415a5d138de4..e72c7a49cd59 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -211,7 +211,7 @@ endif
+ KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
+ 
+ ifdef CONFIG_LTO_CLANG
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+ KBUILD_LDFLAGS	+= -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
+ endif
+ endif
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index cbe28744637b..9996f34327cb 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -11,6 +11,16 @@ space   := $(empty) $(empty)
+ space_escape := _-_SPACE_-_
+ pound := \#
+ 
++###
++# Comparison macros.
++# Usage: $(call test-le, A, B)
++# works like shell's "test A -le B", but A and B must have the same number of
++# digits since it is just ASCII sort.
++test-le = $(if $(filter $1, $(firstword $(sort $1 $2))),y)
++test-ge = $(call test-le, $2, $1)
++test-lt = $(if $(filter-out $2, $(firstword $(sort $1 $2))),y)
++test-gt = $(call test-lt, $2, $1)
++
+ ###
+ # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+ dot-target = $(dir $@).$(notdir $@)
+-- 
+2.34.1
+
