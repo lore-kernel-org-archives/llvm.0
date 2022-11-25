@@ -1,43 +1,43 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9196B7E
-	for <llvm@lists.linux.dev>; Fri, 25 Nov 2022 02:33:56 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id w23so2785479ply.12
-        for <llvm@lists.linux.dev>; Thu, 24 Nov 2022 18:33:56 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418CA7E
+	for <llvm@lists.linux.dev>; Fri, 25 Nov 2022 02:33:59 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id q1so2813212pgl.11
+        for <llvm@lists.linux.dev>; Thu, 24 Nov 2022 18:33:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v3tX8c48SkCwp4614P1MZhKByQyd6IaaDpUY4QZpiCs=;
-        b=K8mWPNqL2s5XUfZHJTMpQCvAD2CWcuE/ue2pBfeMUMxUdsOS8Uvh/liwOaUFUoWlu+
-         JfeEmpmuzkjipWPfzWH9UOJkvl+ccxupfhUIw3+ucLZyu4T1Pd5YiuFvU94+SBuLfrUP
-         /yZY0nj8RaY9lS24bnFN5RFJropy5/eHJ1Ur4fi0hytRRWJO+SfBMvBDYlR8ABU/ZSuh
-         PqcKUjBX96UMIjvrKy/NfoZyHfgw+R5/LSko+Bn0SKn0EN0B0ccEyLvDmcou1LKXyVfT
-         4/FYkZM7DVtPWZ+IJojx+TvwB83xC4DpFsp8qOq42pl2eEJe0bCSg6F5dSfmcQdHTxML
-         RbNQ==
+        bh=3yAoT1kLjr2RjOiYLwcVMKA0GhtRYKf2X90lTYA9Hn4=;
+        b=T/qdGX3ipHc7MMkeq8ke6n/7Kx1Mu93QbEcxMleGD7kJGuP0VXCtHwETV4Z+K9pSOk
+         KbAU/aTvuEZfcAhyhtq5/G7Xe6Egm+NBcRRXpHcaPOcCvERwy0p0TdVMT3b86T4M4qTY
+         UbU2XcbRqpGpE+2omjBcyT7B8iONaRy365xNp++rW8bNWpr9Yb/t7PL6iDOlNyQ0cWz0
+         /mlyCSXYUhKEV37gn3VKtVq8oQDKdAxT7zZeVN2nPoSm1g6ICWSowekz0heRzPrOh1n5
+         HH6biCVATxCQHWVQ5VACH20U3Rn6S32lHun0tnsB//x/zdIP0ciqXAG+/Qd3p9OPd52o
+         kMhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=v3tX8c48SkCwp4614P1MZhKByQyd6IaaDpUY4QZpiCs=;
-        b=l8F3m0flG+XKn/2WxH6REyvxq3RPv0VVimLt6f2gtvZSWNvuCfefcxDE/e3aUbuky7
-         aqG3+dQCpOYGFkqYlFdIDesk6Yl7/gnJjaux9nrGz9BLjG+76qUTQTSCE1iMGTHltxng
-         85yUtlJISWXMh849OKlaarLU/Ytdm00RkyrR9nsdSZCoBks01GiJydoaG0iMupT5jsqc
-         ihuC7KkKfaqvwbIjr9SRLsrD+ucOW8DC+qMe+Sre18OxQ+MfHvudQA1btGHiacQ7CwSh
-         JKa8JyHjSduAyqx+X8Z9J9QjNeHfmncFD7M/vBNg7Cbp7yyekK51/qg6SLbeIhM4kc7h
-         llMA==
-X-Gm-Message-State: ANoB5plso31y6TkwjrVweL7uT6Wv5rteV1shW7l3n//d53ioc2c3C+NK
-	ZJE/daLOYNAeZM79dMwz2z2Ggp3MDsM8JA==
-X-Google-Smtp-Source: AA0mqf5e7DUEU3j8h8l+QvwtCqp7FENf0a5yblGhOl7nnKz7Z4bsnMDA7OJaD6/f6EJYUyRh4Lpiig==
-X-Received: by 2002:a17:902:cec8:b0:189:2b93:3f9f with SMTP id d8-20020a170902cec800b001892b933f9fmr17825231plg.109.1669343635994;
-        Thu, 24 Nov 2022 18:33:55 -0800 (PST)
+        bh=3yAoT1kLjr2RjOiYLwcVMKA0GhtRYKf2X90lTYA9Hn4=;
+        b=VOZ7noNo28UFxqtPZXlmCvcZrTgi5z5/KRwu/oNEsq+1xgdFzgbR4sV2kZLVmXTxEA
+         /R9bxwSVAEEe1M31ub4KAqI9n/xlh9yzunwjZoGI9kdjj91GevgclKAiHAcbr9cTNVqK
+         IrBgiE1Ju4+Wp0x+fSuuuvhubiGh02UM5tYnVh68bEk0RYVKMSkPaR1kGd9jdxx0dNtf
+         TZ5Y7f4+GZytJ6JPIk9cEz8NmDZuriiIoBVIEB9Hp3iURxBuOsrL4bTBzrdkfyS0GZmK
+         52LM+JkRRZ26RIbn9au6c3WQcO4TuJiCnETmeu8YaLzPBYXkAXugFe+HMYgUbP76kym3
+         tdwQ==
+X-Gm-Message-State: ANoB5plseOqe8o/Qz2UDQ5QdyqRfCGWXu3NXAD6bgmh3raAAAvDx7aAB
+	kYOb36mMAn6yxXSV+mVKkyU=
+X-Google-Smtp-Source: AA0mqf5iZlH730FIMbWjNM/VqjZdwc+5RwTIk+VuF/xjGNEX4C2l2JbUHDmFaFALAqPmj12m336MKQ==
+X-Received: by 2002:a05:6a00:d59:b0:56e:5bcd:d025 with SMTP id n25-20020a056a000d5900b0056e5bcdd025mr16409954pfv.65.1669343638652;
+        Thu, 24 Nov 2022 18:33:58 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id m127-20020a625885000000b0056bc5ad4862sm1893822pfb.28.2022.11.24.18.33.53
+        by smtp.gmail.com with ESMTPSA id m127-20020a625885000000b0056bc5ad4862sm1893822pfb.28.2022.11.24.18.33.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 18:33:55 -0800 (PST)
+        Thu, 24 Nov 2022 18:33:58 -0800 (PST)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To: x86@kernel.org,
@@ -51,9 +51,9 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	Borislav Petkov <bp@suse.de>
-Subject: [PATCH v2 1/2] x86/asm/bitops: Replace __fls() by its generic builtin implementation
-Date: Fri, 25 Nov 2022 11:33:29 +0900
-Message-Id: <20221125023330.195581-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 2/2] x86/asm/bitops: Use __builtin_clz*() to evaluate constant expressions
+Date: Fri, 25 Nov 2022 11:33:30 +0900
+Message-Id: <20221125023330.195581-3-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221125023330.195581-1-mailhol.vincent@wanadoo.fr>
 References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
@@ -66,103 +66,134 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Below snippet:
+GCC and clang offers the __builtin_clz(x) and __builtin_clzll(x)
+functions which return the number of leading zero bits in
+x. c.f. [1]. By a simple subtraction, we can derive below equivalences:
 
-  #include <linux/bitops.h>
+* For fls:
+  Aside of the x = 0 special case, fls(x) is equivalent to
+  BITS_PER_TYPE(x) - __builtin_clz(x).
 
-  unsigned int foo(unsigned long word)
-  {
-  	return __fls(word);
-  }
+* For fls64: Aside of the x = 0 special case, fls64(x) is equivalent
+  to BITS_PER_TYPE(x) - __builtin_clzll(x).
+  __builtin_clzll() takes an unsigned long long as argument instead of
+  a u64 which is fine because those two types are equivalent. Regardless,
+  add a BUILD_BUG_ON() safety net is added to formally assert that u64
+  and unsigned long long are the same.
 
-produces this on GCC 12.1.0:
+When used on constant expressions, the compiler is only able to fold
+the builtin version (c.f. [2]). However, for non constant expressions,
+the kernel inline assembly results in better code for both GCC and
+clang.
 
-  0000000000000000 <foo>:
-     0:	f3 0f 1e fa          	endbr64
-     4:	e8 00 00 00 00       	call   9 <foo+0x9>
-     9:	53                   	push   %rbx
-     a:	48 89 fb             	mov    %rdi,%rbx
-     d:	e8 00 00 00 00       	call   12 <foo+0x12>
-    12:	48 0f bd c3          	bsr    %rbx,%rax
-    16:	5b                   	pop    %rbx
-    17:	31 ff                	xor    %edi,%edi
-    19:	e9 00 00 00 00       	jmp    1e <foo+0x1e>
+Use __builtin_constant_p() to select between the kernel's
+fls()/fls64() and __builtin_clz()/__builtin_clzll() depending on
+whether the argument is constant or not.
 
-and that on clang 14.0.6:
+While renaming fls64() to variable_fls64(), change the argument type
+from __64 to u64 because we are not in an uapi header.
 
-  0000000000000000 <foo>:
-     0:	f3 0f 1e fa          	endbr64
-     4:	e8 00 00 00 00       	call   9 <foo+0x9>
-     9:	53                   	push   %rbx
-     a:	50                   	push   %rax
-     b:	48 89 fb             	mov    %rdi,%rbx
-     e:	e8 00 00 00 00       	call   13 <foo+0x13>
-    13:	48 89 1c 24          	mov    %rbx,(%rsp)
-    17:	48 0f bd 04 24       	bsr    (%rsp),%rax
-    1c:	48 83 c4 08          	add    $0x8,%rsp
-    20:	5b                   	pop    %rbx
-    21:	c3                   	ret
+[1] Built-in Functions Provided by GCC:
+https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
 
-The implementation from <asm-generic/bitops/builtin-__fls.h> [1]
-produces the exact same code on GCC and below code on clang:
-
-  0000000000000000 <foo>:
-     0:	f3 0f 1e fa          	endbr64
-     4:	e8 00 00 00 00       	call   9 <foo+0x9>
-     9:	53                   	push   %rbx
-     a:	48 89 fb             	mov    %rdi,%rbx
-     d:	e8 00 00 00 00       	call   12 <foo+0x12>
-    12:	48 0f bd c3          	bsr    %rbx,%rax
-    16:	5b                   	pop    %rbx
-    17:	c3                   	ret
-
-The builtin implementation is better for two reasons:
-
-  1/ it saves two instructions on clang (a push and a stack pointer
-     decrement).
-
-  2/ when used on constant expressions, the compiler is only able to
-     fold the builtin version (c.f. [2]).
-
-For those two reasons, replace the assembly implementation by its
-builtin counterpart.
-
-[1] https://elixir.bootlin.com/linux/v6.0/source/include/asm-generic/bitops/builtin-__fls.h
 [2] commit 146034fed6ee ("x86/asm/bitops: Use __builtin_ffs() to evaluate constant expressions")
 
 CC: Borislav Petkov <bp@suse.de>
+CC: Nick Desaulniers <ndesaulniers@google.com>
 CC: Yury Norov <yury.norov@gmail.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- arch/x86/include/asm/bitops.h | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ arch/x86/include/asm/bitops.h | 56 ++++++++++++++++++++++++-----------
+ 1 file changed, 39 insertions(+), 17 deletions(-)
 
 diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 2edf68475fec..a31453d7686d 100644
+index a31453d7686d..d10e774af343 100644
 --- a/arch/x86/include/asm/bitops.h
 +++ b/arch/x86/include/asm/bitops.h
-@@ -285,19 +285,7 @@ static __always_inline unsigned long variable_ffz(unsigned long word)
- 	 (unsigned long)__builtin_ctzl(~word) :	\
- 	 variable_ffz(word))
+@@ -333,18 +333,15 @@ static __always_inline int variable_ffs(int x)
+  */
+ #define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
  
--/*
-- * __fls: find last set bit in word
-- * @word: The word to search
+-/**
+- * fls - find last set bit in word
+- * @x: the word to search
 - *
-- * Undefined if no set bit exists, so code should check against 0 first.
+- * This is defined in a similar way as the libc and compiler builtin
+- * ffs, but returns the position of the most significant set bit.
+- *
+- * fls(value) returns 0 if value is 0 or the position of the last
+- * set bit if value is nonzero. The last (most significant) bit is
+- * at position 32.
 - */
--static __always_inline unsigned long __fls(unsigned long word)
--{
--	asm("bsr %1,%0"
--	    : "=r" (word)
--	    : "rm" (word));
--	return word;
--}
-+#include <asm-generic/bitops/builtin-__fls.h>
+-static __always_inline int fls(unsigned int x)
++static __always_inline int constant_fls(unsigned int x)
++{
++	if (!x)
++		return 0;
++
++	return BITS_PER_TYPE(x) - __builtin_clz(x);
++}
++
++static __always_inline int variable_fls(unsigned int x)
+ {
+ 	int r;
  
- #undef ADDR
+@@ -375,18 +372,29 @@ static __always_inline int fls(unsigned int x)
+ }
  
+ /**
+- * fls64 - find last set bit in a 64-bit word
++ * fls - find last set bit in word
+  * @x: the word to search
+  *
+  * This is defined in a similar way as the libc and compiler builtin
+- * ffsll, but returns the position of the most significant set bit.
++ * ffs, but returns the position of the most significant set bit.
+  *
+- * fls64(value) returns 0 if value is 0 or the position of the last
++ * fls(value) returns 0 if value is 0 or the position of the last
+  * set bit if value is nonzero. The last (most significant) bit is
+- * at position 64.
++ * at position 32.
+  */
++#define fls(x) (__builtin_constant_p(x) ? constant_fls(x) : variable_fls(x))
++
+ #ifdef CONFIG_X86_64
+-static __always_inline int fls64(__u64 x)
++static __always_inline int constant_fls64(u64 x)
++{
++	if (!x)
++		return 0;
++
++	BUILD_BUG_ON(!__same_type(x, unsigned long long));
++	return BITS_PER_TYPE(x) - __builtin_clzll(x);
++}
++
++static __always_inline int variable_fls64(u64 x)
+ {
+ 	int bitpos = -1;
+ 	/*
+@@ -399,6 +407,20 @@ static __always_inline int fls64(__u64 x)
+ 	    : "rm" (x));
+ 	return bitpos + 1;
+ }
++
++/**
++ * fls64 - find last set bit in a 64-bit word
++ * @x: the word to search
++ *
++ * This is defined in a similar way as the libc and compiler builtin
++ * ffsll, but returns the position of the most significant set bit.
++ *
++ * fls64(value) returns 0 if value is 0 or the position of the last
++ * set bit if value is nonzero. The last (most significant) bit is
++ * at position 64.
++ */
++#define fls64(x) \
++	(__builtin_constant_p(x) ? constant_fls64(x) : variable_fls64(x))
+ #else
+ #include <asm-generic/bitops/fls64.h>
+ #endif
 -- 
 2.37.4
 
