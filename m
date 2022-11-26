@@ -1,189 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA56B7E
-	for <llvm@lists.linux.dev>; Sat, 26 Nov 2022 22:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1669500644;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tPyBd3dUvcfPBPAPGAkZ9rgsiXp1AIyrR5WMqC1XqS4=;
-	b=K2XORwsyaROYv+qM3pfN3Nv2/2LfHkKJBU0mNee8yWLTq9fiBHjl7Gerc9szmZUdzU2URG
-	XjMdr3lS7w0QmI1+Ae7EtI/go7C7Xn11QTM6rHYGtCN9XONvoZSWZ5bzpYFmPz3qj4eRjx
-	22qucbVCYMCQIJmeSUJbW5cId8CEHUk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-WK920hrWM6mjUVjT3jo94A-1; Sat, 26 Nov 2022 17:10:43 -0500
-X-MC-Unique: WK920hrWM6mjUVjT3jo94A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CDE11185A78F
-	for <llvm@lists.linux.dev>; Sat, 26 Nov 2022 22:10:42 +0000 (UTC)
-Received: from [172.64.4.10] (unknown [10.30.34.148])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A81F040C6EC2;
-	Sat, 26 Nov 2022 22:10:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc6,
- mainline.kernel.org-clang, 644e9524)
-Date: Sat, 26 Nov 2022 22:10:36 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093DE2F2E
+	for <llvm@lists.linux.dev>; Sat, 26 Nov 2022 22:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F234C433D6;
+	Sat, 26 Nov 2022 22:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669503393;
+	bh=m3ZEUK0zXePJycyJFWyVV/OydFcxPrFRvDSAjxSAbFg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PO2FYMebNnz4Pbfnw8L4jSaDjHMCbBhjOKGHHL0XHqdTEbi9z/rQObYtc5Y1R8A90
+	 BfP+J0A5NJQO/9ZpskWhGvFqo5+N4UbA0/KELhr4nfVkR0ZcrD5JbPC1XmRdq5UvCz
+	 pFFTHtOLfHL63Xa2FRll9c/1SMNrWbyeqdSa70SK2xcfK3idyIdASCNjALTZ63eR3K
+	 ohcsiMfWB1/6ELvIZtYDEiD5am3qskj/aG4I3aGJiffQ6/AUoPbLkPFBggduWJ0HJm
+	 nCMros1t7GTgCwsh69Z3buA7Ohtivt+nh04MO1b+ORFjDV8YmaxH8p9/yBPTU9m54E
+	 8g2ZlTEp/i1OA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	x86@kernel.org
+Subject: [PATCH v3 1/5] kbuild: add test-{le,ge,lt,gt} macros
+Date: Sun, 27 Nov 2022 07:56:20 +0900
+Message-Id: <20221126225624.751661-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <83144.122112617104300199@us-mta-325.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+Because GNU Make is handle strings, it is very hard to perform math in
+Makefiles.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+When we compare two integers, we invokes shell. One example is in the
+top Makefile:
 
+  ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
 
-Kernel information:
-    Commit message: Merge tag 'for-v6.1-rc' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/sre/linux-power-supply
+This is more expensive than using built-in functions since it forks a
+process.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/61164
+If we know the two have the same number of digits, we can do better.
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-           s390x - stress: stress-ng - memory
-                   Issue: stress: stress-ng - memory: stress-ng --memrate T=
-IMEOUT
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1172
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6116501
+This commit adds four macros, test-le, test-ge, test-lt, test-gt.
 
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6116435
+$(call test-lt, A, B) is evaluated to 'y' if A is less than B, or
+empty otherwise. This will replace $(call shell test A -lt B).
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1479
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+Again, the limitation is that A and B must have the same number of
+digits because these macros are based on $(sort ) function.
 
+  $(call test-lt, 1, 9)    -->  y        (Works!)
+  $(call test-lt, 10, 9)   -->  y        (Not work...)
 
+To make the latter work, you need to add '0' prefix to align the number
+of digits:
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  $(call test-lt, 10, 09)  -->  empty    (Works!)
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Actually, we can live with this limitation in many places. As for the
+example above, we know $(CONFIG_LLD_VERSION) is 6-digits because the
+minimal supported version of LLVM is 11.0.0 (or CONFIG_LLD_VERSION=0
+if the linker is not LLD, this case also works.)
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+So, the shell invocation can be replaced with more efficient code:
+
+  ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+
+Of course, this assumption will break when LLVM 100 is released, but it
+will be far in the future.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+---
+
+Changes in v3:
+  - Ensure the given parameters are not empty
+
+ Makefile               |  2 +-
+ arch/riscv/Makefile    |  2 +-
+ arch/x86/Makefile      |  2 +-
+ scripts/Kbuild.include | 10 ++++++++++
+ 4 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6f846b1f2618..eb80332f7b51 100644
+--- a/Makefile
++++ b/Makefile
+@@ -986,7 +986,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
+ # Check for frame size exceeding threshold during prolog/epilog insertion
+ # when using lld < 13.0.0.
+ ifneq ($(CONFIG_FRAME_WARN),0)
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+ KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
+ endif
+ endif
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 0d13b597cb55..faf2c2177094 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -37,7 +37,7 @@ else
+ endif
+ 
+ ifeq ($(CONFIG_LD_IS_LLD),y)
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
+ 	KBUILD_CFLAGS += -mno-relax
+ 	KBUILD_AFLAGS += -mno-relax
+ ifndef CONFIG_AS_IS_LLVM
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 415a5d138de4..e72c7a49cd59 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -211,7 +211,7 @@ endif
+ KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
+ 
+ ifdef CONFIG_LTO_CLANG
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+ KBUILD_LDFLAGS	+= -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
+ endif
+ endif
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index cbe28744637b..4b8cf464b53b 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -11,6 +11,16 @@ space   := $(empty) $(empty)
+ space_escape := _-_SPACE_-_
+ pound := \#
+ 
++###
++# Comparison macros.
++# Usage: $(call test-le, A, B)
++# works like shell's "test A -le B", use with care bacause it is ASCII sort.
++# If A and B have the same number of digits, it works as expected.
++test-le = $(and $(strip $1),$(strip $2),$(filter $1, $(firstword $(sort $1 $2))),y)
++test-ge = $(call test-le, $2, $1)
++test-lt = $(and $(strip $1),$(strip $2),$(filter-out $2, $(firstword $(sort $1 $2))),y)
++test-gt = $(call test-lt, $2, $1)
++
+ ###
+ # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+ dot-target = $(dir $@).$(notdir $@)
+-- 
+2.34.1
 
