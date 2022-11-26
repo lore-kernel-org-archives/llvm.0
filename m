@@ -1,18 +1,18 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0AA184
-	for <llvm@lists.linux.dev>; Sat, 26 Nov 2022 00:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C5AC433C1;
-	Sat, 26 Nov 2022 00:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DB4184
+	for <llvm@lists.linux.dev>; Sat, 26 Nov 2022 00:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 381A8C433C1;
+	Sat, 26 Nov 2022 00:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1669421606;
-	bh=F2Iz4FmHG/F1E/NZVczN3uc6knKQCTCJz/o482AKOHI=;
+	s=korg; t=1669421878;
+	bh=N0BkCIonzZFjorKsjBaLOWHmBGWXxgq4vQOHZYYI+QM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Xc82kQZsd+dQC/numsQShfrRl+O0J8DnCYj1NMIktTDjsGED0IanHoKaOvb7l6l9W
-	 oyafUj9mcWJNEimTbhve+jbIwR6TknhuIP/fj2WgmMJHG9oI1T07xeHAmMfC/UNu6A
-	 Uq12fxjx9eR+6SxN34H8xSMxLbYx+XtpzKU+ElTI=
-Date: Fri, 25 Nov 2022 16:13:25 -0800
+	b=u0dmufMBeU/Hge17mRXBmPGXWvfk84ictiDbNzdkhYWzCJka/K8Y897LxUKz7Vj3z
+	 U1yJUtWHtoZFdoY4wBcpYuMB3DmBgMpNNHUtIQgiLA4Nb1IDJvLIqamUoTUitgl9U8
+	 USOEXxWnBItN7/5B+3liMkAy2ysF02xGzrkMnRvk=
+Date: Fri, 25 Nov 2022 16:17:57 -0800
 From: Andrew Morton <akpm@linux-foundation.org>
 To: Lee Jones <lee@kernel.org>
 Cc: arnd@arndb.de, nathan@kernel.org, maarten.lankhorst@linux.intel.com,
@@ -24,7 +24,7 @@ Cc: arnd@arndb.de, nathan@kernel.org, maarten.lankhorst@linux.intel.com,
  llvm@lists.linux.dev, amd-gfx@lists.freedesktop.org,
  dri-devel@lists.freedesktop.org
 Subject: Re: [PATCH v2 0/2] Fix a bunch of allmodconfig errors
-Message-Id: <20221125161325.bed715211b887d0a298813de@linux-foundation.org>
+Message-Id: <20221125161757.73f96b3b90f4884509097352@linux-foundation.org>
 In-Reply-To: <20221125120750.3537134-1-lee@kernel.org>
 References: <20221125120750.3537134-1-lee@kernel.org>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
@@ -43,15 +43,9 @@ On Fri, 25 Nov 2022 12:07:48 +0000 Lee Jones <lee@kernel.org> wrote:
 > now defaults to COMPILE_TEST meaning that it's enabled for allmodconfig        
 > builds.  This leads to some interesting failures, each resolved in this set.   
 
-I'm not sure who this patchset is aimed at, so I'll take my usual
-approach of grabbing it and seeing who complains.
+Oh, I get it.  Clang.  I'll tweak the above para to make that clearer.
+
+cc:stable question still applies?  How much trouble will these build
+errors be causing people for the next N years?
 
 > With this set applied, I am able to obtain a successful allmodconfig Arm build.
-
-b339ec9c229aa is a year old and I've been doing arm allmodconfig for
-ever.  What am I missing here?
-
-A broken arm allmodconfig is pretty irritating - I'm thinking that a
-fix should be backported into -stable kernels.  But I'm clearly missing
-something here.
-
