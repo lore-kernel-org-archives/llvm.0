@@ -1,188 +1,193 @@
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331508BF0
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 13:31:32 +0000 (UTC)
-Received: by mail-il1-f199.google.com with SMTP id c4-20020a056e020bc400b0030098df879dso8779399ilu.6
-        for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 05:31:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437518C12
+	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 14:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1669645040;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jCazpTTy+F7fa4dxFepBnOElkUnDE1h7gUS6HgFedPY=;
+	b=OCkxvK7L1zjcU8P6bg4pxXbUXT7vXz0NTRsLKl5bzpooGH1KFL9no+RI+YNHxWcoMa88ed
+	y8u0Z42Y7fOCdcwmc2z5bw1nkMwHZg4LoOQvRZPfMkeNrL8Ap65sgMrGZs9+IFKSQIzUdG
+	4yN1+xiV3I/ZQ4UD/EWa7hHUteywV3U=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-454-VQIZTiYPOMSuRBl0MVrgCQ-1; Mon, 28 Nov 2022 09:17:18 -0500
+X-MC-Unique: VQIZTiYPOMSuRBl0MVrgCQ-1
+Received: by mail-qk1-f200.google.com with SMTP id bp10-20020a05620a458a00b006fa29f253dcso20501450qkb.11
+        for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 06:17:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q9W2Bs9PJih3LVGEirHKHS9VpPnQjGsM8BjB0h3fVtw=;
-        b=cWBvmnWapcGUREv6PaigNBh7XpzEBe4J5sGFuID0vnUExdrbsyO0nSCVcJTkXJsvXz
-         3CONI2x9BHlCkkaSQW8EiuABRWqCf7kP5BLTifLy4GFdk1PbSGnqXRg1dtVnISKYN1kz
-         e5TixhE6fNCRt1NLwvSc67cD58wsLz3J7SwJlrCs9yEAE/87nUBowgFfF7SaJ8cj3usQ
-         E5ugFOcXLoY7emW781XjkfE1w5Au+iY3x4h6ftJtzd/L27i1Jcd9MWHToDM1/XXy9wnD
-         X0bG1Q3EIcKLDK55GXGVVnVPH9C4cTvyPP9wcj/o6oyXRzqOPKyc6zGIXzgo9awItk2W
-         fqWw==
-X-Gm-Message-State: ANoB5plFkvljMabdOszdndiLxdz5Ksypd9s5v14XR1IfYjpWAcF1BU8J
-	eYCkTJbSVfOk4Bq/zKcFnTSQF0KUcvyU11ez7L0aPhYCoCQN
-X-Google-Smtp-Source: AA0mqf4m3YRJnRoPAR/JcXlw41Zn2of0Un2wq9pLylemcPiscMER0hTBdn7fF2ikqEcp+tuHvqtEt8o5RwNh3dDyarMf6gld859C
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jCazpTTy+F7fa4dxFepBnOElkUnDE1h7gUS6HgFedPY=;
+        b=WD8fruR0VInFeMhYcrgwxESipPCgnHzVKpck2DlwjsOiUu0FW5ihAqV3x91M/qwIJx
+         oVBSAqkBlHMm0mkaxz0YoMDD+hDTA+od0hWelTHZFaMej74dw6Jn9CTXC+Lt5stDiN0e
+         /yjNHsCKmA7XGMPOBei5Ccn68lFhlkiihVt4/k4iyk/ZkURKEsj45K1N8am9qcRj0vJ5
+         3ilXZTUH0CicC8SciamCI2eL23/rGYRKUbNkAQMjrJQ/qnxNqCEWEF+iH7SqP7v18rhe
+         l2jZzK3upnWVhAVSYZ9cRlkAS1S4w+Qtx7biQCbSWm8eQomnyOWAAUIRnmlGx5oW/p9K
+         VQKQ==
+X-Gm-Message-State: ANoB5pnzmml1SWtZxGbkrB1atrWKPpSrvpYUymZgkzCKoBgbq+5EVmf/
+	StkMYE2mWhL9RpkxBrxNUFIDfEFhScWKGTpKDk4goFQOV3dLBfJFclv28/0KgA5McWeQihXPO9B
+	JIaS113Oca+f1ZA==
+X-Received: by 2002:a05:620a:15f4:b0:6fc:5e75:8452 with SMTP id p20-20020a05620a15f400b006fc5e758452mr12348129qkm.565.1669645038416;
+        Mon, 28 Nov 2022 06:17:18 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7v1fq7/cmmRa8boL0KEKgHvn1ntFy91sfTcqo+21QKxMb9e0oyQ5n2B68KMni02H2rUIIZ6Q==
+X-Received: by 2002:a05:620a:15f4:b0:6fc:5e75:8452 with SMTP id p20-20020a05620a15f400b006fc5e758452mr12348062qkm.565.1669645038027;
+        Mon, 28 Nov 2022 06:17:18 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id s6-20020a05620a254600b006cbc6e1478csm8423957qko.57.2022.11.28.06.17.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 06:17:17 -0800 (PST)
+Message-ID: <722b8767-daf9-f5b8-8ad7-0d9cb22d4b7d@redhat.com>
+Date: Mon, 28 Nov 2022 15:17:09 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6d28:0:b0:375:c2a:1538 with SMTP id
- m40-20020a026d28000000b003750c2a1538mr15506070jac.5.1669642291208; Mon, 28
- Nov 2022 05:31:31 -0800 (PST)
-Date: Mon, 28 Nov 2022 05:31:31 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab724705ee87e321@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Write in copy_array
-From: syzbot <syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    c35bd4e42885 Add linux-next specific files for 20221124
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13369dc5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=11e19c740a0b2926
-dashboard link: https://syzkaller.appspot.com/bug?extid=b1e1f7feb407b56d0355
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1345a205880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c644b880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/968fee464d14/disk-c35bd4e4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4f46fe801b5b/vmlinux-c35bd4e4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c2cdf8fb264e/bzImage-c35bd4e4.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
-Write of size 232 at addr ffff88801ed62600 by task syz-executor990/5290
-
-CPU: 0 PID: 5290 Comm: syz-executor990 Not tainted 6.1.0-rc6-next-20221124-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:253 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:364
- kasan_report+0xbf/0x1f0 mm/kasan/report.c:464
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
- memcpy+0x3d/0x60 mm/kasan/shadow.c:66
- copy_array+0x96/0x100 kernel/bpf/verifier.c:1032
- copy_verifier_state+0xa9/0xbe0 kernel/bpf/verifier.c:1210
- pop_stack+0x8c/0x2f0 kernel/bpf/verifier.c:1273
- do_check kernel/bpf/verifier.c:13733 [inline]
- do_check_common+0x372b/0xc5e0 kernel/bpf/verifier.c:15991
- do_check_main kernel/bpf/verifier.c:16054 [inline]
- bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
- bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
- __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
- __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
- __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc18e7bbc29
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd8f27a968 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc18e7bbc29
-RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
-RBP: 00007fc18e77fdd0 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fc18e77fe60
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-Allocated by task 5290:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:376 [inline]
- ____kasan_kmalloc mm/kasan/common.c:335 [inline]
- __kasan_krealloc+0x145/0x180 mm/kasan/common.c:444
- kasan_krealloc include/linux/kasan.h:232 [inline]
- __do_krealloc mm/slab_common.c:1348 [inline]
- krealloc+0xa8/0x100 mm/slab_common.c:1385
- push_jmp_history+0x89/0x260 kernel/bpf/verifier.c:2528
- is_state_visited kernel/bpf/verifier.c:13269 [inline]
- do_check kernel/bpf/verifier.c:13466 [inline]
- do_check_common+0x4b47/0xc5e0 kernel/bpf/verifier.c:15991
- do_check_main kernel/bpf/verifier.c:16054 [inline]
- bpf_check+0x7371/0xad00 kernel/bpf/verifier.c:16624
- bpf_prog_load+0x1543/0x2230 kernel/bpf/syscall.c:2619
- __sys_bpf+0x1436/0x4ff0 kernel/bpf/syscall.c:4979
- __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
- __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5081
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff88801ed62600
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 0 bytes inside of
- 256-byte region [ffff88801ed62600, ffff88801ed62700)
-
-The buggy address belongs to the physical page:
-page:ffffea00007b5880 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ed62
-head:ffffea00007b5880 order:1 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffff888012441b40 ffffea0000809f80 dead000000000002
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 56, tgid 56 (kworker/u4:4), ts 7761288109, free_ts 0
- prep_new_page mm/page_alloc.c:2541 [inline]
- get_page_from_freelist+0x119c/0x2cd0 mm/page_alloc.c:4293
- __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5551
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
- alloc_slab_page mm/slub.c:1833 [inline]
- allocate_slab+0x25e/0x350 mm/slub.c:1980
- new_slab mm/slub.c:2033 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3211
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3310
- slab_alloc_node mm/slub.c:3395 [inline]
- __kmem_cache_alloc_node+0x1a9/0x430 mm/slub.c:3472
- kmalloc_trace+0x26/0x60 mm/slab_common.c:1049
- kmalloc include/linux/slab.h:571 [inline]
- scsi_probe_and_add_lun+0x3ae/0x34d0 drivers/scsi/scsi_scan.c:1186
- __scsi_scan_target+0x21f/0xda0 drivers/scsi/scsi_scan.c:1664
- scsi_scan_channel drivers/scsi/scsi_scan.c:1752 [inline]
- scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1728
- scsi_scan_host_selected+0x2e3/0x3b0 drivers/scsi/scsi_scan.c:1781
- do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1920
- do_scan_async+0x42/0x500 drivers/scsi/scsi_scan.c:1930
- async_run_entry_fn+0x9c/0x530 kernel/async.c:127
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff88801ed62500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88801ed62580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88801ed62600: 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc
-                               ^
- ffff88801ed62680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88801ed62700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v5 13/19] iommufd: Add kAPI toward external drivers for
+ physical devices
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+ Anthony Krowiak <akrowiak@linux.ibm.com>,
+ Alex Williamson <alex.williamson@redhat.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Lu Baolu <baolu.lu@linux.intel.com>,
+ Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
+ <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>,
+ David Gibson <david@gibson.dropbear.id.au>,
+ Eric Farman <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Jason Herne <jjherne@linux.ibm.com>, Joao Martins
+ <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+ Lixiao Yang <lixiao.yang@intel.com>, Matthew Rosato
+ <mjrosato@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Nicolin Chen <nicolinc@nvidia.com>, Halil Pasic <pasic@linux.ibm.com>,
+ Niklas Schnelle <schnelle@linux.ibm.com>,
+ Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+ Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <13-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <4c429c36-146e-e2b2-0cb4-d256ca659280@redhat.com>
+ <Y4P9VzpCv/DyHeaD@nvidia.com>
+ <94e6034a-c4c1-be0a-ea8c-f5934dbadd4c@redhat.com>
+ <Y4S1hYFm9HaP0KdR@nvidia.com>
+From: Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <Y4S1hYFm9HaP0KdR@nvidia.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On 11/28/22 14:20, Jason Gunthorpe wrote:
+> On Mon, Nov 28, 2022 at 11:55:41AM +0100, Eric Auger wrote:
+>
+>>> Not really. The name is a mess, but as it is implemented, it means the
+>>> platform is implementing MSI security. How exactly that is done is not
+>>> really defined, and it doesn't really belong as an iommu property.
+>>> However the security is being created is done in a way that is
+>>> transparent to the iommu_domain user.
+>> Some 'ARM platforms' implement what you call MSI security but they do
+>> not advertise IOMMU_CAP_INTR_REMAP
+> Sounds like a bug.
+>  
+>> Besides refering to include/linux/iommu.h:
+>> IOMMU_CAP_INTR_REMAP,           /* IOMMU supports interrupt isolation */
+> Documentation doesn't match code.
+>
+>>> It doesn't matter how it is done, if it remapping HW, fancy
+>>> iommu_domain tricks, or built into the MSI controller. Set this flag
+>>> if the platform is secure and doesn't need the code triggered by
+>>> irq_domain_check_msi_remap().
+>> this is not what is implemented as of now. If the IOMMU does support
+>> interrupt isolation, it advertises IOMMU_CAP_INTR_REMAP. On ARM this
+>> feature is implemented by the ITS MSI controller instead and the only
+>> way to retrieve the info whether the device MSIs are directed to that
+>> kind of MSI controller is to use irq_domain_check_msi_remap().
+> It is important to keep the Linux design seperated from what the
+> architecture papers describes. In Linux the IOMMU is represented by
+> the iommu_domain and the iommu_ops. On x86 neither of these objects
+> play any role in interrupt delivery. Yes, the x86 architecture papers
+> place some of the interrupt logic inside what they consider the iommu
+> block, but that is just some historical stuff and shouldn't impact the
+> SW design.
+>
+> If we had put the IRTE bits inside the irqchip layer instead of in the
+> iommu driver, it would have made a lot more sense.
+>
+> The fact that ARM was allowed to be different (or rather the x86 mess
+> wasn't cleaned up before the ARM mess was overlayed on top) is why
+> this is so confusing. They are doing the same things, just in
+> unnecessarily different ways.
+
+fair enough. But that's a separate discussion that needs to happen with
+iommu and irqchip maintainers I think. At the moment things are
+implemented that way.
+>
+>>>> irq_domain_check_msi_remap() instead means the MSI controller
+>>>> implements that functionality (a given device id is able to trigger
+>>> Not quite, it means that MSI isolation is available, however it is not
+>>> transparent and the iommu_domain user must do the little dance that
+>>> follows.
+>> No I do not agree on that point. The 'little dance' is needed because
+>> the SMMU does not bypass MSI writes as done on Intel. And someone must
+>> take care of the MSI transaction mapping. This is the role of the MSI
+>> cookie stuff. To me this is independent on the above discussion whether
+>> MSI isolation is implemented.
+> OK, so you are worried about someone who sets
+> allow_unsafe_interrupts=1 they will not get the iommu_get_msi_cookie()
+> call done even though they still need it? That does seem wrong.
+yes
+>
+>>> This was sort of sloppy copied from VFIO - we should just delete
+>>> it. The is no driver that sets both, and once the platform asserts
+>>> irq_domain_check_msi_remap() it is going down the non-transparent path
+>>> anyhow and must set a cookie to work. [again the names doesn't make
+>>> any sense for the functionality]
+>>>
+>>> Failing with EPERM is probably not so bad since the platform is using
+>>> an invalid configuration. I'm kind of inclined to leave this for
+>>> right
+>> I don't understand why it is invalid? HW MSI RESV region is a valid
+>> config and not sure you tested with that kind of setup, did you?
+> Why would it be a valid config? No driver sets both..
+>
+> HW MSI RESV should set IOMMU_CAP_INTR_REMAP like Intel does.
+>
+> irq_domain_check_msi_remap() is only for SW MSI RESV regions.
+In theory no. Nothing prevents from having an MSI isolation capable
+controller (such as the ITS) with an IOMMU HW which wouldn't translate
+MSIs. In the past there has been such kind of problematic I think for
+HiSilicon HW
+https://lore.kernel.org/all/20171006140450.89652-1-shameerali.kolothum.thodi@huawei.com/
+This was eventually addressed differently but Shameer may precise ... 
+
+Eric
+
+>
+> This is what the code implements, and yes it makes no sense.
+>
+> Jason
+>
+
