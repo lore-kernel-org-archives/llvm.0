@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4468F7A
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0F8C433C1;
-	Mon, 28 Nov 2022 17:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C2F8F7C
+	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD16C433C1;
+	Mon, 28 Nov 2022 17:41:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1669657123;
+	s=k20201202; t=1669657265;
 	bh=GRR9jBZFyWAtOBROCtryACD0FFkQK7yiBk7+JNb9llA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rydLVwb1VYTeU8wrVwWYOroEzFEgWJ1FGGSM/7R5TRbjgPQFx/xxSDX5ck/bE5OQ0
-	 jiOrsKKALpoCqlwcKLLyr9P3AK9bV3Uwyi2LrJbHkUzzfmc33xY819ZudMbLD2NC77
-	 HbVNyJw6x4Gk39N9VwaPUmHaqZ06vUdlUCHIAcSvnVXFENPpx4QBynRx8QSg753Z3A
-	 CFDrxsMawzfOrWBFF25gIyen7qbotHT9kI2Jyfcx1ThFMreTIjfU9SNN81j9PgliIz
-	 v7aWwMb8Cfyy22i60lj9qLYAUQBe8JpltFS2GpMxQDLn6rNWzCyVhqHSgfAm1A3o6a
-	 VW+nMtacrEcRw==
+	b=bMjmk4hRzpwhm19LHbC+jrDZZoVYy1xIRbSRQGpP/z88LprNMGuwKv4KBXUCh8Gvk
+	 RkvFHJ/FhJBm60ggGkq+ybMjonUIvbyWZ55xG2NhgFOpjRBhBViEKSikCJV6n3rAav
+	 X6SK5DpA3IrJU5yydb3243U3hRO058H35O4sgJ8djlH3cSDUGkPh3H/FD3NlLR2QEC
+	 4OwjIj9WqaKEiI3zgSt8i3ETHLAGtS0IBtcik6yQGxKunh9ilz7Dl9029rQ+IzqeXY
+	 PpBAtPfZTGXfa+dwBEdj03lBY8gpGLrFiRzgsuYvMJfP2BliNCznsoDUydl+CuF0VX
+	 l6lcDxEAFm/Eg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -29,12 +29,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 22/39] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
-Date: Mon, 28 Nov 2022 12:36:02 -0500
-Message-Id: <20221128173642.1441232-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 16/24] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+Date: Mon, 28 Nov 2022 12:40:16 -0500
+Message-Id: <20221128174027.1441921-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128173642.1441232-1-sashal@kernel.org>
-References: <20221128173642.1441232-1-sashal@kernel.org>
+In-Reply-To: <20221128174027.1441921-1-sashal@kernel.org>
+References: <20221128174027.1441921-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
