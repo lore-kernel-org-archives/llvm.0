@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17372A462
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C5A1C433C1;
-	Mon, 28 Nov 2022 17:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739F1A461
+	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C749EC433C1;
+	Mon, 28 Nov 2022 17:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1669657343;
-	bh=2nnZXA8RaZrSVvCN6ByjHxeIL4WuKWU/gteG+urh8OQ=;
+	s=k20201202; t=1669657373;
+	bh=tWi8m0zIJyvdgVCG88lBeVWG25YXSJvsKgl/s+TMVZo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y/rzmGazxMkZ6y0TJ15hZpedP8r1u7t2cGGeteqBp5ptgAp57Wmzd81BxNQWwJ4n/
-	 BVzhl1U+5N2qtgYHuuahECI2MpWCvCiu4WHmvsoUZxUDbJfSUK6z8qSjIc3jztqioo
-	 PyE7iUrlqTgsFSmkNR2HvsD/elZE21gfqRnnQt8jv0X4Cckp+njwFgB/K77qZZhdk/
-	 oaNcHu9aE+9dc20DzdY2v4rv7zEQRQ6z5QwBPF9C7ijUb2LSuAh++p8+GmkVLZnovO
-	 /aLcLjAg9r11S0a8bz92Q7H2ja+1OMOcoQwAtfmhIOoaFBnKp7nlmH4gTmUO8xdOu4
-	 TqgIRN6jt69fA==
+	b=S5F2Ht4ycCc6MSCQtsKrVbmCkbH0oAiNZT2MNItydEffHu2mviFnoboHPNkqPC+A2
+	 I8xBXrzUIcHFycmuyCMCU8S5peItfacq7mV1IfudihOrmI3twrLDoQzcjhaqI6kZDT
+	 8BceOjIac/HK0xMxAMETOVIRNQ4RNX/bXkQis09S+ecP8L9aK6TG6lUqxvdcoQmlr8
+	 ogJcfTYoFsaQz8M9SIOqnnvs5Gyn6l224iaC3qXO74qIUXEPdY7IyDSEPGhEUq+Yam
+	 uAZEzc3WhMbZdjBJNlmqAE93NuMOvBaOXeQ3A0Yu9k7mIn0jKMdQszWN3n95KphXeO
+	 Ohvf1HHXzkQ/A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -29,12 +29,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 10/16] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
-Date: Mon, 28 Nov 2022 12:41:53 -0500
-Message-Id: <20221128174201.1442499-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 07/12] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+Date: Mon, 28 Nov 2022 12:42:30 -0500
+Message-Id: <20221128174235.1442841-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128174201.1442499-1-sashal@kernel.org>
-References: <20221128174201.1442499-1-sashal@kernel.org>
+In-Reply-To: <20221128174235.1442841-1-sashal@kernel.org>
+References: <20221128174235.1442841-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/sound/core/seq/seq_memory.c b/sound/core/seq/seq_memory.c
-index 65db1a7c77b7..bb76a2dd0a2f 100644
+index 5b0388202bac..ac854beb8347 100644
 --- a/sound/core/seq/seq_memory.c
 +++ b/sound/core/seq/seq_memory.c
-@@ -112,15 +112,19 @@ EXPORT_SYMBOL(snd_seq_dump_var_event);
+@@ -126,15 +126,19 @@ EXPORT_SYMBOL(snd_seq_dump_var_event);
   * expand the variable length event to linear buffer space.
   */
  
@@ -103,7 +103,7 @@ index 65db1a7c77b7..bb76a2dd0a2f 100644
  	if (copy_to_user(*bufptr, src, size))
  		return -EFAULT;
  	*bufptr += size;
-@@ -149,8 +153,7 @@ int snd_seq_expand_var_event(const struct snd_seq_event *event, int count, char
+@@ -163,8 +167,7 @@ int snd_seq_expand_var_event(const struct snd_seq_event *event, int count, char
  		return newlen;
  	}
  	err = snd_seq_dump_var_event(event,
