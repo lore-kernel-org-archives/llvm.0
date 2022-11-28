@@ -1,200 +1,283 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F101223D2
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 10:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F242F33
+	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 10:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1669630901;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FuR9TRa62rCwCfKkUviH6bWxPZtfqxtY/B19pKnsROs=;
-	b=Dg3hkJGTaN+Hzs6NsFtj7qYG7ME18eLcjt34vFA1yZsOPce74B1U63cbSRjcoEkgcaxs2l
-	VnPmauNp6dhvT8G04tgxrOu5iQr/Ufl6HUxKnYj7TpHvfT9LmLKhp0qSQofcOGuokTEaAb
-	0d/Uo1uPnbMkUgc5PwF0/M/1sAJJnfY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-266-KHIGt6tpNGqew-joOU9skg-1; Mon, 28 Nov 2022 05:21:39 -0500
-X-MC-Unique: KHIGt6tpNGqew-joOU9skg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D9F31C008A0
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 10:21:39 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.33.126])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 353482166B2E;
-	Mon, 28 Nov 2022 10:21:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc6,
- mainline.kernel.org-clang, bf82d38c)
-Date: Mon, 28 Nov 2022 10:21:39 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	s=mimecast20190719; t=1669632953;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QhYdHOX1qbSelyQF1n2caoyOhYaSnNc+Zc/+zPUkQ+s=;
+	b=XsDY6+Dd+4bC4ZLPRa6HpO4w+vI1fVpdNiT7o+B3k2KoeBE70m3qLnQ3S2wplo+0qQhvC0
+	H5FFtvZSWDG65idN5IFHR17NsBLXIFm8SAo+8kx6pyK7xCxS5hxX9jA/krQdpSyRqjSiUt
+	8xxH7iS3dNAsI0htnh4TEAS/NAugHR4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-460-7UaPqewyOSijJOdtXkPDnQ-1; Mon, 28 Nov 2022 05:55:50 -0500
+X-MC-Unique: 7UaPqewyOSijJOdtXkPDnQ-1
+Received: by mail-qt1-f197.google.com with SMTP id y8-20020ac87088000000b003a528a5b844so14227436qto.18
+        for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 02:55:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QhYdHOX1qbSelyQF1n2caoyOhYaSnNc+Zc/+zPUkQ+s=;
+        b=Q7zmvgEl2a4Qr9rDBPYaBts+oIaj4wNZ/bhair2ROqeyWyJq3cs56ZkklD1XL4Njl+
+         cfGI5XajlBMvk30ZcTgp3QzFGi4ntgRkgx8HxPTHF8MyAk8U9wQFQYdXtkJX6B8aCNT0
+         xbatUxftkkXxHSAOM1My0K1ifDAS5/0lClXng8OE8gE1bh81+pj8f2/AO5dgP9YLb6wT
+         4DWDFyX+dwJ24RDVHo3Kt5uw1sbVdBNyUFH/IQzUE9XCSr7McPQEZa/aAyAq+I4UKq+V
+         UtAaMybTk+96He08boFa3u3vlJNhor8kVxQkMWj8FIlR0XXN9QkmSM5F47ffx++P8h2O
+         r54Q==
+X-Gm-Message-State: ANoB5pk/KHHC65W2Ijh7P/eYEWNovkVK28gZ7atE55G1z7lyqI44tX9D
+	HsfLVsQqfMNQ4mOLrljAfFHH8hJXHUO3Jj9nlZXdHgB8F3hoKhPcfzR1xHmFvKkjELwLGK4jJnl
+	tkDeaASAoasvzKg==
+X-Received: by 2002:a05:6214:5504:b0:4c6:9399:9335 with SMTP id mb4-20020a056214550400b004c693999335mr41468293qvb.12.1669632950398;
+        Mon, 28 Nov 2022 02:55:50 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6R1JyULPFe65HEgSq/X9lfxRMMZgXu5jvkRqbYJFnB6yxrk1GeFdc2izLM+ws6kfHPBGer7g==
+X-Received: by 2002:a05:6214:5504:b0:4c6:9399:9335 with SMTP id mb4-20020a056214550400b004c693999335mr41468274qvb.12.1669632950103;
+        Mon, 28 Nov 2022 02:55:50 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id z1-20020ac84541000000b003a530a32f67sm6703684qtn.65.2022.11.28.02.55.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 02:55:49 -0800 (PST)
+Message-ID: <94e6034a-c4c1-be0a-ea8c-f5934dbadd4c@redhat.com>
+Date: Mon, 28 Nov 2022 11:55:41 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <67082.122112805213900393@us-mta-266.us.mimecast.lan>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v5 13/19] iommufd: Add kAPI toward external drivers for
+ physical devices
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+ Anthony Krowiak <akrowiak@linux.ibm.com>,
+ Alex Williamson <alex.williamson@redhat.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Lu Baolu <baolu.lu@linux.intel.com>,
+ Chaitanya Kulkarni <chaitanyak@nvidia.com>, Cornelia Huck
+ <cohuck@redhat.com>, Daniel Jordan <daniel.m.jordan@oracle.com>,
+ David Gibson <david@gibson.dropbear.id.au>,
+ Eric Farman <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Jason Herne <jjherne@linux.ibm.com>, Joao Martins
+ <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+ Lixiao Yang <lixiao.yang@intel.com>, Matthew Rosato
+ <mjrosato@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>,
+ Nicolin Chen <nicolinc@nvidia.com>, Halil Pasic <pasic@linux.ibm.com>,
+ Niklas Schnelle <schnelle@linux.ibm.com>,
+ Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+ Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <13-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <4c429c36-146e-e2b2-0cb4-d256ca659280@redhat.com>
+ <Y4P9VzpCv/DyHeaD@nvidia.com>
+From: Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <Y4P9VzpCv/DyHeaD@nvidia.com>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+Hi Jason,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On 11/28/22 01:14, Jason Gunthorpe wrote:
+> On Sun, Nov 27, 2022 at 10:13:55PM +0100, Eric Auger wrote:
+>>> +static int iommufd_device_setup_msi(struct iommufd_device *idev,
+>>> +				    struct iommufd_hw_pagetable *hwpt,
+>>> +				    phys_addr_t sw_msi_start,
+>>> +				    unsigned int flags)
+>>> +{
+>>> +	int rc;
+>>> +
+>>> +	/*
+>>> +	 * IOMMU_CAP_INTR_REMAP means that the platform is isolating MSI, and it
+>> rather means that the *IOMMU* implements IRQ remapping.
+> Not really. The name is a mess, but as it is implemented, it means the
+> platform is implementing MSI security. How exactly that is done is not
+> really defined, and it doesn't really belong as an iommu property.
+> However the security is being created is done in a way that is
+> transparent to the iommu_domain user.
+Some 'ARM platforms' implement what you call MSI security but they do
+not advertise IOMMU_CAP_INTR_REMAP
 
+Besides refering to include/linux/iommu.h:
+IOMMU_CAP_INTR_REMAP,           /* IOMMU supports interrupt isolation */
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
+>
+> MSI security means that the originating device (eg the RID for PCI) is
+> validated when the MSI is processed. RIDs can only use MSIs they are
+> authorized to use.
+agreed this is what I described below.
+>
+> It doesn't matter how it is done, if it remapping HW, fancy
+> iommu_domain tricks, or built into the MSI controller. Set this flag
+> if the platform is secure and doesn't need the code triggered by
+> irq_domain_check_msi_remap().
+this is not what is implemented as of now. If the IOMMU does support
+interrupt isolation, it advertises IOMMU_CAP_INTR_REMAP. On ARM this
+feature is implemented by the ITS MSI controller instead and the only
+way to retrieve the info whether the device MSIs are directed to that
+kind of MSI controller is to use irq_domain_check_msi_remap().
+>
+>> irq_domain_check_msi_remap() instead means the MSI controller
+>> implements that functionality (a given device id is able to trigger
+> Not quite, it means that MSI isolation is available, however it is not
+> transparent and the iommu_domain user must do the little dance that
+> follows.
+No I do not agree on that point. The 'little dance' is needed because
+the SMMU does not bypass MSI writes as done on Intel. And someone must
+take care of the MSI transaction mapping. This is the role of the MSI
+cookie stuff. To me this is independent on the above discussion whether
+MSI isolation is implemented.
+>
+> It does not mean the MSI controller implements the security
+> functionality because it is not set on x86.
+>
+> Logically on x86 we should consider the remapping logic as part of the
+> MSI controller even if x86 makes them separated for historical
+> reasons.
+>
+>> MSI #n and this #n gets translated into actual MSI #m) So what you
+>> want is to prevent an assigned device from being able to DMA into an
+>> MSI doorbell that is not protected by either the IOMMU or the MSI
+>> controller. If this happens this means the DMA can generate any kind
+>> of MSI traffic that can jeopardize the host or other VMs
+> I don't know of any real systems that work like this. ARM standard GIC
+> uses a shared ITS page, the IOMMU does nothing to provide MSI
+> security. MSI security is built into the GIC because it validates the
+> device ID as part of processing the MSI. The IOMMU is only involved
+> to grant access to the shared ITS page.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/61184
+?? Yeah that's what I said. The SMMU does nothing about MSI security.
+The ITS does.
+>
+> Intel is similar, it provides security through the MSI controller's
+> remapping logic, the only difference is that on Intel the MSI window
+> is always present in every iommu_domain (becuase it occures before the
+> IOMMU), and in ARM you have to do the little dance.
+On Intel the MSI window [FEE0_0000h - FEF0_000h] is bypassed by the
+IOMMU. On ARM MSI transactions are translated except in case of HW MSI
+RESV regions (I think).
+>
+> Even if the iommu is to be involved it is all hidden from this layer.
+>
+>> and afterwards resv_msi is checked to see if we need to create the
+>> so-called msi cookie.  This msi cookie tells the MSI writes are
+>> translated by the IOMMU and somebody must create a mapping for those
+>> transactions.
+> The cookie is always necessary if we are going to use the
+> non-transparent mode. That is what makes it the non transparent
+> mode. We have to supply the reserved IOVA range from one part of the
+> iommu driver to another part.
+>
+>>> +	 * creates the MSI window by default in the iommu domain. Nothing
+>>> +	 * further to do.
+>>> +	 */
+>>> +	if (device_iommu_capable(idev->dev, IOMMU_CAP_INTR_REMAP))
+>>> +		return 0;
+>>> +
+>>> +	/*
+>>> +	 * On ARM systems that set the global IRQ_DOMAIN_FLAG_MSI_REMAP every
+>>> +	 * allocated iommu_domain will block interrupts by default and this
+>> It sounds there is a confusion between IRQ remapping and the fact MSI
+>> writes are not bypassed by the IOMMU.
+> I don't think I'm confused :)
+As soon as there is an SW MSI_RESV region and only in that case you need
+to put in place the msi cookie (because it indicates the IOMMU
+translates MSI transactions).
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-           s390x - stress: stress-ng - memory
-                   Issue: stress: stress-ng - memory: stress-ng --memrate T=
-IMEOUT
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1172
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6122492
+The fact the platform provides MSI security (through IOMMU or MSI
+controller) looks orthogonal to me.
+>
+>>> +static int iommufd_device_do_attach(struct iommufd_device *idev,
+>>> +				    struct iommufd_hw_pagetable *hwpt,
+>>> +				    unsigned int flags)
+>>> +{
+>>> +	phys_addr_t sw_msi_start = 0;
+>>> +	int rc;
+>>> +
+>>> +	mutex_lock(&hwpt->devices_lock);
+>>> +
+>>> +	/*
+>>> +	 * Try to upgrade the domain we have, it is an iommu driver bug to
+>>> +	 * report IOMMU_CAP_ENFORCE_CACHE_COHERENCY but fail
+>>> +	 * enforce_cache_coherency when there are no devices attached to the
+>>> +	 * domain.
+>>> +	 */
+>>> +	if (idev->enforce_cache_coherency && !hwpt->enforce_cache_coherency) {
+>>> +		if (hwpt->domain->ops->enforce_cache_coherency)
+>>> +			hwpt->enforce_cache_coherency =
+>>> +				hwpt->domain->ops->enforce_cache_coherency(
+>>> +					hwpt->domain);
+>>> +		if (!hwpt->enforce_cache_coherency) {
+>>> +			WARN_ON(list_empty(&hwpt->devices));
+>>> +			rc = -EINVAL;
+>>> +			goto out_unlock;
+>>> +		}
+>>> +	}
+>>> +
+>>> +	rc = iopt_table_enforce_group_resv_regions(&hwpt->ioas->iopt, idev->dev,
+>>> +						   idev->group, &sw_msi_start);
+>>> +	if (rc)
+>>> +		goto out_unlock;
+>>> +
+>> so in the case of any IOMMU_RESV_MSI, iommufd_device_setup_msi() will be
+>> called with *sw_msi_start = 0 which will return -EPERM?
+>> I don't think this is what we want. In that case I think we want the
+>> RESV_MSI region to be taken into account as a RESV region but we don't
+>> need the MSI cookie.
+> This was sort of sloppy copied from VFIO - we should just delete
+> it. The is no driver that sets both, and once the platform asserts
+> irq_domain_check_msi_remap() it is going down the non-transparent path
+> anyhow and must set a cookie to work. [again the names doesn't make
+> any sense for the functionality]
+>
+> Failing with EPERM is probably not so bad since the platform is using
+> an invalid configuration. I'm kind of inclined to leave this for right
+I don't understand why it is invalid? HW MSI RESV region is a valid
+config and not sure you tested with that kind of setup, did you?
+> now since it has all be tested and I don't want to make a
+> regression. But I can try to send a patch to tidy it a bit more, maybe
+> add an appropriate WARN_ON.
+>
+> The whole thing is actually backwards. The IOMMU_CAP_INTR_REMAP should
+> have been some global irq_has_secure_msi() and everything with
+> interrupt remapping, and ARM should set it.
+You are revisiting this IOMMU_CAP_INTR_REMAP definition ... this is not
+what is documented in the header file.
 
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6122172
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6122199
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1479
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: xfstests - nfsv4.2: RIP: 0010:refcount_warn_saturate+0xba/0x=
-110
-            URL: https://lore.kernel.org/all/20220930183917.1390019-1-jsavi=
-tz@redhat.com/t/#u
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: FAIL: /usr/share/beakerlib/testing.sh: =
-line 896: fwts: command not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1486
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+>
+> Then the domain should have had a domain cap
+> IOMUU_CAP_REQUIRE_MSI_WINDOW_SETUP to do the little dance ARM drivers
+> need.
+>
+> And even better would have been to not have the little dance in the
+> first place, as we don't really need the iommu_domain user to convey
+> the fixed MSI window from one part of the iommu driver to another.
+>
+> We may try to fix this up when we get to doing nesting on ARM, or
+> maybe just leave the confusing sort of working thing as-is. I don't
+> know.
+>
+> Jason
+>
+Eric
 
