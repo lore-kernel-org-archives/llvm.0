@@ -1,211 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B0E8F7C
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1669657293;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Qffn/9ShsAB1X/92GP6pX8H7dCrVLRPoO0Vgh3PWcWk=;
-	b=jDALD33QZJ1msJS+yRXVcwEaWSbRsE0EH15D8c8RT/ILTg8Wo4KQNIqrzsnRBd28kKgWG1
-	QUDaVMIWGDOBpoKSJ9H5IzxzSMu1xB0dpmW3iUdOZGbnsnZEoAutzEw1qNSA1E/f85PzC4
-	hv+SIivMKdiRtclWfPq5Lf4YaE2pXOE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-150-C1yMNxjsMF6XEXKme-Ge2g-1; Mon, 28 Nov 2022 12:41:31 -0500
-X-MC-Unique: C1yMNxjsMF6XEXKme-Ge2g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7630F800B23
-	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:41:31 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.33.126])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 60D6A111F3B0;
-	Mon, 28 Nov 2022 17:41:31 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc7,
- mainline.kernel.org-clang, b7b275e6)
-Date: Mon, 28 Nov 2022 17:41:31 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5918C8F7C
+	for <llvm@lists.linux.dev>; Mon, 28 Nov 2022 17:41:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E35D4C433C1;
+	Mon, 28 Nov 2022 17:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669657307;
+	bh=2nnZXA8RaZrSVvCN6ByjHxeIL4WuKWU/gteG+urh8OQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KtJOrQphtQe+rCBXzJ9fBWElwGLJy0EFEKzyfO8msa2UBLiNSirD095+J/eul6qnh
+	 nOiNbSMtd8lhTjAgABQ1MIPGJH6aiEN8EF3aBdGPQSqMRyDJFwcZYSDFbo4bgCmwvl
+	 X9+J2gLaH2spgApl06dUGUHn1xSULGBJdGBozQi0FFl6mdMh8S7z52kpN0DX6sOYqw
+	 lCWTKrlpIdeBHQj4qLXmh8om5ZBPAK8jVnnVDbsRRytk2R3Rv9HVtukMh3ZgLV7wD3
+	 xjuKlgDp7SlO3dtmpo/BNEnassv85Ijh3SHk16olEhrGem0oyFrTxr3410uIzGOJMh
+	 kqPx6+I4ZLu0w==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>,
+	kernel test robot <lkp@intel.com>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	alsa-devel@alsa-project.org,
+	Takashi Iwai <tiwai@suse.de>,
+	Sasha Levin <sashal@kernel.org>,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 12/19] ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+Date: Mon, 28 Nov 2022 12:41:12 -0500
+Message-Id: <20221128174120.1442235-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221128174120.1442235-1-sashal@kernel.org>
+References: <20221128174120.1442235-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <10683.122112812413100653@us-mta-150.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Kees Cook <keescook@chromium.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[ Upstream commit 05530ef7cf7c7d700f6753f058999b1b5099a026 ]
 
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed.
 
-Kernel information:
-    Commit message: Linux 6.1-rc7
+seq_copy_in_user() and seq_copy_in_kernel() did not have prototypes
+matching snd_seq_dump_func_t. Adjust this and remove the casts. There
+are not resulting binary output differences.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/61193
+This was found as a result of Clang's new -Wcast-function-type-strict
+flag, which is more sensitive than the simpler -Wcast-function-type,
+which only checks for type width mismatches.
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-           s390x - stress: stress-ng - memory
-                   Issue: stress: stress-ng - memory: stress-ng --memrate T=
-IMEOUT
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1172
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6125462
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: alsa-devel@alsa-project.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20221118232346.never.380-kees@kernel.org
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/core/seq/seq_memory.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6125195
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
-UT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1374
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1479
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: FAIL: /usr/share/beakerlib/testing.sh: =
-line 896: fwts: command not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1486
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/sound/core/seq/seq_memory.c b/sound/core/seq/seq_memory.c
+index 65db1a7c77b7..bb76a2dd0a2f 100644
+--- a/sound/core/seq/seq_memory.c
++++ b/sound/core/seq/seq_memory.c
+@@ -112,15 +112,19 @@ EXPORT_SYMBOL(snd_seq_dump_var_event);
+  * expand the variable length event to linear buffer space.
+  */
+ 
+-static int seq_copy_in_kernel(char **bufptr, const void *src, int size)
++static int seq_copy_in_kernel(void *ptr, void *src, int size)
+ {
++	char **bufptr = ptr;
++
+ 	memcpy(*bufptr, src, size);
+ 	*bufptr += size;
+ 	return 0;
+ }
+ 
+-static int seq_copy_in_user(char __user **bufptr, const void *src, int size)
++static int seq_copy_in_user(void *ptr, void *src, int size)
+ {
++	char __user **bufptr = ptr;
++
+ 	if (copy_to_user(*bufptr, src, size))
+ 		return -EFAULT;
+ 	*bufptr += size;
+@@ -149,8 +153,7 @@ int snd_seq_expand_var_event(const struct snd_seq_event *event, int count, char
+ 		return newlen;
+ 	}
+ 	err = snd_seq_dump_var_event(event,
+-				     in_kernel ? (snd_seq_dump_func_t)seq_copy_in_kernel :
+-				     (snd_seq_dump_func_t)seq_copy_in_user,
++				     in_kernel ? seq_copy_in_kernel : seq_copy_in_user,
+ 				     &buf);
+ 	return err < 0 ? err : newlen;
+ }
+-- 
+2.35.1
 
