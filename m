@@ -1,130 +1,79 @@
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B47F36A
-	for <llvm@lists.linux.dev>; Tue, 29 Nov 2022 12:33:36 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 571E25C00BC;
-	Tue, 29 Nov 2022 07:33:35 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 29 Nov 2022 07:33:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1669725215; x=1669811615; bh=IqZipqd0Jq
-	L5tnglRr5e29BfFvwlHJufO9Ma0d1pQ0E=; b=eHpcM6SZLoo4/CPogT3l+vk4mD
-	6RQvCq32VDsRJ+RrliP3bJ/vEjyVomm3xgMNMNjA0eDKPjJ1JmlQ4JQo8BukXEL9
-	h358hsP8VJOH9aAszO25g8chHvG2mUZbZhyqY6h+qeomtcWAWL+6qJL691CnFAGe
-	HhxQm1LcSF/Q8cqyhD8mpB8BiQTrNjDfbIEQ4BBEPTlUEfJExg5/hqVm3VcCBCDR
-	ae6Q2S6iDzGBRtaB7ljYLh/8r8+WXxJLxqfF7WWa5sEsv8qPUWfuvUNskdNa6QiA
-	rcLu4ddclbeWBN/aWsW/K6/V+ihYVpBjMhhXMU8bjtbA9M2uOe1GJUSssaTQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1669725215; x=1669811615; bh=IqZipqd0JqL5tnglRr5e29BfFvwl
-	HJufO9Ma0d1pQ0E=; b=HkCxwtOsOLvnCGcKAxedQxQ7kUYyjzjIEvch79MlAP5I
-	WtFDVLIsaJ16v0yvGZBUVmyv6axgav4MS77qa2k1fx2OCOFg+fQMr25J9z0bNA/Y
-	bskE4Xo+lnxTz/N8+2itEvXCstSvhL5KX5DlhohADAVzjbz4wFtgvbRURgHSYvNk
-	mvlvt4Y6KGrPsNm7DBxk6UO02+nG11YfQiGvrGl+di6A+JJOKiwr41PnT9z/YhWJ
-	Wz10XTOW57VG6VRIbgNJy18+fCTpZHNPEJFkpP3tRZBbSG0ApFO6r6KwYAfFeJH7
-	Fimdg+0BsEoat3qlESRAM+Qdpe6eEe4/TiDee5SdPw==
-X-ME-Sender: <xms:HfyFYy2Zkx89s8co5mb89U98CJo3lCSHwOWWiluWJlqgzw1sUshOHQ>
-    <xme:HfyFY1HC6JBgb73vlMd4aYjdr0xlrvyeHgLGh2zogHqfyxJ8ODICBWPtz74kXO2bM
-    ApN8R54NyqJD2gAN9A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddtgdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeeigfeiieeiheejjeeiudekleevvddvffetieehteeikeeigeeiffdttdeftdeg
-    gfenucffohhmrghinhepghhnuhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:HfyFY67auymNWGkuozMR3IEK9g6ZFjQiOROATc_cXLO3hJTb-OEOwg>
-    <xmx:HfyFYz3cv0xQkFfaVc9EOEOj2-hxtxNnl5aILq3ckLOp2jlv5cZF3A>
-    <xmx:HfyFY1FYDzhZFY1RNSEGk2JwvGJg040obGkQ6oV2hBfGqzR0VhSjOQ>
-    <xmx:H_yFY5LtXgsZJdF45k0pMPCFLA9aRu8ejGq91gaLnQ8Nxam8H7B8IA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 9B4EAB60086; Tue, 29 Nov 2022 07:33:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D22BAD5B;
+	Tue, 29 Nov 2022 19:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4124BC433C1;
+	Tue, 29 Nov 2022 19:02:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1669748526;
+	bh=76rMPn3p1fYb/OlmUR+9LC3Aio6SHBw/oxeOcaAWk9w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KsKrOrONiEvlBlKvrXEX0OiVBSQotOXCPTrbKjOJbp/7GWjnAYrOgYffiJ2aEIY+i
+	 Tovr9GCVJ2wAVvUR8bCLWC8UxRb+hHm6wAJsXKOuTnsmDtDVQIdaC/Az60aSgN4JWt
+	 IWBseyS/WVHS6nJ9Lugdg52Iv8bQKgXnGPfO7GiqDR7u0DEDN4/ZtADZ0lxF77qTgL
+	 3IJ1jie/n/iRcwcd01gIRCcjTW1BI7h/c431CXz0Kl/fmnqxzxnHCtSH5stwKVFoqH
+	 hFkye6zaTnM73DBTWqD78knjzqIY93eSq+VU9Ve/dJOs6g+3HvZ2ej7MtqfRiT3FGr
+	 6/C0P/ac9EXyw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	patches@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	linux-crypto@vger.kernel.org
+Subject: [PATCH 0/2] Fix lack of section mismatch warnings with LTO
+Date: Tue, 29 Nov 2022 12:01:21 -0700
+Message-Id: <20221129190123.872394-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <63ced4a4-33b9-4c03-8d7a-987ceb1fc2c7@app.fastmail.com>
-In-Reply-To: <Y4X6AHdMZcxvFnDP@wendy>
-References: <20221101222520.never.109-kees@kernel.org>
- <Y4X6AHdMZcxvFnDP@wendy>
-Date: Tue, 29 Nov 2022 13:33:03 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Conor.Dooley" <conor.dooley@microchip.com>,
- "Kees Cook" <keescook@chromium.org>
-Cc: "Vlastimil Babka" <vbabka@suse.cz>, "David Gow" <davidgow@google.com>,
- "Christoph Lameter" <cl@linux.com>, "Pekka Enberg" <penberg@kernel.org>,
- "David Rientjes" <rientjes@google.com>,
- "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
- "Roman Gushchin" <roman.gushchin@linux.dev>,
- "Hyeonggon Yoo" <42.hyeyoo@gmail.com>,
- "Rasmus Villemoes" <rasmus.villemoes@prevas.dk>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Andy Shevchenko" <andriy.shevchenko@intel.com>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/6] slab: Provide full coverage for __alloc_size attribute
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 29, 2022, at 13:24, Conor Dooley wrote:
-> On Tue, Nov 01, 2022 at 03:33:08PM -0700, Kees Cook wrote:
->> Hi,
->> 
->> This is a series to work around a deficiency in GCC (>=11) and Clang
->> (<16) where the __alloc_size attribute does not apply to inlines. :(
->> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
->> 
->> This manifests as reduced overflow detection coverage for many allocation
->> sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was
->> not actually being propagated to __builtin_dynamic_object_size(). In
->> addition to working around the issue, expand use of __alloc_size (and
->> __realloc_size) to more places and provide KUnit tests to validate all
->> the covered allocator APIs.
->
-> Hello Kees!
->
-> It would appear that one of the macros you've added here is doing Bad
-> Things^TM to allmodconfig on RISC-V since the 22nd:
->
-> ../lib/fortify_kunit.c: In function 'alloc_size_kmalloc_const_test':
-> ../lib/fortify_kunit.c:140:1: error: the frame size of 2384 bytes is 
-> larger than 2048 bytes [-Werror=frame-larger-than=]
->   140 | }                                                               
->         \
->       | ^
-> ../lib/fortify_kunit.c:209:1: note: in expansion of macro 
-> 'DEFINE_ALLOC_SIZE_TEST_PAIR'
->   209 | DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
->       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
->
-> CONFIG_GCC_VERSION=110100
-> CONFIG_AS_VERSION=23700
-> CONFIG_LD_VERSION=23700
->
-> The report came out of my CI (which I should have passed on sooner) so
-> I do not have anything other than stderr - I can get you anything else
-> you'd like/need though if you LMK.
 
-There is generally a conflict between kunit and the structleak
-gcc plugin, I think the Makefile needs a line like
+Hi all,
 
-CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+Vincent recently reported an issue with lack of section mismatch
+warnings with LTO. This is due to commit 6c730bfc894f ("modpost: handle
+-ffunction-sections"), which ignores all function sections for modpost.
 
-      Arnd
+I believe this is incorrect, as these function sections may still refer
+to symbols in other sections and they will ultimately be coalesced into
+.text by vmlinux.lds anyways.
+
+The first patch fixes a warning that I see with allmodconfig + ThinLTO
+builds after applying the second patch. The second patch moves ".text.*"
+into TEXT_SECTIONS so that modpost audits them for mismatches.
+
+I expect this to go via the kbuild tree with an ack from the padata
+maintainers.
+
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: linux-crypto@vger.kernel.org
+
+Nathan Chancellor (2):
+  padata: Do not mark padata_mt_helper() as __init
+  modpost: Include '.text.*' in TEXT_SECTIONS
+
+ kernel/padata.c       | 4 ++--
+ scripts/mod/modpost.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+
+base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
+-- 
+2.38.1
+
