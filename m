@@ -1,199 +1,155 @@
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2119.outbound.protection.outlook.com [40.107.113.119])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6AEBAD32;
-	Mon, 28 Nov 2022 23:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F3D7C;
+	Tue, 29 Nov 2022 01:09:44 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W/ncrzW0/FD4U+BxnJSg3mAYqKLP7+rj/qhEqgBc0dC1SLQgCNea4TvlV6OkytO12yJsYURJuvVdLeV8n2FYwZ035unn2/RsGk1ChjkhZq3j/xmoy8f4w3KWVDlf31xj6EPmxybVWr94e/2s+sy6UBnOphXUbet2YLAq8Bx7brz+thn+WBBdmlWV57WjIacvmN2fhfsNG0mpEG2ZDNu9229FWd/l27ukwWzHUmILW9k4bd9bCgrC8kzMMDatkBn+J9Jcp7mbzLqMWya1zJGF1Xdddsl5/Rf6JqBaL76psPrKKA9kzZZ3hEHYrzg45Abwd32v3EE345G8GRjaqOg98A==
+ b=K6IMB5VPjakjg4v9m5E0ONMc5z7FyBny9cJpo0f6ZgZR8io0++5SIVM5B0xdE6B5IKqq0s1qiG6mP0xbMcdv7dvR2cdXuJZriYK500xfUmx4hZhYzplxUPRMWS6zzgNAkRRdOEAPTZ9vpy4RXPiS59n52UAT7AodHitt+ebcZmFeEIsjohIq7ZoEf+76+qfLFXmGh8JpUVN803GMi0PfJWetroy1YQfqi+ZCqmL43VcCOWj3CERJ5IGrzy2hke7Ueyt1Is0abYHjOtZ2/fB2uwq9wXMBAhc81n6WPM5C/S2jg1hHyX7Xlkn/CACAndhK4XnLJNq8z/u67XC/w8rAcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HX+0PmQp36/2l4TZL9L23ZFjRL0nVzvu99j9OEO0hDc=;
- b=jvOK/m4dO6NNCae8kgiIhnz1/bnLW+3Pb0CDd9/qhiHOGcm6BrTn7MfjNmZBKJPoHCuHL8rwnUW9VixLVY/3Q37Blb71d0uQ+ncrDp/lUMblukRsYtL7OVjvFtsDbFmmaPLXjpNXnd5ITTZR2OSX6hUI0nzFc8WzOicqgy/QOEsNVfRCQ8C4MF/DIyqWrDRoXRHKPY9+sYMmcKmMTU4CM5n6Bz/XBO3m58TW0JMLtCHTYpdupQNK0URI1ryd8R2t8+VLo9dMZL9ory8GxZqHkeMfh+Sx8tpNxKc2/Q25krWyi3v3n12p+AqCfWsCPZT7UDlKJDo8TVyMRpIX0Pbc6Q==
+ bh=wOAjxUiASnvobPSbMDiKn73Arjy3PJLPQdh2Ss1kOkQ=;
+ b=iJN/B87I9VrilhpetCHcPmD8/hANJe0Z1FROc3Cg/Kp2mqn04mYKQbhYrhT032n6O4+zxMJEjtaApYMLJbv9komsdkY8DCH/QogaCbB7MyKEl8jmr1nNDgWjOE2Xc2PGZDM8HYGOsAzJ34oCKrdZFu+7LcRcwg/4Kt85ljJF/q1qRZCUzLb56i1MAv9vONapa0C2sCvJxIGBIZyBw0nZqAoplZyK4AnO1vXCoVGKmT5d8LTD86ta7XpP5W20tXxGyC86kLTVA3FWnQJfidSG9Npn1WSkYHUz8dPXFERL99UTdFfkN+R2NtM447UgQy4i6/Y/8ue9Y/JlQDh7RFU/ng==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HX+0PmQp36/2l4TZL9L23ZFjRL0nVzvu99j9OEO0hDc=;
- b=mPHYjGv2RjQExjGGsjBeizhRVxWc+akJ9yc5CcHyTpzvIz0wU6ktyOJT5JTaaMrcrBUpArstjc4/LfCvn6rW2rsCdrOTCcUFpljxYt+HQmEyoBvg+N4ilBmIWv0o1UBais4iW4HveLJDUi2UacfOLDfwJiLKwk9UYhuEYAkOFPo=
-Received: from OSZPR01MB7019.jpnprd01.prod.outlook.com (2603:1096:604:13c::8)
- by OS0PR01MB5492.jpnprd01.prod.outlook.com (2603:1096:604:a5::16) with
+ bh=wOAjxUiASnvobPSbMDiKn73Arjy3PJLPQdh2Ss1kOkQ=;
+ b=olh1yBl5t46TgmmKdmiWF6dEiNblcsu7jzNNgwkONpiwLwWnChxuNE652N3XXNWOTr2nbSqxDEntMdGywAkGrd4iYvuGAvmWMIVtjEcBVJwi7SzELVAD+X2+ox1R9oi583OD8iXu2NsPEMm9HXL5TBaX14GEHzsoCJh8jELdt/bX8yeYUdgL3f3hQI6BEB75Zx0yELROTwVfgIUIOL3vCWykSj75dIuKyDHoZ72eTkZM60hxANAibAKnTv0UgaB5MEXZLmdUBRODhlOVgQi5sZt6JppW1id2D2/w8wwdw2YSpOPKUuUGtW+TUTQM2xIk8/IIWZnyTH9EkFo8UC/vyQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB5768.namprd12.prod.outlook.com (2603:10b6:8:77::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Mon, 28 Nov
- 2022 23:53:59 +0000
-Received: from OSZPR01MB7019.jpnprd01.prod.outlook.com
- ([fe80::2b87:97f9:d59f:8839]) by OSZPR01MB7019.jpnprd01.prod.outlook.com
- ([fe80::2b87:97f9:d59f:8839%5]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 23:53:58 +0000
-From: Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Nathan Chancellor <nathan@kernel.org>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>
-Subject: RE: [PATCH] media: rzg2l-cru: Remove unnecessary shadowing of ret in
- rzg2l_csi2_s_stream()
-Thread-Topic: [PATCH] media: rzg2l-cru: Remove unnecessary shadowing of ret in
- rzg2l_csi2_s_stream()
-Thread-Index: AQHZAvD+TzEN+26BO0Oadq85NNUNv65VAWvg
-Date: Mon, 28 Nov 2022 23:53:58 +0000
-Message-ID:
- <OSZPR01MB7019DDDF3BE79CABBD8A582FAA139@OSZPR01MB7019.jpnprd01.prod.outlook.com>
-References: <20221128061622.1470489-1-nathan@kernel.org>
-In-Reply-To: <20221128061622.1470489-1-nathan@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSZPR01MB7019:EE_|OS0PR01MB5492:EE_
-x-ms-office365-filtering-correlation-id: 3b49d1fa-717e-47aa-2426-08dad19bd154
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- GbXXGkLade4vPuCny5nsPTThob5QYWDXmews5hcaeKwoDc3fG4xQR7iH2nJSdfL9a7CzhSZ1yQQgv9CpKugUKllQLFJe9bBQB2K8bE0ScHWzRnU5glhuI2naQdtuJ9LJaFBSMP9qrWBGF80fmVIMTdUgbnz6bipHf38quSsODI2cv0GNCPV81OVw99rxDudK/J5bK72Qgb6nRTDDAFIRT7DXx6rsGwPT+I79mGcuUc61HufucwCNW4Vqs5Ogrz7SHfQBeylFg9gPJiR+Ho+fJ9sUEz39MMPF+49STbjHGBKHFOQQpDzWlDkXH49TD+G+2DDbZLSSP7G/3dEEwaJVsGpLAmV6Us1oYzGKi4hNJnvGXmZwnsfblHFeJ1x859aycIcJpo7KzUJa8ohcGdnIt0EP6pkcWst+4UyMhkvC02ks/uR48z1LriUlv3uvY5TG3frP71lteRMTHZTox3O0K3wQOQgmC6qexQz2XvYEqdvAEiHXrgIr8qP34Req26EDwe2sovl4ZfH41wzLB/RdaW8ll34P3eAmKFuZes2yVoT1UM0BMPqDk7XcDFJLdrCGyJfFC/bIMndHeQt/BAuxYu+mfxPaM65qggjyjWFLL8CuixYopfDXEuzz/wGiIV2UX0qXl9TikpRahEIj/cA2xCfAVBS6gi0ZDson7RIjhAyG2jPhMYqr9FmnF7HKvpnayJVwuVYqZEv6ILJleM2f5WIdqeCcHCG8XOQ4jckTYa0=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB7019.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199015)(55016003)(38070700005)(2906002)(33656002)(86362001)(7696005)(71200400001)(966005)(478600001)(53546011)(6506007)(316002)(76116006)(66446008)(52536014)(66946007)(41300700001)(66476007)(45080400002)(5660300002)(4326008)(8676002)(54906003)(64756008)(66556008)(26005)(110136005)(8936002)(122000001)(9686003)(38100700002)(83380400001)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?zeFVKnLvzob2kPGIjNbzjFmRo5+z8n9NDzVRdv0sYpsDuZN8zrwtiO5cGcTm?=
- =?us-ascii?Q?DLhVkoJmtIzcDBC3QIlAbpaKzyv+4l8jm8hL5Aa7LadeFFRUe+ECpJPo284o?=
- =?us-ascii?Q?mwpNdOdENhUU/F57QM1JUWOvQKy/WWMNjVQDrcUAwxwY1vdlOD1npEtx1IOx?=
- =?us-ascii?Q?M6DHJEYXVW7QpJ0nsdsLkSlk4pKv7pMpAPTFLYGzBEZtUe5SBc1m8hcrMvFA?=
- =?us-ascii?Q?EDzRhIaiC6+PdArALbc8ARTAQKrEHUJYAcScG1UR0My+1nQhCa2IecQVJDT5?=
- =?us-ascii?Q?dh6eddqHu4dw0+2kSRZukPqmybG3tVGqGFG3tmTsiZQqIITo+cCltkzkJwv7?=
- =?us-ascii?Q?EPd15sNfQggq4WGzOnJZ/HhuwPnAHD5rQ0Z9qtLSmqVikh5V/dFtE+c+ChS0?=
- =?us-ascii?Q?goZm3Oi0PjCFMM0EIethGcS9pyf8+/s0JJMhik6AgpqQ4kzYiDimNxgB9TGj?=
- =?us-ascii?Q?Wat3o5wTOZo09Nhv1pp+adsJG1DVywj8xLZvL5CxjR2eUOSS6uNRElJRbcwv?=
- =?us-ascii?Q?h5By62LuMmQFKlseMaMfqfGh7InrQScr7ZZi74iutEQ7Csj8TPAOaR0yHcLz?=
- =?us-ascii?Q?qxDc/5zw2Jc0X4kWBpdMDLoe9iEEXUsV8QGWkRLoDtlVfh4PXFQ5LE5V5/16?=
- =?us-ascii?Q?E2jt6Pdr2q7M8TkEiG4RfW1ItuaXn5w9Wl09kziH65VUtBoFEuamou+kZ0jk?=
- =?us-ascii?Q?mzVEBG6eJOYZ2vGVqdGpcqYZ0fLpC8LQU4V88X6ht5GuNR8HqjA0XSn9qm72?=
- =?us-ascii?Q?ktShrnEKEoZcdgj8J92Z5vJIhiqT0COeFLdOLnSTuqzqwlgsJOeG9ZTIadly?=
- =?us-ascii?Q?VYml0ZIkO93ONqvVHLa2VXGADQjy8EULSeXJvo39y2nR6b/PAJc1W5pvsTDh?=
- =?us-ascii?Q?wT4rskUiCrTudvuIl+hw+AeYlv6qtuk8/1+V5CYZfBs1o3RT7XJYax0bCwkX?=
- =?us-ascii?Q?yxodWW3OuB2uJEMnpzhxZjueKsfUwmG66Q5Op9pG3jIw+dEbU5Y3FyQphb49?=
- =?us-ascii?Q?HYJJa7EpjLVUzRRppGMXCp4E/cDNlX3xnITVVId40L1xq2H2K2beeEMW/cMF?=
- =?us-ascii?Q?iAfE9Tcq6UudVSPqGk64Q84dagSicnzDz23JfFFIavsPDXLPpCBMvCqYEoYP?=
- =?us-ascii?Q?WliPk5XeCP7CKXwC/q2/MnOUCpI8Et3fVrF/G+/caLhrOveIqPl5RsD0EIH9?=
- =?us-ascii?Q?RL/pz7SOPtinOV1vq1OzRIT4JKBMb02ZEBpv0dCgiydE4ygu9dr4LbfDH1nU?=
- =?us-ascii?Q?zKE7H88C//zHcPc7sI2Qq30H8irnORKJ0iymhG3i9wz7uEiPq5rXa1exOe2G?=
- =?us-ascii?Q?T8z02R8uvpvN8tHLmQJapfAXsSZUs27RczVqDwQj0VEHAMTRShBmgMqKyQI2?=
- =?us-ascii?Q?lH5nypmQSbiyBPyS3d31QizzbVMw7naGZZWShJRZ/dpPzqAw4kXeKe9i8hQm?=
- =?us-ascii?Q?VxTIhsHuhv4rHNuXZpmTTYo/DVVba38K6k8wi/C5DS+JPB7eKWhYUAGIb0pW?=
- =?us-ascii?Q?LtG0WmwcDmqwap9AlhWjT56e3gtp0a8KXUarJawt52Kf9uWJPgI9f3SCcHho?=
- =?us-ascii?Q?9EYthjrNzKx0J/PXQmEoCIsnq3znHgcAoMrTpsxGXhvDnf6JWR4aoWNsh8VQ?=
- =?us-ascii?Q?d8V37M1GbjcN9ZbnYNpwMG4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
+ 2022 01:09:42 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5857.021; Tue, 29 Nov 2022
+ 01:09:42 +0000
+Date: Mon, 28 Nov 2022 21:09:40 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Eric Auger <eric.auger@redhat.com>
+Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+	Anthony Krowiak <akrowiak@linux.ibm.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	David Gibson <david@gibson.dropbear.id.au>,
+	Eric Farman <farman@linux.ibm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Jason Herne <jjherne@linux.ibm.com>,
+	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+	Lixiao Yang <lixiao.yang@intel.com>,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v5 13/19] iommufd: Add kAPI toward external drivers for
+ physical devices
+Message-ID: <Y4Vb1Fs+yCJAtaSh@nvidia.com>
+References: <13-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <4c429c36-146e-e2b2-0cb4-d256ca659280@redhat.com>
+ <Y4P9VzpCv/DyHeaD@nvidia.com>
+ <94e6034a-c4c1-be0a-ea8c-f5934dbadd4c@redhat.com>
+ <Y4S1hYFm9HaP0KdR@nvidia.com>
+ <722b8767-daf9-f5b8-8ad7-0d9cb22d4b7d@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <722b8767-daf9-f5b8-8ad7-0d9cb22d4b7d@redhat.com>
+X-ClientProxiedBy: BL0PR02CA0028.namprd02.prod.outlook.com
+ (2603:10b6:207:3c::41) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB5768:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ee3af9c-de1a-4c35-8c88-08dad1a6649a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	MNW74lFY6ox0g1WNftKRvxfwY1wMkzWY7kfp3KKRk1HOUrhj1rSwO1GGfmVcQtVqJr8JRli6HQiLumMw1QM7nCAnhjP2+63Pn4hicWmm7htuz5Z4yF3a1NreYxuf8NLTdIjzWQTpNtXfDOYJveZtjjkkRrlKKQl12LXX6F573nwMl7vMhjo8hMHggYuvX8+UEVA+sdmFXKsO5tjy4VPPAR+YbvRLTb5LLRcMe5LypmK1aE2WvGfbjr0dS42bZZC/EhKFqZwI3oHSKiMmDPFmFAbxopqrlQYBDymjWzD3CCttFex93arQwBsEebbmNiIJ9L3khBKdG8sELL3G4zWTzZ54s+QuLdclPlRbPj6GDEw0dZQBEVqcpOGMJKOhbNriXs3ywIvj4eX3gYg9zEqbJWp469SYPI0KpIVi1pKk9H1r5oszK7DT+1o7V2PmE641J5132r1LlZ8Io8GniOL9GLgdOGDZjQo2rrOoeOBCAmR2q6zb7/W4ar4weAEl7FKcYYprRXNtwr0+dgg8gH2QEwgnbDRk6Py5mWmBqqDAhQA+kusPo1KeWcxueDlZoASCQHJum+2qx98i1lBbscpeDHMQ6SwZ4c0IhcrLy/rdGBD55XK8/y6zCOHkMcVX4fUP9gZyREpzNT4tIiop1h2uemXpBd0rB4eAZh+FSXYIFAsdP1qfQ5kabrpNyrHE14C55XT9bCpFbF+jUDWfPkiJUAK0uLyO/OZsxgJitDtdxJ2f4XN0lDb1qAsWGDPrL5c2
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(366004)(346002)(136003)(451199015)(478600001)(316002)(2906002)(66946007)(6486002)(54906003)(966005)(6916009)(36756003)(38100700002)(26005)(6506007)(86362001)(6512007)(186003)(2616005)(7416002)(4744005)(5660300002)(7406005)(8936002)(41300700001)(66476007)(66556008)(4326008)(8676002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Kpb6F/FcT3TH/HMBAVt4SY0+v4MeQQ16xJr6GakjDQWbUVK3lO0yNqY27fIB?=
+ =?us-ascii?Q?2GTZj08x3pyzzDNFi5yJ3FRsPeXFm7v0dG2WlzR6jmLGyGRv6+4JInirNHxf?=
+ =?us-ascii?Q?nW9Ygj4ae9R+dw1U2WBc8yfr4q2xmL1aUO4XsvdDQK6hVKbvXi0Trzhzlyi1?=
+ =?us-ascii?Q?XjVnwy4sTq4JqVdmK+x4vVCPifsaeNlg6FLf0i8cITL1lGTxYAXfMUe5nxW3?=
+ =?us-ascii?Q?GJAYmIDI0+neNcDhck3RIhMcjAWSJlT4hKQNsBKXHHueI3hETnYws67+QHfJ?=
+ =?us-ascii?Q?6ngO7to7ZneO2A1BalZ2X3L4m+050Xwkot2jcXSzRbIVjS0YXEejQiUPSicx?=
+ =?us-ascii?Q?UT8rTXbPXkJyVcBLlXzRXGGq7M1IpPq+myzYnFpcBmNDBo+YS09wdJur3DS+?=
+ =?us-ascii?Q?EDSCUFz7Df4Xf3HwlcVv+5EtVxEE/yaO2rkv4j91NhkWJcPUfTR49L1633ba?=
+ =?us-ascii?Q?F7BMgkCOyDSnoWZs67QmsV/gGwog5+RgCz+Dn19AfXpK+5Idma0P5b3pmUn7?=
+ =?us-ascii?Q?/sPjOW8UhAbz9IXNyG5i28GygmrMIUEmj4RXAGJhZXdpFAoKcP/IOSEdTTOd?=
+ =?us-ascii?Q?hHZgqGe+goOR8Yzg/fgcu+nEc6etp16WMyUNbY2bmkwfn1U76tECo7/jkvV5?=
+ =?us-ascii?Q?HN/0SqY6AZxcXZUA/IlP+G7anEPjZzyH+otoexfVWZAmkFi27nbwmN/kFvAC?=
+ =?us-ascii?Q?cAu4lsmSPiY7eNI+LXOHZrVnkJCZ7U8+FkDM6un5HWEBlnrcFs7PI+012Znc?=
+ =?us-ascii?Q?Hb2B/B3BQ9ufx2SuN4TiJru9bMIPWX0uvsrDffOJk1/pGxw/a4WvG/sIZGsb?=
+ =?us-ascii?Q?Zz2LmSQpGbeZzAv7I52Z8DKHFxK0gnhIZUSsOBcn07daqg8AbQBrJHnxJ9YY?=
+ =?us-ascii?Q?W96TBH8CeUkYrGr6Q8DQl4WlRkE4SQULT0OBHIXObxGDNT3vojlA2J1PfSAh?=
+ =?us-ascii?Q?eB5gra0XXT3CAhMTsN40x32DdvmEwDGLjYCfh+zlPnI7hbMgi0V+FAA8srk8?=
+ =?us-ascii?Q?fHAXvLAeiu92B/g/4N9F7704pMKNgCa2MEmVpENpftqrllumakdkT6477Qxs?=
+ =?us-ascii?Q?/xtX9pQDbYjhERjhIr9ytPLhCx6q4GuRuuIHGdYyahResJhaCIjVlPntJRdg?=
+ =?us-ascii?Q?pms0180jmI2KDB2EtiotYfuuJx2e7LbpK9LDzJ40hHKFO+vFHdxHYDyukiMJ?=
+ =?us-ascii?Q?58Zm/pt7KzVceocLcQaQvUtC4+DwxE2PbK2/uCZo8EkuCtR2tIGbBx+Ynmba?=
+ =?us-ascii?Q?r80eXB8wQ3uOsFQlOhzu51OfEhZRPLbNRaJdmY68OZcRRXlkDxuxlFSCJ8yv?=
+ =?us-ascii?Q?eax5SFpVwnu/t13HHYPDphVslkNwAF1tIFiq5b4Z3yFPFOegwx30W04oRrsg?=
+ =?us-ascii?Q?4mtE1pYlGtdBXvEU2l2W5GPeCv3cpoGs7hCUaqDqqnGWtmo1xEXrEAWDHU1N?=
+ =?us-ascii?Q?l5GMSZfqLIyi6Ci0T/xDPb8HDo4gxVGxeAKCnX2h5OLkAAUOuSbB38RHrH+Y?=
+ =?us-ascii?Q?3fhCPk6MApi8k/NGsOWIk6JQowkOeQdkMhWRHF1uyO+uXxqd45wxBTrtX6EI?=
+ =?us-ascii?Q?L4TXfwtRHKe037zBdmw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ee3af9c-de1a-4c35-8c88-08dad1a6649a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB7019.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b49d1fa-717e-47aa-2426-08dad19bd154
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 23:53:58.8122
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 01:09:42.2421
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wZyKMXg3yVibY+jfWSPqJXgxRQ3koM8lv0f68p+f+Wq8UtARqwktfJnnCi28+xhCQtaR5k/0ffTXLkrf9n4vHSwbOFgFIZwWN4h/NgW+HnK/YXY2jB3Fg2+FkY6xAXy9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5492
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 70clBP2BwuLcZMtSw6ItQd3iwM+36opf7lpqMQ4JxN28ODuvBBxmkyDaKXRgsFIR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5768
 
-Hi Nathan,
+On Mon, Nov 28, 2022 at 03:17:09PM +0100, Eric Auger wrote:
 
-Thank you for the patch.
+> > The fact that ARM was allowed to be different (or rather the x86 mess
+> > wasn't cleaned up before the ARM mess was overlayed on top) is why
+> > this is so confusing. They are doing the same things, just in
+> > unnecessarily different ways.
+> 
+> fair enough. But that's a separate discussion that needs to happen with
+> iommu and irqchip maintainers I think. At the moment things are
+> implemented that way.
 
-> -----Original Message-----
-> From: Nathan Chancellor <nathan@kernel.org>
-> Sent: 28 November 2022 06:16
-> To: Mauro Carvalho Chehab <mchehab@kernel.org>; Sakari Ailus <sakari.ailu=
-s@linux.intel.com>; Prabhakar
-> Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>; Tom Rix <trix@redhat.com>=
-; linux-
-> media@vger.kernel.org; linux-kernel@vger.kernel.org; llvm@lists.linux.dev=
-; patches@lists.linux.dev;
-> Nathan Chancellor <nathan@kernel.org>
-> Subject: [PATCH] media: rzg2l-cru: Remove unnecessary shadowing of ret in=
- rzg2l_csi2_s_stream()
->=20
-> Clang warns:
->=20
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:445:7: error: var=
-iable 'ret' is used
-> uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninit=
-ialized]
->                   if (ret)
->                       ^~~
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:475:9: note: unin=
-itialized use occurs here
->           return ret;
->                 ^~~
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:445:3: note: remo=
-ve the 'if' if its condition
-> is always false
->                   if (ret)
->                   ^~~~~~~~
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:441:7: error: var=
-iable 'ret' is used
-> uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninit=
-ialized]
->                   if (ret)
->                       ^~~
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:475:9: note: unin=
-itialized use occurs here
->           return ret;
->                 ^~~
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:441:3: note: remo=
-ve the 'if' if its condition
-> is always false
->                   if (ret)
->                   ^~~~~~~~
->   drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c:431:9: note: init=
-ialize the variable 'ret' to
-> silence this warning
->           int ret;
->                 ^
->                   =3D 0
->   2 errors generated.
->=20
-> ret is unnecessarily shadowed, meaning the assignments to ret within the =
-first 'if (enable)' block are
-> only applied to the inner scope, not the outer one as intended. Remove th=
-e shadowing to fix the
-> warnings and make everything work correctly.
->=20
-> Fixes: 51e8415e39a9 ("media: platform: Add Renesas RZ/G2L MIPI CSI-2 rece=
-iver driver")
-> Link:
-> https://jpn01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
-b.com%2FClangBuiltLinux%2Flinux
-> %2Fissues%2F1764&amp;data=3D05%7C01%7Cprabhakar.mahadev-
-> lad.rj%40bp.renesas.com%7C76d2a49f939a46e8d15208dad1081ed7%7C53d82571da19=
-47e49cb4625a166a4a2a%7C0%7C0%
-> 7C638052130064697087%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi=
-V2luMzIiLCJBTiI6Ik1haWwiLCJXV
-> CI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3Dfp%2F1JCtgKY8E6qVMRlLewVLYc9WDZ%2By=
-Ntg6t%2BGqIUvk%3D&amp;reserved=3D
-> 0
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Here, this should fix it all up:
 
-Cheers,
-Prabhakar
+https://github.com/jgunthorpe/linux/commits/secure_msi
+
+What do you think?
+
+Jason
