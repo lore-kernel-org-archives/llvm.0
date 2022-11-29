@@ -1,70 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39742583;
-	Tue, 29 Nov 2022 12:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97FBC433D7;
-	Tue, 29 Nov 2022 12:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1669723807;
-	bh=mtnawcMuSzHzZ2UbQGo6aEgto2AHflhvObJh3ex0GDM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fwFjcrkJBs5NFqnXqn6st5NREIXm0i0OWjrMc0w1uQYOq/AzuksuttLVFPYfOq9RA
-	 wRbuPXu4mCZD3iLu/nmcypMkwxoDOlHVUIi85GDqnxx9y8Uq3jZ30k5Fz3OF60DEoZ
-	 ZGZXHu+kCLDRlYADxB6HpKbBa0JxIjK3YVBPv9cI=
-Date: Tue, 29 Nov 2022 13:10:04 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 2/23]
- drivers/usb/gadget/function/uvc_v4l2.c:266:3: warning: unannotated
- fall-through between switch labels
-Message-ID: <Y4X2nGH+LJDM6dDV@kroah.com>
-References: <202211290734.P9mHcjpl-lkp@intel.com>
- <Y4W6/0Ql3dI+ePXF@kroah.com>
- <Y4W7Xw6OA9GLzXmH@kroah.com>
- <Y4W7yKbiKzK4yKoV@kroah.com>
- <20221129101904.GM18924@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE8E2583
+	for <llvm@lists.linux.dev>; Tue, 29 Nov 2022 12:25:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669724703; x=1701260703;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sgAPAU2YJaG40uPP2ZS1Letyp9PAABP/Vbd40Hx4+eQ=;
+  b=biaZ+NL4kmdWyDFWN30vMWnJQVkSCRImwLGIa4xlocCsRxM3c9ktrV34
+   e2itQs11ZWYHf8wqbSOPY6mUxGwy6lB1EascJG8PWxjMttjyriNdGRsk4
+   vnKNEAvoVleKwBIwFST1XUDgKp/cosZPhA+zstsK9INdtj5kz6Jm0R3tS
+   cqOAwwfmR4mroeNZs0FWeXYRuZ9egHWsRWNY4gjAs8HE0kRWZ5d51X8JU
+   wIFLi2aY1f0OTIJV2w6FmpUcERz/iQf0jplj/zC6WhcZJdKNomWTcz3A1
+   IgOF8iJWxppZR9S2kEOjfBwZRwnnos8e0Syjnm9ZeIblxrgoz8zNgce6c
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
+   d="scan'208";a="189146869"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2022 05:24:55 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 29 Nov 2022 05:24:53 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 29 Nov 2022 05:24:50 -0700
+Date: Tue, 29 Nov 2022 12:24:32 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Kees Cook <keescook@chromium.org>
+CC: Vlastimil Babka <vbabka@suse.cz>, David Gow <davidgow@google.com>,
+	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David
+ Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, Roman
+ Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	Rasmus Villemoes <rasmus.villemoes@prevas.dk>, Guenter Roeck
+	<linux@roeck-us.net>, Andy Shevchenko <andriy.shevchenko@intel.com>, Paolo
+ Abeni <pabeni@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-hardening@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH 0/6] slab: Provide full coverage for __alloc_size
+ attribute
+Message-ID: <Y4X6AHdMZcxvFnDP@wendy>
+References: <20221101222520.never.109-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221129101904.GM18924@pengutronix.de>
+In-Reply-To: <20221101222520.never.109-kees@kernel.org>
 
-On Tue, Nov 29, 2022 at 11:19:04AM +0100, Michael Grzeschik wrote:
-> On Tue, Nov 29, 2022 at 08:59:04AM +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Nov 29, 2022 at 08:57:19AM +0100, Greg Kroah-Hartman wrote:
-> > > On Tue, Nov 29, 2022 at 08:55:43AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Tue, Nov 29, 2022 at 07:22:43AM +0800, kernel test robot wrote:
-> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > > > > head:   465d4dd073f72a6348577ed0f7aa4aa00c9264bc
-> > > > > commit: a6f523ee41bfe7ef71110d4ae556339d0520efdd [2/23] usb: gadget: uvc: add validate and fix function for uvc response
-> > > >
-> > > > Michael, I'll drop this commit from my tree now, please fix up and
-> > > > resend.
-> > > 
-> > > Nevermind, I fixed it up myself, it was trivial.
-> > 
-> > And now ignore this, I've dropped it again based on Laurent's review.
-> > 
+On Tue, Nov 01, 2022 at 03:33:08PM -0700, Kees Cook wrote:
+> Hi,
 > 
-> Did you drop it because of the question why this is a good idea?
-
-Yes.
-
-> If so I will improve the commit message. IMHO it totally makes sense to
-> have some sort of validation in the uvc gadget.
+> This is a series to work around a deficiency in GCC (>=11) and Clang
+> (<16) where the __alloc_size attribute does not apply to inlines. :(
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
 > 
-> The version v7 he commented on was not the one you took on the
-> usb-testing tree.
+> This manifests as reduced overflow detection coverage for many allocation
+> sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was
+> not actually being propagated to __builtin_dynamic_object_size(). In
+> addition to working around the issue, expand use of __alloc_size (and
+> __realloc_size) to more places and provide KUnit tests to validate all
+> the covered allocator APIs.
 
-Ok, submit a new one so that everyone can agree please.
+Hello Kees!
 
-thanks,
+It would appear that one of the macros you've added here is doing Bad
+Things^TM to allmodconfig on RISC-V since the 22nd:
 
-greg k-h
+../lib/fortify_kunit.c: In function 'alloc_size_kmalloc_const_test':
+../lib/fortify_kunit.c:140:1: error: the frame size of 2384 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+  140 | }                                                                       \
+      | ^
+../lib/fortify_kunit.c:209:1: note: in expansion of macro 'DEFINE_ALLOC_SIZE_TEST_PAIR'
+  209 | DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+CONFIG_GCC_VERSION=110100
+CONFIG_AS_VERSION=23700
+CONFIG_LD_VERSION=23700
+
+The report came out of my CI (which I should have passed on sooner) so
+I do not have anything other than stderr - I can get you anything else
+you'd like/need though if you LMK.
+
+Thanks,
+Conor.
+
+> Kees Cook (6):
+>   slab: Clean up SLOB vs kmalloc() definition
+>   slab: Remove special-casing of const 0 size allocations
+>   slab: Provide functional __alloc_size() hints to kmalloc_trace*()
+>   string: Add __realloc_size hint to kmemdup()
+>   driver core: Add __alloc_size hint to devm allocators
+>   kunit/fortify: Validate __alloc_size attribute results
+> 
+>  include/linux/device.h         |   7 +-
+>  include/linux/fortify-string.h |   2 +-
+>  include/linux/slab.h           |  36 ++---
+>  include/linux/string.h         |   2 +-
+>  lib/Makefile                   |   1 +
+>  lib/fortify_kunit.c            | 255 +++++++++++++++++++++++++++++++++
+>  mm/slab_common.c               |  14 ++
+>  7 files changed, 296 insertions(+), 21 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
+> 
