@@ -1,118 +1,130 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE8E2583
-	for <llvm@lists.linux.dev>; Tue, 29 Nov 2022 12:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669724703; x=1701260703;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sgAPAU2YJaG40uPP2ZS1Letyp9PAABP/Vbd40Hx4+eQ=;
-  b=biaZ+NL4kmdWyDFWN30vMWnJQVkSCRImwLGIa4xlocCsRxM3c9ktrV34
-   e2itQs11ZWYHf8wqbSOPY6mUxGwy6lB1EascJG8PWxjMttjyriNdGRsk4
-   vnKNEAvoVleKwBIwFST1XUDgKp/cosZPhA+zstsK9INdtj5kz6Jm0R3tS
-   cqOAwwfmR4mroeNZs0FWeXYRuZ9egHWsRWNY4gjAs8HE0kRWZ5d51X8JU
-   wIFLi2aY1f0OTIJV2w6FmpUcERz/iQf0jplj/zC6WhcZJdKNomWTcz3A1
-   IgOF8iJWxppZR9S2kEOjfBwZRwnnos8e0Syjnm9ZeIblxrgoz8zNgce6c
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,203,1665471600"; 
-   d="scan'208";a="189146869"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2022 05:24:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 29 Nov 2022 05:24:53 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 29 Nov 2022 05:24:50 -0700
-Date: Tue, 29 Nov 2022 12:24:32 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Kees Cook <keescook@chromium.org>
-CC: Vlastimil Babka <vbabka@suse.cz>, David Gow <davidgow@google.com>,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David
- Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, Roman
- Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Rasmus Villemoes <rasmus.villemoes@prevas.dk>, Guenter Roeck
-	<linux@roeck-us.net>, Andy Shevchenko <andriy.shevchenko@intel.com>, Paolo
- Abeni <pabeni@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-hardening@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH 0/6] slab: Provide full coverage for __alloc_size
- attribute
-Message-ID: <Y4X6AHdMZcxvFnDP@wendy>
-References: <20221101222520.never.109-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B47F36A
+	for <llvm@lists.linux.dev>; Tue, 29 Nov 2022 12:33:36 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 571E25C00BC;
+	Tue, 29 Nov 2022 07:33:35 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 29 Nov 2022 07:33:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1669725215; x=1669811615; bh=IqZipqd0Jq
+	L5tnglRr5e29BfFvwlHJufO9Ma0d1pQ0E=; b=eHpcM6SZLoo4/CPogT3l+vk4mD
+	6RQvCq32VDsRJ+RrliP3bJ/vEjyVomm3xgMNMNjA0eDKPjJ1JmlQ4JQo8BukXEL9
+	h358hsP8VJOH9aAszO25g8chHvG2mUZbZhyqY6h+qeomtcWAWL+6qJL691CnFAGe
+	HhxQm1LcSF/Q8cqyhD8mpB8BiQTrNjDfbIEQ4BBEPTlUEfJExg5/hqVm3VcCBCDR
+	ae6Q2S6iDzGBRtaB7ljYLh/8r8+WXxJLxqfF7WWa5sEsv8qPUWfuvUNskdNa6QiA
+	rcLu4ddclbeWBN/aWsW/K6/V+ihYVpBjMhhXMU8bjtbA9M2uOe1GJUSssaTQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1669725215; x=1669811615; bh=IqZipqd0JqL5tnglRr5e29BfFvwl
+	HJufO9Ma0d1pQ0E=; b=HkCxwtOsOLvnCGcKAxedQxQ7kUYyjzjIEvch79MlAP5I
+	WtFDVLIsaJ16v0yvGZBUVmyv6axgav4MS77qa2k1fx2OCOFg+fQMr25J9z0bNA/Y
+	bskE4Xo+lnxTz/N8+2itEvXCstSvhL5KX5DlhohADAVzjbz4wFtgvbRURgHSYvNk
+	mvlvt4Y6KGrPsNm7DBxk6UO02+nG11YfQiGvrGl+di6A+JJOKiwr41PnT9z/YhWJ
+	Wz10XTOW57VG6VRIbgNJy18+fCTpZHNPEJFkpP3tRZBbSG0ApFO6r6KwYAfFeJH7
+	Fimdg+0BsEoat3qlESRAM+Qdpe6eEe4/TiDee5SdPw==
+X-ME-Sender: <xms:HfyFYy2Zkx89s8co5mb89U98CJo3lCSHwOWWiluWJlqgzw1sUshOHQ>
+    <xme:HfyFY1HC6JBgb73vlMd4aYjdr0xlrvyeHgLGh2zogHqfyxJ8ODICBWPtz74kXO2bM
+    ApN8R54NyqJD2gAN9A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtddtgdduudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeigfeiieeiheejjeeiudekleevvddvffetieehteeikeeigeeiffdttdeftdeg
+    gfenucffohhmrghinhepghhnuhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:HfyFY67auymNWGkuozMR3IEK9g6ZFjQiOROATc_cXLO3hJTb-OEOwg>
+    <xmx:HfyFYz3cv0xQkFfaVc9EOEOj2-hxtxNnl5aILq3ckLOp2jlv5cZF3A>
+    <xmx:HfyFY1FYDzhZFY1RNSEGk2JwvGJg040obGkQ6oV2hBfGqzR0VhSjOQ>
+    <xmx:H_yFY5LtXgsZJdF45k0pMPCFLA9aRu8ejGq91gaLnQ8Nxam8H7B8IA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 9B4EAB60086; Tue, 29 Nov 2022 07:33:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221101222520.never.109-kees@kernel.org>
+Mime-Version: 1.0
+Message-Id: <63ced4a4-33b9-4c03-8d7a-987ceb1fc2c7@app.fastmail.com>
+In-Reply-To: <Y4X6AHdMZcxvFnDP@wendy>
+References: <20221101222520.never.109-kees@kernel.org>
+ <Y4X6AHdMZcxvFnDP@wendy>
+Date: Tue, 29 Nov 2022 13:33:03 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Conor.Dooley" <conor.dooley@microchip.com>,
+ "Kees Cook" <keescook@chromium.org>
+Cc: "Vlastimil Babka" <vbabka@suse.cz>, "David Gow" <davidgow@google.com>,
+ "Christoph Lameter" <cl@linux.com>, "Pekka Enberg" <penberg@kernel.org>,
+ "David Rientjes" <rientjes@google.com>,
+ "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+ "Roman Gushchin" <roman.gushchin@linux.dev>,
+ "Hyeonggon Yoo" <42.hyeyoo@gmail.com>,
+ "Rasmus Villemoes" <rasmus.villemoes@prevas.dk>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Andy Shevchenko" <andriy.shevchenko@intel.com>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/6] slab: Provide full coverage for __alloc_size attribute
+Content-Type: text/plain
 
-On Tue, Nov 01, 2022 at 03:33:08PM -0700, Kees Cook wrote:
-> Hi,
-> 
-> This is a series to work around a deficiency in GCC (>=11) and Clang
-> (<16) where the __alloc_size attribute does not apply to inlines. :(
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
-> 
-> This manifests as reduced overflow detection coverage for many allocation
-> sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was
-> not actually being propagated to __builtin_dynamic_object_size(). In
-> addition to working around the issue, expand use of __alloc_size (and
-> __realloc_size) to more places and provide KUnit tests to validate all
-> the covered allocator APIs.
+On Tue, Nov 29, 2022, at 13:24, Conor Dooley wrote:
+> On Tue, Nov 01, 2022 at 03:33:08PM -0700, Kees Cook wrote:
+>> Hi,
+>> 
+>> This is a series to work around a deficiency in GCC (>=11) and Clang
+>> (<16) where the __alloc_size attribute does not apply to inlines. :(
+>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+>> 
+>> This manifests as reduced overflow detection coverage for many allocation
+>> sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was
+>> not actually being propagated to __builtin_dynamic_object_size(). In
+>> addition to working around the issue, expand use of __alloc_size (and
+>> __realloc_size) to more places and provide KUnit tests to validate all
+>> the covered allocator APIs.
+>
+> Hello Kees!
+>
+> It would appear that one of the macros you've added here is doing Bad
+> Things^TM to allmodconfig on RISC-V since the 22nd:
+>
+> ../lib/fortify_kunit.c: In function 'alloc_size_kmalloc_const_test':
+> ../lib/fortify_kunit.c:140:1: error: the frame size of 2384 bytes is 
+> larger than 2048 bytes [-Werror=frame-larger-than=]
+>   140 | }                                                               
+>         \
+>       | ^
+> ../lib/fortify_kunit.c:209:1: note: in expansion of macro 
+> 'DEFINE_ALLOC_SIZE_TEST_PAIR'
+>   209 | DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>
+> CONFIG_GCC_VERSION=110100
+> CONFIG_AS_VERSION=23700
+> CONFIG_LD_VERSION=23700
+>
+> The report came out of my CI (which I should have passed on sooner) so
+> I do not have anything other than stderr - I can get you anything else
+> you'd like/need though if you LMK.
 
-Hello Kees!
+There is generally a conflict between kunit and the structleak
+gcc plugin, I think the Makefile needs a line like
 
-It would appear that one of the macros you've added here is doing Bad
-Things^TM to allmodconfig on RISC-V since the 22nd:
+CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
 
-../lib/fortify_kunit.c: In function 'alloc_size_kmalloc_const_test':
-../lib/fortify_kunit.c:140:1: error: the frame size of 2384 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-  140 | }                                                                       \
-      | ^
-../lib/fortify_kunit.c:209:1: note: in expansion of macro 'DEFINE_ALLOC_SIZE_TEST_PAIR'
-  209 | DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
-      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-CONFIG_GCC_VERSION=110100
-CONFIG_AS_VERSION=23700
-CONFIG_LD_VERSION=23700
-
-The report came out of my CI (which I should have passed on sooner) so
-I do not have anything other than stderr - I can get you anything else
-you'd like/need though if you LMK.
-
-Thanks,
-Conor.
-
-> Kees Cook (6):
->   slab: Clean up SLOB vs kmalloc() definition
->   slab: Remove special-casing of const 0 size allocations
->   slab: Provide functional __alloc_size() hints to kmalloc_trace*()
->   string: Add __realloc_size hint to kmemdup()
->   driver core: Add __alloc_size hint to devm allocators
->   kunit/fortify: Validate __alloc_size attribute results
-> 
->  include/linux/device.h         |   7 +-
->  include/linux/fortify-string.h |   2 +-
->  include/linux/slab.h           |  36 ++---
->  include/linux/string.h         |   2 +-
->  lib/Makefile                   |   1 +
->  lib/fortify_kunit.c            | 255 +++++++++++++++++++++++++++++++++
->  mm/slab_common.c               |  14 ++
->  7 files changed, 296 insertions(+), 21 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
-> 
+      Arnd
