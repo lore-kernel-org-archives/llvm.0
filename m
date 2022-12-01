@@ -1,106 +1,122 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B72746B;
-	Thu,  1 Dec 2022 16:23:04 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id 9C519CFB0C;
-	Thu,  1 Dec 2022 16:13:42 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 3A755C0005;
-	Thu,  1 Dec 2022 16:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1669911214;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iz6LqZNPS0aBWMmTuZjugUJg8+g3aUv6Y3WZkCQjMkQ=;
-	b=WpUF6RVuK5ycXMz/AtC1/CKhbkNJHz9rf56zlpex5/jIMkF2W7B5ZsYys3Os1ynDtV3cvN
-	Jwa9BJ8jOsAkT+ri1iEdHy2lN60cw0YNk7EiHN23LKzq1HVknPKjgZOB8zpv/xWMQMOIk0
-	oTooFDVw0eIT6xa724U2dvukvH5L/4/Woftvp+ybSe14DZWC4QNCY9Auo8l3RmQwKDdzaM
-	F0RCLiFHlcT5Ga7+FGfVDmWBp+hd7TjSKW+DonAQuZWK+1mGSgXiinjjfAJ2CCMDSMMJCj
-	PnNV3VD+XFBuQthKS7g+s9TtFoYGWMVFA+tJEzNz4iXdvI/UaoqDBoacSkib4g==
-Date: Thu, 1 Dec 2022 17:13:31 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Mikhail Zhilkin
- <csharper2005@gmail.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, NOGUCHI
- Hiroshi <drvlabo@gmail.com>
-Subject: Re: ld.lld: error: undefined symbol: __udivdi3
-Message-ID: <20221201171331.42f05097@xps-13>
-In-Reply-To: <Y4jPubD53yN32OUL@dev-arch.thelio-3990X>
-References: <202212010140.pIueEBNb-lkp@intel.com>
-	<20221201091610.524f7786@xps-13>
-	<Y4jPubD53yN32OUL@dev-arch.thelio-3990X>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682B77473
+	for <llvm@lists.linux.dev>; Thu,  1 Dec 2022 17:15:36 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id y4so2261953plb.2
+        for <llvm@lists.linux.dev>; Thu, 01 Dec 2022 09:15:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YIINIHGhGskcMDqmUFFXNmVZPREPkJD5rw4zIRk+6sQ=;
+        b=lX7ncvUzSC9rS2ZdVzvSVXdSjYS0XfkOJUpUDqM9m1MziQwQ+9qm+151brYvHnWkOo
+         FgANLgqlGG/z5WgU/eqZH7t6i4HEXTREHuZ76s9iSD6WuDoDYQ9MIb/9FB99Uo1dHdPm
+         I1pD+By6iGuvWEmYvkWzU2tygVfKpSYoBbn4s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YIINIHGhGskcMDqmUFFXNmVZPREPkJD5rw4zIRk+6sQ=;
+        b=L76/fkE4C5h3wnRtErbqCgd0SpQTQRzgB2hwZURhT9x7fXrVR8ty0UCDNoyNIpzoum
+         C0N+SAJx7HccPVyM5XsaWc7MByxVE+P8ib4zKaTJq+q45JpiYlSB7vfQLk8M751WKwyY
+         yWJbvJFWgYxFFUbwyAbdPwFg4zzVkdCdGMpSoTzorLjLC3CLDh0z1dGmoISGhG+8DTH1
+         dC/JyaOMcwz9RYJwxGzrw+fxl37SirscEG+H4jEo44+4WGMKLd5b0Cft8RYsv0lQJQPg
+         INHWd3KLbkUiAA4HwibNnTR51vyun9/1MNZS8GBViAFzotXGPWuGwm8nsa6rnG7zx+HP
+         cdbA==
+X-Gm-Message-State: ANoB5pnrgn3GaV/fOjI5pMys0sdxjtxFUnP6zGnM2vsk5VtkGUUqlIbJ
+	DogO55OteMkqw1Z3XOfRTuF3fw==
+X-Google-Smtp-Source: AA0mqf7hLOuoteAV7+avN4qvvGgVHF7ekfjG+aG+RXbz2yEIxrPB3hTqariDmAhhNwmKDWq0XzzGcg==
+X-Received: by 2002:a17:90b:3e8b:b0:1fb:825c:af8a with SMTP id rj11-20020a17090b3e8b00b001fb825caf8amr31770278pjb.104.1669914935787;
+        Thu, 01 Dec 2022 09:15:35 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s20-20020a170902a51400b001894dc5fdf2sm3850559plq.296.2022.12.01.09.15.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 09:15:34 -0800 (PST)
+Date: Thu, 1 Dec 2022 09:15:34 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: "Conor.Dooley" <conor.dooley@microchip.com>,
+	Vlastimil Babka <vbabka@suse.cz>, David Gow <davidgow@google.com>,
+	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/6] slab: Provide full coverage for __alloc_size
+ attribute
+Message-ID: <202212010915.ADB7D298@keescook>
+References: <20221101222520.never.109-kees@kernel.org>
+ <Y4X6AHdMZcxvFnDP@wendy>
+ <63ced4a4-33b9-4c03-8d7a-987ceb1fc2c7@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63ced4a4-33b9-4c03-8d7a-987ceb1fc2c7@app.fastmail.com>
 
-Hi Nathan,
+On Tue, Nov 29, 2022 at 01:33:03PM +0100, Arnd Bergmann wrote:
+> On Tue, Nov 29, 2022, at 13:24, Conor Dooley wrote:
+> > On Tue, Nov 01, 2022 at 03:33:08PM -0700, Kees Cook wrote:
+> >> Hi,
+> >> 
+> >> This is a series to work around a deficiency in GCC (>=11) and Clang
+> >> (<16) where the __alloc_size attribute does not apply to inlines. :(
+> >> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96503
+> >> 
+> >> This manifests as reduced overflow detection coverage for many allocation
+> >> sites under CONFIG_FORTIFY_SOURCE=y, where the allocation size was
+> >> not actually being propagated to __builtin_dynamic_object_size(). In
+> >> addition to working around the issue, expand use of __alloc_size (and
+> >> __realloc_size) to more places and provide KUnit tests to validate all
+> >> the covered allocator APIs.
+> >
+> > Hello Kees!
+> >
+> > It would appear that one of the macros you've added here is doing Bad
+> > Things^TM to allmodconfig on RISC-V since the 22nd:
+> >
+> > ../lib/fortify_kunit.c: In function 'alloc_size_kmalloc_const_test':
+> > ../lib/fortify_kunit.c:140:1: error: the frame size of 2384 bytes is 
+> > larger than 2048 bytes [-Werror=frame-larger-than=]
+> >   140 | }                                                               
+> >         \
+> >       | ^
+> > ../lib/fortify_kunit.c:209:1: note: in expansion of macro 
+> > 'DEFINE_ALLOC_SIZE_TEST_PAIR'
+> >   209 | DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
+> >       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > cc1: all warnings being treated as errors
+> >
+> > CONFIG_GCC_VERSION=110100
+> > CONFIG_AS_VERSION=23700
+> > CONFIG_LD_VERSION=23700
+> >
+> > The report came out of my CI (which I should have passed on sooner) so
+> > I do not have anything other than stderr - I can get you anything else
+> > you'd like/need though if you LMK.
+> 
+> There is generally a conflict between kunit and the structleak
+> gcc plugin, I think the Makefile needs a line like
+> 
+> CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
 
-nathan@kernel.org wrote on Thu, 1 Dec 2022 09:00:57 -0700:
+Thanks for the report! I've taken Anders's patch for this now.
 
-> On Thu, Dec 01, 2022 at 09:16:10AM +0100, Miquel Raynal wrote:
-> > Hi Mikhail, Hiroshi,
-> >=20
-> > lkp@intel.com wrote on Thu, 1 Dec 2022 01:46:36 +0800:
-> >  =20
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git master
-> > > head:   01f856ae6d0ca5ad0505b79bf2d22d7ca439b2a1
-> > > commit: 9b78ef0c7997052e9eaa0f7a4513d546fa17358c mtd: parsers: add su=
-pport for Sercomm partitions
-> > > date:   6 months ago
-> > > config: mips-randconfig-r033-20221128
-> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project =
-6e4cea55f0d1104408b26ac574566a0e4de48036)
-> > > reproduce (this is a W=3D1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # install mips cross compiling tool for clang build
-> > >         # apt-get install binutils-mipsel-linux-gnu
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
-nux.git/commit/?id=3D9b78ef0c7997052e9eaa0f7a4513d546fa17358c
-> > >         git remote add linus https://git.kernel.org/pub/scm/linux/ker=
-nel/git/torvalds/linux.git
-> > >         git fetch --no-tags linus master
-> > >         git checkout 9b78ef0c7997052e9eaa0f7a4513d546fa17358c
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash
-> > >=20
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > >=20
-> > > All errors (new ones prefixed by >>):
-> > >  =20
-> > > >> ld.lld: error: undefined symbol: __udivdi3   =20
-> > >    >>> referenced by scpart.c
-> > >    >>>               mtd/parsers/scpart.o:(scpart_parse) in archive d=
-rivers/built-in.a   =20
-> > >  =20
-> >=20
-> > Can you please try to reproduce this with a mips toolchain as advised
-> > and send a fix? =20
->=20
-> For what it's worth, this is likely our bug:
->=20
-> https://github.com/ClangBuiltLinux/linux/issues/1635
->=20
-> It sounds like there are some merged LLVM patches that should help but I
-> guess not based on this report...
-
-Ah, yeah, thanks a lot for the share.
-
-Cheers, Miqu=C3=A8l
+-- 
+Kees Cook
