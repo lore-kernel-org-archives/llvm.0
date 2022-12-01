@@ -1,76 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23EFA3C
-	for <llvm@lists.linux.dev>; Thu,  1 Dec 2022 10:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A10C43470
-	for <llvm@lists.linux.dev>; Thu,  1 Dec 2022 10:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1669890705;
-	bh=T7g5uISnZ5nebA9inQJ6ZCETQI0m58pKIh7QyKGpeMg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BmWAdslWgXpt6BQWw0AzPB7Es1MyU5gfXoqoUEXxu+43KS17BlI0ZLlM+rXnalX5V
-	 KmObSZzbuJjzjW/WoaxUmoQ9QlwBt29mf5y8hMNGXhwV284a5604KHQUkIQz1Z4Hfd
-	 yj9vcfMotOaeBWPjy6y4xLFgQ1bVhH5Sa5pZ83OaIhhKg7RhpmoAFjMgUs+720jiof
-	 R/0iQxdGPcrOQ+RM1lG/advrrtposwUuF5pRN41BW+KJqwDHF6jOWwle9zP/BeqOxu
-	 2hguQOP8H4FQ0B96TmuVZAluwddkPs7MyMhLX5ZKtZJKXuyYFOy7MDuC4ZL+yNZ6Az
-	 I/ilvmNAmK0iA==
-Received: by mail-yb1-f176.google.com with SMTP id i131so1442535ybc.9
-        for <llvm@lists.linux.dev>; Thu, 01 Dec 2022 02:31:45 -0800 (PST)
-X-Gm-Message-State: ANoB5pk4RwmPr/Ny91cj8PzOlWp8vQIF4nyKRDmwEPCxyTNlf37xOF3i
-	Y6okhpiYmnyyoh1pX6F4AOynrKpEnrbc53WNITY=
-X-Google-Smtp-Source: AA0mqf4zEMarRVsx8VGR5hYM/nJsZDAg9HVJ9ObB8YVkj5W9ErIJ4YABgbcSeQZqVBY52fOvX3TY73RyfXujyiEXdDU=
-X-Received: by 2002:a5b:dcb:0:b0:6bc:eea6:2d66 with SMTP id
- t11-20020a5b0dcb000000b006bceea62d66mr42907791ybr.545.1669890704550; Thu, 01
- Dec 2022 02:31:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C530F1116
+	for <llvm@lists.linux.dev>; Thu,  1 Dec 2022 11:45:07 +0000 (UTC)
+Received: by mail-vs1-f45.google.com with SMTP id k185so1300570vsc.2
+        for <llvm@lists.linux.dev>; Thu, 01 Dec 2022 03:45:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qE/q8OTGX/vukPXHLJF5f0ZobL7IbidYs5xkC1/4Glo=;
+        b=EzvNjsK/64biWBOqAzlM7ZmFo/qswGF8E2psYeSj0xdD6287yOJeqmtxtWiDCeeRne
+         HLae+HG1stNZu59moUdMxeVYOQDp9sfWFNA6V3VypSXCAVupelhw74Ch1etHO5XDWI0m
+         ybBlh0c2Z/irb2/MSL4MDBPlinBeHrffEoJ60=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qE/q8OTGX/vukPXHLJF5f0ZobL7IbidYs5xkC1/4Glo=;
+        b=54Urm/yZ+wlgQfu6YGBj0Tj2i3SugsVd9oWBYhb39Z6UcZOyKshUjH7ayfBv/EqkCL
+         j1wEg63AWMHfWdYhG1hL0FSY6Yd95bTupKTWdACQYRFCvYLyI/9mnQABGe7CZ1+TDa1m
+         iLldjfIXOpU8EM7NlO3lctMbmIRSPkn6Ysy/PhGqCs1vdSZ3WRmQNdCqchEtcdpz59yQ
+         DPBdl4WQB0iwEEYGPQnJZuZ4cRIGN+ANkkcI4OJaJ2cyR14rsEKgYGauLeN/lC2rNMqS
+         rS7FtQy/1zMPwLdox6lGXfUn603Vga44m+hqwTcPtLK8cYU6Q/wx9XDa4ou19Ff5w/fa
+         rw0g==
+X-Gm-Message-State: ANoB5pm5HihDN9ZI5k0WkDqF1264UBGOClfVMkLibYRVqDaFmin8dexr
+	sXBV5K+r2//dN/KGUTizXWph91MIcybn0xakSizjig==
+X-Google-Smtp-Source: AA0mqf4u5I2OZaSiq21veOJJ1DavEQccozE6Z/lEVW/v7HrTmm4H19hg9RZ5yAmVKH9lnRtk1UUPSAMKL03w0XsTCgg=
+X-Received: by 2002:a67:c98e:0:b0:3ad:3d65:22b with SMTP id
+ y14-20020a67c98e000000b003ad3d65022bmr28646035vsk.65.1669895106580; Thu, 01
+ Dec 2022 03:45:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221129115217.129290-1-marpagan@redhat.com>
-In-Reply-To: <20221129115217.129290-1-marpagan@redhat.com>
-From: Oded Gabbay <ogabbay@kernel.org>
-Date: Thu, 1 Dec 2022 12:31:18 +0200
-X-Gmail-Original-Message-ID: <CAFCwf11cqNHZhAR0b8iKnGeT_XVy5Oa2KHjNo7ROVF2-MjYZfA@mail.gmail.com>
-Message-ID: <CAFCwf11cqNHZhAR0b8iKnGeT_XVy5Oa2KHjNo7ROVF2-MjYZfA@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: fix double assignment in MMU V1
-To: Marco Pagani <marpagan@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20221107072243.15748-1-nancy.lin@mediatek.com> <20221107072243.15748-6-nancy.lin@mediatek.com>
+In-Reply-To: <20221107072243.15748-6-nancy.lin@mediatek.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Thu, 1 Dec 2022 19:44:55 +0800
+Message-ID: <CAGXv+5Hj-H6Q3N+j2tEntd9M=9p0o7TxWYn_4aawhqFUbX7+PQ@mail.gmail.com>
+Subject: Re: [PATCH v28 05/11] soc: mediatek: refine code to use
+ mtk_mmsys_update_bits API
+To: "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net, 
+	nfraprado@collabora.com, devicetree@vger.kernel.org, 
+	Project_Global_Chrome_Upstream_Group@mediatek.com, 
+	Yongqiang Niu <yongqiang.niu@mediatek.com>, David Airlie <airlied@linux.ie>, 
+	"jason-jh . lin" <jason-jh.lin@mediatek.com>, singo.chang@mediatek.com, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Nathan Chancellor <nathan@kernel.org>, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 29, 2022 at 1:52 PM Marco Pagani <marpagan@redhat.com> wrote:
+On Mon, Nov 7, 2022 at 3:23 PM Nancy.Lin <nancy.lin@mediatek.com> wrote:
 >
-> Removing double assignment of the hop2_pte_addr
-> variable in dram_default_mapping_fini().
+> Simplify code for update  mmsys reg.
 >
-> Dead store reported by clang-analyzer.
->
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabor=
+a.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
 > ---
->  drivers/misc/habanalabs/common/mmu/mmu_v1.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/soc/mediatek/mtk-mmsys.c | 45 ++++++++++++--------------------
+>  1 file changed, 16 insertions(+), 29 deletions(-)
 >
-> diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> index 8a40de4a4761..d925dc4dd097 100644
-> --- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> +++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> @@ -344,7 +344,6 @@ static void dram_default_mapping_fini(struct hl_ctx *ctx)
->                 }
->         }
->
-> -       hop2_pte_addr = hop2_addr;
->         hop2_pte_addr = hop2_addr;
->         for (i = 0 ; i < num_of_hop3 ; i++) {
->                 clear_pte(ctx, hop2_pte_addr);
-> --
-> 2.38.1
->
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-=
+mmsys.c
+> index 9a327eb5d9d7..73c8bd27e6ae 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
 
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Applied to -next.
-Thanks,
-Oded
+[...]
+
+> @@ -124,27 +129,14 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>  {
+>         struct mtk_mmsys *mmsys =3D dev_get_drvdata(dev);
+>         const struct mtk_mmsys_routes *routes =3D mmsys->data->routes;
+> -       u32 reg;
+>         int i;
+>
+>         for (i =3D 0; i < mmsys->data->num_routes; i++)
+> -               if (cur =3D=3D routes[i].from_comp && next =3D=3D routes[=
+i].to_comp) {
+> -                       reg =3D readl_relaxed(mmsys->regs + routes[i].add=
+r);
+> -                       reg &=3D ~routes[i].mask;
+> -                       writel_relaxed(reg, mmsys->regs + routes[i].addr)=
+;
+> -               }
+> +               if (cur =3D=3D routes[i].from_comp && next =3D=3D routes[=
+i].to_comp)
+> +                       mtk_mmsys_update_bits(mmsys, routes[i].addr, rout=
+es[i].mask, 0);
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>
+> -static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u=
+32 mask, u32 val)
+> -{
+> -       u32 tmp;
+> -
+> -       tmp =3D readl_relaxed(mmsys->regs + offset);
+> -       tmp =3D (tmp & ~mask) | val;
+> -       writel_relaxed(tmp, mmsys->regs + offset);
+> -}
+> -
+>  void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+>  {
+>         if (val)
+
+This hunk now doesn't apply due to
+
+    soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config func
+
+touching mtk_mmsys_ddp_dpi_fmt_config() as well. It's trivial to resolve
+though.
+
+ChenYu
