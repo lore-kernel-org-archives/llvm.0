@@ -1,92 +1,94 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703AB7473;
-	Thu,  1 Dec 2022 17:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249FD7473;
+	Thu,  1 Dec 2022 17:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669915358; x=1701451358;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Au7i87Gj6lsegjl8HTh/cqUdiZBAORnSt7XgKTfRTtI=;
-  b=Mjb0+aPkIolG8kzqWJ9eO2aIK6Hxj+gQumX3SUBS89zmHTfHLfHdA9Jx
-   X1liDz327NjRuGJS23bqvVBOoiNR63I0y/2ZBNM8jxvHsuf1GmztDzfCI
-   CfnYuYut0ROFM7tN9bWZycEJp5qKSV36fhGZ+NU+QBAUZb5g/+fZLmdUm
-   V3xIEsd4YoOWmQQ91LW4aGRpEAZEl1NHZbu6v8gQ2wOSongos7FCk0zCD
-   x17vLT4QA10o990i2AE2wjHnFkatu+LdAbBFCjN49AaE/mZXUkYYRdCnU
-   wRxPxSf/jzzSG/kbOaB+oz8xJJH1dMcyTFF0+icbkci846QZAWQX7otSq
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="316899328"
+  t=1669916561; x=1701452561;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6oDKHJiT5EtZWAV+M3i0DuU2w4C2X/a9h5LtSXPFZHo=;
+  b=cncQPj7SDZPXNkX66Bha8OMzDieRFCC5ec+2rVWSv+UXSeGrUM7wuHG2
+   hnUkJ/WzgpOkMyqVo4mmn0yn76tQUhxVjm2ZDKq87hLXzxEAmzUHGaeJ8
+   cU11qsYZTVyXkaC0snNJdkaE2A0rnZfW9piWaa6Gpcd3/++TSgW2V7f8U
+   AZRZKevMFKWnGoWMV3wsTLnIdmD9ewasSyKZkRJBSEQ6zoWHlCPPgJ1KF
+   oIWiKor8j9woggDBj9Zs8Pf2fXzNOFLomd6DT2eRlsUHkr8EAi29sWbQX
+   SOo4C+esyqy3NNI+P/fXwWYLNjyeOAJ/4V74nEVYKotPHdLVEYQAbt1Fy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="402026483"
 X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="316899328"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 09:22:37 -0800
+   d="scan'208";a="402026483"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 09:42:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="622382568"
+X-IronPort-AV: E=McAfee;i="6500,9779,10548"; a="713307067"
 X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
-   d="scan'208";a="622382568"
+   d="scan'208";a="713307067"
 Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2022 09:22:36 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 01 Dec 2022 09:42:36 -0800
 Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p0nGd-000ClP-19;
-	Thu, 01 Dec 2022 17:22:35 +0000
-Date: Fri, 2 Dec 2022 01:21:37 +0800
+	id 1p0nZz-000CmC-2k;
+	Thu, 01 Dec 2022 17:42:35 +0000
+Date: Fri, 2 Dec 2022 01:41:52 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [daveh-devel:testme 1/3] drivers/tee/tee.o: warning: objtool:
- tee_ioctl+0xe06: stack state mismatch: cfa1=4+200 cfa2=-1+0
-Message-ID: <202212020100.e34cqLMn-lkp@intel.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [lunn:v6.1-rc5-net-next-inband 1/26] make[5]: *** No rule to make
+ target 'drivers/platform/x86/intel_telemetry_core.o', needed by
+ 'drivers/platform/x86/built-in.a'.
+Message-ID: <202212020138.lDx8Ngtc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Steg7IbOvASPrM+5"
+Content-Type: multipart/mixed; boundary="07PP7foKwvK4QttR"
 Content-Disposition: inline
 
 
---Steg7IbOvASPrM+5
+--07PP7foKwvK4QttR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git testme
-head:   10b8d5025acfd33a53d70f491efea7a8d75b9a71
-commit: ce66a02538f39f071443bac9bc6ff8f3a780ab92 [1/3] x86/mm: Fix sparse warnings in untagged_ptr()
+tree:   https://github.com/lunn/linux.git v6.1-rc5-net-next-inband
+head:   de01e46657887fa8621e2d0958c7055c093f3306
+commit: f0e3c92e3b0d93649fa171cc6f84eddf5e147688 [1/26] platform/x86: Add Zodiac Radio Access Point platform driver
 config: x86_64-randconfig-a003
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/commit/?id=ce66a02538f39f071443bac9bc6ff8f3a780ab92
-        git remote add daveh-devel https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git
-        git fetch --no-tags daveh-devel testme
-        git checkout ce66a02538f39f071443bac9bc6ff8f3a780ab92
+        # https://github.com/lunn/linux/commit/f0e3c92e3b0d93649fa171cc6f84eddf5e147688
+        git remote add lunn https://github.com/lunn/linux.git
+        git fetch --no-tags lunn v6.1-rc5-net-next-inband
+        git checkout f0e3c92e3b0d93649fa171cc6f84eddf5e147688
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/tee/tee.o: warning: objtool: tee_ioctl+0xe06: stack state mismatch: cfa1=4+200 cfa2=-1+0
+>> make[5]: *** No rule to make target 'drivers/platform/x86/intel_telemetry_core.o', needed by 'drivers/platform/x86/built-in.a'.
+>> make[5]: *** No rule to make target 'drivers/platform/x86/intel_telemetry_pltdrv.o', needed by 'drivers/platform/x86/built-in.a'.
+>> make[5]: *** No rule to make target 'drivers/platform/x86/intel_telemetry_debugfs.o', needed by 'drivers/platform/x86/built-in.a'.
+   make[5]: Target 'drivers/platform/x86/' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---Steg7IbOvASPrM+5
+--07PP7foKwvK4QttR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 6.1.0-rc3 Kernel Configuration
+# Linux/x86_64 6.1.0-rc5 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -512,7 +514,7 @@ CONFIG_X86_PAT=y
 CONFIG_ARCH_USES_PG_UNCACHED=y
 CONFIG_X86_UMIP=y
 CONFIG_CC_HAS_IBT=y
-CONFIG_X86_KERNEL_IBT=y
+# CONFIG_X86_KERNEL_IBT is not set
 CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=y
 CONFIG_X86_INTEL_TSX_MODE_OFF=y
 # CONFIG_X86_INTEL_TSX_MODE_ON is not set
@@ -1043,6 +1045,7 @@ CONFIG_NET_IP_TUNNEL=y
 # CONFIG_INET_AH is not set
 # CONFIG_INET_ESP is not set
 # CONFIG_INET_IPCOMP is not set
+CONFIG_INET_TABLE_PERTURB_ORDER=16
 CONFIG_INET_TUNNEL=y
 CONFIG_INET_DIAG=y
 CONFIG_INET_TCP_DIAG=y
@@ -1871,11 +1874,11 @@ CONFIG_KS8851_MLL=y
 # CONFIG_KSZ884X_PCI is not set
 CONFIG_NET_VENDOR_MICROCHIP=y
 # CONFIG_LAN743X is not set
+# CONFIG_VCAP is not set
 # CONFIG_NET_VENDOR_MICROSEMI is not set
 CONFIG_NET_VENDOR_MICROSOFT=y
 CONFIG_NET_VENDOR_MYRI=y
 # CONFIG_MYRI10GE is not set
-# CONFIG_FEALNX is not set
 # CONFIG_NET_VENDOR_NI is not set
 # CONFIG_NET_VENDOR_NATSEMI is not set
 CONFIG_NET_VENDOR_NETERION=y
@@ -2151,6 +2154,7 @@ CONFIG_RTW88=m
 # CONFIG_RTW88_8821CE is not set
 CONFIG_RTW89=m
 # CONFIG_RTW89_8852AE is not set
+# CONFIG_RTW89_8852BE is not set
 # CONFIG_RTW89_8852CE is not set
 CONFIG_WLAN_VENDOR_RSI=y
 CONFIG_RSI_91X=m
@@ -2181,6 +2185,7 @@ CONFIG_WWAN=y
 CONFIG_WWAN_DEBUGFS=y
 # CONFIG_WWAN_HWSIM is not set
 CONFIG_RPMSG_WWAN_CTRL=m
+# CONFIG_IOSM is not set
 # CONFIG_MTK_T7XX is not set
 # end of Wireless WAN
 
@@ -4982,6 +4987,7 @@ CONFIG_INTEL_SCU_PLATFORM=m
 CONFIG_INTEL_SCU_IPC_UTIL=m
 # CONFIG_SIEMENS_SIMATIC_IPC is not set
 # CONFIG_WINMATE_FM07_KEYS is not set
+# CONFIG_ZII_RAP is not set
 # CONFIG_P2SB is not set
 CONFIG_HAVE_CLK=y
 CONFIG_HAVE_CLK_PREPARE=y
@@ -6312,4 +6318,4 @@ CONFIG_ARCH_USE_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---Steg7IbOvASPrM+5--
+--07PP7foKwvK4QttR--
