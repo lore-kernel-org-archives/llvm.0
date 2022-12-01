@@ -1,87 +1,104 @@
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB4A10E8;
-	Thu,  1 Dec 2022 08:16:20 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 13C5F20002;
-	Thu,  1 Dec 2022 08:16:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1669882573;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I4MkZ3sR/CieRO5Y5T285rm+ZZ3CxzFEax+W5AvLe8o=;
-	b=OG2i/MW1w6OfsxAC0zu1BkQwIE6Lf3XuECRvvwM9341jJC4kAKLifUdmWGWZwCJmGcCCIk
-	2WHMHLp0Zd4hmoE9ZrKyKx6gbIXEzbILEacZzqmw85hh2rfmzG1ViUu0wyagxHgkWUv5+u
-	XfJR46d/Iv7J02srCdTlKnTOgrFcPTdTfiFtB3tUTfyvlJscn0vGiRJox2AQCg8jPXYWZN
-	/zn4mHcScygqZ0QpsDa5FzHSye6tFxnF6v9P8icmJsLMLZ7N2tcKPgWqbTklb+Al+orMy9
-	bW5S8sJB0tBC1WQ8hJAmNoMqvmf7Yg5hT2+TjJMrpghBsgyiWR1PZcPUDXdoDg==
-Date: Thu, 1 Dec 2022 09:16:10 +0100
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Mikhail Zhilkin <csharper2005@gmail.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, NOGUCHI
- Hiroshi <drvlabo@gmail.com>
-Subject: Re: ld.lld: error: undefined symbol: __udivdi3
-Message-ID: <20221201091610.524f7786@xps-13>
-In-Reply-To: <202212010140.pIueEBNb-lkp@intel.com>
-References: <202212010140.pIueEBNb-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1B410E8;
+	Thu,  1 Dec 2022 08:26:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921A6C433D6;
+	Thu,  1 Dec 2022 08:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1669883202;
+	bh=bYN7sFnrzXsqdokyyNjsM57Xzrjedk4SiEcICca4yv8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jBziYPIcz32Zipj7BRwvOAXfBQOI7SAumemnTscF+KrvwpcQ6o6LPYwqi465aB2cN
+	 zwgN9DbsD4LMtEgamCL8UVshzL4U0OJeXGgJ5ieVLBX74ESoA+n1jJjJUL6WEDodKw
+	 g7R9/qpkKEb7oSxwnYCIWEc0NAyKKq+GpVd5Fd7M=
+Date: Thu, 1 Dec 2022 08:56:58 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, stable@vger.kernel.org,
+	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	torvalds@linux-foundation.org, akpm@linux-foundation.org,
+	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+	srw@sladewatkins.net, rwarsow@gmx.de, bpf <bpf@vger.kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 6.0 000/289] 6.0.11-rc1 review
+Message-ID: <Y4heSvsjubdeCT1P@kroah.com>
+References: <20221130180544.105550592@linuxfoundation.org>
+ <CA+G9fYuJVxhKbeN9OGCr2_zyfa1k3j4DS1gAoTW0P89Eyz2FHg@mail.gmail.com>
+ <Y4hQVCBYfwU0abvO@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4hQVCBYfwU0abvO@dev-arch.thelio-3990X>
 
-Hi Mikhail, Hiroshi,
+On Wed, Nov 30, 2022 at 11:57:24PM -0700, Nathan Chancellor wrote:
+> On Thu, Dec 01, 2022 at 11:44:53AM +0530, Naresh Kamboju wrote:
+> > On Thu, 1 Dec 2022 at 00:13, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 6.0.11 release.
+> > > There are 289 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Fri, 02 Dec 2022 18:05:05 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.11-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > 
+> > Results from Linaro's test farm.
+> > Regressions found on x86_64:
+> > 
+> >     - build-clang-15-allmodconfig-x86_64
+> >     - build-clang-nightly-allmodconfig-x86_64
+> > 
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > 
+> >     bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
+> >     [ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
+> > 
+> > Causing the following build warnings / errors with clang-15 allmodconfig
+> > on x86_64,
+> > 
+> > Build error:
+> > make --silent --keep-going --jobs=8
+> > O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+> > ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
+> > 'HOSTCC=sccache clang' 'CC=sccache clang'
+> > kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *'
+> > and 'unsigned int (*)(const void *, const struct bpf_insn *,
+> > bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct
+> > bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn
+> > *))')) [-Werror,-Wpointer-type-mismatch]
+> >         __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
+> >                                    ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+> > include/linux/bpf.h:938:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
+> >         __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
+> >                                                             ^~~~
+> > 1 error generated.
+> 
+> Thanks for the report! This is fixed with upstream commit a679120edfcf
+> ("bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()"),
+> which was marked as a fix for c86df29d11df.
 
-lkp@intel.com wrote on Thu, 1 Dec 2022 01:46:36 +0800:
+Now queued up.  I forgot to run my "do we need fixes for the fixes"
+script on the queues, sorry about that.
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   01f856ae6d0ca5ad0505b79bf2d22d7ca439b2a1
-> commit: 9b78ef0c7997052e9eaa0f7a4513d546fa17358c mtd: parsers: add suppor=
-t for Sercomm partitions
-> date:   6 months ago
-> config: mips-randconfig-r033-20221128
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4c=
-ea55f0d1104408b26ac574566a0e4de48036)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mipsel-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3D9b78ef0c7997052e9eaa0f7a4513d546fa17358c
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
-git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 9b78ef0c7997052e9eaa0f7a4513d546fa17358c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
-> >> ld.lld: error: undefined symbol: __udivdi3 =20
->    >>> referenced by scpart.c
->    >>>               mtd/parsers/scpart.o:(scpart_parse) in archive drive=
-rs/built-in.a =20
->=20
-
-Can you please try to reproduce this with a mips toolchain as advised
-and send a fix?
-
-Thanks,
-Miqu=C3=A8l
+greg k-h
