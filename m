@@ -1,89 +1,73 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269DC33FB
-	for <llvm@lists.linux.dev>; Sat,  3 Dec 2022 17:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=b8jU26nVv5zOpuzDY4RwO7PBnJsJWgH0sc80AjiDjCg=; b=0Opbfyx0A7KcUTzMBxsQam5MR2
-	l6MSrcSSRtyJaDFtsvuJcPz7EPzYJo8F4ynaXRbCsckseKpHhXtY4+iCjwqSTJenHcMa5yeXLC9sk
-	nUEidgOVOL46zFwEyJgxDaCUWRgVII7sB5/A1M4lqWymyUKmAPx2EnMsVwJFa1NHXI4a3YFSALpt0
-	kamqwpd3Mn/B3Xg2VIdd3wesfmfG8mrHhfIn+27CIwFDR+pX3P7Z16usnSlH/4VY5F1Bgixddfcno
-	JLwkg5LnNx/9PQnWHj+gEDA85AnJz1IlZMBoUDNqtj6NQRH+Mo3hhpXpSi7YCWHLE33+2M4W9LZ8Q
-	Z57YNhHg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35548)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1p1WFe-0005Gi-11; Sat, 03 Dec 2022 17:24:34 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1p1WFb-0005W0-Or; Sat, 03 Dec 2022 17:24:31 +0000
-Date: Sat, 3 Dec 2022 17:24:31 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: kernel test robot <lkp@intel.com>, devicetree@vger.kernel.org,
-	linux-acpi@vger.kernel.org, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH net-next v2] net: sfp: clean up i2c-bus property parsing
-Message-ID: <Y4uGT19d1Euz75Vd@shell.armlinux.org.uk>
-References: <E1p1OIG-0098J4-EV@rmk-PC.armlinux.org.uk>
- <202212040026.WN9NQzqq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BE779D0
+	for <llvm@lists.linux.dev>; Sat,  3 Dec 2022 17:41:44 +0000 (UTC)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1432a5f6468so8886764fac.12
+        for <llvm@lists.linux.dev>; Sat, 03 Dec 2022 09:41:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfYXengFDnfnOzmVghAMxVJe0q0bhZjcIwVtDVixuuc=;
+        b=qkO1FGGFU/Tgle0WWvj8cXccebEqE76t1Re96EQ14f2BiHxJWrkXqoP6SCU9QcvhBx
+         vZGnX6XiJFdZyMMbqeHm27I/cbr8XsiyJfeVpyVGbBNF+YzPMDJYvBMe4oPlBajwn4W7
+         Og7JpOV119hh6f6HAERgTq58eF4CLkhBl5Q3lKGwj058bdN3pL8yRLOjOrpSqgnPbNdz
+         Glg5VI4K4UxTx2m7bedNQ96kTVquQAigJKVVeExBTNgewhFJKVhuDK9vMFep4cIvtmK5
+         FOjdMR/3f4zchSpjKY9VGDop1Jpg/3oY0hRitMj+dZJKC2Y4R2qQXk6L0BeV92N1dDUa
+         KAHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfYXengFDnfnOzmVghAMxVJe0q0bhZjcIwVtDVixuuc=;
+        b=FxdLnOn8W1LNGxYkxiwhSDxg1nHcKrQQosHkuGYOmbGpd3Ooy/zPbW4mJW3YacK/K/
+         41mfGrmynDOv4Ecb4s3NM5J2Lpi7qQCZ6qJxjSONaxInh6Rl2n9a6DRNXTVKd9d4mr0N
+         O3IIx+MMT3sb6n36a53XzYItqgJUYtT31SN43qk08ID8ZeB+/fAyaDEXlO0UZjydn4Y4
+         GHsz24vE3vkbeM9C0/GTS/gxObnxidXtAJqQIdZJFyoRBa1nOpBAZAOpEvkrCBbk0/iw
+         qMbWCeCuwCw8MYNMLvsGA46qsncD9af8ITEFn4Wm27N1w7MmFzQxAhTkglnjDRUDKlFg
+         A2qw==
+X-Gm-Message-State: ANoB5pnFzJYDCAXYUTSSQ3Xq4A3orOBlpKXPwTx1dnbkOpGqjKfz5PVz
+	X5CNLOjbv9P6lHfcMdIwC9zjzA==
+X-Google-Smtp-Source: AA0mqf5NTOz+apWMFPKcQ9XNXEfFfCp/9DuksPQB/0T2wlJqAYXbypf5mVgq+AgXW5y/9tkbN4YfnA==
+X-Received: by 2002:a05:6870:238f:b0:132:4782:72a8 with SMTP id e15-20020a056870238f00b00132478272a8mr36493950oap.136.1670089304057;
+        Sat, 03 Dec 2022 09:41:44 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id f199-20020a4a58d0000000b004a084b7062asm3193064oob.40.2022.12.03.09.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Dec 2022 09:41:43 -0800 (PST)
+Date: Sat, 3 Dec 2022 09:41:34 -0800 (PST)
+From: Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc: Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>, 
+    Hugh Dickins <hughd@google.com>, llvm@lists.linux.dev, 
+    stable@vger.kernel.org
+Subject: Re: [PATCH 5.4 and earlier only] mm: Fix '.data.once' orphan section
+ warning
+In-Reply-To: <Y4tQYgjDgodwR2pP@kroah.com>
+Message-ID: <5f9317c7-e899-a6b2-dd23-664a1b6d629@google.com>
+References: <20221128225345.9383-1-nathan@kernel.org> <Y4tQYgjDgodwR2pP@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212040026.WN9NQzqq-lkp@intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=US-ASCII
 
-On Sun, Dec 04, 2022 at 12:40:25AM +0800, kernel test robot wrote:
-> Thank you for the patch! Perhaps something to improve:
+On Sat, 3 Dec 2022, Greg Kroah-Hartman wrote:
+> On Mon, Nov 28, 2022 at 03:53:46PM -0700, Nathan Chancellor wrote:
+> > 
+> > As far as I can tell, this should be applied to 5.4 and earlier. It
+> > should apply cleanly but let me know if not.
+> 
+> Queued up everywhere, thanks.
 
-Sigh... this is another stupidity.
+Thanks for queueing them up, Greg, but please read through the thread:
+I have doubts on the 4.14 and 4.9 ones, which would want a different patch
+if we're going to make any change; but thought we could just leave those
+trees without the patch, and Nathan agreed.
 
-> 73970055450eeb Russell King          2017-07-25  2701  	if (pdev->dev.of_node) {
-> 73970055450eeb Russell King          2017-07-25 @2702  		struct device_node *node = pdev->dev.of_node;
-
-"node" declared here...
-
-> 259c8618b0099b Russell King          2017-12-14  2703  		const struct of_device_id *id;
-> 73970055450eeb Russell King          2017-07-25  2704  
-> 259c8618b0099b Russell King          2017-12-14  2705  		id = of_match_node(sfp_of_match, node);
-
-... and clearly used here, so the code looks to be correct.
-
-However, when CONFIG_OF is not set, of_match_node() does not make use
-of this argument:
-
-#define of_match_node(_matches, _node)  NULL
-
-which results in otherwise correct code issuing a warning when
-CONFIG_OF is disabled... and sure enough, your configuration has:
-
-> # CONFIG_OF is not set
-
-This illustrates just how bad an idea it is to use compiler macros for
-this stuff - it actively hurts compile testing, because you have to
-test every damn combination of configuration options to get proper
-coverage, which is totally and utterly rediculous.
-
-of_match_node() and ACPI_HANDLE_FWNODE() should *both* be inline
-functions when the subsystem is disabled, so that incorrect arguments
-can be detected, and warnings about unused variables such as the one
-you're reporting here doesn't happen.
-
-While the issue lies firmly in the realms of the DT (and ACPI) headers,
-I will yet again respin this patch to sort this out - but really the
-correct solution is to fix the bloody headers so compile coverage
-actually works.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Hugh
