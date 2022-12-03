@@ -1,216 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335891C26
-	for <llvm@lists.linux.dev>; Fri,  2 Dec 2022 22:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670020299;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qXkFx/TsuofqCm+FWp+1OtKhI2bAXFjNShDyU4HyAl0=;
-	b=bqTAbA7h9z2n9/hO09cD8rcmBqUDl7LwJvRfUUvW6AHpu2LA9QLexs0Tp47ufj+XneM/Vl
-	IGotQZqdmqdYGApMGzr4jXRuc9Eb9/bbJGDuynoItJMQlzedZ9HoCcF3kDAlE+by0gQIii
-	1jj5WVgqGbYKXYkZ46pGKA1LkSbCIxo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-341-aDF4y2phO5SSp81yRCaWkQ-1; Fri, 02 Dec 2022 17:31:38 -0500
-X-MC-Unique: aDF4y2phO5SSp81yRCaWkQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A648185A78F
-	for <llvm@lists.linux.dev>; Fri,  2 Dec 2022 22:31:38 +0000 (UTC)
-Received: from [172.64.5.14] (unknown [10.30.33.126])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 26ECC40E9785;
-	Fri,  2 Dec 2022 22:31:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc7,
- mainline.kernel.org-clang, a4412fdd)
-Date: Fri, 02 Dec 2022 22:31:38 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5A615A0
+	for <llvm@lists.linux.dev>; Sat,  3 Dec 2022 00:24:10 +0000 (UTC)
+Received: by mail-ej1-f43.google.com with SMTP id n20so15158981ejh.0
+        for <llvm@lists.linux.dev>; Fri, 02 Dec 2022 16:24:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2loMqsiSWHn8Spuu+M+LHawRFTbsBo2tswnPTtpYUgE=;
+        b=oEOyOdmw9oXfAXVgrnKHoZpyVBKl25HYQWqdZuGfQDFG7N0K8/urjETgEQQ8/B7kAQ
+         WwJ+6Y7kS9fyqQLSNl+d4gMnoiuLAdvYPib8d2LjV6Xl2oBEvGFy6SJC8xb4dOL4lusb
+         YQoA1tvWXqOOOnx9DMvoZo1MZRwupg/1B1l55TpQgwWEa+9eOMOgORJr3kHgGAgZzbUj
+         DI/QC+rpDzE/MZdTnsG2KSLHgn4CxuT3LMK17YMZiAaLw5++zQLWKDxDwROT0DaQoGMY
+         D0g3ItYXXtLKg36vbgcF8wIXr/QVDsXDSDOCNLWC95JSyJc193kG/zXPEcLH2eG2WXk1
+         8ySQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2loMqsiSWHn8Spuu+M+LHawRFTbsBo2tswnPTtpYUgE=;
+        b=cuJTR82iJMw4INnbkARtfE0sRlZM/XW7OENcgKw8JZWf70vjKJJCzwTPpKY25NxgVz
+         7UuyY9YPL8C2i8WK+39VrYPrkD7Sp+/k4xNBw4apRVAMg9LDG3TyVX7YU2BMlmzmxyzG
+         GynhiNmPOxeLwXw5CpQa/pOwEHSko+WxhQQvA+rcKrxBQQnIJ4mxdUn0VpPMUCBCSD2q
+         xQH7uoFdd9OZops2KF41AHC1GbK0t1pQj1StDy8Xwj6wLEPd2eLp+otsS94zVc3haScx
+         pGnXGad0Um14PGffA6Hez8LeZvwRunlg4he7K4k6x4vhiGL+j4z3zVi+FI5gIwJIDAfN
+         d+Tw==
+X-Gm-Message-State: ANoB5pmn/JRUmnEb8KaJ0U6ck9OqWD2fkI1PipjyivlaG2mwc9+8hnvN
+	HNTOfY64zV/qSFMMSKqtsWxSzLvtnAsD6lisHno=
+X-Google-Smtp-Source: AA0mqf7MkmI6dUUsU+TjHt/xRpAIK7q5M76t3VO2Jxz169ZnhRM1BefPvXBatpjSkL0fm2OIScX9tO8uN5mxAVM1wqY=
+X-Received: by 2002:a17:907:80cd:b0:7bb:35b4:777d with SMTP id
+ io13-20020a17090780cd00b007bb35b4777dmr4471082ejc.302.1670027048471; Fri, 02
+ Dec 2022 16:24:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <52394.122120217313800489@us-mta-341.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20221201190939.3230513-1-james.hilliard1@gmail.com>
+In-Reply-To: <20221201190939.3230513-1-james.hilliard1@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 2 Dec 2022 16:23:56 -0800
+Message-ID: <CAEf4BzYrT1VGj43A3Xg60cSMSX658iL2+yp8a5Xk=8Ez3sj_Ew@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: add GCC compatible builtins to bpf_legacy.h
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: bpf@vger.kernel.org, "Jose E . Marchesi" <jose.marchesi@oracle.com>, 
+	David Faust <david.faust@oracle.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Thu, Dec 1, 2022 at 11:10 AM James Hilliard
+<james.hilliard1@gmail.com> wrote:
+>
+> The bpf_legacy.h header uses llvm specific load functions, add
+> GCC compatible variants as well to fix tests using these functions
+> under GCC.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
+> Cc: David Faust <david.faust@oracle.com>
+> ---
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Please use [PATCH bpf-next] prefix to target patches for bpf-next
+tree. This helps some of our automation.
 
+>  tools/testing/selftests/bpf/bpf_legacy.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
+> index 845209581440..256c2a90aa20 100644
+> --- a/tools/testing/selftests/bpf/bpf_legacy.h
+> +++ b/tools/testing/selftests/bpf/bpf_legacy.h
+> @@ -2,6 +2,15 @@
+>  #ifndef __BPF_LEGACY__
+>  #define __BPF_LEGACY__
+>
+> +#if __GNUC__ && !__clang__
+> +/* Functions to emit BPF_LD_ABS and BPF_LD_IND instructions.  We
+> + * provide the "standard" names as synonyms of the corresponding GCC
+> + * builtins.  Note how the SKB argument is ignored.
+> + */
+> +#define load_byte(skb,off) __builtin_bpf_load_byte((off))
+> +#define load_half(skb,off) __builtin_bpf_load_half((off))
+> +#define load_word(skb,off) __builtin_bpf_load_word((off))
 
-Kernel information:
-    Commit message: error-injection: Add prompt for function error injectio=
-n
+added space between skb, and off. And we don't need those extra ()
+around off, right? I stripped them away, but let me know if that's
+wrong.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/61846
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6194245
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6194354
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking MACsec: sanity
-                  x86_64 - Networking cki netfilter test
-                  x86_64 - ALSA PCM loopback test
-                  x86_64 - Storage - SCSI VPD
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1479
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - forwarding
-                  x86_64 (debug) - kselftests upstream - tc
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Reboot test
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-                  x86_64 - Networking MACsec: sanity
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1172
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: FAIL: /usr/share/beakerlib/testing.sh: =
-line 896: fwts: command not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1486
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> +#else
+>  /* llvm builtin functions that eBPF C program may use to
+>   * emit BPF_LD_ABS and BPF_LD_IND instructions
+>   */
+> @@ -11,6 +20,7 @@ unsigned long long load_half(void *skb,
+>                              unsigned long long off) asm("llvm.bpf.load.half");
+>  unsigned long long load_word(void *skb,
+>                              unsigned long long off) asm("llvm.bpf.load.word");
+> +#endif
+>
+>  #endif
+>
+> --
+> 2.34.1
+>
