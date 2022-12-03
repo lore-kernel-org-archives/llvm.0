@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92ED67B
-	for <llvm@lists.linux.dev>; Sat,  3 Dec 2022 13:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D881DC433C1;
-	Sat,  3 Dec 2022 13:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A177B
+	for <llvm@lists.linux.dev>; Sat,  3 Dec 2022 13:55:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B1D4C433D6;
+	Sat,  3 Dec 2022 13:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1670075712;
-	bh=w9suPqgmnaFDB3lHT9y0pxVHFqlpMMxqYQc5gUAnUsc=;
+	s=korg; t=1670075724;
+	bh=dAhSQzYlJfeT3ziGMsqtMvGs+RwZBGBuVHmtpowSMjE=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=2SkcJccaJIj5NLoDLczTVudTX/dt9xzh/enRz835jbv0Oa7nQkkwEWttxo8DVUP2t
-	 4z9Ec2YuqGJMfDD9snaL4+PR1bEJ1ZPAKT1TpUtjb9tT7g1dsAeH50E8MSKgZJ6vJK
-	 Ncoya/17oW0b/AwoTx6dqxCPz23h+v4xWwnO9QtU=
-Subject: Patch "mm: Fix '.data.once' orphan section warning" has been added to the 4.14-stable tree
+	b=CXTeHqo7ttuWZgDq+XFQ9Sz6krYUr1oZa3eZP/8owymkHkfl9HyJHaV264Gal21eN
+	 qdib2euKQFrObTwtihcDuFNoHqmrqcjGjdWmheKDvzIQtfOEa0tBtDhpQWxhPEa4qt
+	 NPtfLTwu/YM9yNoRJ4dXEIr+o3gCzxYYBl9FT0VU=
+Subject: Patch "mm: Fix '.data.once' orphan section warning" has been added to the 4.19-stable tree
 To: gregkh@linuxfoundation.org,hughd@google.com,llvm@lists.linux.dev,nathan@kernel.org,sashal@kernel.org
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Sat, 03 Dec 2022 14:54:56 +0100
+Date: Sat, 03 Dec 2022 14:55:03 +0100
 In-Reply-To: <20221128225345.9383-1-nathan@kernel.org>
-Message-ID: <16700756961148@kroah.com>
+Message-ID: <1670075703170173@kroah.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,12 +35,12 @@ This is a note to let you know that I've just added the patch titled
 
     mm: Fix '.data.once' orphan section warning
 
-to the 4.14-stable tree which can be found at:
+to the 4.19-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
      mm-fix-.data.once-orphan-section-warning.patch
-and it can be found in the queue-4.14 subdirectory.
+and it can be found in the queue-4.19 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
@@ -98,4 +98,5 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Patches currently in stable-queue which might be from nathan@kernel.org are
 
-queue-4.14/mm-fix-.data.once-orphan-section-warning.patch
+queue-4.19/risc-v-vdso-do-not-add-missing-symbols-to-version-se.patch
+queue-4.19/mm-fix-.data.once-orphan-section-warning.patch
