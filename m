@@ -1,155 +1,152 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFC41FA3;
-	Sat,  3 Dec 2022 03:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541331FA3;
+	Sat,  3 Dec 2022 03:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670036560; x=1701572560;
+  t=1670037760; x=1701573760;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nMQLu2qLqLFTi8kzRzApwPwM2dxDyRQv1HEo74ApHI4=;
-  b=B8sEzQZlYqxw3SiWWq5ue0yWVhivcnzFHRMmBqKle5uJrGaGo/1OAX9+
-   a0hN+3jMCJ9uz0lrCYDvah0lXOGnqThYPlxJhFUYdV2UhU7VYHtPXXjsd
-   cbtEOZAX8Wv3cWeSkCvfntkBcjEpYHe8Ya+F+fGSi91OHbuHpFgUmwTEi
-   WWDinTNx5jvCbBvPuLjLRmwRbob6xX9g9l3fvlQZWFjXYJoFGroeLoz2G
-   wiihPCj8NIcPVW2qKEHBjsRgSkEAMSbOT/gbink+tfgjry4dnUkqy0rkN
-   WCr7PfCr/MVkL57Bwhy4IYaFwmDEG8E0MzSoz5V/aNgC7PAHEAJe+vCga
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="314796584"
+  bh=EB0+71Io59YaK57TsNi1shxwv+Ju8LsI37z3JciBnYU=;
+  b=AhmIl5lNRJcfMB0LDaYC8MqI7XwBw0mxBX1gZLXriNVXzr0gE0/58Yo1
+   m2KeJpjcOWiDQ98fKQsPBFlPN9/zq9/Hu7RPInESQsIzUBMUIUnkgNPYF
+   zs439WkoCi2KUHkM7jdfnzaSevNDaxQILEmjMQmX5tUTnsGps88pE28sQ
+   BqWLwVXX2Z98ZIeoP78Jawvp4Uj+sF/TXAQfusdd13/HQ4OoxnG8DxdrH
+   hLZc5q1w2wrB32b7rpLPUas1KS2xHGosU31MO8gYxT7V71NO5EZM0+jxk
+   R0YFWQvAhV2s63b5gutz6LoMamuo2nY2/l7iOtYS7lrueDcUKipCeqdgk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="378243053"
 X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="314796584"
+   d="scan'208";a="378243053"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 19:02:39 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 19:22:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="645237008"
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="645239827"
 X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="645237008"
+   d="scan'208";a="645239827"
 Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2022 19:02:36 -0800
+  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2022 19:22:37 -0800
 Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p1InU-000EE1-0a;
-	Sat, 03 Dec 2022 03:02:36 +0000
-Date: Sat, 3 Dec 2022 11:01:49 +0800
+	id 1p1J6q-000EER-1M;
+	Sat, 03 Dec 2022 03:22:36 +0000
+Date: Sat, 3 Dec 2022 11:22:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sven Peter <sven@svenpeter.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:atcphc-20221130 16/16]
- drivers/usb/typec/tipd/displayport.c:114:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202212031032.O3NyzH10-lkp@intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org
+Subject: [helgaas-pci:pci/resource 3/4] arch/x86/kernel/resource.c:49:6:
+ warning: format specifies type 'unsigned long long' but the argument has
+ type 'resource_size_t' (aka 'unsigned int')
+Message-ID: <202212031118.eVMaN1Nf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Yne4FueFYmk/Wpv4"
+Content-Type: multipart/mixed; boundary="k8H5pajluiPg5bqp"
 Content-Disposition: inline
 
 
---Yne4FueFYmk/Wpv4
+--k8H5pajluiPg5bqp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux atcphc-20221130
-head:   c304300c4dbf573fb1b3fbc091673f10f2c33e37
-commit: c304300c4dbf573fb1b3fbc091673f10f2c33e37 [16/16] usb: typec: tipd: Add DisplayPort alternate mode support
+Hi Bjorn,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git pci/resource
+head:   1597150257a94439775d5da14525221cefc27d80
+commit: 844e7aeab81b9e3ff1da928e640945e917508085 [3/4] x86/PCI: Tidy E820 removal messages
 config: i386-randconfig-a002
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/c304300c4dbf573fb1b3fbc091673f10f2c33e37
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux atcphc-20221130
-        git checkout c304300c4dbf573fb1b3fbc091673f10f2c33e37
+        # https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?id=844e7aeab81b9e3ff1da928e640945e917508085
+        git remote add helgaas-pci https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+        git fetch --no-tags helgaas-pci pci/resource
+        git checkout 844e7aeab81b9e3ff1da928e640945e917508085
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/typec/tipd/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/usb/typec/tipd/displayport.c:114:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (tps->dp_vdo_header) {
-               ^~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/tipd/displayport.c:127:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/usb/typec/tipd/displayport.c:114:2: note: remove the 'if' if its condition is always true
-           if (tps->dp_vdo_header) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/typec/tipd/displayport.c:87:23: note: initialize the variable 'ret' to silence this warning
-           int svdm_version, ret;
-                                ^
-                                 = 0
-   1 warning generated.
+>> arch/x86/kernel/resource.c:49:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+                                           avail->start, avail->end);
+                                           ^~~~~~~~~~~~
+   include/linux/printk.h:530:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:457:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   arch/x86/kernel/resource.c:49:20: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+                                           avail->start, avail->end);
+                                                         ^~~~~~~~~~
+   include/linux/printk.h:530:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:457:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +114 drivers/usb/typec/tipd/displayport.c
+vim +49 arch/x86/kernel/resource.c
 
-    83	
-    84	static int tps6598x_displayport_enter(struct typec_altmode *alt, u32 *vdo)
-    85	{
-    86		struct tps6598x *tps = typec_altmode_get_drvdata(alt);
-    87		int svdm_version, ret;
-    88	
-    89		mutex_lock(&tps->dp_lock);
-    90		if (tps->dp_configured) {
-    91			const struct typec_altmode *p = typec_altmode_get_partner(alt);
-    92	
-    93			dev_warn(
-    94				&p->dev,
-    95				"Firmware doesn't support alternate mode overriding\n");
-    96			ret = -EOPNOTSUPP;
-    97			goto out_unlock;
-    98		}
-    99	
-   100		/*
-   101		 * On Apple Silicon platforms we have to switch to USB_ROLE_NONE before
-   102		 * setting up the alternate mode to shut down dwc3 and prevent it from
-   103		 * locking up.
-   104		 */
-   105		if (tps->cd321x)
-   106			usb_role_switch_set_role(tps->role_sw, USB_ROLE_NONE);
-   107	
-   108		svdm_version = typec_altmode_get_svdm_version(tps->dp_port);
-   109		if (svdm_version < 0) {
-   110			ret = svdm_version;
-   111			goto out_unlock;
-   112		}
-   113	
- > 114		if (tps->dp_vdo_header) {
-   115			ret = -EBUSY;
-   116			goto out_unlock;
-   117		}
-   118	
-   119		tps->dp_vdo_header =
-   120			VDO(USB_TYPEC_DP_SID, 1, svdm_version, CMD_ENTER_MODE);
-   121		tps->dp_vdo_header |= VDO_OPOS(USB_TYPEC_DP_MODE);
-   122		tps->dp_vdo_header |= VDO_CMDT(CMDT_RSP_ACK);
-   123		schedule_work(&tps->dp_work);
-   124	
-   125	out_unlock:
-   126		mutex_unlock(&tps->dp_lock);
-   127		return ret;
-   128	}
-   129	
+    27	
+    28	static void remove_e820_regions(struct resource *avail)
+    29	{
+    30		int i;
+    31		struct e820_entry *entry;
+    32		u64 e820_start, e820_end;
+    33		struct resource orig = *avail;
+    34	
+    35		if (!pci_use_e820)
+    36			return;
+    37	
+    38		for (i = 0; i < e820_table->nr_entries; i++) {
+    39			entry = &e820_table->entries[i];
+    40			e820_start = entry->addr;
+    41			e820_end = entry->addr + entry->size - 1;
+    42	
+    43			resource_clip(avail, e820_start, e820_end);
+    44			if (orig.start != avail->start || orig.end != avail->end) {
+    45				pr_info("resource: avoiding allocation from e820 entry [mem %#010Lx-%#010Lx]\n",
+    46					e820_start, e820_end);
+    47				if (avail->end > avail->start)
+    48					pr_info("resource: remaining [mem %#010Lx-%#010Lx] available\n",
+  > 49						avail->start, avail->end);
+    50				orig = *avail;
+    51			}
+    52		}
+    53	}
+    54	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---Yne4FueFYmk/Wpv4
+--k8H5pajluiPg5bqp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/i386 6.1.0-rc7 Kernel Configuration
+# Linux/i386 6.1.0-rc1 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -164,7 +161,6 @@ CONFIG_RUST_IS_AVAILABLE=y
 CONFIG_CC_CAN_LINK=y
 CONFIG_CC_CAN_LINK_STATIC=y
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
-CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
 CONFIG_TOOLS_SUPPORT_RELR=y
 CONFIG_CC_HAS_ASM_INLINE=y
 CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
@@ -1149,7 +1145,6 @@ CONFIG_NET_IP_TUNNEL=y
 # CONFIG_INET_AH is not set
 # CONFIG_INET_ESP is not set
 # CONFIG_INET_IPCOMP is not set
-CONFIG_INET_TABLE_PERTURB_ORDER=16
 CONFIG_INET_TUNNEL=y
 CONFIG_INET_DIAG=y
 CONFIG_INET_TCP_DIAG=y
@@ -3717,7 +3712,7 @@ CONFIG_DRM_UDL=m
 # CONFIG_DRM_MGAG200 is not set
 CONFIG_DRM_RCAR_DW_HDMI=m
 # CONFIG_DRM_RCAR_USE_LVDS is not set
-# CONFIG_DRM_RCAR_USE_MIPI_DSI is not set
+# CONFIG_DRM_RCAR_MIPI_DSI is not set
 # CONFIG_DRM_QXL is not set
 # CONFIG_DRM_VIRTIO_GPU is not set
 CONFIG_DRM_PANEL=y
@@ -5797,7 +5792,6 @@ CONFIG_FPGA_DFL_FME=m
 # CONFIG_FPGA_DFL_AFU is not set
 # CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000 is not set
 # CONFIG_FPGA_DFL_PCI is not set
-# CONFIG_FPGA_M10_BMC_SEC_UPDATE is not set
 # CONFIG_FPGA_MGR_MICROCHIP_SPI is not set
 CONFIG_FSI=m
 # CONFIG_FSI_NEW_DEV_NODE is not set
@@ -6849,7 +6843,6 @@ CONFIG_RUNTIME_TESTING_MENU=y
 # CONFIG_TEST_BITMAP is not set
 # CONFIG_TEST_UUID is not set
 # CONFIG_TEST_XARRAY is not set
-# CONFIG_TEST_MAPLE_TREE is not set
 # CONFIG_TEST_RHASHTABLE is not set
 # CONFIG_TEST_SIPHASH is not set
 # CONFIG_TEST_IDA is not set
@@ -6882,4 +6875,4 @@ CONFIG_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---Yne4FueFYmk/Wpv4--
+--k8H5pajluiPg5bqp--
