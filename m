@@ -1,93 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88F07C
-	for <llvm@lists.linux.dev>; Sun,  4 Dec 2022 14:23:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9EBC433D6;
-	Sun,  4 Dec 2022 14:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670163808;
-	bh=0jPUnNObV3bkM2t/29uwKFNurRLeu5QoW7vFZFxlKpA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NOajA0zJ41WVM6sdybnbEvWqDT5dhMEmKpL/JL5eG+qWGfyx377FzXvS7sCMmvwtg
-	 uzu86D5+Fg4bBJrUPu+lfCAQAhWF69b3hUDcl7kbK/SEcwApbiliwU0M2oJjdKMc0K
-	 gMY/b0S1NWgP9KSJeYIsvGPtpb3z7pq37jewfM0xYjgJyPqyKbv8+xqB3tIu5RLPA1
-	 bXTt58dbX8Jx/xhk9p1UJCYxdPX1VYwCJKO+iMPMlL4NZMDThiShP81KgzBo52+rdD
-	 sLFOW4MD0zQSjTTlFYG1OaFgto5AVg3tnSjRQTICkPK7HiCO5doGAAx4qPCH4j7jrD
-	 BM7ZPjDMfKLrw==
-Date: Sun, 4 Dec 2022 14:36:13 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Michal Simek <michal.simek@amd.com>
-Cc: Marco Pagani <marpagan@redhat.com>, Anand Ashok Dumbre
- <anand.ashok.dumbre@xilinx.com>, Lars-Peter Clausen <lars@metafoo.de>,
- Michal Simek <michal.simek@xilinx.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>, Manish Narani <manish.narani@xilinx.com>, Jonathan
- Cameron <Jonathan.Cameron@huawei.com>, <linux-iio@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
- <llvm@lists.linux.dev>
-Subject: Re: [PATCH] iio: adc: xilinx-ams: fix devm_krealloc() return value
- check
-Message-ID: <20221204143613.310ed016@jic23-huawei>
-In-Reply-To: <7127c7f4-89b3-31f8-cabc-43f955eded64@amd.com>
-References: <20221125113112.219290-1-marpagan@redhat.com>
-	<7127c7f4-89b3-31f8-cabc-43f955eded64@amd.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B05233F9
+	for <llvm@lists.linux.dev>; Sun,  4 Dec 2022 15:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1DFC433D6;
+	Sun,  4 Dec 2022 15:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1670168324;
+	bh=ctdI2YEvFlmKT2YJRj65yRkzoZol77bTrzDHpgJn8NQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JDb1cZcG9Zp4n+iEM1Z0Nbb+L55UUdjR4k4HrlYY6FozQYZMidWFe4lcDW/3BamXr
+	 bYlQXgZtK7bL1gqHn4+WexrPerWgxYFceEw5XV4FAEqAZVEYpv4OgxsxgV52elVSRr
+	 8/Mh9LcZCX+I+/8nLfzE8/gq8gjYexuVDUvdCDbA=
+Date: Sun, 4 Dec 2022 16:38:40 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Hugh Dickins <hughd@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Sasha Levin <sashal@kernel.org>,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH 5.4 and earlier only] mm: Fix '.data.once' orphan section
+ warning
+Message-ID: <Y4y/AEsLmKRcQ/R0@kroah.com>
+References: <20221128225345.9383-1-nathan@kernel.org>
+ <Y4tQYgjDgodwR2pP@kroah.com>
+ <5f9317c7-e899-a6b2-dd23-664a1b6d629@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f9317c7-e899-a6b2-dd23-664a1b6d629@google.com>
 
-On Wed, 30 Nov 2022 18:04:26 +0100
-Michal Simek <michal.simek@amd.com> wrote:
-
-> On 11/25/22 12:31, Marco Pagani wrote:
-> > CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+On Sat, Dec 03, 2022 at 09:41:34AM -0800, Hugh Dickins wrote:
+> On Sat, 3 Dec 2022, Greg Kroah-Hartman wrote:
+> > On Mon, Nov 28, 2022 at 03:53:46PM -0700, Nathan Chancellor wrote:
+> > > 
+> > > As far as I can tell, this should be applied to 5.4 and earlier. It
+> > > should apply cleanly but let me know if not.
 > > 
-> > 
-> > The clang-analyzer reported a warning: "Value stored to 'ret'
-> > is never read".
-> > 
-> > Fix the return value check if devm_krealloc() fails to resize
-> > ams_channels.
-> > 
-> > Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
-> > Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> > ---
-> >   drivers/iio/adc/xilinx-ams.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-> > index 5b4bdf3a26bb..a507d2e17079 100644
-> > --- a/drivers/iio/adc/xilinx-ams.c
-> > +++ b/drivers/iio/adc/xilinx-ams.c
-> > @@ -1329,7 +1329,7 @@ static int ams_parse_firmware(struct iio_dev *indio_dev)
-> > 
-> >          dev_channels = devm_krealloc(dev, ams_channels, dev_size, GFP_KERNEL);
-> >          if (!dev_channels)
-> > -               ret = -ENOMEM;
-> > +               return -ENOMEM;
-> > 
-> >          indio_dev->channels = dev_channels;
-> >          indio_dev->num_channels = num_channels;
-> > --
-> > 2.38.1
-> >   
+> > Queued up everywhere, thanks.
 > 
-> Acked-by: Michal Simek <michal.simek@amd.com>
+> Thanks for queueing them up, Greg, but please read through the thread:
+> I have doubts on the 4.14 and 4.9 ones, which would want a different patch
+> if we're going to make any change; but thought we could just leave those
+> trees without the patch, and Nathan agreed.
 
-Applied to the fixes-togreg branch of iio.git.  Given merge window opening soon
-it might be a few weeks before this goes upstream.
+Oops, sorry, now dropped from 4.14 and 4.9 and I left the 4.19 one as
+that one was ok to keep, right?
 
-Thanks,
+thanks,
 
-Jonathan
-
-> 
-> Thanks,
-> Michal
-
+greg k-h
