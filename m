@@ -1,163 +1,211 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D3E15C8B;
-	Mon,  5 Dec 2022 20:20:38 +0000 (UTC)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 88343589;
-	Mon,  5 Dec 2022 21:20:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1670271629;
-	bh=iSP+2rDHGpQBGKye/R5g7M3Xo8ozyNXCDY5nD2esdYM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RRvdo/Rn+HIm44YVnb4Lpaa8XvAvFFCB0aO95dKUjWzScWLnECt7lTufVA2zclLhD
-	 aimfumSUleAd5D7cjAikvCT4iHcZ8ZkNkNOqRucfsDbNL0q+dsm9mwRzkRgqwiVr08
-	 +sc+Mw3h8tdlMzSHbfhyVepX+WOFARWzaqaqTrjM=
-Message-ID: <926df743-9c43-9471-3c67-3df9f4e18204@ideasonboard.com>
-Date: Mon, 5 Dec 2022 20:20:25 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB5F7C
+	for <llvm@lists.linux.dev>; Mon,  5 Dec 2022 20:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1670273493;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=R8bkQhPIadozk1dyc5nu2TiUO+kMUmr0kdlt9/VKQwo=;
+	b=KkJiezytvlGLBd4uT4LIMKDhwpRDy2XcYBmLPYjttHYfyq5aXzvrnXK6ylm5/+uIGAgXr+
+	LJTQwJt2ZLrgc4v+pb/79PReaoj9INidRArWfLOwxOVAfyARskcRTqsg20aVVDG3qL+eAz
+	WKiuSHvnq+iu4EaCP7Plx1GGaWMKwlA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-536-kM90fk0DOYONJ-RKozZcDw-1; Mon, 05 Dec 2022 15:51:32 -0500
+X-MC-Unique: kM90fk0DOYONJ-RKozZcDw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80265800B23
+	for <llvm@lists.linux.dev>; Mon,  5 Dec 2022 20:51:32 +0000 (UTC)
+Received: from [172.64.11.46] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6B1142028CE4;
+	Mon,  5 Dec 2022 20:51:32 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (25/379 SKIPPED): Test report for master
+ (6.1.0-rc8, mainline.kernel.org-clang, 76dcd734)
+Date: Mon, 05 Dec 2022 20:51:32 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [usb:usb-testing 2/2] drivers/usb/gadget/legacy/webcam.c:174:3:
- error: field designator 'bmInterfaceFlags' does not refer to any field in
- type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-usb@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <202212060347.MaTRoCo0-lkp@intel.com>
-From: Dan Scally <dan.scally@ideasonboard.com>
-In-Reply-To: <202212060347.MaTRoCo0-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <71092.122120515513200402@us-mta-536.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Oops, forgot all about the legacy version. Sorry Greg - let me send a v2.
+Hi, we tested your kernel and here are the results:
 
-On 05/12/2022 19:33, kernel test robot wrote:
-> Hi Daniel,
->
-> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> head:   751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
-> commit: 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c [2/2] usb: gadget: uvc: Rename bmInterfaceFlags -> bmInterlaceFlags
-> config: arm-randconfig-r012-20221205
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install arm cross compiling tool for clang build
->          # apt-get install binutils-arm-linux-gnueabi
->          # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
->          git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
->          git fetch --no-tags usb usb-testing
->          git checkout 751fbcc59a16ece5d1fb35ae6b25ef79ffa92d0c
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/gadget/legacy/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> drivers/usb/gadget/legacy/webcam.c:174:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_uncompressed'; did you mean 'bmInterlaceFlags'?
->             .bmInterfaceFlags       = 0,
->              ^~~~~~~~~~~~~~~~
->              bmInterlaceFlags
->     include/uapi/linux/usb/video.h:469:8: note: 'bmInterlaceFlags' declared here
->             __u8  bmInterlaceFlags;
->                   ^
->>> drivers/usb/gadget/legacy/webcam.c:225:3: error: field designator 'bmInterfaceFlags' does not refer to any field in type 'const struct uvc_format_mjpeg'; did you mean 'bmInterlaceFlags'?
->             .bmInterfaceFlags       = 0,
->              ^~~~~~~~~~~~~~~~
->              bmInterlaceFlags
->     include/uapi/linux/usb/video.h:525:8: note: 'bmInterlaceFlags' declared here
->             __u8  bmInterlaceFlags;
->                   ^
->     2 errors generated.
->
->
-> vim +174 drivers/usb/gadget/legacy/webcam.c
->
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  160
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  161  static const struct uvc_format_uncompressed uvc_format_yuv = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  162  	.bLength		= UVC_DT_FORMAT_UNCOMPRESSED_SIZE,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  163  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  164  	.bDescriptorSubType	= UVC_VS_FORMAT_UNCOMPRESSED,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  165  	.bFormatIndex		= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  166  	.bNumFrameDescriptors	= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  167  	.guidFormat		=
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  168  		{ 'Y',  'U',  'Y',  '2', 0x00, 0x00, 0x10, 0x00,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  169  		 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71},
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  170  	.bBitsPerPixel		= 16,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  171  	.bDefaultFrameIndex	= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  172  	.bAspectRatioX		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  173  	.bAspectRatioY		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02 @174  	.bmInterfaceFlags	= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  175  	.bCopyProtect		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  176  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  177
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  178  DECLARE_UVC_FRAME_UNCOMPRESSED(1);
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  179  DECLARE_UVC_FRAME_UNCOMPRESSED(3);
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  180
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  181  static const struct UVC_FRAME_UNCOMPRESSED(3) uvc_frame_yuv_360p = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  182  	.bLength		= UVC_DT_FRAME_UNCOMPRESSED_SIZE(3),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  183  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  184  	.bDescriptorSubType	= UVC_VS_FRAME_UNCOMPRESSED,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  185  	.bFrameIndex		= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  186  	.bmCapabilities		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  187  	.wWidth			= cpu_to_le16(640),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  188  	.wHeight		= cpu_to_le16(360),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  189  	.dwMinBitRate		= cpu_to_le32(18432000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  190  	.dwMaxBitRate		= cpu_to_le32(55296000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  191  	.dwMaxVideoFrameBufferSize	= cpu_to_le32(460800),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  192  	.dwDefaultFrameInterval	= cpu_to_le32(666666),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  193  	.bFrameIntervalType	= 3,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  194  	.dwFrameInterval[0]	= cpu_to_le32(666666),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  195  	.dwFrameInterval[1]	= cpu_to_le32(1000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  196  	.dwFrameInterval[2]	= cpu_to_le32(5000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  197  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  198
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  199  static const struct UVC_FRAME_UNCOMPRESSED(1) uvc_frame_yuv_720p = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  200  	.bLength		= UVC_DT_FRAME_UNCOMPRESSED_SIZE(1),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  201  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  202  	.bDescriptorSubType	= UVC_VS_FRAME_UNCOMPRESSED,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  203  	.bFrameIndex		= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  204  	.bmCapabilities		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  205  	.wWidth			= cpu_to_le16(1280),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  206  	.wHeight		= cpu_to_le16(720),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  207  	.dwMinBitRate		= cpu_to_le32(29491200),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  208  	.dwMaxBitRate		= cpu_to_le32(29491200),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  209  	.dwMaxVideoFrameBufferSize	= cpu_to_le32(1843200),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  210  	.dwDefaultFrameInterval	= cpu_to_le32(5000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  211  	.bFrameIntervalType	= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  212  	.dwFrameInterval[0]	= cpu_to_le32(5000000),
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  213  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  214
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  215  static const struct uvc_format_mjpeg uvc_format_mjpg = {
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  216  	.bLength		= UVC_DT_FORMAT_MJPEG_SIZE,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  217  	.bDescriptorType	= USB_DT_CS_INTERFACE,
-> bbafc0cb6c52c40 drivers/usb/gadget/webcam.c Laurent Pinchart 2010-07-10  218  	.bDescriptorSubType	= UVC_VS_FORMAT_MJPEG,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  219  	.bFormatIndex		= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  220  	.bNumFrameDescriptors	= 2,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  221  	.bmFlags		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  222  	.bDefaultFrameIndex	= 1,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  223  	.bAspectRatioX		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  224  	.bAspectRatioY		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02 @225  	.bmInterfaceFlags	= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  226  	.bCopyProtect		= 0,
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  227  };
-> a9914127e834acf drivers/usb/gadget/webcam.c Laurent Pinchart 2010-05-02  228
->
-> :::::: The code at line 174 was first introduced by commit
-> :::::: a9914127e834acf648a96c72b4e271dc0c1c7c74 USB gadget: Webcam device
->
-> :::::: TO: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> :::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
->
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Linux 6.1-rc8
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/62074
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
+syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
+=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Networking sctp-auth: sockopts test
+                  x86_64 (debug) - Reboot test
+        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
+d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
+tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
+apability permissive=3D0
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 aarch64 - Networking cki netfilter test
+                 aarch64 - ALSA PCM loopback test
+                 aarch64 - Storage - SCSI VPD
+                 ppc64le - Networking MACsec: sanity
+                 ppc64le - Networking cki netfilter test
+                 ppc64le - ALSA PCM loopback test
+                   s390x - Networking MACsec: sanity
+                   s390x - Networking cki netfilter test
+                  x86_64 (debug) - Networking cki netfilter test
+                  x86_64 (debug) - Storage - SCSI VPD
+        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1479
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1172
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1306
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+        Issue: Networking route: pmtu: Cannot find device "veth0_client"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
+            Affected tests:
+                 aarch64 - Networking MACsec: sanity
+                 ppc64le - Networking MACsec: sanity
+                   s390x - Networking MACsec: sanity
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: FAIL: /usr/share/beakerlib/testing.sh: =
+line 896: fwts: command not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1486
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
