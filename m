@@ -1,78 +1,80 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2075.outbound.protection.outlook.com [40.107.92.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD9B5664;
-	Tue,  6 Dec 2022 20:15:47 +0000 (UTC)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6IxKAK016887;
-	Tue, 6 Dec 2022 20:15:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=2OGjNJ3NVHidFdQjrTcXIaixgmvKBmheIItDy1oqj5o=;
- b=P4BWfVdt1sEA0e6dPjWzxUyWLjMmiXtdMne5BXAwUmFD+4UT4dw8nyETWSsLlwLOcPrV
- eagTWAK0sc2xlGIZa+XKas7VEM1oG6Lvks9mpS8vtuv1nxeshfV5dAB28sqHy4z/n2pz
- MYxt3I0/rx+izys+5ZZI/FV0105qLxCYYyAg587FrAC1Atll82hkP9gDtMkBVY6J+SS8
- KnLGxFJfkHcRgs4XregRA6ksMnBfIqob3aa9szuJ1/Ak5VqSdfSk5qN6Zx1b8vcQT/Lm
- Gm3pbc4jMsdddkmtaDYTgyx+vRdJFCSMjq24+j7V1MpAJwi0Xe+iem5e18KS+yfGxZ3a bw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ydjh227-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 06 Dec 2022 20:15:33 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B6JMKBO032118;
-	Tue, 6 Dec 2022 20:15:32 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2176.outbound.protection.outlook.com [104.47.59.176])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3maa7v6v88-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 06 Dec 2022 20:15:31 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01685567D;
+	Tue,  6 Dec 2022 20:40:46 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ByELG9BAlLShrBtpTzCWfBFJw2RQcwOTx2wSJv8Qm/O5ZstZxnkb53d9oBTf/nZO6N8oSi/BqxPE7drwHBdAYu0AzcTk4JLf3FuqsKkjCVkc8chDsBnPIGQ4zLp6v3uVF9c8yJVyXHWOjlIitNObjYdw4YMllkGocS7tDm9sTmYzn9y9u7wlDoFgOE7keASQnvxNMWlZ31G9jrJnKOR9mA5DhVx2Vcq0bJC9Z0SZ8Ds7mPCOA5b4VhNzHId295nrTS/lFYmJSLTyB9uiaukeWTcEC7S935SOn9Ax5+GGxI5fVON4B/Dt5Hr5P/5ER/SgOxR1E+17rZtuibtLb/Zy5w==
+ b=ihPzS9h5Q8R6NRCLRsObX91pIRx2a5oo62fAu0BZiUfzwlIOJigXu+dZKqFmzdUF7LpmD8W2opsha6mhqj3L/BpE6o+A9qRfJUYdf+wusQwOTabT0qXfg7SImHA+z/ODgy/BE5PO9pEJG12Cy2SRxiwZOPT2u3xQZNjMnZi1Tm0D7eMwdSeh5zBCTeeQek7RfrYKRpvouTkqJWlWTy/tMjlUVYmWGE3e8c+Dgn4H3QregijnAPrztZY15ZyMG/fNmwNiFVvU7RDaQe4ZTo9SYwJe5a/hvjxh3S5NavCSM1BhfO8Y2KPdMxo6A/5B0NK/oGtGqxKsQlfbTIQdlTTLfQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2OGjNJ3NVHidFdQjrTcXIaixgmvKBmheIItDy1oqj5o=;
- b=WIv7JHbBBvnxNF7ABuftVMBmAIo4GKYbGtdtYMMg/ZbzjuMvGgyrXqGbHq9coa9nWBqnzlROmptdpEbD65aJc0z3/48p8lK2ib/UWGr7odvJuc1nmETItEUmQJcaG2Grm1UQa7iTyT+VRs7m8w2q6lE/Jz33Hn2a8BhEGyBnFeVTQ7Ikk4dVZ74GhLdlzl6M0t68ycvmO3/fEMeE9kM64qXlalrZaUjwyiGYjoRvj9/rRek/11pmYh5a9veLQT/iqrIiSiomQ9U2wEBGGXI0GCaVaxjZ8UQQqlICrey4r/Ygro1kgMddSYxK67DexcsFVK5GExyoZQexgAcNWe5tNg==
+ bh=c0wekwp1a6rNUH6SWTHVNicB55w0GkDfuKpM8iFmFxA=;
+ b=atXQKztPnTF4Z3uyy91jLpuiGHxub2nvN4znM7JMcYJ8FVVFM2zEjysTD4o5SOnjV61ARbVI1eMlonpVTvNVw0pyP+/8RmAbD2r/H9LHAKGuVBUuGMXb+uhmByUiWueNcjzQwklg1lg7lnhYjplAgM7IeQqBHSz88IcaaRpV/5SI757zFMRQqpqmwCR1vX+glsjTP1iG6awzXB61Num3D1wvxUebdbX/CX3EU7eRFzgAcBMmMZU183v04KnLMQ14/enzXPS2/gir2hE5NT5mJXhY2fSVNZ97eHfmokVT80DkAY7x1OpO4n+63sEsE5pG/pyuK2qDtwoHxRsHaLk23g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2OGjNJ3NVHidFdQjrTcXIaixgmvKBmheIItDy1oqj5o=;
- b=wF4fEDX52FGuGQgZODJkRExuNm58zMEtt62IfO7od6Vln111HMEpcUntgr5Ay1TvdjrpbYWKF98TOaWO3pOx3JLoQdrWNbTu94P1eDZKtS4R5vNKI2dE5odt5+P6sepCY1C67iGvWHD9KlkvgNrQ2Scnc19krX83hWJxywlu5Ak=
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com (2603:10b6:806:23e::20)
- by MW5PR10MB5875.namprd10.prod.outlook.com (2603:10b6:303:191::12) with
+ bh=c0wekwp1a6rNUH6SWTHVNicB55w0GkDfuKpM8iFmFxA=;
+ b=LsI5ZPQa9eNIivowCLzXG893ZLqK543ZSEQz4Uxx09D9nxLANfrYhI53xO9P7sJlqZia8o67q9sOG6pFx16TW6H8DGtCukQlcPmL8f1Nl/GKHIMxTRzvmRq3FHDRlu6ymEKpTT6En/OWz/sGMPeHpSSj2TwhV8hv8m1B3Ny2h560TdVIQGNzTGmJzNlDDBYwsaIsifv7tbKyurNEDe3vqVtxxfLph9eUz3ogHF4DcuBCau4QCGCPjYW7iEPeqq5oTlx8mTeTRvUQkBoMN3/7Efybh/QvIXwamZyFtBFqR1OvNSTya2F/CO6gjy+IHvgFT8oGKeiSN+OqELYDccR9uQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
- 2022 20:15:29 +0000
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::6a6a:2552:ef79:e2ec]) by SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::6a6a:2552:ef79:e2ec%8]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
- 20:15:29 +0000
-Date: Tue, 6 Dec 2022 15:15:26 -0500
-From: Daniel Jordan <daniel.m.jordan@oracle.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 1/2] padata: Do not mark padata_mt_helper() as __init
-Message-ID: <20221206201526.al3tpbdvd244cvl5@parnassus.localdomain>
-References: <20221129190123.872394-1-nathan@kernel.org>
- <20221129190123.872394-2-nathan@kernel.org>
- <CAK7LNASdOhcTqbnRibPumMH1o+78dxBjLuzLK+JS+AiHyTiY6A@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Tue, 6 Dec
+ 2022 20:40:44 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
+ 20:40:44 +0000
+Date: Tue, 6 Dec 2022 16:40:42 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Eric Auger <eric.auger@redhat.com>
+Cc: bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+	Anthony Krowiak <akrowiak@linux.ibm.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Daniel Jordan <daniel.m.jordan@oracle.com>,
+	David Gibson <david@gibson.dropbear.id.au>,
+	Eric Farman <farman@linux.ibm.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Jason Herne <jjherne@linux.ibm.com>,
+	Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+	Lixiao Yang <lixiao.yang@intel.com>,
+	Matthew Rosato <mjrosato@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+	Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v5 14/19] iommufd: Add kAPI toward external drivers for
+ kernel access
+Message-ID: <Y4+oygRGw562mbT9@nvidia.com>
+References: <14-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <44ea1bad-500c-b4a5-c2a5-e7bc79de2394@redhat.com>
+ <Y4UEUXO09YeKhrtt@nvidia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNASdOhcTqbnRibPumMH1o+78dxBjLuzLK+JS+AiHyTiY6A@mail.gmail.com>
-X-ClientProxiedBy: BL1PR13CA0414.namprd13.prod.outlook.com
- (2603:10b6:208:2c2::29) To SA1PR10MB5711.namprd10.prod.outlook.com
- (2603:10b6:806:23e::20)
+In-Reply-To: <Y4UEUXO09YeKhrtt@nvidia.com>
+X-ClientProxiedBy: MN2PR05CA0041.namprd05.prod.outlook.com
+ (2603:10b6:208:236::10) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,153 +82,127 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR10MB5711:EE_|MW5PR10MB5875:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e8dfe85-8a5e-480f-24bc-08dad7c69ed0
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB5744:EE_
+X-MS-Office365-Filtering-Correlation-Id: 346ad5dd-2bca-4394-9575-08dad7ca255a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	AMw+2xAZHnUgOqG+99EZbGJ9jZtL7uMmqWX84iXVOKJuiVf3aOYQYISBG6Oe1Vfo7lKU/NqIUJV2TZ6lIGTjU8FedgVk6oP8XcM0E4MVHR8RDh8D4RiKJCESB4EH4A+U+2HXHTYMKYMwTFXe1l/WxX/azTwMVxlK6W3F0Fs1c+EBQ9vPz1FBaNCxZlekDIOmcvlh6W8YDfrp8My/n4dKoMmyIc+2gXAjqmvtt/wx3X0bkeHg05eBZzG3I3JuaP3Oah3PTQsjyuMzVMZy+NoV4OPB72T/JUeT8afnRcjzRN1PjiU4BU/HsDMW4NCkOApPUzzfAtfuPOa6Q1Upa9GjKFxF+efbCEigGIJa5CIwIa7KB/IjeDnIPQzucpz81bo3WJSzzXIJJU2cSl21CgQKBCjLxmPWH/9aAD/YMD4vmCchrbFjCPCeSwciPMYM7QJ6LxKzRcd7OaC+nWQShRZv7GbomQ6KMTzFC6wVdHUKBOGXGgbKbHpl/XoNd2IFjlUdT/scfOl2/fIyaQHxEpN5KaLaQ6Li4Mz+M5TZWv/CtKnZC4pBtq1VzE7wWJvOXKr0j/HiVaFSwsg/3RGKI/M5WF/W5S8NH/QTtbchm/D+AghzqPN1mt61FDjHf93mQPiRsom0cyF4yZUxrwYKXsgw/g==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5711.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(376002)(396003)(39860400002)(136003)(451199015)(2906002)(8676002)(4326008)(66476007)(66556008)(66946007)(41300700001)(8936002)(5660300002)(7416002)(86362001)(9686003)(26005)(6512007)(186003)(1076003)(6486002)(53546011)(6666004)(478600001)(6506007)(38100700002)(316002)(83380400001)(54906003)(6916009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info:
+	WqX5ON+rQR6+nBnQldQZ+Mp14tN36bC9RgPRKKJyq8HOFbFYfYJeOZWImB5a0DxaOCObsecwnIsVmvhc6OuYIbUTD4wTtK3yyxso54Q4gu4nVoSxgLn6/1cEty1vVxh5M6uyE4gNbMnawbO/4J7G8IrOtWgC7G/G4EpuLTNRvLyVOSEvdVFrPfSJEN/+9kNNHHduMWswAj5Fd5r5E15bxeSWNSzyxllxBcmErfw6yqVqcBXqgjUHaV2hdnFmIKSnlaDRIJ7JEyUcXtSCI8VOuTbEnTb+FN5wTYISr/WmjetxULFM5uG6pnBOJ3bB+BSAkg0ufETh0LNe7czdsmCNCqx5C7e4Gq0NIXg9wBteQhNquVDK1qzHpNGGDXfNA9K7NJ3Z3mnQGRMAlzDBjCFN0knjtmDQzEMyRYPMARuVznm/jHJl2KdgIkLenc+zFSf55uQfb1XbkRmCT8n8LZWHJdwvsA4kVCkEoU+vPgnR9olRWbRQ+Or4l4leTjtNv+0TI66aob4UZ8+0gGN0duojwlFaVhR+bKCshEhUC+yA5puz3sCc3JPTwLfhPc3MqcUxmsXE4zZNzpAiswjxbGC9w+oPc4FYx/6m/C14cmg8BnrXw2XfeKL89sCRMHmaDJBp1dVA8PPUxoTpKLYBG0uMMYXc3F5w5gE7sQ1rmwuL2EGDqEP/ptbPtd2qO459A753
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(396003)(136003)(376002)(451199015)(83380400001)(186003)(2616005)(86362001)(38100700002)(36756003)(41300700001)(66476007)(5660300002)(8936002)(7416002)(66946007)(7406005)(66556008)(6916009)(316002)(54906003)(2906002)(6512007)(6506007)(478600001)(4326008)(6486002)(26005)(8676002)(67856001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?fvzrtTRUxPT0So3Id+KUpRhapPmknV6gl7Bwa6uOJNJ77B1U+vlgBSs9T7em?=
- =?us-ascii?Q?uSEsZV2Zb7e+xNdz7cHaWhBOWKaOs1571eIW/MXjWeNQ3LNmiLSAoQoEyoOZ?=
- =?us-ascii?Q?XY154f9NAXWK8le0//k/r8iTdzWha4q4eB2+m2R2IKRMpb/qITDJxjBnTNqN?=
- =?us-ascii?Q?bWAvuceARwuuAXbYUyAsm1d55P/bsOaKoAYK5nJnDm541WlkVwxuZZ78S/cC?=
- =?us-ascii?Q?Nihh8JwysniGzyrb18n1Ai2WBwiGW9Jp1LnKiX9A2BPO9hMY97KKtEk4A1O1?=
- =?us-ascii?Q?VRK9nvTxPHy7UlIc4Li6wsOyXtYbq/LwwK8u6YDJrd50Ej2ZXNwzCyg4pfEB?=
- =?us-ascii?Q?COHJ9EdX/2S7L7hyAMv0/hzEgdC8cZm3Q1HeK9gXHYUkIZHf9QyOv2TsSjuW?=
- =?us-ascii?Q?K0R402xX5GQKZq0JPAg+SMvqNPKcplHQKZwlKXKI6Ufdncr0BLgvkB7gfEvK?=
- =?us-ascii?Q?NpAfmES7EkkZ7JZ/3F0wZLKX/OlycWpZFFGJWKUE08ZDEXQojU8Prmt0Q1Ba?=
- =?us-ascii?Q?/+utJP1pUF8BHSVJ+wmYiPZN8jGMoe62/BA43Q0L9T70tMmJgz2mM6Ejf5Pn?=
- =?us-ascii?Q?zZu0oRtuI0xe71mVH5eBfJYmOkUovvyQ9NR6llPOCiTcyjV98lLREwyJ9IXU?=
- =?us-ascii?Q?f4F0qR9EObVxr5nsRASaUXhQ+V4RqvHrn+wQkaWoLjggJ4kZE5MO3fRS6PnO?=
- =?us-ascii?Q?/gRuDbhwMjmQImNn3692Xxe6oWyMJOiXdN+8S5m1ASqeO93qOpnDNstm61vx?=
- =?us-ascii?Q?qBWdGzaF9gqawkkMIX/XEkdMmyxBpRwlYtUjxTsyKWF8ReYlpS5fCa6szvrJ?=
- =?us-ascii?Q?aOhXu0ldlv/ccJDYG83vgiKtQf1LoUaYzp2uaTjDM/5BDgHnh2KftMB7Imyn?=
- =?us-ascii?Q?xRRV3JqpaUaqRFMxQYx3bu7fCd5hP65B2UEWCkdIhBguB/0TLJak69xKs0/y?=
- =?us-ascii?Q?xRgyan/JnwXTyWQHkwtrUNh/AVlTp2rNCgM5q4eyJCBR0ztB3HTm3ek6Y9vg?=
- =?us-ascii?Q?59UgibjWJCr0OtrVPGXNw3KJlcwIfdLqYbO4q5rmPxWGsacZUljvCKWFH/hM?=
- =?us-ascii?Q?VjarSa6dBU04xEmaRvWgXpAnt9GWWLS2yA8/D92DfDlWvXkP1kCQmIlAVLqi?=
- =?us-ascii?Q?0vR0UdZxJmAjSpUsbk8YnyaW1ZSl9dDhH0RrYruw2K7Yc0RN0R5iCCO7kt5g?=
- =?us-ascii?Q?KSRoFtB6eZXe5GZVO5f25yjjytnMRPg7/3BNPVGxFzgUsd1U8oWEB6C0sR33?=
- =?us-ascii?Q?rPhJxjFf+n389k4RNu21t1BM6Hqsvp3lOqxhLXrXIVb+JxMGRbI1sbsfXe7P?=
- =?us-ascii?Q?uX53Hi285Q/hv5ZIYPiy1v6AQ0PeILqzRu3sDmfElU1CYzLa7NrT1qVP2i6o?=
- =?us-ascii?Q?sa7rWjQywm6qcq/Wkjx3fwldUzFCx1dI8itf/uS5ayu84exV3TkGK5a87Pi4?=
- =?us-ascii?Q?o47ld4Gvi5TnFkYzh4ngfPqRmH0saZ+aMktWVRAQVqR6cAq4ZK14ucmfMfzk?=
- =?us-ascii?Q?euSHmpPQiLgjwfRT5118CjcnfotuakNfpt2FtTy4hmB2ODk8ZWIjKlvrLEV/?=
- =?us-ascii?Q?hgaZzIL+EPkA4aOTKWtcIp4CVfI28UqksdTH1KvVD+NvOEFTYEFk22pNzYXs?=
- =?us-ascii?Q?Qg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?us-ascii?Q?RD2Ltewce+v4zMDxekwjVRAw+IZAGkU9X4Gq/SW7uMH9GoOhYrLeKBCgTsJl?=
- =?us-ascii?Q?pnPaADTW3LwQF3ZmQ8Y13q1AkEr5PdK1FpKdddbruLTOUDJZDNJMzFTZUW8f?=
- =?us-ascii?Q?UC0rbPMLReqMpV+3fIyJCsg71L8sVyczAl+Inpa3AsFzcyt75vsvnoNd0yrv?=
- =?us-ascii?Q?otx0snJ3tWmeRnn5fPk243yS22JkDMgrhE7A+voms0O4KK8+1EVBT8JelZXK?=
- =?us-ascii?Q?V+vaNd6V64tO/HSA7u37VBThN7N/wQZzw7a6MMm9P0zFPwVBdFtGBuqcXg4I?=
- =?us-ascii?Q?c87qsgXUAyBylhuSY0PxsJxE6JHVhd9pZVKVEZpTlzvB22ffJ3nDWYka09o/?=
- =?us-ascii?Q?ub/d2siAavJ85OhrRwAmfW5QYmYK3DNFnE8b4zbHb/BpoicLZoICbX0I+91w?=
- =?us-ascii?Q?sJPzXtiV6xxuxFKmnKpUCGm05pxRusSWHdz7MXSLGmdQm9trHd5YwRpmiNXF?=
- =?us-ascii?Q?fV3KmzLfvq1g+qxzfKrbfcVKO6pDaI4y38EndIAA9bwmGgWcmRiMZeuHQ0yq?=
- =?us-ascii?Q?qX0bzpnrUXkpjOLG1gIQYtTGFOB82S9/1pJGyh4xbvRFkr/H3nojNd7rh1BT?=
- =?us-ascii?Q?JTh6qcgEWJSLB58bAxvTMZApUcFQlrIA2/xd/U4pKJ5xC8ML6rVmU49miNrp?=
- =?us-ascii?Q?ldcmxRs6I7WqoEa8eJYyEgnjtr4qn8IDR8eDutUrcqAMFJK8ex3HazOs9vf+?=
- =?us-ascii?Q?3QgV30qvP1Vr9SY0P2PpO/3nIJV6u4M83ltyLNp00s2DURtyQfq7+cnaf1k3?=
- =?us-ascii?Q?+41ZLQMgW1kwiEoRNdnM90+t0gyWGPy6sJpdFrg5/pTXYUHthsvXV2d608NL?=
- =?us-ascii?Q?BpLGC4/OxBELBJrrO15/0M4GW3no6qMCyxFlF0U17+nQ2Wa6GApcOeRiT0R1?=
- =?us-ascii?Q?VKrWKmqbUdYrE+4sJVmsAYRwOquuTL0/SFMPHWvost/Yd0yrtmIjcTno3ES9?=
- =?us-ascii?Q?TDSMnTGDlW/Ozc55kYVioarL+NMSO6XjUmnLAa7qpk3o7NcG/8WClvyOgHb6?=
- =?us-ascii?Q?LW8xVDiCZilIRBJHLVE9pUn+R5/maSlbtIKydl51qK4q3fOlaolT79ATkJwv?=
- =?us-ascii?Q?8pjFnqJIYNJDEYQ34qBHk9kJlfg3iAXwV/udQV09CXGe5M5YfVLlipkTS6pf?=
- =?us-ascii?Q?k5CNDICIOjIbsVWjKBMfGuSubI1GEOWx/EcgugFWPF7w70aci+sEhJc=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e8dfe85-8a5e-480f-24bc-08dad7c69ed0
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5711.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?E7iqhzl5M4IAKeEASLto1y4IMfEHKy+zk/JRrOkOKjJpSj25VRo7B0nv2irT?=
+ =?us-ascii?Q?M3tDqra4MUbDbBBCOYwoOmHiUbEKuo7zJqcWc7Eq+Utn2Ugs/nOP8ersSGLw?=
+ =?us-ascii?Q?dJvIfOQkfOAZUbmlD+oVPIM1SIzLerBPNxKEUZwwGLda99XuSUUcb69AYKBe?=
+ =?us-ascii?Q?vq7NOuqI40e+d+ES4r/cNs015Kc7spqWeDlC4Qn2P0Wq+uc+gsIYNJFWcw6F?=
+ =?us-ascii?Q?OeMUcKTeEretgP7yg9SkwoHOCTomH/5KU1uJSYqFFywAwdiNW4JTmK1PvYb5?=
+ =?us-ascii?Q?m0P8gVRupoN8nO4QimZEkkgxLCSjdtXtUsnvr1XBnm4HppupcymVyE2n1RhA?=
+ =?us-ascii?Q?0MGoOmn+s7zJi6BR4cPWMSvppKLsFWNKVXag7O2h3btmVwN0tp02OQ/RYVrV?=
+ =?us-ascii?Q?4/fO5TVeZGdFxICd1+/7MstLK+a/cnQY+pF4nN0MeAqtWPlVTAzFZFzQwhIr?=
+ =?us-ascii?Q?35v/pDH7hJSXU0XfTwxnOjaq0f+uP/ZeY5VXwMtjJT7ytCEnZrRwgIHEKoPT?=
+ =?us-ascii?Q?zZJHqyihoyQAQcqbTm1wV+rHiFSPGDx0VcCwN/5Af0IYhWE+C+s+PEAxaJWR?=
+ =?us-ascii?Q?2BMDHMCyUV4V7XWMo/mSqDUsiKhkIFdYkzKfqgMstXCj0qCyygCWXEEY2ouY?=
+ =?us-ascii?Q?PI0yMouSaJMvN6NlV6fcFhZ5M7TmeEO08DhfvToNDdHMJMqeFVrYRBRxDtzH?=
+ =?us-ascii?Q?ghVPt4sjsvb8vYdExeHdWVQDrMhdj0X2TU2W6mXN5mYAXp3M3us7AZHz17+f?=
+ =?us-ascii?Q?3EBce83RVYLv8vC9mrcUMnNpqEZk2luvdpzx8MC7UrgPBxMFzhi4GZNRp2d7?=
+ =?us-ascii?Q?xses3JK1H38953YOk4f9iTgSIy74Ek54WwIcpftHPxk6r3iviDFtrS7F0Sin?=
+ =?us-ascii?Q?+EgAN3m9L4kes1gt7rn32PN4X+4YkSc9UZXfW+ovIeWRYdc5u6+GR5BiTITW?=
+ =?us-ascii?Q?wWPp/qKLXTRASlE5aV9seHbq0vFL5V37IRk3yUNmyn3zOPyUy2QGWtzbMC60?=
+ =?us-ascii?Q?sEZTA4re4oF/5dOFHNnzzoONR+M680IWOhK0Vybnd7MUSll4wJnzvu1VdYtr?=
+ =?us-ascii?Q?qR2ie3qJYbJXa7aqUoaKe9BKVMpyGwkQoDHnm1vaL7yn5otn6CaUltwez5TY?=
+ =?us-ascii?Q?kdoKIGAY3Ru/rws3RSLz1Yz5pR1FX8aJyymZxsYKornlVX0CoPMdmZ29Ax8x?=
+ =?us-ascii?Q?srIWwp5PARivvibQoOjHWUdsFljEYpZGRO5nWzCYqowQxnwHb7qhRz4w8mkH?=
+ =?us-ascii?Q?8qbMQdKJ2544bfAxub4NiPpe1xNne1vt5VrTiCijEMz3Xf5BuOI/wdWJvcye?=
+ =?us-ascii?Q?qLN43dEvLjqWTMRN1hcG8FAa+ofBHoW1TEL/fEHWw72wW17Wi+JohmtCxFC9?=
+ =?us-ascii?Q?s3918Xs8I77guKGFjo/kDaec5A6HvJCI/3SzeX6bw3gW4WiHpQl4LyWyxRUV?=
+ =?us-ascii?Q?fZBrczqfOCcV2MVgM1LYUuwpv2o1n8IzrEQV8XrGcXyHO5Xl1YA1utLLP1zu?=
+ =?us-ascii?Q?wKVAQwQS7XY4CDq6zQoZSFCFa/KEcJVUgEiUjTBZFmCKXEildLoDhSpdRp+8?=
+ =?us-ascii?Q?UmBIQGA/WjqlDOmdJ3k=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 346ad5dd-2bca-4394-9575-08dad7ca255a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 20:15:29.7252
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 20:40:43.8124
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OnMa8TY0xx5KZUK9qDFElvfp3gxAu9KROOEnDzxF4GlhpgfieuVS+zClq6FXd5vN/S8diLuphXn1+pCe56GbEK2c0h/EW/6JIVg5VuocIuo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5875
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-06_11,2022-12-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212060170
-X-Proofpoint-ORIG-GUID: SX5Q8Xr49sA51KEGeuCJJu9FW543qPXX
-X-Proofpoint-GUID: SX5Q8Xr49sA51KEGeuCJJu9FW543qPXX
+X-MS-Exchange-CrossTenant-UserPrincipalName: E83aXU8kSsjL6MCR6SCulojgkpTaKawY1kx3ZhEyqLETjjKnJgy3kTXa23fcoipn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5744
 
-On Thu, Dec 01, 2022 at 07:35:59AM +0900, Masahiro Yamada wrote:
-> On Wed, Nov 30, 2022 at 4:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > When building arm64 allmodconfig + ThinLTO with clang and a proposed
-> > modpost update to account for -ffuncton-sections, the following warning
-> > appears:
-> >
-> >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
-> >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
-> >
-> > In both cases, an __init function calls padata_work_init(), which is not
-> > marked __init, with padata_mt_helper(), another __init function, as a
-> > work function argument.
-> >
-> > padata_work_init() is called from non-init paths, otherwise it could be
-> > marked __init to resolve the warning. Instead, remove __init from
-> > padata_mt_helper() to resolve the warning.
-> >
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> > Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> > Cc: linux-crypto@vger.kernel.org
-> > ---
-> >  kernel/padata.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/padata.c b/kernel/padata.c
-> > index e5819bb8bd1d..c2271d7e446d 100644
-> > --- a/kernel/padata.c
-> > +++ b/kernel/padata.c
-> > @@ -45,7 +45,7 @@ struct padata_mt_job_state {
-> >  };
-> >
-> >  static void padata_free_pd(struct parallel_data *pd);
-> > -static void __init padata_mt_helper(struct work_struct *work);
-> > +static void padata_mt_helper(struct work_struct *work);
-> >
-> >  static int padata_index_to_cpu(struct parallel_data *pd, int cpu_index)
-> >  {
-> > @@ -425,7 +425,7 @@ static int padata_setup_cpumasks(struct padata_instance *pinst)
-> >         return err;
-> >  }
-> >
-> > -static void __init padata_mt_helper(struct work_struct *w)
-> > +static void padata_mt_helper(struct work_struct *w)
-> >  {
-> >         struct padata_work *pw = container_of(w, struct padata_work, pw_work);
-> >         struct padata_mt_job_state *ps = pw->pw_data;
-> > --
-> > 2.38.1
-> >
+On Mon, Nov 28, 2022 at 02:56:17PM -0400, Jason Gunthorpe wrote:
+> It is basically saying a driver cannot write this:
 > 
-> This patch seems wrong.
+> unmap():
+>   mutex_lock(lock)
+>    iommufd_access_unpin_pages(access)
+>   mutex_unlock(lock)
 > 
-> padata_work_init() does not reference to padata_mt_helper()
+> driver_close
+>   mutex_lock(lock)
+>    iommufd_access_destroy(access)
+>   mutex_unlock(lock)
 > 
+> Or any other equivalent thing. How about
 > 
-> padata_work_alloc_mt() and padata_do_multithreaded() do.
+>  * iommufd_access_destroy() will wait for any outstanding unmap callback to
+>  * complete. Once iommufd_access_destroy() no unmap ops are running or will
+>  * run in the future. Due to this a driver must not create locking that prevents
+>  * unmap to complete while iommufd_access_destroy() is running.
+> 
+> And I should really add a lockdep map here, which I will add as a
+> followup patch:
 
-I see LLVM optimizing padata_work_init by embedding padata_mt_helper's
-address in its text, which runs afoul of modpost.
+Actually, it turns out we already have enough real locks that lockdep
+warns on this anyhow:
 
-I agree with Masahiro, the warning is a false positive since only __init
-functions ever cause the embedded address to be used.
+[  186.281328] ======================================================
+[  186.281647] WARNING: possible circular locking dependency detected
+[  186.281930] 6.1.0-rc7+ #156 Not tainted
+[  186.282104] ------------------------------------------------------
+[  186.282394] iommufd/404 is trying to acquire lock:
+[  186.282622] ffff888006e57278 (&staccess->lock){+.+.}-{3:3}, at: iommufd_test_access_unmap+0x2a/0x170 [iommufd]
+[  186.283211] 
+[  186.283211] but task is already holding lock:
+[  186.283498] ffff888008059a70 (&obj->destroy_rwsem){++++}-{3:3}, at: iommufd_access_notify_unmap+0xb7/0x240 [iommufd]
+[  186.284000] 
+[  186.284000] which lock already depends on the new lock.
+[  186.284000] 
+[  186.284496] 
+[  186.284496] the existing dependency chain (in reverse order) is:
+[  186.284905] 
+[  186.284905] -> #1 (&obj->destroy_rwsem){++++}-{3:3}:
+[  186.285234]        down_write+0x34/0x50
+[  186.285438]        iommufd_object_destroy_user+0x1b/0x120 [iommufd]
+[  186.285771]        iommufd_access_destroy+0x80/0xa0 [iommufd]
+[  186.286111]        iommufd_test_staccess_release+0x5a/0x80 [iommufd]
+[  186.286454]        __fput+0x1f9/0x3f0
+[  186.286650]        ____fput+0x9/0x10
+[  186.286834]        task_work_run+0xf4/0x150
+[  186.287026]        exit_to_user_mode_loop+0xd0/0xf0
+[  186.287271]        exit_to_user_mode_prepare+0x7f/0xc0
+[  186.287519]        syscall_exit_to_user_mode+0x4d/0x1e0
+[  186.287768]        do_syscall_64+0x50/0x90
+[  186.287958]        entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[  186.288206] 
+[  186.288206] -> #0 (&staccess->lock){+.+.}-{3:3}:
+[  186.288598]        __lock_acquire+0x2092/0x3c80
+[  186.288837]        lock_acquire+0x1b5/0x300
+[  186.289037]        __mutex_lock_common+0xf7/0x1410
+[  186.289299]        mutex_lock_nested+0x1b/0x30
+[  186.289561]        iommufd_test_access_unmap+0x2a/0x170 [iommufd]
+[  186.289892]        iommufd_access_notify_unmap+0x196/0x240 [iommufd]
+[  186.290259]        iopt_unmap_iova_range+0x2c2/0x350 [iommufd]
+[  186.290604]        iopt_unmap_iova+0x1b/0x30 [iommufd]
+[  186.290889]        iommufd_ioas_unmap+0xdc/0x1d0 [iommufd]
+[  186.291170]        iommufd_fops_ioctl+0x1e7/0x210 [iommufd]
+[  186.291450]        __x64_sys_ioctl+0x11bb/0x1260
+[  186.291707]        do_syscall_64+0x44/0x90
+[  186.291903]        entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-We have __ref for situations like this.  That way, padata_mt_helper can
-stay properly __init.
+eg trying to provoke it by deliberately wrongly locking
+iommufd_access_destroy()
+
+Jason
