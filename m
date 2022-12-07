@@ -1,181 +1,189 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFEB625
-	for <llvm@lists.linux.dev>; Wed,  7 Dec 2022 06:50:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670395835;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NIoajQKxt3LVerk/YgwTSORZbyqh5XPjNK6Im9jIPkw=;
-	b=IKFj6FDfgw0JmAHYoQxPFCvxOeACGUOC60UnNVRn6paIgsswo1cj09zMiSdU+FSyPokRnp
-	dt/QAeFJdonwen48SLkYrhfNBugYK0tJe4YpvOmyxh3cM5KFk2DsnxkyeWb2Obx+bjG34j
-	AJqQNH4Svs4hspvfEpbPnYEwS5o76A8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-NZFS2HFEPhmkNK1j24EQgQ-1; Wed, 07 Dec 2022 01:50:33 -0500
-X-MC-Unique: NZFS2HFEPhmkNK1j24EQgQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9BEF4185A78B
-	for <llvm@lists.linux.dev>; Wed,  7 Dec 2022 06:50:33 +0000 (UTC)
-Received: from [172.64.11.46] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 86C8B2166B26;
-	Wed,  7 Dec 2022 06:50:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc8,
- mainline.kernel.org-clang, 8ed710da)
-Date: Wed, 07 Dec 2022 06:50:33 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D462D643
+	for <llvm@lists.linux.dev>; Wed,  7 Dec 2022 07:00:48 +0000 (UTC)
+Received: by mail-il1-f198.google.com with SMTP id w15-20020a056e021a6f00b00303520bff1dso8659166ilv.20
+        for <llvm@lists.linux.dev>; Tue, 06 Dec 2022 23:00:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ucw3nYpJXRPLlC5lh3bgfdvB49nVLd/MO6a/6x+xcP0=;
+        b=SEveCejeAgyAemVC5Izp2Xj7BvQCzg+6R3zNIlC8iTMQI6D1i4XtCLaE62BjTRTa3z
+         lU7rddX27GD99yP2lFeKWGLliEfeiny6sDvKi/2v7hIw1Gkf3MDk3yPOTSoHNY8sLPUm
+         9NUCPgQb/B+O6Sa/PwFn9D0owV88gYpL3GgAyLWws1ojIcPTfN25JDMmDsmFy7RRHAmN
+         9THNFtpu5Cz4zdwTwQo2NTyMfPS5BvSCOOgv48ZLUsG/6P+oH9PHVynmN7JdYsbkiGPc
+         rPSf7vEe5m7yjkr2k+H3VVdM2dKLzY7YlyOx8um4EGuNtYEAY7kl+zmT/Mn6FWA+BrHu
+         xlTA==
+X-Gm-Message-State: ANoB5pl5Jb9OKLM7Psz3B+pkijr5O7adihZffuxYETXU15qqiTH67ufq
+	LQ3sJFIlGvqt3lPyRC3ZrSJbD3YhJBKAOJUQR5eQHVA6iE+I
+X-Google-Smtp-Source: AA0mqf4dVSrdfQGmDym4pxMsH1xHsY17zDRlmwsZSfzJ8KCsUXRW7tXVs+2HP8oPj9f7MIhgcQzsr/lxkcO5p4Tg6trkh3yBArc2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <19727.122120701503300311@us-mta-328.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a6b:3102:0:b0:6bf:e923:388b with SMTP id
+ j2-20020a6b3102000000b006bfe923388bmr42986397ioa.105.1670396447962; Tue, 06
+ Dec 2022 23:00:47 -0800 (PST)
+Date: Tue, 06 Dec 2022 23:00:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ea3c3105ef377a12@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
+From: syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+syzbot found the following issue on:
+
+HEAD commit:    8ed710da2873 Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10027d97880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=50de433dd4debef8
+dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160e0797880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16bf79d5880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/75851d210874/disk-8ed710da.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c70846514634/vmlinux-8ed710da.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/34393d745af1/bzImage-8ed710da.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ce942d5850e5/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 4096
+ntfs3: loop0: Different NTFS' sector size (1024) and media sector size (512)
+==================================================================
+BUG: KASAN: slab-out-of-bounds in ntfs_list_ea fs/ntfs3/xattr.c:191 [inline]
+BUG: KASAN: slab-out-of-bounds in ntfs_listxattr+0x401/0x570 fs/ntfs3/xattr.c:710
+Read of size 1 at addr ffff888021acaf3d by task syz-executor128/3632
+
+CPU: 1 PID: 3632 Comm: syz-executor128 Not tainted 6.1.0-rc8-syzkaller-00014-g8ed710da2873 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:284
+ print_report+0x107/0x220 mm/kasan/report.c:395
+ kasan_report+0x139/0x170 mm/kasan/report.c:495
+ ntfs_list_ea fs/ntfs3/xattr.c:191 [inline]
+ ntfs_listxattr+0x401/0x570 fs/ntfs3/xattr.c:710
+ vfs_listxattr fs/xattr.c:457 [inline]
+ listxattr+0x293/0x2d0 fs/xattr.c:804
+ path_listxattr fs/xattr.c:828 [inline]
+ __do_sys_llistxattr fs/xattr.c:846 [inline]
+ __se_sys_llistxattr fs/xattr.c:843 [inline]
+ __x64_sys_llistxattr+0x174/0x230 fs/xattr.c:843
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbd70b66749
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff05b9d818 EFLAGS: 00000246 ORIG_RAX: 00000000000000c3
+RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007fbd70b66749
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
+RBP: 00007fbd70b25fe0 R08: 000000000001f6fe R09: 0000000000000000
+R10: 00007fff05b9d6e0 R11: 0000000000000246 R12: 00007fbd70b26070
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 3632:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ __do_kmalloc_node mm/slab_common.c:955 [inline]
+ __kmalloc+0xaf/0x1a0 mm/slab_common.c:968
+ kmalloc include/linux/slab.h:558 [inline]
+ ntfs_read_ea+0x437/0x820 fs/ntfs3/xattr.c:110
+ ntfs_list_ea fs/ntfs3/xattr.c:168 [inline]
+ ntfs_listxattr+0x184/0x570 fs/ntfs3/xattr.c:710
+ vfs_listxattr fs/xattr.c:457 [inline]
+ listxattr+0x293/0x2d0 fs/xattr.c:804
+ path_listxattr fs/xattr.c:828 [inline]
+ __do_sys_llistxattr fs/xattr.c:846 [inline]
+ __se_sys_llistxattr fs/xattr.c:843 [inline]
+ __x64_sys_llistxattr+0x174/0x230 fs/xattr.c:843
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888021acaf00
+ which belongs to the cache kmalloc-64 of size 64
+The buggy address is located 61 bytes inside of
+ 64-byte region [ffff888021acaf00, ffff888021acaf40)
+
+The buggy address belongs to the physical page:
+page:ffffea000086b280 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888021aca080 pfn:0x21aca
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea0000796a40 dead000000000005 ffff888012841640
+raw: ffff888021aca080 000000008020001d 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 46, tgid 46 (kworker/u4:3), ts 7050450825, free_ts 6956530319
+ prep_new_page mm/page_alloc.c:2539 [inline]
+ get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4291
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
+ alloc_slab_page+0xbd/0x190 mm/slub.c:1794
+ allocate_slab+0x5e/0x4b0 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0x7f4/0xeb0 mm/slub.c:3180
+ __slab_alloc mm/slub.c:3279 [inline]
+ slab_alloc_node mm/slub.c:3364 [inline]
+ __kmem_cache_alloc_node+0x252/0x310 mm/slub.c:3437
+ kmalloc_node_trace+0x23/0x60 mm/slab_common.c:1058
+ kmalloc_node include/linux/slab.h:575 [inline]
+ kzalloc_node include/linux/slab.h:700 [inline]
+ __get_vm_area_node+0x13f/0x380 mm/vmalloc.c:2494
+ __vmalloc_node_range+0x3a6/0x1400 mm/vmalloc.c:3173
+ alloc_thread_stack_node+0x307/0x500 kernel/fork.c:311
+ dup_task_struct+0x8b/0x490 kernel/fork.c:974
+ copy_process+0x637/0x3fc0 kernel/fork.c:2084
+ kernel_clone+0x227/0x640 kernel/fork.c:2671
+ user_mode_thread+0x12d/0x190 kernel/fork.c:2747
+ call_usermodehelper_exec_work+0x57/0x220 kernel/umh.c:175
+ process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1459 [inline]
+ free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x7d/0x630 mm/page_alloc.c:3483
+ __vunmap+0x867/0x9d0 mm/vmalloc.c:2713
+ free_work+0x66/0x90 mm/vmalloc.c:97
+ process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+Memory state around the buggy address:
+ ffff888021acae00: 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc fc
+ ffff888021acae80: 00 00 00 00 01 fc fc fc fc fc fc fc fc fc fc fc
+>ffff888021acaf00: 00 00 00 00 00 00 00 04 fc fc fc fc fc fc fc fc
+                                        ^
+ ffff888021acaf80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff888021acb000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-Kernel information:
-    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/arm64/linux
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62368
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6268516
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { sys_admin } for  pid=3D674004 comm=3D"system=
-d-gpt-aut" capability=3D21  scontext=3Dsystem_u:system_r:systemd_gpt_genera=
-tor_t:s0 tcontext=3Dsystem_u:system_r:systemd_gpt_generator_t:s0 tclass=3Dc=
-apability permissive=3D0
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2083900
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 aarch64 - Networking cki netfilter test
-                 aarch64 - ALSA PCM loopback test
-                 aarch64 - Storage - SCSI VPD
-                 aarch64 - Firmware test suite
-                 ppc64le - Networking MACsec: sanity
-                 ppc64le - Networking cki netfilter test
-                 ppc64le - ALSA PCM loopback test
-                   s390x - Networking MACsec: sanity
-                   s390x - Networking cki netfilter test
-                  x86_64 (debug) - Networking cki netfilter test
-                  x86_64 (debug) - Storage - SCSI VPD
-        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1479
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                 aarch64 - Reboot test
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 (debug) - Reboot test
-        Issue: (upstream) Cannot download, all mirrors were already tried w=
-ithout success
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/5439024
-            Affected tests:
-                  x86_64 (debug) - xfstests - ext4
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking MACsec: sanity: Cannot find device "dummy0"
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1306
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-        Issue: Networking route: pmtu: Cannot find device "veth0_client"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2118519
-            Affected tests:
-                 aarch64 - Networking MACsec: sanity
-                 ppc64le - Networking MACsec: sanity
-                   s390x - Networking MACsec: sanity
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
