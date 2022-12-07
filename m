@@ -1,170 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA9463A;
-	Wed,  7 Dec 2022 18:36:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F1DC43145;
-	Wed,  7 Dec 2022 18:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1177563A;
+	Wed,  7 Dec 2022 18:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01996C433D6;
+	Wed,  7 Dec 2022 18:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670438178;
-	bh=mBPLiRISW0j7Pl/OFYZmohWGPJReABYEkzxR6WmqBYQ=;
+	s=k20201202; t=1670439531;
+	bh=tileNfIVVSzSkC6hGTUe9h984/Ujy2+taCQu+sbD3EM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ufwhSZjyJJnVTmUA5mtv98p92WGFST+2vs82VtZpd7+fCCG1+/Vry1VOEeJv5LrL6
-	 s+4/DnwX5i1Aufmq6qwZyVqovM81GDv364cZ+EWEWEJ9hkbiWakMiBOPL7O1Bgq88T
-	 Qy14j78uPCARrtjS45C0rjlwxUA//owOI9KNAZWzOn12GMPxfsu39TOxU/UWxI5McC
-	 6nUARdPjKBdrTN3UdiJBHZ5i4/JRSCYL9K/uagQi7OuAFSdH0/JUjkvgeig6ESNQ0h
-	 uKyI51XVu++KNHqi99Vi0OyuJsUYM0KLgrpTiCMSQz7310gCgBtCoMESs/tfppqjdm
-	 mcC8RVNUVCh1g==
-Date: Wed, 7 Dec 2022 11:36:16 -0700
+	b=ZTOQvX+ZEFGW9ZgdU02BHVvgAgQ5IXPrg8Ro2U9dF/A7aynlgp91rKsVEfkZJCa3p
+	 WsK/udxDrqaHgQ0KH18sjNrXrT5pv5oMCGdcEtsHSXfOR11RzbA8NyWcDTcWF48I7x
+	 Dm6W5Kh/B6XSaJa/w7qjPYBTL8fPhfQdETdR/xNL/4ItIl2jfjk6r0WlxJU4xNJNil
+	 bUu6fNdZFVF9sv7z8zImG4Pm8IlpCixieuJm1DxwmBoQFAwdWmm6tuSnG0nPaJz01f
+	 rXy2cQ0Uw4ocHw7vZLmWikzqfeRjsAMk2efTWAubfz/oFNfCLBYf8sr/KZIwaQAc20
+	 /7YJqlEQJ5E1w==
+Date: Wed, 7 Dec 2022 11:58:49 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Mikhail Zhilkin <csharper2005@gmail.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	NOGUCHI Hiroshi <drvlabo@gmail.com>
-Subject: Re: ld.lld: error: undefined symbol: __udivdi3
-Message-ID: <Y5DdIM6xkJVuVVbn@dev-arch.thelio-3990X>
-References: <202212010140.pIueEBNb-lkp@intel.com>
- <20221201091610.524f7786@xps-13>
- <Y4jPubD53yN32OUL@dev-arch.thelio-3990X>
- <20221201171331.42f05097@xps-13>
- <CAC2txAZpGooRGSxh4x9T7Y9b4OvfePx5=YuJoyaSwk1M_EvwtQ@mail.gmail.com>
- <Y4913gH2tvIED61P@dev-arch.thelio-3990X>
- <4999a9ee-ba08-6e4c-a1d1-074687f82d5e@gmail.com>
+To: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Vincent Donnefort <vdonnefort@google.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH 1/2] padata: Do not mark padata_mt_helper() as __init
+Message-ID: <Y5DiaT8+eQDLfJcW@dev-arch.thelio-3990X>
+References: <20221129190123.872394-1-nathan@kernel.org>
+ <20221129190123.872394-2-nathan@kernel.org>
+ <CAK7LNASdOhcTqbnRibPumMH1o+78dxBjLuzLK+JS+AiHyTiY6A@mail.gmail.com>
+ <20221206201526.al3tpbdvd244cvl5@parnassus.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4999a9ee-ba08-6e4c-a1d1-074687f82d5e@gmail.com>
+In-Reply-To: <20221206201526.al3tpbdvd244cvl5@parnassus.localdomain>
 
-On Wed, Dec 07, 2022 at 09:32:41PM +0300, Mikhail Zhilkin wrote:
-> Hi Nathan,
+On Tue, Dec 06, 2022 at 03:15:26PM -0500, Daniel Jordan wrote:
+> On Thu, Dec 01, 2022 at 07:35:59AM +0900, Masahiro Yamada wrote:
+> > On Wed, Nov 30, 2022 at 4:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > When building arm64 allmodconfig + ThinLTO with clang and a proposed
+> > > modpost update to account for -ffuncton-sections, the following warning
+> > > appears:
+> > >
+> > >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
+> > >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
+> > >
+> > > In both cases, an __init function calls padata_work_init(), which is not
+> > > marked __init, with padata_mt_helper(), another __init function, as a
+> > > work function argument.
+> > >
+> > > padata_work_init() is called from non-init paths, otherwise it could be
+> > > marked __init to resolve the warning. Instead, remove __init from
+> > > padata_mt_helper() to resolve the warning.
+> > >
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > > Cc: Steffen Klassert <steffen.klassert@secunet.com>
+> > > Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+> > > Cc: linux-crypto@vger.kernel.org
+> > > ---
+> > >  kernel/padata.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/padata.c b/kernel/padata.c
+> > > index e5819bb8bd1d..c2271d7e446d 100644
+> > > --- a/kernel/padata.c
+> > > +++ b/kernel/padata.c
+> > > @@ -45,7 +45,7 @@ struct padata_mt_job_state {
+> > >  };
+> > >
+> > >  static void padata_free_pd(struct parallel_data *pd);
+> > > -static void __init padata_mt_helper(struct work_struct *work);
+> > > +static void padata_mt_helper(struct work_struct *work);
+> > >
+> > >  static int padata_index_to_cpu(struct parallel_data *pd, int cpu_index)
+> > >  {
+> > > @@ -425,7 +425,7 @@ static int padata_setup_cpumasks(struct padata_instance *pinst)
+> > >         return err;
+> > >  }
+> > >
+> > > -static void __init padata_mt_helper(struct work_struct *w)
+> > > +static void padata_mt_helper(struct work_struct *w)
+> > >  {
+> > >         struct padata_work *pw = container_of(w, struct padata_work, pw_work);
+> > >         struct padata_mt_job_state *ps = pw->pw_data;
+> > > --
+> > > 2.38.1
+> > >
+> > 
+> > This patch seems wrong.
+> > 
+> > padata_work_init() does not reference to padata_mt_helper()
+> > 
+> > 
+> > padata_work_alloc_mt() and padata_do_multithreaded() do.
 > 
-> On 12/6/2022 8:03 PM, Nathan Chancellor wrote:
+> I see LLVM optimizing padata_work_init by embedding padata_mt_helper's
+> address in its text, which runs afoul of modpost.
 > 
-> > Hi Mikhail,
-> >
-> > First and foremost, apologies for the delay in my response!
-> >
-> > On Thu, Dec 01, 2022 at 09:39:22PM +0300, Mikhail Zhilkin wrote:
-> >> Hi Miquèl, Nathan,
-> >>
-> >> On 12/1/2022 7:13 PM, Miquel Raynal wrote:
-> >>> Hi Nathan,
-> >>>
-> >>> nathan@kernel.org wrote on Thu, 1 Dec 2022 09:00:57 -0700:
-> >>>
-> >>>> On Thu, Dec 01, 2022 at 09:16:10AM +0100, Miquel Raynal wrote:
-> >>>>> Hi Mikhail, Hiroshi,
-> >>>>>
-> >>>>> lkp@intel.com wrote on Thu, 1 Dec 2022 01:46:36 +0800:
-> >>>>>
-> >>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> >>>>>> head:   01f856ae6d0ca5ad0505b79bf2d22d7ca439b2a1
-> >>>>>> commit: 9b78ef0c7997052e9eaa0f7a4513d546fa17358c mtd: parsers: add support for Sercomm partitions
-> >>>>>> date:   6 months ago
-> >>>>>> config: mips-randconfig-r033-20221128
-> >>>>>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
-> >>>>>> reproduce (this is a W=1 build):
-> >>>>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>>>>>         chmod +x ~/bin/make.cross
-> >>>>>>         # install mips cross compiling tool for clang build
-> >>>>>>         # apt-get install binutils-mipsel-linux-gnu
-> >>>>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9b78ef0c7997052e9eaa0f7a4513d546fa17358c
-> >>>>>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >>>>>>         git fetch --no-tags linus master
-> >>>>>>         git checkout 9b78ef0c7997052e9eaa0f7a4513d546fa17358c
-> >>>>>>         # save the config file
-> >>>>>>         mkdir build_dir && cp config build_dir/.config
-> >>>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-> >>>>>>
-> >>>>>> If you fix the issue, kindly add following tag where applicable
-> >>>>>> | Reported-by: kernel test robot <lkp@intel.com>
-> >>>>>>
-> >>>>>> All errors (new ones prefixed by >>):
-> >>>>>>
-> >>>>>>>> ld.lld: error: undefined symbol: __udivdi3
-> >>>>>>    >>> referenced by scpart.c
-> >>>>>>    >>>               mtd/parsers/scpart.o:(scpart_parse) in archive drivers/built-in.a
-> >>>>>>
-> >>>>> Can you please try to reproduce this with a mips toolchain as advised
-> >>>>> and send a fix?
-> >>>> For what it's worth, this is likely our bug:
-> >>>>
-> >>>> https://github.com/ClangBuiltLinux/linux/issues/1635
-> >>>>
-> >>>> It sounds like there are some merged LLVM patches that should help but I
-> >>>> guess not based on this report...
-> >>> Ah, yeah, thanks a lot for the share.
-> >>>
-> >>> Cheers, Miquèl
-> >> I could reproduce the issue and found that reference to __udivdi3
-> >> appears in this function:
-> >>
-> >> static uint32_t scpart_desc_is_valid(struct sc_part_desc *pdesc)
-> >> {
-> >>         return ((pdesc->part_id != 0xffffffffUL) &&
-> >>                 (pdesc->part_offs != 0xffffffffUL) &&
-> >>                 (pdesc->part_bytes != 0xffffffffUL));
-> >> }
-> >>
-> >> There is no LLVM compiler error if:
-> >>
-> >> static uint32_t scpart_desc_is_valid(struct sc_part_desc *pdesc)
-> >> {
-> >>         return (0);
-> >> }
-> >>
-> >> Currently I have no ideas where does __udivdi3 come from, because
-> >> there's no division here. Should I try to rewrite somehow the function
-> >> to avoid the error?
-> >> I would greatly appreciate any ideas.
-> > I do not think it is that function that is causing the problem. Making
-> > it return zero just causes the code generation to change enough to avoid
-> > this issue.
-> >
-> > Based on the previous analysis and reduction [1], LLVM is transforming
-> > the for loop in scpart_scan_partmap() into division; you can verify this
-> > by commenting it out some way then rebuilding and running 'readelf -s'
-> > to look for __udivdi3.
-> >
-> > Arnd suggested working around this problem by making offs a 32-bit type,
-> > as it is already bounded by ->erasesize, which appears to be a 32-bit
-> > value from what I can tell. Making a change like so appears to resolve
-> > the issue for me but I am not sure if that has any other implications.
-> >
-> > diff --git a/drivers/mtd/parsers/scpart.c b/drivers/mtd/parsers/scpart.c
-> > index 02601bb33de4..6e5e11c37078 100644
-> > --- a/drivers/mtd/parsers/scpart.c
-> > +++ b/drivers/mtd/parsers/scpart.c
-> > @@ -50,7 +50,7 @@ static int scpart_scan_partmap(struct mtd_info *master, loff_t partmap_offs,
-> >  	int cnt = 0;
-> >  	int res = 0;
-> >  	int res2;
-> > -	loff_t offs;
-> > +	uint32_t offs;
-> >  	size_t retlen;
-> >  	struct sc_part_desc *pdesc = NULL;
-> >  	struct sc_part_desc *tmpdesc;
-> >
-> > [1]: https://github.com/ClangBuiltLinux/linux/issues/1635
+> I agree with Masahiro, the warning is a false positive since only __init
+> functions ever cause the embedded address to be used.
 > 
-> Many thanks for your time and very clear explanation!
-> 
-> I've made compile and run tests. It seems that have the working
-> workaround and I'm going to send the patch. After analyzing the code, I
-> don't expect any other implications.
-> 
-> Who should I add to Suggested-by of the patch: You or maybe Arndt?
+> We have __ref for situations like this.  That way, padata_mt_helper can
+> stay properly __init.
 
-I think Arnd should be the suggested-by on that patch, you should be
-able to get his info from either MAINTAINERS or git log. Thanks for
-taking a look and sending a patch!
+Ah, thank you for pointing out __ref, that seems to be exactly what we
+want here. I will send a v2 marking padata_work_init() as __ref shortly.
 
 Cheers,
 Nathan
