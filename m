@@ -1,96 +1,103 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507422102;
-	Wed,  7 Dec 2022 14:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9F28828;
+	Wed,  7 Dec 2022 14:31:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670422873; x=1701958873;
+  t=1670423473; x=1701959473;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MZxK43CBtfMZYGUpxekk9w6lBNmsHAAuCNRtmboW83k=;
-  b=hOWn8H/0RNwtAaC5eQPbg+krujvUVzk8LQdWwuzF6hH53IUxLDlp/wfQ
-   65tymUV114dtxJIt14USmNFLdxJmhJedA+ET8c0LtspIreGSPYtV+Ydal
-   rekvaPQrAF4NKYVnKEvB03uxu1sJFEZzhtQ39ZOzjLwCyOI6duuGfw8PG
-   sncFzAOo00LMJTJianZxZAYxPqb/S9valWGI4NDNCpszOQgD7HplrXhOz
-   NMQLD8ingK53YVDe2tMqRr7KX9QCM4g8A8dAWSQmCC3H7oW2F3oPWxMrN
-   aMvcDzY45fHw3iuqH06UFnakf6XXVmCqg1F+sZN5jq5qTYG9LdGJpEsae
+  bh=02ZNAnrhc/cS5mf6sLuscop4903lTUC9vaMAvNGVpHE=;
+  b=bSHOU+/BnUunQKtEnk6wmAo1QS9ommDxI9JGk2EUWeVd6Vy1bjggkwZX
+   S4FCC+scT4C0qBx6ugSxorY7N5rLI94UToEGMNg08X36TE72Dxr+xRIiE
+   76H1oidhA9nNAO4VCjy8Lfo7Zh3PyJx3AiBoQdoeTOjSiLwOVXve+80Pf
+   pIVn+IwUqvLF1Wr/RLxWa0QMUzdT3PVbgP3W511qrKkSxbKd+2k+2Q6lk
+   cIJ/HW8ayUjdntep+8ti8HjUbilfBCUK25KpAx8GZEuXMznuP2pkwmdNZ
+   //ytcyBayhkt5ktLUY0IIvycTk4ACotRXYP2RfEidEGC+KETFxdBCVyoK
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="296594990"
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="297257480"
 X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="296594990"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 06:21:11 -0800
+   d="scan'208";a="297257480"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 06:31:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="640262716"
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="710082400"
 X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="640262716"
+   d="scan'208";a="710082400"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2022 06:21:07 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2022 06:31:07 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p2vII-0000J7-28;
-	Wed, 07 Dec 2022 14:21:06 +0000
-Date: Wed, 7 Dec 2022 22:20:07 +0800
+	id 1p2vRy-0000JT-2q;
+	Wed, 07 Dec 2022 14:31:06 +0000
+Date: Wed, 7 Dec 2022 22:30:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Marchevsky <davemarchevsky@fb.com>, bpf@vger.kernel.org
+To: David Collins <quic_collinsd@quicinc.com>,
+	Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kernel Team <kernel-team@fb.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Tejun Heo <tj@kernel.org>, Dave Marchevsky <davemarchevsky@fb.com>
-Subject: Re: [PATCH bpf-next 06/13] bpf: Add bpf_rbtree_{add,remove,first}
- kfuncs
-Message-ID: <202212072219.N1swbZBY-lkp@intel.com>
-References: <20221206231000.3180914-7-davemarchevsky@fb.com>
+	David Collins <quic_collinsd@quicinc.com>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] thermal: qcom-spmi-temp-alarm: add support for
+ LITE PMIC peripherals
+Message-ID: <202212072253.UeKPqhxU-lkp@intel.com>
+References: <fa5b6b7a88b23f3efb15f4da4a2fdfa6e6d57cb2.1670375556.git.quic_collinsd@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Uiay8YaKVKDmGpsz"
+Content-Type: multipart/mixed; boundary="j+3d1Tfx41nOCetQ"
 Content-Disposition: inline
-In-Reply-To: <20221206231000.3180914-7-davemarchevsky@fb.com>
+In-Reply-To: <fa5b6b7a88b23f3efb15f4da4a2fdfa6e6d57cb2.1670375556.git.quic_collinsd@quicinc.com>
 
 
---Uiay8YaKVKDmGpsz
+--j+3d1Tfx41nOCetQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Dave,
+Hi David,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.1-rc8 next-20221207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Marchevsky/BPF-rbtree-next-gen-datastructure/20221207-071214
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20221206231000.3180914-7-davemarchevsky%40fb.com
-patch subject: [PATCH bpf-next 06/13] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Collins/thermal-qcom-spmi-temp-alarm-add-support-for-new-TEMP_ALARM-subtypes/20221207-100725
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/fa5b6b7a88b23f3efb15f4da4a2fdfa6e6d57cb2.1670375556.git.quic_collinsd%40quicinc.com
+patch subject: [PATCH v2 3/3] thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
 config: hexagon-randconfig-r036-20221207
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/829813f5a42feb5637b0e6acf6a840b65efb1c49
+        # https://github.com/intel-lab-lkp/linux/commit/e0a2cf4754a17500d98226eb7fa3e10822bd497b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dave-Marchevsky/BPF-rbtree-next-gen-datastructure/20221207-071214
-        git checkout 829813f5a42feb5637b0e6acf6a840b65efb1c49
+        git fetch --no-tags linux-review David-Collins/thermal-qcom-spmi-temp-alarm-add-support-for-new-TEMP_ALARM-subtypes/20221207-100725
+        git checkout e0a2cf4754a17500d98226eb7fa3e10822bd497b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/thermal/qcom/ kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/thermal/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from kernel/bpf/helpers.c:6:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:38:
+   In file included from drivers/thermal/qcom/qcom-spmi-temp-alarm.c:11:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
    In file included from include/asm-generic/hardirq.h:17:
@@ -106,9 +113,8 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
                                                      ^
-   In file included from kernel/bpf/helpers.c:6:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:38:
+   In file included from drivers/thermal/qcom/qcom-spmi-temp-alarm.c:11:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
    In file included from include/asm-generic/hardirq.h:17:
@@ -121,9 +127,8 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
                                                      ^
-   In file included from kernel/bpf/helpers.c:6:
-   In file included from include/linux/bpf-cgroup.h:11:
-   In file included from include/net/sock.h:38:
+   In file included from drivers/thermal/qcom/qcom-spmi-temp-alarm.c:11:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
    In file included from include/asm-generic/hardirq.h:17:
@@ -139,34 +144,102 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
->> kernel/bpf/helpers.c:1885:9: warning: cast from 'bool (*)(struct bpf_rb_node *, const struct bpf_rb_node *)' (aka '_Bool (*)(struct bpf_rb_node *, const struct bpf_rb_node *)') to 'bool (*)(struct rb_node *, const struct rb_node *)' (aka '_Bool (*)(struct rb_node *, const struct rb_node *)') converts to incompatible function type [-Wcast-function-type-strict]
-                         (bool (*)(struct rb_node *, const struct rb_node *))less);
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   7 warnings generated.
+>> drivers/thermal/qcom/qcom-spmi-temp-alarm.c:374:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           reg |= FIELD_PREP(LITE_TEMP_CFG_THRESHOLD_MASK, thresh);
+                  ^
+>> drivers/thermal/qcom/qcom-spmi-temp-alarm.c:648:11: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
+                    ^
+   6 warnings and 2 errors generated.
 
 
-vim +1885 kernel/bpf/helpers.c
+vim +/FIELD_PREP +374 drivers/thermal/qcom/qcom-spmi-temp-alarm.c
 
-  1880	
-  1881	void bpf_rbtree_add(struct bpf_rb_root *root, struct bpf_rb_node *node,
-  1882			    bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b))
-  1883	{
-  1884		rb_add_cached((struct rb_node *)node, (struct rb_root_cached *)root,
-> 1885			      (bool (*)(struct rb_node *, const struct rb_node *))less);
-  1886	}
-  1887	
+   314	
+   315	static int qpnp_tm_set_temp_lite_thresh(struct qpnp_tm_chip *chip, int trip,
+   316					       int temp)
+   317	{
+   318		int ret, temp_cfg, i;
+   319		const long *temp_map;
+   320		u16 addr;
+   321		u8 reg, thresh;
+   322	
+   323		if (trip < 0 || trip >= STAGE_COUNT) {
+   324			dev_err(chip->dev, "invalid TEMP_LITE trip = %d\n", trip);
+   325			return -EINVAL;
+   326		}
+   327	
+   328		switch (trip) {
+   329		case 0:
+   330			temp_map = temp_map_lite_warning;
+   331			addr = QPNP_TM_REG_LITE_TEMP_CFG1;
+   332			break;
+   333		case 1:
+   334			/*
+   335			 * The second trip point is purely in software to facilitate
+   336			 * a controlled shutdown after the warning threshold is crossed
+   337			 * but before the automatic hardware shutdown threshold is
+   338			 * crossed.
+   339			 */
+   340			return 0;
+   341		case 2:
+   342			temp_map = temp_map_lite_shutdown;
+   343			addr = QPNP_TM_REG_LITE_TEMP_CFG2;
+   344			break;
+   345		default:
+   346			return 0;
+   347		}
+   348	
+   349		if (temp < temp_map[THRESH_MIN] || temp > temp_map[THRESH_MAX]) {
+   350			dev_err(chip->dev, "invalid TEMP_LITE temp = %d\n", temp);
+   351			return -EINVAL;
+   352		}
+   353	
+   354		thresh = 0;
+   355		temp_cfg = temp_map[thresh];
+   356		for (i = THRESH_MAX; i >= THRESH_MIN; i--) {
+   357			if (temp >= temp_map[i]) {
+   358				thresh = i;
+   359				temp_cfg = temp_map[i];
+   360				break;
+   361			}
+   362		}
+   363	
+   364		if (temp_cfg == chip->temp_dac_map[trip])
+   365			return 0;
+   366	
+   367		ret = qpnp_tm_read(chip, addr, &reg);
+   368		if (ret < 0) {
+   369			dev_err(chip->dev, "LITE_TEMP_CFG read failed, ret=%d\n", ret);
+   370			return ret;
+   371		}
+   372	
+   373		reg &= ~LITE_TEMP_CFG_THRESHOLD_MASK;
+ > 374		reg |= FIELD_PREP(LITE_TEMP_CFG_THRESHOLD_MASK, thresh);
+   375	
+   376		ret = qpnp_tm_write(chip, addr, reg);
+   377		if (ret < 0) {
+   378			dev_err(chip->dev, "LITE_TEMP_CFG write failed, ret=%d\n", ret);
+   379			return ret;
+   380		}
+   381	
+   382		chip->temp_dac_map[trip] = temp_cfg;
+   383	
+   384		return 0;
+   385	}
+   386	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---Uiay8YaKVKDmGpsz
+--j+3d1Tfx41nOCetQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/hexagon 6.1.0-rc7 Kernel Configuration
+# Linux/hexagon 6.1.0-rc2 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 6e4cea55f0d1104408b26ac574566a0e4de48036)"
 CONFIG_GCC_VERSION=0
@@ -179,7 +252,6 @@ CONFIG_LD_IS_LLD=y
 CONFIG_LLD_VERSION=160000
 CONFIG_RUST_IS_AVAILABLE=y
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
-CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
 CONFIG_TOOLS_SUPPORT_RELR=y
 CONFIG_CC_HAS_ASM_INLINE=y
 CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
@@ -558,7 +630,6 @@ CONFIG_INET_ESP=m
 CONFIG_INET_ESP_OFFLOAD=m
 CONFIG_INET_ESPINTCP=y
 CONFIG_INET_IPCOMP=y
-CONFIG_INET_TABLE_PERTURB_ORDER=16
 CONFIG_INET_XFRM_TUNNEL=y
 CONFIG_INET_TUNNEL=y
 CONFIG_INET_DIAG=m
@@ -681,6 +752,7 @@ CONFIG_NFT_MASQ=m
 # CONFIG_NFT_REDIR is not set
 # CONFIG_NFT_NAT is not set
 # CONFIG_NFT_TUNNEL is not set
+# CONFIG_NFT_OBJREF is not set
 CONFIG_NFT_QUOTA=y
 CONFIG_NFT_REJECT=m
 CONFIG_NFT_COMPAT=y
@@ -2735,7 +2807,7 @@ CONFIG_ROCKCHIP_INNO_HDMI=y
 CONFIG_ROCKCHIP_RK3066_HDMI=y
 # CONFIG_DRM_RCAR_DW_HDMI is not set
 # CONFIG_DRM_RCAR_USE_LVDS is not set
-# CONFIG_DRM_RCAR_USE_MIPI_DSI is not set
+# CONFIG_DRM_RCAR_MIPI_DSI is not set
 # CONFIG_DRM_SUN4I is not set
 CONFIG_DRM_VIRTIO_GPU=m
 # CONFIG_DRM_MSM is not set
@@ -5168,7 +5240,7 @@ CONFIG_CRYPTO_DES=y
 CONFIG_CRYPTO_FCRYPT=m
 CONFIG_CRYPTO_SERPENT=y
 CONFIG_CRYPTO_SM4=m
-# CONFIG_CRYPTO_SM4_GENERIC is not set
+CONFIG_CRYPTO_SM4_GENERIC=m
 # CONFIG_CRYPTO_TWOFISH is not set
 # end of Block ciphers
 
@@ -5685,7 +5757,6 @@ CONFIG_TEST_SCANF=m
 # CONFIG_TEST_BITMAP is not set
 CONFIG_TEST_UUID=m
 CONFIG_TEST_XARRAY=m
-# CONFIG_TEST_MAPLE_TREE is not set
 CONFIG_TEST_RHASHTABLE=m
 # CONFIG_TEST_SIPHASH is not set
 CONFIG_TEST_IDA=y
@@ -5714,4 +5785,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---Uiay8YaKVKDmGpsz--
+--j+3d1Tfx41nOCetQ--
