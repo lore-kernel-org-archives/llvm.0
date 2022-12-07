@@ -1,117 +1,128 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194E2646
-	for <llvm@lists.linux.dev>; Wed,  7 Dec 2022 07:00:48 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id h11-20020a6b7a0b000000b006e0004fc167so7255369iom.5
-        for <llvm@lists.linux.dev>; Tue, 06 Dec 2022 23:00:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E1A136D;
+	Wed,  7 Dec 2022 09:10:00 +0000 (UTC)
+Received: by mail-wr1-f46.google.com with SMTP id h10so17574944wrx.3;
+        Wed, 07 Dec 2022 01:10:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XexAGe1dnyO8Tb1PpjMLyG9UePGMuGERQkoS5jrCkxE=;
+        b=e34dKlDQUU9jG8gMwSv+lmeNSvVk9AqDs0cFDBPGxZtmE2HkLYI8u+P8B4UsHorkvV
+         +T7nMj/8qHBWPiwY/Bk9XBEFCNDA0cDc0u9g+bih7bxCqXgj2lXoHIK1JzXC0I/kBmLg
+         0ZS+Fo5MA4743ZOka++V/+77lz2rxUWNiooxXBF+Ll8cvz2vx3vkMP9sjz+zl78vnMyJ
+         YeReYOJDwj3Mgxp3uRbAs66Fo9v7W5E6YnVL6YyP7tKAq1SGpFTA4Wyd5KkhtNS3612e
+         JeVOGABcXvoc8gUmEuEAtYxj33CMOcCCprSoPX855ZbX8xvCdwNY8Sl8Ri4UUeNFR69b
+         TfbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sFoDzixvIOUecSJ5AIeZIidcr9UNIE79oGoDN9IDh+w=;
-        b=Z2rapRr9xMVTNbCocOnnpuS614EiRSc95hBM/Lms+Z5M1QRzQPw+4tbW9bE6luhbwO
-         61I2k362mrRxwTp0ber2iNb/xGplFzqXeYJ/2bE4UAFL8AC4D7NGE94WRhugklyvHQTo
-         UTWny9LqL6BvTrGMOwnnHAQwFmDbjOdpzTZx/4GY+pKWB4f36YVjlQE0froGjUhogfcB
-         HxpmhyGYf61hyjmNy2DaEiUVT6j63X3dA+vxwPQPwCxai6SRnEXsc/T8SEgyhIUHo6m+
-         kF37EZBifO7+NVk4szF1p5iDrzJb0iJlu7UkD8cKfS0h2On3F+gr9GMhlv+XqeWrKCpT
-         he6w==
-X-Gm-Message-State: ANoB5pmPmtoL+J82e4nXId6y0U08o8hhyORgw0uQhZdb9j9f9+0hZCN0
-	EwyAt1qsJ33a+85L52MXYDintAGdcmhkJnhqXAzSIdTLw2b0
-X-Google-Smtp-Source: AA0mqf7mxhK4vGB9fZQVlsP/vUeiIIwUfIOnKwREj+VjbOmFUc2vscxBgVbsgxrUY7JrV6+sbthVKxyjx4DlciMBy+Bk9WumqHvB
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XexAGe1dnyO8Tb1PpjMLyG9UePGMuGERQkoS5jrCkxE=;
+        b=sGTpxKLLQVBp2DJCIVKdJM4VIeHF8BF4YMk4HnTPeEsuckdiz266kTl0Kxv8pQd03R
+         YuCV2zI6Ci5sasHzMWusDSHm1z0khn50uJXsex1WNj8Gk1BtXoDUbMizyfvc8OlVJPcL
+         wkSMnbd0a2Ch732H+/Ogusxdg96o+JrReyEJn9gvSZ0iQ9yYxjOAQmxI17XkwPVaKnCf
+         Y+LFzgPq+e3M5M8apxyIcjQLSKxmQzI8DqSWWGO8471gDhZHtpFIMwNavKwzc3NkVmNZ
+         mCyWFjL/hynLz0tgxF36kDJXXaTfySrPReXwVoFjdkyY/pSDxLOUeTHnNIVullmHqPB8
+         9kyw==
+X-Gm-Message-State: ANoB5pmLp1/jxFyRN+D8+MRlVvdvn9ElRGxsbsGNQnF1NGJvz/usR2HW
+	nuXuEDxBcNeit8A0ktODQRo=
+X-Google-Smtp-Source: AA0mqf47GL83IXl3JYGx/NF4AFWYddX1aErxcLfNCLyAHNzagQY1/KZBMHFyKUjMJe59lam/qmWt+Q==
+X-Received: by 2002:a05:6000:1290:b0:242:733b:af28 with SMTP id f16-20020a056000129000b00242733baf28mr217195wrx.5.1670404198855;
+        Wed, 07 Dec 2022 01:09:58 -0800 (PST)
+Received: from gmail.com ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id a16-20020a5d4570000000b00242109cf587sm19103840wrc.28.2022.12.07.01.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 01:09:58 -0800 (PST)
+Date: Wed, 7 Dec 2022 09:09:55 +0000
+From: Martin Habets <habetsm.xilinx@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: Re: drivers/net/ethernet/sfc/siena/selftest.c:46:15: warning: field
+ ip within 'struct efx_loopback_payload' is less aligned than 'struct iphdr'
+ and is usually due to 'struct efx_loopback_payload' being packed, which can
+ lead to unaligned accesses
+Message-ID: <Y5BYY71+ifu3D45z@gmail.com>
+References: <202212050514.lAJ4GhwN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:89:b0:363:9e67:d9d9 with SMTP id
- v9-20020a056638008900b003639e67d9d9mr34521143jao.133.1670396448246; Tue, 06
- Dec 2022 23:00:48 -0800 (PST)
-Date: Tue, 06 Dec 2022 23:00:48 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ee924305ef377a61@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in write_inode_now (2)
-From: syzbot <syzbot+5294a9e355351fddb4b2@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212050514.lAJ4GhwN-lkp@intel.com>
 
-Hello,
+On Mon, Dec 05, 2022 at 06:09:17AM +0800, kernel test robot wrote:
+> Hi Martin,
+> 
+> FYI, the error/warning still remains.
 
-syzbot found the following issue on:
+We are looking into this, it will take a bit of a rewrite for fix
+the warning. We have not had reports of an actual unaligned accesses
+happening.
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1080851d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=5294a9e355351fddb4b2
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+Martin
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5294a9e355351fddb4b2@syzkaller.appspotmail.com
-
-=============================
-WARNING: suspicious RCU usage
-6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0 Not tainted
------------------------------
-kernel/sched/core.c:9870 Illegal context switch in RCU-bh read-side critical section!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-1 lock held by syz-executor.5/19612:
- #0: ffff0001428b30e0 (&type->s_umount_key#94/1){+.+.}-{3:3}, at: alloc_super+0xf8/0x430 fs/super.c:228
-
-stack backtrace:
-CPU: 0 PID: 19612 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- lockdep_rcu_suspicious+0x138/0x154 kernel/locking/lockdep.c:6597
- __might_resched+0x6c/0x218 kernel/sched/core.c:9870
- __might_sleep+0x48/0x78 kernel/sched/core.c:9837
- write_inode_now+0xa4/0xdc fs/fs-writeback.c:2743
- iput_final fs/inode.c:1734 [inline]
- iput+0x1e4/0x324 fs/inode.c:1773
- ntfs_fill_super+0x1254/0x14a4 fs/ntfs3/super.c:1190
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x890 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   c2bf05db6c78f53ca5cd4b48f3b9b71f78d215f1
+> commit: c5a13c319e10e795850b61bc7e3447b08024be2e sfc: Add a basic Siena module
+> date:   7 months ago
+> config: arm-randconfig-r012-20221205
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c5a13c319e10e795850b61bc7e3447b08024be2e
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout c5a13c319e10e795850b61bc7e3447b08024be2e
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/sfc/siena/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/net/ethernet/sfc/siena/selftest.c:46:15: warning: field ip within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+>            struct iphdr ip;
+>                         ^
+>    1 warning generated.
+> 
+> 
+> vim +46 drivers/net/ethernet/sfc/siena/selftest.c
+> 
+> d48523cb88e0703 Martin Habets 2022-05-09  37  
+> d48523cb88e0703 Martin Habets 2022-05-09  38  /*
+> d48523cb88e0703 Martin Habets 2022-05-09  39   * Loopback test packet structure
+> d48523cb88e0703 Martin Habets 2022-05-09  40   *
+> d48523cb88e0703 Martin Habets 2022-05-09  41   * The self-test should stress every RSS vector, and unfortunately
+> d48523cb88e0703 Martin Habets 2022-05-09  42   * Falcon only performs RSS on TCP/UDP packets.
+> d48523cb88e0703 Martin Habets 2022-05-09  43   */
+> d48523cb88e0703 Martin Habets 2022-05-09  44  struct efx_loopback_payload {
+> d48523cb88e0703 Martin Habets 2022-05-09  45  	struct ethhdr header;
+> d48523cb88e0703 Martin Habets 2022-05-09 @46  	struct iphdr ip;
+> d48523cb88e0703 Martin Habets 2022-05-09  47  	struct udphdr udp;
+> d48523cb88e0703 Martin Habets 2022-05-09  48  	__be16 iteration;
+> d48523cb88e0703 Martin Habets 2022-05-09  49  	char msg[64];
+> d48523cb88e0703 Martin Habets 2022-05-09  50  } __packed;
+> d48523cb88e0703 Martin Habets 2022-05-09  51  
+> 
+> :::::: The code at line 46 was first introduced by commit
+> :::::: d48523cb88e0703055c1b33e61eb644a7976f92b sfc: Copy shared files needed for Siena (part 2)
+> 
+> :::::: TO: Martin Habets <martinh@xilinx.com>
+> :::::: CC: Jakub Kicinski <kuba@kernel.org>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
