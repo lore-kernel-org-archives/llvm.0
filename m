@@ -1,59 +1,61 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E582F36;
-	Thu,  8 Dec 2022 23:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9F07E;
+	Fri,  9 Dec 2022 01:32:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670542261; x=1702078261;
+  t=1670549524; x=1702085524;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fZMcTs9D1RPXqtIWuLAoHWP30VWmMjgseLi3DXou7q0=;
-  b=M+Ojn4dqvAWwA34B09Q+lZdouHt/0n3bQF+qWsfyLORTqQeGplpPtIIJ
-   3q3uV555RgqDdUu2Haz2+KjWqrFd1CjSBea4Vx7gDUXMN7AtjvnM1oiq3
-   i1/8PLS2psyiKa/QJWvYK2ZMS20bLnP/TNd39Du/nN7xCiR1yuOa2HRT+
-   jm9H+B+uVglr2U1i0GyC+nS8pzLDXzH+Od3yaC7kNbt8wNuHlHGMpBLAX
-   2dnmlbwAB/c49KoyI/IvVsq+fTQK2bm1jYIRC9j/KLnLz1YhqcBcGBjup
-   S2Z44DKEv6PbzhYBkClBb6/eOPUWLkVzlte9XYCstpkEIE6t52cUwYtA0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="300751578"
+  bh=VM2OO+ktHlCJDM2OyCMB/gmVYabaQBxs3/XyZYJA93Q=;
+  b=cK+OJ5hs5nCFxxH/2nPSfRZ9iwg+nmwNiTsNm+0QkNqM8r99SGFCQdGm
+   4M9IWEihcLAn5ozjcgwTfG51v/e4dLKdm8wlFx+LjG06eH6GGM8iNoPB+
+   xvO/F9CEJj2jomzHi281cE0qSFgPcT4pofd/X/TKQN8OcGhLTRntSDP2T
+   +6MwfeTr49UwTN+ntZNkd5XfpMOGucGNp7EDDerZJayXAGFBeB09MMw47
+   ZyKPwn3xyFdnAjI8vtdUT1J9XASzDoVgiOz7WPa/uKRwGUkTFQ9pIbmkN
+   KJSLmMi8iieLsAMkhqN3yaw3gfiqP0Orzll6PioFZqj+YKjw53h1zz3ru
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="297034113"
 X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="300751578"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 15:31:00 -0800
+   d="scan'208";a="297034113"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 17:32:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="624905528"
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="647238685"
 X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="624905528"
+   d="scan'208";a="647238685"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2022 15:30:58 -0800
+  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2022 17:31:59 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p3QLx-0001Ud-16;
-	Thu, 08 Dec 2022 23:30:57 +0000
-Date: Fri, 9 Dec 2022 07:30:29 +0800
+	id 1p3SF5-0001Xf-0J;
+	Fri, 09 Dec 2022 01:31:59 +0000
+Date: Fri, 9 Dec 2022 09:31:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [alobakin:fgkaslr 15/15] include/linux/extable.h:40:9: error: use of
- undeclared identifier 'NULL'
-Message-ID: <202212090718.i3M7fuK8-lkp@intel.com>
+To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [ammarfaizi2-block:crng/random/vdso 25/29] mm/debug.c:45:21: error:
+ expected expression
+Message-ID: <202212090938.JWKSkYBq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="GNX1hf7jRNhdif/B"
+Content-Type: multipart/mixed; boundary="AFp8M+Q0FOGDNaCf"
 Content-Disposition: inline
 
 
---GNX1hf7jRNhdif/B
+--AFp8M+Q0FOGDNaCf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/alobakin/linux fgkaslr
-head:   9ec4f6bf7d5b0f91ecea50563ae214bcbcc06c94
-commit: 9ec4f6bf7d5b0f91ecea50563ae214bcbcc06c94 [15/15] [RAW] New implementation
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/vdso
+head:   7bb66fe29412146c0767a9b149ae9c722473424b
+commit: 92c954fca4e80881da50aaf9dd1f39be8b5e5fe6 [25/29] mm: add VM_DROPPABLE for designating always lazily freeable mappings
 config: arm-randconfig-r046-20221207
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
 reproduce (this is a W=1 build):
@@ -61,170 +63,51 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/alobakin/linux/commit/9ec4f6bf7d5b0f91ecea50563ae214bcbcc06c94
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin fgkaslr
-        git checkout 9ec4f6bf7d5b0f91ecea50563ae214bcbcc06c94
+        # https://github.com/ammarfaizi2/linux-block/commit/92c954fca4e80881da50aaf9dd1f39be8b5e5fe6
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/vdso
+        git checkout 92c954fca4e80881da50aaf9dd1f39be8b5e5fe6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm/mm/extable.c:5:
-   include/linux/extable.h:21:15: error: unknown type name 'size_t'
-                  const size_t num,
-                        ^
->> include/linux/extable.h:40:9: error: use of undeclared identifier 'NULL'
-           return NULL;
-                  ^
-   include/linux/extable.h:50:9: error: use of undeclared identifier 'NULL'
-           return NULL;
-                  ^
-   3 errors generated.
---
-   In file included from arch/arm/mm/fault.c:8:
-   include/linux/extable.h:21:15: error: unknown type name 'size_t'
-                  const size_t num,
-                        ^
->> include/linux/extable.h:40:9: error: use of undeclared identifier 'NULL'
-           return NULL;
-                  ^
-   include/linux/extable.h:50:9: error: use of undeclared identifier 'NULL'
-           return NULL;
-                  ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                        ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                                        ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-                   b3 = b->sig[3]; b2 = b->sig[2];                         \
-                        ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-                   b3 = b->sig[3]; b2 = b->sig[2];                         \
-                                        ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:3: note: expanded from macro '_SIG_SET_BINOP'
-                   r->sig[3] = op(a3, b3);                                 \
-                   ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/arm/mm/fault.c:9:
-   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
+>> mm/debug.c:45:21: error: expected expression
+           __def_vmaflag_names,
+                              ^
+   1 error generated.
 
 
-vim +/NULL +40 include/linux/extable.h
+vim +45 mm/debug.c
 
-0ef7653797adde Paul Gortmaker 2016-07-27  32  
-0ef7653797adde Paul Gortmaker 2016-07-27  33  #ifdef CONFIG_MODULES
-0ef7653797adde Paul Gortmaker 2016-07-27  34  /* For extable.c to search modules' exception tables. */
-0ef7653797adde Paul Gortmaker 2016-07-27  35  const struct exception_table_entry *search_module_extables(unsigned long addr);
-0ef7653797adde Paul Gortmaker 2016-07-27  36  #else
-0ef7653797adde Paul Gortmaker 2016-07-27  37  static inline const struct exception_table_entry *
-0ef7653797adde Paul Gortmaker 2016-07-27  38  search_module_extables(unsigned long addr)
-0ef7653797adde Paul Gortmaker 2016-07-27  39  {
-0ef7653797adde Paul Gortmaker 2016-07-27 @40  	return NULL;
-0ef7653797adde Paul Gortmaker 2016-07-27  41  }
-0ef7653797adde Paul Gortmaker 2016-07-27  42  #endif /*CONFIG_MODULES*/
-0ef7653797adde Paul Gortmaker 2016-07-27  43  
+420adbe9fc1a451 Vlastimil Babka 2016-03-15  43  
+edf14cdbf9a0e5a Vlastimil Babka 2016-03-15  44  const struct trace_print_flags vmaflag_names[] = {
+edf14cdbf9a0e5a Vlastimil Babka 2016-03-15 @45  	__def_vmaflag_names,
+edf14cdbf9a0e5a Vlastimil Babka 2016-03-15  46  	{0, NULL}
+82742a3a5152195 Sasha Levin     2014-10-09  47  };
+82742a3a5152195 Sasha Levin     2014-10-09  48  
 
-:::::: The code at line 40 was first introduced by commit
-:::::: 0ef7653797addea8ba1bf97f8208a54a62498d94 exceptions: fork exception table content from module.h into extable.h
+:::::: The code at line 45 was first introduced by commit
+:::::: edf14cdbf9a0e5ab52698ca66d07a76ade0d5c46 mm, printk: introduce new format string for flags
 
-:::::: TO: Paul Gortmaker <paul.gortmaker@windriver.com>
-:::::: CC: Rusty Russell <rusty@rustcorp.com.au>
+:::::: TO: Vlastimil Babka <vbabka@suse.cz>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---GNX1hf7jRNhdif/B
+--AFp8M+Q0FOGDNaCf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 6.1.0-rc1 Kernel Configuration
+# Linux/arm 6.1.0-rc5 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 6e4cea55f0d1104408b26ac574566a0e4de48036)"
 CONFIG_GCC_VERSION=0
@@ -668,7 +551,6 @@ CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
 # end of GCOV-based kernel profiling
 
 CONFIG_HAVE_GCC_PLUGINS=y
-CONFIG_FUNCTION_ALIGNMENT=0
 # end of General architecture-dependent options
 
 CONFIG_RT_MUTEXES=y
@@ -1305,8 +1187,6 @@ CONFIG_TCG_VTPM_PROXY=y
 CONFIG_XILLYBUS_CLASS=y
 CONFIG_XILLYBUS=y
 # CONFIG_XILLYBUS_OF is not set
-CONFIG_RANDOM_TRUST_CPU=y
-# CONFIG_RANDOM_TRUST_BOOTLOADER is not set
 # end of Character devices
 
 #
@@ -3010,7 +2890,7 @@ CONFIG_DRM_I2C_NXP_TDA9950=y
 # CONFIG_DRM_RCAR_DU is not set
 CONFIG_DRM_RCAR_DW_HDMI=y
 # CONFIG_DRM_RCAR_USE_LVDS is not set
-CONFIG_DRM_RCAR_MIPI_DSI=y
+# CONFIG_DRM_RCAR_USE_MIPI_DSI is not set
 # CONFIG_DRM_SHMOBILE is not set
 # CONFIG_DRM_SUN4I is not set
 # CONFIG_DRM_TILCDC is not set
@@ -5747,6 +5627,7 @@ CONFIG_TEST_SCANF=y
 CONFIG_TEST_BITMAP=y
 CONFIG_TEST_UUID=y
 CONFIG_TEST_XARRAY=y
+# CONFIG_TEST_MAPLE_TREE is not set
 CONFIG_TEST_RHASHTABLE=y
 # CONFIG_TEST_SIPHASH is not set
 CONFIG_TEST_IDA=y
@@ -5769,4 +5650,4 @@ CONFIG_ARCH_USE_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---GNX1hf7jRNhdif/B--
+--AFp8M+Q0FOGDNaCf--
