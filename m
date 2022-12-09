@@ -1,51 +1,51 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955F76D24
-	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 18:26:32 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id fa4-20020a17090af0c400b002198d1328a0so8854712pjb.0
-        for <llvm@lists.linux.dev>; Fri, 09 Dec 2022 10:26:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865566D24
+	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 18:27:42 +0000 (UTC)
+Received: by mail-pj1-f51.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so5822384pjm.2
+        for <llvm@lists.linux.dev>; Fri, 09 Dec 2022 10:27:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y0tIk3sqFNpbfHpA1sauvw8a7wXa2Xcms6EuyEYhvRk=;
-        b=ZAFgp4eeuB30KsOgzpkTWhKYP4oe59cgyqai7KuZpD1LLjw00yzO7fINeDtWdZaIz1
-         N5s+469IBqPdFDVZhfH92bc4fyR1YWmFSToug5cPNFwqj46koW4vG3I8XPMeFZdaZhRf
-         U93lqGZ5wfiQGH2ucaECSaiFfHxIze+3VIOr0yrEUmqJciGcmk7VyyTDS4FGQZvNDbbv
-         qvjpLVp52U2y6qMVQ5az73XIluTz2Vx9fJrY04gsxKyHa4ODqS0IJfnUuqfF0HMqj98d
-         gyaGfmunZHNABei21Bzs/q51SZiuQhRuQM1b+RRJUlPrR05BfymnfTIXVunt+036i0L8
-         LTwA==
+        bh=4gIgOD4wswhYFoONZnkGpnT9Fb5RY+TP6tHyxkVws9g=;
+        b=podaF/exWcGGx/OfgyRwWibmT7w7cgfPONQ55bPT/RukR4RdJ3oLP8BtPHAXlpMuQU
+         4EbLe4xubbmd2Isk6+pbqxHqaYooBCQmy3G2+XjrTZ4cCWFec+A6ahs1VJeHOCtwG0/W
+         UNcc0lyRrt5nHmnVoNT/7aOY9N3EHNvB+VvEDeBWRIOsygmYMxLxHyMSDEVjor9AThmT
+         cngODjR923ruf8mw74f9S0mUawB8A3dviNLvYnZCLFLjuas0T9E/WcRA2CbPQD0+ck6z
+         e7PushbybebKiDq4+pyEPMNfuCs3e6RvpqZuGjwEONRtjQiXdsaFV+glvQu5IsVsbCUj
+         0Mpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=y0tIk3sqFNpbfHpA1sauvw8a7wXa2Xcms6EuyEYhvRk=;
-        b=2B5UcN5TXXye4JiGS5++VuDZUNClY9oT7L47EKMvW58dPHbEPYo9Hqi/Ioqh1Oc2q3
-         t2xOnmdtcMe5ihFuC4izz1i6i88bZ88ELSdSNypoSzrRojWBesY4kxh/Q7Ih6wIpV607
-         ce3CXXPMb4shsMBIGiaksJCLMayNLmYV7uRVooCUdD8RWyPePXkLYffW8y20X2MLKT3D
-         /GVK7lvFnLNfAngCbiCqn/3jmMvks39z30mTwyUp/TAUlA85gKMVJ8gyTSfYthEGwL8Q
-         uLfrNxTfsfBogqRRlJ00hCQhXMDxq5ytGdQPJ1/UMLXpQyHwwxoVHW+JhJ+aLEz80SPE
-         j5uw==
-X-Gm-Message-State: ANoB5ploO88OWUcPVW8mgDEMuZ5euZEs+rmXavEEGCIe9WL8Uxc3K7ju
-	MWK0ZH2dN0/6FgCvWmLg06dMw9NbxCwNb0GjzKVJSQ==
-X-Google-Smtp-Source: AA0mqf7Irxffe4OQflHuywnqDb6sN/nLBFJocgSX8td1o1PYS66eHUpd/ohf1Fhb2Uth0n8S14TGTCuoadwcmR6m4ys=
-X-Received: by 2002:a17:90a:ab84:b0:213:343:9873 with SMTP id
- n4-20020a17090aab8400b0021303439873mr109320494pjq.102.1670610391716; Fri, 09
- Dec 2022 10:26:31 -0800 (PST)
+        bh=4gIgOD4wswhYFoONZnkGpnT9Fb5RY+TP6tHyxkVws9g=;
+        b=1sdNNXlqpqr6xj7DumzCnFQsFBFWqGab44Mvd6hEBQTe0ncKDLNSC6ZckZslLlO8Gf
+         v/UCsClvyLYqxxIEyy04DjgVBAC788+Eel6faUnNMuWJ3l+4P8r/BmsO0zXgVoYr6xIr
+         OErfQ4904RM2wf4qBKbd56rXgrVhfDIxKIv7cAFHBR+DeQ6wYHPnE49Qy++JosuFhxB1
+         fwa4YW5QWnqm4NtnqxjwFGNXz/pGBVflJ4Qo6h8+5oSzI6X8qsFx9Nfio+jq+4R985Wk
+         G7muOYHC45eDHbDuq557g56/utFiTi54L5X1Y1tj+aVm7Nm0qtMdyssIocBCNVFo5Jv5
+         Y/yA==
+X-Gm-Message-State: ANoB5pk+WAKox43gAoWoaG+tumq1dVqbt1B2h+7WY11odK3cYmlvPfRF
+	Ur612uPls1/1F7pOqsvoXOCwTXcOakHuTYXdNpF/pQ==
+X-Google-Smtp-Source: AA0mqf7/s6f8fvn45C5p0KJifVNXCAkl232CBj3A49DUBuPorsuAcOiLgacl7cmyAqtHsysvaq6vWLYEbQzmwebPLxY=
+X-Received: by 2002:a17:90b:2743:b0:20d:4173:faf9 with SMTP id
+ qi3-20020a17090b274300b0020d4173faf9mr108648571pjb.147.1670610461644; Fri, 09
+ Dec 2022 10:27:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221122001125.765003-1-irogers@google.com> <20221122001125.765003-5-irogers@google.com>
-In-Reply-To: <20221122001125.765003-5-irogers@google.com>
+References: <20221122001125.765003-1-irogers@google.com> <CAKwvOd=fEc=f++NFJpb+QOynC8vRrRp3wFT1KpQNwVcG9WWdrQ@mail.gmail.com>
+In-Reply-To: <CAKwvOd=fEc=f++NFJpb+QOynC8vRrRp3wFT1KpQNwVcG9WWdrQ@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 9 Dec 2022 10:26:20 -0800
-Message-ID: <CAKwvOd=kgXmpfbVa1wiEvwL0tX3gu+dDTGi-HEiRXSojwCLRrg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] objtool: Alter how HOSTCC is forced
+Date: Fri, 9 Dec 2022 10:27:30 -0800
+Message-ID: <CAKwvOdnXH_wSCXNJ=ozdJWEOj9E6EvL60bqz1Cw-DU0ojV7VsA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] objtool build improvements
 To: Ian Rogers <irogers@google.com>
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
@@ -55,101 +55,58 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 21, 2022 at 4:12 PM Ian Rogers <irogers@google.com> wrote:
+On Fri, Dec 9, 2022 at 10:17 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
-> happens after tools/scripts/Makefile.include is included, meaning
-> flags are set assuming say CC is gcc, but then it can be later set to
-> HOSTCC which may be clang. tools/scripts/Makefile.include is needed
-> for host set up and common macros in objtool's Makefile. Rather than
-> override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
-> libsubcmd builds and the linkage step. This means the Makefiles don't
-> see things like CC changing and tool flag determination, and similar,
-> work properly. To avoid mixing CFLAGS from different compilers just
-> the objtool CFLAGS are determined. HOSTCFLAGS is added to these so
-> that command line flags can add to the CFLAGS.
+> On Mon, Nov 21, 2022 at 4:11 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > Install libsubcmd and then get headers from there, this avoids
+> > inadvertent dependencies on things in tools/lib. Fix V=1
+> > support. Clean up how HOSTCC is used to override CC to avoid CFLAGS
+> > being set for say gcc, and then CC being overridden to clang. Support
+> > HOSTCFLAGS as a make option.
 >
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/objtool/Makefile | 27 ++++++++++++++++-----------
->  1 file changed, 16 insertions(+), 11 deletions(-)
+> Ian, I'm terribly sorry about the delay in reviewing this; usually my
+> turnaround time is much lower on code review...
 >
-> diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-> index 61a00b7acae9..e550a98e2dd9 100644
-> --- a/tools/objtool/Makefile
-> +++ b/tools/objtool/Makefile
-> @@ -2,16 +2,12 @@
->  include ../scripts/Makefile.include
->  include ../scripts/Makefile.arch
+> Anyways, the patchset LGTM; thanks for the work that went into this.
 >
-> -# always use the host compiler
-> -AR      = $(HOSTAR)
-> -CC      = $(HOSTCC)
-> -LD      = $(HOSTLD)
-> -
->  ifeq ($(srctree),)
->  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
->  srctree := $(patsubst %/,%,$(dir $(srctree)))
->  endif
->
-> +MAKE = make -S
->  LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
->  ifneq ($(OUTPUT),)
->    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-> @@ -36,13 +32,20 @@ INCLUDES := -I$(srctree)/tools/include \
->             -I$(srctree)/tools/objtool/include \
->             -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
->             -I$(LIBSUBCMD_OUTPUT)/include
-> -WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Looking closer at the V=1 diff in meld, I think this is dropping
-EXTRA_WARNINGS.  I think you want to add those back to OBJTOOL_CFLAGS.
+Sorry, I just spotted a potential issue in patch 4/4.  You may retain
+my above tags for the first three patches if you send a v3.
 
-> -CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
-> -LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
-> +WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> +OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
-> +OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
 >
->  # Allow old libelf to be used:
->  elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
-> -CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> +OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> +
-> +# Always want host compilation.
-> +HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
-> +                 LD="$(HOSTLD)" AR="$(HOSTAR)"
-> +BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
-> +                       LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
-> +                       AR="$(HOSTAR)"
->
->  AWK = awk
->  MKDIR = mkdir
-> @@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
->
->  $(OBJTOOL_IN): fixdep FORCE
->         $(Q)$(CONFIG_SHELL) ./sync-check.sh
-> -       $(Q)$(MAKE) $(build)=objtool
-> +       $(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
-> +
->
->  $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
-> -       $(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
-> +       $(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
+> >
+> > v2. Include required "tools lib subcmd: Add install target" that is
+> >     already in Arnaldo's tree:
+> > https://lore.kernel.org/lkml/20221109184914.1357295-3-irogers@google.com/
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=630ae80ea1dd253609cb50cff87f3248f901aca3
+> >     When building libsubcmd.a from objtool's Makefile, clear the
+> >     subdir to avoid it being appended onto OUTPUT and breaking the
+> >     build.
+> >
+> > Ian Rogers (4):
+> >   tools lib subcmd: Add install target
+> >   objtool: Install libsubcmd in build
+> >   objtool: Properly support make V=1
+> >   objtool: Alter how HOSTCC is forced
+> >
+> >  tools/lib/subcmd/Makefile | 49 ++++++++++++++++++++++++++++
+> >  tools/objtool/Build       |  2 --
+> >  tools/objtool/Makefile    | 68 +++++++++++++++++++++++++++------------
+> >  3 files changed, 97 insertions(+), 22 deletions(-)
+> >
+> > --
+> > 2.38.1.584.g0f3c55d4c2-goog
+> >
 >
 >
->  $(LIBSUBCMD_OUTPUT):
-> @@ -77,6 +81,7 @@ $(LIBSUBCMD_OUTPUT):
->  $(LIBSUBCMD): fixdep FORCE $(LIBSUBCMD_OUTPUT)
->         $(Q)$(MAKE) -C $(LIBSUBCMD_DIR) O=$(LIBSUBCMD_OUTPUT) \
->                 DESTDIR=$(LIBSUBCMD_DESTDIR) prefix= subdir= \
-> +               $(HOST_OVERRIDES) \
->                 $@ install_headers
->
->  $(LIBSUBCMD)-clean:
 > --
-> 2.38.1.584.g0f3c55d4c2-goog
->
+> Thanks,
+> ~Nick Desaulniers
+
 
 
 -- 
