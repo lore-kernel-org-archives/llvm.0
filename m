@@ -1,189 +1,51 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A423833F0
-	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 13:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670593889;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2211233F0;
+	Fri,  9 Dec 2022 13:55:00 +0000 (UTC)
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1670594093;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Bzp7eXFRxSgQc0mhO7aGPwdX30Gbz6ZLmPIm4V6WqQs=;
-	b=cZW001JF9S0LAb5k9h9PVy0SjSeNIzczeLo94azu/orphriPWiIjYiLK4TARK5OQTfHzzT
-	UhqXx8aoSm1FtTh6GRwukI4jZSjGpj8Lgi7dfPI62X3pwQTed+TzNoi2XFDJfJRMaGwskG
-	/yEzR+F7ERDLKpeeZXRDzFS2+S8ChNM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-OFDvr-ocN2u5RypbFKPzJQ-1; Fri, 09 Dec 2022 08:51:28 -0500
-X-MC-Unique: OFDvr-ocN2u5RypbFKPzJQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 209FF1C0690D
-	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 13:51:28 +0000 (UTC)
-Received: from [172.64.11.46] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0C99F1415100;
-	Fri,  9 Dec 2022 13:51:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (82/379 SKIPPED): Test report for master
- (6.1.0-rc8, mainline.kernel.org-clang, 859c73d4)
-Date: Fri, 09 Dec 2022 13:51:28 -0000
-To: llvm@lists.linux.dev
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ab75hFCZtUT7NrQrs3DM49B+BwGSoyqvD4tFdAumbY8=;
+	b=RY1QOIM2IVUHyu82WZu8x/LEwRJC+kSbaeaJMlfJQYdu94BG4e7bwwSPU1tQ10LRASCLUp
+	AUVCjuT/RIcF0y3FQn5exvMNkS7wwVmSTUQ1oN5xjGu0vMcL5d3HdFE3V4fB9TLojNSZG9
+	oB3QnTwBMtNPz4dDwOYtyKbhwFCXH8kq+AulIRwDOguTqLD4etEJVmAzjCL/POQkx3z+gE
+	fGL+lUDIthdxP4+1eQ+A9jsma+DWxZLYvt8t0lMeAh4MJDE2ohx6yf53JsxXPogUqpdiu5
+	FdJ15QHYjtViEtUBA3paOnmbmOU1k10P5k8f2p2XN85DNdbH881AXs2K9PjLSQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1670594093;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ab75hFCZtUT7NrQrs3DM49B+BwGSoyqvD4tFdAumbY8=;
+	b=oW4Vnw2FpxWvCwG7welZP6XVKyLewZIllvjl7J9QiidSpN3OjGxaGVJ1wEBxHXEw/g2YNk
+	fItVdWWz4MTVemDA==
+To: Nathan Chancellor <nathan@kernel.org>, Andy Lutomirski
+ <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] x86/vdso: Conditionally export __vdso_sgx_enter_enclave
+In-Reply-To: <Y5M8SZEN1N5Dt15X@dev-arch.thelio-3990X>
+References: <20221109000306.1407357-1-nathan@kernel.org>
+ <Y5M8SZEN1N5Dt15X@dev-arch.thelio-3990X>
+Date: Fri, 09 Dec 2022 14:54:52 +0100
+Message-ID: <87r0x8d6mr.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <54446.122120908512800507@us-mta-15.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi, we tested your kernel and here are the results:
+On Fri, Dec 09 2022 at 06:46, Nathan Chancellor wrote:
+> Ping? The default switch was remerged a couple of days ago so builds
+> with tip of tree LLVM are going to be broken again:
+>
+> https://github.com/llvm/llvm-project/commit/241dbd310599e3c1a0f1b0c9ced14c8b8760539e
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'block-6.1-2022-12-08' of git://git.kernel.dk=
-/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62665
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
-systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
-t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
-ive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
-            Affected tests:
-                 ppc64le - LTP: openposix test suite
-                   s390x - LTP: openposix test suite
-                  x86_64 - LTP: openposix test suite
-                  x86_64 (debug) - LTP: openposix test suite
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Networking sctp-auth: sockopts test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: serge-testsuite: cap_userns/test ............. Dubious, test=
- returned 1
-            URL: https://gitlab.com/cki-project/kpet-db/-/issues/45
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-        Issue: stress: stress-ng - memory: stress-ng --memfd TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1164
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
- /boot/vmlinuz-6.1.0-rc8 not a file
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1497
-            Affected tests:
-                 aarch64 - Boot test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Sorry. That fell through the cracks. I'll take care of it.
 
