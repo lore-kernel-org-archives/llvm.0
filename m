@@ -1,61 +1,80 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9F07E;
-	Fri,  9 Dec 2022 01:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E177E;
+	Fri,  9 Dec 2022 01:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670549524; x=1702085524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VM2OO+ktHlCJDM2OyCMB/gmVYabaQBxs3/XyZYJA93Q=;
-  b=cK+OJ5hs5nCFxxH/2nPSfRZ9iwg+nmwNiTsNm+0QkNqM8r99SGFCQdGm
-   4M9IWEihcLAn5ozjcgwTfG51v/e4dLKdm8wlFx+LjG06eH6GGM8iNoPB+
-   xvO/F9CEJj2jomzHi281cE0qSFgPcT4pofd/X/TKQN8OcGhLTRntSDP2T
-   +6MwfeTr49UwTN+ntZNkd5XfpMOGucGNp7EDDerZJayXAGFBeB09MMw47
-   ZyKPwn3xyFdnAjI8vtdUT1J9XASzDoVgiOz7WPa/uKRwGUkTFQ9pIbmkN
-   KJSLmMi8iieLsAMkhqN3yaw3gfiqP0Orzll6PioFZqj+YKjw53h1zz3ru
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="297034113"
+  t=1670550127; x=1702086127;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nhsWH/oOitX2t/qaN2HZwrDe+b+bkWOLSmU0aFMoy1g=;
+  b=Ac7nWtzSOZitue/yVBvNvWhCqP9SrtzdvbGGWf8LkWgfkqWb7cxY4S0r
+   T+hTMtDzZ2xoWBs3eT47x0xtZuiU/R6/d/gm65/lJKNA2y3Pe7JCeT8ex
+   IqXdGqgMM44SIW5Eyk8rQvKMhub+2fHIkSsHULob4V8Ff7QOz1rqflTKW
+   xf7DMuWcDK+WU04bQoQ4iBdcbdPqPmeSHhqEGIdLB6R4yK8Scv9aUzWec
+   S+GuII8HE8xKm/hcc8a4ZJMDXY7+8KqKiP0T06FGshAw/EDmU/WT2BJGX
+   IpToSnC0F3XJq3aUqhB52a+CxHb91qVdsUG7miPQd6SXpCgVA4tew0IKf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="381663820"
 X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="297034113"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 17:32:02 -0800
+   d="scan'208";a="381663820"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 17:42:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="647238685"
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="710720734"
 X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="647238685"
+   d="scan'208";a="710720734"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2022 17:31:59 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 08 Dec 2022 17:41:59 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p3SF5-0001Xf-0J;
-	Fri, 09 Dec 2022 01:31:59 +0000
-Date: Fri, 9 Dec 2022 09:31:43 +0800
+	id 1p3SOl-0001Xu-0k;
+	Fri, 09 Dec 2022 01:41:59 +0000
+Date: Fri, 9 Dec 2022 09:41:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [ammarfaizi2-block:crng/random/vdso 25/29] mm/debug.c:45:21: error:
- expected expression
-Message-ID: <202212090938.JWKSkYBq-lkp@intel.com>
+To: Douglas Anderson <dianders@chromium.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mka@chromium.org,
+	swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	Yunlong Jia <ecs.beijing2022@gmail.com>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Johnny Chuang <johnny.chuang.emc@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] Input: elants_i2c: Delay longer with reset asserted
+Message-ID: <202212090934.epFm6X7y-lkp@intel.com>
+References: <20221208111910.5.I6edfb3f459662c041563a54e5b7df727c27caaba@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="AFp8M+Q0FOGDNaCf"
+Content-Type: multipart/mixed; boundary="YahDswhBStQJlwcR"
 Content-Disposition: inline
+In-Reply-To: <20221208111910.5.I6edfb3f459662c041563a54e5b7df727c27caaba@changeid>
 
 
---AFp8M+Q0FOGDNaCf
+--YahDswhBStQJlwcR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/vdso
-head:   7bb66fe29412146c0767a9b149ae9c722473424b
-commit: 92c954fca4e80881da50aaf9dd1f39be8b5e5fe6 [25/29] mm: add VM_DROPPABLE for designating always lazily freeable mappings
+Hi Douglas,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on next-20221208]
+[cannot apply to robh/for-next dtor-input/next dtor-input/for-linus hid/for-next v6.1-rc8 v6.1-rc7 v6.1-rc6 linus/master v6.1-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/arm64-dts-qcom-sc7180-Make-pazquel360-s-touchscreen-work/20221209-032214
+patch link:    https://lore.kernel.org/r/20221208111910.5.I6edfb3f459662c041563a54e5b7df727c27caaba%40changeid
+patch subject: [PATCH 5/5] Input: elants_i2c: Delay longer with reset asserted
 config: arm-randconfig-r046-20221207
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
 reproduce (this is a W=1 build):
@@ -63,10 +82,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install arm cross compiling tool for clang build
         # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/ammarfaizi2/linux-block/commit/92c954fca4e80881da50aaf9dd1f39be8b5e5fe6
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/vdso
-        git checkout 92c954fca4e80881da50aaf9dd1f39be8b5e5fe6
+        # https://github.com/intel-lab-lkp/linux/commit/8e4ac288d13f505629004cb39e1621bcf877b8a3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Douglas-Anderson/arm64-dts-qcom-sc7180-Make-pazquel360-s-touchscreen-work/20221209-032214
+        git checkout 8e4ac288d13f505629004cb39e1621bcf877b8a3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
@@ -76,38 +95,21 @@ If you fix the issue, kindly add following tag where applicable
 
 All errors (new ones prefixed by >>):
 
->> mm/debug.c:45:21: error: expected expression
-           __def_vmaflag_names,
-                              ^
-   1 error generated.
-
-
-vim +45 mm/debug.c
-
-420adbe9fc1a451 Vlastimil Babka 2016-03-15  43  
-edf14cdbf9a0e5a Vlastimil Babka 2016-03-15  44  const struct trace_print_flags vmaflag_names[] = {
-edf14cdbf9a0e5a Vlastimil Babka 2016-03-15 @45  	__def_vmaflag_names,
-edf14cdbf9a0e5a Vlastimil Babka 2016-03-15  46  	{0, NULL}
-82742a3a5152195 Sasha Levin     2014-10-09  47  };
-82742a3a5152195 Sasha Levin     2014-10-09  48  
-
-:::::: The code at line 45 was first introduced by commit
-:::::: edf14cdbf9a0e5ab52698ca66d07a76ade0d5c46 mm, printk: introduce new format string for flags
-
-:::::: TO: Vlastimil Babka <vbabka@suse.cz>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+>> ld.lld: error: undefined symbol: __bad_udelay
+   >>> referenced by elants_i2c.c
+   >>>               drivers/input/touchscreen/elants_i2c.o:(elants_i2c_power_on) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---AFp8M+Q0FOGDNaCf
+--YahDswhBStQJlwcR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 6.1.0-rc5 Kernel Configuration
+# Linux/arm 6.1.0-rc8 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 6e4cea55f0d1104408b26ac574566a0e4de48036)"
 CONFIG_GCC_VERSION=0
@@ -120,6 +122,7 @@ CONFIG_LD_IS_LLD=y
 CONFIG_LLD_VERSION=160000
 CONFIG_RUST_IS_AVAILABLE=y
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
+CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
 CONFIG_TOOLS_SUPPORT_RELR=y
 CONFIG_CC_HAS_ASM_INLINE=y
 CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
@@ -279,6 +282,7 @@ CONFIG_INITRAMFS_PRESERVE_MTIME=y
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
 # CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
 CONFIG_LD_ORPHAN_WARN=y
+CONFIG_LD_ORPHAN_WARN_LEVEL="warn"
 CONFIG_HAVE_UID16=y
 CONFIG_EXPERT=y
 # CONFIG_UID16 is not set
@@ -300,6 +304,7 @@ CONFIG_AIO=y
 # CONFIG_ADVISE_SYSCALLS is not set
 CONFIG_MEMBARRIER=y
 CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_SELFTEST is not set
 CONFIG_KALLSYMS_ALL=y
 CONFIG_KALLSYMS_BASE_RELATIVE=y
 CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
@@ -390,7 +395,6 @@ CONFIG_ARM_MPU=y
 #
 CONFIG_IRQSTACKS=y
 CONFIG_PAGE_OFFSET=0x00800000
-CONFIG_ARCH_NR_GPIO=0
 CONFIG_HZ_FIXED=0
 CONFIG_HZ_100=y
 # CONFIG_HZ_200 is not set
@@ -551,6 +555,7 @@ CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
 # end of GCOV-based kernel profiling
 
 CONFIG_HAVE_GCC_PLUGINS=y
+CONFIG_FUNCTION_ALIGNMENT=0
 # end of General architecture-dependent options
 
 CONFIG_RT_MUTEXES=y
@@ -590,7 +595,7 @@ CONFIG_BINFMT_MISC=y
 #
 CONFIG_SLAB=y
 # CONFIG_SLUB is not set
-# CONFIG_SLOB is not set
+# CONFIG_SLOB_DEPRECATED is not set
 CONFIG_SLAB_MERGE_DEFAULT=y
 # CONFIG_SLAB_FREELIST_RANDOM is not set
 # CONFIG_SLAB_FREELIST_HARDENED is not set
@@ -717,7 +722,7 @@ CONFIG_ARM_SCPI_POWER_DOMAIN=y
 CONFIG_FIRMWARE_MEMMAP=y
 # CONFIG_TURRIS_MOX_RWTM is not set
 # CONFIG_BCM47XX_NVRAM is not set
-CONFIG_CS_DSP=y
+CONFIG_FW_CS_DSP=y
 # CONFIG_GOOGLE_FIRMWARE is not set
 
 #
@@ -745,6 +750,7 @@ CONFIG_MTD_OF_PARTS=y
 # CONFIG_MTD_OF_PARTS_LINKSYS_NS is not set
 # CONFIG_MTD_PARSER_IMAGETAG is not set
 CONFIG_MTD_AFS_PARTS=y
+# CONFIG_MTD_PARSER_TPLINK_SAFELOADER is not set
 # CONFIG_MTD_PARSER_TRX is not set
 # CONFIG_MTD_SHARPSL_PARTS is not set
 # CONFIG_MTD_REDBOOT_PARTS is not set
@@ -819,7 +825,6 @@ CONFIG_MTD_NAND_CORE=y
 CONFIG_MTD_ONENAND=y
 CONFIG_MTD_ONENAND_VERIFY_WRITE=y
 CONFIG_MTD_ONENAND_GENERIC=y
-# CONFIG_MTD_ONENAND_OMAP2 is not set
 # CONFIG_MTD_ONENAND_SAMSUNG is not set
 CONFIG_MTD_ONENAND_OTP=y
 CONFIG_MTD_ONENAND_2X_PROGRAM=y
@@ -884,6 +889,8 @@ CONFIG_DUMMY_IRQ=y
 CONFIG_ICS932S401=y
 # CONFIG_ATMEL_SSC is not set
 CONFIG_ENCLOSURE_SERVICES=y
+# CONFIG_SMPRO_ERRMON is not set
+# CONFIG_SMPRO_MISC is not set
 CONFIG_HI6421V600_IRQ=y
 # CONFIG_QCOM_COINCELL is not set
 # CONFIG_QCOM_FASTRPC is not set
@@ -979,14 +986,18 @@ CONFIG_KEYBOARD_TCA8418=y
 # CONFIG_KEYBOARD_MATRIX is not set
 CONFIG_KEYBOARD_LM8323=y
 CONFIG_KEYBOARD_LM8333=y
+# CONFIG_KEYBOARD_LPC32XX is not set
 CONFIG_KEYBOARD_MAX7359=y
 CONFIG_KEYBOARD_MCS=y
 # CONFIG_KEYBOARD_MPR121 is not set
 # CONFIG_KEYBOARD_SNVS_PWRKEY is not set
 # CONFIG_KEYBOARD_IMX is not set
 CONFIG_KEYBOARD_NEWTON=y
+# CONFIG_KEYBOARD_NOMADIK is not set
+# CONFIG_KEYBOARD_TEGRA is not set
 CONFIG_KEYBOARD_OPENCORES=y
 # CONFIG_KEYBOARD_PINEPHONE is not set
+# CONFIG_KEYBOARD_PXA27x is not set
 CONFIG_KEYBOARD_PMIC8XXX=y
 CONFIG_KEYBOARD_SAMSUNG=y
 # CONFIG_KEYBOARD_GOLDFISH_EVENTS is not set
@@ -997,6 +1008,7 @@ CONFIG_KEYBOARD_SUNKBD=y
 CONFIG_KEYBOARD_STMPE=y
 # CONFIG_KEYBOARD_IQS62X is not set
 CONFIG_KEYBOARD_OMAP4=y
+# CONFIG_KEYBOARD_SPEAR is not set
 CONFIG_KEYBOARD_TM2_TOUCHKEY=y
 # CONFIG_KEYBOARD_TWL4030 is not set
 CONFIG_KEYBOARD_XTKBD=y
@@ -1032,6 +1044,7 @@ CONFIG_TOUCHSCREEN_CYTTSP_CORE=y
 # CONFIG_TOUCHSCREEN_CYTTSP_I2C is not set
 CONFIG_TOUCHSCREEN_CYTTSP4_CORE=y
 # CONFIG_TOUCHSCREEN_CYTTSP4_I2C is not set
+# CONFIG_TOUCHSCREEN_CYTTSP5 is not set
 CONFIG_TOUCHSCREEN_DA9034=y
 # CONFIG_TOUCHSCREEN_DYNAPRO is not set
 CONFIG_TOUCHSCREEN_HAMPSHIRE=y
@@ -1043,6 +1056,7 @@ CONFIG_TOUCHSCREEN_FUJITSU=y
 CONFIG_TOUCHSCREEN_GOODIX=y
 CONFIG_TOUCHSCREEN_HIDEEP=y
 # CONFIG_TOUCHSCREEN_HYCON_HY46XX is not set
+# CONFIG_TOUCHSCREEN_HYNITRON_CSTXXX is not set
 CONFIG_TOUCHSCREEN_ILI210X=y
 CONFIG_TOUCHSCREEN_ILITEK=y
 # CONFIG_TOUCHSCREEN_IPROC is not set
@@ -1096,6 +1110,7 @@ CONFIG_TOUCHSCREEN_SX8654=y
 CONFIG_TOUCHSCREEN_ROHM_BU21023=y
 CONFIG_TOUCHSCREEN_IQS5XX=y
 # CONFIG_TOUCHSCREEN_ZINITIX is not set
+# CONFIG_TOUCHSCREEN_HIMAX_HX83112B is not set
 # CONFIG_INPUT_MISC is not set
 CONFIG_RMI4_CORE=y
 # CONFIG_RMI4_I2C is not set
@@ -1150,6 +1165,7 @@ CONFIG_IPMI_POWEROFF=y
 # CONFIG_ASPEED_KCS_IPMI_BMC is not set
 # CONFIG_NPCM7XX_KCS_IPMI_BMC is not set
 # CONFIG_ASPEED_BT_IPMI_BMC is not set
+# CONFIG_SSIF_IPMI_BMC is not set
 # CONFIG_IPMB_DEVICE_INTERFACE is not set
 CONFIG_HW_RANDOM=y
 # CONFIG_HW_RANDOM_TIMERIOMEM is not set
@@ -1368,6 +1384,7 @@ CONFIG_PINCTRL_AXP209=y
 # CONFIG_PINCTRL_DA850_PUPD is not set
 # CONFIG_PINCTRL_EQUILIBRIUM is not set
 # CONFIG_PINCTRL_INGENIC is not set
+# CONFIG_PINCTRL_LOONGSON2 is not set
 # CONFIG_PINCTRL_LPC18XX is not set
 CONFIG_PINCTRL_MCP23S08_I2C=y
 CONFIG_PINCTRL_MCP23S08=y
@@ -1645,6 +1662,7 @@ CONFIG_GPIO_WM8350=y
 # Virtual GPIO drivers
 #
 CONFIG_GPIO_AGGREGATOR=y
+# CONFIG_GPIO_LATCH is not set
 # CONFIG_GPIO_MOCKUP is not set
 # CONFIG_GPIO_VIRTIO is not set
 # CONFIG_GPIO_SIM is not set
@@ -2181,6 +2199,7 @@ CONFIG_MFD_CORE=y
 CONFIG_MFD_ACT8945A=y
 # CONFIG_MFD_SUN4I_GPADC is not set
 # CONFIG_MFD_AS3711 is not set
+# CONFIG_MFD_SMPRO is not set
 CONFIG_MFD_AS3722=y
 # CONFIG_PMIC_ADP5520 is not set
 # CONFIG_MFD_AAT2870_CORE is not set
@@ -2216,7 +2235,6 @@ CONFIG_MFD_HI6421_PMIC=y
 CONFIG_MFD_HI6421_SPMI=y
 # CONFIG_MFD_HI655X_PMIC is not set
 CONFIG_HTC_PASIC3=y
-# CONFIG_HTC_I2CPLD is not set
 # CONFIG_INTEL_SOC_PMIC is not set
 CONFIG_MFD_IQS62X=y
 # CONFIG_MFD_KEMPLD is not set
@@ -2283,6 +2301,7 @@ CONFIG_MFD_TPS65217=y
 CONFIG_MFD_TI_LP873X=y
 CONFIG_MFD_TI_LP87565=y
 CONFIG_MFD_TPS65218=y
+# CONFIG_MFD_TPS65219 is not set
 # CONFIG_MFD_TPS6586X is not set
 # CONFIG_MFD_TPS65910 is not set
 CONFIG_MFD_TPS65912=y
@@ -2418,6 +2437,7 @@ CONFIG_REGULATOR_RT5033=y
 # CONFIG_REGULATOR_RT5190A is not set
 # CONFIG_REGULATOR_RT5759 is not set
 CONFIG_REGULATOR_RT6160=y
+# CONFIG_REGULATOR_RT6190 is not set
 CONFIG_REGULATOR_RT6245=y
 # CONFIG_REGULATOR_RTQ2134 is not set
 # CONFIG_REGULATOR_RTMV20 is not set
@@ -2583,6 +2603,10 @@ CONFIG_SDR_PLATFORM_DRIVERS=y
 
 #
 # Mediatek media platform drivers
+#
+
+#
+# Microchip Technology, Inc. media platform drivers
 #
 
 #
@@ -2849,6 +2873,7 @@ CONFIG_DVB_DUMMY_FE=y
 #
 # Graphics support
 #
+CONFIG_VIDEO_NOMODESET=y
 # CONFIG_TEGRA_HOST1X is not set
 # CONFIG_IMX_IPUV3_CORE is not set
 CONFIG_DRM=y
@@ -2891,6 +2916,7 @@ CONFIG_DRM_I2C_NXP_TDA9950=y
 CONFIG_DRM_RCAR_DW_HDMI=y
 # CONFIG_DRM_RCAR_USE_LVDS is not set
 # CONFIG_DRM_RCAR_USE_MIPI_DSI is not set
+# CONFIG_DRM_RZG2L_MIPI_DSI is not set
 # CONFIG_DRM_SHMOBILE is not set
 # CONFIG_DRM_SUN4I is not set
 # CONFIG_DRM_TILCDC is not set
@@ -2918,12 +2944,14 @@ CONFIG_DRM_PANEL_FEIXIN_K101_IM2BA02=y
 CONFIG_DRM_PANEL_FEIYANG_FY07024DI26A30D=y
 CONFIG_DRM_PANEL_ILITEK_ILI9881C=y
 # CONFIG_DRM_PANEL_INNOLUX_P079ZCA is not set
+# CONFIG_DRM_PANEL_JADARD_JD9365DA_H3 is not set
 CONFIG_DRM_PANEL_JDI_LT070ME05000=y
 CONFIG_DRM_PANEL_JDI_R63452=y
 CONFIG_DRM_PANEL_KHADAS_TS050=y
 CONFIG_DRM_PANEL_KINGDISPLAY_KD097D04=y
 CONFIG_DRM_PANEL_LEADTEK_LTK050H3146W=y
 CONFIG_DRM_PANEL_LEADTEK_LTK500HD1829=y
+# CONFIG_DRM_PANEL_NEWVISION_NV3051D is not set
 CONFIG_DRM_PANEL_NOVATEK_NT35510=y
 CONFIG_DRM_PANEL_NOVATEK_NT35560=y
 # CONFIG_DRM_PANEL_NOVATEK_NT35950 is not set
@@ -3029,7 +3057,6 @@ CONFIG_DRM_ARCPGU=y
 CONFIG_DRM_TIDSS=y
 # CONFIG_DRM_SPRD is not set
 CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
-CONFIG_DRM_NOMODESET=y
 
 #
 # Frame buffer Devices
@@ -3121,6 +3148,7 @@ CONFIG_HDMI=y
 # CONFIG_LOGO is not set
 # end of Graphics support
 
+# CONFIG_DRM_ACCEL is not set
 CONFIG_SOUND=y
 CONFIG_SND=y
 CONFIG_SND_TIMER=y
@@ -3430,6 +3458,7 @@ CONFIG_SND_SOC_PCM512x_I2C=y
 CONFIG_SND_SOC_RL6231=y
 CONFIG_SND_SOC_RT1308_SDW=y
 CONFIG_SND_SOC_RT1316_SDW=y
+# CONFIG_SND_SOC_RT1318_SDW is not set
 CONFIG_SND_SOC_RT5616=y
 CONFIG_SND_SOC_RT5631=y
 # CONFIG_SND_SOC_RT5640 is not set
@@ -3509,6 +3538,7 @@ CONFIG_SND_SOC_WM8903=y
 # CONFIG_SND_SOC_WM8904 is not set
 # CONFIG_SND_SOC_WM8940 is not set
 CONFIG_SND_SOC_WM8960=y
+# CONFIG_SND_SOC_WM8961 is not set
 # CONFIG_SND_SOC_WM8962 is not set
 CONFIG_SND_SOC_WM8974=y
 CONFIG_SND_SOC_WM8978=y
@@ -3541,10 +3571,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD2_CUSTOM_SAMPLE=y
 # CONFIG_SND_TEST_COMPONENT is not set
 # CONFIG_SND_VIRTIO is not set
 CONFIG_AC97_BUS=y
-
-#
-# HID support
-#
+CONFIG_HID_SUPPORT=y
 CONFIG_HID=y
 CONFIG_HID_BATTERY_STRENGTH=y
 # CONFIG_HIDRAW is not set
@@ -3638,6 +3665,12 @@ CONFIG_HID_ALPS=y
 # end of Special HID drivers
 
 #
+# HID-BPF support
+#
+CONFIG_HID_BPF=y
+# end of HID-BPF support
+
+#
 # I2C HID support
 #
 CONFIG_I2C_HID_OF=y
@@ -3646,8 +3679,6 @@ CONFIG_I2C_HID_OF=y
 # end of I2C HID support
 
 CONFIG_I2C_HID_CORE=y
-# end of HID support
-
 CONFIG_USB_OHCI_LITTLE_ENDIAN=y
 # CONFIG_USB_SUPPORT is not set
 # CONFIG_MMC is not set
@@ -3880,7 +3911,6 @@ CONFIG_RTC_DRV_NTXEC=y
 # on-CPU RTC drivers
 #
 # CONFIG_RTC_DRV_ASM9260 is not set
-# CONFIG_RTC_DRV_DAVINCI is not set
 # CONFIG_RTC_DRV_DIGICOLOR is not set
 # CONFIG_RTC_DRV_FSL_FTM_ALARM is not set
 # CONFIG_RTC_DRV_MESON is not set
@@ -3949,7 +3979,6 @@ CONFIG_FSL_EDMA=y
 CONFIG_FSL_QDMA=y
 # CONFIG_IMG_MDC_DMA is not set
 CONFIG_INTEL_IDMA64=y
-# CONFIG_INTEL_IOP_ADMA is not set
 # CONFIG_K3_DMA is not set
 # CONFIG_LPC18XX_DMAMUX is not set
 # CONFIG_MCF_EDMA is not set
@@ -4032,6 +4061,7 @@ CONFIG_CHARLCD_BL_ON=y
 # CONFIG_CHARLCD_BL_FLASH is not set
 # CONFIG_PANEL is not set
 CONFIG_VFIO=y
+CONFIG_VFIO_CONTAINER=y
 CONFIG_VFIO_NOIOMMU=y
 # CONFIG_VFIO_PLATFORM is not set
 # CONFIG_VFIO_MDEV is not set
@@ -4163,6 +4193,7 @@ CONFIG_COMMON_CLK_FIXED_MMIO=y
 # Ingenic SoCs drivers
 #
 # CONFIG_INGENIC_CGU_JZ4740 is not set
+# CONFIG_INGENIC_CGU_JZ4755 is not set
 # CONFIG_INGENIC_CGU_JZ4725B is not set
 # CONFIG_INGENIC_CGU_JZ4760 is not set
 # CONFIG_INGENIC_CGU_JZ4770 is not set
@@ -4178,6 +4209,7 @@ CONFIG_COMMON_CLK_FIXED_MMIO=y
 #
 # Clock driver for MediaTek SoC
 #
+# CONFIG_COMMON_CLK_MEDIATEK_FHCTL is not set
 # CONFIG_COMMON_CLK_MT2701 is not set
 # CONFIG_COMMON_CLK_MT2712 is not set
 # CONFIG_COMMON_CLK_MT6765 is not set
@@ -4207,6 +4239,7 @@ CONFIG_COMMON_CLK_MESON_PLL=y
 CONFIG_COMMON_CLK_MESON8B=y
 # end of Clock support for Amlogic platforms
 
+# CONFIG_MSTAR_MSC313_CPUPLL is not set
 # CONFIG_MSTAR_MSC313_MPLL is not set
 # CONFIG_MCHP_CLK_MPFS is not set
 # CONFIG_COMMON_CLK_PISTACHIO is not set
@@ -4446,6 +4479,8 @@ CONFIG_LITEX=y
 CONFIG_LITEX_SOC_CONTROLLER=y
 # end of Enable LiteX SoC Builder specific drivers
 
+# CONFIG_LOONGSON2_GUTS is not set
+
 #
 # MediaTek SoC drivers
 #
@@ -4457,6 +4492,8 @@ CONFIG_LITEX_SOC_CONTROLLER=y
 # CONFIG_MTK_SCPSYS_PM_DOMAINS is not set
 # CONFIG_MTK_MMSYS is not set
 # end of MediaTek SoC drivers
+
+# CONFIG_WPCM450_SOC is not set
 
 #
 # Qualcomm SoC drivers
@@ -4742,6 +4779,7 @@ CONFIG_PHY_PXA_28NM_USB2=y
 # CONFIG_PHY_QCOM_IPQ806X_USB is not set
 # CONFIG_PHY_MT7621_PCI is not set
 # CONFIG_PHY_RALINK_USB is not set
+# CONFIG_PHY_R8A779F0_ETHERNET_SERDES is not set
 # CONFIG_PHY_RCAR_GEN3_USB3 is not set
 # CONFIG_PHY_ROCKCHIP_DPHY_RX0 is not set
 # CONFIG_PHY_ROCKCHIP_INNO_HDMI is not set
@@ -4790,6 +4828,7 @@ CONFIG_ARM_CCN=y
 # CONFIG_FSL_IMX8_DDR_PMU is not set
 # CONFIG_ARM_DMC620_PMU is not set
 # CONFIG_ALIBABA_UNCORE_DRW_PMU is not set
+# CONFIG_MESON_DDR_PMU is not set
 # end of Performance monitor support
 
 CONFIG_RAS=y
@@ -5096,7 +5135,6 @@ CONFIG_CRYPTO_MANAGER=y
 CONFIG_CRYPTO_MANAGER2=y
 # CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
 CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
-CONFIG_CRYPTO_GF128MUL=y
 CONFIG_CRYPTO_NULL=y
 CONFIG_CRYPTO_NULL2=y
 CONFIG_CRYPTO_CRYPTD=y
@@ -5134,7 +5172,7 @@ CONFIG_CRYPTO_DES=y
 CONFIG_CRYPTO_FCRYPT=y
 # CONFIG_CRYPTO_SERPENT is not set
 CONFIG_CRYPTO_SM4=y
-# CONFIG_CRYPTO_SM4_GENERIC is not set
+CONFIG_CRYPTO_SM4_GENERIC=y
 CONFIG_CRYPTO_TWOFISH=y
 CONFIG_CRYPTO_TWOFISH_COMMON=y
 # end of Block ciphers
@@ -5186,7 +5224,7 @@ CONFIG_CRYPTO_SHA256=y
 CONFIG_CRYPTO_SHA512=y
 CONFIG_CRYPTO_SHA3=y
 CONFIG_CRYPTO_SM3=y
-# CONFIG_CRYPTO_SM3_GENERIC is not set
+CONFIG_CRYPTO_SM3_GENERIC=y
 CONFIG_CRYPTO_STREEBOG=y
 CONFIG_CRYPTO_VMAC=y
 # CONFIG_CRYPTO_WP512 is not set
@@ -5318,6 +5356,7 @@ CONFIG_ARCH_USE_CMPXCHG_LOCKREF=y
 #
 CONFIG_CRYPTO_LIB_UTILS=y
 CONFIG_CRYPTO_LIB_AES=y
+CONFIG_CRYPTO_LIB_GF128MUL=y
 CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
 CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=y
 CONFIG_CRYPTO_LIB_CHACHA_GENERIC=y
@@ -5410,6 +5449,7 @@ CONFIG_IRQ_POLL=y
 CONFIG_MPILIB=y
 CONFIG_LIBFDT=y
 CONFIG_OID_REGISTRY=y
+CONFIG_ARCH_STACKWALK=y
 CONFIG_STACKDEPOT=y
 # CONFIG_PARMAN is not set
 # CONFIG_OBJAGG is not set
@@ -5459,6 +5499,7 @@ CONFIG_DEBUG_FS=y
 # CONFIG_DEBUG_FS_ALLOW_ALL is not set
 CONFIG_DEBUG_FS_DISALLOW_MOUNT=y
 # CONFIG_DEBUG_FS_ALLOW_NONE is not set
+CONFIG_ARCH_HAS_UBSAN_SANITIZE_ALL=y
 CONFIG_UBSAN=y
 CONFIG_CC_HAS_UBSAN_BOUNDS=y
 CONFIG_CC_HAS_UBSAN_ARRAY_BOUNDS=y
@@ -5468,6 +5509,7 @@ CONFIG_UBSAN_SHIFT=y
 # CONFIG_UBSAN_UNREACHABLE is not set
 # CONFIG_UBSAN_BOOL is not set
 CONFIG_UBSAN_ENUM=y
+CONFIG_UBSAN_SANITIZE_ALL=y
 # end of Generic Kernel Debugging Instruments
 
 #
@@ -5620,7 +5662,6 @@ CONFIG_ATOMIC64_SELFTEST=y
 CONFIG_TEST_HEXDUMP=y
 CONFIG_STRING_SELFTEST=y
 CONFIG_TEST_STRING_HELPERS=y
-CONFIG_TEST_STRSCPY=y
 CONFIG_TEST_KSTRTOX=y
 # CONFIG_TEST_PRINTF is not set
 CONFIG_TEST_SCANF=y
@@ -5629,7 +5670,6 @@ CONFIG_TEST_UUID=y
 CONFIG_TEST_XARRAY=y
 # CONFIG_TEST_MAPLE_TREE is not set
 CONFIG_TEST_RHASHTABLE=y
-# CONFIG_TEST_SIPHASH is not set
 CONFIG_TEST_IDA=y
 CONFIG_FIND_BIT_BENCHMARK=y
 # CONFIG_TEST_FIRMWARE is not set
@@ -5650,4 +5690,4 @@ CONFIG_ARCH_USE_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---AFp8M+Q0FOGDNaCf--
+--YahDswhBStQJlwcR--
