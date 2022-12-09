@@ -1,236 +1,184 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23380A45
-	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 08:57:45 +0000 (UTC)
-Received: by mail-il1-f200.google.com with SMTP id k6-20020a92c246000000b003035797fa8cso3365585ilo.8
-        for <llvm@lists.linux.dev>; Fri, 09 Dec 2022 00:57:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8N5uA/S0DpG25/Y8QsbGP2w+sYQpSLnGRWahlvUerdw=;
-        b=UixL62qGs2SIDdOTAGq5DqgZCzsCk+3DcD+LVcKK7X/N9hLEgfWRV8EfOQjtVUoRL6
-         V7AcYRhS1ksVGdt84mhEKzrY9uJKRqOcrhdGLrgAR1av7I8khKSSydIRqnjY1SLO0Mjd
-         G2CsN7a00pBw3ZhclESLRzDdvd+hZENdAdVupnqpK+VVJEaGZFyybyGfIs39LMSfox/s
-         HkEoKzGKKDrzgKynCywFoyQZWst9dX9q5cR0m5wm5xhqO5qghq2cMoM/JkxqInNE/FGS
-         XGcs3rCAflo3an9CSNNLKFM/WwsWggSpHa8t0JcC0Led31pkukxB/qIsAZx7eIT6HL5b
-         8XfA==
-X-Gm-Message-State: ANoB5pkLId11s2j7KpmA0UToYB2QvtsN7lVADUfpmeUmKuv0IzmmHmME
-	M03AY6LXSVbZDqtyIet3qf4OpXQd0GOwYWZPfuiATV1kutIe
-X-Google-Smtp-Source: AA0mqf5cNz/uScMtPhZKIfmabh7C5f/fPWhTo2csXvp0tF2fdgji3oP+/VN+auo/xJE0g4PYFT+IRNFsGtwagRzu/iW1YqiVzomt
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61951A3F
+	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 10:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1670580098;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=W0QKBreq9DKYp42w6tlCWalSzVhGDwlh1PBr9T9nlQ8=;
+	b=CfjTuQfe4vhLes88VzaFQarsU6gmSdsgAxCH+F7LkkrXUSREDzQ5BTtmxhCTirsHY6aQvF
+	VPvf/oRYnd9rPuhZHg193/ZwxaAMNo+i5sV+aO6b6RaUNe87ZYeTn858rjBFEiAHU4CXuw
+	G+iDc6asutoBeeTmVEjwH74govAggDg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-311-8pEA0hCvPAutYTMBAbNDAg-1; Fri, 09 Dec 2022 05:01:37 -0500
+X-MC-Unique: 8pEA0hCvPAutYTMBAbNDAg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CBAF18027FE
+	for <llvm@lists.linux.dev>; Fri,  9 Dec 2022 10:01:36 +0000 (UTC)
+Received: from [172.64.11.46] (unknown [10.30.32.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 973A0492B04;
+	Fri,  9 Dec 2022 10:01:31 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc8,
+ mainline.kernel.org-clang, ce19275f)
+Date: Fri, 09 Dec 2022 10:01:31 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:c80c:0:b0:38a:159d:d7de with SMTP id
- p12-20020a02c80c000000b0038a159dd7demr14837492jao.290.1670576264120; Fri, 09
- Dec 2022 00:57:44 -0800 (PST)
-Date: Fri, 09 Dec 2022 00:57:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cb121205ef615844@google.com>
-Subject: [syzbot] possible deadlock in ntfs_fallocate
-From: syzbot <syzbot+adacb2b0c896bc427962@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <54390.122120905013700409@us-mta-311.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi, we tested your kernel and here are the results:
 
-syzbot found the following issue on:
-
-HEAD commit:    f3e8416619ce Merge tag 'soc-fixes-6.1-5' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ab680b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=adacb2b0c896bc427962
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/628abc27cbe7/disk-f3e84166.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2f19ea836174/vmlinux-f3e84166.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f2e1347e85a5/bzImage-f3e84166.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+adacb2b0c896bc427962@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc8-syzkaller-00035-gf3e8416619ce #0 Not tainted
-------------------------------------------------------
-syz-executor.2/8526 is trying to acquire lock:
-ffff88803100bc00 (&ni->ni_lock/4){+.+.}-{3:3}, at: ni_lock fs/ntfs3/ntfs_fs.h:1108 [inline]
-ffff88803100bc00 (&ni->ni_lock/4){+.+.}-{3:3}, at: ntfs_fallocate+0x83f/0xfb0 fs/ntfs3/file.c:666
-
-but task is already holding lock:
-ffff88803100c040 (mapping.invalidate_lock#4){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:801 [inline]
-ffff88803100c040 (mapping.invalidate_lock#4){++++}-{3:3}, at: ntfs_fallocate+0x38a/0xfb0 fs/ntfs3/file.c:583
-
-which lock already depends on the new lock.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-the existing dependency chain (in reverse order) is:
+Kernel information:
+    Commit message: Merge tag 'for-linus-2022120801' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/hid/hid
 
--> #3 (mapping.invalidate_lock#4){++++}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_read+0x39/0x50 kernel/locking/rwsem.c:1509
-       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-       filemap_fault+0x2fb/0x1060 mm/filemap.c:3127
-       __do_fault+0x136/0x4f0 mm/memory.c:4202
-       do_shared_fault mm/memory.c:4608 [inline]
-       do_fault mm/memory.c:4686 [inline]
-       handle_pte_fault mm/memory.c:4954 [inline]
-       __handle_mm_fault mm/memory.c:5096 [inline]
-       handle_mm_fault+0x1bca/0x3630 mm/memory.c:5217
-       faultin_page mm/gup.c:1009 [inline]
-       __get_user_pages+0x4db/0x1200 mm/gup.c:1230
-       __get_user_pages_locked mm/gup.c:1434 [inline]
-       get_user_pages_unlocked+0x568/0x890 mm/gup.c:2343
-       __gup_longterm_unlocked+0x48/0x140 mm/gup.c:2954
-       internal_get_user_pages_fast+0xcf4/0xee0 mm/gup.c:3044
-       __iov_iter_get_pages_alloc+0x3b4/0xa90 lib/iov_iter.c:1460
-       iov_iter_get_pages2+0xcb/0x120 lib/iov_iter.c:1503
-       dio_refill_pages+0x8d/0x580 fs/direct-io.c:172
-       dio_get_page fs/direct-io.c:215 [inline]
-       do_direct_IO fs/direct-io.c:932 [inline]
-       __blockdev_direct_IO+0x1230/0x3c90 fs/direct-io.c:1266
-       blockdev_direct_IO include/linux/fs.h:3222 [inline]
-       ntfs_direct_IO+0x1a6/0x360 fs/ntfs3/inode.c:769
-       generic_file_read_iter+0x330/0x540 mm/filemap.c:2798
-       do_iter_read+0x6e3/0xc10 fs/read_write.c:796
-       vfs_readv fs/read_write.c:916 [inline]
-       do_preadv+0x1f4/0x330 fs/read_write.c:1008
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/62653
 
--> #2 (&mm->mmap_lock#2){++++}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __might_fault+0xb2/0x110 mm/memory.c:5645
-       _copy_to_user+0x26/0x130 lib/usercopy.c:29
-       copy_to_user include/linux/uaccess.h:169 [inline]
-       fiemap_fill_next_extent+0x22e/0x410 fs/ioctl.c:144
-       ni_fiemap+0x950/0x1130 fs/ntfs3/frecord.c:2030
-       ntfs_fiemap+0x134/0x180 fs/ntfs3/file.c:1245
-       ioctl_fiemap fs/ioctl.c:219 [inline]
-       do_vfs_ioctl+0x187f/0x29a0 fs/ioctl.c:810
-       __do_sys_ioctl fs/ioctl.c:868 [inline]
-       __se_sys_ioctl+0x83/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+           s390x - selinux-policy: serge-testsuite
+                   Issue: serge-testsuite: cap_userns/test ............. Du=
+bious, test returned 1
+                          https://gitlab.com/cki-project/kpet-db/-/issues/4=
+5
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6310284
 
--> #1 (&ni->file.run_lock#3){++++}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
-       ntfs_truncate fs/ntfs3/file.c:493 [inline]
-       ntfs3_setattr+0x504/0xb00 fs/ntfs3/file.c:792
-       notify_change+0xe38/0x10f0 fs/attr.c:420
-       do_truncate+0x1fb/0x2e0 fs/open.c:65
-       handle_truncate fs/namei.c:3216 [inline]
-       do_open fs/namei.c:3561 [inline]
-       path_openat+0x2770/0x2df0 fs/namei.c:3714
-       do_filp_open+0x264/0x4f0 fs/namei.c:3741
-       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_creat fs/open.c:1402 [inline]
-       __se_sys_creat fs/open.c:1396 [inline]
-       __x64_sys_creat+0x11f/0x160 fs/open.c:1396
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6309787
 
--> #0 (&ni->ni_lock/4){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       ni_lock fs/ntfs3/ntfs_fs.h:1108 [inline]
-       ntfs_fallocate+0x83f/0xfb0 fs/ntfs3/file.c:666
-       vfs_fallocate+0x515/0x670 fs/open.c:323
-       ksys_fallocate fs/open.c:346 [inline]
-       __do_sys_fallocate fs/open.c:354 [inline]
-       __se_sys_fallocate fs/open.c:352 [inline]
-       __x64_sys_fallocate+0xb9/0x100 fs/open.c:352
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &ni->ni_lock/4 --> &mm->mmap_lock#2 --> mapping.invalidate_lock#4
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(mapping.invalidate_lock#4);
-                               lock(&mm->mmap_lock#2);
-                               lock(mapping.invalidate_lock#4);
-  lock(&ni->ni_lock/4);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor.2/8526:
- #0: ffff888022762460 (sb_writers#13){.+.+}-{0:0}, at: file_start_write include/linux/fs.h:2944 [inline]
- #0: ffff888022762460 (sb_writers#13){.+.+}-{0:0}, at: vfs_fallocate+0x489/0x670 fs/open.c:322
- #1: ffff88803100bea0 (&sb->s_type->i_mutex_key#21){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff88803100bea0 (&sb->s_type->i_mutex_key#21){+.+.}-{3:3}, at: ntfs_fallocate+0x2d4/0xfb0 fs/ntfs3/file.c:569
- #2: ffff88803100c040 (mapping.invalidate_lock#4){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:801 [inline]
- #2: ffff88803100c040 (mapping.invalidate_lock#4){++++}-{3:3}, at: ntfs_fallocate+0x38a/0xfb0 fs/ntfs3/file.c:583
-
-stack backtrace:
-CPU: 1 PID: 8526 Comm: syz-executor.2 Not tainted 6.1.0-rc8-syzkaller-00035-gf3e8416619ce #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- ni_lock fs/ntfs3/ntfs_fs.h:1108 [inline]
- ntfs_fallocate+0x83f/0xfb0 fs/ntfs3/file.c:666
- vfs_fallocate+0x515/0x670 fs/open.c:323
- ksys_fallocate fs/open.c:346 [inline]
- __do_sys_fallocate fs/open.c:354 [inline]
- __se_sys_fallocate fs/open.c:352 [inline]
- __x64_sys_fallocate+0xb9/0x100 fs/open.c:352
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f3b4288c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f3b435fd168 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007f3b429ac050 RCX: 00007f3b4288c0d9
-RDX: 0000000000000000 RSI: 0000000000000020 RDI: 0000000000000004
-RBP: 00007f3b428e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000020000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe40f08bef R14: 00007f3b435fd300 R15: 0000000000022000
- </TASK>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
+systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
+t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
+ive=3D1
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6300879
+            Affected tests:
+                 ppc64le - LTP: openposix test suite
+                   s390x - LTP: openposix test suite
+                  x86_64 - LTP: openposix test suite
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1479
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
+syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
+=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
+            Affected tests:
+                 ppc64le - Reboot test
+                   s390x - Reboot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: serge-testsuite: cap_userns/test ............. Dubious, test=
+ returned 1
+            URL: https://gitlab.com/cki-project/kpet-db/-/issues/45
+            Affected tests:
+                  x86_64 - selinux-policy: serge-testsuite
+        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1172
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
+ /boot/vmlinuz-6.1.0-rc8 not a file
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1497
+            Affected tests:
+                 aarch64 - Boot test
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
