@@ -1,162 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE17EC4
-	for <llvm@lists.linux.dev>; Sun, 11 Dec 2022 02:47:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B0CC433D2;
-	Sun, 11 Dec 2022 02:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670726831;
-	bh=a85+YHrkUTxTxO4/UXl+D9uSuSdZ9mM7ecjBPKZ65EE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=FEfOlQhlGESTUpVvnRkhqPGlEuKXXeyr2VLqvxnoFZ+g8EgEsita1hF9RMyAGPUu5
-	 73Ej4ZZJ2/F+iZjXDUyCczg7FW06Eh3zZkhRmaZhxECzADJL75P5tF+nhdy/LZBEX4
-	 ZXdl5pGJxevAAXxwFTwvrh68owCZ5/qYR6rKQFDnG9U7OH9ufrc+1L2g5g2gJy10gy
-	 J8kquE4kqm9kU6C7m9jWVTYkuwShYFfzd+Ub18OCXbdA3sBUaVvZKF2lwHsdOvVNxy
-	 DHR5uW2yMW0VEnFw+kFVclSiHr5mRjdHWoaow4CNBMbIW06lJCOiRF4ujII8oHUmP/
-	 OgqfCO1ytvbSA==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Tom Rix <trix@redhat.com>,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev,
-	x86@kernel.org
-Subject: [PATCH] kbuild: add test-{ge,gt,le,lt} macros
-Date: Sun, 11 Dec 2022 11:46:47 +0900
-Message-Id: <20221211024647.2614394-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A92D1107;
+	Sun, 11 Dec 2022 03:27:41 +0000 (UTC)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NV98Y3WjJzJp94;
+	Sun, 11 Dec 2022 11:23:57 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sun, 11 Dec 2022 11:27:31 +0800
+Message-ID: <50506c8a-71c1-9c68-aa47-7e8dc68a3c52@huawei.com>
+Date: Sun, 11 Dec 2022 11:27:31 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [ammarfaizi2-block:akpm/mm/mm-unstable 71/161] mm/ksm.c:2605:7:
+ error: implicit declaration of function 'copy_mc_user_highpage' is invalid in
+ C99
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Ammar Faizi
+	<ammarfaizi2@gnuweeb.org>, GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	Andrew Morton <akpm@linux-foundation.org>, Linux Memory Management List
+	<linux-mm@kvack.org>
+References: <202212101658.opz53ZV8-lkp@intel.com>
+From: Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <202212101658.opz53ZV8-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 
-GNU Make 4.4 introduced $(intcmp ...), which is useful to compare two
-integers without forking a new process.
+Hi,  the patch "[PATCH -next v2] mm: hwposion: support recovery from 
+ksm_might_need_to_copy()" is
 
-Add test-{ge,gt,le,lt} macros, which work more efficiently with GNU
-Make >= 4.4. For older Make versions, they fall back to the 'test'
-shell command.
+based on next-20221208,  relay on Tony Luck's Patch series 
+"Copy-on-write poison recovery".
 
-The first two parameters to $(intcmp ...) must not be empty. To avoid
-the syntax error, I appended '0' to them. Fortunately, '00' is treated
-as '0'. This is needed because CONFIG options may expand to an empty
-string when the kernel configuration is not included.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
----
-
-Changes in v3:
-  - Use $(intcmp ...) instead of playing with $(sort ...)
-
- Makefile                  |  2 +-
- arch/riscv/Makefile       |  2 +-
- arch/x86/Makefile         |  2 +-
- scripts/Kbuild.include    | 16 ++++++++++++++++
- scripts/Makefile.compiler |  4 ++--
- 5 files changed, 21 insertions(+), 5 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index fbd9ff4a61e7..8801cac4d3d5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -993,7 +993,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
- # Check for frame size exceeding threshold during prolog/epilog insertion
- # when using lld < 13.0.0.
- ifneq ($(CONFIG_FRAME_WARN),0)
--ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-+ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
- KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
- endif
- endif
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 0d13b597cb55..faf2c2177094 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -37,7 +37,7 @@ else
- endif
- 
- ifeq ($(CONFIG_LD_IS_LLD),y)
--ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
-+ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
- 	KBUILD_CFLAGS += -mno-relax
- 	KBUILD_AFLAGS += -mno-relax
- ifndef CONFIG_AS_IS_LLVM
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 415a5d138de4..e72c7a49cd59 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -211,7 +211,7 @@ endif
- KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
- 
- ifdef CONFIG_LTO_CLANG
--ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-+ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
- KBUILD_LDFLAGS	+= -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
- endif
- endif
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index cbe28744637b..5019bc1e38e4 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -11,6 +11,22 @@ space   := $(empty) $(empty)
- space_escape := _-_SPACE_-_
- pound := \#
- 
-+###
-+# Comparison macros.
-+# Usage: $(call test-lt, $(CONFIG_LLD_VERSION), 150000)
-+#
-+# Use $(intcmp ...) if supported. (Make >= 4.4)
-+# Otherwise, fall back to the 'test' shell command.
-+ifeq ($(intcmp 1,0,,,y),y)
-+test-le = $(intcmp $(strip $1)0, $(strip $2)0,y,y,)
-+test-lt = $(intcmp $(strip $1)0, $(strip $2)0,y,,)
-+else
-+test-le = $(shell test $(strip $1)0 -le $(strip $2)0 && echo y)
-+test-lt = $(shell test $(strip $1)0 -lt $(strip $2)0 && echo y)
-+endif
-+test-ge = $(call test-le, $2, $1)
-+test-gt = $(call test-lt, $2, $1)
-+
- ###
- # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
- dot-target = $(dir $@).$(notdir $@)
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 20d353dcabfb..3d8adfd34af1 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -63,11 +63,11 @@ cc-disable-warning = $(call try-run,\
- 
- # gcc-min-version
- # Usage: cflags-$(call gcc-min-version, 70100) += -foo
--gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
-+gcc-min-version = $(call test-ge, $(CONFIG_GCC_VERSION), $1)
- 
- # clang-min-version
- # Usage: cflags-$(call clang-min-version, 110000) += -foo
--clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && echo y)
-+clang-min-version = $(call test-ge, $(CONFIG_CLANG_VERSION), $1)
- 
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
--- 
-2.34.1
-
+On 2022/12/10 16:19, kernel test robot wrote:
+> tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+> head:   4661cf99c1e4946297434595994227e47f33c014
+> commit: b7edf4b1cdb10106ea63ff2a416b5680d8392dcb [71/161] mm: hwpoison: support recovery from ksm_might_need_to_copy()
+> config: i386-randconfig-a002
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/ammarfaizi2/linux-block/commit/b7edf4b1cdb10106ea63ff2a416b5680d8392dcb
+>          git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>          git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+>          git checkout b7edf4b1cdb10106ea63ff2a416b5680d8392dcb
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> Note: the ammarfaizi2-block/akpm/mm/mm-unstable HEAD 4661cf99c1e4946297434595994227e47f33c014 builds fine.
+>        It only hurts bisectability.
+>
+> All errors (new ones prefixed by >>):
+>
+>>> mm/ksm.c:2605:7: error: implicit declaration of function 'copy_mc_user_highpage' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+>                     if (copy_mc_user_highpage(new_page, page, address, vma)) {
+>                         ^
+>     mm/ksm.c:2605:7: note: did you mean 'copy_user_highpage'?
+>     include/linux/highmem.h:307:20: note: 'copy_user_highpage' declared here
+>     static inline void copy_user_highpage(struct page *to, struct page *from,
+>                        ^
+>     1 error generated.
+>
+>
+> vim +/copy_mc_user_highpage +2605 mm/ksm.c
+>
+>    2577	
+>    2578	struct page *ksm_might_need_to_copy(struct page *page,
+>    2579				struct vm_area_struct *vma, unsigned long address)
+>    2580	{
+>    2581		struct folio *folio = page_folio(page);
+>    2582		struct anon_vma *anon_vma = folio_anon_vma(folio);
+>    2583		struct page *new_page;
+>    2584	
+>    2585		if (PageKsm(page)) {
+>    2586			if (page_stable_node(page) &&
+>    2587			    !(ksm_run & KSM_RUN_UNMERGE))
+>    2588				return page;	/* no need to copy it */
+>    2589		} else if (!anon_vma) {
+>    2590			return page;		/* no need to copy it */
+>    2591		} else if (page->index == linear_page_index(vma, address) &&
+>    2592				anon_vma->root == vma->anon_vma->root) {
+>    2593			return page;		/* still no need to copy it */
+>    2594		}
+>    2595		if (!PageUptodate(page))
+>    2596			return page;		/* let do_swap_page report the error */
+>    2597	
+>    2598		new_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, address);
+>    2599		if (new_page &&
+>    2600		    mem_cgroup_charge(page_folio(new_page), vma->vm_mm, GFP_KERNEL)) {
+>    2601			put_page(new_page);
+>    2602			new_page = NULL;
+>    2603		}
+>    2604		if (new_page) {
+>> 2605			if (copy_mc_user_highpage(new_page, page, address, vma)) {
+>    2606				put_page(new_page);
+>    2607				new_page = ERR_PTR(-EHWPOISON);
+>    2608				memory_failure_queue(page_to_pfn(page), 0);
+>    2609				return new_page;
+>    2610			}
+>    2611			SetPageDirty(new_page);
+>    2612			__SetPageUptodate(new_page);
+>    2613			__SetPageLocked(new_page);
+>    2614	#ifdef CONFIG_SWAP
+>    2615			count_vm_event(KSM_SWPIN_COPY);
+>    2616	#endif
+>    2617		}
+>    2618	
+>    2619		return new_page;
+>    2620	}
+>    2621	
+>
