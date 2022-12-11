@@ -1,189 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C1D6FBB
-	for <llvm@lists.linux.dev>; Sat, 10 Dec 2022 23:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670714490;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=D77YUInxeprhB1eRArO1y6Z8F8q39kD8u/Abb2nYsxE=;
-	b=PujSHSiUv0Aeq+bHxbA1bIIQrNJYDSwzoXsL5dqVVjqafsG2mQc1jYSJNc7yHMC3M/+j1e
-	mugFXu8+P7w+mNphhdKTc8cdWmaEDtiA0O46Sjz2sVEM0c1DJNUffwEqndgEWnB4PLvxxC
-	mu5ypHThzehKiWr51if+cHbB1qeYhMY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-240-r2ND9WbFNf6-9BuSJb3Rvw-1; Sat, 10 Dec 2022 18:21:29 -0500
-X-MC-Unique: r2ND9WbFNf6-9BuSJb3Rvw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F23D29AB3E0
-	for <llvm@lists.linux.dev>; Sat, 10 Dec 2022 23:21:29 +0000 (UTC)
-Received: from [172.64.11.46] (unknown [10.30.32.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 69D911121331;
-	Sat, 10 Dec 2022 23:21:29 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc8,
- mainline.kernel.org-clang, 3ecc3791)
-Date: Sat, 10 Dec 2022 23:21:29 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE17EC4
+	for <llvm@lists.linux.dev>; Sun, 11 Dec 2022 02:47:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B0CC433D2;
+	Sun, 11 Dec 2022 02:47:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1670726831;
+	bh=a85+YHrkUTxTxO4/UXl+D9uSuSdZ9mM7ecjBPKZ65EE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=FEfOlQhlGESTUpVvnRkhqPGlEuKXXeyr2VLqvxnoFZ+g8EgEsita1hF9RMyAGPUu5
+	 73Ej4ZZJ2/F+iZjXDUyCczg7FW06Eh3zZkhRmaZhxECzADJL75P5tF+nhdy/LZBEX4
+	 ZXdl5pGJxevAAXxwFTwvrh68owCZ5/qYR6rKQFDnG9U7OH9ufrc+1L2g5g2gJy10gy
+	 J8kquE4kqm9kU6C7m9jWVTYkuwShYFfzd+Ub18OCXbdA3sBUaVvZKF2lwHsdOvVNxy
+	 DHR5uW2yMW0VEnFw+kFVclSiHr5mRjdHWoaow4CNBMbIW06lJCOiRF4ujII8oHUmP/
+	 OgqfCO1ytvbSA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	x86@kernel.org
+Subject: [PATCH] kbuild: add test-{ge,gt,le,lt} macros
+Date: Sun, 11 Dec 2022 11:46:47 +0900
+Message-Id: <20221211024647.2614394-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <67891.122121018212900159@us-mta-240.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+GNU Make 4.4 introduced $(intcmp ...), which is useful to compare two
+integers without forking a new process.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Add test-{ge,gt,le,lt} macros, which work more efficiently with GNU
+Make >= 4.4. For older Make versions, they fall back to the 'test'
+shell command.
 
+The first two parameters to $(intcmp ...) must not be empty. To avoid
+the syntax error, I appended '0' to them. Fortunately, '00' is treated
+as '0'. This is needed because CONFIG options may expand to an empty
+string when the kernel configuration is not included.
 
-Kernel information:
-    Commit message: Merge tag 'media/v6.1-4' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/mchehab/linux-media
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+---
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62751
+Changes in v3:
+  - Use $(intcmp ...) instead of playing with $(sort ...)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6326091
-          x86_64 (debug) - xfstests - nfsv4.2
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6326222
+ Makefile                  |  2 +-
+ arch/riscv/Makefile       |  2 +-
+ arch/x86/Makefile         |  2 +-
+ scripts/Kbuild.include    | 16 ++++++++++++++++
+ scripts/Makefile.compiler |  4 ++--
+ 5 files changed, 21 insertions(+), 5 deletions(-)
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
-systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
-t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
-ive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
-            Affected tests:
-                 ppc64le - LTP: openposix test suite
-                   s390x - LTP: openposix test suite
-                  x86_64 - LTP: openposix test suite
-                  x86_64 (debug) - LTP: openposix test suite
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                 ppc64le - Reboot test
-                   s390x - Reboot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Networking sctp-auth: sockopts test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: serge-testsuite: cap_userns/test ............. Dubious, test=
- returned 1
-            URL: https://gitlab.com/cki-project/kpet-db/-/issues/45
-            Affected tests:
-                   s390x - selinux-policy: serge-testsuite
-                  x86_64 - selinux-policy: serge-testsuite
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1172
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
- /boot/vmlinuz-6.1.0-rc8 not a file
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1497
-            Affected tests:
-                 aarch64 - Boot test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/Makefile b/Makefile
+index fbd9ff4a61e7..8801cac4d3d5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -993,7 +993,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
+ # Check for frame size exceeding threshold during prolog/epilog insertion
+ # when using lld < 13.0.0.
+ ifneq ($(CONFIG_FRAME_WARN),0)
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+ KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
+ endif
+ endif
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 0d13b597cb55..faf2c2177094 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -37,7 +37,7 @@ else
+ endif
+ 
+ ifeq ($(CONFIG_LD_IS_LLD),y)
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
+ 	KBUILD_CFLAGS += -mno-relax
+ 	KBUILD_AFLAGS += -mno-relax
+ ifndef CONFIG_AS_IS_LLVM
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 415a5d138de4..e72c7a49cd59 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -211,7 +211,7 @@ endif
+ KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
+ 
+ ifdef CONFIG_LTO_CLANG
+-ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
++ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
+ KBUILD_LDFLAGS	+= -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
+ endif
+ endif
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index cbe28744637b..5019bc1e38e4 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -11,6 +11,22 @@ space   := $(empty) $(empty)
+ space_escape := _-_SPACE_-_
+ pound := \#
+ 
++###
++# Comparison macros.
++# Usage: $(call test-lt, $(CONFIG_LLD_VERSION), 150000)
++#
++# Use $(intcmp ...) if supported. (Make >= 4.4)
++# Otherwise, fall back to the 'test' shell command.
++ifeq ($(intcmp 1,0,,,y),y)
++test-le = $(intcmp $(strip $1)0, $(strip $2)0,y,y,)
++test-lt = $(intcmp $(strip $1)0, $(strip $2)0,y,,)
++else
++test-le = $(shell test $(strip $1)0 -le $(strip $2)0 && echo y)
++test-lt = $(shell test $(strip $1)0 -lt $(strip $2)0 && echo y)
++endif
++test-ge = $(call test-le, $2, $1)
++test-gt = $(call test-lt, $2, $1)
++
+ ###
+ # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+ dot-target = $(dir $@).$(notdir $@)
+diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+index 20d353dcabfb..3d8adfd34af1 100644
+--- a/scripts/Makefile.compiler
++++ b/scripts/Makefile.compiler
+@@ -63,11 +63,11 @@ cc-disable-warning = $(call try-run,\
+ 
+ # gcc-min-version
+ # Usage: cflags-$(call gcc-min-version, 70100) += -foo
+-gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
++gcc-min-version = $(call test-ge, $(CONFIG_GCC_VERSION), $1)
+ 
+ # clang-min-version
+ # Usage: cflags-$(call clang-min-version, 110000) += -foo
+-clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && echo y)
++clang-min-version = $(call test-ge, $(CONFIG_CLANG_VERSION), $1)
+ 
+ # ld-option
+ # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+-- 
+2.34.1
 
