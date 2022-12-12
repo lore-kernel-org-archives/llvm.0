@@ -1,101 +1,151 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA572F58
-	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 20:32:28 +0000 (UTC)
-Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N5G1V-1oucA71QdJ-01171N; Mon, 12 Dec 2022 21:31:42 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-	id F41C03C1BA; Mon, 12 Dec 2022 21:31:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-	t=1670877095; bh=nxwnxqjAjgVwT5akycdILq2xF3x3T7jbclBRpYvebKA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BHwwSClVQEiCMkeGU0a2VtIArgQ0VdHgcme8hBeaPzIH0A38SOUYE4QFSfQlvSu3r
-	 cH/Qjk5/WDBnq/unjNIzEMLNnJA1szFxe0q+AZe3xUwn2dHwRRq5aieSjfUxin3BA2
-	 0edYlpDVltvU7VJ43z+1gUDLW3BuHm87PXERBT3Y=
-Date: Mon, 12 Dec 2022 21:31:34 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/5] Improvements to incremental builds
-Message-ID: <Y5ePpm3HKts3b+gJ@fjasle.eu>
-References: <20221202045743.2639466-1-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5162E2F58
+	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 21:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1670878888;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=G9BrlBtvXFHLd6GV75XaUG6UhTYrphznJhfUdetih0c=;
+	b=fhfWPse6OFf1fftxsfbsUgHTyZ+t/U6qla2WupruJzFsXsG9+0mXWF5DPPr7goAabFWHYn
+	5VJ727zaOMz01sI1IgmbUFZp4O2ToD6mEc8OrEhjrVNcWSt9ovaiioDM3it9XDx+9LMH/D
+	yxIrPaLaHIRmDYW8VHxrOks2c+C/SQI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-Wl0Sq4imNw-sRhjZptwxrg-1; Mon, 12 Dec 2022 16:01:27 -0500
+X-MC-Unique: Wl0Sq4imNw-sRhjZptwxrg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAA7C185A78B
+	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 21:01:26 +0000 (UTC)
+Received: from [172.64.9.12] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A61AE2026D4B;
+	Mon, 12 Dec 2022 21:01:26 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc8,
+ mainline.kernel.org-clang, d92b86f6)
+Date: Mon, 12 Dec 2022 21:01:26 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221202045743.2639466-1-irogers@google.com>
-X-Provags-ID: V03:K1:Q5tTJtvP+OI+UVlSCti/RJFZLupxY/4hPPzq2moZ9pa7JrEvtwM
- ft2PS2S2w3HPVHOCQ+BzHC0MOmMI5c8JE7cGMFkb9tBSUCz41D7lKie3SvGmEDlb9G1liv5
- CysdTktoc6kxQSDGJBNQwvp6IpXEy35zKHix5qSDNOa/HGoiQJb6v/8hAVk6uld5Rar8rP/
- EX8yQg6Cxwaq5KGiGWc6A==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:srtxlQSFqI8=;EFiRNw0p2P7eEd1nkNBqWsU7Hf5
- bQVMEHU3DRCp67FcD3GjOFeLGwaq2hrPNQVFomHSp2/uyqB21NMypyDXUabhQcbmsSKLheAM9
- JfSO7Tw7dSTqL9F8XuE+XT8IdNZJTJcpUsfcqNm6i9MT6iZIIP3N6mow0KYShu81tf/EkK8WY
- ydgsNLijrvE6AcNwbiLrac5HCsl4FeOCNSjRJOlc3HSSC4FgvAQ7Z93QLFMKXzwJwXgRbzzjc
- 8KJxBgtbK2zr38QZSQTN4NfM2uBtikl+Un/WmDQYWkXorPjSi7olRZXRCfCVduHg6WPQtwY81
- VkWIAn/h5tAW2K9CW+9IsiG4h35uLxpTG5R0LX+xht32j6+Ym3HO0zI5qGd8gfkpx3WmNaTSR
- X6NWCw0kKovUVmlwrA9uXOqK+pNBjR7GLe9sc7n+gA96cdV9U5S2okmRCYg9Qcoum+kmJcKnm
- m6c5bUcoyDesN2Q0Rjm7elC2tIheSRhObPW3Uy8maZey3a1foxy8t6U7ghwA7BGOaEVv+74F2
- C29GIZjvlHg3P3M1vhxkJzNY6T+HBH25DVkWQGpLqaw4VEetuoSVOQMD/aunBOq2LaDo2JYAA
- 2BNkRiK2p8KOVDsgXAA95udGQeoxeE+XIFAEJgaWu6dx7V3tE7NE16eiGDA516c4GXBGk2hDh
- X5Q11ivXw6OXDKAFp1Bhmg4gZhssQXX9ypGVzAKwsw==
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <33381.122121216012700831@us-mta-59.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 01, 2022 at 08:57:38PM -0800 Ian Rogers wrote:
-> Switching to using install_headers caused incremental builds to always
-> rebuild most targets. This was caused by the headers always being
-> reinstalled and then getting new timestamps causing dependencies to be
-> rebuilt. Follow the convention in libbpf where the install targets are
-> separated and trigger when the target isn't present or is out-of-date.
-> 
-> Further, fix an issue in the perf build with libpython where
-> python/perf.so was also regenerated as the target name was incorrect.
-> 
-> Ian Rogers (5):
->   tools lib api: Add dependency test to install_headers
->   tools lib perf: Add dependency test to install_headers
->   tools lib subcmd: Add dependency test to install_headers
->   tools lib symbol: Add dependency test to install_headers
->   perf build: Fix python/perf.so library's name
-> 
->  tools/lib/api/Makefile     | 38 ++++++++++++++++++++++-----------
->  tools/lib/perf/Makefile    | 43 +++++++++++++++++++-------------------
->  tools/lib/subcmd/Makefile  | 23 +++++++++++---------
->  tools/lib/symbol/Makefile  | 21 ++++++++++++-------
->  tools/perf/Makefile.config |  4 +++-
->  tools/perf/Makefile.perf   |  2 +-
->  6 files changed, 79 insertions(+), 52 deletions(-)
-> 
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
+Hi, we tested your kernel and here are the results:
 
-Hi Ian,
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-which tree is your patch set based on?  At least it doesn't apply on the
-current kbuild trees.
 
-Kind regards,
-Nicolas
+Kernel information:
+    Commit message: Merge tag 'iommu-fix-v6.1-rc8' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/joro/iommu
 
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/62811
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6335034
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
+            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
+NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
+systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
+t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
+ive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
+            Affected tests:
+                 ppc64le - LTP: openposix test suite
+                  x86_64 - LTP: openposix test suite
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
+syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
+=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
+            Affected tests:
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+        Issue: serge-testsuite: cap_userns/test ............. Dubious, test=
+ returned 1
+            URL: https://gitlab.com/cki-project/kpet-db/-/issues/45
+            Affected tests:
+                  x86_64 - selinux-policy: serge-testsuite
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
+ /boot/vmlinuz-6.1.0-rc8 not a file
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1497
+            Affected tests:
+                 aarch64 - Boot test
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
