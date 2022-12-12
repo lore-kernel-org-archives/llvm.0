@@ -1,151 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5162E2F58
-	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 21:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670878888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G9BrlBtvXFHLd6GV75XaUG6UhTYrphznJhfUdetih0c=;
-	b=fhfWPse6OFf1fftxsfbsUgHTyZ+t/U6qla2WupruJzFsXsG9+0mXWF5DPPr7goAabFWHYn
-	5VJ727zaOMz01sI1IgmbUFZp4O2ToD6mEc8OrEhjrVNcWSt9ovaiioDM3it9XDx+9LMH/D
-	yxIrPaLaHIRmDYW8VHxrOks2c+C/SQI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-Wl0Sq4imNw-sRhjZptwxrg-1; Mon, 12 Dec 2022 16:01:27 -0500
-X-MC-Unique: Wl0Sq4imNw-sRhjZptwxrg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAA7C185A78B
-	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 21:01:26 +0000 (UTC)
-Received: from [172.64.9.12] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A61AE2026D4B;
-	Mon, 12 Dec 2022 21:01:26 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0-rc8,
- mainline.kernel.org-clang, d92b86f6)
-Date: Mon, 12 Dec 2022 21:01:26 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEA66FD9
+	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 21:04:58 +0000 (UTC)
+Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mleo0-1odmn242ug-00imxM; Mon, 12 Dec 2022 21:57:47 +0100
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+	id 770693C1BA; Mon, 12 Dec 2022 21:57:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+	t=1670878658; bh=qnQ4b4OQQYBi41zkGd5uOCUPLtZ3tfRTJtk/z24yVwk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=4x5ahCDLnX1Nwswko43mNTdERhxKyMuflqrcHjLjKRvKaeLkFF/p80sxO1Leyq3vE
+	 SgfxTSm+ivpt3Ilu3P5k+ScZ9gLFNObyr7D/iamJou6F57djITqC4AiietPvAb4Np3
+	 tSvtnIjNRvuVhDLdwGqgJM1IZrqJwzl6wBgsXZHs=
+Date: Mon, 12 Dec 2022 21:57:38 +0100
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
+ install_headers
+Message-ID: <Y5eVwlId2A2/pN40@fjasle.eu>
+References: <20221202045743.2639466-1-irogers@google.com>
+ <20221202045743.2639466-4-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <33381.122121216012700831@us-mta-59.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221202045743.2639466-4-irogers@google.com>
+X-Provags-ID: V03:K1:3GmCeNNSVVdhmJX5HMTzbhSdxI6R4yUF6tJQCtwPq/TnqvO5APk
+ /+xEZtzMC83be00kVnu0kgC6dao9my0lKfrnr1YkOYOcQvaLg8Xb4nj0q1VtsXhowaQ/C3M
+ Lp+WOdtyKO9zX/bGvpytzbjN50dCkbTyUfajmSLE/HnaMQ+J62EhxWaNErXiXf4p0QSZUJd
+ LZC/vbAoFLWwVn81ixpTA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:W8kwHyfwEI8=;sa17pKR9FLWrGGt6O1U/Vt9Q/qo
+ LEGxpYR0Np2hKoGW7r5FEVf+xKbD+j59hQ7nxWRj7hJ5qc1YCLqed8FWtB8AUvGbXWOdnsFkG
+ Wkiepge0RP3d3c+HMrmywAaxVfhglmYoOqdBMRSTGlK2ii3piJT9K16+1/l4hkJn4UZsZIFDX
+ My8aemydGmMCX3lZjDQrXIraL183OOPWdeChF7a0AlEO5+ioZesPZBWTB1xbIt5tXfvkP5UTE
+ D0UQHeeV3QDW0CvlWaocFQcKSuOIE3V8omtgH74gIZuzv+EYpAPsX5TB7ZZ/ZSlpv+IdAkkbc
+ ok+RLXUXnlN0tCmBvcU4uzAM4d9G2dL206wKaRRoX3Gj378HAvcnLmX+rMrT2EDgNr3qKAScK
+ TppyRLVe+Gd3OfX6Pji5DLJUSb6OuuQamzsfsv6Y+DamHYheW7QbnhC/WKGr6HlFSfOk/ldJJ
+ w1npChbKI5dIiWfUYXjJkDBlosNILTRm+yssP1fPd0Q950N7XaOZTdHZxKdLPDHcazTmzVFLs
+ 7iS9bjIGbYZl+T6ItpcBnV90v52csKbkgg7sgXnHQjYa6U9Uzw46OfanAJmJbbvYIqP8YPt3W
+ MnaBZB9jUfXXZOQFk2p30p2/9/WNRLi6d0P8W0lyHKoljen+tl7sNHtvbnrfNVftwxqKG/x2E
+ cQr5odFLQaTnJzsBLFQ9xIVa0rjQ2utb/Uo2x/BlzA==
 
-Hi, we tested your kernel and here are the results:
+On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
+> Compute the headers to be installed from their source headers and make
+> each have its own build target to install it. Using dependencies
+> avoids headers being reinstalled and getting a new timestamp which
+> then causes files that depend on the header to be rebuilt.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+> index 9a316d8b89df..b87213263a5e 100644
+> --- a/tools/lib/subcmd/Makefile
+> +++ b/tools/lib/subcmd/Makefile
+> @@ -89,10 +89,10 @@ define do_install_mkdir
+>  endef
+>  
+>  define do_install
+> -	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
+> -		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
+> +	if [ ! -d '$2' ]; then             \
+> +		$(INSTALL) -d -m 755 '$2'; \
+>  	fi;                                             \
+> -	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
+> +	$(INSTALL) $1 $(if $3,-m $3,) '$2'
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+What about using '$(INSTALL) -D ...' instead of the if-mkdir-block above?
+(E.g. as in tools/debugging/Makefile.)
 
+Kind regards,
+Nicolas
 
-Kernel information:
-    Commit message: Merge tag 'iommu-fix-v6.1-rc8' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/joro/iommu
+>  endef
+>  
+>  install_lib: $(LIBFILE)
+> @@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
+>  		$(call do_install_mkdir,$(libdir_SQ)); \
+>  		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
+>  
+> -install_headers:
+> -	$(call QUIET_INSTALL, libsubcmd_headers) \
+> -		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
+> +HDRS := exec-cmd.h help.h pager.h parse-options.h run-command.h
+> +INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/subcmd
+> +INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
+> +
+> +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
+> +	$(call QUIET_INSTALL, $@) \
+> +		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
+> +
+> +install_headers: $(INSTALL_HDRS)
+> +	$(call QUIET_INSTALL, libsubcmd_headers)
+>  
+>  install: install_lib install_headers
+>  
+> -- 
+> 2.39.0.rc0.267.gcb52ba06e7-goog
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62811
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6335034
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] RIP: 0010:i5000_init_one+0x938/0x990 [i5000_edac]
-            URL: https://lore.kernel.org/all/CA+QYu4pF9X2UwG+UtNmUqAeWX2oZx=
-NTgh2z0DerZ0WdAWAkwBw@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
-systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
-t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
-ive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
-            Affected tests:
-                 ppc64le - LTP: openposix test suite
-                  x86_64 - LTP: openposix test suite
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                 ppc64le - Reboot test
-                  x86_64 - Reboot test
-        Issue: serge-testsuite: cap_userns/test ............. Dubious, test=
- returned 1
-            URL: https://gitlab.com/cki-project/kpet-db/-/issues/45
-            Affected tests:
-                  x86_64 - selinux-policy: serge-testsuite
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
- /boot/vmlinuz-6.1.0-rc8 not a file
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1497
-            Affected tests:
-                 aarch64 - Boot test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
