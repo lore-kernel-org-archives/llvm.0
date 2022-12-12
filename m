@@ -1,46 +1,44 @@
-Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4380E2585;
-	Mon, 12 Dec 2022 13:13:50 +0000 (UTC)
-Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-02.nifty.com with ESMTP id 2BCD8Blx015104;
-	Mon, 12 Dec 2022 22:08:11 +0900
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
-	by conssluserg-02.nifty.com with ESMTP id 2BCD80UY001214;
-	Mon, 12 Dec 2022 22:08:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2BCD80UY001214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887522585;
+	Mon, 12 Dec 2022 13:14:06 +0000 (UTC)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180]) (authenticated)
+	by conssluserg-01.nifty.com with ESMTP id 2BCDDvOs015881;
+	Mon, 12 Dec 2022 22:13:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2BCDDvOs015881
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-	s=dec2015msa; t=1670850481;
-	bh=60Bgpu0atlDkoRoUv+KHKiAoEPhzrlitVEuwVEjISH8=;
+	s=dec2015msa; t=1670850838;
+	bh=Qyvr5aZkM+wmdhHKW6aw9JveC938iEMrNt3NYpNMYho=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S1R8EygUdT0sePVuwyu0xVcBa/332qFMxveWrw988yuTPqcdlCYpH0J01FRF9GqRq
-	 6NAYUO6z6X8AWUmIj4fKF2AsETdOJnH2x89E7eB80ZHY5t1lXgDObzGiQByt6BSatZ
-	 KNnqsSHvAJMiTDsx9J6TKEOCW6VDImfE83tpC8QPwfSU3zxx3ls3Azb9z7nQAI4HJu
-	 1rTFJ1wbdy5xctyM2sikSwR28raiGgVdZzX9mmr1GfpspGtDprHH9OzkyWMmA/J+8+
-	 ZCYMyEdTf8XWhY9XkhnpVMOWF4S7nHPg5O8U9EDN7y99Xp+jWcY2fepFinQBSYL/Ak
-	 NEpGscyytV1lQ==
-X-Nifty-SrcIP: [209.85.160.53]
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1443a16b71cso8212308fac.13;
-        Mon, 12 Dec 2022 05:08:01 -0800 (PST)
-X-Gm-Message-State: ANoB5pksYwX5Rn82ML6N+r6unvXKU+Ak8bniRKj2Z7VUVYEeoqwRTOyr
-	VkU0xSmbnqv0bGa8flV29w401TO7UFE8DyRv9PY=
-X-Google-Smtp-Source: AA0mqf7M4QfjT3R/GEAqDtO/Cby83qpELei3PVXnETZgJx/Q5WFbXGO/tMYP5+mZ+gL2OQ5qEKbSaAk/zOFU3ItDe8k=
-X-Received: by 2002:a05:6870:c7b4:b0:144:d060:72e with SMTP id
- dy52-20020a056870c7b400b00144d060072emr5970097oab.287.1670850480174; Mon, 12
- Dec 2022 05:08:00 -0800 (PST)
+	b=b5+lBzaQFXLoYKeSphoB86Oodwyjy3b9I8NHzJQNVZFS+/itGfmkNfo+6WSyINJXf
+	 qOxsZm/dxLZS7ebxowc1YLekgFybdLtdHsbpR9HBMVw7xln5QsZBqYR0ioRthhzo9Q
+	 8m6TILZSxsQORWoE0wtaelTgDrHHT2W9hiwu8PunxSWhtHf5vngzVFDh6bWl7eZ8H0
+	 XUL7sSsoyJh2Vp39ZpHt9uxGQMhZfFe3rVvavOwpizOYgPlSeV8nimuzM+S5UTiYqz
+	 yJU8M9BQxsrE6XBFgwxDPpbksm8eWxibVXpUM6XHZip6VmNSkNGQTQv9cFWGBh16+e
+	 U7Qbgz3noIu8w==
+X-Nifty-SrcIP: [209.85.167.180]
+Received: by mail-oi1-f180.google.com with SMTP id c129so11192520oia.0;
+        Mon, 12 Dec 2022 05:13:57 -0800 (PST)
+X-Gm-Message-State: ANoB5pnp7jmiYm0DG55YgMLfQUfbI+mlh3k6qIyvwZMFEcJ+XS1MSVEv
+	DDw3y08Os5USREan7IxV7k7sULW+s37z95ZI+Tg=
+X-Google-Smtp-Source: AA0mqf4I3SXFUfc/eWCj/dtwZNLGGSsqlfdozaJ6EZO9Qm+gTzG9smhalmAJvZK7tGN7or7+K+lH+s4AbNqf02TFKSc=
+X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
+ ay9-20020a056808300900b0035494a6a721mr37705245oib.194.1670850836790; Mon, 12
+ Dec 2022 05:13:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221207191657.2852229-1-nathan@kernel.org> <20221207191657.2852229-2-nathan@kernel.org>
-In-Reply-To: <20221207191657.2852229-2-nathan@kernel.org>
+References: <20221207191657.2852229-1-nathan@kernel.org> <20221207191657.2852229-3-nathan@kernel.org>
+In-Reply-To: <20221207191657.2852229-3-nathan@kernel.org>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 12 Dec 2022 22:07:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARoxqSzjpM0twcssMkf9X_PppzqtUo_opq=CX+zixma8g@mail.gmail.com>
-Message-ID: <CAK7LNARoxqSzjpM0twcssMkf9X_PppzqtUo_opq=CX+zixma8g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] padata: Mark padata_work_init() as __ref
+Date: Mon, 12 Dec 2022 22:13:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASoHieMNQTwPw6JVYnn6nBm-aPpOTrXeBPGeQKR-TxaUg@mail.gmail.com>
+Message-ID: <CAK7LNASoHieMNQTwPw6JVYnn6nBm-aPpOTrXeBPGeQKR-TxaUg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] modpost: Include '.text.*' in TEXT_SECTIONS
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
@@ -48,116 +46,61 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
         Vincent Donnefort <vdonnefort@google.com>,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev, patches@lists.linux.dev,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        linux-crypto@vger.kernel.org
+        Alexander Lobakin <alexandr.lobakin@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, Dec 8, 2022 at 4:17 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> When building arm64 allmodconfig + ThinLTO with clang and a proposed
-> modpost update to account for -ffuncton-sections, the following warning
-> appears:
+> Commit 6c730bfc894f ("modpost: handle -ffunction-sections") added
+> ".text.*" to the OTHER_TEXT_SECTIONS macro to fix certain section
+> mismatch warnings. Unfortunately, this makes it impossible for modpost
+> to warn about section mismatchs with LTO, which implies
+
+"mismatches"
+Other than the typo, this patch looks good to me.
+
+It was just 1/2 was difficult for me to understand.
+
+
+
+
+> '-ffunction-sections', as all functions are put in their own
+> '.text.<func_name>' sections, which may still reference functions in
+> sections they are not supposed to, such as __init.
 >
->   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
->   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
+> Fix this by moving ".text.*" into TEXT_SECTIONS, so that configurations
+> with '-ffunction-sections' will see warnings about mismatched sections.
 >
-> LLVM has optimized padata_work_init() to include the address of
-> padata_mt_helper() directly, which causes modpost to complain since
-> padata_work_init() is not __init, whereas padata_mt_helper() is. In
-> reality, padata_work_init() is only called with padata_mt_helper() as
-> the work_fn argument in code that is __init, so this warning will not
-> result in any problems. Silence it with __ref, which makes it clear to
-> modpost that padata_work_init() can only use padata_mt_helper() in
-> __init code.
->
-> Suggested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+> Link: https://lore.kernel.org/Y39kI3MOtVI5BAnV@google.com/
+> Reported-by: Vincent Donnefort <vdonnefort@google.com>
+> Reviewed-and-tested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> Tested-by: Vincent Donnefort <vdonnefort@google.com>
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: linux-crypto@vger.kernel.org
-> ---
->  kernel/padata.c | 4 ++--
+>  scripts/mod/modpost.c | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/kernel/padata.c b/kernel/padata.c
-> index e5819bb8bd1d..4c3137fe8449 100644
-> --- a/kernel/padata.c
-> +++ b/kernel/padata.c
-> @@ -83,8 +83,8 @@ static struct padata_work *padata_work_alloc(void)
->         return pw;
->  }
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 2c80da0220c3..c861beabc128 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -823,10 +823,10 @@ static void check_section(const char *modname, struct elf_info *elf,
+>  #define ALL_EXIT_SECTIONS EXIT_SECTIONS, ALL_XXXEXIT_SECTIONS
 >
-> -static void padata_work_init(struct padata_work *pw, work_func_t work_fn,
-> -                            void *data, int flags)
-> +static __ref void padata_work_init(struct padata_work *pw, work_func_t work_fn,
-> +                                  void *data, int flags)
->  {
->         if (flags & PADATA_WORK_ONSTACK)
->                 INIT_WORK_ONSTACK(&pw->pw_work, work_fn);
+>  #define DATA_SECTIONS ".data", ".data.rel"
+> -#define TEXT_SECTIONS ".text", ".text.unlikely", ".sched.text", \
+> +#define TEXT_SECTIONS ".text", ".text.*", ".sched.text", \
+>                 ".kprobes.text", ".cpuidle.text", ".noinstr.text"
+>  #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
+> -               ".fixup", ".entry.text", ".exception.text", ".text.*", \
+> +               ".fixup", ".entry.text", ".exception.text", \
+>                 ".coldtext", ".softirqentry.text"
 >
-> base-commit: 76dcd734eca23168cb008912c0f69ff408905235
+>  #define INIT_SECTIONS      ".init.*"
 > --
 > 2.38.1
 >
-
-It took me a while to understand why LTO can embed
-padata_mt_helper's address into padata_work_init().
-
-
-There are 3 call-sites to padata_work_init().
-
-(1)  __init padata_work_alloc_mt()
-         -->  padata_work_init(..., padata_mt_helper, ...)
-
-(2) padata_do_parallel()
-         -->  padata_work_init(..., padata_parallel_worker, ...)
-
-(3) __init padata_do_multithreaded()
-        --> padata_work_init(..., padata_mt_helper, ...)
-
-
-The function call (2) is squashed away.
-
-
-With only (1) and (3) remaining, the 2nd parameter to
-padata_work_init() is always padata_mt_helper,
-therefore LLVM embeds padata_mt_hlper's address
-directly into padata_work_init().
-
-I am not sure if the compiler should do this level of optimization
-because kernel/padata.c does not seem to be a special case.
-Perhaps, we might be hit with more cases that need __ref annotation,
-which is only required by LTO.
-
-One note is that, we could discard padata_work_init()
-because (1) and (3) are both annotated as __init.
-So, another way of fixing is
-   static __always_inline void padata_work_init(...)
-because the compiler would determine padata_work_init()
-would be small enough if the caller and callee belonged to
-the same section.
-
-I do not have a strong opinion.
-Honestly, I do not know what the best approach would be to fix this.
-
-
-If we go with the __ref annotation, I can pick this, but
-at least can you add some comments?
-
-
-include/linux/init.h says:
-"optimally document why the __ref is needed and why it's OK"
-
-
-I think this is the case that needs some comments
-because LTO optimization looks too tricky to me.
-
-
-
-
-
 
 
 -- 
