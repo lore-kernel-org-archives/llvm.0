@@ -1,55 +1,101 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4C76FC6
-	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 20:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=aPK79tB/1me3EbuApGrUPE56J1u84v6/ie8oZnW1nMo=; b=k6QurxhHunpwyxRecRIIR8PX/+
-	3Gq1lRCXB63j1+GjoPclXJGdjAM3KFRfjjvTholfNVyMv4sHeZ4l7Ez9EVWPo6tWvt1CHxcOVO5m+
-	uFz3vFLkaxZclF3yNB6J4bVTcU5RnAPSF1cdJfi/u/KrCqkV9k6XUdrzFJ0JMKpULh3o0+K8I5J+w
-	pDxGC4pamwNCBvDQIB0uCKSneKheBSJSTnjZDykYCE4rsSSEtH3V1jqJWLX5nAeslPs5NstqJPjRl
-	NqK3eG7Gd3LD7zlKON3/N6la1VaXyIc5zXs7/2hhC3K6Z8Pi8VBwnM2eSdjMwnIuhL0/S+9g7GhVk
-	QOPb+GFw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1p4p9d-0056uz-9S; Mon, 12 Dec 2022 20:12:01 +0000
-Date: Mon, 12 Dec 2022 12:12:01 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA572F58
+	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 20:32:28 +0000 (UTC)
+Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N5G1V-1oucA71QdJ-01171N; Mon, 12 Dec 2022 21:31:42 +0100
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+	id F41C03C1BA; Mon, 12 Dec 2022 21:31:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+	t=1670877095; bh=nxwnxqjAjgVwT5akycdILq2xF3x3T7jbclBRpYvebKA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BHwwSClVQEiCMkeGU0a2VtIArgQ0VdHgcme8hBeaPzIH0A38SOUYE4QFSfQlvSu3r
+	 cH/Qjk5/WDBnq/unjNIzEMLNnJA1szFxe0q+AZe3xUwn2dHwRRq5aieSjfUxin3BA2
+	 0edYlpDVltvU7VJ43z+1gUDLW3BuHm87PXERBT3Y=
+Date: Mon, 12 Dec 2022 21:31:34 +0100
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	linux-modules@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] kbuild: change module.order to list *.o instead of
- *.ko
-Message-ID: <Y5eLESH5D+2bkoBW@bombadil.infradead.org>
-References: <20221211130408.2800314-1-masahiroy@kernel.org>
+	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 0/5] Improvements to incremental builds
+Message-ID: <Y5ePpm3HKts3b+gJ@fjasle.eu>
+References: <20221202045743.2639466-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221211130408.2800314-1-masahiroy@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221202045743.2639466-1-irogers@google.com>
+X-Provags-ID: V03:K1:Q5tTJtvP+OI+UVlSCti/RJFZLupxY/4hPPzq2moZ9pa7JrEvtwM
+ ft2PS2S2w3HPVHOCQ+BzHC0MOmMI5c8JE7cGMFkb9tBSUCz41D7lKie3SvGmEDlb9G1liv5
+ CysdTktoc6kxQSDGJBNQwvp6IpXEy35zKHix5qSDNOa/HGoiQJb6v/8hAVk6uld5Rar8rP/
+ EX8yQg6Cxwaq5KGiGWc6A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:srtxlQSFqI8=;EFiRNw0p2P7eEd1nkNBqWsU7Hf5
+ bQVMEHU3DRCp67FcD3GjOFeLGwaq2hrPNQVFomHSp2/uyqB21NMypyDXUabhQcbmsSKLheAM9
+ JfSO7Tw7dSTqL9F8XuE+XT8IdNZJTJcpUsfcqNm6i9MT6iZIIP3N6mow0KYShu81tf/EkK8WY
+ ydgsNLijrvE6AcNwbiLrac5HCsl4FeOCNSjRJOlc3HSSC4FgvAQ7Z93QLFMKXzwJwXgRbzzjc
+ 8KJxBgtbK2zr38QZSQTN4NfM2uBtikl+Un/WmDQYWkXorPjSi7olRZXRCfCVduHg6WPQtwY81
+ VkWIAn/h5tAW2K9CW+9IsiG4h35uLxpTG5R0LX+xht32j6+Ym3HO0zI5qGd8gfkpx3WmNaTSR
+ X6NWCw0kKovUVmlwrA9uXOqK+pNBjR7GLe9sc7n+gA96cdV9U5S2okmRCYg9Qcoum+kmJcKnm
+ m6c5bUcoyDesN2Q0Rjm7elC2tIheSRhObPW3Uy8maZey3a1foxy8t6U7ghwA7BGOaEVv+74F2
+ C29GIZjvlHg3P3M1vhxkJzNY6T+HBH25DVkWQGpLqaw4VEetuoSVOQMD/aunBOq2LaDo2JYAA
+ 2BNkRiK2p8KOVDsgXAA95udGQeoxeE+XIFAEJgaWu6dx7V3tE7NE16eiGDA516c4GXBGk2hDh
+ X5Q11ivXw6OXDKAFp1Bhmg4gZhssQXX9ypGVzAKwsw==
 
-On Sun, Dec 11, 2022 at 10:04:07PM +0900, Masahiro Yamada wrote:
-> scripts/Makefile.build replaces the suffix .o with .ko, then
-> scripts/Makefile.modpost calls the sed command to change .ko back
-> to the original .o suffix.
+On Thu, Dec 01, 2022 at 08:57:38PM -0800 Ian Rogers wrote:
+> Switching to using install_headers caused incremental builds to always
+> rebuild most targets. This was caused by the headers always being
+> reinstalled and then getting new timestamps causing dependencies to be
+> rebuilt. Follow the convention in libbpf where the install targets are
+> separated and trigger when the target isn't present or is out-of-date.
 > 
-> Instead of converting the suffixes back-and-forth, store the .o paths
-> in modules.order, and replace it with .ko in 'make modules_install'.
+> Further, fix an issue in the perf build with libpython where
+> python/perf.so was also regenerated as the target name was incorrect.
 > 
-> This avoids the unneeded sed command.
+> Ian Rogers (5):
+>   tools lib api: Add dependency test to install_headers
+>   tools lib perf: Add dependency test to install_headers
+>   tools lib subcmd: Add dependency test to install_headers
+>   tools lib symbol: Add dependency test to install_headers
+>   perf build: Fix python/perf.so library's name
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>  tools/lib/api/Makefile     | 38 ++++++++++++++++++++++-----------
+>  tools/lib/perf/Makefile    | 43 +++++++++++++++++++-------------------
+>  tools/lib/subcmd/Makefile  | 23 +++++++++++---------
+>  tools/lib/symbol/Makefile  | 21 ++++++++++++-------
+>  tools/perf/Makefile.config |  4 +++-
+>  tools/perf/Makefile.perf   |  2 +-
+>  6 files changed, 79 insertions(+), 52 deletions(-)
+> 
+> -- 
+> 2.39.0.rc0.267.gcb52ba06e7-goog
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Hi Ian,
 
-  Luis
+which tree is your patch set based on?  At least it doesn't apply on the
+current kbuild trees.
+
+Kind regards,
+Nicolas
+
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
