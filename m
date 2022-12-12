@@ -1,39 +1,32 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269EA53B9;
-	Mon, 12 Dec 2022 20:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBCFC433EF;
-	Mon, 12 Dec 2022 20:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670875578;
-	bh=X5xmfWRTmgqPRq7JxHELTB+1YzEZLrNIUjkjESAieLE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hjhQE9tSqE1qG14JX44LeNEEuvaTD1RKr5NzuJgBYdyUc5X5zx/nevMdch4cMHqla
-	 aET/T9m9eKSjPgNnLkPHHRf3GoAQKdpx0xmBPT+1mu/v66c/rn9/76lMesQddph8TV
-	 ODoeJUeeRFXXLdiksvfnZivLkbRw9O9MrYuk14fhCE1zlelcjPgNMee/2ti9TcqcJW
-	 Xi6JgrXtj8RJF73XhawyUPXap8Us/RLe/BPFcre5Dhu7g8VZ26du8pE44KPMW6XJ+r
-	 Lvp0UNErnPuJ3+lFMl0I3/DAAJMZkslbHbweunIJE4sBZ2xfQhTDwyayALW84Pe52r
-	 v6AwKjJzVO0dA==
-Date: Mon, 12 Dec 2022 13:06:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4C76FC6
+	for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 20:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=aPK79tB/1me3EbuApGrUPE56J1u84v6/ie8oZnW1nMo=; b=k6QurxhHunpwyxRecRIIR8PX/+
+	3Gq1lRCXB63j1+GjoPclXJGdjAM3KFRfjjvTholfNVyMv4sHeZ4l7Ez9EVWPo6tWvt1CHxcOVO5m+
+	uFz3vFLkaxZclF3yNB6J4bVTcU5RnAPSF1cdJfi/u/KrCqkV9k6XUdrzFJ0JMKpULh3o0+K8I5J+w
+	pDxGC4pamwNCBvDQIB0uCKSneKheBSJSTnjZDykYCE4rsSSEtH3V1jqJWLX5nAeslPs5NstqJPjRl
+	NqK3eG7Gd3LD7zlKON3/N6la1VaXyIc5zXs7/2hhC3K6Z8Pi8VBwnM2eSdjMwnIuhL0/S+9g7GhVk
+	QOPb+GFw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1p4p9d-0056uz-9S; Mon, 12 Dec 2022 20:12:01 +0000
+Date: Mon, 12 Dec 2022 12:12:01 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] padata: Mark padata_work_init() as __ref
-Message-ID: <Y5eJuBWoCJ+q++IM@dev-arch.thelio-3990X>
-References: <20221207191657.2852229-1-nathan@kernel.org>
- <20221207191657.2852229-2-nathan@kernel.org>
- <CAK7LNARoxqSzjpM0twcssMkf9X_PppzqtUo_opq=CX+zixma8g@mail.gmail.com>
- <Y5dfPgNF8E2EpNCM@dev-arch.thelio-3990X>
- <20221212192157.plxiyyinfhieyzbt@parnassus.localdomain>
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] kbuild: change module.order to list *.o instead of
+ *.ko
+Message-ID: <Y5eLESH5D+2bkoBW@bombadil.infradead.org>
+References: <20221211130408.2800314-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,69 +35,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212192157.plxiyyinfhieyzbt@parnassus.localdomain>
+In-Reply-To: <20221211130408.2800314-1-masahiroy@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Mon, Dec 12, 2022 at 02:21:57PM -0500, Daniel Jordan wrote:
-> On Mon, Dec 12, 2022 at 10:05:02AM -0700, Nathan Chancellor wrote:
-> > On Mon, Dec 12, 2022 at 10:07:24PM +0900, Masahiro Yamada wrote:
-> > > I am not sure if the compiler should do this level of optimization
-> > > because kernel/padata.c does not seem to be a special case.
-> > > Perhaps, we might be hit with more cases that need __ref annotation,
-> > > which is only required by LTO.
-> > 
-> > That's possible. I did only see this once instance in all my builds but
-> > allmodconfig + ThinLTO might not be too interesting of a case,
-> > since the sanitizers will be enabled, which makes optimization more
-> > difficult. I could try to enable ThinLTO with some distribution
-> > configurations to see if there are any more instances that crop up.
+On Sun, Dec 11, 2022 at 10:04:07PM +0900, Masahiro Yamada wrote:
+> scripts/Makefile.build replaces the suffix .o with .ko, then
+> scripts/Makefile.modpost calls the sed command to change .ko back
+> to the original .o suffix.
 > 
-> Yes, if there were many more instances of this problem it might be worth
-> thinking about an LTO-specific solution to fix it closer to the source.
-
-Ack, I will wire up some build tests to see if this optimization occurs
-frequently enough to warrant a wider fix.
-
-> > > One note is that, we could discard padata_work_init()
-> > > because (1) and (3) are both annotated as __init.
-> > > So, another way of fixing is
-> > >    static __always_inline void padata_work_init(...)
-> > > because the compiler would determine padata_work_init()
-> > > would be small enough if the caller and callee belonged to
-> > > the same section.
-> > > 
-> > > I do not have a strong opinion.
+> Instead of converting the suffixes back-and-forth, store the .o paths
+> in modules.order, and replace it with .ko in 'make modules_install'.
 > 
-> I'm right there with you.  :-)
+> This avoids the unneeded sed command.
 > 
-> > > Honestly, I do not know what the best approach would be to fix this.
-> 
-> Either approach works, either can include an explanatory comment.
-> __ref seems more targeted to the problem at hand.
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Right, I suspect __ref is the right way to go for this particular issue.
-I will add a comment regardless.
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-> > > If we go with the __ref annotation, I can pick this, but
-> > > at least can you add some comments?
-> > > 
-> > > 
-> > > include/linux/init.h says:
-> > > "optimally document why the __ref is needed and why it's OK"
-> > > 
-> > > 
-> > > I think this is the case that needs some comments
-> > > because LTO optimization looks too tricky to me.
-> > 
-> > Sure thing, I will send a v3 either Tuesday or Wednesday with an updated
-> > commit message and code comment if we end up going this route.
-> 
-> A nitpick, but as long as you're respinning, if we stay with this
-> approach, could you put __ref just before the function name?  init.h
-> says "The markers follow same syntax rules as __init / __initdata" and
-> for those it says "You should add __init immediately before the function
-> name" though there are plenty of places in the tree that don't do this.
-
-Sure thing!
-
-Cheers,
-Nathan
+  Luis
