@@ -1,50 +1,54 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FF6173
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 00:16:57 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id z17-20020a25e311000000b00719e04e59e1so11666076ybd.10
-        for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 16:16:57 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95CD15A8
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 00:16:58 +0000 (UTC)
+Received: by mail-pf1-f201.google.com with SMTP id u3-20020a056a00124300b0056d4ab0c7cbso906099pfi.7
+        for <llvm@lists.linux.dev>; Mon, 12 Dec 2022 16:16:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rrmKIRMf4Mq2msGAMjuH9G/DlO6PhwIb4et9Vyytf0s=;
-        b=Y/SoLe17F+HoJZwya7YFOMVPVWxIyS8YXDXAdkZKURoZhYboc1qqDhxRYkM8qd/fyn
-         zV4AKnvonZDIf4kBxS6BbqKkYvK++Z8SlakM9rrpZf/WnJthiD/WaPvC4mId1Hi85VXx
-         HEnTLJKfq/AiMkE+A1lvFD7n5RUyEVn7KE12qMAkazwYdkxp/onbTYKAwGSZxx/+wvCu
-         AkCHnFjwsiycANQDr7f8nJl13jr3Aq6KbcvSvBjixq+cK42hwQ3dC8wgvpt4LO7Wo9ul
-         DCX6EzwtU8238LHHvhH1M16EyNBESvafX2Bsjx0/y3efzS0Lla4Z0vEPMEkwmHimVswS
-         SmYg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=DOvY7w0rRl2MxDLB0k3o2yUeh+erpcmsWDFuA702T6s=;
+        b=l9bHJR0oKKynBT27/jXjQ30QimwweOaqtl3QWSLCU6FiFSKCA3rrt+E957wr1zpBhD
+         p4waCGA7XG6QFQxmIYOYBakT8OP8vBme+ryoiFdvRCbt7Q2ZtXp4RLmkXlcugdy8NM6J
+         MYhNQigzo87mMoFsVV3kq1X4lwNDqM8YgTEc4/zV1HBrccTtlep12cAiKHftvJ9PO0k2
+         dGucFeV2hflrJde6Dcxo9dBUuMVUPRQOUE5HkYqU6f8H7eZCPwsf2UIaBzMv3IzDH+uX
+         QKFy0hRnovAJqXB4b5KB6Lo+KRVs0lKzNC9qMNzoduiGQCZghvBOB/ql+Wco/Cgp8R+b
+         el5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rrmKIRMf4Mq2msGAMjuH9G/DlO6PhwIb4et9Vyytf0s=;
-        b=l2L6dh3+gM+kAe8DcPqFt/kieAREpesK0qCI86V+hUf+lrVk4gR3T9nOoE6Ib6vWK1
-         vQC2Y3pmna63k4m0cChPrdnpldJjd2QqoJhCKNXtHxFTLUb2pKjQMtRfO6k/cR8oOajc
-         Cxd97Uh5m558Z7zkeZ/FYV+vW5HzHWxoUsnFd8tyyX+fJpsM12mEOc9MTy3PVhoPfNo8
-         tBMQ5uoEwzCqJn81bSOTL9xCdPwJJCXhQBp5hD23IxQh3+NV3HLg+5u6d03/N9YFj/G7
-         vLGKjIg5LVW8OCX4Iup/5zNypfon+iEP498VqzVka/uOO6fuxT9VNgbPAkzXwC6tWC0b
-         XN1Q==
-X-Gm-Message-State: ANoB5plxLY6VSP607VKXXk2PT+a990av3sai6IxXo9Z/pliwdsw5hOoM
-	lBdQY0MIU1P82mYWlzuShfs0dBE9C3U=
-X-Google-Smtp-Source: AA0mqf6/pKu0pWWW1KBsbsV+bRwkpXaD3AJngXQVdm+DqVUnownROWyJFsvs/+l4EXLP/kxHJtplxf44+Wk=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DOvY7w0rRl2MxDLB0k3o2yUeh+erpcmsWDFuA702T6s=;
+        b=T2YlnwD6rIU9K76slvNAAW4IFxly8jQSnwW/laBZuyIH6nPU0gm6kBY/NwhtKpiGNC
+         sY9ZzBMVxegc1w7ikXDA0vGirKZr/qQuFgzE5XC+PUezduvsDmQPKW9mv2stRv5UkCFJ
+         0gE9noeJL8ZuAC0p+fnEhzWrKFtepTYxBeAKOieN7/uEqB9XFjqwIaYPFaW63EwIhNx0
+         ixffs8cthm/bsEtgTqdylWGalGe2X2bTnM92vaG5lovWQu2UCqM7lAyUdfubhm0wDSmj
+         1out0oktcanKVgdIZLuBO62Jx2ueWXBUHzPNbH9IMIuGbjD0eCis6Q/2ap2VqTFkfyz0
+         RZOQ==
+X-Gm-Message-State: ANoB5pnbp8j/KxeqY03TOaxQVgppQVc7Gekqa181i7Xu+sWg9bbfmVpd
+	ZHme0KGbgBWrhyWwXjREJaQei2JcRbs=
+X-Google-Smtp-Source: AA0mqf4hBxtcZbd9UejO8wqEoLXBgUBqlQprFxOUH1fTAJDZ9Y1ut6pSZnFL0fRAkhQQsou2JfJD4SuBkEo=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:2397:0:b0:724:2a55:aadb with SMTP id
- j145-20020a252397000000b007242a55aadbmr1005565ybj.576.1670890616579; Mon, 12
- Dec 2022 16:16:56 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:aa7:9629:0:b0:576:8cdd:3f26 with SMTP id
+ r9-20020aa79629000000b005768cdd3f26mr26606972pfg.59.1670890618334; Mon, 12
+ Dec 2022 16:16:58 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Tue, 13 Dec 2022 00:16:39 +0000
+Date: Tue, 13 Dec 2022 00:16:40 +0000
+In-Reply-To: <20221213001653.3852042-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20221213001653.3852042-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221213001653.3852042-1-seanjc@google.com>
-Subject: [PATCH 00/14] KVM: selftests: Clang fixes, Makefile cleanup
+Message-ID: <20221213001653.3852042-2-seanjc@google.com>
+Subject: [PATCH 01/14] KVM: selftests: Define literal to asm constraint in
+ aarch64 as unsigned long
 From: Sean Christopherson <seanjc@google.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
 	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
@@ -60,73 +64,40 @@ Cc: James Morse <james.morse@arm.com>, Alexandru Elisei <alexandru.elisei@arm.co
 	Raghavendra Rao Ananta <rananta@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Fix a variety of KVM selftests issues exposed by clang, and rework the
-Makefile and .gitignore to reduce the maintenance burden of selftests.
+Define a literal '0' asm input constraint to aarch64/page_fault_test's
+guest_cas() as an unsigned long to make clang happy.
 
-For the Makefile, programmatically generate the list of targets by
-looking for .c files, and opt-out via a dummy macro in the source
-instead of forcing architectures to opt-in.  The opt-out approach is
-less error prone (harder to forget to add an arch), doesn't generate
-unnecessary conflicts if multiple tests are added simultanesouly, and
-makes it much easier to understand which tests aren't supported, e.g.
+  tools/testing/selftests/kvm/aarch64/page_fault_test.c:120:16: error:
+    value size does not match register size specified by the constraint
+    and modifier [-Werror,-Wasm-operand-widths]
+                       :: "r" (0), "r" (TEST_DATA), "r" (guest_test_memory));
+                               ^
+  tools/testing/selftests/kvm/aarch64/page_fault_test.c:119:15: note:
+    use constraint modifier "w"
+                       "casal %0, %1, [%2]\n"
+                              ^~
+                              %w0
 
-  $ git grep TEST_UNSUPPORTED | grep aarch64
-  hardware_disable_test.c:TEST_UNSUPPORTED(aarch64);
-  max_guest_memory_test.c:TEST_UNSUPPORTED(aarch64);
-  system_counter_offset_test.c:TEST_UNSUPPORTED(aarch64);
+Fixes: 35c581015712 ("KVM: selftests: aarch64: Add aarch64/page_fault_test")
+Cc: Ricardo Koller <ricarkol@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ tools/testing/selftests/kvm/aarch64/page_fault_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This all started when trying to reproduce clang build errors reported by
-Raghu and Aaron that were introduced by commit 6b6f71484bf4 ("KVM:
-selftests: Implement memcmp(), memcpy(), and memset() for guest use").
-Just getting selftests to compile with clang was a nightmare, as it took
-me several hours to realize that "CC=clang make" and "make CC=clang"
-aren't equivalent, and that the "include ../lib.mak" buried halfway through
-the Makefile was overriding "CC=clang make".
-
-After too many hours fighting to get clang working, my frustration with
-the Makefile boiled over a bit...
-
-Note, I have fixes for the RISC-V RSEQ bugs (outside of selftests/kvm) that
-I'll post separately.
-
-Tested on x86 and arm, build tested on s390x and RISC-V, all with both gcc
-and clang.
-
-Sean Christopherson (14):
-  KVM: selftests: Define literal to asm constraint in aarch64 as
-    unsigned long
-  KVM: selftests: Delete dead code in x86_64/vmx_tsc_adjust_test.c
-  KVM: selftests: Fix divide-by-zero bug in memslot_perf_test
-  KVM: selftests: Use pattern matching in .gitignore
-  KVM: selftests: Fix a typo in x86-64's kvm_get_cpu_address_width()
-  KVM: selftests: Rename UNAME_M to ARCH_DIR, fill explicitly for x86
-  KVM: selftests: Use proper function prototypes in probing code
-  KVM: selftests: Probe -no-pie with actual CFLAGS used to compile
-  KVM: selftests: Explicitly disable builtins for mem*() overrides
-  KVM: selftests: Include lib.mk before consuming $(CC)
-  KVM: selftests: Disable "gnu-variable-sized-type-not-at-end" warning
-  KVM: selftests: Use wildcards to find library source files
-  KVM: selftests: Use wildcards to find targets and test source files
-  KVM: selftests: Enable RSEQ test for RISC-V
-
- tools/testing/selftests/kvm/.gitignore        |  91 +------
- tools/testing/selftests/kvm/Makefile          | 229 +++---------------
- .../selftests/kvm/aarch64/page_fault_test.c   |   2 +-
- .../selftests/kvm/access_tracking_perf_test.c |   3 +
- .../selftests/kvm/dirty_log_perf_test.c       |   3 +
- .../selftests/kvm/hardware_disable_test.c     |   4 +
- .../testing/selftests/kvm/include/test_util.h |  11 +
- .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
- .../selftests/kvm/max_guest_memory_test.c     |   4 +
- .../kvm/memslot_modification_stress_test.c    |   3 +
- .../testing/selftests/kvm/memslot_perf_test.c |   6 +
- tools/testing/selftests/kvm/steal_time.c      |   3 +
- .../kvm/system_counter_offset_test.c          |   4 +
- .../kvm/x86_64/vmx_tsc_adjust_test.c          |   5 -
- 14 files changed, 80 insertions(+), 290 deletions(-)
-
-
-base-commit: f1a1d3aff0cc2e68a9ebbd8810d7dcd8cfe2714b
+diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+index 95d22cfb7b41..beb944fa6fd4 100644
+--- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
++++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+@@ -117,7 +117,7 @@ static void guest_cas(void)
+ 	GUEST_ASSERT(guest_check_lse());
+ 	asm volatile(".arch_extension lse\n"
+ 		     "casal %0, %1, [%2]\n"
+-		     :: "r" (0), "r" (TEST_DATA), "r" (guest_test_memory));
++		     :: "r" (0ul), "r" (TEST_DATA), "r" (guest_test_memory));
+ 	val = READ_ONCE(*guest_test_memory);
+ 	GUEST_ASSERT_EQ(val, TEST_DATA);
+ }
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
