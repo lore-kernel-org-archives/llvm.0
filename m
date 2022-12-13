@@ -1,45 +1,45 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9962C28EF
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 09:47:27 +0000 (UTC)
-Received: by mail-wm1-f48.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso7406685wme.5
-        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 01:47:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6853428F0
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 09:48:04 +0000 (UTC)
+Received: by mail-wr1-f43.google.com with SMTP id h10so14998200wrx.3
+        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 01:48:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VUffeOkZJV6CbBOjXRvBE9aKOOUHPUai9QNqwF2Rw6k=;
-        b=s1JH0apqKbSMIxIiwVTiEGvWlt6voHGA0Qg93k6bu0bo94Xy2pc1rgrx+aKZpEtkx6
-         tAkY+DS3eAY/MbbRYxforucS9NjS3Y/J+tyLt2y4zma1TERO/0grq5KMq0vq/JPyZFBz
-         uuzCElIdsA0WjdkodayUEVOjRvLIQMBQqZyE+ugj5nJLcFiHRq0Adeoz1JxR/vw5valn
-         M6ePXoLF+ntrgyqEb+FWCTpZ/Y72s2I7CfUH8aDCBnPG2ygVESeMtHM7BOVqZvMx+DrN
-         +34OyPj6HJPDo1O1oBSY+duAkwoi2k2YHG0FzskbkMhvLtYA4PBVWcLfgYnkAWBL9chR
-         D2Gw==
+        bh=9kjr0P8P3evTsHtv0kx5R0LLm1BjbVlP2JBqTHfgIEU=;
+        b=wxREDceclsVP4jxePxvte5FDBoV8oOTQ+kk6QFnlyxJvqYJlw6q99Pp1nurNiEIDcM
+         9/QhIdsqo/Mvmd0D1NOjeYmiTaUYd27+N8bXw7PgG1XVqeuHvL0gucTFuUCy0TiqiLnY
+         cJGcXgCzKmAfB+NHUwBa04Ks9c6wflPCLOsAECG/QjplFaeuNUn2phsb6D3wu+2hEwsu
+         84WblEtk36HvUMtvdeu9efTCSwNFLmaTDZ8ypqla1IRKx/eWU0SU7u2K0C26EvvPsz9i
+         fQ3rQMJDeLJobD49zJBFgCw9BxJVhEqU4EgqX+/2ZBjH0vLq+9zvQwzpZ3qp6a0lyLlu
+         Xprg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VUffeOkZJV6CbBOjXRvBE9aKOOUHPUai9QNqwF2Rw6k=;
-        b=hgEaI4dojcigxfeIx0008rJYwfHp7RvQVJvk+Oai0T0nA4psyVKqq8WTN6632jS5jA
-         133pjUef6YAzVbFgbVoWqLl7ur8qAUOWwryeqqyer5+cWiw74zSO34O4mJHxhQYDfo/T
-         Mty+NBSCzQ6WzVKOmq4y9cyT4mZc96Q7k2NlBdR86zSzB+EjCnmJICpECg8WcspeSgVQ
-         qPpmJQ3IMgYDInWnPiOagqpt10NI17y91PMAThLTfnLsjtXIZDkJgb0c8ISdCymv607H
-         VF6mtb7Pow3VOy4pJgJzmTk97Z+HjSzqcIQOploYNTA5qgC5svWsUfj7/9RKJIRbbnc2
-         Txxg==
-X-Gm-Message-State: ANoB5pmn81CLiGYRfvBxla+SvM9rJJ+PJ/RohGYXB7h7Lnekq/LIy7cp
-	y50RPHOWZ7njuezbYPLZwRYWVw==
-X-Google-Smtp-Source: AA0mqf45B8663eyuUa7gYYZoZljx5xDAypBaIEMtrhbpuNigeolIoqaS3rVH+IjTq+i8TltLJF+66w==
-X-Received: by 2002:a05:600c:a54:b0:3cf:a41d:844b with SMTP id c20-20020a05600c0a5400b003cfa41d844bmr15253803wmq.5.1670924845957;
-        Tue, 13 Dec 2022 01:47:25 -0800 (PST)
+        bh=9kjr0P8P3evTsHtv0kx5R0LLm1BjbVlP2JBqTHfgIEU=;
+        b=OxPcso9qXkOgnScMW1HYxfIXdRLlggbL/FGAnOeHRGDbNJnxU5Brg7hxHuXeUgQlry
+         fGJMok0G/5iYNZfaR7g5DpEq8dqw22qkaNHBBLQgeJ0FjP/GbUiOyYflM7KByKJhnkP5
+         43iaXWSd0GBNIu54eRdSjYBtWGB2GxNEQuBU7DmquGVMRKLw4RhKr7MKsla/YvryM2kB
+         9DrryqIoMnOjmDtzqr4kPIT3bbWJaskqg2NAMR655fJm/J7ixD4w9N9+qVZJg1rVMJH9
+         0TTXqw6ihZQzEYMpEB/9CgBXlNo6p/Ql3i4BU39Fn4SdXVORfUZvVP9Y2pBf6MxVbBkx
+         GIxg==
+X-Gm-Message-State: ANoB5pmy69hjSG0832nLKiiJlr4MXX1FTaCMm7Vlt7TmewSTwh52l/Hi
+	aQPzRjfIbgwMNQw1mOj+0d9W5A==
+X-Google-Smtp-Source: AA0mqf7qf8gp5KDq16JqrUroPUpREMH1ONeNa3KMxmeoce64zNsGbHFkbza+M0tQPkVeVr4/pP6aWw==
+X-Received: by 2002:a5d:490d:0:b0:242:fa5:ce83 with SMTP id x13-20020a5d490d000000b002420fa5ce83mr14631600wrq.37.1670924882743;
+        Tue, 13 Dec 2022 01:48:02 -0800 (PST)
 Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id ay13-20020a05600c1e0d00b003c6bd91caa5sm12602817wmb.17.2022.12.13.01.47.24
+        by smtp.gmail.com with ESMTPSA id f7-20020a5d5687000000b002365730eae8sm11005215wrv.55.2022.12.13.01.48.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 01:47:25 -0800 (PST)
-Message-ID: <2505189d-c682-ed70-442b-798c258d3b68@linaro.org>
-Date: Tue, 13 Dec 2022 10:47:23 +0100
+        Tue, 13 Dec 2022 01:48:02 -0800 (PST)
+Message-ID: <ba1760b7-3153-d761-d0aa-3bf321f2f682@linaro.org>
+Date: Tue, 13 Dec 2022 10:48:00 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,8 +48,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 05/14] KVM: selftests: Fix a typo in x86-64's
- kvm_get_cpu_address_width()
+Subject: Re: [PATCH 07/14] KVM: selftests: Use proper function prototypes in
+ probing code
 Content-Language: en-US
 To: Sean Christopherson <seanjc@google.com>,
  Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -68,38 +68,23 @@ Cc: James Morse <james.morse@arm.com>,
  Aaron Lewis <aaronlewis@google.com>,
  Raghavendra Rao Ananta <rananta@google.com>
 References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-6-seanjc@google.com>
+ <20221213001653.3852042-8-seanjc@google.com>
 From: =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221213001653.3852042-6-seanjc@google.com>
+In-Reply-To: <20221213001653.3852042-8-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 13/12/22 01:16, Sean Christopherson wrote:
-> Fix a == vs. = typo in kvm_get_cpu_address_width() that results in
-> @pa_bits being left unset if the CPU doesn't support enumerating its
-> MAX_PHY_ADDR.  Flagged by clang's unusued-value warning.
+> Make the main() functions in the probing code proper prototypes so that
+> compiling the probing code with more strict flags won't generate false
+> negatives.
 > 
-> lib/x86_64/processor.c:1034:51: warning: expression result unused [-Wunused-value]
->                  *pa_bits == kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
+>    <stdin>:1:5: error: function declaration isn’t a prototype [-Werror=strict-prototypes]
 > 
-> Fixes: 3bd396353d18 ("KVM: selftests: Add X86_FEATURE_PAE and use it calc "fallback" MAXPHYADDR")
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->   tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index c4d368d56cfe..acfa1d01e7df 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -1031,7 +1031,7 @@ bool is_amd_cpu(void)
->   void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
->   {
->   	if (!kvm_cpu_has_p(X86_PROPERTY_MAX_PHY_ADDR)) {
-> -		*pa_bits == kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
-> +		*pa_bits = kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
-
-:)
+>   tools/testing/selftests/kvm/Makefile | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
