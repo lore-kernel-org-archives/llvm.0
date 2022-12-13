@@ -1,45 +1,45 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1134E28EF
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 09:46:22 +0000 (UTC)
-Received: by mail-wr1-f53.google.com with SMTP id h16so6035310wrz.12
-        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 01:46:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9962C28EF
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 09:47:27 +0000 (UTC)
+Received: by mail-wm1-f48.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso7406685wme.5
+        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 01:47:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6HCpfsDxKsbRWDniMvTsAcm6k9bqzut02W2Q+dej5cA=;
-        b=Ex6palua+CAb8sAnNRSs8QCJJYJy/CXh6vu8iuxELmuLYIDrF2/RExi4CYvGIwjJVb
-         0Hw8S/7m4UBgKH+bGVe+zuk8w2F7mFhNNeHeX6LVfeyQY5x3cnou27cfkigKZrENvKBz
-         LX8clCm2xYOgwgxlVTiZEEtbOr3jJ1dLVrGoE6s3UPIvxdMR9U2X4lxGEf6qw9kIOdYD
-         K+ksfEaTBuwkypOmNmDFRZz5c/4gWAgs5j5mnkV4YFuQmGeJELWnGZ41hrzsIeZ+TXtt
-         quGHmeCbmOcVfzAXWOBWrrgDYUWcXplwtQ/ZI6tst+MM7yleBo+Dyn7REujufWRh+W+H
-         fTeg==
+        bh=VUffeOkZJV6CbBOjXRvBE9aKOOUHPUai9QNqwF2Rw6k=;
+        b=s1JH0apqKbSMIxIiwVTiEGvWlt6voHGA0Qg93k6bu0bo94Xy2pc1rgrx+aKZpEtkx6
+         tAkY+DS3eAY/MbbRYxforucS9NjS3Y/J+tyLt2y4zma1TERO/0grq5KMq0vq/JPyZFBz
+         uuzCElIdsA0WjdkodayUEVOjRvLIQMBQqZyE+ugj5nJLcFiHRq0Adeoz1JxR/vw5valn
+         M6ePXoLF+ntrgyqEb+FWCTpZ/Y72s2I7CfUH8aDCBnPG2ygVESeMtHM7BOVqZvMx+DrN
+         +34OyPj6HJPDo1O1oBSY+duAkwoi2k2YHG0FzskbkMhvLtYA4PBVWcLfgYnkAWBL9chR
+         D2Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6HCpfsDxKsbRWDniMvTsAcm6k9bqzut02W2Q+dej5cA=;
-        b=smXe2FAzUCN4KtKrgZg+a246a+RS7bU5j4XgAeon5t710OvyxUU3WHlnhLH9KDB1nx
-         k1g1l3QiKS4//rOPx9PuHxDMuNrCYCXLrz+rBk1CD8385vYh1rX7I9fmvJAMuOjzYyOI
-         cXNViS1Fl8jjN+1nQFZsnGtRom5HLMWeBEs5SLIMjLoOiciyhMFKrnSsevE5e9T2M7Qm
-         j6G2XPX117uC27T9xY+2y8WYDZMSeOxb1Q42XR22xl/NWrLR8A5U+BasOK9laErTYP47
-         rpSWclP3LUTwFZVPV55Oaq2G+RrBKl6b5xSlZ1yo7K9SSRtnYtfcCQTHpNAgueh3oANb
-         5wkA==
-X-Gm-Message-State: ANoB5pmEiqCJwczJyhWY+EjKMMhTP9HyHU8Zs0JjoZ9P6nWrXi4aIV7E
-	smAADay7P3K3mtujpAJSq+2e0g==
-X-Google-Smtp-Source: AA0mqf62OayQR32aHZW7SQ2L2Smz6e0kOzvNE3xqgzO1KHXWbyXt8wEW/lnneYLd3l0I3gIKF9q7mQ==
-X-Received: by 2002:a5d:5a19:0:b0:242:8177:6291 with SMTP id bq25-20020a5d5a19000000b0024281776291mr15276191wrb.1.1670924781185;
-        Tue, 13 Dec 2022 01:46:21 -0800 (PST)
+        bh=VUffeOkZJV6CbBOjXRvBE9aKOOUHPUai9QNqwF2Rw6k=;
+        b=hgEaI4dojcigxfeIx0008rJYwfHp7RvQVJvk+Oai0T0nA4psyVKqq8WTN6632jS5jA
+         133pjUef6YAzVbFgbVoWqLl7ur8qAUOWwryeqqyer5+cWiw74zSO34O4mJHxhQYDfo/T
+         Mty+NBSCzQ6WzVKOmq4y9cyT4mZc96Q7k2NlBdR86zSzB+EjCnmJICpECg8WcspeSgVQ
+         qPpmJQ3IMgYDInWnPiOagqpt10NI17y91PMAThLTfnLsjtXIZDkJgb0c8ISdCymv607H
+         VF6mtb7Pow3VOy4pJgJzmTk97Z+HjSzqcIQOploYNTA5qgC5svWsUfj7/9RKJIRbbnc2
+         Txxg==
+X-Gm-Message-State: ANoB5pmn81CLiGYRfvBxla+SvM9rJJ+PJ/RohGYXB7h7Lnekq/LIy7cp
+	y50RPHOWZ7njuezbYPLZwRYWVw==
+X-Google-Smtp-Source: AA0mqf45B8663eyuUa7gYYZoZljx5xDAypBaIEMtrhbpuNigeolIoqaS3rVH+IjTq+i8TltLJF+66w==
+X-Received: by 2002:a05:600c:a54:b0:3cf:a41d:844b with SMTP id c20-20020a05600c0a5400b003cfa41d844bmr15253803wmq.5.1670924845957;
+        Tue, 13 Dec 2022 01:47:25 -0800 (PST)
 Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d618d000000b002422816aa25sm12963005wru.108.2022.12.13.01.46.19
+        by smtp.gmail.com with ESMTPSA id ay13-20020a05600c1e0d00b003c6bd91caa5sm12602817wmb.17.2022.12.13.01.47.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 01:46:20 -0800 (PST)
-Message-ID: <84c81594-0106-536c-5e04-1afb24953727@linaro.org>
-Date: Tue, 13 Dec 2022 10:46:18 +0100
+        Tue, 13 Dec 2022 01:47:25 -0800 (PST)
+Message-ID: <2505189d-c682-ed70-442b-798c258d3b68@linaro.org>
+Date: Tue, 13 Dec 2022 10:47:23 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,8 +48,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 03/14] KVM: selftests: Fix divide-by-zero bug in
- memslot_perf_test
+Subject: Re: [PATCH 05/14] KVM: selftests: Fix a typo in x86-64's
+ kvm_get_cpu_address_width()
 Content-Language: en-US
 To: Sean Christopherson <seanjc@google.com>,
  Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -68,26 +68,38 @@ Cc: James Morse <james.morse@arm.com>,
  Aaron Lewis <aaronlewis@google.com>,
  Raghavendra Rao Ananta <rananta@google.com>
 References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-4-seanjc@google.com>
+ <20221213001653.3852042-6-seanjc@google.com>
 From: =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221213001653.3852042-4-seanjc@google.com>
+In-Reply-To: <20221213001653.3852042-6-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 13/12/22 01:16, Sean Christopherson wrote:
-> Check that the number of pages per slot is non-zero in get_max_slots()
-> prior to computing the remaining number of pages.  clang generates code
-> that uses an actual DIV for calculating the remaining, which causes a #DE
-> if the total number of pages is less than the number of slots.
+> Fix a == vs. = typo in kvm_get_cpu_address_width() that results in
+> @pa_bits being left unset if the CPU doesn't support enumerating its
+> MAX_PHY_ADDR.  Flagged by clang's unusued-value warning.
 > 
->    traps: memslot_perf_te[97611] trap divide error ip:4030c4 sp:7ffd18ae58f0
->           error:0 in memslot_perf_test[401000+cb000]
+> lib/x86_64/processor.c:1034:51: warning: expression result unused [-Wunused-value]
+>                  *pa_bits == kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
 > 
-> Fixes: a69170c65acd ("KVM: selftests: memslot_perf_test: Report optimal memory slots")
+> Fixes: 3bd396353d18 ("KVM: selftests: Add X86_FEATURE_PAE and use it calc "fallback" MAXPHYADDR")
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->   tools/testing/selftests/kvm/memslot_perf_test.c | 3 +++
->   1 file changed, 3 insertions(+)
+>   tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index c4d368d56cfe..acfa1d01e7df 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1031,7 +1031,7 @@ bool is_amd_cpu(void)
+>   void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+>   {
+>   	if (!kvm_cpu_has_p(X86_PROPERTY_MAX_PHY_ADDR)) {
+> -		*pa_bits == kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
+> +		*pa_bits = kvm_cpu_has(X86_FEATURE_PAE) ? 36 : 32;
+
+:)
 
 Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
