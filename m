@@ -1,39 +1,37 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9804479CE;
-	Tue, 13 Dec 2022 18:35:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F3B1C43392;
-	Tue, 13 Dec 2022 18:35:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670956551;
-	bh=zP20aDjnUQPn1P7/uYtDstE9AmCYWnXCx1jW4UCPLd0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=b4I19TCYll82qUU7uOX/Wqwot21STcEHJ5idUJO82gRdoaAprx+YSIW3rU6CzNcul
-	 zKWe3CIzJ81Vet50Y9CW/9fPlKr8FDdNnql+xME6UHb49fOC9G6gAdbQgoISOh7NHV
-	 931dgVIKZEG5V7Vbg8ZjvsNnJq3Q9mlpZ9zowdNptW0LkoP/dCaC60QlPxlg0M+y1Y
-	 ySd+6ySAnYLsKvKPMy/Rg8668WpU1FBnqJfn0bJk9gB+A3mEGBi3ilffjn47R3baOS
-	 rYTOU3epfXv4dS3gSW3ZsC+wLk0aVlcGFAVlyB/MDgL9JQRn+jD1iIJVuw8HnqUgQD
-	 +N3CkcRmI6cFQ==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
+Received: from smtpdh20-1.aruba.it (smtpdh20-1.aruba.it [62.149.155.164])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C0A79D2
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 19:21:27 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.66.6])
+	by Aruba Outgoing Smtp  with ESMTPSA
+	id 5An9pnstapLT85An9pWbXH; Tue, 13 Dec 2022 20:18:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+	t=1670959101; bh=45b7rjT0/sHSloklDkuIVsgXND/IMJ9OTxAKP6zw8VY=;
+	h=From:To:Subject:Date:MIME-Version;
+	b=AYDt7SXh49oRBw5EfMN/zvZSgqXCjySsPSO8kZyq4LGsxQVhdqzyKGgst26KyIISy
+	 /N1iIZ/W22WPTuMV/DJoEqPa1DdtCShuTb4vJo4815KUUAlWyKo8PzEKIaV02iOBxo
+	 7CXpZVyesMdT4Y1ebvD8SVHzH9iKfv+EZuzF89XooieLjEOlkNKqMmCQWo9vQi7fDH
+	 wBDhQRs7e/rox6uLInslxIUHA/12TyrzgTJRsX++/uFzU3sIUKLGtvCExwsb61ndHl
+	 +hUr+l77FdM0w68Q6ibHtlOdqCr3W1AFA39NO3NrQz3cyolyQxzXAPFrhe8LdNxa+8
+	 uM9enQR+8fhfw==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: Russell King <linux@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	linux-kbuild@vger.kernel.org,
+	Giulio Benetti <giulio.benetti@benettiengineering.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Will Deacon <will@kernel.org>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Alexander Lobakin <alexandr.lobakin@intel.com>
-Subject: [PATCH v3 2/2] modpost: Include '.text.*' in TEXT_SECTIONS
-Date: Tue, 13 Dec 2022 11:35:29 -0700
-Message-Id: <20221213183529.766630-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221213183529.766630-1-nathan@kernel.org>
-References: <20221213183529.766630-1-nathan@kernel.org>
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] ARM: mm: fix warning on phys_addr_t to void pointer assignment
+Date: Tue, 13 Dec 2022 20:18:13 +0100
+Message-Id: <20221213191813.4054267-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,45 +39,38 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfD1IV/P04Cugw3asqwnUxCFrlRnAaYWaB3aYVXpV2G3EVnhhfFs/Z5jZkCbE4wf2lBfe6O7x1GSkfdLmd3vUJcqaq/3dnchNZgQmRCMahE36rTR/HnQI
+ xG/ng25jHVR0HglDXAq1HEFAB/+sajRd0SKVx0k57RipJpRxMhE4DRLKesCDb7EAQV18LIf5tbQkMg5fcNijcchd7HSkA22B45KDLlQPdBnR5HoiQUm/CQmz
+ LsY4I+1+wSaTLD2OmhoUbGRBVVgpYDIYcxo5X6c6KUPg9q2qgbKpeX5ngwqhkngwcQVaBdIGTpRBE05V2ek8GtQJad8kEkONtQMG+29jZkuIit1YWf/T7Abj
+ nlBJNuZtYgBQ50VjKbriCyELT2aMYu88SnfzkSeMMPhSvITuYRsPLbvKCroxAxhiLiYnPNRqV3MPmU9TEmoht0ECwVigeHdwKgV9j4Dc836561T+7rTB4fQ9
+ BCb27D9qf/yYji77OxDjk6Jg6QPpNvYeFOd5m5ENFU1oRO2WW4svLHWw0qHcyoW5SpAm0ulYEHUV+ocSRFtyczdIYaartHlwxlUJuriRJLhTk9AO+sgKx/UB
+ uCezY6VtDyzxiQd83kQ9z40RzqlnD1GdVLr6Aw4hBAARHzMbfwqxqjlpWlWIQMrdFvg5FkvCQdbFtzawfXapiGrDH5XbpcVWcCAve9s+wT0kVw==
 
-Commit 6c730bfc894f ("modpost: handle -ffunction-sections") added
-".text.*" to the OTHER_TEXT_SECTIONS macro to fix certain section
-mismatch warnings. Unfortunately, this makes it impossible for modpost
-to warn about section mismatches with LTO, which implies
-'-ffunction-sections', as all functions are put in their own
-'.text.<func_name>' sections, which may still reference functions in
-sections they are not supposed to, such as __init.
+zero_page is a void* pointer but memblock_alloc() returns phys_addr_t type
+so this generates a warning while using clang and with -Wint-error enabled
+that becomes and error. So let's cast the return of memblock_alloc() to
+(void *).
 
-Fix this by moving ".text.*" into TEXT_SECTIONS, so that configurations
-with '-ffunction-sections' will see warnings about mismatched sections.
-
-Link: https://lore.kernel.org/Y39kI3MOtVI5BAnV@google.com/
-Reported-by: Vincent Donnefort <vdonnefort@google.com>
-Reviewed-and-tested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Tested-by: Vincent Donnefort <vdonnefort@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Cc: <stable@vger.kernel.org> # 4.14.x +
+Fixes: 340a982825f7 ("ARM: 9266/1: mm: fix no-MMU ZERO_PAGE() implementation")
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- scripts/mod/modpost.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/mm/nommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 2c80da0220c3..c861beabc128 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -823,10 +823,10 @@ static void check_section(const char *modname, struct elf_info *elf,
- #define ALL_EXIT_SECTIONS EXIT_SECTIONS, ALL_XXXEXIT_SECTIONS
+diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
+index c1494a4dee25..53f2d8774fdb 100644
+--- a/arch/arm/mm/nommu.c
++++ b/arch/arm/mm/nommu.c
+@@ -161,7 +161,7 @@ void __init paging_init(const struct machine_desc *mdesc)
+ 	mpu_setup();
  
- #define DATA_SECTIONS ".data", ".data.rel"
--#define TEXT_SECTIONS ".text", ".text.unlikely", ".sched.text", \
-+#define TEXT_SECTIONS ".text", ".text.*", ".sched.text", \
- 		".kprobes.text", ".cpuidle.text", ".noinstr.text"
- #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
--		".fixup", ".entry.text", ".exception.text", ".text.*", \
-+		".fixup", ".entry.text", ".exception.text", \
- 		".coldtext", ".softirqentry.text"
- 
- #define INIT_SECTIONS      ".init.*"
+ 	/* allocate the zero page. */
+-	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
++	zero_page = (void *)memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+ 	if (!zero_page)
+ 		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
+ 		      __func__, PAGE_SIZE, PAGE_SIZE);
 -- 
-2.39.0
+2.34.1
 
