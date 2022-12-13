@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1324433D4
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 13:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2539533D4
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 13:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670937696;
+	s=mimecast20190719; t=1670939498;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=9latrQbdwwB7flGmR67LGDKAKcbLKTkv44GI5ollx1Q=;
-	b=H2DrTTZCivjvLVZH3zzxl+6hfZbxd2SPS21lFhxkCzo0g4f3wpk7UqaESp3gHXKbpbl72d
-	egI3Rna3jUS+tcns4984wCGzmjYr4wR/VIhcV3bMNrnMBn7tH45xpYh+ctwK9b3UifBTSx
-	KyUPFjP9s1pl/OhZXuYH3i/huTNB/zA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=0bORVmgUIvo828uGSnlnbbjdg5dymze8MTmROPBvxLM=;
+	b=eMP0SQzbs/qoVf8yu1VC+LwY3eKSX6pxuFkdqxXJ0f1BbwKJcT+90q6xtKNdEUUdMW1hEo
+	1NlUc/sWb5urxTdebCOJqLVWAL8F0k5MMEInOaiaAz4CLiHB8pLY4O4UvkP7uBnds9JiAi
+	4lB+cQmf4qGfhUymP090erAclqOkCIY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-TtXRG2ZXOySQDuOJO8kLAw-1; Tue, 13 Dec 2022 08:21:34 -0500
-X-MC-Unique: TtXRG2ZXOySQDuOJO8kLAw-1
+ us-mta-629-Wj3bh7v9Mjqyb1bdN5jOJA-1; Tue, 13 Dec 2022 08:51:37 -0500
+X-MC-Unique: Wj3bh7v9Mjqyb1bdN5jOJA-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80A7F1C05AEB
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 13:21:34 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFA938339C5
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 13:51:36 +0000 (UTC)
 Received: from [172.64.9.12] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 70E0814152F4;
-	Tue, 13 Dec 2022 13:21:34 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9EB6F14152F4;
+	Tue, 13 Dec 2022 13:51:36 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (151/379 SKIPPED): Test report for master
- (6.1.0, mainline.kernel.org-clang, 43686598)
-Date: Tue, 13 Dec 2022 13:21:34 -0000
+Subject: =?utf-8?b?4pyF?= PASS (162/379 SKIPPED): Test report for master
+ (6.1.0, mainline.kernel.org-clang, 06cff4a5)
+Date: Tue, 13 Dec 2022 13:51:36 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <94655.122121308213400719@us-mta-110.us.mimecast.lan>
+Message-Id: <51023.122121308513700592@us-mta-629.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,11 +53,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'tpmdd-next-v6.2-rc1' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/jarkko/linux-tpmdd
+    Commit message: Merge tag 'arm64-upstream' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/arm64/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62917
+    https://datawarehouse.cki-project.org/kcidb/checkouts/62922
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -68,6 +68,11 @@ e of undeclared identifier 'NF_NAT_MANIP_SRC'
 l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftest build - bpf
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
         Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
 systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
 t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
@@ -85,26 +90,6 @@ l-tests/-/issues/1456
                  ppc64le - CIFS Connectathon
                   x86_64 - CIFS Connectathon
                   x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                 ppc64le - Reboot test
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Networking sctp-auth: sockopts test
-                  x86_64 (debug) - Reboot test
         Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
 .o: Permission denied
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -118,17 +103,35 @@ l-tests/-/issues/1473
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
+syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
+=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
+            Affected tests:
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Reboot test
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1172
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
         Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1498
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
