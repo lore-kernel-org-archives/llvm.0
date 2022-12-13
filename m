@@ -1,33 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7776279C9;
-	Tue, 13 Dec 2022 19:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9C8EC433D2;
-	Tue, 13 Dec 2022 19:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670960725;
-	bh=Rus8LKt6JC2vTsynj6VmjIXsVmtuWiGAxvSB33tcGtU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FtnCt7NDom2YFBeiaXE07DgnEvo+e0z+9S42m7CDIRcmHqKGrsUyMH/yUuOQN7gCa
-	 bu/M4IALLygYoc+Tx2ovEk1nkkghHLG+S5k9RIZI71lx0nv11s9RawHc5Iv3gjDJML
-	 16uLLLO1WjeKBjCV1Gd+19LTqKZQNxvyN6iEIyoEOU6OdF495BwK9SRVT8dE5jzbOo
-	 HpvX014WRDFHwMbcFuMulVlQDT5rdoBZ8UcfWFjks3bohla5hDciiuK6y+Y3DBcrvm
-	 xjFvDppW4y0Dj19fs3ma16blEXCBDQtGqJ9ctpaxidhH3g964Mwksi16aSDeZL3IUE
-	 vFAhq+T+mO6Ww==
-Date: Tue, 13 Dec 2022 11:45:23 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Ard Biesheuvel <ardb@kernel.org>, kernel test robot <lkp@intel.com>,
-	Robert Elliott <elliott@hpe.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: Re: [PATCH] crypto: arm/sha1 - Fix clang function cast warnings
-Message-ID: <Y5jWUytRsZatKmCk@sol.localdomain>
-References: <202211041904.f9S5gAGL-lkp@intel.com>
- <Y5FvChDBD/+uaFy8@gondor.apana.org.au>
- <CAMj1kXGkdp_cwOWeX_49Y5xTCH8Y7X-LnM8pJufCH3yw7anBWQ@mail.gmail.com>
- <Y5hXUlvSmHrP8PTN@gondor.apana.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129AA79E3
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 20:03:09 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso4728630pjh.1
+        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 12:03:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SlLKeNs0EWVsu+ptfdWBNmvU18ZVhMR61XWdAxFV9XQ=;
+        b=Jgh2h70gyFoI+vZEt+HRyYhvy8YXmJruypdwVRYeOAtwakBPLsrcx6y+QvB3hUhUNm
+         v/DiIWAZ3oh+MtBheCrEL++Gyb7HLAT1gDnpqMiVuiB04sbr6RL+4HisIMlXsah7jJHs
+         BQh9UrAAjRfz+6OEQK8DW+ZocCeLgGW7E9/YuE4vDZ2U7pCZP9xxdvcW7BRNNE9/dvXk
+         UHFZHnLNmVVz3QPKDVMD9nL2tc1Un2n3p3lY72Vrrn4IEro5ne4Mp2Xd+uRIFimABqMP
+         9hVMz9Et/jMsgOYssc4gfckHfVOAIkEUwXeMIcmjytkpiwFO3ZODSvpun/Uk3hH9yVpu
+         tYKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SlLKeNs0EWVsu+ptfdWBNmvU18ZVhMR61XWdAxFV9XQ=;
+        b=x8BK45ScCPmxsmILxurhOjLp6IYyTR2uqvxiqeoe6pILILc7pH6ayey0BOKMu1lE2T
+         HQWemW8OHMPxWQL7c0e1Ty+1z9PgTomJoGybjvAnEaNai4h+/aStW4oG4PgUkTXZuszJ
+         qDgEDzqVHl3OMiQsbkgNKTaw64wGCH5yde9vSMUS7zDiyvjsSbgLoZyIhiCqVSq5gHBM
+         iBjUOleqfx7kUWlLs4KRBELzcvguCgEdIfoGIyM+kA1aeRTSalqHP2AA9JKMSMrhXF/k
+         KJeHHcjhEnDyBCklQxPCseCgQ6Io0wq3gw/IZbJC5S4PxfskvvpcoB78NMvLjEh89xYP
+         IZdA==
+X-Gm-Message-State: ANoB5pnQF5VMZF7igBAWxMHBErHp1RiHNMflrWRLT1yZfa0z/0JubDdT
+	Vd+7AIkyMhAMgBWqovq7vAYlIg==
+X-Google-Smtp-Source: AA0mqf43rfeTLye05owqv8MbDwr9r9xovoe2k6ziCGD54isSIqaMDQrLxrh/vw468kpaItrUN7BQ5g==
+X-Received: by 2002:a17:902:7b96:b0:189:858f:b5c0 with SMTP id w22-20020a1709027b9600b00189858fb5c0mr428994pll.0.1670961788301;
+        Tue, 13 Dec 2022 12:03:08 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170903124500b00189667acf19sm289595plh.95.2022.12.13.12.03.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 12:03:07 -0800 (PST)
+Date: Tue, 13 Dec 2022 20:03:03 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	James Morse <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Oliver Upton <oliver.upton@linux.dev>, Tom Rix <trix@redhat.com>,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Ricardo Koller <ricarkol@google.com>,
+	Aaron Lewis <aaronlewis@google.com>,
+	Raghavendra Rao Ananta <rananta@google.com>
+Cc: David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH 06/14] KVM: selftests: Rename UNAME_M to ARCH_DIR, fill
+ explicitly for x86
+Message-ID: <Y5jadzKz6Qi9MiI9@google.com>
+References: <20221213001653.3852042-1-seanjc@google.com>
+ <20221213001653.3852042-7-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,35 +69,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5hXUlvSmHrP8PTN@gondor.apana.org.au>
+In-Reply-To: <20221213001653.3852042-7-seanjc@google.com>
 
-On Tue, Dec 13, 2022 at 06:43:30PM +0800, Herbert Xu wrote:
-> -asmlinkage void sha1_block_data_order(u32 *digest,
-> -		const unsigned char *data, unsigned int rounds);
-> +asmlinkage void sha1_block_data_order(struct sha1_state *digest,
-> +		const u8 *data, int rounds);
++David
 
-The last parameter should be called 'blocks', not 'rounds'.
+On Tue, Dec 13, 2022, Sean Christopherson wrote:
+> Rename UNAME_M to ARCH_DIR and explicitly set it directly for x86.  At
+> this point, the name of the arch directory really doesn't have anything
+> to do with `uname -m`, and UNAME_M is unnecessarily confusing given that
+> its purpose is purely to identify the arch specific directory.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+> -# No change necessary for x86_64
+> -UNAME_M := $(shell uname -m)
+> -
+> -# Set UNAME_M for arm64 compile/install to work
+> -ifeq ($(ARCH),arm64)
+> -	UNAME_M := aarch64
+> -endif
+> -# Set UNAME_M s390x compile/install to work
+> -ifeq ($(ARCH),s390)
+> -	UNAME_M := s390x
+> -endif
+> -# Set UNAME_M riscv compile/install to work
+> -ifeq ($(ARCH),riscv)
+> -	UNAME_M := riscv
+> +ifeq ($(ARCH),x86)
 
->  int sha1_update_arm(struct shash_desc *desc, const u8 *data,
->  		    unsigned int len)
->  {
-> -	/* make sure casting to sha1_block_fn() is safe */
-> +	/* make sure signature matches sha1_block_fn() */
->  	BUILD_BUG_ON(offsetof(struct sha1_state, state) != 0);
+As discovered by by David, this breaks doing "ARCH=x86_64 make", which is an
+allowed/supported variant in the kernel proper, so this needs to be:
 
-The above comment doesn't really make sense, since making sure function
-signatures match is the responsibility of the compiler.
+  ifneq (,$(filter $(ARCH),x86 x86_64))
 
-A better comment would be:
+or alternatively
 
-	/* sha1_block_data_order() expects the actual state at the beginning. */
+  ifeq ($(ARCH),x86_64)
+  ARCH := x86
+  endif
 
-It would also be helpful to add a comment to the definition of struct
-sha1_state, analogous to the comment in struct blake2s_state:
+Hmm, unless there's a reason to keep ARCH=x86_64, the latter appears to be the
+better option as lib.mak doesn't play nice with x86_64 either, e.g. `ARCH=x86_64
+LLVM=1 make` fails.  That's arguably a lib.mak bug, but it's trivial to handle
+in KVM's makefile so forcing lib.mak to handle both seems unnecessary.
 
-struct sha1_state {
-	/* 'state' is used by assembly code, so keep it as-is. */
-	u32 state[SHA1_DIGEST_SIZE / 4];
+I'll also add a comment to call out that $(ARCH) follows the kernel's terminology
+for arch/*, whereas for whatever reason KVM selftests effectively uses `uname -m`
+terminology.
 
-- Eric
+One last thought/question, what do y'all think about renaming directories to
+follow the kernel proper?  I.e. aarch64=>arm64, s390x=>s390, and x86_64=>x86.
+Then $(ARCH_DIR) would go away.  The churn would be unfortunate, but it would be
+nice to align with arch/ and tools/arch/.
+
+> +	ARCH_DIR := x86_64
+> +else ifeq ($(ARCH),arm64)
+> +	ARCH_DIR := aarch64
+> +else ifeq ($(ARCH),s390)
+> +	ARCH_DIR := s390x
+> +else ifeq ($(ARCH),riscv)
+> +	ARCH_DIR := riscv
+> +else
+> +$(error Unknown architecture '$(ARCH)')
+>  endif
