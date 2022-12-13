@@ -1,174 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C22879FA
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 21:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670966438;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9nM0kFKdfG0sfBc7pY26Pby/ctUUdyW5cfuNGipMopI=;
-	b=SNGgnX7gjrbs4SMujFqGcNT2DHPal2g7JJBik6JaPXMxYluO614pf/vgpczcN2ilz/E23A
-	bwvUhGJR0GVWOl4A+JPFm9+cYSr893nGmaWmt1r6nR0TYtTroep9RSkmEGk1uQQzk1Ueol
-	TI2eHfSODPoKMtf0yfNldtxuMPr2PgQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-61-T5FWt-HcNMa36YnC8fH2kA-1; Tue, 13 Dec 2022 16:20:37 -0500
-X-MC-Unique: T5FWt-HcNMa36YnC8fH2kA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3D658027EC
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 21:20:36 +0000 (UTC)
-Received: from [172.64.9.12] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C055D1121314;
-	Tue, 13 Dec 2022 21:20:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (152/379 SKIPPED): Test report for master
- (6.1.0, mainline.kernel.org-clang, 8702f2c6)
-Date: Tue, 13 Dec 2022 21:20:36 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0DF79FA
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 21:28:35 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id ja17so6657368wmb.3
+        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 13:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sPxCch+SuJX/czcKg/x1jS3wKYQ1yhbWpMuG4i9oUWw=;
+        b=E+lkNW/vnitIH25/YnSrt7TWGivM29tl8AVsANwFHEc9rH5JKyJW7bRkbD1EqRGDfF
+         IbaXcj4hTp85nDZepnLtVL1fCB8FwovIslVrrUOWGStxH1cRsyNfYQaKraZfjbTx8zDG
+         Y6Uyb/fFOIDJ4Z+FwL4DHITXdbRlNIYY/kRFDet4bzICjNllgNH3NtqFshl1QoSaHf36
+         Cva9GMrwVGDI6RgldilFEV1lVZqc+2BDZ8j7owZX73X4ghABa3KeKjezgLW2oP653Mgu
+         MGnc51UtYncxknfwWT6Snyzc/1+oIN53DpcB/JL6LDj4IT6Sk8xxh80ao+ILw+aBlkwp
+         qcNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sPxCch+SuJX/czcKg/x1jS3wKYQ1yhbWpMuG4i9oUWw=;
+        b=dkYPHOJ5X7pu5MQ9kjUGUGo6t/wACFYn1hRFzzr0mrxze7lAauQ2/BRnw+z9CxWa5K
+         wa9q0lbmVkihZcqF9WlAJzpWcznvkVrz8kc1wJFVHfvfZw7LWoEP2HGjI59JvUVTpO69
+         J6NCDkX76W8bIuLHr75tLrdQA50ipHwsovaMVD5tBg5Bk9yeMHV6zztDOcDwQ8vy+imY
+         y6g8kPbjl7I7TUjLrJPtZVPIl5hqTKfoZeDleIVG4KsE6SKzYJHzs0EqqvulMR3O0CV4
+         WONvKAN3h0XOcR+Dr1XfWQJ7C/lGtwj1dmjCmwib/hLPwoK9x7sXUbetIIzg3/QxpQNg
+         sZ9Q==
+X-Gm-Message-State: ANoB5pmNMBe7ugjmxUjdBC/VZZOPp5KssOWwqzcZ+g9ko4s4A4PtJ1ro
+	cW0OuJ/c5mUpGZmP0UgoV51vx4hVmY2DKbKRM3k2TQ==
+X-Google-Smtp-Source: AA0mqf4mbRN9RO70+dP+17nvXwqHWyjSQsBIhtnZWLOuogyyAtbhcJWpE11dGgYAj5QrifRpofLF7t15nrzEa0jLA+w=
+X-Received: by 2002:a1c:7203:0:b0:3c6:c109:2d9 with SMTP id
+ n3-20020a1c7203000000b003c6c10902d9mr13324wmc.149.1670966913709; Tue, 13 Dec
+ 2022 13:28:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <32530.122121316203700419@us-mta-61.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20221202045743.2639466-1-irogers@google.com> <20221202045743.2639466-4-irogers@google.com>
+ <Y5eVwlId2A2/pN40@fjasle.eu>
+In-Reply-To: <Y5eVwlId2A2/pN40@fjasle.eu>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 13 Dec 2022 13:28:21 -0800
+Message-ID: <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
+Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to install_headers
+To: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Dec 12, 2022 at 12:57 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
+> > Compute the headers to be installed from their source headers and make
+> > each have its own build target to install it. Using dependencies
+> > avoids headers being reinstalled and getting a new timestamp which
+> > then causes files that depend on the header to be rebuilt.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
+> >  1 file changed, 13 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+> > index 9a316d8b89df..b87213263a5e 100644
+> > --- a/tools/lib/subcmd/Makefile
+> > +++ b/tools/lib/subcmd/Makefile
+> > @@ -89,10 +89,10 @@ define do_install_mkdir
+> >  endef
+> >
+> >  define do_install
+> > -     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
+> > -             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
+> > +     if [ ! -d '$2' ]; then             \
+> > +             $(INSTALL) -d -m 755 '$2'; \
+> >       fi;                                             \
+> > -     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
+> > +     $(INSTALL) $1 $(if $3,-m $3,) '$2'
+>
+> What about using '$(INSTALL) -D ...' instead of the if-mkdir-block above?
+> (E.g. as in tools/debugging/Makefile.)
+>
+> Kind regards,
+> Nicolas
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thanks Nicolas, the reason was to keep the code consistent. That's not
+to say this is the best approach. For example, here is the same thing
+for tools/lib/api:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/l=
+ib/api/Makefile?h=3Dperf/core&id=3Df43368371888694a2eceaaad8f5e9775c092009a=
+#n84
 
-Tested-by: CKI Project <cki-project@redhat.com>
+If you'd like to improve this in all the versions and send patches I'd
+be happy to take a look.
 
-Kernel information:
-    Commit message: Merge tag 'mm-nonmm-stable-2022-12-12' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/akpm/mm
+Thanks,
+Ian
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62990
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
-systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
-t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
-ive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
-            Affected tests:
-                 ppc64le - LTP: openposix test suite
-                  x86_64 - LTP: openposix test suite
-                  x86_64 (debug) - LTP: openposix test suite
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
-syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
-=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
-            Affected tests:
-                  x86_64 - Reboot test
-                  x86_64 (debug) - Networking sctp-auth: sockopts test
-                  x86_64 (debug) - Reboot test
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
- /boot/vmlinuz-6.1.0-rc8 not a file
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1497
-            Affected tests:
-                 aarch64 - Boot test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> >  endef
+> >
+> >  install_lib: $(LIBFILE)
+> > @@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
+> >               $(call do_install_mkdir,$(libdir_SQ)); \
+> >               cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
+> >
+> > -install_headers:
+> > -     $(call QUIET_INSTALL, libsubcmd_headers) \
+> > -             $(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644=
+); \
+> > -             $(call do_install,help.h,$(prefix)/include/subcmd,644); \
+> > -             $(call do_install,pager.h,$(prefix)/include/subcmd,644); =
+\
+> > -             $(call do_install,parse-options.h,$(prefix)/include/subcm=
+d,644); \
+> > -             $(call do_install,run-command.h,$(prefix)/include/subcmd,=
+644);
+> > +HDRS :=3D exec-cmd.h help.h pager.h parse-options.h run-command.h
+> > +INSTALL_HDRS_PFX :=3D $(DESTDIR)$(prefix)/include/subcmd
+> > +INSTALL_HDRS :=3D $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
+> > +
+> > +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
+> > +     $(call QUIET_INSTALL, $@) \
+> > +             $(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
+> > +
+> > +install_headers: $(INSTALL_HDRS)
+> > +     $(call QUIET_INSTALL, libsubcmd_headers)
+> >
+> >  install: install_lib install_headers
+> >
+> > --
+> > 2.39.0.rc0.267.gcb52ba06e7-goog
+>
+> --
+> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+>      -- frykten for herren er opphav til kunnskap --
