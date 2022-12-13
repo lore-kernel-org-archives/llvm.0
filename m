@@ -1,83 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801C2748C;
-	Tue, 13 Dec 2022 16:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D69C433EF;
-	Tue, 13 Dec 2022 16:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1670950267;
-	bh=XuyPsD72oPHirUFch10ORuPd8S8i15OahN565MHaV3Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UulrFBfvcnR1w6K3YNUjNDZcZ7syW1CNLwHP52g1fRg0NiL+ufzmvvXbtW+qWBLF4
-	 JXeZbqtpwOTCcV7XYKGyfBsOp4vCdXCJSu6EP5sLRYjYy9QuPIqFYmCjzkJ6pAMdAD
-	 bw0SJzye9X/1myFawQ6MwgsuUoS4+fcEnnFop6uNiQAyanNtA7pyKjmomzBETf7Wzs
-	 H6EFFqunywPAOVhpjRz2tlrMOp6r/E/H83WJwJ9+W9PAetSChyYS8oPzhW2HwxpNDY
-	 S2IjtGNRAwlu+HJpR/BxYZkoLbyjvbpj6n2ZQ/EuhnL5f9yjHHMN35Kxh9ycOjAjt5
-	 VqC4SArSIY+lg==
-Date: Tue, 13 Dec 2022 09:51:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, llvm@lists.linux.dev,
-	stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/157] 6.0.13-rc1 review
-Message-ID: <Y5iteH7jCU83w5qm@dev-arch.thelio-3990X>
-References: <20221212130934.337225088@linuxfoundation.org>
- <CA+G9fYt7QTkGWPhj0NX8bcDOvEvf9jOW5Oaj8T2zmzasHjo1yA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B2A748F
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 17:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1670951213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EOYSn0ABw/PTlascbUku2DcG8a5ddyAdOvMJyDDxsb0=;
+	b=PrkJLs5cPdiQl8q+FrHKGbhZfDwhfWoD6YCxGdNn6G4f3PXMno8m3rqkB07LTt+F2PhrPz
+	STP2njppyS+dmLgLKJxIVo+V0f3f7fda53cJwHdlFM2vzVDWQcHKxzxKEDrwPo7f+N+rVI
+	AhsDG6O8XDzBDkeIaia/oZdDdgJJgdw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-84-c3RaIDWPMpyUh-M9P1VkHA-1; Tue, 13 Dec 2022 12:06:52 -0500
+X-MC-Unique: c3RaIDWPMpyUh-M9P1VkHA-1
+Received: by mail-ej1-f71.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso9669235ejb.5
+        for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 09:06:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EOYSn0ABw/PTlascbUku2DcG8a5ddyAdOvMJyDDxsb0=;
+        b=RJ3fPIv7ctqwEdmT5L9beuQbNKY5bzWzb8//YPZhIQygPS1n5HFE5pvtenwMGWiCUx
+         +g1tDJsvJKMwmm1ENORld9tWQUQhzYRJNSFnXenRZk+/HxMPVd9eM7XtVdoUq0/nWfSn
+         Oc+RzvdC5SE8/WgEzgVudTYkWs2AR1EnjcNZKVNMV6y7JhgbL27EVZDBWEn/r3vmugR7
+         +R0Uq47k+nznzh8hXR03zWxL3JQchyAdBauGBLPA34RbujpgUPpcB2+coIUgOzsYy32b
+         okLYwb0i6qkuVdpOk4IBvyhYnVgExKZgRm2kKxrghxarIar7QeurX05TV5mMKjZUErMF
+         rx+A==
+X-Gm-Message-State: ANoB5plVPFDw4N54DEfqPhnpW0CkcW2TjG3cJcO47D8C2SsAODc5XL0Z
+	xX2o79tJ5eWaBDNZ+Nwvjx1o2+WTGHj/ZiCyCtQ3c4KwD0Wa4+ddZ2jCfeBBW5XpCCZeH4LzmGC
+	boN7ZyxwOm6MU/A==
+X-Received: by 2002:a17:906:8805:b0:7c1:3125:955f with SMTP id zh5-20020a170906880500b007c13125955fmr15800652ejb.65.1670951210090;
+        Tue, 13 Dec 2022 09:06:50 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5dlhfqvH6MBKRYHOqv9AiDTlEqEMKNVVthP0BR1nci7rLMKfiH59/D15hJSmQ0o+mXEC48MA==
+X-Received: by 2002:a17:906:8805:b0:7c1:3125:955f with SMTP id zh5-20020a170906880500b007c13125955fmr15800632ejb.65.1670951209855;
+        Tue, 13 Dec 2022 09:06:49 -0800 (PST)
+Received: from ovpn-194-169.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id g1-20020aa7c841000000b004704658abebsm609741edt.54.2022.12.13.09.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:06:49 -0800 (PST)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: kvm@vger.kernel.org, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [linux-stable-rc:linux-5.15.y 2855/9999]
+ arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds
+ limit (1024) in 'kvm_hv_hypercall'
+In-Reply-To: <202212122016.eqBzscLJ-lkp@intel.com>
+References: <202212122016.eqBzscLJ-lkp@intel.com>
+Date: Tue, 13 Dec 2022 18:06:48 +0100
+Message-ID: <87zgbr9qs7.fsf@ovpn-194-169.brq.redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYt7QTkGWPhj0NX8bcDOvEvf9jOW5Oaj8T2zmzasHjo1yA@mail.gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain
 
-Hi Naresh,
+kernel test robot <lkp@intel.com> writes:
 
-On Tue, Dec 13, 2022 at 12:01:25PM +0530, Naresh Kamboju wrote:
-> This is an additional report.
-> Following issue is specific to clang nightly,
-> 
-> x86 clang-nightly builds failed with defconfig and tinyconfig due to
-> below errors / warnings.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Regressions found on x86_64:
-> 
->     - build/clang-nightly-tinyconfig
->     - build/clang-nightly-x86_64_defconfig
->     - build/clang-nightly-allnoconfig
->     - build/clang-nightly-lkftconfig
-> 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
-> CC=clang
-> 
-> ld.lld: error: version script assignment of 'LINUX_2.6' to symbol
-> '__vdso_sgx_enter_enclave' failed: symbol not defined
-> llvm-objdump: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
-> or directory
-> llvm-objcopy: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
-> or directory
-> make[4]: *** [/builds/linux/arch/x86/entry/vdso/Makefile:136:
-> arch/x86/entry/vdso/vdso64.so] Error 1
+> Hi Vitaly,
+>
+> FYI, the error/warning still remains.
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> head:   2b8b2c150867edf2f7c351b27e2ce18865b0a25a
+> commit: cb188e07105f2216f5efbefac95df4b6ce266906 [2855/9999] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
+> config: i386-buildonly-randconfig-r003-20221212
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
+>         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+>         git fetch --no-tags linux-stable-rc linux-5.15.y
+>         git checkout cb188e07105f2216f5efbefac95df4b6ce266906
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
+>    int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>        ^
+>    1 warning generated.
+>
 
-Thanks for the report!
+There's a 'fix' for this in kvm/next:
 
-This is resolved in mainline now with commit 45be2ad007a9 ("x86/vdso:
-Conditionally export __vdso_sgx_enter_enclave()"). I was going to
-request stable backports once it was a little calmer but if people are
-hitting this now, I guess now is as good a time as ever :) I believe it
-should backport cleanly to 5.15+, which is where it is needed.
+commit 7d5e88d301f84a7b64602dbe3640f288223095ea
+Author: Vitaly Kuznetsov <vkuznets@redhat.com>
+Date:   Tue Nov 1 15:53:56 2022 +0100
 
-Cheers,
-Nathan
+    KVM: x86: hyper-v: Use preallocated buffer in 'struct kvm_vcpu_hv' instead of on-stack 'sparse_banks'
+
+but I'm unsure whether it's worth cherry-picking into stable@, I doubt
+this is a real world issue (i386, clang, Windows guests,...).
+
+-- 
+Vitaly
+
