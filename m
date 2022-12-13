@@ -1,34 +1,34 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0E623A7
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 20:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5713279EE
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 20:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1670963498;
+	s=mimecast20190719; t=1670964038;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=iPQsEi3LzdXX4t9xbaPBySKWOVk95LMOlovLG4RsHLU=;
-	b=Ro3bWDtSdDXgWpPklVKeVcnM8G4SgZMzLV7yr4nRZWr3euzNbOQXYCetsN0uUmW2/h/6E+
-	Wxuccc/n6Eq33egNTaQot2pw+Ja++A/6ibb+wZzJIog7jrBsniCycH+H7OKdOXytgQ3nRP
-	zeNJH5RECZa9uqYoaG8wECah9ad8WYU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=YVluFeF8wwYHX/C/1g62qM3B6Dv1Hducg+V+52eXKnY=;
+	b=Kil6HOmRqBnDb3Ugs/DOvf+aHH6ayQA79nigrwfDKMTm7vb7wh3JC6IesYOSLnNQVuTFkG
+	8C7KNyDAas+x29NyiTx2kHCPwF8JvaRksvcuSXdMNmbdxV45r+IPA/4i3EBY34b8tLy+TP
+	xBq4Bv+gyZmR4MJ559LoY2SNdp52oxA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-JcAQ9zD6NUyEDm3LRLvwDQ-1; Tue, 13 Dec 2022 15:31:37 -0500
-X-MC-Unique: JcAQ9zD6NUyEDm3LRLvwDQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-516-i-1S7vceOxSsG6aMylEgkg-1; Tue, 13 Dec 2022 15:40:37 -0500
+X-MC-Unique: i-1S7vceOxSsG6aMylEgkg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B12ED3C10231
-	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 20:31:36 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D62AF8038E7
+	for <llvm@lists.linux.dev>; Tue, 13 Dec 2022 20:40:36 +0000 (UTC)
 Received: from [172.64.9.12] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9CEEC1121314;
-	Tue, 13 Dec 2022 20:31:36 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C149D2026D68;
+	Tue, 13 Dec 2022 20:40:36 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (153/379 SKIPPED): Test report for master
- (6.1.0, mainline.kernel.org-clang, 268325bd)
-Date: Tue, 13 Dec 2022 20:31:36 -0000
+Subject: =?utf-8?b?4pyF?= PASS (152/379 SKIPPED): Test report for master
+ (6.1.0, mainline.kernel.org-clang, eb451153)
+Date: Tue, 13 Dec 2022 20:40:36 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <95805.122121315313700195@us-mta-154.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <25727.122121315403700356@us-mta-516.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,11 +53,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'random-6.2-rc1-for-linus' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/crng/random
+    Commit message: Merge tag 'trace-tools-6.2' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/trace/linux-trace
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/62985
+    https://datawarehouse.cki-project.org/kcidb/checkouts/62987
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -119,11 +119,16 @@ l-tests/-/issues/1498
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1172
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
             Affected tests:
-                  x86_64 - stress: stress-ng - memory
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
