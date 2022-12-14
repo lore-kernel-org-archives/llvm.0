@@ -1,244 +1,152 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582B73208
-	for <llvm@lists.linux.dev>; Wed, 14 Dec 2022 19:14:21 +0000 (UTC)
-Received: by mail-wr1-f47.google.com with SMTP id m14so804471wrh.7
-        for <llvm@lists.linux.dev>; Wed, 14 Dec 2022 11:14:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1AwZaH5JIoKs86X8in+Ofgepd04rN9EuIQh7OlgsTXc=;
-        b=bYeX2lMcH6vOsW+SAP/DbiKABbnuV1dhTBY4P5LY+HLxYAFm72PsD7U6Og+uAy0e0V
-         EPos6EmkFTFH4rl/1jYyWBFaBYIMuxEA6tab5jvqgfIQroBUTlnO+jPH5N+cpGtH7Z1M
-         sdyZF4YVwVGlfU7u9mUPKnpn9x0GH7b4jbQxJwW4pyaHNkT3uEf/wrsfT2/hs0Zt8Msx
-         goJCbfT8NmjHyrJ37W0W/EcAr8a4hfk9su6s88otLjozes1wX+2atX2EKlyzO5P92o1O
-         cYpMfN1aBtjGdkv2tYF/J3OQ8TfPMqxjNT4BbNn4TFqkGv85R9yCUxTechqo9XCRABaa
-         lVOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1AwZaH5JIoKs86X8in+Ofgepd04rN9EuIQh7OlgsTXc=;
-        b=C78ypox6JL8b1HB2G9re1s+oW9b5wIlakTfP0CRoxvAxpMxabqoVV/heLb65eQxNbR
-         IbG4nlI40ZoP7bc6IPYTbePJs3cDmeBwE41UzMEQdwC+hrT6O5FpeAtAczXqwKdtHsgV
-         OTxrVVyZtDKR5RkLaufGUvpJPDc1SIJwjF+XwGIKfRIAXpPQYRmLCZF+Gk1QesVT5Fo1
-         5rVM+aSrrJMkfajj9MOnj12WBmIUI+k/olUVHXQCjz+cFQD5IRSNmiDquki7qQ0oK0HD
-         3WdTGhBDrWhvx03kVdzfWm/lkBThhSeyq5jl60Y5G+pMZAI6DPT9UO/u5XSqQ+ODSCIl
-         dMJw==
-X-Gm-Message-State: AFqh2kpyO7gNX023V7MXKMU3tRpJId1Ch3/w2eki2/BWzWsSYxa9b9gB
-	oU3MxRlBugDb3h93w1xxyKx4Bu00JEMvBxqt1VIj4Q==
-X-Google-Smtp-Source: AMrXdXvviWzSpjJF9LGtBqcCOf9kkJCtLsjUOn99v38MDVwK8l3jDE/7frHjgWzRAYXkQXsXRInjezwsrRqT1E9AI0s=
-X-Received: by 2002:a05:6000:69b:b0:256:c249:b819 with SMTP id
- bo27-20020a056000069b00b00256c249b819mr9042wrb.654.1671045259498; Wed, 14 Dec
- 2022 11:14:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4A63208
+	for <llvm@lists.linux.dev>; Wed, 14 Dec 2022 19:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1671046296;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=i6Fwm7H70wJ2tCA08ec0nI1cTMVjSiYq1FM6xhqhPxE=;
+	b=Womf6M8g+Ekh9HLCsdjySAIQVh73oboudBK0QS0WxLquLS0+VGi1B7MflnPR1j5o11scTY
+	LVxSdP11+vrRSRykyrAQj5TdmuAUdJpacE8j32zi0O2PgbagmzVnjSxpfcsMD4B+Gnl2B9
+	sthDkZOyNpGndz1X21tEBcD28lvIQCg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-py5ee15dOhOfEbopN6Eeog-1; Wed, 14 Dec 2022 14:31:34 -0500
+X-MC-Unique: py5ee15dOhOfEbopN6Eeog-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A14C13C10140
+	for <llvm@lists.linux.dev>; Wed, 14 Dec 2022 19:31:34 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1F287492C14;
+	Wed, 14 Dec 2022 19:31:34 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
+ mainline.kernel.org-clang, 1ca06f1c)
+Date: Wed, 14 Dec 2022 19:31:34 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221122001125.765003-1-irogers@google.com> <20221122001125.765003-5-irogers@google.com>
- <CAKwvOd=kgXmpfbVa1wiEvwL0tX3gu+dDTGi-HEiRXSojwCLRrg@mail.gmail.com>
- <CAP-5=fUX2jYgKVrnFLH2MjhUXb_Y1KGdoonkeLE7AcB5gdtaVw@mail.gmail.com> <CAKwvOdmpfA0kqU9otkuXq-BkjuUtDiS+JANTEftpWBp-wJmdCg@mail.gmail.com>
-In-Reply-To: <CAKwvOdmpfA0kqU9otkuXq-BkjuUtDiS+JANTEftpWBp-wJmdCg@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 14 Dec 2022 11:14:07 -0800
-Message-ID: <CAP-5=fV6XPTXNi+5EamYKLQFP0VBGQWaHa3n+jNYGL9m6vz_dA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] objtool: Alter how HOSTCC is forced
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <83614.122121414313401873@us-mta-346.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 14, 2022 at 10:34 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Wed, Dec 14, 2022 at 10:25 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Fri, Dec 9, 2022 at 10:26 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > On Mon, Nov 21, 2022 at 4:12 PM Ian Rogers <irogers@google.com> wrote:
-> > > >
-> > > > HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
-> > > > happens after tools/scripts/Makefile.include is included, meaning
-> > > > flags are set assuming say CC is gcc, but then it can be later set to
-> > > > HOSTCC which may be clang. tools/scripts/Makefile.include is needed
-> > > > for host set up and common macros in objtool's Makefile. Rather than
-> > > > override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
-> > > > libsubcmd builds and the linkage step. This means the Makefiles don't
-> > > > see things like CC changing and tool flag determination, and similar,
-> > > > work properly. To avoid mixing CFLAGS from different compilers just
-> > > > the objtool CFLAGS are determined. HOSTCFLAGS is added to these so
-> > > > that command line flags can add to the CFLAGS.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/objtool/Makefile | 27 ++++++++++++++++-----------
-> > > >  1 file changed, 16 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-> > > > index 61a00b7acae9..e550a98e2dd9 100644
-> > > > --- a/tools/objtool/Makefile
-> > > > +++ b/tools/objtool/Makefile
-> > > > @@ -2,16 +2,12 @@
-> > > >  include ../scripts/Makefile.include
-> > > >  include ../scripts/Makefile.arch
-> > > >
-> > > > -# always use the host compiler
-> > > > -AR      = $(HOSTAR)
-> > > > -CC      = $(HOSTCC)
-> > > > -LD      = $(HOSTLD)
-> > > > -
-> > > >  ifeq ($(srctree),)
-> > > >  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
-> > > >  srctree := $(patsubst %/,%,$(dir $(srctree)))
-> > > >  endif
-> > > >
-> > > > +MAKE = make -S
-> > > >  LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
-> > > >  ifneq ($(OUTPUT),)
-> > > >    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-> > > > @@ -36,13 +32,20 @@ INCLUDES := -I$(srctree)/tools/include \
-> > > >             -I$(srctree)/tools/objtool/include \
-> > > >             -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
-> > > >             -I$(LIBSUBCMD_OUTPUT)/include
-> > > > -WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> > >
-> > > Looking closer at the V=1 diff in meld, I think this is dropping
-> > > EXTRA_WARNINGS.  I think you want to add those back to OBJTOOL_CFLAGS.
-> >
-> > Thanks Nick! When I try this it causes new build failures.
-> > Specifically EXTRA_WARNINGS includes things like -Wswitch-enum that
-> > trigger:
->
-> That's...unexpected. These warnings didn't exist when EXTRA_WARNINGS
-> was being passed to the compiler for these...unless that wasn't the
-> case?
+Hi, we tested your kernel and here are the results:
 
-I wasn't adding EXTRA_WARNINGS but they are set up here:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/tools/scripts/Makefile.include?id=630ae80ea1dd253609cb50cff87f3248f901aca3#n23
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-I've avoided in these changes passing through values from
-Makefile.include to the subprocesses, like Makefile.build, as
-Makefile.include makes choices based on the current flags like clang
-and llvm, not those we override.
 
-> >
-> > ```
-> > check.c:1312:10: error: 14 enumeration values not explicitly handled
-> > in switch: 'INSN_JUMP_DYNAMIC',
-> > 'INSN_JUMP_DYNAMIC_CONDITIONAL', 'INSN_CALL_DYNAMIC'... [-Werror,-Wswitch-enum]
-> >        switch (insn->type) {
-> >                ^~~~~~~~~~
-> > check.c:2620:11: error: enumeration value 'OP_SRC_CONST' not
-> > explicitly handled in switch [-Werror,-
-> > Wswitch-enum]
-> >                switch (op->src.type) {
-> >                        ^~~~~~~~~~~~
-> > check.c:3447:11: error: 5 enumeration values not explicitly handled in
-> > switch: 'INSN_BUG', 'INSN_NOP
-> > ', 'INSN_TRAP'... [-Werror,-Wswitch-enum]
-> >                switch (insn->type) {
-> >                        ^~~~~~~~~~
-> > check.c:3647:11: error: 9 enumeration values not explicitly handled in
-> > switch: 'INSN_CONTEXT_SWITCH'
-> > , 'INSN_BUG', 'INSN_STAC'... [-Werror,-Wswitch-enum]
-> >                switch (insn->type) {
-> >                        ^~~~~~~~~~
-> > check.c:4008:10: error: 9 enumeration values not explicitly handled in
-> > switch: 'INSN_CONTEXT_SWITCH'
-> > , 'INSN_BUG', 'INSN_STAC'... [-Werror,-Wswitch-enum]
-> >        switch (insn->type) {
-> >                ^~~~~~~~~~
-> > check.c:4173:11: error: 15 enumeration values not explicitly handled
-> > in switch: 'INSN_JUMP_CONDITION
-> > AL', 'INSN_JUMP_UNCONDITIONAL', 'INSN_JUMP_DYNAMIC_CONDITIONAL'...
-> > [-Werror,-Wswitch-enum]
-> >                switch (insn->type) {
-> >                        ^~~~~~~~~~
-> > 6 errors generated.
-> > ```
-> >
-> > What should the next step be? Land this or add EXTRA_WARNINGS and fix
-> > all the issues?
->
-> Up to Josh. I think the first 3 patches are ready to go.
+Kernel information:
+    Commit message: Merge tag 'xtensa-20221213' of https://github.com/jcmvb=
+kbc/linux-xtensa
 
-Note, the first patch is already in Arnaldo's tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=630ae80ea1dd253609cb50cff87f3248f901aca3
-and shows up in linux-next:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/tools/lib/subcmd/Makefile?id=630ae80ea1dd253609cb50cff87f3248f901aca3
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/63145
 
-Thanks,
-Ian
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6381438
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
+systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
+t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
+ive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
+            Affected tests:
+                 ppc64le - LTP: openposix test suite
+                  x86_64 - LTP: openposix test suite
+                  x86_64 (debug) - LTP: openposix test suite
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
+syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
+=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
+            Affected tests:
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Reboot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: [upstream] [aarch64] Boot Test: Error: kernel image argument=
+ /boot/vmlinuz-6.1.0-rc8 not a file
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1497
+            Affected tests:
+                 aarch64 - Boot test
 
 
 
-> >
-> > Thanks,
-> > Ian
-> >
-> > > > -CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
-> > > > -LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
-> > > > +WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> > > > +OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
-> > > > +OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
-> > > >
-> > > >  # Allow old libelf to be used:
-> > > >  elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
-> > > > -CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> > > > +OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> > > > +
-> > > > +# Always want host compilation.
-> > > > +HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
-> > > > +                 LD="$(HOSTLD)" AR="$(HOSTAR)"
-> > > > +BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
-> > > > +                       LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
-> > > > +                       AR="$(HOSTAR)"
-> > > >
-> > > >  AWK = awk
-> > > >  MKDIR = mkdir
-> > > > @@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
-> > > >
-> > > >  $(OBJTOOL_IN): fixdep FORCE
-> > > >         $(Q)$(CONFIG_SHELL) ./sync-check.sh
-> > > > -       $(Q)$(MAKE) $(build)=objtool
-> > > > +       $(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
-> > > > +
-> > > >
-> > > >  $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
-> > > > -       $(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
-> > > > +       $(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
-> > > >
-> > > >
-> > > >  $(LIBSUBCMD_OUTPUT):
-> > > > @@ -77,6 +81,7 @@ $(LIBSUBCMD_OUTPUT):
-> > > >  $(LIBSUBCMD): fixdep FORCE $(LIBSUBCMD_OUTPUT)
-> > > >         $(Q)$(MAKE) -C $(LIBSUBCMD_DIR) O=$(LIBSUBCMD_OUTPUT) \
-> > > >                 DESTDIR=$(LIBSUBCMD_DESTDIR) prefix= subdir= \
-> > > > +               $(HOST_OVERRIDES) \
-> > > >                 $@ install_headers
-> > > >
-> > > >  $(LIBSUBCMD)-clean:
-> > > > --
-> > > > 2.38.1.584.g0f3c55d4c2-goog
-> > > >
-> > >
-> > >
-> > > --
-> > > Thanks,
-> > > ~Nick Desaulniers
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
