@@ -1,38 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E17190
-	for <llvm@lists.linux.dev>; Thu, 15 Dec 2022 16:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 304D0C433EF;
-	Thu, 15 Dec 2022 16:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FB63D71
+	for <llvm@lists.linux.dev>; Thu, 15 Dec 2022 16:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81A8C433EF;
+	Thu, 15 Dec 2022 16:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671121601;
-	bh=NQhOvRDb47qHa+Q6SeiWEqOiMrLXdQJpkU+Bg3f6MZU=;
-	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=RC7RD4kKa4Ojq7CyadAqJYUontCem9zIv7i+DnS4OwIrFPNBr0YoYMVDMXvAkWbu5
-	 yQx5ST5lwGpGblAH9Iy6Sev1pjJbtmjIy5+vhhb9Qt5KiLvt81/Z+k0CxeXehWPZUS
-	 LmJW1Z6ENc7QW2Du2bQnIPIAG3mR0fRJwBauStVF4t0xobw92GIjOUOY/zGEnc7F47
-	 z3rbk5a/s6I8nYEFQ/0cfUFdHgSkzj8WRnpFNx3U5kBm5OvwZr5X+oqsEHIDVaZB3n
-	 pvtMXsSgosE3mbTXTOWBIImS8tqHo3kxL4KGpJFUQNPZrSVpEqDNtbA0XHrfqFm4Bu
-	 fFpVaRJ/8Scpw==
+	s=k20201202; t=1671122118;
+	bh=g+llGdryqrPBn/E1pMNZ7VfxGoucOwyeg4NbT0i9qN8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OZz69KEVu8zw0awttRT/LTDhwdgnAiiEQ3EocltG1q6SLSM8KtEx7EQyXhCLAnyii
+	 O1Kzsa4o6oD4E+IQqqtzp0TUhOb2sYgz0xJoN48kKczNb8tWH3rr6BnvVTKnXtJFNJ
+	 zvnuuhxTpy39u+WQh7GwwPR18zp/97T+J76POMvfGJIZLRjzasFliCpUyUwzdbelhn
+	 I7GwLL1ijFBg188O8SIum+p6nQqA+9ng8c/ULmaTfUgK7Q9y/cdeygGngaWhxNxXr/
+	 tQzh05kPt49OJITLM+ni/Pbf1f6V2XOdu5ZSM8hhZPH2LTlGvCXb8NgJ+OZZivTLZm
+	 7ky1rgk65x9Qw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Russell King <linux@armlinux.org.uk>,
+To: David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>
+Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>
-List-Id: <soc.lore.kernel.org>
-Cc: soc@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-arm-kernel@lists.infradead.org,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
+	Daniel Latypov <dlatypov@google.com>,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] ARM: disallow pre-ARMv5 builds with ld.lld
-Date: Thu, 15 Dec 2022 17:26:20 +0100
-Message-Id: <20221215162635.3750763-1-arnd@kernel.org>
+Subject: [PATCH] drm/tests: reduce drm_mm_test stack usage
+Date: Thu, 15 Dec 2022 17:34:49 +0100
+Message-Id: <20221215163511.266214-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -44,40 +42,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-lld cannot build for ARMv4/v4T targets because it inserts 'blx' instructions
-that are unsupported there:
+The check_reserve_boundaries function uses a lot of kernel stack,
+and it gets inlined by clang, which makes __drm_test_mm_reserve
+use even more of it, to the point of hitting the warning limit:
 
-  ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size (1048) exceeds limit (1024) in '__drm_test_mm_reserve' [-Werror,-Wframe-larger-than]
 
-Add a Kconfig time dependency to prevent those targets from being
-selected in randconfig builds.
+When building with gcc, this does not happen, but the structleak
+plugin can similarly increase the stack usage and needs to be
+disabled, as we do for all other kunit users.
 
-Link: https://github.com/llvm/llvm-project/issues/50764
-Link: https://github.com/ClangBuiltLinux/linux/issues/964
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/tests/Makefile      | 2 ++
+ drivers/gpu/drm/tests/drm_mm_test.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 4a8fff7f9be0..d995054ab602 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -344,12 +344,14 @@ comment "CPU Core family selection"
- config ARCH_MULTI_V4
- 	bool "ARMv4 based platforms (FA526, StrongARM)"
- 	depends on !ARCH_MULTI_V6_V7
-+	depends on !LD_IS_LLD
- 	select ARCH_MULTI_V4_V5
- 	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
+diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+index b29ef1085cad..f896ef85c2f2 100644
+--- a/drivers/gpu/drm/tests/Makefile
++++ b/drivers/gpu/drm/tests/Makefile
+@@ -12,3 +12,5 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+ 	drm_mm_test.o \
+ 	drm_plane_helper_test.o \
+ 	drm_rect_test.o
++
++CFLAGS_drm_mm_test.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index 89f12d3b4a21..90a5becc99b8 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -298,7 +298,7 @@ static bool expect_reserve_fail(struct kunit *test, struct drm_mm *mm, struct dr
+ 	return false;
+ }
  
- config ARCH_MULTI_V4T
- 	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
- 	depends on !ARCH_MULTI_V6_V7
-+	depends on !LD_IS_LLD
- 	select ARCH_MULTI_V4_V5
- 	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
- 		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
+-static bool check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
++static bool noinline_for_stack check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+ 				     unsigned int count,
+ 				     u64 size)
+ {
 -- 
 2.35.1
 
