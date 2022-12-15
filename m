@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2137F190
-	for <llvm@lists.linux.dev>; Thu, 15 Dec 2022 16:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38FC1C433D2;
-	Thu, 15 Dec 2022 16:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2EA190
+	for <llvm@lists.linux.dev>; Thu, 15 Dec 2022 16:25:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F76FC433EF;
+	Thu, 15 Dec 2022 16:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671120475;
-	bh=rjTRsba5uD4q7QllFe7RT5FYqITsWk8COGttM+gBAc4=;
+	s=k20201202; t=1671121536;
+	bh=PGA+ic9jPYfLEX1HOAFtdxJIjRz+LHkKF4oeHjlUx3E=;
 	h=From:To:List-Id:Cc:Subject:Date:From;
-	b=bYLLWymp+OLkuBhPpRe3fTAadPuaYzpoeAtUjEY86rlHv8cx/GdwaizFJx/kaYzKt
-	 UFeqhvy1L9xlb2Iz28MZUk3Bzrv3/HWbHP+hKa57Di99qC5Rveg9p724BZULBCbB/4
-	 g/K1eKixykvguWJ9Iwh708G9rW4hlJHRer9TyEt7fw7hJUphXINbqtGdsg9a1mx2/W
-	 5mBeIBRZt4WcRQBLfZUnmSOQsN5KHOmdr774hNg4U4V12Kx5C/OWa55KxKUjfGONlh
-	 VQYn16VvKf86TyBckrKKbMdzaJSahMv80DpdLSfrlnj8taj47lvDb8t9uO84Lvz/l+
-	 UGADPLqcPInUA==
+	b=CY9xXp99k9koM+vouwcbCSE2IbqItSkFRzo4jBNK8nertnAA+Ubn0c66yJ/g2q5no
+	 Ma5uBnjEfOcGvSU4EfAXNOpCpg86Wj0BDIIFbgmdZSU/NWM/DdRQ5bIzJw0ilKL+4G
+	 gp3RAGNRMcXB/PapAZqV8A3VTIj3/mWFdUCoIwC/x/qPeG157t05b8KD1B8P0ncevm
+	 JnauIodncKuCQufjYCUBBcdaHfB19IvSEfzikIkbrhJGDz6h7howXTehOX74V7pVc2
+	 xxFbzFUkQfuyG7Nah+EgjDRUQbeR7Lmg7LFPuna2/7I/zbwffN3/EVKogHuokGeYOb
+	 Fmf64VKC3mArQ==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Daniel Mack <daniel@zonque.org>,
 	Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -26,12 +26,11 @@ Cc: soc@kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] ARM: pxa: fix building with clang
-Date: Thu, 15 Dec 2022 17:07:28 +0100
-Message-Id: <20221215160747.2173998-1-arnd@kernel.org>
+Subject: [PATCH] [v2] ARM: pxa: fix building with clang
+Date: Thu, 15 Dec 2022 17:25:14 +0100
+Message-Id: <20221215162529.3659187-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.35.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -56,9 +55,11 @@ mrrc/mcrr, so use that for builds with IAS.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-pxa/pxa27x.c |  8 ++++++++
- arch/arm/mach-pxa/pxa3xx.c | 16 +++++++++-------
- 2 files changed, 17 insertions(+), 7 deletions(-)
+v2: this version should actually apply
+---
+ arch/arm/mach-pxa/pxa27x.c | 8 ++++++++
+ arch/arm/mach-pxa/pxa3xx.c | 8 ++++++++
+ 2 files changed, 16 insertions(+)
 
 diff --git a/arch/arm/mach-pxa/pxa27x.c b/arch/arm/mach-pxa/pxa27x.c
 index afbf6ace954f..eea507fd5095 100644
@@ -91,18 +92,15 @@ index afbf6ace954f..eea507fd5095 100644
  		break;
  	}
 diff --git a/arch/arm/mach-pxa/pxa3xx.c b/arch/arm/mach-pxa/pxa3xx.c
-index 4637c54dd6a1..b26f00fc75d5 100644
+index 979642aa7ffe..b26f00fc75d5 100644
 --- a/arch/arm/mach-pxa/pxa3xx.c
 +++ b/arch/arm/mach-pxa/pxa3xx.c
-@@ -108,11 +108,12 @@ static void pxa3xx_cpu_pm_suspend(void)
+@@ -108,8 +108,12 @@ static void pxa3xx_cpu_pm_suspend(void)
  #ifndef CONFIG_IWMMXT
  	u64 acc0;
  
--	asm volatile(
- #ifdef CONFIG_CC_IS_GCC
--		     ".arch_extension xscale\n\t"
--#endif
-+	asm volatile(".arch_extension xscale\n\t"
++#ifdef CONFIG_CC_IS_GCC
+ 	asm volatile(".arch_extension xscale\n\t"
  		     "mra %Q0, %R0, acc0" : "=r" (acc0));
 +#else
 +	asm volatile("mrrc p0, 0, %Q0, %R0, c0" : "=r" (acc0));
@@ -110,16 +108,12 @@ index 4637c54dd6a1..b26f00fc75d5 100644
  #endif
  
  	/* resuming from D2 requires the HSIO2/BOOT/TPM clocks enabled */
-@@ -140,11 +141,12 @@ static void pxa3xx_cpu_pm_suspend(void)
+@@ -137,8 +141,12 @@ static void pxa3xx_cpu_pm_suspend(void)
  	AD3ER = 0;
  
  #ifndef CONFIG_IWMMXT
--	asm volatile(
--#ifdef CONFIG_CC_IS_GCC
--		     ".arch_extension xscale\n\t"
--#endif
 +#ifndef CONFIG_AS_IS_LLVM
-+	asm volatile(".arch_extension xscale\n\t"
+ 	asm volatile(".arch_extension xscale\n\t"
  		     "mar acc0, %Q0, %R0" : "=r" (acc0));
 +#else
 +	asm volatile("mcrr p0, 0, %Q0, %R0, c0" :: "r" (acc0));
