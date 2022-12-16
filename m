@@ -1,116 +1,469 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05CD371;
-	Fri, 16 Dec 2022 05:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E11371;
+	Fri, 16 Dec 2022 05:36:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671167788; x=1702703788;
+  t=1671168992; x=1702704992;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Vd5TeVtNAAGSveYf1WH02WOcQ/TtCbXvl+Lop8Pcsik=;
-  b=fAyiEn0FT/IOnV/ymDdA4FieXVcArOt+42cXwQkOJRKUe+nfa6oD7g0W
-   9zjPLBB1Oe2L8msbVu7sULEx4nQexvKVjJogJD3TI1i9Kl2pgFsqqAp3r
-   QbBLV6T3suSajUyJl4srbh79pcTv13VidPTCqscOsWtMuJu0naoOJgiO8
-   A8BLkEQpMuRnMcuGAJ5tyYNwoD/miSICHiY0SlJPQfW7DOoEeAomqcrGQ
-   uN9RZlIiDE8Q5DinEBi+/DuNjvg34BnnBMdBNII3pZDAl0WsYGmixeqhq
-   +Hbd0zIxrvm4nDMlM3JE3A+CLsio/QUCUS6UVcXSKAopfjdLMdE+q8ilY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="381107970"
+  bh=acxD6hmImc+1fXzkUfVmn65lk2R1Ag20m9BTI7dUJg8=;
+  b=FfhU7jOd0t97HZ4oGH2US6Z7IJaET/poXgCQNtw4TSPn2MWRs6K4tOyu
+   7FyZOTOHTqAahw/K/Nau8Ft5m5nUs20KgCnuf+73reaNpS7wzk4NDZiQo
+   NcPoDDaNLtef5NX8y+uAx/D6xUvNZoEwwGVPRrXzuOf1dIhxdAnYnO7M9
+   O/D9DmWOTa/uCMfDmaeAlfr2Zm6vprJlPAPvM8//hTjQfehUUtoRzBYKY
+   9uNZdjJ/Ga0IcXQEcrtdiSuRH9xNVeccvdVmmhE1ADipQMlgfAkJkjh0T
+   HbLh/qHeBWjegHa21fA6+ixuRKtlkYZX8euyaPl3kYJP19XNCzgrNX8hc
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="298559015"
 X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="381107970"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 21:16:25 -0800
+   d="scan'208";a="298559015"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 21:36:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="599824983"
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="627460551"
 X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="599824983"
+   d="scan'208";a="627460551"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Dec 2022 21:16:20 -0800
+  by orsmga006.jf.intel.com with ESMTP; 15 Dec 2022 21:36:20 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p6351-0006vW-1L;
-	Fri, 16 Dec 2022 05:16:19 +0000
-Date: Fri, 16 Dec 2022 13:15:32 +0800
+	id 1p63ON-0006wI-2m;
+	Fri, 16 Dec 2022 05:36:19 +0000
+Date: Fri, 16 Dec 2022 13:35:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas Stach <l.stach@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>, Richard Zhu <hongxing.zhu@nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	marcel.ziswiler@toradex.com, marex@denx.de, tharvey@gateworks.com,
-	alexander.stein@ew.tq-group.com, richard.leitner@linux.dev,
-	lukas@mntre.com, patchwork-lst@pengutronix.de,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] soc: imx: imx8mp-blk-ctrl: expose high
- performance PLL clock
-Message-ID: <202212161328.9lRSq2Po-lkp@intel.com>
-References: <20221215174942.2835690-3-l.stach@pengutronix.de>
+To: Boris Burkov <boris@bur.io>, linux-btrfs@vger.kernel.org,
+	kernel-team@fb.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 5/5] btrfs: dont use size classes for zoned file
+ systems
+Message-ID: <202212161313.pvRRVfe3-lkp@intel.com>
+References: <6214dfa0a7191e4e7b4a24fb24ef9c9562001012.1671149056.git.boris@bur.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="aM9uy4v4WUgh3xAI"
+Content-Type: multipart/mixed; boundary="4K55xEb/RCBu4IuE"
 Content-Disposition: inline
-In-Reply-To: <20221215174942.2835690-3-l.stach@pengutronix.de>
+In-Reply-To: <6214dfa0a7191e4e7b4a24fb24ef9c9562001012.1671149056.git.boris@bur.io>
 
 
---aM9uy4v4WUgh3xAI
+--4K55xEb/RCBu4IuE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Lucas,
+Hi Boris,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on shawnguo/for-next krzk/for-next krzk-dt/for-next linus/master v6.1 next-20221215]
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on linus/master next-20221216]
+[cannot apply to v6.1]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Stach/dt-bindings-soc-imx8mp-hsio-blk-ctrl-add-clock-cells/20221216-015014
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20221215174942.2835690-3-l.stach%40pengutronix.de
-patch subject: [PATCH v2 3/4] soc: imx: imx8mp-blk-ctrl: expose high performance PLL clock
+url:    https://github.com/intel-lab-lkp/linux/commits/Boris-Burkov/btrfs-data-block-group-size-classes/20221216-080728
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/6214dfa0a7191e4e7b4a24fb24ef9c9562001012.1671149056.git.boris%40bur.io
+patch subject: [PATCH v4 5/5] btrfs: dont use size classes for zoned file systems
 config: hexagon-randconfig-r041-20221215
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 98b13979fb05f3ed288a900deb843e7b27589e58)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9268d6a359fb6b528401673838da1e7f25f259c6
+        # https://github.com/intel-lab-lkp/linux/commit/3135559f7b49bc47764d6b113da52a68e8d5b4fa
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lucas-Stach/dt-bindings-soc-imx8mp-hsio-blk-ctrl-add-clock-cells/20221216-015014
-        git checkout 9268d6a359fb6b528401673838da1e7f25f259c6
+        git fetch --no-tags linux-review Boris-Burkov/btrfs-data-block-group-size-classes/20221216-080728
+        git checkout 3135559f7b49bc47764d6b113da52a68e8d5b4fa
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: devm_clk_hw_register
-   >>> referenced by imx8mp-blk-ctrl.c:161 (drivers/soc/imx/imx8mp-blk-ctrl.c:161)
-   >>>               drivers/soc/imx/imx8mp-blk-ctrl.o:(imx8mp_hsio_blk_ctrl_probe) in archive vmlinux.a
-   >>> referenced by imx8mp-blk-ctrl.c:161 (drivers/soc/imx/imx8mp-blk-ctrl.c:161)
-   >>>               drivers/soc/imx/imx8mp-blk-ctrl.o:(imx8mp_hsio_blk_ctrl_probe) in archive vmlinux.a
+   In file included from fs/btrfs/zoned.c:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from fs/btrfs/zoned.c:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from fs/btrfs/zoned.c:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> fs/btrfs/zoned.c:1371:11: error: no member named 'has_zns_device' in 'struct btrfs_block_group'
+                           cache->has_zns_device = true;
+                           ~~~~~  ^
+   6 warnings and 1 error generated.
+
+
+vim +1371 fs/btrfs/zoned.c
+
+  1273	
+  1274	int btrfs_load_block_group_zone_info(struct btrfs_block_group *cache, bool new)
+  1275	{
+  1276		struct btrfs_fs_info *fs_info = cache->fs_info;
+  1277		struct extent_map_tree *em_tree = &fs_info->mapping_tree;
+  1278		struct extent_map *em;
+  1279		struct map_lookup *map;
+  1280		struct btrfs_device *device;
+  1281		u64 logical = cache->start;
+  1282		u64 length = cache->length;
+  1283		int ret;
+  1284		int i;
+  1285		unsigned int nofs_flag;
+  1286		u64 *alloc_offsets = NULL;
+  1287		u64 *caps = NULL;
+  1288		u64 *physical = NULL;
+  1289		unsigned long *active = NULL;
+  1290		u64 last_alloc = 0;
+  1291		u32 num_sequential = 0, num_conventional = 0;
+  1292	
+  1293		if (!btrfs_is_zoned(fs_info))
+  1294			return 0;
+  1295	
+  1296		/* Sanity check */
+  1297		if (!IS_ALIGNED(length, fs_info->zone_size)) {
+  1298			btrfs_err(fs_info,
+  1299			"zoned: block group %llu len %llu unaligned to zone size %llu",
+  1300				  logical, length, fs_info->zone_size);
+  1301			return -EIO;
+  1302		}
+  1303	
+  1304		/* Get the chunk mapping */
+  1305		read_lock(&em_tree->lock);
+  1306		em = lookup_extent_mapping(em_tree, logical, length);
+  1307		read_unlock(&em_tree->lock);
+  1308	
+  1309		if (!em)
+  1310			return -EINVAL;
+  1311	
+  1312		map = em->map_lookup;
+  1313	
+  1314		cache->physical_map = kmemdup(map, map_lookup_size(map->num_stripes), GFP_NOFS);
+  1315		if (!cache->physical_map) {
+  1316			ret = -ENOMEM;
+  1317			goto out;
+  1318		}
+  1319	
+  1320		alloc_offsets = kcalloc(map->num_stripes, sizeof(*alloc_offsets), GFP_NOFS);
+  1321		if (!alloc_offsets) {
+  1322			ret = -ENOMEM;
+  1323			goto out;
+  1324		}
+  1325	
+  1326		caps = kcalloc(map->num_stripes, sizeof(*caps), GFP_NOFS);
+  1327		if (!caps) {
+  1328			ret = -ENOMEM;
+  1329			goto out;
+  1330		}
+  1331	
+  1332		physical = kcalloc(map->num_stripes, sizeof(*physical), GFP_NOFS);
+  1333		if (!physical) {
+  1334			ret = -ENOMEM;
+  1335			goto out;
+  1336		}
+  1337	
+  1338		active = bitmap_zalloc(map->num_stripes, GFP_NOFS);
+  1339		if (!active) {
+  1340			ret = -ENOMEM;
+  1341			goto out;
+  1342		}
+  1343	
+  1344		for (i = 0; i < map->num_stripes; i++) {
+  1345			bool is_sequential;
+  1346			struct blk_zone zone;
+  1347			struct btrfs_dev_replace *dev_replace = &fs_info->dev_replace;
+  1348			int dev_replace_is_ongoing = 0;
+  1349	
+  1350			device = map->stripes[i].dev;
+  1351			physical[i] = map->stripes[i].physical;
+  1352	
+  1353			if (device->bdev == NULL) {
+  1354				alloc_offsets[i] = WP_MISSING_DEV;
+  1355				continue;
+  1356			}
+  1357	
+  1358			is_sequential = btrfs_dev_is_sequential(device, physical[i]);
+  1359			if (is_sequential)
+  1360				num_sequential++;
+  1361			else
+  1362				num_conventional++;
+  1363	
+  1364			/*
+  1365			 * Consider a zone as active if we can allow any number of
+  1366			 * active zones.
+  1367			 */
+  1368			if (!device->zone_info->max_active_zones)
+  1369				__set_bit(i, active);
+  1370			else
+> 1371				cache->has_zns_device = true;
+  1372	
+  1373			if (!is_sequential) {
+  1374				alloc_offsets[i] = WP_CONVENTIONAL;
+  1375				continue;
+  1376			}
+  1377	
+  1378			/*
+  1379			 * This zone will be used for allocation, so mark this zone
+  1380			 * non-empty.
+  1381			 */
+  1382			btrfs_dev_clear_zone_empty(device, physical[i]);
+  1383	
+  1384			down_read(&dev_replace->rwsem);
+  1385			dev_replace_is_ongoing = btrfs_dev_replace_is_ongoing(dev_replace);
+  1386			if (dev_replace_is_ongoing && dev_replace->tgtdev != NULL)
+  1387				btrfs_dev_clear_zone_empty(dev_replace->tgtdev, physical[i]);
+  1388			up_read(&dev_replace->rwsem);
+  1389	
+  1390			/*
+  1391			 * The group is mapped to a sequential zone. Get the zone write
+  1392			 * pointer to determine the allocation offset within the zone.
+  1393			 */
+  1394			WARN_ON(!IS_ALIGNED(physical[i], fs_info->zone_size));
+  1395			nofs_flag = memalloc_nofs_save();
+  1396			ret = btrfs_get_dev_zone(device, physical[i], &zone);
+  1397			memalloc_nofs_restore(nofs_flag);
+  1398			if (ret == -EIO || ret == -EOPNOTSUPP) {
+  1399				ret = 0;
+  1400				alloc_offsets[i] = WP_MISSING_DEV;
+  1401				continue;
+  1402			} else if (ret) {
+  1403				goto out;
+  1404			}
+  1405	
+  1406			if (zone.type == BLK_ZONE_TYPE_CONVENTIONAL) {
+  1407				btrfs_err_in_rcu(fs_info,
+  1408		"zoned: unexpected conventional zone %llu on device %s (devid %llu)",
+  1409					zone.start << SECTOR_SHIFT,
+  1410					rcu_str_deref(device->name), device->devid);
+  1411				ret = -EIO;
+  1412				goto out;
+  1413			}
+  1414	
+  1415			caps[i] = (zone.capacity << SECTOR_SHIFT);
+  1416	
+  1417			switch (zone.cond) {
+  1418			case BLK_ZONE_COND_OFFLINE:
+  1419			case BLK_ZONE_COND_READONLY:
+  1420				btrfs_err(fs_info,
+  1421			"zoned: offline/readonly zone %llu on device %s (devid %llu)",
+  1422					  physical[i] >> device->zone_info->zone_size_shift,
+  1423					  rcu_str_deref(device->name), device->devid);
+  1424				alloc_offsets[i] = WP_MISSING_DEV;
+  1425				break;
+  1426			case BLK_ZONE_COND_EMPTY:
+  1427				alloc_offsets[i] = 0;
+  1428				break;
+  1429			case BLK_ZONE_COND_FULL:
+  1430				alloc_offsets[i] = caps[i];
+  1431				break;
+  1432			default:
+  1433				/* Partially used zone */
+  1434				alloc_offsets[i] =
+  1435						((zone.wp - zone.start) << SECTOR_SHIFT);
+  1436				__set_bit(i, active);
+  1437				break;
+  1438			}
+  1439		}
+  1440	
+  1441		if (num_sequential > 0)
+  1442			set_bit(BLOCK_GROUP_FLAG_SEQUENTIAL_ZONE, &cache->runtime_flags);
+  1443	
+  1444		if (num_conventional > 0) {
+  1445			/* Zone capacity is always zone size in emulation */
+  1446			cache->zone_capacity = cache->length;
+  1447			ret = calculate_alloc_pointer(cache, &last_alloc, new);
+  1448			if (ret) {
+  1449				btrfs_err(fs_info,
+  1450				"zoned: failed to determine allocation offset of bg %llu",
+  1451					  cache->start);
+  1452				goto out;
+  1453			} else if (map->num_stripes == num_conventional) {
+  1454				cache->alloc_offset = last_alloc;
+  1455				set_bit(BLOCK_GROUP_FLAG_ZONE_IS_ACTIVE, &cache->runtime_flags);
+  1456				goto out;
+  1457			}
+  1458		}
+  1459	
+  1460		switch (map->type & BTRFS_BLOCK_GROUP_PROFILE_MASK) {
+  1461		case 0: /* single */
+  1462			if (alloc_offsets[0] == WP_MISSING_DEV) {
+  1463				btrfs_err(fs_info,
+  1464				"zoned: cannot recover write pointer for zone %llu",
+  1465					physical[0]);
+  1466				ret = -EIO;
+  1467				goto out;
+  1468			}
+  1469			cache->alloc_offset = alloc_offsets[0];
+  1470			cache->zone_capacity = caps[0];
+  1471			if (test_bit(0, active))
+  1472				set_bit(BLOCK_GROUP_FLAG_ZONE_IS_ACTIVE, &cache->runtime_flags);
+  1473			break;
+  1474		case BTRFS_BLOCK_GROUP_DUP:
+  1475			if (map->type & BTRFS_BLOCK_GROUP_DATA) {
+  1476				btrfs_err(fs_info, "zoned: profile DUP not yet supported on data bg");
+  1477				ret = -EINVAL;
+  1478				goto out;
+  1479			}
+  1480			if (alloc_offsets[0] == WP_MISSING_DEV) {
+  1481				btrfs_err(fs_info,
+  1482				"zoned: cannot recover write pointer for zone %llu",
+  1483					physical[0]);
+  1484				ret = -EIO;
+  1485				goto out;
+  1486			}
+  1487			if (alloc_offsets[1] == WP_MISSING_DEV) {
+  1488				btrfs_err(fs_info,
+  1489				"zoned: cannot recover write pointer for zone %llu",
+  1490					physical[1]);
+  1491				ret = -EIO;
+  1492				goto out;
+  1493			}
+  1494			if (alloc_offsets[0] != alloc_offsets[1]) {
+  1495				btrfs_err(fs_info,
+  1496				"zoned: write pointer offset mismatch of zones in DUP profile");
+  1497				ret = -EIO;
+  1498				goto out;
+  1499			}
+  1500			if (test_bit(0, active) != test_bit(1, active)) {
+  1501				if (!btrfs_zone_activate(cache)) {
+  1502					ret = -EIO;
+  1503					goto out;
+  1504				}
+  1505			} else {
+  1506				if (test_bit(0, active))
+  1507					set_bit(BLOCK_GROUP_FLAG_ZONE_IS_ACTIVE,
+  1508						&cache->runtime_flags);
+  1509			}
+  1510			cache->alloc_offset = alloc_offsets[0];
+  1511			cache->zone_capacity = min(caps[0], caps[1]);
+  1512			break;
+  1513		case BTRFS_BLOCK_GROUP_RAID1:
+  1514		case BTRFS_BLOCK_GROUP_RAID0:
+  1515		case BTRFS_BLOCK_GROUP_RAID10:
+  1516		case BTRFS_BLOCK_GROUP_RAID5:
+  1517		case BTRFS_BLOCK_GROUP_RAID6:
+  1518			/* non-single profiles are not supported yet */
+  1519		default:
+  1520			btrfs_err(fs_info, "zoned: profile %s not yet supported",
+  1521				  btrfs_bg_type_to_raid_name(map->type));
+  1522			ret = -EINVAL;
+  1523			goto out;
+  1524		}
+  1525	
+  1526	out:
+  1527		if (cache->alloc_offset > fs_info->zone_size) {
+  1528			btrfs_err(fs_info,
+  1529				"zoned: invalid write pointer %llu in block group %llu",
+  1530				cache->alloc_offset, cache->start);
+  1531			ret = -EIO;
+  1532		}
+  1533	
+  1534		if (cache->alloc_offset > cache->zone_capacity) {
+  1535			btrfs_err(fs_info,
+  1536	"zoned: invalid write pointer %llu (larger than zone capacity %llu) in block group %llu",
+  1537				  cache->alloc_offset, cache->zone_capacity,
+  1538				  cache->start);
+  1539			ret = -EIO;
+  1540		}
+  1541	
+  1542		/* An extent is allocated after the write pointer */
+  1543		if (!ret && num_conventional && last_alloc > cache->alloc_offset) {
+  1544			btrfs_err(fs_info,
+  1545				  "zoned: got wrong write pointer in BG %llu: %llu > %llu",
+  1546				  logical, last_alloc, cache->alloc_offset);
+  1547			ret = -EIO;
+  1548		}
+  1549	
+  1550		if (!ret) {
+  1551			cache->meta_write_pointer = cache->alloc_offset + cache->start;
+  1552			if (test_bit(BLOCK_GROUP_FLAG_ZONE_IS_ACTIVE, &cache->runtime_flags)) {
+  1553				btrfs_get_block_group(cache);
+  1554				spin_lock(&fs_info->zone_active_bgs_lock);
+  1555				list_add_tail(&cache->active_bg_list,
+  1556					      &fs_info->zone_active_bgs);
+  1557				spin_unlock(&fs_info->zone_active_bgs_lock);
+  1558			}
+  1559		} else {
+  1560			kfree(cache->physical_map);
+  1561			cache->physical_map = NULL;
+  1562		}
+  1563		bitmap_free(active);
+  1564		kfree(physical);
+  1565		kfree(caps);
+  1566		kfree(alloc_offsets);
+  1567		free_extent_map(em);
+  1568	
+  1569		return ret;
+  1570	}
+  1571	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---aM9uy4v4WUgh3xAI
+--4K55xEb/RCBu4IuE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/hexagon 6.1.0-rc1 Kernel Configuration
+# Linux/hexagon 6.1.0-rc8 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 98b13979fb05f3ed288a900deb843e7b27589e58)"
 CONFIG_GCC_VERSION=0
@@ -123,6 +476,7 @@ CONFIG_LD_IS_LLD=y
 CONFIG_LLD_VERSION=160000
 CONFIG_RUST_IS_AVAILABLE=y
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
+CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
 CONFIG_TOOLS_SUPPORT_RELR=y
 CONFIG_CC_HAS_ASM_INLINE=y
 CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
@@ -1305,7 +1659,6 @@ CONFIG_INPUT_MC13783_PWRBUTTON=y
 # CONFIG_INPUT_GPIO_BEEPER is not set
 CONFIG_INPUT_GPIO_DECODER=y
 CONFIG_INPUT_GPIO_VIBRA=y
-CONFIG_INPUT_CPCAP_PWRBUTTON=y
 # CONFIG_INPUT_KXTJ9 is not set
 CONFIG_INPUT_REGULATOR_HAPTIC=y
 CONFIG_INPUT_TWL6040_VIBRA=y
@@ -2028,7 +2381,6 @@ CONFIG_MAX8925_POWER=y
 CONFIG_TEST_POWER=y
 CONFIG_CHARGER_ADP5061=y
 # CONFIG_BATTERY_ACT8945A is not set
-# CONFIG_BATTERY_CPCAP is not set
 # CONFIG_BATTERY_CW2015 is not set
 CONFIG_BATTERY_DS2760=y
 CONFIG_BATTERY_DS2780=y
@@ -2049,7 +2401,6 @@ CONFIG_BATTERY_MAX17040=y
 CONFIG_BATTERY_MAX17042=y
 # CONFIG_BATTERY_MAX1721X is not set
 CONFIG_CHARGER_PCF50633=y
-CONFIG_CHARGER_CPCAP=y
 CONFIG_CHARGER_MAX8903=y
 # CONFIG_CHARGER_LP8727 is not set
 # CONFIG_CHARGER_LP8788 is not set
@@ -2160,7 +2511,7 @@ CONFIG_SENSORS_MAX31730=y
 # CONFIG_SENSORS_MAX31760 is not set
 CONFIG_SENSORS_MAX6620=y
 # CONFIG_SENSORS_MAX6621 is not set
-CONFIG_SENSORS_MAX6639=y
+# CONFIG_SENSORS_MAX6639 is not set
 CONFIG_SENSORS_MAX6650=y
 CONFIG_SENSORS_MAX6697=y
 CONFIG_SENSORS_MAX31790=y
@@ -2507,7 +2858,7 @@ CONFIG_MFD_88PM805=y
 CONFIG_MFD_MAX14577=y
 # CONFIG_MFD_MAX77620 is not set
 # CONFIG_MFD_MAX77650 is not set
-CONFIG_MFD_MAX77686=y
+# CONFIG_MFD_MAX77686 is not set
 # CONFIG_MFD_MAX77693 is not set
 # CONFIG_MFD_MAX77714 is not set
 CONFIG_MFD_MAX77843=y
@@ -2521,7 +2872,7 @@ CONFIG_MFD_MT6397=y
 CONFIG_MFD_MENF21BMC=y
 # CONFIG_MFD_OCELOT is not set
 # CONFIG_EZX_PCAP is not set
-CONFIG_MFD_CPCAP=y
+# CONFIG_MFD_CPCAP is not set
 # CONFIG_MFD_NTXEC is not set
 # CONFIG_MFD_RETU is not set
 CONFIG_MFD_PCF50633=y
@@ -2533,7 +2884,7 @@ CONFIG_MFD_SY7636A=y
 CONFIG_MFD_RT5033=y
 CONFIG_MFD_RT5120=y
 # CONFIG_MFD_RC5T583 is not set
-CONFIG_MFD_SEC_CORE=y
+# CONFIG_MFD_SEC_CORE is not set
 # CONFIG_MFD_SI476X_CORE is not set
 CONFIG_MFD_SIMPLE_MFD_I2C=y
 CONFIG_MFD_SL28CPLD=y
@@ -2577,7 +2928,7 @@ CONFIG_MFD_WM8350_I2C=y
 CONFIG_MFD_STW481X=y
 # CONFIG_MFD_STM32_LPTIMER is not set
 CONFIG_MFD_STM32_TIMERS=y
-CONFIG_MFD_STMFX=y
+# CONFIG_MFD_STMFX is not set
 # CONFIG_MFD_WCD934X is not set
 # CONFIG_MFD_ATC260X_I2C is not set
 # CONFIG_MFD_KHADAS_MCU is not set
@@ -2598,7 +2949,6 @@ CONFIG_REGULATOR_ANATOP=y
 CONFIG_REGULATOR_AAT2870=y
 CONFIG_REGULATOR_BCM590XX=y
 CONFIG_REGULATOR_BD9571MWV=y
-CONFIG_REGULATOR_CPCAP=y
 # CONFIG_REGULATOR_DA9052 is not set
 CONFIG_REGULATOR_DA9055=y
 CONFIG_REGULATOR_DA9062=y
@@ -3722,7 +4072,7 @@ CONFIG_DMA_SUN6I=y
 # CONFIG_EP93XX_DMA is not set
 # CONFIG_IMG_MDC_DMA is not set
 CONFIG_INTEL_IDMA64=y
-CONFIG_INTEL_IOP_ADMA=y
+# CONFIG_INTEL_IOP_ADMA is not set
 CONFIG_K3_DMA=y
 # CONFIG_MCF_EDMA is not set
 CONFIG_MMP_PDMA=y
@@ -4327,7 +4677,6 @@ CONFIG_AD7923=y
 CONFIG_AT91_SAMA5D2_ADC=y
 CONFIG_BCM_IPROC_ADC=y
 # CONFIG_BERLIN2_ADC is not set
-# CONFIG_CPCAP_ADC is not set
 CONFIG_DA9150_GPADC=y
 # CONFIG_ENVELOPE_DETECTOR is not set
 CONFIG_MXS_LRADC_ADC=y
@@ -5047,7 +5396,7 @@ CONFIG_MULTIPLEXER=y
 CONFIG_MUX_ADG792A=y
 # CONFIG_MUX_ADGS1408 is not set
 CONFIG_MUX_GPIO=y
-CONFIG_MUX_MMIO=y
+# CONFIG_MUX_MMIO is not set
 # end of Multiplexer drivers
 
 CONFIG_PM_OPP=y
@@ -5925,8 +6274,9 @@ CONFIG_TEST_SCANF=y
 # CONFIG_TEST_BITMAP is not set
 CONFIG_TEST_UUID=y
 CONFIG_TEST_XARRAY=y
+CONFIG_TEST_MAPLE_TREE=y
 CONFIG_TEST_RHASHTABLE=y
-CONFIG_TEST_SIPHASH=y
+# CONFIG_TEST_SIPHASH is not set
 CONFIG_TEST_IDA=y
 # CONFIG_FIND_BIT_BENCHMARK is not set
 CONFIG_TEST_FIRMWARE=y
@@ -5961,4 +6311,4 @@ CONFIG_TEST_OBJAGG=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---aM9uy4v4WUgh3xAI--
+--4K55xEb/RCBu4IuE--
