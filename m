@@ -1,110 +1,59 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3C0EA5
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 11:00:34 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id C274A32007CF;
-	Sun, 18 Dec 2022 06:00:32 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 18 Dec 2022 06:00:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1671361232; x=1671447632; bh=CTcjQagkOe
-	Sa4wcIniJx2lfHjoYHcejOy4bVh6qCaDw=; b=FwI4rYy8XnVjMnL2uAAbtTiCW7
-	4bw+Cn6o3BaQMRFwo4GmDG6eSopP08OaYroIfhUEaxBrWwSaKkPhodB2x4vfx5m7
-	qJlpPDDaHR0lEyCPbQZQ7VHDI6TbYoGlZDZgkkbP624xPStes84BOPWrS0koQMyP
-	X8YP75f1uogpJtDwczYTR+AVr7FU5tzAAWe9lR2JLIkZCHhNzwOstiAB+83jDxTA
-	zp791Z2C27K1J7XnKQpBqIDTiULzzJx8wIxRbvy36cTtu1JoTZeZC9kPwxlJxtRo
-	XC7/Mvx6N3ODUN7TSZsBKfp+zk+mORWJkG3hb4Bg8KJMtf8EkbrpM4c+AJZQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1671361232; x=1671447632; bh=CTcjQagkOeSa4wcIniJx2lfHjoYH
-	cejOy4bVh6qCaDw=; b=CdBByvMP3+1RE1OMXB3vBRUEXpnudYUEiwL8lzlWPR5z
-	zm4ziLsk0PLej2Q1vAgasi8sAsasxtipMpz51+YwKFn53CwL34EozI0Qdvnbe1ac
-	8j6MGIOoU6O337RR22VYrm7Jq6yHTiTQ1GD+NEjWW59TNjiyMLgcOD9uEyxT6gWG
-	x1W9YWBnjSPT16Z6SeCV9kS5IeXQsbRvbl/5m5AxJZjGILgJ9plkWTguuXKBqjNr
-	WQQ/OqjxYzaFaalXXOF6b3s4XooP/cPMsbMQzOVsyvZXcoVSqKsf+ocNMuO8M3PU
-	c7pBH7UskgWnDzD1ewkC/Ej27nbUc3DETwpRcbnS4w==
-X-ME-Sender: <xms:z_KeY_KGduKnm3e2bikGvJ3ussGSEBp52ugTB4-6-T7UusEBRRLZLw>
-    <xme:z_KeYzL9wnTzyStnN9CWmKFWv0WKxBRhvKxqJWzMLGxymoSKcqo4rh77gaVdmK2Nb
-    -9J_rV53hyW1AnUBiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedugddvfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpedvudfhvdevleehveffueevueejieejudfgffetiedvhfefkeefuddvkeegvdfh
-    ueenucffohhmrghinheprghrmhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:z_KeY3sS-aMSC__eVRx3WUS5tDvE7R7VLLLCqZmB_0U3LPF88Y2C6A>
-    <xmx:z_KeY4bM7o9IpHAtMQSxkqu0qMOlPSA0309NHwacD9CuAsaVxc5BYg>
-    <xmx:z_KeY2Y9OdD4r3DU7o0I2c6Ym8lREpKdHvEsyV97ba99uSTVLHWfKw>
-    <xmx:0PKeY8kaCHN5mwRC3rONu_trKfBLyxcGDH9691mi2ql7ONzZmdBe3A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id BEB05B60086; Sun, 18 Dec 2022 06:00:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4788EEA5
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 11:12:36 +0000 (UTC)
+Received: from SOPL295.local (unknown [IPv6:2a01:e0a:a6a:5f90:5db3:4ad4:9c19:1e87])
+	(Authenticated sender: robert.jarzmik@free.fr)
+	by smtp5-g21.free.fr (Postfix) with ESMTPSA id 727245FF3F;
+	Sun, 18 Dec 2022 12:12:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+	s=smtp-20201208; t=1671361954;
+	bh=MZvIcX8wDL2sCtiXzzXYQSPZlAoLes/xpj9CwN5iLvk=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+	b=J78iWl+PtoFUbkd8XVnkgciX+SkysPVkDKde61bSoIKgB/N9v6y3KhrTB8UDChnFQ
+	 MrRxZtwO6dnk3OSZbfZ4307T6R1RUrN+25KMy8dWahYjD2y5WlOTl6Q4akxXNgNgV9
+	 yWCJRM8ABE5O8LEl0OBu2Uxe0bYQVDPfPd+xt6RqTJPxYLjzOIkgFgG+KeVtATnTSh
+	 ESkMdOdD3A1K7Gy07zjnxWy9G6UBiUtnVou2Z3kbUS5YDtQYLtajIdGh6bSYdBzC/3
+	 d/dTFQ7vBSRwrzicJAmGJEKL6t7B0Uis5zpDQTjuzhhXSG5uK4g11bOsDCpZ5gzzD8
+	 2oLRMBXOfrfXw==
+References: <20221215160747.2173998-1-arnd@kernel.org>
+ <m21qoxiw9t.fsf@free.fr>
+ <9a4d34d4-f78b-49f0-a57a-b80432ad652b@app.fastmail.com>
+User-agent: mu4e 1.8.11; emacs 28.1
+From: Robert Jarzmik <robert.jarzmik@free.fr>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>, Arnd Bergmann
+ <arnd@kernel.org>, Daniel Mack <daniel@zonque.org>, Haojian Zhuang
+ <haojian.zhuang@gmail.com>, soc@kernel.org, Russell King
+ <linux@armlinux.org.uk>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] ARM: pxa: fix building with clang
+Date: Sun, 18 Dec 2022 12:11:26 +0100
+In-reply-to: <9a4d34d4-f78b-49f0-a57a-b80432ad652b@app.fastmail.com>
+Message-ID: <m2wn6pge3z.fsf@free.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <9a4d34d4-f78b-49f0-a57a-b80432ad652b@app.fastmail.com>
-In-Reply-To: <m21qoxiw9t.fsf@free.fr>
-References: <20221215160747.2173998-1-arnd@kernel.org>
- <m21qoxiw9t.fsf@free.fr>
-Date: Sun, 18 Dec 2022 12:00:00 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Robert Jarzmik" <robert.jarzmik@free.fr>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Daniel Mack" <daniel@zonque.org>,
- "Haojian Zhuang" <haojian.zhuang@gmail.com>, soc@kernel.org,
- "Russell King" <linux@armlinux.org.uk>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] ARM: pxa: fix building with clang
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed
 
-On Sat, Dec 17, 2022, at 21:45, Robert Jarzmik wrote:
-> Arnd Bergmann <arnd@kernel.org> writes:
->
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> The integrated assembler in clang does not understand the xscale
->> specific mra/mar instructions:
->>
->> arch/arm/mach-pxa/pxa27x.c:136:15: error: unsupported 
->> architectural extension: xscale
->>         asm volatile(".arch_extension xscale\n\t"
->> arch/arm/mach-pxa/pxa27x.c:136:40: error: invalid instruction, 
->> did you mean: mcr, mla, mrc, mrs, msr?
->>         mra r2, r3, acc0
->>
->> Since these are coprocessor features, the same can be expressed 
->> using
->> mrrc/mcrr, so use that for builds with IAS.
-> Ok Arnd, but "mrrc" is an ARMv6 instruction if I'm not mistaken.
-> Yet PXA27X is an ARMv5 XScale instruction set IP.
->
-> Is that patch correct therefore, or is it just to make clang happy 
-> even if it's not correct ?
 
-According to
+"Arnd Bergmann" <arnd@arndb.de> writes:
+> "MRRC is available in ARMv6 and above, and E variants of ARMv5
+> excluding xP variants". I'm not entire sure what "xP variants"
+> means, but we do build for ARMv5E, so I think this is actually
+> correct.
+Ah yes, and XScale is ARMv5TE.
 
-https://developer.arm.com/documentation/dui0231/b/arm-instruction-reference/coprocessor-instructions/mrrc-and-mrrc2?lang=en
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
 
-"MRRC is available in ARMv6 and above, and E variants of ARMv5
-excluding xP variants". I'm not entire sure what "xP variants"
-means, but we do build for ARMv5E, so I think this is actually
-correct.
+Cheers.
 
-    Arnd
+--
+Robert
+
