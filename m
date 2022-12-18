@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF51C33CA
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64679C433F0;
-	Sun, 18 Dec 2022 16:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F9D33CA
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A10C433F0;
+	Sun, 18 Dec 2022 16:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671380035;
-	bh=To1zNpXD0KVKRva4FzasldUmR2gCcvIZD+yhSo2fdVQ=;
+	s=k20201202; t=1671380046;
+	bh=2GkK5YJnqS2K8+x4XjShdS4yf6xmc9uTVGnxYH8807A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=B7ZVhEn/56yleAd5THNPOAfPBv6U9fQa7u5xl0fcpWbRNLepqMO83xmD9fKJ/giap
-	 iZu0g6Wsb1a1QypVgUKRf92DLONGMLpadKAPX+axFgwyZu4FrN8oXZCjnea60nfSuO
-	 ziNzjym57IS5DwLpjhAhruETBgVIkSGRvnLtvj0FCOdGl3lWgxdOg/0fu0BH++m1E2
-	 tiGgrwN0+NCXHnF9NRSEI8pFoS/EgkvNzklwlkm+CmvmigHrYRbDqyN3HvsjDiWhOE
-	 OOqsSGAvZlJcdf3G6Tsbfo/C9RVPNH2fHi0lVLzR4lz1bQYWiZPLlLaaPOA1jZDOQ0
-	 b2kj2VE7Cp4XA==
+	b=dawR3EhkG0EznPUgT4O68/GM9dNsMT1yeeGOXbbZrEVYnTCyvrHvs3hks1SrG7Cim
+	 wEiKbgnZ+GJlhauKPyp0chtZfD3lhNKtMNpcy3IUsiP80vUMBOyMrcRyZASYFXCfIh
+	 28jt0SdnathGPwAiGgIMZDwwUPFsBSkyvaVZ0bkE+FKdlk6KQ1wHsldJdNdLGOXtE4
+	 EG0kNHZ1azaq8Ms6eeC76+i6l68UBoW35uIbwr8f7cuwsPmVTO7ETyRswC6txSBwKN
+	 3aJlUaJMOotA4p47XVWqUVBWzQRgigSy20IR0N+Iqp7RGMktMq32dNlK3sbyNW5mL/
+	 mUHaGzJXH36Ng==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -27,20 +27,20 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	Xinhui.Pan@amd.com,
 	airlied@gmail.com,
 	daniel@ffwll.ch,
+	evan.quan@amd.com,
 	ndesaulniers@google.com,
-	Hawking.Zhang@amd.com,
-	PengJu.Zhou@amd.com,
 	lijo.lazar@amd.com,
-	horace.chen@amd.com,
-	danijel.slivka@amd.com,
-	Victor.Zhao@amd.com,
-	victor.skvortsov@amd.com,
+	kevinyang.wang@amd.com,
+	kenneth.feng@amd.com,
+	darren.powell@amd.com,
+	li.ma@amd.com,
+	floridsleeves@gmail.com,
 	amd-gfx@lists.freedesktop.org,
 	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 16/46] drm/amdgpu: Fix type of second parameter in trans_msg() callback
-Date: Sun, 18 Dec 2022 11:12:14 -0500
-Message-Id: <20221218161244.930785-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 17/46] drm/amdgpu: Fix type of second parameter in odn_edit_dpm_table() callback
+Date: Sun, 18 Dec 2022 11:12:15 -0500
+Message-Id: <20221218161244.930785-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218161244.930785-1-sashal@kernel.org>
 References: <20221218161244.930785-1-sashal@kernel.org>
@@ -56,7 +56,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit f0d0f1087333714ee683cc134a95afe331d7ddd9 ]
+[ Upstream commit e4d0ef752081e7aa6ffb7ccac11c499c732a2e05 ]
 
 With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 indirect call targets are validated against the expected function
@@ -66,18 +66,23 @@ which manifests as either a kernel panic or thread getting killed. A
 proposed warning in clang aims to catch these at compile time, which
 reveals:
 
-  drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c:412:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
-          .trans_msg = xgpu_ai_mailbox_trans_msg,
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:3008:29: error: incompatible function pointer types initializing 'int (*)(void *, uint32_t, long *, uint32_t)' (aka 'int (*)(void *, unsigned int, long *, unsigned int)') with an expression of type 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *, uint32_t)' (aka 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+          .odn_edit_dpm_table      = smu_od_edit_dpm_table,
+                                     ^~~~~~~~~~~~~~~~~~~~~
   1 error generated.
 
-  drivers/gpu/drm/amd/amdgpu/mxgpu_nv.c:435:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
-          .trans_msg = xgpu_nv_mailbox_trans_msg,
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-  1 error generated.
+There are only two implementations of ->odn_edit_dpm_table() in 'struct
+amd_pm_funcs': smu_od_edit_dpm_table() and pp_odn_edit_dpm_table(). One
+has a second parameter type of 'enum PP_OD_DPM_TABLE_COMMAND' and the
+other uses 'u32'. Ultimately, smu_od_edit_dpm_table() calls
+->od_edit_dpm_table() from 'struct pptable_funcs' and
+pp_odn_edit_dpm_table() calls ->odn_edit_dpm_table() from 'struct
+pp_hwmgr_func', which both have a second parameter type of 'enum
+PP_OD_DPM_TABLE_COMMAND'.
 
-The type of the second parameter in the prototype should be 'enum
-idh_request' instead of 'u32'. Update it to clear up the warnings.
+Update the type parameter in both the prototype in 'struct amd_pm_funcs'
+and pp_odn_edit_dpm_table() to 'enum PP_OD_DPM_TABLE_COMMAND', which
+cleans up the warning.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 Reported-by: Sami Tolvanen <samitolvanen@google.com>
@@ -86,32 +91,38 @@ Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/include/kgd_pp_interface.h   | 3 ++-
+ drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
-index ce31d4fdee93..4af3610f4a82 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
-@@ -62,6 +62,8 @@ struct amdgpu_vf_error_buffer {
- 	uint64_t data[AMDGPU_VF_ERROR_ENTRY_SIZE];
- };
+diff --git a/drivers/gpu/drm/amd/include/kgd_pp_interface.h b/drivers/gpu/drm/amd/include/kgd_pp_interface.h
+index bac15c466733..6e27c8b16391 100644
+--- a/drivers/gpu/drm/amd/include/kgd_pp_interface.h
++++ b/drivers/gpu/drm/amd/include/kgd_pp_interface.h
+@@ -341,7 +341,8 @@ struct amd_pm_funcs {
+ 	int (*get_power_profile_mode)(void *handle, char *buf);
+ 	int (*set_power_profile_mode)(void *handle, long *input, uint32_t size);
+ 	int (*set_fine_grain_clk_vol)(void *handle, uint32_t type, long *input, uint32_t size);
+-	int (*odn_edit_dpm_table)(void *handle, uint32_t type, long *input, uint32_t size);
++	int (*odn_edit_dpm_table)(void *handle, enum PP_OD_DPM_TABLE_COMMAND type,
++				  long *input, uint32_t size);
+ 	int (*set_mp1_state)(void *handle, enum pp_mp1_state mp1_state);
+ 	int (*smu_i2c_bus_access)(void *handle, bool acquire);
+ 	int (*gfx_state_change_set)(void *handle, uint32_t state);
+diff --git a/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c b/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c
+index 321215003643..0f5930e797bd 100644
+--- a/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c
++++ b/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c
+@@ -924,7 +924,8 @@ static int pp_set_fine_grain_clk_vol(void *handle, uint32_t type, long *input, u
+ 	return hwmgr->hwmgr_func->set_fine_grain_clk_vol(hwmgr, type, input, size);
+ }
  
-+enum idh_request;
-+
- /**
-  * struct amdgpu_virt_ops - amdgpu device virt operations
-  */
-@@ -71,7 +73,8 @@ struct amdgpu_virt_ops {
- 	int (*req_init_data)(struct amdgpu_device *adev);
- 	int (*reset_gpu)(struct amdgpu_device *adev);
- 	int (*wait_reset)(struct amdgpu_device *adev);
--	void (*trans_msg)(struct amdgpu_device *adev, u32 req, u32 data1, u32 data2, u32 data3);
-+	void (*trans_msg)(struct amdgpu_device *adev, enum idh_request req,
-+			  u32 data1, u32 data2, u32 data3);
- };
+-static int pp_odn_edit_dpm_table(void *handle, uint32_t type, long *input, uint32_t size)
++static int pp_odn_edit_dpm_table(void *handle, enum PP_OD_DPM_TABLE_COMMAND type,
++				 long *input, uint32_t size)
+ {
+ 	struct pp_hwmgr *hwmgr = handle;
  
- /*
 -- 
 2.35.1
 
