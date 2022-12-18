@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AFB33CA
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2FADC433F0;
-	Sun, 18 Dec 2022 16:13:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93D733CA
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17538C433F1;
+	Sun, 18 Dec 2022 16:13:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671380016;
-	bh=74oED/ABmW0A+X9spJM7GV1K+ZhLhsueqGtIF4eopHE=;
+	s=k20201202; t=1671380018;
+	bh=HvhBXNttaTTCxIN6/c+CJYTilJvv/u7LgQqCqzGcXGE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TnCNjNS61mn+iRukovitPuoWYDMmSEBYF/s2dEOt/8aVc039U2ncU4RS0Rb4Pw8ba
-	 OKmqrziJQPr9nCfrBsELpeownwaCbkrZEmhY7AFEXWchbzfSvZCJl1PU83rSXNO8j1
-	 cG8moQhrY5MXBYwNy+gNxq6EkPi3CBG+wbXTzAcjgkl8VFpK54HfJMzEMoUqa/7Z4S
-	 ehRKBkwZnj1XG0fHhRD/Yidwy6QmhvKz4UmWx/WbNjv4MrtkeAR5XNtffO0q+Ltx8F
-	 Aqpaisdj5IeNWFyhhp47jkoEAiZDL1muwSi0p2EhjR6tG1OYgPYBcbPiUvW3e7o+wE
-	 oTYfd3dCcU8Gw==
+	b=r95QBPFdgrbnG7ueUrJSOKc8w5V2I1BF1ACmbCxIDrU+fJ/47yYfKp2pvIvlY0xwM
+	 hUre4Lxa/y5pBoRVMwFHNvMyfBcFjN3X4N6GcRIMQfHCSlfUO499EpPROpAXYTCtne
+	 KzvXTknLe6gbvhFlN7I8QTos4KSJgU5IzQdnNP8agOrf6bDfxrZ/6gNryLggcrNoKJ
+	 4kTO7l4fKinDmyywXuUQ/ntaAVucBJ7vMJT51WGZA2u9GJ1P3rng7kbtnqM1vqVWpA
+	 PND/0pfoee7jmfTuWLeTMkq7kzNCUoBBI6anSp/63aTsTG3N8qZZoGow4fld9YPb/E
+	 dSq38C/Oe3V8Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -22,19 +22,17 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	Kees Cook <keescook@chromium.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	t.sailer@alumni.ethz.ch,
 	davem@davemloft.net,
 	edumazet@google.com,
 	pabeni@redhat.com,
 	ndesaulniers@google.com,
-	mkl@pengutronix.de,
-	paul@xen.org,
-	f.fainelli@gmail.com,
-	colin.i.king@gmail.com,
+	linux-hams@vger.kernel.org,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 12/46] net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
-Date: Sun, 18 Dec 2022 11:12:10 -0500
-Message-Id: <20221218161244.930785-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 13/46] hamradio: baycom_epp: Fix return type of baycom_send_packet()
+Date: Sun, 18 Dec 2022 11:12:11 -0500
+Message-Id: <20221218161244.930785-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218161244.930785-1-sashal@kernel.org>
 References: <20221218161244.930785-1-sashal@kernel.org>
@@ -50,7 +48,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 63fe6ff674a96cfcfc0fa8df1051a27aa31c70b4 ]
+[ Upstream commit c5733e5b15d91ab679646ec3149e192996a27d5d ]
 
 With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 indirect call targets are validated against the expected function
@@ -60,39 +58,38 @@ which manifests as either a kernel panic or thread getting killed. A
 proposed warning in clang aims to catch these at compile time, which
 reveals:
 
-  drivers/net/ethernet/ti/netcp_core.c:1944:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = netcp_ndo_start_xmit,
-                                    ^~~~~~~~~~~~~~~~~~~~
+  drivers/net/hamradio/baycom_epp.c:1119:25: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .ndo_start_xmit      = baycom_send_packet,
+                                ^~~~~~~~~~~~~~~~~~
   1 error generated.
 
 ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of
-netcp_ndo_start_xmit() to match the prototype's to resolve the warning
-and CFI failure.
+'netdev_tx_t', not 'int'. Adjust the return type of baycom_send_packet()
+to match the prototype's to resolve the warning and CFI failure.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20221102160933.1601260-1-nathan@kernel.org
+Link: https://lore.kernel.org/r/20221102160610.1186145-1-nathan@kernel.org
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/ti/netcp_core.c | 2 +-
+ drivers/net/hamradio/baycom_epp.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
-index eda2961c0fe2..07bdeece1723 100644
---- a/drivers/net/ethernet/ti/netcp_core.c
-+++ b/drivers/net/ethernet/ti/netcp_core.c
-@@ -1262,7 +1262,7 @@ static int netcp_tx_submit_skb(struct netcp_intf *netcp,
- }
+diff --git a/drivers/net/hamradio/baycom_epp.c b/drivers/net/hamradio/baycom_epp.c
+index 6b6f28d5b8d5..f9d03f7b9101 100644
+--- a/drivers/net/hamradio/baycom_epp.c
++++ b/drivers/net/hamradio/baycom_epp.c
+@@ -758,7 +758,7 @@ static void epp_bh(struct work_struct *work)
+  * ===================== network driver interface =========================
+  */
  
- /* Submit the packet */
--static int netcp_ndo_start_xmit(struct sk_buff *skb, struct net_device *ndev)
-+static netdev_tx_t netcp_ndo_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+-static int baycom_send_packet(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t baycom_send_packet(struct sk_buff *skb, struct net_device *dev)
  {
- 	struct netcp_intf *netcp = netdev_priv(ndev);
- 	struct netcp_stats *tx_stats = &netcp->stats;
+ 	struct baycom_state *bc = netdev_priv(dev);
+ 
 -- 
 2.35.1
 
