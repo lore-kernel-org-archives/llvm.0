@@ -1,112 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F7E3D76
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F11A3C43392;
-	Sun, 18 Dec 2022 16:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671380613;
-	bh=j+XvRaeHGALL552/+G9Y1kGH0I+QWcqTXZJUhSX4eWc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GcJJ+hcvFPwfSJLwB95l0qLo2Ucd55esszkmIizwKa10VleulegRFIOLSzAZfx4iw
-	 t9t/kidAMemq7UCeLVaIc0A7fclMRbJwpJBpeHx0RUfCBn7lhNr3B4rT5Yg43z6k7K
-	 kMobxQmqm45JFdPrUNGKxs5dMkdg736UUFE0Vo/D750Mpo7LCBeqqz1vSg2+HlUgjd
-	 rsOapiKWV+lVUG0YgQE3k2gBwUWfdmMYNWb2ZFo20RdBK1zV3UJhZf+M070p3goNdv
-	 K1O3RahjNL9Z9vaJXoHBEtzm3ljq4S2NSg95vNdbp848oXZUOU71EKK0PLVJ+WCVP3
-	 x3dIl3SVyoTuw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Alexandra Winter <wintera@linux.ibm.com>,
-	Kees Cook <keescook@chromium.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Sasha Levin <sashal@kernel.org>,
-	wenjia@linux.ibm.com,
-	hca@linux.ibm.com,
-	gor@linux.ibm.com,
-	agordeev@linux.ibm.com,
-	ndesaulniers@google.com,
-	linux-s390@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.9 10/20] s390/lcs: Fix return type of lcs_start_xmit()
-Date: Sun, 18 Dec 2022 11:22:55 -0500
-Message-Id: <20221218162305.935724-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221218162305.935724-1-sashal@kernel.org>
-References: <20221218162305.935724-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318522CAB
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 18:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1671388899;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TVQJfj7LdwwVI0wmS7uFZTUrOFdpeUF8dY6dyjVak8o=;
+	b=aRZvRPkgcPBeJblWDE6faL3/AWV4rK+RkpEUVGjL60iNodMX2vz7yxaMJv+azJuao0tQYJ
+	80rCzWU+D+0RS6T0UEXyevJEtjm8hKV9HHD0nk9v4msr87Ana6HF3XVayTdIGmDwKGIyjD
+	xv6gcmo02XYZGmbux+4jtBuEJlhhMF0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-ir4pz4b4P72xCJX2i-4-Fg-1; Sun, 18 Dec 2022 13:41:35 -0500
+X-MC-Unique: ir4pz4b4P72xCJX2i-4-Fg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E1C13C0D858
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 18:41:35 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 277E4492C14;
+	Sun, 18 Dec 2022 18:41:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
+ mainline.kernel.org-clang, 057b40f4)
+Date: Sun, 18 Dec 2022 18:41:35 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <41903.122121813413500155@us-mta-141.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Nathan Chancellor <nathan@kernel.org>
+Hi, we tested your kernel and here are the results:
 
-[ Upstream commit bb16db8393658e0978c3f0d30ae069e878264fa3 ]
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-proposed warning in clang aims to catch these at compile time, which
-reveals:
 
-  drivers/s390/net/lcs.c:2090:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = lcs_start_xmit,
-                                    ^~~~~~~~~~~~~~
-  drivers/s390/net/lcs.c:2097:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = lcs_start_xmit,
-                                    ^~~~~~~~~~~~~~
+Kernel information:
+    Commit message: Merge tag 'acpi-6.2-rc1-2' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/rafael/linux-pm
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of lcs_start_xmit() to
-match the prototype's to resolve the warning and potential CFI failure,
-should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/63474
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/s390/net/lcs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6412162
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6412491
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6412499
 
-diff --git a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
-index 4d3caad7e981..3bd2241c13e8 100644
---- a/drivers/s390/net/lcs.c
-+++ b/drivers/s390/net/lcs.c
-@@ -1544,9 +1544,8 @@ lcs_txbuffer_cb(struct lcs_channel *channel, struct lcs_buffer *buffer)
- /**
-  * Packet transmit function called by network stack
-  */
--static int
--__lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
--		 struct net_device *dev)
-+static netdev_tx_t __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
-+				    struct net_device *dev)
- {
- 	struct lcs_header *header;
- 	int rc = NETDEV_TX_OK;
-@@ -1607,8 +1606,7 @@ __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
- 	return rc;
- }
- 
--static int
--lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct lcs_card *card;
- 	int rc;
--- 
-2.35.1
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rawhide] avc:  denied  { create } for  pid=3D60245 comm=3D"=
+systemd-coredum" scontext=3Dsystem_u:system_r:systemd_coredump_t:s0 tcontex=
+t=3Dsystem_u:system_r:systemd_coredump_t:s0 tclass=3Duser_namespace permiss=
+ive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2152137
+            Affected tests:
+                 aarch64 - LTP: openposix test suite
+                 aarch64 - Firmware test suite
+                 ppc64le - LTP: openposix test suite
+                  x86_64 - LTP: openposix test suite
+                  x86_64 (debug) - LTP: openposix test suite
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [rawhide] avc:  denied  { setpcap } for  pid=3D651 comm=3D"r=
+syslogd" capability=3D8  scontext=3Dsystem_u:system_r:syslogd_t:s0 tcontext=
+=3Dsystem_u:system_r:syslogd_t:s0 tclass=3Dcapability permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2149633
+            Affected tests:
+                 aarch64 - Reboot test
+                 ppc64le - Reboot test
+                  x86_64 - Reboot test
+                  x86_64 (debug) - Reboot test
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
