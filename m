@@ -1,39 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CAA33CA
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53521C433EF;
-	Sun, 18 Dec 2022 16:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0EB33CA
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:03:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3299BC433F0;
+	Sun, 18 Dec 2022 16:03:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671379388;
-	bh=UGuOnxnM7GPmefNXCCPZBE0jOJo+3GsKpHYT1te8Qhc=;
+	s=k20201202; t=1671379396;
+	bh=P6Vv4HWUGMloQZ7EzWAIoXrADR6KamKu1l8cHYJ5V+0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oP+8czzkgNR8RJkxPdHfE59EGgDaEgZY2xbsylV6QCHyRRG12WIjdwlcS1Mb/NLn9
-	 kNwXZe79rnMp4LoyyaA1IwLonHTtSNBgO+hhVhQz/bdkGAMDUBO/ufySp0SsQyUQmr
-	 HdqlUDpt0ha7uS7lZ16Hv5Jnab5iYbYVStThD15sbkLDOG6lIMlF8egaqAV/pHQc3M
-	 grSg5RH8vurSUIu6xGE88RKnCAevnFPlN2ISfziYxCeuPyoRrmOlWfpcL+EMcAdCuA
-	 IxclxO15vlBuIKhJGW50mZ2C6B+4svb6tUX1/A53hH2HNEnsIDYJCQQFLbhUIKWKP9
-	 B2VOvrqOA/QcQ==
+	b=p5ubiQMpqmZLYjN3NsZLSD+a3JuIEn0hKi5pBf1JJU3Bf7tM8aMYR5mY/cP+9uPPT
+	 pXw8icmn/cM7qrU7mVjdJ/8ID0vgExBb4dbxdWqq7FH8+0dtQc59+10NIGWXDaA3TO
+	 OIBuSHXAcabjfWWrFs+/28SU5V1FUgudp8+mKBBDikMnF4ektHnifzZfbZWE/hzIwA
+	 cmiFawI9Gq/naRnjPfvK04xjL8k3pPAZCKDIdzGGOSaKhCVU45dVUBlWztTTurTNxB
+	 DLOjbjdK4HkKwGPIFoO/sDwTeE89AJB79ok/NpUXJaHn3HrmSmlI7u6tkrM91jka/E
+	 JKfFkJdQedSdw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Nathan Chancellor <nathan@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
 	Kees Cook <keescook@chromium.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	khilman@baylibre.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
 	ndesaulniers@google.com,
-	dri-devel@lists.freedesktop.org,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
+	wintera@linux.ibm.com,
+	colin.i.king@gmail.com,
+	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 22/85] drm/meson: Fix return type of meson_encoder_cvbs_mode_valid()
-Date: Sun, 18 Dec 2022 11:00:39 -0500
-Message-Id: <20221218160142.925394-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 24/85] net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
+Date: Sun, 18 Dec 2022 11:00:41 -0500
+Message-Id: <20221218160142.925394-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218160142.925394-1-sashal@kernel.org>
 References: <20221218160142.925394-1-sashal@kernel.org>
@@ -49,7 +48,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 6c4e4d35203301906afb53c6d1e1302d4c793c05 ]
+[ Upstream commit 63fe6ff674a96cfcfc0fa8df1051a27aa31c70b4 ]
 
 With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 indirect call targets are validated against the expected function
@@ -59,45 +58,39 @@ which manifests as either a kernel panic or thread getting killed. A
 proposed warning in clang aims to catch these at compile time, which
 reveals:
 
-  drivers/gpu/drm/meson/meson_encoder_cvbs.c:211:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .mode_valid = meson_encoder_cvbs_mode_valid,
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/net/ethernet/ti/netcp_core.c:1944:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .ndo_start_xmit         = netcp_ndo_start_xmit,
+                                    ^~~~~~~~~~~~~~~~~~~~
   1 error generated.
 
-->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
-'enum drm_mode_status', not 'int'. Adjust the return type of
-meson_encoder_cvbs_mode_valid() to match the prototype's to resolve the
-warning and CFI failure.
+->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+'netdev_tx_t', not 'int'. Adjust the return type of
+netcp_ndo_start_xmit() to match the prototype's to resolve the warning
+and CFI failure.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Reported-by: Sami Tolvanen <samitolvanen@google.com>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20221102155242.1927166-1-nathan@kernel.org
+Link: https://lore.kernel.org/r/20221102160933.1601260-1-nathan@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_encoder_cvbs.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/ti/netcp_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/meson/meson_encoder_cvbs.c b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-index 5675bc2a92cf..3f73b211fa8e 100644
---- a/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-+++ b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-@@ -116,9 +116,10 @@ static int meson_encoder_cvbs_get_modes(struct drm_bridge *bridge,
- 	return i;
+diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
+index aba70bef4894..9eb9eaff4dc9 100644
+--- a/drivers/net/ethernet/ti/netcp_core.c
++++ b/drivers/net/ethernet/ti/netcp_core.c
+@@ -1261,7 +1261,7 @@ static int netcp_tx_submit_skb(struct netcp_intf *netcp,
  }
  
--static int meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
--					const struct drm_display_info *display_info,
--					const struct drm_display_mode *mode)
-+static enum drm_mode_status
-+meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
-+			      const struct drm_display_info *display_info,
-+			      const struct drm_display_mode *mode)
+ /* Submit the packet */
+-static int netcp_ndo_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++static netdev_tx_t netcp_ndo_start_xmit(struct sk_buff *skb, struct net_device *ndev)
  {
- 	if (meson_cvbs_get_mode(mode))
- 		return MODE_OK;
+ 	struct netcp_intf *netcp = netdev_priv(ndev);
+ 	struct netcp_stats *tx_stats = &netcp->stats;
 -- 
 2.35.1
 
