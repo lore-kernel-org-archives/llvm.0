@@ -1,44 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FB133CA
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:14:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2F50C433F0;
-	Sun, 18 Dec 2022 16:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C7D33CA
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D92C433EF;
+	Sun, 18 Dec 2022 16:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671380066;
-	bh=WeOOt14tkYeELBrtRWfPT2/q6Bw4lnOCH2VvxZFmpcY=;
+	s=k20201202; t=1671380200;
+	bh=5CbHv81krKt2Ox8i16GAQfwnmEMHtR3suRCtxHA+tNM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dzmje4hKaeQrYSHdhC+sIKTl3vsoWacmBh8tQRli0WQoXINR+Wqf7Mr1mMLxCBasE
-	 k7LqmV3sTY8OOk6+9M5zm2XyZVrSPCuQjwCxkfZkoL5t/VEjQrnrny3xTuP/U/5vb3
-	 AHaHONGG6Kfl8ILtoF53bllgO0bqNgEnNOVYWhGdXez2iqNqEbBM4ECR20H8dWU8zJ
-	 VxowEVeEmbTITMAuJfKzJnSADTunTJDwQm3aTlWokw/DCyvSstR4Hx5OphJ93pikv8
-	 RR1bOp1B2B4T8VdKu67+dmU6OxBKjVBQ8JRhZCsDheOuOjWjPeipBaK/zSUbYu/KxQ
-	 pSYuOEKPUL4mQ==
+	b=gPhhxJ7Kfh2BYiL5ic2aOJFYa3AzBA60yp6T49VoVZTX8mRs08nXCoNBMoxecJIxA
+	 BuNivenBo8IzTf0WWfmNx8b2IKTKVb40C5UBfbbyr4tMMpAe3bnnoBsgx0IHBztphC
+	 25i6J7OpiCyqUNtjSWioDtRrZRlut+4XGfJLWAks0Ee3E8v37FBcXrq0L3WF8JtDP+
+	 qUG4n7PBW4R6gWDcwSP81k4I7X+jvfRJGs2ugUjUAMSuMfmxbT3CJHnXsOeLno9HxK
+	 vpHtoiZH6BeCVa9ucUW+R2S8cSHiOlZxRxjJtoFrRdGPpH6EqE6CPnBl9snIHGDx//
+	 bQJyLuGf07SLQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Nathan Chancellor <nathan@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
 	Kees Cook <keescook@chromium.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	p.zabel@pengutronix.de,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	matthias.bgg@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
 	ndesaulniers@google.com,
-	dri-devel@lists.freedesktop.org,
-	linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
+	f.fainelli@gmail.com,
+	colin.i.king@gmail.com,
+	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 24/46] drm/mediatek: Fix return type of mtk_hdmi_bridge_mode_valid()
-Date: Sun, 18 Dec 2022 11:12:22 -0500
-Message-Id: <20221218161244.930785-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 10/39] net: ethernet: ti: Fix return type of netcp_ndo_start_xmit()
+Date: Sun, 18 Dec 2022 11:15:30 -0500
+Message-Id: <20221218161559.932604-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221218161244.930785-1-sashal@kernel.org>
-References: <20221218161244.930785-1-sashal@kernel.org>
+In-Reply-To: <20221218161559.932604-1-sashal@kernel.org>
+References: <20221218161559.932604-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +48,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 890d637523eec9d730e3885532fa1228ba678880 ]
+[ Upstream commit 63fe6ff674a96cfcfc0fa8df1051a27aa31c70b4 ]
 
 With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 indirect call targets are validated against the expected function
@@ -61,45 +58,39 @@ which manifests as either a kernel panic or thread getting killed. A
 proposed warning in clang aims to catch these at compile time, which
 reveals:
 
-  drivers/gpu/drm/mediatek/mtk_hdmi.c:1407:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .mode_valid = mtk_hdmi_bridge_mode_valid,
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/net/ethernet/ti/netcp_core.c:1944:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .ndo_start_xmit         = netcp_ndo_start_xmit,
+                                    ^~~~~~~~~~~~~~~~~~~~
   1 error generated.
 
-->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
-'enum drm_mode_status', not 'int'. Adjust the return type of
-mtk_hdmi_bridge_mode_valid() to match the prototype's to resolve the
-warning and CFI failure.
+->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+'netdev_tx_t', not 'int'. Adjust the return type of
+netcp_ndo_start_xmit() to match the prototype's to resolve the warning
+and CFI failure.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Reported-by: Sami Tolvanen <samitolvanen@google.com>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Link: https://lore.kernel.org/r/20221102160933.1601260-1-nathan@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/mediatek/mtk_hdmi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/ti/netcp_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediatek/mtk_hdmi.c
-index 3196189429bc..7613b0fa2be6 100644
---- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
-@@ -1203,9 +1203,10 @@ static enum drm_connector_status mtk_hdmi_detect(struct mtk_hdmi *hdmi)
- 	return mtk_hdmi_update_plugged_status(hdmi);
+diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
+index dc50e948195d..f145abb77a49 100644
+--- a/drivers/net/ethernet/ti/netcp_core.c
++++ b/drivers/net/ethernet/ti/netcp_core.c
+@@ -1262,7 +1262,7 @@ static int netcp_tx_submit_skb(struct netcp_intf *netcp,
  }
  
--static int mtk_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
--				      const struct drm_display_info *info,
--				      const struct drm_display_mode *mode)
-+static enum drm_mode_status
-+mtk_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
-+			   const struct drm_display_info *info,
-+			   const struct drm_display_mode *mode)
+ /* Submit the packet */
+-static int netcp_ndo_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++static netdev_tx_t netcp_ndo_start_xmit(struct sk_buff *skb, struct net_device *ndev)
  {
- 	struct mtk_hdmi *hdmi = hdmi_ctx_from_bridge(bridge);
- 	struct drm_bridge *next_bridge;
+ 	struct netcp_intf *netcp = netdev_priv(ndev);
+ 	struct netcp_stats *tx_stats = &netcp->stats;
 -- 
 2.35.1
 
