@@ -1,38 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93D733CA
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17538C433F1;
-	Sun, 18 Dec 2022 16:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF51C33CA
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64679C433F0;
+	Sun, 18 Dec 2022 16:13:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671380018;
-	bh=HvhBXNttaTTCxIN6/c+CJYTilJvv/u7LgQqCqzGcXGE=;
+	s=k20201202; t=1671380035;
+	bh=To1zNpXD0KVKRva4FzasldUmR2gCcvIZD+yhSo2fdVQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r95QBPFdgrbnG7ueUrJSOKc8w5V2I1BF1ACmbCxIDrU+fJ/47yYfKp2pvIvlY0xwM
-	 hUre4Lxa/y5pBoRVMwFHNvMyfBcFjN3X4N6GcRIMQfHCSlfUO499EpPROpAXYTCtne
-	 KzvXTknLe6gbvhFlN7I8QTos4KSJgU5IzQdnNP8agOrf6bDfxrZ/6gNryLggcrNoKJ
-	 4kTO7l4fKinDmyywXuUQ/ntaAVucBJ7vMJT51WGZA2u9GJ1P3rng7kbtnqM1vqVWpA
-	 PND/0pfoee7jmfTuWLeTMkq7kzNCUoBBI6anSp/63aTsTG3N8qZZoGow4fld9YPb/E
-	 dSq38C/Oe3V8Q==
+	b=B7ZVhEn/56yleAd5THNPOAfPBv6U9fQa7u5xl0fcpWbRNLepqMO83xmD9fKJ/giap
+	 iZu0g6Wsb1a1QypVgUKRf92DLONGMLpadKAPX+axFgwyZu4FrN8oXZCjnea60nfSuO
+	 ziNzjym57IS5DwLpjhAhruETBgVIkSGRvnLtvj0FCOdGl3lWgxdOg/0fu0BH++m1E2
+	 tiGgrwN0+NCXHnF9NRSEI8pFoS/EgkvNzklwlkm+CmvmigHrYRbDqyN3HvsjDiWhOE
+	 OOqsSGAvZlJcdf3G6Tsbfo/C9RVPNH2fHi0lVLzR4lz1bQYWiZPLlLaaPOA1jZDOQ0
+	 b2kj2VE7Cp4XA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Nathan Chancellor <nathan@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
 	Kees Cook <keescook@chromium.org>,
-	Jakub Kicinski <kuba@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
 	Sasha Levin <sashal@kernel.org>,
-	t.sailer@alumni.ethz.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
 	ndesaulniers@google.com,
-	linux-hams@vger.kernel.org,
-	netdev@vger.kernel.org,
+	Hawking.Zhang@amd.com,
+	PengJu.Zhou@amd.com,
+	lijo.lazar@amd.com,
+	horace.chen@amd.com,
+	danijel.slivka@amd.com,
+	Victor.Zhao@amd.com,
+	victor.skvortsov@amd.com,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 13/46] hamradio: baycom_epp: Fix return type of baycom_send_packet()
-Date: Sun, 18 Dec 2022 11:12:11 -0500
-Message-Id: <20221218161244.930785-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 16/46] drm/amdgpu: Fix type of second parameter in trans_msg() callback
+Date: Sun, 18 Dec 2022 11:12:14 -0500
+Message-Id: <20221218161244.930785-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221218161244.930785-1-sashal@kernel.org>
 References: <20221218161244.930785-1-sashal@kernel.org>
@@ -48,7 +56,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit c5733e5b15d91ab679646ec3149e192996a27d5d ]
+[ Upstream commit f0d0f1087333714ee683cc134a95afe331d7ddd9 ]
 
 With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
 indirect call targets are validated against the expected function
@@ -58,38 +66,52 @@ which manifests as either a kernel panic or thread getting killed. A
 proposed warning in clang aims to catch these at compile time, which
 reveals:
 
-  drivers/net/hamradio/baycom_epp.c:1119:25: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit      = baycom_send_packet,
-                                ^~~~~~~~~~~~~~~~~~
+  drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c:412:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+          .trans_msg = xgpu_ai_mailbox_trans_msg,
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~
   1 error generated.
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of baycom_send_packet()
-to match the prototype's to resolve the warning and CFI failure.
+  drivers/gpu/drm/amd/amdgpu/mxgpu_nv.c:435:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+          .trans_msg = xgpu_nv_mailbox_trans_msg,
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
+
+The type of the second parameter in the prototype should be 'enum
+idh_request' instead of 'u32'. Update it to clear up the warnings.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20221102160610.1186145-1-nathan@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hamradio/baycom_epp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/hamradio/baycom_epp.c b/drivers/net/hamradio/baycom_epp.c
-index 6b6f28d5b8d5..f9d03f7b9101 100644
---- a/drivers/net/hamradio/baycom_epp.c
-+++ b/drivers/net/hamradio/baycom_epp.c
-@@ -758,7 +758,7 @@ static void epp_bh(struct work_struct *work)
-  * ===================== network driver interface =========================
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
+index ce31d4fdee93..4af3610f4a82 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
+@@ -62,6 +62,8 @@ struct amdgpu_vf_error_buffer {
+ 	uint64_t data[AMDGPU_VF_ERROR_ENTRY_SIZE];
+ };
+ 
++enum idh_request;
++
+ /**
+  * struct amdgpu_virt_ops - amdgpu device virt operations
   */
+@@ -71,7 +73,8 @@ struct amdgpu_virt_ops {
+ 	int (*req_init_data)(struct amdgpu_device *adev);
+ 	int (*reset_gpu)(struct amdgpu_device *adev);
+ 	int (*wait_reset)(struct amdgpu_device *adev);
+-	void (*trans_msg)(struct amdgpu_device *adev, u32 req, u32 data1, u32 data2, u32 data3);
++	void (*trans_msg)(struct amdgpu_device *adev, enum idh_request req,
++			  u32 data1, u32 data2, u32 data3);
+ };
  
--static int baycom_send_packet(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t baycom_send_packet(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct baycom_state *bc = netdev_priv(dev);
- 
+ /*
 -- 
 2.35.1
 
