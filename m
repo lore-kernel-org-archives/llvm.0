@@ -1,132 +1,103 @@
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A5633CA
-	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 15:36:41 +0000 (UTC)
-Received: by mail-io1-f70.google.com with SMTP id w18-20020a5d9cd2000000b006e32359d7fcso2953918iow.15
-        for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 07:36:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2UDRP+rqHDtdAflIvbj6H9tsEQH1tc5gZEcOVjsrbO0=;
-        b=EDJ6Vz7y+Gv+Tj0M+B2TyIHoSBuZHx5xjgJMIEiKDhwKrGEp7yfqbJ/PPoX47oD9uS
-         F4NrDKHEaT4O/eK0fLovdv1T7u+neOS7EUjDDyF9/h4fHWEqx0i4PDjkd/8C/KxWrs5v
-         pSFhYrFF57tzNbr66rIYCg2tm7gFSv+hJo7lxLcJEVMVlsPOuNEa8lVRKtAY9QCvTJEx
-         bG0zlu/tn/cljv3bQNmk76Py5ad9z4jtg0ns+7nuYzG44kxxMvthAR1tJrCF8S9hchE4
-         B2gOOS2eTerrN0ktz2UkXkoMPgLQzyPihRMZiGAYA9FeRLg8v1RuVMCMq/HYmniU2NX8
-         U6PQ==
-X-Gm-Message-State: ANoB5pmypGDCS7PmIDBHeXzvvZbDX/aBe1dh+iekOfsAdSBbWM/jf5SX
-	l3Gn0ac0zstnzmCY6fHYA/3MaowOQDJWfdu4eiBE+ailyBIg
-X-Google-Smtp-Source: AA0mqf4PGPr/gv0WcsIAWq+z4iEzp0kGhKxHD1sNzeEiuKVmH0phnSCjokl2zccdegD6jNVtSm/c9yO8cJNOiQBrfQroBnPrpbYt
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CAA33CA
+	for <llvm@lists.linux.dev>; Sun, 18 Dec 2022 16:03:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53521C433EF;
+	Sun, 18 Dec 2022 16:03:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1671379388;
+	bh=UGuOnxnM7GPmefNXCCPZBE0jOJo+3GsKpHYT1te8Qhc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=oP+8czzkgNR8RJkxPdHfE59EGgDaEgZY2xbsylV6QCHyRRG12WIjdwlcS1Mb/NLn9
+	 kNwXZe79rnMp4LoyyaA1IwLonHTtSNBgO+hhVhQz/bdkGAMDUBO/ufySp0SsQyUQmr
+	 HdqlUDpt0ha7uS7lZ16Hv5Jnab5iYbYVStThD15sbkLDOG6lIMlF8egaqAV/pHQc3M
+	 grSg5RH8vurSUIu6xGE88RKnCAevnFPlN2ISfziYxCeuPyoRrmOlWfpcL+EMcAdCuA
+	 IxclxO15vlBuIKhJGW50mZ2C6B+4svb6tUX1/A53hH2HNEnsIDYJCQQFLbhUIKWKP9
+	 B2VOvrqOA/QcQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Sasha Levin <sashal@kernel.org>,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	khilman@baylibre.com,
+	ndesaulniers@google.com,
+	dri-devel@lists.freedesktop.org,
+	linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.1 22/85] drm/meson: Fix return type of meson_encoder_cvbs_mode_valid()
+Date: Sun, 18 Dec 2022 11:00:39 -0500
+Message-Id: <20221218160142.925394-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221218160142.925394-1-sashal@kernel.org>
+References: <20221218160142.925394-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:85ab:0:b0:389:fed9:fff2 with SMTP id
- d40-20020a0285ab000000b00389fed9fff2mr20415156jai.123.1671377800186; Sun, 18
- Dec 2022 07:36:40 -0800 (PST)
-Date: Sun, 18 Dec 2022 07:36:40 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000010d44905f01bf8e7@google.com>
-Subject: [syzbot] [ntfs3?] BUG: unable to handle kernel NULL pointer
- dereference in ntfs_sparse_cluster
-From: syzbot <syzbot+deb631beeb93bdb2df4c@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hello,
+From: Nathan Chancellor <nathan@kernel.org>
 
-syzbot found the following issue on:
+[ Upstream commit 6c4e4d35203301906afb53c6d1e1302d4c793c05 ]
 
-HEAD commit:    e2ca6ba6ba01 Merge tag 'mm-stable-2022-12-13' of git://git..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=122e9bc7880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=276eb8ff64eb2c27
-dashboard link: https://syzkaller.appspot.com/bug?extid=deb631beeb93bdb2df4c
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d8601b880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a09c93880000
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8aad47431ccd/disk-e2ca6ba6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/382636835ba9/vmlinux-e2ca6ba6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ac62c9f6a7cf/bzImage-e2ca6ba6.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2d4fa4df0bbf/mount_0.gz
+  drivers/gpu/drm/meson/meson_encoder_cvbs.c:211:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .mode_valid = meson_encoder_cvbs_mode_valid,
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+deb631beeb93bdb2df4c@syzkaller.appspotmail.com
+->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
+'enum drm_mode_status', not 'int'. Adjust the return type of
+meson_encoder_cvbs_mode_valid() to match the prototype's to resolve the
+warning and CFI failure.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor instruction fetch in kernel mode
-#PF: error_code(0x0010) - not-present page
-PGD 217c0067 P4D 217c0067 PUD 1e4e8067 PMD 0 
-Oops: 0010 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5302 Comm: syz-executor244 Not tainted 6.1.0-syzkaller-09941-ge2ca6ba6ba01 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-RSP: 0018:ffffc90003c1fca8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: ffff8880268b8000
-RDX: 0000000000000000 RSI: ffffea0001c79440 RDI: ffff888075eb0478
-RBP: ffffea0001c79440 R08: ffffffff81bc12ab R09: fffff9400038f289
-R10: fffff9400038f289 R11: 1ffffd400038f288 R12: 0000000000000000
-R13: 0000000000010000 R14: 1ffffd400038f288 R15: ffffffffffffffff
-FS:  00007f45fe7d4700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000002986e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ntfs_sparse_cluster+0x767/0xa90 fs/ntfs3/file.c:335
- ntfs_fallocate+0xbc6/0xfb0 fs/ntfs3/file.c:727
- vfs_fallocate+0x515/0x670 fs/open.c:323
- ksys_fallocate fs/open.c:346 [inline]
- __do_sys_fallocate fs/open.c:354 [inline]
- __se_sys_fallocate fs/open.c:352 [inline]
- __x64_sys_fallocate+0xb9/0x100 fs/open.c:352
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4606a484c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f45fe7d4308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007f4606aec6f8 RCX: 00007f4606a484c9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
-RBP: 00007f4606aec6f0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000010000 R11: 0000000000000246 R12: 00007f4606aec6fc
-R13: 00007f4606ab93d8 R14: 0030656c69662f2e R15: 0000000000022000
- </TASK>
-Modules linked in:
-CR2: 0000000000000000
----[ end trace 0000000000000000 ]---
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-RSP: 0018:ffffc90003c1fca8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: ffff8880268b8000
-RDX: 0000000000000000 RSI: ffffea0001c79440 RDI: ffff888075eb0478
-RBP: ffffea0001c79440 R08: ffffffff81bc12ab R09: fffff9400038f289
-R10: fffff9400038f289 R11: 1ffffd400038f288 R12: 0000000000000000
-R13: 0000000000010000 R14: 1ffffd400038f288 R15: ffffffffffffffff
-FS:  00007f45fe7d4700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 000000002986e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20221102155242.1927166-1-nathan@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/gpu/drm/meson/meson_encoder_cvbs.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/gpu/drm/meson/meson_encoder_cvbs.c b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
+index 5675bc2a92cf..3f73b211fa8e 100644
+--- a/drivers/gpu/drm/meson/meson_encoder_cvbs.c
++++ b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
+@@ -116,9 +116,10 @@ static int meson_encoder_cvbs_get_modes(struct drm_bridge *bridge,
+ 	return i;
+ }
+ 
+-static int meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
+-					const struct drm_display_info *display_info,
+-					const struct drm_display_mode *mode)
++static enum drm_mode_status
++meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
++			      const struct drm_display_info *display_info,
++			      const struct drm_display_mode *mode)
+ {
+ 	if (meson_cvbs_get_mode(mode))
+ 		return MODE_OK;
+-- 
+2.35.1
+
