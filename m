@@ -1,209 +1,109 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF8F7E
-	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 10:37:50 +0000 (UTC)
-Received: by mail-io1-f72.google.com with SMTP id o22-20020a6b5a16000000b006e2d564944aso3851892iob.7
-        for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 02:37:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MN2EWpHYQFYc/HKpaCBVTVic/neMpUMPorWKL36xRm0=;
-        b=DYrt5nvS8j3MpLOTc1yaIzWAL2R6fuTRFb1mWc4YYLE86fZBYwI+J1U8sC2Gowmq0C
-         /Divt5hPcNLmgaoQZM5A97ABysGnFtc9+IqhfyqinMGCs0ZvVwKFjEferEO7piC2+lQn
-         JqvNjzMZj6yVdVytyKT8sB8rVuYmAE69LMrDABkGhWl8cuyAruuPwGn7xgxb/ewm1aBg
-         NMoJxmAQcbF1mLd5J208W8ItgE+UOStt+jZ8KQnJsTPdGZl8kU4C02/fZu5cIjOeHzBV
-         mkIM9SdP9Yfh6zzamKqegkFNay0nXrxBbq0fUzdR7Fn3QLNd1ALWjDUIFt3SycLwgI3H
-         wW0A==
-X-Gm-Message-State: ANoB5pnhJRK2dTHwNO59ZVzc33Vi0gy2SgdkD6uI5FBH2rWyQuoudBIy
-	5I4cphGX2uz5utWp7n5aUfQQ+VFdQOkcNmTTCcD1wSY2ZOxI
-X-Google-Smtp-Source: AA0mqf5Upz7iDtfNWEC9L4RCQ9Ut4BwhupkP6RBCswjTvfwiQz1SbZR9ZTOSJqf+Q/DlG6Cp2xvGk4S/u2pdv5hydzPdQ/bHWTKv
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B507E
+	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 10:40:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=IFPbzfUdrDLPsI6Yh+be7PnQrtmthWZZnt5l8XeTNK8=; b=WksacInf7Ol45SQs7nMlR4j8Yy
+	ePN7+1E4lzz+ySEpmFHlDJU3/HzJQtQVqhDOSs//Ud4ViZ8UTtOv8kw24I2DTRJ/mnuBjH7bPsfl/
+	hESqLCr18tpGKf4F4Ovg5vxJRUktTGNqlxRfIz/yvzw+ZV1dRqnRw9MbVuFlj1/2ToT5WA/OCPv4O
+	ltyOn8cuvIwHfbspMuS9dUDCRZjL2aXuhxQq9maiz9yyJYgLxyyccA10rlRCfhczSxcBr0uZiAmB2
+	Le8I0NMnMRliDR7/Mg8xG1fRT7hHpcy8xCkNCVrv0Cd6zEf5ufuT7KrRoy/LRYYmj1vU027Vm/wux
+	H75Z0zHQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1p7DZQ-000cjH-9m; Mon, 19 Dec 2022 10:40:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A36223001D6;
+	Mon, 19 Dec 2022 11:40:19 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 81968202FE504; Mon, 19 Dec 2022 11:40:19 +0100 (CET)
+Date: Mon, 19 Dec 2022 11:40:19 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dan Li <ashimida.1990@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Marco Elver <elver@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Song Liu <song@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Aaron Tomlin <atomlin@redhat.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
+Message-ID: <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a88e:0:b0:38a:6579:50e6 with SMTP id
- l14-20020a02a88e000000b0038a657950e6mr8688128jam.185.1671446269433; Mon, 19
- Dec 2022 02:37:49 -0800 (PST)
-Date: Mon, 19 Dec 2022 02:37:49 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000269f9a05f02be9d8@google.com>
-Subject: [syzbot] KASAN: slab-out-of-bounds Write in copy_verifier_state
-From: syzbot <syzbot+59af7bf76d795311da8c@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219061758.23321-1-ashimida.1990@gmail.com>
 
-Hello,
+On Sun, Dec 18, 2022 at 10:17:58PM -0800, Dan Li wrote:
 
-syzbot found the following issue on:
+> In the compiler part[4], there are some differences from Sami's
+> implementation[3], mainly including:
+> 
+> 1. When a typeid mismatch is detected, the cfi_check_failed function
+>    will be called instead of the brk instruction. This function needs
+>    to be implemented by the compiler user.
+>    If there are user mode programs or other systems that want to use
+>    this feature, it may be more convenient to use a callback (so this
+>    compilation option is set to -fsanitize=cfi instead of kcfi).
 
-HEAD commit:    041fae9c105a Merge tag 'f2fs-for-6.2-rc1' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=136be5d0480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2f3d9d232a3cac5
-dashboard link: https://syzkaller.appspot.com/bug?extid=59af7bf76d795311da8c
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1650d477880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1305f993880000
+This is not going to be acceptible for x86_64.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e228bf558f91/disk-041fae9c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/11eeb90801b7/vmlinux-041fae9c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1f9651f3b5bd/bzImage-041fae9c.xz
+> 2. A reserved typeid (such as 0x0U on the aarch64 platform) is always
+>    inserted in front of functions that should not be called indirectly.
+>    Functions that can be called indirectly will not use this hash value,
+>    which prevents instructions/data before the function from being used
+>    as a typeid by an attacker.
+> 
+> 3. Some bits are ignored in the typeid to avoid conflicts between the
+>    typeid and the instruction set of a specific platform, thereby
+>    preventing an attacker from bypassing the CFI check by using the
+>    instruction as a typeid, such as on the aarch64 platform:
+>    * If the following instruction sequence exists:
+> 	  400620:       a9be7bfd        stp     x29, x30, [sp, #-32]!
+> 	  400624:       910003fd        mov     x29, sp
+> 	  400628:       f9000bf3        str     x19, [sp, #16]
+>    * If the expected typeid of the indirect call is exactly 0x910003fd,
+>      the attacker can jump to the next instruction position of any
+>      "mov x29,sp" instruction (such as 0x400628 here).
+> 
+> 4. Insert a symbol __cfi_<function> before each function's typeid,
+>    which may be helpful for fine-grained KASLR implementations (or not?).
+> 
+> 5. The current implementation of gcc only supports the aarch64 platform.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+59af7bf76d795311da8c@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-out-of-bounds in copy_array kernel/bpf/verifier.c:1072 [inline]
-BUG: KASAN: slab-out-of-bounds in copy_verifier_state+0x130/0xbe0 kernel/bpf/verifier.c:1250
-Write of size 80 at addr ffff888022c71000 by task syz-executor186/5067
-
-CPU: 0 PID: 5067 Comm: syz-executor186 Not tainted 6.1.0-syzkaller-10971-g041fae9c105a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2d0 lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:306
- print_report+0x107/0x220 mm/kasan/report.c:417
- kasan_report+0x139/0x170 mm/kasan/report.c:517
- kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
- memcpy+0x3c/0x60 mm/kasan/shadow.c:66
- copy_array kernel/bpf/verifier.c:1072 [inline]
- copy_verifier_state+0x130/0xbe0 kernel/bpf/verifier.c:1250
- pop_stack kernel/bpf/verifier.c:1314 [inline]
- do_check+0x8e51/0x107b0 kernel/bpf/verifier.c:14031
- do_check_common+0x909/0x1800 kernel/bpf/verifier.c:16289
- do_check_main kernel/bpf/verifier.c:16352 [inline]
- bpf_check+0x107e2/0x16170 kernel/bpf/verifier.c:16936
- bpf_prog_load+0x1306/0x1be0 kernel/bpf/syscall.c:2619
- __sys_bpf+0x396/0x6d0 kernel/bpf/syscall.c:4979
- __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
- __x64_sys_bpf+0x78/0x90 kernel/bpf/syscall.c:5081
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff1fb190c29
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffeaae55678 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff1fb190c29
-RDX: 0000000000000048 RSI: 0000000020000200 RDI: 0000000000000005
-RBP: 00007ff1fb154dd0 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007ff1fb154e60
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-Allocated by task 5067:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x4c/0x70 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- __kasan_krealloc+0xbf/0xf0 mm/kasan/common.c:439
- kasan_krealloc include/linux/kasan.h:231 [inline]
- __do_krealloc mm/slab_common.c:1361 [inline]
- krealloc+0xb2/0x110 mm/slab_common.c:1398
- push_jmp_history kernel/bpf/verifier.c:2592 [inline]
- is_state_visited kernel/bpf/verifier.c:13552 [inline]
- do_check+0x9433/0x107b0 kernel/bpf/verifier.c:13752
- do_check_common+0x909/0x1800 kernel/bpf/verifier.c:16289
- do_check_main kernel/bpf/verifier.c:16352 [inline]
- bpf_check+0x107e2/0x16170 kernel/bpf/verifier.c:16936
- bpf_prog_load+0x1306/0x1be0 kernel/bpf/syscall.c:2619
- __sys_bpf+0x396/0x6d0 kernel/bpf/syscall.c:4979
- __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
- __x64_sys_bpf+0x78/0x90 kernel/bpf/syscall.c:5081
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff888022c71000
- which belongs to the cache kmalloc-96 of size 96
-The buggy address is located 0 bytes inside of
- 96-byte region [ffff888022c71000, ffff888022c71060)
-
-The buggy address belongs to the physical page:
-page:ffffea00008b1c40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x22c71
-ksm flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff888012841780 ffffea0000a6d880 0000000000000003
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY), pid 4437, tgid 4437 (udevd), ts 26581643327, free_ts 26581082061
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
- alloc_slab_page+0xbd/0x190 mm/slub.c:1851
- allocate_slab+0x5e/0x3c0 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0x7f4/0xeb0 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- __kmem_cache_alloc_node+0x25b/0x340 mm/slub.c:3491
- __do_kmalloc_node mm/slab_common.c:967 [inline]
- __kmalloc+0x9e/0x190 mm/slab_common.c:981
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- tomoyo_encode2 security/tomoyo/realpath.c:45 [inline]
- tomoyo_encode+0x26f/0x540 security/tomoyo/realpath.c:80
- tomoyo_realpath_from_path+0x5ae/0x5f0 security/tomoyo/realpath.c:283
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_perm+0x280/0x680 security/tomoyo/file.c:822
- security_inode_getattr+0xc0/0x140 security/security.c:1375
- vfs_getattr fs/stat.c:161 [inline]
- vfs_statx+0x198/0x4b0 fs/stat.c:236
- vfs_fstatat fs/stat.c:270 [inline]
- __do_sys_newfstatat fs/stat.c:440 [inline]
- __se_sys_newfstatat+0x104/0x7b0 fs/stat.c:434
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare+0x751/0x780 mm/page_alloc.c:1496
- free_unref_page_prepare mm/page_alloc.c:3369 [inline]
- free_unref_page+0x19/0x4c0 mm/page_alloc.c:3464
- free_pipe_info+0x302/0x380 fs/pipe.c:851
- put_pipe_info fs/pipe.c:711 [inline]
- pipe_release+0x232/0x310 fs/pipe.c:734
- __fput+0x3ba/0x880 fs/file_table.c:320
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x134/0x160 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x2e/0x60 kernel/entry/common.c:296
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888022c70f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888022c70f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff888022c71000: 00 00 fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                         ^
- ffff888022c71080: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
- ffff888022c71100: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+What, if any, are the plans for x86_64 support?
