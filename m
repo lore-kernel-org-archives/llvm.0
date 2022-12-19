@@ -1,115 +1,156 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA771C02
-	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 13:32:10 +0000 (UTC)
-Received: by mail-pg1-f170.google.com with SMTP id 62so6130246pgb.13
-        for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 05:32:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dBdUZZuJPOmpy2Xr6QADuWry9xil1hvmnye/zX2ZeGs=;
-        b=fudn22QQR0cZNc/3RoQpxRlTLjwWSHPdJ3HbEt/WxpuONQEkIQnkWpBlerF9kEPodJ
-         nHhQFOykKEx6IwR5/KfRtAGdVyduWE4KKnkENOc2szemL+pJqARz2salHLoW95MwEbdA
-         4l8C9DgDXblVaaqJ7qI9X4RGT4ChxV2bMC1ENtWvdqwdBfsedCwcpXE4H+LW+wNxHezu
-         PrVxhEJl0r5aoDk7qfpvB3XMyrRfWqp0XjyDX+nwKDJBCaYRg3q9T6oErlC4ykTpLMIo
-         lmb8XMScdS8JKQTabKQpf5aytupGC3t56WCAiBDQ8xriUGgm665URRddp66Cq+IxHZ93
-         WjWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dBdUZZuJPOmpy2Xr6QADuWry9xil1hvmnye/zX2ZeGs=;
-        b=6OPmOxbcgqMNn0bqTgVMf3asWN02FQj3QnVApRpdlbwf1IlLMarRPDMrevE/GRUO7T
-         eVizPDlmDctbyc/pWJxJBnYgCN1LB689q7gY1nDPfvV7ZA/pqonJxSk33lNVWNFEchFZ
-         crilVD7lwofW6msmabHa8VJ85bY1dzaHwjGfLpEvm5OwqVYmQvXkkOS7P7948FmY0pUx
-         jl8BOmf9T3YrNWMsFMeB0XTA+TTRBMxg/MLYAsI0olpJ8ZWuO2pea0+Nk96g7aaivl/1
-         hIcjWliJb5ZgRJSSnI7pVFE2FM7lifBqnKQLuEhpZsHA34YGCZ/rhI28VE/qXq1jq6X/
-         TbSA==
-X-Gm-Message-State: ANoB5pk7SS4awUG10sw0qPvh09Vkp6eDksqTANv9snLONZYgu5oyEgLA
-	KhRkdKpyoc/uW32izC1B/ns=
-X-Google-Smtp-Source: AA0mqf7lo7GM8x5UdwEdtv60/3460fbiPsGJh8g4HC8TKv3RHlSb+qHW4uv3yzbalqxIGN7bytAd6Q==
-X-Received: by 2002:aa7:9f04:0:b0:577:4168:b5ef with SMTP id g4-20020aa79f04000000b005774168b5efmr42472793pfr.3.1671456729555;
-        Mon, 19 Dec 2022 05:32:09 -0800 (PST)
-Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id s7-20020a625e07000000b0057691fb0d37sm6553392pfb.193.2022.12.19.05.32.08
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 19 Dec 2022 05:32:09 -0800 (PST)
-Date: Mon, 19 Dec 2022 05:32:04 -0800
-From: Dan Li <ashimida.1990@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E643E3217
+	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 14:48:14 +0000 (UTC)
+Received: from leknes.fjasle.eu ([46.142.96.64]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MsaeR-1oslfq133D-00tyIB; Mon, 19 Dec 2022 15:44:53 +0100
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by leknes.fjasle.eu (Postfix) with ESMTPS id A7FAB3C1B9;
+	Mon, 19 Dec 2022 15:44:49 +0100 (CET)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+	id 711B377B; Mon, 19 Dec 2022 15:44:38 +0100 (CET)
+Date: Mon, 19 Dec 2022 15:44:38 +0100
+From: Nicolas Schier <nicolas@fjasle.eu>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Marco Elver <elver@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Song Liu <song@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Yuntao Wang <ytcoode@gmail.com>,
-	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
+ install_headers
+Message-ID: <Y6B41hsv1KHDQMYh@bergen.fjasle.eu>
+References: <20221202045743.2639466-1-irogers@google.com>
+ <20221202045743.2639466-4-irogers@google.com>
+ <Y5eVwlId2A2/pN40@fjasle.eu>
+ <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="keRu1ywOaLNQdaoA"
 Content-Disposition: inline
-In-Reply-To: <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
+Jabber-ID: nicolas@fjasle.eu
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:yl11gYBxldkrWBmMWqPPZ7dMxGlIZugrpEYUIRHh38u8ZimLr8b
+ 1zTL5CA03GKrLX5KddnhDPuoCpPPCg+XKi/89LoG0aHPG00VlmGn/jQV3VjU1FEc4f6/ABR
+ jsQKfhRcYUBTk0oCwwjJI68WUTsXD6fXYAmi610sEyBVz3cb9ONljYGLMYEhu2tGphMNhD7
+ bstfVrPwf9h8u+5BFyLGQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:vBAzi/prR4g=;n+3CWflB16E98fuNJdzHMbLNdMe
+ nEN9nnpMrtVUdoGfjOAjM44GTiyZ1x4oNLWtoci3E9d9TSpvZoJIrWWVSO4Mzz1oIj+3cTT5g
+ 8b46QQmzkALonayLITHzxEhzHczpeIqyiHUhFJFZxmbuPW//Y7hA/hfTK+cMn7vzMXQjgyv6k
+ FcBwYyGDnirDTkAvlu5g9VOEX/AegSoGfE+KnAOvtm/c3BRG6gGow79PUnLmEHJCGWPzbOvi6
+ mtgGtIOpTxPW1a+1pfA7shmKFke4FmLaCPYAC5hOa0shJnOvIlP42UlYOrsjOG3pgA0BJ5u/J
+ npPCnDR44MbjCDdOulbCD82qKctRa2ZGGeLalDokd4cizHSsAxUjcOOSIGrE8y+9YpETPhkvx
+ +xI8NSaLYCwNjKUQvt4Fkacik0QMIoL/sTvTs8cbL1BjIbpFmCWGSpWSAyDUt2c+aEBc+BrRZ
+ z4jWxzeIBdwJV8fEEfRGZokJK9CNfya3IyQ40lOPlTCe9MIWLHdpto7I5dN8tG6pRvyLhh9nt
+ 9zFYZIhLzDGLvD7kMaykr26wSFNdEVzJJ40RW+WIEK2jUWCNVM5mbANOAyczI/5hmsc40OLjQ
+ /qLldaeAT7jwsvPNh0307BqtZD9cxWWRBwy/Sbia9kTXjvhHtgDxCtp4jHDNAAwAuFgAzclV7
+ z3SiCLHz/SmJWsVcKzpCevwcD1HKREbUu/1sZ/0wJA==
 
-Hi Peter,
 
-On 12/19, Peter Zijlstra wrote:
-> On Sun, Dec 18, 2022 at 10:17:58PM -0800, Dan Li wrote:
-> 
-> > 1. When a typeid mismatch is detected, the cfi_check_failed function
-> >    will be called instead of the brk instruction. This function needs
-> >    to be implemented by the compiler user.
-> >    If there are user mode programs or other systems that want to use
-> >    this feature, it may be more convenient to use a callback (so this
-> >    compilation option is set to -fsanitize=cfi instead of kcfi).
-> 
-> This is not going to be acceptible for x86_64.
+--keRu1ywOaLNQdaoA
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm not familiar enough with the x86_64 platform, could you please
-tell me why this is not acceptable? Is there a similar situation
-on the arm64 platform?
+On Tue 13 Dec 2022 13:28:21 GMT, Ian Rogers wrote:
+> On Mon, Dec 12, 2022 at 12:57 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+> >
+> > On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
+> > > Compute the headers to be installed from their source headers and make
+> > > each have its own build target to install it. Using dependencies
+> > > avoids headers being reinstalled and getting a new timestamp which
+> > > then causes files that depend on the header to be rebuilt.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
+> > >  1 file changed, 13 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+> > > index 9a316d8b89df..b87213263a5e 100644
+> > > --- a/tools/lib/subcmd/Makefile
+> > > +++ b/tools/lib/subcmd/Makefile
+> > > @@ -89,10 +89,10 @@ define do_install_mkdir
+> > >  endef
+> > >
+> > >  define do_install
+> > > -     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
+> > > -             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
+> > > +     if [ ! -d '$2' ]; then             \
+> > > +             $(INSTALL) -d -m 755 '$2'; \
+> > >       fi;                                             \
+> > > -     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
+> > > +     $(INSTALL) $1 $(if $3,-m $3,) '$2'
+> >
+> > What about using '$(INSTALL) -D ...' instead of the if-mkdir-block abov=
+e?
+> > (E.g. as in tools/debugging/Makefile.)
+> >
+> > Kind regards,
+> > Nicolas
+>=20
+> Thanks Nicolas, the reason was to keep the code consistent. That's not
+> to say this is the best approach. For example, here is the same thing
+> for tools/lib/api:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools=
+/lib/api/Makefile?h=3Dperf/core&id=3Df43368371888694a2eceaaad8f5e9775c09200=
+9a#n84
+>=20
+> If you'd like to improve this in all the versions and send patches I'd
+> be happy to take a look.
+>=20
+> Thanks,
+> Ian
 
-> > 5. The current implementation of gcc only supports the aarch64 platform.
-> 
-> What, if any, are the plans for x86_64 support?
+Ian, while watching at tools/lib/*/Makefile I stumple across the=20
+special single-quote handling (e.g. 'DESTDIR_SQ') several times. =20
 
-I'd like to implement something similar on x86_64 later, but
-currently I'm doing this in my spare time, so it might take a
-little longer. :(
+Top-level Makefile and kbuild are not designed to work with file or=20
+directory names containing spaces.  Do you know whether this is needed=20
+for the installation rules in tools/lib/?  I'd like to remove support=20
+for path names with spaces for a increasing simplicity and consistency.
 
-Thanks,
-Dan
+Kind regards,
+Nicolas
+
+--keRu1ywOaLNQdaoA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOgeNUACgkQB1IKcBYm
+EmmqvBAAvc+hpUNMRLt4cfWfIA2KsbSBDQLjh+dWIF4bhH9lSOuSlfmwlYSaCjpG
+r656tEHGAS2oYr12RNBwDa7Rpl8M0XycHyCO39PmsUrjFDNlIrsIclhYo++9X+9G
+iJJIzy8fsBAW3apLVOv3sPnzMcv6jPj8QD4nQXtgAqBy1Nj798t416TC9gkd6ZXC
+ZBYbV2d6I4EtIbD24IK5eptBObyjSU1WlsZRlLq60JCMNjXTszsBTmN+qi91bZs0
+cctgVxhXxkB0d75w3KWHXKSbbAHurLtmIjzZMJEI3f+o+ptEwOWiP/+Sk3NXu7JX
+udi4vKNCX4TXXf3cOUmhKqGigaYpbCn4drPCa4r0kmdE7zkCeGtEuNLs8ocItiOS
+fRsxU9bTXcC/7Ox0DqX1/qBYQgHBmbF5eXqAg4UerAn4/8l4fxdXemeO/LwNVpGC
+Pkmioif0PU4wZFU27qzOqKnjgKfioLh8qLgXmTPMo8Hq7c62ytA/A35Hcn9ZEE/X
+e9F8Kg734p1LUHPTrpCfOg3Q3X0t9c2ra+4wBa8d7zhOWhFFfQDjsaIuoe8ZiSqv
+ZITXn7XySp/0sjot8HyO0a9bIZvR5RK9OfEayShgLuLIkd5yoByEjz551oh5I753
+KyeIgi+OMvO56V0n0kd2rh4O5E4IggpGJbjvG+KO4uY9L1DYYcU=
+=DYaH
+-----END PGP SIGNATURE-----
+
+--keRu1ywOaLNQdaoA--
