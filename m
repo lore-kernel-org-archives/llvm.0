@@ -1,156 +1,101 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E643E3217
-	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 14:48:14 +0000 (UTC)
-Received: from leknes.fjasle.eu ([46.142.96.64]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MsaeR-1oslfq133D-00tyIB; Mon, 19 Dec 2022 15:44:53 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B675433F2
+	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 15:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=KdZYtJLDRb9x+/tacCvutz61fqLYajL5kPnJqkf0xhM=; b=LK6fVQE7Ey5+B3j7gHOi5eOm5y
+	0TcSfYAy8s/ZBadf3MKVq6b944bzYM5noq5/+ZkDJC4oiaYWYMCZfuF/Ot8FNE8fi++CiTpfoirk4
+	vFchFv39449g/A41kDy2376QCvoFJPcSTTuUXz3yDOq2OBinOngRmgZzC+PnJAn4YJHqPcfdwoHcb
+	wlW4BxPDt4MAP6Y2pdmw/FFXGO99i0sQ7GzgyGG90IRlceF0QGWdmKSd7bDknIhvsxw3VfpIP/cUC
+	YdIvJ8CeQ9o67hON9mEQuOn9KnFQVv6XwqtzUdUOkBEBXjOiJxBpWr3MMd+2UZRwjcoSfiXjNnwRL
+	n7+tY16g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1p7HhT-000p6L-Bf; Mon, 19 Dec 2022 15:05:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(Client did not present a certificate)
-	by leknes.fjasle.eu (Postfix) with ESMTPS id A7FAB3C1B9;
-	Mon, 19 Dec 2022 15:44:49 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-	id 711B377B; Mon, 19 Dec 2022 15:44:38 +0100 (CET)
-Date: Mon, 19 Dec 2022 15:44:38 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 39E1F300348;
+	Mon, 19 Dec 2022 16:04:55 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 1EEFC202FE50F; Mon, 19 Dec 2022 16:04:55 +0100 (CET)
+Date: Mon, 19 Dec 2022 16:04:55 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dan Li <ashimida.1990@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
- install_headers
-Message-ID: <Y6B41hsv1KHDQMYh@bergen.fjasle.eu>
-References: <20221202045743.2639466-1-irogers@google.com>
- <20221202045743.2639466-4-irogers@google.com>
- <Y5eVwlId2A2/pN40@fjasle.eu>
- <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Marco Elver <elver@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Song Liu <song@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Aaron Tomlin <atomlin@redhat.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
+Message-ID: <Y6B9l/aDnsek8Zyl@hirez.programming.kicks-ass.net>
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+ <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
+ <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="keRu1ywOaLNQdaoA"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:yl11gYBxldkrWBmMWqPPZ7dMxGlIZugrpEYUIRHh38u8ZimLr8b
- 1zTL5CA03GKrLX5KddnhDPuoCpPPCg+XKi/89LoG0aHPG00VlmGn/jQV3VjU1FEc4f6/ABR
- jsQKfhRcYUBTk0oCwwjJI68WUTsXD6fXYAmi610sEyBVz3cb9ONljYGLMYEhu2tGphMNhD7
- bstfVrPwf9h8u+5BFyLGQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:vBAzi/prR4g=;n+3CWflB16E98fuNJdzHMbLNdMe
- nEN9nnpMrtVUdoGfjOAjM44GTiyZ1x4oNLWtoci3E9d9TSpvZoJIrWWVSO4Mzz1oIj+3cTT5g
- 8b46QQmzkALonayLITHzxEhzHczpeIqyiHUhFJFZxmbuPW//Y7hA/hfTK+cMn7vzMXQjgyv6k
- FcBwYyGDnirDTkAvlu5g9VOEX/AegSoGfE+KnAOvtm/c3BRG6gGow79PUnLmEHJCGWPzbOvi6
- mtgGtIOpTxPW1a+1pfA7shmKFke4FmLaCPYAC5hOa0shJnOvIlP42UlYOrsjOG3pgA0BJ5u/J
- npPCnDR44MbjCDdOulbCD82qKctRa2ZGGeLalDokd4cizHSsAxUjcOOSIGrE8y+9YpETPhkvx
- +xI8NSaLYCwNjKUQvt4Fkacik0QMIoL/sTvTs8cbL1BjIbpFmCWGSpWSAyDUt2c+aEBc+BrRZ
- z4jWxzeIBdwJV8fEEfRGZokJK9CNfya3IyQ40lOPlTCe9MIWLHdpto7I5dN8tG6pRvyLhh9nt
- 9zFYZIhLzDGLvD7kMaykr26wSFNdEVzJJ40RW+WIEK2jUWCNVM5mbANOAyczI/5hmsc40OLjQ
- /qLldaeAT7jwsvPNh0307BqtZD9cxWWRBwy/Sbia9kTXjvhHtgDxCtp4jHDNAAwAuFgAzclV7
- z3SiCLHz/SmJWsVcKzpCevwcD1HKREbUu/1sZ/0wJA==
+In-Reply-To: <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
+
+On Mon, Dec 19, 2022 at 05:32:04AM -0800, Dan Li wrote:
+> Hi Peter,
+> 
+> On 12/19, Peter Zijlstra wrote:
+> > On Sun, Dec 18, 2022 at 10:17:58PM -0800, Dan Li wrote:
+> > 
+> > > 1. When a typeid mismatch is detected, the cfi_check_failed function
+> > >    will be called instead of the brk instruction. This function needs
+> > >    to be implemented by the compiler user.
+> > >    If there are user mode programs or other systems that want to use
+> > >    this feature, it may be more convenient to use a callback (so this
+> > >    compilation option is set to -fsanitize=cfi instead of kcfi).
+> > 
+> > This is not going to be acceptible for x86_64.
+> 
+> I'm not familiar enough with the x86_64 platform, could you please
+> tell me why this is not acceptable? Is there a similar situation
+> on the arm64 platform?
+
+Mostly because the call would be a 5 byte instruction while the trap
+(UD2) is only 2 bytes.
+
+I suspect Argh64 has a similar problem if the to be called function is
+outside the immediate range (26 bits or thereabout), in which case you
+end up with a multi-instruction sequence to construct the call target or
+so. A trap is always a single instruction.
 
 
---keRu1ywOaLNQdaoA
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue 13 Dec 2022 13:28:21 GMT, Ian Rogers wrote:
-> On Mon, Dec 12, 2022 at 12:57 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
-> >
-> > On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
-> > > Compute the headers to be installed from their source headers and make
-> > > each have its own build target to install it. Using dependencies
-> > > avoids headers being reinstalled and getting a new timestamp which
-> > > then causes files that depend on the header to be rebuilt.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
-> > >  1 file changed, 13 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> > > index 9a316d8b89df..b87213263a5e 100644
-> > > --- a/tools/lib/subcmd/Makefile
-> > > +++ b/tools/lib/subcmd/Makefile
-> > > @@ -89,10 +89,10 @@ define do_install_mkdir
-> > >  endef
-> > >
-> > >  define do_install
-> > > -     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> > > -             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> > > +     if [ ! -d '$2' ]; then             \
-> > > +             $(INSTALL) -d -m 755 '$2'; \
-> > >       fi;                                             \
-> > > -     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> > > +     $(INSTALL) $1 $(if $3,-m $3,) '$2'
-> >
-> > What about using '$(INSTALL) -D ...' instead of the if-mkdir-block abov=
-e?
-> > (E.g. as in tools/debugging/Makefile.)
-> >
-> > Kind regards,
-> > Nicolas
->=20
-> Thanks Nicolas, the reason was to keep the code consistent. That's not
-> to say this is the best approach. For example, here is the same thing
-> for tools/lib/api:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools=
-/lib/api/Makefile?h=3Dperf/core&id=3Df43368371888694a2eceaaad8f5e9775c09200=
-9a#n84
->=20
-> If you'd like to improve this in all the versions and send patches I'd
-> be happy to take a look.
->=20
-> Thanks,
-> Ian
-
-Ian, while watching at tools/lib/*/Makefile I stumple across the=20
-special single-quote handling (e.g. 'DESTDIR_SQ') several times. =20
-
-Top-level Makefile and kbuild are not designed to work with file or=20
-directory names containing spaces.  Do you know whether this is needed=20
-for the installation rules in tools/lib/?  I'd like to remove support=20
-for path names with spaces for a increasing simplicity and consistency.
-
-Kind regards,
-Nicolas
-
---keRu1ywOaLNQdaoA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOgeNUACgkQB1IKcBYm
-EmmqvBAAvc+hpUNMRLt4cfWfIA2KsbSBDQLjh+dWIF4bhH9lSOuSlfmwlYSaCjpG
-r656tEHGAS2oYr12RNBwDa7Rpl8M0XycHyCO39PmsUrjFDNlIrsIclhYo++9X+9G
-iJJIzy8fsBAW3apLVOv3sPnzMcv6jPj8QD4nQXtgAqBy1Nj798t416TC9gkd6ZXC
-ZBYbV2d6I4EtIbD24IK5eptBObyjSU1WlsZRlLq60JCMNjXTszsBTmN+qi91bZs0
-cctgVxhXxkB0d75w3KWHXKSbbAHurLtmIjzZMJEI3f+o+ptEwOWiP/+Sk3NXu7JX
-udi4vKNCX4TXXf3cOUmhKqGigaYpbCn4drPCa4r0kmdE7zkCeGtEuNLs8ocItiOS
-fRsxU9bTXcC/7Ox0DqX1/qBYQgHBmbF5eXqAg4UerAn4/8l4fxdXemeO/LwNVpGC
-Pkmioif0PU4wZFU27qzOqKnjgKfioLh8qLgXmTPMo8Hq7c62ytA/A35Hcn9ZEE/X
-e9F8Kg734p1LUHPTrpCfOg3Q3X0t9c2ra+4wBa8d7zhOWhFFfQDjsaIuoe8ZiSqv
-ZITXn7XySp/0sjot8HyO0a9bIZvR5RK9OfEayShgLuLIkd5yoByEjz551oh5I753
-KyeIgi+OMvO56V0n0kd2rh4O5E4IggpGJbjvG+KO4uY9L1DYYcU=
-=DYaH
------END PGP SIGNATURE-----
-
---keRu1ywOaLNQdaoA--
