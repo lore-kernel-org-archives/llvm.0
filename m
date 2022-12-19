@@ -1,72 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A2E46AB
-	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 15:26:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AAEC433EF;
-	Mon, 19 Dec 2022 15:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671463571;
-	bh=Hu3FgL4IL2JBUaBE8gcwEdnNOK9X7aQnS/FovjtJwVY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sLmlZ4DJOz+bov2ywGFmpGv2cnN9MmEWec4sgfMw02D/jehX/d0/+5kJ8laLaysM/
-	 KbWRAF4qtYRmG68V0ULPUWIjQqNbL8qecPsp5uDqLkPkOURdxruVfWcjodPW1deGjb
-	 e84/P3TY/X6+AZ+pP8/JXdvyRfb0dj/MjUCU+bPFKrw/TAHQuOGeNYPe/VXj3oyvsG
-	 4WHgx5wcqJtfPmMKfMGqi8w/XY0WLdPQIailN61lYb5u1mSrQ3icCVIZq6fsH6TM5k
-	 1IV5yDtm5zqQNCGomQIpaBmeX5LLXUhGrGSiy2D+Rw3L8u1uVVw2K56ryTxfxNv4IL
-	 /1tVZYHtYUtrw==
-Date: Mon, 19 Dec 2022 08:26:09 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: linux-stable <stable@vger.kernel.org>, llvm@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>, lkft-triage@lists.linaro.org
-Subject: Re: Linux-stable-rc/ queue_5.10
-Message-ID: <Y6CCkWLcNZMqN8UV@dev-arch.thelio-3990X>
-References: <CA+G9fYs=G_AAbkNOfLv7Oyvt6uOZ8CYun8fUQ-GghoKtbD5WAw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AD246AB
+	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 15:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1671464497;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L1X02W6wISQC6EcF/RnPaqUA+7aKZ19H4ne4DRGi5MU=;
+	b=LIKuB79zjHbUoD8x7r/8zQOJFzC5R6Vv1Khwa7zGM2PYnEISNanCdyrfdkr9/SSdzuqkB/
+	19fdsg/cEhplATkWQVJXTGUhPcpn76DxyDMJ1PxzefTl6ad1xU8XVfdrbLWaoLD7/vG7d5
+	N6yGzyWDWyPKez6mNRLQfrtsACVdAy4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-FFdP-ny7MB6Swtk9RsUcSQ-1; Mon, 19 Dec 2022 10:41:36 -0500
+X-MC-Unique: FFdP-ny7MB6Swtk9RsUcSQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1050885620
+	for <llvm@lists.linux.dev>; Mon, 19 Dec 2022 15:41:35 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CFE9E492B00;
+	Mon, 19 Dec 2022 15:41:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
+ mainline.kernel.org-clang, 71a7507a)
+Date: Mon, 19 Dec 2022 15:41:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYs=G_AAbkNOfLv7Oyvt6uOZ8CYun8fUQ-GghoKtbD5WAw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <90176.122121910413600862@us-mta-411.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Naresh,
+Hi, we tested your kernel and here are the results:
 
-On Mon, Dec 19, 2022 at 08:47:32PM +0530, Naresh Kamboju wrote:
-> The MIPS tinyconfig with clang nightly  build failed,
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build warnings / errors,
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=0
-> ARCH=mips CROSS_COMPILE=mips-linux-gnu- HOSTCC=clang CC=clang
-> tinyconfig
-> 
-> /tmp/calibrate-9ea8cf.s: Assembler messages:
-> /tmp/calibrate-9ea8cf.s:134: Error: .module is not permitted after
-> generating code
-> /tmp/calibrate-9ea8cf.s:168: Error: .module is not permitted after
-> generating code
-> /tmp/calibrate-9ea8cf.s:192: Error: .module is not permitted after
-> generating code
-> /tmp/calibrate-9ea8cf.s:216: Error: .module is not permitted after
-> generating code
-> clang: error: assembler command failed with exit code 1 (use -v to see
-> invocation)
-> make[2]: *** [/builds/linux/scripts/Makefile.build:286:
-> init/calibrate.o] Error 1
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Thanks for the report. This is a toolchain regression that should
-hopefully be resolved soon:
 
-https://reviews.llvm.org/D138179#4002068
+Kernel information:
+    Commit message: Merge tag 'driver-core-6.2-rc1' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/gregkh/driver-core
 
-https://reviews.llvm.org/D140270
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/63608
 
-Cheers,
-Nathan
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6425182
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
+/0xa0
+            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
+rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: (upstream) Cannot download, all mirrors were already tried w=
+ithout success
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5439024
+            Affected tests:
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
