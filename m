@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280DC10E6
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 01:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C93BC433D2;
-	Tue, 20 Dec 2022 01:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B676310E6
+	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 01:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4A0C433F1;
+	Tue, 20 Dec 2022 01:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671499302;
-	bh=GfROr8HR6qZP6TAhiHR0HybOQfzTNxipuRy8eXjgMtc=;
+	s=k20201202; t=1671499308;
+	bh=NEUP6zN9OADZm5zNxMnUdUs2DJSQYC2jc+XVsX3Rf54=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ir16EejscDisx0JDlXqs/zJheri0kw9iWj58+iD2KOkyQzzZ31acm6hnNFRBXkVZv
-	 PcgJohHQIHE9YOIt+xSvhTxMQaw2uI2XnJ6GgJpT2VK8rSzu0+HoS6voViIX2h9gEz
-	 HpKrxzdBPTqdynSF7mRxCQOFzAvLi+5aeM7jhxmOu8ildzIzK/iQcYhv8nwc142C8e
-	 58QBIHeUzpPQTtldL1681e/ga+YYTrLBnBLGsSAzKhzw2tY0XuFGGHLZ5R3UDeuGi4
-	 l+753cB+GYyH+m6+YGGOFB1YDYAiXLqFErlIhqSPyiIRauAdY+FJlvIYd3Vp1scJ38
-	 UHSUqMRJuKBNw==
+	b=JYbqeKVbha+Btq2UEggh2M++N0GDyzlSSy0TFB8j7Zx0NxaIm32b8fGsl0122GngK
+	 Pkv7SLj3h9IiJJbeqYfvWkgtHW+TzCCs33C5zSTIcGISES8Ehif2k8kS0jiRAQEz+G
+	 fvznbfXhBYVN6FKy6iyKj5nb/WY7d4lpoAa9QppeGw7KcIQJVx828nmgRQ7H/n7Z4Q
+	 DWd3EQNCy4HuZEhc5XqgQs4wjxM0XkSLAbQLiO3juZT3zCKv4HlQX+Cknt+atXJrlq
+	 cCMpaZ2aejWW5/cYrI3JJc1HjM7gDBe18W/alGKUfhWelQzqBYverwrJp9exwsK42n
+	 0MzQkvIMWHB9g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Nathan Chancellor <nathan@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Kees Cook <keescook@chromium.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Sasha Levin <sashal@kernel.org>,
-	james.smart@broadcom.com,
-	ram.vegesna@broadcom.com,
-	jejb@linux.ibm.com,
+	stefan@agner.ch,
+	alison.wang@nxp.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
 	ndesaulniers@google.com,
-	linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 06/16] scsi: elx: libefc: Fix second parameter type in state callbacks
-Date: Mon, 19 Dec 2022 20:21:16 -0500
-Message-Id: <20221220012127.1222311-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 10/16] drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
+Date: Mon, 19 Dec 2022 20:21:20 -0500
+Message-Id: <20221220012127.1222311-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221220012127.1222311-1-sashal@kernel.org>
 References: <20221220012127.1222311-1-sashal@kernel.org>
@@ -48,77 +47,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 3d75e766b58a7410d4e835c534e1b4664a8f62d0 ]
+[ Upstream commit 96d845a67b7e406cfed7880a724c8ca6121e022e ]
 
 With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function pointer
-prototype to make sure the call target is valid to help mitigate ROP
-attacks. If they are not identical, there is a failure at run time, which
-manifests as either a kernel panic or thread getting killed. A proposed
-warning in clang aims to catch these at compile time, which reveals:
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-  drivers/scsi/elx/libefc/efc_node.c:811:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-                  ctx->current_state = state;
-                                    ^ ~~~~~
-  drivers/scsi/elx/libefc/efc_node.c:878:21: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          node->nodedb_state = state;
-                            ^ ~~~~~
-  drivers/scsi/elx/libefc/efc_node.c:905:6: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' from 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') [-Werror,-Wincompatible-function-pointer-types-strict]
-                  pf = node->nodedb_state;
-                    ^ ~~~~~~~~~~~~~~~~~~
+  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c:74:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .mode_valid = fsl_dcu_drm_connector_mode_valid,
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-  drivers/scsi/elx/libefc/efc_device.c:455:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-                  node->nodedb_state = __efc_d_init;
-                                    ^ ~~~~~~~~~~~~
-
-  drivers/scsi/elx/libefc/efc_sm.c:41:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-                  ctx->current_state = state;
-                                    ^ ~~~~~
-
-The type of the second parameter in the prototypes of ->current_state() and
-->nodedb_state() ('u32') does not match the implementations, which have a
-second parameter type of 'enum efc_sm_event'. Update the prototypes to have
-the correct second parameter type, clearing up all the warnings and CFI
-failures.
+->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
+type of 'enum drm_mode_status', not 'int'. Adjust the return type of
+fsl_dcu_drm_connector_mode_valid() to match the prototype's to resolve
+the warning and CFI failure.
 
 Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 Reported-by: Sami Tolvanen <samitolvanen@google.com>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20221102161906.2781508-1-nathan@kernel.org
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20221102154215.78059-1-nathan@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/elx/libefc/efclib.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/elx/libefc/efclib.h b/drivers/scsi/elx/libefc/efclib.h
-index dde20891c2dd..57e338612812 100644
---- a/drivers/scsi/elx/libefc/efclib.h
-+++ b/drivers/scsi/elx/libefc/efclib.h
-@@ -58,10 +58,12 @@ enum efc_node_send_ls_acc {
- #define EFC_LINK_STATUS_UP		0
- #define EFC_LINK_STATUS_DOWN		1
+diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+index 4d4a715b429d..2c2b92324a2e 100644
+--- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
++++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+@@ -60,8 +60,9 @@ static int fsl_dcu_drm_connector_get_modes(struct drm_connector *connector)
+ 	return drm_panel_get_modes(fsl_connector->panel, connector);
+ }
  
-+enum efc_sm_event;
-+
- /* State machine context header  */
- struct efc_sm_ctx {
- 	void (*current_state)(struct efc_sm_ctx *ctx,
--			      u32 evt, void *arg);
-+			      enum efc_sm_event evt, void *arg);
- 
- 	const char	*description;
- 	void		*app;
-@@ -365,7 +367,7 @@ struct efc_node {
- 	int			prev_evt;
- 
- 	void (*nodedb_state)(struct efc_sm_ctx *ctx,
--			     u32 evt, void *arg);
-+			     enum efc_sm_event evt, void *arg);
- 	struct timer_list	gidpt_delay_timer;
- 	u64			time_last_gidpt_msec;
- 
+-static int fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
+-					    struct drm_display_mode *mode)
++static enum drm_mode_status
++fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
++				 struct drm_display_mode *mode)
+ {
+ 	if (mode->hdisplay & 0xf)
+ 		return MODE_ERROR;
 -- 
 2.35.1
 
