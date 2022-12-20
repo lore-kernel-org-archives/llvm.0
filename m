@@ -1,119 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2453F1878
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 16:32:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CF9C433D2;
-	Tue, 20 Dec 2022 16:32:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1671553960;
-	bh=Bem8z5//1aEvoEVVdnx5RIqRMonjMFHjFzpnJmFo32M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RAodN6DClMr8hmKGNFCfW2DeFLSmvd+YgOftHqGH0g8PMDm2wuYHUPiZFVObuJUpC
-	 xKYaNlkePLkV3NAYAnZQNYyYBmT+ls2jgTL42ZtIgswRVeTNFrsIdVqCHO7jKN3wtN
-	 cqvmE3hJtL4vGutpOiJiwHjdwT/Tl268yDfML8rYsNzc8LkBr4FIbK9IjoGb3APs+W
-	 ewmvKnlYKe2qJ87FNXDMIP7pIp37xy0lMIJTbJjShQqnigZptoMtvDsWLuFGVGrjt3
-	 vtGPnUWJc4e4IuC/SwgabpYGPtrcfwI7ZmElBtOp/ELnQB6eJpuOXSbgk8k5i0quWe
-	 4N7x73MNzi5EA==
-Date: Tue, 20 Dec 2022 09:32:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc: virtualization@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-	bhelgaas@google.com, "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
-Message-ID: <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
-References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
- <20221219083511.73205-4-alvaro.karsz@solid-run.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510151878
+	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 16:46:58 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id 82so8748904pgc.0
+        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 08:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S9MYeEEvKypc4mpQnza4+BeXfUFl1039ZqekhzchkzA=;
+        b=gC92C0srqh0bzt3sZl8p90ERaBFv3q+IPEHBDqiAr8Gl6w7ssHuuRnrkIo//rjBc0+
+         NMz5S9Q6XtOZi3FBx0E4TRU7spQ80ylSiU/NxJnUr/h377BcLdzO84mLlTUDTWoU/hU5
+         H5dlKsnn5YiA+baudcN6twCWz2MT+yKYBKya4HsSRisHj0AI9Km4laR1jl1d96uWv4hi
+         +u/Rw/vtvudGmC3fXdcTMh2BVpVP6r6DGm4X+w9i+NmCdlo/MvWp/aC+XJw8m4uKIlR7
+         p5DY7y+Qy2vvXMyM3VzWeYwuraPTqOaX25iKSnMpYOl4l1BQup2SR/jySluyKyi+45pk
+         cLNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S9MYeEEvKypc4mpQnza4+BeXfUFl1039ZqekhzchkzA=;
+        b=13EpjUXVFXO0K4dfK3j2NrceVz3mrgX3FwtZ8FSH89NfbWOPqJQgDxiWqFVbSxW+7w
+         tpVllL9bfe8sVkD1/a5j4PuZeWW1aG9xeSW1Ojg03okfatNX/+FjkD7pi0LQDb3cGfGQ
+         ypFrk4s2aoJxFrVIA1bvqg03MjVgPNkE3KJuPiqyQEZ+pxEqzX7GDNMHrkNF/3pB4g1k
+         uasIKYqiZgiHVVonqym9yAQcIUSi38FGAhvspid5zz91soEjYOqwfVFqjAgK3p1Y3VMO
+         7C4/k3/ralNCHLY0zWXlOQZt/LAuQlutbhSoLiTTAHE+kBXPiXcWjoxNklGDrUN99Ajo
+         kG0w==
+X-Gm-Message-State: ANoB5pnSngYc7XuPHnEXm6W4Gievw6LsLCv/hgzpYUdkPlVsYQXtuVzu
+	rtRnLOX9h9+S0NSPC/PNz5c4ZT9YT1fmJh2X5fLmFA==
+X-Google-Smtp-Source: AA0mqf4Ey+s+5l8jI3qYvVeBn8nM7I7QUh+8bTEBMtc1ra/8US8uJ2wgBMg7DP97/O+NPnVsIALqABdGhJE1Hd+5H6I=
+X-Received: by 2002:a63:2226:0:b0:478:54e2:ecb1 with SMTP id
+ i38-20020a632226000000b0047854e2ecb1mr39520530pgi.550.1671554817603; Tue, 20
+ Dec 2022 08:46:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219083511.73205-4-alvaro.karsz@solid-run.com>
+References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
+ <20221219083511.73205-4-alvaro.karsz@solid-run.com> <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
+In-Reply-To: <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
+From: Alvaro Karsz <alvaro.karsz@solid-run.com>
+Date: Tue, 20 Dec 2022 18:46:20 +0200
+Message-ID: <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: virtualization@lists.linux-foundation.org, linux-pci@vger.kernel.org, 
+	bhelgaas@google.com, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alvaro,
+Hi Nathan,
 
-On Mon, Dec 19, 2022 at 10:35:11AM +0200, Alvaro Karsz wrote:
-> This commit includes:
->  1) The driver to manage the controlplane over vDPA bus.
->  2) A HW monitor device to read health values from the DPU.
-> 
-> Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
+> This does not appear to be a false positive but what was the intent
+> here? Should the local name variables increase their length or should
+> the buffer length be reduced?
 
-<snip>
+You're right, the local name variables and snprintf argument don't match.
+Thanks for noticing.
+I think that we should increase the name variables  to be
+SNET_NAME_SIZE bytes long.
 
-> +static int psnet_open_pf_bar(struct pci_dev *pdev, struct psnet *psnet)
-> +{
-> +	char name[25];
-> +	int ret, i, mask = 0;
-> +	/* We don't know which BAR will be used to communicate..
-> +	 * We will map every bar with len > 0.
-> +	 *
-> +	 * Later, we will discover the BAR and unmap all other BARs.
-> +	 */
-> +	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> +		if (pci_resource_len(pdev, i))
-> +			mask |= (1 << i);
-> +	}
-> +
-> +	/* No BAR can be used.. */
-> +	if (!mask) {
-> +		SNET_ERR(pdev, "Failed to find a PCI BAR\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	snprintf(name, SNET_NAME_SIZE, "psnet[%s]-bars", pci_name(pdev));
-> +	ret = pcim_iomap_regions(pdev, mask, name);
-> +	if (ret) {
-> +		SNET_ERR(pdev, "Failed to request and map PCI BARs\n");
-> +		return ret;
-> +	}
-> +
-> +	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
-> +		if (mask & (1 << i))
-> +			psnet->bars[i] = pcim_iomap_table(pdev)[i];
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int snet_open_vf_bar(struct pci_dev *pdev, struct snet *snet)
-> +{
-> +	char name[20];
-> +	int ret;
-> +
-> +	snprintf(name, SNET_NAME_SIZE, "snet[%s]-bar", pci_name(pdev));
-> +	/* Request and map BAR */
-> +	ret = pcim_iomap_regions(pdev, BIT(snet->psnet->cfg.vf_bar), name);
-> +	if (ret) {
-> +		SNET_ERR(pdev, "Failed to request and map PCI BAR for a VF\n");
-> +		return ret;
-> +	}
-> +
-> +	snet->bar = pcim_iomap_table(pdev)[snet->psnet->cfg.vf_bar];
-> +
-> +	return 0;
-> +}
+How should I proceed from here?
+Should I create a new version for this patch, or should I fix it in a
+follow up patch?
 
-This patch as commit 73a720b16fa1 ("virtio: vdpa: new SolidNET DPU
-driver.") in next-20221220 causes the following clang warnings:
-
-  drivers/vdpa/solidrun/snet_main.c:561:2: error: 'snprintf' size argument is too large; destination buffer has size 25, but size argument is 256 [-Werror,-Wfortify-source]
-          snprintf(name, SNET_NAME_SIZE, "psnet[%s]-bars", pci_name(pdev));
-          ^
-  drivers/vdpa/solidrun/snet_main.c:581:2: error: 'snprintf' size argument is too large; destination buffer has size 20, but size argument is 256 [-Werror,-Wfortify-source]
-          snprintf(name, SNET_NAME_SIZE, "snet[%s]-bar", pci_name(pdev));
-          ^
-  2 errors generated.
-
-This does not appear to be a false positive but what was the intent
-here? Should the local name variables increase their length or should
-the buffer length be reduced?
-
-Cheers,
-Nathan
+Thanks,
+Alvaro
