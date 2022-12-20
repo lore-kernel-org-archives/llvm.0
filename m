@@ -1,72 +1,99 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510151878
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 16:46:58 +0000 (UTC)
-Received: by mail-pg1-f177.google.com with SMTP id 82so8748904pgc.0
-        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 08:46:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S9MYeEEvKypc4mpQnza4+BeXfUFl1039ZqekhzchkzA=;
-        b=gC92C0srqh0bzt3sZl8p90ERaBFv3q+IPEHBDqiAr8Gl6w7ssHuuRnrkIo//rjBc0+
-         NMz5S9Q6XtOZi3FBx0E4TRU7spQ80ylSiU/NxJnUr/h377BcLdzO84mLlTUDTWoU/hU5
-         H5dlKsnn5YiA+baudcN6twCWz2MT+yKYBKya4HsSRisHj0AI9Km4laR1jl1d96uWv4hi
-         +u/Rw/vtvudGmC3fXdcTMh2BVpVP6r6DGm4X+w9i+NmCdlo/MvWp/aC+XJw8m4uKIlR7
-         p5DY7y+Qy2vvXMyM3VzWeYwuraPTqOaX25iKSnMpYOl4l1BQup2SR/jySluyKyi+45pk
-         cLNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S9MYeEEvKypc4mpQnza4+BeXfUFl1039ZqekhzchkzA=;
-        b=13EpjUXVFXO0K4dfK3j2NrceVz3mrgX3FwtZ8FSH89NfbWOPqJQgDxiWqFVbSxW+7w
-         tpVllL9bfe8sVkD1/a5j4PuZeWW1aG9xeSW1Ojg03okfatNX/+FjkD7pi0LQDb3cGfGQ
-         ypFrk4s2aoJxFrVIA1bvqg03MjVgPNkE3KJuPiqyQEZ+pxEqzX7GDNMHrkNF/3pB4g1k
-         uasIKYqiZgiHVVonqym9yAQcIUSi38FGAhvspid5zz91soEjYOqwfVFqjAgK3p1Y3VMO
-         7C4/k3/ralNCHLY0zWXlOQZt/LAuQlutbhSoLiTTAHE+kBXPiXcWjoxNklGDrUN99Ajo
-         kG0w==
-X-Gm-Message-State: ANoB5pnSngYc7XuPHnEXm6W4Gievw6LsLCv/hgzpYUdkPlVsYQXtuVzu
-	rtRnLOX9h9+S0NSPC/PNz5c4ZT9YT1fmJh2X5fLmFA==
-X-Google-Smtp-Source: AA0mqf4Ey+s+5l8jI3qYvVeBn8nM7I7QUh+8bTEBMtc1ra/8US8uJ2wgBMg7DP97/O+NPnVsIALqABdGhJE1Hd+5H6I=
-X-Received: by 2002:a63:2226:0:b0:478:54e2:ecb1 with SMTP id
- i38-20020a632226000000b0047854e2ecb1mr39520530pgi.550.1671554817603; Tue, 20
- Dec 2022 08:46:57 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760B38F63
+	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 19:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=cjwugnyOcfkc5U5fWcTHxiaxFg7f7rBtDIM03J92Ct0=; b=SnBtcTV75E1lEfSyHuKfTiMV5H
+	dMwnXrYDrExtJHABsJMQgpNI2DqpYMI2olV+z/urHHiT3C1ZtDTjema5OKq06/N2qkYkJLeGLXm5g
+	l/sXtbaeIeXm/nkVlgAvu5iKq1Ezgz2HN6J7/KVvMIxvdoKVAoNQvTUhHDArZlKD+TWir5KTQmXZt
+	lv6BvBQmi0J1H8eVp405HYKR1f+Nz4V8AIa93X0BnmS574dZAfJi0Utos3uUnHohfmQWwIdbwQa5H
+	VRl4zrt8JzJmyCGTWn5XSMppc2YXzL2G0YBy7AdGCsLA+/NiNo0K/NgvNAS9Z6gseI/xYA0jGHyGw
+	t+3dXwgw==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1p7iHI-007609-Ub; Tue, 20 Dec 2022 20:27:53 +0100
+Message-ID: <9c9d97a9-7543-06ed-f50b-f48b1c3a9def@igalia.com>
+Date: Tue, 20 Dec 2022 16:27:43 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
- <20221219083511.73205-4-alvaro.karsz@solid-run.com> <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
-In-Reply-To: <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
-From: Alvaro Karsz <alvaro.karsz@solid-run.com>
-Date: Tue, 20 Dec 2022 18:46:20 +0200
-Message-ID: <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: virtualization@lists.linux-foundation.org, linux-pci@vger.kernel.org, 
-	bhelgaas@google.com, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] drm/tests: reduce drm_mm_test stack usage
+To: Arnd Bergmann <arnd@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
+ Daniel Latypov <dlatypov@google.com>, llvm@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>, =?UTF-8?Q?Ma=c3=adra_Canal?=
+ <maira.canal@usp.br>
+References: <20221215163511.266214-1-arnd@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221215163511.266214-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Nathan,
+On 12/15/22 13:34, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The check_reserve_boundaries function uses a lot of kernel stack,
+> and it gets inlined by clang, which makes __drm_test_mm_reserve
+> use even more of it, to the point of hitting the warning limit:
+> 
+> drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size (1048) exceeds limit (1024) in '__drm_test_mm_reserve' [-Werror,-Wframe-larger-than]
+> 
+> When building with gcc, this does not happen, but the structleak
+> plugin can similarly increase the stack usage and needs to be
+> disabled, as we do for all other kunit users.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> This does not appear to be a false positive but what was the intent
-> here? Should the local name variables increase their length or should
-> the buffer length be reduced?
+Apart from the checkpatch problem on the function
+check_reserve_boundaries(),
 
-You're right, the local name variables and snprintf argument don't match.
-Thanks for noticing.
-I think that we should increase the name variables  to be
-SNET_NAME_SIZE bytes long.
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-How should I proceed from here?
-Should I create a new version for this patch, or should I fix it in a
-follow up patch?
+Best Regards,
+- Maíra Canal
 
-Thanks,
-Alvaro
+> ---
+>  drivers/gpu/drm/tests/Makefile      | 2 ++
+>  drivers/gpu/drm/tests/drm_mm_test.c | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+> index b29ef1085cad..f896ef85c2f2 100644
+> --- a/drivers/gpu/drm/tests/Makefile
+> +++ b/drivers/gpu/drm/tests/Makefile
+> @@ -12,3 +12,5 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+>  	drm_mm_test.o \
+>  	drm_plane_helper_test.o \
+>  	drm_rect_test.o
+> +
+> +CFLAGS_drm_mm_test.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+> index 89f12d3b4a21..90a5becc99b8 100644
+> --- a/drivers/gpu/drm/tests/drm_mm_test.c
+> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
+> @@ -298,7 +298,7 @@ static bool expect_reserve_fail(struct kunit *test, struct drm_mm *mm, struct dr
+>  	return false;
+>  }
+>  
+> -static bool check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+> +static bool noinline_for_stack check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+>  				     unsigned int count,
+>  				     u64 size)
+>  {
