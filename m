@@ -1,234 +1,72 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D817184C
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 07:35:00 +0000 (UTC)
-Received: from leknes.fjasle.eu ([46.142.99.43]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MXop2-1pNwzJ3lO8-00YAcI; Tue, 20 Dec 2022 08:33:58 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by leknes.fjasle.eu (Postfix) with ESMTPS id 0FC3A3C0EE;
-	Tue, 20 Dec 2022 08:33:52 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-	id A79D423F; Tue, 20 Dec 2022 08:33:50 +0100 (CET)
-Date: Tue, 20 Dec 2022 08:33:50 +0100
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
- install_headers
-Message-ID: <Y6FlXj2IT/5ruI/j@bergen.fjasle.eu>
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1D6184C;
+	Tue, 20 Dec 2022 07:50:12 +0000 (UTC)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+	by APP-01 (Coremail) with SMTP id qwCowACXwO6qZ6FjaKwRCA--.1506S2;
+	Tue, 20 Dec 2022 15:43:38 +0800 (CST)
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To: almaz.alexandrovich@paragon-software.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com
+Cc: ntfs3@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] fs/ntfs3: Add missing check for kmemdup
+Date: Tue, 20 Dec 2022 15:43:36 +0800
+Message-Id: <20221220074336.24258-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iTsQL20z2LG4ZgZl"
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fXX5RsCFvGy2_CBYJczauWVemSRB=Bz3nDQ9iufuAXyHg@mail.gmail.com>
- <20221202045743.2639466-4-irogers@google.com>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:olVMs0MvHTcPOd+l3DsTa5pBjm+dogUdGH44zkKe9/7m2zeuAiX
- Tb4h6bKxmRzUqf9MEUYwvde7kUrQjhoHgyotiak1j66PXYPzYY5lO43ZaXtx0WXJ5Y1/J17
- 5DWQZqI/kzo9Wv86erKvk27BndkmA1VjA3mwBfBD0G1oZQUoIYwKiELsog5ldjTNahmbLqa
- v7Z43zcCPCh64Puv9GUaQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:0AtlAzCOiSU=;nFV5+pe11+tGmromAmcF1FprNRM
- iGWAaT/qXnhKfL4tWtaVW9MfG0cpz9I5oVgtCqHasKhJ9kzD7a9pH9aqdU8uy0klBMn4pf8I3
- n2PBapMZ1TRG+lE9SN7AMkzYZp67oyR1M7v9TZBlyfCPUFM/O+dw2TvJIV99RjBEYzo14QTCZ
- 6Sij/4wr3tOTshOwGWFMfIGBFt5DPCCSv2IJ4/ke7nyYJ37AeGYJxF+7MeKjVB+WPfQAnAjN8
- pvii5a7k/D/LIeiD+6wxsE3OvLflCLZQbdtEhMl3+K52pRQOMpQM+lZ6BtlHYi+gmQROKKyVi
- qfnnn9cDrk0VWdnUyM0+B+DIv3jP4CWjyVsasJSWKYOjL6ujCCui+qzswtwFIQOeyF8HOiqFu
- 6AJcFWBAXbmux1q0QEg8oPE78x2rcmztxBKa5+kpa5djp8c1pugDe4WaAhMCIIqXvUYuav3i2
- JIpL1FRHKGWiDvWqj0sJLEVh2uaH7841Rl79SQigJaiXXiHcccEy0Fdnx9rW9A3MMoqswWaHo
- zEXRmziww3/IZ1kb78iR2NFf574c8t8h1PpKWbTT0oijbBxJYwdYYCb4fGCB9O1wzereoAiat
- m5cgBpUYPnO+7uT++7et14Z3UQTLQmK/Ni2xJ25cE+s7ruNq2RgTLw4fPKLG3pQNCLx/8MZGa
- yGMGhOKh3ziH1ijmo3aMbWDnOozvQrCuwySClTf6ag==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowACXwO6qZ6FjaKwRCA--.1506S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFWrJF1rCFyUtr1UWFWruFg_yoWxZrb_tF
+	ZrC3WrXw17tr1vk3WDt3yrtws3uws3Jrn5WrZ7KF13JF98Ja1Y9rWktrs8Jw4xW34FgF48
+	G3s0kFy5ZrnI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4x
+	MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjE1v3UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 
+Add check for the return value of the kmemdup since
+it may return NULL pointer if allocation fails.
 
---iTsQL20z2LG4ZgZl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: b46acd6a6a62 ("fs/ntfs3: Add NTFS journal")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ fs/ntfs3/fslog.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Mon 19 Dec 2022 14:48:59 GMT, Ian Rogers wrote:
-> On Mon, Dec 19, 2022 at 6:44 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
->=20
-> > On Tue 13 Dec 2022 13:28:21 GMT, Ian Rogers wrote:
-> > > On Mon, Dec 12, 2022 at 12:57 PM Nicolas Schier <nicolas@fjasle.eu>
-> > wrote:
-> > > >
-> > > > On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
-> > > > > Compute the headers to be installed from their source headers and
-> > make
-> > > > > each have its own build target to install it. Using dependencies
-> > > > > avoids headers being reinstalled and getting a new timestamp which
-> > > > > then causes files that depend on the header to be rebuilt.
-> > > > >
-> > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > ---
-> > > > >  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
-> > > > >  1 file changed, 13 insertions(+), 10 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> > > > > index 9a316d8b89df..b87213263a5e 100644
-> > > > > --- a/tools/lib/subcmd/Makefile
-> > > > > +++ b/tools/lib/subcmd/Makefile
-> > > > > @@ -89,10 +89,10 @@ define do_install_mkdir
-> > > > >  endef
-> > > > >
-> > > > >  define do_install
-> > > > > -     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> > > > > -             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> > > > > +     if [ ! -d '$2' ]; then             \
-> > > > > +             $(INSTALL) -d -m 755 '$2'; \
-> > > > >       fi;                                             \
-> > > > > -     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> > > > > +     $(INSTALL) $1 $(if $3,-m $3,) '$2'
-> > > >
-> > > > What about using '$(INSTALL) -D ...' instead of the if-mkdir-block
-> > above?
-> > > > (E.g. as in tools/debugging/Makefile.)
-> > > >
-> > > > Kind regards,
-> > > > Nicolas
-> > >
-> > > Thanks Nicolas, the reason was to keep the code consistent. That's not
-> > > to say this is the best approach. For example, here is the same thing
-> > > for tools/lib/api:
-> > >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/too=
-ls/lib/api/Makefile?h=3Dperf/core&id=3Df43368371888694a2eceaaad8f5e9775c092=
-009a#n84
-> > >
-> > > If you'd like to improve this in all the versions and send patches I'd
-> > > be happy to take a look.
-> > >
-> > > Thanks,
-> > > Ian
-> >
-> > Ian, while watching at tools/lib/*/Makefile I stumple across the
-> > special single-quote handling (e.g. 'DESTDIR_SQ') several times.
-> >
-> > Top-level Makefile and kbuild are not designed to work with file or
-> > directory names containing spaces.  Do you know whether this is needed
-> > for the installation rules in tools/lib/?  I'd like to remove support
-> > for path names with spaces for a increasing simplicity and consistency.
-> >
-> > Kind regards,
-> > Nicolas
-> >
->=20
-> Hi Nicolas,
->=20
-> Simplicity in the files SGTM, my own shell script norms are to be
-> cautious/defensive around the interpretation of spaces. The SQ code was
-> cargo culted and so may or may not be necessary. The installation rules a=
-re
-> dealing with user paths which may contain spaces, so I'd encourage some
-> caution. We should be able to come up with some command lines that test a=
-ll
-> cases to determine if anything suffers from the changes and whether to ca=
-re.
->=20
-> Thanks,
-> Ian
+diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
+index 0d611a6c5511..eb7cf8a69607 100644
+--- a/fs/ntfs3/fslog.c
++++ b/fs/ntfs3/fslog.c
+@@ -4277,6 +4277,10 @@ int log_replay(struct ntfs_inode *ni, bool *initialized)
+ 	rec_len -= t32;
+ 
+ 	attr_names = kmemdup(Add2Ptr(lrh, t32), rec_len, GFP_NOFS);
++	if (!attr_names) {
++		err = -ENOMEM;
++		goto out;
++	}
+ 
+ 	lcb_put(lcb);
+ 	lcb = NULL;
+-- 
+2.25.1
 
-Hi Ian,
-
-looking at some of the tools/lib/*/Makefiles and your patch above, the=20
-use of DESTDIR vs. DESTDIR_SQ seems to be quite inconsistent already:
-
->  define do_install
-> -	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> -		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> +	if [ ! -d '$2' ]; then             \
-> +		$(INSTALL) -d -m 755 '$2'; \
->  	fi;                                             \
-> -	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> +	$(INSTALL) $1 $(if $3,-m $3,) '$2'
-
-Here, the single-quoted DESTDIR_SQ is removed from do_install (which I=20
-think is a good thing)...
-
->  endef
-> =20
->  install_lib: $(LIBFILE)
-> @@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
->  		$(call do_install_mkdir,$(libdir_SQ)); \
->  		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
-> =20
-> -install_headers:
-> -	$(call QUIET_INSTALL, libsubcmd_headers) \
-> -		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
-> -		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
-> +HDRS :=3D exec-cmd.h help.h pager.h parse-options.h run-command.h
-> +INSTALL_HDRS_PFX :=3D $(DESTDIR)$(prefix)/include/subcmd
-> +INSTALL_HDRS :=3D $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
-> +
-> +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
-> +	$(call QUIET_INSTALL, $@) \
-> +		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
-
-=2E.. and a plain $(DESTDIR) (via $(INSTALL_HDRS_PFX)) is forwarded to=20
-do_install.  Doesn't that mean, that we end up with
-
-  $(INSTALL) $< -m 644 '$(DESTDIR)$(prefix)/include/subcmd'
-
-where neither $(DESTDIR) nor $(prefix) has the special single-quote=20
-handling?  If we would remove the single-quoting and _SQ redefinitions,=20
-it _should_ be possible (again) to have destination paths with spaces=20
-(and single quotes), iff users escape properly e.g.
-DESTDIR=3D"'/name with space'".  Perhaps a hint about that in the=20
-Documentation might then be helpful.
-
-Or do I get something completely wrong?
-
-If nobody complains, I am going to prepare a patch for removing the=20
-single-quote special handling.
-
-Kind regards,
-Nicolas
-
---iTsQL20z2LG4ZgZl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOhZVgACgkQB1IKcBYm
-EmmSmhAA57YOl1MinlSplaZWdWN5NpBPPPEvGI6x+GQEqSP3EDguUqjDXF2HRT2c
-JyhabSzz1QnI3Dv/D+Hfu0H4x6vezixXYp2krWcjg5GBW+MAfIhr+L0pIgQXOj+1
-+pswC12cksIOhfIn1HavWHHgidFvrxjQFo/649prLznaHdWxK1UKGL9bXWIcdFcq
-ntM8RlO0ixEnAmAhYPy0+61cg7n3X3Gq1C/WIyXu9d66ORkNSKWrnztP5qWVKOe2
-eWBh/kZnj+TW67wLBOm6i7gsUYy7EXHrKad39XpTsSGmzlxXkmfGBJhTSGbMSYtA
-SI4bVPp664FkMEz9diR2iSGObWyqvStnMOeFGitkBQBJRL7Y/8wMja8zdp9AGyvj
-BB6ygJr+0wzIsgfJmcHtyEAImlANfACoyTq1LyKJIaRqZMi/OsE5yOU8HLC4iQgU
-dtHuxtV+IrE+byZa6aWIUI5itvTyMuyEUG0E5A9AofP+vg+rglsnrmGOYvIBfwvq
-SNSQoxc3vf4gKNMj6jmLlGltFUNEeKW5jzSR1Wefm9jt2rRjCOzaBtn4fM1ssqGg
-LX1KM9JLQUx7MlQrEs5R32KL5hzAq0+LDL+5oEGHuRaiyeG2tPB2cNLzV2RTHiv8
-HMv7tAK+7qX1bPaP6xmk7ahwGZe4jrYzjh1i+2+wP+LT5DC9UmI=
-=ACeV
------END PGP SIGNATURE-----
-
---iTsQL20z2LG4ZgZl--
