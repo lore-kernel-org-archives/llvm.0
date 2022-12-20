@@ -1,166 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C7846B3
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 15:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671548497;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=h2MkHMNnJgTmECAd4pRtkb1qJmxlmuPD02mvQpecjd0=;
-	b=ZV4BbORs7LbGkIdeB9alsNx8OLZ/xkPweDJamOxxD8iRsYIh+H+TdmnAlkUPWRn+7qCBCR
-	tqEljd58DUELL+WdJH2amZoj9QhmtgkKvPpo7AngV0wjBRE7XYvjVQduO26TiaNy3mMjJm
-	Cu1pkhhB/qOnJ6fyNGNcpSAjxQaQtjY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-ARKnI2eMPmm5x3TAWMyh3Q-1; Tue, 20 Dec 2022 10:01:35 -0500
-X-MC-Unique: ARKnI2eMPmm5x3TAWMyh3Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9313F88905B
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 15:01:35 +0000 (UTC)
-Received: from [172.64.12.49] (unknown [10.30.33.198])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 75D344014EB9;
-	Tue, 20 Dec 2022 15:01:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
- mainline.kernel.org-clang, 6feb57c2)
-Date: Tue, 20 Dec 2022 15:01:35 -0000
-To: bgoncalv@redhat.com, omosnace@redhat.com, llvm@lists.linux.dev,
- mmalik@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2453F1878
+	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 16:32:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CF9C433D2;
+	Tue, 20 Dec 2022 16:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1671553960;
+	bh=Bem8z5//1aEvoEVVdnx5RIqRMonjMFHjFzpnJmFo32M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RAodN6DClMr8hmKGNFCfW2DeFLSmvd+YgOftHqGH0g8PMDm2wuYHUPiZFVObuJUpC
+	 xKYaNlkePLkV3NAYAnZQNYyYBmT+ls2jgTL42ZtIgswRVeTNFrsIdVqCHO7jKN3wtN
+	 cqvmE3hJtL4vGutpOiJiwHjdwT/Tl268yDfML8rYsNzc8LkBr4FIbK9IjoGb3APs+W
+	 ewmvKnlYKe2qJ87FNXDMIP7pIp37xy0lMIJTbJjShQqnigZptoMtvDsWLuFGVGrjt3
+	 vtGPnUWJc4e4IuC/SwgabpYGPtrcfwI7ZmElBtOp/ELnQB6eJpuOXSbgk8k5i0quWe
+	 4N7x73MNzi5EA==
+Date: Tue, 20 Dec 2022 09:32:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc: virtualization@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+	bhelgaas@google.com, "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
+Message-ID: <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
+References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
+ <20221219083511.73205-4-alvaro.karsz@solid-run.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <23604.122122010013502681@us-mta-408.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219083511.73205-4-alvaro.karsz@solid-run.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Alvaro,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Mon, Dec 19, 2022 at 10:35:11AM +0200, Alvaro Karsz wrote:
+> This commit includes:
+>  1) The driver to manage the controlplane over vDPA bus.
+>  2) A HW monitor device to read health values from the DPU.
+> 
+> Signed-off-by: Alvaro Karsz <alvaro.karsz@solid-run.com>
 
+<snip>
 
-Kernel information:
-    Commit message: Merge tag 'kbuild-v6.2' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/masahiroy/linux-kbuild
+> +static int psnet_open_pf_bar(struct pci_dev *pdev, struct psnet *psnet)
+> +{
+> +	char name[25];
+> +	int ret, i, mask = 0;
+> +	/* We don't know which BAR will be used to communicate..
+> +	 * We will map every bar with len > 0.
+> +	 *
+> +	 * Later, we will discover the BAR and unmap all other BARs.
+> +	 */
+> +	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
+> +		if (pci_resource_len(pdev, i))
+> +			mask |= (1 << i);
+> +	}
+> +
+> +	/* No BAR can be used.. */
+> +	if (!mask) {
+> +		SNET_ERR(pdev, "Failed to find a PCI BAR\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	snprintf(name, SNET_NAME_SIZE, "psnet[%s]-bars", pci_name(pdev));
+> +	ret = pcim_iomap_regions(pdev, mask, name);
+> +	if (ret) {
+> +		SNET_ERR(pdev, "Failed to request and map PCI BARs\n");
+> +		return ret;
+> +	}
+> +
+> +	for (i = 0; i < PCI_STD_NUM_BARS; i++) {
+> +		if (mask & (1 << i))
+> +			psnet->bars[i] = pcim_iomap_table(pdev)[i];
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int snet_open_vf_bar(struct pci_dev *pdev, struct snet *snet)
+> +{
+> +	char name[20];
+> +	int ret;
+> +
+> +	snprintf(name, SNET_NAME_SIZE, "snet[%s]-bar", pci_name(pdev));
+> +	/* Request and map BAR */
+> +	ret = pcim_iomap_regions(pdev, BIT(snet->psnet->cfg.vf_bar), name);
+> +	if (ret) {
+> +		SNET_ERR(pdev, "Failed to request and map PCI BAR for a VF\n");
+> +		return ret;
+> +	}
+> +
+> +	snet->bar = pcim_iomap_table(pdev)[snet->psnet->cfg.vf_bar];
+> +
+> +	return 0;
+> +}
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/63883
+This patch as commit 73a720b16fa1 ("virtio: vdpa: new SolidNET DPU
+driver.") in next-20221220 causes the following clang warnings:
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         ppc64le - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6456761
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6457029
+  drivers/vdpa/solidrun/snet_main.c:561:2: error: 'snprintf' size argument is too large; destination buffer has size 25, but size argument is 256 [-Werror,-Wfortify-source]
+          snprintf(name, SNET_NAME_SIZE, "psnet[%s]-bars", pci_name(pdev));
+          ^
+  drivers/vdpa/solidrun/snet_main.c:581:2: error: 'snprintf' size argument is too large; destination buffer has size 20, but size argument is 256 [-Werror,-Wfortify-source]
+          snprintf(name, SNET_NAME_SIZE, "snet[%s]-bar", pci_name(pdev));
+          ^
+  2 errors generated.
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
-/0xa0
-            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
-rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: LTP: openposix test suite: timer_settime_6-1 - timer did not=
- wait for correct interval
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1103
-            Affected tests:
-                  x86_64 - LTP: openposix test suite
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+This does not appear to be a false positive but what was the intent
+here? Should the local name variables increase their length or should
+the buffer length be reduced?
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
