@@ -1,93 +1,84 @@
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B6D7E
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 21:49:00 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 3F86D5C012E;
-	Tue, 20 Dec 2022 16:48:59 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 20 Dec 2022 16:48:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1671572939; x=1671659339; bh=qFNrjE+MU/
-	aHWOuwaY9sLeM6ocoYDHmnOKkYGdXz6Ks=; b=lTBbHcgYoQZEGGaHuIbvpX/x5t
-	hpxUG4HobRHjPfpEBI9DUySOvbUPDku7Wdt/wacxlVuGwVSrr4HpiLOTswIFvGvv
-	zXjbpD/jHf9suSmuS/FxM4YTTJ0J6nZHxsax8WjD/n/LtCsHEU+CTKR7Xk+nw+NJ
-	cNqaHe2XPeEWXdZxm3eSN3h4GnEKp7QDd+ozIzZoEL4W0UOpJcA0a3+5SCFTaJDg
-	5K7eCkEF8+/9EtivlEZitdhH67d49cb5OxNB50Iq7He64JaU3wo2kSRXRXsAgFYT
-	/SjccVLz5mfgtsV39n+U5AMhcyzL3mAHe2p2EHDmaHbmbHQhBPC0oKLAIy4w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1671572939; x=1671659339; bh=qFNrjE+MU/aHWOuwaY9sLeM6ocoY
-	DHmnOKkYGdXz6Ks=; b=JQ5P4EjydGRaa0w/hRPrIdAv/wgWy64UiIDbWtDzaR2e
-	pBXzhTfcpJfIjKSJrXSGMpSLy3+P8p9r2MB0euBqrWX2V1qSaUyFDHRppNzbmCvC
-	hAiotAmG8w2fbqsqzJ6QWg19M3tB01FMOZovi32UWH7nR5EcSOuAX2fTuVkgHkS3
-	wU4XM/hV5453CJn3dX/qJwDHVr9whriM6vDPmDCG3oxTtK390/54mX66vk3pY2f0
-	ZrSHAs5Ga0hYosGJ9UHGIM3IwPvN2tOPIEdQ0B2VrKfo1AHcjY23wRazpLlraetN
-	fDKBlCHKHRSnfXo/zIl8hVtj/C7QQFclx6W/Sr9W6A==
-X-ME-Sender: <xms:yy2iY79pVamm-m8ywGcXVF805qhm7i3uHm3QlguahNKqOvUmT17YTQ>
-    <xme:yy2iY3u8aTyAjI1HnJp68fzyOpDB5TFuJz1XNhn6nN1n93ragUdebZ1Kvh0Xzo0pr
-    MEt0VL8rHgIBnSsIlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeigdduvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:yy2iY5AaIBsZx-7oZGK7mbEXiy3jlmxKNWgrVWJwSFVDMye9fKpvDA>
-    <xmx:yy2iY3cbLAZVNxZQI0J0Tb-rB4KfPsxJwB1hqx1dwBGdpGNUpyPTYQ>
-    <xmx:yy2iYwNgbAGE4f8PZjjWejpxx4eANgO2CDhkuFyp-zK29Psrarb6YA>
-    <xmx:yy2iY3dbd6Sll9_DW01LQJ7bK8SLbR81gccc8ZtfKMlS06Tc39WkyQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 004BDB60086; Tue, 20 Dec 2022 16:48:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91761365;
+	Tue, 20 Dec 2022 22:40:41 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 84B4C4DDCA;
+	Tue, 20 Dec 2022 22:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1671576034; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MaMjbYXCAB1pbi4N+U+NGehF3r5cVCO6SVyTsmpw7ww=;
+	b=V42YAehYBCywNM1UQufySKDLW1mVDe7l8mqGWFTRbnlsnKLAST+9UHBh6ENJ22ooblCPHT
+	gaBEHh+UsnUG+cq5p10QzjWZF7WxGv70IkGPIXMTVGjNrJKy3layqgUP+9cZHUUbiQUUFn
+	K/eH+JKW0gsOgmF+YQ6R1eOEvdWN3p4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1671576034;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MaMjbYXCAB1pbi4N+U+NGehF3r5cVCO6SVyTsmpw7ww=;
+	b=NvRTujoIjo3aqzAgklxOHfa0hgQf7TvHBWnrNNCvuy69aOVIBZBmvmHalDGacSjDl51KII
+	lEiT89QRNlOYlgCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 745ED1390E;
+	Tue, 20 Dec 2022 22:40:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id YSRdHOI5omNUCwAAMHmgww
+	(envelope-from <jack@suse.cz>); Tue, 20 Dec 2022 22:40:34 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id ECA76A0732; Tue, 20 Dec 2022 23:40:33 +0100 (CET)
+Date: Tue, 20 Dec 2022 23:40:33 +0100
+From: Jan Kara <jack@suse.cz>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: kernel test robot <lkp@intel.com>, Jan Kara <jack@suse.cz>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [jack-fs:for_next 17/20] fs/udf/namei.c:1250:12: warning: stack
+ frame size (1536) exceeds limit (1024) in 'udf_rename'
+Message-ID: <20221220224033.sniahpndvlswdghx@quack3>
+References: <202212200558.lK9x1KW0-lkp@intel.com>
+ <b41e5a55-397f-4e86-a1aa-8874114f23c7@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <ee60ef99-b09c-4ed7-ab8e-5df97037cad1@app.fastmail.com>
-In-Reply-To: 
- <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
-References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
- <20221219083511.73205-4-alvaro.karsz@solid-run.com>
- <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
- <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
-Date: Tue, 20 Dec 2022 22:48:38 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alvaro Karsz" <alvaro.karsz@solid-run.com>,
- "Nathan Chancellor" <nathan@kernel.org>
-Cc: virtualization@lists.linux-foundation.org, linux-pci@vger.kernel.org,
- bhelgaas@google.com, "Michael S. Tsirkin" <mst@redhat.com>,
- "Jason Wang" <jasowang@redhat.com>, "Jean Delvare" <jdelvare@suse.com>,
- "Guenter Roeck" <linux@roeck-us.net>, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b41e5a55-397f-4e86-a1aa-8874114f23c7@app.fastmail.com>
 
-On Tue, Dec 20, 2022, at 17:46, Alvaro Karsz wrote:
-> Hi Nathan,
->
->> This does not appear to be a false positive but what was the intent
->> here? Should the local name variables increase their length or should
->> the buffer length be reduced?
->
-> You're right, the local name variables and snprintf argument don't match.
-> Thanks for noticing.
-> I think that we should increase the name variables  to be
-> SNET_NAME_SIZE bytes long.
+On Tue 20-12-22 22:26:07, Arnd Bergmann wrote:
+> On Mon, Dec 19, 2022, at 22:47, kernel test robot wrote:
+> > tree:   
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git 
+> > for_next
+> > head:   288b92cc9d904b35f73c8e0b0c99592999702685
+> > commit: e4fefb466e1317384788946a1b81b577e8e730b9 [17/20] udf: Convert 
+> > udf_rename() to new directory iteration code
+> > config: arm-randconfig-r046-20221218
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
+> > 98b13979fb05f3ed288a900deb843e7b27589e58)
+> > reproduce (this is a W=1 build):
+> 
+> I see this as well, the problem is clearly the three instances of
+> struct udf_fileident_iter on the stack, each of them containing
+> a 256 character string along with ~100 bytes of other data.
 
-If you can show that the string fits into the current length, it
-would be better to keep the stack usage low and just adapt the
-length to be sizeof(string) instead of SNET_NAME_SIZE.
+Yep, I'm testing a patch that moves the 256-byte buffer to kmalloc() area
+to reduce the stack usage...
 
-    Arnd
+								Honza
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
