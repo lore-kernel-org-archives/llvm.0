@@ -1,62 +1,150 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3030B1FB3
-	for <llvm@lists.linux.dev>; Wed, 21 Dec 2022 07:05:46 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id t2so14687133ply.2
-        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 23:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Sa/I/7gVZaIQy7B1ZRMHInqzdjhXIObW4yJN5eIb0s=;
-        b=O6PraZUESnwbOholnhjgplj9xv51g9sGEVY8NhsjgGTLrtwdyLSpcy0hoDX94TLpOM
-         ZLtIi5w3Xaw+kDPdXAKAd4uQybBVnl3NhdP8baIsgh0xxPJfwH316rvbIt08yN+SVFBc
-         Em1QxCO/rC8nBxgI+dOUE46YXMb7IexbUy0+CdTSC1EIy+Rv9S3Q5xnA2NxRxIS+klwG
-         smbNQkEXEYHiNtF4LRNDHBJ8rnVk0NROrkfDiFiCYNOEm+UYFZ/xMn/WjDCm9Ah2p9ZB
-         1vUHjeklLjFEGi/8nFgo7OJpH6ClxYT9lmQPOdmyfvJZ2XywtGy7VcDizXeYQvsoHt4H
-         aaaQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F243E1FB3
+	for <llvm@lists.linux.dev>; Wed, 21 Dec 2022 08:14:41 +0000 (UTC)
+Received: by mail-il1-f197.google.com with SMTP id l16-20020a056e02067000b0030325bbd570so9663931ilt.0
+        for <llvm@lists.linux.dev>; Wed, 21 Dec 2022 00:14:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Sa/I/7gVZaIQy7B1ZRMHInqzdjhXIObW4yJN5eIb0s=;
-        b=wjYoL/xTsNiCWpUC7cWGXxz1Kp2/LI8yfgxaITjBrM2wR/fURBmYGiEN7AYXN1TMqR
-         b6Pz0niY+c0VSc+g2um5IYlw7qGaKxvysGuz92QjTHDczQyPg6moGl7kM1Mlnz013+gQ
-         I6VlflqxB0s34gWWbpv9YaDa4anl5/CWdKNYVOKqbGeRMmJy1ES60gLrGo+77FZV4GHf
-         RRjN0jIN31euGh4ixk+htuQE1S0WrOi8Son/F0yM2lAMGCM8p5SCZt12Q38eLs4UFfJj
-         dbGy7cUxdkEbT6L2kld750lURXQWKVpyMy+58gSGS0BU9oRFCcBfmMn2CYo+97VdrEzC
-         P+vw==
-X-Gm-Message-State: AFqh2kqB2n5z1o+XRx6RWnJHHQpPJb9ZJbQ6ZAcFpSArZ5suKADU84dU
-	gcfWwSW2+sxndv3bDHzVv2/U4ECZgph2lwAlfpKyZg==
-X-Google-Smtp-Source: AMrXdXvI2GJq84khAIseirWSINYK4M29Z94nEO5s+eBoaKJPpgioRv51ok/p+Qy7fV6OS5HQxAg+rm39/gGG8ulXdnk=
-X-Received: by 2002:a17:90b:8b:b0:219:19c1:1ae7 with SMTP id
- bb11-20020a17090b008b00b0021919c11ae7mr79160pjb.13.1671606345295; Tue, 20 Dec
- 2022 23:05:45 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A7+8fuqPbIIauDX75GlkNV66FuhTqueE+eYRZ4kmpgo=;
+        b=OLRw5jmUnLsXkCS61zJg3CPsFsWueFTiIcnJZ/f0+Yv7CuwlRCzIg6ThgxzwQ9TmnK
+         4FDcgAMf70lla5BiJXeLqk7pht6vkeiBUHQPZtGqyMmFc4MgrqNpXGeGVqaTV2EJ7MZC
+         FwwUiSFMSQT8dvT6DdNkzrWLd/cQKu+0ZvDdpWAjrkhPNTrNISYzW8smqjhuiXJ7YKVY
+         OTMAlsyoS8LlDxZP93yZLnqoC4T1DuRUqCoVNVIwlmuU6H1gzyIcQLnTzmXXXpxk5W0S
+         0fIL7oUWZyhLaAzNvRNfQplfvzqUpSkRAKAFO8mCKE50U70wHu+yQzQZ9PNc2KqlemyG
+         Yhhw==
+X-Gm-Message-State: AFqh2ko3qW7kRbkl8wOuI1737PG8WuWujdg1RJAYx1muFaKCStOyAnxH
+	HsZgMPXAfU3G7OvEr3Jcmg4uuHVYPU17gA7Mzw+5Gm4i04Qb
+X-Google-Smtp-Source: AMrXdXupwWn7ThN+0DC+oN0Jgz8FQ2+SYhQnb2YaIdKCjtpr7VtKkMb0ZcHkelzjW9Gypy+7024Cj0HmUL/p40wDZcBnzKwGnaE1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
- <20221219083511.73205-4-alvaro.karsz@solid-run.com> <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
- <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com> <20221221013907-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221221013907-mutt-send-email-mst@kernel.org>
-From: Alvaro Karsz <alvaro.karsz@solid-run.com>
-Date: Wed, 21 Dec 2022 09:05:08 +0200
-Message-ID: <CAJs=3_BuiRj2ZGQM7wVfpUgGNMR_24jv3h0fv+swBk54Gmr6uw@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, virtualization@lists.linux-foundation.org, 
-	linux-pci@vger.kernel.org, bhelgaas@google.com, 
-	Jason Wang <jasowang@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
+X-Received: by 2002:a92:4442:0:b0:303:c52:274a with SMTP id
+ a2-20020a924442000000b003030c52274amr90595ilm.171.1671610481055; Wed, 21 Dec
+ 2022 00:14:41 -0800 (PST)
+Date: Wed, 21 Dec 2022 00:14:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ed1df405f05224aa@google.com>
+Subject: [syzbot] [ntfs3?] possible deadlock in ntfs_set_state
+From: syzbot <syzbot+f91c29a5d5a01ada051a@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, bvanassche@acm.org, hch@lst.de, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, martin.petersen@oracle.com, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, viro@zeniv.linux.org.uk, 
+	yanaijie@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 
-> Please post a follow-up ASAP. I can squash myself if I rebase.
->
-> Thanks!
+Hello,
 
-Sure, I'll do it now
+syzbot found the following issue on:
+
+HEAD commit:    aeba12b26c79 Merge tag 'nfsd-6.2-1' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1655e690480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4d348fc1e0f483c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=f91c29a5d5a01ada051a
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15332c9b880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16647dc8480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/661fe33f851b/disk-aeba12b2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c938bdcf3ad0/vmlinux-aeba12b2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e7f738de30b7/bzImage-aeba12b2.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b4ed1012076c/mount_0.gz
+
+The issue was bisected to:
+
+commit d9a434fa0c12ed5f7afe1e9dd30003ab5d059b85
+Author: Jason Yan <yanaijie@huawei.com>
+Date:   Wed Jul 20 02:51:20 2022 +0000
+
+    scsi: core: Fix warning in scsi_alloc_sgtables()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14a1c453880000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16a1c453880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a1c453880000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f91c29a5d5a01ada051a@syzkaller.appspotmail.com
+Fixes: d9a434fa0c12 ("scsi: core: Fix warning in scsi_alloc_sgtables()")
+
+ntfs3: loop0: ino=5, ntfs_iget5
+============================================
+WARNING: possible recursive locking detected
+6.1.0-syzkaller-13781-gaeba12b26c79 #0 Not tainted
+--------------------------------------------
+kworker/u4:6/3799 is trying to acquire lock:
+ffff888076a40100 (&ni->ni_lock){+.+.}-{3:3}, at: ntfs_set_state+0x1da/0x680 fs/ntfs3/fsntfs.c:920
+
+but task is already holding lock:
+ffff888076a46fa0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_trylock fs/ntfs3/ntfs_fs.h:1123 [inline]
+ffff888076a46fa0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_write_inode+0x14d/0x11e0 fs/ntfs3/frecord.c:3226
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&ni->ni_lock);
+  lock(&ni->ni_lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+3 locks held by kworker/u4:6/3799:
+ #0: ffff88814514c138 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc9000ecc7d00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff888076a46fa0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_trylock fs/ntfs3/ntfs_fs.h:1123 [inline]
+ #2: ffff888076a46fa0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_write_inode+0x14d/0x11e0 fs/ntfs3/frecord.c:3226
+
+stack backtrace:
+CPU: 0 PID: 3799 Comm: kworker/u4:6 Not tainted 6.1.0-syzkaller-13781-gaeba12b26c79 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: writeback wb_workfn (flush-7:0)
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2990 [inline]
+ check_deadlock kernel/locking/lockdep.c:3033 [inline]
+ validate_chain+0x4843/0x6ae0 kernel/locking/lockdep.c:3818
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ ntfs_set_state+0x1da/0x680 fs/ntfs3/fsntfs.c:920
+ ntfs_iget5+0x34c/0x36f0 fs/ntfs3/inode.c:504
+ ni_update_parent+0x7ea/0xc60 fs/ntfs3/frecord.c:3182
+ ni_write_inode+0xe30/0x11e0 fs/ntfs3/frecord.c:3277
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2063
+ wb_do_writeback fs/fs-writeback.c:2206 [inline]
+ wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
