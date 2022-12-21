@@ -1,104 +1,261 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D891365
-	for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 23:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671578464;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B/yL2ss9yIdWHwPse2tigQEB/FE3FbjAM3XIM8TGekM=;
-	b=i+CJtNEDzlCqFSQjn5lbwH/fx0H1nGPCSpVNDnHWbSw+YLblO2UMzzNXyKcoDkP8PewWr1
-	A6nQ1ui+4K0lnNOyXqFh0hK8rKG+Qv7M3g0FjpqC6Fd80kHfPm9AKXBDu1cQ4Aq5BJGVn2
-	d3qFNAkwtP+YBWR6brhHn80GGCS2Zz0=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-308-q1mp6wRFOtGISQfTCfVdpw-1; Tue, 20 Dec 2022 18:21:03 -0500
-X-MC-Unique: q1mp6wRFOtGISQfTCfVdpw-1
-Received: by mail-qt1-f197.google.com with SMTP id fg11-20020a05622a580b00b003a7eaa5cb47so6188120qtb.15
-        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 15:21:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B737E
+	for <llvm@lists.linux.dev>; Wed, 21 Dec 2022 05:59:26 +0000 (UTC)
+Received: by mail-il1-f169.google.com with SMTP id d14so7430361ilq.11
+        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 21:59:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NTAcqyZi4W+uNvx0HYCH7K/UWAkMHmtbGpytiWnrUo=;
+        b=mcfDIPPmOH7rWQnM/v7aWKAHCv1U9AFPS5zUZ8YXKmag/b8GKqwNKNC/yy5NJhjL+z
+         uzR4TewO2g8iUvMc3pfULNoMkr8qk6OYIBnK3AseWiqf2ob2vUm0bsGrnCHMfAhgHxOq
+         qm6B48yUax7tBSEYK43LwIxlEc0LmcykT9MswAZC3H7Y0z0lOqWzDQLi5Fti4JZ8Vrp6
+         IsNiN23KZ+8Cy5XuaI3vGzi+7NpvfnhSS/Xz/478DwfEBBUiTgDu5qzfiDDzinnTin6Z
+         yiKfOMdGjMMORM+999yLlTPapp2KHTgg27WxAjBWhkcSTLoNtgATpVrONS3r+drdib1a
+         gIuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B/yL2ss9yIdWHwPse2tigQEB/FE3FbjAM3XIM8TGekM=;
-        b=brKu7+Yhn/6sx3liUcd3FJbD/357/lTV6jcMO/bG/lsZ6dAEf8TW4aZCvOcH9YxOnR
-         lQVEUqNocqGaIH61t8kmnKUcY8wv6WbEpQAsR0laXKf3IK3HjFQ61qY3ylcs+ugz4jls
-         6A5+jZd6TqqlsVgC901ChICy1pMkYP6Yy8bEf0oTuhOiWFgLzw0JT04cze1H1LkR2Eh+
-         aAAjBnR/JJHm4qjE0RxZBZx/S/2rd/kUF8lazjNYD6i31QAB3ozawdVVKCi19jr0GGOW
-         rKi3MHM08cKKnM2Ds/hFg7hBYCj5HYYcifLK0GPtPLqNr21Q4568mVK8sfMzMp7QKTGH
-         bEnw==
-X-Gm-Message-State: AFqh2kon5obXyFfT1izu1Gv2w36XnCY+rPpcH9SYvaViN01T8ls1+Vqp
-	OHt02IsliOLT2KfbdZTy/ra5xVaNspNARjxKzZFqhhWdhzkTtm0wwEJ+jGXb0meRLT+gcB/JILK
-	PdzhMNp1724itpA==
-X-Received: by 2002:ad4:4c50:0:b0:4c7:2547:bc03 with SMTP id cs16-20020ad44c50000000b004c72547bc03mr14988662qvb.50.1671578462604;
-        Tue, 20 Dec 2022 15:21:02 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsDl5nzwCTQTVtglgJWA2+tKSWwmW+GiT3UWFjEy1Jz1RZbeyhVIyRfPXdfqhBYgTBI7HoA+g==
-X-Received: by 2002:ad4:4c50:0:b0:4c7:2547:bc03 with SMTP id cs16-20020ad44c50000000b004c72547bc03mr14988633qvb.50.1671578462340;
-        Tue, 20 Dec 2022 15:21:02 -0800 (PST)
-Received: from redhat.com ([37.19.199.117])
-        by smtp.gmail.com with ESMTPSA id o20-20020a05620a22d400b006e07228ed53sm9565979qki.18.2022.12.20.15.20.59
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+NTAcqyZi4W+uNvx0HYCH7K/UWAkMHmtbGpytiWnrUo=;
+        b=ziNeAGr5nPirzdqvYNIH0XkZUibmsTN6oCbyCpH79Hz+YtiaXDstSTow8T9M0FjhhE
+         w0CimhtKI1MV9WKFywyu9s8+szfflnr9mJMrnKI6xSx2vJ+/NHyHnjy3XLBiIXoogea4
+         ENGnO9wuVSYUeQMqs/KRcsrLeGq1oy+0epJd0stnX35PJ6gTsruE+vrW4MWppNwzUMhB
+         EcfqBYakP9uTv5vc5x5YpAUDQaIQF0DUbqhLEYseciEtZHOK/+dRifwvpVpKHDHdiuBa
+         e2hSLnqljODTbFWMJN4TNIi8hzYgq/YPlxjdVSquwY+5011J8IAboBXzeWXpftayQexz
+         5kvw==
+X-Gm-Message-State: AFqh2kqKhldWSen4KlOqNkUP4Gljx6woEapZk2UtSoka1ZngRTytnMUx
+	Pr/ELWsXrB5Xt09vTK5hPSo=
+X-Google-Smtp-Source: AMrXdXtBCBTWGUjxKkQYB6+2tmxDLbf/zN22r8j0Rz9PtPcXywOIqLZzy2hPRCdemJ3ZZJZncyzOAw==
+X-Received: by 2002:a92:ce07:0:b0:300:1cc8:7ec7 with SMTP id b7-20020a92ce07000000b003001cc87ec7mr577234ilo.12.1671602365053;
+        Tue, 20 Dec 2022 21:59:25 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net. [71.33.132.231])
+        by smtp.gmail.com with ESMTPSA id b3-20020a029583000000b003748d3552e1sm5282647jai.154.2022.12.20.21.59.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 15:21:01 -0800 (PST)
-Date: Tue, 20 Dec 2022 18:20:56 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alvaro Karsz <alvaro.karsz@solid-run.com>,
-	virtualization@lists.linux-foundation.org,
-	linux-pci@vger.kernel.org, bhelgaas@google.com,
-	Jason Wang <jasowang@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
-Message-ID: <20221220182026-mutt-send-email-mst@kernel.org>
-References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
- <20221219083511.73205-4-alvaro.karsz@solid-run.com>
- <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
- <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
- <Y6IfwHicoMojJrIB@dev-arch.thelio-3990X>
+        Tue, 20 Dec 2022 21:59:24 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: bpf@vger.kernel.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next] selftests/bpf: move struct definitions out of function params
+Date: Tue, 20 Dec 2022 22:58:48 -0700
+Message-Id: <20221221055856.2786043-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <Y6IfwHicoMojJrIB@dev-arch.thelio-3990X>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 20, 2022 at 01:49:04PM -0700, Nathan Chancellor wrote:
-> On Tue, Dec 20, 2022 at 06:46:20PM +0200, Alvaro Karsz wrote:
-> > Hi Nathan,
-> > 
-> > > This does not appear to be a false positive but what was the intent
-> > > here? Should the local name variables increase their length or should
-> > > the buffer length be reduced?
-> > 
-> > You're right, the local name variables and snprintf argument don't match.
-> > Thanks for noticing.
-> > I think that we should increase the name variables  to be
-> > SNET_NAME_SIZE bytes long.
-> > 
-> > How should I proceed from here?
-> > Should I create a new version for this patch, or should I fix it in a
-> > follow up patch?
-> 
-> That is up to Michael at the end of the day (each maintainer handles
-> their tree differently) but I would recommend sending a follow up fix,
-> as it is easy to fold it in if they want to rebase the tree for it or
-> just take it as a fix.
-> 
-> Thanks for the quick triage and response!
-> 
-> Cheers,
-> Nathan
+Anonymous structs can't be declared inside function parameter
+definitions in current c standards, however clang doesn't detect this
+condition currently while GCC does.
 
-on top is ok but post soon please as i need to send this to Linus.
+Details: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108189
 
+Fixes errors like:
+progs/btf_dump_test_case_bitfields.c:85:7: error: anonymous struct declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+   85 | int f(struct {
+      |       ^~~~~~
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../bpf/progs/btf_dump_test_case_bitfields.c  |  9 ++++--
+ .../progs/btf_dump_test_case_namespacing.c    | 10 ++++---
+ .../bpf/progs/btf_dump_test_case_packing.c    | 10 ++++---
+ .../bpf/progs/btf_dump_test_case_padding.c    | 10 ++++---
+ .../bpf/progs/btf_dump_test_case_syntax.c     | 30 +++++++++++++------
+ 5 files changed, 46 insertions(+), 23 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+index e01690618e1e..c75f6bd06a49 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+@@ -82,11 +82,16 @@ struct bitfield_flushed {
+ 	long b: 16;
+ };
+ 
+-int f(struct {
++/* ----- START-EXPECTED-OUTPUT ----- */
++struct root_struct {
+ 	struct bitfields_only_mixed_types _1;
+ 	struct bitfield_mixed_with_others _2;
+ 	struct bitfield_flushed _3;
+-} *_)
++};
++
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+index 92a4ad428710..d7cf2a8487c9 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+@@ -49,9 +49,7 @@ typedef int Y;
+ 
+ typedef int Z;
+ 
+-/*------ END-EXPECTED-OUTPUT ------ */
+-
+-int f(struct {
++struct root_struct {
+ 	struct S _1;
+ 	S _2;
+ 	union U _3;
+@@ -67,7 +65,11 @@ int f(struct {
+ 	X xx;
+ 	Y yy;
+ 	Z zz;
+-} *_)
++};
++
++/*------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+index 7998f27df7dd..e039ceb50c43 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+@@ -132,9 +132,7 @@ struct outer_packed_struct {
+ 	struct nested_packed_struct b;
+ } __attribute__((packed));
+ 
+-/* ------ END-EXPECTED-OUTPUT ------ */
+-
+-int f(struct {
++struct root_struct {
+ 	struct packed_trailing_space _1;
+ 	struct non_packed_trailing_space _2;
+ 	struct packed_fields _3;
+@@ -147,7 +145,11 @@ int f(struct {
+ 	struct usb_host_endpoint _10;
+ 	struct outer_nonpacked_struct _11;
+ 	struct outer_packed_struct _12;
+-} *_)
++};
++
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+index 79276fbe454a..2ca46ad8d66a 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+@@ -220,9 +220,7 @@ struct outer_mixed_but_unpacked {
+ 	struct nested_packed b2;
+ };
+ 
+-/* ------ END-EXPECTED-OUTPUT ------ */
+-
+-int f(struct {
++struct root_struct {
+ 	struct padded_implicitly _1;
+ 	struct padded_explicitly _2;
+ 	struct padded_a_lot _3;
+@@ -243,7 +241,11 @@ int f(struct {
+ 	struct ib_wc _201;
+ 	struct acpi_object_method _202;
+ 	struct outer_mixed_but_unpacked _203;
+-} *_)
++} __attribute__((packed));
++
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 26fffb02ed10..3e31df7cecc6 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -104,24 +104,24 @@ typedef void (*printf_fn_t)(const char *, ...);
+  *   typedef const fn_output_inner_t fn_ptr_arr2_t[5];
+  */
+ /* ----- START-EXPECTED-OUTPUT ----- */
+-typedef char * const * (*fn_ptr2_t)(struct {
+-	int a;
+-}, int (*)(int));
++struct struct_a;
++
++typedef char * const * (*fn_ptr2_t)(struct struct_a, int (*)(int));
++
++struct struct_c;
++
++struct struct_h;
+ 
+ typedef struct {
+ 	int a;
+-	void (*b)(int, struct {
+-		int c;
+-	}, union {
++	void (*b)(int, struct struct_c, union {
+ 		char d;
+ 		int e[5];
+ 	});
+ } (*fn_complex_t)(union {
+ 	void *f;
+ 	char g[16];
+-}, struct {
+-	int h;
+-});
++}, struct struct_h);
+ 
+ typedef void (* (*signal_t)(int, void (*)(int)))(int);
+ 
+@@ -272,6 +272,18 @@ struct root_struct {
+ 	struct float_struct _15;
+ };
+ 
++struct struct_a {
++	int a;
++};
++
++struct struct_h {
++	int h;
++};
++
++struct struct_c {
++	int c;
++};
++
+ /* ------ END-EXPECTED-OUTPUT ------ */
+ 
+ int f(struct root_struct *s)
 -- 
-MST
+2.34.1
 
