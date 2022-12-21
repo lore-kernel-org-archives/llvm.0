@@ -1,98 +1,62 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F561FA7
-	for <llvm@lists.linux.dev>; Wed, 21 Dec 2022 06:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671604823;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6GIXJfP6lLbkNCudO+mG156mH9R13EdyawfZqeVfjt4=;
-	b=jUWB1gV4+rdWLZcNl0DLlWePGgyTub5ikvr7dFZP6QRrNuMYK89z+feA+Z8KTL9voSKPtB
-	Chbne5/2s34gCdNsrRW/66H5xuUMBoE20z5muA4Tu0Rmmj7ZZaCyhB856FbZF/+ymD6COL
-	C7DDCuFQ2oU+8BtXDzOQIOUJ21h49Gs=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-148-ETqnZkoKNO6rTJu2xvpItw-1; Wed, 21 Dec 2022 01:40:21 -0500
-X-MC-Unique: ETqnZkoKNO6rTJu2xvpItw-1
-Received: by mail-qt1-f199.google.com with SMTP id bb12-20020a05622a1b0c00b003a98dd528f0so3155715qtb.13
-        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 22:40:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3030B1FB3
+	for <llvm@lists.linux.dev>; Wed, 21 Dec 2022 07:05:46 +0000 (UTC)
+Received: by mail-pl1-f176.google.com with SMTP id t2so14687133ply.2
+        for <llvm@lists.linux.dev>; Tue, 20 Dec 2022 23:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Sa/I/7gVZaIQy7B1ZRMHInqzdjhXIObW4yJN5eIb0s=;
+        b=O6PraZUESnwbOholnhjgplj9xv51g9sGEVY8NhsjgGTLrtwdyLSpcy0hoDX94TLpOM
+         ZLtIi5w3Xaw+kDPdXAKAd4uQybBVnl3NhdP8baIsgh0xxPJfwH316rvbIt08yN+SVFBc
+         Em1QxCO/rC8nBxgI+dOUE46YXMb7IexbUy0+CdTSC1EIy+Rv9S3Q5xnA2NxRxIS+klwG
+         smbNQkEXEYHiNtF4LRNDHBJ8rnVk0NROrkfDiFiCYNOEm+UYFZ/xMn/WjDCm9Ah2p9ZB
+         1vUHjeklLjFEGi/8nFgo7OJpH6ClxYT9lmQPOdmyfvJZ2XywtGy7VcDizXeYQvsoHt4H
+         aaaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6GIXJfP6lLbkNCudO+mG156mH9R13EdyawfZqeVfjt4=;
-        b=tsLE95+9Y3SKl5pL2SEuSBwO74wE8mzq/5oO8T08L/6UjiV6+GTwnoqSkiTaTitiFl
-         +V9mqDmqgZ0drPbZW0Tn8K3XfFJbQ2UyINm6xu/Cm1Sakg4vlgEEom2MS+8/9o2BocPi
-         pjxoEeLWkRlc3N00Eb3ip+mLFUTeQyFV32U/BoeGA850eDZ21fJbKweCwNb16WBbjuCU
-         iOzqGOzGdspPCeR+7wX27zn9u+dhV7kxnluMMJFhVYh4/tOis/3ObFJH0E1M5S39/kMB
-         iDSbUYE/1SJmxoDsCDyV8a8sgyBOPHdM01DKER3Ul/QPnOEVFl5TM1P16bsRgwZACXhY
-         zgLw==
-X-Gm-Message-State: AFqh2krQiK4GM7V9joAuOXE/y208gaDh6eoN9y7qOkdU5ZIofGJkR3ao
-	Msd+btvTYhunbqQIOqyQK90eC8tIS4n8e3364ToCuU2MiAw9HsE5HmMDiOTV9OS/NeINAn8uht/
-	fBdygIOvgE42WAQ==
-X-Received: by 2002:ac8:7542:0:b0:3ab:28ea:d849 with SMTP id b2-20020ac87542000000b003ab28ead849mr890788qtr.10.1671604821279;
-        Tue, 20 Dec 2022 22:40:21 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvY5Z6Nk+cW9c4QcsX8MAS54V9yZ+Jd55Y6+e6sz97Dtit25nevBX+Xt+gWUMZeniF5ZgyfTA==
-X-Received: by 2002:ac8:7542:0:b0:3ab:28ea:d849 with SMTP id b2-20020ac87542000000b003ab28ead849mr890776qtr.10.1671604821067;
-        Tue, 20 Dec 2022 22:40:21 -0800 (PST)
-Received: from redhat.com ([37.19.199.117])
-        by smtp.gmail.com with ESMTPSA id t15-20020ac86a0f000000b0039cc64bcb53sm8589408qtr.27.2022.12.20.22.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 22:40:20 -0800 (PST)
-Date: Wed, 21 Dec 2022 01:40:15 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	virtualization@lists.linux-foundation.org,
-	linux-pci@vger.kernel.org, bhelgaas@google.com,
-	Jason Wang <jasowang@redhat.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
-Message-ID: <20221221013907-mutt-send-email-mst@kernel.org>
-References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
- <20221219083511.73205-4-alvaro.karsz@solid-run.com>
- <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
- <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+Sa/I/7gVZaIQy7B1ZRMHInqzdjhXIObW4yJN5eIb0s=;
+        b=wjYoL/xTsNiCWpUC7cWGXxz1Kp2/LI8yfgxaITjBrM2wR/fURBmYGiEN7AYXN1TMqR
+         b6Pz0niY+c0VSc+g2um5IYlw7qGaKxvysGuz92QjTHDczQyPg6moGl7kM1Mlnz013+gQ
+         I6VlflqxB0s34gWWbpv9YaDa4anl5/CWdKNYVOKqbGeRMmJy1ES60gLrGo+77FZV4GHf
+         RRjN0jIN31euGh4ixk+htuQE1S0WrOi8Son/F0yM2lAMGCM8p5SCZt12Q38eLs4UFfJj
+         dbGy7cUxdkEbT6L2kld750lURXQWKVpyMy+58gSGS0BU9oRFCcBfmMn2CYo+97VdrEzC
+         P+vw==
+X-Gm-Message-State: AFqh2kqB2n5z1o+XRx6RWnJHHQpPJb9ZJbQ6ZAcFpSArZ5suKADU84dU
+	gcfWwSW2+sxndv3bDHzVv2/U4ECZgph2lwAlfpKyZg==
+X-Google-Smtp-Source: AMrXdXvI2GJq84khAIseirWSINYK4M29Z94nEO5s+eBoaKJPpgioRv51ok/p+Qy7fV6OS5HQxAg+rm39/gGG8ulXdnk=
+X-Received: by 2002:a17:90b:8b:b0:219:19c1:1ae7 with SMTP id
+ bb11-20020a17090b008b00b0021919c11ae7mr79160pjb.13.1671606345295; Tue, 20 Dec
+ 2022 23:05:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20221219083511.73205-1-alvaro.karsz@solid-run.com>
+ <20221219083511.73205-4-alvaro.karsz@solid-run.com> <Y6HjpvDfIusAz2uS@dev-arch.thelio-3990X>
+ <CAJs=3_B7WoERAiXPyvz=6d7O5rcwXMfWZJFsi_ds-OAemvfcgQ@mail.gmail.com> <20221221013907-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20221221013907-mutt-send-email-mst@kernel.org>
+From: Alvaro Karsz <alvaro.karsz@solid-run.com>
+Date: Wed, 21 Dec 2022 09:05:08 +0200
+Message-ID: <CAJs=3_BuiRj2ZGQM7wVfpUgGNMR_24jv3h0fv+swBk54Gmr6uw@mail.gmail.com>
+Subject: Re: [PATCH 3/3 v6] virtio: vdpa: new SolidNET DPU driver.
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, virtualization@lists.linux-foundation.org, 
+	linux-pci@vger.kernel.org, bhelgaas@google.com, 
+	Jason Wang <jasowang@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 20, 2022 at 06:46:20PM +0200, Alvaro Karsz wrote:
-> Hi Nathan,
-> 
-> > This does not appear to be a false positive but what was the intent
-> > here? Should the local name variables increase their length or should
-> > the buffer length be reduced?
-> 
-> You're right, the local name variables and snprintf argument don't match.
-> Thanks for noticing.
-> I think that we should increase the name variables  to be
-> SNET_NAME_SIZE bytes long.
-> 
-> How should I proceed from here?
-> Should I create a new version for this patch, or should I fix it in a
-> follow up patch?
-> 
-> Thanks,
-> Alvaro
+> Please post a follow-up ASAP. I can squash myself if I rebase.
+>
+> Thanks!
 
-
-Please post a follow-up ASAP. I can squash myself if I rebase.
-
-Thanks!
-
--- 
-MST
-
+Sure, I'll do it now
