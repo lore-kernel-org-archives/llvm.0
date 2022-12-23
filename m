@@ -1,99 +1,166 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFC38476
-	for <llvm@lists.linux.dev>; Fri, 23 Dec 2022 14:31:45 +0000 (UTC)
-Received: from localhost.localdomain (unknown [182.253.183.184])
-	by gnuweeb.org (Postfix) with ESMTPSA id 9534E7E2AE;
-	Fri, 23 Dec 2022 14:24:42 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1671805486;
-	bh=dNPzty6+3wvC9UOMJf16amTH8c8ZgOehht68bpqpb34=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pZBNuHiv1L3TiQm7thqehXucGb6L40REIbArmLM03emV+BgTKq3/OCg803rdwgeFf
-	 OpWJzEcQOzg+CswI1uWQVKKUEWhNSMw93Xrm7Ev3ktK05lx37pbQqXheSUPx0xJuaD
-	 1dCTzhhuWQ4N8b10GcdIaFcdNO9dVU77KjG//R3hDBvQVBLD1cSd0Zk3Pd/PkIjop+
-	 ne4pdS94/I6emwPbIsSQYvB6vb7OOKnw4ew2XSRfqMzekusyV+ye/U4ktj/3sRxL8C
-	 NdL/WvOr7Lj2+gMQx7vPvKBMSW9A2To7itbYbISMDw6oF+JhE3ZoKq93Kd5urLdL9K
-	 y3IZgrj2vflVQ==
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To: Robert Moore <robert.moore@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	Len Brown <lenb@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Linux ACPI Mailing List <linux-acpi@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	ACPICA Mailing List <devel@acpica.org>,
-	LLVM Mailing List <llvm@lists.linux.dev>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH v1 0/2] clang warning cleanups
-Date: Fri, 23 Dec 2022 21:24:17 +0700
-Message-Id: <20221223142419.3781410-1-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD858F63
+	for <llvm@lists.linux.dev>; Fri, 23 Dec 2022 14:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1671807100;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=J/C+e0b4S2+Xiis1J0F/7MtGpwXj4R6JU1L3PjLS8tk=;
+	b=CtZ0OXOIk02w8iHYDAvE9LyhzE95wv1iJAmm2xRV2+g0TcHAxEvwhBEFI20bgbSP+ggbzU
+	osP5GFSUSCQcaSKsM6I2bCcvbaQFvUo7LKxe4xC+xl8BC5QqBifFzCRIThFgUX4PGjoJul
+	zUcZm9lNWqUAjFPnfFmjXQLNntEVVWE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-660-KydabYo-OhqUQQbmXafaHQ-1; Fri, 23 Dec 2022 09:51:36 -0500
+X-MC-Unique: KydabYo-OhqUQQbmXafaHQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 906A48F6E80
+	for <llvm@lists.linux.dev>; Fri, 23 Dec 2022 14:51:36 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7495B2166B33;
+	Fri, 23 Dec 2022 14:51:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
+ mainline.kernel.org-clang, 8395ae05)
+Date: Fri, 23 Dec 2022 14:51:36 -0000
+To: llvm@lists.linux.dev, ffan@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <31621.122122309513601038@us-mta-660.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Hi, we tested your kernel and here are the results:
 
-Hi,
-
-On top of Linus' tree. This series fixes clang warnings.
-
-Base commit: 8395ae05cb5a2e31d36106e8c85efa11cda849be ("Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi")
-
-# Patch 1:
-
-  Compiling with clang-16:
-
-    drivers/acpi/acpi_lpit.c:142:6: error: no previous prototype \
-    for function 'acpi_init_lpit' [-Werror,-Wmissing-prototypes]
-
-    drivers/acpi/ioapic.c:212:6: error: no previous prototype \
-    for function 'pci_ioapic_remove' [-Werror,-Wmissing-prototypes]
-
-    drivers/acpi/ioapic.c:229:5: error: no previous prototype \
-    for function 'acpi_ioapic_remove' [-Werror,-Wmissing-prototypes]
-
-  Include "internal.h" to silence them.
-
-# Patch 2:
-
-  @num_carats is used for debugging, passed to the 'ACPI_DEBUG_PRINT()'
-  macro. But this macro will expand to nothing when debug is disabled,
-  resulting in the following (clang-16):
-
-    drivers/acpi/acpica/nsaccess.c:295:6: error: variable 'num_carats' set \
-    but not used [-Werror,-Wunused-but-set-variable]
-          u32 num_carats;
-              ^
-    1 error generated.
-
-  Move the variable declaration inside the else block to reduce the scope,
-  then add '(void)num_carats' to silence the warning when debug is disabled.
-
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
-Ammar Faizi (2):
-  ACPI: Silence missing prototype warnings
-  ACPICA: Silence 'unused-but-set variable' warning
-
- drivers/acpi/acpi_lpit.c       | 1 +
- drivers/acpi/acpica/nsaccess.c | 4 ++--
- drivers/acpi/ioapic.c          | 1 +
- 3 files changed, 4 insertions(+), 2 deletions(-)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-base-commit: 8395ae05cb5a2e31d36106e8c85efa11cda849be
--- 
-Ammar Faizi
+Kernel information:
+    Commit message: Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/jejb/scsi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64127
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Storage - software RAID testing
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6486730
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
+/0xa0
+            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
+rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+        Issue: Storage - multipath mapping test: /usr/share/beakerlib/testi=
+ng.sh: line 896: sg_luns: command not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1510
+            Affected tests:
+                 ppc64le - Storage - multipath mapping test
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
