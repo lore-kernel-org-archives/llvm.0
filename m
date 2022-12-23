@@ -1,59 +1,59 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037DCA48A;
-	Fri, 23 Dec 2022 17:32:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB233A49D;
+	Fri, 23 Dec 2022 20:24:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671816742; x=1703352742;
+  t=1671827063; x=1703363063;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PCqRjlKMDL9VBnhZ+VxQq6qI8S0nRA3aiYToGR4kI5w=;
-  b=PND/oT83RvGo5inYXlszsu3b6dOsjJ9RtALgPwJ+BrW/33bWfJsjCCvg
-   rZ/zLmzbDtaI5RTlzquKcg+U4Zwl3UMTuM0xbAdqUHwebI4rqlay4+S5s
-   5UGCtiTZt7g8KuVWyVhhj0y41UP4xn+X7DXL+6yUJbtDte54wMy7gUOUN
-   hnoiKaxJObOLS+FtR13bzRC95qHzEvfb2+eBoHLh/4Nr9T5RhdV0N/GRt
-   HCpgCJa/HOAumRiN2TU3WuCD112hO8tprQiQuLlJxKgWjLTLqVKfkjxLd
-   UidQImp2eX17sNbYFxtP7mpIxJ6yZZEUk/eUlGI36dgPhwOmoQGbY9lEP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="382618613"
+  bh=16G6JDzhSBfSsqmag03ZGAeogFW5/GYH4P6aeAPk7KE=;
+  b=KGDPTEmHh6mH1qoSY8TmlTBcPoRDTNUKxTpNmRUuVSfj65RhMycIDFos
+   gU1co+OlkxlrUwah+MEgmPG6knzk2m2G7so6XML0tGyzFe+Rm4WboRIXf
+   KLMyyE7Rl9yMUZr1dI+7nOdn9vAf87ym20QWdKDwQAiZbTqq0jijPve8U
+   z4vy6DTLsXtVdh7b5V5gzssyMNUDALK6j6rCi0UhVVHC6cH1JTSpjQcn9
+   WP57L9SuZV9b6D6fjNF3WRdL4P/LqesWXuTVjwzAXLoxla5ot8gJKqsyF
+   LapUpKr1dMODqtEKMZl0dJ3Z+koXdtqzn+Vi+RzqC8nxCLT7IHHtgecmz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="308088572"
 X-IronPort-AV: E=Sophos;i="5.96,269,1665471600"; 
-   d="scan'208";a="382618613"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 09:32:21 -0800
+   d="scan'208";a="308088572"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 12:24:23 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="652174127"
+X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="654277314"
 X-IronPort-AV: E=Sophos;i="5.96,269,1665471600"; 
-   d="scan'208";a="652174127"
+   d="scan'208";a="654277314"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Dec 2022 09:32:18 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 23 Dec 2022 12:24:20 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p8lu5-000CoZ-2T;
-	Fri, 23 Dec 2022 17:32:17 +0000
-Date: Sat, 24 Dec 2022 01:31:58 +0800
+	id 1p8oaa-000Crz-0A;
+	Fri, 23 Dec 2022 20:24:20 +0000
+Date: Sat, 24 Dec 2022 04:23:33 +0800
 From: kernel test robot <lkp@intel.com>
 To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:for-kernelci 7/7] drivers/firmware/efi/libstub/arm64.c:87:22:
- warning: no previous prototype for function 'primary_entry_offset'
-Message-ID: <202212240118.FLXSpRFl-lkp@intel.com>
+Subject: [ardb:arm64-efi-enter-with-mmu-on-for-v6.3 6/7] ld.lld: error:
+ init_stack not at start of RW_DATA as expected
+Message-ID: <202212240429.SwB6VE9X-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="FoHq3V+pguP0tRBP"
+Content-Type: multipart/mixed; boundary="0YU3eLF5yIXMfiEQ"
 Content-Disposition: inline
 
 
---FoHq3V+pguP0tRBP
+--0YU3eLF5yIXMfiEQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   7236bac201b2e20877e084e8022e84206d957757
-commit: 7236bac201b2e20877e084e8022e84206d957757 [7/7] efi: arm64: enter with MMU and caches enabled
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-efi-enter-with-mmu-on-for-v6.3
+head:   771a55d1352099be6d3611d981fcd0727287a1b9
+commit: 2a07d76d6292f3f5399d267501e912e762a91006 [6/7] arm64: lds: reduce effective minimum image alignment to 64k
 config: arm64-randconfig-r024-20221219
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project f5700e7b69048de958172fb513b336564e7f8709)
 reproduce (this is a W=1 build):
@@ -61,60 +61,30 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install arm64 cross compiling tool for clang build
         # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=7236bac201b2e20877e084e8022e84206d957757
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=2a07d76d6292f3f5399d267501e912e762a91006
         git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout 7236bac201b2e20877e084e8022e84206d957757
+        git fetch --no-tags ardb arm64-efi-enter-with-mmu-on-for-v6.3
+        git checkout 2a07d76d6292f3f5399d267501e912e762a91006
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/firmware/efi/libstub/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/arm64.c:87:22: warning: no previous prototype for function 'primary_entry_offset' [-Wmissing-prototypes]
-   unsigned long __weak primary_entry_offset(void)
-                        ^
-   drivers/firmware/efi/libstub/arm64.c:87:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long __weak primary_entry_offset(void)
-   ^
-   static 
-   1 warning generated.
---
->> drivers/firmware/efi/libstub/arm64-stub.c:148:15: warning: no previous prototype for function 'primary_entry_offset' [-Wmissing-prototypes]
-   unsigned long primary_entry_offset(void)
-                 ^
-   drivers/firmware/efi/libstub/arm64-stub.c:148:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long primary_entry_offset(void)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/primary_entry_offset +87 drivers/firmware/efi/libstub/arm64.c
-
-    86	
-  > 87	unsigned long __weak primary_entry_offset(void)
-    88	{
-    89		/*
-    90		 * By default, we can invoke the kernel via the branch instruction in
-    91		 * the image header, so offset #0. This will be overridden by the EFI
-    92		 * stub build that is linked into the core kernel, as in that case, the
-    93		 * image header may not have been loaded into memory, or may be mapped
-    94		 * with non-executable permissions.
-    95		 */
-    96	       return 0;
-    97	}
-    98	
+>> ld.lld: error: init_stack not at start of RW_DATA as expected
+>> ld.lld: error: init_stack not at start of RW_DATA as expected
+>> ld.lld: error: init_stack not at start of RW_DATA as expected
+>> ld.lld: error: init_stack not at start of RW_DATA as expected
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---FoHq3V+pguP0tRBP
+--0YU3eLF5yIXMfiEQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -6414,4 +6384,4 @@ CONFIG_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---FoHq3V+pguP0tRBP--
+--0YU3eLF5yIXMfiEQ--
