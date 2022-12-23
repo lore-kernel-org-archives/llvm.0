@@ -1,166 +1,95 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD858F63
-	for <llvm@lists.linux.dev>; Fri, 23 Dec 2022 14:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671807100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J/C+e0b4S2+Xiis1J0F/7MtGpwXj4R6JU1L3PjLS8tk=;
-	b=CtZ0OXOIk02w8iHYDAvE9LyhzE95wv1iJAmm2xRV2+g0TcHAxEvwhBEFI20bgbSP+ggbzU
-	osP5GFSUSCQcaSKsM6I2bCcvbaQFvUo7LKxe4xC+xl8BC5QqBifFzCRIThFgUX4PGjoJul
-	zUcZm9lNWqUAjFPnfFmjXQLNntEVVWE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-KydabYo-OhqUQQbmXafaHQ-1; Fri, 23 Dec 2022 09:51:36 -0500
-X-MC-Unique: KydabYo-OhqUQQbmXafaHQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 906A48F6E80
-	for <llvm@lists.linux.dev>; Fri, 23 Dec 2022 14:51:36 +0000 (UTC)
-Received: from [172.64.12.49] (unknown [10.30.33.198])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7495B2166B33;
-	Fri, 23 Dec 2022 14:51:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
- mainline.kernel.org-clang, 8395ae05)
-Date: Fri, 23 Dec 2022 14:51:36 -0000
-To: llvm@lists.linux.dev, ffan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AC18F63
+	for <llvm@lists.linux.dev>; Fri, 23 Dec 2022 14:52:11 +0000 (UTC)
+Received: from localhost.localdomain (unknown [182.253.183.184])
+	by gnuweeb.org (Postfix) with ESMTPSA id 248447E2AF;
+	Fri, 23 Dec 2022 14:52:07 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1671807131;
+	bh=oJEfdxT5/bQz94HuPnh6KWVv4Q97ynYQ98e0q4+hCvk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YygV2RW5JSy8TgXFKoGe+8Pt6f9MiEHg6IF2tCDLhe479MO+TbQsF1/9aX1wZ9o0O
+	 nY7GFdrGJ/BaUVoVpHhlcUmp8RhOvMZkQ7FsQC6eHKvrVG5qSfB9n1BynklsdNosqr
+	 DdQ4U+pNKyxtpOot4oyZJ1u6aOpCZ8o5w7oBRmE5HsaMkKFV8BjIeGoiwe7qiEcyr0
+	 eRj97WcTkCp2t9XAceRnW2Edg3W/uPklIEruJuKhpZDi7DkQ8hNRvyCoRExyfNbrsZ
+	 7Ui8LJlUu7GLArHNgXo7ZvWsBEkqqvrHZNKVi7P94mE5P/5RVQYygSBmMAjQnbCTXI
+	 6MfQNp5Rz73bg==
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	LLVM Mailing List <llvm@lists.linux.dev>
+Subject: [PATCH v1] driver core: Silence 'unused-but-set variable' warning
+Date: Fri, 23 Dec 2022 21:51:37 +0700
+Message-Id: <20221223145137.3786601-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <31621.122122309513601038@us-mta-660.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Compiling with clang-16:
 
+  drivers/base/module.c:36:6: error: variable 'no_warn' set but not \
+  used [-Werror,-Wunused-but-set-variable]
+          int no_warn;
+              ^
+  1 error generated.
 
-Kernel information:
-    Commit message: Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/jejb/scsi
+A reason the @no_warn variable exists is:
+sysfs_create_link() return value needs not be ignored to silence
+another warning.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/64127
+So don't remove @no_warn, but add a '(void)no_warn;'.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Storage - software RAID testing
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6486730
+Cc: LLVM Mailing List <llvm@lists.linux.dev>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ drivers/base/module.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
-/0xa0
-            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
-rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 ppc64le - Networking cki netfilter test
-        Issue: Storage - multipath mapping test: /usr/share/beakerlib/testi=
-ng.sh: line 896: sg_luns: command not found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1510
-            Affected tests:
-                 ppc64le - Storage - multipath mapping test
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+diff --git a/drivers/base/module.c b/drivers/base/module.c
+index 46ad4d636731..42f0b3b9e7f8 100644
+--- a/drivers/base/module.c
++++ b/drivers/base/module.c
+@@ -59,22 +59,23 @@ void module_add_driver(struct module *mod, struct device_driver *drv)
+ 		return;
+ 
+ 	/* Don't check return codes; these calls are idempotent */
+ 	no_warn = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
+ 	driver_name = make_driver_name(drv);
+ 	if (driver_name) {
+ 		module_create_drivers_dir(mk);
+ 		no_warn = sysfs_create_link(mk->drivers_dir, &drv->p->kobj,
+ 					    driver_name);
+ 		kfree(driver_name);
+ 	}
++	(void)no_warn;
+ }
+ 
+ void module_remove_driver(struct device_driver *drv)
+ {
+ 	struct module_kobject *mk = NULL;
+ 	char *driver_name;
+ 
+ 	if (!drv)
+ 		return;
+ 
+ 	sysfs_remove_link(&drv->p->kobj, "module");
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+base-commit: 8395ae05cb5a2e31d36106e8c85efa11cda849be
+-- 
+Ammar Faizi
 
