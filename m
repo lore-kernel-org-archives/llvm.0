@@ -1,51 +1,51 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6537B210A
-	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 09:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A05A210A
+	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 09:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671873423;
+	s=mimecast20190719; t=1671873521;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1WJ5IG512JK4HdlC/w+MEPT5hs4wW6eIO1tcvJBoFHE=;
-	b=F90mZhlT6A4P/+WBvMOsTfUQRosPffV66Drf29IkT+UX9MUmQ9g/eIT8fbMd+eICKynE4k
-	UCrEnwBkD7+8QJEjb/bsx72dapi6ixfbEA4nWwpj2mc+7Oz/s0VsvfXXRH5Y3A+4BifQQB
-	UpjU7T1r5bBMs7kvfBqBZEQQvb27Y/M=
+	bh=QxublDXwR8D5DtOHl7/e/B0PH3ei1t0qPkoztnwEfr0=;
+	b=DuV0HZwKUHRG0ecRZdF+V4AQE09gK3vQlY41Q5ZDYRYkhI7L2Ko0smA8qOfVSzYVXNvNq3
+	Akq6frxjHaKWgWcBb5w6lr8lzHV2hji2CNTOLA7YbAg6LYgSql/ynJWMdZ+FRKOkgE8iqJ
+	1gk4senF3TSWTX7AkJxhs9XHdVIklQ0=
 Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
  [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-30-xZZa3sEHMb6J6_4f6Tk1vg-1; Sat, 24 Dec 2022 04:16:59 -0500
-X-MC-Unique: xZZa3sEHMb6J6_4f6Tk1vg-1
-Received: by mail-ed1-f69.google.com with SMTP id h18-20020a05640250d200b004758e655ebeso4953249edb.11
-        for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 01:16:59 -0800 (PST)
+ us-mta-172-fTbhNuy0OReRxe6m6gkUfg-1; Sat, 24 Dec 2022 04:18:38 -0500
+X-MC-Unique: fTbhNuy0OReRxe6m6gkUfg-1
+Received: by mail-ed1-f69.google.com with SMTP id g14-20020a056402090e00b0046790cd9082so4993121edz.21
+        for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 01:18:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1WJ5IG512JK4HdlC/w+MEPT5hs4wW6eIO1tcvJBoFHE=;
-        b=sxxcsL4EW4cDwX2vIU35GCrkoqdtZgKGUrH3CiO+6/fT3kq5U9kmNUy/HbIfeEt6Iq
-         Lb2ZRfQHkplqv+EQF5HKpbo1QSe9khvImaJ7yjYKSvp7aSkmYcC1gf0tPQkO4ie9GuS3
-         rhC/71ceiNxT/2kKD07t/t4o+scnEuuiSYG5MGcpCPd6vfANHdkaPI2mfDl4gyNACC8m
-         xWhfllV4Hsi54CsrQ4ULgcE7HGdQF6umal9q6+CoXUoWtJmwomio4vmHx4D20bA6y8SE
-         ZJcvlCn46ocSUdSFmBfuNtrOSoGtEFbhPGED1Yxr+hLBTV9xLuqlNmQDcCmPoLrh29g2
-         2Hig==
-X-Gm-Message-State: AFqh2komjo5VHE+PKMWprgARndrupeyDmA87TAe3zJLrMFWtFUUzdJSB
-	eEfYXYA5X+0QBnXXuYUv16VfdirgSQJYzwVwbZeaVJeZQi1eWdgpXDcIYXtQivrKjpX2M9hc4Yx
-	wJD0HOqyo/4n+nQ==
-X-Received: by 2002:a17:906:2813:b0:7c0:f9ef:23a2 with SMTP id r19-20020a170906281300b007c0f9ef23a2mr12170067ejc.30.1671873418351;
-        Sat, 24 Dec 2022 01:16:58 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvxPdiaG4E8UewTBDKGwk+RrHY5iIcLLbOD+rhwdwS97aEIalcuCrM4uQvmfbCxpmo46L3Qww==
-X-Received: by 2002:a17:906:2813:b0:7c0:f9ef:23a2 with SMTP id r19-20020a170906281300b007c0f9ef23a2mr12170039ejc.30.1671873418109;
-        Sat, 24 Dec 2022 01:16:58 -0800 (PST)
+        bh=QxublDXwR8D5DtOHl7/e/B0PH3ei1t0qPkoztnwEfr0=;
+        b=jzEjFNCDaJPkufxZ3RiKMa39GbQaRK3TvC6XBUL+hU9ruBKy3Q//dbEzV19PICJRa5
+         e6w9N1uqkmZyZU4rru7uy0L/MDqm9yxISfEmi+cqmesyC3pxqoqnIMaKzSNUFAwgPRVd
+         YLfhnkxw+ZO2U02XoERa3ssI7OdZL3+QvVxz7jFjwoInXpT8+8zWHToiyYmfYynGKqqV
+         twSeHDV43JCQViTABmYFQhAyTS86abD/mEPeu+B+LP/v2bX+Q1J8HO7mYMcimypZMjVE
+         tM50UpcXJHK9uZZgZvh479XKzLMfih95EFrsET0AVpumyHDJg8EJai+YfcSldnJVC0wB
+         zEGg==
+X-Gm-Message-State: AFqh2kpEBGPBhaQeM40rLcRJEBiMt67CCvzs9Iva2ihKT49Cf3jquXlh
+	0mO35yw+iBVzsOXup2T53CD+oXOPqmGoE8PfXcmB+wKHWqV1i2tGADEwbiLpye6xdQRJRUZM2WO
+	WAHlAmP0nQf8IDg==
+X-Received: by 2002:a17:907:20b0:b0:7d3:8159:f361 with SMTP id pw16-20020a17090720b000b007d38159f361mr10353244ejb.36.1671873517897;
+        Sat, 24 Dec 2022 01:18:37 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuzaX4Vch7tXx6y3KWiTjg6uUOEDxqKJ4lnD0J2K3STImlt9Y+l7L7jqIYGtkrdkVnkKuq68w==
+X-Received: by 2002:a17:907:20b0:b0:7d3:8159:f361 with SMTP id pw16-20020a17090720b000b007d38159f361mr10353228ejb.36.1671873517691;
+        Sat, 24 Dec 2022 01:18:37 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id gf3-20020a170906e20300b007bff9fb211fsm2323104ejb.57.2022.12.24.01.16.55
+        by smtp.googlemail.com with ESMTPSA id kx20-20020a170907775400b0078d3f96d293sm2338931ejc.30.2022.12.24.01.18.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Dec 2022 01:16:57 -0800 (PST)
-Message-ID: <f53ed5b9-156c-e809-08e2-050217a970a5@redhat.com>
-Date: Sat, 24 Dec 2022 10:16:55 +0100
+        Sat, 24 Dec 2022 01:18:37 -0800 (PST)
+Message-ID: <4f789996-28aa-1d9c-f918-03de663d28b8@redhat.com>
+Date: Sat, 24 Dec 2022 10:18:35 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,8 +54,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 09/14] KVM: selftests: Explicitly disable builtins for
- mem*() overrides
+Subject: Re: [PATCH 10/14] KVM: selftests: Include lib.mk before consuming
+ $(CC)
 To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
  Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
  <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
@@ -72,9 +72,9 @@ Cc: James Morse <james.morse@arm.com>,
  Aaron Lewis <aaronlewis@google.com>,
  Raghavendra Rao Ananta <rananta@google.com>
 References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-10-seanjc@google.com>
+ <20221213001653.3852042-11-seanjc@google.com>
 From: Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221213001653.3852042-10-seanjc@google.com>
+In-Reply-To: <20221213001653.3852042-11-seanjc@google.com>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Language: en-US
@@ -82,18 +82,19 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/13/22 01:16, Sean Christopherson wrote:
-> Explicitly disable the compiler's builtin memcmp(), memcpy(), and
-> memset().  Because only lib/string_override.c is built with -ffreestanding,
-> the compiler reserves the right to do what it wants and can try to link the
-> non-freestanding code to its own crud.
-> 
->    /usr/bin/x86_64-linux-gnu-ld: /lib/x86_64-linux-gnu/libc.a(memcmp.o): in function `memcmp_ifunc':
->    (.text+0x0): multiple definition of `memcmp'; tools/testing/selftests/kvm/lib/string_override.o:
->    tools/testing/selftests/kvm/lib/string_override.c:15: first defined here
->    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+> Include lib.mk before consuming $(CC) and document that lib.mk overwrites
+> $(CC) unless make was invoked with -e or $(CC) was specified after make
+> (which apparently makes the environment override the Makefile?!?!).
 
-Hmm, that's weird though.  I think it's an effect of ifunc and maybe 
-even a linker bug.  The patch makes sense anyway.
+Yes, it does.  In projects that don't use configure or similar, you 
+might have seen
+
+CFLAGS = -O2 -g
+
+to be overridden with "make CFLAGS=-g" if optimization is undesirable.
 
 Paolo
+
+> Including lib.mk after using it for probing, e.g. for -no-pie, can lead
+> to weirdness.
 
