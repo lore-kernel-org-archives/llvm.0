@@ -1,35 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8783117F4
-	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 15:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFD9322E
+	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 16:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671894695;
+	s=mimecast20190719; t=1671898254;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=TYFtRKiOvsNzwvOSz+TYd+DCF9a5OjUUIcZNq57Fo4U=;
-	b=KRcr45mVjP+bhi7q1YOAFHHa7XJKbSkXAPsx/WmwOW6JRR9bBam/TaD6Ykocn1VFDtkY8m
-	ZkI3Q9touJ+lHl2h3gX496zEvtu0ONcQ9jF/aklgOVU9ohbt75ynq+MSEnULehK1flMpgl
-	jk7QlOVhs6ByL0fzDRnL8Rff37gOeec=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=c7kPH0/VoUc/0qBuBQRhaVkSHncvfkOvCW+W4pN+w6U=;
+	b=QHi51iF93vLqtiMSA+B9/M2TExyQ+23GFD34M5Qe2AKv2JyBDDD/B+vdBYZmr2TmGNtijl
+	Kw9FkHMCBlqTqoy6Y45uXBvNLz85iVoWUDvT0ufCOw30G/bcXxaAGINoO8eSyDM+GuDx3t
+	/VdK1Cc4wW1QMrpsr7vHi0776sfV7+0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-467-2aqaZ0QcP12KWuvZRf7CDA-1; Sat, 24 Dec 2022 10:11:33 -0500
-X-MC-Unique: 2aqaZ0QcP12KWuvZRf7CDA-1
+ us-mta-292-Q9hq8QnsP6GOlueGwDJxlw-1; Sat, 24 Dec 2022 11:10:52 -0500
+X-MC-Unique: Q9hq8QnsP6GOlueGwDJxlw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A44271C05AF1
-	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 15:11:33 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 85BD51869B60
+	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 16:10:52 +0000 (UTC)
 Received: from [172.64.12.49] (unknown [10.30.33.198])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 55ACA492C14;
-	Sat, 24 Dec 2022 15:11:33 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 73C00492C14;
+	Sat, 24 Dec 2022 16:10:52 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.1.0,
- mainline.kernel.org-clang, a27405b2)
-Date: Sat, 24 Dec 2022 15:11:33 -0000
-To: llvm@lists.linux.dev, bhe@redhat.com, xiawu@redhat.com
+ mainline.kernel.org-clang, 51094a24)
+Date: Sat, 24 Dec 2022 16:10:52 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <42976.122122410113400189@us-mta-467.us.mimecast.lan>
+Message-Id: <61770.122122411105200343@us-mta-292.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,20 +52,17 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'sound-6.2-rc1-2' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/tiwai/sound
+    Commit message: Merge tag 'hardening-v6.2-rc1-fixes' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/kees/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/64186
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64191
 
 One or more kernel tests failed:
     Unrecognized or new issues:
-         ppc64le - kdump - sysrq-c
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6494800
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6494692
+6495829
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -102,6 +99,7 @@ d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
+                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
         Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -120,6 +118,7 @@ client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
 l-tests/-/issues/1501
             Affected tests:
+                 aarch64 - Networking cki netfilter test
                  ppc64le - Networking cki netfilter test
                   x86_64 - Networking cki netfilter test
         Issue: Storage - multipath mapping test: /usr/share/beakerlib/testi=
