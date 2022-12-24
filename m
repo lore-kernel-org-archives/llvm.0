@@ -1,54 +1,54 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B772F33;
-	Sat, 24 Dec 2022 20:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604948F6D;
+	Sat, 24 Dec 2022 22:20:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671914391; x=1703450391;
+  t=1671920453; x=1703456453;
   h=date:from:cc:subject:message-id:mime-version;
-  bh=kVHREFIXp1Zy+DoTA74aXVLcC/CsMdJc8KD2Ji4cwDM=;
-  b=HXm2WMpLE/kpX/2bZEkR5URH83V1E1ksrHEumY5IArwMpdGBloRgRjKL
-   k6vt/u5AloScFaRKIZ9QYT1ff0LJuQkcMkXgxvBCcPVtdelyGv/gn3Vq3
-   GwKeymHqGCXEIRgtdu+8Lfc6+nOGpKB8qo8AhafMs1fKunN5uv5XW+17Y
-   YluTLuVXTVInTwVygzG+dXkEojL1esgCatjqR0CC0duDUcKVD+WIkak4q
-   IhZ5cx+A6vjZfCDILKbmAXrTOCpJq6zqNal8gglaTyIMlYK2Nb+raFi7M
-   fwvXErSXAfyI0GT/uD6NfEAk3cNnAQgtuLkaTupNm4sVaVUyodFrXzikM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="406691259"
-X-IronPort-AV: E=Sophos;i="5.96,271,1665471600"; 
-   d="scan'208";a="406691259"
+  bh=XstUOEZE3Gkt7wDyPEycCpBDYMYLHjkf2KV1QGCtDBw=;
+  b=ZwA6r92GrKUCAPv3JwRbZtffiOb8GlA8AWxYOOhns0+kimoMEQxVNjsm
+   cEyhZU23NDozcG4g15KcRg/SCSHfngh6fkJZdOqzYz7qpezGGTTLyXyMu
+   2QLhwkdsRXr0sL+xFodBRAkAVOPFWJDeDPRckY2hyvnnR9idlBwV25LUD
+   g+dudGke4+jfoNDBBTitEp3Kk3JEUcxKNbagpt/mHpmV+HjBrZTAMd79n
+   0Xi7zTo7m4rr9LzQ+bpoaMzDXtlXe/sLEJ7umSRmwY3BKEjwPTZXXB5p0
+   dPWdCI0qB5RGomD1MYY8GizOYpUKNc8dpo1Meo5PwaW6aA+FIzFDXfg0k
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="308175498"
+X-IronPort-AV: E=Sophos;i="5.96,272,1665471600"; 
+   d="scan'208";a="308175498"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2022 12:39:51 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2022 14:20:52 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="630089630"
-X-IronPort-AV: E=Sophos;i="5.96,271,1665471600"; 
-   d="scan'208";a="630089630"
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="630103394"
+X-IronPort-AV: E=Sophos;i="5.96,272,1665471600"; 
+   d="scan'208";a="630103394"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Dec 2022 12:39:49 -0800
+  by orsmga006.jf.intel.com with ESMTP; 24 Dec 2022 14:20:50 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1p9BJ6-000DZb-1S;
-	Sat, 24 Dec 2022 20:39:48 +0000
-Date: Sun, 25 Dec 2022 04:39:22 +0800
+	id 1p9Csr-000Dbl-2X;
+	Sat, 24 Dec 2022 22:20:49 +0000
+Date: Sun, 25 Dec 2022 06:20:27 +0800
 From: kernel test robot <lkp@intel.com>
 Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
 Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
- kallsyms_lookup_name: .text+0x68): relocation R_RISCV_PCREL_HI20 out of
- range: -524410 is not in [-524288, 524287]; references
- kallsyms_seqs_of_names
-Message-ID: <202212250454.wE3kqxih-lkp@intel.com>
+ kallsyms_on_each_match_symbol: .text+0x7cc): relocation R_RISCV_PCREL_HI20
+ out of range: -524411 is not in [-524288, 524287]; references
+ kallsyms_relative_base
+Message-ID: <202212250648.cSK5GSPJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="ck5jjaiKCa4t9jG9"
+Content-Type: multipart/mixed; boundary="eqJO5gDy4DbW2w1M"
 Content-Disposition: inline
 
 
---ck5jjaiKCa4t9jG9
+--eqJO5gDy4DbW2w1M
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -62,7 +62,7 @@ FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   72a85e2b0a1e1e6fb4ee51ae902730212b2de25c
-commit: 60443c88f3a89fd303a9e8c0e84895910675c316 kallsyms: Improve the performance of kallsyms_lookup_name()
+commit: 4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998 kallsyms: Add helper kallsyms_on_each_match_symbol()
 date:   6 weeks ago
 config: riscv-randconfig-r022-20221225
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project f5700e7b69048de958172fb513b336564e7f8709)
@@ -71,10 +71,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60443c88f3a89fd303a9e8c0e84895910675c316
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 60443c88f3a89fd303a9e8c0e84895910675c316
+        git checkout 4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
@@ -85,15 +85,31 @@ If you fix the issue, kindly add following tag where applicable
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_name: .text+0x68): relocation R_RISCV_PCREL_HI20 out of range: -524410 is not in [-524288, 524287]; references kallsyms_seqs_of_names
-   >>> referenced by kallsyms.c:267 (kernel/kallsyms.c:267)
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x7cc): relocation R_RISCV_PCREL_HI20 out of range: -524411 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by kallsyms.c:156 (kernel/kallsyms.c:156)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x7dc): relocation R_RISCV_PCREL_HI20 out of range: -524411 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c:156 (kernel/kallsyms.c:156)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0x7e4): relocation R_RISCV_PCREL_HI20 out of range: -524411 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by kallsyms.c:156 (kernel/kallsyms.c:156)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x13c): relocation R_RISCV_PCREL_HI20 out of range: -524410 is not in [-524288, 524287]; references kallsyms_num_syms
+   >>> referenced by kallsyms.c:281 (kernel/kallsyms.c:281)
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x160): relocation R_RISCV_PCREL_HI20 out of range: -524410 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c:281 (kernel/kallsyms.c:281)
    >>> defined in vmlinux.a(kernel/kallsyms.o)
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---ck5jjaiKCa4t9jG9
+--eqJO5gDy4DbW2w1M
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -5356,4 +5372,4 @@ CONFIG_MEMTEST=y
 # CONFIG_WARN_ABI_ERRORS is not set
 # end of Kernel hacking
 
---ck5jjaiKCa4t9jG9--
+--eqJO5gDy4DbW2w1M--
