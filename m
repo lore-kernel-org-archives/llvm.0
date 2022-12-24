@@ -1,51 +1,51 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F382116
-	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 09:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6537B210A
+	for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 09:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1671873144;
+	s=mimecast20190719; t=1671873423;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=K/8A/i9y6rIvKCnypgiTdopbEh62sIZ4224f2Kvswms=;
-	b=fCEgmAYkIn2Rb15FU0PNY4V1KOchtXjhe3CNWAfJmkgZ81vBE68sTkCSdpRVyw0NQh6fum
-	pGbhuRwMd7/C6XGkUDU66PBCpGt08YaDzY35Dl3OWY5YmCfVIhG/HsH2Kp7RvXOrY5YFEI
-	9mdfdGB6KPbTHBMFKU4poz6d/V3nJl0=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=1WJ5IG512JK4HdlC/w+MEPT5hs4wW6eIO1tcvJBoFHE=;
+	b=F90mZhlT6A4P/+WBvMOsTfUQRosPffV66Drf29IkT+UX9MUmQ9g/eIT8fbMd+eICKynE4k
+	UCrEnwBkD7+8QJEjb/bsx72dapi6ixfbEA4nWwpj2mc+7Oz/s0VsvfXXRH5Y3A+4BifQQB
+	UpjU7T1r5bBMs7kvfBqBZEQQvb27Y/M=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-240-_yuaswN9Nu2njUn3uAv4eQ-1; Sat, 24 Dec 2022 04:12:22 -0500
-X-MC-Unique: _yuaswN9Nu2njUn3uAv4eQ-1
-Received: by mail-ej1-f71.google.com with SMTP id hs18-20020a1709073e9200b007c0f9ac75f9so4627593ejc.9
-        for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 01:12:21 -0800 (PST)
+ us-mta-30-xZZa3sEHMb6J6_4f6Tk1vg-1; Sat, 24 Dec 2022 04:16:59 -0500
+X-MC-Unique: xZZa3sEHMb6J6_4f6Tk1vg-1
+Received: by mail-ed1-f69.google.com with SMTP id h18-20020a05640250d200b004758e655ebeso4953249edb.11
+        for <llvm@lists.linux.dev>; Sat, 24 Dec 2022 01:16:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K/8A/i9y6rIvKCnypgiTdopbEh62sIZ4224f2Kvswms=;
-        b=AYdeDgfP2g9otMO7MIlfKHMN5QyF7RCSGTgfUrHa/YZb+/Bwm8tUkwwVbwZvqah+/2
-         Bh9HlBCS4IbmZ1ApFui65VjIS2HGHEFzldylDSWxE7d/yyhQzWOD8sdSTITWsTZP6TPI
-         a5jWo7J/I2YW9ENUkOVShJBMkugxNykSnCY2ZwgHwA+lWKG2eiAGp3FG46dKzj1BzsvD
-         dHPb2e/2x59VEEoFGA+Jurp8/InMQTFpZcxE/XUqsNVpLOV0kTFc+kZvixMZHH0wcg4+
-         Ubmcg/4XKMeWKeW35xq7QkriVv/m+aCL+dGubhR/bH9CJACQty8wHEnKJFGLdjiFnxqk
-         R3XQ==
-X-Gm-Message-State: AFqh2krow5dr4EJ4VZFlvE/fGZwJCJAxc987/erPicBioBbL6/zBdpfp
-	oeL3oSJctcHWoGnPmzT5SM5PFNEWIRJXXSMLt5mcniSFnlIo1NClPSMcThprK2x0i7U3tYReBVz
-	UFMAJ4wV/+FGooQ==
-X-Received: by 2002:a17:906:4894:b0:7c0:beee:2f06 with SMTP id v20-20020a170906489400b007c0beee2f06mr10450206ejq.52.1671873141073;
-        Sat, 24 Dec 2022 01:12:21 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvlm/vA6G01U45Ww3rRE/hpJxyrrrVFeI3NtGzIAEN1d8PbapEpyn4qgCdB7ow6B9vpaz9eng==
-X-Received: by 2002:a17:906:4894:b0:7c0:beee:2f06 with SMTP id v20-20020a170906489400b007c0beee2f06mr10450165ejq.52.1671873140745;
-        Sat, 24 Dec 2022 01:12:20 -0800 (PST)
+        bh=1WJ5IG512JK4HdlC/w+MEPT5hs4wW6eIO1tcvJBoFHE=;
+        b=sxxcsL4EW4cDwX2vIU35GCrkoqdtZgKGUrH3CiO+6/fT3kq5U9kmNUy/HbIfeEt6Iq
+         Lb2ZRfQHkplqv+EQF5HKpbo1QSe9khvImaJ7yjYKSvp7aSkmYcC1gf0tPQkO4ie9GuS3
+         rhC/71ceiNxT/2kKD07t/t4o+scnEuuiSYG5MGcpCPd6vfANHdkaPI2mfDl4gyNACC8m
+         xWhfllV4Hsi54CsrQ4ULgcE7HGdQF6umal9q6+CoXUoWtJmwomio4vmHx4D20bA6y8SE
+         ZJcvlCn46ocSUdSFmBfuNtrOSoGtEFbhPGED1Yxr+hLBTV9xLuqlNmQDcCmPoLrh29g2
+         2Hig==
+X-Gm-Message-State: AFqh2komjo5VHE+PKMWprgARndrupeyDmA87TAe3zJLrMFWtFUUzdJSB
+	eEfYXYA5X+0QBnXXuYUv16VfdirgSQJYzwVwbZeaVJeZQi1eWdgpXDcIYXtQivrKjpX2M9hc4Yx
+	wJD0HOqyo/4n+nQ==
+X-Received: by 2002:a17:906:2813:b0:7c0:f9ef:23a2 with SMTP id r19-20020a170906281300b007c0f9ef23a2mr12170067ejc.30.1671873418351;
+        Sat, 24 Dec 2022 01:16:58 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvxPdiaG4E8UewTBDKGwk+RrHY5iIcLLbOD+rhwdwS97aEIalcuCrM4uQvmfbCxpmo46L3Qww==
+X-Received: by 2002:a17:906:2813:b0:7c0:f9ef:23a2 with SMTP id r19-20020a170906281300b007c0f9ef23a2mr12170039ejc.30.1671873418109;
+        Sat, 24 Dec 2022 01:16:58 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a170906218a00b0073d796a1043sm2321829eju.123.2022.12.24.01.12.18
+        by smtp.googlemail.com with ESMTPSA id gf3-20020a170906e20300b007bff9fb211fsm2323104ejb.57.2022.12.24.01.16.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Dec 2022 01:12:19 -0800 (PST)
-Message-ID: <a03fb002-ef66-e9ea-7447-baf3d3aff1d9@redhat.com>
-Date: Sat, 24 Dec 2022 10:12:09 +0100
+        Sat, 24 Dec 2022 01:16:57 -0800 (PST)
+Message-ID: <f53ed5b9-156c-e809-08e2-050217a970a5@redhat.com>
+Date: Sat, 24 Dec 2022 10:16:55 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,8 +54,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 06/14] KVM: selftests: Rename UNAME_M to ARCH_DIR, fill
- explicitly for x86
+Subject: Re: [PATCH 09/14] KVM: selftests: Explicitly disable builtins for
+ mem*() overrides
 To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
  Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
  <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
@@ -72,9 +72,9 @@ Cc: James Morse <james.morse@arm.com>,
  Aaron Lewis <aaronlewis@google.com>,
  Raghavendra Rao Ananta <rananta@google.com>
 References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-7-seanjc@google.com>
+ <20221213001653.3852042-10-seanjc@google.com>
 From: Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221213001653.3852042-7-seanjc@google.com>
+In-Reply-To: <20221213001653.3852042-10-seanjc@google.com>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Language: en-US
@@ -82,44 +82,18 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/13/22 01:16, Sean Christopherson wrote:
-> -ifeq ($(ARCH),riscv)
-> -	UNAME_M := riscv
-> +ifeq ($(ARCH),x86)
-> +	ARCH_DIR := x86_64
-> +else ifeq ($(ARCH),arm64)
-> +	ARCH_DIR := aarch64
-> +else ifeq ($(ARCH),s390)
-> +	ARCH_DIR := s390x
-> +else ifeq ($(ARCH),riscv)
-> +	ARCH_DIR := riscv
-> +else
-> +$(error Unknown architecture '$(ARCH)')
->   endif
+> Explicitly disable the compiler's builtin memcmp(), memcpy(), and
+> memset().  Because only lib/string_override.c is built with -ffreestanding,
+> the compiler reserves the right to do what it wants and can try to link the
+> non-freestanding code to its own crud.
+> 
+>    /usr/bin/x86_64-linux-gnu-ld: /lib/x86_64-linux-gnu/libc.a(memcmp.o): in function `memcmp_ifunc':
+>    (.text+0x0): multiple definition of `memcmp'; tools/testing/selftests/kvm/lib/string_override.o:
+>    tools/testing/selftests/kvm/lib/string_override.c:15: first defined here
+>    clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
-$(error) would break compiling via tools/testing/selftests/Makefile, so 
-I am squashing this:
-
-diff --git a/tools/testing/selftests/kvm/Makefile 
-b/tools/testing/selftests/kvm/Makefile
-index d761a77c3a80..59f3eb53c932 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -13,10 +13,8 @@ else ifeq ($(ARCH),arm64)
-  	ARCH_DIR := aarch64
-  else ifeq ($(ARCH),s390)
-  	ARCH_DIR := s390x
--else ifeq ($(ARCH),riscv)
--	ARCH_DIR := riscv
-  else
--$(error Unknown architecture '$(ARCH)')
-+	ARCH_DIR := $(ARCH)
-  endif
-
-  LIBKVM += lib/assert.c
-
-Then the aarch64 and s390x directories can be renamed---x86 too, but the 
-ifeq needs to stay (just changed to do x86_64->x86 instead of the other 
-way round).
+Hmm, that's weird though.  I think it's an effect of ifunc and maybe 
+even a linker bug.  The patch makes sense anyway.
 
 Paolo
 
