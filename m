@@ -1,117 +1,154 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C844D8831
-	for <llvm@lists.linux.dev>; Mon, 26 Dec 2022 14:42:34 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so3680073iog.0
-        for <llvm@lists.linux.dev>; Mon, 26 Dec 2022 06:42:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jbQqDJM7rNEn/w9o07nQo5LxtMxnlWVdv8R6yb+ZPeM=;
-        b=MsbGvcMk4DMfRr11NyZSC62ALug+H/WfFkD60nceELDr8V7Rrt0jb6clE86llNzmu+
-         5yg97CjxgCo9mxWd6pFwEjycnM6DfpQVEwxEuEluPV8DFtQCbdmu4OkyfOk7VnIv7klO
-         Fa3rVv9ysgpC0uyN9qyvq5yx8RDqjoOYxTmRq6qydHladrysrqAAzd82cKuLVCRRmC3O
-         XTLlubyPWJZ0UmqROcvc1kj3r6dCf1OObG0SEnpnAg+PBq1Ehsiz1V4VCn+Exu9c/xje
-         qNqQcEJ1YRCoLD2BZ4NuceIyDXISLdF+NkosCU8mMbxmuWLZsPHWu8pDrR4fy6P9BaMm
-         cAPA==
-X-Gm-Message-State: AFqh2ko8Ja22x8IvuC2Py73f+tS4b15VDwfHpINd6nH7I5bg2d90fX0W
-	l5cI4v/YxvZVSCwudotSv0XRBWxV+SKViWmZNKlJKtBsD9r3
-X-Google-Smtp-Source: AMrXdXujo4kXMZZ00hcXHEAD7vPMaQuPsD2v7cPqIHVy2Q+FaZdct6dJ3Bqv22rtAP/htBOT4TWOoom/vDvS+ww+du0v4XC88bZX
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1BB7B;
+	Mon, 26 Dec 2022 14:50:26 +0000 (UTC)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 6CDA32112;
+	Mon, 26 Dec 2022 14:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=paragon-software.com; s=mail; t=1672066014;
+	bh=ukI9jakFh2yz57dp6fz506Kyb5zH5OmJfIaNBaXl9uc=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=UuJbpwy7R1SoG0u/35Psa2ByKT/cjSHdoreYvRo4vuTg5qLHb0vE79vA8rVYcJJNq
+	 24z+EUBu6kMeAN63xC3JAAT2XuLrHyauCD6qV0yF9fp0Ebj20BVus+5U0U5kzRlV3E
+	 8IXySIy9GQZ2d/g5lZhYQseB1UrO3xJgPgFKId1c=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+	by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B6393212B;
+	Mon, 26 Dec 2022 14:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=paragon-software.com; s=mail; t=1672066223;
+	bh=ukI9jakFh2yz57dp6fz506Kyb5zH5OmJfIaNBaXl9uc=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=CHvMNSpLPqLjdCbh7f6Rc/Qb03IalhWtAaBUqPIWOqxacU3TBLadOH0C0st+k6dpo
+	 pjbo4AwW748aNvxtCgdUcvGMfsU6wUWXFAx5hwpOFr6rHtRd60zxxiphh+xaE8GyC8
+	 qoQBCDgF4fGwVXVrpQu9pOB26xcfi/B0NDPEJae8=
+Received: from [192.168.211.153] (192.168.211.153) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 26 Dec 2022 17:50:23 +0300
+Message-ID: <634b2664-a968-27ae-35f2-e3b3de6f6603@paragon-software.com>
+Date: Mon, 26 Dec 2022 18:50:22 +0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a92:da8b:0:b0:302:f62a:53e7 with SMTP id
- u11-20020a92da8b000000b00302f62a53e7mr1598651iln.273.1672065753772; Mon, 26
- Dec 2022 06:42:33 -0800 (PST)
-Date: Mon, 26 Dec 2022 06:42:33 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004b7b3a05f0bc25f8@google.com>
-Subject: [syzbot] [ntfs3?] kernel panic: stack is corrupted in __lock_acquire (5)
-From: syzbot <syzbot+0bc4c0668351ce1cab8f@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] ntfs3: fix NULL pointer dereference in 'ni_write_inode'
+Content-Language: en-US
+To: Ye Bin <yebin@huaweicloud.com>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <trix@redhat.com>, <ntfs3@lists.linux.dev>
+CC: <yebin10@huawei.com>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>,
+	<syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com>
+References: <20221117091912.3436127-1-yebin@huaweicloud.com>
+From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20221117091912.3436127-1-yebin@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.211.153]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1550a5b4480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=0bc4c0668351ce1cab8f
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fe2b94480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1567f993880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/bcef00e22a50/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0bc4c0668351ce1cab8f@syzkaller.appspotmail.com
-
-loop3: detected capacity change from 0 to 4096
-ntfs3: loop3: Different NTFS' sector size (1024) and media sector size (512)
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: __lock_acquire+0x3074/0x3084 kernel/locking/lockdep.c:5055
-CPU: 1 PID: 7324 Comm: syz-executor176 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- panic+0x218/0x508 kernel/panic.c:274
- warn_bogus_irq_restore+0x0/0x40 kernel/panic.c:703
- __lock_acquire+0x3074/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- _atomic_dec_and_lock+0xc8/0x130 lib/dec_and_lock.c:28
- iput+0x50/0x324 fs/inode.c:1765
- ntfs_fill_super+0x1254/0x14a4 fs/ntfs3/super.c:1190
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x890 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x00000,040e0108,4c017203
-Memory Limit: none
-Rebooting in 86400 seconds..
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On 17.11.2022 13:19, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+>
+> Syzbot found the following issue:
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000016
+> Mem abort info:
+>    ESR = 0x0000000096000006
+>    EC = 0x25: DABT (current EL), IL = 32 bits
+>    SET = 0, FnV = 0
+>    EA = 0, S1PTW = 0
+>    FSC = 0x06: level 2 translation fault
+> Data abort info:
+>    ISV = 0, ISS = 0x00000006
+>    CM = 0, WnR = 0
+> user pgtable: 4k pages, 48-bit VAs, pgdp=000000010af56000
+> [0000000000000016] pgd=08000001090da003, p4d=08000001090da003, pud=08000001090ce003, pmd=0000000000000000
+> Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+> Modules linked in:
+> CPU: 1 PID: 3036 Comm: syz-executor206 Not tainted 6.0.0-rc6-syzkaller-17739-g16c9f284e746 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/26/2022
+> pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
+> pc : ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
+> lr : ni_write_inode+0xa0/0x798 fs/ntfs3/frecord.c:3226
+> sp : ffff8000126c3800
+> x29: ffff8000126c3860 x28: 0000000000000000 x27: ffff0000c8b02000
+> x26: ffff0000c7502320 x25: ffff0000c7502288 x24: 0000000000000000
+> x23: ffff80000cbec91c x22: ffff0000c8b03000 x21: ffff0000c8b02000
+> x20: 0000000000000001 x19: ffff0000c75024d8 x18: 00000000000000c0
+> x17: ffff80000dd1b198 x16: ffff80000db59158 x15: ffff0000c4b6b500
+> x14: 00000000000000b8 x13: 0000000000000000 x12: ffff0000c4b6b500
+> x11: ff80800008be1b60 x10: 0000000000000000 x9 : ffff0000c4b6b500
+> x8 : 0000000000000000 x7 : ffff800008be1b50 x6 : 0000000000000000
+> x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+> x2 : 0000000000000008 x1 : 0000000000000001 x0 : 0000000000000000
+> Call trace:
+>   is_rec_inuse fs/ntfs3/ntfs.h:313 [inline]
+>   ni_write_inode+0xac/0x798 fs/ntfs3/frecord.c:3232
+>   ntfs_evict_inode+0x54/0x84 fs/ntfs3/inode.c:1744
+>   evict+0xec/0x334 fs/inode.c:665
+>   iput_final fs/inode.c:1748 [inline]
+>   iput+0x2c4/0x324 fs/inode.c:1774
+>   ntfs_new_inode+0x7c/0xe0 fs/ntfs3/fsntfs.c:1660
+>   ntfs_create_inode+0x20c/0xe78 fs/ntfs3/inode.c:1278
+>   ntfs_create+0x54/0x74 fs/ntfs3/namei.c:100
+>   lookup_open fs/namei.c:3413 [inline]
+>   open_last_lookups fs/namei.c:3481 [inline]
+>   path_openat+0x804/0x11c4 fs/namei.c:3688
+>   do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+>   do_sys_openat2+0xb8/0x22c fs/open.c:1311
+>   do_sys_open fs/open.c:1327 [inline]
+>   __do_sys_openat fs/open.c:1343 [inline]
+>   __se_sys_openat fs/open.c:1338 [inline]
+>   __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+>   __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+>   invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+>   el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+>   do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+>   el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+>   el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+>   el0t_64_sync+0x18c/0x190
+> Code: 97dafee4 340001b4 f9401328 2a1f03e0 (79402d14)
+> ---[ end trace 0000000000000000 ]---
+>
+> Above issue may happens as follows:
+> ntfs_new_inode
+>    mi_init
+>      mi->mrec = kmalloc(sbi->record_size, GFP_NOFS); -->failed to allocate memory
+>        if (!mi->mrec)
+>          return -ENOMEM;
+> iput
+>    iput_final
+>      evict
+>        ntfs_evict_inode
+>          ni_write_inode
+> 	  is_rec_inuse(ni->mi.mrec)-> As 'ni->mi.mrec' is NULL trigger NULL-ptr-deref
+>
+> To solve above issue if new inode failed make inode bad before call 'iput()' in
+> 'ntfs_new_inode()'.
+>
+> Reported-by: syzbot+f45957555ed4a808cc7a@syzkaller.appspotmail.com
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>   fs/ntfs3/fsntfs.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
+> index 567563771bf8..8de861ddec60 100644
+> --- a/fs/ntfs3/fsntfs.c
+> +++ b/fs/ntfs3/fsntfs.c
+> @@ -1683,6 +1683,7 @@ struct ntfs_inode *ntfs_new_inode(struct ntfs_sb_info *sbi, CLST rno, bool dir)
+>   
+>   out:
+>   	if (err) {
+> +		make_bad_inode(inode);
+>   		iput(inode);
+>   		ni = ERR_PTR(err);
+>   	}
+Thanks for patch, applied!
