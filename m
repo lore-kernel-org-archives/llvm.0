@@ -1,71 +1,166 @@
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A1C7B;
-	Mon, 26 Dec 2022 15:04:38 +0000 (UTC)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 850B72112;
-	Mon, 26 Dec 2022 15:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=paragon-software.com; s=mail; t=1672066867;
-	bh=Mwj50PbPOzH4V7RtccJj3Vb5q71wQ/ygotgnXgchirk=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=THALBGxwnCkLMqfXjL5pgoi7/PsqtdAcBJRfA0uNMdclhluNVDFQE5IwLzCsPEqs9
-	 HEpmcwWWzuTljjy7hSWdvk3sEN59B/ZV/dz08guykvfjq6b0AkMmqtqQoK7SxGirGO
-	 g855OXnLV9Qm2vnI0a6hZdRHrCIGDa+A68jXxVgw=
-Received: from [192.168.211.153] (192.168.211.153) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 26 Dec 2022 18:04:36 +0300
-Message-ID: <0bf7a140-1405-2b07-4d29-d593d9507c33@paragon-software.com>
-Date: Mon, 26 Dec 2022 19:04:35 +0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F8B259D
+	for <llvm@lists.linux.dev>; Mon, 26 Dec 2022 17:21:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1672075295;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pCuq6WTfAzJsWhulJT8CtAkFxxUEJa8XYNe3L/IpSF8=;
+	b=KcBA26c+/mEMqyczJABNdhG5BeJfkljqyOXNRFX8j1ElqezRKB+9jdMr7sl0XbwnwUh34S
+	Ee9nBV4Qqw+u8/FcBfX+o/go6D8sqZio6DHG40V3WwbPHO5vdtAKal5Nm9IZGJQVJMOCJ+
+	P7hoaffhrIJkFx/PoDmcweWriBYbhHw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-AcCTn8HAOBKH3hPKRNlm3w-1; Mon, 26 Dec 2022 12:21:34 -0500
+X-MC-Unique: AcCTn8HAOBKH3hPKRNlm3w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F35311869B6F
+	for <llvm@lists.linux.dev>; Mon, 26 Dec 2022 17:21:33 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E00F940C2004;
+	Mon, 26 Dec 2022 17:21:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.2.0-rc1,
+ mainline.kernel.org-clang, 1b929c02)
+Date: Mon, 26 Dec 2022 17:21:33 -0000
+To: guazhang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fs/ntfs3: Add check for kmemdup
-Content-Language: en-US
-To: Jiasheng Jiang <jiasheng@iscas.ac.cn>, <nathan@kernel.org>,
-	<ndesaulniers@google.com>, <trix@redhat.com>
-CC: <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20221123084846.2703-1-jiasheng@iscas.ac.cn>
-From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20221123084846.2703-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.211.153]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <95725.122122612213400397@us-mta-171.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23.11.2022 12:48, Jiasheng Jiang wrote:
-> Since the kmemdup may return NULL pointer,
-> it should be better to add check for the return value
-> in order to avoid NULL pointer dereference.
->
-> Fixes: b46acd6a6a62 ("fs/ntfs3: Add NTFS journal")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->   fs/ntfs3/fslog.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
-> index 0d611a6c5511..eb7cf8a69607 100644
-> --- a/fs/ntfs3/fslog.c
-> +++ b/fs/ntfs3/fslog.c
-> @@ -4277,6 +4277,10 @@ int log_replay(struct ntfs_inode *ni, bool *initialized)
->   	rec_len -= t32;
->   
->   	attr_names = kmemdup(Add2Ptr(lrh, t32), rec_len, GFP_NOFS);
-> +	if (!attr_names) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
->   
->   	lcb_put(lcb);
->   	lcb = NULL;
-Thank you for your work, applied!
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Linux 6.2-rc1
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64209
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Storage - SCSI VPD
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6499404
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6498968
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
+/0xa0
+            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
+rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: CIFS Connectathon: failed to clone cthon04
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5808606
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: Storage - multipath mapping test: /usr/share/beakerlib/testi=
+ng.sh: line 896: sg_luns: command not found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1510
+            Affected tests:
+                 ppc64le - Storage - multipath mapping test
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
