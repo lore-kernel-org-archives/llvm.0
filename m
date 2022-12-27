@@ -1,108 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mr85p00im-zteg06021901.me.com (mr85p00im-zteg06021901.me.com [17.58.23.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DA63239
-	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 18:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D088C433D2;
-	Tue, 27 Dec 2022 18:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672166893;
-	bh=jC+G6KggctyJl19lPvX6acqHjopjAKeOdWYT4ODLTZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lo1YFgc4wMO579CEmwBJteC/WRWHqg6NmNoHdgr2Myntqw6NsJ/QboLSBLlG0/wQl
-	 GNxFtfJuBD1zNW0kzFB0gkOFhWDXP7vftCIm8u80vENUIrb/sF3LRupDlqdpM7mH8p
-	 Spu9aRXzzs5wSCaFWUx0HinsGxFdV1WgK4abqeTTyC4fyNYrPd6N5EXj06jxX81NYI
-	 hl8HBlrrxBvlWkP7lFICUXqtL7HIHU5/Fh8fT8AxhPEir4aAaHqYdTrPahC6IoZctI
-	 OOIVJmRn7TjXDhhk9ne82b53glBkRNIvZO4zUJaZWpWsVpawEz/rsxgxxNgnkOxk7w
-	 zNVuI+iJztoZw==
-Date: Tue, 27 Dec 2022 11:48:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Helge Deller <deller@gmx.de>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
-	linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
-	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] fbdev: make offb driver tristate
-Message-ID: <Y6s96iuc3NRN5tS4@dev-arch.thelio-3990X>
-References: <20221126000401.25302-1-rdunlap@infradead.org>
- <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
- <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96293320D
+	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 20:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+	t=1672173090; bh=bn8cbZ1+5gpfp47ylD0XGaLQcJuV5XgPGMnDvf0oOfc=;
+	h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
+	b=HMQytf0C+PD8zA4CoYTgDmf1Mf0ZzOLE8VHOzCS80TmAJ2zA7D9gcTBvlGLLQpPix
+	 wZVz4pA8/EWoMFWutcn6xmbmpffQPyU3APfozAUxxkIo0aSARH+GO+bsJ5NfdyTk6g
+	 l1bB1yPHgTU/sbnNNi7/yD2IuF7qYCz13wz4Ux6vTmJi7t8TLxhQV+W9F6euHi59Es
+	 v2tRTrRV6DjBy6qlWOW1wKsSf6pA2LeF1OL4gmdGr232sZ1FNqnByWlXqVP87YjgDe
+	 SRCWicxsvwDmCKiGs0iLCKdVpUZdPwB4zViyi3vVVyW77UTj+zoHBNG6Dl5w2mM3gW
+	 FBUhY2P0vYBOA==
+Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+	by mr85p00im-zteg06021901.me.com (Postfix) with ESMTPSA id 59F2F74062F;
+	Tue, 27 Dec 2022 20:31:29 +0000 (UTC)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.23\))
+Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
+ transitively contain a `#[repr(align)]` type
+From: Alexander Altman <alexanderaltman@me.com>
+In-Reply-To: <Y6r+UbfkXruwHU2v@zn.tnic>
+Date: Tue, 27 Dec 2022 12:31:17 -0800
+Cc: kernel test robot <lkp@intel.com>,
+ llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev,
+ rust-for-linux@vger.kernel.org,
+ lkml <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <76353487-736A-4470-AD31-77F47F8C08F6@me.com>
+References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
+ <Y6r+UbfkXruwHU2v@zn.tnic>
+To: Borislav Petkov <bp@alien8.de>
+X-Mailer: Apple Mail (2.3731.400.23)
+X-Proofpoint-GUID: AR0abnXbYKiN-FukuifFkXTTBuwPFtj0
+X-Proofpoint-ORIG-GUID: AR0abnXbYKiN-FukuifFkXTTBuwPFtj0
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 clxscore=1011
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212270170
 
-On Sat, Dec 10, 2022 at 05:35:06PM +0100, Helge Deller wrote:
-> On 11/26/22 14:40, Thomas Zimmermann wrote:
-> > Am 26.11.22 um 01:04 schrieb Randy Dunlap:
-> > > Make the offb (Open Firmware frame buffer) driver tristate,
-> > > i.e., so that it can be built as a loadable module.
-> > > 
-> > > However, it still depends on the setting of DRM_OFDRM
-> > > so that both of these drivers cannot be builtin at the same time
-> > > nor can one be builtin and the other one a loadable module.
-> > > 
-> > > Build-tested successfully with all combination of DRM_OFDRM and FB_OF.
-> > > 
-> > > This fixes a build issue that Michal reported when FB_OF=y and
-> > > DRM_OFDRM=m:
-> > > 
-> > > powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x58): undefined reference to `cfb_fillrect'
-> > > powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x60): undefined reference to `cfb_copyarea'
-> > > powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x68): undefined reference to `cfb_imageblit'
-> > > 
-> > > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > > Cc: Michal Suchánek <msuchanek@suse.de>
-> > > Cc: linuxppc-dev@lists.ozlabs.org
-> > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > Cc: Helge Deller <deller@gmx.de>
-> > > Cc: linux-fbdev@vger.kernel.org
-> > > Cc: dri-devel@lists.freedesktop.org
-> > 
-> > Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
-> applied.
+> On Dec 27, 2022, at 6:16 AM, Borislav Petkov <bp@alien8.de> wrote:
+>=20
+> Resending because rust ML doesn't like big messages:
+>=20
+> From: rust-for-linux-owner@vger.kernel.org
+> To: rust-for-linux-approval@vger.kernel.org, bp@alien8.de
+> Subject: BOUNCE rust-for-linux@vger.kernel.org:     Message too long =
+(>100000 chars)
+>=20
+> Rust folks, you can check out the whole thing here:
+>=20
+> https://lore.kernel.org/all/202212272003.rgQDX8DQ-lkp@intel.com/
+>=20
+> (and maybe raise the limit on that ML of yours :))
+>=20
+> Thx.
+>=20
+> On Tue, Dec 27, 2022 at 02:52:25PM +0100, Borislav Petkov wrote:
+>> On Tue, Dec 27, 2022 at 08:36:11PM +0800, kernel test robot wrote:
+>>> Hi Borislav,
+>>>=20
+>>> FYI, the error/warning was bisected to this commit, please ignore it =
+if it's irrelevant.
+>>>=20
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git =
+tip-x86-alternatives
+>>> head:   82db736201e76889825efe8899ad55976111691a
+>>> commit: 82db736201e76889825efe8899ad55976111691a [1/1] =
+x86/alternatives: Add alt_instr.flags
+>>> config: x86_64-rhel-8.3-rust
+>>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project =
+f28c006a5895fc0e329fe15fead81e37457cb1d1)
+>>> reproduce (this is a W=3D1 build):
+>>>        wget =
+https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross =
+-O ~/bin/make.cross
+>>>        chmod +x ~/bin/make.cross
+>>>        # =
+https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/commit/?id=3D82d=
+b736201e76889825efe8899ad55976111691a
+>>>        git remote add bp =
+https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git
+>>>        git fetch --no-tags bp tip-x86-alternatives
+>>>        git checkout 82db736201e76889825efe8899ad55976111691a
+>>>        # save the config file
+>>>        mkdir build_dir && cp config build_dir/.config
+>>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
+make.cross W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
+>>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
+make.cross W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 prepare
+>>=20
+>> These reproduction instructions look insufficient to me. The env =
+needs a
+>> rust compiler installed. Which I don't have:
+>>=20
+>> ./scripts/rust_is_available.sh -v
+>> ***
+>> *** Rust compiler '' could not be found.
+>> ***
+>>=20
+>> Or does some of that make.cross magic install one? I don't see a =
+"rustc"
+>> mentioned there at all but I see
+>>=20
+>> CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.62.0 (a8314ef7d 2022-06-27)"
+>>=20
+>> in the .config so apparently that rustc thing has come from =
+somewhere...
+>>=20
+>>> If you fix the issue, kindly add following tag where applicable
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>=20
+>>> All errors (new ones prefixed by >>):
+>>>=20
+>>>>> error[E0588]: packed type cannot transitively contain a =
+`#[repr(align)]` type
 
-Is this going to make it to Linus soon? We are now seeing this error in
-our CI, which has the configuration describe in this commit.
 
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/3785609002/jobs/6437398666#step:5:149
+This is indeed directly because of your change, although fixing it =
+beyond my
+skill.  Explanation:
 
-https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2JUMSmjAoSJoKfl6PPjfU66JGit/build.log
+You made the following change:
+> - u16 cpuid; /* cpuid bit set for replacement */
+> +
+> + union {
+> + struct {
+> + u32 cpuid: 16; /* CPUID bit set for replacement */
+> + u32 flags: 16; /* patching control flags */
+> + };
+> + u32 ft_flgs;
+> + };
 
-Cheers,
-Nathan
+That caused Rust=E2=80=99s bindgen (bindings generator) to generate a =
+type for the
+altered field that indirectly included a representation of the
+bitfields...which have a greater-than-natural alignment because of their
+encoding (they=E2=80=99re represented as an array of 4 8-bit unsigned =
+integers, but
+aligned as if they=E2=80=99re a single 16-bit unsigned integer).  This =
+interacts
+badly with the top-level command to make the alt_instr struct packed, =
+which
+bindgen faithfully translates from C __packed to Rust #[repr(packed)].
 
-> > > ---
-> > >   drivers/video/fbdev/Kconfig |    4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff -- a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-> > > --- a/drivers/video/fbdev/Kconfig
-> > > +++ b/drivers/video/fbdev/Kconfig
-> > > @@ -456,8 +456,8 @@ config FB_ATARI
-> > >         chipset found in Ataris.
-> > >   config FB_OF
-> > > -    bool "Open Firmware frame buffer device support"
-> > > -    depends on (FB = y) && PPC && (!PPC_PSERIES || PCI)
-> > > +    tristate "Open Firmware frame buffer device support"
-> > > +    depends on FB && PPC && (!PPC_PSERIES || PCI)
-> > >       depends on !DRM_OFDRM
-> > >       select APERTURE_HELPERS
-> > >       select FB_CFB_FILLRECT
-> > 
-> 
-> 
+One way to resolve this temporarily would be to add the following line =
+above
+the offending struct:
+/// <div rustbindgen hide></div>
+This will cause bindgen to ignore the struct entirely and not translate =
+it.  If it=E2=80=99s
+actually needed for Rust code, now or later, then we can=E2=80=99t do =
+that and need
+to actually replace it with something translatable, or else leave it =
+hidden and
+manually create its translation on the Rust side.  For the latter, just =
+using a
+u32 for the entire bitfield-containing union would be sufficient.
+
+>>=20
+>> -ENOPARSE this error.
+>>=20
+>> Lemme add rust and toolchain MLs to Cc and leave the rest for them =
+with
+>> the hope that they can translate this linenoise for me.
+>=20
+> Well, not leaving it because rust ML can't take such big emails.
+>=20
+> --=20
+> Regards/Gruss,
+>    Boris.
+>=20
+> https://people.kernel.org/tglx/notes-about-netiquette
+>=20
+
+
+Thanks,
+     Laine Taffin Altman=20=
