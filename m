@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B147C63DE
-	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 20:33:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157B1C433F1;
-	Tue, 27 Dec 2022 20:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACE26ADB
+	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 20:34:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EFFC433F1;
+	Tue, 27 Dec 2022 20:34:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672173208;
+	s=k20201202; t=1672173260;
 	bh=ox2BEnfMPBNYHHyGMIa+nrsHjfNFzw5LZfghfX3ovzY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jeDPFF1HpVhx6lTX2g0zx4lK56eL6YJWpFxslBUWpQhYqpfox8j+7MBYCf66xFhW0
-	 G7/pNDg+MK1dopDXrkyUa5QgtzWaCDZ50gTEbXXpbf1HwdFpknh9agsAIeCFn3Rm+j
-	 JKP8ztrk+0/D8GmCb3Z5HYfuQ/CWIcFsX3/Jq1R6NE9zsHopH6SJOH9cyPN8IB6A/Y
-	 FNheE9WnE0tVvbLmnQrKiifyq1esP8XVa37cRsSxzW1q9FQtYipK+pSbeBTA41Dn/U
-	 mJlNtjsejsJmsnGo3jAiy1+eyEpZzpovbLVA32eL9OHymlGdT9Ji33N8rSUHkFDkT0
-	 O+0m6Q8eMnhDA==
+	b=iS3gr8U4yU0nJuwimMLUwYxyX179WdPRfWSfBScwDXtdisc80plDwPw2f4HHqqQJR
+	 wIeTo0y6lG1s/Gzxg+EL8PBRlYGWrz1W5f8gYWJxAu7rZnxyEtTSsXeLjg2iptxV2j
+	 IOFr1CZ1bmHjSGJusOOyFwhg6VKBz6rg/pnAVl5vS6Q8e5LPumvk6lj2nHnupJxJVO
+	 7jmxEX9BHbvOHnNbLXI18L3kUzdTveZoxoNjVLwAfuuoVLuh6Pt7+h8g53mrswiPGP
+	 d3wKZHhSdbmsyaJH98CjDqYl2E+XIge+ZpOHE6jU/ENG2Ft/ZFYHuAv1iMP5xOux6l
+	 IHI77OCnOx8Mw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -31,12 +31,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 23/28] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
-Date: Tue, 27 Dec 2022 15:32:44 -0500
-Message-Id: <20221227203249.1213526-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 23/27] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
+Date: Tue, 27 Dec 2022 15:33:38 -0500
+Message-Id: <20221227203342.1213918-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221227203249.1213526-1-sashal@kernel.org>
-References: <20221227203249.1213526-1-sashal@kernel.org>
+In-Reply-To: <20221227203342.1213918-1-sashal@kernel.org>
+References: <20221227203342.1213918-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
