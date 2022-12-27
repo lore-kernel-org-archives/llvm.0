@@ -1,190 +1,117 @@
-Received: from mr85p00im-zteg06021901.me.com (mr85p00im-zteg06021901.me.com [17.58.23.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96293320D
-	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 20:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-	t=1672173090; bh=bn8cbZ1+5gpfp47ylD0XGaLQcJuV5XgPGMnDvf0oOfc=;
-	h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-	b=HMQytf0C+PD8zA4CoYTgDmf1Mf0ZzOLE8VHOzCS80TmAJ2zA7D9gcTBvlGLLQpPix
-	 wZVz4pA8/EWoMFWutcn6xmbmpffQPyU3APfozAUxxkIo0aSARH+GO+bsJ5NfdyTk6g
-	 l1bB1yPHgTU/sbnNNi7/yD2IuF7qYCz13wz4Ux6vTmJi7t8TLxhQV+W9F6euHi59Es
-	 v2tRTrRV6DjBy6qlWOW1wKsSf6pA2LeF1OL4gmdGr232sZ1FNqnByWlXqVP87YjgDe
-	 SRCWicxsvwDmCKiGs0iLCKdVpUZdPwB4zViyi3vVVyW77UTj+zoHBNG6Dl5w2mM3gW
-	 FBUhY2P0vYBOA==
-Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-zteg06021901.me.com (Postfix) with ESMTPSA id 59F2F74062F;
-	Tue, 27 Dec 2022 20:31:29 +0000 (UTC)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B147C63DE
+	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 20:33:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157B1C433F1;
+	Tue, 27 Dec 2022 20:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1672173208;
+	bh=ox2BEnfMPBNYHHyGMIa+nrsHjfNFzw5LZfghfX3ovzY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jeDPFF1HpVhx6lTX2g0zx4lK56eL6YJWpFxslBUWpQhYqpfox8j+7MBYCf66xFhW0
+	 G7/pNDg+MK1dopDXrkyUa5QgtzWaCDZ50gTEbXXpbf1HwdFpknh9agsAIeCFn3Rm+j
+	 JKP8ztrk+0/D8GmCb3Z5HYfuQ/CWIcFsX3/Jq1R6NE9zsHopH6SJOH9cyPN8IB6A/Y
+	 FNheE9WnE0tVvbLmnQrKiifyq1esP8XVa37cRsSxzW1q9FQtYipK+pSbeBTA41Dn/U
+	 mJlNtjsejsJmsnGo3jAiy1+eyEpZzpovbLVA32eL9OHymlGdT9Ji33N8rSUHkFDkT0
+	 O+0m6Q8eMnhDA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>,
+	kernel test robot <lkp@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	Sasha Levin <sashal@kernel.org>,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.1 23/28] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
+Date: Tue, 27 Dec 2022 15:32:44 -0500
+Message-Id: <20221227203249.1213526-23-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221227203249.1213526-1-sashal@kernel.org>
+References: <20221227203249.1213526-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.23\))
-Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
- transitively contain a `#[repr(align)]` type
-From: Alexander Altman <alexanderaltman@me.com>
-In-Reply-To: <Y6r+UbfkXruwHU2v@zn.tnic>
-Date: Tue, 27 Dec 2022 12:31:17 -0800
-Cc: kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- rust-for-linux@vger.kernel.org,
- lkml <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <76353487-736A-4470-AD31-77F47F8C08F6@me.com>
-References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
- <Y6r+UbfkXruwHU2v@zn.tnic>
-To: Borislav Petkov <bp@alien8.de>
-X-Mailer: Apple Mail (2.3731.400.23)
-X-Proofpoint-GUID: AR0abnXbYKiN-FukuifFkXTTBuwPFtj0
-X-Proofpoint-ORIG-GUID: AR0abnXbYKiN-FukuifFkXTTBuwPFtj0
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 clxscore=1011
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212270170
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-> On Dec 27, 2022, at 6:16 AM, Borislav Petkov <bp@alien8.de> wrote:
->=20
-> Resending because rust ML doesn't like big messages:
->=20
-> From: rust-for-linux-owner@vger.kernel.org
-> To: rust-for-linux-approval@vger.kernel.org, bp@alien8.de
-> Subject: BOUNCE rust-for-linux@vger.kernel.org:     Message too long =
-(>100000 chars)
->=20
-> Rust folks, you can check out the whole thing here:
->=20
-> https://lore.kernel.org/all/202212272003.rgQDX8DQ-lkp@intel.com/
->=20
-> (and maybe raise the limit on that ML of yours :))
->=20
-> Thx.
->=20
-> On Tue, Dec 27, 2022 at 02:52:25PM +0100, Borislav Petkov wrote:
->> On Tue, Dec 27, 2022 at 08:36:11PM +0800, kernel test robot wrote:
->>> Hi Borislav,
->>>=20
->>> FYI, the error/warning was bisected to this commit, please ignore it =
-if it's irrelevant.
->>>=20
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git =
-tip-x86-alternatives
->>> head:   82db736201e76889825efe8899ad55976111691a
->>> commit: 82db736201e76889825efe8899ad55976111691a [1/1] =
-x86/alternatives: Add alt_instr.flags
->>> config: x86_64-rhel-8.3-rust
->>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project =
-f28c006a5895fc0e329fe15fead81e37457cb1d1)
->>> reproduce (this is a W=3D1 build):
->>>        wget =
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross =
--O ~/bin/make.cross
->>>        chmod +x ~/bin/make.cross
->>>        # =
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/commit/?id=3D82d=
-b736201e76889825efe8899ad55976111691a
->>>        git remote add bp =
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git
->>>        git fetch --no-tags bp tip-x86-alternatives
->>>        git checkout 82db736201e76889825efe8899ad55976111691a
->>>        # save the config file
->>>        mkdir build_dir && cp config build_dir/.config
->>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
-make.cross W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
->>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
-make.cross W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 prepare
->>=20
->> These reproduction instructions look insufficient to me. The env =
-needs a
->> rust compiler installed. Which I don't have:
->>=20
->> ./scripts/rust_is_available.sh -v
->> ***
->> *** Rust compiler '' could not be found.
->> ***
->>=20
->> Or does some of that make.cross magic install one? I don't see a =
-"rustc"
->> mentioned there at all but I see
->>=20
->> CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.62.0 (a8314ef7d 2022-06-27)"
->>=20
->> in the .config so apparently that rustc thing has come from =
-somewhere...
->>=20
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>>=20
->>> All errors (new ones prefixed by >>):
->>>=20
->>>>> error[E0588]: packed type cannot transitively contain a =
-`#[repr(align)]` type
+From: Kees Cook <keescook@chromium.org>
 
+[ Upstream commit 21b8a1dd56a163825e5749b303858fb902ebf198 ]
 
-This is indeed directly because of your change, although fixing it =
-beyond my
-skill.  Explanation:
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed.
 
-You made the following change:
-> - u16 cpuid; /* cpuid bit set for replacement */
-> +
-> + union {
-> + struct {
-> + u32 cpuid: 16; /* CPUID bit set for replacement */
-> + u32 flags: 16; /* patching control flags */
-> + };
-> + u32 ft_flgs;
-> + };
+msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
+did not have matching prototypes for devm_add_action_or_reset()'s
+callback argument. Refactor to use devm_clk_get_enabled() instead.
 
-That caused Rust=E2=80=99s bindgen (bindings generator) to generate a =
-type for the
-altered field that indirectly included a representation of the
-bitfields...which have a greater-than-natural alignment because of their
-encoding (they=E2=80=99re represented as an array of 4 8-bit unsigned =
-integers, but
-aligned as if they=E2=80=99re a single 16-bit unsigned integer).  This =
-interacts
-badly with the top-level command to make the alt_instr struct packed, =
-which
-bindgen faithfully translates from C __packed to Rust #[repr(packed)].
+This was found as a result of Clang's new -Wcast-function-type-strict
+flag, which is more sensitive than the simpler -Wcast-function-type,
+which only checks for type width mismatches.
 
-One way to resolve this temporarily would be to add the following line =
-above
-the offending struct:
-/// <div rustbindgen hide></div>
-This will cause bindgen to ignore the struct entirely and not translate =
-it.  If it=E2=80=99s
-actually needed for Rust code, now or later, then we can=E2=80=99t do =
-that and need
-to actually replace it with something translatable, or else leave it =
-hidden and
-manually create its translation on the Rust side.  For the latter, just =
-using a
-u32 for the entire bitfield-containing union would be sufficient.
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Daniel Palmer <daniel@thingy.jp>
+Cc: Romain Perier <romain.perier@gmail.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-rtc@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Daniel Palmer <daniel@thingy.jp>
+Tested-by: Daniel Palmer <daniel@thingy.jp>
+Link: https://lore.kernel.org/r/20221202184525.gonna.423-kees@kernel.org
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/rtc/rtc-msc313.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
->>=20
->> -ENOPARSE this error.
->>=20
->> Lemme add rust and toolchain MLs to Cc and leave the rest for them =
-with
->> the hope that they can translate this linenoise for me.
->=20
-> Well, not leaving it because rust ML can't take such big emails.
->=20
-> --=20
-> Regards/Gruss,
->    Boris.
->=20
-> https://people.kernel.org/tglx/notes-about-netiquette
->=20
+diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+index f3fde013c4b8..8d7737e0e2e0 100644
+--- a/drivers/rtc/rtc-msc313.c
++++ b/drivers/rtc/rtc-msc313.c
+@@ -212,22 +212,12 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	clk = devm_clk_get(dev, NULL);
++	clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(dev, "No input reference clock\n");
+ 		return PTR_ERR(clk);
+ 	}
+ 
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to enable the reference clock, %d\n", ret);
+-		return ret;
+-	}
+-
+-	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
+-	if (ret)
+-		return ret;
+-
+ 	rate = clk_get_rate(clk);
+ 	writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
+ 	writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H);
+-- 
+2.35.1
 
-
-Thanks,
-     Laine Taffin Altman=20=
