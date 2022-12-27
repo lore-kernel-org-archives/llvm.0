@@ -1,308 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D758163AD;
-	Tue, 27 Dec 2022 18:07:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308C4C433EF;
-	Tue, 27 Dec 2022 18:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DA63239
+	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 18:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D088C433D2;
+	Tue, 27 Dec 2022 18:48:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672164452;
-	bh=2gIVArRSVX69B4yyMqnVV1uzH65WEas6JMyCVEdj7Yw=;
+	s=k20201202; t=1672166893;
+	bh=jC+G6KggctyJl19lPvX6acqHjopjAKeOdWYT4ODLTZU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GDHMWz1WEhVldtE/XYagYk2NcaYmK95Mxq3OJQ/cbweOUaehoqYjhqCLdFTHel0Je
-	 AIBIEFz97BEV6KCqNqscEpoper44jUZ0mv2x8Hjl3FK9M54LTGwK1iROAbeb+OrD4P
-	 hSc6ZN6RA/3ANyjAjeKALQJ8pZfU7jBTV3cQyPyG8jwpNAoDX2Af2Hy7tBeohG6NAy
-	 HRhCw2MHM5UcdDUqhfl98Jrdl83A9y3R0u15aAv85EshsYg2LMdJEfZyFr79c1q7L8
-	 D6OkKaN9K4sXKqj4RTNDV0mHuq81NJumc3hgtpg+nGLV9J+J7Zp3poQAU8oFjPlcPe
-	 FjrQsNM2hjhMQ==
-Date: Tue, 27 Dec 2022 11:07:30 -0700
+	b=Lo1YFgc4wMO579CEmwBJteC/WRWHqg6NmNoHdgr2Myntqw6NsJ/QboLSBLlG0/wQl
+	 GNxFtfJuBD1zNW0kzFB0gkOFhWDXP7vftCIm8u80vENUIrb/sF3LRupDlqdpM7mH8p
+	 Spu9aRXzzs5wSCaFWUx0HinsGxFdV1WgK4abqeTTyC4fyNYrPd6N5EXj06jxX81NYI
+	 hl8HBlrrxBvlWkP7lFICUXqtL7HIHU5/Fh8fT8AxhPEir4aAaHqYdTrPahC6IoZctI
+	 OOIVJmRn7TjXDhhk9ne82b53glBkRNIvZO4zUJaZWpWsVpawEz/rsxgxxNgnkOxk7w
+	 zNVuI+iJztoZw==
+Date: Tue, 27 Dec 2022 11:48:10 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [peterz-queue:core/wip-u128 14/14]
- arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
-Message-ID: <Y6s0Yongvkn1WoIK@dev-arch.thelio-3990X>
-References: <202212272348.xvp2fQTy-lkp@intel.com>
+To: Helge Deller <deller@gmx.de>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+	linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
+	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] fbdev: make offb driver tristate
+Message-ID: <Y6s96iuc3NRN5tS4@dev-arch.thelio-3990X>
+References: <20221126000401.25302-1-rdunlap@infradead.org>
+ <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
+ <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <202212272348.xvp2fQTy-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
 
-On Tue, Dec 27, 2022 at 11:27:57PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/wip-u128
-> head:   c05419246aa69cd3ff3f929e232ebed1b5b49c2d
-> commit: c05419246aa69cd3ff3f929e232ebed1b5b49c2d [14/14] atomic: Add test cases for cmpxchg128 family
-> config: arm-randconfig-r046-20221226
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project f5700e7b69048de958172fb513b336564e7f8709)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c05419246aa69cd3ff3f929e232ebed1b5b49c2d
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue core/wip-u128
->         git checkout c05419246aa69cd3ff3f929e232ebed1b5b49c2d
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash lib/
+On Sat, Dec 10, 2022 at 05:35:06PM +0100, Helge Deller wrote:
+> On 11/26/22 14:40, Thomas Zimmermann wrote:
+> > Am 26.11.22 um 01:04 schrieb Randy Dunlap:
+> > > Make the offb (Open Firmware frame buffer) driver tristate,
+> > > i.e., so that it can be built as a loadable module.
+> > > 
+> > > However, it still depends on the setting of DRM_OFDRM
+> > > so that both of these drivers cannot be builtin at the same time
+> > > nor can one be builtin and the other one a loadable module.
+> > > 
+> > > Build-tested successfully with all combination of DRM_OFDRM and FB_OF.
+> > > 
+> > > This fixes a build issue that Michal reported when FB_OF=y and
+> > > DRM_OFDRM=m:
+> > > 
+> > > powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x58): undefined reference to `cfb_fillrect'
+> > > powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x60): undefined reference to `cfb_copyarea'
+> > > powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x68): undefined reference to `cfb_imageblit'
+> > > 
+> > > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> > > Cc: Michal Suchánek <msuchanek@suse.de>
+> > > Cc: linuxppc-dev@lists.ozlabs.org
+> > > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > > Cc: Helge Deller <deller@gmx.de>
+> > > Cc: linux-fbdev@vger.kernel.org
+> > > Cc: dri-devel@lists.freedesktop.org
+> > 
+> > Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 > 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r4, r5, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r6, r7, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
-> >> arch/arm/include/asm/cmpxchg.h:254:1: error: instruction requires: !armv*m
->    "1:     ldrexd          %1, %H1, [%3]\n"
->    ^
->    <inline asm>:1:5: note: instantiated into assembly here
->            1:      ldrexd          r6, r7, [r0]
->                    ^
->    In file included from lib/atomic64_test.c:12:
->    In file included from include/linux/kernel.h:22:
->    In file included from include/linux/bitops.h:68:
->    In file included from arch/arm/include/asm/bitops.h:245:
->    In file included from include/asm-generic/bitops/lock.h:5:
->    In file included from include/linux/atomic.h:7:
->    In file included from arch/arm/include/asm/atomic.h:16:
->    arch/arm/include/asm/cmpxchg.h:258:2: error: instruction requires: !armv*m
->    "       strexd          %0, %5, %H5, [%3]\n"
->     ^
->    <inline asm>:5:2: note: instantiated into assembly here
->            strexd          r1, r4, r5, [r0]
->            ^
->    16 errors generated.
+> applied.
 
-GAS's error message is a little more informative as to what is going on.
+Is this going to make it to Linus soon? We are now seeing this error in
+our CI, which has the configuration describe in this commit.
 
-/tmp/cccn02Dg.s: Assembler messages:
-/tmp/cccn02Dg.s:6048: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6052: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6090: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6094: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6133: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6137: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6175: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6179: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6219: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6223: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6263: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6267: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6311: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6315: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6356: Error: selected processor does not support `ldrexd r0,r1,[r3]' in Thumb mode
-/tmp/cccn02Dg.s:6360: Error: selected processor does not support `strexd r2,r6,r7,[r3]' in Thumb mode
+https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/3785609002/jobs/6437398666#step:5:149
 
-which leads to looking at the config:
-
-$ rg 'CPU_(V|32)|THUMB2' .config
-265:CONFIG_CPU_V7M=y
-268:CONFIG_CPU_32v7M=y
-273:CONFIG_CPU_V7M_NUM_IRQ=90
-311:CONFIG_THUMB2_KERNEL=y
-
-CONFIG_GENERIC_ATOMIC64 is selected for CONFIG_CPU_V7M, presumably to
-avoid using these instructions, based on the other CONFIGs in that
-select statement in arch/arm/Kconfig? I am not sure how the test needs
-to cope with that but hopefully that makes it a little more obvious what
-is happening here.
+https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2JUMSmjAoSJoKfl6PPjfU66JGit/build.log
 
 Cheers,
 Nathan
+
+> > > ---
+> > >   drivers/video/fbdev/Kconfig |    4 ++--
+> > >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff -- a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+> > > --- a/drivers/video/fbdev/Kconfig
+> > > +++ b/drivers/video/fbdev/Kconfig
+> > > @@ -456,8 +456,8 @@ config FB_ATARI
+> > >         chipset found in Ataris.
+> > >   config FB_OF
+> > > -    bool "Open Firmware frame buffer device support"
+> > > -    depends on (FB = y) && PPC && (!PPC_PSERIES || PCI)
+> > > +    tristate "Open Firmware frame buffer device support"
+> > > +    depends on FB && PPC && (!PPC_PSERIES || PCI)
+> > >       depends on !DRM_OFDRM
+> > >       select APERTURE_HELPERS
+> > >       select FB_CFB_FILLRECT
+> > 
+> 
+> 
