@@ -1,117 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACE26ADB
-	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 20:34:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EFFC433F1;
-	Tue, 27 Dec 2022 20:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672173260;
-	bh=ox2BEnfMPBNYHHyGMIa+nrsHjfNFzw5LZfghfX3ovzY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iS3gr8U4yU0nJuwimMLUwYxyX179WdPRfWSfBScwDXtdisc80plDwPw2f4HHqqQJR
-	 wIeTo0y6lG1s/Gzxg+EL8PBRlYGWrz1W5f8gYWJxAu7rZnxyEtTSsXeLjg2iptxV2j
-	 IOFr1CZ1bmHjSGJusOOyFwhg6VKBz6rg/pnAVl5vS6Q8e5LPumvk6lj2nHnupJxJVO
-	 7jmxEX9BHbvOHnNbLXI18L3kUzdTveZoxoNjVLwAfuuoVLuh6Pt7+h8g53mrswiPGP
-	 d3wKZHhSdbmsyaJH98CjDqYl2E+XIge+ZpOHE6jU/ENG2Ft/ZFYHuAv1iMP5xOux6l
-	 IHI77OCnOx8Mw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	kernel test robot <lkp@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rtc@vger.kernel.org,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.0 23/27] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
-Date: Tue, 27 Dec 2022 15:33:38 -0500
-Message-Id: <20221227203342.1213918-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221227203342.1213918-1-sashal@kernel.org>
-References: <20221227203342.1213918-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBF86ADB
+	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 21:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1672175221; bh=OL5WJhJ3/ioUTccUP2H6ZJHZm++nEKN5MiFWcaZshkI=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=DP1X3adLdzt3xnBG3I0B9VUWlDhKza6IbdAs40Qoe/bPk3oB4A+eZOBtyvYpW0ppF
+	 VKlADVUoLV255aRFH2P6g7Os4xXiKumbLF5yWAhXH6h0IpeuxIs0hsiyIgapKEfIpk
+	 Mr/7enpe72LseWOrkj3IG7rGXXGLRNgmbtEqCPJkM9667QYESkhYbLC7f5ugS883do
+	 w5wlWUPT0LlOyCXAMnTBZpSRkOHCHDZ1DFEyfp5HZMeH2SRqU0V4HT06AA+sPwMImI
+	 dtu9zVhJ2Tdnj3Jz0dCy05W1a4kFLd8W59zYAEX7cFq0kIs1/d40QIyrRkpbRiKEEg
+	 Kn45IwDeNEXlA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.190.3]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrQJ5-1oX6Re0szP-00oYBV; Tue, 27
+ Dec 2022 22:07:01 +0100
+Message-ID: <aaf6a109-ac1b-c22a-88b7-0414b3265857@gmx.de>
+Date: Tue, 27 Dec 2022 22:06:59 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] fbdev: make offb driver tristate
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>,
+ Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+ Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
+ =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+ linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev
+References: <20221126000401.25302-1-rdunlap@infradead.org>
+ <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
+ <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
+ <Y6s96iuc3NRN5tS4@dev-arch.thelio-3990X>
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+In-Reply-To: <Y6s96iuc3NRN5tS4@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pmufG/yBB7w10j8I7juqQ1B39xUxP8hRiEiNAVefeU+Zrc6CndG
+ P8D13De0yweY4iSpmMFzYgs6fOK5FY/JajFhHgVW2MhBJFSnDzKgrXKxbm67ZiGG77ZOXyu
+ FLsoDQkkcIufDRIPC8QEKCG9C/E/xdgEsK+r6KUlD4LVKleVqgJN1rYSFrY3/kFHkS0k90G
+ 3aibwRR9tFFMx1kg3m9XA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:4m/m/TKe8EY=;8px+0lBpXJqhmDlMMqcatGE6fyR
+ kwdAiq3U2LOYRCxMiNVKvGCCqgYC7ouanOJGEqPMwm2bYQgcwkpZQa8H5cF9bZQj34BAIsZsA
+ 1XaKbiPO6NpfRjtEEMZtMJxLLjyQml/if2W/d9BlP9bs9nHhn/x81lApHGsN8lRiie2Hw5s65
+ CkGmlTfGpZqQFfR3vl7BrvMn8H4VBnh9fqZQP/Qax0iIoCeVG57nvtJwaUGFKx1Te4GHsigtp
+ qyYqRalAbUye9HFVHulSa43FI7QDfWFz2FHzyrboHoSvQ4m2xPUpU6QY+Ux9j2ZRBr78JqaDN
+ cLZz6NQUsojzhZ7gPHpjMdyART5prM6RQozcOlq0WB/yyNqsD7UqbWQWFAsV3oVafcDG8X6gf
+ xAYOzoEoYGRMmpt3htPz1nJYi+fKuvOOWmc2eG6edLfPAH3KtnnZQtpvfgWt7cVkLqbtWWoPC
+ CB8xkIdRQglorW4K8x1cCNApA3rr6y26eFaZKXjO87lEhOg5QOnz5XTSn3XgZ2d9FmFaYsFMc
+ 3NVsCgZ2gE0BFa1lem1NlLGvpU/bgrnCIZppeqOe+xhZ5+fw5t+KVVhVXmg1x1PDaY/o1cJJ5
+ p5YQfhICbF/Eh1NNjPo7XKtVU4NqOxXWhh+SyAiNabpDIxUEx3phW6Iw5RwSvqeOijsriYAT6
+ KBZLy4gdPEg9p0Yq9h6tzRUSB183VmBIaM4L1toY6RF1VO2tS5fCRb9GQUp25gmkTRG8CSVbx
+ ejQSOttkcoVUXEb64ETtnJNUVv6KF5bHR96YTiNAqjSryZd5VJLZJ4Hfagb4S6XgT69FXReDu
+ pmU6YXRpUtZQNzcqZ3A9mqEJPS8H35jtEqXcPR54RKvB+gPOlKqmyw4DEMc5O+Ew+og53U+LL
+ MpDMGXwo0jV2Nu1DrSFMLj6Hw9g9KHRXCGYL6LdvIrIT1jl2QayH61cYho1wZiYKrCMhf+e4c
+ gkwanbkBWZCZ56wz9awOPy+2nJk=
 
-From: Kees Cook <keescook@chromium.org>
+On 12/27/22 19:48, Nathan Chancellor wrote:
+> On Sat, Dec 10, 2022 at 05:35:06PM +0100, Helge Deller wrote:
+>> On 11/26/22 14:40, Thomas Zimmermann wrote:
+>>> Am 26.11.22 um 01:04 schrieb Randy Dunlap:
+>>>> Make the offb (Open Firmware frame buffer) driver tristate,
+>>>> i.e., so that it can be built as a loadable module.
+>>>>
+>>>> However, it still depends on the setting of DRM_OFDRM
+>>>> so that both of these drivers cannot be builtin at the same time
+>>>> nor can one be builtin and the other one a loadable module.
+>>>>
+>>>> Build-tested successfully with all combination of DRM_OFDRM and FB_OF=
+.
+>>>>
+>>>> This fixes a build issue that Michal reported when FB_OF=3Dy and
+>>>> DRM_OFDRM=3Dm:
+>>>>
+>>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x58): u=
+ndefined reference to `cfb_fillrect'
+>>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x60): u=
+ndefined reference to `cfb_copyarea'
+>>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x68): u=
+ndefined reference to `cfb_imageblit'
+>>>>
+>>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>>>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>>>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>>>> Cc: Michal Such=C3=A1nek <msuchanek@suse.de>
+>>>> Cc: linuxppc-dev@lists.ozlabs.org
+>>>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>>>> Cc: Helge Deller <deller@gmx.de>
+>>>> Cc: linux-fbdev@vger.kernel.org
+>>>> Cc: dri-devel@lists.freedesktop.org
+>>>
+>>> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+>>
+>> applied.
+>
+> Is this going to make it to Linus soon? We are now seeing this error in
+> our CI, which has the configuration describe in this commit.
+>
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/=
+3785609002/jobs/6437398666#step:5:149
+>
+> https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integrati=
+on2/builds/2JUMSmjAoSJoKfl6PPjfU66JGit/build.log
 
-[ Upstream commit 21b8a1dd56a163825e5749b303858fb902ebf198 ]
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed.
+It didn't applied cleanly earlier.
+I've now added it to the fbdev for-next branch, and if no problems
+show up in the next few days I'll push it before next weekend.
+https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/log=
+/?h=3Dfor-next
 
-msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
-did not have matching prototypes for devm_add_action_or_reset()'s
-callback argument. Refactor to use devm_clk_get_enabled() instead.
+Helge
 
-This was found as a result of Clang's new -Wcast-function-type-strict
-flag, which is more sensitive than the simpler -Wcast-function-type,
-which only checks for type width mismatches.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
-Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Daniel Palmer <daniel@thingy.jp>
-Cc: Romain Perier <romain.perier@gmail.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-rtc@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Daniel Palmer <daniel@thingy.jp>
-Tested-by: Daniel Palmer <daniel@thingy.jp>
-Link: https://lore.kernel.org/r/20221202184525.gonna.423-kees@kernel.org
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/rtc/rtc-msc313.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
-
-diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
-index f3fde013c4b8..8d7737e0e2e0 100644
---- a/drivers/rtc/rtc-msc313.c
-+++ b/drivers/rtc/rtc-msc313.c
-@@ -212,22 +212,12 @@ static int msc313_rtc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	clk = devm_clk_get(dev, NULL);
-+	clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(clk)) {
- 		dev_err(dev, "No input reference clock\n");
- 		return PTR_ERR(clk);
- 	}
- 
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		dev_err(dev, "Failed to enable the reference clock, %d\n", ret);
--		return ret;
--	}
--
--	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
--	if (ret)
--		return ret;
--
- 	rate = clk_get_rate(clk);
- 	writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
- 	writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H);
--- 
-2.35.1
+> Cheers,
+> Nathan
+>
+>>>> ---
+>>>>  =C2=A0 drivers/video/fbdev/Kconfig |=C2=A0=C2=A0=C2=A0 4 ++--
+>>>>  =C2=A0 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff -- a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+>>>> --- a/drivers/video/fbdev/Kconfig
+>>>> +++ b/drivers/video/fbdev/Kconfig
+>>>> @@ -456,8 +456,8 @@ config FB_ATARI
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chipset found in Ataris.
+>>>>  =C2=A0 config FB_OF
+>>>> -=C2=A0=C2=A0=C2=A0 bool "Open Firmware frame buffer device support"
+>>>> -=C2=A0=C2=A0=C2=A0 depends on (FB =3D y) && PPC && (!PPC_PSERIES || =
+PCI)
+>>>> +=C2=A0=C2=A0=C2=A0 tristate "Open Firmware frame buffer device suppo=
+rt"
+>>>> +=C2=A0=C2=A0=C2=A0 depends on FB && PPC && (!PPC_PSERIES || PCI)
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on !DRM_OFDRM
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select APERTURE_HELPERS
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select FB_CFB_FILLRECT
+>>>
+>>
+>>
 
