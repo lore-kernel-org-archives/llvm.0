@@ -1,177 +1,102 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D5E620
-	for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 23:49:30 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so10330906wms.4
-        for <llvm@lists.linux.dev>; Tue, 27 Dec 2022 15:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0QgWN6vOgzOsG8KrJlP4S4kou7HYGIHzwKAIy2MCJCM=;
-        b=U9+cgm2K8zqx9jzmqQjgjyCo45oSo30p0lGK3e8OfblI6wMVtyBWi/jvEmvq52vAhf
-         oPtBPRUZf8eEPCcOcEXdufi0HqCQlVZdIrkGAiYEc0IQjZl3Foi/BVMqqmrYtOEdb6UE
-         MgFP7t5SRxvkQO3ZxDer+u9NEzRc6A6VNRy3XorDclwNqO9duQoDTSdFeLnS1NNExKfi
-         eafslM08k3BkFb+6HLH/pf3lNSilFon8bPy0MgygR0ScOpyVxg2BM7VfdZ5eXTNEA+Nm
-         1oAkT4bjIddH6Y70gPk+Jka8Gdh4qK3Q3Jt5l/vbB2EJM7LENzvU593L4EmLnt/JKJ4M
-         xLxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0QgWN6vOgzOsG8KrJlP4S4kou7HYGIHzwKAIy2MCJCM=;
-        b=vMS2gjjpmbh/TZ0MeaYg4Ltx4K4eMXwsBgFwsxYjEw7QuerDNYc74xPCAt7tud1hKw
-         s6fA1tk01/S/dG17wK287ujF5mV/4c4VNYuwB3qtafZJCuWa44IorolkWMP5pvoUz3NY
-         qKyewwTxz3GENB9lSmDLi169672qewAK1UmL0eKeXmGFz+uqF/8RFnFV6QoooDUeDGZP
-         0IBpHT21+Oh/Xkjkjt/28de1yoBrdujLtkR34jN0S1Xdcej10ufv4b+gGCBkDFuShNHJ
-         lyEBnAvnk3kJGzmD8c/8Jt2C+VfYd598oZr46AFp1fueMzxrip8swJPeckztM3aGc5za
-         jaLA==
-X-Gm-Message-State: AFqh2koRfLXT3sSyb4B2PN7YIjV5zrQzW7wQeIwYUNGfD/8xfu+042K0
-	sl4KzgYaEJhPJIW4l5pKjMWv2IReDV/vIKLa
-X-Google-Smtp-Source: AMrXdXsFXH26JDZwoqcpatns4xaa7pkuYS+8pvRmgbOBimQ33vxXsWZG1u/mjljlmSCe/ATLR7UASA==
-X-Received: by 2002:a05:600c:22c4:b0:3cf:8ed7:712d with SMTP id 4-20020a05600c22c400b003cf8ed7712dmr19513190wmg.14.1672184969242;
-        Tue, 27 Dec 2022 15:49:29 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05600c19c900b003d9876aa04asm7066947wmq.41.2022.12.27.15.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 15:49:28 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Tue, 27 Dec 2022 23:49:28 +0000 (UTC)
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: llvm@lists.linux.dev, arnd@linaro.org
-Message-ID: <1351264102.7965.1672184968838@jenkins.jenkins>
-Subject: [TCWG CI] Failure after v6.1-rc8-270-g1b19c4c249a1: btrfs: turn on
- -Wmaybe-uninitialized
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D5867E3
+	for <llvm@lists.linux.dev>; Wed, 28 Dec 2022 00:36:13 +0000 (UTC)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 04443DB8;
+	Wed, 28 Dec 2022 01:36:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+	s=202211; t=1672187772;
+	bh=/RGVuKr5/3fCEx87FQ8Nip6ERreIb5DBGC2EyffIs24=;
+	h=Date:From:Cc:Subject:References:In-Reply-To:From;
+	b=fuPuYWcBEuWZDrHK7r+tlFxnVEDjRSfUxg5F1XbZUdKjSLnkAUn2hZH2WRFYRtVr8
+	 7wbGB7GKMQYpblP0yaD0DtfNvlvENzCWXcxQglQf288+wAbkC8nEH0BT4UmkQhCQnP
+	 vQ0spz/+EKLikRfa3lbF2LnzbCnoXuP+26d1jR4upnQOKZ/qSSyJpaZBkUyTlIw7As
+	 HhCx1oru5tKwvwf3knElh+jyjJH3ijWm8lONORICVA+3YDTNVUNYqM+8mMTZrueFEZ
+	 DZr/3V7lh66OSxXg0jtO1rBxeHh8ooZHLMAt8CWOKf+0eG73JtCyofQ4vMrHiF28GF
+	 jZSohr6L3xI+g==
+Date: Wed, 28 Dec 2022 01:36:10 +0100
+From: Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 2/2] perf python: don't run the linker for clang feature tests
+Message-ID: <7d943ff294fbc606880a824b9764704f803f8beb.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_7964_1281025303.1672184968242"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3obvt4otlktrkdug"
+Content-Disposition: inline
+In-Reply-To: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
+User-Agent: NeoMutt/20220429
 
-------=_Part_7964_1281025303.1672184968242
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Failure after v6.1-rc8-270-g1b19c4c249a1: btrfs: turn on -Wmaybe-uninitialized:
+--3obvt4otlktrkdug
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Results changed to
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-23449
-# First few build errors in logs:
-# 00:31:50 error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
-# 00:31:50 make[3]: *** [scripts/Makefile.build:250: fs/btrfs/super.o] Error 1
-# 00:31:50 error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
-# 00:31:50 make[3]: *** [scripts/Makefile.build:250: fs/btrfs/ctree.o] Error 1
-# 00:31:50 error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
-# 00:31:50 make[3]: *** [scripts/Makefile.build:250: fs/btrfs/extent-tree.o] Error 1
-# 00:31:50 error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
-# 00:31:50 make[3]: *** [scripts/Makefile.build:250: fs/btrfs/print-tree.o] Error 1
-# 00:31:50 error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
-# 00:31:50 make[3]: *** [scripts/Makefile.build:250: fs/btrfs/root-tree.o] Error 1
+This, for me, slightly-more-than-halves the time it takes to run
+  for a in "-mcet" "-fcf-protection" "-fstack-clash-protection" \
+           "-fstack-protector-strong" "-fno-semantic-interposition" \
+           "-ffat-lto-objects"; do
+    cc "$a" ../build/feature/test-hello.c -o /dev/null; done
+=66rom just over 600ms.
 
-from
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-32292
-# linux build successful:
-all
-
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
-
-For latest status see comments in https://linaro.atlassian.net/browse/LLVM-647 .
-Status of v6.1-rc8-270-g1b19c4c249a1 commit for tcwg_kernel:
-commit 1b19c4c249a196301a2a3a69aeba2c6407dad25d
-Author: Josef Bacik <josef@toxicpanda.com>
-Date:   Fri Dec 16 15:15:58 2022 -0500
-
-    btrfs: turn on -Wmaybe-uninitialized
-    
-    We had a recent bug that would have been caught by a newer compiler with
-    -Wmaybe-uninitialized and would have saved us a month of failing tests
-    that I didn't have time to investigate.
-    
-    Reviewed-by: Qu Wenruo <wqu@suse.com>
-    Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-    Reviewed-by: David Sterba <dsterba@suse.com>
-    Signed-off-by: David Sterba <dsterba@suse.com>
-* llvm-master-aarch64-next-allmodconfig
-** Failure after v6.1-rc8-270-g1b19c4c249a1: btrfs: turn on -Wmaybe-uninitialized:
-** https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allmodconfig/601/
-
-Bad  build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allmodconfig/601/artifact/artifacts
-Good build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allmodconfig/600/artifact/artifacts
-
-Reproduce current build:
-<cut>
-mkdir -p investigate-linux-1b19c4c249a196301a2a3a69aeba2c6407dad25d
-cd investigate-linux-1b19c4c249a196301a2a3a69aeba2c6407dad25d
-
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests for bad and good builds
-mkdir -p bad/artifacts good/artifacts
-curl -o bad/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allmodconfig/601/artifact/artifacts/manifest.sh --fail
-curl -o good/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allmodconfig/600/artifact/artifacts/manifest.sh --fail
-
-# Reproduce bad build
-(cd bad; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-# Reproduce good build
-(cd good; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit 1b19c4c249a196301a2a3a69aeba2c6407dad25d
-Author: Josef Bacik <josef@toxicpanda.com>
-Date:   Fri Dec 16 15:15:58 2022 -0500
-
-    btrfs: turn on -Wmaybe-uninitialized
-    
-    We had a recent bug that would have been caught by a newer compiler with
-    -Wmaybe-uninitialized and would have saved us a month of failing tests
-    that I didn't have time to investigate.
-    
-    Reviewed-by: Qu Wenruo <wqu@suse.com>
-    Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-    Reviewed-by: David Sterba <dsterba@suse.com>
-    Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- fs/btrfs/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/Makefile b/fs/btrfs/Makefile
-index 555c962fdad6..eca995abccdf 100644
---- a/fs/btrfs/Makefile
-+++ b/fs/btrfs/Makefile
-@@ -7,6 +7,7 @@ subdir-ccflags-y += -Wmissing-format-attribute
- subdir-ccflags-y += -Wmissing-prototypes
- subdir-ccflags-y += -Wold-style-definition
- subdir-ccflags-y += -Wmissing-include-dirs
-+subdir-ccflags-y += -Wmaybe-uninitialized
- condflags := \
- 	$(call cc-option, -Wunused-but-set-variable)		\
- 	$(call cc-option, -Wunused-const-variable)		\
-</cut>
-------=_Part_7964_1281025303.1672184968242--
+diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+index 58239e1cdb2a..400c99cd7734 100644
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -16,7 +16,7 @@ cc_is_clang =3D b"clang version" in Popen([cc, "-v"], std=
+err=3DPIPE).stderr.readline
+ src_feature_tests  =3D getenv('srctree') + '/tools/build/feature'
+=20
+ def clang_has_option(option):
+-    cc_output =3D Popen([cc, cc_options + option + "-o /dev/null", path.jo=
+in(src_feature_tests, "test-hello.c") ], stderr=3DPIPE).stderr.readlines()
++    cc_output =3D Popen([cc, cc_options + option + "-c -o /dev/null", path=
+=2Ejoin(src_feature_tests, "test-hello.c") ], stderr=3DPIPE).stderr.readlin=
+es()
+     return [o for o in cc_output if ((b"unknown argument" in o) or (b"is n=
+ot supported" in o))] =3D=3D [ ]
+=20
+ if cc_is_clang:
+--=20
+2.30.2
+
+--3obvt4otlktrkdug
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmOrj3oACgkQvP0LAY0m
+WPHFcQ//VwvmoEt08EvPPuNlO0m3AH/15h9Tw3G8eXSbMBHT4IhvE7UZm7CiOaCx
+ymvzKpnbZ4q/zqn8TV9MoVuppr9E6r6PNk7LTCzVFpTVPjphBuXM1tZ66JQAc1Tl
+Gq/k9xumFejBUE9pRJHoeutprC2gAAIhc8Tn36URCjgqFLb1phq1MyPg6DbKuAVo
+itbenP+2z5iSXtLM9cB1MmrK5UUSK61blfEsJJ4tph93zG9VSBGeqGMgHHSLpxUr
+dLJkHbsrhlmhM2x1ufzCxcd6mOf8PN7Hur7krUKdyjguhmBvXDscHcmQrZooaZct
+lFU5On8l5QHNClXH0cI8VectiD1tJGX82Y/c6XiEPV1Nn0Nz1vdiwtpX6rfV8Wey
+tBWr+sFSLbDqgg0Iqr4ooxK/lraJvXj2PJrKLg1chwEcTAqYC8/kR1KNGfMq/b+D
+/pdsXvVym1GWRMZ2wrhy+yvhja2mn3DRoEUQwTPi6Oxqv9JCgfuRHvuru2v4xP9c
+Sf8VqDsVdu20Xuty6WUfo5pJaXAYMP8Ze/bGDOEGSM7tOBdzjRuTa5HkeOzUK9uu
+LyusCrHNKV5H/A+DnZQWY/s4o/hilgJSpBOFySPT71tsM8aEoci2cdbbZOZB0NXm
+5i8sfvHOnKdJHfgXThvcZmXj0vCZSSptTvEE0WIR4ATt/E2lge0=
+=ZA2T
+-----END PGP SIGNATURE-----
+
+--3obvt4otlktrkdug--
