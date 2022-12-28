@@ -1,20 +1,20 @@
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D5867E3
-	for <llvm@lists.linux.dev>; Wed, 28 Dec 2022 00:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3FD7E3
+	for <llvm@lists.linux.dev>; Wed, 28 Dec 2022 00:42:17 +0000 (UTC)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 04443DB8;
-	Wed, 28 Dec 2022 01:36:12 +0100 (CET)
+	by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id B34C6DB4;
+	Wed, 28 Dec 2022 01:35:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-	s=202211; t=1672187772;
-	bh=/RGVuKr5/3fCEx87FQ8Nip6ERreIb5DBGC2EyffIs24=;
-	h=Date:From:Cc:Subject:References:In-Reply-To:From;
-	b=fuPuYWcBEuWZDrHK7r+tlFxnVEDjRSfUxg5F1XbZUdKjSLnkAUn2hZH2WRFYRtVr8
-	 7wbGB7GKMQYpblP0yaD0DtfNvlvENzCWXcxQglQf288+wAbkC8nEH0BT4UmkQhCQnP
-	 vQ0spz/+EKLikRfa3lbF2LnzbCnoXuP+26d1jR4upnQOKZ/qSSyJpaZBkUyTlIw7As
-	 HhCx1oru5tKwvwf3knElh+jyjJH3ijWm8lONORICVA+3YDTNVUNYqM+8mMTZrueFEZ
-	 DZr/3V7lh66OSxXg0jtO1rBxeHh8ooZHLMAt8CWOKf+0eG73JtCyofQ4vMrHiF28GF
-	 jZSohr6L3xI+g==
-Date: Wed, 28 Dec 2022 01:36:10 +0100
+	s=202211; t=1672187750;
+	bh=+yuFqRfY2HLZJC2FTM5sps1/rCx07mHiCqapWOI0R/c=;
+	h=Date:From:Cc:Subject:From;
+	b=hsmtYgBQLo1Z4Qzh85AN9gMUxXyHYaoD5iz+hIUBCovvxPn6km+W6Z1C6v1MscyZh
+	 Lha37KFpdbgElHnNfALmj/AhX2VXwFxgZ2vUGoLmBRzZJaEeVUVPe6tRrEgzcPEyW6
+	 equ9UmhUp9IeYY8D0PfCeYpxvVomhg42/LJPGJ6PTDaMKuvjmB7KjTfzq6THmx9Itd
+	 B3e5634EoqAHoDAXNs9JLN9S8ZUPw4quAzlRqd+eYHvYAEs0jsOI15Sr1IjxZ2W1kp
+	 7N+AZ6KCyos8845Hofx20UxisuGi+6QxUpes/opTdX+SEfHwcXarHyZCpdKoxjA/Fz
+	 NH0pbvjRY+mNQ==
+Date: Wed, 28 Dec 2022 01:35:49 +0100
 From: Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -25,9 +25,8 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 2/2] perf python: don't run the linker for clang feature tests
-Message-ID: <7d943ff294fbc606880a824b9764704f803f8beb.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
+Subject: [PATCH 1/2] perf python: fix clang feature detection littering
+Message-ID: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,31 +34,28 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3obvt4otlktrkdug"
+	protocol="application/pgp-signature"; boundary="t3pulo24eodgyv74"
 Content-Disposition: inline
-In-Reply-To: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
 
 
---3obvt4otlktrkdug
+--t3pulo24eodgyv74
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-This, for me, slightly-more-than-halves the time it takes to run
-  for a in "-mcet" "-fcf-protection" "-fstack-clash-protection" \
-           "-fstack-protector-strong" "-fno-semantic-interposition" \
-           "-ffat-lto-objects"; do
-    cc "$a" ../build/feature/test-hello.c -o /dev/null; done
-=66rom just over 600ms.
+This left behind tools/perf/a.out,
+not .gitignored and not removed by make clean.
 
+Fixes: commit 5508672d7f4949f15c316ffd947228f130498534 ("perf python:
+ Remove -mcet and -fcf-protection when building with clang")
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
  tools/perf/util/setup.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-index 58239e1cdb2a..400c99cd7734 100644
+index c294db713677..58239e1cdb2a 100644
 --- a/tools/perf/util/setup.py
 +++ b/tools/perf/util/setup.py
 @@ -16,7 +16,7 @@ cc_is_clang =3D b"clang version" in Popen([cc, "-v"], std=
@@ -67,11 +63,10 @@ err=3DPIPE).stderr.readline
  src_feature_tests  =3D getenv('srctree') + '/tools/build/feature'
 =20
  def clang_has_option(option):
--    cc_output =3D Popen([cc, cc_options + option + "-o /dev/null", path.jo=
+-    cc_output =3D Popen([cc, cc_options + option, path.join(src_feature_te=
+sts, "test-hello.c") ], stderr=3DPIPE).stderr.readlines()
++    cc_output =3D Popen([cc, cc_options + option + "-o /dev/null", path.jo=
 in(src_feature_tests, "test-hello.c") ], stderr=3DPIPE).stderr.readlines()
-+    cc_output =3D Popen([cc, cc_options + option + "-c -o /dev/null", path=
-=2Ejoin(src_feature_tests, "test-hello.c") ], stderr=3DPIPE).stderr.readlin=
-es()
      return [o for o in cc_output if ((b"unknown argument" in o) or (b"is n=
 ot supported" in o))] =3D=3D [ ]
 =20
@@ -79,24 +74,25 @@ ot supported" in o))] =3D=3D [ ]
 --=20
 2.30.2
 
---3obvt4otlktrkdug
+
+--t3pulo24eodgyv74
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmOrj3oACgkQvP0LAY0m
-WPHFcQ//VwvmoEt08EvPPuNlO0m3AH/15h9Tw3G8eXSbMBHT4IhvE7UZm7CiOaCx
-ymvzKpnbZ4q/zqn8TV9MoVuppr9E6r6PNk7LTCzVFpTVPjphBuXM1tZ66JQAc1Tl
-Gq/k9xumFejBUE9pRJHoeutprC2gAAIhc8Tn36URCjgqFLb1phq1MyPg6DbKuAVo
-itbenP+2z5iSXtLM9cB1MmrK5UUSK61blfEsJJ4tph93zG9VSBGeqGMgHHSLpxUr
-dLJkHbsrhlmhM2x1ufzCxcd6mOf8PN7Hur7krUKdyjguhmBvXDscHcmQrZooaZct
-lFU5On8l5QHNClXH0cI8VectiD1tJGX82Y/c6XiEPV1Nn0Nz1vdiwtpX6rfV8Wey
-tBWr+sFSLbDqgg0Iqr4ooxK/lraJvXj2PJrKLg1chwEcTAqYC8/kR1KNGfMq/b+D
-/pdsXvVym1GWRMZ2wrhy+yvhja2mn3DRoEUQwTPi6Oxqv9JCgfuRHvuru2v4xP9c
-Sf8VqDsVdu20Xuty6WUfo5pJaXAYMP8Ze/bGDOEGSM7tOBdzjRuTa5HkeOzUK9uu
-LyusCrHNKV5H/A+DnZQWY/s4o/hilgJSpBOFySPT71tsM8aEoci2cdbbZOZB0NXm
-5i8sfvHOnKdJHfgXThvcZmXj0vCZSSptTvEE0WIR4ATt/E2lge0=
-=ZA2T
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmOrj2UACgkQvP0LAY0m
+WPHYow//fy0XFEF+QnvjTzfb45o4BtmQnZjdY1QcstapWBzocqgQ+vuygxVpc7kJ
+q5WzQVBwEPgBgqnqlLH9cDsQ1W7YRzbL9/7hn3/yq84CqYAr5aGPoF1oE/yPEUO8
+9ngrEXMCfLi9U1rPfkd51y3X27J6+dnogMskoyl4vFsRdyDcsgU9APA7L2jmHyVc
+VRm5JQDLDEgJE2kajCks6r8Qpz9M1xEiFB2yIXw+9Ithl7T1LJez62CHLUiM3Tnj
+yld3e1y/VkIqPykc/gTR0Wiza4WUHyMY8ZpFB1cv8rwnr2z4hBuQQRoZ5XhUPmrI
+WXkQgkoB2yesb7fu9+f30UmHIxShr5etoeDhhzxo/y37qHm4n1DQ5Qrt4WctE7FE
+e0E7FtDRUNvrPBaRdxhVI0PGpc6XKsHHzY/LSsjhtgcO3m1o2r3GLdrFguckBdEt
+RyWHxMV4lzsBpmFAH2/QfLWQcmIa1dFSe9hP8xzoc2BOLsouo/0kadzzEIYwatSP
+00HgN8zhf/9YGX10cP1X35lpDNvx8ow02a5t/YnpSpkIToAimIlo+Xu4Bt9xvcXk
+XEcZfE1gPIiJNBwSeM6NRmDtWGCwqFirh9S4fDiEGlZElNUfyYYpV3tHtlraMSG4
+EBW22aYuAIzoAvRb5tOXVL1O4cHyFb1DSg4vlmkKPkFXIXrM+1s=
+=KmYn
 -----END PGP SIGNATURE-----
 
---3obvt4otlktrkdug--
+--t3pulo24eodgyv74--
