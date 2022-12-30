@@ -1,116 +1,56 @@
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727542F34
-	for <llvm@lists.linux.dev>; Fri, 30 Dec 2022 18:18:04 +0000 (UTC)
-Received: by mail-io1-f48.google.com with SMTP id n63so11474204iod.7
-        for <llvm@lists.linux.dev>; Fri, 30 Dec 2022 10:18:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CA5uU9xfc2kQPK+mg/5jhRujnxjVswB27Z1UxXXBvOg=;
-        b=1TOuc2HIlGO/fN1fuBcVjLo/Pyr/wDEOYLWRsUydsE+HGoEIwAFPkH3iWzicE6NLRt
-         lHb8D3ylrKnzknCpzBE6C9jSC6kXtAP3dOMHzvw+aWS0wSA9tRrCSFPo4kMGe//SPyv6
-         7+Y0KusEbP6IwybaCjSLIdfiXRPOS2ioDR4BkY4AlYBp0oP0Ykc0Pwu5BFGQLbo29PY5
-         lrcpvlWZ4CQPk7oPPgEB/NMNy+j4NJr9xFqdbR7R7FeMRqtselMq4pzLrSfzzMbvY7gJ
-         fsaYNHHjeUBFQUxK/V6nThnH9yhY+LNF4wGulSSbfJeeX6To/AUBgoJQeap5+wglnMCv
-         W4Ww==
-X-Gm-Message-State: AFqh2kqlnDvBJPVoFGEqIU8NdT4V/7WKSsesUuQJ4/Xj5lFz0FnVMEX2
-	ZiEF0earo54DCS7dfnlM7gDTghuGgPCELXI+uBk=
-X-Google-Smtp-Source: AMrXdXtvG/+juumm/OZ/6Xk91ooHhF3lK0NDpHretXH3t7gCzczen11e1APu8EEbwu9uQ62YiVCVqPHZpEtSMwIgIyo=
-X-Received: by 2002:a02:3b4f:0:b0:39a:98b:480e with SMTP id
- i15-20020a023b4f000000b0039a098b480emr2485950jaf.125.1672424283499; Fri, 30
- Dec 2022 10:18:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C267E;
+	Fri, 30 Dec 2022 19:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0DAC433EF;
+	Fri, 30 Dec 2022 19:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1672429953;
+	bh=8d81TX58YH1G9J+afWPRLe8LwaJbseEEbaaCSWCyhUw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=FZ0aRG52Zqkc4eP+mgUb3RQa0QaxbxWEYHFibI5hIv5age03Zz3UpWas9exd+utXz
+	 kNzq8BucpbMEaK/dg702NKqxaQzm1QTziVsCHQTG7PQxa/PLLHGTu75l6lBaCNLQUV
+	 v9Diu3UOp4hMot/Z9fDReK6oAj4Rw0H7J1g4YWaPqh+l+Lg4TdarkySNmU9vSqYzUa
+	 K9FJGRJJBGM9M0fXIzHPCOrUlLHXfuPUtRVBgYciTrPb004ekbalKO5gpbFZPT2wzK
+	 q8FEHdlASbSJf4oZE0eeGo5ihklt75WwECj6dYMj7zhL/P7gomo5vWdzdAy7EP7w6r
+	 0LoQnp4mMD3pw==
+Date: Fri, 30 Dec 2022 13:52:31 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: daire.mcnamara@microchip.com, conor.dooley@microchip.com,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-pci@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 8/9] PCI: microchip: Partition inbound address
+ translation
+Message-ID: <20221230195231.GA704036@bhelgaas>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221223142419.3781410-1-ammar.faizi@intel.com> <20221223142419.3781410-3-ammar.faizi@intel.com>
-In-Reply-To: <20221223142419.3781410-3-ammar.faizi@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 30 Dec 2022 19:17:51 +0100
-Message-ID: <CAJZ5v0jAy6YmGwZ3QBrgGf4O0xmkF=K=cS71gB0S_0GBC0kLfg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] ACPICA: Silence 'unused-but-set variable' warning
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: Robert Moore <robert.moore@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <lenb@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Linux ACPI Mailing List <linux-acpi@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, ACPICA Mailing List <devel@acpica.org>, 
-	LLVM Mailing List <llvm@lists.linux.dev>, "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212221347.puj3IN6d-lkp@intel.com>
 
-On Fri, Dec 23, 2022 at 3:24 PM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
->
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
->
-> @num_carats is used for debugging, passed to the 'ACPI_DEBUG_PRINT()'
-> macro. But this macro will expand to nothing when debug is disabled,
-> resulting in the following (clang-16):
->
->   drivers/acpi/acpica/nsaccess.c:295:6: error: variable 'num_carats' set \
->   but not used [-Werror,-Wunused-but-set-variable]
->         u32 num_carats;
->             ^
->   1 error generated.
->
-> Move the variable declaration inside the else block to reduce the scope,
-> then add '(void)num_carats' to silence the warning when debug is disabled.
->
-> Cc: LLVM Mailing List <llvm@lists.linux.dev>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Thu, Dec 22, 2022 at 01:30:03PM +0800, kernel test robot wrote:
+> ...
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/pci/controller/pcie-microchip-host.c:896:32: warning: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+>            devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
+>                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ACPICA changes require (at least) a pull request to be submitted to
-the upstream ACPICA project on GitHub.
+I know this particular warning wasn't added by *this* series, but of
+600+ instances of devm_add_action_or_reset(), only 4 have similar cast
+ugliness like this.  I think most others define a trivial stub that
+takes a void * and passes it on to the underlying function that
+expects a more specific type.  That's kind of ugly too, but arguably
+a little less so.
 
-If such a pull request is created, please resend the Linux patch with
-a Link tag pointing to that pull request.
-
-Thanks!
-
-> ---
->  drivers/acpi/acpica/nsaccess.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/acpica/nsaccess.c b/drivers/acpi/acpica/nsaccess.c
-> index a0c1a665dfc1..d73d052c5b3b 100644
-> --- a/drivers/acpi/acpica/nsaccess.c
-> +++ b/drivers/acpi/acpica/nsaccess.c
-> @@ -292,7 +292,6 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
->         struct acpi_namespace_node *current_node = NULL;
->         struct acpi_namespace_node *this_node = NULL;
->         u32 num_segments;
-> -       u32 num_carats;
->         acpi_name simple_name;
->         acpi_object_type type_to_check_for;
->         acpi_object_type this_search_type;
-> @@ -394,6 +393,7 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
->                                           "Path is absolute from root [%p]\n",
->                                           this_node));
->                 } else {
-> +                       u32 num_carats = 0;
->                         /* Pathname is relative to current scope, start there */
->
->                         ACPI_DEBUG_PRINT((ACPI_DB_NAMES,
-> @@ -406,7 +406,6 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
->                          * the parent node for each prefix instance.
->                          */
->                         this_node = prefix_node;
-> -                       num_carats = 0;
->                         while (*path == (u8) AML_PARENT_PREFIX) {
->
->                                 /* Name is fully qualified, no search rules apply */
-> @@ -449,6 +448,7 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
->                                                   "Search scope is [%4.4s], path has %u carat(s)\n",
->                                                   acpi_ut_get_node_name
->                                                   (this_node), num_carats));
-> +                               (void)num_carats;
->                         }
->                 }
->
-> --
-> Ammar Faizi
->
+Bjorn
