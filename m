@@ -1,40 +1,40 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BA52F34
-	for <llvm@lists.linux.dev>; Fri, 30 Dec 2022 18:13:48 +0000 (UTC)
-Received: by mail-io1-f42.google.com with SMTP id g20so11479664iob.2
-        for <llvm@lists.linux.dev>; Fri, 30 Dec 2022 10:13:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727542F34
+	for <llvm@lists.linux.dev>; Fri, 30 Dec 2022 18:18:04 +0000 (UTC)
+Received: by mail-io1-f48.google.com with SMTP id n63so11474204iod.7
+        for <llvm@lists.linux.dev>; Fri, 30 Dec 2022 10:18:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BjjFYrn+Z6BrwQksjCuz3/lydaArAzbP2sbV0KLxPy8=;
-        b=mDcdpD6C65llUIoIz/g73Qv2HxpnsfFNkS3BkoWu3dvAZxVO9ycZQRhftDXBjzdFyT
-         GAOPYs51hmNOxa+YK6h8ahRLs7o5qM2Us0JxKohJ1hThqrmD2Bn2A9NaFKBvvg7g08nP
-         7XSGr4ZnSsNQosAABu8H62PG1Qjhz6E2ri1GtjC5u957GLP1FnNB5LAKewlM/qWlZfVd
-         f/Nsr+iLVCkO3m4gXR3VmAYFmoYAs7Z5lsWI55lje+23UhbRHXsm5nd+wiyntih14bpw
-         1fwidRCQNsa79iqh+85+FO1KYKD3JtqrhH4ZgMBuKimDWdSHD3PxeEiSZhJ4TaFc6e6p
-         o6sA==
-X-Gm-Message-State: AFqh2kr6KszNvY5VFg/z4nXfn9zkeEIAqLo1uYERHERUYZfeDlFprXSp
-	A3VURP5tqdI2/Hmo5iMavbPS3rc5kpY4w4sB8Ls=
-X-Google-Smtp-Source: AMrXdXsFDmiFbOwAISGoYvX96GPBHqjsnblzpwinRTNmG/43jaVn4C/GjMuEMo/LrdYQwGIRK6DNTbQ8+wvW98l2lTo=
-X-Received: by 2002:a5e:c00c:0:b0:6a2:8015:afef with SMTP id
- u12-20020a5ec00c000000b006a28015afefmr2425943iol.149.1672424027483; Fri, 30
- Dec 2022 10:13:47 -0800 (PST)
+        bh=CA5uU9xfc2kQPK+mg/5jhRujnxjVswB27Z1UxXXBvOg=;
+        b=1TOuc2HIlGO/fN1fuBcVjLo/Pyr/wDEOYLWRsUydsE+HGoEIwAFPkH3iWzicE6NLRt
+         lHb8D3ylrKnzknCpzBE6C9jSC6kXtAP3dOMHzvw+aWS0wSA9tRrCSFPo4kMGe//SPyv6
+         7+Y0KusEbP6IwybaCjSLIdfiXRPOS2ioDR4BkY4AlYBp0oP0Ykc0Pwu5BFGQLbo29PY5
+         lrcpvlWZ4CQPk7oPPgEB/NMNy+j4NJr9xFqdbR7R7FeMRqtselMq4pzLrSfzzMbvY7gJ
+         fsaYNHHjeUBFQUxK/V6nThnH9yhY+LNF4wGulSSbfJeeX6To/AUBgoJQeap5+wglnMCv
+         W4Ww==
+X-Gm-Message-State: AFqh2kqlnDvBJPVoFGEqIU8NdT4V/7WKSsesUuQJ4/Xj5lFz0FnVMEX2
+	ZiEF0earo54DCS7dfnlM7gDTghuGgPCELXI+uBk=
+X-Google-Smtp-Source: AMrXdXtvG/+juumm/OZ/6Xk91ooHhF3lK0NDpHretXH3t7gCzczen11e1APu8EEbwu9uQ62YiVCVqPHZpEtSMwIgIyo=
+X-Received: by 2002:a02:3b4f:0:b0:39a:98b:480e with SMTP id
+ i15-20020a023b4f000000b0039a098b480emr2485950jaf.125.1672424283499; Fri, 30
+ Dec 2022 10:18:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221223142419.3781410-1-ammar.faizi@intel.com> <20221223142419.3781410-2-ammar.faizi@intel.com>
-In-Reply-To: <20221223142419.3781410-2-ammar.faizi@intel.com>
+References: <20221223142419.3781410-1-ammar.faizi@intel.com> <20221223142419.3781410-3-ammar.faizi@intel.com>
+In-Reply-To: <20221223142419.3781410-3-ammar.faizi@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 30 Dec 2022 19:13:35 +0100
-Message-ID: <CAJZ5v0j1nB9W=uNHKhqLHovTgAq_5ZYkzp6z==AspY4Dfp3PxA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] ACPI: Silence missing prototype warnings
+Date: Fri, 30 Dec 2022 19:17:51 +0100
+Message-ID: <CAJZ5v0jAy6YmGwZ3QBrgGf4O0xmkF=K=cS71gB0S_0GBC0kLfg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] ACPICA: Silence 'unused-but-set variable' warning
 To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 Cc: Robert Moore <robert.moore@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
 	Len Brown <lenb@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
@@ -43,54 +43,74 @@ Cc: Robert Moore <robert.moore@intel.com>, "Rafael J. Wysocki" <rafael@kernel.or
 	LLVM Mailing List <llvm@lists.linux.dev>, "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Dec 23, 2022 at 3:25 PM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+On Fri, Dec 23, 2022 at 3:24 PM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
 >
 > From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 >
-> Compiling with clang-16:
+> @num_carats is used for debugging, passed to the 'ACPI_DEBUG_PRINT()'
+> macro. But this macro will expand to nothing when debug is disabled,
+> resulting in the following (clang-16):
 >
->   drivers/acpi/acpi_lpit.c:142:6: error: no previous prototype \
->   for function 'acpi_init_lpit' [-Werror,-Wmissing-prototypes]
+>   drivers/acpi/acpica/nsaccess.c:295:6: error: variable 'num_carats' set \
+>   but not used [-Werror,-Wunused-but-set-variable]
+>         u32 num_carats;
+>             ^
+>   1 error generated.
 >
->   drivers/acpi/ioapic.c:212:6: error: no previous prototype \
->   for function 'pci_ioapic_remove' [-Werror,-Wmissing-prototypes]
->
->   drivers/acpi/ioapic.c:229:5: error: no previous prototype \
->   for function 'acpi_ioapic_remove' [-Werror,-Wmissing-prototypes]
->
-> Include "internal.h" to silence them.
+> Move the variable declaration inside the else block to reduce the scope,
+> then add '(void)num_carats' to silence the warning when debug is disabled.
 >
 > Cc: LLVM Mailing List <llvm@lists.linux.dev>
 > Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
->  drivers/acpi/acpi_lpit.c | 1 +
->  drivers/acpi/ioapic.c    | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/acpi/acpi_lpit.c b/drivers/acpi/acpi_lpit.c
-> index 50540d4d4948..3843d2576d3f 100644
-> --- a/drivers/acpi/acpi_lpit.c
-> +++ b/drivers/acpi/acpi_lpit.c
-> @@ -10,6 +10,7 @@
->  #include <linux/acpi.h>
->  #include <asm/msr.h>
->  #include <asm/tsc.h>
-> +#include "internal.h"
->
->  struct lpit_residency_info {
->         struct acpi_generic_address gaddr;
-> diff --git a/drivers/acpi/ioapic.c b/drivers/acpi/ioapic.c
-> index a690c7b18623..6677955b4a8e 100644
-> --- a/drivers/acpi/ioapic.c
-> +++ b/drivers/acpi/ioapic.c
-> @@ -24,6 +24,7 @@
->  #include <linux/acpi.h>
->  #include <linux/pci.h>
->  #include <acpi/acpi.h>
-> +#include "internal.h"
->
->  struct acpi_pci_ioapic {
->         acpi_handle     root_handle;
-> --
 
-Applied as 6.3 material, thanks!
+ACPICA changes require (at least) a pull request to be submitted to
+the upstream ACPICA project on GitHub.
+
+If such a pull request is created, please resend the Linux patch with
+a Link tag pointing to that pull request.
+
+Thanks!
+
+> ---
+>  drivers/acpi/acpica/nsaccess.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/acpica/nsaccess.c b/drivers/acpi/acpica/nsaccess.c
+> index a0c1a665dfc1..d73d052c5b3b 100644
+> --- a/drivers/acpi/acpica/nsaccess.c
+> +++ b/drivers/acpi/acpica/nsaccess.c
+> @@ -292,7 +292,6 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+>         struct acpi_namespace_node *current_node = NULL;
+>         struct acpi_namespace_node *this_node = NULL;
+>         u32 num_segments;
+> -       u32 num_carats;
+>         acpi_name simple_name;
+>         acpi_object_type type_to_check_for;
+>         acpi_object_type this_search_type;
+> @@ -394,6 +393,7 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+>                                           "Path is absolute from root [%p]\n",
+>                                           this_node));
+>                 } else {
+> +                       u32 num_carats = 0;
+>                         /* Pathname is relative to current scope, start there */
+>
+>                         ACPI_DEBUG_PRINT((ACPI_DB_NAMES,
+> @@ -406,7 +406,6 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+>                          * the parent node for each prefix instance.
+>                          */
+>                         this_node = prefix_node;
+> -                       num_carats = 0;
+>                         while (*path == (u8) AML_PARENT_PREFIX) {
+>
+>                                 /* Name is fully qualified, no search rules apply */
+> @@ -449,6 +448,7 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+>                                                   "Search scope is [%4.4s], path has %u carat(s)\n",
+>                                                   acpi_ut_get_node_name
+>                                                   (this_node), num_carats));
+> +                               (void)num_carats;
+>                         }
+>                 }
+>
+> --
+> Ammar Faizi
+>
