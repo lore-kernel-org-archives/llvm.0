@@ -1,116 +1,155 @@
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2136.outbound.protection.outlook.com [40.107.10.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01843209
-	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 18:06:47 +0000 (UTC)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1pBfxk-0003TW-EM; Sat, 31 Dec 2022 18:48:04 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 12B9A14AB65;
-	Sat, 31 Dec 2022 17:47:46 +0000 (UTC)
-Date: Sat, 31 Dec 2022 18:47:45 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DCE2C9C
+	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 20:01:23 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gnbmcqx8avem+0RyARd3aW0o30oVzYiIeh/k7vpkQnp+VyUlpFgcjPdr+tQijV7MUp97srGD1FOx5spVH5qskZ/g92LFyBh1NFJwrZU5V5gMZGjE4E1OppCVItg9LV1l/3S0z6Nt7oVXTzU6h+/owYqNxzlfRrY0xmiG6ZQeQ0WYKw+/q6oxCzyx4siPb3hyojbfnnyKmgrkDpxVK5A0v4if2ATxAWumqEXrCrEuDQSy4lnt9lbHlPunPzX6ZAspE5KoHqeZubfydADfsvsC9Z9qZ4BfgGkUR8kNYDtO7coxrqOCWsmMvNqhZGODttBj16aAqn2kX4QV+Zpgr+flvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SZWpisZcCCJaQKmScbrtlwAxjyQV5Ndgw8wGrrgDSGM=;
+ b=Uj4VAZHqnOb8OVQMLQlWc0ixucuIuyOUSfoykQtVlJIS2kKx8I0GxNI5w7SKOBCipOUzc8gBHUhvTr0hvh5CkJKPFmFX0rqWkGEg0tmzyjTJPKx8XaQ149WKp/U3vF33iW+YBksAVAfcnyewZnIsnNa5kQGUeGruSfgiQxaYA5g02B0NHsDFLX2If4119ykdjpX/SHraVo+4Y59QMUUQb5FsKU5tOAoQ2ZfApKrhyfsUHr+QfPUv29aIuY4f6c8tGiiQxUtlXIZ2H6YWjJmEXBxuj70OfuKHpGi1qMhin1CLT6H9ja59buIZV2nxtbhw3saAe1JGQcIHaEwnAWAsJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SZWpisZcCCJaQKmScbrtlwAxjyQV5Ndgw8wGrrgDSGM=;
+ b=gOOZa8bQ+6bJ3nxkk1JKAwaSlKdVWu2hH/QXZIxtMUf+ePJMIOCAsrR5qTKsgDDAknff9G6JdARMmMo37F43y4wdoUEcXtYRs0/jfYyhFeZHgozUR1+W4h+ZFztzGU4BymFNIOBImYq9TrAOD3L7+N+PAFoLEV1O3QGhLuzHzWY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by CWLP265MB2545.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:96::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.18; Sat, 31 Dec
+ 2022 20:01:20 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f24:8099:5588:8ba8%8]) with mapi id 15.20.5944.018; Sat, 31 Dec 2022
+ 20:01:20 +0000
+Date: Sat, 31 Dec 2022 20:01:19 +0000
+From: Gary Guo <gary@garyguo.net>
 To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
-	kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] kbuild: change module.order to list *.o instead of
- *.ko
-Message-ID: <20221231174745.jc3qlmwydujswrne@pengutronix.de>
-References: <20221211130408.2800314-1-masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, Miguel Ojeda
+ <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, =?UTF-8?B?Qmo=?=
+ =?UTF-8?B?w7Zybg==?= Roy Baron <bjorn3_gh@protonmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>,
+ Tom Rix <trix@redhat.com>, Wedson Almeida Filho <wedsonaf@gmail.com>,
+ llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH 1/6] kbuild: specify output names separately for each
+ emission type from rustc
+Message-ID: <20221231200119.227f622d.gary@garyguo.net>
+In-Reply-To: <20221231064203.1623793-2-masahiroy@kernel.org>
+References: <20221231064203.1623793-1-masahiroy@kernel.org>
+	<20221231064203.1623793-2-masahiroy@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0681.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:351::15) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u65cng565x4ymoau"
-Content-Disposition: inline
-In-Reply-To: <20221211130408.2800314-1-masahiroy@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB2545:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25576835-f255-47f2-2333-08daeb69c949
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	3dpvgMDPlOiqdky8ruZYDe5duSlqFWwgDGpThPLsuYkkwkMgNDF4l8VbzKI9XMeipK8t8Ok7vuQiKgpBohPPYAje+FBFFZHKZSfRCRv5frXNzmOkZ3WbjhdMIp/o6tveR0EEQEjDD7nIQnNw99oXyGTuOwj0XTF+9vRTzG0UjAfUyX5B5sNev5ZBfY0PJ4nDTHXyd6X3+xh3lfqD7o51R8f+nZvvKaPMMJO1iU+n/7ogCWxrywoExkjS0H6IBQJRWJMSe8YnXTNnclHeaVMioQIQKyyyr0jMpZxSahhYw+gDTiOGSzmMCqBLswbJtCvgfSfGZb9kTHj6mbQ8bIj4XH+r9w9On0xEir8AWhG/RWWofhYGdEL9V6wsxl/0yj3IIzgXx/FVRcQ6ozVgVuSlevKSpE/XqDspTWz14r25iL/EfF6v7DskjLofErpn/U9cWMHbSmhAM3bUb0qKjNIiqG1vstFfVTvgw3Mk/Ua+w/qgqFS1trQPsGbHzsKooqJeuFDZqs8v7LeJuoqNvUwhn1QbBYquA5HlIhjuXrsAwUW6f9un3rZel/ftsNvwgdZC33b5MsdxRu0Yhc6pxAJXoXtPpgTmwyqntzFmF8vyvjaUVt4RB7oqPP1CkjSw3iJ4i3zEXpHG3VPJuYUa/HvJgA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(346002)(39830400003)(136003)(376002)(396003)(366004)(451199015)(41300700001)(66556008)(66476007)(66946007)(5660300002)(7416002)(2906002)(6916009)(8676002)(8936002)(4326008)(54906003)(6486002)(478600001)(26005)(186003)(55236004)(6512007)(6506007)(2616005)(1076003)(38100700002)(316002)(36756003)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?jbbuHtAkkmluhmZDVFxSPHLzd+3N3mBBvJD+aGLpzLHjTrXRjQwLl+zpMzoT?=
+ =?us-ascii?Q?U88f/vpVxmW9dOc9o84qw4jQZLwRRlroqDOdGZMG+WMQT8OMS/gUP6BRBH2Y?=
+ =?us-ascii?Q?0u/iaU+b1c+0hkpn4arQbbnlVT9z/YjfkAgFOjxnoU5egKstQWUZmVBo9tkX?=
+ =?us-ascii?Q?sSuO71B1LMJrXbcENR20YfGUzaNmoc3ifCM5LtIk4gywyY+xuVxfEUYi3T18?=
+ =?us-ascii?Q?Z6ovCPv47PNVPig6/nxcCFXxrhKWbsprj26TIlVptQce51dIaJque6QXBH6E?=
+ =?us-ascii?Q?47iS+cmtoRofFvejvA3qetezYaIUcx2UBbP1HHnbnNzrn8ttO/0+QNEuXiJs?=
+ =?us-ascii?Q?bXtnRfDZk84jJ2btqq+5mApsHN0y3tWce/QIhwL9/u0vzkCkfPKnJ593EX1+?=
+ =?us-ascii?Q?GZh8rE48cr982bAJaZonEw+tG/dY/XavxGn8u1qSWpEOkJ4DIJ6Tt0u8F+be?=
+ =?us-ascii?Q?z9LgYbqEQ49UGNHR/gzgL4KIgJyMb5Yfc4N7/l8oVJ+6yt5TLJGQeThdMCvG?=
+ =?us-ascii?Q?j3ZwOAz8WorR/3lgXTwHM8QKo+K39nAIc7DuX0gHF9FMt5j4m0pm23SQcW8K?=
+ =?us-ascii?Q?wkCyeIyuTvSr5hopqAwriRuttBNRsn3rJS2NNGwqWn3ceqKk1XUm1sFIC7jX?=
+ =?us-ascii?Q?8jqScPRvPfksAzu6zMtM9e/FNDMfKBZDcikKbMYTOr2Q0eVkbYTwmmqNNUfk?=
+ =?us-ascii?Q?xU+eoxmoTi+3aYhV7r297qxMfy66aEfCKiyP9LKq+7xFsPZu97jOE8oxvIcN?=
+ =?us-ascii?Q?sQieO2ZMA6BzydtJrfkWWOlVaNxETo2V+ypgNAbODrAVN9klpXd8ofPhOnKo?=
+ =?us-ascii?Q?xMCwSU1wfSILNMxuBbuh6vqLqvOqUKbxyecuzm5EjqFEOiwZZLatimtA9Soy?=
+ =?us-ascii?Q?i31hP6L9uNaVz5emEzZKBDJ7dTs6tuUM8QeIwAwRwe0uB6Yd4MENCUhxW+EN?=
+ =?us-ascii?Q?ip57/Lz90yYzYdmg6SPjdR89T0Lgf6td7l1XLMU4AVxXoVrAQC4K0F7ddeEw?=
+ =?us-ascii?Q?7f62+dSznCPhedjecJdY5lAEsOmp8+KYGX8TdH0XzSJ0hZaD9935l4oGU65w?=
+ =?us-ascii?Q?iqtrxw32bmYinRAoHx2Q7KfuFMk8iOif/uOqDydJdu5nHINES9XU+v9fRQaW?=
+ =?us-ascii?Q?12eqWev2W7lOblyklTxG/R//+cY4wVK7S8RxKva7fr6AB4XQZrNy/GJxhosU?=
+ =?us-ascii?Q?yj7Ui3pq6qxdjO06AliOiTG3rwaVxe+Vugm+pXNH2EjvYm8EgyZJLtRc09pb?=
+ =?us-ascii?Q?t3rPajqcYUrAJxnbYj5Jaghwi3NNizYGC0o/LFbJRFIoklcrrO6SJStz47D2?=
+ =?us-ascii?Q?2IKOO0r8+vyOw+Gvjn0Pgxa60QmKLT8y5fJA9jk46ORsZkhWhkn7SU9kue+i?=
+ =?us-ascii?Q?N/WbdKEvZhrhbPNepTu72tMxZEnMhKgOVKsXgl3rWpTtpUaCVRub2d/H7Bc+?=
+ =?us-ascii?Q?QtodAYWHMrfPI5YadPdUtexyBOi6eb0ZA0chwYbkjfF4I7tCPvjopqgDF9vS?=
+ =?us-ascii?Q?AGwJEBGP8xEf9kWDqgS7jgTHkHh6+Rw9E/0dNupGt3WztRtFaGAcZo+hOdWo?=
+ =?us-ascii?Q?PNfpBKwrIiz9/QqhbfNXRqLDGakTLsI0/umitUuc?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25576835-f255-47f2-2333-08daeb69c949
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2022 20:01:20.8703
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZXZcwZAgBrk1VzVztbVIa2K+ZGXdgsBd6YZNkmMTaUlJKGgl28bY/G+Zv3wH2fKrXmcF1sczOTbrPlkPqz4eOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB2545
 
+On Sat, 31 Dec 2022 15:41:58 +0900
+Masahiro Yamada <masahiroy@kernel.org> wrote:
 
---u65cng565x4ymoau
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> diff --git a/scripts/Makefile.host b/scripts/Makefile.host
+> index da133780b751..4434cdbf7b8e 100644
+> --- a/scripts/Makefile.host
+> +++ b/scripts/Makefile.host
+> @@ -84,8 +84,8 @@ _hostc_flags   = $(KBUILD_HOSTCFLAGS)   $(HOST_EXTRACFLAGS)   \
+>                   $(HOSTCFLAGS_$(target-stem).o)
+>  _hostcxx_flags = $(KBUILD_HOSTCXXFLAGS) $(HOST_EXTRACXXFLAGS) \
+>                   $(HOSTCXXFLAGS_$(target-stem).o)
+> -_hostrust_flags = $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
+> -                  $(HOSTRUSTFLAGS_$(target-stem))
+> +hostrust_flags = $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
+> +                  $(HOSTRUSTFLAGS_$(target-stem)) --emit=dep-info=$(depfile)
+>  
+>  # $(objtree)/$(obj) for including generated headers from checkin source files
+>  ifeq ($(KBUILD_EXTMOD),)
+> @@ -97,7 +97,6 @@ endif
+>  
+>  hostc_flags    = -Wp,-MMD,$(depfile) $(_hostc_flags)
+>  hostcxx_flags  = -Wp,-MMD,$(depfile) $(_hostcxx_flags)
+> -hostrust_flags = $(_hostrust_flags)
 
-On 11.12.2022 22:04:07, Masahiro Yamada wrote:
-> scripts/Makefile.build replaces the suffix .o with .ko, then
-> scripts/Makefile.modpost calls the sed command to change .ko back
-> to the original .o suffix.
->=20
-> Instead of converting the suffixes back-and-forth, store the .o paths
-> in modules.order, and replace it with .ko in 'make modules_install'.
->=20
-> This avoids the unneeded sed command.
+Would it be better to have `--emit=dep-info=$(depfile)` added here
+instead so that it mimics c/cxx flags?
 
-This breaks direct compilation of kernel modules (on current Linus's
-master):
+>  
+>  #####
+>  # Compile programs on the host
+> @@ -149,9 +148,7 @@ $(host-cxxobjs): $(obj)/%.o: $(src)/%.cc FORCE
+>  # host-rust -> Executable
+>  quiet_cmd_host-rust	= HOSTRUSTC $@
+>        cmd_host-rust	= \
+> -	$(HOSTRUSTC) $(hostrust_flags) --emit=dep-info,link \
+> -		--out-dir=$(obj)/ $<; \
+> -	mv $(obj)/$(target-stem).d $(depfile); \
+> +	$(HOSTRUSTC) $(hostrust_flags) --emit=link=$@ $<; \
+>  	sed -i '/^\#/d' $(depfile)
+>  $(host-rust): $(obj)/%: $(src)/%.rs FORCE
+>  	$(call if_changed_dep,host-rust)
 
-| $ make drivers/net/can/dev/can-dev.ko
-| [...]
-|   CC [M]  drivers/net/can/dev/skb.o
-|   CC [M]  drivers/net/can/dev/calc_bittiming.o
-|   CC [M]  drivers/net/can/dev/bittiming.o
-|   CC [M]  drivers/net/can/dev/dev.o
-|   CC [M]  drivers/net/can/dev/length.o
-|   CC [M]  drivers/net/can/dev/netlink.o
-|   LD [M]  drivers/net/can/dev/can-dev.o
-| make[5]: 'drivers/net/can/dev/can-dev.mod' is up to date.
-|   LDS     scripts/module.lds
-|   MODPOST Module.symvers
-| drivers/net/can/dev/can-dev.ko: No such file or directory
-| make[1]: *** [.../linux/scripts/Makefile.modpost:129: Module.symvers] Err=
-or 1
-| make: *** [.../linux/Makefile:1982: single_modules] Error 2
+Best,
+Gary
 
-According to "make help" it should be possible:
-
-|  dir/file.ko     - Build module including final link
-
-I've bisected it to:
-
-| first bad commit: [f65a486821cfd363833079b2a7b0769250ee21c9] kbuild: chan=
-ge module.order to list *.o instead of *.ko
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---u65cng565x4ymoau
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOwdbwACgkQrX5LkNig
-011z7gf+OghAr5P75iK5yC0Sf+UGA5HUhb3UYTln5I/nHb9bVvzQSDfwS6+xpA/g
-SpPKOPu08eMeKXU6J3jYzQUs8vp6v3vz8/D6HZY7ahruFMRB1/wERjsHOpdflXaM
-228L6rWmd5/9cTv24ex/r0BV7YR6OfQUd/sp3/A5FRjdDVBOcerjKDSFnIn0rYZw
-/w77Uav6Veq6k520xWq8d6aRi3TLLrqtnIo+zwQfWHA939P7hDtGYGtBG/zbhlIC
-r301YxE7Tt2ERUUMtZp+ziSuFbtp4/41ajvxHcn3b0VFNa8zRjEjvnQXu+/TFzYq
-fEvuZXngXlaezkX6BRvYvnaVKnbLtg==
-=gccH
------END PGP SIGNATURE-----
-
---u65cng565x4ymoau--
