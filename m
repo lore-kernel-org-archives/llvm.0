@@ -1,162 +1,89 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from condef-03.nifty.com (condef-03.nifty.com [202.248.20.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043602903
-	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 14:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1672497689;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eAgGHWaqFmQaoGh+sXUFRQZwcGcAv4kKi7/R3Qdsi4A=;
-	b=IY9p2mw5V+7TOXs1JRgAvLSfoPLmb9P8UGL3xfjQ/Li+apDhs1OZqH8AcWxjP0+fgmvqB6
-	4K84lgcawSv6irzvzDBCN6RKjMHQGQPjALjK6aczMJ0aXT0tWYNd49leaoLztFVpr9bbCB
-	4C7/xs1qV7dbcsxKKLpn6us9Ck6W56Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-274-9FWO9coPOOSK3PwnCHiwQA-1; Sat, 31 Dec 2022 09:41:28 -0500
-X-MC-Unique: 9FWO9coPOOSK3PwnCHiwQA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA868811E6E
-	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 14:41:27 +0000 (UTC)
-Received: from [172.64.12.49] (unknown [10.30.33.198])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D1CF4492B00;
-	Sat, 31 Dec 2022 14:41:27 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.2.0-rc1,
- mainline.kernel.org-clang, c8451c14)
-Date: Sat, 31 Dec 2022 14:41:27 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25F52903
+	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 15:16:18 +0000 (UTC)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-03.nifty.com with ESMTP id 2BVF6irr032189
+	for <llvm@lists.linux.dev>; Sun, 1 Jan 2023 00:06:44 +0900
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45]) (authenticated)
+	by conssluserg-05.nifty.com with ESMTP id 2BVF6Oa9020455
+	for <llvm@lists.linux.dev>; Sun, 1 Jan 2023 00:06:25 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2BVF6Oa9020455
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+	s=dec2015msa; t=1672499186;
+	bh=cPtMT1ikPVY2628/xD0d9Qu971vGxgBBHmwX2fGx46Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qPAUxth/qw93T8XlinZlEZ+TtBTGrTRnuDsJdNUzVpdsp79Wj4a6z1A87z3mzozPt
+	 0UquscrCLavkcY+JH7G9wbZgurvCypaS+DZC5LhcsESGmZy7EcSXSyUD9wv5C7d5yj
+	 YtDFTO+wWVQ5GrXmObd4LFoaXqPX4u70KP8jc5f0pgnvS2mY/bZm+afIC8bD1lk2Ow
+	 ViS+oB1EV39yLPK/1q1ouLVUexfkn37JJmyWNSBKK64z4tt+/YiR4kCb6PHaXT1XJX
+	 dug5fLPI7Cv47T/mbXjN2okCfZbfOnMQSNrobrLFpaxPqf+OI4yNuFZO/rKCFz1zoo
+	 DECTpZM+99qww==
+X-Nifty-SrcIP: [209.85.167.45]
+Received: by mail-lf1-f45.google.com with SMTP id cf42so35535449lfb.1
+        for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 07:06:25 -0800 (PST)
+X-Gm-Message-State: AFqh2koTHuwkmKyQByM3yHiyLg4XjERubmeIbbJfD9CVaOqbd4KEuznT
+	FbfXEisc0YLRfHpy5/7xH0ObD7dJ+nLbmhGWRFg=
+X-Google-Smtp-Source: AMrXdXtV2tGXh1jtska7YrD89aDiR/6tpAp7znMYCCa6K7MzJDPvlhi8f3ERlPs23u5zAoXo/qR0Ug1SeDa+LVKrW5E=
+X-Received: by 2002:a05:6512:462:b0:4b5:706c:ab80 with SMTP id
+ x2-20020a056512046200b004b5706cab80mr1681418lfd.226.1672499183563; Sat, 31
+ Dec 2022 07:06:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <33635.122123109412800235@us-mta-274.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20221231064203.1623793-1-masahiroy@kernel.org> <CANiq72m5E1MehfqdrkmJt43fAzUMc9kEKu7x4WaALdgDGJ30-g@mail.gmail.com>
+In-Reply-To: <CANiq72m5E1MehfqdrkmJt43fAzUMc9kEKu7x4WaALdgDGJ30-g@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 1 Jan 2023 00:05:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQOaLHizg24CrMUz7veX0fa0QYwgJzAi5tOT+-CDCmUzw@mail.gmail.com>
+Message-ID: <CAK7LNAQOaLHizg24CrMUz7veX0fa0QYwgJzAi5tOT+-CDCmUzw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] kbuild: fix dep-file processing for rust
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>, llvm@lists.linux.dev,
+        rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Sat, Dec 31, 2022 at 10:34 PM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> On Sat, Dec 31, 2022 at 7:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Masahiro Yamada (6):
+> >   kbuild: specify output names separately for each emission type from
+> >     rustc
+> >   fixdep: parse Makefile more correctly to handle comments etc.
+> >   kbuild: remove sed commands after rustc rules
+> >   fixdep: refactor hash table lookup
+> >   fixdep: avoid parsing the same file over again
+> >   fixdep: do not parse *.so, *.rmeta, *.rlib
+>
+> These cleanups are great, and it is a pleasure to see proper
+> integration with `fixdep` -- thanks a ton! :)
+>
+> Will you want to take them through the kbuild tree? (I guess so, given
+> the bulk of it is on `fixdep`)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
 
-
-Kernel information:
-    Commit message: Merge tag 'acpi-6.2-rc2' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/rafael/linux-pm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/64292
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6512762
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
-/0xa0
-            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
-rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
-1.test) file.0 has mode 555 after chmod 0
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1456
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+Yes, my plan is to get it in the kbuild tree with your ack.
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+> Cheers,
+> Miguel
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
+
+-- 
+Best Regards
+Masahiro Yamada
