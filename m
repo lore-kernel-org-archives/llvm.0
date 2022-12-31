@@ -1,67 +1,142 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5C72F44
-	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 15:30:49 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id v126so26298082ybv.2
-        for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 07:30:48 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33AA3209
+	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 17:44:45 +0000 (UTC)
+Received: by mail-wm1-f42.google.com with SMTP id ja17so17562029wmb.3
+        for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 09:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JG8JkGizHk6OOlCN3XUOXJ3kZY3cgZs7QsL4MTDQgDE=;
-        b=n8oLluZQpcfXatNmm1scwWitiRMGtbMUnTQ2IG347RR+LDQYiiouavkARCkcHF7U9+
-         Hmck4dAVIe5VR3TCXCicDeXgSkVi1lYR8/8t9gB4RmKFbKNE0a0s8xlhbnzPwRbh4XQ9
-         AN9Zkb5bYIx277isgokdBGNfz8jayyX+/+9dS7n2xn4kCBwq8rM5G19T24fPjNE2azcy
-         Co3dBDIpAcR/jKvsHguL+Q1BVJPM+SLjkhjOKTtaiJwD84BifgMXJ6VS/EpdCfIc9Bdc
-         R18yG36V6ANIO8L76cuiOSGIIBvvlCltQLvdyFe8oOaNzji+FHfNPyCfnMt5O0oMnXFI
-         XqBQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vKGVwmg5J1Ql+fiJXPb+1gyrIp6pIUsxPUQhpeTa7cE=;
+        b=kVcjcnjVuAmiqvP8lYg9PmM0y1+l+1Uyott5Q46/0z+HvG+a+/ZbMLczaNiOfWRafr
+         U3ClLxdkF1sn468QqPW33lhOcize+mIP0EBhRJJITsiv8M591bqe4n+myFSlFnhZHESA
+         3XPgZio1FVG+seF0x49fzeIKSDQHl76+ZIPZtYkbb4fn1f4gIsZnfuc6s8tTww/FdjHP
+         WJyRA+KKdqoDNBUWp6HWIrcphEe8cBAA+ALUdNqYK+Cz7Ch43N5fHX/Z1Qn3BhnnNIFL
+         QdWszvr3DtkPYvr2J70t/rapTdrnq54Yz5FU/XNVBIQVL+QWgg9hHMgN/y1Lu8UBnYC6
+         0RDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JG8JkGizHk6OOlCN3XUOXJ3kZY3cgZs7QsL4MTDQgDE=;
-        b=uuClKylJdsgENr5C3mORq7tMaX+cc3z4M/B/mdMDOtgxEC9ZPGc/l9tGFALu3VKt3M
-         4Y2zl1chE+w6NTxbuHxkarIrtuhe8fRgLRTR1fl4NObAS5GO7vXZxjkcrOrTVn/Xn2Ow
-         9paBwYRxCkHwGFMZXNcbELpK6+0mj8qx9PEiPrbHRdH85BHvWXJGFiU6oDAdq99MIJ8G
-         sjaP3hS5hNZ2hxUm20CPXlph5QUEjLdht2vUNVslL1U3l+/9WxZRtGH3scEb9v08Sfhq
-         eu3wWs9ZLFzWKzdBdidS9107rYcgeANd3hEpqIUCzBpSbNf720CG9UT+uNxlEzh4Ldnk
-         X2Bw==
-X-Gm-Message-State: AFqh2koi6R0Oa8teCmwP1RH3WMTl6W+/2PPQlOt0Har5QMaUtpMF1Kg1
-	3qsKtN0WgghvFui+zASRPy8g+YYIpj7rJibuVsU=
-X-Google-Smtp-Source: AMrXdXvVNXKjofXjG2tD1fK9j47fIGvuVoh+trQG1yqh1vM6hpHKOkh82Yz3mKC0GUdOL1Gd1da5HgfXej1RE6ZZWm8=
-X-Received: by 2002:a25:7653:0:b0:6f9:13cc:de91 with SMTP id
- r80-20020a257653000000b006f913ccde91mr4131006ybc.328.1672500648107; Sat, 31
- Dec 2022 07:30:48 -0800 (PST)
+        bh=vKGVwmg5J1Ql+fiJXPb+1gyrIp6pIUsxPUQhpeTa7cE=;
+        b=wAIM22SOyDq49ovYwP8zQEJTr7gM1v5dmKAqxErgheVTW7gfYtDqJD5NdnTxDIzGeM
+         TrZXhXqNs8cetGAzFQpFGAzmx0n46WJfeE7Qgzj88HiPFwsTr0XRVNzIiVpQlW4uGvs9
+         XWvzsOHh7m2epSHZOhQf/lizbzXCkgmPJXLwVB0bd+8gyflQFGZu5SC2zZMEIIS3h3K5
+         olqTwg1+GeKGY4i0hCLxwhZ4yoX/Eaf+S4LqDv0seQGdolj7EimN2G1TICvp4GGIPPN/
+         4T8smsBQS6HWL4z+g3sGD2ihj+SBQaD6b9p/+1+rWPAy2pjI8uHUvFR1X/oEG/SZTD9C
+         Ezjw==
+X-Gm-Message-State: AFqh2kq3kl16NeH8AG+sd5FazS8Ib8jhVwLdHBdK/Pysw09UeLV0+ThE
+	uKY6Q5Wza0bZtYXDfyGPgr8=
+X-Google-Smtp-Source: AMrXdXtOafM5UGHzLjN1Yn1s92x0yr1m0tQKluSwnvIJXRy3QMgYLJu9vPM4iCuysf6kS5kZjL2J+w==
+X-Received: by 2002:a7b:c414:0:b0:3d6:ecc4:6279 with SMTP id k20-20020a7bc414000000b003d6ecc46279mr25627186wmi.27.1672508683777;
+        Sat, 31 Dec 2022 09:44:43 -0800 (PST)
+Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
+        by smtp.gmail.com with ESMTPSA id d22-20020a1c7316000000b003d9862ec435sm19206066wmb.20.2022.12.31.09.44.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 09:44:43 -0800 (PST)
+From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To: "Theodore Ts'o" <tytso@mit.edu>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-ext4@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] fs/ext4: Replace kmap_atomic() with kmap_local_page()
+Date: Sat, 31 Dec 2022 18:44:39 +0100
+Message-Id: <20221231174439.8557-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221231064203.1623793-1-masahiroy@kernel.org>
- <20221231064203.1623793-3-masahiroy@kernel.org> <CANiq72mbazF7b3sbH=9F=cHbTB_np=os+YzUPCzh=4HgEHsEKg@mail.gmail.com>
-In-Reply-To: <CANiq72mbazF7b3sbH=9F=cHbTB_np=os+YzUPCzh=4HgEHsEKg@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 31 Dec 2022 16:30:37 +0100
-Message-ID: <CANiq72n7hjdSJGB0qSXJtXOgR+58zZ657UrCnZRRFWyArUOOOg@mail.gmail.com>
-Subject: Re: [PATCH 2/6] fixdep: parse Makefile more correctly to handle
- comments etc.
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sat, Dec 31, 2022 at 4:25 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Hmm... I couldn't apply this one, it turns out `#include <stdarg.h>`
-> is gone. Adding it and adjusting the patch fixes it.
+kmap_atomic() is deprecated in favor of kmap_local_page(). Therefore,
+replace kmap_atomic() with kmap_local_page().
 
-Ah, I think you created them on top of kbuild/fixes.
+kmap_atomic() is implemented like a kmap_local_page() which also disables
+page-faults and preemption (the latter only for !PREEMPT_RT kernels).
 
-Cheers,
-Miguel
+However, the code within the mappings and un-mappings in ext4/inline.c
+does not depend on the above-mentioned side effects.
+
+Therefore, a mere replacement of the old API with the new one is all it
+is required (i.e., there is no need to explicitly add any calls to
+pagefault_disable() and/or preempt_disable()).
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+
+I tried my best to understand the code within mapping and un-mapping.
+However, I'm not an expert. Therefore, although I'm pretty confident, I
+cannot be 100% sure that the code between the mapping and the un-mapping
+does not depend on pagefault_disable() and/or preempt_disable().
+
+Unfortunately, I cannot currently test this changes to check the
+above-mentioned assumptions. However, if I'm required to do the tests
+with (x)fstests, I have no problems with doing them in the next days.
+
+If so, I'll test in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+HIGHMEM64GB enabled.
+
+I'd like to hear whether or not the maintainers require these tests
+and/or other tests.
+
+ fs/ext4/inline.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index 2b42ececa46d..bfb044425d8a 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -490,10 +490,10 @@ static int ext4_read_inline_page(struct inode *inode, struct page *page)
+ 		goto out;
+ 
+ 	len = min_t(size_t, ext4_get_inline_size(inode), i_size_read(inode));
+-	kaddr = kmap_atomic(page);
++	kaddr = kmap_local_page(page);
+ 	ret = ext4_read_inline_data(inode, kaddr, len, &iloc);
+ 	flush_dcache_page(page);
+-	kunmap_atomic(kaddr);
++	kunmap_local(kaddr);
+ 	zero_user_segment(page, len, PAGE_SIZE);
+ 	SetPageUptodate(page);
+ 	brelse(iloc.bh);
+@@ -763,9 +763,9 @@ int ext4_write_inline_data_end(struct inode *inode, loff_t pos, unsigned len,
+ 		 */
+ 		(void) ext4_find_inline_data_nolock(inode);
+ 
+-		kaddr = kmap_atomic(page);
++		kaddr = kmap_local_page(page);
+ 		ext4_write_inline_data(inode, &iloc, kaddr, pos, copied);
+-		kunmap_atomic(kaddr);
++		kunmap_local(kaddr);
+ 		SetPageUptodate(page);
+ 		/* clear page dirty so that writepages wouldn't work for us. */
+ 		ClearPageDirty(page);
+@@ -831,9 +831,9 @@ ext4_journalled_write_inline_data(struct inode *inode,
+ 	}
+ 
+ 	ext4_write_lock_xattr(inode, &no_expand);
+-	kaddr = kmap_atomic(page);
++	kaddr = kmap_local_page(page);
+ 	ext4_write_inline_data(inode, &iloc, kaddr, 0, len);
+-	kunmap_atomic(kaddr);
++	kunmap_local(kaddr);
+ 	ext4_write_unlock_xattr(inode, &no_expand);
+ 
+ 	return iloc.bh;
+-- 
+2.39.0
+
