@@ -1,142 +1,116 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33AA3209
-	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 17:44:45 +0000 (UTC)
-Received: by mail-wm1-f42.google.com with SMTP id ja17so17562029wmb.3
-        for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 09:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vKGVwmg5J1Ql+fiJXPb+1gyrIp6pIUsxPUQhpeTa7cE=;
-        b=kVcjcnjVuAmiqvP8lYg9PmM0y1+l+1Uyott5Q46/0z+HvG+a+/ZbMLczaNiOfWRafr
-         U3ClLxdkF1sn468QqPW33lhOcize+mIP0EBhRJJITsiv8M591bqe4n+myFSlFnhZHESA
-         3XPgZio1FVG+seF0x49fzeIKSDQHl76+ZIPZtYkbb4fn1f4gIsZnfuc6s8tTww/FdjHP
-         WJyRA+KKdqoDNBUWp6HWIrcphEe8cBAA+ALUdNqYK+Cz7Ch43N5fHX/Z1Qn3BhnnNIFL
-         QdWszvr3DtkPYvr2J70t/rapTdrnq54Yz5FU/XNVBIQVL+QWgg9hHMgN/y1Lu8UBnYC6
-         0RDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vKGVwmg5J1Ql+fiJXPb+1gyrIp6pIUsxPUQhpeTa7cE=;
-        b=wAIM22SOyDq49ovYwP8zQEJTr7gM1v5dmKAqxErgheVTW7gfYtDqJD5NdnTxDIzGeM
-         TrZXhXqNs8cetGAzFQpFGAzmx0n46WJfeE7Qgzj88HiPFwsTr0XRVNzIiVpQlW4uGvs9
-         XWvzsOHh7m2epSHZOhQf/lizbzXCkgmPJXLwVB0bd+8gyflQFGZu5SC2zZMEIIS3h3K5
-         olqTwg1+GeKGY4i0hCLxwhZ4yoX/Eaf+S4LqDv0seQGdolj7EimN2G1TICvp4GGIPPN/
-         4T8smsBQS6HWL4z+g3sGD2ihj+SBQaD6b9p/+1+rWPAy2pjI8uHUvFR1X/oEG/SZTD9C
-         Ezjw==
-X-Gm-Message-State: AFqh2kq3kl16NeH8AG+sd5FazS8Ib8jhVwLdHBdK/Pysw09UeLV0+ThE
-	uKY6Q5Wza0bZtYXDfyGPgr8=
-X-Google-Smtp-Source: AMrXdXtOafM5UGHzLjN1Yn1s92x0yr1m0tQKluSwnvIJXRy3QMgYLJu9vPM4iCuysf6kS5kZjL2J+w==
-X-Received: by 2002:a7b:c414:0:b0:3d6:ecc4:6279 with SMTP id k20-20020a7bc414000000b003d6ecc46279mr25627186wmi.27.1672508683777;
-        Sat, 31 Dec 2022 09:44:43 -0800 (PST)
-Received: from localhost.localdomain (host-79-56-217-20.retail.telecomitalia.it. [79.56.217.20])
-        by smtp.gmail.com with ESMTPSA id d22-20020a1c7316000000b003d9862ec435sm19206066wmb.20.2022.12.31.09.44.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 09:44:43 -0800 (PST)
-From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To: "Theodore Ts'o" <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01843209
+	for <llvm@lists.linux.dev>; Sat, 31 Dec 2022 18:06:47 +0000 (UTC)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1pBfxk-0003TW-EM; Sat, 31 Dec 2022 18:48:04 +0100
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 12B9A14AB65;
+	Sat, 31 Dec 2022 17:47:46 +0000 (UTC)
+Date: Sat, 31 Dec 2022 18:47:45 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org
-Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] fs/ext4: Replace kmap_atomic() with kmap_local_page()
-Date: Sat, 31 Dec 2022 18:44:39 +0100
-Message-Id: <20221231174439.8557-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.39.0
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+	kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] kbuild: change module.order to list *.o instead of
+ *.ko
+Message-ID: <20221231174745.jc3qlmwydujswrne@pengutronix.de>
+References: <20221211130408.2800314-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u65cng565x4ymoau"
+Content-Disposition: inline
+In-Reply-To: <20221211130408.2800314-1-masahiroy@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-kmap_atomic() is deprecated in favor of kmap_local_page(). Therefore,
-replace kmap_atomic() with kmap_local_page().
 
-kmap_atomic() is implemented like a kmap_local_page() which also disables
-page-faults and preemption (the latter only for !PREEMPT_RT kernels).
+--u65cng565x4ymoau
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, the code within the mappings and un-mappings in ext4/inline.c
-does not depend on the above-mentioned side effects.
+On 11.12.2022 22:04:07, Masahiro Yamada wrote:
+> scripts/Makefile.build replaces the suffix .o with .ko, then
+> scripts/Makefile.modpost calls the sed command to change .ko back
+> to the original .o suffix.
+>=20
+> Instead of converting the suffixes back-and-forth, store the .o paths
+> in modules.order, and replace it with .ko in 'make modules_install'.
+>=20
+> This avoids the unneeded sed command.
 
-Therefore, a mere replacement of the old API with the new one is all it
-is required (i.e., there is no need to explicitly add any calls to
-pagefault_disable() and/or preempt_disable()).
+This breaks direct compilation of kernel modules (on current Linus's
+master):
 
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+| $ make drivers/net/can/dev/can-dev.ko
+| [...]
+|   CC [M]  drivers/net/can/dev/skb.o
+|   CC [M]  drivers/net/can/dev/calc_bittiming.o
+|   CC [M]  drivers/net/can/dev/bittiming.o
+|   CC [M]  drivers/net/can/dev/dev.o
+|   CC [M]  drivers/net/can/dev/length.o
+|   CC [M]  drivers/net/can/dev/netlink.o
+|   LD [M]  drivers/net/can/dev/can-dev.o
+| make[5]: 'drivers/net/can/dev/can-dev.mod' is up to date.
+|   LDS     scripts/module.lds
+|   MODPOST Module.symvers
+| drivers/net/can/dev/can-dev.ko: No such file or directory
+| make[1]: *** [.../linux/scripts/Makefile.modpost:129: Module.symvers] Err=
+or 1
+| make: *** [.../linux/Makefile:1982: single_modules] Error 2
 
-I tried my best to understand the code within mapping and un-mapping.
-However, I'm not an expert. Therefore, although I'm pretty confident, I
-cannot be 100% sure that the code between the mapping and the un-mapping
-does not depend on pagefault_disable() and/or preempt_disable().
+According to "make help" it should be possible:
 
-Unfortunately, I cannot currently test this changes to check the
-above-mentioned assumptions. However, if I'm required to do the tests
-with (x)fstests, I have no problems with doing them in the next days.
+|  dir/file.ko     - Build module including final link
 
-If so, I'll test in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-HIGHMEM64GB enabled.
+I've bisected it to:
 
-I'd like to hear whether or not the maintainers require these tests
-and/or other tests.
+| first bad commit: [f65a486821cfd363833079b2a7b0769250ee21c9] kbuild: chan=
+ge module.order to list *.o instead of *.ko
 
- fs/ext4/inline.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+regards,
+Marc
 
-diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
-index 2b42ececa46d..bfb044425d8a 100644
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -490,10 +490,10 @@ static int ext4_read_inline_page(struct inode *inode, struct page *page)
- 		goto out;
- 
- 	len = min_t(size_t, ext4_get_inline_size(inode), i_size_read(inode));
--	kaddr = kmap_atomic(page);
-+	kaddr = kmap_local_page(page);
- 	ret = ext4_read_inline_data(inode, kaddr, len, &iloc);
- 	flush_dcache_page(page);
--	kunmap_atomic(kaddr);
-+	kunmap_local(kaddr);
- 	zero_user_segment(page, len, PAGE_SIZE);
- 	SetPageUptodate(page);
- 	brelse(iloc.bh);
-@@ -763,9 +763,9 @@ int ext4_write_inline_data_end(struct inode *inode, loff_t pos, unsigned len,
- 		 */
- 		(void) ext4_find_inline_data_nolock(inode);
- 
--		kaddr = kmap_atomic(page);
-+		kaddr = kmap_local_page(page);
- 		ext4_write_inline_data(inode, &iloc, kaddr, pos, copied);
--		kunmap_atomic(kaddr);
-+		kunmap_local(kaddr);
- 		SetPageUptodate(page);
- 		/* clear page dirty so that writepages wouldn't work for us. */
- 		ClearPageDirty(page);
-@@ -831,9 +831,9 @@ ext4_journalled_write_inline_data(struct inode *inode,
- 	}
- 
- 	ext4_write_lock_xattr(inode, &no_expand);
--	kaddr = kmap_atomic(page);
-+	kaddr = kmap_local_page(page);
- 	ext4_write_inline_data(inode, &iloc, kaddr, 0, len);
--	kunmap_atomic(kaddr);
-+	kunmap_local(kaddr);
- 	ext4_write_unlock_xattr(inode, &no_expand);
- 
- 	return iloc.bh;
--- 
-2.39.0
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--u65cng565x4ymoau
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOwdbwACgkQrX5LkNig
+011z7gf+OghAr5P75iK5yC0Sf+UGA5HUhb3UYTln5I/nHb9bVvzQSDfwS6+xpA/g
+SpPKOPu08eMeKXU6J3jYzQUs8vp6v3vz8/D6HZY7ahruFMRB1/wERjsHOpdflXaM
+228L6rWmd5/9cTv24ex/r0BV7YR6OfQUd/sp3/A5FRjdDVBOcerjKDSFnIn0rYZw
+/w77Uav6Veq6k520xWq8d6aRi3TLLrqtnIo+zwQfWHA939P7hDtGYGtBG/zbhlIC
+r301YxE7Tt2ERUUMtZp+ziSuFbtp4/41ajvxHcn3b0VFNa8zRjEjvnQXu+/TFzYq
+fEvuZXngXlaezkX6BRvYvnaVKnbLtg==
+=gccH
+-----END PGP SIGNATURE-----
+
+--u65cng565x4ymoau--
