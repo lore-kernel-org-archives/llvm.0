@@ -1,57 +1,50 @@
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E5F320E
-	for <llvm@lists.linux.dev>; Mon,  2 Jan 2023 12:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEED320E
+	for <llvm@lists.linux.dev>; Mon,  2 Jan 2023 12:50:22 +0000 (UTC)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 877B020F11;
-	Mon,  2 Jan 2023 12:47:58 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DCD2120F26;
+	Mon,  2 Jan 2023 12:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1672663678;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
+	t=1672663820; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8MEMF1Di8T491Z7gpFZexJEbRO0goQfo2mNNC19Dwlw=;
-	b=Bho7fl7+1m5PHrcpXO/NsKrbYso7mtiYVrhHG/e9MgYwZX6WDndeXrNDaiteUAZcQIlHMj
-	//7SRtqVs7YllEIJemwJcBVtd3kduyIRNpLdqXrdfByrnUtPXpHPpjhmNLhTeG0KNN2WFZ
-	OjPgYI7d+CY8agTHZW6WP/Phdgo6a30=
+	bh=TAgWaDyX+CD+dHh7IWXVooNTsZBsSrrFLlnSItEwsbU=;
+	b=wXVFNfsXtGEajs6z4yGHknsxESh9f+vtRtdfuP1i1X8sEVfqsAjmsjhXcqkOBacswWcYAC
+	wQ2BOUuJi9Itt5NP7/yAPNaI6/7SXFfFO8QG743qILX/sGBkk/J2q8rBALc+BV7Mv5G3i0
+	tbNre87gjI98OSElZabr5UmqBFrS6iY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1672663678;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
+	s=susede2_ed25519; t=1672663820;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8MEMF1Di8T491Z7gpFZexJEbRO0goQfo2mNNC19Dwlw=;
-	b=8xcIZgID6yyL8tso5U4W2aD4BOAiB5exlr0/ZLshKB9VhcA8NhPu0cpEPW7fgLIsabysDi
-	xdB7+ETNMAqJgZDw==
+	bh=TAgWaDyX+CD+dHh7IWXVooNTsZBsSrrFLlnSItEwsbU=;
+	b=zfSV81cXHMhk0J0/H6dk+ayKCD64OqT92Ux+9hAmjxrcBV33QNIFaCJnS3t6MJckpXK0Oe
+	3X9V0pxDpVTd7ECA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3BFF613427;
-	Mon,  2 Jan 2023 12:47:58 +0000 (UTC)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C177713427;
+	Mon,  2 Jan 2023 12:50:20 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
 	by imap2.suse-dmz.suse.de with ESMTPSA
-	id Fo+0DX7SsmNQGgAAMHmgww
-	(envelope-from <dsterba@suse.cz>); Mon, 02 Jan 2023 12:47:58 +0000
-Date: Mon, 2 Jan 2023 13:42:28 +0100
-From: David Sterba <dsterba@suse.cz>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org, Josef Bacik <josef@toxicpanda.com>,
-	linux-btrfs@vger.kernel.org, kernel-team@fb.com,
-	llvm@lists.linux.dev, Filipe Manana <fdmanana@suse.com>,
-	David Sterba <dsterba@suse.com>
-Subject: Re: [PATCH 8/8] btrfs: turn on -Wmaybe-uninitialized
-Message-ID: <20230102124228.GB11562@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <cover.1671221596.git.josef@toxicpanda.com>
- <1d9deaa274c13665eca60dee0ccbc4b56b506d06.1671221596.git.josef@toxicpanda.com>
- <Y6kgR4qnb23UdAEX@dev-arch.thelio-3990X>
- <CA+G9fYuhZzVfxXnVRMog_yv8F17NY4vHe_iafwgxpYCGfuaJqQ@mail.gmail.com>
+	id /EwrLwzTsmOpGwAAMHmgww
+	(envelope-from <jack@suse.cz>); Mon, 02 Jan 2023 12:50:20 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 19026A073E; Mon,  2 Jan 2023 13:50:20 +0100 (CET)
+Date: Mon, 2 Jan 2023 13:50:20 +0100
+From: Jan Kara <jack@suse.cz>
+To: Tom Rix <trix@redhat.com>
+Cc: jack@suse.com, nathan@kernel.org, ndesaulniers@google.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] udf: initialize newblock to 0
+Message-ID: <20230102125020.fg5m6aqz3ca4f2mt@quack3>
+References: <20221230175341.1629734-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,26 +53,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYuhZzVfxXnVRMog_yv8F17NY4vHe_iafwgxpYCGfuaJqQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+In-Reply-To: <20221230175341.1629734-1-trix@redhat.com>
 
-On Mon, Dec 26, 2022 at 07:34:51PM +0530, Naresh Kamboju wrote:
-> On Mon, 26 Dec 2022 at 09:47, Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Fri, Dec 16, 2022 at 03:15:58PM -0500, Josef Bacik wrote:
-> > > We had a recent bug that would have been caught by a newer compiler with
-> > > -Wmaybe-uninitialized and would have saved us a month of failing tests
-> > > that I didn't have time to investigate.
-> > >
-> > > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> >
-> > This needs to be moved to the condflags section, as
-> > -Wmaybe-uninitialized is a GCC only flag, so this breaks our builds with
-> > clang on next-20221226:
-> >
-> >   error: unknown warning option '-Wmaybe-uninitialized'; did you mean '-Wuninitialized'? [-Werror,-Wunknown-warning-option]
+On Fri 30-12-22 12:53:41, Tom Rix wrote:
+> The clang build reports this error
+> fs/udf/inode.c:805:6: error: variable 'newblock' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>         if (*err < 0)
+>             ^~~~~~~~
+> newblock is never set before error handling jump.
+> Initialize newblock to 0 and remove redundant settings.
 > 
-> LKFT test farm also noticed these build breaks with clang on next-20221226.
+> Fixes: d8b39db5fab8 ("udf: Handle error when adding extent to a file")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Fixed in our branch and for-next snapshot updated so the warnings will
-be fixed once linux-next resumes.
+Thanks! I've added the patch to my tree.
+
+								Honza
+
+> ---
+>  fs/udf/inode.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/fs/udf/inode.c b/fs/udf/inode.c
+> index 4a912e2edcec..31965c3798f2 100644
+> --- a/fs/udf/inode.c
+> +++ b/fs/udf/inode.c
+> @@ -604,7 +604,7 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
+>  	struct kernel_lb_addr eloc, tmpeloc;
+>  	int c = 1;
+>  	loff_t lbcount = 0, b_off = 0;
+> -	udf_pblk_t newblocknum, newblock;
+> +	udf_pblk_t newblocknum, newblock = 0;
+>  	sector_t offset = 0;
+>  	int8_t etype;
+>  	struct udf_inode_info *iinfo = UDF_I(inode);
+> @@ -710,7 +710,6 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
+>  		ret = udf_do_extend_file(inode, &prev_epos, laarr, hole_len);
+>  		if (ret < 0) {
+>  			*err = ret;
+> -			newblock = 0;
+>  			goto out_free;
+>  		}
+>  		c = 0;
+> @@ -775,7 +774,6 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
+>  				goal, err);
+>  		if (!newblocknum) {
+>  			*err = -ENOSPC;
+> -			newblock = 0;
+>  			goto out_free;
+>  		}
+>  		if (isBeyondEOF)
+> -- 
+> 2.27.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
