@@ -1,274 +1,121 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E795691
-	for <llvm@lists.linux.dev>; Mon,  2 Jan 2023 20:15:35 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so15618391wml.0
-        for <llvm@lists.linux.dev>; Mon, 02 Jan 2023 12:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nnA4MtPzVXj83EtEWBnqLYWTGe3+2ecag8jqt62Sxp0=;
-        b=moVcv0FeBZxqZaG9Te6OONuUIQ+3dG/Xq7KXkYzsKABw3MAGzHH7yHfh+ZLRB27AX7
-         QM5d3oOfxdozS0g9yl0O7JrZeRl/5+zJUFDEQ2OQgFMHimBmefAYjM+2WyaeQmtsOBk3
-         T216V8gXokWsuQtFuvsb0lgmaRkDT2HVEe+x67qmZ1QafNSfS4w9lMLtOzKyViNF7pcD
-         HlgQc/H4hWrXsHDUA1vW1mbaEdN+GZ5o6KTkxOyAlhQzj0b6sYjJSxbcN4C63hK8xFjB
-         T9bqQAodRaKjVGuhZHqCKNgAg3wEemdlYqpNHPSr2WFnHeepQhVeTRgpm0empufehEim
-         Qxbw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A829568A
+	for <llvm@lists.linux.dev>; Mon,  2 Jan 2023 20:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1672691150;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xCNMgkWa09fEzea1HqZoR7Nx7p6LXc3d3hq975HBBf8=;
+	b=c2M3eULR4SrHEtadMH4w/oKeDoXpeGqfj8oQlSa03jFY7D95X1+aY1KEvQg7LwT8PUHrMt
+	Ol44dyYQDgwhswErbn7izCNmqSg3OhD8ZtxbXS/gscBVDefX8P3VglApc90+MvrVnUkS8d
+	6eBnY2VDXJlCw19yaTZixy94QcSAHno=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-75-GQ5AZl0jOsGami20uKAPGw-1; Mon, 02 Jan 2023 15:25:49 -0500
+X-MC-Unique: GQ5AZl0jOsGami20uKAPGw-1
+Received: by mail-wr1-f70.google.com with SMTP id o14-20020adfa10e000000b002631c56fe26so3239923wro.1
+        for <llvm@lists.linux.dev>; Mon, 02 Jan 2023 12:25:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nnA4MtPzVXj83EtEWBnqLYWTGe3+2ecag8jqt62Sxp0=;
-        b=0sXCCGWY7PQgPQJoJgjvrlyC2QtQSYviQ27q0+CuLXDPymxQza8hqkExcbunzWCCKA
-         MomUlU4Ne+8lVoR8SHAxiDLoUa3z5Sl2BIRI6Y/CwZASa0Z3NxfkuqrIG3UNy1xkahpp
-         pt8FMMko/Gf3ZLxYm2gtwkEQcevwCDUWUCi5VkK5eG3qFJWw76wWkSIXYvSrd6u/kPMc
-         RRe6Ky4oAmHMMNf1FZyIdBTQ8UsKFwSdnOQBnRqxvmXwIkyUeY4sKyaOylaYATDSDjoM
-         1gLYMYig9I9Kmqxn4h1WhV0z3qpyNaqX6JoRTB/jxevm472pqtnpvY47I1HTA9/ZsB88
-         0qxg==
-X-Gm-Message-State: AFqh2kqYSpJHymScw3NE2M4CuPVUDLq4PrTLYLrOk6GGO4Iw+ZID9Eo/
-	Jlh7355AZqjZv3YdEX/xTRmbe+8ivzJnJabp
-X-Google-Smtp-Source: AMrXdXv9kZrm9xHrztYmPiV4vAWV8QzkbdL+pjDA6nrGZy/acL6+OREtYTCCOcaueXo49XVcnF34hQ==
-X-Received: by 2002:a7b:ce06:0:b0:3cf:a483:3100 with SMTP id m6-20020a7bce06000000b003cfa4833100mr29609216wmc.3.1672690533571;
-        Mon, 02 Jan 2023 12:15:33 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:9c:201:6950:757d:cd6e:92aa])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05600c4f5600b003d995a704fdsm23095070wmq.33.2023.01.02.12.15.32
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xCNMgkWa09fEzea1HqZoR7Nx7p6LXc3d3hq975HBBf8=;
+        b=dldu/iOaOsbz6v9SiBmZG/CBSSkWP/kv0/AJ83Uu/GoK+V/Xz8B6w9hai2+xqgJs5y
+         N63xxKny7eo/T2slWPAAHsYpHb1lhRuWIUMWZOBqkEXiBwQBExtLmPNUm5708oDgZxbW
+         mzf1vX11O6z2Fbz9HvZOseAw4Q308KFLk59R+U+oe/ECF7+XTJHgt3jY1cN7k3ucX+r2
+         gVsDil3c7/h13jq3ZeEnm1sZWpBIwOpsljnvsHo550Xv4e88cYJnkzPY4D6ZhkzjQiOL
+         svHNs3LWpzEXkbDgpZU6S4+ZiwbVWSEMbDuAwHKJWBOyEZpKugX/B0QBnjv1pdUZme3Y
+         Ip8Q==
+X-Gm-Message-State: AFqh2kqwtdr7gb47q+YDxcP7n7sM5zVLb55jFzZ/KVYDB2/pmUqWfTmo
+	ZkCDTrPeCXeA6pXsMW8OsbRpg2dnsfRbU6WHv1dCyzCMPMKiCrfvVH762gqslc42UqisdmOgISR
+	/HazmAERXcj0+Fw==
+X-Received: by 2002:a05:600c:1c85:b0:3d3:4b18:27c6 with SMTP id k5-20020a05600c1c8500b003d34b1827c6mr29159454wms.11.1672691148000;
+        Mon, 02 Jan 2023 12:25:48 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXucLyQjV1JdUh/Oxhsrc63ax4d9VZwsRvpyJNghr8LaaYhJT1s03Mg1ltldjdSwypzvI/Jtqw==
+X-Received: by 2002:a05:600c:1c85:b0:3d3:4b18:27c6 with SMTP id k5-20020a05600c1c8500b003d34b1827c6mr29159442wms.11.1672691147819;
+        Mon, 02 Jan 2023 12:25:47 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003d35c845cbbsm50061135wmq.21.2023.01.02.12.25.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 12:15:33 -0800 (PST)
-Date: Mon, 2 Jan 2023 21:15:26 +0100
-From: Marco Elver <elver@google.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	Sasha Levin <sashal@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 54/54]
- kernel/kcsan/core.c:1076:49: error: too many arguments to function call,
- expected 3, have 4
-Message-ID: <Y7M7Xo7NJEy7Yucr@elver.google.com>
-References: <202301030233.rZPMiNh1-lkp@intel.com>
+        Mon, 02 Jan 2023 12:25:47 -0800 (PST)
+From: Javier Martinez Canillas <javierm@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: Sam Ravnborg <sam@ravnborg.org>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	David Airlie <airlied@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Tom Rix <trix@redhat.com>,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 1/2] drm/mipi-dsi: Fix mipi_dsi_dcs_write_seq() macro definition format
+Date: Mon,  2 Jan 2023 21:25:41 +0100
+Message-Id: <20230102202542.3494677-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="gpGndaiEQHGR3Z5V"
-Content-Disposition: inline
-In-Reply-To: <202301030233.rZPMiNh1-lkp@intel.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
+Change made using a `clang-format -i include/drm/drm_mipi_dsi.h` command.
 
---gpGndaiEQHGR3Z5V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Jan 03, 2023 at 02:44AM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
-> head:   6b61636f89bfa685895515e024c7d07c0fdebaa9
-> commit: 6b61636f89bfa685895515e024c7d07c0fdebaa9 [54/54] kcsan: Instrument memcpy/memset/memmove with newer Clang
-> config: s390-randconfig-r021-20230102
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 7a8cb6cd4e3ff8aaadebff2b9d3ee9e2a326d444)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install s390 cross compiling tool for clang build
->         # apt-get install binutils-s390x-linux-gnu
->         # https://github.com/ammarfaizi2/linux-block/commit/6b61636f89bfa685895515e024c7d07c0fdebaa9
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
->         git checkout 6b61636f89bfa685895515e024c7d07c0fdebaa9
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/kcsan/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/kcsan/core.c:1076:49: error: too many arguments to function call, expected 3, have 4
->            check_access(s, check_len, KCSAN_ACCESS_WRITE, _RET_IP_);
->            ~~~~~~~~~~~~                                   ^~~~~~~~
->    include/linux/kernel.h:57:19: note: expanded from macro '_RET_IP_'
->    #define _RET_IP_                (unsigned long)__builtin_return_address(0)
->                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/kcsan/core.c:601:29: note: 'check_access' declared here
->    static __always_inline void check_access(const volatile void *ptr, size_t size,
->                                ^
->    kernel/kcsan/core.c:1090:51: error: too many arguments to function call, expected 3, have 4
->            check_access(dst, check_len, KCSAN_ACCESS_WRITE, _RET_IP_);
->            ~~~~~~~~~~~~                                     ^~~~~~~~
->    include/linux/kernel.h:57:19: note: expanded from macro '_RET_IP_'
->    #define _RET_IP_                (unsigned long)__builtin_return_address(0)
->                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/kcsan/core.c:601:29: note: 'check_access' declared here
->    static __always_inline void check_access(const volatile void *ptr, size_t size,
->                                ^
->    kernel/kcsan/core.c:1091:34: error: too many arguments to function call, expected 3, have 4
->            check_access(src, check_len, 0, _RET_IP_);
->            ~~~~~~~~~~~~                    ^~~~~~~~
->    include/linux/kernel.h:57:19: note: expanded from macro '_RET_IP_'
->    #define _RET_IP_                (unsigned long)__builtin_return_address(0)
->                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/kcsan/core.c:601:29: note: 'check_access' declared here
->    static __always_inline void check_access(const volatile void *ptr, size_t size,
->                                ^
->    kernel/kcsan/core.c:1105:51: error: too many arguments to function call, expected 3, have 4
->            check_access(dst, check_len, KCSAN_ACCESS_WRITE, _RET_IP_);
->            ~~~~~~~~~~~~                                     ^~~~~~~~
->    include/linux/kernel.h:57:19: note: expanded from macro '_RET_IP_'
->    #define _RET_IP_                (unsigned long)__builtin_return_address(0)
->                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/kcsan/core.c:601:29: note: 'check_access' declared here
->    static __always_inline void check_access(const volatile void *ptr, size_t size,
->                                ^
->    kernel/kcsan/core.c:1106:34: error: too many arguments to function call, expected 3, have 4
->            check_access(src, check_len, 0, _RET_IP_);
->            ~~~~~~~~~~~~                    ^~~~~~~~
->    include/linux/kernel.h:57:19: note: expanded from macro '_RET_IP_'
->    #define _RET_IP_                (unsigned long)__builtin_return_address(0)
->                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/kcsan/core.c:601:29: note: 'check_access' declared here
->    static __always_inline void check_access(const volatile void *ptr, size_t size,
->                                ^
->    5 errors generated.
-> 
-> 
-> vim +1076 kernel/kcsan/core.c
-> 
->   1065	
->   1066	#ifdef __HAVE_ARCH_MEMSET
->   1067	void *__tsan_memset(void *s, int c, size_t count);
->   1068	noinline void *__tsan_memset(void *s, int c, size_t count)
->   1069	{
->   1070		/*
->   1071		 * Instead of not setting up watchpoints where accessed size is greater
->   1072		 * than MAX_ENCODABLE_SIZE, truncate checked size to MAX_ENCODABLE_SIZE.
->   1073		 */
->   1074		size_t check_len = min_t(size_t, count, MAX_ENCODABLE_SIZE);
->   1075	
-> > 1076		check_access(s, check_len, KCSAN_ACCESS_WRITE, _RET_IP_);
->   1077		return memset(s, c, count);
->   1078	}
->   1079	#else
->   1080	void *__tsan_memset(void *s, int c, size_t count) __alias(memset);
->   1081	#endif
->   1082	EXPORT_SYMBOL(__tsan_memset);
->   1083	
-
-For 5.10 and 5.15 stable kernels we require a separate backport (see
-attached), because check_access() was changed in commit 55a55fec5015b.
-
-Thanks,
--- Marco
-
---gpGndaiEQHGR3Z5V
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-kcsan-Instrument-memcpy-memset-memmove-with-newer-Cl.patch"
-
-From 460f24b2b74f507d100d3f09ab81c7b089477bb3 Mon Sep 17 00:00:00 2001
-From: Marco Elver <elver@google.com>
-Date: Mon, 12 Sep 2022 11:45:40 +0200
-Subject: [PATCH] kcsan: Instrument memcpy/memset/memmove with newer Clang
-
-commit 7c201739beef1a586d806463f1465429cdce34c5 upstream.
-
-With Clang version 16+, -fsanitize=thread will turn
-memcpy/memset/memmove calls in instrumented functions into
-__tsan_memcpy/__tsan_memset/__tsan_memmove calls respectively.
-
-Add these functions to the core KCSAN runtime, so that we (a) catch data
-races with mem* functions, and (b) won't run into linker errors with
-such newer compilers.
-
-[ elver@google.com: adjust check_access() call for v5.15 and earlier. ]
-
-Cc: stable@vger.kernel.org # v5.10+
-Signed-off-by: Marco Elver <elver@google.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Suggested-by: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
- kernel/kcsan/core.c | 50 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
 
-diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-index 76e67d1e02d4..526510b3791e 100644
---- a/kernel/kcsan/core.c
-+++ b/kernel/kcsan/core.c
-@@ -14,10 +14,12 @@
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
-+#include <linux/minmax.h>
- #include <linux/moduleparam.h>
- #include <linux/percpu.h>
- #include <linux/preempt.h>
- #include <linux/sched.h>
-+#include <linux/string.h>
- #include <linux/uaccess.h>
+Changes in v2:
+- New patch in v2.
+
+ include/drm/drm_mipi_dsi.h | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/include/drm/drm_mipi_dsi.h b/include/drm/drm_mipi_dsi.h
+index 20b21b577dea..e9d1e8a7fc7e 100644
+--- a/include/drm/drm_mipi_dsi.h
++++ b/include/drm/drm_mipi_dsi.h
+@@ -303,15 +303,18 @@ int mipi_dsi_dcs_get_display_brightness(struct mipi_dsi_device *dsi,
+  * @cmd: Command
+  * @seq: buffer containing data to be transmitted
+  */
+-#define mipi_dsi_dcs_write_seq(dsi, cmd, seq...) do {				\
+-		static const u8 d[] = { cmd, seq };				\
+-		struct device *dev = &dsi->dev;	\
+-		int ret;						\
+-		ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d));	\
+-		if (ret < 0) {						\
+-			dev_err_ratelimited(dev, "sending command %#02x failed: %d\n", cmd, ret); \
+-			return ret;						\
+-		}						\
++#define mipi_dsi_dcs_write_seq(dsi, cmd, seq...)                           \
++	do {                                                               \
++		static const u8 d[] = { cmd, seq };                        \
++		struct device *dev = &dsi->dev;                            \
++		int ret;                                                   \
++		ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d));    \
++		if (ret < 0) {                                             \
++			dev_err_ratelimited(                               \
++				dev, "sending command %#02x failed: %d\n", \
++				cmd, ret);                                 \
++			return ret;                                        \
++		}                                                          \
+ 	} while (0)
  
- #include "encoding.h"
-@@ -1060,3 +1062,51 @@ EXPORT_SYMBOL(__tsan_atomic_thread_fence);
- void __tsan_atomic_signal_fence(int memorder);
- void __tsan_atomic_signal_fence(int memorder) { }
- EXPORT_SYMBOL(__tsan_atomic_signal_fence);
-+
-+#ifdef __HAVE_ARCH_MEMSET
-+void *__tsan_memset(void *s, int c, size_t count);
-+noinline void *__tsan_memset(void *s, int c, size_t count)
-+{
-+	/*
-+	 * Instead of not setting up watchpoints where accessed size is greater
-+	 * than MAX_ENCODABLE_SIZE, truncate checked size to MAX_ENCODABLE_SIZE.
-+	 */
-+	size_t check_len = min_t(size_t, count, MAX_ENCODABLE_SIZE);
-+
-+	check_access(s, check_len, KCSAN_ACCESS_WRITE);
-+	return memset(s, c, count);
-+}
-+#else
-+void *__tsan_memset(void *s, int c, size_t count) __alias(memset);
-+#endif
-+EXPORT_SYMBOL(__tsan_memset);
-+
-+#ifdef __HAVE_ARCH_MEMMOVE
-+void *__tsan_memmove(void *dst, const void *src, size_t len);
-+noinline void *__tsan_memmove(void *dst, const void *src, size_t len)
-+{
-+	size_t check_len = min_t(size_t, len, MAX_ENCODABLE_SIZE);
-+
-+	check_access(dst, check_len, KCSAN_ACCESS_WRITE);
-+	check_access(src, check_len, 0);
-+	return memmove(dst, src, len);
-+}
-+#else
-+void *__tsan_memmove(void *dst, const void *src, size_t len) __alias(memmove);
-+#endif
-+EXPORT_SYMBOL(__tsan_memmove);
-+
-+#ifdef __HAVE_ARCH_MEMCPY
-+void *__tsan_memcpy(void *dst, const void *src, size_t len);
-+noinline void *__tsan_memcpy(void *dst, const void *src, size_t len)
-+{
-+	size_t check_len = min_t(size_t, len, MAX_ENCODABLE_SIZE);
-+
-+	check_access(dst, check_len, KCSAN_ACCESS_WRITE);
-+	check_access(src, check_len, 0);
-+	return memcpy(dst, src, len);
-+}
-+#else
-+void *__tsan_memcpy(void *dst, const void *src, size_t len) __alias(memcpy);
-+#endif
-+EXPORT_SYMBOL(__tsan_memcpy);
+ /**
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.38.1
 
-
---gpGndaiEQHGR3Z5V--
