@@ -1,52 +1,52 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D1F7F;
-	Mon,  2 Jan 2023 00:17:13 +0000 (UTC)
-Received: by mail-lf1-f42.google.com with SMTP id bf43so39533765lfb.6;
-        Sun, 01 Jan 2023 16:17:13 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822417F;
+	Mon,  2 Jan 2023 00:19:01 +0000 (UTC)
+Received: by mail-lj1-f171.google.com with SMTP id q2so27822008ljp.6;
+        Sun, 01 Jan 2023 16:19:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e6nRfoijxk3uR6m8/DRVshsbz5chvsyMXxKmiNheHYI=;
-        b=nSYTyI0gdEIvPfWAftFUh7mxyN23liDdjpH6Lcpq4XS85cAm/X9vx8OU/YZiTGcm0K
-         uhrsGADtuL8qR899y9460r/GCueYJ+ctiOrdNTXprJXwlWcd6Z/UJIf4Mxb6Hd5XM/4s
-         xtjtzr6vw0V+2or7SukhShpEJa0N0dj/taWID2vyWGly5ZA0C4+IUm+cFF37LOiZfK6S
-         Kfu0ttjeBwMg8BAOkmxRK+moWOUlfh9DteZYBhxbcM90Qx0B9tsxpBDmguIYUgj0Aas7
-         45mbEujVKVzLyeAaQVGBXVcxcidUvgdLssRDhjqtW6ZSf6P7knB+8l4KdRdhrD1N2WgZ
-         NM5w==
+        bh=VoxOMirVxjVMz6HgPkWOUqIX78Qz87TJFD3kE2Q06Bs=;
+        b=gligsVQqBH9gIy9eCjzeb01XC6qQLFpi5ixH3zZQLiwL9psiWcdVq5AUsNBnU1er9n
+         iGMYTtnQIz1TUP0uZsGzh4uVk5tTQ+OwM7S+qcpk8WMMtxTKoZeF5BEfJJ9JUBPSK0HY
+         QrhMm/9Zy73aTBMaTBg+4PnWf9JwlJdmV19p1G3nmf4XfZNVsTLCOiReFuHpuyjiJKhs
+         Bs+/L94yTfIbUbArRLWFv3ENFTga10qjlk/zO0VvdWxs711biIh2aWFB3Stkk9hR2cI+
+         NyxHosCcJAZl4fVpd7YhHtjId3Xp9bTFKGxvV8DU04EFWqaoAfjGIGdC7XEtSIjtZghm
+         YAPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e6nRfoijxk3uR6m8/DRVshsbz5chvsyMXxKmiNheHYI=;
-        b=06QIYFXUzD9kxRlHVz0GY5gTCNAIrzB0Wi8MqWkSKurSy+MAHex+6gPRy8SUjAzh9i
-         zfRtzIwazzf4PiSP/XhYbDzA5RYaYp6Vkr7E8jfLMhzH+FVgI0OkXZkrrhGHxiwZDAay
-         okSq/BaCByLubu1eawUdFb0h30C4Trmii1S9U1RjtBA3m4kBPmEg8iHh2y2opdHRkYzM
-         fMfsWw4GxnFTxFPerT1qGvSnnUT9kEJZBlMPjajmaSEjJ62ETHd5RVSIBP3kUYH9kkzs
-         oolVw0cInzPfPA9hT6IHPVv9aHZv5WHfkoMqHkM/S0LDIrp7AQOnRitTpnU2IrMOZfWF
-         MWmA==
-X-Gm-Message-State: AFqh2kryC1x4Q8ij0GIiCShHJelmRcplkNTaqXuWB5FdNlgG9bN3euvH
-	4mjnmQkSB2/Ev7Czufwqk8hxLKcsuu9jMKogvXg=
-X-Google-Smtp-Source: AMrXdXtJrmmkBFGHvmuH0AKQO7lues9gnuOYmAmAOHmTU5Rewfka6tN+7qWOaHRqXtlxk9vnP5rmr8D6sT2H2hAJSwg=
-X-Received: by 2002:ac2:5492:0:b0:4cb:19fe:5640 with SMTP id
- t18-20020ac25492000000b004cb19fe5640mr1523073lfk.556.1672618631532; Sun, 01
- Jan 2023 16:17:11 -0800 (PST)
+        bh=VoxOMirVxjVMz6HgPkWOUqIX78Qz87TJFD3kE2Q06Bs=;
+        b=gkhTLXJTwVlmBmY1pdizHl4uXKBgy5uAzyAvm+DfCOLXZ9qnaDWvKuAutHuWd5YYFr
+         r/2HVZihPW7x71NyVihDWt3kaZ77Qoj4f/GUblPaPFVkq6tglP8G+z6NQbW/DtuvlY1A
+         yoNqnTY1957zuR6mO9HK1VdfE+VaPJ4QbR07fknV0HM0JOhhO49UyOEshzbLEzYcAfIy
+         OQFj6c0jG5qD3j0OGTN5qKszK0v1X/aNijuS+XjIY2N8gyNDBj1ii3dGKgddZ4KC/3ft
+         9eB1WoY/VgbDvACZW98ocSn7inJ601yt5GDgEifLYFl6yWfOZoGtC+Cg+BWrEyEdNcCM
+         WOQg==
+X-Gm-Message-State: AFqh2kpOmauWoChLWmqdTGHHkrumk6dfJOOz+HoJhff1SfjdrxPDUkcq
+	QLBS2qiS6fMcSVHsPVTbPIlexINe8PLZgHbStb0=
+X-Google-Smtp-Source: AMrXdXvDbbRTyNk+bpvsscRHHwZYT8L1loW/+diapeAM178vk5gfZddeodS0b+g4h+zL6qub3NbZpR1QVy3/eUo3HGY=
+X-Received: by 2002:a2e:87ce:0:b0:27f:f062:8957 with SMTP id
+ v14-20020a2e87ce000000b0027ff0628957mr157098ljj.479.1672618739315; Sun, 01
+ Jan 2023 16:18:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221231053421.2039591-1-yoochan1026@gmail.com> <202301020326.pzL5zDsa-lkp@intel.com>
-In-Reply-To: <202301020326.pzL5zDsa-lkp@intel.com>
+References: <20221231051954.2038772-1-yoochan1026@gmail.com> <202301020540.wMrbqIkY-lkp@intel.com>
+In-Reply-To: <202301020540.wMrbqIkY-lkp@intel.com>
 From: Yoochan Lee <yoochan1026@gmail.com>
-Date: Mon, 2 Jan 2023 09:17:00 +0900
-Message-ID: <CALQpDLcLghTY44YumjGj8McLsTUDkcxTKMOmjA5-oqEPGBG3ww@mail.gmail.com>
-Subject: Re: [PATCH] tee: optee: ffa_abi: Fix use-after-free in optee_ffa_open
+Date: Mon, 2 Jan 2023 09:18:48 +0900
+Message-ID: <CALQpDLd+eEYv=qkPOoPkRGe5RX2eTgUfj_pp838eDX39Cfke2w@mail.gmail.com>
+Subject: Re: [PATCH] tee: optee: smc_abi: Fix use-after-free in optee_smc_open
 To: kernel test robot <lkp@intel.com>
 Cc: jens.wiklander@linaro.org, llvm@lists.linux.dev, 
 	oe-kbuild-all@lists.linux.dev, op-tee@lists.trustedfirmware.org, 
@@ -54,60 +54,50 @@ Cc: jens.wiklander@linaro.org, llvm@lists.linux.dev,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-I fix the error in the previous patch.
+I fix the errors in the previous patch.
 
-From fde49d86f6401789ba51f267a0d79fbe4e7ffc24 Mon Sep 17 00:00:00 2001
+From 2046cc19aeaddb5f6fb5e9b1d9a380a116892657 Mon Sep 17 00:00:00 2001
 From: Yoochan Lee <yoochan1026@gmail.com>
-Date: Mon, 2 Jan 2023 09:16:05 +0900
+Date: Mon, 2 Jan 2023 09:18:23 +0900
 Subject: [PATCH 2/2] fix errors in previous patch
 
 ---
- drivers/tee/optee/ffa_abi.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/tee/optee/smc_abi.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index ea76d7532419..65d9463d9ed8 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -741,28 +741,23 @@ static void optee_ffa_delete(struct kref *kref)
-
- static void optee_ffa_release(struct tee_context *ctx)
- {
-- struct optee *optee =3D tee_get_drvdata(teedev);
--
-- optee_release_helper(ctx, optee_close_session_helper);
-+ struct optee *optee =3D tee_get_drvdata(ctx->teedev);
-+
-+ optee_release(ctx);
-  kref_put(&optee->refcnt, optee_ffa_delete);
- }
-
- void optee_ffa_release_supp(struct tee_context *ctx)
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index 4fbec2acc255..be662f263f29 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -1103,12 +1103,7 @@ static void optee_smc_release_supp(struct
+tee_context *ctx)
  {
   struct optee *optee =3D tee_get_drvdata(ctx->teedev);
--
+
 - optee_release_helper(ctx, optee_close_session_helper);
 - if (optee->scan_bus_wq) {
 - destroy_workqueue(optee->scan_bus_wq);
 - optee->scan_bus_wq =3D NULL;
 - }
 - optee_supp_release(&optee->supp);
-+
-+ optee_release_supp(ctx);
-  kref_put(&optee->refcnt, optee_ffa_delete);
++ optee_release_supp(ctx)
+  kref_put(&optee->refcnt, optee_smc_delete);
  }
 
- static int optee_ffa_open(struct tee_context *ctx)
+@@ -1116,7 +1111,7 @@ static void optee_smc_release(struct tee_context *ctx=
+)
  {
-- struct optee *optee =3D tee_get_drvdata(teedev);
-+ struct optee *optee =3D tee_get_drvdata(ctx->teedev);
-  kref_get(&optee->refcnt);
+  struct optee *optee =3D tee_get_drvdata(ctx->teedev);
 
-  return optee_open(ctx, true);
+- optee_release_helper(ctx, optee_close_session_helper);
++ optee_release(ctx);
+  kref_put(&optee->refcnt, optee_smc_delete);
+ }
+
 --
 2.39.0
 
-2023=EB=85=84 1=EC=9B=94 2=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 5:12, ke=
+2023=EB=85=84 1=EC=9B=94 2=EC=9D=BC (=EC=9B=94) =EC=98=A4=EC=A0=84 6:43, ke=
 rnel test robot <lkp@intel.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 >
 > Hi Yoochan,
@@ -121,11 +111,11 @@ rnel test robot <lkp@intel.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 > https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
 > url:    https://github.com/intel-lab-lkp/linux/commits/Yoochan-Lee/tee-op=
-tee-ffa_abi-Fix-use-after-free-in-optee_ffa_open/20221231-133611
-> patch link:    https://lore.kernel.org/r/20221231053421.2039591-1-yoochan=
+tee-smc_abi-Fix-use-after-free-in-optee_smc_open/20221231-132046
+> patch link:    https://lore.kernel.org/r/20221231051954.2038772-1-yoochan=
 1026%40gmail.com
-> patch subject: [PATCH] tee: optee: ffa_abi: Fix use-after-free in optee_f=
-fa_open
+> patch subject: [PATCH] tee: optee: smc_abi: Fix use-after-free in optee_s=
+mc_open
 > config: arm-randconfig-c002-20221231
 > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project f570=
 0e7b69048de958172fb513b336564e7f8709)
@@ -135,13 +125,13 @@ n/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
 >         # install arm cross compiling tool for clang build
 >         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/intel-lab-lkp/linux/commit/3fe68a00d912f9e5d=
-bec5002a7d30cf2a0868679
+>         # https://github.com/intel-lab-lkp/linux/commit/6d3d5f78a2463a577=
+c1a908cdedda61affba9c01
 >         git remote add linux-review https://github.com/intel-lab-lkp/linu=
 x
->         git fetch --no-tags linux-review Yoochan-Lee/tee-optee-ffa_abi-Fi=
-x-use-after-free-in-optee_ffa_open/20221231-133611
->         git checkout 3fe68a00d912f9e5dbec5002a7d30cf2a0868679
+>         git fetch --no-tags linux-review Yoochan-Lee/tee-optee-smc_abi-Fi=
+x-use-after-free-in-optee_smc_open/20221231-132046
+>         git checkout 6d3d5f78a2463a577c1a908cdedda61affba9c01
 >         # save the config file
 >         mkdir build_dir && cp config build_dir/.config
 >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
@@ -152,68 +142,43 @@ x-use-after-free-in-optee_ffa_open/20221231-133611
 > If you fix the issue, kindly add following tag where applicable
 > | Reported-by: kernel test robot <lkp@intel.com>
 >
-> All error/warnings (new ones prefixed by >>):
+> All errors (new ones prefixed by >>):
 >
-> >> drivers/tee/optee/ffa_abi.c:744:40: error: use of undeclared identifie=
-r 'teedev'
->            struct optee *optee =3D tee_get_drvdata(teedev);
->                                                  ^
-> >> drivers/tee/optee/ffa_abi.c:746:2: error: call to undeclared function =
-'optee_release_helper'; ISO C99 and later do not support implicit function =
-declarations [-Wimplicit-function-declaration]
+> >> drivers/tee/optee/smc_abi.c:1106:2: error: call to undeclared function=
+ 'optee_release_helper'; ISO C99 and later do not support implicit function=
+ declarations [-Wimplicit-function-declaration]
 >            optee_release_helper(ctx, optee_close_session_helper);
 >            ^
->    drivers/tee/optee/ffa_abi.c:746:2: note: did you mean 'optee_release_s=
-upp'?
+>    drivers/tee/optee/smc_abi.c:1106:2: note: did you mean 'optee_release_=
+supp'?
 >    drivers/tee/optee/optee_private.h:258:6: note: 'optee_release_supp' de=
 clared here
 >    void optee_release_supp(struct tee_context *ctx);
 >         ^
->    drivers/tee/optee/ffa_abi.c:754:2: error: call to undeclared function =
-'optee_release_helper'; ISO C99 and later do not support implicit function =
-declarations [-Wimplicit-function-declaration]
+>    drivers/tee/optee/smc_abi.c:1119:2: error: call to undeclared function=
+ 'optee_release_helper'; ISO C99 and later do not support implicit function=
+ declarations [-Wimplicit-function-declaration]
 >            optee_release_helper(ctx, optee_close_session_helper);
 >            ^
-> >> drivers/tee/optee/ffa_abi.c:750:6: warning: no previous prototype for =
-function 'optee_ffa_release_supp' [-Wmissing-prototypes]
->    void optee_ffa_release_supp(struct tee_context *ctx)
->         ^
->    drivers/tee/optee/ffa_abi.c:750:1: note: declare 'static' if the funct=
-ion is not intended to be used outside of this translation unit
->    void optee_ffa_release_supp(struct tee_context *ctx)
->    ^
->    static
->    drivers/tee/optee/ffa_abi.c:765:40: error: use of undeclared identifie=
-r 'teedev'
->            struct optee *optee =3D tee_get_drvdata(teedev);
->                                                  ^
->    1 warning and 4 errors generated.
+>    2 errors generated.
 >
 >
-> vim +/teedev +744 drivers/tee/optee/ffa_abi.c
+> vim +/optee_release_helper +1106 drivers/tee/optee/smc_abi.c
 >
->    741
->    742  static void optee_ffa_release(struct tee_context *ctx)
->    743  {
->  > 744          struct optee *optee =3D tee_get_drvdata(teedev);
->    745
->  > 746          optee_release_helper(ctx, optee_close_session_helper);
->    747          kref_put(&optee->refcnt, optee_ffa_delete);
->    748  }
->    749
->  > 750  void optee_ffa_release_supp(struct tee_context *ctx)
->    751  {
->    752          struct optee *optee =3D tee_get_drvdata(ctx->teedev);
->    753
->    754          optee_release_helper(ctx, optee_close_session_helper);
->    755          if (optee->scan_bus_wq) {
->    756                  destroy_workqueue(optee->scan_bus_wq);
->    757                  optee->scan_bus_wq =3D NULL;
->    758          }
->    759          optee_supp_release(&optee->supp);
->    760          kref_put(&optee->refcnt, optee_ffa_delete);
->    761  }
->    762
+>   1101
+>   1102  static void optee_smc_release_supp(struct tee_context *ctx)
+>   1103  {
+>   1104          struct optee *optee =3D tee_get_drvdata(ctx->teedev);
+>   1105
+> > 1106          optee_release_helper(ctx, optee_close_session_helper);
+>   1107          if (optee->scan_bus_wq) {
+>   1108                  destroy_workqueue(optee->scan_bus_wq);
+>   1109                  optee->scan_bus_wq =3D NULL;
+>   1110          }
+>   1111          optee_supp_release(&optee->supp);
+>   1112          kref_put(&optee->refcnt, optee_smc_delete);
+>   1113  }
+>   1114
 >
 > --
 > 0-DAY CI Kernel Test Service
