@@ -1,148 +1,231 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A0337A;
-	Tue,  3 Jan 2023 00:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F415D380;
+	Tue,  3 Jan 2023 01:59:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672706915; x=1704242915;
+  t=1672711156; x=1704247156;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=o8T1Vyac70dK/Bup5gy2IEHawVctBBt+VuEPE+Usj5Y=;
-  b=RSfep7I+ekfsXMYw0jI+0tS8gKfjpOn7BHoaLvMLDU9v8wWdJU45qlJ4
-   CyYvRhZbW2kfiIlJsOVIAOxwWgrpUE+HuoaY5b9ehwRSbO0cfyYh0MGuQ
-   +HD+nP+zy8QDOfNoId+zqhiQ1Ept+ZTFlfglmlkrk9OGGoCXvLPUKAeCc
-   1a0alWQlJlUsW78Q8R+m4rZPAjF9y+Hl0q24bXnHJs/7QZF0wr8xOFnxA
-   4mEg1ZiL+n/z94bdYp6yQLXS24bRWsz/oOdKh+9TmoBBVbxhXWQ1nZ0lT
-   BoDEWoicsb7dtRwjo2/VLDV7ey5GdTRJVXCh8LscKMFf0TmpTucsktJTQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="319260178"
+  bh=Im9/nokcArfNe82Qwx5aQAC895SWBTujFjgssaDqNm4=;
+  b=Z/mo+PvVD7z1ZMVtzNxQMlzBtVDUOGxmUllIaSSyT10X6g8RGyp2JLsb
+   5g4+Y+qAo1JsdqBWX0EkGCCExvoJern5D/peIp8+q++vLQZQinV7rvtzx
+   7j6BsHWCowmyAbuTOUe8a3vKsq5SfvUXeKN59RbZxNiaKYEW/RHydqCFp
+   Be7gNn+32GTGiXp6ZAxye0mR40kGelKaHXxEjTrymGURvSQfEl6NRnkHP
+   s1PqAnj5r0kZFK+/SiLijGVRNWCIQjAsv7dUnCw2rSJM/60O71vnSEaMy
+   B/QS2vpp4zXUlUyrkldVsJ7T9tnWzqVkd3GG8j9N7w7Vn5ep7hM/9Gner
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="321629955"
 X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
-   d="scan'208";a="319260178"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 16:48:11 -0800
+   d="scan'208";a="321629955"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2023 17:59:14 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="654620055"
+X-IronPort-AV: E=McAfee;i="6500,9779,10578"; a="717937254"
 X-IronPort-AV: E=Sophos;i="5.96,295,1665471600"; 
-   d="scan'208";a="654620055"
+   d="scan'208";a="717937254"
 Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Jan 2023 16:48:08 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 02 Jan 2023 17:59:10 -0800
 Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pCVTL-000Rd5-15;
-	Tue, 03 Jan 2023 00:48:07 +0000
-Date: Tue, 3 Jan 2023 08:47:58 +0800
+	id 1pCWa5-000RfL-2T;
+	Tue, 03 Jan 2023 01:59:09 +0000
+Date: Tue, 3 Jan 2023 09:58:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] block: Improve shared tag set performance
-Message-ID: <202301030824.GmJSSJSc-lkp@intel.com>
-References: <20230102173926.29132-1-bvanassche@acm.org>
+To: Joshua Goins <josh@redstrate.com>, linux-input@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jose.exposito89@gmail.com, Joshua Goins <josh@redstrate.com>,
+	kernel test robot <lkp@intel.com>,
+	Dan Carpenter <error27@gmail.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: uclogic: Add support for XP-PEN Artist 22R Pro
+Message-ID: <202301030941.60EGInuf-lkp@intel.com>
+References: <20230102194911.56083-1-josh@redstrate.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="n/qzv5MrM62ZFGdv"
+Content-Type: multipart/mixed; boundary="DeUBKInF+G1lnIIz"
 Content-Disposition: inline
-In-Reply-To: <20230102173926.29132-1-bvanassche@acm.org>
+In-Reply-To: <20230102194911.56083-1-josh@redstrate.com>
 
 
---n/qzv5MrM62ZFGdv
+--DeUBKInF+G1lnIIz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Bart,
+Hi Joshua,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on linus/master v6.2-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 88603b6dc419445847923fcb7fe5080067a30f98]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/block-Improve-shared-tag-set-performance/20230103-014130
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230102173926.29132-1-bvanassche%40acm.org
-patch subject: [PATCH] block: Improve shared tag set performance
+url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Goins/HID-uclogic-Add-support-for-XP-PEN-Artist-22R-Pro/20230103-035221
+base:   88603b6dc419445847923fcb7fe5080067a30f98
+patch link:    https://lore.kernel.org/r/20230102194911.56083-1-josh%40redstrate.com
+patch subject: [PATCH v2] HID: uclogic: Add support for XP-PEN Artist 22R Pro
 config: i386-randconfig-a013-20230102
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/099e296fb8cae16b616841459902840a9149270a
+        # https://github.com/intel-lab-lkp/linux/commit/544bdd996d164d0202d03318e29f3ec570f88b16
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bart-Van-Assche/block-Improve-shared-tag-set-performance/20230103-014130
-        git checkout 099e296fb8cae16b616841459902840a9149270a
+        git fetch --no-tags linux-review Joshua-Goins/HID-uclogic-Add-support-for-XP-PEN-Artist-22R-Pro/20230103-035221
+        git checkout 544bdd996d164d0202d03318e29f3ec570f88b16
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> block/blk-mq-tag.c:56:39: warning: variable 'users' is uninitialized when used here [-Wuninitialized]
-           blk_mq_update_wake_batch(hctx->tags, users);
-                                                ^~~~~
-   block/blk-mq-tag.c:42:20: note: initialize the variable 'users' to silence this warning
-           unsigned int users;
-                             ^
-                              = 0
-   block/blk-mq-tag.c:89:33: warning: variable 'users' is uninitialized when used here [-Wuninitialized]
-           blk_mq_update_wake_batch(tags, users);
-                                          ^~~~~
-   block/blk-mq-tag.c:76:20: note: initialize the variable 'users' to silence this warning
-           unsigned int users;
-                             ^
-                              = 0
-   2 warnings generated.
+>> drivers/hid/hid-uclogic-params.c:1522:10: error: passing 'const __u8[]' (aka 'const unsigned char[]') to parameter of type 'u8 *' (aka 'unsigned char *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        uclogic_ugee_v2_probe_arr,
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-uclogic-params.c:1026:65: note: passing argument to parameter 'magic_arr' here
+   static int uclogic_probe_interface(struct hid_device *hdev, u8 *magic_arr,
+                                                                   ^
+   1 error generated.
 
 
-vim +/users +56 block/blk-mq-tag.c
+vim +1522 drivers/hid/hid-uclogic-params.c
 
-180dccb0dba4f5 Laibin Qiu    2022-01-13  33  
-0d2602ca30e410 Jens Axboe    2014-05-13  34  /*
-0d2602ca30e410 Jens Axboe    2014-05-13  35   * If a previously inactive queue goes active, bump the active user count.
-d263ed9926823c Jianchao Wang 2018-08-09  36   * We need to do this before try to allocate driver tag, then even if fail
-d263ed9926823c Jianchao Wang 2018-08-09  37   * to get tag when first time, the other shared-tag users could reserve
-d263ed9926823c Jianchao Wang 2018-08-09  38   * budget for it.
-0d2602ca30e410 Jens Axboe    2014-05-13  39   */
-ee78ec1077d37d Liu Song      2022-06-25  40  void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
-0d2602ca30e410 Jens Axboe    2014-05-13  41  {
-180dccb0dba4f5 Laibin Qiu    2022-01-13  42  	unsigned int users;
-180dccb0dba4f5 Laibin Qiu    2022-01-13  43  
-079a2e3e862548 John Garry    2021-10-05  44  	if (blk_mq_is_shared_tags(hctx->flags)) {
-f1b49fdc1c64db John Garry    2020-08-19  45  		struct request_queue *q = hctx->queue;
-f1b49fdc1c64db John Garry    2020-08-19  46  
-ee78ec1077d37d Liu Song      2022-06-25  47  		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags))
-ee78ec1077d37d Liu Song      2022-06-25  48  			return;
-ee78ec1077d37d Liu Song      2022-06-25  49  		set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags);
-f1b49fdc1c64db John Garry    2020-08-19  50  	} else {
-ee78ec1077d37d Liu Song      2022-06-25  51  		if (test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
-ee78ec1077d37d Liu Song      2022-06-25  52  			return;
-ee78ec1077d37d Liu Song      2022-06-25  53  		set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state);
-f1b49fdc1c64db John Garry    2020-08-19  54  	}
-0d2602ca30e410 Jens Axboe    2014-05-13  55  
-180dccb0dba4f5 Laibin Qiu    2022-01-13 @56  	blk_mq_update_wake_batch(hctx->tags, users);
-0d2602ca30e410 Jens Axboe    2014-05-13  57  }
-0d2602ca30e410 Jens Axboe    2014-05-13  58  
+  1475	
+  1476	/*
+  1477	 * uclogic_params_init_ugee_xppen_pro() - Initializes a UGEE XP-Pen Pro tablet device.
+  1478	 *
+  1479	 * @hdev:	The HID device of the tablet interface to initialize and get
+  1480	 *		parameters from. Cannot be NULL.
+  1481	 * @params:	Parameters to fill in (to be cleaned with
+  1482	 *		uclogic_params_cleanup()). Not modified in case of error.
+  1483	 *		Cannot be NULL.
+  1484	 *
+  1485	 * Returns:
+  1486	 *	Zero, if successful. A negative errno code on error.
+  1487	 */
+  1488	static int uclogic_params_init_ugee_xppen_pro(struct uclogic_params *params,
+  1489						      struct hid_device *hdev,
+  1490						      const u8 rdesc_frame_arr[],
+  1491						      const size_t rdesc_frame_size)
+  1492	{
+  1493		int rc = 0;
+  1494		struct usb_interface *iface;
+  1495		__u8 bInterfaceNumber;
+  1496		const int str_desc_len = 12;
+  1497		u8 *str_desc = NULL;
+  1498		__u8 *rdesc_pen = NULL;
+  1499		s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
+  1500		/* The resulting parameters (noop) */
+  1501		struct uclogic_params p = {0, };
+  1502	
+  1503		if (!hdev || !params) {
+  1504			rc = -EINVAL;
+  1505			goto cleanup;
+  1506		}
+  1507	
+  1508		iface = to_usb_interface(hdev->dev.parent);
+  1509		bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
+  1510	
+  1511		/* Ignore non-pen interfaces */
+  1512		if (bInterfaceNumber != 2) {
+  1513			uclogic_params_init_invalid(&p);
+  1514			goto output;
+  1515		}
+  1516	
+  1517		/*
+  1518		 * Initialize the interface by sending magic data.
+  1519		 * This magic data is the same as other UGEE v2 tablets.
+  1520		 */
+  1521		rc = uclogic_probe_interface(hdev,
+> 1522					     uclogic_ugee_v2_probe_arr,
+  1523					     uclogic_ugee_v2_probe_size,
+  1524					     0x03);
+  1525		if (rc) {
+  1526			uclogic_params_init_invalid(&p);
+  1527			goto output;
+  1528		}
+  1529	
+  1530		/**
+  1531		 * Read the string descriptor containing pen and frame parameters.
+  1532		 * These are slightly different than typical UGEE v2 devices.
+  1533		 */
+  1534		rc = uclogic_params_get_str_desc(&str_desc, hdev, 100, str_desc_len);
+  1535		if (rc != str_desc_len) {
+  1536			hid_err(hdev, "failed retrieving pen and frame parameters: %d\n", rc);
+  1537			uclogic_params_init_invalid(&p);
+  1538			goto output;
+  1539		}
+  1540	
+  1541		rc = uclogic_params_parse_ugee_xppen_pro_desc(str_desc, str_desc_len,
+  1542							      desc_params,
+  1543							      ARRAY_SIZE(desc_params));
+  1544		if (rc)
+  1545			goto cleanup;
+  1546	
+  1547		kfree(str_desc);
+  1548		str_desc = NULL;
+  1549	
+  1550		/* Initialize the pen interface */
+  1551		rdesc_pen = uclogic_rdesc_template_apply(
+  1552					uclogic_rdesc_ugee_v2_pen_template_arr,
+  1553					uclogic_rdesc_ugee_v2_pen_template_size,
+  1554					desc_params, ARRAY_SIZE(desc_params));
+  1555		if (!rdesc_pen) {
+  1556			rc = -ENOMEM;
+  1557			goto cleanup;
+  1558		}
+  1559	
+  1560		p.pen.desc_ptr = rdesc_pen;
+  1561		p.pen.desc_size = uclogic_rdesc_ugee_v2_pen_template_size;
+  1562		p.pen.id = 0x02;
+  1563		p.pen.subreport_list[0].value = 0xf0;
+  1564		p.pen.subreport_list[0].id = UCLOGIC_RDESC_V1_FRAME_ID;
+  1565	
+  1566		/* Initialize the frame interface */
+  1567		rc = uclogic_params_frame_init_with_desc(
+  1568			&p.frame_list[0],
+  1569			rdesc_frame_arr,
+  1570			rdesc_frame_size,
+  1571			UCLOGIC_RDESC_V1_FRAME_ID);
+  1572		if (rc < 0) {
+  1573			hid_err(hdev, "initializing frame params failed: %d\n", rc);
+  1574			goto output;
+  1575		}
+  1576	
+  1577		p.frame_list[0].bitmap_dial_byte = 7;
+  1578		p.frame_list[0].bitmap_second_dial_destination_byte = 8;
+  1579	
+  1580	output:
+  1581		/* Output parameters */
+  1582		memcpy(params, &p, sizeof(*params));
+  1583		memset(&p, 0, sizeof(p));
+  1584		rc = 0;
+  1585	cleanup:
+  1586		kfree(str_desc);
+  1587		uclogic_params_cleanup(&p);
+  1588		return rc;
+  1589	}
+  1590	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---n/qzv5MrM62ZFGdv
+--DeUBKInF+G1lnIIz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/i386 6.2.0-rc1 Kernel Configuration
+# Linux/i386 6.2.0-rc2 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -7073,4 +7156,4 @@ CONFIG_HYPERV_TESTING=y
 # end of Rust hacking
 # end of Kernel hacking
 
---n/qzv5MrM62ZFGdv--
+--DeUBKInF+G1lnIIz--
