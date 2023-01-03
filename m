@@ -1,82 +1,65 @@
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043922F33
-	for <llvm@lists.linux.dev>; Tue,  3 Jan 2023 20:45:01 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id 192so34433938ybt.6
-        for <llvm@lists.linux.dev>; Tue, 03 Jan 2023 12:45:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B992F33
+	for <llvm@lists.linux.dev>; Tue,  3 Jan 2023 20:45:26 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-46198b81e5eso452658167b3.4
+        for <llvm@lists.linux.dev>; Tue, 03 Jan 2023 12:45:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SeLnyRcrosxbe7zf1NVtqwd15UENUyCvBtMhWBv4YcQ=;
-        b=RgsXiF/LZxqKxVwy3PS7+xLpQTNa5yod6qXTeC6WE/1PoBqYtaLZEw+O1KnICdjsuF
-         FVbislKOQciha5Os2si2N3f2G8cuUuMVJn+fk8OKGMSQYwcLMdpOn0/0Htijta8tVhGN
-         2vU2rE6dyi1QmX2Sto+c47Vxcj7VlwgRPQCJQS1UeUd6qObj8wW0n+IxU1oirVG6KO+r
-         fX5iytG4iLcfqzIa6kpPNDTQX3YYxYG4NY6Pa/xIRyZpX76K5KY5c4Yf9Pm0m9tY9rqc
-         ts7HHaLxV2QINzyCIFqvIjaEqYDlWd9nWDY+UjW+//cGgGGPYyn5UjxyzvDpAozK0lVN
-         yPdQ==
+        bh=+3JBM1k56yKl55H/sSVuzObxHoNMCyKwCe4lUAVYz8w=;
+        b=JIjRdZPV6+BSjR1ei14D7j5zk9/1vwJwzYbL+Q4/0tWfxOdhiaZT1sAaw20OZlQpTY
+         qg044Z3y0LBmEJIod7ReIE1pX3P4KLWCk2gTLO9XXepI04IRWRJsYl75xPw61SlOwWWC
+         X+QYXE+q4vYXBnnHl0XNSqeMl9J5PXyvqmHtTHNvB+igy7UmU+GHaL3jmFiI5DG3CYnh
+         uLpwMUwqxaE9VkWlIw7fAqATVkPKb8AIM14OUuNQKgWloPrY/j7POOp5IT0OEI/8y7df
+         jfGEUSzNTPk+LjMSSoDIj5XcZ+U8Up6+oEViIX2T8Lym9Io+tbuF80c9iSUI/tSf/CeT
+         zitA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SeLnyRcrosxbe7zf1NVtqwd15UENUyCvBtMhWBv4YcQ=;
-        b=4sEEDLUOzFQJEIioKkmn2AehmNJSTeNFn+dbCml88sBR0XM+tJuRY9TUC7Xt05/zRo
-         pSWrnr1DIFQw+HwNr0tLxaxZ9tfjrqRf62ATQCWK9b5lTwzWzT937wzUoNgVag6O77JJ
-         CKtM1PFRcFYT/bRKUBJn4zhZeDovby+BTFiCzl4h7VLuKKl2tlklUyhuXNtU8Xz05p6w
-         HREvxba5N3hnpmjeRMzITPuRsBtxGlJV9ytiw3yAkkd64RudEPopTCU31wuU0fusdclK
-         DjFFzM3xEePn9MtL91ujlAaZIcYf5Ab2Lw4lOECa2wfBFIbmiSIPGzEbE++STdLICkkv
-         k90Q==
-X-Gm-Message-State: AFqh2koZpU0d9LYjljUQ6YzAvif83QUBbnA0D88bhQKDib30aJcjipaH
-	b15M8XNfIiMvs2yAG6MJKa9UwQifBaCUMN/aCLg=
-X-Google-Smtp-Source: AMrXdXu0aI6zgR44lJkZQk5J/ah2nhc8d7y8bZuvOHZmmoOGaXFvRF8UKRfA/3TxipvjPYEdZM+Vjy2tLh5Ul5tIvb4=
-X-Received: by 2002:a25:ca4d:0:b0:771:56e1:e4e9 with SMTP id
- a74-20020a25ca4d000000b0077156e1e4e9mr4244307ybg.75.1672778701030; Tue, 03
- Jan 2023 12:45:01 -0800 (PST)
+        bh=+3JBM1k56yKl55H/sSVuzObxHoNMCyKwCe4lUAVYz8w=;
+        b=rYSSKvhfFwfhZZlPCIXjIhdZphZHRZpis2W1jXB3eyKLnCosSB/cdodncniGyq3x5G
+         KZonckYjPgqWf0hiDiOqptE7hTQrOKzjjepOBIySlzQEMYZFraKayr8DM5j9OOngtThy
+         9v2G++nvaGERt/I7AXvaCnTdNetbZQC3SL1xfvJUBcquxPEDHs/PvwwNer72B0L82YzA
+         lHphjNc1iLY4SnC9CQg6p+dcEdx5nHx18OyW2xJhPMpZrdsX/pZhs+l5V3OsFYPIvSDu
+         MSaL6xOUrjwUc4ki5uA6IwrTIOSRpbnX0AH59pDcQLbcGkQ7GrU0kCZXS4qRs9ZcGSbg
+         sZjw==
+X-Gm-Message-State: AFqh2krL0docX26htF2N2cRM2fX+3X+03VSMoLEqfwuJGVHiooBtnzzI
+	Z0vW4z4jEk+Db43/+d4Fd3y5KbbnKiy/sidW+90=
+X-Google-Smtp-Source: AMrXdXuDfedFAD34vQELEPd/hr3pWJDR0G43tXNA7Ak90t3yosTF3jzXmM7MeqbHYm0/FgdrZaHJ6/MYjKLTEMSjTQM=
+X-Received: by 2002:a81:94d:0:b0:3bc:7270:cb70 with SMTP id
+ 74-20020a81094d000000b003bc7270cb70mr5510503ywj.83.1672778725262; Tue, 03 Jan
+ 2023 12:45:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221231064203.1623793-1-masahiroy@kernel.org> <20221231064203.1623793-2-masahiroy@kernel.org>
-In-Reply-To: <20221231064203.1623793-2-masahiroy@kernel.org>
+References: <20221231064203.1623793-1-masahiroy@kernel.org> <20221231064203.1623793-3-masahiroy@kernel.org>
+In-Reply-To: <20221231064203.1623793-3-masahiroy@kernel.org>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 3 Jan 2023 21:44:49 +0100
-Message-ID: <CANiq72k8LSqsnWNd_aa-M1=rMNLWD7KJWrK6Pv0Waq15Exv59g@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kbuild: specify output names separately for each
- emission type from rustc
+Date: Tue, 3 Jan 2023 21:45:14 +0100
+Message-ID: <CANiq72mxvxE+6p44157v4hFgyTugO_0+J4nuZteajM4wLVbCtQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] fixdep: parse Makefile more correctly to handle
+ comments etc.
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
 On Sat, Dec 31, 2022 at 7:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
->   $ make -j$(nproc) samples/rust/rust_minimal.o samples/rust/rust_minimal.rsi \
->                     samples/rust/rust_minimal.s samples/rust/rust_minimal.ll
+> This commit improves the parser a little more for better processing
+> comments, escape sequences, etc.
 
-Yeah, we were testing the single targets, but not multiple at once, thanks!
-
-> +               --emit=dep-info=$(depfile) --emit=obj=$@ --emit=metadata=$(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
-
-Perhaps a newline here to avoid the lengthy line?
-
->  hostc_flags    = -Wp,-MMD,$(depfile) $(_hostc_flags)
->  hostcxx_flags  = -Wp,-MMD,$(depfile) $(_hostcxx_flags)
-> -hostrust_flags = $(_hostrust_flags)
-
-This was originally meant to be consistent with C and C++ indeed, but
-if you prefer less variables, I guess it is fine, in which case,
-should we update the C/C++ side too (in another series)?
-
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
 Cheers,
