@@ -1,111 +1,175 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39DE79C5
-	for <llvm@lists.linux.dev>; Tue,  3 Jan 2023 13:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672751726; x=1704287726;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v5CCLLO+upNdoJWrssvE30mPz+dADC8azsX5O8Z4OGw=;
-  b=SZYAZ+XQx5nYR5eMitoqbhIIf2t5DTJLx07916zFBg+OdLwWby4/Y1tr
-   JO0Ltzk7v+ExOuqzUHk94A/k5cnpx78yvF9RQPSOGzZNpQgj++CqWH5ri
-   6nOTCIOyYaOOIBTwR+s4fNHRivm1lU1nOFNQiuVVQ6npCdTY49gU/zDPL
-   6xhgI5bIBR9d39PdYJR/gXCanHdtrfMDdoy8tJQGfPCLHL3GeVGUVivfN
-   ia3GPaW9gHT19bVRYbpd9cIwpHBerwYA+bkVDQ3GpAalHoogSja66cm9L
-   p8R0ARaN0D7HisJmFR70FwOO+K56W+Fq3Et4fx67MGXyBu82Ta5UCzq68
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="305160787"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="305160787"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 05:15:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="743492376"
-X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
-   d="scan'208";a="743492376"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2023 05:15:22 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 1DDD7162; Tue,  3 Jan 2023 15:15:54 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Pavel Machek <pavel@ucw.cz>,
-	Vincent Knecht <vincent.knecht@mailoo.org>,
-	linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Lee Jones <lee@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	kernel test robot <lkp@intel.com>
-Subject: [resent, PATCH v2 1/1] leds: is31fl319x: Wrap mutex_destroy() for devm_add_action_or_rest()
-Date: Tue,  3 Jan 2023 15:15:53 +0200
-Message-Id: <20230103131553.34124-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C358466
+	for <llvm@lists.linux.dev>; Tue,  3 Jan 2023 15:01:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1672758097;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QAN9/1NIIOkeKd0dbl6a3ZzQWA4VmUQYqPBXqR0y/vo=;
+	b=GhOFjJEHDGN2TOuku5b/FdvqoIqtHHhZ6rw/+ctEvUQH2q6xohelLdkgqK6nxaOjPLYJVM
+	EBk4mpJKy9vRzBlflM1P/i6+N3noPCdopfA+Rv1yb24aES8XE7rt3sZzb6AWRQiagN1yAI
+	+YzmCxtJ3ry3KoeNT907FgQe+ZSrE1w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-C_VYssGJNreD84WcL_yx8Q-1; Tue, 03 Jan 2023 10:01:35 -0500
+X-MC-Unique: C_VYssGJNreD84WcL_yx8Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8744619705A9
+	for <llvm@lists.linux.dev>; Tue,  3 Jan 2023 15:01:35 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 728EF1121315;
+	Tue,  3 Jan 2023 15:01:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (102/383 SKIPPED): Test report for master
+ (6.2.0-rc2, mainline.kernel.org-clang, 69b41ac8)
+Date: Tue, 03 Jan 2023 15:01:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <16622.123010310013502377@us-mta-344.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Clang complains that devm_add_action() takes a parameter with a wrong type:
+Hi, we tested your kernel and here are the results:
 
-warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-    err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1 warning generated.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
-non-devm ordering") missed two things:
-- while mention devm_add_action_or_reset() the actual change got
-  devm_add_action() call by unknown reason
-- strictly speaking the parameter is not compatible by type
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Fix both issues by switching to devm_add_action_or_reset() and adding a
-wrapper for mutex_destroy() call.
+Kernel information:
+    Commit message: Merge tag 'for-6.2-rc2-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64387
 
-v2 resent: resent as v2
-v2: added tag (Vincent), Cc'ed to Lee                                                                            
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [upstream] BUG: KASAN: slab-out-of-bounds in copy_array+0x7a=
+/0xa0
+            URL: https://lore.kernel.org/all/CA+QYu4q_FhdnkdzTrzS9jhw-7CjEi=
+rWBtTKuB-cNozD1z2f8qg@mail.gmail.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: ./test4: (/mnt/connectathon/kvm-06-guest1=
+1.test) file.0 has mode 555 after chmod 0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1456
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
+ree+0x53/0x80
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1359
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
- drivers/leds/leds-is31fl319x.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-index b2f4c4ec7c56..7c908414ac7e 100644
---- a/drivers/leds/leds-is31fl319x.c
-+++ b/drivers/leds/leds-is31fl319x.c
-@@ -495,6 +495,11 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
- 	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
- }
- 
-+static void is31f1319x_mutex_destroy(void *lock)
-+{
-+	mutex_destroy(lock);
-+}
-+
- static int is31fl319x_probe(struct i2c_client *client)
- {
- 	struct is31fl319x_chip *is31;
-@@ -511,7 +516,7 @@ static int is31fl319x_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	mutex_init(&is31->lock);
--	err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
-+	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
- 	if (err)
- 		return err;
- 
--- 
-2.35.1
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
