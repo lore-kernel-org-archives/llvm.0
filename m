@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCD07B
-	for <llvm@lists.linux.dev>; Wed,  4 Jan 2023 00:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E715AC433EF;
-	Wed,  4 Jan 2023 00:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD827B
+	for <llvm@lists.linux.dev>; Wed,  4 Jan 2023 00:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 310C8C433D2;
+	Wed,  4 Jan 2023 00:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672791139;
-	bh=ND1Wr1MoOKLl3XcwPrGcFU/G4D7jt7w3I5bZzOY2l3k=;
+	s=k20201202; t=1672791826;
+	bh=Ub1O4ARA4Fg1QerVBHMPex3kBs1tuOPd9OUWy+AyaE8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eTm6RHP1Uu+Q81kktV21pykehzogHIdDoKtICAIXNfyCIdrZtV/yRfysMu8x+ugu7
-	 cTaigngnxDJlEMwOacy+NFmzLkXDeRpIVa8uhWQfz3jLA7rQuBVmj2BMjsMXzs+v7J
-	 H9LNNPdXmcUNSQagbJNpP12J7MCDwkgC7oxW+zjg5KqDr+GicvbOVJtmZz6jtUHdzd
-	 H8iqz30PTkUZVIZ8vrF7RdczYqLg/Uzl+gHJs0zAMIlF+c2SOU81leIWEKJOko/mSi
-	 yiD8K65kbbEwHWYKQsAE8+efB3eQzHpVvj9qCPcx5eXPhh6LdauZDCBuvNosLLq6v+
-	 w/W+kiZIiODwA==
-Date: Tue, 3 Jan 2023 17:12:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
+	b=OZwcaB7pDsRLazyUJiUCwgCbXeXHfPdPlBxzS9RGiCSHj9KgfXl7IbIbWALJzQfsQ
+	 XacyMUuuQrCcLhrYdplLErkyezbqno6aB4dGt9WzbC/zMfQbEjIH/jEhx0wCYhILHw
+	 842OZZRWeHYTnWl5/K7R7xf56w9baqfnSzZQsAQwcdfvoJ0i9b6lO7ET0WCYayim8f
+	 EWbh/u1kI/ghzkRHK+x970ganXbmY08478lfgqX5/6OZpuVLzqvGOdrXpsGoktvjN5
+	 yg0qacQjxBYYYzgnG4OXJ1qwQHYLHvlhB3osx9zyRGNN+JoawlYRvzHHIQHTH5MQnE
+	 ySiN15/1QoAoQ==
+Date: Wed, 4 Jan 2023 00:23:44 +0000
+From: Eric Biggers <ebiggers@kernel.org>
 To: Kees Cook <keescook@chromium.org>
 Cc: tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
 	linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
 	linux-hardening@vger.kernel.org
 Subject: Re: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
-Message-ID: <Y7TEYceulOsSTQIZ@dev-arch.thelio-3990X>
+Message-ID: <Y7THENi5v2+fgUAc@gmail.com>
 References: <20230103234616.never.915-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,9 +53,6 @@ On Tue, Jan 03, 2023 at 03:46:20PM -0800, Kees Cook wrote:
 > which only checks for type width mismatches.
 > 
 > Signed-off-by: Kees Cook <keescook@chromium.org>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
 > ---
 >  fs/ext4/sysfs.c | 7 ++++++-
 >  1 file changed, 6 insertions(+), 1 deletion(-)
@@ -81,9 +79,11 @@ Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 >  	.sysfs_ops	= &ext4_attr_ops,
 > -	.release	= (void (*)(struct kobject *))kfree,
 > +	.release	= ext4_kobject_release,
->  };
->  
->  void ext4_notify_error_sysfs(struct ext4_sb_info *sbi)
-> -- 
-> 2.34.1
-> 
+
+For consistency, maybe call this ext4_feat_release?  So ext4_sb_ktype would have
+ext4_sb_release, and ext4_feat_ktype would have ext4_feat_release.
+
+I'm also surprised that this wasn't found earlier.  Is it possible that CFI does
+not actually distinguish between the two function prototypes here?
+
+- Eric
