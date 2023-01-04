@@ -1,32 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD457F
-	for <llvm@lists.linux.dev>; Wed,  4 Jan 2023 00:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2880FC433EF;
-	Wed,  4 Jan 2023 00:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672793697;
-	bh=D6kfiVE9mOojgtBjsTsllPEN/tZ8Ks/6aaCN32Ve4Fs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kCCVcy5Fg8yE5P4F1SSVrZau28sxHVJfMQmJm5uNuMn/euAdc62ttf8L99nhGl3Hr
-	 iYfz3N/vZW+pLgKR2GEt+em3gmFkUTDCtFCAcgeo0iH5ZLYVF3OW1pbxUg75MuI1uS
-	 PrZkTO6NXSz94VPxNC3E7Jc0rGW4MRPb4E6d4H5ReZrW+sGjZ3MwwbVLZDAFWSl7az
-	 ux9pKObnTpv5WmqH/qNVHjm+nQ0QLPU58CQ1UoME7IIDSTKZlTvj5soX7TSuqUmZZK
-	 yqtkR/Q+VXo0kwutDlKWcKn7qboODjjJWSmifteSat3rxTFdyKwosfOP3APthscdqS
-	 wMtIttSbc2kvA==
-Date: Tue, 3 Jan 2023 18:55:01 -0600
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73429373
+	for <llvm@lists.linux.dev>; Wed,  4 Jan 2023 01:09:40 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id 17so34496884pll.0
+        for <llvm@lists.linux.dev>; Tue, 03 Jan 2023 17:09:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2VT5QZhcZZeDbsiEz/fllfSXONvy51XdiSS8QokpwQg=;
+        b=Q4DEfeoNUsJnujmG5WDcxlCAMaEfhBmMWAS7aUzEC2GW3ofbkRwZ22ZYFjITsxmo6K
+         bb0vjmVJXZL0G/l4TGKr3KMTIDcdwQUeKoeFnx6I8MLcodY9TVH6AGEpkz9x9GWI5hwx
+         k7R0UjHzbUt2Ai1wJRy2IFQHhF6DWYLx8cxQAFMWDWI6Xgrug2FARlR3RiNRVi4rCbo9
+         AP/OLiZNnuV7UvZFm8qEsAphMEm93ULbKnV9d+A7rgWdhM6aiDUP6a5tWQx2bF/ggq6A
+         f7JPgRzWEeYZPXHV5Lm4ZgFljKv8WtzXvID2mUUKGwqdRm31BuBbvKfhkRXpKAhdOylW
+         Zj3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2VT5QZhcZZeDbsiEz/fllfSXONvy51XdiSS8QokpwQg=;
+        b=kwRN5AyBWTuCgRi7p0m33bKx8RzJBTfahCKA0hpHsznDwvOBdZk4IfO5unr/C1RWgm
+         seThdgvX5NWa/DBI1hNB8HEHnB1REkJxNhi0GKwaFlkcOmNfjFrihR+bwtv3pPXO4FsV
+         YramwcWm/qcgaGhX579eK0ijU4M+PsEDRb/W54ygmzUQTBx5m+k8DHvzO6azzjAO+9k7
+         ymzkL1DTOIFieuTq7himzFoP8fGvqX3bsVTtL/Ime3pnA+oaj/b4rDlaRluxYB0Y5y0I
+         erO1gLwDpnV4WZWfz2nXBvXLWZaRXu62kxL9eKXneTxCXcXl7ybdgg9j9cRHYScG7FCZ
+         w9dQ==
+X-Gm-Message-State: AFqh2koh/jcBpRjKZgap9/4mfWLhN0EssuA4wElnn+xlRSPudyDwyHlH
+	aTGBRmpypIB6VDuz2mVTw1xkYg==
+X-Google-Smtp-Source: AMrXdXt4xHOajqscKlKaEpBiTyEw5HpxcS2+BmkjFSTy1AWvaTA2O2HtoOh9s0+BdQR2dE8QR1delA==
+X-Received: by 2002:a17:90a:9912:b0:219:f970:5119 with SMTP id b18-20020a17090a991200b00219f9705119mr3677621pjp.1.1672794579775;
+        Tue, 03 Jan 2023 17:09:39 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id dw6-20020a17090b094600b00223f495dc28sm19707506pjb.14.2023.01.03.17.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 17:09:39 -0800 (PST)
+Date: Wed, 4 Jan 2023 01:09:35 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Marc Zyngier <maz@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-ext4@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ext4: Fix function prototype mismatch for ext4_feat_ktype
-Message-ID: <Y7TOZRnz9sH6C2ey@work>
-References: <20230103234616.never.915-kees@kernel.org>
+	James Morse <james.morse@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Oliver Upton <oliver.upton@linux.dev>, Tom Rix <trix@redhat.com>,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Ricardo Koller <ricarkol@google.com>,
+	Aaron Lewis <aaronlewis@google.com>,
+	Raghavendra Rao Ananta <rananta@google.com>
+Subject: Re: [PATCH 12/14] KVM: selftests: Use wildcards to find library
+ source files
+Message-ID: <Y7TRz1AY95SlKOHv@google.com>
+References: <20221213001653.3852042-1-seanjc@google.com>
+ <20221213001653.3852042-13-seanjc@google.com>
+ <363f4713-6105-82d1-351e-423d07470cdf@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,66 +69,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103234616.never.915-kees@kernel.org>
+In-Reply-To: <363f4713-6105-82d1-351e-423d07470cdf@redhat.com>
 
-On Tue, Jan 03, 2023 at 03:46:20PM -0800, Kees Cook wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed.
+On Sat, Dec 24, 2022, Paolo Bonzini wrote:
+> On 12/13/22 01:16, Sean Christopherson wrote:
+> > Use $(wildcard ...) to find the library source files instead of manually
+> > defining the inputs, which is a maintenance burden and error prone.
 > 
-> ext4_feat_ktype was setting the "release" handler to "kfree", which
-> doesn't have a matching function prototype. Add a simple wrapper
-> with the correct prototype.
-> 
-> This was found as a result of Clang's new -Wcast-function-type-strict
-> flag, which is more sensitive than the simpler -Wcast-function-type,
-> which only checks for type width mismatches.
-> 
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> No, please don't.  This leads to weird errors, for example when "git
+> checkout" is interrupted with ^C.
 
-Build-tested-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Well, don't do that ;-)
 
-Just for the record, this is the warning Clang reports without this
-patch:
-
-fs/ext4/sysfs.c:508:13: warning: cast from 'void (*)(const void *)' to 'void (*)(struct kobject *)' converts to incompatible function type [-Wcast-function-type-strict]
-
-Thanks
---
-Gustavo
-
-> ---
->  fs/ext4/sysfs.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-> index d233c24ea342..83cf8b5afb54 100644
-> --- a/fs/ext4/sysfs.c
-> +++ b/fs/ext4/sysfs.c
-> @@ -491,6 +491,11 @@ static void ext4_sb_release(struct kobject *kobj)
->  	complete(&sbi->s_kobj_unregister);
->  }
->  
-> +static void ext4_kobject_release(struct kobject *kobj)
-> +{
-> +	kfree(kobj);
-> +}
-> +
->  static const struct sysfs_ops ext4_attr_ops = {
->  	.show	= ext4_attr_show,
->  	.store	= ext4_attr_store,
-> @@ -505,7 +510,7 @@ static struct kobj_type ext4_sb_ktype = {
->  static struct kobj_type ext4_feat_ktype = {
->  	.default_groups = ext4_feat_groups,
->  	.sysfs_ops	= &ext4_attr_ops,
-> -	.release	= (void (*)(struct kobject *))kfree,
-> +	.release	= ext4_kobject_release,
->  };
->  
->  void ext4_notify_error_sysfs(struct ext4_sb_info *sbi)
-> -- 
-> 2.34.1
-> 
+Are there concerns beyond having an incomplete and/or modified git working tree?
+E.g. could we do something crazy like fail the build by default if the working
+tree isn't pristine?  The library files aren't terrible, but the number of tests
+is getting unwieldy, to say the least.
