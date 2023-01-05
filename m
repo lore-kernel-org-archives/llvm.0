@@ -1,1159 +1,184 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FDD62A
-	for <llvm@lists.linux.dev>; Thu,  5 Jan 2023 23:11:11 +0000 (UTC)
-Received: by mail-wm1-f49.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso48036wmb.0
-        for <llvm@lists.linux.dev>; Thu, 05 Jan 2023 15:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UV3txnD0iCO+XhfWpvO9H+ej9tHUuMXRtmiA42JISpM=;
-        b=anoxSeKJGhl7wPX/lA5al2b2Yagw/nxuTJlSGDLmLfzSABV497L7usms83u+yBVt/v
-         lJ1EdKgibF6Js7MrAKB5zLK52HurrisoUMyuFIdNTAPOj25DDiaWCgqADF5dZlrI/6fu
-         8W7mu2E6ZW0qtXJL6hgpCftdUrcriMrrFhvhKfxxg6OmB0LQK3r7enisi0xhBqvS59V6
-         K8KWNECV3UXQu9/XsLuEwf81kughAiS8YLjvkWIJ0mkgkzdRieL30RTiGa7IL4+agcuP
-         1CDXYBZvNfPx8NqnZ/w17qNzc2kUui63fCfEKdYIQ0CPHCAkXIYOXHZYbwKEb1PFUS46
-         In6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UV3txnD0iCO+XhfWpvO9H+ej9tHUuMXRtmiA42JISpM=;
-        b=6iOKz8tzcSeV2fHamv5gzn5mTZzbuuYYjrMcQmVOezCKGVp+pIDtPuty695J1tjIAq
-         FBy8L+sJw57pMXMPG1JVBU6oA2CpouqB6Qr8jhU8JtG4tkA6G3LmKHkrUmWf/NXHcCmo
-         Cg1/gz/PWCbSFaB3kxJZj94Ybz3HpZiugygM7Cuop9Rflecw3bS9PuR4YZeswzVTihyg
-         qnPcLifecjtLnkbtUMxCm5NVz7zEX1GDZck2sjDiDmmH7LAjpnK7VG5QdfslYxjomJv/
-         gZFQH8+tz8vQHcUf1fUzV/HxLRUTxXu76bT/lb8JGaND5liaECvyiimNggyPx5X/pgep
-         /xEw==
-X-Gm-Message-State: AFqh2krAYtfn9S/AV/BPAE4XKp5bJzJCvOJH1OZMxvzrcZNuedzNJOXh
-	0SSRnXFtXq0mg3DoTikM22kBKg==
-X-Google-Smtp-Source: AMrXdXvwB0n+TZVWKCpZeKUuNkmVcqgmjZlwjw9ZTCND7PNw28EPVrM8b/vLbm8G++18aoyrDK2Aqw==
-X-Received: by 2002:a05:600c:35c7:b0:3d3:5d0f:6dfc with SMTP id r7-20020a05600c35c700b003d35d0f6dfcmr37043493wmq.30.1672960269183;
-        Thu, 05 Jan 2023 15:11:09 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id be9-20020a05600c1e8900b003c6bd12ac27sm3994147wmb.37.2023.01.05.15.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 15:11:08 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Thu, 5 Jan 2023 23:11:08 +0000 (UTC)
-To: Oded Gabbay <ogabbay@kernel.org>
-Cc: llvm@lists.linux.dev, arnd@linaro.org
-Message-ID: <653462903.13152.1672960268772@jenkins.jenkins>
-Subject: [TCWG CI] Failure after v6.2-rc1-33-g520560c30621: habanalabs: move
- driver to accel subsystem
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1548107BA
+	for <llvm@lists.linux.dev>; Thu,  5 Jan 2023 23:36:38 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e6brgKhpJsQ7g9VmfGST9KbP8eUN57Am/4PnKZ67lVZPIivzvJP2QIRuhexy0nYA1/HKhgB1LOZiyWVGoVDd5rRK+cC4PPSUgDZhZf7a4r7y0t1Cx5JiPam5X+oE0Vh/QmjV5EFLdAHDamBZMrZye31ZNVYbl3DiKq+sdBh2BuoYcKFEOw69WUI69H8ZZ8IBTHhh8OepVQnlAwQKLChYaS1CThpVRHh/PHXzwVrs8JCRdHVyK5oVGaKKrHkDaEkaFIOf3+ZbV9AnuNRuKSTM7C6YvHrRLx7fqM/4NVlF+mfzvLhAgXwRqYQMYg2P8RmMp/516jPtV1X3mc22peDe+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NR3eKyRwc3llxiqUL3S6Bbzzk4GAkQXBWj8ka9Smif0=;
+ b=bO+F2d4yKoZBAxNrCEZLn3K5ze1rFTpNH+NZJdSallLaVohi5/phGL+26aPnzBWh5oPVEAXO00jzN6A0sXITiRpaWJZTuj6UEmS23GAXL9YWXJmiIAmZF6BIlauoLwaDugTccpzIaN2XvB2tS2iydBJNsyfAet4CHitFYxEA84glwLYW+pD/tZU4et6E+ty0+WeUNpprQCsuWa8rSKwt+jQflIjA1W+5+6MQkxxPw0VS+i4Oa30vS1ZinNLHBH0tTQvgWmMku+fn7rcmOo8o6zQkVd1CDu4CdMA1UkkN7OgJpbvLcTzPC5O6JXmRDstVtWzCgx+0kyhHehAEE+aytQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NR3eKyRwc3llxiqUL3S6Bbzzk4GAkQXBWj8ka9Smif0=;
+ b=VHZ5mbG7W6J5STyROoJiPUKxcCreZY+Z/LQPEiwMfvjTt0iJZq54btH0PUOyaFNozyobJdDFwpX6t7DubeYmuQjHJ2Xc8lHZ6RXfy+2dhjQ2FUa8H/dpfcNRUTWdk2joXhgXg1DwiGJZ0irOXzkOBYmkrpl/RGVJY4/SlOLNzgU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
+ by LV2PR12MB5823.namprd12.prod.outlook.com (2603:10b6:408:178::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
+ 2023 23:36:35 +0000
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::7d2d:dc01:79cf:df79]) by DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::7d2d:dc01:79cf:df79%3]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
+ 23:36:35 +0000
+Message-ID: <e57369d9-e4ab-365e-2d59-4a5f46d65283@amd.com>
+Date: Fri, 6 Jan 2023 05:09:40 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ASoC: amd: ps: Fix uninitialized ret in
+ create_acp64_platform_devs()
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: lgirdwood@gmail.com, broonie@kernel.org, Syed.SabaKareem@amd.com,
+ alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230105-wsometimes-uninitialized-pci-ps-c-v1-1-4022fd077959@kernel.org>
+ <6bb126b7-1cb4-0c4c-d357-fadc3ffdd3f9@amd.com>
+ <Y7cEra00F9PeFFcx@dev-arch.thelio-3990X>
+ <Y7cKHZL8e+rfR66a@dev-arch.thelio-3990X>
+From: "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+In-Reply-To: <Y7cKHZL8e+rfR66a@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN0PR01CA0004.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:4f::9) To DM6PR12MB4123.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::23)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_13151_705576834.1672960268277"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-next-allyesconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|LV2PR12MB5823:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41a4b54e-c371-4f07-4e62-08daef75aed8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	O3fU7Jdlz0ksw5v3y4x7rZkeHmBacE3FR/q2HspVElbZyApx48hDyBCs46EYd0p8Tze2+wD1fV1lLHWEiYdS/DB27kVsK7jBVJEhospNo+A1AjLoHlaRHLSf4gssTwl8dak/0LuHsvc6QBWOh2i+aywCZVW3KDt9VYbdJ5P1ZTSHPVVvzD99haGNy9bOk2F1z0TTxsM8Qr/F7JlPG0m26rZZmqo/Sr/BsK793QOiUXozLw8AwM7m+/IHpVMwwXK2BLYdudj3QHwsqWHdrx2wzAH8Emj7ngj2YFu9p06VISsywtRVFUYFZC97Fl/Ior8STecL2pPg/Vt6swWA/yG8NuI5pUcSeYbTsoL6P4AyJb2SV9U1N99wUXFk4WbG3Mh6MXahg+oH1cSzSeZjDVt66t3gveC+3bPsvHbGuSDwbbbr2hlcsTE5MwGdgmicLvGyKKA+oROl1vB4462sRVtwqJAl+pUmfYiMZoyqZcyPDlxIryq2ngsjkhpWvpdG2VLgWo9W1S+CGpmalL14U674NFR1mNZJz/CX2ydzIM5yZRggJltClX/jAsZ46sIZ6JUfX81sMS5B+junLPhKqGAtdiZJWchIdsFtBikP1PfTntCZdFayHlgvRM5euWonb8DIUDGjk652dJc42g9OCbL/TwdqGZLe6c/1dPLih7f+be9EW7FmgsibWhFouqDkU+bKq44faEjQeCIWnrsaz58i6BxDZP35syYTe726euqDXdt22oDyhg3fvGkW+1fbDSFuTvwqjJcsvfUwSXIYOgeAXg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(376002)(366004)(451199015)(8936002)(41300700001)(66946007)(5660300002)(8676002)(2906002)(6916009)(66556008)(31686004)(4326008)(966005)(53546011)(6506007)(45080400002)(6486002)(6666004)(316002)(478600001)(66476007)(86362001)(31696002)(26005)(186003)(2616005)(83380400001)(6512007)(38100700002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VE8wdmw3cG4yVE5SRkVTa0RGa3lRdmNsOUs4eVA2OGJkZE82VUZpakE4U1Yz?=
+ =?utf-8?B?di9yMHI0bjI0MmtXZG12aGZScE5kUVI1em0yVk1lWEw1QmxhdnhjL3pqT2o2?=
+ =?utf-8?B?dVdwaDdpMkRjMXRuQjNTRVN0OC8yTHhZL1RjVVFVUmlqTkVOZmd0TkZ6UWx2?=
+ =?utf-8?B?ckRObXBDYmd5Vk14Tm9FQ1FDVTZ1b1E2cDJ6Z0gvRENnbDcrQXhkTFBrSXlP?=
+ =?utf-8?B?TitXcE0weDZwa1VPVkthS0o3NWVqOXlSRHp4VnNhdXhxRVlEZ1FkQ0YzWW80?=
+ =?utf-8?B?dmVFTlV5Qk9NVExJSXQzMGxmRjI2dUhtT0o1azlTTzNmWlRrams5OHFRN0VD?=
+ =?utf-8?B?eFIwUDAvNnZmS3V1QllBYlJCbFQ4cFNSdmRpNjNtOGlySG5nSkFRUnN0b2tr?=
+ =?utf-8?B?TVk5UTZMVWRJWU0rZCs5dnBXcDNMR3RId0F6MGpwd3dTUm9sTisrN1lZSHA1?=
+ =?utf-8?B?UndzOFc3UytsbVV2VWx3TVNabGhXejlxcnc1UFNGeUczNEszV1FlUUZZSlB4?=
+ =?utf-8?B?K0xoYzdBZzN6V2hZT0R2b1ltaUI3RURDUzVtUEVIOUVGbFFyRW9lRm15bHIr?=
+ =?utf-8?B?UzVOR0FqNUYybUIrblhRa203d3hvMmVKcnpVZ2JpcUNZWUdudmJBUnV0K1J6?=
+ =?utf-8?B?UzIrNXZUeEdOYkhWZWcvVXJLbW1QaTY2U0VlK2xHRndnNHhEV3BIb3ozL3dz?=
+ =?utf-8?B?NWVnS1E2OHBiNjV1YVc3WlZEejF2bmROektQSGdCM2hEZFNZMlcxNUFIK2V3?=
+ =?utf-8?B?bTlPdEZwVVZ1eE9VVTMxOVRCeFZSU0k1K1ZPKzJwb0I3Nlk3VzVkNUs0Um5v?=
+ =?utf-8?B?Qmk5Y1Fwc1VHMUxWTzVVSFNSK2dNQjFERjduQ2t5eXFVMmpLbVQ5czhXMXdC?=
+ =?utf-8?B?ZGhENUNzc2x0bUJPZ21UbEk3MmhCdW9GNEhITTN6MFZmOW8zOFBCellyUnBp?=
+ =?utf-8?B?RU03MmFSTERJOWZsOUluaUtJMVo2QVVUTVR4YlovLzRaOUQ1SG5YdmtBeDZn?=
+ =?utf-8?B?T1c5WFNZUVlhMG1VY0hadWY5MTVpR0NrNlpIdFgwOU85Tm9mQkUxd2dSZ3h3?=
+ =?utf-8?B?QWY2MFRNWGRiSldjeVFxMEUrdTgrYlhLSDVtNG1aVHlHd1VmK2gvbDYwYjd1?=
+ =?utf-8?B?cXBoWG41NklpL0EwdWVqeVI4aHFGZ3JEMEZmNmFZbzdlNEpaOFFnRTMrYjlx?=
+ =?utf-8?B?SzRqbE85a2pUYUh6ZG5NNGZ2aWljUWpkVElhQnVMU0xDMWZsWHN1bllxYS83?=
+ =?utf-8?B?cHBITDdvU0NHbTlvMTNHOVZhejJpbFNzb1pyZXZaeUU1Unh6YnJ3WS9SU2Y2?=
+ =?utf-8?B?Q1gycXpxaG5SNUNnT0FUVW8wOUg1aDBPVHhreXdVQWIrZXp2N1dQblplTFE0?=
+ =?utf-8?B?cUxxWHlrdmlxM3hOWW9RQnVLbUVLZUxZYWtUL1kzUFpzZ2NGcmx2UUtPd053?=
+ =?utf-8?B?RVpGb0RKN2t1V3JYYis4VHZISDdkeDUzbTQ2MlBGYVljb2h4S25wM1hWMjFZ?=
+ =?utf-8?B?TS9jRDdySGFSRzNsVS81VU9CamxwR2tHWHhBMXUxcnpwZGhDVlZlcTFtdnpB?=
+ =?utf-8?B?WjFqbG9DNHBoa0Ixb1JkTGovTE81ZGwwQnh5dXZZTlRWWmtUdkxEeERTZ0dh?=
+ =?utf-8?B?RmM4Y0FWVnBsRmlQOStueWE5djRPd0pSc3R3ZW4vdnN4cThBS3ZPNmJLR0FH?=
+ =?utf-8?B?ZlFrVFhRSisrTWFod0c0eFdCbXRrTDFHYW80VVJ6ejN2Q0s4cDRiR0dUMlJE?=
+ =?utf-8?B?YnFSMGVoQ3R3eUdpZFNuUVo2M0pPY3llUC9tT044YmI5cmNRRGF6TkFTTlht?=
+ =?utf-8?B?eFd3VklwT3VuUDU4UlU0S01pY0Q1RzBZcGdBMHJRN0dETHBMMkZLT2pTL2t5?=
+ =?utf-8?B?bk5FNERPMXdwTXc5Rkl0U1JtNENpY3BkMk1NV0ExY3U2MG9xcDVJQWJxRVps?=
+ =?utf-8?B?d2ExK2dZNGN1VVBGUEtENnhwQ2pPOW9mdkIyUWtPaUcyQ2dXUUlmYW1DNGhV?=
+ =?utf-8?B?V0QxdmFyZkpIMUR2RkRDK1FTR3pHak95a1Y0MUxhT3BVb0Z0dERqOS9zRkZC?=
+ =?utf-8?B?UmlOYzdNVWlzYVNGVWV1K21JUE54ajQzUmdFSnIxQ2U0dEs2Wk5sT0g2WnBP?=
+ =?utf-8?Q?l1Lr7/Qc+O4f5fzSwVop3EoZx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41a4b54e-c371-4f07-4e62-08daef75aed8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 23:36:35.4500
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: E14jIJPcZPzeFfBaWDbB9z9dg7nSY5N9fSz9ecdRcIzVFZlMN6v8EkY1SR6/nNtoja9RgHUnX59kPJvWUaHgEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5823
 
-------=_Part_13151_705576834.1672960268277
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On 05/01/23 23:04, Nathan Chancellor wrote:
+> On Thu, Jan 05, 2023 at 10:11:09AM -0700, Nathan Chancellor wrote:
+>> On Thu, Jan 05, 2023 at 10:34:10PM +0530, Mukunda,Vijendar wrote:
+>>> On 05/01/23 21:23, Nathan Chancellor wrote:
+>>>> Clang warns:
+>>>>
+>>>>   sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>>>>           default:
+>>>>           ^~~~~~~
+>>>>   sound/soc/amd/ps/pci-ps.c:239:9: note: uninitialized use occurs here
+>>>>           return ret;
+>>>>                  ^~~
+>>>>   sound/soc/amd/ps/pci-ps.c:190:9: note: initialize the variable 'ret' to silence this warning
+>>>>           int ret;
+>>>>                  ^
+>>>>                   = 0
+>>>>   1 error generated.
+>>>>
+>>>> Return -ENODEV, which matches the debug message's description of this block.
+>>>>
+>>>> Fixes: 1d325cdaf7a2 ("ASoC: amd: ps: refactor platform device creation logic")
+>>>> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FClangBuiltLinux%2Flinux%2Fissues%2F1779&data=05%7C01%7Cvijendar.mukunda%40amd.com%7Ce9133748553c4463824d08daef4317c1%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638085368693977265%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=nDmZXCJR%2Fwt%2FautwTwcZostLvRtUrEbYV2l7M2W%2FTD0%3D&reserved=0
+>>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>>>> ---
+>>>>  sound/soc/amd/ps/pci-ps.c | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+>>>> index 401cfd0036be..f54b9fd9c3ce 100644
+>>>> --- a/sound/soc/amd/ps/pci-ps.c
+>>>> +++ b/sound/soc/amd/ps/pci-ps.c
+>>>> @@ -217,6 +217,7 @@ static int create_acp63_platform_devs(struct pci_dev *pci, struct acp63_dev_data
+>>>>  		break;
+>>>>  	default:
+>>>>  		dev_dbg(&pci->dev, "No PDM devices found\n");
+>>>> +		ret = -ENODEV;
+>>> ACP PCI driver supports different configurations. As per design , even  when no child dev
+>>> nodes are created , ACP driver probe should be successful. ACP PCI driver probe failure
+>>> causes power state transition failures when no child device nodes are created.
+>>> We should not return -ENODEV in this case.
+>>> return 0 is enough in this case. No need to de-init the ACP.
+>> Thank you for the review and input and sorry for getting it wrong! I
+>> will send a v2 replacing 'break;' with 'return 0;' shortly.
+> Actually, I re-read your message and looked at the code now that I am
+> back in front of my keyboard and I am a little confused by your message.
+> Should 'goto de_init' be replaced with 'return 0' to avoid the call to
+> acp63_deinit() or should ret just be initialized to 0 in this block so
+> that the call to acp63_deinit() still happens?
+>
+> Thanks again for your input!
+> Nathan
+'goto de-init' should be replaced with 'return 0' for default case.
 
-Failure after v6.2-rc1-33-g520560c30621: habanalabs: move driver to accel subsystem:
+-
+Vijendar
+>
+>>>>  		goto de_init;
+>>>>  	}
+>>>>  
+>>>>
+>>>> ---
+>>>> base-commit: 03178b4f7e2c59ead102e5ab5acb82ce1eaefe46
+>>>> change-id: 20230105-wsometimes-uninitialized-pci-ps-c-3b5725c6ed31
+>>>>
+>>>> Best regards,
 
-Results changed to
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-20998
-# First few build errors in logs:
-# 00:14:32 drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size (1040) exceeds limit (1024) in '__drm_test_mm_reserve' [-Werror,-Wframe-larger-than]
-# 00:14:33 make[5]: *** [scripts/Makefile.build:252: drivers/gpu/drm/tests/drm_mm_test.o] Error 1
-# 00:14:38 make[4]: *** [scripts/Makefile.build:504: drivers/gpu/drm/tests] Error 2
-# 00:45:44 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
-# 00:45:44 make[6]: *** [scripts/Makefile.build:252: drivers/net/ethernet/mellanox/mlx5/core/en_main.o] Error 1
-# 00:49:50 make[3]: *** [scripts/Makefile.build:504: drivers/gpu/drm] Error 2
-# 00:49:50 make[2]: *** [scripts/Makefile.build:504: drivers/gpu] Error 2
-# 00:49:52 make[5]: *** [scripts/Makefile.build:504: drivers/net/ethernet/mellanox/mlx5/core] Error 2
-# 00:49:52 make[4]: *** [scripts/Makefile.build:504: drivers/net/ethernet/mellanox] Error 2
-# 00:49:52 make[3]: *** [scripts/Makefile.build:504: drivers/net/ethernet] Error 2
-
-from
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21030
-# First few build errors in logs:
-# 00:16:40 drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size (1040) exceeds limit (1024) in '__drm_test_mm_reserve' [-Werror,-Wframe-larger-than]
-# 00:16:41 make[5]: *** [scripts/Makefile.build:252: drivers/gpu/drm/tests/drm_mm_test.o] Error 1
-# 00:16:45 make[4]: *** [scripts/Makefile.build:504: drivers/gpu/drm/tests] Error 2
-# 00:47:00 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
-# 00:47:01 make[6]: *** [scripts/Makefile.build:252: drivers/net/ethernet/mellanox/mlx5/core/en_main.o] Error 1
-# 00:50:01 make[3]: *** [scripts/Makefile.build:504: drivers/gpu/drm] Error 2
-# 00:50:01 make[2]: *** [scripts/Makefile.build:504: drivers/gpu] Error 2
-# 00:50:09 make[5]: *** [scripts/Makefile.build:504: drivers/net/ethernet/mellanox/mlx5/core] Error 2
-# 00:50:09 make[4]: *** [scripts/Makefile.build:504: drivers/net/ethernet/mellanox] Error 2
-# 00:50:09 make[3]: *** [scripts/Makefile.build:504: drivers/net/ethernet] Error 2
-
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
-
-For latest status see comments in https://linaro.atlassian.net/browse/LLVM-647 .
-Status of v6.2-rc1-33-g520560c30621 commit for tcwg_kernel:
-commit 520560c306216414cf8614f58796ec79618419cd
-Author: Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon Dec 26 23:05:00 2022 +0200
-
-    habanalabs: move driver to accel subsystem
-    
-    Now that we have a subsystem for compute accelerators, move the
-    habanalabs driver to it.
-    
-    This patch only moves the files and fixes the Makefiles. Future
-    patches will change the existing code to register to the accel
-    subsystem and expose the accel device char files instead of the
-    habanalabs device char files.
-    
-    Update the MAINTAINERS file to reflect this change.
-    
-    Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
-* llvm-master-arm-next-allyesconfig
-** Failure after v6.2-rc1-33-g520560c30621: habanalabs: move driver to accel subsystem:
-** https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-next-allyesconfig/541/
-
-Bad  build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-next-allyesconfig/541/artifact/artifacts
-Good build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-next-allyesconfig/540/artifact/artifacts
-
-Reproduce current build:
-<cut>
-mkdir -p investigate-linux-520560c306216414cf8614f58796ec79618419cd
-cd investigate-linux-520560c306216414cf8614f58796ec79618419cd
-
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests for bad and good builds
-mkdir -p bad/artifacts good/artifacts
-curl -o bad/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-next-allyesconfig/541/artifact/artifacts/manifest.sh --fail
-curl -o good/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-next-allyesconfig/540/artifact/artifacts/manifest.sh --fail
-
-# Reproduce bad build
-(cd bad; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-# Reproduce good build
-(cd good; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit 520560c306216414cf8614f58796ec79618419cd
-Author: Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon Dec 26 23:05:00 2022 +0200
-
-    habanalabs: move driver to accel subsystem
-    
-    Now that we have a subsystem for compute accelerators, move the
-    habanalabs driver to it.
-    
-    This patch only moves the files and fixes the Makefiles. Future
-    patches will change the existing code to register to the accel
-    subsystem and expose the accel device char files instead of the
-    habanalabs device char files.
-    
-    Update the MAINTAINERS file to reflect this change.
-    
-    Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- MAINTAINERS                                                         | 4 +++-
- drivers/Makefile                                                    | 1 +
- drivers/accel/Kconfig                                               | 2 ++
- drivers/accel/Makefile                                              | 3 +++
- drivers/{misc => accel}/habanalabs/Kconfig                          | 6 ++++--
- drivers/{misc => accel}/habanalabs/Makefile                         | 2 +-
- drivers/{misc => accel}/habanalabs/common/Makefile                  | 0
- drivers/{misc => accel}/habanalabs/common/asid.c                    | 0
- drivers/{misc => accel}/habanalabs/common/command_buffer.c          | 0
- drivers/{misc => accel}/habanalabs/common/command_submission.c      | 0
- drivers/{misc => accel}/habanalabs/common/context.c                 | 0
- drivers/{misc => accel}/habanalabs/common/debugfs.c                 | 0
- drivers/{misc => accel}/habanalabs/common/decoder.c                 | 0
- drivers/{misc => accel}/habanalabs/common/device.c                  | 0
- drivers/{misc => accel}/habanalabs/common/firmware_if.c             | 0
- drivers/{misc => accel}/habanalabs/common/habanalabs.h              | 0
- drivers/{misc => accel}/habanalabs/common/habanalabs_drv.c          | 0
- drivers/{misc => accel}/habanalabs/common/habanalabs_ioctl.c        | 0
- drivers/{misc => accel}/habanalabs/common/hw_queue.c                | 0
- drivers/{misc => accel}/habanalabs/common/hwmon.c                   | 0
- drivers/{misc => accel}/habanalabs/common/irq.c                     | 0
- drivers/{misc => accel}/habanalabs/common/memory.c                  | 0
- drivers/{misc => accel}/habanalabs/common/memory_mgr.c              | 0
- drivers/{misc => accel}/habanalabs/common/mmu/Makefile              | 0
- drivers/{misc => accel}/habanalabs/common/mmu/mmu.c                 | 0
- drivers/{misc => accel}/habanalabs/common/mmu/mmu_v1.c              | 0
- drivers/{misc => accel}/habanalabs/common/mmu/mmu_v2_hr.c           | 0
- drivers/{misc => accel}/habanalabs/common/pci/Makefile              | 0
- drivers/{misc => accel}/habanalabs/common/pci/pci.c                 | 0
- drivers/{misc => accel}/habanalabs/common/security.c                | 0
- drivers/{misc => accel}/habanalabs/common/state_dump.c              | 0
- drivers/{misc => accel}/habanalabs/common/sysfs.c                   | 0
- drivers/{misc => accel}/habanalabs/gaudi/Makefile                   | 0
- drivers/{misc => accel}/habanalabs/gaudi/gaudi.c                    | 0
- drivers/{misc => accel}/habanalabs/gaudi/gaudiP.h                   | 0
- drivers/{misc => accel}/habanalabs/gaudi/gaudi_coresight.c          | 0
- drivers/{misc => accel}/habanalabs/gaudi/gaudi_security.c           | 0
- drivers/{misc => accel}/habanalabs/gaudi2/Makefile                  | 0
- drivers/{misc => accel}/habanalabs/gaudi2/gaudi2.c                  | 0
- drivers/{misc => accel}/habanalabs/gaudi2/gaudi2P.h                 | 0
- drivers/{misc => accel}/habanalabs/gaudi2/gaudi2_coresight.c        | 0
- drivers/{misc => accel}/habanalabs/gaudi2/gaudi2_coresight_regs.h   | 0
- drivers/{misc => accel}/habanalabs/gaudi2/gaudi2_masks.h            | 0
- drivers/{misc => accel}/habanalabs/gaudi2/gaudi2_security.c         | 0
- drivers/{misc => accel}/habanalabs/goya/Makefile                    | 0
- drivers/{misc => accel}/habanalabs/goya/goya.c                      | 0
- drivers/{misc => accel}/habanalabs/goya/goyaP.h                     | 0
- drivers/{misc => accel}/habanalabs/goya/goya_coresight.c            | 0
- drivers/{misc => accel}/habanalabs/goya/goya_hwmgr.c                | 0
- drivers/{misc => accel}/habanalabs/goya/goya_security.c             | 0
- drivers/{misc => accel}/habanalabs/include/common/cpucp_if.h        | 0
- drivers/{misc => accel}/habanalabs/include/common/hl_boot_if.h      | 0
- drivers/{misc => accel}/habanalabs/include/common/qman_if.h         | 0
- .../{misc => accel}/habanalabs/include/gaudi/asic_reg/cpu_if_regs.h | 0
- .../habanalabs/include/gaudi/asic_reg/dma0_core_masks.h             | 0
- .../habanalabs/include/gaudi/asic_reg/dma0_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma0_qm_masks.h               | 0
- .../habanalabs/include/gaudi/asic_reg/dma0_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma1_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma1_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma2_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma2_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma3_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma3_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma4_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma4_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma5_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma5_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma6_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma6_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma7_core_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/dma7_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch0_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch1_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_e_n_regs.h             | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch0_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch1_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_e_s_regs.h             | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch0_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch1_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_w_n_regs.h             | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch0_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch1_regs.h    | 0
- .../habanalabs/include/gaudi/asic_reg/dma_if_w_s_regs.h             | 0
- .../habanalabs/include/gaudi/asic_reg/gaudi_blocks.h                | 0
- .../{misc => accel}/habanalabs/include/gaudi/asic_reg/gaudi_regs.h  | 0
- .../habanalabs/include/gaudi/asic_reg/mme0_ctrl_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/mme0_qm_masks.h               | 0
- .../habanalabs/include/gaudi/asic_reg/mme0_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/mme1_ctrl_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/mme2_ctrl_regs.h              | 0
- .../habanalabs/include/gaudi/asic_reg/mme2_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/mme3_ctrl_regs.h              | 0
- .../{misc => accel}/habanalabs/include/gaudi/asic_reg/mmu_up_regs.h | 0
- .../habanalabs/include/gaudi/asic_reg/nic0_qm0_masks.h              | 0
- .../habanalabs/include/gaudi/asic_reg/nic0_qm0_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic0_qm1_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic1_qm0_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic1_qm1_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic2_qm0_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic2_qm1_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic3_qm0_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic3_qm1_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic4_qm0_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nic4_qm1_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_0_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_1_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_2_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_3_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_4_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_5_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_6_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_7_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/psoc_cpu_pll_regs.h           | 0
- .../habanalabs/include/gaudi/asic_reg/psoc_etr_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/psoc_global_conf_masks.h      | 0
- .../habanalabs/include/gaudi/asic_reg/psoc_global_conf_regs.h       | 0
- .../habanalabs/include/gaudi/asic_reg/psoc_timestamp_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_0_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_1_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_2_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_3_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_4_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_5_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_6_regs.h         | 0
- .../habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_7_regs.h         | 0
- .../{misc => accel}/habanalabs/include/gaudi/asic_reg/stlb_regs.h   | 0
- .../habanalabs/include/gaudi/asic_reg/tpc0_cfg_masks.h              | 0
- .../habanalabs/include/gaudi/asic_reg/tpc0_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc0_qm_masks.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc0_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc1_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc1_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc2_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc2_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc3_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc3_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc4_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc4_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc5_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc5_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc6_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc6_qm_regs.h                | 0
- .../habanalabs/include/gaudi/asic_reg/tpc7_cfg_regs.h               | 0
- .../habanalabs/include/gaudi/asic_reg/tpc7_qm_regs.h                | 0
- drivers/{misc => accel}/habanalabs/include/gaudi/gaudi.h            | 0
- .../{misc => accel}/habanalabs/include/gaudi/gaudi_async_events.h   | 0
- .../habanalabs/include/gaudi/gaudi_async_ids_map_extended.h         | 0
- drivers/{misc => accel}/habanalabs/include/gaudi/gaudi_coresight.h  | 0
- drivers/{misc => accel}/habanalabs/include/gaudi/gaudi_fw_if.h      | 0
- drivers/{misc => accel}/habanalabs/include/gaudi/gaudi_masks.h      | 0
- drivers/{misc => accel}/habanalabs/include/gaudi/gaudi_packets.h    | 0
- drivers/{misc => accel}/habanalabs/include/gaudi/gaudi_reg_map.h    | 0
- .../habanalabs/include/gaudi2/arc/gaudi2_arc_common_packets.h       | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_acp_eng_regs.h | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_aux_masks.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_aux_regs.h     | 0
- .../include/gaudi2/asic_reg/arc_farm_arc0_dup_eng_axuser_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_arc0_dup_eng_regs.h | 0
- .../include/gaudi2/asic_reg/arc_farm_kdma_ctx_axuser_masks.h        | 0
- .../include/gaudi2/asic_reg/arc_farm_kdma_ctx_axuser_regs.h         | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_ctx_masks.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_ctx_regs.h     | 0
- .../include/gaudi2/asic_reg/arc_farm_kdma_kdma_cgm_regs.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_masks.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/arc_farm_kdma_regs.h         | 0
- .../habanalabs/include/gaudi2/asic_reg/cpu_if_regs.h                | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_dec0_cmd_masks.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_dec0_cmd_regs.h       | 0
- .../include/gaudi2/asic_reg/dcore0_edma0_core_ctx_axuser_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_ctx_regs.h | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_masks.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_edma0_core_regs.h     | 0
- .../include/gaudi2/asic_reg/dcore0_edma0_qm_arc_aux_regs.h          | 0
- .../gaudi2/asic_reg/dcore0_edma0_qm_axuser_nonsecured_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_cgm_regs.h   | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_masks.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_edma0_qm_regs.h       | 0
- .../include/gaudi2/asic_reg/dcore0_edma1_core_ctx_axuser_regs.h     | 0
- .../gaudi2/asic_reg/dcore0_edma1_qm_axuser_nonsecured_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_regs.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_acc_regs.h        | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout0_master_regs.h | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout0_slave_regs.h  | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout1_master_regs.h | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_cout1_slave_regs.h  | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in0_master_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in0_slave_regs.h    | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in1_master_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in1_slave_regs.h    | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in2_master_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in2_slave_regs.h    | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in3_master_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in3_slave_regs.h    | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in4_master_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_agu_in4_slave_regs.h    | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_base_addr_regs.h        | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_end_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_start_regs.h | 0
- .../include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_tensor_a_regs.h | 0
- .../include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_tensor_b_regs.h | 0
- .../gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_tensor_cout_regs.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_masks.h   | 0
- .../include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_mme_axuser_regs.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_regs.h    | 0
- .../include/gaudi2/asic_reg/dcore0_mme_qm_arc_acp_eng_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_arc_aux_regs.h | 0
- .../include/gaudi2/asic_reg/dcore0_mme_qm_arc_dup_eng_axuser_regs.h | 0
- .../include/gaudi2/asic_reg/dcore0_mme_qm_arc_dup_eng_regs.h        | 0
- .../include/gaudi2/asic_reg/dcore0_mme_qm_axuser_nonsecured_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_mme_qm_axuser_secured_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_cgm_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_qm_regs.h         | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_mme_sbte0_masks.h     | 0
- .../include/gaudi2/asic_reg/dcore0_mme_sbte0_mstr_if_axuser_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_mme_wb0_mstr_if_axuser_regs.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_rtr0_ctrl_regs.h      | 0
- .../include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_prvt_hbw_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_prvt_lbw_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_shrd_hbw_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_rtr0_mstr_if_rr_shrd_lbw_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_sync_mngr_glbl_masks.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_glbl_regs.h | 0
- .../include/gaudi2/asic_reg/dcore0_sync_mngr_mstr_if_axuser_masks.h | 0
- .../include/gaudi2/asic_reg/dcore0_sync_mngr_mstr_if_axuser_regs.h  | 0
- .../include/gaudi2/asic_reg/dcore0_sync_mngr_objs_masks.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_sync_mngr_objs_regs.h | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_cfg_axuser_regs.h           | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_cfg_kernel_regs.h           | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_cfg_kernel_tensor_0_regs.h  | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_masks.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_qm_regs.h    | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_cfg_qm_sync_object_regs.h   | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_cfg_qm_tensor_0_regs.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_cfg_regs.h       | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_cfg_special_regs.h          | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_eml_busmon_0_regs.h         | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_etf_regs.h   | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_eml_funnel_regs.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_spmu_regs.h  | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_eml_stm_regs.h   | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_qm_arc_aux_regs.h           | 0
- .../include/gaudi2/asic_reg/dcore0_tpc0_qm_axuser_nonsecured_regs.h | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_qm_cgm_regs.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore0_tpc0_qm_regs.h        | 0
- .../gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_dec_regs.h        | 0
- .../gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_abnrm_regs.h | 0
- .../gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_l2c_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_nrm_regs.h   | 0
- .../gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_axuser_msix_vcd_regs.h   | 0
- .../include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_masks.h          | 0
- .../include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_regs.h           | 0
- .../include/gaudi2/asic_reg/dcore0_vdec0_ctrl_special_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore1_mme_ctrl_lo_regs.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/dcore3_mme_ctrl_lo_regs.h    | 0
- .../habanalabs/include/gaudi2/asic_reg/gaudi2_blocks_linux_driver.h | 0
- .../habanalabs/include/gaudi2/asic_reg/gaudi2_regs.h                | 0
- .../habanalabs/include/gaudi2/asic_reg/nic0_qm0_cgm_regs.h          | 0
- .../habanalabs/include/gaudi2/asic_reg/nic0_qm0_regs.h              | 0
- .../habanalabs/include/gaudi2/asic_reg/nic0_qm_arc_aux0_regs.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/nic0_qpc0_regs.h             | 0
- .../gaudi2/asic_reg/nic0_umr0_0_completion_queue_ci_1_regs.h        | 0
- .../include/gaudi2/asic_reg/nic0_umr0_0_unsecure_doorbell0_regs.h   | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_aux_regs.h              | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_dbi_regs.h              | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_dec0_cmd_masks.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_dec0_cmd_regs.h         | 0
- .../include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_dec_regs.h  | 0
- .../gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_abnrm_regs.h   | 0
- .../gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_l2c_regs.h     | 0
- .../gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_nrm_regs.h     | 0
- .../gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_axuser_msix_vcd_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_masks.h | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_regs.h  | 0
- .../include/gaudi2/asic_reg/pcie_vdec0_ctrl_special_regs.h          | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_wrap_regs.h             | 0
- .../habanalabs/include/gaudi2/asic_reg/pcie_wrap_special_regs.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_core_ctx_axuser_regs.h | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_core_ctx_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_core_masks.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_core_regs.h            | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_core_special_masks.h   | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_qm_arc_aux_regs.h      | 0
- .../include/gaudi2/asic_reg/pdma0_qm_axuser_nonsecured_regs.h       | 0
- .../include/gaudi2/asic_reg/pdma0_qm_axuser_secured_regs.h          | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_qm_cgm_regs.h          | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_qm_masks.h             | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma0_qm_regs.h              | 0
- .../habanalabs/include/gaudi2/asic_reg/pdma1_core_ctx_axuser_regs.h | 0
- .../include/gaudi2/asic_reg/pdma1_qm_axuser_nonsecured_regs.h       | 0
- .../habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_masks.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_regs.h         | 0
- .../habanalabs/include/gaudi2/asic_reg/pmmu_pif_regs.h              | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_etr_masks.h             | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_etr_regs.h              | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_global_conf_masks.h     | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_global_conf_regs.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_reset_conf_masks.h      | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_reset_conf_regs.h       | 0
- .../habanalabs/include/gaudi2/asic_reg/psoc_timestamp_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/rot0_desc_regs.h             | 0
- .../{misc => accel}/habanalabs/include/gaudi2/asic_reg/rot0_masks.h | 0
- .../habanalabs/include/gaudi2/asic_reg/rot0_qm_arc_aux_regs.h       | 0
- .../include/gaudi2/asic_reg/rot0_qm_axuser_nonsecured_regs.h        | 0
- .../habanalabs/include/gaudi2/asic_reg/rot0_qm_cgm_regs.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/rot0_qm_regs.h               | 0
- .../{misc => accel}/habanalabs/include/gaudi2/asic_reg/rot0_regs.h  | 0
- .../habanalabs/include/gaudi2/asic_reg/xbar_edge_0_regs.h           | 0
- .../habanalabs/include/gaudi2/asic_reg/xbar_mid_0_regs.h            | 0
- drivers/{misc => accel}/habanalabs/include/gaudi2/gaudi2.h          | 0
- .../{misc => accel}/habanalabs/include/gaudi2/gaudi2_async_events.h | 0
- .../habanalabs/include/gaudi2/gaudi2_async_ids_map_extended.h       | 0
- .../{misc => accel}/habanalabs/include/gaudi2/gaudi2_coresight.h    | 0
- drivers/{misc => accel}/habanalabs/include/gaudi2/gaudi2_fw_if.h    | 0
- drivers/{misc => accel}/habanalabs/include/gaudi2/gaudi2_packets.h  | 0
- drivers/{misc => accel}/habanalabs/include/gaudi2/gaudi2_reg_map.h  | 0
- .../habanalabs/include/goya/asic_reg/cpu_ca53_cfg_masks.h           | 0
- .../habanalabs/include/goya/asic_reg/cpu_ca53_cfg_regs.h            | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/cpu_if_regs.h  | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/cpu_pll_regs.h | 0
- .../habanalabs/include/goya/asic_reg/dma_ch_0_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/dma_ch_0_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_ch_1_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_ch_2_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_ch_3_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_ch_4_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_macro_masks.h              | 0
- .../habanalabs/include/goya/asic_reg/dma_macro_regs.h               | 0
- .../habanalabs/include/goya/asic_reg/dma_nrtr_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/dma_nrtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_qm_0_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/dma_qm_0_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_qm_1_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_qm_2_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_qm_3_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/dma_qm_4_regs.h                | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/goya_blocks.h  | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/goya_masks.h   | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/goya_regs.h    | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/ic_pll_regs.h  | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/mc_pll_regs.h  | 0
- .../habanalabs/include/goya/asic_reg/mme1_rtr_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/mme1_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/mme2_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/mme3_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/mme4_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/mme5_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/mme6_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/mme_cmdq_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/mme_cmdq_regs.h                | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/mme_masks.h    | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/mme_qm_masks.h | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/mme_qm_regs.h  | 0
- drivers/{misc => accel}/habanalabs/include/goya/asic_reg/mme_regs.h | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/mmu_masks.h    | 0
- drivers/{misc => accel}/habanalabs/include/goya/asic_reg/mmu_regs.h | 0
- .../habanalabs/include/goya/asic_reg/pci_nrtr_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/pci_nrtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/pcie_aux_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/pcie_wrap_regs.h               | 0
- .../habanalabs/include/goya/asic_reg/psoc_emmc_pll_regs.h           | 0
- .../habanalabs/include/goya/asic_reg/psoc_etr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/psoc_global_conf_masks.h       | 0
- .../habanalabs/include/goya/asic_reg/psoc_global_conf_regs.h        | 0
- .../habanalabs/include/goya/asic_reg/psoc_mme_pll_regs.h            | 0
- .../habanalabs/include/goya/asic_reg/psoc_pci_pll_regs.h            | 0
- .../habanalabs/include/goya/asic_reg/psoc_spi_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/psoc_timestamp_regs.h          | 0
- .../habanalabs/include/goya/asic_reg/sram_y0_x0_rtr_regs.h          | 0
- .../habanalabs/include/goya/asic_reg/sram_y0_x1_rtr_regs.h          | 0
- .../habanalabs/include/goya/asic_reg/sram_y0_x2_rtr_regs.h          | 0
- .../habanalabs/include/goya/asic_reg/sram_y0_x3_rtr_regs.h          | 0
- .../habanalabs/include/goya/asic_reg/sram_y0_x4_rtr_regs.h          | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/stlb_masks.h   | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/stlb_regs.h    | 0
- .../habanalabs/include/goya/asic_reg/tpc0_cfg_masks.h               | 0
- .../habanalabs/include/goya/asic_reg/tpc0_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc0_cmdq_masks.h              | 0
- .../habanalabs/include/goya/asic_reg/tpc0_cmdq_regs.h               | 0
- .../habanalabs/include/goya/asic_reg/tpc0_eml_cfg_masks.h           | 0
- .../habanalabs/include/goya/asic_reg/tpc0_eml_cfg_regs.h            | 0
- .../habanalabs/include/goya/asic_reg/tpc0_nrtr_masks.h              | 0
- .../habanalabs/include/goya/asic_reg/tpc0_nrtr_regs.h               | 0
- .../habanalabs/include/goya/asic_reg/tpc0_qm_masks.h                | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc0_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc1_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc1_cmdq_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc1_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc1_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc2_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc2_cmdq_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc2_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc2_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc3_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc3_cmdq_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc3_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc3_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc4_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc4_cmdq_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc4_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc4_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc5_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc5_cmdq_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc5_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc5_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc6_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc6_cmdq_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc6_qm_regs.h | 0
- .../habanalabs/include/goya/asic_reg/tpc6_rtr_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc7_cfg_regs.h                | 0
- .../habanalabs/include/goya/asic_reg/tpc7_cmdq_regs.h               | 0
- .../habanalabs/include/goya/asic_reg/tpc7_nrtr_regs.h               | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc7_qm_regs.h | 0
- .../{misc => accel}/habanalabs/include/goya/asic_reg/tpc_pll_regs.h | 0
- drivers/{misc => accel}/habanalabs/include/goya/goya.h              | 0
- drivers/{misc => accel}/habanalabs/include/goya/goya_async_events.h | 0
- drivers/{misc => accel}/habanalabs/include/goya/goya_coresight.h    | 0
- drivers/{misc => accel}/habanalabs/include/goya/goya_fw_if.h        | 0
- drivers/{misc => accel}/habanalabs/include/goya/goya_packets.h      | 0
- drivers/{misc => accel}/habanalabs/include/goya/goya_reg_map.h      | 0
- drivers/{misc => accel}/habanalabs/include/hw_ip/mmu/mmu_general.h  | 0
- drivers/{misc => accel}/habanalabs/include/hw_ip/mmu/mmu_v1_0.h     | 0
- drivers/{misc => accel}/habanalabs/include/hw_ip/mmu/mmu_v1_1.h     | 0
- drivers/{misc => accel}/habanalabs/include/hw_ip/mmu/mmu_v2_0.h     | 0
- drivers/{misc => accel}/habanalabs/include/hw_ip/pci/pci_general.h  | 0
- drivers/misc/Kconfig                                                | 1 -
- drivers/misc/Makefile                                               | 1 -
- 430 files changed, 14 insertions(+), 6 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ce47d05693d9..0fb59aa03856 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9043,11 +9043,13 @@ F:	block/partitions/efi.*
- 
- HABANALABS PCI DRIVER
- M:	Oded Gabbay <ogabbay@kernel.org>
-+L:	dri-devel@lists.freedesktop.org
- S:	Supported
-+C:	irc://irc.oftc.net/dri-devel
- T:	git https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
- F:	Documentation/ABI/testing/debugfs-driver-habanalabs
- F:	Documentation/ABI/testing/sysfs-driver-habanalabs
--F:	drivers/misc/habanalabs/
-+F:	drivers/accel/habanalabs/
- F:	include/trace/events/habanalabs.h
- F:	include/uapi/drm/habanalabs_accel.h
- 
-diff --git a/drivers/Makefile b/drivers/Makefile
-index bdf1c66141c9..9ea6eb3b5d7b 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -189,3 +189,4 @@ obj-$(CONFIG_COUNTER)		+= counter/
- obj-$(CONFIG_MOST)		+= most/
- obj-$(CONFIG_PECI)		+= peci/
- obj-$(CONFIG_HTE)		+= hte/
-+obj-$(CONFIG_DRM_ACCEL)		+= accel/
-diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
-index c9ce849b2984..a5989b55178a 100644
---- a/drivers/accel/Kconfig
-+++ b/drivers/accel/Kconfig
-@@ -22,3 +22,5 @@ menuconfig DRM_ACCEL
- 	  major number than GPUs, and will be exposed to user-space using
- 	  different device files, called accel/accel* (in /dev, sysfs
- 	  and debugfs).
-+
-+source "drivers/accel/habanalabs/Kconfig"
-diff --git a/drivers/accel/Makefile b/drivers/accel/Makefile
-new file mode 100644
-index 000000000000..4df38885d6c6
---- /dev/null
-+++ b/drivers/accel/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-y  += habanalabs/
-\ No newline at end of file
-diff --git a/drivers/misc/habanalabs/Kconfig b/drivers/accel/habanalabs/Kconfig
-similarity index 86%
-rename from drivers/misc/habanalabs/Kconfig
-rename to drivers/accel/habanalabs/Kconfig
-index 585235531b9b..be85336107f9 100644
---- a/drivers/misc/habanalabs/Kconfig
-+++ b/drivers/accel/habanalabs/Kconfig
-@@ -3,8 +3,10 @@
- # HabanaLabs AI accelerators driver
- #
- 
--config HABANA_AI
--	tristate "HabanaAI accelerators (habanalabs)"
-+config DRM_ACCEL_HABANALABS
-+	tristate "HabanaLabs AI accelerators"
-+	depends on DRM_ACCEL
-+	depends on X86_64
- 	depends on PCI && HAS_IOMEM
- 	select GENERIC_ALLOCATOR
- 	select HWMON
-diff --git a/drivers/misc/habanalabs/Makefile b/drivers/accel/habanalabs/Makefile
-similarity index 88%
-rename from drivers/misc/habanalabs/Makefile
-rename to drivers/accel/habanalabs/Makefile
-index a48a9e0969ed..98510cdd5066 100644
---- a/drivers/misc/habanalabs/Makefile
-+++ b/drivers/accel/habanalabs/Makefile
-@@ -3,7 +3,7 @@
- # Makefile for HabanaLabs AI accelerators driver
- #
- 
--obj-$(CONFIG_HABANA_AI) := habanalabs.o
-+obj-$(CONFIG_DRM_ACCEL_HABANALABS) := habanalabs.o
- 
- include $(src)/common/Makefile
- habanalabs-y += $(HL_COMMON_FILES)
-diff --git a/drivers/misc/habanalabs/common/Makefile b/drivers/accel/habanalabs/common/Makefile
-similarity index 100%
-rename from drivers/misc/habanalabs/common/Makefile
-rename to drivers/accel/habanalabs/common/Makefile
-diff --git a/drivers/misc/habanalabs/common/asid.c b/drivers/accel/habanalabs/common/asid.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/asid.c
-rename to drivers/accel/habanalabs/common/asid.c
-diff --git a/drivers/misc/habanalabs/common/command_buffer.c b/drivers/accel/habanalabs/common/command_buffer.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/command_buffer.c
-rename to drivers/accel/habanalabs/common/command_buffer.c
-diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/accel/habanalabs/common/command_submission.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/command_submission.c
-rename to drivers/accel/habanalabs/common/command_submission.c
-diff --git a/drivers/misc/habanalabs/common/context.c b/drivers/accel/habanalabs/common/context.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/context.c
-rename to drivers/accel/habanalabs/common/context.c
-diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/accel/habanalabs/common/debugfs.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/debugfs.c
-rename to drivers/accel/habanalabs/common/debugfs.c
-diff --git a/drivers/misc/habanalabs/common/decoder.c b/drivers/accel/habanalabs/common/decoder.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/decoder.c
-rename to drivers/accel/habanalabs/common/decoder.c
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/accel/habanalabs/common/device.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/device.c
-rename to drivers/accel/habanalabs/common/device.c
-diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/accel/habanalabs/common/firmware_if.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/firmware_if.c
-rename to drivers/accel/habanalabs/common/firmware_if.c
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/common/habanalabs.h
-rename to drivers/accel/habanalabs/common/habanalabs.h
-diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/accel/habanalabs/common/habanalabs_drv.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/habanalabs_drv.c
-rename to drivers/accel/habanalabs/common/habanalabs_drv.c
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/accel/habanalabs/common/habanalabs_ioctl.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/habanalabs_ioctl.c
-rename to drivers/accel/habanalabs/common/habanalabs_ioctl.c
-diff --git a/drivers/misc/habanalabs/common/hw_queue.c b/drivers/accel/habanalabs/common/hw_queue.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/hw_queue.c
-rename to drivers/accel/habanalabs/common/hw_queue.c
-diff --git a/drivers/misc/habanalabs/common/hwmon.c b/drivers/accel/habanalabs/common/hwmon.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/hwmon.c
-rename to drivers/accel/habanalabs/common/hwmon.c
-diff --git a/drivers/misc/habanalabs/common/irq.c b/drivers/accel/habanalabs/common/irq.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/irq.c
-rename to drivers/accel/habanalabs/common/irq.c
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/accel/habanalabs/common/memory.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/memory.c
-rename to drivers/accel/habanalabs/common/memory.c
-diff --git a/drivers/misc/habanalabs/common/memory_mgr.c b/drivers/accel/habanalabs/common/memory_mgr.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/memory_mgr.c
-rename to drivers/accel/habanalabs/common/memory_mgr.c
-diff --git a/drivers/misc/habanalabs/common/mmu/Makefile b/drivers/accel/habanalabs/common/mmu/Makefile
-similarity index 100%
-rename from drivers/misc/habanalabs/common/mmu/Makefile
-rename to drivers/accel/habanalabs/common/mmu/Makefile
-diff --git a/drivers/misc/habanalabs/common/mmu/mmu.c b/drivers/accel/habanalabs/common/mmu/mmu.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/mmu/mmu.c
-rename to drivers/accel/habanalabs/common/mmu/mmu.c
-diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/accel/habanalabs/common/mmu/mmu_v1.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/mmu/mmu_v1.c
-rename to drivers/accel/habanalabs/common/mmu/mmu_v1.c
-diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v2_hr.c b/drivers/accel/habanalabs/common/mmu/mmu_v2_hr.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/mmu/mmu_v2_hr.c
-rename to drivers/accel/habanalabs/common/mmu/mmu_v2_hr.c
-diff --git a/drivers/misc/habanalabs/common/pci/Makefile b/drivers/accel/habanalabs/common/pci/Makefile
-similarity index 100%
-rename from drivers/misc/habanalabs/common/pci/Makefile
-rename to drivers/accel/habanalabs/common/pci/Makefile
-diff --git a/drivers/misc/habanalabs/common/pci/pci.c b/drivers/accel/habanalabs/common/pci/pci.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/pci/pci.c
-rename to drivers/accel/habanalabs/common/pci/pci.c
-diff --git a/drivers/misc/habanalabs/common/security.c b/drivers/accel/habanalabs/common/security.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/security.c
-rename to drivers/accel/habanalabs/common/security.c
-diff --git a/drivers/misc/habanalabs/common/state_dump.c b/drivers/accel/habanalabs/common/state_dump.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/state_dump.c
-rename to drivers/accel/habanalabs/common/state_dump.c
-diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/accel/habanalabs/common/sysfs.c
-similarity index 100%
-rename from drivers/misc/habanalabs/common/sysfs.c
-rename to drivers/accel/habanalabs/common/sysfs.c
-diff --git a/drivers/misc/habanalabs/gaudi/Makefile b/drivers/accel/habanalabs/gaudi/Makefile
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi/Makefile
-rename to drivers/accel/habanalabs/gaudi/Makefile
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/accel/habanalabs/gaudi/gaudi.c
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi/gaudi.c
-rename to drivers/accel/habanalabs/gaudi/gaudi.c
-diff --git a/drivers/misc/habanalabs/gaudi/gaudiP.h b/drivers/accel/habanalabs/gaudi/gaudiP.h
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi/gaudiP.h
-rename to drivers/accel/habanalabs/gaudi/gaudiP.h
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi_coresight.c b/drivers/accel/habanalabs/gaudi/gaudi_coresight.c
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi/gaudi_coresight.c
-rename to drivers/accel/habanalabs/gaudi/gaudi_coresight.c
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi_security.c b/drivers/accel/habanalabs/gaudi/gaudi_security.c
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi/gaudi_security.c
-rename to drivers/accel/habanalabs/gaudi/gaudi_security.c
-diff --git a/drivers/misc/habanalabs/gaudi2/Makefile b/drivers/accel/habanalabs/gaudi2/Makefile
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/Makefile
-rename to drivers/accel/habanalabs/gaudi2/Makefile
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/accel/habanalabs/gaudi2/gaudi2.c
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/gaudi2.c
-rename to drivers/accel/habanalabs/gaudi2/gaudi2.c
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2P.h b/drivers/accel/habanalabs/gaudi2/gaudi2P.h
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/gaudi2P.h
-rename to drivers/accel/habanalabs/gaudi2/gaudi2P.h
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c b/drivers/accel/habanalabs/gaudi2/gaudi2_coresight.c
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
-rename to drivers/accel/habanalabs/gaudi2/gaudi2_coresight.c
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h b/drivers/accel/habanalabs/gaudi2/gaudi2_coresight_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h
-rename to drivers/accel/habanalabs/gaudi2/gaudi2_coresight_regs.h
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_masks.h b/drivers/accel/habanalabs/gaudi2/gaudi2_masks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/gaudi2_masks.h
-rename to drivers/accel/habanalabs/gaudi2/gaudi2_masks.h
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_security.c b/drivers/accel/habanalabs/gaudi2/gaudi2_security.c
-similarity index 100%
-rename from drivers/misc/habanalabs/gaudi2/gaudi2_security.c
-rename to drivers/accel/habanalabs/gaudi2/gaudi2_security.c
-diff --git a/drivers/misc/habanalabs/goya/Makefile b/drivers/accel/habanalabs/goya/Makefile
-similarity index 100%
-rename from drivers/misc/habanalabs/goya/Makefile
-rename to drivers/accel/habanalabs/goya/Makefile
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/accel/habanalabs/goya/goya.c
-similarity index 100%
-rename from drivers/misc/habanalabs/goya/goya.c
-rename to drivers/accel/habanalabs/goya/goya.c
-diff --git a/drivers/misc/habanalabs/goya/goyaP.h b/drivers/accel/habanalabs/goya/goyaP.h
-similarity index 100%
-rename from drivers/misc/habanalabs/goya/goyaP.h
-rename to drivers/accel/habanalabs/goya/goyaP.h
-diff --git a/drivers/misc/habanalabs/goya/goya_coresight.c b/drivers/accel/habanalabs/goya/goya_coresight.c
-similarity index 100%
-rename from drivers/misc/habanalabs/goya/goya_coresight.c
-rename to drivers/accel/habanalabs/goya/goya_coresight.c
-diff --git a/drivers/misc/habanalabs/goya/goya_hwmgr.c b/drivers/accel/habanalabs/goya/goya_hwmgr.c
-similarity index 100%
-rename from drivers/misc/habanalabs/goya/goya_hwmgr.c
-rename to drivers/accel/habanalabs/goya/goya_hwmgr.c
-diff --git a/drivers/misc/habanalabs/goya/goya_security.c b/drivers/accel/habanalabs/goya/goya_security.c
-similarity index 100%
-rename from drivers/misc/habanalabs/goya/goya_security.c
-rename to drivers/accel/habanalabs/goya/goya_security.c
-diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/accel/habanalabs/include/common/cpucp_if.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/common/cpucp_if.h
-rename to drivers/accel/habanalabs/include/common/cpucp_if.h
-diff --git a/drivers/misc/habanalabs/include/common/hl_boot_if.h b/drivers/accel/habanalabs/include/common/hl_boot_if.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/common/hl_boot_if.h
-rename to drivers/accel/habanalabs/include/common/hl_boot_if.h
-diff --git a/drivers/misc/habanalabs/include/common/qman_if.h b/drivers/accel/habanalabs/include/common/qman_if.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/common/qman_if.h
-rename to drivers/accel/habanalabs/include/common/qman_if.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/cpu_if_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/cpu_if_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/cpu_if_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/cpu_if_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_core_masks.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_core_masks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_core_masks.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_core_masks.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_qm_masks.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_qm_masks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_qm_masks.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_qm_masks.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma0_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma0_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma1_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma1_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma1_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma1_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma1_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma1_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma1_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma1_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma2_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma2_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma2_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma2_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma2_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma2_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma2_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma2_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma3_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma3_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma3_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma3_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma3_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma3_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma3_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma3_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma4_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma4_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma4_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma4_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma4_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma4_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma4_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma4_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma5_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma5_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma5_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma5_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma5_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma5_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma5_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma5_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma6_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma6_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma6_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma6_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma6_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma6_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma6_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma6_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma7_core_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma7_core_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma7_core_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma7_core_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma7_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma7_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma7_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma7_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_n_down_ch1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_n_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_n_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_n_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_n_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_s_down_ch1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_s_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_s_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_e_s_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_e_s_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_n_down_ch1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_n_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_n_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_n_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_n_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_s_down_ch1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_s_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_s_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/dma_if_w_s_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/dma_if_w_s_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/gaudi_blocks.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/gaudi_blocks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/gaudi_blocks.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/gaudi_blocks.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/gaudi_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/gaudi_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/gaudi_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/gaudi_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme0_ctrl_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme0_ctrl_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme0_ctrl_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme0_ctrl_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme0_qm_masks.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme0_qm_masks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme0_qm_masks.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme0_qm_masks.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme0_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme0_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme0_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme0_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme1_ctrl_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme1_ctrl_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme1_ctrl_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme1_ctrl_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme2_ctrl_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme2_ctrl_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme2_ctrl_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme2_ctrl_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme2_qm_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme2_qm_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme2_qm_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme2_qm_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mme3_ctrl_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mme3_ctrl_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mme3_ctrl_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mme3_ctrl_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/mmu_up_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/mmu_up_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/mmu_up_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/mmu_up_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic0_qm0_masks.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic0_qm0_masks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic0_qm0_masks.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic0_qm0_masks.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic0_qm0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic0_qm0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic0_qm0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic0_qm0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic0_qm1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic0_qm1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic0_qm1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic0_qm1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic1_qm0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic1_qm0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic1_qm0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic1_qm0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic1_qm1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic1_qm1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic1_qm1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic1_qm1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic2_qm0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic2_qm0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic2_qm0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic2_qm0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic2_qm1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic2_qm1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic2_qm1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic2_qm1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic3_qm0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic3_qm0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic3_qm0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic3_qm0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic3_qm1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic3_qm1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic3_qm1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic3_qm1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic4_qm0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic4_qm0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic4_qm0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic4_qm0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nic4_qm1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nic4_qm1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nic4_qm1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nic4_qm1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_2_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_2_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_2_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_2_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_3_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_3_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_3_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_3_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_4_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_4_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_4_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_4_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_5_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_5_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_5_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_5_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_6_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_6_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_6_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_6_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_7_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_7_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_7_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/nif_rtr_ctrl_7_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_cpu_pll_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_cpu_pll_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_cpu_pll_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_cpu_pll_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_etr_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_etr_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_etr_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_etr_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_global_conf_masks.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_global_conf_masks.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_global_conf_masks.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_global_conf_masks.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_global_conf_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_global_conf_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_global_conf_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_global_conf_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_timestamp_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_timestamp_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/psoc_timestamp_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/psoc_timestamp_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_0_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_0_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_0_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_0_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_1_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_1_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_1_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_1_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_2_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_2_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_2_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_2_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_3_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_3_regs.h
-similarity index 100%
-rename from drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_3_regs.h
-rename to drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_3_regs.h
-diff --git a/drivers/misc/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_4_regs.h b/drivers/accel/habanalabs/include/gaudi/asic_reg/sif_rtr_ctrl_4_regs.h
-similarity index 100%
-</cut>
-------=_Part_13151_705576834.1672960268277--
