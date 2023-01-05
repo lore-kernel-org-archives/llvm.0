@@ -1,99 +1,109 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84ACE80F
-	for <llvm@lists.linux.dev>; Thu,  5 Jan 2023 07:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CBA80F
+	for <llvm@lists.linux.dev>; Thu,  5 Jan 2023 08:00:53 +0000 (UTC)
 Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3057Tjor020514;
-	Thu, 5 Jan 2023 07:38:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=6/5Aco2Nacgnq1R/RDf8a9fgyuB1yy3yqYXtlql8A2E=;
- b=ESmzlfbTHrzX7fjEFMlBQaA7/ISSFtktKkMgzLLUcP6B4egnIdNPNBHE9WfNVFpDsDkj
- 9Nq5lBRl5DeVUl4pK1zQD/pQXWECNn0eXG2UQew/UntF69+HSuqeIBNzUcT4PPZi12zT
- 4tcNxQRtDWLXRAn4W/twW2K0BJLu6snlZSj0DrTrlkN7Y1kUX4r+9YE9Th6Rs+XqGv58
- ouZMsrdWOrDi2h7/u6KKt10CSur9p+hKe0C1+o0U14gIGVisYls4GaGmwDXZ4yAML9BN
- 6blpj21Zoc26NzyYrZXmkgtwYQgt8iRGo/9tmdUyTOXNseQPYAd/DiYsRVQLXODILKj9 xQ== 
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3057m6nE036979;
+	Thu, 5 Jan 2023 08:00:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=5zKaQOA6IGKVjD/e3CeInd78n2sD2CM5QMQ3/3xpoGk=;
+ b=EW9DXA6n2b01/pIeafCvQxNtyVXERMmUKUcexO4zlYK5qRyuT9us8zoLA1/5lQbJ5qy1
+ /ynaFOc6HqsRRtM5cMcTDaEcpaDP3cNwOJZOuVePS8htJeyrPbhJ8rQ2ZgmFJgwv1kp7
+ +ie99xvIvOusHkzPu9qCmrCY0hSNGXBHH83tQloT802o/xA3CQsVRQahUm92P4+4x1py
+ ZpGD0hOq3cQHnX10/yPwafM6UobAeQxrhuzUBtCNnb/PdsaDsxNCVkeQxgeb5EEozmRK
+ fI3YcoD3kZG7G9vDTutVltfhiRsvVrWe3mOPf6qZd93S/XvTZt8+Zab06nqszpW27rnA dw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwt79g730-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwtfm06tp-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Jan 2023 07:38:57 +0000
+	Thu, 05 Jan 2023 08:00:14 +0000
 Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3057WbUW029306;
-	Thu, 5 Jan 2023 07:38:56 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwt79g72c-1
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3057mKYR037398;
+	Thu, 5 Jan 2023 08:00:13 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwtfm06qu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Jan 2023 07:38:56 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-	by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 304IU95N000322;
-	Thu, 5 Jan 2023 07:33:54 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6vp1t-1
+	Thu, 05 Jan 2023 08:00:13 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+	by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3051RcWN000986;
+	Thu, 5 Jan 2023 08:00:10 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3mtcq6mpf0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Jan 2023 07:33:54 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3057Xo8r50856420
+	Thu, 05 Jan 2023 08:00:10 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 305806Vv45351190
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 5 Jan 2023 07:33:50 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9488120040;
-	Thu,  5 Jan 2023 07:33:50 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 531C520043;
-	Thu,  5 Jan 2023 07:33:50 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu,  5 Jan 2023 07:33:50 +0000 (GMT)
-From: Sven Schnelle <svens@linux.ibm.com>
+	Thu, 5 Jan 2023 08:00:06 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 69A8E2005A;
+	Thu,  5 Jan 2023 08:00:06 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A2D7920043;
+	Thu,  5 Jan 2023 08:00:04 +0000 (GMT)
+Received: from osiris (unknown [9.171.68.186])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu,  5 Jan 2023 08:00:04 +0000 (GMT)
+Date: Thu, 5 Jan 2023 09:00:03 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
         trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-        kernel test robot <lkp@intel.com>, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH 11/14] s390/purgatory: Remove unused '-MD' and
- unnecessary '-c' flags
+        kernel test robot <lkp@intel.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 00/14] Remove clang's -Qunused-arguments from
+ KBUILD_CPPFLAGS
+Message-ID: <Y7aDg5BqjRDZrOR/@osiris>
 References: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org>
-	<20221228-drop-qunused-arguments-v1-11-658cbc8fc592@kernel.org>
-Date: Thu, 05 Jan 2023 08:33:50 +0100
-In-Reply-To: <20221228-drop-qunused-arguments-v1-11-658cbc8fc592@kernel.org>
-	(Nathan Chancellor's message of "Wed, 04 Jan 2023 12:54:28 -0700")
-Message-ID: <yt9d358ph1up.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org>
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: d74QEH0TYv0feBi_UGwGR7t0DiRIOqb0
-X-Proofpoint-ORIG-GUID: l6XZbvx7z9wXTEy2uAUv8p4SOynfEtz9
+X-Proofpoint-GUID: HN0SRG90u-IN-eEqiy_9QPgOJjfvpn1A
+X-Proofpoint-ORIG-GUID: AWGhRIIBoEln5sOF-oxHHjt5w7QDkV0-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2023-01-05_02,2023-01-04_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- bulkscore=0 mlxscore=0 adultscore=0 priorityscore=1501 suspectscore=0
- spamscore=0 mlxlogscore=549 malwarescore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=670
+ mlxscore=0 suspectscore=0 phishscore=0 impostorscore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2301050062
 
-Nathan Chancellor <nathan@kernel.org> writes:
+On Wed, Jan 04, 2023 at 12:54:18PM -0700, Nathan Chancellor wrote:
+> Hi all,
+...
+> This series has seen my personal test framework, which tests several different
+> configurations and architectures, with LLVM tip of tree (16.0.0). I have done
+> defconfig, allmodconfig, and allnoconfig builds for arm, arm64, i386, mips,
+> powerpc, riscv, s390, and x86_64 with GCC 12.2.0 as well but I am hoping the
+> rest of the test infrastructure will catch any lurking problems.
+> 
+> I would like this series to stay together so that there is no opportunity for
+> breakage so please consider giving acks so that this can be carried via the
+> kbuild tree.
+...
+>       s390/vdso: Drop unused '-s' flag from KBUILD_AFLAGS_64
+>       s390/vdso: Drop '-shared' from KBUILD_CFLAGS_64
+>       s390/purgatory: Remove unused '-MD' and unnecessary '-c' flags
+...
+>  arch/s390/kernel/vdso64/Makefile            |  4 +--
+>  arch/s390/purgatory/Makefile                |  2 +-
 
-> When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, it
-> warns while building objects in the purgatory folder:
->
->   clang-16: error: argument unused during compilation: '-MD' [-Werror,-Wunused-command-line-argument]
->
-> '-MMD' is always passed to the preprocessor via c_flags, even when
-> KBUILD_CFLAGS is overridden in a folder, so clang complains the addition
-> of '-MD' will be unused. Remove '-MD' to clear up this warning, as it is
-> unnecessary with '-MMD'.
->
-> Additionally, '-c' is also unnecessary, remove it while in the area.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
+For the s390 bits:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
