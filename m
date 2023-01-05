@@ -1,104 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CE4EB0F
-	for <llvm@lists.linux.dev>; Thu,  5 Jan 2023 17:34:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C901C433EF;
-	Thu,  5 Jan 2023 17:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4E2EB0F
+	for <llvm@lists.linux.dev>; Thu,  5 Jan 2023 18:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56603C433EF;
+	Thu,  5 Jan 2023 18:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1672940063;
-	bh=1fJkf23oCC2RJXN3Sa96FKGl2kzGrLdl82SeNdIED3E=;
+	s=k20201202; t=1672941865;
+	bh=qgLRdj60mW8eOCCU8IOIvx4YirE72RALiIrG9dhDlsI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c9POn9KyAvZpA8TrcSCtD9gQCcT8BJmznj4R/0Dq8zNzyRJC9/oPeGCUIhNK1InCE
-	 4VadieJ0ZyQMxdXDv52cJDDaOPyrASMFMt6tPOCIAk1i5qN2udI0Twn1ZZQ1c145V3
-	 /qGYeNM0qmvRgx/KZgeh24ZYoBhgsf3q0flkSdMhKA//aSByerLUTFjMt17Am1X/wl
-	 sZT5gkh6EpgPr6xM/9HGpmtsLvTh0K4qO4mYcAZ0Tr4MwH/fMKvovK8mrbhJo/EkZY
-	 hYR+RCzdFcPc0pFgXpYxyngvdFf2epPAEZ5I8AUzYOh6UglVUu5FM1ZHyRFsJ+M0BR
-	 5bMnYXqvTLjEA==
-Date: Thu, 5 Jan 2023 10:34:21 -0700
+	b=NZeOPl0nlhGR+rHDtz9tedHiTqc/L3K1MVUN1WY6RAiunwqvgZ8Gqb/9S8jsWIUjy
+	 Z+/ThuUlri5WUDMU6mmdzZ0lZw4/jhroRoWbuKL62e3LUUnVxQrG+YIHmzorKbeR41
+	 eNEqNqUmFZIaYj7/OFsGdZgpH1c5gTEJTQYcrKgZdS8HUQWgIE1AMZqpu7aCBiqh6D
+	 K67Hj55YGC+dWIsjh+AK/1oBC4ogj9scScF+yoHd2yWZlNhtLZNBjhfRROoexxMmgB
+	 Py0Rvx5mZQykzQG4VeCbQzdVS7Yj64G0jqtemSJsNilk7GiTpdxSsaO0ygPc/HGGK4
+	 R3A6LkwaJ5mIw==
+Date: Thu, 5 Jan 2023 11:04:23 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-Cc: lgirdwood@gmail.com, broonie@kernel.org, Syed.SabaKareem@amd.com,
-	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] ASoC: amd: ps: Fix uninitialized ret in
- create_acp64_platform_devs()
-Message-ID: <Y7cKHZL8e+rfR66a@dev-arch.thelio-3990X>
-References: <20230105-wsometimes-uninitialized-pci-ps-c-v1-1-4022fd077959@kernel.org>
- <6bb126b7-1cb4-0c4c-d357-fadc3ffdd3f9@amd.com>
- <Y7cEra00F9PeFFcx@dev-arch.thelio-3990X>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: linux-s390@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
+	Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	lkft-triage@lists.linaro.org, llvm@lists.linux.dev,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: next: clang-15: s390x-linux-gnu-ld: BFD (GNU Binutils for
+ Debian) 2.35.2 assertion fail ../../bfd/elf64-s390.c:3349
+Message-ID: <Y7cRJ8xh/LLT9kk0@dev-arch.thelio-3990X>
+References: <CA+G9fYu6=N4OU11CcHqh5auVJ4WdrR4QmovHjni-z88N41y8zw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y7cEra00F9PeFFcx@dev-arch.thelio-3990X>
+In-Reply-To: <CA+G9fYu6=N4OU11CcHqh5auVJ4WdrR4QmovHjni-z88N41y8zw@mail.gmail.com>
 
-On Thu, Jan 05, 2023 at 10:11:09AM -0700, Nathan Chancellor wrote:
-> On Thu, Jan 05, 2023 at 10:34:10PM +0530, Mukunda,Vijendar wrote:
-> > On 05/01/23 21:23, Nathan Chancellor wrote:
-> > > Clang warns:
-> > >
-> > >   sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-> > >           default:
-> > >           ^~~~~~~
-> > >   sound/soc/amd/ps/pci-ps.c:239:9: note: uninitialized use occurs here
-> > >           return ret;
-> > >                  ^~~
-> > >   sound/soc/amd/ps/pci-ps.c:190:9: note: initialize the variable 'ret' to silence this warning
-> > >           int ret;
-> > >                  ^
-> > >                   = 0
-> > >   1 error generated.
-> > >
-> > > Return -ENODEV, which matches the debug message's description of this block.
-> > >
-> > > Fixes: 1d325cdaf7a2 ("ASoC: amd: ps: refactor platform device creation logic")
-> > > Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FClangBuiltLinux%2Flinux%2Fissues%2F1779&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cad26656c3d2f4c75d00208daef350528%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638085308267581104%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=eeHVStOIOcy%2FdDISOKlGNeyEwx4i5AtJZmQ5dcNB7XQ%3D&reserved=0
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  sound/soc/amd/ps/pci-ps.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-> > > index 401cfd0036be..f54b9fd9c3ce 100644
-> > > --- a/sound/soc/amd/ps/pci-ps.c
-> > > +++ b/sound/soc/amd/ps/pci-ps.c
-> > > @@ -217,6 +217,7 @@ static int create_acp63_platform_devs(struct pci_dev *pci, struct acp63_dev_data
-> > >  		break;
-> > >  	default:
-> > >  		dev_dbg(&pci->dev, "No PDM devices found\n");
-> > > +		ret = -ENODEV;
-> > ACP PCI driver supports different configurations. As per design , even  when no child dev
-> > nodes are created , ACP driver probe should be successful. ACP PCI driver probe failure
-> > causes power state transition failures when no child device nodes are created.
-> > We should not return -ENODEV in this case.
-> > return 0 is enough in this case. No need to de-init the ACP.
+Hi Naresh,
+
+On Thu, Jan 05, 2023 at 10:19:23PM +0530, Naresh Kamboju wrote:
+> The s390 clang-15 build failures on Linux next-20230105 due to following
+> errors / warnings.
 > 
-> Thank you for the review and input and sorry for getting it wrong! I
-> will send a v2 replacing 'break;' with 'return 0;' shortly.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+> defined in discarded section `.exit.text' of fs/fuse/inode.o
+> `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+> defined in discarded section `.exit.text' of fs/fuse/inode.o
+> `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
+> defined in discarded section `.exit.text' of crypto/algboss.o
+> `.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
+> defined in discarded section `.exit.text' of drivers/scsi/sd.o
+> `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+> defined in discarded section `.exit.text' of drivers/md/md.o
+> `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+> defined in discarded section `.exit.text' of drivers/md/md.o
+> `.exit.text' referenced in section `.altinstructions' of
+> drivers/md/md.o: defined in discarded section `.exit.text' of
+> drivers/md/md.o
+> `.exit.text' referenced in section `.altinstructions' of
+> drivers/md/md.o: defined in discarded section `.exit.text' of
+> drivers/md/md.o
+> `.exit.text' referenced in section `.altinstructions' of
+> net/iucv/iucv.o: defined in discarded section `.exit.text' of
+> net/iucv/iucv.o
+> `.exit.text' referenced in section `__bug_table' of
+> drivers/s390/cio/qdio_thinint.o: defined in discarded section
+> `.exit.text' of drivers/s390/cio/qdio_thinint.o
+> `.exit.text' referenced in section `__bug_table' of
+> drivers/s390/net/qeth_l3_main.o: defined in discarded section
+> `.exit.text' of drivers/s390/net/qeth_l3_main.o
+> `.exit.text' referenced in section `__bug_table' of
+> drivers/s390/net/qeth_l3_main.o: defined in discarded section
+> `.exit.text' of drivers/s390/net/qeth_l3_main.o
+> s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
+> fail ../../bfd/elf64-s390.c:3349
+> make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+> make[2]: Target '__default' not remade because of errors.
+> make[1]: *** [Makefile:1252: vmlinux] Error 2
 
-Actually, I re-read your message and looked at the code now that I am
-back in front of my keyboard and I am a little confused by your message.
-Should 'goto de_init' be replaced with 'return 0' to avoid the call to
-acp63_deinit() or should ret just be initialized to 0 in this block so
-that the call to acp63_deinit() still happens?
+Thank you for the report! This has been reported and discussed in a few
+different places on the mailing list with various solutions:
 
-Thanks again for your input!
+https://lore.kernel.org/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
+https://lore.kernel.org/20230102225656.GA3532398@roeck-us.net/
+
+https://lore.kernel.org/20230105031306.1455409-1-masahiroy@kernel.org/
+https://lore.kernel.org/20230105132349.384666-1-mpe@ellerman.id.au/
+https://lore.kernel.org/CAMj1kXHqQoqoys83nEp=Q6oT68+-GpCuMjfnYK9pMy-X_+jjKw@mail.gmail.com/
+
+For the future, if you are able to bisect to the change that caused the
+failure, you can devise a more targeted Cc list and potentially find
+some of this information out beforehand, which would allow more threads
+to stay together.
+
+The PowerPC build failure that you reported around the same time as this
+one has the same root cause.
+
+Cheers,
 Nathan
-
-> > >  		goto de_init;
-> > >  	}
-> > >  
-> > >
-> > > ---
-> > > base-commit: 03178b4f7e2c59ead102e5ab5acb82ce1eaefe46
-> > > change-id: 20230105-wsometimes-uninitialized-pci-ps-c-3b5725c6ed31
-> > >
-> > > Best regards,
-> > 
-> 
