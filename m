@@ -1,127 +1,244 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3EF7E0;
-	Fri,  6 Jan 2023 00:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743547E3;
+	Fri,  6 Jan 2023 00:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672963383; x=1704499383;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B4mehfOm5jMhXoLSKdZsAbQS8GwtomHoBGgTKj0V88Y=;
-  b=UOCgbVgrV+K+2Hjy01cGozTJEV6+uLOzJTs1X1B4jNR9kngDBNPjQ7FK
-   XZPVWf4WwU+yOFz50y4CcJmmRffgtGGm6wBKQ8PC3yCm1lwmgDlf6SgxP
-   SaZFPu4mXkkFui9b06l0ffqBn32KHf3vz62kMqEjG3DOhGl49TCifoqC9
-   38Nt2jgTvGoqKH/NdV1uNh/e2d2NEICgN7I7fyTslNfc8dRgRYMsLKii1
-   Gx0JsR7VuGPmuTk9HrDt2Uw8R9f/cz+xsQDdin1D5EkIJMSdmWVOS3aLy
-   9hxKTQb2DhgsVvU+ZyVi/MDMiqUt53mN2PPTr/toeIARK+c3pg6tACsrL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="305876304"
+  t=1672963983; x=1704499983;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Jum0ehUjh6lG+ArAS/fvh+x1lTEZ//FndJUvAzeiBSI=;
+  b=YRbZQ1TDI4eCZ4zuZfkuc/+s07zpIhtB3jjjv6xvFfPZXmscBE63Q3tl
+   VRyRGubkFL55oJRJCC1m9uGj4hlM8vPT+HQYRBXa1YKPHny7nreetKYtH
+   EatCveKibSDDZEWhkXCac6HPV3CYQanFJpJhjEy3/5Tm1ON26hzV5FbY4
+   smmYX9H/JO7N72MYgEA8pOxjkhB1fOnsqm5eeIvuaeLaMRwcYvY23kUCg
+   R3KpYVfPhOJnyCxV+LIL7m9SKRo4UemQY356dp3/lGA6IQRSIDN5sqKod
+   rBBk3Gbq2jTZwc3vze2S9+HRrEjFM3ukiIkrfsammHRbbdvnLRQYvvXvf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="302725513"
 X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="305876304"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 16:03:01 -0800
+   d="scan'208";a="302725513"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 16:13:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="984487942"
+X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="688108937"
 X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="984487942"
+   d="scan'208";a="688108937"
 Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Jan 2023 16:02:59 -0800
+  by orsmga001.jf.intel.com with ESMTP; 05 Jan 2023 16:12:59 -0800
 Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pDaCI-0002jb-1Y;
-	Fri, 06 Jan 2023 00:02:58 +0000
-Date: Fri, 6 Jan 2023 08:02:42 +0800
+	id 1pDaLy-0002k1-2J;
+	Fri, 06 Jan 2023 00:12:58 +0000
+Date: Fri, 6 Jan 2023 08:12:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Borislav Petkov (AMD)" <bp@alien8.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Ingo Molnar <mingo@kernel.org>
-Subject: [tip:x86/alternatives 1/1] error[E0588]: packed type cannot
- transitively contain a `#[repr(align)]` type
-Message-ID: <202301060824.xycdrZ24-lkp@intel.com>
+To: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2] netfilter: conntrack: simplify sctp state machine
+Message-ID: <202301060851.iMndJxe9-lkp@intel.com>
+References: <20230105114740.27882-1-sriram.yagnaraman@est.tech>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="gRpWVtS5fDlasKz6"
+Content-Type: multipart/mixed; boundary="nv75HSsQWfhAWqVg"
 Content-Disposition: inline
+In-Reply-To: <20230105114740.27882-1-sriram.yagnaraman@est.tech>
 
 
---gRpWVtS5fDlasKz6
+--nv75HSsQWfhAWqVg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Borislav,
+Hi Sriram,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc2 next-20230105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/alternatives
-head:   5d1dd961e74334a2178264193ea813d44ce5e725
-commit: 5d1dd961e74334a2178264193ea813d44ce5e725 [1/1] x86/alternatives: Add alt_instr.flags
+url:    https://github.com/intel-lab-lkp/linux/commits/Sriram-Yagnaraman/netfilter-conntrack-simplify-sctp-state-machine/20230105-195012
+patch link:    https://lore.kernel.org/r/20230105114740.27882-1-sriram.yagnaraman%40est.tech
+patch subject: [RFC PATCH v2] netfilter: conntrack: simplify sctp state machine
 config: x86_64-rhel-8.3-rust
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=5d1dd961e74334a2178264193ea813d44ce5e725
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip x86/alternatives
-        git checkout 5d1dd961e74334a2178264193ea813d44ce5e725
+        # https://github.com/intel-lab-lkp/linux/commit/a35de504693a9140cc460028b71dbd46782f08f3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sriram-Yagnaraman/netfilter-conntrack-simplify-sctp-state-machine/20230105-195012
+        git checkout a35de504693a9140cc460028b71dbd46782f08f3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/netfilter/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error[E0588]: packed type cannot transitively contain a `#[repr(align)]` type
-   --> rust/bindings/bindings_generated.rs:6182:1
-   |
-   6182 | / pub struct alt_instr {
-   6183 | |     pub instr_offset: s32,
-   6184 | |     pub repl_offset: s32,
-   6185 | |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
-   6186 | |     pub instrlen: u8_,
-   6187 | |     pub replacementlen: u8_,
-   6188 | | }
-   | |_^
-   |
-   note: `alt_instr__bindgen_ty_1__bindgen_ty_1` has a `#[repr(align)]` attribute
-   --> rust/bindings/bindings_generated.rs:6199:1
-   |
-   6199 | / pub struct alt_instr__bindgen_ty_1__bindgen_ty_1 {
-   6200 | |     pub _bitfield_1: __BindgenBitfieldUnit<[u8; 4usize], u16>,
-   6201 | | }
-   | |_^
-   note: `alt_instr` contains a field of type `alt_instr__bindgen_ty_1`
-   --> rust/bindings/bindings_generated.rs:6185:9
-   |
-   6185 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1,
-   |         ^^^^^^^^^^^^^^^^
-   note: ...which contains a field of type `alt_instr__bindgen_ty_1__bindgen_ty_1`
-   --> rust/bindings/bindings_generated.rs:6192:9
-   |
-   6192 |     pub __bindgen_anon_1: alt_instr__bindgen_ty_1__bindgen_ty_1,
-   |         ^^^^^^^^^^^^^^^^
---
->> error: aborting due to previous error
+>> net/netfilter/nf_conntrack_proto_sctp.c:181:14: warning: unused variable 'count' [-Wunused-variable]
+           u32 offset, count;
+                       ^
+   1 warning generated.
+
+
+vim +/count +181 net/netfilter/nf_conntrack_proto_sctp.c
+
+   162	
+   163	#define for_each_sctp_chunk(skb, sch, _sch, offset, dataoff)	\
+   164	for ((offset) = (dataoff) + sizeof(struct sctphdr);	\
+   165		((sch) = skb_header_pointer((skb), (offset), sizeof(_sch), &(_sch))) &&	\
+   166		(sch)->length;	\
+   167		(offset) += (ntohs((sch)->length) + 3) & ~3)
+   168	
+   169	/* Returns verdict for packet, or -NF_ACCEPT for invalid. */
+   170	int nf_conntrack_sctp_packet(struct nf_conn *ct,
+   171				     struct sk_buff *skb,
+   172				     unsigned int dataoff,
+   173				     enum ip_conntrack_info ctinfo,
+   174				     const struct nf_hook_state *state)
+   175	{
+   176		enum ip_conntrack_dir dir = CTINFO2DIR(ctinfo);
+   177		unsigned long map[256 / sizeof(unsigned long)] = { 0 };
+   178		unsigned long tflags[256 / sizeof(unsigned long)] = { 0 };
+   179		unsigned int *timeouts;
+   180		u32 init_vtag = 0;
+ > 181		u32 offset, count;
+   182		struct sctphdr _sctph, *sctph;
+   183		struct sctp_chunkhdr _sch, *sch;
+   184	
+   185		if (sctp_error(skb, dataoff, state))
+   186			return -NF_ACCEPT;
+   187	
+   188		sctph = skb_header_pointer(skb, dataoff, sizeof(_sctph), &_sctph);
+   189		if (!sctph)
+   190			return -NF_ACCEPT;
+   191	
+   192		for_each_sctp_chunk (skb, sch, _sch, offset, dataoff) {
+   193			set_bit(sch->type, map);
+   194			if (sch->flags & SCTP_CHUNK_FLAG_T)
+   195				set_bit(sch->type, tflags);
+   196	
+   197			if (sch->type == SCTP_CID_INIT ||
+   198			    sch->type == SCTP_CID_INIT_ACK) {
+   199				struct sctp_inithdr _inith, *inith;
+   200	
+   201				inith = skb_header_pointer(skb, offset + sizeof(_sch),
+   202							   sizeof(_inith), &_inith);
+   203				if (inith)
+   204					init_vtag = inith->init_tag;
+   205				else
+   206					return -NF_ACCEPT;
+   207			}
+   208		}
+   209	
+   210		if (!nf_ct_is_confirmed(ct)) {
+   211			/* If an OOTB packet has any of these chunks discard (Sec 8.4) */
+   212			if (test_bit(SCTP_CID_ABORT, map) ||
+   213			    test_bit(SCTP_CID_SHUTDOWN_COMPLETE, map) ||
+   214			    test_bit(SCTP_CID_COOKIE_ACK, map))
+   215				return -NF_ACCEPT;
+   216	
+   217			sctp_new(ct, ctinfo, init_vtag, sctph->vtag, map);
+   218			goto out;
+   219		}
+   220	
+   221		/* don't renew timeout on init retransmit so
+   222		 * port reuse by client or NAT middlebox cannot
+   223		 * keep entry alive indefinitely (incl. nat info).
+   224		 */
+   225		if (test_bit(SCTP_CID_INIT, map))
+   226			return NF_ACCEPT;
+   227	
+   228		spin_lock_bh(&ct->lock);
+   229		if (!ct->proto.sctp.vtag[!dir] &&
+   230		    test_bit(SCTP_CID_INIT_ACK, map))
+   231			ct->proto.sctp.vtag[!dir] = init_vtag;
+   232	
+   233		if (!ct->proto.sctp.vtag[dir])
+   234			ct->proto.sctp.vtag[dir] = sctph->vtag;
+   235	
+   236		/* we have seen traffic both ways, go to established */
+   237		if (dir == IP_CT_DIR_REPLY &&
+   238		    ct->proto.sctp.state == SCTP_CONNTRACK_OPEN_WAIT) {
+   239			ct->proto.sctp.state = SCTP_CONNTRACK_ESTABLISHED;
+   240			nf_conntrack_event_cache(IPCT_PROTOINFO, ct);
+   241	
+   242			if (!test_and_set_bit(IPS_ASSURED_BIT, &ct->status))
+   243				nf_conntrack_event_cache(IPCT_ASSURED, ct);
+   244		}
+   245	
+   246		if (test_bit(SCTP_CID_HEARTBEAT, map)) {
+   247			if (sctph->vtag != ct->proto.sctp.vtag[dir]) {
+   248				if (test_bit(SCTP_CID_DATA, map))
+   249					goto out_unlock;
+   250	
+   251				ct->proto.sctp.flags |= SCTP_FLAG_HEARTBEAT_VTAG_FAILED;
+   252				ct->proto.sctp.last_dir = dir;
+   253			} else if (ct->proto.sctp.flags & SCTP_FLAG_HEARTBEAT_VTAG_FAILED) {
+   254				ct->proto.sctp.flags &= ~SCTP_FLAG_HEARTBEAT_VTAG_FAILED;
+   255			}
+   256		}
+   257		if (test_bit(SCTP_CID_HEARTBEAT_ACK, map)) {
+   258			if (sctph->vtag != ct->proto.sctp.vtag[dir]) {
+   259				if (test_bit(SCTP_CID_DATA, map))
+   260					goto out_unlock;
+   261	
+   262				if ((ct->proto.sctp.flags & SCTP_FLAG_HEARTBEAT_VTAG_FAILED) == 0 ||
+   263				    ct->proto.sctp.last_dir == dir)
+   264					goto out_unlock;
+   265	
+   266				ct->proto.sctp.flags &= ~SCTP_FLAG_HEARTBEAT_VTAG_FAILED;
+   267				ct->proto.sctp.vtag[dir] = sctph->vtag;
+   268				ct->proto.sctp.vtag[!dir] = 0;
+   269			} else if (ct->proto.sctp.flags & SCTP_FLAG_HEARTBEAT_VTAG_FAILED) {
+   270				ct->proto.sctp.flags &= ~SCTP_FLAG_HEARTBEAT_VTAG_FAILED;
+   271			}
+   272		}
+   273		spin_unlock_bh(&ct->lock);
+   274	
+   275		if (!sctp_vtag_check(ct, ctinfo, sctph->vtag, map, tflags)) {
+   276			nf_ct_l4proto_log_invalid(skb, ct, state,
+   277						  "verification tag check failed %x vs (%x: dir %d) and (%x: dir %d)",
+   278						  sctph->vtag, ct->proto.sctp.vtag[dir], dir,
+   279						  ct->proto.sctp.vtag[!dir], !dir);
+   280			return -NF_ACCEPT;
+   281		}
+   282	
+   283	out:
+   284		timeouts = nf_ct_timeout_lookup(ct);
+   285		if (!timeouts)
+   286			timeouts = nf_sctp_pernet(nf_ct_net(ct))->timeouts;
+   287	
+   288		nf_ct_refresh_acct(ct, ctinfo, skb, timeouts[ct->proto.sctp.state]);
+   289	
+   290		return NF_ACCEPT;
+   291	
+   292	out_unlock:
+   293		spin_unlock_bh(&ct->lock);
+   294		return -NF_ACCEPT;
+   295	}
+   296	
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests
 
---gRpWVtS5fDlasKz6
+--nv75HSsQWfhAWqVg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 6.2.0-rc1 Kernel Configuration
+# Linux/x86_64 6.2.0-rc2 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -229,7 +346,7 @@ CONFIG_CONTEXT_TRACKING_USER=y
 # CONFIG_CONTEXT_TRACKING_USER_FORCE is not set
 CONFIG_NO_HZ=y
 CONFIG_HIGH_RES_TIMERS=y
-CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=125
+CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=100
 # end of Timers subsystem
 
 CONFIG_BPF=y
@@ -4836,7 +4953,7 @@ CONFIG_LEDS_LT3593=m
 #
 # LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THINGM)
 #
-# CONFIG_LEDS_BLINKM is not set
+CONFIG_LEDS_BLINKM=m
 CONFIG_LEDS_MLXCPLD=m
 # CONFIG_LEDS_MLXREG is not set
 # CONFIG_LEDS_USER is not set
@@ -5761,7 +5878,7 @@ CONFIG_NLS_ISO8859_8=m
 CONFIG_NLS_CODEPAGE_1250=m
 CONFIG_NLS_CODEPAGE_1251=m
 CONFIG_NLS_ASCII=y
-# CONFIG_NLS_ISO8859_1 is not set
+CONFIG_NLS_ISO8859_1=m
 CONFIG_NLS_ISO8859_2=m
 CONFIG_NLS_ISO8859_3=m
 CONFIG_NLS_ISO8859_4=m
@@ -6674,4 +6791,4 @@ CONFIG_RUST_OVERFLOW_CHECKS=y
 # end of Rust hacking
 # end of Kernel hacking
 
---gRpWVtS5fDlasKz6--
+--nv75HSsQWfhAWqVg--
