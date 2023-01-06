@@ -1,173 +1,260 @@
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402327B
-	for <llvm@lists.linux.dev>; Fri,  6 Jan 2023 08:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1672993258; x=1704529258;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=VfB3Wk1e3aV90p64Y12eHY5tZP+NSwW47hHcSstoauc=;
-  b=BCt5HmdOYZl/xjg1er3bJBpgwdmM4ilF9GxVlp3/5zUiqwzbffcFuRTN
-   BA78ddbixPm50kN/GHm+uoFGFyLh8DsepsLgRy/4OF8V0xUv2h00ug7Uw
-   UpGvSEPLCVgqLx4myBuXAcU8+VO30wW7dl37Pt4rTzEqCh/pXR3UOEZ/O
-   bZXn6zNqh8g79n7MOR2Cycbw0RYIbKmKB6PTyj+soPpw9Y1/dt/2jbtig
-   xuI8Gkzf+yagRpu1eMniFOH8TqHHJshftHu6SMKxaX239qdhNAFHig7eV
-   MgKndCiShqnojs0gzkcWvczKQPh00DvtuZl5VobQa6Mcu1LPd+ENU1l4/
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,304,1665417600"; 
-   d="scan'208";a="225215868"
-Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Jan 2023 16:19:46 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X2fgm8eM7EfGq5uNT4MmZSiXyW2dZ4JyHMTH3g0NwFoF2Ug/TcjPpwUFmAmJa79OPerGhPp2DR5XluyO2Hs4lo4W4AQRQNBYFamZP3Yrff9ZD2PX0D4IezoswtZzMNyIo/r5RjflB5AU28Ps1VXePMoK3qoZH2+OGUrc8mByFl1u1K6vWiScnqtxiyXr+mdxzGTxW9Hn7Kwk8hn7PmVgTsu6nM6GDzUehnpHXBdqKa7BkHcHHphMSp+dxJu/hB56F6I4BFtkyDXfIYHCAaeV4uZp9DXbMOw5YAkpsOjtZzKIzZH9QUIo5nYQRxrfW6ufqX4qkG7aeh8gRTq6Ws/xZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RtE7qi3UkdJsvDnm21phjxBEif44PP3oAvs1u8vyhCE=;
- b=jjjjxEzoRUs3hD7AOdteSq1ffwGkajXfeKudzXJV9c8JMfCQB+ZagSkkVT3/ElwELhTbJXKVBeEbZ7o+GSnyz2RCqpJgTRLnMsIZr8E2Acpsasmys4fmqz9GPB395oYf1vhSspRexME7xFpiVl/PGr5DBYB5YsrFo3dQhxMsO3ck7CjO+GfxBgCo39F/aQN06dGOzruzGNEJyM6MTjMTprZnZWCqEj5dI4DUBEsdhhYIqgc6OJyg+iW8XuF05MgL80KxWRLBxt2QNtslMfyOCYIgieva8Kb4ryqexGEpXa8Vi2DKvCf9VCHqdma30jXgMFV96BohbQmrfNKKI3U+bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196987B
+	for <llvm@lists.linux.dev>; Fri,  6 Jan 2023 09:24:54 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so3108559wmk.4
+        for <llvm@lists.linux.dev>; Fri, 06 Jan 2023 01:24:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RtE7qi3UkdJsvDnm21phjxBEif44PP3oAvs1u8vyhCE=;
- b=ZDgRO2Eyvns4Qfmc+5gF8fFeKLb0ioTeoe6k+fLlNBYjQBLifSaD60JSNu20+awcSlgHL8ToQrgxgkatsMI9dpRGYh/wlSxJfDZMbIAcsQtYQ8YoMmRYLGieLZW0vl2EnNGvdSiXOuu9fzfmejiFQn3MwnIOYzGFelDzNR3OIAQ=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- SA0PR04MB7337.namprd04.prod.outlook.com (2603:10b6:806:db::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.19; Fri, 6 Jan 2023 08:19:45 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::1afa:ab74:ef51:1e72]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::1afa:ab74:ef51:1e72%4]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 08:19:44 +0000
-From: Avri Altman <Avri.Altman@wdc.com>
-To: Tom Rix <trix@redhat.com>, "alim.akhtar@samsung.com"
-	<alim.akhtar@samsung.com>, "bvanassche@acm.org" <bvanassche@acm.org>,
-	"jejb@linux.ibm.com" <jejb@linux.ibm.com>, "martin.petersen@oracle.com"
-	<martin.petersen@oracle.com>, "nathan@kernel.org" <nathan@kernel.org>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>, "beanhuo@micron.com"
-	<beanhuo@micron.com>, Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-	"stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-	"j-young.choi@samsung.com" <j-young.choi@samsung.com>,
-	"peter.wang@mediatek.com" <peter.wang@mediatek.com>
-CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] scsi: ufs: core: initialize sg_cnt, sg_list
-Thread-Topic: [PATCH] scsi: ufs: core: initialize sg_cnt, sg_list
-Thread-Index: AQHZIU83ZSgdo4iBMUWhjrgAbgC0V66RDGHQ
-Date: Fri, 6 Jan 2023 08:19:44 +0000
-Message-ID:
- <DM6PR04MB6575FDCA528AE6263537A27BFCFB9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20230105214635.874609-1-trix@redhat.com>
-In-Reply-To: <20230105214635.874609-1-trix@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR04MB6575:EE_|SA0PR04MB7337:EE_
-x-ms-office365-filtering-correlation-id: d3c54f18-17fe-4bf0-cf40-08daefbec498
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- zID8/CFJgcfChtMCPB4VARn10hFMwFIzT6iO+ittSBVOJ1gljDjkG5q4MF05s2Y06T32JX9qh1lNbXyFWRePdylZ3o4gfMhSVxy8SkPAC2/+Q3acJ/mVPTeajjUVphQXUx2eDtvCz8eF6tybJZRULsmIYiC2WP4AzSXINdcwPQCORixFPasISUIm/82GpXZTPXb6MnXu/Qgr2a7S931wJMEh6vNc9rSvyf99F557Bw1tWJPzC0S+Kb72wgQIRhP2uYVM1VKLYlOwH/1nP1Tzv4KY5EVE8kh8pifby6S5Pbg4gIkXlfV5BT5gOW2oyDwaEusrwAl06FEuMkJxIaZSF2T4NfFrhUqyeh+UuNic5caMSq0dAARibD3DT286h+aaqlNIomoEiIZaNvib4NybUR1kfFIJL9JEFJLShuB1c/kSuGpOHLxyVwSTRNzYuJ/dnGj7FznJHZuw9Ne66PAoLufHCmrI3/8TOoRfl/q1uMv7fgfv9fLpWbDB2gr41vDYdoqwd8sTwyLc0vgYbjE1kMs8plGRURVw864uoa4Enz4ayqWreJrEbWicGDtZYdt+A1/cOtTTnuhyF50azx+ncmloLGLrcmvP+y9FfJXjik2WybTcWx5rO9yCWTzi6p1BP4IglXWcRCad8puzJA7sPcMAo1C3ZEYZsHc1APeuxiNHiRCISBv9TrCLjxI/dNgRcEZG4mxB9xXYXNceoVj7Vw==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39860400002)(451199015)(33656002)(66556008)(66476007)(64756008)(66446008)(66946007)(76116006)(4326008)(8676002)(4744005)(5660300002)(41300700001)(52536014)(8936002)(921005)(71200400001)(478600001)(55016003)(110136005)(38070700005)(6506007)(54906003)(38100700002)(122000001)(82960400001)(316002)(86362001)(186003)(26005)(9686003)(7696005)(7416002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Ra/+hcLx2+VFN42tQf5Ehun5k3aauKqQfO87z6YOkw/cnMyuDG/SgPNDzXhM?=
- =?us-ascii?Q?5hcRWlST4aJlt9/IvmV6bp6LWhBywXYfq3rQ19wqwuqJy5ZimAzWfeewxNk3?=
- =?us-ascii?Q?RvJ6SIsIhOfTUG4MqlUSFSojk3NPIDrYC/fYBIi3oa3RfQHS7Dj3S755YACE?=
- =?us-ascii?Q?O1k77fmc3PRSOXgNXXvZoA21zjlXfbfqT9tAzBZdqCibio1E0dONxmIj+Icg?=
- =?us-ascii?Q?aeBGTeYxQKsVVgmMi0av86iAh/lcnnyen1ANJdyAQgjGZhhkAJQKKJq5yfCs?=
- =?us-ascii?Q?q0ObI3MJkZ6wAQUexYaMCsUvggv1ngJqsuPtapCR5VGvAA5rfubbLrQezsT7?=
- =?us-ascii?Q?uwNhSsOaCsH8t/zj1aewocJzlFJ/SYWZCReJ7wqoky2YFeCatao/kASBAI/v?=
- =?us-ascii?Q?pU4ngiH49WjLbyjKvCxozp6l7KWOof2A1vFarvac5Stlob+Hxz3tTLPYqCxC?=
- =?us-ascii?Q?/7bBz5zaDXzEWc0Jirti5kTOxn8hFLFP//W/6iof8urCLWp4sxzIGg/Szd17?=
- =?us-ascii?Q?+4Hi+RffuNQ8bdyZFMtNak/7KH5fta0ywndg58SeYuGeJbY3SWy1duchCq2a?=
- =?us-ascii?Q?aKNnmYnWbJo/kqglwRPzomCwhjPvINsntiDsAKjBs4vXdE6zAn97SR7wKxIh?=
- =?us-ascii?Q?IT6wrtfuHfsZ3E5QKvQT5l3TeH7eElR5EAzCZ56d9i1p8FI0FqaXXPFDob5N?=
- =?us-ascii?Q?H8EcoBUeas2RFDa23nN7hLxiLgpDTeRdVG1FmQkjhNG9WqjF0uJuOT50CQbT?=
- =?us-ascii?Q?ZGOJE6lNMhDZLmMg3UCNWyAKRF63GAuqVD749UR/aQZVSeRD2O4vlp3o458y?=
- =?us-ascii?Q?c+jOgn8wKmsys6Xvf2sgCYifbRmtGyDiK+YJIfx1bmspsHvZhshphQwegmXa?=
- =?us-ascii?Q?867KzbBG5k6BdpJUS9aWs4NORPwqzn1aSYnlofaykdBWA/EdYBZKWgSdVBcl?=
- =?us-ascii?Q?bs87x5GHAdFExwhSnUhTzKNjWdMr0VehXzF/3HEFJgWhZExTABlhv2KHFv6y?=
- =?us-ascii?Q?R6ItSIkLQoE7gW9loll4eCjWKR+ZmjihmfNeEdHRHv5gSccZ4SzncFzU0g65?=
- =?us-ascii?Q?G26M2nV8coJSqaPekYkPPLvAzO6wnQa45i+ztatgiBFozlKfxWxwc9DYg148?=
- =?us-ascii?Q?NIAym/cfJksrFRri0CMWmMv/zlqmwwYDmZf+2Ey0GtFZtAvl3ckCw+km7zuR?=
- =?us-ascii?Q?ZXdLN3fR2/OAfvVaUc0PjGgo6L+Jg8INCvgX8XqYKNUBGLHBzApN84OTlwAZ?=
- =?us-ascii?Q?zHy8Rto6fCMaAWutS3Ld/1SJX05JVWb0EpcIa/hbh9TMjnKeGllVJp53Gfn4?=
- =?us-ascii?Q?g5Y5ioKrhc0crHh0GfN2WmOZzK6wSBI48JiuWb8Z7MCIUAu0BOs/vMOgip6N?=
- =?us-ascii?Q?e31bi9E38GaeyKMXX1E97ST8APIYf0tjCZgg4ADdGm1RCVl8HltGZOvMLRqh?=
- =?us-ascii?Q?mO9EAyvLphmse80/swWZbhT4/ZS44dDveu6qHsNEOyvgYFXC31tbDEgoTFba?=
- =?us-ascii?Q?4k8sZAzAgQhinbGYMdPVSRqYJP7jziPDe/XC8/4RUAXXJLUlj2UDdtpPXZdA?=
- =?us-ascii?Q?uNTelvIlP6dJwiGXDJaVhJvJeOcSOsK76AsBZWSB?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eN3wmdzmTLqWXye5oDHMBQuxAiTpRZvNJRGwc3NjW2I=;
+        b=DI79P0ulD48ko0W0kQzqD4bbbO/LESjHlP3K+3Gjqd5aq5qCjTjycUCVvjmwWb1a0g
+         gHFLluMta509rrl+pNWWb+aSLbQ2Vx9q/WquEQA/P026QlYlFA5sh6byWNePTaqTqCKk
+         OKJ0cEKn6QAh1GnPDQ33PZi3/5cA+5Q8Dfp7ZCJpvohQq5u0cSXIjXTzufhoATgbe4nk
+         jk45rcLYOwhdbft2IvOijmRmNGSa4i+ZPZpmx0YCXJ48bbuVUbiWZ4o6gPHC35JWiGwL
+         GOuMQJ8sAoO5MbwVTgtX6YH36bKJAtOZqNBL/p6+6GU5QRoy/FOBPGgwm8raKpStN+Fp
+         GIJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eN3wmdzmTLqWXye5oDHMBQuxAiTpRZvNJRGwc3NjW2I=;
+        b=ZaYHvEyunb3WfPxKM/CZdIv9wxNEWVTcxD03vItjbZrXLAjeVxoqHZZNE2XFTv0PbY
+         jCRrAVlHroQ62koMihJ8uIB1IIILXVclnt0ot2DEYq/K552TF4BXxmDPMJiao7e+3sqa
+         E/EfF7Br3134sTIqb8qCHF9+AWyW0PVmXdYFdaEJV3+1HzMQKw9mKSX9oqgnA0QGhc5I
+         /aawKTxxnBkDzpkt05QgErOiDjHSViwL/U/1fQ7+zsE7wUnd2zmBkzfOc7XnpUS/kiTG
+         3TrKNJh08ikW4QA5EXVMWKg0mnxEMX1HudMapjII4fQaMZlsnneeNofFD3k1f27cLkT8
+         +BJw==
+X-Gm-Message-State: AFqh2kpdzlxJoPk22szUDAUZMrXMOXAsZnVbG+/pTtA+F9X3Fd4pj+xR
+	cDm3V450UvJFtI08BJ/MZwg=
+X-Google-Smtp-Source: AMrXdXvPuwuFCHi0wBSNMRA1fAyU8V/40zD5/QIHvmHwD+xoLKDHLsKubomynygyF8bJ9A2VooS6lQ==
+X-Received: by 2002:a05:600c:1d20:b0:3d2:2aaf:316 with SMTP id l32-20020a05600c1d2000b003d22aaf0316mr39335797wms.36.1672997093023;
+        Fri, 06 Jan 2023 01:24:53 -0800 (PST)
+Received: from localhost ([217.138.219.182])
+        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003c70191f267sm5909704wmo.39.2023.01.06.01.24.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 01:24:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	=?us-ascii?Q?ZO5PVOqHbowvbCmRHaGV2rPlJR/goF9q2nOOWRJQ2W0lEAPrO8i1+1ZDPAX6?=
- =?us-ascii?Q?93i0HhZS06dQ6RxvoWvQs1XHMcXAkMJewYCfBb+Fq45CwemgIauz/xJsa9O3?=
- =?us-ascii?Q?LwKoJh7w/A0zzvA/ca3HnsERtNypCkpOiiHgTrnQWXElrwY9zvYI17NToRPo?=
- =?us-ascii?Q?y8QK5B5DUlMlIK7Vy5adIKvi96n+VD0pOofSYwtUO9HCyUp86KW+OiCZU4eJ?=
- =?us-ascii?Q?KPOcydQFL0FjbGBd7Y1o2Ie1q7ze3gJ17+2CGFPCVfF/56Rd24CeeFrrtJd4?=
- =?us-ascii?Q?RC33o5JGTX4wSB2PGt/ZfptpNzXpbHZMxcsqDeApDSCeIfJWGlTBi3loMqhr?=
- =?us-ascii?Q?2DdN/6JPmiQx1Rf9fAsAUOW9Mr92s5SOBko/UZoZUGssy+4I621VvggksveB?=
- =?us-ascii?Q?2uTtzPzQFMGaVjiVCVT/LwhYmCWr0qE/sZVxG4TWhJGWsdvdC9oa3dA6WMUQ?=
- =?us-ascii?Q?hTglbPKgmpFQybVdLzN3YImZRNZKMrw6ov6ybCpVNZ6S5K7qZceYBs8FKdnT?=
- =?us-ascii?Q?8UohWQUrAYr31B5AjQx2aAr86Wly4JIrh53deQc//i+CfAfZ4LZvxuf1YN7N?=
- =?us-ascii?Q?473AfQVD5bjTQlZAyf+M4cS0ujAG7EgTzYzGToml6gd1pGOmanxF1BcszLdE?=
- =?us-ascii?Q?RsUV5SWLXqvJkSRAEeluRRZG8kt9zuw8qGIVeNTHoH66CJo+bkaz6OrPKLmd?=
- =?us-ascii?Q?sGFo8OnDq7nEL4pGQASSLp+6HMt86Hk4CaG6gBCjfruJxU0oMhOpe3/1O6hc?=
- =?us-ascii?Q?1vN3qfH/r6f4eZL94lm1G6LTKCrgU82L6WOYmgM1SnndDCDHs0juTHjJKan3?=
- =?us-ascii?Q?odzy5VJhLFAOmecSOrEL/ZlwftYRnUh7I0yblekTaeqkRHy9uoArH0UKU264?=
- =?us-ascii?Q?1b7iXvBkc+fgK7AbTFvdRGs921Kc4LM2aRKDDuYb8GXS3D7onVFInI4k0yjR?=
- =?us-ascii?Q?/lXJ0tgYnjiGIgAreAzQRvGtZcn3aW30cGNGHqoH3CuqlcqnMIGNF/hvPDYH?=
- =?us-ascii?Q?jXYj4Hgun3mxeERliwTgGk+7Ri29ot/BwXeY4fXodROc/3wqIqo/xefGWT0/?=
- =?us-ascii?Q?ixCdKcWeyPOlShQIg8jGZV7Qy5qHY5cK2MXtL/xs9QIWDHys0eD/2Spo/bdw?=
- =?us-ascii?Q?okg5h/wh1ct3CFUfmGzliLdVOz9Y3jmtjpaqi4wWg8oC5/r52yFule6o1WxE?=
- =?us-ascii?Q?+1iSi+C7GBz8u5td?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3c54f18-17fe-4bf0-cf40-08daefbec498
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2023 08:19:44.7362
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DD1sdcwQ5/Hc2fpmODrOgTnHj03DoPsRFGKunVqADI2pCw/wVDneh8jwnKp5ac+cNUUa6DMmcUHcyhEhksTrcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR04MB7337
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Jan 2023 10:24:49 +0100
+Message-Id: <CPKZZ0T9YZQI.3REWBZJ04YQZR@vincent>
+Cc: <linux-kernel@vger.kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
+ Gaynor" <alex.gaynor@gmail.com>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, "Nicolas Schier"
+ <nicolas@fjasle.eu>, "Tom Rix" <trix@redhat.com>, "Wedson Almeida Filho"
+ <wedsonaf@gmail.com>, <llvm@lists.linux.dev>,
+ <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH 1/6] kbuild: specify output names separately for each
+ emission type from rustc
+From: "Vincenzo" <vincenzopalazzodev@gmail.com>
+To: "Masahiro Yamada" <masahiroy@kernel.org>, <linux-kbuild@vger.kernel.org>
+X-Mailer: aerc 0.8.2
+References: <20221231064203.1623793-1-masahiroy@kernel.org>
+ <20221231064203.1623793-2-masahiroy@kernel.org>
+In-Reply-To: <20221231064203.1623793-2-masahiroy@kernel.org>
 
-> The clang build fails with
-> drivers/ufs/core/ufs_bsg.c:107:6: error: variable 'sg_cnt' is used
->   uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-
-> uninitialized]
->         if (dir !=3D DMA_NONE) {
->             ^~~~~~~~~~~~~~~
-> Similar for sg_list.
->=20
-> This is not an error because ufshcd_advanced_rpmb_req_handler() does a
-> similar check, but that check can be reduced if sg_list is initialized to=
- NULL.
-> Initialize sg_cnt to silence its error.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-I think that Bean already submitted a fix for that.
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 
-Thanks,
-Avri
+
+On Sat Dec 31, 2022 at 7:41 AM CET, Masahiro Yamada wrote:
+> In Kbuild, two different rules must not write to the same file, but
+> it happens when compiling rust source files.
+>
+> For example, set CONFIG_SAMPLE_RUST_MINIMAL=3Dm and run the following:
+>
+>   $ make -j$(nproc) samples/rust/rust_minimal.o samples/rust/rust_minimal=
+.rsi \
+>                     samples/rust/rust_minimal.s samples/rust/rust_minimal=
+.ll
+>     [snip]
+>     RUSTC [M] samples/rust/rust_minimal.o
+>     RUSTC [M] samples/rust/rust_minimal.rsi
+>     RUSTC [M] samples/rust/rust_minimal.s
+>     RUSTC [M] samples/rust/rust_minimal.ll
+>   mv: cannot stat 'samples/rust/rust_minimal.d': No such file or director=
+y
+>   make[3]: *** [scripts/Makefile.build:334: samples/rust/rust_minimal.ll]=
+ Error 1
+>   make[3]: *** Waiting for unfinished jobs....
+>   mv: cannot stat 'samples/rust/rust_minimal.d': No such file or director=
+y
+>   make[3]: *** [scripts/Makefile.build:309: samples/rust/rust_minimal.o] =
+Error 1
+>   mv: cannot stat 'samples/rust/rust_minimal.d': No such file or director=
+y
+>   make[3]: *** [scripts/Makefile.build:326: samples/rust/rust_minimal.s] =
+Error 1
+>   make[2]: *** [scripts/Makefile.build:504: samples/rust] Error 2
+>   make[1]: *** [scripts/Makefile.build:504: samples] Error 2
+>   make: *** [Makefile:2008: .] Error 2
+>
+> The reason for the error is that 4 threads running in parallel creates
+> and renames the same file path, samples/rust/rust_minimal.d.
+>
+> This does not happen when compiling C or assembly files because we
+> explicitly specify the dependency filename by using the preprocessor
+> option, -Wp,-MMD,$(depfile). $(depfile) is a unique path for each target.
+>
+> Currently, rustc is only given --out-dir and the list of emitted types.
+> So, all the rust build rules output the dep-info into the default
+> <CRATE_NAME>.d, causing the conflict.
+>
+> Fortunately, the --emit option is able to specify the output path
+> individually, with the form --emit=3D<type>=3D<path>.
+>
+> Add --emit=3Ddep-info=3D$(depfile) to the common command part. Also, remo=
+ve
+> the redundant --out-dir because we specify the output path for each type.
+>
+> The code gets much cleaner because we do not need to rename *.d files.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  rust/Makefile          | 10 ++++------
+>  scripts/Makefile.build | 14 +++++++-------
+>  scripts/Makefile.host  |  9 +++------
+>  3 files changed, 14 insertions(+), 19 deletions(-)
+>
+> diff --git a/rust/Makefile b/rust/Makefile
+> index ff70c4c916f8..0e2a32f4b3e9 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -331,10 +331,9 @@ $(obj)/exports_kernel_generated.h: $(obj)/kernel.o F=
+ORCE
+>  quiet_cmd_rustc_procmacro =3D $(RUSTC_OR_CLIPPY_QUIET) P $@
+>        cmd_rustc_procmacro =3D \
+>  	$(RUSTC_OR_CLIPPY) $(rust_common_flags) \
+> -		--emit=3Ddep-info,link --extern proc_macro \
+> -		--crate-type proc-macro --out-dir $(objtree)/$(obj) \
+> +		--emit=3Ddep-info=3D$(depfile) --emit=3Dlink=3D$@ --extern proc_macro =
+\
+> +		--crate-type proc-macro \
+>  		--crate-name $(patsubst lib%.so,%,$(notdir $@)) $<; \
+> -	mv $(objtree)/$(obj)/$(patsubst lib%.so,%,$(notdir $@)).d $(depfile); \
+>  	sed -i '/^\#/d' $(depfile)
+> =20
+>  # Procedural macros can only be used with the `rustc` that compiled it.
+> @@ -348,10 +347,9 @@ quiet_cmd_rustc_library =3D $(if $(skip_clippy),RUST=
+C,$(RUSTC_OR_CLIPPY_QUIET)) L
+>  	OBJTREE=3D$(abspath $(objtree)) \
+>  	$(if $(skip_clippy),$(RUSTC),$(RUSTC_OR_CLIPPY)) \
+>  		$(filter-out $(skip_flags),$(rust_flags) $(rustc_target_flags)) \
+> -		--emit=3Ddep-info,obj,metadata --crate-type rlib \
+> -		--out-dir $(objtree)/$(obj) -L$(objtree)/$(obj) \
+> +		--emit=3Ddep-info=3D$(depfile) --emit=3Dobj=3D$@ --emit=3Dmetadata=3D$=
+(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
+> +		--crate-type rlib -L$(objtree)/$(obj) \
+>  		--crate-name $(patsubst %.o,%,$(notdir $@)) $<; \
+> -	mv $(objtree)/$(obj)/$(patsubst %.o,%,$(notdir $@)).d $(depfile); \
+>  	sed -i '/^\#/d' $(depfile) \
+>  	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
+> =20
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index a0d5c6cca76d..40de20246e50 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -285,11 +285,11 @@ rust_common_cmd =3D \
+>  	-Zcrate-attr=3Dno_std \
+>  	-Zcrate-attr=3D'feature($(rust_allowed_features))' \
+>  	--extern alloc --extern kernel \
+> -	--crate-type rlib --out-dir $(obj) -L $(objtree)/rust/ \
+> -	--crate-name $(basename $(notdir $@))
+> +	--crate-type rlib -L $(objtree)/rust/ \
+> +	--crate-name $(basename $(notdir $@)) \
+> +	--emit=3Ddep-info=3D$(depfile)
+> =20
+>  rust_handle_depfile =3D \
+> -	mv $(obj)/$(basename $(notdir $@)).d $(depfile); \
+>  	sed -i '/^\#/d' $(depfile)
+> =20
+>  # `--emit=3Dobj`, `--emit=3Dasm` and `--emit=3Dllvm-ir` imply a single c=
+odegen unit
+> @@ -302,7 +302,7 @@ rust_handle_depfile =3D \
+> =20
+>  quiet_cmd_rustc_o_rs =3D $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+>        cmd_rustc_o_rs =3D \
+> -	$(rust_common_cmd) --emit=3Ddep-info,obj $<; \
+> +	$(rust_common_cmd) --emit=3Dobj=3D$@ $<; \
+>  	$(rust_handle_depfile)
+> =20
+>  $(obj)/%.o: $(src)/%.rs FORCE
+> @@ -310,7 +310,7 @@ $(obj)/%.o: $(src)/%.rs FORCE
+> =20
+>  quiet_cmd_rustc_rsi_rs =3D $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+>        cmd_rustc_rsi_rs =3D \
+> -	$(rust_common_cmd) --emit=3Ddep-info -Zunpretty=3Dexpanded $< >$@; \
+> +	$(rust_common_cmd) -Zunpretty=3Dexpanded $< >$@; \
+>  	command -v $(RUSTFMT) >/dev/null && $(RUSTFMT) $@; \
+>  	$(rust_handle_depfile)
+> =20
+> @@ -319,7 +319,7 @@ $(obj)/%.rsi: $(src)/%.rs FORCE
+> =20
+>  quiet_cmd_rustc_s_rs =3D $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+>        cmd_rustc_s_rs =3D \
+> -	$(rust_common_cmd) --emit=3Ddep-info,asm $<; \
+> +	$(rust_common_cmd) --emit=3Dasm=3D$@ $<; \
+>  	$(rust_handle_depfile)
+> =20
+>  $(obj)/%.s: $(src)/%.rs FORCE
+> @@ -327,7 +327,7 @@ $(obj)/%.s: $(src)/%.rs FORCE
+> =20
+>  quiet_cmd_rustc_ll_rs =3D $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+>        cmd_rustc_ll_rs =3D \
+> -	$(rust_common_cmd) --emit=3Ddep-info,llvm-ir $<; \
+> +	$(rust_common_cmd) --emit=3Dllvm-ir=3D$@ $<; \
+>  	$(rust_handle_depfile)
+> =20
+>  $(obj)/%.ll: $(src)/%.rs FORCE
+> diff --git a/scripts/Makefile.host b/scripts/Makefile.host
+> index da133780b751..4434cdbf7b8e 100644
+> --- a/scripts/Makefile.host
+> +++ b/scripts/Makefile.host
+> @@ -84,8 +84,8 @@ _hostc_flags   =3D $(KBUILD_HOSTCFLAGS)   $(HOST_EXTRAC=
+FLAGS)   \
+>                   $(HOSTCFLAGS_$(target-stem).o)
+>  _hostcxx_flags =3D $(KBUILD_HOSTCXXFLAGS) $(HOST_EXTRACXXFLAGS) \
+>                   $(HOSTCXXFLAGS_$(target-stem).o)
+> -_hostrust_flags =3D $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
+> -                  $(HOSTRUSTFLAGS_$(target-stem))
+> +hostrust_flags =3D $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
+> +                  $(HOSTRUSTFLAGS_$(target-stem)) --emit=3Ddep-info=3D$(=
+depfile)
+> =20
+>  # $(objtree)/$(obj) for including generated headers from checkin source =
+files
+>  ifeq ($(KBUILD_EXTMOD),)
+> @@ -97,7 +97,6 @@ endif
+> =20
+>  hostc_flags    =3D -Wp,-MMD,$(depfile) $(_hostc_flags)
+>  hostcxx_flags  =3D -Wp,-MMD,$(depfile) $(_hostcxx_flags)
+> -hostrust_flags =3D $(_hostrust_flags)
+> =20
+>  #####
+>  # Compile programs on the host
+> @@ -149,9 +148,7 @@ $(host-cxxobjs): $(obj)/%.o: $(src)/%.cc FORCE
+>  # host-rust -> Executable
+>  quiet_cmd_host-rust	=3D HOSTRUSTC $@
+>        cmd_host-rust	=3D \
+> -	$(HOSTRUSTC) $(hostrust_flags) --emit=3Ddep-info,link \
+> -		--out-dir=3D$(obj)/ $<; \
+> -	mv $(obj)/$(target-stem).d $(depfile); \
+> +	$(HOSTRUSTC) $(hostrust_flags) --emit=3Dlink=3D$@ $<; \
+>  	sed -i '/^\#/d' $(depfile)
+>  $(host-rust): $(obj)/%: $(src)/%.rs FORCE
+>  	$(call if_changed_dep,host-rust)
+> --=20
+> 2.34.1
+
