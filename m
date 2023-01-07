@@ -1,97 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D90257A
-	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 17:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C3F2CAB
+	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 17:50:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673113016;
+	s=mimecast20190719; t=1673113838;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9gCpV0dGtCCGp1jPgBtNFnuKxWWQi0wqnd//45zEPmE=;
-	b=EJIlnTDUVa1//NaJ/AOzvjM5lBFn33IZx484/SRp5tlZn2ZdKQigF/H5+yd6vv+CXcC4BW
-	txU9mv2uMVZ0rsNkM9CP2X+Cg8SwCylE7gWzCBBuTmqaM0IZbMTuOQyskp9+qRyatCHRqI
-	3DJdwtfza16KozX4iLBDX3+KslqtweA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-656-XAevGCa0Nli-TN76p5TTqw-1; Sat, 07 Jan 2023 12:36:55 -0500
-X-MC-Unique: XAevGCa0Nli-TN76p5TTqw-1
-Received: by mail-wm1-f71.google.com with SMTP id t24-20020a1c7718000000b003d1fd0b866fso985242wmi.3
-        for <llvm@lists.linux.dev>; Sat, 07 Jan 2023 09:36:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gCpV0dGtCCGp1jPgBtNFnuKxWWQi0wqnd//45zEPmE=;
-        b=dL4GmMsd/2Q6MRYiGQUYo9jt/y0sfgZ/tue9sBKr639xQuswqv5/7Jy4byZ3VLs2Ef
-         7sx79U43xtUXGh7G5CY6HmbHfgtiIRQUkWLUYXwdNZ6E7lerP7OkI3SG4pAxHflN02TP
-         4jZtOlyWJ1swdXNzbJb2aL1ExfuJeMl+6fXgCIwlv/iQLCqvG9Pl5I8zRJTFrtSr+CbU
-         gRDJYanJkaHFMfalHV5ispNftccmWFZrNgT625AVZ62/N1LZCYHaP0rnhknDLQeQYnIA
-         xDoe+oJIj/Ic478/z2864xdiPSL5fF3TNb9sFHNaZPDYueD1eItqxG8jIh5hu0rV0/lG
-         zfvg==
-X-Gm-Message-State: AFqh2kqE6S2Y5IQL12fNLtH4cvqpXogqFb2S0gMxRjDjBfI7eoEOLcJ1
-	6OQYI7qEdIdXXGnOmfl61lwZjzvzP4hs06XfuX6nhgjga5K+ZwQqlgqXFE70UImiQHwp0s1Iu0M
-	uWm7+A9eUBbNC5g==
-X-Received: by 2002:a7b:cd99:0:b0:3d3:5506:1bac with SMTP id y25-20020a7bcd99000000b003d355061bacmr42940021wmj.30.1673113014604;
-        Sat, 07 Jan 2023 09:36:54 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtq5O2gMQwBFZYJBuaPTxiyhl5nYlsXlZhAewhas7TQGY9Hr/5ja8BEgFOpLT7ZHXkopoF13A==
-X-Received: by 2002:a7b:cd99:0:b0:3d3:5506:1bac with SMTP id y25-20020a7bcd99000000b003d355061bacmr42940017wmj.30.1673113014449;
-        Sat, 07 Jan 2023 09:36:54 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d6a08000000b002a1ae285bfasm4291978wru.77.2023.01.07.09.36.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Jan 2023 09:36:53 -0800 (PST)
-Message-ID: <8110a6b7-dacb-57d3-a9fd-b2caf9899ab9@redhat.com>
-Date: Sat, 7 Jan 2023 18:36:52 +0100
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GmwdLqg84x9cYHq0jvULnR14hqD/iIY5ibJLdPJtPnw=;
+	b=Xi1DgiKXfiW+lvC2wNR3BHmcHIBhnRjjcRr6kQPAX3bmlebob5LxfNs0QO65Qx2nmmh/4Y
+	uRpibB76ixnAeL8CXPGUbn3wX0zDmVwVSDFdy0IhIqjYTkCV+ENu7tq83mT9T0x+xOyZe8
+	AQBlTKv9aU/B4vQQYmvMwGkB94tuVS4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-193-MT6UGjPMPGS713VPpt5qkw-1; Sat, 07 Jan 2023 12:50:37 -0500
+X-MC-Unique: MT6UGjPMPGS713VPpt5qkw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C75C3C02189
+	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 17:50:37 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 44C01492B06;
+	Sat,  7 Jan 2023 17:50:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.2.0-rc2,
+ mainline.kernel.org-clang, 1382999a)
+Date: Sat, 07 Jan 2023 17:50:37 -0000
+To: jiyin@redhat.com, llvm@lists.linux.dev, bgoncalv@redhat.com,
+ xifeng@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/2] drm/mipi-dsi: Fix mipi_dsi_dcs_write_seq() macro
- definition format
-To: Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Tom Rix <trix@redhat.com>,
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev
-References: <20230102202542.3494677-1-javierm@redhat.com>
- <Y7M+6gdQM/4DhQsP@ravnborg.org>
-From: Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Y7M+6gdQM/4DhQsP@ravnborg.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <90115.123010712503700103@us-mta-193.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/2/23 21:30, Sam Ravnborg wrote:
-> On Mon, Jan 02, 2023 at 09:25:41PM +0100, Javier Martinez Canillas wrote:
->> Change made using a `clang-format -i include/drm/drm_mipi_dsi.h` command.
->>
->> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Thanks,
-> 
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
->> ---
+Hi, we tested your kernel and here are the results:
 
-Pushed to drm-misc (drm-misc-next). Thanks!
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
--- 
-Best regards,
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Kernel information:
+    Commit message: tpm: Allow system suspend to continue when TPM suspend =
+fails
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64878
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6582380
+         ppc64le - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6582559
+         ppc64le - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6582601
+          x86_64 - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6582638
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6582156
+          x86_64 (debug) - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6582306
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: (upstream) Cannot download, all mirrors were already tried w=
+ithout success
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5439024
+            Affected tests:
+                  x86_64 (debug) - xfstests - ext4
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
