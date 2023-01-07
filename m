@@ -1,132 +1,176 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28A31C32
-	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 15:42:18 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id p123so2195874pfb.8
-        for <llvm@lists.linux.dev>; Sat, 07 Jan 2023 07:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6xDSCMl1byV6r8CizXSU340HcVITDFX3ysn4+0ZvaY4=;
-        b=TNWw3UNm5egls2TgN5h1Ray/CeJYacXRE5VvHj5EBCIDbShpoHMXcg/CdGYkkUB4Wg
-         XFDo8Z7EyaAmDv+1hTmeIrPlgAWAb0Kr7iIjKimoOH43XnVytB2LObGWtdMsMmC2t7T7
-         3GHxn24IttXoZThaVeAuklaoGEpGV12+uQlxosVbSOJsEEWcwK1VxkOPRSZCd1XgF5iI
-         6a8n6zXv26MZdzIJe1jEet6ATzAf+eRP/0droi6ns2ZlwJBUFJSbpN3ZgHVpTCTSBgna
-         upO2eBw994cGyLlKX6C2DeRIUIANfl5xh2sipF+4p+peodXSBVdv4l66V/HRyAJV3ooh
-         L8UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6xDSCMl1byV6r8CizXSU340HcVITDFX3ysn4+0ZvaY4=;
-        b=OYY2aihetX/tY6QsfP15BJAzUkdxLpK8lc3+7RyqtSX3EO+bmM0zynj3W8KE/ySKxl
-         SQOP4vUo6s7CJmvSyKF3qab8ykGPr1A2z0RusvA8kLfF2VT2NWp0eJMl4JhjSL5uoqSm
-         pNvTM8zYt8szqVy4yNGNIoD9DWiUnOYm5QI8/Q4sgrKLlQktni2ByjpHXQQra0h0VpgS
-         4s+7xWXUsDqCs9nRkjiUWBfqRksEFmgG3L8a8wdTjQzFw+7ry8M3Nm47NTPgZSZFGKSK
-         HyS5qSTHQb2IgPS/ERzm5+bvHna0Pgg9J14T+X1IE4jUZeSb4HxGeMEovJqSwT0+gCyd
-         A9Dw==
-X-Gm-Message-State: AFqh2kpRkYcOQPFoimCyeLPhAWhkqLPShObbRRFtj2wL0pymbA9hGR5Y
-	XuSrFU9amCaiQaUgLo85PU0=
-X-Google-Smtp-Source: AMrXdXvE5OGLzHXfqQC90eD/mJS2cy4fM2WVoP4U6+pXa936fN643zge3kXFDrnpKY640ANna1bIiA==
-X-Received: by 2002:a62:b50c:0:b0:587:3153:6080 with SMTP id y12-20020a62b50c000000b0058731536080mr669851pfe.31.1673106138167;
-        Sat, 07 Jan 2023 07:42:18 -0800 (PST)
-Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id h2-20020aa79f42000000b00575d1ba0ecfsm2966907pfr.133.2023.01.07.07.42.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 07 Jan 2023 07:42:17 -0800 (PST)
-Date: Sat, 7 Jan 2023 07:42:13 -0800
-From: Dan Li <ashimida.1990@gmail.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Qing Zhao <qing.zhao@oracle.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Marco Elver <elver@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Song Liu <song@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Yuntao Wang <ytcoode@gmail.com>,
-	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20230107154213.ocyghxd2k66gbvv6@ubuntu>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
- <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
- <202301061929.6881F6CD40@keescook>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E380823D7
+	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 17:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673110839;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aZlZvkS546SfJp6MFc7E9OiqmFrl/3Ti5UpZHxgGNbA=;
+	b=Hw05WV4aIsqca8m8XXYQXSYFH63pErvtQ4CUdkcnZ9KNufk19hJCbR5ZL0DOInm26folOe
+	OONxEstdpeg7/ro5wjdNKBRFLs9hfWmz3qVkT+tQmdgZEqiVtyvjp67AC8Un4gP0uanL7j
+	li7SQT647jVnygtpwPvFQ/epyUh9Ybk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-qKnRT8UiP5aVXfkIzC5ApQ-1; Sat, 07 Jan 2023 12:00:37 -0500
+X-MC-Unique: qKnRT8UiP5aVXfkIzC5ApQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D19331C05130
+	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 17:00:36 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AD185400E107;
+	Sat,  7 Jan 2023 17:00:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.2.0-rc2,
+ mainline.kernel.org-clang, a689b938)
+Date: Sat, 07 Jan 2023 17:00:36 -0000
+To: jiyin@redhat.com, llvm@lists.linux.dev, xifeng@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301061929.6881F6CD40@keescook>
-User-Agent: NeoMutt/20171215
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <48636.123010712003700380@us-mta-663.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+Hi, we tested your kernel and here are the results:
 
-On 01/06, Kees Cook wrote:
-> On Mon, Dec 19, 2022 at 05:32:04AM -0800, Dan Li wrote:
-> > Hi Peter,
-> Hi!
-> 
-> First of all, thank you thank you for working on this in GCC. This will
-> make a big difference for folks that don't have the option to build with
-> Clang to gain CFI coverage.
-> 
-> As for the implementation details, the core issue is really that this
-> type of CFI is specifically designed for the Linux kernel, and it took a
-> rather long time to figure out all the specifics needed (down to the
-> byte counts and instruction layouts). GCC's version will ultimately need
-> to exactly match the Clang output, or Linux is unlikely to support it.
-> 
-> We're already on our second CFI -- the original Clang CFI was just too
-> clunky for long-term use in Linux, so unless we're going to improve on
-> the latest Clang KCFI implementation in some way, it's better to stick
-> to exactly byte-for-byte identical results. The KCFI support in Linux
-> depends on the arm64 and x86_64 runtimes for catching the traps, and the
-> post-processing done (on x86_64) with objtool that prepares the kernel
-> for IBT use, and converts to the optional FineIBT CFI mechanism. With
-> all those moving parts, there needs to be a very compelling reason to
-> have GCC KCFI implementation differ from Clang's.
-> 
-> Hopefully that context helps a little. I'm excited to try out future
-> versions!
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Thanks for the context, it makes sense and helped me a lot. :)
 
-In the next version I'll make the gcc implementation consistent with clang.
+Kernel information:
+    Commit message: Merge tag 'block-2023-01-06' of git://git.kernel.dk/lin=
+ux
 
-Thanks,
-Dan.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64857
 
-> 
-> -Kees
-> 
-> -- 
-> Kees Cook
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6581484
+         ppc64le - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6581405
+          x86_64 - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6581272
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6580372
+          x86_64 (debug) - CIFS Connectathon
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6581356
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
