@@ -1,93 +1,217 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A89D1842
-	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 09:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA17FC433D2
-	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 09:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98D31842
+	for <llvm@lists.linux.dev>; Sat,  7 Jan 2023 09:18:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2752C433F0;
+	Sat,  7 Jan 2023 09:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673082626;
-	bh=IBB4vS9uXFcRA5vbIOpEIyUnvisvZwkqPn9Sb1Psd/E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ppMRysQWQN03Z7wpwi3vlzb66/WBwSqtJiTO7+Uoaa4xEfOJfhWqTqKevE+06AMs/
-	 TyQwRzcX5X3FQ2S+h/s0U8CDyNBpVsPi1BPzA7VJbaufr+Q1gfuZKMts2blyiEE0Ug
-	 WwnZ32r1b8IRcfZqPR5S83nMC6jxtD6ToBfj0netvBYB8/Pv+piXsVYHm9YKMBLBqZ
-	 lJnZl9GUvleKl9TlA4thg5PrX22UnwpSkQGsZ7CP8J2oQUENp8Stxi3mx5JGTY3+Pg
-	 PBPEp8+ZfwDdMRFbjW/Vh1ihT97RYQ3KRi9Y9Al2jUjsGNCpBS0L2bWbhOFYngL5Pf
-	 6L4b4iaxQVHXw==
-Received: by mail-ot1-f51.google.com with SMTP id x25-20020a056830115900b00670932eff32so2267465otq.3
-        for <llvm@lists.linux.dev>; Sat, 07 Jan 2023 01:10:26 -0800 (PST)
-X-Gm-Message-State: AFqh2koGjk+zZsq4E/fu1H+IA8Ja+6Ka/rOVpOsaQvo6N4DhRiaRiKYL
-	KxNGVlef0eL0m1zO8gwLUEBH48zV9YbzSP3gvP0=
-X-Google-Smtp-Source: AMrXdXuWtj+rWB/s6w4ffQZ35ddawNN5ZxJS3aZYJbk/c2fIqmUiiMaTwh5RfwH7fXDlq+d4890py22AWrj/Cm7q+20=
-X-Received: by 2002:a9d:128c:0:b0:66c:794e:f8c6 with SMTP id
- g12-20020a9d128c000000b0066c794ef8c6mr3619042otg.343.1673082625996; Sat, 07
- Jan 2023 01:10:25 -0800 (PST)
+	s=k20201202; t=1673083112;
+	bh=0QF2lzNN/SLn4tIfGJY0no6diuyNZkG0xSiunadzdwQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bn/zBTlN/qu9/Q/toTAoVwwdm6H665REKlxjr9NaCH1ds7yhrw8wNfqpK5mi/hmXm
+	 8V6WJcyVYjKjzfmz98tYnt9GRa9QtdWkn6qWYYTD8Unid/lPiFkq+XYGR/oVY2Vlf+
+	 Or5h7tt6tjJV0PpKZlrD9lTzQtKRjiZUkHtXc5+nuRnWer9NAs+GCDS8LOOYpd1GM+
+	 V6CWuvEIeEJeFr6Kv1i9QY/f7R7hviBYNBTOw6fNq3R3mb1y3zB1ng2p/E83deCxl8
+	 LOG6TXnLlfI75hyHZHBEPfWQFDMsQPK02bJmMf311q2zcMOxy7LZbALbKGzISwZCtr
+	 n2BZ7OwHKyRyA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	rust-for-linux@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 2/7] kbuild: specify output names separately for each emission type from rustc
+Date: Sat,  7 Jan 2023 18:18:15 +0900
+Message-Id: <20230107091820.3382134-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230107091820.3382134-1-masahiroy@kernel.org>
+References: <20230107091820.3382134-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221231064203.1623793-1-masahiroy@kernel.org>
- <20221231064203.1623793-2-masahiroy@kernel.org> <CANiq72k8LSqsnWNd_aa-M1=rMNLWD7KJWrK6Pv0Waq15Exv59g@mail.gmail.com>
-In-Reply-To: <CANiq72k8LSqsnWNd_aa-M1=rMNLWD7KJWrK6Pv0Waq15Exv59g@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 7 Jan 2023 18:09:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT7of2JqjYpaM0=fZTB5PG9Sike9-mcKxHS12JwfEAbQA@mail.gmail.com>
-Message-ID: <CAK7LNAT7of2JqjYpaM0=fZTB5PG9Sike9-mcKxHS12JwfEAbQA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kbuild: specify output names separately for each
- emission type from rustc
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 4, 2023 at 5:45 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Sat, Dec 31, 2022 at 7:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> >   $ make -j$(nproc) samples/rust/rust_minimal.o samples/rust/rust_minimal.rsi \
-> >                     samples/rust/rust_minimal.s samples/rust/rust_minimal.ll
->
-> Yeah, we were testing the single targets, but not multiple at once, thanks!
->
-> > +               --emit=dep-info=$(depfile) --emit=obj=$@ --emit=metadata=$(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
->
-> Perhaps a newline here to avoid the lengthy line?
+In Kbuild, two different rules must not write to the same file, but
+it happens when compiling rust source files.
 
+For example, set CONFIG_SAMPLE_RUST_MINIMAL=m and run the following:
 
-OK, I will wrap it in v2.
+  $ make -j$(nproc) samples/rust/rust_minimal.o samples/rust/rust_minimal.rsi \
+                    samples/rust/rust_minimal.s samples/rust/rust_minimal.ll
+    [snip]
+    RUSTC [M] samples/rust/rust_minimal.o
+    RUSTC [M] samples/rust/rust_minimal.rsi
+    RUSTC [M] samples/rust/rust_minimal.s
+    RUSTC [M] samples/rust/rust_minimal.ll
+  mv: cannot stat 'samples/rust/rust_minimal.d': No such file or directory
+  make[3]: *** [scripts/Makefile.build:334: samples/rust/rust_minimal.ll] Error 1
+  make[3]: *** Waiting for unfinished jobs....
+  mv: cannot stat 'samples/rust/rust_minimal.d': No such file or directory
+  make[3]: *** [scripts/Makefile.build:309: samples/rust/rust_minimal.o] Error 1
+  mv: cannot stat 'samples/rust/rust_minimal.d': No such file or directory
+  make[3]: *** [scripts/Makefile.build:326: samples/rust/rust_minimal.s] Error 1
+  make[2]: *** [scripts/Makefile.build:504: samples/rust] Error 2
+  make[1]: *** [scripts/Makefile.build:504: samples] Error 2
+  make: *** [Makefile:2008: .] Error 2
 
+The reason for the error is that 4 threads running in parallel renames
+the same file, samples/rust/rust_minimal.d.
 
->
-> >  hostc_flags    = -Wp,-MMD,$(depfile) $(_hostc_flags)
-> >  hostcxx_flags  = -Wp,-MMD,$(depfile) $(_hostcxx_flags)
-> > -hostrust_flags = $(_hostrust_flags)
->
-> This was originally meant to be consistent with C and C++ indeed, but
-> if you prefer less variables, I guess it is fine, in which case,
-> should we update the C/C++ side too (in another series)?
+This does not happen when compiling C or assembly files because
+-Wp,-MMD,$(depfile) explicitly specifies the dependency filepath.
+$(depfile) is a unique path for each target.
 
+Currently, rustc is only given --out-dir and --emit=<list-of-types>
+So, all the rust build rules output the dep-info into the default
+<CRATE_NAME>.d, which causes the path conflict.
 
-Yup, we could do this with less variables.
-I will send a clean up.
+Fortunately, the --emit option is able to specify the output path
+individually, with the form --emit=<type>=<path>.
 
+Add --emit=dep-info=$(depfile) to the common part. Also, remove the
+redundant --out-dir because the output path is specified for each type.
 
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> Tested-by: Miguel Ojeda <ojeda@kernel.org>
->
-> Cheers,
-> Miguel
+The code gets much cleaner because we do not need to rename *.d files.
 
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+---
 
+Changes in v2:
+  - Wrap a too long line
 
+ rust/Makefile          | 11 +++++------
+ scripts/Makefile.build | 14 +++++++-------
+ scripts/Makefile.host  |  6 ++----
+ 3 files changed, 14 insertions(+), 17 deletions(-)
+
+diff --git a/rust/Makefile b/rust/Makefile
+index ff70c4c916f8..865afb87bc9b 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -331,10 +331,9 @@ $(obj)/exports_kernel_generated.h: $(obj)/kernel.o FORCE
+ quiet_cmd_rustc_procmacro = $(RUSTC_OR_CLIPPY_QUIET) P $@
+       cmd_rustc_procmacro = \
+ 	$(RUSTC_OR_CLIPPY) $(rust_common_flags) \
+-		--emit=dep-info,link --extern proc_macro \
+-		--crate-type proc-macro --out-dir $(objtree)/$(obj) \
++		--emit=dep-info=$(depfile) --emit=link=$@ --extern proc_macro \
++		--crate-type proc-macro \
+ 		--crate-name $(patsubst lib%.so,%,$(notdir $@)) $<; \
+-	mv $(objtree)/$(obj)/$(patsubst lib%.so,%,$(notdir $@)).d $(depfile); \
+ 	sed -i '/^\#/d' $(depfile)
+ 
+ # Procedural macros can only be used with the `rustc` that compiled it.
+@@ -348,10 +347,10 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
+ 	OBJTREE=$(abspath $(objtree)) \
+ 	$(if $(skip_clippy),$(RUSTC),$(RUSTC_OR_CLIPPY)) \
+ 		$(filter-out $(skip_flags),$(rust_flags) $(rustc_target_flags)) \
+-		--emit=dep-info,obj,metadata --crate-type rlib \
+-		--out-dir $(objtree)/$(obj) -L$(objtree)/$(obj) \
++		--emit=dep-info=$(depfile) --emit=obj=$@ \
++		--emit=metadata=$(dir $@)$(patsubst %.o,lib%.rmeta,$(notdir $@)) \
++		--crate-type rlib -L$(objtree)/$(obj) \
+ 		--crate-name $(patsubst %.o,%,$(notdir $@)) $<; \
+-	mv $(objtree)/$(obj)/$(patsubst %.o,%,$(notdir $@)).d $(depfile); \
+ 	sed -i '/^\#/d' $(depfile) \
+ 	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
+ 
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index a0d5c6cca76d..40de20246e50 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -285,11 +285,11 @@ rust_common_cmd = \
+ 	-Zcrate-attr=no_std \
+ 	-Zcrate-attr='feature($(rust_allowed_features))' \
+ 	--extern alloc --extern kernel \
+-	--crate-type rlib --out-dir $(obj) -L $(objtree)/rust/ \
+-	--crate-name $(basename $(notdir $@))
++	--crate-type rlib -L $(objtree)/rust/ \
++	--crate-name $(basename $(notdir $@)) \
++	--emit=dep-info=$(depfile)
+ 
+ rust_handle_depfile = \
+-	mv $(obj)/$(basename $(notdir $@)).d $(depfile); \
+ 	sed -i '/^\#/d' $(depfile)
+ 
+ # `--emit=obj`, `--emit=asm` and `--emit=llvm-ir` imply a single codegen unit
+@@ -302,7 +302,7 @@ rust_handle_depfile = \
+ 
+ quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+       cmd_rustc_o_rs = \
+-	$(rust_common_cmd) --emit=dep-info,obj $<; \
++	$(rust_common_cmd) --emit=obj=$@ $<; \
+ 	$(rust_handle_depfile)
+ 
+ $(obj)/%.o: $(src)/%.rs FORCE
+@@ -310,7 +310,7 @@ $(obj)/%.o: $(src)/%.rs FORCE
+ 
+ quiet_cmd_rustc_rsi_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+       cmd_rustc_rsi_rs = \
+-	$(rust_common_cmd) --emit=dep-info -Zunpretty=expanded $< >$@; \
++	$(rust_common_cmd) -Zunpretty=expanded $< >$@; \
+ 	command -v $(RUSTFMT) >/dev/null && $(RUSTFMT) $@; \
+ 	$(rust_handle_depfile)
+ 
+@@ -319,7 +319,7 @@ $(obj)/%.rsi: $(src)/%.rs FORCE
+ 
+ quiet_cmd_rustc_s_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+       cmd_rustc_s_rs = \
+-	$(rust_common_cmd) --emit=dep-info,asm $<; \
++	$(rust_common_cmd) --emit=asm=$@ $<; \
+ 	$(rust_handle_depfile)
+ 
+ $(obj)/%.s: $(src)/%.rs FORCE
+@@ -327,7 +327,7 @@ $(obj)/%.s: $(src)/%.rs FORCE
+ 
+ quiet_cmd_rustc_ll_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
+       cmd_rustc_ll_rs = \
+-	$(rust_common_cmd) --emit=dep-info,llvm-ir $<; \
++	$(rust_common_cmd) --emit=llvm-ir=$@ $<; \
+ 	$(rust_handle_depfile)
+ 
+ $(obj)/%.ll: $(src)/%.rs FORCE
+diff --git a/scripts/Makefile.host b/scripts/Makefile.host
+index dea494ef55d5..67ef852712d4 100644
+--- a/scripts/Makefile.host
++++ b/scripts/Makefile.host
+@@ -85,7 +85,7 @@ hostc_flags    = $(KBUILD_HOSTCFLAGS) $(HOST_EXTRACFLAGS) \
+ hostcxx_flags  = $(KBUILD_HOSTCXXFLAGS) $(HOST_EXTRACXXFLAGS) \
+                   $(HOSTCXXFLAGS_$(target-stem).o) -Wp,-MMD,$(depfile)
+ hostrust_flags = $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
+-                 $(HOSTRUSTFLAGS_$(target-stem))
++                 $(HOSTRUSTFLAGS_$(target-stem)) --emit=dep-info=$(depfile)
+ 
+ # $(objtree)/$(obj) for including generated headers from checkin source files
+ ifeq ($(KBUILD_EXTMOD),)
+@@ -145,9 +145,7 @@ $(host-cxxobjs): $(obj)/%.o: $(src)/%.cc FORCE
+ # host-rust -> Executable
+ quiet_cmd_host-rust	= HOSTRUSTC $@
+       cmd_host-rust	= \
+-	$(HOSTRUSTC) $(hostrust_flags) --emit=dep-info,link \
+-		--out-dir=$(obj)/ $<; \
+-	mv $(obj)/$(target-stem).d $(depfile); \
++	$(HOSTRUSTC) $(hostrust_flags) --emit=link=$@ $<; \
+ 	sed -i '/^\#/d' $(depfile)
+ $(host-rust): $(obj)/%: $(src)/%.rs FORCE
+ 	$(call if_changed_dep,host-rust)
 -- 
-Best Regards
-Masahiro Yamada
+2.34.1
+
