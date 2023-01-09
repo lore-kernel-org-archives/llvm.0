@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D767833D6
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 16:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241C3C433F2;
-	Mon,  9 Jan 2023 16:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3183C0B
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 16:49:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ECA7C433F1;
+	Mon,  9 Jan 2023 16:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673282949;
-	bh=vfToooFvqG7PPIh4+IgqDfsebCiWzTMy8pkLwP+eTLE=;
+	s=k20201202; t=1673282959;
+	bh=crfH3DNuxnnnEgBLc4QnnpaR6XIAnGQOnWmoA6qkFFo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dTZ4S4m0Kixw+/ADbnK/a9lxMmzQ94LmS1Z0eEq/i7EruP1hlAt81aajr5fwcRNL5
-	 pOe/qFU5fQrbC3YDNIrtf8kwCZ2gRziMWn/OJXEed2A8OQOSFNcQ2ees5Li5P207ee
-	 K/OpgSs6fJRl/z5g7grnlJDAoCwaNoSPN9ngl+DIeGdT6RUWHbcWA8wpufWGHVf/TH
-	 +d7hDCYszE6gHjpqBwAPwHzMeyi9Gmv1H0gxd8GztsrKkI2/+rjCgDjOy0bV/mrpVA
-	 z03ZwJ58N6JEuKglO24N5iDEZPXIOvhDD/sqliSpfEjtxoV12W8/ATmgS3Y9AXsPA0
-	 CU2OT9vfCG6LQ==
+	b=i7nz99UUUB6mq8L6gizntMmjWgzo0ggwV1fA/GkVuSeGE/DYjSDy4egfwgjFO7lkn
+	 n3E1W93PxQVkOojQkLMT9IvVzW3BQ8k91d9Zvnssn4pVzbzmAejw923qZani6LdgTe
+	 U2vuEB6YPEa57xrjp/pae4pMRCKio68lLDZ9yjcySuwPOYJ6wBQtbK3Im7i0hwz3KC
+	 bKsTMg5FDAMq0S/Fsmth7TzthwKfInp33J8GtUk4/xxzgS6EqkWtBGeQL4fxx1P1u7
+	 Kwk3yxKCGB+O/FcjS0A8hQFmP2MP+RB4/0+pGU5XZ2MyANpiYZejzq899YftK02PGc
+	 xJ+PbTWkjkulA==
 From: Mark Brown <broonie@kernel.org>
 To: lgirdwood@gmail.com, Nathan Chancellor <nathan@kernel.org>
-Cc: Vijendar.Mukunda@amd.com, Syed.SabaKareem@amd.com,
+Cc: Syed.SabaKareem@amd.com, ndesaulniers@google.com, trix@redhat.com,
  alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
+ llvm@lists.linux.dev, Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 In-Reply-To:
- <20230105-wsometimes-uninitialized-pci-ps-c-v1-1-4022fd077959@kernel.org>
+ <20230105-wsometimes-uninitialized-pci-ps-c-v2-1-c50321676325@kernel.org>
 References:
- <20230105-wsometimes-uninitialized-pci-ps-c-v1-1-4022fd077959@kernel.org>
-Subject: Re: [PATCH] ASoC: amd: ps: Fix uninitialized ret in
+ <20230105-wsometimes-uninitialized-pci-ps-c-v2-1-c50321676325@kernel.org>
+Subject: Re: [PATCH v2] ASoC: amd: ps: Fix uninitialized ret in
  create_acp64_platform_devs()
-Message-Id: <167328294786.323147.5948330744390772644.b4-ty@kernel.org>
-Date: Mon, 09 Jan 2023 16:49:07 +0000
+Message-Id: <167328295784.323147.10320883556735377893.b4-ty@kernel.org>
+Date: Mon, 09 Jan 2023 16:49:17 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,7 +38,7 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12-dev-8b3d1
 
-On Thu, 05 Jan 2023 08:53:32 -0700, Nathan Chancellor wrote:
+On Thu, 05 Jan 2023 17:43:39 -0700, Nathan Chancellor wrote:
 > Clang warns:
 > 
 >   sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
