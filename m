@@ -1,162 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7BF15B4
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 06:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673246490;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GS4cUwjyArlKCv9kSFORbuqh4ObRncmzXypiig3/tqg=;
-	b=i49F12TzWis4U1YuPtaISMUh5LZb3KWnwYTmbgeomoDnCqZMrcnDFat+zPewJkkO8t8w1D
-	I/q/TsbQE2ROwHJ2yWsTp4zdvszI0JG7Rs3Z9U0PrUmZBjn3e3pXgrkwzYjoY47TcX8hta
-	5PAuTxrgSbRdti23JlRGXY9f0lMTwuQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-132-Tj4DLN01NY6XPeDtSwYFxQ-1; Mon, 09 Jan 2023 01:41:28 -0500
-X-MC-Unique: Tj4DLN01NY6XPeDtSwYFxQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56C29101A521
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 06:41:28 +0000 (UTC)
-Received: from [172.64.12.49] (unknown [10.30.33.198])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4241A492B00;
-	Mon,  9 Jan 2023 06:41:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (97/383 SKIPPED): Test report for master
- (6.2.0-rc2, mainline.kernel.org-clang, e9ffbf16)
-Date: Mon, 09 Jan 2023 06:41:28 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A956923CB
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 06:48:40 +0000 (UTC)
+Received: by mail-il1-f200.google.com with SMTP id z8-20020a056e02088800b0030c247efc7dso5465398ils.15
+        for <llvm@lists.linux.dev>; Sun, 08 Jan 2023 22:48:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FZxoDGIUXPGrupbgdSJfUdBAOmhNQ8UvSXrona3AoYg=;
+        b=wQM1WdfYSVADWSw8EnhPCVSjru6CxA2JHcQY73lWJGSrekGU6RP1el4eEJxdeMSSZh
+         BPM9ZKeFg9gWXouSvLJmoZ94mfp3c7NXrzTuMW9YdQ0p42upFqVWZIi+Xjmtwm+lN4v6
+         0Xt8AGPao7ytS+nJnznTpGOdFhZJoIvKX9J1XJdlGqLVTRSfASowZr3qqc9d4dO6Yzyj
+         5LjdxwYzrTGg+VrAkWRzVcKpKXWxBsX2tjn5AuBLfxGuM3CxT2BG5rOd31W2xMUVeIiD
+         mRr7ma+SibEVfbeQO3U9wBvULTTT6qO+ARpBBIbLP3FtSvpdprRzcG2/X+NNfPWjBMmq
+         g+GQ==
+X-Gm-Message-State: AFqh2kpyqRVSd3zU0bF5EbujfVYLdLKpnyCiqTC/2pNjLNYj78gAWZ+0
+	vvtNGcQkLZPJK3/VEHF1Pqn3YY5hilxX7Q4bajMJqXiwq7vu
+X-Google-Smtp-Source: AMrXdXs2JylWKdp//knDSg/T1GQHokJNbtsjPWaWLdmeHXl8FgrZkQ+I6CLv9g/2T/LBlKzAwLvTC71dLUpVc/Xx96z7hwXapZV3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <98716.123010901412800107@us-mta-132.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a02:cc4b:0:b0:375:c16b:7776 with SMTP id
+ i11-20020a02cc4b000000b00375c16b7776mr5636701jaq.54.1673246919742; Sun, 08
+ Jan 2023 22:48:39 -0800 (PST)
+Date: Sun, 08 Jan 2023 22:48:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000045dcd205f1cf28f2@google.com>
+Subject: [syzbot] [ntfs3?] general protection fault in ntfs_lookup
+From: syzbot <syzbot+3e567493c9db9df18d8f@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+syzbot found the following issue on:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+HEAD commit:    cc3c08b41a9c Add linux-next specific files for 20230105
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13c4ded6480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4ac9ebd4cb9742f3
+dashboard link: https://syzkaller.appspot.com/bug?extid=3e567493c9db9df18d8f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Kernel information:
-    Commit message: Merge tag 'fixes-2023-01-08' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/rppt/memblock
+Unfortunately, I don't have any reproducer for this issue yet.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/64928
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6def59e24625/disk-cc3c08b4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ef1bd308bc05/vmlinux-cc3c08b4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09339fbdbfe9/bzImage-cc3c08b4.xz
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3e567493c9db9df18d8f@syzkaller.appspotmail.com
+
+ntfs3: loop5: Mark volume as dirty due to NTFS errors
+general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
+CPU: 0 PID: 13888 Comm: syz-executor.5 Not tainted 6.2.0-rc2-next-20230105-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:ntfs_lookup+0x16b/0x260 fs/ntfs3/namei.c:96
+Code: ff ff e8 e8 24 cd fe 48 81 fd 00 f0 ff ff 77 2b e8 0a 28 cd fe 48 8d 7d 20 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d3 00 00 00 48 83 7d 20 00 74 54 e8 df 27 cd fe
+RSP: 0018:ffffc900039877c8 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 1ffffffff1ce77e6 RCX: ffffc9000bb11000
+RDX: 0000000000000004 RSI: ffffffff82b48776 RDI: 0000000000000020
+RBP: 0000000000000000 R08: 0000000000000007 R09: fffffffffffff000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880919dfbe8
+R13: ffff88807d6a0000 R14: ffff888091a24c10 R15: ffff888091a24a58
+FS:  00007fe7387b9700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b3342a000 CR3: 000000001dec0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __lookup_slow+0x24c/0x460 fs/namei.c:1685
+ lookup_slow fs/namei.c:1702 [inline]
+ walk_component+0x33f/0x5a0 fs/namei.c:1993
+ link_path_walk.part.0+0x730/0xdf0 fs/namei.c:2320
+ link_path_walk fs/namei.c:2244 [inline]
+ path_lookupat+0xb7/0x840 fs/namei.c:2473
+ do_o_path fs/namei.c:3685 [inline]
+ path_openat+0x1766/0x2b40 fs/namei.c:3707
+ do_filp_open+0x1ba/0x410 fs/namei.c:3741
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __x64_sys_openat+0x143/0x1f0 fs/open.c:1337
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe737a8c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe7387b9168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00007fe737babf80 RCX: 00007fe737a8c0c9
+RDX: 0000000000200002 RSI: 0000000020000180 RDI: ffffffffffffff9c
+RBP: 00007fe737ae7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff9572fccf R14: 00007fe7387b9300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ntfs_lookup+0x16b/0x260 fs/ntfs3/namei.c:96
+Code: ff ff e8 e8 24 cd fe 48 81 fd 00 f0 ff ff 77 2b e8 0a 28 cd fe 48 8d 7d 20 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d3 00 00 00 48 83 7d 20 00 74 54 e8 df 27 cd fe
+RSP: 0018:ffffc900039877c8 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 1ffffffff1ce77e6 RCX: ffffc9000bb11000
+RDX: 0000000000000004 RSI: ffffffff82b48776 RDI: 0000000000000020
+RBP: 0000000000000000 R08: 0000000000000007 R09: fffffffffffff000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880919dfbe8
+R13: ffff88807d6a0000 R14: ffff888091a24c10 R15: ffff888091a24a58
+FS:  00007fe7387b9700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6fa9185058 CR3: 000000001dec0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 2 bytes skipped:
+   0:	e8 e8 24 cd fe       	callq  0xfecd24ed
+   5:	48 81 fd 00 f0 ff ff 	cmp    $0xfffffffffffff000,%rbp
+   c:	77 2b                	ja     0x39
+   e:	e8 0a 28 cd fe       	callq  0xfecd281d
+  13:	48 8d 7d 20          	lea    0x20(%rbp),%rdi
+  17:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1e:	fc ff df
+  21:	48 89 fa             	mov    %rdi,%rdx
+  24:	48 c1 ea 03          	shr    $0x3,%rdx
+* 28:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2c:	0f 85 d3 00 00 00    	jne    0x105
+  32:	48 83 7d 20 00       	cmpq   $0x0,0x20(%rbp)
+  37:	74 54                	je     0x8d
+  39:	e8 df 27 cd fe       	callq  0xfecd281d
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
