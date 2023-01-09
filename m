@@ -1,84 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3183C0B
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 16:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ECA7C433F1;
-	Mon,  9 Jan 2023 16:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E4B3C0B
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 17:06:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D1CC433F0;
+	Mon,  9 Jan 2023 17:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673282959;
-	bh=crfH3DNuxnnnEgBLc4QnnpaR6XIAnGQOnWmoA6qkFFo=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=i7nz99UUUB6mq8L6gizntMmjWgzo0ggwV1fA/GkVuSeGE/DYjSDy4egfwgjFO7lkn
-	 n3E1W93PxQVkOojQkLMT9IvVzW3BQ8k91d9Zvnssn4pVzbzmAejw923qZani6LdgTe
-	 U2vuEB6YPEa57xrjp/pae4pMRCKio68lLDZ9yjcySuwPOYJ6wBQtbK3Im7i0hwz3KC
-	 bKsTMg5FDAMq0S/Fsmth7TzthwKfInp33J8GtUk4/xxzgS6EqkWtBGeQL4fxx1P1u7
-	 Kwk3yxKCGB+O/FcjS0A8hQFmP2MP+RB4/0+pGU5XZ2MyANpiYZejzq899YftK02PGc
-	 xJ+PbTWkjkulA==
-From: Mark Brown <broonie@kernel.org>
-To: lgirdwood@gmail.com, Nathan Chancellor <nathan@kernel.org>
-Cc: Syed.SabaKareem@amd.com, ndesaulniers@google.com, trix@redhat.com,
- alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-In-Reply-To:
- <20230105-wsometimes-uninitialized-pci-ps-c-v2-1-c50321676325@kernel.org>
-References:
- <20230105-wsometimes-uninitialized-pci-ps-c-v2-1-c50321676325@kernel.org>
-Subject: Re: [PATCH v2] ASoC: amd: ps: Fix uninitialized ret in
- create_acp64_platform_devs()
-Message-Id: <167328295784.323147.10320883556735377893.b4-ty@kernel.org>
-Date: Mon, 09 Jan 2023 16:49:17 +0000
+	s=k20201202; t=1673283968;
+	bh=vEV9IS5lr6A/EE9wxrV5D9TaFzycOxX4Uu56ZOeL6M8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EtyaDBeUOkqQUzw6fSk49pLzNL0bz4DaGhE5rtpO3DuaDAfvTnHk+ydPYVIewSWdZ
+	 YhKx2ZCyexae5uxi0ZhHyjaWXGdg+Sg6XrXMDKPP7AjnZnKmK2i6FcDdSxzZ6xeyPB
+	 MtdcA6neLy77LFUwkJFbQqR84amGc01eNorg9kcNVmdfGVvXq6e128rkV7/4jAeSz/
+	 tv1QYsBqpU6JNyPI/ePkEbE508hWUxyKyQUL3mZx7QwUO2hgvEFnevjf3Zd1i/DvBC
+	 WYFZ1dUkQxan5/ffs2AeNLAgbF7W3sOK/4wQk/vZupkTwxZpdSS4Ur1KhU2YWWGT0X
+	 p3KxsaY1JZHiQ==
+Date: Mon, 9 Jan 2023 17:06:03 +0000
+From: Lee Jones <lee@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Vincent Knecht <vincent.knecht@mailoo.org>,
+	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
+ devm_add_action_or_rest()
+Message-ID: <Y7xJexzNrs4c7WP/@google.com>
+References: <20221228093238.82713-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-8b3d1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221228093238.82713-1-andriy.shevchenko@linux.intel.com>
 
-On Thu, 05 Jan 2023 17:43:39 -0700, Nathan Chancellor wrote:
-> Clang warns:
+On Wed, 28 Dec 2022, Andy Shevchenko wrote:
+
+> Clang complains that devm_add_action() takes a parameter with a wrong type:
 > 
->   sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
->           default:
->           ^~~~~~~
->   sound/soc/amd/ps/pci-ps.c:239:9: note: uninitialized use occurs here
->           return ret;
->                  ^~~
->   sound/soc/amd/ps/pci-ps.c:190:9: note: initialize the variable 'ret' to silence this warning
->           int ret;
->                  ^
->                   = 0
->   1 error generated.
+> warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+>     err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
+>                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1 warning generated.
 > 
-> [...]
+> It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
+> non-devm ordering") missed two things:
+> - while mention devm_add_action_or_reset() the actual change got
+>   devm_add_action() call by unknown reason
+> - strictly speaking the parameter is not compatible by type
 
-Applied to
+I fixed-up the wording above a little.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> Fix both issues by switching to devm_add_action_or_reset() and adding a
+> wrapper for mutex_destroy() call.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> ---
+> 
+> v2: added tag (Vincent), Cc'ed to Lee
+> 
+>  drivers/leds/leds-is31fl319x.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 
-Thanks!
+Applied, thanks
 
-[1/1] ASoC: amd: ps: Fix uninitialized ret in create_acp64_platform_devs()
-      commit: de1cae22898cf10aacc735a21d799b5bbce4496c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Lee Jones [李琼斯]
