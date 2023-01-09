@@ -1,75 +1,248 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E4B3C0B
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 17:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D1CC433F0;
-	Mon,  9 Jan 2023 17:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579183C0B
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 17:10:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE6DC433F1;
+	Mon,  9 Jan 2023 17:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673283968;
-	bh=vEV9IS5lr6A/EE9wxrV5D9TaFzycOxX4Uu56ZOeL6M8=;
+	s=k20201202; t=1673284255;
+	bh=oTRkQyMF2DjGCawOHegpUvhRGt2ypHnFvhlRYLqVs0E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EtyaDBeUOkqQUzw6fSk49pLzNL0bz4DaGhE5rtpO3DuaDAfvTnHk+ydPYVIewSWdZ
-	 YhKx2ZCyexae5uxi0ZhHyjaWXGdg+Sg6XrXMDKPP7AjnZnKmK2i6FcDdSxzZ6xeyPB
-	 MtdcA6neLy77LFUwkJFbQqR84amGc01eNorg9kcNVmdfGVvXq6e128rkV7/4jAeSz/
-	 tv1QYsBqpU6JNyPI/ePkEbE508hWUxyKyQUL3mZx7QwUO2hgvEFnevjf3Zd1i/DvBC
-	 WYFZ1dUkQxan5/ffs2AeNLAgbF7W3sOK/4wQk/vZupkTwxZpdSS4Ur1KhU2YWWGT0X
-	 p3KxsaY1JZHiQ==
-Date: Mon, 9 Jan 2023 17:06:03 +0000
-From: Lee Jones <lee@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>, Vincent Knecht <vincent.knecht@mailoo.org>,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	b=VtNz0MLzegDV1DqfOGWuVF2pDOw09yDd7OKJHG6QPsoLSeAwWokuWWIqo2KDraxDr
+	 dgl+9bcjqqT5aifqPVOSKY6dDhlGqnigRmne7OThzQbydANXELK/cOdp9bJHe8RE4k
+	 J8z03Hn1/tRPH8iqXmKyFwGgpv/HoaGlZ/ySf+JSdfbDmx+lMlr7VLoe+SROLNVrLj
+	 1UkXdepbasIAP74XviavJ9EPoH5ikIybGqlQO/w8NutRptVEkNq2uiGUq5q9ynymLZ
+	 lasiB0cZwsBxaaB8LoTYcUUUi58DjTDa09tjvdduuvyKcNJQm8xfj/5amD2YhWLc7V
+	 S2WBDTwafnp7w==
+Date: Mon, 9 Jan 2023 10:10:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
- devm_add_action_or_rest()
-Message-ID: <Y7xJexzNrs4c7WP/@google.com>
-References: <20221228093238.82713-1-andriy.shevchenko@linux.intel.com>
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>, llvm@lists.linux.dev,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: rust: remove -v option of
+ scripts/rust_is_available.sh
+Message-ID: <Y7xKnFsDd5Vlqt4I@dev-arch.thelio-3990X>
+References: <20230109061436.3146442-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221228093238.82713-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230109061436.3146442-1-masahiroy@kernel.org>
 
-On Wed, 28 Dec 2022, Andy Shevchenko wrote:
-
-> Clang complains that devm_add_action() takes a parameter with a wrong type:
+On Mon, Jan 09, 2023 at 03:14:36PM +0900, Masahiro Yamada wrote:
+> The -v option is passed when this script is invoked from Makefile,
+> but not when invoked from Kconfig.
 > 
-> warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
->     err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
->                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     1 warning generated.
+> As you can see in scripts/Kconfig.include, the 'success' macro suppresses
+> stdout and stderr anyway, so this script does not need to be quiet.
 > 
-> It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
-> non-devm ordering") missed two things:
-> - while mention devm_add_action_or_reset() the actual change got
->   devm_add_action() call by unknown reason
-> - strictly speaking the parameter is not compatible by type
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-I fixed-up the wording above a little.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> Fix both issues by switching to devm_add_action_or_reset() and adding a
-> wrapper for mutex_destroy() call.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
 > ---
 > 
-> v2: added tag (Vincent), Cc'ed to Lee
+> Changes in v2:
+>   - Fix description (scripts -> script)
+>   - Remove stale comment
 > 
->  drivers/leds/leds-is31fl319x.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-
-Applied, thanks
-
--- 
-Lee Jones [李琼斯]
+>  Makefile                     |  4 +-
+>  scripts/rust_is_available.sh | 96 +++++++++++++++---------------------
+>  2 files changed, 42 insertions(+), 58 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index c1f59f54ae90..59d827b85888 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1288,7 +1288,7 @@ prepare0: archprepare
+>  # All the preparing..
+>  prepare: prepare0
+>  ifdef CONFIG_RUST
+> -	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh -v
+> +	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh
+>  	$(Q)$(MAKE) $(build)=rust
+>  endif
+>  
+> @@ -1813,7 +1813,7 @@ $(DOC_TARGETS):
+>  # "Is Rust available?" target
+>  PHONY += rustavailable
+>  rustavailable:
+> -	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh -v && echo "Rust is available!"
+> +	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh && echo "Rust is available!"
+>  
+>  # Documentation target
+>  #
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> index aebbf1913970..f43a010eaf30 100755
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -2,8 +2,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  #
+>  # Tests whether a suitable Rust toolchain is available.
+> -#
+> -# Pass `-v` for human output and more checks (as warnings).
+>  
+>  set -e
+>  
+> @@ -23,21 +21,17 @@ get_canonical_version()
+>  
+>  # Check that the Rust compiler exists.
+>  if ! command -v "$RUSTC" >/dev/null; then
+> -	if [ "$1" = -v ]; then
+> -		echo >&2 "***"
+> -		echo >&2 "*** Rust compiler '$RUSTC' could not be found."
+> -		echo >&2 "***"
+> -	fi
+> +	echo >&2 "***"
+> +	echo >&2 "*** Rust compiler '$RUSTC' could not be found."
+> +	echo >&2 "***"
+>  	exit 1
+>  fi
+>  
+>  # Check that the Rust bindings generator exists.
+>  if ! command -v "$BINDGEN" >/dev/null; then
+> -	if [ "$1" = -v ]; then
+> -		echo >&2 "***"
+> -		echo >&2 "*** Rust bindings generator '$BINDGEN' could not be found."
+> -		echo >&2 "***"
+> -	fi
+> +	echo >&2 "***"
+> +	echo >&2 "*** Rust bindings generator '$BINDGEN' could not be found."
+> +	echo >&2 "***"
+>  	exit 1
+>  fi
+>  
+> @@ -53,16 +47,14 @@ rust_compiler_min_version=$($min_tool_version rustc)
+>  rust_compiler_cversion=$(get_canonical_version $rust_compiler_version)
+>  rust_compiler_min_cversion=$(get_canonical_version $rust_compiler_min_version)
+>  if [ "$rust_compiler_cversion" -lt "$rust_compiler_min_cversion" ]; then
+> -	if [ "$1" = -v ]; then
+> -		echo >&2 "***"
+> -		echo >&2 "*** Rust compiler '$RUSTC' is too old."
+> -		echo >&2 "***   Your version:    $rust_compiler_version"
+> -		echo >&2 "***   Minimum version: $rust_compiler_min_version"
+> -		echo >&2 "***"
+> -	fi
+> +	echo >&2 "***"
+> +	echo >&2 "*** Rust compiler '$RUSTC' is too old."
+> +	echo >&2 "***   Your version:    $rust_compiler_version"
+> +	echo >&2 "***   Minimum version: $rust_compiler_min_version"
+> +	echo >&2 "***"
+>  	exit 1
+>  fi
+> -if [ "$1" = -v ] && [ "$rust_compiler_cversion" -gt "$rust_compiler_min_cversion" ]; then
+> +if [ "$rust_compiler_cversion" -gt "$rust_compiler_min_cversion" ]; then
+>  	echo >&2 "***"
+>  	echo >&2 "*** Rust compiler '$RUSTC' is too new. This may or may not work."
+>  	echo >&2 "***   Your version:     $rust_compiler_version"
+> @@ -82,16 +74,14 @@ rust_bindings_generator_min_version=$($min_tool_version bindgen)
+>  rust_bindings_generator_cversion=$(get_canonical_version $rust_bindings_generator_version)
+>  rust_bindings_generator_min_cversion=$(get_canonical_version $rust_bindings_generator_min_version)
+>  if [ "$rust_bindings_generator_cversion" -lt "$rust_bindings_generator_min_cversion" ]; then
+> -	if [ "$1" = -v ]; then
+> -		echo >&2 "***"
+> -		echo >&2 "*** Rust bindings generator '$BINDGEN' is too old."
+> -		echo >&2 "***   Your version:    $rust_bindings_generator_version"
+> -		echo >&2 "***   Minimum version: $rust_bindings_generator_min_version"
+> -		echo >&2 "***"
+> -	fi
+> +	echo >&2 "***"
+> +	echo >&2 "*** Rust bindings generator '$BINDGEN' is too old."
+> +	echo >&2 "***   Your version:    $rust_bindings_generator_version"
+> +	echo >&2 "***   Minimum version: $rust_bindings_generator_min_version"
+> +	echo >&2 "***"
+>  	exit 1
+>  fi
+> -if [ "$1" = -v ] && [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cversion" ]; then
+> +if [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cversion" ]; then
+>  	echo >&2 "***"
+>  	echo >&2 "*** Rust bindings generator '$BINDGEN' is too new. This may or may not work."
+>  	echo >&2 "***   Your version:     $rust_bindings_generator_version"
+> @@ -110,13 +100,11 @@ bindgen_libclang_min_version=$($min_tool_version llvm)
+>  bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
+>  bindgen_libclang_min_cversion=$(get_canonical_version $bindgen_libclang_min_version)
+>  if [ "$bindgen_libclang_cversion" -lt "$bindgen_libclang_min_cversion" ]; then
+> -	if [ "$1" = -v ]; then
+> -		echo >&2 "***"
+> -		echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') is too old."
+> -		echo >&2 "***   Your version:    $bindgen_libclang_version"
+> -		echo >&2 "***   Minimum version: $bindgen_libclang_min_version"
+> -		echo >&2 "***"
+> -	fi
+> +	echo >&2 "***"
+> +	echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') is too old."
+> +	echo >&2 "***   Your version:    $bindgen_libclang_version"
+> +	echo >&2 "***   Minimum version: $bindgen_libclang_min_version"
+> +	echo >&2 "***"
+>  	exit 1
+>  fi
+>  
+> @@ -125,21 +113,19 @@ fi
+>  #
+>  # In the future, we might be able to perform a full version check, see
+>  # https://github.com/rust-lang/rust-bindgen/issues/2138.
+> -if [ "$1" = -v ]; then
+> -	cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
+> -	if [ "$cc_name" = Clang ]; then
+> -		clang_version=$( \
+> -			LC_ALL=C "$CC" --version 2>/dev/null \
+> -				| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+> -		)
+> -		if [ "$clang_version" != "$bindgen_libclang_version" ]; then
+> -			echo >&2 "***"
+> -			echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN')"
+> -			echo >&2 "*** version does not match Clang's. This may be a problem."
+> -			echo >&2 "***   libclang version: $bindgen_libclang_version"
+> -			echo >&2 "***   Clang version:    $clang_version"
+> -			echo >&2 "***"
+> -		fi
+> +cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
+> +if [ "$cc_name" = Clang ]; then
+> +	clang_version=$( \
+> +		LC_ALL=C "$CC" --version 2>/dev/null \
+> +			| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+> +	)
+> +	if [ "$clang_version" != "$bindgen_libclang_version" ]; then
+> +		echo >&2 "***"
+> +		echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN')"
+> +		echo >&2 "*** version does not match Clang's. This may be a problem."
+> +		echo >&2 "***   libclang version: $bindgen_libclang_version"
+> +		echo >&2 "***   Clang version:    $clang_version"
+> +		echo >&2 "***"
+>  	fi
+>  fi
+>  
+> @@ -150,11 +136,9 @@ rustc_sysroot=$("$RUSTC" $KRUSTFLAGS --print sysroot)
+>  rustc_src=${RUST_LIB_SRC:-"$rustc_sysroot/lib/rustlib/src/rust/library"}
+>  rustc_src_core="$rustc_src/core/src/lib.rs"
+>  if [ ! -e "$rustc_src_core" ]; then
+> -	if [ "$1" = -v ]; then
+> -		echo >&2 "***"
+> -		echo >&2 "*** Source code for the 'core' standard library could not be found"
+> -		echo >&2 "*** at '$rustc_src_core'."
+> -		echo >&2 "***"
+> -	fi
+> +	echo >&2 "***"
+> +	echo >&2 "*** Source code for the 'core' standard library could not be found"
+> +	echo >&2 "*** at '$rustc_src_core'."
+> +	echo >&2 "***"
+>  	exit 1
+>  fi
+> -- 
+> 2.34.1
+> 
