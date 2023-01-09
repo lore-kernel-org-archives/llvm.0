@@ -1,51 +1,51 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3997F5221
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 21:24:38 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id 20so1801857pfu.13
-        for <llvm@lists.linux.dev>; Mon, 09 Jan 2023 13:24:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6AA15233
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 21:58:44 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id 7so6879388pga.1
+        for <llvm@lists.linux.dev>; Mon, 09 Jan 2023 13:58:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cwNgqi/NQkqWmtT2yM6QfKma/Y9yH7Zze7tBPVBivxk=;
-        b=BUrkQTa+u/VpDQVrQM/lKNS4FTu2L3sLIIqBbnjlsemezMYlVHS8iPOKK5l8sDB8yf
-         M4eQOaPKiijvKhy/SLCWzcZDVz/vrcfFQIx6305wyt+99rkBk/j46H2bPJO4NqwWUeFh
-         SkY620a+ghXrYMMXDe+qWeyKu+3Dvw/iW6h4x+aAX3OuOb3gVlFRnttrZ6X5yzPnhfFV
-         a4hbYsL2Asa8O8K8Flc+yw3WuHu8TpXa9t3pgAGlKDIZrPieC5OiBBQVM/ABA/0OaMpG
-         9l3Kc8GBn58XMHZQT3nc6VjzrTALSMaOkN4yeTt5fG9hcT419bAO6RkFlg+/vznV8Naa
-         zz/g==
+        bh=8mtKWc4WmtGm6NDppB1FPmywRJwZewn7Wl9vLbuK9vw=;
+        b=SXyWMObFZXeTNyQecHi104uVS3C5VVNdbITrtvMou5aDqzX/U4NRz7uvEIsM8Onyco
+         x8qqLrvh0HSwV3fczYkK93qVBE1SWVIm5mK9HzYglylMhUJMaXqn7bL6FtcjEoZEo/fo
+         OcjstuljDhRYrS830xjpdSB77YwrYtXuM+PYffd8oCYXe+qhIHx87mShQzdUWimUiypY
+         QNKHUicr800mVPn0COXPqDU4vjZAVpA83JY6L6WaC9XuTG0bw7sSTuItcNytIXboiUkK
+         JB8evh3Cgq1lCllojmImBjDJpZSraooL+3WVJsi+rOxRCXx/O5eGPvvgudRNalID0dyL
+         rXPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cwNgqi/NQkqWmtT2yM6QfKma/Y9yH7Zze7tBPVBivxk=;
-        b=qrQC9XtCf7UB4eEfcsl2LUIUt/SzItc39Wo+GvcHrF5doiqG2tytMeD98hm6XUkj8t
-         aHHoa8tXU46LqedlcJC7io78n6OzzdP64XK9xwZ4Own4V9ErSWB6XRDzPueFB2r1Ree7
-         a0nSr9nGWYs4aP76p9WY22lJXFSG8RbGh6/t9OLh10rrIzxgzCOKcY48UDKiMUK3d15/
-         EYXAYBKTq5NQlZyJ34dgxQ7toMsVrVnk4Oooa9aBGqSRPalaETjf+0U1s+vQ0F19Fws3
-         V+orZHw4G9Zitu1EmM8SZbhFF5dTWn9nD5EylK6XhsAL24//g6VkZgLK5jIiWveI4jz+
-         SQsA==
-X-Gm-Message-State: AFqh2kohPon/LZ5o32lAfZqOwwAgjZSnkwXTXxsuBS1kviIEbeLDd8IF
-	UfF/YYM57WRsPSuVZAU/1yvi89c5kSQVB1a4JOMOiw==
-X-Google-Smtp-Source: AMrXdXtIh0E/DgOM0QwEcwfy9eQgImnKUYlPyPKRHz81WoFNXLApps0jEhpEfXN0JAZZbWaOYH1ssQGCAd5Wpz9DJLc=
+        bh=8mtKWc4WmtGm6NDppB1FPmywRJwZewn7Wl9vLbuK9vw=;
+        b=vHt1KVSPiqQofS7ajavEIWfcG6MYWVYv562A2gfqi3irPSTpLlDNj31xjr8sgJIgeG
+         CxmLNHMjbfgXTvYZ8iYD2fSjsBRaxnuOKcyCYUR47iZarFG9/uOtGdK4ShsF55eXHr2h
+         l5J1XbopGduyZExTvJl5NinefqF62wJNtnv83yGUSc3S4MvPprYZgN/yiC2NGHf6yrt+
+         GmPgJyXCirXFAx2Wbt46mfE6lU/PqK5BrT7iKLnvKsxW7UDlRDA8g8Gk4OKWU30mY1m8
+         v6DT+eeNrVEfCv/sbsWxJvv4R+veNAwqcydofDuXhmxHWsLyamBv7wHBXwTJUz1Vg2sN
+         6bVQ==
+X-Gm-Message-State: AFqh2kow2d16lmiQtxKN7kpj4Cvoq7NDQRZ2guaVRMn4oEnoZaPo9gdm
+	3JmaFKdnDLFF2ZJLIjD8LwKMmcHS/7IfnHoQ0zXz5g==
+X-Google-Smtp-Source: AMrXdXsTlZoISLITCF02n+J4dXMcvFqFszZPB4liS+mZyZpp5BBYwkngdTAnTeTZgwlDRJLb/yCfd+smm6q/Dgm9C1w=
 X-Received: by 2002:a63:4943:0:b0:478:e6cf:c24c with SMTP id
- y3-20020a634943000000b00478e6cfc24cmr5119252pgk.365.1673299477404; Mon, 09
- Jan 2023 13:24:37 -0800 (PST)
+ y3-20020a634943000000b00478e6cfc24cmr5128347pgk.365.1673301523884; Mon, 09
+ Jan 2023 13:58:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org> <20221228-drop-qunused-arguments-v1-5-658cbc8fc592@kernel.org>
-In-Reply-To: <20221228-drop-qunused-arguments-v1-5-658cbc8fc592@kernel.org>
+References: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org> <20221228-drop-qunused-arguments-v1-6-658cbc8fc592@kernel.org>
+In-Reply-To: <20221228-drop-qunused-arguments-v1-6-658cbc8fc592@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 Jan 2023 13:24:26 -0800
-Message-ID: <CAKwvOdkB_+Nf9zpXeeayA6V14QoAEfW0b37DBsro04q5JpjBnw@mail.gmail.com>
-Subject: Re: [PATCH 05/14] powerpc: Remove linker flag from KBUILD_AFLAGS
+Date: Mon, 9 Jan 2023 13:58:32 -0800
+Message-ID: <CAKwvOdknEE7DyUG0s43GNGf27QeMgW2fUTXcCzKLbjH1g318vQ@mail.gmail.com>
+Subject: Re: [PATCH 06/14] powerpc/vdso: Remove unused '-s' flag from ASFLAGS
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: masahiroy@kernel.org, nicolas@fjasle.eu, trix@redhat.com, 
 	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
@@ -53,71 +53,57 @@ Cc: masahiroy@kernel.org, nicolas@fjasle.eu, trix@redhat.com,
 	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jan 4, 2023 at 11:54 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Wed, Jan 4, 2023 at 11:55 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
 > When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, it
-> points out that KBUILD_AFLAGS contains a linker flag, which will be
-> used:
+> warns that ASFLAGS contains '-s', which is a linking phase option, so it
+> is unused.
 >
->   clang: error: -Wl,-a32: 'linker' input unused [-Werror,-Wunused-command-line-argument]
+>   clang-16: error: argument unused during compilation: '-s' [-Werror,-Wunused-command-line-argument]
 >
-> This was likely supposed to be '-Wa,-a$(BITS)'. However, this change is
-> unnecessary, as all supported versions of clang and gcc will pass '-a64'
-> or '-a32' to GNU as based on the value of '-m'; the behavior of the
-> latest stable release of the oldest supported major version of each
-> compiler is shown below and each compiler's latest release exhibits the
-> same behavior (GCC 12.2.0 and Clang 15.0.6).
->
->   $ powerpc64-linux-gcc --version | head -1
->   powerpc64-linux-gcc (GCC) 5.5.0
->
->   $ powerpc64-linux-gcc -m64 -### -x assembler-with-cpp -c -o /dev/null /dev/null &| grep 'as '
->   .../as -a64 -mppc64 -many -mbig -o /dev/null /tmp/cctwuBzZ.s
->
->   $ powerpc64-linux-gcc -m32 -### -x assembler-with-cpp -c -o /dev/null /dev/null &| grep 'as '
->   .../as -a32 -mppc -many -mbig -o /dev/null /tmp/ccaZP4mF.sg
->
->   $ clang --version | head -1
->   Ubuntu clang version 11.1.0-++20211011094159+1fdec59bffc1-1~exp1~20211011214622.5
->
->   $ clang --target=powerpc64-linux-gnu -fno-integrated-as -m64 -### \
->     -x assembler-with-cpp -c -o /dev/null /dev/null &| grep gnu-as
->    "/usr/bin/powerpc64-linux-gnu-as" "-a64" "-mppc64" "-many" "-o" "/dev/null" "/tmp/null-80267c.s"
->
->   $ clang --target=powerpc64-linux-gnu -fno-integrated-as -m64 -### \
->     -x assembler-with-cpp -c -o /dev/null /dev/null &| grep gnu-as
->    "/usr/bin/powerpc64-linux-gnu-as" "-a32" "-mppc" "-many" "-o" "/dev/null" "/tmp/null-ab8f8d.s"
->
-> Remove this flag altogether to avoid future issues.
->
-> Fixes: 1421dc6d4829 ("powerpc/kbuild: Use flags variables rather than overriding LD/CC/AS")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Looking at the GAS sources, '-s' is only useful when targeting Solaris
+> and it is ignored for the powerpc target so just drop the flag
+> altogether, as it is not needed.
 
-Thanks for the patch!
+Do you have any more info where you found this?  I don't see -s
+documented as an assembler flag.
+https://sourceware.org/binutils/docs/as/PowerPC_002dOpts.html
+https://sourceware.org/binutils/docs/as/Invoking.html
+
+The patch seems fine to me, but what was this ever supposed to be?
+FWICT it predates git history (looking at
+arch/powerpc/kernel/vdso32/Makefile at fc15351d9d63)
+
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
 > Cc: mpe@ellerman.id.au
 > Cc: npiggin@gmail.com
 > Cc: christophe.leroy@csgroup.eu
 > Cc: linuxppc-dev@lists.ozlabs.org
 > ---
->  arch/powerpc/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/powerpc/kernel/vdso/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-> index dc4cbf0a5ca9..4fd630efe39d 100644
-> --- a/arch/powerpc/Makefile
-> +++ b/arch/powerpc/Makefile
-> @@ -90,7 +90,7 @@ aflags-$(CONFIG_CPU_LITTLE_ENDIAN)    += -mlittle-endian
+> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+> index 6a977b0d8ffc..45c0cc5d34b6 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -51,10 +51,10 @@ ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
+>  ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
 >
->  ifeq ($(HAS_BIARCH),y)
->  KBUILD_CFLAGS  += -m$(BITS)
-> -KBUILD_AFLAGS  += -m$(BITS) -Wl,-a$(BITS)
-> +KBUILD_AFLAGS  += -m$(BITS)
->  KBUILD_LDFLAGS += -m elf$(BITS)$(LDEMULATION)
->  endif
+>  CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
+> -AS32FLAGS := -D__VDSO32__ -s
+> +AS32FLAGS := -D__VDSO32__
 >
+>  CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
+> -AS64FLAGS := -D__VDSO64__ -s
+> +AS64FLAGS := -D__VDSO64__
+>
+>  targets += vdso32.lds
+>  CPPFLAGS_vdso32.lds += -P -C -Upowerpc
 >
 > --
 > 2.39.0
