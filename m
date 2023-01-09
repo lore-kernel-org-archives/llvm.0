@@ -1,71 +1,71 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7C83C0B
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 17:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673285752; x=1704821752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Oc3up1tIJXFobHGzmlb1xgFIEQN0bCsytgnQj6AycjA=;
-  b=NZg7RuyyAezG/Fk0NRPcYpZP2uVBRJsVo3ObumbL3tMNObxvSCXcsKGR
-   PaytYsgrQ3elcjUk3TE9QEO/LlhVtyTmfCIVk3VcD7nbWbnFuxKxVGipQ
-   c7qN4yoHzmXsq23iG0zNatHuRdO/e4KLyCsawLIGIqiGxNx2urYAtSHiY
-   H3+gLxc1adFrcA0OyQq8Oxxf8FhLMvKT0VXXNg1kRw2cYfqmxpLc+DJW1
-   C5Xbp0RoB0kL71+Y/NHQcg3Suky38/HjXSzqcfrL2NMQlzrFv1A71F+H7
-   NisfwDqmnFD8uabhDZx3fm4C0kHkcZq1rARkl0Fh0g6zVHAVavPZLuyKI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="302633614"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="302633614"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 09:35:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="650074389"
-X-IronPort-AV: E=Sophos;i="5.96,311,1665471600"; 
-   d="scan'208";a="650074389"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 09 Jan 2023 09:35:48 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1pEw3m-006dM8-2R;
-	Mon, 09 Jan 2023 19:35:46 +0200
-Date: Mon, 9 Jan 2023 19:35:46 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Lee Jones <lee@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Vincent Knecht <vincent.knecht@mailoo.org>,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C5C3C2F
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 17:45:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB7FC433D2;
+	Mon,  9 Jan 2023 17:45:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1673286334;
+	bh=N/mGC1JSaAE/Ch09Nd54a2F0u2gUgX6CiTHhcHbSQ1o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=r2B9nZaiKwxOFnGCxW1UZllASxVtPY2UB+BNGkSihEBHz6fEgQdOtgomB7sELwuON
+	 bl/sx60FbrFOv2p/yre1OVm72cHaZg79zO1KvDMbBD1IhPR9u9/qbzyFkYAHHgIjMm
+	 m7nUaEbnJbrDfu4WdMn7SGz6Q6JqCyRUWuqsj+4zj5GYVKZZ88Ybx8BIReFTLILHG4
+	 myE2MnpoUYh1XoIUIgNPnnchx1lF3H08a59oa1UFm7eHkt9MaKUnvXmq6AxheCTE9g
+	 1TaRRwFwObNGNl+SPOZ2LwFopkiIKbv5owLU56d6she5DjDGUghyTf9+/ir2WIn3sl
+	 xhBrtnF8+Fl8w==
+From: Will Deacon <will@kernel.org>
+To: James Clark <james.clark@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	mark.rutland@arm.com
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Florent Revest <revest@chromium.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] leds: is31fl319x: Wrap mutex_destroy() for
- devm_add_action_or_rest()
-Message-ID: <Y7xQcmYZ8/aSkA2v@smile.fi.intel.com>
-References: <20221228093238.82713-1-andriy.shevchenko@linux.intel.com>
- <Y7xJexzNrs4c7WP/@google.com>
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] arm64: Fix build with CC=clang, CONFIG_FTRACE=y and CONFIG_STACK_TRACER=y
+Date: Mon,  9 Jan 2023 17:45:28 +0000
+Message-Id: <167327998306.3113570.4853582275546519184.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230109122744.1904852-1-james.clark@arm.com>
+References: <20230109122744.1904852-1-james.clark@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7xJexzNrs4c7WP/@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 09, 2023 at 05:06:03PM +0000, Lee Jones wrote:
-> On Wed, 28 Dec 2022, Andy Shevchenko wrote:
+On Mon, 9 Jan 2023 12:27:43 +0000, James Clark wrote:
+> commit 45bd8951806e ("arm64: Improve HAVE_DYNAMIC_FTRACE_WITH_REGS
+> selection for clang") fixed the build with the above combination by
+> splitting HAVE_DYNAMIC_FTRACE_WITH_REGS into separate checks for
+> Clang and GCC.
+> 
+> commit 26299b3f6ba2 ("ftrace: arm64: move from REGS to ARGS") added the
+> GCC only check "-fpatchable-function-entry=2" back in unconditionally
+> which breaks the build.
+> 
+> [...]
 
-...
+Applied to arm64 (for-next/fixes), thanks!
 
-> Applied, thanks
+[1/1] arm64: Fix build with CC=clang, CONFIG_FTRACE=y and CONFIG_STACK_TRACER=y
+      https://git.kernel.org/arm64/c/68a63a412d18
 
-Thank you and HNY!
-
+Cheers,
 -- 
-With Best Regards,
-Andy Shevchenko
+Will
 
-
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
