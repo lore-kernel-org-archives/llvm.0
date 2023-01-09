@@ -1,159 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8D828ED
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 10:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673258491;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wytZzLHLv4hitQiJJpibfAGQ2JmhkSI6vz4+RTqRod4=;
-	b=ZQertQ5mMSSP0mJejSUgDB4/OuhV3wSzgp61D4iQQoquM1r20VTU8TlaSH2bHqlQxuKMUs
-	Sp2q47EOKKUxBUIF3CEEL9f0jUiysg2fwv5/vMzJEOyEJwKX9VRNSIjbtBrEVdLhH14wdu
-	rhvP3DWk6ix4qcZCYR1Ux/+zcjA2ZO0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-DFPgA11WPJaUzGTl9IMTig-1; Mon, 09 Jan 2023 05:01:29 -0500
-X-MC-Unique: DFPgA11WPJaUzGTl9IMTig-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43ED23C10146
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 10:01:29 +0000 (UTC)
-Received: from [172.64.12.49] (unknown [10.30.33.198])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 28457492C14;
-	Mon,  9 Jan 2023 10:01:29 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (101/383 SKIPPED): Test report for master
- (6.2.0-rc2, mainline.kernel.org-clang, 93928d48)
-Date: Mon, 09 Jan 2023 10:01:29 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964A428E8
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 10:34:40 +0000 (UTC)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-4bf16baa865so106624067b3.13
+        for <llvm@lists.linux.dev>; Mon, 09 Jan 2023 02:34:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4GG5MB79KA/+iG8tjCkehVlHp0lvZGYfV+k+DriA6GM=;
+        b=oX+gSy8dlC3JT3sgpgfMdXgU2gGGk+/cSlhzGvhqU7ra+xAIuvX5gmlu1/2fEgc+Qs
+         dtYI9fpso74sbJ8BJNg3nucfU0/xVki4WWgK8IMfVXJpOnf8L6IPKEA0nxhvyvw7c015
+         NAJc42nRec+pyaDatOj3+yjuaI9BROcyPytE0icCWebHzsslmcFzNsl4nMySDtYXkgpF
+         YJndiY0Fa6+NJ9R0T1JlexsmB+CzIckfFzx4r+AJ4aFXa72y+h9Ed1H4gMxg3qoV/xXI
+         LbS1Kx2MHkp4h/6OEcF0+t1fJpC5hJESwvfI17CpcEPmbMRoRAQGMNLVPJIG3C7RvGIM
+         eJ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4GG5MB79KA/+iG8tjCkehVlHp0lvZGYfV+k+DriA6GM=;
+        b=7UDio2gk20nfwIuOtkjP5f+X+e/3gnCkJ7+fA7D9f+HlK4OnADsddluJz1GgDRBmhb
+         rlGwG84JVmtGkXozEPEIZkL2K5Mp9WPZGZeTVJMiQNeyENvODr3oLjWXoe/qklnVsNIY
+         H/spzwDKsKfpx6/lwXhGytfV/mwV+MOue9JUOCIQwQMyfFHbG1/WGv2tidvkrDHoLWBT
+         zlWrcD7+HGK2kMx8xDhMOv9PIB5d+6j4NYo5MQzcE+rMWX2XCx45QB581E1GNZIvl5kC
+         yWwvog0PisXbC8D8NhUJDSLTZeLp8Brwb6cBMggOOCgIX5C46C/EO6bhaWNtcwtQGlrQ
+         zoIA==
+X-Gm-Message-State: AFqh2kpI4pX9kXpA+Tz0xUk/ImDyVJvssYHTRti+T3WKgR4le+U0Tb7I
+	M2OWw7KGUw0YzUa2kfFJw4K5ehbS6enIAduiRmH1Gg==
+X-Google-Smtp-Source: AMrXdXvbJg8E9ccFMQ3aL0vvH8SnY7pE6BrEr6EVxZ6O7V2lb8vcdGHfRgcUFU55mvIl+ku9rprFK8ohzvLepTsurJU=
+X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
+ bg19-20020a05690c031300b0037e6806a5f9mr1578119ywb.47.1673260479291; Mon, 09
+ Jan 2023 02:34:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <13175.123010905012900415@us-mta-16.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20230108143843.2987732-1-trix@redhat.com>
+In-Reply-To: <20230108143843.2987732-1-trix@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 9 Jan 2023 11:34:28 +0100
+Message-ID: <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
+Subject: Re: [PATCH] net: ena: initialize dim_sample
+To: Tom Rix <trix@redhat.com>
+Cc: shayagr@amazon.com, akiyano@amazon.com, darinzon@amazon.com, 
+	ndagan@amazon.com, saeedb@amazon.com, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com, 
+	khalasa@piap.pl, wsa+renesas@sang-engineering.com, yuancan@huawei.com, 
+	tglx@linutronix.de, 42.hyeyoo@gmail.com, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+On Sun, Jan 8, 2023 at 3:38 PM Tom Rix <trix@redhat.com> wrote:
+>
+> clang static analysis reports this problem
+> drivers/net/ethernet/amazon/ena/ena_netdev.c:1821:2: warning: Passed-by-value struct
+>   argument contains uninitialized data (e.g., field: 'comp_ctr') [core.CallAndMessage]
+>         net_dim(&ena_napi->dim, dim_sample);
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> net_dim can call dim_calc_stats() which uses the comp_ctr element,
+> so it must be initialized.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+This seems to be a dim_update_sample() problem really, when comp_ctr
+has been added...
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Your patch works, but we could avoid pre-initializing dim_sample in all callers,
+then re-writing all but one field...
 
-Kernel information:
-    Commit message: Merge tag 'powerpc-6.2-2' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/powerpc/linux
+diff --git a/include/linux/dim.h b/include/linux/dim.h
+index 6c5733981563eadf5f06c59c5dc97df961692b02..4604ced4517268ef8912cd8053ac8f4d2630f977
+100644
+--- a/include/linux/dim.h
++++ b/include/linux/dim.h
+@@ -254,6 +254,7 @@ dim_update_sample(u16 event_ctr, u64 packets, u64
+bytes, struct dim_sample *s)
+        s->pkt_ctr   = packets;
+        s->byte_ctr  = bytes;
+        s->event_ctr = event_ctr;
++       s->comp_ctr  = 0;
+ }
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/64935
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
-amdgpu]
-            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
-33a3db@linux.intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
-recordmcount: cannot execute binary file: Exec format error
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1507
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+ /**
