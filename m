@@ -1,161 +1,123 @@
 Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A42C23A3
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 23:06:06 +0000 (UTC)
-Received: by mail-pj1-f45.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so11423351pjj.4
-        for <llvm@lists.linux.dev>; Mon, 09 Jan 2023 15:06:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CB6524F
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 23:14:46 +0000 (UTC)
+Received: by mail-pj1-f45.google.com with SMTP id q64so10408599pjq.4
+        for <llvm@lists.linux.dev>; Mon, 09 Jan 2023 15:14:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/CVTYF+siE7mPtrMDw8SN4lrmh2h4F+GDmmLhXk98fA=;
-        b=Fp8t4mN5XBq2ZAbrbns8S/ghiLp66DrY/knFr24tO2TBIqJVPkF2Is8LhmtEtWKkCj
-         4k3FlBBFHxZItXcxKiT25Z+b1mOn0KTod4/vHIkLxG6/HfMovDovyxQFbVw6DrwH45D9
-         95B2jczsZYv+SVrrQSvJJX2rVfzrFuBR+ZhvlVqXFkHJ36Dzwbu/IsHcT0YRBTeYNDWy
-         7GUSw7vLqR7zrF+VEyKAFAF8x2a0DWw/HLS8xE4b8H9kX81NCfX/4BGggRTRF6BtbI7T
-         kUYk8+eW47s9tuJbVmoF87cVXTBkrIBpSxEugfpQY7OSXxlAA4ZQ+v+vXzV6LAT82isb
-         wsnw==
+        bh=0+WOyLnDWh5S7xcrPmBfttF3Z19ifhLYlKcXHEX4tIs=;
+        b=Hg3hO8JL3A/4d7/eG7rMHOUq18URfw4TuAMqoteHfbY2En4Z8wMIUbn6Wls9eAMRie
+         QnLXQI25t2A60rJTTrdmJNF33LIvG8uyFd4+CHsEraCMSflZi6avawbI1nB5FYLpds7W
+         x1D911LtQfYNKd6wFxU7QQ3br1mlnfaVBMZVnlMFMHOAv9KSNhFdVRrJ6WCNnZv0xfdp
+         TzD7vDuBd04CjyuxJY6xN2H1+R5tZKPgoHlWi2U7uN/HZKIVASC+lC1yqyiqpWxQVmZX
+         Gblyo450A3Wu0Q4yWi4Xtf835QOZOvb9WzuS1kskSfQCTaba/69HNDFgKHNb63JeXx88
+         59Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/CVTYF+siE7mPtrMDw8SN4lrmh2h4F+GDmmLhXk98fA=;
-        b=puyjkPWs56MCRz+O0/rVuj2mUpfpzSvJoE+6Zl1Go9hb6cHD5dQHM1dkvC1iJ8FXn0
-         EdhJL2b6c/dmBc3qVk3CHUNVN49+hrmD3t/TvjMWjJw9RY6CDbr1fSic6yGvVJr5OCVN
-         SUduf7U4tR0oCq1NukjwRHLAqw5WBB8zy16zQBOu8neKfTKJCMEVhsg46332/DnLLw6b
-         1rLWTv78O3wk3m/6nb2A9VCflQqcKE9dfFOnhhwIOpYPE6M0DDBYWQnnFVK7jRmwMcpc
-         g52J6a5DBtyImSnIu+lJaDHlbmFURWkiXUfF6lHQZH6Ii3RxjZ/q4ISSqDTvB7jpdXQf
-         7wyw==
-X-Gm-Message-State: AFqh2kpuzHWjkkB0fpXR10ITiaHRZdASlsvcR4Sr4FV7SUapcTt4Zxrr
-	SaDHGNrE0gFZ5cTRuC7nEuRbNijGlI1RQQIP52FNqA==
-X-Google-Smtp-Source: AMrXdXtLf4clZ35d0wcG2QlDT2iO2pcdvqPMYc0WlGFotr/edxFfq6YMrQVGvGV7TKNRFXsFBlRIFdvxfzgXwINoY30=
-X-Received: by 2002:a17:90b:a18:b0:227:202b:8eaa with SMTP id
- gg24-20020a17090b0a1800b00227202b8eaamr360967pjb.147.1673305565227; Mon, 09
- Jan 2023 15:06:05 -0800 (PST)
+        bh=0+WOyLnDWh5S7xcrPmBfttF3Z19ifhLYlKcXHEX4tIs=;
+        b=HZZqbvMh/h+hu2RWeLmZ6y4jW/KhznbYbybUNYSuzwDJEMPzsgFdX0QWmBsoDyQIrT
+         eQClmSe/Hr9fkNUpjzUXHM6ak9inY6ecAX5z/dkTzms0zooAAT3PlbqS27if7c0tpVPi
+         fshzLNAU68otuM1MRnRNGvD3wBVhvNPRAfwT+43aovep6H+1GU21L3Iq/K1IQxZReIZ2
+         Q72Pnt/dT4tfasspHp71WoljPkZlAawy/IAqwUdCi83tk8N6VUSZTOOHW7InPtGKbPnU
+         E8/84VpWFUwbjIyIgDDRXlsTF31spACJh1OeSDUp+ocuyhmSDRX7V0wA1nDxZTImCJgT
+         yWuA==
+X-Gm-Message-State: AFqh2kr04VBYUy7ZhZKNjgx9SZC9/3BrwIDZI///PjLXeHMiZvnAsBi+
+	9vRMJhJDGakQu6NAuGD4Pkz3eHe70gs9+Rwz36WquQ==
+X-Google-Smtp-Source: AMrXdXsB3ryalN8D7oA3yt3g9w8IcGiWFckF3wJZX8uc1YDF62989GrGh+WqKFfUXH6OhRUTzaYeOT+I2KPSfz2kMDM=
+X-Received: by 2002:a17:90a:488a:b0:226:b5f4:d420 with SMTP id
+ b10-20020a17090a488a00b00226b5f4d420mr2205324pjh.102.1673306085681; Mon, 09
+ Jan 2023 15:14:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230105090155.357604-1-irogers@google.com> <20230105090155.357604-4-irogers@google.com>
-In-Reply-To: <20230105090155.357604-4-irogers@google.com>
+References: <20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org>
+ <20221228-drop-qunused-arguments-v1-6-658cbc8fc592@kernel.org>
+ <CAKwvOdknEE7DyUG0s43GNGf27QeMgW2fUTXcCzKLbjH1g318vQ@mail.gmail.com> <20230109222337.GM25951@gate.crashing.org>
+In-Reply-To: <20230109222337.GM25951@gate.crashing.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 9 Jan 2023 15:05:53 -0800
-Message-ID: <CAKwvOdnagfhgdi7LoggNwu5hjj1NHqCSF6oqe=CR5SgUwEX8UQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] objtool: Alter how HOSTCC is forced
-To: Ian Rogers <irogers@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
+Date: Mon, 9 Jan 2023 15:14:33 -0800
+Message-ID: <CAKwvOdn3En6kdGBmDF4nFYpMgR0Dx0cgaTH1pPZdEcAJTZWaPg@mail.gmail.com>
+Subject: Re: [PATCH 06/14] powerpc/vdso: Remove unused '-s' flag from ASFLAGS
+To: Segher Boessenkool <segher@kernel.crashing.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, linux-kbuild@vger.kernel.org, trix@redhat.com, 
+	masahiroy@kernel.org, llvm@lists.linux.dev, npiggin@gmail.com, 
+	linuxppc-dev@lists.ozlabs.org, nicolas@fjasle.eu
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jan 5, 2023 at 1:02 AM Ian Rogers <irogers@google.com> wrote:
+On Mon, Jan 9, 2023 at 2:29 PM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
 >
-> HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
-> happens after tools/scripts/Makefile.include is included, meaning
-> flags are set assuming say CC is gcc, but then it can be later set to
-> HOSTCC which may be clang. tools/scripts/Makefile.include is needed
-> for host set up and common macros in objtool's Makefile. Rather than
-> override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
-> libsubcmd builds and the linkage step. This means the Makefiles don't
-> see things like CC changing and tool flag determination, and similar,
-> work properly. To avoid mixing CFLAGS from different compilers just
-> the objtool CFLAGS are determined with the exception of
-> EXTRA_WARNINGS. HOSTCFLAGS is added to these so that command line
-> flags can add to the CFLAGS.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Hi!  Happy new year all.
 
-Thanks Ian, and happy new year! Sorry for delays reviewing this; I'm
-just getting back online today.  Assuming Peter and Josh may be too,
-otherwise can Peter or Josh PTAL?
+HNY Segher! :)
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> On Mon, Jan 09, 2023 at 01:58:32PM -0800, Nick Desaulniers wrote:
+> > On Wed, Jan 4, 2023 at 11:55 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, it
+> > > warns that ASFLAGS contains '-s', which is a linking phase option, so it
+> > > is unused.
+> > >
+> > >   clang-16: error: argument unused during compilation: '-s' [-Werror,-Wunused-command-line-argument]
+> > >
+> > > Looking at the GAS sources, '-s' is only useful when targeting Solaris
+> > > and it is ignored for the powerpc target so just drop the flag
+> > > altogether, as it is not needed.
+> >
+> > Do you have any more info where you found this?  I don't see -s
+> > documented as an assembler flag.
+> > https://sourceware.org/binutils/docs/as/PowerPC_002dOpts.html
+> > https://sourceware.org/binutils/docs/as/Invoking.html
+>
+> It is required by POSIX (for the c99 command, anyway).  It *also* is
+> required to be supported when producing object files (so when no linking
+> is done).
+>
+> It is a GCC flag, and documented just fine:
+> https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#index-s
+>
+> (Yes, that says it is for linking; but the option is allowed without
+> error of any kind always).
+>
+> (ASFLAGS sounds like it is for assembler commands, but it really is
+> for compiler commands that just happen to get .S input files).
+>
+> > The patch seems fine to me, but what was this ever supposed to be?
+> > FWICT it predates git history (looking at
+> > arch/powerpc/kernel/vdso32/Makefile at fc15351d9d63)
+>
+> Yeah, good question.  This compiler flag does the moral equivalent of
+> strip -s (aka --strip-all).  Maybe this was needed at some point, or
+> the symbol or debug info was just annoying (during bringup or similar)?
 
-(I'm happy that this allows me to now pass HOSTCFLAGS on to objtool
-successfully)
+Ah right! Ok then, I think we might keep the patch's diff, but update
+the commit message to mention this is a linker flag that's unused
+since the compiler is being invoked but not the linker (the compiler
+is being used as the driver to assemble a single assembler source
+without linking it; linking is then driven by the linker in a separate
+make rule).
 
-> ---
->  tools/objtool/Makefile | 25 +++++++++++++++----------
->  1 file changed, 15 insertions(+), 10 deletions(-)
+Then we might want to revisit that s390 patch, too?
+https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v1-9-658cbc8fc592@kernel.org/
+
 >
-> diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-> index 61a00b7acae9..49956f4f58b9 100644
-> --- a/tools/objtool/Makefile
-> +++ b/tools/objtool/Makefile
-> @@ -2,16 +2,12 @@
->  include ../scripts/Makefile.include
->  include ../scripts/Makefile.arch
->
-> -# always use the host compiler
-> -AR      = $(HOSTAR)
-> -CC      = $(HOSTCC)
-> -LD      = $(HOSTLD)
-> -
->  ifeq ($(srctree),)
->  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
->  srctree := $(patsubst %/,%,$(dir $(srctree)))
->  endif
->
-> +MAKE = make -S
->  LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
->  ifneq ($(OUTPUT),)
->    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-> @@ -37,12 +33,19 @@ INCLUDES := -I$(srctree)/tools/include \
->             -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
->             -I$(LIBSUBCMD_OUTPUT)/include
->  WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> -CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
-> -LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
-> +OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
-> +OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
->
->  # Allow old libelf to be used:
->  elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
-> -CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> +OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> +
-> +# Always want host compilation.
-> +HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
-> +                 LD="$(HOSTLD)" AR="$(HOSTAR)"
-> +BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
-> +                       LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
-> +                       AR="$(HOSTAR)"
->
->  AWK = awk
->  MKDIR = mkdir
-> @@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
->
->  $(OBJTOOL_IN): fixdep FORCE
->         $(Q)$(CONFIG_SHELL) ./sync-check.sh
-> -       $(Q)$(MAKE) $(build)=objtool
-> +       $(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
-> +
->
->  $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
-> -       $(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
-> +       $(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
 >
 >
->  $(LIBSUBCMD_OUTPUT):
-> @@ -77,6 +81,7 @@ $(LIBSUBCMD_OUTPUT):
->  $(LIBSUBCMD): fixdep FORCE $(LIBSUBCMD_OUTPUT)
->         $(Q)$(MAKE) -C $(LIBSUBCMD_DIR) O=$(LIBSUBCMD_OUTPUT) \
->                 DESTDIR=$(LIBSUBCMD_DESTDIR) prefix= subdir= \
-> +               $(HOST_OVERRIDES) \
->                 $@ install_headers
->
->  $(LIBSUBCMD)-clean:
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+> Segher
+
 
 
 -- 
