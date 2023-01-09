@@ -1,147 +1,84 @@
-Received: from faui40.informatik.uni-erlangen.de (faui40.informatik.uni-erlangen.de [131.188.34.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8313205
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 15:07:29 +0000 (UTC)
-Received: from luis-i4.informatik.uni-erlangen.de (i4laptop35.informatik.uni-erlangen.de [10.188.34.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: gerhorst)
-	by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPSA id 4NrHNs2GvsznkXl;
-	Mon,  9 Jan 2023 16:07:25 +0100 (CET)
-From: Luis Gerhorst <gerhorst@cs.fau.de>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Piotr Krysiuk <piotras@gmail.com>,
-	Benedict Schlueter <benedict.schlueter@rub.de>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Luis Gerhorst <gerhorst@cs.fau.de>,
-	stefan.saecherl@use.startmail.com,
-	Henriette Hofmeier <henriette.hofmeier@rub.de>
-Subject: [PATCH] bpf: Fix pointer-leak due to insufficient speculative store bypass mitigation
-Date: Mon,  9 Jan 2023 16:05:46 +0100
-Message-Id: <20230109150544.41465-1-gerhorst@cs.fau.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <edc95bad-aada-9cfc-ffe2-fa9bb206583c@cs.fau.de>
-References: 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D767833D6
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 16:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241C3C433F2;
+	Mon,  9 Jan 2023 16:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1673282949;
+	bh=vfToooFvqG7PPIh4+IgqDfsebCiWzTMy8pkLwP+eTLE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=dTZ4S4m0Kixw+/ADbnK/a9lxMmzQ94LmS1Z0eEq/i7EruP1hlAt81aajr5fwcRNL5
+	 pOe/qFU5fQrbC3YDNIrtf8kwCZ2gRziMWn/OJXEed2A8OQOSFNcQ2ees5Li5P207ee
+	 K/OpgSs6fJRl/z5g7grnlJDAoCwaNoSPN9ngl+DIeGdT6RUWHbcWA8wpufWGHVf/TH
+	 +d7hDCYszE6gHjpqBwAPwHzMeyi9Gmv1H0gxd8GztsrKkI2/+rjCgDjOy0bV/mrpVA
+	 z03ZwJ58N6JEuKglO24N5iDEZPXIOvhDD/sqliSpfEjtxoV12W8/ATmgS3Y9AXsPA0
+	 CU2OT9vfCG6LQ==
+From: Mark Brown <broonie@kernel.org>
+To: lgirdwood@gmail.com, Nathan Chancellor <nathan@kernel.org>
+Cc: Vijendar.Mukunda@amd.com, Syed.SabaKareem@amd.com,
+ alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+In-Reply-To:
+ <20230105-wsometimes-uninitialized-pci-ps-c-v1-1-4022fd077959@kernel.org>
+References:
+ <20230105-wsometimes-uninitialized-pci-ps-c-v1-1-4022fd077959@kernel.org>
+Subject: Re: [PATCH] ASoC: amd: ps: Fix uninitialized ret in
+ create_acp64_platform_devs()
+Message-Id: <167328294786.323147.5948330744390772644.b4-ty@kernel.org>
+Date: Mon, 09 Jan 2023 16:49:07 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED=-1
-	autolearn=disabled version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	faui40.informatik.uni-erlangen.de
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-8b3d1
 
-To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
-insufficient speculative store bypass mitigation") inserts lfence
-instructions after 1) initializing a stack slot and 2) spilling a
-pointer to the stack.
+On Thu, 05 Jan 2023 08:53:32 -0700, Nathan Chancellor wrote:
+> Clang warns:
+> 
+>   sound/soc/amd/ps/pci-ps.c:218:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>           default:
+>           ^~~~~~~
+>   sound/soc/amd/ps/pci-ps.c:239:9: note: uninitialized use occurs here
+>           return ret;
+>                  ^~~
+>   sound/soc/amd/ps/pci-ps.c:190:9: note: initialize the variable 'ret' to silence this warning
+>           int ret;
+>                  ^
+>                   = 0
+>   1 error generated.
+> 
+> [...]
 
-However, this does not cover cases where a stack slot is first
-initialized with a pointer (subject to sanitization) but then
-overwritten with a scalar (not subject to sanitization because the slot
-was already initialized). In this case, the second write may be subject
-to speculative store bypass (SSB) creating a speculative
-pointer-as-scalar type confusion. This allows the program to
-subsequently leak the numerical pointer value using, for example, a
-branch-based cache side channel.
+Applied to
 
-To fix this, also sanitize scalars if they write a stack slot that
-previously contained a pointer. Assuming that pointer-spills are only
-generated by LLVM on register-pressure, the performance impact on most
-real-world BPF programs should be small.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-The following unprivileged BPF bytecode drafts a minimal exploit and the
-mitigation:
+Thanks!
 
-  [...]
-  // r6 = 0 or 1 (skalar, unknown user input)
-  // r7 = accessible ptr for side channel
-  // r10 = frame pointer (fp), to be leaked
-  //
-  r9 = r10 # fp alias to encourage ssb
-  *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
-  // lfence added here because of pointer spill to stack.
-  //
-  // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
-  // for no r9-r10 dependency.
-  //
-  *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
-  // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
-  // store may be subject to SSB
-  //
-  // fix: also add an lfence when the slot contained a ptr
-  //
-  r8 = *(u64 *)(r9 - 8)
-  // r8 = architecturally a scalar, speculatively a ptr
-  //
-  // leak ptr using branch-based cache side channel:
-  r8 &= 1 // choose bit to leak
-  if r8 == 0 goto SLOW // no mispredict
-  // architecturally dead code if input r6 is 0,
-  // only executes speculatively iff ptr bit is 1
-  r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
-SLOW:
-  [...]
+[1/1] ASoC: amd: ps: Fix uninitialized ret in create_acp64_platform_devs()
+      commit: de1cae22898cf10aacc735a21d799b5bbce4496c
 
-After running this, the program can time the access to *(r7 + 0) to
-determine whether the chosen pointer bit was 0 or 1. Repeat this 64
-times to recover the whole address on amd64.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-In summary, sanitization can only be skipped if one scalar is
-overwritten with another scalar. Scalar-confusion due to speculative
-store bypass can not lead to invalid accesses because the pointer bounds
-deducted during verification are enforced using branchless logic. See
-979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
-arithmetic") for details.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Do not make the mitigation depend on
-!env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
-likely unexpected if these were enabled. For example, leaking the
-address to a protected log file may be acceptable while disabling the
-mitigation might unintentionally leak the address into the cached-state
-of a map that is accessible to unprivileged processes.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
-Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
-Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
----
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a5255a0dcbb6..5e3aa4a75bd6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3287,7 +3287,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 		bool sanitize = reg && is_spillable_regtype(reg->type);
- 
- 		for (i = 0; i < size; i++) {
--			if (state->stack[spi].slot_type[i] == STACK_INVALID) {
-+			u8 type = state->stack[spi].slot_type[i];
-+			if (type != STACK_MISC && type != STACK_ZERO) {
- 				sanitize = true;
- 				break;
- 			}
--- 
-2.34.1
-
+Thanks,
+Mark
