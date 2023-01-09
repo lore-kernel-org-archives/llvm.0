@@ -1,246 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF40723C0
-	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 06:14:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D20C433D2;
-	Mon,  9 Jan 2023 06:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673244886;
-	bh=7nHdG7tBKvymlwJ/oQJ88KCANE4outKDYx5LGQcv3bU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Tp16WlcPkwuxR20sEg9VspajpL7aDjyHuBtjsr8UuQ2FbIdOUo7/Y0hx4+g1xBzzG
-	 +qaP7L6BgkPjPzd14wBgl8v1asbWAsk8BWUSEB0S0DyjjSKGVHPphh++wJxiczBYvE
-	 xLqpsLNuWdhuqtOObOFIEqKNeB1Xj4dp0pxPuY50Ybz0Lmp7ie88BoAZ5hsY6p32x6
-	 l7WIf1xWTiP35pUVsOzD5hyCHviqYMFTon6TJLHVDzD7+zc+dbSKbx77IlHn7E0q6I
-	 PnIwOeDmqYiCdG4yCOldKCusQ5jhg8hYZ6oW8C1ZWrHEkJT6nApL1tONWNXCUgzZyF
-	 MLqWvIYzRtMmA==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Tom Rix <trix@redhat.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	llvm@lists.linux.dev,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH v2] kbuild: rust: remove -v option of scripts/rust_is_available.sh
-Date: Mon,  9 Jan 2023 15:14:36 +0900
-Message-Id: <20230109061436.3146442-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7BF15B4
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 06:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673246490;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GS4cUwjyArlKCv9kSFORbuqh4ObRncmzXypiig3/tqg=;
+	b=i49F12TzWis4U1YuPtaISMUh5LZb3KWnwYTmbgeomoDnCqZMrcnDFat+zPewJkkO8t8w1D
+	I/q/TsbQE2ROwHJ2yWsTp4zdvszI0JG7Rs3Z9U0PrUmZBjn3e3pXgrkwzYjoY47TcX8hta
+	5PAuTxrgSbRdti23JlRGXY9f0lMTwuQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-132-Tj4DLN01NY6XPeDtSwYFxQ-1; Mon, 09 Jan 2023 01:41:28 -0500
+X-MC-Unique: Tj4DLN01NY6XPeDtSwYFxQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56C29101A521
+	for <llvm@lists.linux.dev>; Mon,  9 Jan 2023 06:41:28 +0000 (UTC)
+Received: from [172.64.12.49] (unknown [10.30.33.198])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4241A492B00;
+	Mon,  9 Jan 2023 06:41:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (97/383 SKIPPED): Test report for master
+ (6.2.0-rc2, mainline.kernel.org-clang, e9ffbf16)
+Date: Mon, 09 Jan 2023 06:41:28 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <98716.123010901412800107@us-mta-132.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The -v option is passed when this script is invoked from Makefile,
-but not when invoked from Kconfig.
+Hi, we tested your kernel and here are the results:
 
-As you can see in scripts/Kconfig.include, the 'success' macro suppresses
-stdout and stderr anyway, so this script does not need to be quiet.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-Tested-by: Miguel Ojeda <ojeda@kernel.org>
----
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Changes in v2:
-  - Fix description (scripts -> script)
-  - Remove stale comment
+Kernel information:
+    Commit message: Merge tag 'fixes-2023-01-08' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/rppt/memblock
 
- Makefile                     |  4 +-
- scripts/rust_is_available.sh | 96 +++++++++++++++---------------------
- 2 files changed, 42 insertions(+), 58 deletions(-)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/64928
 
-diff --git a/Makefile b/Makefile
-index c1f59f54ae90..59d827b85888 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1288,7 +1288,7 @@ prepare0: archprepare
- # All the preparing..
- prepare: prepare0
- ifdef CONFIG_RUST
--	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh -v
-+	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh
- 	$(Q)$(MAKE) $(build)=rust
- endif
- 
-@@ -1813,7 +1813,7 @@ $(DOC_TARGETS):
- # "Is Rust available?" target
- PHONY += rustavailable
- rustavailable:
--	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh -v && echo "Rust is available!"
-+	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust_is_available.sh && echo "Rust is available!"
- 
- # Documentation target
- #
-diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-index aebbf1913970..f43a010eaf30 100755
---- a/scripts/rust_is_available.sh
-+++ b/scripts/rust_is_available.sh
-@@ -2,8 +2,6 @@
- # SPDX-License-Identifier: GPL-2.0
- #
- # Tests whether a suitable Rust toolchain is available.
--#
--# Pass `-v` for human output and more checks (as warnings).
- 
- set -e
- 
-@@ -23,21 +21,17 @@ get_canonical_version()
- 
- # Check that the Rust compiler exists.
- if ! command -v "$RUSTC" >/dev/null; then
--	if [ "$1" = -v ]; then
--		echo >&2 "***"
--		echo >&2 "*** Rust compiler '$RUSTC' could not be found."
--		echo >&2 "***"
--	fi
-+	echo >&2 "***"
-+	echo >&2 "*** Rust compiler '$RUSTC' could not be found."
-+	echo >&2 "***"
- 	exit 1
- fi
- 
- # Check that the Rust bindings generator exists.
- if ! command -v "$BINDGEN" >/dev/null; then
--	if [ "$1" = -v ]; then
--		echo >&2 "***"
--		echo >&2 "*** Rust bindings generator '$BINDGEN' could not be found."
--		echo >&2 "***"
--	fi
-+	echo >&2 "***"
-+	echo >&2 "*** Rust bindings generator '$BINDGEN' could not be found."
-+	echo >&2 "***"
- 	exit 1
- fi
- 
-@@ -53,16 +47,14 @@ rust_compiler_min_version=$($min_tool_version rustc)
- rust_compiler_cversion=$(get_canonical_version $rust_compiler_version)
- rust_compiler_min_cversion=$(get_canonical_version $rust_compiler_min_version)
- if [ "$rust_compiler_cversion" -lt "$rust_compiler_min_cversion" ]; then
--	if [ "$1" = -v ]; then
--		echo >&2 "***"
--		echo >&2 "*** Rust compiler '$RUSTC' is too old."
--		echo >&2 "***   Your version:    $rust_compiler_version"
--		echo >&2 "***   Minimum version: $rust_compiler_min_version"
--		echo >&2 "***"
--	fi
-+	echo >&2 "***"
-+	echo >&2 "*** Rust compiler '$RUSTC' is too old."
-+	echo >&2 "***   Your version:    $rust_compiler_version"
-+	echo >&2 "***   Minimum version: $rust_compiler_min_version"
-+	echo >&2 "***"
- 	exit 1
- fi
--if [ "$1" = -v ] && [ "$rust_compiler_cversion" -gt "$rust_compiler_min_cversion" ]; then
-+if [ "$rust_compiler_cversion" -gt "$rust_compiler_min_cversion" ]; then
- 	echo >&2 "***"
- 	echo >&2 "*** Rust compiler '$RUSTC' is too new. This may or may not work."
- 	echo >&2 "***   Your version:     $rust_compiler_version"
-@@ -82,16 +74,14 @@ rust_bindings_generator_min_version=$($min_tool_version bindgen)
- rust_bindings_generator_cversion=$(get_canonical_version $rust_bindings_generator_version)
- rust_bindings_generator_min_cversion=$(get_canonical_version $rust_bindings_generator_min_version)
- if [ "$rust_bindings_generator_cversion" -lt "$rust_bindings_generator_min_cversion" ]; then
--	if [ "$1" = -v ]; then
--		echo >&2 "***"
--		echo >&2 "*** Rust bindings generator '$BINDGEN' is too old."
--		echo >&2 "***   Your version:    $rust_bindings_generator_version"
--		echo >&2 "***   Minimum version: $rust_bindings_generator_min_version"
--		echo >&2 "***"
--	fi
-+	echo >&2 "***"
-+	echo >&2 "*** Rust bindings generator '$BINDGEN' is too old."
-+	echo >&2 "***   Your version:    $rust_bindings_generator_version"
-+	echo >&2 "***   Minimum version: $rust_bindings_generator_min_version"
-+	echo >&2 "***"
- 	exit 1
- fi
--if [ "$1" = -v ] && [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cversion" ]; then
-+if [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cversion" ]; then
- 	echo >&2 "***"
- 	echo >&2 "*** Rust bindings generator '$BINDGEN' is too new. This may or may not work."
- 	echo >&2 "***   Your version:     $rust_bindings_generator_version"
-@@ -110,13 +100,11 @@ bindgen_libclang_min_version=$($min_tool_version llvm)
- bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
- bindgen_libclang_min_cversion=$(get_canonical_version $bindgen_libclang_min_version)
- if [ "$bindgen_libclang_cversion" -lt "$bindgen_libclang_min_cversion" ]; then
--	if [ "$1" = -v ]; then
--		echo >&2 "***"
--		echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') is too old."
--		echo >&2 "***   Your version:    $bindgen_libclang_version"
--		echo >&2 "***   Minimum version: $bindgen_libclang_min_version"
--		echo >&2 "***"
--	fi
-+	echo >&2 "***"
-+	echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') is too old."
-+	echo >&2 "***   Your version:    $bindgen_libclang_version"
-+	echo >&2 "***   Minimum version: $bindgen_libclang_min_version"
-+	echo >&2 "***"
- 	exit 1
- fi
- 
-@@ -125,21 +113,19 @@ fi
- #
- # In the future, we might be able to perform a full version check, see
- # https://github.com/rust-lang/rust-bindgen/issues/2138.
--if [ "$1" = -v ]; then
--	cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
--	if [ "$cc_name" = Clang ]; then
--		clang_version=$( \
--			LC_ALL=C "$CC" --version 2>/dev/null \
--				| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
--		)
--		if [ "$clang_version" != "$bindgen_libclang_version" ]; then
--			echo >&2 "***"
--			echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN')"
--			echo >&2 "*** version does not match Clang's. This may be a problem."
--			echo >&2 "***   libclang version: $bindgen_libclang_version"
--			echo >&2 "***   Clang version:    $clang_version"
--			echo >&2 "***"
--		fi
-+cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
-+if [ "$cc_name" = Clang ]; then
-+	clang_version=$( \
-+		LC_ALL=C "$CC" --version 2>/dev/null \
-+			| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
-+	)
-+	if [ "$clang_version" != "$bindgen_libclang_version" ]; then
-+		echo >&2 "***"
-+		echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN')"
-+		echo >&2 "*** version does not match Clang's. This may be a problem."
-+		echo >&2 "***   libclang version: $bindgen_libclang_version"
-+		echo >&2 "***   Clang version:    $clang_version"
-+		echo >&2 "***"
- 	fi
- fi
- 
-@@ -150,11 +136,9 @@ rustc_sysroot=$("$RUSTC" $KRUSTFLAGS --print sysroot)
- rustc_src=${RUST_LIB_SRC:-"$rustc_sysroot/lib/rustlib/src/rust/library"}
- rustc_src_core="$rustc_src/core/src/lib.rs"
- if [ ! -e "$rustc_src_core" ]; then
--	if [ "$1" = -v ]; then
--		echo >&2 "***"
--		echo >&2 "*** Source code for the 'core' standard library could not be found"
--		echo >&2 "*** at '$rustc_src_core'."
--		echo >&2 "***"
--	fi
-+	echo >&2 "***"
-+	echo >&2 "*** Source code for the 'core' standard library could not be found"
-+	echo >&2 "*** at '$rustc_src_core'."
-+	echo >&2 "***"
- 	exit 1
- fi
--- 
-2.34.1
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
+und in kselftest-list.txt
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1473
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: selinux-policy: serge-testsuite: /bin/sh: line 1: ./scripts/=
+recordmcount: cannot execute binary file: Exec format error
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1507
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
