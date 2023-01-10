@@ -1,42 +1,42 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB985B422
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 22:21:05 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-4ce566db73eso73157977b3.11
-        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 14:21:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1C7B422
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 22:21:13 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id x188-20020a2531c5000000b00716de19d76bso14199801ybx.19
+        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 14:21:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4sg2Aa5uCHWcDC8jm9J4EAv2OJFGtXnNHMXMT9mO4Gw=;
-        b=AW29Ki0ipdxS14sshMxXhqz4FZFcNVmZ3WvoBGdx8Bla7+yjxNrYSNmR1ihsyWRsrf
-         X60XFLMewiYm9IGefUm4eEzu+c8CeyIivN4qFu4JpwnYwB3jA2QMO7bOOM3Ko7g1jq8K
-         C5RnWXn1KhH66oHffsmy/GqlYcVahiBR3eqjUSNwhLqIpkauqFmAyRmy+3bD+cnZC0dZ
-         KFqMPnIG2GLgHMH6PYQiwuTfPPwsF8vA5I0JxA/flSZfhMIfeqXMaRE2xMVljQClk+CN
-         NAwV6KvZTl/6ClD/vaGcAe7VaWC8QwAk0u7Hs7wmIUwxTE33GdGdAYSdTQfnpepXNN/1
-         khRg==
+        bh=/FtIYr0/RheXwrssHV0cFATW8LMtUvVk/N1uI6ptIqc=;
+        b=RNYP627ovo2gwEzsZZbFylrtQb+tRstmx8+kwVlpER/K5C5tNb2oBe50zVPZpE1xuZ
+         NU9zXXblOxx6EAKLVYDrvaw3SP0ZyRrbegvCU8UFWhy7tdpYKJsjdqHS8Q8fCYTB2AA1
+         XfxIcjNfCJVewHShT9ogfUdkxa5rGgTTPcO795wa5pyopE3PY7OwUHSfWNK2py18qEHb
+         lU9rAZ5slO3ij3YjOrOQ5FnhJPYOoz0FdvRAzlSJcgOtT3Q85Tvra/8+nQofX8xCCpMS
+         FEo/8EYdWVgxNvEjlwcyYar4md8dE1bKiVeg7zyJe6xTPO25BRQ85Hz4YMsQr4Ew/YJj
+         ifFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4sg2Aa5uCHWcDC8jm9J4EAv2OJFGtXnNHMXMT9mO4Gw=;
-        b=e8Ch7Tt5W/AUB5m9nfW3S3mplEhcGYQVtylqp/ogOPiwb2XIB1Vf2tLC3hnhzM+uUe
-         QtRAuhYtrcQiv4JQJfNk+WXx+vkRww0/y0Mj3jWA/wTVzyLPhDcfPk2ZS7seQ2inks68
-         7SCIhzLnf3J+kD89Y9mEbPVmefFlq2M0QjHVjCcJNxDZKMZkup1WoX7kq5DC1dMKmATi
-         6Dd+6MKwEKNfj8F0ZwXidUF/Oa38CcIBotT9hP16lrc7Z42CY33c1sVlxk3pwG95u+kK
-         tE2pO5w5lHJll/QFd8uFyVHH1YLvRM1ozhOG6uDYFMmhyw6yczMvEYPrrCJrEOW/Jrg4
-         cNjw==
-X-Gm-Message-State: AFqh2koVy2uDh5ne85cdBsaHIaKUV+kAwmAsN7cN3fi0ZPnvb26OTtBH
-	b/RbOpyQwct2ZBTYuem/sjezcvMJTE7U
-X-Google-Smtp-Source: AMrXdXul//OabQOCLWyx1Luc6Hl+ueTmgO396xd2lzHTTOh6r4Z7uBXUeTt67VSekVDq2442YXd8T9SPuWGF
+        bh=/FtIYr0/RheXwrssHV0cFATW8LMtUvVk/N1uI6ptIqc=;
+        b=qtN3H0MyKKox8HdFldG4BVSdiJrtjV+YJIXKYn5cszxfR3LFIHTVgKKyPPV00nOUQh
+         +zr5RzS84HfEzw25viW0+6q+izlrd3RNRYZB/xKWzaZ7c5CwX6fa+AFuUkeXV54kjQDR
+         Br1US1q1gZ3LuSE+NDQDTHVbpk/RfEtHZ82T/QMu/DJDrzWQ2pdHTMJC5a7yVMswkvXv
+         BIrdHiA7YSwGSI4VaaL3i0oxXYLgkVfZWNZz6obKrG4fbxAPeT5pjnkOaqu/ri/32Prv
+         98tgociFV1SgxuVAGuWZDgUU44xMP8/PYx9/x/mIZp8HfLCAwg+EoWor2lQfzzfzcZ3G
+         051g==
+X-Gm-Message-State: AFqh2krD42NPx9/lBHC8L+tvc/KJY8gJEBNQrCJs8ufLcIOt3er89DNa
+	btfF6D8mqSIA6akX+sAEAvfLZOECo2Jv
+X-Google-Smtp-Source: AMrXdXt8x+kd9UlLPbZYhu5Ooy9hNfxVHcOZmgh4OR3ywtB1lSBt3xtVEtTcEV9ZxG+DMlVpkAwMcWwdvcU8
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cebf:c37e:8184:56])
- (user=irogers job=sendgmr) by 2002:a25:449:0:b0:7b6:f8d5:82f4 with SMTP id
- 70-20020a250449000000b007b6f8d582f4mr2181307ybe.646.1673389264926; Tue, 10
- Jan 2023 14:21:04 -0800 (PST)
-Date: Tue, 10 Jan 2023 14:20:01 -0800
+ (user=irogers job=sendgmr) by 2002:a25:8110:0:b0:6f6:ec71:8ede with SMTP id
+ o16-20020a258110000000b006f6ec718edemr5909003ybk.422.1673389272586; Tue, 10
+ Jan 2023 14:21:12 -0800 (PST)
+Date: Tue, 10 Jan 2023 14:20:02 -0800
 In-Reply-To: <20230110222003.1591436-1-irogers@google.com>
-Message-Id: <20230110222003.1591436-6-irogers@google.com>
+Message-Id: <20230110222003.1591436-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230110222003.1591436-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 5/7] tools lib api: Tweak strbuf allocation size computation
+Subject: [PATCH v1 6/7] perf help: Use run_command_strbuf
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -67,57 +67,78 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-alloc_nr gives an estimate of the actual memory behind an allocation
-but isn't accurate. Use malloc_usable_size to accurately set the
-strbuf alloc, which potentially avoids realloc calls.
+Remove boiler plate by using library routine.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/api/strbuf.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ tools/perf/builtin-help.c | 47 ++++++++++++---------------------------
+ 1 file changed, 14 insertions(+), 33 deletions(-)
 
-diff --git a/tools/lib/api/strbuf.c b/tools/lib/api/strbuf.c
-index eafa2c01f46a..a3d7f96d8b9f 100644
---- a/tools/lib/api/strbuf.c
-+++ b/tools/lib/api/strbuf.c
-@@ -4,6 +4,7 @@
- #include <linux/kernel.h>
- #include <linux/string.h>
- #include <linux/zalloc.h>
-+#include <malloc.h>
- #include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -42,7 +43,6 @@ char *strbuf_detach(struct strbuf *sb, size_t *sz)
- 	return res;
- }
- 
--#define alloc_nr(x) (((x)+16)*3/2)
- int strbuf_grow(struct strbuf *sb, size_t extra)
+diff --git a/tools/perf/builtin-help.c b/tools/perf/builtin-help.c
+index 8874e1e0335b..1cb87358cd20 100644
+--- a/tools/perf/builtin-help.c
++++ b/tools/perf/builtin-help.c
+@@ -70,46 +70,27 @@ static const char *get_man_viewer_info(const char *name)
+ static int check_emacsclient_version(void)
  {
- 	char *buf;
-@@ -54,9 +54,6 @@ int strbuf_grow(struct strbuf *sb, size_t extra)
- 	if (nr <= sb->len)
- 		return -E2BIG;
+ 	struct strbuf buffer = STRBUF_INIT;
+-	struct child_process ec_process;
+-	const char *argv_ec[] = { "emacsclient", "--version", NULL };
+-	int version;
+ 	int ret = -1;
  
--	if (alloc_nr(sb->alloc) > nr)
--		nr = alloc_nr(sb->alloc);
+-	/* emacsclient prints its version number on stderr */
+-	memset(&ec_process, 0, sizeof(ec_process));
+-	ec_process.argv = argv_ec;
+-	ec_process.err = -1;
+-	ec_process.stdout_to_stderr = 1;
+-	if (start_command(&ec_process)) {
+-		fprintf(stderr, "Failed to start emacsclient.\n");
+-		return -1;
+-	}
+-	if (strbuf_read(&buffer, ec_process.err, 20) < 0) {
+-		fprintf(stderr, "Failed to read emacsclient version\n");
+-		goto out;
+-	}
+-	close(ec_process.err);
 -
  	/*
- 	 * Note that sb->buf == strbuf_slopbuf if sb->alloc == 0, and it is
- 	 * a static variable. Thus we have to avoid passing it to realloc.
-@@ -66,10 +63,9 @@ int strbuf_grow(struct strbuf *sb, size_t extra)
- 		return -ENOMEM;
+-	 * Don't bother checking return value, because "emacsclient --version"
+-	 * seems to always exits with code 1.
++	 * emacsclient may print its version number on stderr. Don't bother
++	 * checking return value, because some "emacsclient --version" commands
++	 * seem to always exits with code 1.
+ 	 */
+-	finish_command(&ec_process);
++	run_command_strbuf("emacsclient --version 2>&1", &buffer);
  
- 	sb->buf = buf;
--	sb->alloc = nr;
-+	sb->alloc = malloc_usable_size(buf);
- 	return 0;
+-	if (!strstarts(buffer.buf, "emacsclient")) {
++	if (!strstarts(buffer.buf, "emacsclient"))
+ 		fprintf(stderr, "Failed to parse emacsclient version.\n");
+-		goto out;
+-	}
+-
+-	version = atoi(buffer.buf + strlen("emacsclient"));
++	else {
++		int version = atoi(buffer.buf + strlen("emacsclient"));
+ 
+-	if (version < 22) {
+-		fprintf(stderr,
+-			"emacsclient version '%d' too old (< 22).\n",
+-			version);
+-	} else
+-		ret = 0;
+-out:
++		if (version < 22) {
++			fprintf(stderr,
++				"emacsclient version '%d' too old (< 22).\n",
++				version);
++		} else
++			ret = 0;
++	}
+ 	strbuf_release(&buffer);
+ 	return ret;
  }
--#undef alloc_nr
- 
- int strbuf_addch(struct strbuf *sb, int c)
- {
 -- 
 2.39.0.314.g84b9a713c41-goog
 
