@@ -1,155 +1,106 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05E517DB
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 16:53:45 +0000 (UTC)
-Received: by mail-lj1-f173.google.com with SMTP id bx6so13184408ljb.3
-        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 08:53:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9F823A6
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 16:59:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UHlQmz4MZPCYm9BygwyVFf2S1z6UZf0NIZ7PiPTX9pQ=;
-        b=eOEttK62GmXf0jQCMYIlYh623FQaOyPteJMvs+9gqBGF2BiED7YcvXEXCQPyMkpRna
-         MqDTI5zO2JB7sPi8MMKGgWs8qHzcu9xaZ7kdKe94nzBkUQ9Ap0b9Iririg90SObGYe7c
-         8mJfMbLaBJZqUbjXfMtt3E2BiHD58XiS6O9d3KpR4Z8Zd09eOfoBHNOal/QxXg1o7/Ih
-         uLmjZ4/fl5d3uEtnyqwezEPLSWsEcpm1iCjMv056cTVE7Gw2huxUTiP08y8uqLZ4a1DQ
-         1HxRNgQm74sTDb7Q2vmwJtBDjCZPgF38SMqoHI5W6WqeeYufRsMzfpvB5cidW0191Gah
-         ynDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UHlQmz4MZPCYm9BygwyVFf2S1z6UZf0NIZ7PiPTX9pQ=;
-        b=NEQclqo8JxURgXrlN68AiL9hUPitrWHksTVCxDeds4bUES/X8IGlWi0Pv75Z0lhTCC
-         GsLhUvilNQCvJNc1JpjV18jdjWlgDPbblnhLgt26POIYXg6spws91nDYF3ELQkIB0vtm
-         ONKGKIt8XsfU5lTKuJnexq8I/W9d1RCd4sG7xJzBNkzkA6nhl9dFTb2/V7ETNtH3a0v9
-         4u3s3thrpYVqkJ6nKy0tfhJHpKJCcPRDB6BURI3hBLU2/7nkHIgIB0VU/fX42Xzr3WbF
-         EEXxjkOvOIXWIv9vP2eX4YSvhYBZZ+3dQK++0F1QL/7dLGkH2WXLDiML3154Pen8HD/a
-         VNEA==
-X-Gm-Message-State: AFqh2kqj1bDtrSrC9MS+pt588sR5JxqbSLmDX+ZY84ZFdxd79XwDO4aH
-	VuxDfd3c9umAlBoupKPNSKNwima01MiS5EsCsJJdlQ==
-X-Google-Smtp-Source: AMrXdXt/FTDJ1jQlyl0sPF3dYRo062A9EttvZq77C4MjzFUPN4zhXdMvRHWsX1mn8ECQcKnN7yCNgz1PVzPs7wpARFY=
-X-Received: by 2002:a2e:7316:0:b0:283:2205:3ba4 with SMTP id
- o22-20020a2e7316000000b0028322053ba4mr510837ljc.494.1673369623680; Tue, 10
- Jan 2023 08:53:43 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673370000; x=1704906000;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version;
+  bh=v0FHnqz++7WAyCUdZ4a39D9ZNS9Mj+/iD1X/Rx7tWI4=;
+  b=hOSplJKNcnwv7w8M77WMlrFQXDw/P49OpFHcgkmX0OiGLuoGFvCo1Q2T
+   WeEkScKgEccpX538NKE2xFObQt7EiLzl2LhmwlloPHIl+ZDRqxsY+ug62
+   qx9/LmmIaJ41fRXlofc0/ff5CQGjyZbQ9QDeVqNw0/ib0bSSuqo6tNIWt
+   s=;
+X-IronPort-AV: E=Sophos;i="5.96,315,1665446400"; 
+   d="scan'208";a="285208024"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 16:59:53 +0000
+Received: from EX13D48EUB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+	by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 6920741664;
+	Tue, 10 Jan 2023 16:59:51 +0000 (UTC)
+Received: from EX19D028EUB003.ant.amazon.com (10.252.61.31) by
+ EX13D48EUB001.ant.amazon.com (10.43.166.179) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Tue, 10 Jan 2023 16:59:50 +0000
+Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.160.120) by
+ EX19D028EUB003.ant.amazon.com (10.252.61.31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.7; Tue, 10 Jan 2023 16:59:40 +0000
+References: <20230108143843.2987732-1-trix@redhat.com>
+ <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 28.0.91
+From: Shay Agroskin <shayagr@amazon.com>
+To: Eric Dumazet <edumazet@google.com>
+CC: Tom Rix <trix@redhat.com>, <akiyano@amazon.com>, <darinzon@amazon.com>,
+	<ndagan@amazon.com>, <saeedb@amazon.com>, <davem@davemloft.net>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <khalasa@piap.pl>,
+	<wsa+renesas@sang-engineering.com>, <yuancan@huawei.com>,
+	<tglx@linutronix.de>, <42.hyeyoo@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH] net: ena: initialize dim_sample
+Date: Tue, 10 Jan 2023 18:58:37 +0200
+In-Reply-To: <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
+Message-ID: <pj41zlpmbmba16.fsf@u570694869fb251.ant.amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230110161831.2625821-1-trix@redhat.com> <CAMkAt6oqBH35=moST5nO_BXwc8k0M4h_8TvT9H6outR9vOw5qg@mail.gmail.com>
- <ecd0c7f2-f82c-845f-b1fe-a7d3bf495bb1@redhat.com>
-In-Reply-To: <ecd0c7f2-f82c-845f-b1fe-a7d3bf495bb1@redhat.com>
-From: Peter Gonda <pgonda@google.com>
-Date: Tue, 10 Jan 2023 09:53:32 -0700
-Message-ID: <CAMkAt6rKfM_uvLRMaN3SSTYVfiMixVGtEyZjo38OG8L1HcfKdg@mail.gmail.com>
-Subject: Re: [PATCH] crypto: initialize error
-To: Tom Rix <trix@redhat.com>
-Cc: brijesh.singh@amd.com, thomas.lendacky@amd.com, john.allen@amd.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, nathan@kernel.org, 
-	ndesaulniers@google.com, rientjes@google.com, marcorr@google.com, 
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; format=flowed
+X-Originating-IP: [10.43.160.120]
+X-ClientProxiedBy: EX13D45UWA002.ant.amazon.com (10.43.160.38) To
+ EX19D028EUB003.ant.amazon.com (10.252.61.31)
+Precedence: Bulk
 
-On Tue, Jan 10, 2023 at 9:48 AM Tom Rix <trix@redhat.com> wrote:
->
->
-> On 1/10/23 8:27 AM, Peter Gonda wrote:
-> > On Tue, Jan 10, 2023 at 9:18 AM Tom Rix <trix@redhat.com> wrote:
-> >> clang static analysis reports this problem
-> >> drivers/crypto/ccp/sev-dev.c:1347:3: warning: 3rd function call
-> >>    argument is an uninitialized value [core.CallAndMessage]
-> >>      dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
-> >>      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>
-> >> __sev_platform_init_locked() can return without setting the
-> >> error parameter, causing the dev_err() to report a gargage
-> > garbage
-> ok
-> >
-> >> value.
-> >>
-> >> Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
-> > Should this be: 'Fixes: 200664d5237f ("crypto: ccp: Add Secure
-> > Encrypted Virtualization (SEV) command support")'
-> >
-> > Since in that patch an uninitialized error can be printed?
->
-> It was a bit of a toss up on who is at fault. This is fine, i'll change
-> this as well.
 
-Ack. Not trying to play a blame game =]. Just thought this patch might
-as well be backported back to anyone using this function.
+Eric Dumazet <edumazet@google.com> writes:
 
-If you are sending another version you can add:
+> On Sun, Jan 8, 2023 at 3:38 PM Tom Rix <trix@redhat.com> wrote:
+>>
+>> clang static analysis reports this problem
+>> drivers/net/ethernet/amazon/ena/ena_netdev.c:1821:2: warning: 
+>> Passed-by-value struct
+>>   argument contains uninitialized data (e.g., field: 
+>>   'comp_ctr') [core.CallAndMessage]
+>>         net_dim(&ena_napi->dim, dim_sample);
+>>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> net_dim can call dim_calc_stats() which uses the comp_ctr 
+>> element,
+>> so it must be initialized.
+>
+> This seems to be a dim_update_sample() problem really, when 
+> comp_ctr
+> has been added...
+>
+> Your patch works, but we could avoid pre-initializing dim_sample 
+> in all callers,
+> then re-writing all but one field...
+>
+> diff --git a/include/linux/dim.h b/include/linux/dim.h
+> index 
+> 6c5733981563eadf5f06c59c5dc97df961692b02..4604ced4517268ef8912cd8053ac8f4d2630f977
+> 100644
+> --- a/include/linux/dim.h
+> +++ b/include/linux/dim.h
+> @@ -254,6 +254,7 @@ dim_update_sample(u16 event_ctr, u64 
+> packets, u64
+> bytes, struct dim_sample *s)
+>         s->pkt_ctr   = packets;
+>         s->byte_ctr  = bytes;
+>         s->event_ctr = event_ctr;
+> +       s->comp_ctr  = 0;
+>  }
+>
+>  /**
 
-Reviewed-by: Peter Gonda <pgonda@google.com>
+Hi,
 
->
-> Thanks
->
-> Tom
->
->
-> > +void psp_pci_init(void)
-> > +{
-> > +       struct sev_user_data_status *status;
-> > +       struct sp_device *sp;
-> > +       int error, rc;
-> > +
-> > +       sp = sp_get_psp_master_device();
-> > +       if (!sp)
-> > +               return;
-> > +
-> > +       psp_master = sp->psp_data;
-> > +
-> > +       /* Initialize the platform */
-> > +       rc = sev_platform_init(&error);
-> > +       if (rc) {
-> > +               dev_err(sp->dev, "SEV: failed to INIT error %#x\n", error);
-> > +               goto err;
-> > +       }
-> >
-> >
-> > ...
-> >
-> > +static int __sev_platform_init_locked(int *error)
-> > +{
-> > +       struct psp_device *psp = psp_master;
-> > +       int rc = 0;
-> > +
-> > +       if (!psp)
-> > +               return -ENODEV;
-> > +
-> > +       if (psp->sev_state == SEV_STATE_INIT)
-> > +               return 0;
-> >
-> >
-> > So if !psp an uninitialized error is printed?
-> >
-> >> Signed-off-by: Tom Rix <trix@redhat.com>
-> >> ---
-> >>   drivers/crypto/ccp/sev-dev.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> >> index 56998bc579d6..643cccc06a0b 100644
-> >> --- a/drivers/crypto/ccp/sev-dev.c
-> >> +++ b/drivers/crypto/ccp/sev-dev.c
-> >> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
-> >>   void sev_pci_init(void)
-> >>   {
-> >>          struct sev_device *sev = psp_master->sev_data;
-> >> -       int error, rc;
-> >> +       int error = 0, rc;
-> >>
-> >>          if (!sev)
-> >>                  return;
-> >> --
-> >> 2.27.0
-> >>
->
+I'd rather go with Eric's solution to this issue than zero the 
+whole struct in ENA
+
+Thanks,
+Shay
