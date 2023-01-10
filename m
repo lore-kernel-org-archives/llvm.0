@@ -1,106 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07FDA935
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 16:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673369606;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Kup4HOCIEU1szEBLKhvEmi75KAA9Nb/HeMnvSYwk5j0=;
-	b=WzHzKQ4dcxf590YX9zWoLDs2+9lPIzT/re/Lg+lBbSJGhuIiCf1mntkHOSCUoF+EQ95/u2
-	PkiL15vbG41lZ+YJL+DmY4CHLXRW7+DkIWu21PWka2QSfV7DeddwRV+1IVrJJsBvJ6up8a
-	elbXth0MlJTnSRcaGZXzsD/UP0xXFVg=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-486-lBxZsOf_OUa9OlTHjcad7A-1; Tue, 10 Jan 2023 11:53:21 -0500
-X-MC-Unique: lBxZsOf_OUa9OlTHjcad7A-1
-Received: by mail-qk1-f197.google.com with SMTP id y6-20020a05620a44c600b00704d482d3a0so9195401qkp.21
-        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 08:53:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05E517DB
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 16:53:45 +0000 (UTC)
+Received: by mail-lj1-f173.google.com with SMTP id bx6so13184408ljb.3
+        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 08:53:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UHlQmz4MZPCYm9BygwyVFf2S1z6UZf0NIZ7PiPTX9pQ=;
+        b=eOEttK62GmXf0jQCMYIlYh623FQaOyPteJMvs+9gqBGF2BiED7YcvXEXCQPyMkpRna
+         MqDTI5zO2JB7sPi8MMKGgWs8qHzcu9xaZ7kdKe94nzBkUQ9Ap0b9Iririg90SObGYe7c
+         8mJfMbLaBJZqUbjXfMtt3E2BiHD58XiS6O9d3KpR4Z8Zd09eOfoBHNOal/QxXg1o7/Ih
+         uLmjZ4/fl5d3uEtnyqwezEPLSWsEcpm1iCjMv056cTVE7Gw2huxUTiP08y8uqLZ4a1DQ
+         1HxRNgQm74sTDb7Q2vmwJtBDjCZPgF38SMqoHI5W6WqeeYufRsMzfpvB5cidW0191Gah
+         ynDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Kup4HOCIEU1szEBLKhvEmi75KAA9Nb/HeMnvSYwk5j0=;
-        b=WXDHulltVJiN17LsOXzVuW3Z/o9EATexoSRw7jXzTNT/6H4GGWb2WpxADUeHqoCsp1
-         rrvNMCtdGYlw6uPIRdfYVgHjM0v5ZLbGvJMbDC6Mh3+vdc+K5TPgcvtbWBO6mJEixjRC
-         /+b9jqX15778cAO6R2suuwuJsKnXDUK6DUJEH6yKSxoiWfBohZ6d3VmhT68Xp5XDWffF
-         1tMhwAdUKX1j9mTMp3mgOD7WgFWZCl4aepzVAh/bvV6LBO0pHT2wtw8ls8NnqLJPFInf
-         7ZMSVk3Od8dfNNHyBjtHrPjMKfrWCUDpe3jh2DMaTNMqfsy03+neOZvEGtlPVqfxT2JY
-         PdRg==
-X-Gm-Message-State: AFqh2krdAx8fNqF/yW9P0p28uQLtzfIhvu+v/IzFHmetc/EEZyKy7EtQ
-	6HIqI293KIov2zz/5OXAYGw0TLSx/Wgxe/XpPC9Mza9stWtdPx7ODNhNV0tSurr6rTYXjNUGTyH
-	xw1l4PJxzcEF+zw==
-X-Received: by 2002:a05:622a:1f06:b0:3ae:55ba:8392 with SMTP id ca6-20020a05622a1f0600b003ae55ba8392mr8544547qtb.32.1673369600684;
-        Tue, 10 Jan 2023 08:53:20 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu1gy+R4UVBxdneGHh2kFQ1PNWrp1or09a54OsiH2i2fXOwcKnmCac0ajbB6/JUU7bf9dSNdA==
-X-Received: by 2002:a05:622a:1f06:b0:3ae:55ba:8392 with SMTP id ca6-20020a05622a1f0600b003ae55ba8392mr8544521qtb.32.1673369600490;
-        Tue, 10 Jan 2023 08:53:20 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y19-20020a05620a44d300b006fba44843a5sm7452833qkp.52.2023.01.10.08.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 08:53:20 -0800 (PST)
-From: Tom Rix <trix@redhat.com>
-To: brijesh.singh@amd.com,
-	thomas.lendacky@amd.com,
-	john.allen@amd.com,
-	herbert@gondor.apana.org.au,
-	davem@davemloft.net,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] crypto: ccp: initialize error
-Date: Tue, 10 Jan 2023 11:53:16 -0500
-Message-Id: <20230110165316.2870300-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        bh=UHlQmz4MZPCYm9BygwyVFf2S1z6UZf0NIZ7PiPTX9pQ=;
+        b=NEQclqo8JxURgXrlN68AiL9hUPitrWHksTVCxDeds4bUES/X8IGlWi0Pv75Z0lhTCC
+         GsLhUvilNQCvJNc1JpjV18jdjWlgDPbblnhLgt26POIYXg6spws91nDYF3ELQkIB0vtm
+         ONKGKIt8XsfU5lTKuJnexq8I/W9d1RCd4sG7xJzBNkzkA6nhl9dFTb2/V7ETNtH3a0v9
+         4u3s3thrpYVqkJ6nKy0tfhJHpKJCcPRDB6BURI3hBLU2/7nkHIgIB0VU/fX42Xzr3WbF
+         EEXxjkOvOIXWIv9vP2eX4YSvhYBZZ+3dQK++0F1QL/7dLGkH2WXLDiML3154Pen8HD/a
+         VNEA==
+X-Gm-Message-State: AFqh2kqj1bDtrSrC9MS+pt588sR5JxqbSLmDX+ZY84ZFdxd79XwDO4aH
+	VuxDfd3c9umAlBoupKPNSKNwima01MiS5EsCsJJdlQ==
+X-Google-Smtp-Source: AMrXdXt/FTDJ1jQlyl0sPF3dYRo062A9EttvZq77C4MjzFUPN4zhXdMvRHWsX1mn8ECQcKnN7yCNgz1PVzPs7wpARFY=
+X-Received: by 2002:a2e:7316:0:b0:283:2205:3ba4 with SMTP id
+ o22-20020a2e7316000000b0028322053ba4mr510837ljc.494.1673369623680; Tue, 10
+ Jan 2023 08:53:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+References: <20230110161831.2625821-1-trix@redhat.com> <CAMkAt6oqBH35=moST5nO_BXwc8k0M4h_8TvT9H6outR9vOw5qg@mail.gmail.com>
+ <ecd0c7f2-f82c-845f-b1fe-a7d3bf495bb1@redhat.com>
+In-Reply-To: <ecd0c7f2-f82c-845f-b1fe-a7d3bf495bb1@redhat.com>
+From: Peter Gonda <pgonda@google.com>
+Date: Tue, 10 Jan 2023 09:53:32 -0700
+Message-ID: <CAMkAt6rKfM_uvLRMaN3SSTYVfiMixVGtEyZjo38OG8L1HcfKdg@mail.gmail.com>
+Subject: Re: [PATCH] crypto: initialize error
+To: Tom Rix <trix@redhat.com>
+Cc: brijesh.singh@amd.com, thomas.lendacky@amd.com, john.allen@amd.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, nathan@kernel.org, 
+	ndesaulniers@google.com, rientjes@google.com, marcorr@google.com, 
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-clang static analysis reports this problem
-drivers/crypto/ccp/sev-dev.c:1347:3: warning: 3rd function call
-  argument is an uninitialized value [core.CallAndMessage]
-    dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
-    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Tue, Jan 10, 2023 at 9:48 AM Tom Rix <trix@redhat.com> wrote:
+>
+>
+> On 1/10/23 8:27 AM, Peter Gonda wrote:
+> > On Tue, Jan 10, 2023 at 9:18 AM Tom Rix <trix@redhat.com> wrote:
+> >> clang static analysis reports this problem
+> >> drivers/crypto/ccp/sev-dev.c:1347:3: warning: 3rd function call
+> >>    argument is an uninitialized value [core.CallAndMessage]
+> >>      dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
+> >>      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>
+> >> __sev_platform_init_locked() can return without setting the
+> >> error parameter, causing the dev_err() to report a gargage
+> > garbage
+> ok
+> >
+> >> value.
+> >>
+> >> Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
+> > Should this be: 'Fixes: 200664d5237f ("crypto: ccp: Add Secure
+> > Encrypted Virtualization (SEV) command support")'
+> >
+> > Since in that patch an uninitialized error can be printed?
+>
+> It was a bit of a toss up on who is at fault. This is fine, i'll change
+> this as well.
 
-__sev_platform_init_locked() can return without setting the
-error parameter, causing the dev_err() to report a garbage
-value.
+Ack. Not trying to play a blame game =]. Just thought this patch might
+as well be backported back to anyone using this function.
 
-Fixes: 200664d5237f ("crypto: ccp: Add Secure Encrypted Virtualization (SEV) command support")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2 : cleanup commit log
----
-drivers/crypto/ccp/sev-dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you are sending another version you can add:
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 56998bc579d6..643cccc06a0b 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
- void sev_pci_init(void)
- {
- 	struct sev_device *sev = psp_master->sev_data;
--	int error, rc;
-+	int error = 0, rc;
- 
- 	if (!sev)
- 		return;
--- 
-2.27.0
+Reviewed-by: Peter Gonda <pgonda@google.com>
 
+>
+> Thanks
+>
+> Tom
+>
+>
+> > +void psp_pci_init(void)
+> > +{
+> > +       struct sev_user_data_status *status;
+> > +       struct sp_device *sp;
+> > +       int error, rc;
+> > +
+> > +       sp = sp_get_psp_master_device();
+> > +       if (!sp)
+> > +               return;
+> > +
+> > +       psp_master = sp->psp_data;
+> > +
+> > +       /* Initialize the platform */
+> > +       rc = sev_platform_init(&error);
+> > +       if (rc) {
+> > +               dev_err(sp->dev, "SEV: failed to INIT error %#x\n", error);
+> > +               goto err;
+> > +       }
+> >
+> >
+> > ...
+> >
+> > +static int __sev_platform_init_locked(int *error)
+> > +{
+> > +       struct psp_device *psp = psp_master;
+> > +       int rc = 0;
+> > +
+> > +       if (!psp)
+> > +               return -ENODEV;
+> > +
+> > +       if (psp->sev_state == SEV_STATE_INIT)
+> > +               return 0;
+> >
+> >
+> > So if !psp an uninitialized error is printed?
+> >
+> >> Signed-off-by: Tom Rix <trix@redhat.com>
+> >> ---
+> >>   drivers/crypto/ccp/sev-dev.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> >> index 56998bc579d6..643cccc06a0b 100644
+> >> --- a/drivers/crypto/ccp/sev-dev.c
+> >> +++ b/drivers/crypto/ccp/sev-dev.c
+> >> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
+> >>   void sev_pci_init(void)
+> >>   {
+> >>          struct sev_device *sev = psp_master->sev_data;
+> >> -       int error, rc;
+> >> +       int error = 0, rc;
+> >>
+> >>          if (!sev)
+> >>                  return;
+> >> --
+> >> 2.27.0
+> >>
+>
