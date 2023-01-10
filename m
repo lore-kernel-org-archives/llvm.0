@@ -1,42 +1,42 @@
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EC3B422
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 22:20:45 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-4d4b54d0731so12695657b3.18
-        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 14:20:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EE9B422
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 22:20:57 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-482d3bf0266so141720587b3.3
+        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 14:20:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+OL21tRhOI5FC8OP8rOHe4TMF297jaFfbFeRu1wlqg=;
-        b=pAopMpFhTfX0jzenqkNBx67vQjfjd9TY0dEwmq4dnUUW/5FoxhH/tVN7EA6o41wxrx
-         rsUBnMfLZxm5PQ3Gm0Z5qpVo9n/Dnw2t+GjNw3fXdMd4EbvEybnsF61808WRKPLXGEPX
-         BP/2/BT6IOMQEJFjn/Laru90RARJ4roIZIz7Einhd/Z0P1NaLFrKvEfC1eWc4LMqSZvs
-         b0T7fdriG8IC3vY8yB0wM/np9pfhaT10oOvYNSasEBMAIwRVJOVL3zjz2LA6Lhv6zmQq
-         XBNkFoUi1yjwG7YzAhVBeRgAhvFBI7sfazm/WV9x3buWT4x5HgobueNTp6jLXWkx3t0D
-         8dBQ==
+        bh=b4cDFSVYG43croOnEV27nNQKcdSJ0iRzIK+gxT25DWQ=;
+        b=oWwqPFHv+dZCSeNo+f2delVO4bkS5CysJ1Fb9cTlI9zPxRA7uKaiJ7fzrQAE/gTePN
+         yQdJfBq26Z53aSri1L4flICMFvFNUevMxBBdhNvHv8Ijb0Oku7b8R3i1GIZwAS7jcJ22
+         jMmWxbFtkBzDL/R9uaLOc+rwZEKLhEkSnycWiK+bJoz5ZUvP8k/r3gzwpyc58iJZ/qIR
+         uFv/RK4kFlujjtJHI9F8csecrHrl/8oIz/UTVfp75WDyghQbB2noKVROCgEIL9/hytzp
+         05/J55rtJDAGcO6Q4BwMKuBUc0CZ06wbMj2tK5aFbb8NTedwer0JBGvwhthbuu/kH2CO
+         qRSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+OL21tRhOI5FC8OP8rOHe4TMF297jaFfbFeRu1wlqg=;
-        b=Z290lFxLJXYJWcc7dzUV4yCAI5ak9rCj9tamRqnRKCNfiqKlrPvD5GSGV0hdPwmYcl
-         JKVL50mPy0c/rqxDleBsQbQ9TG4uFjFydxf/8SCVo5KMziBi7RFwhe3vvxnTb9pgspaC
-         Lnh+oWST+UQ5Yko0Sfp7Yrr+xn/KIla8Bdvebzo1H8WyBLLk0H1L5mHz1zINUw1zOt1l
-         XUqkOQAuy1N4TEzH4rs3ScrCLSJ6dBZjJxSxDMN0worLrmRCfEEEfaw2cpsXR9oFTOKK
-         w8hhqKxtcnMi3g5hj2/nodWdbiWuNA7FtpmPck8JoYyElX+zN6Hbsd+ep7/otzmNrJgH
-         MU+Q==
-X-Gm-Message-State: AFqh2kpRHdxohJTkfC+qACEBU0XdGD/2f4+HyGm/C/OdMIkGy9LmrLjK
-	Zat3fWta2gCE1F4kaXHDEDVBBqT/6g4q
-X-Google-Smtp-Source: AMrXdXulQqaqr6Cu/NW8mUaEtU/19rWhPKAZID8kQpT+uofH5KiblfeW6JI4Cfz9L3ukAKsgfkHBgFGgaTTP
+        bh=b4cDFSVYG43croOnEV27nNQKcdSJ0iRzIK+gxT25DWQ=;
+        b=V3caQYlEc/734xMvz51u2v35mgC7ZRr+67QxakM4YutlWlFEGddT6cd1pdznrIajqm
+         vIIeu7G4T9XHpab0FECag+2wCF4X+UFOvzrXf24EouCI1shnP3xv92LuxRLsrQSaYyN3
+         S6qpqKYPeXp/0m/FO9NCfk00eVfKAC41jr1xVF8Oa1T752zvcaLCCilL8BjExtuKEtP9
+         BHt9FUXuG5KYlGSPslAlJ991cyI1goUybx/7hblZXsSlN3mOGTHPDeqF6fI4jS0ISI6+
+         6O7ugArwN9lgocE5REvcJA4wlXwldyU7SLFcgjs1rDN+5GFJ5Px8cfdI+RZrtr/kZPvJ
+         RO0g==
+X-Gm-Message-State: AFqh2koD+L2bQEZNhyzba8YBvx3EcBzwyf2jo27iHA+n9BfTqE3Krakh
+	CnluouCxNJ88JiFSeuqEJTL7knMzLdVu
+X-Google-Smtp-Source: AMrXdXvI95ryIYv3mYiLaEW52Mjy6G2g6DQ8MwrTjJmJYfZaK+uEyVB7Y9YgTbG/z/1GFMv0iQnxIls+z2Xi
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cebf:c37e:8184:56])
- (user=irogers job=sendgmr) by 2002:a25:804:0:b0:767:3057:9533 with SMTP id
- 4-20020a250804000000b0076730579533mr8371214ybi.454.1673389244250; Tue, 10 Jan
- 2023 14:20:44 -0800 (PST)
-Date: Tue, 10 Jan 2023 14:19:59 -0800
+ (user=irogers job=sendgmr) by 2002:a25:9a02:0:b0:7ba:f028:b325 with SMTP id
+ x2-20020a259a02000000b007baf028b325mr1547877ybn.452.1673389256480; Tue, 10
+ Jan 2023 14:20:56 -0800 (PST)
+Date: Tue, 10 Jan 2023 14:20:00 -0800
 In-Reply-To: <20230110222003.1591436-1-irogers@google.com>
-Message-Id: <20230110222003.1591436-4-irogers@google.com>
+Message-Id: <20230110222003.1591436-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230110222003.1591436-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 3/7] tools lib subcmd: Add run_command_strbuf
+Subject: [PATCH v1 4/7] tools lib api: Minor strbuf_read improvements
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -67,152 +67,57 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Often a command wants to be run in a shell with stdout placed in a
-string. This API mimics that of stdio's popen, running the given
-command (not argv array) with "/bin/sh -c" then appending the output
-from stdout to the buf argument.
+If a read is smaller than the remaining space, don't grow the buffer
+as it is likely we've reached the end of the file.  Make the grow
+amounts a single page rather than just over 2 once the null terminator
+is included.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/subcmd/Makefile      | 32 +++++++++++++++++++++++++++++---
- tools/lib/subcmd/run-command.c | 30 ++++++++++++++++++++++++++++++
- tools/lib/subcmd/run-command.h | 14 ++++++++++++++
- 3 files changed, 73 insertions(+), 3 deletions(-)
+ tools/lib/api/strbuf.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-index b87213263a5e..23174d013519 100644
---- a/tools/lib/subcmd/Makefile
-+++ b/tools/lib/subcmd/Makefile
-@@ -13,6 +13,7 @@ CC ?= $(CROSS_COMPILE)gcc
- LD ?= $(CROSS_COMPILE)ld
- AR ?= $(CROSS_COMPILE)ar
+diff --git a/tools/lib/api/strbuf.c b/tools/lib/api/strbuf.c
+index 4639b2d02e62..eafa2c01f46a 100644
+--- a/tools/lib/api/strbuf.c
++++ b/tools/lib/api/strbuf.c
+@@ -143,25 +143,28 @@ ssize_t strbuf_read(struct strbuf *sb, int fd, ssize_t hint)
+ 	size_t oldalloc = sb->alloc;
+ 	int ret;
  
-+MKDIR = mkdir
- RM = rm -f
+-	ret = strbuf_grow(sb, hint ? hint : 8192);
++	ret = strbuf_grow(sb, hint ? hint : 4095);
+ 	if (ret)
+ 		return ret;
  
- MAKEFLAGS += --no-print-directory
-@@ -55,6 +56,17 @@ CFLAGS += -I$(srctree)/tools/include/
+ 	for (;;) {
+-		ssize_t cnt;
++		ssize_t read_size;
++		size_t sb_remaining = sb->alloc - sb->len - 1;
  
- CFLAGS += $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
- 
-+LIBAPI_DIR      = $(srctree)/tools/lib/api/
-+ifneq ($(OUTPUT),)
-+  LIBAPI_OUTPUT = $(abspath $(OUTPUT))/libapi
-+else
-+  LIBAPI_OUTPUT = $(CURDIR)/libapi
-+endif
-+LIBAPI_DESTDIR = $(LIBAPI_OUTPUT)
-+LIBAPI_INCLUDE = $(LIBAPI_DESTDIR)/include
-+LIBAPI = $(LIBAPI_OUTPUT)/libapi.a
-+CFLAGS += -I$(LIBAPI_OUTPUT)/include
-+
- SUBCMD_IN := $(OUTPUT)libsubcmd-in.o
- 
- ifeq ($(LP64), 1)
-@@ -76,7 +88,9 @@ include $(srctree)/tools/build/Makefile.include
- 
- all: fixdep $(LIBFILE)
- 
--$(SUBCMD_IN): FORCE
-+prepare: $(LIBAPI)
-+
-+$(SUBCMD_IN): FORCE prepare
- 	@$(MAKE) $(build)=libsubcmd
- 
- $(LIBFILE): $(SUBCMD_IN)
-@@ -113,10 +127,22 @@ install_headers: $(INSTALL_HDRS)
- 
- install: install_lib install_headers
- 
--clean:
-+$(LIBAPI_OUTPUT):
-+	$(Q)$(MKDIR) -p $@
-+
-+$(LIBAPI): FORCE | $(LIBAPI_OUTPUT)
-+	$(Q)$(MAKE) -C $(LIBAPI_DIR) O=$(LIBAPI_OUTPUT) \
-+		DESTDIR=$(LIBAPI_DESTDIR) prefix= \
-+		$@ install_headers
-+
-+$(LIBAPI)-clean:
-+	$(call QUIET_CLEAN, libapi)
-+	$(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
-+
-+clean: $(LIBAPI)-clean
- 	$(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
- 	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
- 
- FORCE:
- 
--.PHONY: clean FORCE
-+.PHONY: clean FORCE prepare
-diff --git a/tools/lib/subcmd/run-command.c b/tools/lib/subcmd/run-command.c
-index 5cdac2162532..e90b285b6720 100644
---- a/tools/lib/subcmd/run-command.c
-+++ b/tools/lib/subcmd/run-command.c
-@@ -7,6 +7,7 @@
- #include <linux/string.h>
- #include <errno.h>
- #include <sys/wait.h>
-+#include <api/strbuf.h>
- #include "subcmd-util.h"
- #include "run-command.h"
- #include "exec-cmd.h"
-@@ -227,3 +228,32 @@ int run_command_v_opt(const char **argv, int opt)
- 	prepare_run_command_v_opt(&cmd, argv, opt);
- 	return run_command(&cmd);
- }
-+
-+int run_command_strbuf(const char *cmd, struct strbuf *buf)
-+{
-+	const char *argv[4] = {
-+		"/bin/sh",
-+		"-c",
-+		cmd,
-+		NULL
-+	};
-+	struct child_process child = {
-+		.argv = argv,
-+		.out = -1,
-+	};
-+	int err;
-+	ssize_t read_sz;
-+
-+	err = start_command(&child);
-+	if (err)
-+		return err;
-+
-+	read_sz = strbuf_read(buf, child.out, 0);
-+
-+	err = finish_command(&child);
-+	close(child.out);
-+	if (read_sz < 0)
-+		return (int)read_sz;
-+
-+	return err;
-+}
-diff --git a/tools/lib/subcmd/run-command.h b/tools/lib/subcmd/run-command.h
-index 17d969c6add3..1f7a2af9248c 100644
---- a/tools/lib/subcmd/run-command.h
-+++ b/tools/lib/subcmd/run-command.h
-@@ -58,4 +58,18 @@ int run_command(struct child_process *);
- #define RUN_COMMAND_STDOUT_TO_STDERR 4
- int run_command_v_opt(const char **argv, int opt);
- 
-+struct strbuf;
-+/**
-+ * run_command_strbuf() - Run cmd using /bin/sh and place stdout in strbuf.
-+ * @cmd: The command to run by "/bin/sh -c".
-+ * @buf: The strbuf appended to by reading stdout.
-+ *
-+ * Similar to popen with fread, run the given command reading the stdout output
-+ * to buf. As with popen, stderr output goes to the current processes stderr but
-+ * may be redirected in cmd by using "2>&1".
-+ *
-+ * Return: 0 on success or a negative error code on failure.
-+ */
-+int run_command_strbuf(const char *cmd, struct strbuf *buf);
-+
- #endif /* __SUBCMD_RUN_COMMAND_H */
+-		cnt = read(fd, sb->buf + sb->len, sb->alloc - sb->len - 1);
+-		if (cnt < 0) {
++		read_size = read(fd, sb->buf + sb->len, sb_remaining);
++		if (read_size < 0) {
+ 			if (oldalloc == 0)
+ 				strbuf_release(sb);
+ 			else
+ 				strbuf_setlen(sb, oldlen);
+-			return cnt;
++			return read_size;
+ 		}
+-		if (!cnt)
++		if (read_size == 0)
+ 			break;
+-		sb->len += cnt;
+-		ret = strbuf_grow(sb, 8192);
++		sb->len += read_size;
++		if ((size_t)read_size < sb_remaining)
++			continue;
++		ret = strbuf_grow(sb, 4095);
+ 		if (ret)
+ 			return ret;
+ 	}
 -- 
 2.39.0.314.g84b9a713c41-goog
 
