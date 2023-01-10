@@ -1,49 +1,51 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4882E7474
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 22:20:18 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id g9-20020a25bdc9000000b0073727a20239so14073204ybk.4
-        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 14:20:18 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E8EB422
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 22:20:26 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id y66-20020a25c845000000b00733b5049b6fso14119401ybf.3
+        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 14:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Nlle/Ds4SGPTSO3cAFMNWJvr6o/XSd9jrGxltpsb3Is=;
-        b=ftX8xF0c4UQtCj8N+r4KjGdZEM2Q89eJAcT0lc5k/816CbQ+dPH3JYa+OAjFdHDNVd
-         QyNvH3IJFde6G23zqfZ76D+IjfOJOEJQC8/srm5Q4JQO34ZQ6PHCNQNnk3T97ACazfYQ
-         HHQBjOaNCkKCHAbfEPLr9p1YUIFhxolo+DlVnsz+cKtev8lxSLSXqjvP+LHfkU1/k/jk
-         qPt0UvhGHIZTQfM9cCSp12yKvJbykIDjFeZDqP1xycj4bpUaMhu7YD3N+s012svSe704
-         7D2j18A1UUV+BbCbxOCelY+whUXsx9mWkDkQvlwuDsyBryuamdZKE2ycCj+IlrBL6lUX
-         Zfeg==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7v/gEXdtTx+UxkZcAUgCVgz4MqYf6krsrfnmQSxx5Nk=;
+        b=PVrvr2OhQFTUO9zDrH5+2bNwVFqzBYaqjf4hDvEr10wr+zRc5//vzbPS9ggZSCWPfC
+         36TUo5BG7B8TkedHGtGVN2hi3FKU0/0IPbtRMt6oLWxVbgyfiBi/JwhyOQ9mrRzQ+rmn
+         U0DRvEz36y6B+ETuwktmXn/HAr2e4DC7uDZ17DROPT89WL6WZa3Q5woCWaCwOIKp+ep7
+         rA8MJ/3ZD7oa6ukMV9OmnaQ0IzvWquQc/+RCW1cJJN5pz4NzTHh14Tjt4c7U82HtGv1k
+         QabcgkXXuEptpfHctVAR8MIzbxgVBLAYpU14CFESsjoWuv0T+Eo4zNIMmKB/cGnUXsWh
+         utwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nlle/Ds4SGPTSO3cAFMNWJvr6o/XSd9jrGxltpsb3Is=;
-        b=hHFys3IWK4a+GXcbni77tcNMkUietrPlPf9bp32Jur95BnrbK0wLk+iRNoGQ5yivx+
-         dWC1oibTVBu/KbcX0zn6pUENLYfKk2sOUSyye+yBxmAZhN6lJvuBhMPQ8+It8I2nDu0X
-         PrSOaomS7lEs+J9rxC/+VnwQMaFi0p75M692jId3ybUtoDrglvp7SUx1s9WVwlwJX29l
-         l4jGYHKcmyZuzd/ojFqQvBf9APAVASTuQ6B55MvJ3c7J6arXCl6G9cxvtpMU4IVbW11o
-         v3MJ1HgRfrkEwZ03a3peNO7d4AXohDNIABz3NGXt/9WGMP0Sg5F6Xqh/pm2m/hZaGVHD
-         IQiQ==
-X-Gm-Message-State: AFqh2koMnp1SVCZTflGSmOQLiPfWCpkZ/PfFuR7TDkEWoyiDbgWyh5hT
-	1t+d0fdv1gzJQAiIy01a3ZnB4KkyiHA8
-X-Google-Smtp-Source: AMrXdXtzpGXPPgsytierIDG6YXDjewBU1q0UJ4Cmay17C+CNB+GpbrmA2w0OASTh4x8U/CXwGr/u7lyqI43p
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7v/gEXdtTx+UxkZcAUgCVgz4MqYf6krsrfnmQSxx5Nk=;
+        b=WE2T6ZkhtkNafrDVaIY+7Pk69oiteLUAEfhZvqYcUjnqNNIoPJ+KnQz02+gnrcXh56
+         bikSLMdpfn8ot+sCfJXK7WMVlAsC5nYcP4N9Rzwqu8f7nQ8tnWoXrMw2ackgCNbIV8Qw
+         NkxJ7J5Wb8ysS4ESMQrhbP/N9A09YvSaRo0/fjRUBqwvJ5cUPlYUkZ1GErih2D8fkWYT
+         espcR4AazjDJb4P2VfQervjqsHiHVWu5KEbrgSj3WtYcuH1W00miIumfiJxe4hMnS4e6
+         HvQZdXbEjGhIlob/oOfM80FJ3s+kq5qBiEkU0oMYXfeyIrTH59AF5Y0GjcSdtA+rMNDR
+         Sxdg==
+X-Gm-Message-State: AFqh2kp234tJMPltGieD04XXBD1/e4FWr3Dzc/9cRojz3Jcu4xsUFFlg
+	b7p2Uf6/gVC+oL/ihaz/9RQcEpCKkazD
+X-Google-Smtp-Source: AMrXdXuLSIM1R2M2WKOVVqSZXBrLkDMxsBuumbJODjFU7Qxn1OGo2/6wdDF991wspJJd0u54TfIqk1msGa0+
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cebf:c37e:8184:56])
- (user=irogers job=sendgmr) by 2002:a25:8a8c:0:b0:7a7:c930:e66c with SMTP id
- h12-20020a258a8c000000b007a7c930e66cmr3763503ybl.644.1673389217080; Tue, 10
- Jan 2023 14:20:17 -0800 (PST)
-Date: Tue, 10 Jan 2023 14:19:56 -0800
-Message-Id: <20230110222003.1591436-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a0d:d583:0:b0:3ec:a0cb:550 with SMTP id
+ x125-20020a0dd583000000b003eca0cb0550mr1240169ywd.3.1673389225104; Tue, 10
+ Jan 2023 14:20:25 -0800 (PST)
+Date: Tue, 10 Jan 2023 14:19:57 -0800
+In-Reply-To: <20230110222003.1591436-1-irogers@google.com>
+Message-Id: <20230110222003.1591436-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230110222003.1591436-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 0/7] Add and use run_command_strbuf
+Subject: [PATCH v1 1/7] perf llvm: Fix inadvertent file creation
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -65,63 +67,70 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-It is commonly useful to run a command using "/bin/sh -c" (like popen)
-and to place the output in a string. Move strbuf to libapi, add a new
-run_command that places output in a strbuf, then use it in help and
-llvm in perf. Some small strbuf efficiency improvements are
-included. Whilst adding a new function should increase lines-of-code,
-by sharing two similar usages in perf llvm and perf help, the overall
-lines-of-code is moderately reduced.
+The LLVM template is first echo-ed into command_out and then
+command_out executed. The echo surrounds the template with double
+quotes, however, the template itself may contain quotes. This is
+generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+we see:
+...
+SEC("func=null_lseek file->f_mode offset orig")
+...
+where the first double quote ends the double quote of the echo, then
+the > redirects output into a file called f_mode.
 
-First "perf llvm: Fix inadvertent file creation" is cherry-picked
-from:
-https://lore.kernel.org/lkml/20230105082609.344538-1-irogers@google.com/
-to avoid a merge conflict. The next patches deal with moving strbuf,
-adding the run_command function with Makefile dependency from
-libsubcmd to libapi, and improving the strbuf performance. The final
-two patches add usage from the perf command.
+To avoid this inadvertent behavior substitute redirects and similar
+characters to be ASCII control codes, then substitute the output in
+the echo back again.
 
-Ian Rogers (7):
-  perf llvm: Fix inadvertent file creation
-  tools lib: Move strbuf to libapi
-  tools lib subcmd: Add run_command_strbuf
-  tools lib api: Minor strbuf_read improvements
-  tools lib api: Tweak strbuf allocation size computation
-  perf help: Use run_command_strbuf
-  perf llvm: Remove read_from_pipe
+Fixes: 5eab5a7ee032 ("perf llvm: Display eBPF compiling command in debug output")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
- tools/lib/api/Build                   |   1 +
- tools/lib/api/Makefile                |   2 +-
- tools/{perf/util => lib/api}/strbuf.c |  28 ++--
- tools/{perf/util => lib/api}/strbuf.h |   0
- tools/lib/subcmd/Makefile             |  32 +++-
- tools/lib/subcmd/run-command.c        |  30 ++++
- tools/lib/subcmd/run-command.h        |  14 ++
- tools/perf/bench/evlist-open-close.c  |   2 +-
- tools/perf/builtin-help.c             |  49 ++----
- tools/perf/builtin-list.c             |   2 +-
- tools/perf/tests/bpf.c                |  12 +-
- tools/perf/tests/llvm.c               |  18 +--
- tools/perf/tests/llvm.h               |   3 +-
- tools/perf/util/Build                 |   1 -
- tools/perf/util/bpf-loader.c          |   9 +-
- tools/perf/util/cache.h               |   2 +-
- tools/perf/util/dwarf-aux.c           |   2 +-
- tools/perf/util/env.c                 |   2 +-
- tools/perf/util/header.c              |   2 +-
- tools/perf/util/llvm-utils.c          | 207 ++++++++------------------
- tools/perf/util/llvm-utils.h          |   6 +-
- tools/perf/util/metricgroup.c         |   2 +-
- tools/perf/util/pfm.c                 |   2 +-
- tools/perf/util/pmu.c                 |   2 +-
- tools/perf/util/probe-event.c         |   2 +-
- tools/perf/util/probe-file.c          |   2 +-
- tools/perf/util/probe-finder.c        |   2 +-
- tools/perf/util/sort.c                |   2 +-
- 28 files changed, 201 insertions(+), 237 deletions(-)
- rename tools/{perf/util => lib/api}/strbuf.c (87%)
- rename tools/{perf/util => lib/api}/strbuf.h (100%)
-
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 650ffe336f3a..4e8e243a6e4b 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 
+ 	pr_debug("llvm compiling command template: %s\n", template);
+ 
++	/*
++	 * Below, substitute control characters for values that can cause the
++	 * echo to misbehave, then substitute the values back.
++	 */
+ 	err = -ENOMEM;
+-	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
++	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
+ 		goto errout;
+ 
++#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
++	for (char *p = command_echo; *p; p++) {
++		SWAP_CHAR('<', '\001');
++		SWAP_CHAR('>', '\002');
++		SWAP_CHAR('"', '\003');
++		SWAP_CHAR('\'', '\004');
++		SWAP_CHAR('|', '\005');
++		SWAP_CHAR('&', '\006');
++		SWAP_CHAR('\a', '"');
++	}
+ 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
+ 	if (err)
+ 		goto errout;
+ 
++	for (char *p = command_out; *p; p++) {
++		SWAP_CHAR('\001', '<');
++		SWAP_CHAR('\002', '>');
++		SWAP_CHAR('\003', '"');
++		SWAP_CHAR('\004', '\'');
++		SWAP_CHAR('\005', '|');
++		SWAP_CHAR('\006', '&');
++	}
++#undef SWAP_CHAR
+ 	pr_debug("llvm compiling command : %s\n", command_out);
+ 
+ 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
