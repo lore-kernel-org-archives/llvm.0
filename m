@@ -1,102 +1,107 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533487481;
-	Tue, 10 Jan 2023 15:30:53 +0000 (UTC)
-Received: from lhrpeml100006.china.huawei.com (unknown [172.18.147.226])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NrvsN0FpRz67N2W;
-	Tue, 10 Jan 2023 23:30:48 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml100006.china.huawei.com (7.191.160.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 15:30:49 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2375.034;
- Tue, 10 Jan 2023 15:30:49 +0000
-From: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To: Joao Martins <joao.m.martins@oracle.com>, Jason Gunthorpe <jgg@nvidia.com>
-CC: Yi Liu <yi.l.liu@intel.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, David Woodhouse <dwmw2@infradead.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, Joerg Roedel
-	<joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda
-	<ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Shuah Khan
-	<shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>, Alex Williamson
-	<alex.williamson@redhat.com>, Lu Baolu <baolu.lu@linux.intel.com>, "Chaitanya
- Kulkarni" <chaitanyak@nvidia.com>, Cornelia Huck <cohuck@redhat.com>, "Daniel
- Jordan" <daniel.m.jordan@oracle.com>, David Gibson
-	<david@gibson.dropbear.id.au>, Eric Auger <eric.auger@redhat.com>, "Eric
- Farman" <farman@linux.ibm.com>, Jason Wang <jasowang@redhat.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, Matthew Rosato <mjrosato@linux.ibm.com>, "Michael S.
- Tsirkin" <mst@redhat.com>, Nicolin Chen <nicolinc@nvidia.com>, "Niklas
- Schnelle" <schnelle@linux.ibm.com>, zhukeqian <zhukeqian1@huawei.com>
-Subject: RE: [PATCH v4 00/17] IOMMUFD Generic interface
-Thread-Topic: [PATCH v4 00/17] IOMMUFD Generic interface
-Thread-Index: AQHY8wv6WqOaN9m/WUKJgvcZCnpZkK454qzggAFgXgCAXKMbQIAAKFmAgAAYaYCAAAM8UA==
-Date: Tue, 10 Jan 2023 15:30:49 +0000
-Message-ID: <dc7ffdc5f38248caaaabac5a66de85bb@huawei.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-	<3a20e56423f544dab312bca1bcb56ce4@huawei.com>
-	<000cf099-9824-39b8-3719-cf43b33ae1ef@intel.com>
-	<36b0fdac061e4680b5966d2774f0026a@huawei.com> <Y71szSt7jRFKTMcl@nvidia.com>
- <5481b0e8-84dc-52a9-c99f-1df3417328d6@oracle.com>
-In-Reply-To: <5481b0e8-84dc-52a9-c99f-1df3417328d6@oracle.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EC5A921
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 16:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673367520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=J7MvbGohPb9c5KuFVDOSy13hj72U3Wx/T4iJQbVeyfQ=;
+	b=RO88AT8dT8qJFiyjllDMiE9JSFodtGv0UH9CAYxCfHHC3BTTcxUmFPp9CcKNep4DljCKpw
+	+u/0Z7CuncAlsYVUQqVt0zs8GK4RvisOOQMXvI4EtSqFyLe0wqd2OLfFC6kvLD3uWWSpKW
+	NU25UcWCoy3zqg30nUGaRtMxA2nKc9s=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-481-o_JYm-jXPMajvispom3gog-1; Tue, 10 Jan 2023 11:18:38 -0500
+X-MC-Unique: o_JYm-jXPMajvispom3gog-1
+Received: by mail-qt1-f200.google.com with SMTP id s26-20020ac8759a000000b003ae43bc2445so2341486qtq.9
+        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 08:18:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J7MvbGohPb9c5KuFVDOSy13hj72U3Wx/T4iJQbVeyfQ=;
+        b=08TL5cxVbP+QIgHNUADYwzPzAFsSC2LV7E4MZQZ7yD/hsEDmsH8aye1ZAtqmqy+kK6
+         iNoS1TPjAikGiBJTliuZJbp5Lnd078ohX1dh7Tua54ichfm2RpKTii1GOhOq/wXDNIfk
+         tq7zOMzub/ymbrKvZEmOeHP4Wn6A/mCEBMsnpIxHM5+LhALnXZRXLq0u/99WZKub77ow
+         wgBziJWeDfzasH7ZySVKaj8VAq8oc9+op5Xa4/AENHZjbcAE+XgRFmwBDeIb+cZfnKOC
+         qnlCw47b6+ohC8ofEnZmLmyWlxF+ZYo7Nm5APDU30zyfOkBzmm+hbItgzAbdAFNkWF0R
+         H6RA==
+X-Gm-Message-State: AFqh2kqLBg7pcYfmcI5TLLImb4DDoMB8QLnyRzrPN8/5hV/x8lOYvjbU
+	K5VZQNnxiYmGNe6mO6DqIJuobiilHQWp/vcDCvMdgXDqJ8meoR0g+v4DT3pry9Yu2/f3mBswG0b
+	+x1PcOvKlO6KYIQ==
+X-Received: by 2002:a05:622a:4d06:b0:3a9:9217:9e6c with SMTP id fd6-20020a05622a4d0600b003a992179e6cmr109627046qtb.55.1673367516966;
+        Tue, 10 Jan 2023 08:18:36 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtvz6UJWZ+sKLEjeZfRYxKqad/zTOI/hkz1wPhI9svfnbTHZgxVGTtTAGAgwHNF9SUsIhqUjw==
+X-Received: by 2002:a05:622a:4d06:b0:3a9:9217:9e6c with SMTP id fd6-20020a05622a4d0600b003a992179e6cmr109626901qtb.55.1673367515311;
+        Tue, 10 Jan 2023 08:18:35 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id t34-20020a05622a182200b003a527d29a41sm6190082qtc.75.2023.01.10.08.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 08:18:34 -0800 (PST)
+From: Tom Rix <trix@redhat.com>
+To: brijesh.singh@amd.com,
+	thomas.lendacky@amd.com,
+	john.allen@amd.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	rientjes@google.com,
+	marcorr@google.com,
+	pgonda@google.com
+Cc: linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] crypto: initialize error
+Date: Tue, 10 Jan 2023 11:18:31 -0500
+Message-Id: <20230110161831.2625821-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9hbyBNYXJ0aW5zIFtt
-YWlsdG86am9hby5tLm1hcnRpbnNAb3JhY2xlLmNvbV0NCj4gU2VudDogMTAgSmFudWFyeSAyMDIz
-IDE1OjE2DQo+IFRvOiBKYXNvbiBHdW50aG9ycGUgPGpnZ0BudmlkaWEuY29tPjsgU2hhbWVlcmFs
-aSBLb2xvdGh1bSBUaG9kaQ0KPiA8c2hhbWVlcmFsaS5rb2xvdGh1bS50aG9kaUBodWF3ZWkuY29t
-Pg0KPiBDYzogWWkgTGl1IDx5aS5sLmxpdUBpbnRlbC5jb20+OyBicGZAdmdlci5rZXJuZWwub3Jn
-OyBKb25hdGhhbiBDb3JiZXQNCj4gPGNvcmJldEBsd24ubmV0PjsgRGF2aWQgV29vZGhvdXNlIDxk
-d213MkBpbmZyYWRlYWQub3JnPjsNCj4gaW9tbXVAbGlzdHMubGludXguZGV2OyBKb2VyZyBSb2Vk
-ZWwgPGpvcm9AOGJ5dGVzLm9yZz47IEtldmluIFRpYW4NCj4gPGtldmluLnRpYW5AaW50ZWwuY29t
-PjsgbGludXgtZG9jQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgta3NlbGZ0ZXN0QHZnZXIua2Vy
-bmVsLm9yZzsgbGx2bUBsaXN0cy5saW51eC5kZXY7IE5hdGhhbiBDaGFuY2VsbG9yDQo+IDxuYXRo
-YW5Aa2VybmVsLm9yZz47IE5pY2sgRGVzYXVsbmllcnMgPG5kZXNhdWxuaWVyc0Bnb29nbGUuY29t
-PjsgTWlndWVsDQo+IE9qZWRhIDxvamVkYUBrZXJuZWwub3JnPjsgUm9iaW4gTXVycGh5IDxyb2Jp
-bi5tdXJwaHlAYXJtLmNvbT47IFNodWFoDQo+IEtoYW4gPHNodWFoQGtlcm5lbC5vcmc+OyBTdXJh
-dmVlIFN1dGhpa3VscGFuaXQNCj4gPHN1cmF2ZWUuc3V0aGlrdWxwYW5pdEBhbWQuY29tPjsgVG9t
-IFJpeCA8dHJpeEByZWRoYXQuY29tPjsgV2lsbA0KPiBEZWFjb24gPHdpbGxAa2VybmVsLm9yZz47
-IEFsZXggV2lsbGlhbXNvbiA8YWxleC53aWxsaWFtc29uQHJlZGhhdC5jb20+Ow0KPiBMdSBCYW9s
-dSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPjsgQ2hhaXRhbnlhIEt1bGthcm5pDQo+IDxjaGFp
-dGFueWFrQG52aWRpYS5jb20+OyBDb3JuZWxpYSBIdWNrIDxjb2h1Y2tAcmVkaGF0LmNvbT47IERh
-bmllbA0KPiBKb3JkYW4gPGRhbmllbC5tLmpvcmRhbkBvcmFjbGUuY29tPjsgRGF2aWQgR2lic29u
-DQo+IDxkYXZpZEBnaWJzb24uZHJvcGJlYXIuaWQuYXU+OyBFcmljIEF1Z2VyIDxlcmljLmF1Z2Vy
-QHJlZGhhdC5jb20+OyBFcmljDQo+IEZhcm1hbiA8ZmFybWFuQGxpbnV4LmlibS5jb20+OyBKYXNv
-biBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPjsNCj4gSmVhbi1QaGlsaXBwZSBCcnVja2VyIDxq
-ZWFuLXBoaWxpcHBlQGxpbmFyby5vcmc+OyBrdm1Admdlci5rZXJuZWwub3JnOw0KPiBNYXR0aGV3
-IFJvc2F0byA8bWpyb3NhdG9AbGludXguaWJtLmNvbT47IE1pY2hhZWwgUy4gVHNpcmtpbg0KPiA8
-bXN0QHJlZGhhdC5jb20+OyBOaWNvbGluIENoZW4gPG5pY29saW5jQG52aWRpYS5jb20+OyBOaWts
-YXMgU2NobmVsbGUNCj4gPHNjaG5lbGxlQGxpbnV4LmlibS5jb20+OyB6aHVrZXFpYW4gPHpodWtl
-cWlhbjFAaHVhd2VpLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2NCAwMC8xN10gSU9NTVVG
-RCBHZW5lcmljIGludGVyZmFjZQ0KPiANCj4gT24gMTAvMDEvMjAyMyAxMzo0OSwgSmFzb24gR3Vu
-dGhvcnBlIHdyb3RlOg0KPiA+IENhbiB5b3UgYWxzbyBsb29rIGF0IHRoZSBkaXJ0eSB0cmFja2lu
-ZyBzdHVmZj8gSSdkIHJlYWxseSBsaWtlIHRvIHNlZQ0KPiA+IHRoYXQgZG9uZSBmb3IgdGhlIGh1
-YXdlaSB2ZmlvIGxpdmUgbWlncmF0aW9uIGRyaXZlcg0KPiA+DQo+IA0KPiBIZSBkaWQgbG9vayBh
-bmQgcHJvdmlkZXMgY29tbWVudHMgYmFzZWQgb24gaGlzIHRlc3Rpbmcgb2YgdGhlIGluaXRpYWwg
-c2VyaWVzDQo+IChJSVVDIGZyb20gd2hhdCB3ZSBzcG9rZSBhdCBMUEMpLiB2MiBzaG91bGQgYmUg
-c2ltcGxlciwgdGhvdWdoIEkgYW0gc3RpbGwNCj4gd29ya2luZyBpdCBvdXQgdGhlIG1lcmdpbmcg
-b2YgdW5pdCB0ZXN0cyBpbnRvIGlvbW11ZmQuDQo+IA0KPiBNeSBwbGFuIG9uY2UgSSBwb3N0IHRo
-ZSB2MiB3YXMgdG8gaGFuZG92ZXIgdGhlIFNNTVV2MyBwYXJ0IGJhY2sgdG8NCj4gU2hhbWVlcmFs
-aQ0KPiBnaXZlbiB0aGUgZmFjdCBoZSBoYXMgaGFyZHdhcmUgdGhhdCBoYXMgdGhlIGZlYXR1cmUg
-YW5kIGNhbiBpdGVyYXRlIG1vcmUNCj4gbWVhbmluZ2Z1bGx5IHRoYW4gbWUuDQoNCk5vIHByb2Js
-ZW0uIEhhcHB5IHRvIGhlbHAuDQoNClRoYW5rcywNClNoYW1lZXINCg==
+clang static analysis reports this problem
+drivers/crypto/ccp/sev-dev.c:1347:3: warning: 3rd function call
+  argument is an uninitialized value [core.CallAndMessage]
+    dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+__sev_platform_init_locked() can return without setting the
+error parameter, causing the dev_err() to report a gargage
+value.
+
+Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/crypto/ccp/sev-dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 56998bc579d6..643cccc06a0b 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
+ void sev_pci_init(void)
+ {
+ 	struct sev_device *sev = psp_master->sev_data;
+-	int error, rc;
++	int error = 0, rc;
+ 
+ 	if (!sev)
+ 		return;
+-- 
+2.27.0
+
