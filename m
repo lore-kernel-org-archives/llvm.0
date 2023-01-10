@@ -1,156 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D541AA94E
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 19:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51906FBB
+	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 19:36:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673379094;
+	s=mimecast20190719; t=1673379390;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=wbPRZDz/xzyM/rpvFJIoKH1g2zI8l5UgehHr9uG0CPM=;
-	b=b3XzXO0mA5asuoHDtyspw4ePPPk9kDMrPSqBXdKCkBOvBMNIJ8aRhPNHLE16iqusVIYbIH
-	v+6olI6AkFnIFNtxKtb9BiQtwjNb9BgqbvSXyZDw1nWA4r6lxxxpKk56XerbWucx+dW/8g
-	/AUJv2EW41DGxXamUnKi207w3sFhf4E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-mDTCcAs6N724dCGK3kKoQg-1; Tue, 10 Jan 2023 14:31:33 -0500
-X-MC-Unique: mDTCcAs6N724dCGK3kKoQg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A411802C1C
-	for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 19:31:33 +0000 (UTC)
-Received: from [172.64.10.55] (unknown [10.30.32.123])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2D29C492B00;
-	Tue, 10 Jan 2023 19:31:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (101/383 SKIPPED): Test report for master
- (6.2.0-rc3, mainline.kernel.org-clang, 5a41237a)
-Date: Tue, 10 Jan 2023 19:31:33 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	bh=Yj+HBuTUncC5lE81l2Gg3tjvcbmvnq4VCsptZAErNXM=;
+	b=af5cAjsE2jOMiYODzm28Gy8e9BE7x2XC0BfiigOhQVIgD3ct8Ssy3DPY3SuC9HjDNFazC8
+	l0Jx3zf6CAvJjOwL9FzsSaVwIyqreCv+Lxx9unvlye+o/M1hyHIiuOHqlrLXw+Ey1rk/e2
+	iOhLyhIlus3H+zXOa791aVAzmBGIh3s=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-158-2NQMfS56MCmUpqT1uaAKfw-1; Tue, 10 Jan 2023 14:36:21 -0500
+X-MC-Unique: 2NQMfS56MCmUpqT1uaAKfw-1
+Received: by mail-pj1-f71.google.com with SMTP id o8-20020a17090a9f8800b002260d01b221so9773308pjp.8
+        for <llvm@lists.linux.dev>; Tue, 10 Jan 2023 11:36:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yj+HBuTUncC5lE81l2Gg3tjvcbmvnq4VCsptZAErNXM=;
+        b=Og3/kX5+tm5RpP7kcT7/0oWECWfzkSTF6Eqrz2MtX53Xx4UOCPtgXn4i4Ov78dXlNw
+         0qUaRDj3ynzYMXsDs35KiUMCO7NVUrnebTJR/BdsdinrLYK4YPv6PDV1cmIcb8PfoUll
+         1f8nxk74Bf0hjrtBz9yrPsCtAkaeKV6NBNV/nngw3m2mNEikSLahfcNwAELWetbQ3t/w
+         uNBXgTlBLMgJliTK3EknLGBaw0cqUIUzM8JZNAUIjUtGKmh+C8bTHuJ8Dwreh6dkb6lb
+         Sjnn9DCQHseGD9o4aBNwnwYl7oR6n5JZRJgxmuCguLt8WHvEPe61SlXTu9bB2tSNbLR0
+         gb0g==
+X-Gm-Message-State: AFqh2kpPv0DjQfSoP0at6PrL6Rtn1kL+fEtSM3ilVH4IVpY9Df5gqizw
+	yQGjmPufxk7i28wW4tK1eeNktPwCKxV6BYeR8KhZxaW/SY+TJ1xFO7l1U7HBPjhgyBVH7IHHI4p
+	daGxX6uOJQo9qfQ==
+X-Received: by 2002:a05:6a20:47c8:b0:9d:efbe:204b with SMTP id ey8-20020a056a2047c800b0009defbe204bmr76827472pzb.1.1673379380009;
+        Tue, 10 Jan 2023 11:36:20 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvCtPTYrYlOZy/4MsymT5iev0oOLVLTuxBLZWISSRSnYz9AF4e8Uu0T/HgOGW4RT0ynfsSHjQ==
+X-Received: by 2002:a05:6a20:47c8:b0:9d:efbe:204b with SMTP id ey8-20020a056a2047c800b0009defbe204bmr76827465pzb.1.1673379379776;
+        Tue, 10 Jan 2023 11:36:19 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 14-20020a630c4e000000b00478f87eaa44sm7005552pgm.35.2023.01.10.11.36.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 11:36:19 -0800 (PST)
+From: Tom Rix <trix@redhat.com>
+To: bleung@chromium.org,
+	groeck@chromium.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: chrome-platform@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] platform/chrome: cros_ec_lpc: initialize the buf variable
+Date: Tue, 10 Jan 2023 14:36:11 -0500
+Message-Id: <20230110193611.3573777-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <97472.123011014313300986@us-mta-675.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi, we tested your kernel and here are the results:
+Clang static analysis reports this problem
+drivers/platform/chrome/cros_ec_lpc.c:379:13: warning: The left operand
+  of '!=' is a garbage value [core.UndefinedBinaryOperatorResult]
+    if (buf[0] != 'E' || buf[1] != 'C') {
+         ~~~~~~ ^
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+The check depends on the side effect of the read.  When the read fails
+or is short, a buf containing garbage could be mistaken as correct.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/platform/chrome/cros_ec_lpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kernel information:
-    Commit message: gcc: disable -Warray-bounds for gcc-11 too
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/65098
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6608397
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6608595
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream: WARN: kselftests/tc-testing test not fo=
-und in kselftest-list.txt
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1473
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+index 3708fa75feb1..68bba0fcafab 100644
+--- a/drivers/platform/chrome/cros_ec_lpc.c
++++ b/drivers/platform/chrome/cros_ec_lpc.c
+@@ -350,7 +350,7 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
+ 	struct acpi_device *adev;
+ 	acpi_status status;
+ 	struct cros_ec_device *ec_dev;
+-	u8 buf[2];
++	u8 buf[2] = {};
+ 	int irq, ret;
+ 
+ 	/*
+-- 
+2.27.0
 
