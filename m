@@ -1,149 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7049B3209
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 16:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673455895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HVHeXpeViGsWE/zBwCF4AdRicz7NDpxfb9d4pXGR2Qs=;
-	b=I5yZNeejI8FvTXLeNA/0fNNAJ08PSAuIMwfXfQoNwa6jfhvLS3bCHD498WaPc6+dTOKE5s
-	7WyVMvd9LIH6bwjl2xajcNVyLdxGkGxkTv4CDOzw1Nn8/TY8AIArh/hfbLoU4DRRqAgGen
-	bW5DcTERtvw1zceCpLtuZH7P+HvT0Zo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-bgq8TLHPN72vSGopxsAGPw-1; Wed, 11 Jan 2023 11:51:34 -0500
-X-MC-Unique: bgq8TLHPN72vSGopxsAGPw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00780811E6E
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 16:51:34 +0000 (UTC)
-Received: from [172.64.10.55] (unknown [10.30.32.123])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DD1112026D68;
-	Wed, 11 Jan 2023 16:51:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (101/383 SKIPPED): Test report for master
- (6.2.0-rc3, mainline.kernel.org-clang, 7dd4b804)
-Date: Wed, 11 Jan 2023 16:51:33 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A733233D2
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 17:23:06 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so2859821pjl.0
+        for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 09:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EWgZ7gEEc8X81PQ76CMhbd301TJwMAVpkYL1Blw7+Zk=;
+        b=WD8PFa8hQS4wnu5QtrBDSJ3P1GJkq6Q9cT+r/KhndZ3Tu8+HugHEA8PxWJGSVrNd25
+         UfDJVHLnJzB5gGYcYWXYs+Eud6e5dTJDZ8q74pJsR5DcUzZ/rHL8EY3nixbeXRDN8HO3
+         FFS5AziGVV/tYAy8f5Ly8XC/HLPXc6pvIb5BASUo6+NcypcrS+9duVarrYGjhHc46l1R
+         Qhme2QRMC/1Vpn5xDgzumZK2bUtfKUgKz+czRDIcWGsqldDKTvjZmCqIaOUGy5wiEZcv
+         z2QhcXvN/fRqt+NKLMi5j+tX2s+9ek//8w8hUwrI6Z2sK1pVqDWhqVbuniCMHaoUt4kU
+         oFDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EWgZ7gEEc8X81PQ76CMhbd301TJwMAVpkYL1Blw7+Zk=;
+        b=z/ERFT/ssiL7JTqWc56byRnKCSibfWZMzGC9aNsyBUBjyKCr1eBJD7H/4vbDlVf3n8
+         KkMP8deHkUwITbziJkrSUFKpBRtFMQHFtLoxZ3cHaHh1YToNWMNzs2YEjhTGAI3QxNFA
+         6Vifjydy/WHCqebEnK+ePcJEKwiNDMsV5GzRzlvUW0V29aZgtJtursNNuYXMAwrAnBM4
+         rX0qmf9v1tVX0b2MrZImvAHefbQYCnEDLnM27Keg7T8PVK0LBeiE/IIRRtwe8s3BzY2b
+         gIVOGAsHOu5gUy2YQRTn1KOLKhdaHK+xK35DJyyS6vY4oihN6NIGWWpMzyVRmEME+Ufh
+         XGCQ==
+X-Gm-Message-State: AFqh2krvGtygwpitsJw7OEPY0TfiHtY/ixgvKBWSuN5Q2ddd6h8JBh8a
+	u86344pMGwqYLGoowCrTBPMOtg==
+X-Google-Smtp-Source: AMrXdXsJli37LpeR+Ut9dL6CmRUEVfCSe8QSBjABC+clmVX45J5X5gNTWEC6/HhSq6xnbHOHLH0oow==
+X-Received: by 2002:a17:90b:f90:b0:227:b29:ae56 with SMTP id ft16-20020a17090b0f9000b002270b29ae56mr12731828pjb.1.1673457785758;
+        Wed, 11 Jan 2023 09:23:05 -0800 (PST)
+Received: from google.com ([2620:15c:2d1:203:a5cc:f0f5:1fc6:713])
+        by smtp.gmail.com with ESMTPSA id x21-20020a17090ab01500b00226eadf094dsm8670970pjq.30.2023.01.11.09.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Jan 2023 09:23:05 -0800 (PST)
+Date: Wed, 11 Jan 2023 09:22:58 -0800
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Bean Huo <beanhuo@iokpp.de>
+Cc: alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
+	quic_cang@quicinc.com, quic_xiaosenh@quicinc.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] scsi: ufs: core: bsg: Fix sometimes-uninitialized
+ warnings
+Message-ID: <20230111172258.pzzvjzuxczkfiojj@google.com>
+References: <20230108224057.354438-1-beanhuo@iokpp.de>
+ <20230108224057.354438-2-beanhuo@iokpp.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <54844.123011111513400676@us-mta-622.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230108224057.354438-2-beanhuo@iokpp.de>
 
-Hi, we tested your kernel and here are the results:
+On Sun, Jan 08, 2023 at 11:40:55PM +0100, Bean Huo wrote:
+> From: Bean Huo <beanhuo@micron.com>
+> 
+> Compilation complains that two possible variables are used without
+> initialization:
+> 
+> drivers/ufs/core/ufs_bsg.c:112:6: warning: variable 'sg_cnt' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+> drivers/ufs/core/ufs_bsg.c:112:6: warning: variable 'sg_list' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+> 
+> Fix both warnings by adding initialization with sg_cnt = 0, sg_list = NULL.
+> 
+> Fixes: 6ff265fc5ef6 ("scsi: ufs: core: bsg: Add advanced RPMB support in ufs_bsg")
+> Signed-off-by: Bean Huo <beanhuo@micron.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Xiaosen He <quic_xiaosenh@quicinc.com>
+> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+We also got a report from KernelCI:
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.2-3' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/cel/linux
+Link: https://lore.kernel.org/llvm/63be5f73.170a0220.16f9f.8b91@mx.google.com/
+Reported-by: kernelci.org bot <bot@kernelci.org>
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/65225
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6622934
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> ---
+>  drivers/ufs/core/ufs_bsg.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
+> index 0044029bcf7b..0d38e7fa34cc 100644
+> --- a/drivers/ufs/core/ufs_bsg.c
+> +++ b/drivers/ufs/core/ufs_bsg.c
+> @@ -70,9 +70,9 @@ static int ufs_bsg_exec_advanced_rpmb_req(struct ufs_hba *hba, struct bsg_job *j
+>  	struct ufs_rpmb_reply *rpmb_reply = job->reply;
+>  	struct bsg_buffer *payload = NULL;
+>  	enum dma_data_direction dir;
+> -	struct scatterlist *sg_list;
+> +	struct scatterlist *sg_list = NULL;
+>  	int rpmb_req_type;
+> -	int sg_cnt;
+> +	int sg_cnt = 0;
+>  	int ret;
+>  	int data_len;
+>  
+> -- 
+> 2.25.1
+> 
+> 
