@@ -1,146 +1,128 @@
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF12817EF
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 08:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0CF17F1
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 08:53:52 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id t5so9898971wrq.1
+        for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 00:53:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1673427014; x=1704963014;
-  h=references:from:to:cc:subject:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=ikQdH8m796ihx32dJUgR1hV1YKER/WpBzoyYK0/iPXE=;
-  b=Ar+Y/igd97NTRl5y/sqSLcqJOmyJ+iJkEfYdcDpqdY4dxN3HlhJMbbAh
-   WwKBvlLuMl88dLOFIAdDN9vhXrwKRVypJgioiK24oloOKIgUXOWEQ5ED1
-   4shygitr5idsJXVYmJx8oMXNz9pLyUQvBWqwEneyJJ+ImUUxGXViEVAjp
-   E=;
-X-IronPort-AV: E=Sophos;i="5.96,315,1665446400"; 
-   d="scan'208";a="285453292"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:50:10 +0000
-Received: from EX13D27EUB004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-	by email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com (Postfix) with ESMTPS id 9216381161;
-	Wed, 11 Jan 2023 08:50:05 +0000 (UTC)
-Received: from EX19D028EUB003.ant.amazon.com (10.252.61.31) by
- EX13D27EUB004.ant.amazon.com (10.43.166.152) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 11 Jan 2023 08:50:05 +0000
-Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.162.56) by
- EX19D028EUB003.ant.amazon.com (10.252.61.31) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.7; Wed, 11 Jan 2023 08:49:57 +0000
-References: <20230108143843.2987732-1-trix@redhat.com>
- <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
- <pj41zlpmbmba16.fsf@u570694869fb251.ant.amazon.com>
- <db824c89-13f2-3349-9dd0-0fb7559c6273@redhat.com>
-User-agent: mu4e 1.6.10; emacs 28.0.91
-From: Shay Agroskin <shayagr@amazon.com>
-To: Tom Rix <trix@redhat.com>
-CC: Eric Dumazet <edumazet@google.com>, <akiyano@amazon.com>,
-	<darinzon@amazon.com>, <ndagan@amazon.com>, <saeedb@amazon.com>,
-	<davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<nathan@kernel.org>, <ndesaulniers@google.com>, <khalasa@piap.pl>,
-	<wsa+renesas@sang-engineering.com>, <yuancan@huawei.com>,
-	<tglx@linutronix.de>, <42.hyeyoo@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH] net: ena: initialize dim_sample
-Date: Wed, 11 Jan 2023 10:46:50 +0200
-In-Reply-To: <db824c89-13f2-3349-9dd0-0fb7559c6273@redhat.com>
-Message-ID: <pj41zllem9bglr.fsf@u570694869fb251.ant.amazon.com>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7ZKXxds+m1ToRjFrL/N+aqre1KgGndrtfTN0CIit8s=;
+        b=XHHHDrQhKlGvPWmc4XNnEMGxL98utCEbip/4LCI7ljniEym7IpDxUK8BxJ+7p5NdCr
+         4BOpTEMGIVYn7IkwE8mgzFcGqFg1zSecStlMS+PktmW8m33h4gAm+RZUtrefkE6Vx2xf
+         Jcg+NiTYrourEiRHiJArQCdj6W7BWafOq7hXvEMM5/qUS35Jm3Rqlkq3rdPlbYEFFNBz
+         lZlf/JqEhvL18r7/2/CuShLPEjQJg5sDuCo/MKJJbg6fdJZu7mDdufy4gGcZkkD1RQY4
+         bJnQA3fHLd9aA6qiurp3X5RAdNMmaJXv/ipWIDgC/PPbGbPoAgdL9z90gOMEuVCnlr5L
+         A9gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7ZKXxds+m1ToRjFrL/N+aqre1KgGndrtfTN0CIit8s=;
+        b=t6IgRQ+hZyabWn6K3BlmfEeCvjNwllykYrAyXmkfFtmQNk04tfs8eY7cS2u533Gfjm
+         iF4lbK7aTgo817lavIkynb151N4e8rAmOzX5frC9rS8BNiepwwTYAIW93/2vVeJKu6z1
+         /N94iNN0bgfLa7lv94fZmffD8gNsdfOaLtk7UbPiJeiRcBouBcqKAzkGJR5X47GRYUSV
+         1PrvIICT2HDb0eVagqynN6q9vlibPrwsxs7YkBs0lHFCZz93RBOBoT36/zDgCpZ7FYCJ
+         T07HpmnEZvpB7c3ZU/05ZKOpMuMdPqjwTJrLAKrY1s0mNdl1KgyIHkG8r5UpqznSVPSN
+         Skmw==
+X-Gm-Message-State: AFqh2kq2papRzwzUJzP1+U1JPjAXg4JaeY4aIH2FLILu91r0m6pWWB7w
+	4Iaq2AzL8djnwy+HRlWPvGlEWQ==
+X-Google-Smtp-Source: AMrXdXtSvUw/ROl85qcQG2OnoAkmXrr7Fjq3EFgsOO+Fd8GkN3u1UpW6ueKal3JQWBwXt4G8jDGyrA==
+X-Received: by 2002:a5d:6e8c:0:b0:26b:e7e1:ad03 with SMTP id k12-20020a5d6e8c000000b0026be7e1ad03mr44564208wrz.55.1673427231254;
+        Wed, 11 Jan 2023 00:53:51 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm13442872wrj.94.2023.01.11.00.53.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 00:53:50 -0800 (PST)
+Message-ID: <1301a59a-9085-c7f5-bc1c-ce09766806a1@linaro.org>
+Date: Wed, 11 Jan 2023 09:53:47 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D27UWA003.ant.amazon.com (10.43.160.56) To
- EX19D028EUB003.ant.amazon.com (10.252.61.31)
-Precedence: Bulk
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V9 4/5] ASoC: codecs: Aw883xx chip register file, data
+ type file and Kconfig Makefile
+To: wangweidong.a@awinic.com, lkp@intel.com
+Cc: 13691752556@139.com, alsa-devel@alsa-project.org, broonie@kernel.org,
+ cezary.rojewski@intel.com, ckeepax@opensource.cirrus.com,
+ daniel.beer@igorinstitute.com, devicetree@vger.kernel.org,
+ flatmax@flatmax.com, james.schulman@cirrus.com, jonathan.albrieux@gmail.com,
+ krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+ linux-kernel@vger.kernel.org, liweilei@awinic.com, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, perex@perex.cz,
+ pierre-louis.bossart@linux.intel.com, povik+lin@cutebit.org,
+ rf@opensource.cirrus.com, robh+dt@kernel.org,
+ srinivas.kandagatla@linaro.org, steve@sk2.org, tiwai@suse.com,
+ yangxiaohua@everest-semi.com, yijiangtao@awinic.com, zhaolei@awinic.com
+References: <202301100233.QuEJ8pyu-lkp@intel.com>
+ <20230111020233.4306-1-wangweidong.a@awinic.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230111020233.4306-1-wangweidong.a@awinic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-Tom Rix <trix@redhat.com> writes:
-
-> On 1/10/23 8:58 AM, Shay Agroskin wrote:
->>
->> Eric Dumazet <edumazet@google.com> writes:
->>
->>> On Sun, Jan 8, 2023 at 3:38 PM Tom Rix <trix@redhat.com>=20
->>> wrote:
->>>>
->>>> clang static analysis reports this problem
->>>> drivers/net/ethernet/amazon/ena/ena_netdev.c:1821:2: warning:
->>>> Passed-by-value struct
->>>> =C2=A0 argument contains uninitialized data (e.g., field:=20
->>>> 'comp_ctr')
->>>> [core.CallAndMessage]
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 net_dim(&ena_napi->dim, dim=
-_sample);
->>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~
->>>>
->>>> net_dim can call dim_calc_stats() which uses the comp_ctr=20
->>>> element,
->>>> so it must be initialized.
->>>
->>> This seems to be a dim_update_sample() problem really, when=20
->>> comp_ctr
->>> has been added...
->>>
->>> Your patch works, but we could avoid pre-initializing=20
->>> dim_sample in
->>> all callers,
->>> then re-writing all but one field...
->>>
->>> diff --git a/include/linux/dim.h b/include/linux/dim.h
->>> index
->>> 6c5733981563eadf5f06c59c5dc97df961692b02..4604ced4517268ef8912cd8053ac8=
-f4d2630f977
->>> 100644
->>> --- a/include/linux/dim.h
->>> +++ b/include/linux/dim.h
->>> @@ -254,6 +254,7 @@ dim_update_sample(u16 event_ctr, u64=20
->>> packets, u64
->>> bytes, struct dim_sample *s)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->pkt_ctr=C2=A0=C2=A0 =3D p=
-ackets;
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->byte_ctr=C2=A0 =3D bytes;
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->event_ctr =3D event_ctr;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->comp_ctr=C2=A0 =3D 0;
->>> =C2=A0}
->>>
->>> =C2=A0/**
->>
+On 11/01/2023 03:02, wangweidong.a@awinic.com wrote:
+> On 09/01/2023 03:00, kernel test robot wrote:
 >> Hi,
->>
->> I'd rather go with Eric's solution to this issue than zero the=20
->> whole
->> struct in ENA
->
-> Please look at the other callers of dim_update_sample.=C2=A0 The=20
-> common
-> pattern is to initialize the struct.
->
-> This alternative will work, but the pattern of initializing the=20
-> struct
-> the other (~20) callers should be refactored.
->
-> Tom
->
+> 
+>> Thank you for the patch! Yet something to improve:
+> 
+>> [auto build test ERROR on 1f5abbd77e2c1787e74b7c2caffac97def78ba52]
+> 
+>> url:    https://github.com/intel-lab-lkp/linux/commits/wangweidong-a-awinic-com/ASoC-codecs-Add-i2c-and-codec-registration-for-aw883xx-and-their-associated-operation-functions/20230106-113130
+>> base:   1f5abbd77e2c1787e74b7c2caffac97def78ba52
+>> patch link:    https://lore.kernel.org/r/20230106032835.141918-5-wangweidong.a%40awinic.com
+>> patch subject: [PATCH V9 4/5] ASoC: codecs: Aw883xx chip register file, data type file and Kconfig Makefile
+>> config: arm64-randconfig-r034-20230109
+>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 8d9828ef5aa9688500657d36cd2aefbe12bbd162)
+>> reproduce (this is a W=1 build):
+>>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>        chmod +x ~/bin/make.cross
+>>        # install arm64 cross compiling tool for clang build
+>>        # apt-get install binutils-aarch64-linux-gnu
+>>        # https://github.com/intel-lab-lkp/linux/commit/63bed80c0eacb29f78eb53987b34863bafd48cee
+>>        git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>        git fetch --no-tags linux-review wangweidong-a-awinic-com/ASoC-codecs-Add-i2c-and-codec-registration-for-aw883xx-and-their-associated-operation-functions/20230106-113130
+>>        git checkout 63bed80c0eacb29f78eb53987b34863bafd48cee
+>>        # save the config file
+>>        mkdir build_dir && cp config build_dir/.config
+>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> 
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+>> All errors (new ones prefixed by >>):
+> 
+>>>> ld.lld: error: undefined symbol: crc8_populate_lsb
+>>   >>> referenced by aw883xx_bin_parse.c:1049 (sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:1049)
+>>   >>>               vmlinux.o:(aw883xx_dev_load_acf_check)
+>> --
+>>>> ld.lld: error: undefined symbol: crc8
+>>   >>> referenced by aw883xx_bin_parse.c:963 (sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:963)
+>>   >>>               vmlinux.o:(aw883xx_dev_load_acf_check)
+>>   >>> referenced by aw883xx_bin_parse.c:1022 (sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:1022)
+>>   >>>               vmlinux.o:(aw883xx_dev_load_acf_check)
+>>   >>> did you mean: crc4
+>>   >>> defined in: vmlinux.o
+> 
+> This looks like a false positive. crc8_populate_lsb is defined in the lib/crc8.c file.
+> I also could not reproduce it with GCC.
 
-While Eric's patch might be bigger if you also remove the=20
-pre-initialization in the other drivers, the Linux code itself=20
-would be smaller (granted not significantly) and
-it make less room for pitfalls in adding DIM support in other=20
-drivers.
+kernel test robot almost does not report false positives, at least not
+in such obvious cases. Chances you get here false positive are so small
+(although possible), that it is much, much more likely your code needs
+fixing.
 
-Is there a good argument against using Eric's patch other than=20
-'the other patch would be bigger' ?
-
-Shay
-
->>
->> Thanks,
->> Shay
->>
+Best regards,
+Krzysztof
 
