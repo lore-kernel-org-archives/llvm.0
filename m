@@ -1,55 +1,34 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A733233D2
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 17:23:06 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so2859821pjl.0
-        for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 09:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EWgZ7gEEc8X81PQ76CMhbd301TJwMAVpkYL1Blw7+Zk=;
-        b=WD8PFa8hQS4wnu5QtrBDSJ3P1GJkq6Q9cT+r/KhndZ3Tu8+HugHEA8PxWJGSVrNd25
-         UfDJVHLnJzB5gGYcYWXYs+Eud6e5dTJDZ8q74pJsR5DcUzZ/rHL8EY3nixbeXRDN8HO3
-         FFS5AziGVV/tYAy8f5Ly8XC/HLPXc6pvIb5BASUo6+NcypcrS+9duVarrYGjhHc46l1R
-         Qhme2QRMC/1Vpn5xDgzumZK2bUtfKUgKz+czRDIcWGsqldDKTvjZmCqIaOUGy5wiEZcv
-         z2QhcXvN/fRqt+NKLMi5j+tX2s+9ek//8w8hUwrI6Z2sK1pVqDWhqVbuniCMHaoUt4kU
-         oFDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWgZ7gEEc8X81PQ76CMhbd301TJwMAVpkYL1Blw7+Zk=;
-        b=z/ERFT/ssiL7JTqWc56byRnKCSibfWZMzGC9aNsyBUBjyKCr1eBJD7H/4vbDlVf3n8
-         KkMP8deHkUwITbziJkrSUFKpBRtFMQHFtLoxZ3cHaHh1YToNWMNzs2YEjhTGAI3QxNFA
-         6Vifjydy/WHCqebEnK+ePcJEKwiNDMsV5GzRzlvUW0V29aZgtJtursNNuYXMAwrAnBM4
-         rX0qmf9v1tVX0b2MrZImvAHefbQYCnEDLnM27Keg7T8PVK0LBeiE/IIRRtwe8s3BzY2b
-         gIVOGAsHOu5gUy2YQRTn1KOLKhdaHK+xK35DJyyS6vY4oihN6NIGWWpMzyVRmEME+Ufh
-         XGCQ==
-X-Gm-Message-State: AFqh2krvGtygwpitsJw7OEPY0TfiHtY/ixgvKBWSuN5Q2ddd6h8JBh8a
-	u86344pMGwqYLGoowCrTBPMOtg==
-X-Google-Smtp-Source: AMrXdXsJli37LpeR+Ut9dL6CmRUEVfCSe8QSBjABC+clmVX45J5X5gNTWEC6/HhSq6xnbHOHLH0oow==
-X-Received: by 2002:a17:90b:f90:b0:227:b29:ae56 with SMTP id ft16-20020a17090b0f9000b002270b29ae56mr12731828pjb.1.1673457785758;
-        Wed, 11 Jan 2023 09:23:05 -0800 (PST)
-Received: from google.com ([2620:15c:2d1:203:a5cc:f0f5:1fc6:713])
-        by smtp.gmail.com with ESMTPSA id x21-20020a17090ab01500b00226eadf094dsm8670970pjq.30.2023.01.11.09.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 09:23:05 -0800 (PST)
-Date: Wed, 11 Jan 2023 09:22:58 -0800
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Bean Huo <beanhuo@iokpp.de>
-Cc: alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
-	quic_cang@quicinc.com, quic_xiaosenh@quicinc.com,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 1/3] scsi: ufs: core: bsg: Fix sometimes-uninitialized
- warnings
-Message-ID: <20230111172258.pzzvjzuxczkfiojj@google.com>
-References: <20230108224057.354438-1-beanhuo@iokpp.de>
- <20230108224057.354438-2-beanhuo@iokpp.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A3917EA
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 21:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E990C433D2;
+	Wed, 11 Jan 2023 21:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1673471907;
+	bh=gE7iiQqZo4EDwR53HuYYitcV2oTBz3bJ4nXSfMJJo5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ULZGowEsOaE6Gr3qQoM1M5xBd+3x09nQ7c9yB4Ykqrdvj4gBuItp7an6WM8PajB4a
+	 Gj8N6Y2KByHelHOGgtW+7CHPGadC7GQNmgdFwajA72Yhxs1vG9TgCedj1CyV4zEzPK
+	 WK1yzjAMg6qdFwAhnlTkGeSTOnMDD3R7Bzi0BX74dkkoh+55F04D+Pu4cX+N46DLai
+	 1BGMBJ9lq6xoXaBtKF0FfUDBEfABru6AB84Ka9cpbIlERVIbPrESxJR5TFwYDVBNaU
+	 5/XrERgtSkDVpUa8GfywMGuxVZw4p4LLGzbkb3fUK1JKhWj8ITYZRe0zD57rA4PCI7
+	 NK2AsuB/V6Obw==
+Date: Wed, 11 Jan 2023 14:18:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	will@kernel.org, catalin.marinas@arm.com,
+	Mark Rutland <mark.rutland@arm.com>, Lee Jones <lee@kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] arm64: efi: Account for the EFI runtime stack in
+ stack unwinder
+Message-ID: <Y78noHxkLQbM6bIK@dev-arch.thelio-3990X>
+References: <20230106174703.1883495-1-ardb@kernel.org>
+ <20230106174703.1883495-3-ardb@kernel.org>
+ <Y73PAtm6FPuT+1cM@dev-arch.thelio-3990X>
+ <CAMj1kXGFa=Zriyp_mS7bbQr0wiwikt0ObjOKUSNGpJtFvLmnkg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,54 +37,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230108224057.354438-2-beanhuo@iokpp.de>
+In-Reply-To: <CAMj1kXGFa=Zriyp_mS7bbQr0wiwikt0ObjOKUSNGpJtFvLmnkg@mail.gmail.com>
 
-On Sun, Jan 08, 2023 at 11:40:55PM +0100, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
-> 
-> Compilation complains that two possible variables are used without
-> initialization:
-> 
-> drivers/ufs/core/ufs_bsg.c:112:6: warning: variable 'sg_cnt' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> drivers/ufs/core/ufs_bsg.c:112:6: warning: variable 'sg_list' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> 
-> Fix both warnings by adding initialization with sg_cnt = 0, sg_list = NULL.
-> 
-> Fixes: 6ff265fc5ef6 ("scsi: ufs: core: bsg: Add advanced RPMB support in ufs_bsg")
-> Signed-off-by: Bean Huo <beanhuo@micron.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Xiaosen He <quic_xiaosenh@quicinc.com>
-> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Hi Ard,
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-We also got a report from KernelCI:
-
-Link: https://lore.kernel.org/llvm/63be5f73.170a0220.16f9f.8b91@mx.google.com/
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
-> ---
->  drivers/ufs/core/ufs_bsg.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, Jan 11, 2023 at 09:45:32AM +0100, Ard Biesheuvel wrote:
+> On Tue, 10 Jan 2023 at 21:48, Nathan Chancellor <nathan@kernel.org> wrote:
+> > On Fri, Jan 06, 2023 at 06:47:03PM +0100, Ard Biesheuvel wrote:
+> > > The EFI runtime services run from a dedicated stack now, and so the
+> > > stack unwinder needs to be informed about this.
+> > >
+> > > Acked-by: Mark Rutland <mark.rutland@arm.com>
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > Apologies if this has been reported and/or fixed already, I searched
+> > lore and did not find anything but I just bisected a QEMU boot hang [1]
+> > that we see in the ClangBuiltLinux CI with Fedora's configuration [2] to
+> > this change in next-20220110 as commit a7334dc70496 ("arm64: efi:
+> > Account for the EFI runtime stack in stack unwinder").
+> >
 > 
-> diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
-> index 0044029bcf7b..0d38e7fa34cc 100644
-> --- a/drivers/ufs/core/ufs_bsg.c
-> +++ b/drivers/ufs/core/ufs_bsg.c
-> @@ -70,9 +70,9 @@ static int ufs_bsg_exec_advanced_rpmb_req(struct ufs_hba *hba, struct bsg_job *j
->  	struct ufs_rpmb_reply *rpmb_reply = job->reply;
->  	struct bsg_buffer *payload = NULL;
->  	enum dma_data_direction dir;
-> -	struct scatterlist *sg_list;
-> +	struct scatterlist *sg_list = NULL;
->  	int rpmb_req_type;
-> -	int sg_cnt;
-> +	int sg_cnt = 0;
->  	int ret;
->  	int data_len;
->  
-> -- 
-> 2.25.1
+> Thanks for the report. This is due to an oversight on my part: we
+> removed a spin_is_locked() check, and the lock in question can only be
+> in the locked state when EFI runtime services are enabled to begin
+> with.
 > 
+> Without the lock check, we may end up dereferencing the uninitialized
+> efi_rt_stack_top on non-EFI boots.
 > 
+> I've fixed this up in the EFI fixes tree, so the issue should
+> disappear once -next is updated. (We just missed 20230111
+> unfortunately)
+
+Thank you for the quick response! That issue appears to be fixed.
+
+Unfortunately, I am still seeing a hang while booting via EFI on either
+bare metal or KVM when CONFIG_DEBUG_PREEMPT is enabled (Fedora's rawhide
+config appears to enable several debugging options), so it appears I was
+seeing two distinct issues :/ defconfig + CONFIG_DEBUG_PREEMPT=y is
+enough for me to reproduce this problem.
+
+I see
+
+  [    0.015382] Remapping and enabling EFI services.
+
+as the last line in the console (via earlycon) with the bad kernel and
+nothing after it (I assume we deadlock somewhere or hit a BUG_ON()?), vs
+
+  [    0.015191] Remapping and enabling EFI services.
+  [    0.016725] smp: Bringing up secondary CPUs ...
+
+on the good kernel, followed by a normal boot.
+
+Sorry for not noticing this sooner! It should be pretty easy to
+reproduce but if there is any other information I can provide, I am more
+than happy to do so.
+
+Cheers,
+Nathan
