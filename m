@@ -1,104 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863A02560
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 22:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3179BC433D2
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 22:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673477597;
-	bh=nNq+pSheNC0KtjNImlKJHQbIHUBErCwXA8jMCQLz73o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fAD0MhVMeLsJmHvSSBqH8ZJUnK19gdcwbkX7P5M04uyq/G59J3wPDqkPcC89rVVF0
-	 haprBCnNB97PmEVbuobedGt9SCo4zoPkG5Y/ufq0rtNPS7Zp3ePVWBl5r4JASKFXF4
-	 eAEcdZzcaEmYeXVjnrmnmV2+PIJ1a1T3qSqGJolO15Uvz3IPTKQix/h/5qZsg1HNK3
-	 80HxEoRon61ALVqkdmJEy8DbT0fO4tr5dXTrToFFUGrD85rVpCHFA080psWY6THtxd
-	 Xwmhef7sX5aGhstLbPlsX8fsvJvtElg38+HUwahf/QzmtT3vyb/Lp7SL6/+JMhmD2y
-	 vOiFJ4DiXK77w==
-Received: by mail-lf1-f47.google.com with SMTP id v25so25748540lfe.12
-        for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 14:53:17 -0800 (PST)
-X-Gm-Message-State: AFqh2kpCXs/cS3vh9DQxKx+hG3RsAZPoQteT+PO64bAI0LSaxCnCX4zI
-	deHOSFd6/JKiN1iPIYMNgipzTVDnd20e6/9eKq4=
-X-Google-Smtp-Source: AMrXdXufCNRb7fr0bAXNNlgtF4BV2XdUfPlA8wYDcs3z5/EbO22/UkWWt+s6VT/MyJvwTqugYPIQJPswQh0e+xxlhqA=
-X-Received: by 2002:ac2:4a72:0:b0:4b6:f37c:c123 with SMTP id
- q18-20020ac24a72000000b004b6f37cc123mr5232775lfp.539.1673477595240; Wed, 11
- Jan 2023 14:53:15 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A09817EA
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 23:20:24 +0000 (UTC)
+Received: by mail-il1-f176.google.com with SMTP id o8so8650261ilo.1
+        for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 15:20:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=82kiV6CT5bY5UwtwlTr9ODnHbyHvh43Y6iajviNHDb0=;
+        b=UK3+wgm0lc1kST8z65QsZby2afptNaWNJYkOuEoueXtIuX2G0iMseEJHi0TKnpIQr9
+         e2j5juB2iNKYpJhoIC92JD3m9g8VASmQaBmhTBnt/btuVwsQZUrX6h6u9NgWeUQjKQ+6
+         XxJuIs8E2gVmO3IdIF+mDiyJw3JH10HGhHlRc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=82kiV6CT5bY5UwtwlTr9ODnHbyHvh43Y6iajviNHDb0=;
+        b=RZGnyI2N3anKw0t+GEK/JTajnZGdEmMMdoaIy+0tmK1h7cYdicZa6TZ72RPWv7e9uV
+         zOJIJ2j2Kc7wl9v58sW6c7IxFMZaWlcz5r9rhDcMsqtEzaXFZGSp7GAY3rAWCbLFVCbJ
+         SwQw3fajP5G1smgGg08Fw9Q1rf/LgeOhsrGzQRfzEi1ztPs09tGkymCTf5vCj7/HG0FW
+         oQLgoC71UeGYCRZkezva5BUksQIp8GJ+wgOhCmhfoA8h7Pontj3xRgKc9lkMxrqr9aSg
+         9SMg/WFg8R8NeifXaNdK5ObMuWMBs1pNT+dq45GgaDcw3jSI/G0rvqGinAYnRJ9uxjKF
+         dZDg==
+X-Gm-Message-State: AFqh2kqeRaDmBFj4ec5vL9RaK4aN5qxegnduSyNTYtYftNX8uu9J46VL
+	8aYyRxhRX+2MMcSw+uBTfIawEg==
+X-Google-Smtp-Source: AMrXdXvNBaXGvRgfW9IIO/6VMKJAaGzPIQky+h01RDjk5ybH4GNQ4PE3cOseA2+qBakv4nWCuOpSBg==
+X-Received: by 2002:a92:b703:0:b0:30c:1dda:42dd with SMTP id k3-20020a92b703000000b0030c1dda42ddmr6991828ili.1.1673479223936;
+        Wed, 11 Jan 2023 15:20:23 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g20-20020a92c7d4000000b0030c661606eesm4877810ilk.63.2023.01.11.15.20.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 15:20:23 -0800 (PST)
+Message-ID: <6d3602fd-fdf8-d6f6-56f7-d70eb2d381d8@linuxfoundation.org>
+Date: Wed, 11 Jan 2023 16:20:22 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230106174703.1883495-1-ardb@kernel.org> <20230106174703.1883495-3-ardb@kernel.org>
- <Y73PAtm6FPuT+1cM@dev-arch.thelio-3990X> <CAMj1kXGFa=Zriyp_mS7bbQr0wiwikt0ObjOKUSNGpJtFvLmnkg@mail.gmail.com>
- <Y78noHxkLQbM6bIK@dev-arch.thelio-3990X>
-In-Reply-To: <Y78noHxkLQbM6bIK@dev-arch.thelio-3990X>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 11 Jan 2023 23:53:03 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF-yFnNnpX6-mS0TaE2BZ-AzhXa1+GUfJJU_2v0C58zPg@mail.gmail.com>
-Message-ID: <CAMj1kXF-yFnNnpX6-mS0TaE2BZ-AzhXa1+GUfJJU_2v0C58zPg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] arm64: efi: Account for the EFI runtime stack in
- stack unwinder
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	will@kernel.org, catalin.marinas@arm.com, Mark Rutland <mark.rutland@arm.com>, 
-	Lee Jones <lee@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] kselftest: Fix error message for unconfigured LLVM builds
+To: Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230111-kselftest-lib-clang-fix-v1-1-58ebadd0e090@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230111-kselftest-lib-clang-fix-v1-1-58ebadd0e090@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 11 Jan 2023 at 22:18, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Ard,
->
-> On Wed, Jan 11, 2023 at 09:45:32AM +0100, Ard Biesheuvel wrote:
-> > On Tue, 10 Jan 2023 at 21:48, Nathan Chancellor <nathan@kernel.org> wrote:
-> > > On Fri, Jan 06, 2023 at 06:47:03PM +0100, Ard Biesheuvel wrote:
-> > > > The EFI runtime services run from a dedicated stack now, and so the
-> > > > stack unwinder needs to be informed about this.
-> > > >
-> > > > Acked-by: Mark Rutland <mark.rutland@arm.com>
-> > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > Apologies if this has been reported and/or fixed already, I searched
-> > > lore and did not find anything but I just bisected a QEMU boot hang [1]
-> > > that we see in the ClangBuiltLinux CI with Fedora's configuration [2] to
-> > > this change in next-20220110 as commit a7334dc70496 ("arm64: efi:
-> > > Account for the EFI runtime stack in stack unwinder").
-> > >
-> >
-> > Thanks for the report. This is due to an oversight on my part: we
-> > removed a spin_is_locked() check, and the lock in question can only be
-> > in the locked state when EFI runtime services are enabled to begin
-> > with.
-> >
-> > Without the lock check, we may end up dereferencing the uninitialized
-> > efi_rt_stack_top on non-EFI boots.
-> >
-> > I've fixed this up in the EFI fixes tree, so the issue should
-> > disappear once -next is updated. (We just missed 20230111
-> > unfortunately)
->
-> Thank you for the quick response! That issue appears to be fixed.
->
-> Unfortunately, I am still seeing a hang while booting via EFI on either
-> bare metal or KVM when CONFIG_DEBUG_PREEMPT is enabled (Fedora's rawhide
-> config appears to enable several debugging options), so it appears I was
-> seeing two distinct issues :/ defconfig + CONFIG_DEBUG_PREEMPT=y is
-> enough for me to reproduce this problem.
->
-> I see
->
->   [    0.015382] Remapping and enabling EFI services.
->
-> as the last line in the console (via earlycon) with the bad kernel and
-> nothing after it (I assume we deadlock somewhere or hit a BUG_ON()?), vs
->
->   [    0.015191] Remapping and enabling EFI services.
->   [    0.016725] smp: Bringing up secondary CPUs ...
->
-> on the good kernel, followed by a normal boot.
->
+On 1/11/23 15:33, Mark Brown wrote:
+> We are missing a ) when we attempt to complain about not having enough
+> configuration for clang, resulting in the rather inscrutable error:
+> 
+> ../lib.mk:23: *** unterminated call to function 'error': missing ')'.  Stop.
+> 
+> Add the required ) so we print the message we were trying to print.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>   tools/testing/selftests/lib.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 291144c284fb..f7900e75d230 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -20,7 +20,7 @@ CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
+>   
+>   ifeq ($(CROSS_COMPILE),)
+>   ifeq ($(CLANG_TARGET_FLAGS),)
+> -$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk
+> +$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk)
+>   else
+>   CLANG_FLAGS     += --target=$(CLANG_TARGET_FLAGS)
+>   endif # CLANG_TARGET_FLAGS
+> 
+> ---
+> base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
+> change-id: 20230111-kselftest-lib-clang-fix-8936ba376ea1
+> 
+> Best regards,
 
-Yeah, this is the same issue, essentially.
+Thank you. I will queue this up for the next rc.
 
-I have added back the spin_is_locked() check, which is a better
-indicator of whether the EFI runtime stack is actually in use or not.
+thanks,
+-- Shuah
