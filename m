@@ -1,97 +1,149 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128FF2F38
-	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 16:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7049B3209
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 16:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673454197;
+	s=mimecast20190719; t=1673455895;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bAzX0I8qhNQFozyjHTOv5miI6bc1TzOt0NGHpESsMAQ=;
-	b=LzHWb9EjXPVw0aRXOlX6fNEEYudnBgJ6/ZlLzR4+d+M8ExnHxVNE1xt6ItZ/HcfUgA3FMx
-	xH/pEmT6uZ/qOAPH/Lg9U/l66Nv1pZJB9bMIHoJIF+IuVI38exxHNJC/4DNxv8vnSWkSFw
-	VPFxMEMqJvGd3RvE3docfu0mloKinFU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-294-y2n_opKPMKOFh_5QcDev2Q-1; Wed, 11 Jan 2023 11:23:06 -0500
-X-MC-Unique: y2n_opKPMKOFh_5QcDev2Q-1
-Received: by mail-wr1-f69.google.com with SMTP id m12-20020adfa3cc000000b002b881cb0cb4so2819367wrb.3
-        for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 08:23:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bAzX0I8qhNQFozyjHTOv5miI6bc1TzOt0NGHpESsMAQ=;
-        b=NRtjgAzx0Ta2uQJqZNz9PpOGs4UQg5bhnyDMN+HRkZKxKklsacQPLDkc8ZwTjxh/Ok
-         cxq8EPMoOoP8KalyOWZ6ZnTPyoXd4ytD7/R9OYIbuPVP+AKIJDLY1Wrfge7TYOV5wcSr
-         9JXPISXcYTrXNy+aP3uOgGzQgkR96SE8IsGyNw11X6ZDy8UDoQMGvn1jzVLedxqlXT3A
-         OSu9yhMEz4StikheNC47OP47gjN7Sdh0qlGD4AyczO7mQS8Gsx5WpeEsN2jyemuGVLJv
-         qXw3/BmGG6m/1co9PdRPJ1VjfrCc8m7THrVbjxD3JpNaCdBuqlPuoxXCDDWASUmX+OTQ
-         +t5A==
-X-Gm-Message-State: AFqh2koO+TmvWR7orRxhNItmDZGc2oGJbb03TiimcydqMxSW1jP8dZ62
-	iTuPddb8TENsWmYIZSOSdNJg6gBy4A38yuauXqhsDuUo9dDWneB8puv85rQ1J+MqdTVimzfEHWC
-	i9bNgqu0LKgwBxw==
-X-Received: by 2002:a7b:ce06:0:b0:3cf:a483:3100 with SMTP id m6-20020a7bce06000000b003cfa4833100mr52806212wmc.3.1673454185097;
-        Wed, 11 Jan 2023 08:23:05 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtLvuQHiCtmyqnm4CLAs4LBNQIvAx3luYBZ9kZsu5kzE6A6u6fOimphXyAb5WqlrOBkfqsJsQ==
-X-Received: by 2002:a7b:ce06:0:b0:3cf:a483:3100 with SMTP id m6-20020a7bce06000000b003cfa4833100mr52806198wmc.3.1673454184874;
-        Wed, 11 Jan 2023 08:23:04 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:4783:a68:c1ee:15c5? ([2001:b07:6468:f312:4783:a68:c1ee:15c5])
-        by smtp.googlemail.com with ESMTPSA id v10-20020a05600c444a00b003d998412db6sm25266750wmn.28.2023.01.11.08.23.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Jan 2023 08:23:04 -0800 (PST)
-Message-ID: <8333e62b-8bb6-981f-ba07-d867ec61657e@redhat.com>
-Date: Wed, 11 Jan 2023 17:23:00 +0100
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HVHeXpeViGsWE/zBwCF4AdRicz7NDpxfb9d4pXGR2Qs=;
+	b=I5yZNeejI8FvTXLeNA/0fNNAJ08PSAuIMwfXfQoNwa6jfhvLS3bCHD498WaPc6+dTOKE5s
+	7WyVMvd9LIH6bwjl2xajcNVyLdxGkGxkTv4CDOzw1Nn8/TY8AIArh/hfbLoU4DRRqAgGen
+	bW5DcTERtvw1zceCpLtuZH7P+HvT0Zo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-bgq8TLHPN72vSGopxsAGPw-1; Wed, 11 Jan 2023 11:51:34 -0500
+X-MC-Unique: bgq8TLHPN72vSGopxsAGPw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00780811E6E
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 16:51:34 +0000 (UTC)
+Received: from [172.64.10.55] (unknown [10.30.32.123])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DD1112026D68;
+	Wed, 11 Jan 2023 16:51:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (101/383 SKIPPED): Test report for master
+ (6.2.0-rc3, mainline.kernel.org-clang, 7dd4b804)
+Date: Wed, 11 Jan 2023 16:51:33 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 11/14] KVM: selftests: Disable
- "gnu-variable-sized-type-not-at-end" warning
-To: Sean Christopherson <seanjc@google.com>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Nathan Chancellor <nathan@kernel.org>, James Morse <james.morse@arm.com>,
- Alexandru Elisei <alexandru.elisei@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>,
- Oliver Upton <oliver.upton@linux.dev>, Tom Rix <trix@redhat.com>,
- kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, Ricardo Koller <ricarkol@google.com>,
- Aaron Lewis <aaronlewis@google.com>,
- Raghavendra Rao Ananta <rananta@google.com>
-References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-12-seanjc@google.com>
- <CAKwvOdnRQQb9YbH=MgDymBmmjYgajc8tkyjbJVxjpA5zDZpNTQ@mail.gmail.com>
- <Y5ffxebJ/eRzEXh+@google.com>
-From: Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y5ffxebJ/eRzEXh+@google.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <54844.123011111513400676@us-mta-622.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/13/22 03:13, Sean Christopherson wrote:
-> AFAICT, gcc stopped treating unknown "-Wno" flags as unconditional errors starting
-> with gcc-4.4, and the kernel's min supported version is 5.1.  gcc-4.4 through
-> gcc-9.5 all print a mild warning if there's a different error, but otherwise
-> silently ignore the uknown "-Wno".
-> 
->    cc1: warning: unrecognized command line option '-Wno-gnu-variable-sized-type-not-at-end'
+Hi, we tested your kernel and here are the results:
 
-scripts/Makefile.compiler has cc-disable-warning for this, we can copy 
-it to tools/.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Paolo
+
+Kernel information:
+    Commit message: Merge tag 'nfsd-6.2-3' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/cel/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/65225
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6622934
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
