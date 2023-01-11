@@ -1,100 +1,146 @@
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9B217EF;
-	Wed, 11 Jan 2023 08:48:10 +0000 (UTC)
-Content-Type: text/plain;
-	charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-	t=1673426330; bh=tYUkvP1LL/oKjpBzUtCikUMIK2n3hYe7+3rcbguWTLI=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To;
-	b=jB92gv8ARa5tL/VyJEF/uCMfvl1vtEXMwuAMJ+MMC63FMtUet8XBJLP3KY9UXwe7u
-	 crj5snAwBqlFuMS+Tg4NgOWDTEwk2mJl81z/lGeAJRQ0/GkSWMi0n5JMVz7EkJb2en
-	 3dIorM7Y2WBeYwV6O3Y6GSej5fdPsDMEIbI5b5Gs=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF12817EF
+	for <llvm@lists.linux.dev>; Wed, 11 Jan 2023 08:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673427014; x=1704963014;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ikQdH8m796ihx32dJUgR1hV1YKER/WpBzoyYK0/iPXE=;
+  b=Ar+Y/igd97NTRl5y/sqSLcqJOmyJ+iJkEfYdcDpqdY4dxN3HlhJMbbAh
+   WwKBvlLuMl88dLOFIAdDN9vhXrwKRVypJgioiK24oloOKIgUXOWEQ5ED1
+   4shygitr5idsJXVYmJx8oMXNz9pLyUQvBWqwEneyJJ+ImUUxGXViEVAjp
+   E=;
+X-IronPort-AV: E=Sophos;i="5.96,315,1665446400"; 
+   d="scan'208";a="285453292"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 08:50:10 +0000
+Received: from EX13D27EUB004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+	by email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com (Postfix) with ESMTPS id 9216381161;
+	Wed, 11 Jan 2023 08:50:05 +0000 (UTC)
+Received: from EX19D028EUB003.ant.amazon.com (10.252.61.31) by
+ EX13D27EUB004.ant.amazon.com (10.43.166.152) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 11 Jan 2023 08:50:05 +0000
+Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.162.56) by
+ EX19D028EUB003.ant.amazon.com (10.252.61.31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.7; Wed, 11 Jan 2023 08:49:57 +0000
+References: <20230108143843.2987732-1-trix@redhat.com>
+ <CANn89iLFtrQm-E5BRwgKFw4xRZiOOdWg-WTFi5eZsg7ycq2szg@mail.gmail.com>
+ <pj41zlpmbmba16.fsf@u570694869fb251.ant.amazon.com>
+ <db824c89-13f2-3349-9dd0-0fb7559c6273@redhat.com>
+User-agent: mu4e 1.6.10; emacs 28.0.91
+From: Shay Agroskin <shayagr@amazon.com>
+To: Tom Rix <trix@redhat.com>
+CC: Eric Dumazet <edumazet@google.com>, <akiyano@amazon.com>,
+	<darinzon@amazon.com>, <ndagan@amazon.com>, <saeedb@amazon.com>,
+	<davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<nathan@kernel.org>, <ndesaulniers@google.com>, <khalasa@piap.pl>,
+	<wsa+renesas@sang-engineering.com>, <yuancan@huawei.com>,
+	<tglx@linutronix.de>, <42.hyeyoo@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH] net: ena: initialize dim_sample
+Date: Wed, 11 Jan 2023 10:46:50 +0200
+In-Reply-To: <db824c89-13f2-3349-9dd0-0fb7559c6273@redhat.com>
+Message-ID: <pj41zllem9bglr.fsf@u570694869fb251.ant.amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH V9 4/5] ASoC: codecs: Aw883xx chip register file, data
- type file and Kconfig Makefile
-From: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <20230111020233.4306-1-wangweidong.a@awinic.com>
-Date: Wed, 11 Jan 2023 09:38:47 +0100
-Cc: lkp@intel.com,
- 13691752556@139.com,
- Linux-ALSA <alsa-devel@alsa-project.org>,
- Mark Brown <broonie@kernel.org>,
- cezary.rojewski@intel.com,
- ckeepax@opensource.cirrus.com,
- daniel.beer@igorinstitute.com,
- devicetree@vger.kernel.org,
- flatmax@flatmax.com,
- james.schulman@cirrus.com,
- jonathan.albrieux@gmail.com,
- krzysztof.kozlowski+dt@linaro.org,
- lgirdwood@gmail.com,
- linux-kernel@vger.kernel.org,
- liweilei@awinic.com,
- llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev,
- perex@perex.cz,
- pierre-louis.bossart@linux.intel.com,
- rf@opensource.cirrus.com,
- robh+dt@kernel.org,
- srinivas.kandagatla@linaro.org,
- steve@sk2.org,
- tiwai@suse.com,
- yangxiaohua@everest-semi.com,
- yijiangtao@awinic.com,
- zhaolei@awinic.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <5EA7B038-9B49-4E5D-8209-8689C0D03071@cutebit.org>
-References: <202301100233.QuEJ8pyu-lkp@intel.com>
- <20230111020233.4306-1-wangweidong.a@awinic.com>
-To: wangweidong.a@awinic.com
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D27UWA003.ant.amazon.com (10.43.160.56) To
+ EX19D028EUB003.ant.amazon.com (10.252.61.31)
+Precedence: Bulk
 
 
-> On 11. 1. 2023, at 3:02, wangweidong.a@awinic.com wrote:
->=20
-> On 09/01/2023 03:00, kernel test robot wrote:
+Tom Rix <trix@redhat.com> writes:
 
->> All errors (new ones prefixed by >>):
->=20
->>>> ld.lld: error: undefined symbol: crc8_populate_lsb
->>>>> referenced by aw883xx_bin_parse.c:1049 =
-(sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:1049)
->>>>>              vmlinux.o:(aw883xx_dev_load_acf_check)
->> --
->>>> ld.lld: error: undefined symbol: crc8
->>>>> referenced by aw883xx_bin_parse.c:963 =
-(sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:963)
->>>>>              vmlinux.o:(aw883xx_dev_load_acf_check)
->>>>> referenced by aw883xx_bin_parse.c:1022 =
-(sound/soc/codecs/aw883xx/aw883xx_bin_parse.c:1022)
->>>>>              vmlinux.o:(aw883xx_dev_load_acf_check)
->>>>> did you mean: crc4
->>>>> defined in: vmlinux.o
->=20
-> This looks like a false positive. crc8_populate_lsb is defined in the =
-lib/crc8.c file.
-> I also could not reproduce it with GCC.
+> On 1/10/23 8:58 AM, Shay Agroskin wrote:
+>>
+>> Eric Dumazet <edumazet@google.com> writes:
+>>
+>>> On Sun, Jan 8, 2023 at 3:38 PM Tom Rix <trix@redhat.com>=20
+>>> wrote:
+>>>>
+>>>> clang static analysis reports this problem
+>>>> drivers/net/ethernet/amazon/ena/ena_netdev.c:1821:2: warning:
+>>>> Passed-by-value struct
+>>>> =C2=A0 argument contains uninitialized data (e.g., field:=20
+>>>> 'comp_ctr')
+>>>> [core.CallAndMessage]
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 net_dim(&ena_napi->dim, dim=
+_sample);
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~
+>>>>
+>>>> net_dim can call dim_calc_stats() which uses the comp_ctr=20
+>>>> element,
+>>>> so it must be initialized.
+>>>
+>>> This seems to be a dim_update_sample() problem really, when=20
+>>> comp_ctr
+>>> has been added...
+>>>
+>>> Your patch works, but we could avoid pre-initializing=20
+>>> dim_sample in
+>>> all callers,
+>>> then re-writing all but one field...
+>>>
+>>> diff --git a/include/linux/dim.h b/include/linux/dim.h
+>>> index
+>>> 6c5733981563eadf5f06c59c5dc97df961692b02..4604ced4517268ef8912cd8053ac8=
+f4d2630f977
+>>> 100644
+>>> --- a/include/linux/dim.h
+>>> +++ b/include/linux/dim.h
+>>> @@ -254,6 +254,7 @@ dim_update_sample(u16 event_ctr, u64=20
+>>> packets, u64
+>>> bytes, struct dim_sample *s)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->pkt_ctr=C2=A0=C2=A0 =3D p=
+ackets;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->byte_ctr=C2=A0 =3D bytes;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->event_ctr =3D event_ctr;
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s->comp_ctr=C2=A0 =3D 0;
+>>> =C2=A0}
+>>>
+>>> =C2=A0/**
+>>
+>> Hi,
+>>
+>> I'd rather go with Eric's solution to this issue than zero the=20
+>> whole
+>> struct in ENA
+>
+> Please look at the other callers of dim_update_sample.=C2=A0 The=20
+> common
+> pattern is to initialize the struct.
+>
+> This alternative will work, but the pattern of initializing the=20
+> struct
+> the other (~20) callers should be refactored.
+>
+> Tom
+>
 
-Hi,
+While Eric's patch might be bigger if you also remove the=20
+pre-initialization in the other drivers, the Linux code itself=20
+would be smaller (granted not significantly) and
+it make less room for pitfalls in adding DIM support in other=20
+drivers.
 
-the issue here would be that it=E2=80=99s possible to select your driver =
-for compilation without
-having selected the CRC8 functions, leading to the linkage error.
+Is there a good argument against using Eric's patch other than=20
+'the other patch would be bigger' ?
 
-You can fix that by adding =E2=80=99select CRC8=E2=80=99 under the =
-Kconfig section of your driver, similarly
-to how the SND_SOC_SIGMADSP symbol selects CRC32.
+Shay
 
-Best regards,
-Martin
-
->=20
-> Best regards,
-> Weidong Wang
+>>
+>> Thanks,
+>> Shay
+>>
 
