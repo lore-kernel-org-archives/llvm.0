@@ -1,20 +1,20 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DAA2105
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 20:35:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61992105
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 20:38:28 +0000 (UTC)
 Received: from leknes.fjasle.eu ([46.142.98.230]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MBll6-1pS7TU0SeC-00C7tX; Thu, 12 Jan 2023 21:32:28 +0100
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Myevl-1oXJnv3O6X-00z0eH; Thu, 12 Jan 2023 21:37:27 +0100
 Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-	id D255B3C1B9; Thu, 12 Jan 2023 21:25:12 +0100 (CET)
+	id 636F23C1BF; Thu, 12 Jan 2023 21:31:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-	t=1673555117; bh=YmIZVCrUzmJ3voRqFlLqoXaouv4xbA9tW2X5/h1G53Y=;
+	t=1673555475; bh=MHm95B69AvfvxZt/XRwNLLsRL0BfVrWwpaIDMaWBPR4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lPUd0RV5hVLE1NxB8lv5M5aDvoMp4WTEPJWtcXRXTbYqz2MWQ/x1/QibJhljE9e6k
-	 V7u5TNR6o8m1TcRcb6ds9fwBtXY3tax4sMd6/PNnhTIe/TLSNe8IBGS8IqSUTz90lu
-	 KRjQuhmDx9M77b08F7RcIZV06fFFc3sSXIxRkrGM=
-Date: Thu, 12 Jan 2023 21:25:12 +0100
+	b=JhlIHQYsq+5z9hoJB/e9B2hRluSscVDF3bkX1pL3AsWjePB6/OTubiUFCjzf3U0WV
+	 +8XAKseKBYBu4JwobZ8Z7SxstCFRmKvqukYWq78uTntLBtoHOv3BOTfkZb8QlEtAtT
+	 hS5xr+aFbWo3eD/j9vWAI4EdWNTnf0hyJKtRZANM=
+Date: Thu, 12 Jan 2023 21:31:07 +0100
 From: Nicolas Schier <nicolas@fjasle.eu>
 To: Ian Rogers <irogers@google.com>
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -27,10 +27,10 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
 	Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH v3 1/3] objtool: Install libsubcmd in build
-Message-ID: <Y8BsqN/HfOf+vKZP@fjasle.eu>
+Subject: Re: [PATCH v3 2/3] objtool: Properly support make V=1
+Message-ID: <Y8BuCnG0ih/7LoKL@fjasle.eu>
 References: <20230105090155.357604-1-irogers@google.com>
- <20230105090155.357604-2-irogers@google.com>
+ <20230105090155.357604-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,90 +38,64 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="8looZPJ63KG3fDin"
+	protocol="application/pgp-signature"; boundary="G3Vj2TMWvFUmNujO"
 Content-Disposition: inline
-In-Reply-To: <20230105090155.357604-2-irogers@google.com>
-X-Provags-ID: V03:K1:o+I3bQzy9JooLqMSzdIi0Ns+aMeXJU2ZXJFUD3V3ByY6t5ShNNr
- Rj4hGij4tdf8GeV20vQPHqIkMo9WWcqm9REd5+8ru7Y6bLgO1gEw2druRCZFswpCVFRPasU
- /hoO7PnjXHBivmR5i141DawV5vG9ZVyObHfka+i6U87ZJNJBt8ke6mk60JLZmYV3hC/EXaS
- 7BkxqyNlbbKqqBc8LiY3Q==
+In-Reply-To: <20230105090155.357604-3-irogers@google.com>
+X-Provags-ID: V03:K1:NSv3LH8HelTziEjzI5E1l6sUZ4yfp/UwsaIGrmEe/rV9dxYhUgb
+ dTNNgKiWFM5u1dYYCmmmQB7ZzZchgXT1F3ejYAJjee+0V/4S82M1hL4tcYgP+zzBcd/V9cQ
+ knzK5Y7qm6JWtOHAaUOyrhH5ki37QsC+6lsvDEDJK5t4VpqFVmI2WCxUIzaOuGsdSFan6/v
+ 3WB1Lu9nTo25pAjYMoKmw==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Fl8kltTiBww=;fAuHNYKuZi+WG9hYMQY3XJkXO/v
- PxgPHE9BvGYZxdfwlnbeaNI2P5fk9meCoScO+B+DtEvwYyVV16XMf0EPidRqDgox0r6UKNBBB
- 8YyiV2ykhYq4rYPQWM1f5JT9+mAM25mewMg0rouWhVkxJLgT+pSXKzIMlFVDD7AZ6hZkIWQD3
- GNJvXiUyRP1OWW7yJnJZosu1AdUb8aeMphls+eUOMJSTmwHwiW8WvPYIymOVBVMi0FYyMyIgH
- dpifpm1eScEIbQhCD5/Ade/qX2vaN2dO6QO9Q6sW0PhuIjil6CMY2RvTNlenyK5p38dWfnO1S
- qwF4vfap9Y1KadMfpPfcWq+UwFKe3lR9pmqrhzQAKFBSECag7az9kpCMTEyRwXa5/YlPCZoRk
- G6cf5FRi8kKJW5YXjHZHbdNpIxWXl+RmWeQF+I4SNtvpd71naaOBKPxHyFGeqsnor1vTt15/T
- CtJp4KXMzgm5VKKmO/WfVNwtK1rd5RHM0Vf2+t5LrRISrh5jy3MSmcpSYXbgZVqAby96loWQf
- 82g+TzsjgSSaCCToBRvssB8lvhPcBuF32AwGwIR0bxpm9srnUZ+XhTnIcFEvkfyMcg2QkyM/1
- P6C0p0tsE2YDgrjVSu/1sCRUBe18dzbxV4UXjI4rWqMZlWI1DMnOwKOkyRLq9rupkIFvGRT3u
- ujHG9tWmVM+IiPfuKNQqOEfvglqf53dr/8CHPRxeWw==
+UI-OutboundReport: notjunk:1;M01:P0:zItUcXf31Xo=;/ZJIhZffAigioyX8OBbOdPuKHeX
+ 3AFw6wkZJMCreAhGtf1Y9olAvQYjo2JxVPheUobqD+fW/95YE6D53rtvX2BdAx2ywfdD5b+MV
+ YhvLPO1CuDG93Xn+hbPGroaVYkozAxoBah8FFx0Jk2bFeXTblhjds+Wh66t2gZ5x6Hq3sfamz
+ amKhfqWR++3uZJKjHcanUQvBldsJP5ecTTSNSeShR1er+OwcdMTemY7tAJhJOwW0a9oe6YzFz
+ n/aPqhodAh2lZxwSIb8rNIe+gLTEdR93y+iobd9GSFFBIaQTpZPEXsvwEY8djjK3zsyV0ABxp
+ xYKwiSEqruuOFCOLHoJMb8saj2TZGUoJMn4kIHIjHyql5uDHxPid2V6PMbbrNqike0WFjRTfc
+ dq9VGWNP0URFSTgVzMST+/bWfrnu1z/CG9mv2GwfQ0CmfwHalGJugyT6gg09OsPX7AoxU18ah
+ rO6rl0H8RvWezxEdg1W9STMrOf+DSd2upBdLqzS+Sp6m7muy9vv9qXdT5kwShBAJZY5Bwm+at
+ SaUJ0jwozZHgXN8qJrN8qZeg7uuxJW6P1c4Q/gIX4rj57KAJabytYMmGZ9giUdAnWFKNehupd
+ nYT5hc9dNOIZCYElpn/LBMKkwo7SC5YjKRyUsxg3BSb7j2woLqf07qFjplJkzjcDjRDroBh08
+ RVcN72RQTaPEslU5pqN3x4sC+Dci/djestVtIpkgsw==
 
 
---8looZPJ63KG3fDin
+--G3Vj2TMWvFUmNujO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 05, 2023 at 01:01:53AM -0800 Ian Rogers wrote:
-> Including from tools/lib can create inadvertent dependencies. Install
-> libsubcmd in the objtool build and then include the headers from
-> there.
+On Thu, Jan 05, 2023 at 01:01:54AM -0800 Ian Rogers wrote:
+> The Q variable was being used but never correctly set up. Add the
+> setting up and use in place of @.
 >=20
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 > ---
->  tools/objtool/Build    |  2 --
->  tools/objtool/Makefile | 33 +++++++++++++++++++++++++--------
->  2 files changed, 25 insertions(+), 10 deletions(-)
+>  tools/objtool/Makefile | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
 >=20
-[...]
-> diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-> index a3a9cc24e0e3..fd9b3e3113c6 100644
-> --- a/tools/objtool/Makefile
-> +++ b/tools/objtool/Makefile
-> @@ -12,9 +12,15 @@ srctree :=3D $(patsubst %/,%,$(dir $(CURDIR)))
->  srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
->  endif
-> =20
-> -SUBCMD_SRCDIR		=3D $(srctree)/tools/lib/subcmd/
-> -LIBSUBCMD_OUTPUT	=3D $(or $(OUTPUT),$(CURDIR)/)
-> -LIBSUBCMD		=3D $(LIBSUBCMD_OUTPUT)libsubcmd.a
-> +LIBSUBCMD_DIR =3D $(srctree)/tools/lib/subcmd/
-> +ifneq ($(OUTPUT),)
-> +  LIBSUBCMD_OUTPUT =3D $(abspath $(OUTPUT))/libsubcmd
-> +else
-> +  LIBSUBCMD_OUTPUT =3D $(CURDIR)/libsubcmd
-> +endif
-> +LIBSUBCMD_DESTDIR =3D $(LIBSUBCMD_OUTPUT)
-
-Hi Ian,
-
-Is there a reason for distinguishing between $(LIBSUBCMD_DESTDIR) and
-$(LIBSUBCMD_OUTPUT)?
 
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
---8looZPJ63KG3fDin
+--G3Vj2TMWvFUmNujO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmPAbKcACgkQB1IKcBYm
-Emlg6RAArhy5v5jFKm2z0C+qMHu3Ye8QswcakcArwsZxIfFdqQuvidU2XncQvrLc
-gCjLGABUjRCOedbYJKhA11zwG32QmC/GMaembjV3X1M3qwDKDl8K+LTZBBK1smfa
-q95ZDMb6Mr59Cuart0quno5RCSEuQ5NXnS4MU41g9FqT7+YUkT8x0GF96MeydVq5
-avexNnfU4AWQXBPBVKdGODg0ez6WFtNc6uqc4yjo6qcrR8dfQl5lHVqJZAPL7Ml5
-ts9ppjcyx9Vfjj1RVcKc4UiQQGGf75Enx3CDEKblEVLdaHrRvwLtRFjf4G1HR18q
-bVZGX/QOIo1XEZf7aBotsxVBmla6wIySarskK+5FlIwOw29Ts1X1UiwWF5DsQO66
-j1idqxyrcejJ8+JWioPxVNOL/oy4Qv0BLVbCJFrgJ/suufACaQo6cQdkvFf4VlKV
-uwjd8C1qrm0TnjZznAXP+jwKgJckJfE+BxfT3rbqwrhekZwefxQJtY+a+/8ySryr
-s81sL1Zo5lQdZpBxvu+Vt2y3EFSvnOeQ9VGanH/7MqflkmkjphbogHOHVgUlGBxs
-LhrPPz7XFaQQq1IS30UAHh+AH9yBLDBvT/SQ04IgI3mE+Q+MiRq++Pnpx9f3cXPn
-WYyQBm9rI4i7C5PShPdaHLLCP/z3irkFKaZv2sKNwY7n+j5K3pY=
-=aHjG
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmPAbgoACgkQB1IKcBYm
+EmnlghAA2i+EjTkjYRZWDfLp6uRdWEk3N+rIqNW/013R7+0sI7ypHRNDi3fLDR00
+8XoVD0kk0FdEhdsHJVim02gOnbTOkxGteeH5WDN5b4S8OSucJw4iqZMeaJAvY1X1
+SbJd0oFWzoAc1oREgENCJH4eFy9Ak1Tf6IOzG0JHPCRYI1yYJkcxhUPNriiAfn6S
+PXAEQ+aqYyWjrAlqAgvCiarPRNm/FHfPK4UrJIVh5Kwtg+08zU3Z9O3TZpTypjdJ
+seBSOU48LEhLSgT1dcCWDGWWXAxDJ4a4qV2HsvHH6IvU+fQ4om5w48GCwOqfj1lO
+Q/vChoqfp6Ja9AlbptQuetl98+zQEsTT6cVIe0My7l7NS4Kl/4Ta72kgeaulId+G
+MLuuMFKGsD4GKO5qx/KcUpG48m1L8CRTGRFO9B287pGntmV5j3b3UKg3fLjGNjMW
+XE+kACJguGqjhV/svYwSKfQmAQf+50IlBxdYTo9zFOQktxve9Qeasaatqg1TYizN
+oWH7QDnjFiSNo0hPNd/vvITCHf7sM66s1FpWTTpdzZ9z4ey//GvZe98X8zrNg9oH
+jGNQ3I/6B+dhDEsjWKyrNWTaawaXBhW4J1s+fzh4lzOTBcQMPQNvmr/F7aczYINR
+5vOWqoLLluRN4bBFpwQlmX5CLdthL94VUGwG3Xrg2SlfFpWt4Hk=
+=UyhM
 -----END PGP SIGNATURE-----
 
---8looZPJ63KG3fDin--
+--G3Vj2TMWvFUmNujO--
