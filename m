@@ -1,154 +1,142 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD9ABD3D;
-	Wed, 11 Jan 2023 23:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C104361;
+	Thu, 12 Jan 2023 01:37:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673480794; x=1705016794;
+  t=1673487457; x=1705023457;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=brRmTVqVJwSUpzSHhAqLiXDzpXprNoRQaRFfWTWQuNM=;
-  b=O9uwJm+NgBMlWUGa1CRwFl8AatT+5ltgJil8xJBczLlfjn/V3MVRO+BQ
-   3b1juks6tyI0teJd/UeIZrYB6bOwRP9WFvAP+Rv41AwGa5eT+awWI9iiM
-   yrMoyEyARGo75groddYpfzBrJVQcQlug6sSc57mXIUy/dgM+4Z4bfYNBE
-   o7OxfiDYlcc5JPXrShL8Qyc7Rn4I2zoHhiLY3R1Tv2IhNZjrtP3BPP+id
-   gzDAMG1mAuR+8nqvzja9RBFJAa/EnVIKO3UFq+CPyzU4UMT9A3kQ3udS7
-   TqT33b1Ki4D7wBtafC5F34Y7bkmP9GsZB1ty4zd3Y4LEx5080axHJIOwf
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="350794022"
+  bh=f9V7SbrwPjXKciTI6XkQ7HD2l8eL2xoaosxJRCAhOIM=;
+  b=jvwHtiE16Qyb/wBxSQkkzVqLcyPjGFngCHOztIopCBgdNWPdgEwZKqf5
+   6aUPNhYFZjx+BES44M3B4dpco/EmauLq/k1w+2JgUQ/hbppTDcRCf80t4
+   vFxQy0Le3BiaP0ul5ajdjZFa6xlEGeG0UCj9Q9BwlCxF/6GaPIc69Rm86
+   hQk6q+nPZtvNQYfGJFzykNPXvaHnqOVXeZYZ8iesVvtOdORhhk3F6YufQ
+   r4IZezg051hXxvEaDT/6fC58BCcWM+U2QsShWgIM0JHLKtqk9EVSmPFSx
+   tCvk9BQMbzLwdUcQVodkKnmnTSpxDkUqQxtRPBPbzkVUsDOjWkFy2V9ZW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="385898577"
 X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
-   d="scan'208";a="350794022"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 15:46:32 -0800
+   d="scan'208";a="385898577"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 17:37:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="800002968"
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="726137737"
 X-IronPort-AV: E=Sophos;i="5.96,318,1665471600"; 
-   d="scan'208";a="800002968"
+   d="scan'208";a="726137737"
 Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Jan 2023 15:46:28 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 11 Jan 2023 17:37:32 -0800
 Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pFknb-0009d4-3D;
-	Wed, 11 Jan 2023 23:46:28 +0000
-Date: Thu, 12 Jan 2023 07:45:46 +0800
+	id 1pFmX6-0009gc-07;
+	Thu, 12 Jan 2023 01:37:32 +0000
+Date: Thu, 12 Jan 2023 09:36:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
+To: Jan Kara <jack@suse.cz>, Ted Tso <tytso@mit.edu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ross Zwisler <zwisler@google.com>
-Subject: Re: [PATCH 4/4] tracing: Allow boot instances to have snapshot
- buffers
-Message-ID: <202301120725.JEfPJ1M8-lkp@intel.com>
-References: <20230111145842.847715402@goodmis.org>
+	linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH 3/7] ext4: Mark page for delayed dirtying only if it is
+ pinned
+Message-ID: <202301120928.qFoMWeyi-lkp@intel.com>
+References: <20230111154338.392-3-jack@suse.cz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="18aWA61wSQkqNZbj"
+Content-Type: multipart/mixed; boundary="3mrunVgd+EdLa4tv"
 Content-Disposition: inline
-In-Reply-To: <20230111145842.847715402@goodmis.org>
+In-Reply-To: <20230111154338.392-3-jack@suse.cz>
 
 
---18aWA61wSQkqNZbj
+--3mrunVgd+EdLa4tv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Steven,
+Hi Jan,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test ERROR on tytso-ext4/dev]
 [also build test ERROR on linus/master v6.2-rc3 next-20230111]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-Add-creation-of-instances-at-boot-command-line/20230111-230425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230111145842.847715402%40goodmis.org
-patch subject: [PATCH 4/4] tracing: Allow boot instances to have snapshot buffers
+url:    https://github.com/intel-lab-lkp/linux/commits/Jan-Kara/ext4-Update-stale-comment-about-write-constraints/20230111-234837
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230111154338.392-3-jack%40suse.cz
+patch subject: [PATCH 3/7] ext4: Mark page for delayed dirtying only if it is pinned
 config: i386-randconfig-a002
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b4515aa1407184147348b74b42bf10af90b905e7
+        # https://github.com/intel-lab-lkp/linux/commit/d96cf5a515c2cfae084227d197c80e53683c1cf8
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Rostedt/tracing-Add-creation-of-instances-at-boot-command-line/20230111-230425
-        git checkout b4515aa1407184147348b74b42bf10af90b905e7
+        git fetch --no-tags linux-review Jan-Kara/ext4-Update-stale-comment-about-write-constraints/20230111-234837
+        git checkout d96cf5a515c2cfae084227d197c80e53683c1cf8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/trace.c:10244:4: error: implicit declaration of function 'do_allocate_snapshot' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           do_allocate_snapshot(tok);
-                           ^
-   kernel/trace/trace.c:10244:4: note: did you mean 'boot_alloc_snapshot'?
-   kernel/trace/trace.c:232:19: note: 'boot_alloc_snapshot' declared here
-   static int __init boot_alloc_snapshot(char *str)
-                     ^
+>> fs/ext4/inode.c:3691:6: error: implicit declaration of function 'folio_may_be_dma_pinned' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (folio_may_be_dma_pinned(folio))
+               ^
+   fs/ext4/inode.c:3691:6: note: did you mean 'folio_maybe_dma_pinned'?
+   include/linux/mm.h:1562:20: note: 'folio_maybe_dma_pinned' declared here
+   static inline bool folio_maybe_dma_pinned(struct folio *folio)
+                      ^
    1 error generated.
 
 
-vim +/do_allocate_snapshot +10244 kernel/trace/trace.c
+vim +/folio_may_be_dma_pinned +3691 fs/ext4/inode.c
 
- 10227	
- 10228	__init static void enable_instances(void)
- 10229	{
- 10230		struct trace_array *tr;
- 10231		char *curr_str;
- 10232		char *str;
- 10233		char *tok;
- 10234	
- 10235		/* A tab is always appended */
- 10236		boot_instance_info[boot_instance_index - 1] = '\0';
- 10237		str = boot_instance_info;
- 10238	
- 10239		while ((curr_str = strsep(&str, "\t"))) {
- 10240	
- 10241			tok = strsep(&curr_str, ",");
- 10242	
- 10243			if (IS_ENABLED(CONFIG_TRACER_MAX_TRACE))
- 10244				do_allocate_snapshot(tok);
- 10245	
- 10246			tr = trace_array_get_by_name(tok);
- 10247			if (!tr) {
- 10248				pr_warn("Failed to create instance buffer %s\n", curr_str);
- 10249				continue;
- 10250			}
- 10251			/* Allow user space to delete it */
- 10252			trace_array_put(tr);
- 10253	
- 10254			while ((tok = strsep(&curr_str, ","))) {
- 10255				early_enable_events(tr, tok, true);
- 10256			}
- 10257		}
- 10258	}
- 10259	
+  3671	
+  3672	/*
+  3673	 * For data=journal mode, folio should be marked dirty only when it was
+  3674	 * writeably mapped. When that happens, it was already attached to the
+  3675	 * transaction and marked as jbddirty (we take care of this in
+  3676	 * ext4_page_mkwrite()). On transaction commit, we writeprotect page mappings
+  3677	 * so we should have nothing to do here, except for the case when someone
+  3678	 * had the page pinned and dirtied the page through this pin (e.g. by doing
+  3679	 * direct IO to it). In that case we'd need to attach buffers here to the
+  3680	 * transaction but we cannot due to lock ordering.  We cannot just dirty the
+  3681	 * folio and leave attached buffers clean, because the buffers' dirty state is
+  3682	 * "definitive".  We cannot just set the buffers dirty or jbddirty because all
+  3683	 * the journalling code will explode.  So what we do is to mark the folio
+  3684	 * "pending dirty" and next time ext4_writepages() is called, attach buffers
+  3685	 * to the transaction appropriately.
+  3686	 */
+  3687	static bool ext4_journalled_dirty_folio(struct address_space *mapping,
+  3688			struct folio *folio)
+  3689	{
+  3690		WARN_ON_ONCE(!folio_buffers(folio));
+> 3691		if (folio_may_be_dma_pinned(folio))
+  3692			folio_set_checked(folio);
+  3693		return filemap_dirty_folio(mapping, folio);
+  3694	}
+  3695	
 
 -- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests
 
---18aWA61wSQkqNZbj
+--3mrunVgd+EdLa4tv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/i386 6.2.0-rc1 Kernel Configuration
+# Linux/i386 6.1.0-rc4 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="clang version 14.0.6 (git://gitmirror/llvm_project f28c006a5895fc0e329fe15fead81e37457cb1d1)"
 CONFIG_GCC_VERSION=0
@@ -163,7 +151,6 @@ CONFIG_RUST_IS_AVAILABLE=y
 CONFIG_CC_CAN_LINK=y
 CONFIG_CC_CAN_LINK_STATIC=y
 CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
-CONFIG_CC_HAS_ASM_GOTO_TIED_OUTPUT=y
 CONFIG_TOOLS_SUPPORT_RELR=y
 CONFIG_CC_HAS_ASM_INLINE=y
 CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
@@ -374,7 +361,6 @@ CONFIG_INITRAMFS_PRESERVE_MTIME=y
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
 # CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
 CONFIG_LD_ORPHAN_WARN=y
-CONFIG_LD_ORPHAN_WARN_LEVEL="warn"
 CONFIG_SYSCTL=y
 CONFIG_HAVE_UID16=y
 CONFIG_SYSCTL_EXCEPTION_TRACE=y
@@ -402,7 +388,6 @@ CONFIG_IO_URING=y
 CONFIG_ADVISE_SYSCALLS=y
 # CONFIG_MEMBARRIER is not set
 CONFIG_KALLSYMS=y
-# CONFIG_KALLSYMS_SELFTEST is not set
 CONFIG_KALLSYMS_ALL=y
 CONFIG_KALLSYMS_BASE_RELATIVE=y
 CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
@@ -443,6 +428,7 @@ CONFIG_ARCH_MAY_HAVE_PC_FDC=y
 CONFIG_GENERIC_CALIBRATE_DELAY=y
 CONFIG_ARCH_HAS_CPU_RELAX=y
 CONFIG_ARCH_HIBERNATION_POSSIBLE=y
+CONFIG_ARCH_NR_GPIO=512
 CONFIG_ARCH_SUSPEND_POSSIBLE=y
 CONFIG_X86_32_SMP=y
 CONFIG_ARCH_SUPPORTS_UPROBES=y
@@ -610,9 +596,6 @@ CONFIG_MODIFY_LDT_SYSCALL=y
 # CONFIG_STRICT_SIGALTSTACK_SIZE is not set
 # end of Processor type and features
 
-CONFIG_CC_HAS_ENTRY_PADDING=y
-CONFIG_FUNCTION_PADDING_CFI=11
-CONFIG_FUNCTION_PADDING_BYTES=16
 CONFIG_SPECULATION_MITIGATIONS=y
 # CONFIG_RETPOLINE is not set
 CONFIG_ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE=y
@@ -683,7 +666,6 @@ CONFIG_HAVE_ACPI_APEI_NMI=y
 # CONFIG_ACPI_APEI is not set
 # CONFIG_ACPI_DPTF is not set
 # CONFIG_ACPI_CONFIGFS is not set
-# CONFIG_ACPI_FFH is not set
 # CONFIG_PMIC_OPREGION is not set
 CONFIG_X86_PM_TIMER=y
 # CONFIG_APM is not set
@@ -806,7 +788,6 @@ CONFIG_KVM=y
 CONFIG_KVM_WERROR=y
 CONFIG_KVM_INTEL=m
 # CONFIG_KVM_AMD is not set
-CONFIG_KVM_SMM=y
 # CONFIG_KVM_XEN is not set
 CONFIG_AS_AVX512=y
 CONFIG_AS_SHA1_NI=y
@@ -865,7 +846,6 @@ CONFIG_MMU_GATHER_TABLE_FREE=y
 CONFIG_MMU_GATHER_RCU_TABLE_FREE=y
 CONFIG_MMU_GATHER_MERGE_VMAS=y
 CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
-CONFIG_ARCH_HAS_NMI_SAFE_THIS_CPU_OPS=y
 CONFIG_HAVE_ALIGNED_STRUCT_PAGE=y
 CONFIG_HAVE_CMPXCHG_LOCAL=y
 CONFIG_HAVE_CMPXCHG_DOUBLE=y
@@ -926,9 +906,6 @@ CONFIG_GCOV_PROFILE_ALL=y
 # end of GCOV-based kernel profiling
 
 CONFIG_HAVE_GCC_PLUGINS=y
-CONFIG_FUNCTION_ALIGNMENT_4B=y
-CONFIG_FUNCTION_ALIGNMENT_16B=y
-CONFIG_FUNCTION_ALIGNMENT=16
 # end of General architecture-dependent options
 
 CONFIG_RT_MUTEXES=y
@@ -1056,15 +1033,13 @@ CONFIG_ZBUD=y
 CONFIG_Z3FOLD=y
 CONFIG_ZSMALLOC=y
 CONFIG_ZSMALLOC_STAT=y
-CONFIG_ZSMALLOC_CHAIN_SIZE=8
 
 #
 # SLAB allocator options
 #
 # CONFIG_SLAB is not set
 CONFIG_SLUB=y
-# CONFIG_SLOB_DEPRECATED is not set
-# CONFIG_SLUB_TINY is not set
+# CONFIG_SLOB is not set
 CONFIG_SLAB_MERGE_DEFAULT=y
 # CONFIG_SLAB_FREELIST_RANDOM is not set
 CONFIG_SLAB_FREELIST_HARDENED=y
@@ -1161,7 +1136,6 @@ CONFIG_NET_IP_TUNNEL=y
 # CONFIG_INET_AH is not set
 # CONFIG_INET_ESP is not set
 # CONFIG_INET_IPCOMP is not set
-CONFIG_INET_TABLE_PERTURB_ORDER=16
 CONFIG_INET_TUNNEL=y
 CONFIG_INET_DIAG=y
 CONFIG_INET_TCP_DIAG=y
@@ -1638,6 +1612,7 @@ CONFIG_BLK_DEV=y
 # CONFIG_BLK_DEV_DRBD is not set
 # CONFIG_BLK_DEV_NBD is not set
 # CONFIG_BLK_DEV_RAM is not set
+# CONFIG_CDROM_PKTCDVD is not set
 # CONFIG_ATA_OVER_ETH is not set
 # CONFIG_VIRTIO_BLK is not set
 # CONFIG_BLK_DEV_RBD is not set
@@ -2031,11 +2006,11 @@ CONFIG_NET_VENDOR_MICROCHIP=y
 # CONFIG_ENC28J60 is not set
 # CONFIG_ENCX24J600 is not set
 # CONFIG_LAN743X is not set
-# CONFIG_VCAP is not set
 CONFIG_NET_VENDOR_MICROSEMI=y
 CONFIG_NET_VENDOR_MICROSOFT=y
 CONFIG_NET_VENDOR_MYRI=y
 # CONFIG_MYRI10GE is not set
+# CONFIG_FEALNX is not set
 CONFIG_NET_VENDOR_NI=y
 # CONFIG_NI_XGE_MANAGEMENT_ENET is not set
 CONFIG_NET_VENDOR_NATSEMI=y
@@ -2328,7 +2303,6 @@ CONFIG_TOUCHSCREEN_CHIPONE_ICN8318=m
 CONFIG_TOUCHSCREEN_CYTTSP4_CORE=m
 # CONFIG_TOUCHSCREEN_CYTTSP4_I2C is not set
 CONFIG_TOUCHSCREEN_CYTTSP4_SPI=m
-# CONFIG_TOUCHSCREEN_CYTTSP5 is not set
 CONFIG_TOUCHSCREEN_DA9052=m
 # CONFIG_TOUCHSCREEN_DYNAPRO is not set
 CONFIG_TOUCHSCREEN_HAMPSHIRE=y
@@ -2340,7 +2314,6 @@ CONFIG_TOUCHSCREEN_FUJITSU=m
 # CONFIG_TOUCHSCREEN_GOODIX is not set
 CONFIG_TOUCHSCREEN_HIDEEP=m
 CONFIG_TOUCHSCREEN_HYCON_HY46XX=m
-# CONFIG_TOUCHSCREEN_HYNITRON_CSTXXX is not set
 CONFIG_TOUCHSCREEN_ILI210X=m
 CONFIG_TOUCHSCREEN_ILITEK=m
 CONFIG_TOUCHSCREEN_S6SY761=y
@@ -2407,7 +2380,6 @@ CONFIG_TOUCHSCREEN_ZFORCE=m
 # CONFIG_TOUCHSCREEN_ROHM_BU21023 is not set
 CONFIG_TOUCHSCREEN_IQS5XX=y
 # CONFIG_TOUCHSCREEN_ZINITIX is not set
-# CONFIG_TOUCHSCREEN_HIMAX_HX83112B is not set
 # CONFIG_INPUT_MISC is not set
 CONFIG_RMI4_CORE=m
 CONFIG_RMI4_I2C=m
@@ -2455,7 +2427,6 @@ CONFIG_TTY=y
 # CONFIG_VT is not set
 CONFIG_UNIX98_PTYS=y
 # CONFIG_LEGACY_PTYS is not set
-CONFIG_LEGACY_TIOCSTI=y
 # CONFIG_LDISC_AUTOLOAD is not set
 
 #
@@ -2540,7 +2511,6 @@ CONFIG_IPMI_SI=y
 CONFIG_IPMI_IPMB=y
 CONFIG_IPMI_WATCHDOG=y
 CONFIG_IPMI_POWEROFF=y
-# CONFIG_SSIF_IPMI_BMC is not set
 CONFIG_IPMB_DEVICE_INTERFACE=m
 CONFIG_HW_RANDOM=y
 # CONFIG_HW_RANDOM_TIMERIOMEM is not set
@@ -2579,6 +2549,8 @@ CONFIG_XILLYBUS_CLASS=m
 CONFIG_XILLYBUS=m
 CONFIG_XILLYBUS_OF=m
 CONFIG_XILLYUSB=m
+CONFIG_RANDOM_TRUST_CPU=y
+CONFIG_RANDOM_TRUST_BOOTLOADER=y
 # end of Character devices
 
 #
@@ -2723,12 +2695,10 @@ CONFIG_SPI_GPIO=y
 # CONFIG_SPI_MICROCHIP_CORE_QSPI is not set
 # CONFIG_SPI_LANTIQ_SSC is not set
 CONFIG_SPI_OC_TINY=m
-# CONFIG_SPI_PCI1XXXX is not set
 # CONFIG_SPI_PXA2XX is not set
 CONFIG_SPI_ROCKCHIP=m
 # CONFIG_SPI_SC18IS602 is not set
 CONFIG_SPI_SIFIVE=y
-# CONFIG_SPI_SN_F_OSPI is not set
 CONFIG_SPI_MXIC=m
 # CONFIG_SPI_TOPCLIFF_PCH is not set
 CONFIG_SPI_XCOMM=y
@@ -2954,7 +2924,6 @@ CONFIG_GPIO_XRA1403=y
 # Virtual GPIO drivers
 #
 CONFIG_GPIO_AGGREGATOR=y
-# CONFIG_GPIO_LATCH is not set
 CONFIG_GPIO_MOCKUP=m
 # CONFIG_GPIO_VIRTIO is not set
 # CONFIG_GPIO_SIM is not set
@@ -3198,9 +3167,6 @@ CONFIG_SENSORS_NCT7904=m
 CONFIG_SENSORS_NPCM7XX=m
 CONFIG_SENSORS_NZXT_KRAKEN2=m
 # CONFIG_SENSORS_NZXT_SMART2 is not set
-# CONFIG_SENSORS_OCC_P8_I2C is not set
-# CONFIG_SENSORS_OCC_P9_SBE is not set
-# CONFIG_SENSORS_OXP is not set
 CONFIG_SENSORS_PCF8591=m
 # CONFIG_PMBUS is not set
 # CONFIG_SENSORS_PWM_FAN is not set
@@ -3346,7 +3312,6 @@ CONFIG_MAX77620_WATCHDOG=m
 CONFIG_STPMIC1_WATCHDOG=m
 CONFIG_ACQUIRE_WDT=m
 CONFIG_ADVANTECH_WDT=m
-# CONFIG_ADVANTECH_EC_WDT is not set
 # CONFIG_ALIM1535_WDT is not set
 # CONFIG_ALIM7101_WDT is not set
 CONFIG_EBC_C384_WDT=m
@@ -3412,7 +3377,6 @@ CONFIG_MFD_CORE=y
 # CONFIG_MFD_CS5535 is not set
 # CONFIG_MFD_ACT8945A is not set
 CONFIG_MFD_AS3711=y
-# CONFIG_MFD_SMPRO is not set
 CONFIG_MFD_AS3722=m
 # CONFIG_PMIC_ADP5520 is not set
 CONFIG_MFD_AAT2870_CORE=y
@@ -3445,6 +3409,7 @@ CONFIG_MFD_MP2629=m
 # CONFIG_MFD_HI6421_PMIC is not set
 CONFIG_MFD_HI6421_SPMI=m
 # CONFIG_HTC_PASIC3 is not set
+# CONFIG_HTC_I2CPLD is not set
 # CONFIG_MFD_INTEL_QUARK_I2C_GPIO is not set
 # CONFIG_LPC_ICH is not set
 # CONFIG_LPC_SCH is not set
@@ -3508,7 +3473,6 @@ CONFIG_MFD_TPS65217=m
 CONFIG_MFD_TI_LP873X=y
 CONFIG_MFD_TI_LP87565=y
 CONFIG_MFD_TPS65218=y
-# CONFIG_MFD_TPS65219 is not set
 CONFIG_MFD_TPS6586X=y
 CONFIG_MFD_TPS65910=y
 CONFIG_MFD_TPS65912=y
@@ -3616,7 +3580,6 @@ CONFIG_REGULATOR_MT6315=m
 CONFIG_REGULATOR_MT6323=m
 # CONFIG_REGULATOR_MT6331 is not set
 # CONFIG_REGULATOR_MT6332 is not set
-# CONFIG_REGULATOR_MT6357 is not set
 CONFIG_REGULATOR_MT6358=m
 CONFIG_REGULATOR_MT6359=m
 # CONFIG_REGULATOR_MT6397 is not set
@@ -3640,7 +3603,6 @@ CONFIG_REGULATOR_RT5033=m
 # CONFIG_REGULATOR_RT5190A is not set
 # CONFIG_REGULATOR_RT5759 is not set
 CONFIG_REGULATOR_RT6160=m
-# CONFIG_REGULATOR_RT6190 is not set
 # CONFIG_REGULATOR_RT6245 is not set
 CONFIG_REGULATOR_RTQ2134=m
 CONFIG_REGULATOR_RTMV20=m
@@ -3693,7 +3655,6 @@ CONFIG_USB_RAINSHADOW_CEC=y
 # Graphics support
 #
 CONFIG_APERTURE_HELPERS=y
-CONFIG_VIDEO_NOMODESET=y
 # CONFIG_AGP is not set
 # CONFIG_VGA_SWITCHEROO is not set
 CONFIG_DRM=m
@@ -3744,7 +3705,7 @@ CONFIG_DRM_UDL=m
 # CONFIG_DRM_MGAG200 is not set
 CONFIG_DRM_RCAR_DW_HDMI=m
 # CONFIG_DRM_RCAR_USE_LVDS is not set
-# CONFIG_DRM_RCAR_USE_MIPI_DSI is not set
+# CONFIG_DRM_RCAR_MIPI_DSI is not set
 # CONFIG_DRM_QXL is not set
 # CONFIG_DRM_VIRTIO_GPU is not set
 CONFIG_DRM_PANEL=y
@@ -3771,7 +3732,6 @@ CONFIG_DRM_PANEL_ILITEK_ILI9341=m
 # CONFIG_DRM_PANEL_ILITEK_ILI9881C is not set
 CONFIG_DRM_PANEL_INNOLUX_EJ030NA=m
 CONFIG_DRM_PANEL_INNOLUX_P079ZCA=m
-# CONFIG_DRM_PANEL_JADARD_JD9365DA_H3 is not set
 CONFIG_DRM_PANEL_JDI_LT070ME05000=m
 # CONFIG_DRM_PANEL_JDI_R63452 is not set
 CONFIG_DRM_PANEL_KHADAS_TS050=m
@@ -3782,7 +3742,6 @@ CONFIG_DRM_PANEL_SAMSUNG_LD9040=m
 CONFIG_DRM_PANEL_LG_LB035Q02=m
 CONFIG_DRM_PANEL_LG_LG4573=m
 CONFIG_DRM_PANEL_NEC_NL8048HL11=m
-# CONFIG_DRM_PANEL_NEWVISION_NV3051D is not set
 # CONFIG_DRM_PANEL_NEWVISION_NV3052C is not set
 # CONFIG_DRM_PANEL_NOVATEK_NT35510 is not set
 # CONFIG_DRM_PANEL_NOVATEK_NT35560 is not set
@@ -3899,6 +3858,7 @@ CONFIG_DRM_GUD=m
 # CONFIG_DRM_SSD130X is not set
 # CONFIG_DRM_LEGACY is not set
 CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=m
+CONFIG_DRM_NOMODESET=y
 
 #
 # Frame buffer Devices
@@ -4017,7 +3977,6 @@ CONFIG_HDMI=y
 # CONFIG_LOGO is not set
 # end of Graphics support
 
-# CONFIG_DRM_ACCEL is not set
 # CONFIG_SOUND is not set
 
 #
@@ -4200,6 +4159,7 @@ CONFIG_USB_C67X00_HCD=m
 # CONFIG_USB_EHCI_HCD is not set
 CONFIG_USB_OXU210HP_HCD=m
 CONFIG_USB_ISP116X_HCD=y
+# CONFIG_USB_FOTG210_HCD is not set
 CONFIG_USB_MAX3421_HCD=y
 CONFIG_USB_OHCI_HCD=m
 CONFIG_USB_OHCI_HCD_PCI=m
@@ -4235,10 +4195,6 @@ CONFIG_USB_TMC=y
 # CONFIG_USB_MDC800 is not set
 # CONFIG_USB_MICROTEK is not set
 # CONFIG_USBIP_CORE is not set
-
-#
-# USB dual-mode controller drivers
-#
 # CONFIG_USB_CDNS_SUPPORT is not set
 CONFIG_USB_MUSB_HDRC=m
 CONFIG_USB_MUSB_HOST=y
@@ -4381,6 +4337,7 @@ CONFIG_U_SERIAL_CONSOLE=y
 # USB Peripheral Controller
 #
 CONFIG_USB_FUSB300=m
+# CONFIG_USB_FOTG210_UDC is not set
 # CONFIG_USB_GR_UDC is not set
 # CONFIG_USB_R8A66597 is not set
 CONFIG_USB_PXA27X=y
@@ -4863,7 +4820,6 @@ CONFIG_CHROMEOS_PSTORE=m
 # CONFIG_CHROMEOS_TBMC is not set
 # CONFIG_CROS_EC is not set
 # CONFIG_CROS_KBD_LED_BACKLIGHT is not set
-# CONFIG_CROS_HPS_I2C is not set
 # CONFIG_CHROMEOS_PRIVACY_SCREEN is not set
 # CONFIG_MELLANOX_PLATFORM is not set
 CONFIG_OLPC_EC=y
@@ -4892,7 +4848,7 @@ CONFIG_DELL_SMO8800=m
 # CONFIG_FUJITSU_LAPTOP is not set
 # CONFIG_FUJITSU_TABLET is not set
 # CONFIG_GPD_POCKET_FAN is not set
-# CONFIG_X86_PLATFORM_DRIVERS_HP is not set
+# CONFIG_HP_ACCEL is not set
 # CONFIG_WIRELESS_HOTKEY is not set
 # CONFIG_IBM_RTL is not set
 # CONFIG_SENSORS_HDAPS is not set
@@ -4989,7 +4945,6 @@ CONFIG_IOMMU_DEFAULT_DMA_LAZY=y
 # CONFIG_IOMMU_DEFAULT_PASSTHROUGH is not set
 CONFIG_OF_IOMMU=y
 CONFIG_IOMMU_DMA=y
-# CONFIG_IOMMUFD is not set
 # CONFIG_VIRTIO_IOMMU is not set
 
 #
@@ -5151,8 +5106,6 @@ CONFIG_FXLS8962AF_I2C=m
 CONFIG_FXLS8962AF_SPI=y
 # CONFIG_HID_SENSOR_ACCEL_3D is not set
 # CONFIG_IIO_ST_ACCEL_3AXIS is not set
-# CONFIG_IIO_KX022A_SPI is not set
-# CONFIG_IIO_KX022A_I2C is not set
 CONFIG_KXSD9=m
 CONFIG_KXSD9_SPI=m
 # CONFIG_KXSD9_I2C is not set
@@ -5179,7 +5132,6 @@ CONFIG_STK8BA50=m
 # Analog to digital converters
 #
 CONFIG_AD_SIGMA_DELTA=m
-# CONFIG_AD4130 is not set
 CONFIG_AD7091R5=m
 # CONFIG_AD7124 is not set
 CONFIG_AD7192=m
@@ -5218,7 +5170,6 @@ CONFIG_MAX1027=y
 CONFIG_MAX11100=y
 CONFIG_MAX1118=m
 # CONFIG_MAX11205 is not set
-# CONFIG_MAX11410 is not set
 CONFIG_MAX1241=m
 CONFIG_MAX1363=m
 CONFIG_MAX9611=y
@@ -5260,7 +5211,6 @@ CONFIG_XILINX_XADC=y
 #
 # Analog to digital and digital to analog converters
 #
-# CONFIG_AD74115 is not set
 # CONFIG_AD74413R is not set
 # end of Analog to digital and digital to analog converters
 
@@ -5400,7 +5350,6 @@ CONFIG_VF610_DAC=m
 #
 CONFIG_ADF4350=m
 CONFIG_ADF4371=m
-# CONFIG_ADF4377 is not set
 CONFIG_ADMV1013=m
 # CONFIG_ADMV4420 is not set
 # CONFIG_ADRF6780 is not set
@@ -5692,7 +5641,6 @@ CONFIG_TMP007=y
 # CONFIG_TMP117 is not set
 # CONFIG_TSYS01 is not set
 # CONFIG_TSYS02D is not set
-# CONFIG_MAX30208 is not set
 CONFIG_MAX31856=y
 # CONFIG_MAX31865 is not set
 # end of Temperature sensors
@@ -5836,9 +5784,7 @@ CONFIG_FPGA_DFL_FME=m
 # CONFIG_FPGA_DFL_AFU is not set
 # CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000 is not set
 # CONFIG_FPGA_DFL_PCI is not set
-# CONFIG_FPGA_M10_BMC_SEC_UPDATE is not set
 # CONFIG_FPGA_MGR_MICROCHIP_SPI is not set
-# CONFIG_FPGA_MGR_LATTICE_SYSCONFIG_SPI is not set
 CONFIG_FSI=m
 # CONFIG_FSI_NEW_DEV_NODE is not set
 CONFIG_FSI_MASTER_GPIO=m
@@ -6223,6 +6169,7 @@ CONFIG_CRYPTO_MANAGER=y
 CONFIG_CRYPTO_MANAGER2=y
 # CONFIG_CRYPTO_USER is not set
 CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=y
+CONFIG_CRYPTO_GF128MUL=m
 CONFIG_CRYPTO_NULL=y
 CONFIG_CRYPTO_NULL2=y
 CONFIG_CRYPTO_PCRYPT=y
@@ -6418,7 +6365,6 @@ CONFIG_ARCH_USE_SYM_ANNOTATIONS=y
 #
 CONFIG_CRYPTO_LIB_UTILS=y
 CONFIG_CRYPTO_LIB_AES=y
-CONFIG_CRYPTO_LIB_GF128MUL=m
 CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
 CONFIG_CRYPTO_LIB_CHACHA_GENERIC=y
 CONFIG_CRYPTO_LIB_CHACHA=y
@@ -6517,7 +6463,6 @@ CONFIG_GENERIC_GETTIMEOFDAY=y
 CONFIG_GENERIC_VDSO_32=y
 CONFIG_GENERIC_VDSO_TIME_NS=y
 CONFIG_SG_POOL=y
-CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION=y
 CONFIG_ARCH_STACKWALK=y
 CONFIG_STACKDEPOT=y
 CONFIG_REF_TRACKER=y
@@ -6557,7 +6502,6 @@ CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 # CONFIG_DEBUG_INFO_DWARF4 is not set
 # CONFIG_DEBUG_INFO_DWARF5 is not set
 CONFIG_DEBUG_INFO_REDUCED=y
-CONFIG_DEBUG_INFO_COMPRESSED_NONE=y
 # CONFIG_DEBUG_INFO_SPLIT is not set
 CONFIG_PAHOLE_HAS_SPLIT_BTF=y
 CONFIG_PAHOLE_HAS_BTF_TAG=y
@@ -6753,7 +6697,6 @@ CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=0
 # CONFIG_DEBUG_WQ_FORCE_RR_CPU is not set
 # CONFIG_CPU_HOTPLUG_STATE_CONTROL is not set
 CONFIG_LATENCYTOP=y
-# CONFIG_DEBUG_CGROUP_REF is not set
 CONFIG_USER_STACKTRACE_SUPPORT=y
 CONFIG_NOP_TRACER=y
 CONFIG_HAVE_RETHOOK=y
@@ -6872,7 +6815,6 @@ CONFIG_FAILSLAB=y
 # CONFIG_FAULT_INJECTION_DEBUG_FS is not set
 CONFIG_CC_HAS_SANCOV_TRACE_PC=y
 CONFIG_RUNTIME_TESTING_MENU=y
-# CONFIG_TEST_DHRY is not set
 # CONFIG_LKDTM is not set
 # CONFIG_TEST_MIN_HEAP is not set
 # CONFIG_TEST_DIV64 is not set
@@ -6886,14 +6828,15 @@ CONFIG_RUNTIME_TESTING_MENU=y
 # CONFIG_TEST_HEXDUMP is not set
 # CONFIG_STRING_SELFTEST is not set
 # CONFIG_TEST_STRING_HELPERS is not set
+# CONFIG_TEST_STRSCPY is not set
 # CONFIG_TEST_KSTRTOX is not set
 # CONFIG_TEST_PRINTF is not set
 # CONFIG_TEST_SCANF is not set
 # CONFIG_TEST_BITMAP is not set
 # CONFIG_TEST_UUID is not set
 # CONFIG_TEST_XARRAY is not set
-# CONFIG_TEST_MAPLE_TREE is not set
 # CONFIG_TEST_RHASHTABLE is not set
+# CONFIG_TEST_SIPHASH is not set
 # CONFIG_TEST_IDA is not set
 # CONFIG_TEST_LKM is not set
 # CONFIG_TEST_BITOPS is not set
@@ -6924,4 +6867,4 @@ CONFIG_MEMTEST=y
 # end of Rust hacking
 # end of Kernel hacking
 
---18aWA61wSQkqNZbj--
+--3mrunVgd+EdLa4tv--
