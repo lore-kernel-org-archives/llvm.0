@@ -1,61 +1,63 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799552F33
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 22:49:52 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id a14-20020a5b0ace000000b007bf99065fcbso12790647ybr.2
-        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 14:49:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0F38F66
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 22:49:53 +0000 (UTC)
+Received: by mail-pf1-f201.google.com with SMTP id bq10-20020a056a000e0a00b00581221976c0so9256148pfb.10
+        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 14:49:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=k1JPjbOQ3twwCwVlAFBMY3qVvPpY8UbYSrJ/ZH6BzqQ=;
-        b=C+6arahpXofsQ4/5TXoa5s3dPh2/+h8+T6vNr8Xm5Jzn0MJecvYKer2be4zi2BsNve
-         JNselWBnbBC2Yu/KP5VtuxgjMhAKTon4iLNvFm1eT394OkJVIk1JADYH4isIkJJQp/8T
-         2zd0rr+pPM4ZkdrjTEEqcR3XhFVlLAnQrpHO8lHul3nEVnyINw44zayX3Si6aU4UGNg9
-         l04lOd8ptfdISM/pmHbTFbGnTM2UGvY8qQBcUo98YoSt7MdmGRHknYOGUhtnsbKKSw9m
-         rpWntd0bbcM6dihybhM9aDSCiXv5ulT3gjPJvSKpwqa8aCs3J3ZBVTojp2FCBoomNZgL
-         IRkA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=krOkhLT+c7U46nktWLemrW1bS9Yrnn+8SFntyDlkQac=;
+        b=QTK4nSUmuxy+1J35jcLAd518bIk7u1ZRts53DRc59ez2TYPhG7P4A+G8LrOzOvVg5l
+         XICuTPpLTuo2N81UUVWtWGP4g603in2GlUecwbD3oBurd0VOHeN1/m3u7DB243M6ge9I
+         b++NQso6tX2ypDaqddh24rZVPZJL32vyQzhwH1PDNuLtNJwJA2yawRzibA7+OY/Bsp0U
+         Fpq9nl8bgW1IMJxmmNjZinG0kf5D3V9feHhQs5Ozk4xGG9WtkbiiVwT9olcv3+k5D38R
+         HhmAbG0e0W2zS4dLtTXGI00NuCuwDKUU03m0zurJ9usQr7jNk71/O5aKE0Uupyxi38vr
+         xULg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k1JPjbOQ3twwCwVlAFBMY3qVvPpY8UbYSrJ/ZH6BzqQ=;
-        b=gVhfpJMjUAgDrhn0iz0WtD7ou0zXvl28ZHGRNtaqtv2qr2uPGvgHD+98MTPcyn+nET
-         HJZA5VM2hCOb1CnckNievxmO8GyTWqvy9HnmSu01Vy9qcwt5awamf9ThK1zsRmPZjw0t
-         v8hZmx8ICObaoEb6oq7tf1DQe+oFa+LnLmcPfSdNlJYoMS+5wqs+9qZXh+tQvnm2qpeq
-         +S10LjdHzsnClgSzO6leu5JwZgWfOceVBn2vDXapTcAtu417MjeRr8/f96RadhbUiiHT
-         0B1r5KqC9ehadljI9l4BA+8m0TIm5UBKebZ3ztqaIHBsjms/fq6UyRPhXcDZbYXSdCDx
-         KcsQ==
-X-Gm-Message-State: AFqh2kqvMjSfeLpmj0h9pKM8hEx1Vpb/dPNxK7iOaL3DDfikTdhNcPWP
-	BEO6f8gxTP0xKmenxa3ZlmTVKV2iXRcj0rcgd3M=
-X-Google-Smtp-Source: AMrXdXuAS6TrhA/thn+Y88sZDTak+5v33qq9KMGKa2v/rKCpkx1Gac8Y4xEDv2MpYAI/XqvE328cUwFnFiyqV12HiaY=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=krOkhLT+c7U46nktWLemrW1bS9Yrnn+8SFntyDlkQac=;
+        b=O1lotCQZxPMKWyu/Xsfms/lTfZlzXUyDWd8m46Vy+EhlNI5REw/ibUn4sf1sQNsk0Z
+         neCPblmyDHNx170uBG0WFhv7HCWN9Xz5/0zDM+atIrDqem1lu6XI81HTP30zw40O9E6D
+         5WWYbUHkY27bLKHb5uKXwaPJPx/LbjQl1TqhclSQXUniZGwkDnrBCRsI72jcbjjrEouw
+         pnfeWTieEtgRwhQ3hkBwb7vqo+Rs9+XcyvPRwCLTUxG2vmWNXbepM5TQWMMmaDQtksl+
+         Kh+XownT0u0E5hSXsspLuuehQXUFHE++Mch10JKXlQmP4pHYZ9mfNvy/acKY96kD7l81
+         3Gig==
+X-Gm-Message-State: AFqh2kq+VaESMNFzrGBkd40s0YnACRleH/mlXwL6TZCX4f/u2fz6RRHA
+	lvo7vcHW2pS7Z0iAvnL21Sv5lwlLsKvkdIplzkk=
+X-Google-Smtp-Source: AMrXdXt3bTqmMIgY22mEuRxBHVyyH/cxAfO4FD/JNlNClzeThq9oHGhDyk94Ewfp3blP1epRjxbjP4avGteI2bCJQ6A=
 X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a05:690c:291:b0:498:693d:c342 with
- SMTP id bf17-20020a05690c029100b00498693dc342mr5155044ywb.468.1673563791533;
- Thu, 12 Jan 2023 14:49:51 -0800 (PST)
-Date: Thu, 12 Jan 2023 22:49:47 +0000
+ (user=samitolvanen job=sendgmr) by 2002:a62:55c3:0:b0:576:b4ce:42b4 with SMTP
+ id j186-20020a6255c3000000b00576b4ce42b4mr5678543pfb.61.1673563792959; Thu,
+ 12 Jan 2023 14:49:52 -0800 (PST)
+Date: Thu, 12 Jan 2023 22:49:48 +0000
+In-Reply-To: <20230112224948.1479453-1-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20230112224948.1479453-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=759; i=samitolvanen@google.com;
- h=from:subject; bh=FjTRhLA9CePRZYIdtY20ypwiouGtoz1QdaFB6TOg7Dk=;
- b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjwI6MpoLvqaH1V7mD24emzCXHeOJafLjsjoDYdvtk
- w53TaaCJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCY8COjAAKCRBMtfaEi7xW7j6mDA
- CpsD+W/2uCHxg43p5GFPtc6hB7gf2sNnjbX2olMo/N1oymT0eWYLML9jzn/VYWqCKq5EgkFErYf2cJ
- kjcO5VHj8yDo0bmAbyRJTbkkxP1zJNSRk98PeKc/ZkxFrVRYNuFODO3VXj1qPP8zSNeheAkgh2z2+I
- od+5+9Zl2dYE9QJZNb50qmsrGMUFjkmo2xXw/xp/4I/5h1QUIcupcspXeIbgRQAuRjx+lQXatiAKcA
- WZoMscSUh7J4ZzMlF/kFjS5RTHgc7atL++s1AyCTo4/6dD8GgOKpwKJQ66cA7LnPDJP98uRNuCZDxG
- qjuWdF3l+PPSVqDsRQjW71TZy8EWOXA7Td8Zz3fR2voTPwi2MFd+dksta3smkfsnZKepdnbZOL6QpB
- Bq5GXapBR/RDT9PRHan5wSAUi/h8xvbf+flIPBwBTAmISxC6zMo/WRNO86IrFjiTMkwipFcDrVxGhC
- Tfm0sg22++c5k0aBWdP+8uheSiAG1Wxo6KKZD80bSd+3A=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1985; i=samitolvanen@google.com;
+ h=from:subject; bh=aSZfn870i7k4AYxDF7PqueNLtd+APFuGBHTKsmwxabQ=;
+ b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBjwI6Mvhx8Oxw1AYEyInnbt2OtbnMq3R5QH8tnwyBU
+ SUDO5MqJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCY8COjAAKCRBMtfaEi7xW7t54C/
+ 9haN+wS+iX3MzxAKhMMfqlGPK+BBUu09OknboN/hvMycgG50DAjXulhQnaUr1e42QFEk3L93F4fhea
+ 4XgvwySRQMiHcwcUeXCwuTlUvo3HDAb4tODMIv0e7nlCbTQJxusOnk5tNyMuAVAyFobrKQIkVtA6ph
+ /Vyqh7rkUtGymkQt55HR4ngM93pvXyjnKhvir9La5L1rQxUEHNPfk4Exfa6GblSBErK083zNOrktHK
+ DC7092XdcelrXaAZ8+SQdGqiVb1kGTOXqCLxkV1dzXbEeqVNuIuBaQQyYbqVLohZmxGvfKz2RtxqRt
+ IJ93l/DuXunlEuW3fXbjrwUxW9lDtuKVcEx7XEFUV5qLpEtmXMmCLE9ObyWUy0bpwN/895k3DUlwNq
+ CjXpqm5UyUMjd4r7YQP0aoolx1BVBn8NYj1CeAhsUnmAkKob4v1IFXhtT1ZtWVYut+3VrQ35CUnQMS
+ 8Sz12h+mNkDMcXl/FZgJaYdYOt0L8p3yh/Zp5TOEhVOiE=
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230112224948.1479453-1-samitolvanen@google.com>
-Subject: [PATCH 0/1] Fix CFI hash randomization with KASAN
+Message-ID: <20230112224948.1479453-2-samitolvanen@google.com>
+Subject: [PATCH 1/1] kbuild: Fix CFI hash randomization with KASAN
 From: Sami Tolvanen <samitolvanen@google.com>
 To: "Peter Zijlstra (Intel)" <peterz@infradead.org>, Masahiro Yamada <masahiroy@kernel.org>
 Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
@@ -63,30 +65,54 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google
 	linux-kernel@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Peter, Masahiro,
+Clang emits a asan.module_ctor constructor to each object file
+when KASAN is enabled, and these functions are indirectly called
+in do_ctors. With CONFIG_CFI_CLANG, the compiler also emits a CFI
+type hash before each address-taken global function so they can
+pass indirect call checks.
 
-I noticed that KASAN+CFI fails to boot on x86_64 without
-cfi=norand. The randomization code is missing a couple of KASAN
-constructors in object files that are not part of vmlinux.o. This
-happens because we don't run objtool for the files, which means
-the type hashes are not included in the .cfi_sites section.
+However, in commit 0c3e806ec0f9 ("x86/cfi: Add boot time hash
+randomization"), x86 implemented boot time hash randomization,
+which relies on the .cfi_sites section generated by objtool. As
+objtool is run against vmlinux.o instead of individual object
+files with X86_KERNEL_IBT (enabled by default), CFI types in
+object files that are not part of vmlinux.o end up not being
+included in .cfi_sites, and thus won't get randomized and trip
+CFI when called.
 
-This patch simply disables KASAN for these files, which seems
-reasonable to me and fixes the boot issue, but perhaps you have
-better ideas?
+Only .vmlinux.export.o and init/version-timestamp.o are linked
+into vmlinux separately from vmlinux.o. As these files don't
+contain any functions, disable KASAN for both of them to avoid
+breaking hash randomization.
 
-Sami
-
-
-Sami Tolvanen (1):
-  kbuild: Fix CFI hash randomization with KASAN
-
+Link: https://github.com/ClangBuiltLinux/linux/issues/1742
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
  init/Makefile            | 1 +
  scripts/Makefile.vmlinux | 1 +
  2 files changed, 2 insertions(+)
 
-
-base-commit: c757fc92a3f73734872c7793b97f06434773d65d
+diff --git a/init/Makefile b/init/Makefile
+index 8316c23bead2..26de459006c4 100644
+--- a/init/Makefile
++++ b/init/Makefile
+@@ -59,3 +59,4 @@ include/generated/utsversion.h: FORCE
+ 
+ $(obj)/version-timestamp.o: include/generated/utsversion.h
+ CFLAGS_version-timestamp.o := -include include/generated/utsversion.h
++KASAN_SANITIZE_version-timestamp.o := n
+diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+index 49946cb96844..10176dec97ea 100644
+--- a/scripts/Makefile.vmlinux
++++ b/scripts/Makefile.vmlinux
+@@ -18,6 +18,7 @@ quiet_cmd_cc_o_c = CC      $@
+ 	$(call if_changed_dep,cc_o_c)
+ 
+ ifdef CONFIG_MODULES
++KASAN_SANITIZE_.vmlinux.export.o := n
+ targets += .vmlinux.export.o
+ vmlinux: .vmlinux.export.o
+ endif
 -- 
 2.39.0.314.g84b9a713c41-goog
 
