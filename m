@@ -1,36 +1,30 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812A08F44
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 20:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11268F44
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 21:15:27 +0000 (UTC)
 Received: from leknes.fjasle.eu ([46.142.98.230]) by mrelayeu.kundenserver.de
  (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N1gWU-1oaJdR0OV6-011wFY; Thu, 12 Jan 2023 21:40:49 +0100
+ 1MybbH-1oXIxD33rJ-00yxhc; Thu, 12 Jan 2023 22:14:50 +0100
 Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-	id 970333C1B9; Thu, 12 Jan 2023 21:40:45 +0100 (CET)
+	id C44983C1B9; Thu, 12 Jan 2023 22:14:44 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-	t=1673556047; bh=5lJd4UqMcvR4THZLV0UxZhYJKneRHMCk8SGHPphfMuY=;
+	t=1673558085; bh=ueaZ7qRmhwgL5Koba7sENAXlFnsBTsko001t+9SMGpg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u62/aBNH/kUtLAgLaEyfy71mGH3Z38lzADxJExxY0mylyi94Pzd+R+rYBojYtKc3D
-	 k5GNYFkKoUEQ0EXsT9xz0fRg2sjfU2f2Qx8i+SWmtm9qM8S8JVDRYUtsmk6SMK78W4
-	 tc625dJ4BO69sU85ecBCfYzdgR7vnwW7dWBiwJ38=
-Date: Thu, 12 Jan 2023 21:40:45 +0100
+	b=k4h/OuWEs9Km9rDpXkHnguFfrg87t6dAhMK0sBSMw2aVL6jI5VwcwFplpsbyWAgpw
+	 mpXrdzSyrwNa747F+H2ngHcXqJCLld9UwmAYyWBdyqrD8FimavMmaL1izdf/ZBBYJh
+	 X7bvQN5JcbLLfPwkN9u9NnrIWrjrkUGg839Kr3eQ=
+Date: Thu, 12 Jan 2023 22:14:44 +0100
 From: Nicolas Schier <nicolas@fjasle.eu>
-To: Ian Rogers <irogers@google.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Stephane Eranian <eranian@google.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH v3 3/3] objtool: Alter how HOSTCC is forced
-Message-ID: <Y8BwTdwuDiDpsKB+@fjasle.eu>
-References: <20230105090155.357604-1-irogers@google.com>
- <20230105090155.357604-4-irogers@google.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
+Message-ID: <Y8B4RJBg6FWuL1UL@fjasle.eu>
+References: <20230112023006.1873859-1-masahiroy@kernel.org>
+ <CAKwvOd=k=veNG=Q-bZxX4iX4q14e2ozO_sHZhdCz1+BwBxq=cQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,72 +32,270 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="hgmatHOWyR+UeKy1"
+	protocol="application/pgp-signature"; boundary="7ESul6TuRCN2yDNb"
 Content-Disposition: inline
-In-Reply-To: <20230105090155.357604-4-irogers@google.com>
-X-Provags-ID: V03:K1:wOccXVEvjaXr8f52saPXX3/F9hw7Zj2gIRO88AwcRt3v9E8Szov
- 7PMZ7F3P/IpLm1K/UHVI5Y+lKSgpgl6gkdZLnu1GmxheTeF8nhvd3dt2O3TtijVRxirGPRd
- J/i6wMdPweXePI9DnUwWSI/Sh39I4jJwfQ6U8Mzw/jbEc39AskQ2Jspoyi+fE2uEZPETSYD
- 4LgXaa8pRu9Pwomh8J8QQ==
+In-Reply-To: <CAKwvOd=k=veNG=Q-bZxX4iX4q14e2ozO_sHZhdCz1+BwBxq=cQ@mail.gmail.com>
+X-Provags-ID: V03:K1:0K7CqpWuSLqQclTR+kYZFUVmdYLjOFXqVF252IaUJDxOLJet7Kf
+ IQQ1jHo96wKJXbaZyifPDR6IB24eVYs1EW1yH66jhuuIuXkXT5fzJEz9zUneTZFF5ltCKuH
+ 4de8+CVUJ0lnkYH0kmk/Ub+MC1NhThB0gqCaQtunncJvmbiNoqI/18k0piVT4YcgW4kqLx0
+ WJIOpEr25xXugnyCtQf1w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:78iPcWj/3OI=;ypqrr4PiVC/+/feegckAqBTk/Q/
- RXS0FaiTSvX7ny32ur9SaFPxekAPIu2rrAy1gHr1JD9VPhop0sMoeS38dNWmZBJzetV51PwaQ
- /hwjzATbyegcdfe6g2P3xNVBMJN5efD+JBDXPQQjhY1pjj4p6y/Tecr2ubu5mK30A9E05yoT4
- qpPJabpMEAmaaIDQpFlvwfs/zV8bAGhzd5qVe5tomSyIFa4ODYgYRhSmGCqM3JcmRB73Eq4Co
- 8igPE3YRDl1WYaVczejP33OMcUJZnPVgQcrvB2fT5QPm6p/CWz1/camHTlLaoct8WlDfKIAsk
- 3wbN/AQ2Fmds/2n+exgP+lqahBX2zkZVfRAqoInjljoZL5fGLEpKtHwikOSKN01f40dvwO5N7
- vWJVAWET++U4+2ozMARDHc14Ko2oPpINO2G1YsJBa1Eet766o7St6toFPXDjKqLZfF+uwLKKI
- DFUmFjof+2dLqSHrX7sdCrtZhgpTmcs7TjIS8Cv24M4to9qNBh5V4xHUsOoZwWowyw8qEKzdo
- NUKnO+rXKWVsAA1ElJPL5MwlRgeVRhuNkI/6TodCBelS7pnO2zdEvBwyH97mLyLvx8lSCxTLJ
- KUokeOMwW3am29Hn8JHSJFe3j+GZS3sTWniv1HXPaJtw94hWzpEvHhR6z90s/XtYBgnrdZyZr
- ehERiPMLwxDo9xcvG302R2DRiJv3t3BEQNNqqCVBaA==
+UI-OutboundReport: notjunk:1;M01:P0:5cqQc5QMkeU=;CwxenqyaT0BVmvZjbrEgCKDUumk
+ jyTuK1iSVksPd7Dn35PgxhuVU9bpSMdyBeYbZVuCqibZOxLtl0fuztkDKadBDIrSGb+fmnrBI
+ XwHe+dBGwK/DzR40meSxVPxkECrgIkvBEjC8CThbR9bcspT7/adXksz+l2J5qk2RawiJseBL6
+ Ax6V/hU6a1mhJ9efc6eunkxYZD6BmEsgvKF7mzYRCkANHmZv4jzx8SxyOLcz2Nf7cd7C/4E0W
+ P2ROJS02X8UwRQvXvmlcubslQcoO67irr2HX4yQGr7IClLmxg6HVs3S9j836Iq4Z+Pg6XH4gh
+ rUKWkp5W/CGANZ0I5SFP3WevHDjqd4vMxFQxEFW36iaJM/aQYq0iScUEnW5lumV1+twysDx9z
+ nQWmaPOjZGXZZ3A2IlDkV3gPNwRTpQism9nNxq9rXh5OA9/kTsaBxj+iXXnbfvcioEBwHTR35
+ ZuEtXjmSrwLVVKE7LFrY669raqzdz9pogH1yq7RKHxN3jvl3tiNH/DpoMUIhSPbzUoIK8Xqjf
+ 8cfkyQNfUXXF6EU9D4MH3w3p+hnup3h40j9AmpAKQWXS8KEpcvj2uIzqYdkQACuHbtTh9YyZi
+ Q0RCSl1VPR5RO+rRjeavIhXoaBwt//87nyo1ShL6o5+Vl9pwAAec+bgnSSJxLPHMOx+wxzCNZ
+ s3P0YAWrPpuVpX2OYfOl/BxhbUdwzsbfI0Kv8eLRiw==
 
 
---hgmatHOWyR+UeKy1
-Content-Type: text/plain; charset=us-ascii
+--7ESul6TuRCN2yDNb
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 05, 2023 at 01:01:55AM -0800 Ian Rogers wrote:
-> HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
-> happens after tools/scripts/Makefile.include is included, meaning
-> flags are set assuming say CC is gcc, but then it can be later set to
-> HOSTCC which may be clang. tools/scripts/Makefile.include is needed
-> for host set up and common macros in objtool's Makefile. Rather than
-> override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
-> libsubcmd builds and the linkage step. This means the Makefiles don't
-> see things like CC changing and tool flag determination, and similar,
-> work properly. To avoid mixing CFLAGS from different compilers just
-> the objtool CFLAGS are determined with the exception of
-> EXTRA_WARNINGS. HOSTCFLAGS is added to these so that command line
-> flags can add to the CFLAGS.
+On Thu, Jan 12, 2023 at 10:55:45AM -0800 Nick Desaulniers wrote:
+> On Wed, Jan 11, 2023 at 6:30 PM Masahiro Yamada <masahiroy@kernel.org> wr=
+ote:
+> >
+> > In the follow-up of commit fb3041d61f68 ("kbuild: fix SIGPIPE error
+> > message for AR=3Dgcc-ar and AR=3Dllvm-ar"), Kees Cook pointed out that
+> > tools should _not_ catch their own SIGPIPEs [1] [2].
+> >
+> > Based on his feedback, LLVM was fixed [3].
+> >
+> > However, Python's default behavior is to show noisy bracktrace when
+> > SIGPIPE is sent. So, scripts written in Python are basically in the
+> > same situation as the buggy llvm tools.
+> >
+> > Example:
+> >
+> >   $ make -s allnoconfig
+> >   $ make -s allmodconfig
+> >   $ scripts/diffconfig .config.old .config | head -n1
+> >   -ALIX n
+> >   Traceback (most recent call last):
+> >     File "/home/masahiro/linux/scripts/diffconfig", line 132, in <modul=
+e>
+> >       main()
+> >     File "/home/masahiro/linux/scripts/diffconfig", line 130, in main
+> >       print_config("+", config, None, b[config])
+> >     File "/home/masahiro/linux/scripts/diffconfig", line 64, in print_c=
+onfig
+> >       print("+%s %s" % (config, new_value))
+> >   BrokenPipeError: [Errno 32] Broken pipe
+> >
+> > Python documentatin [4] notes how to make scripts die immediately and
 >=20
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/objtool/Makefile | 25 +++++++++++++++----------
->  1 file changed, 15 insertions(+), 10 deletions(-)
+> typo: s/documentatin/documentation/
 >=20
+> > silently:
+> >
+> >   """
+> >   Piping output of your program to tools like head(1) will cause a
+> >   SIGPIPE signal to be sent to your process when the receiver of its
+> >   standard output closes early. This results in an exception like
+> >   BrokenPipeError: [Errno 32] Broken pipe. To handle this case,
+> >   wrap your entry point to catch this exception as follows:
+> >
+> >     import os
+> >     import sys
+> >
+> >     def main():
+> >         try:
+> >             # simulate large output (your code replaces this loop)
+> >             for x in range(10000):
+> >                 print("y")
+> >             # flush output here to force SIGPIPE to be triggered
+> >             # while inside this try block.
+> >             sys.stdout.flush()
+> >         except BrokenPipeError:
+> >             # Python flushes standard streams on exit; redirect remaini=
+ng output
+> >             # to devnull to avoid another BrokenPipeError at shutdown
+> >             devnull =3D os.open(os.devnull, os.O_WRONLY)
+> >             os.dup2(devnull, sys.stdout.fileno())
+> >             sys.exit(1)  # Python exits with error code 1 on EPIPE
+> >
+> >     if __name__ =3D=3D '__main__':
+> >         main()
+> >
+> >   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avoid
+> >   BrokenPipeError. Doing that would cause your program to exit
+> >   unexpectedly whenever any socket connection is interrupted while
+> >   your program is still writing to it.
+> >   """
+> >
+> > Currently, tools/perf/scripts/python/intel-pt-events.py seems the
+
+Hi Masahiro,
+
+should it be "... seems to be the ..."? =20
 
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
---hgmatHOWyR+UeKy1
+> > only script that fixes the issue that way.
+> >
+> > tools/perf/scripts/python/compaction-times.py uses another approach
+> > signal.signal(signal.SIGPIPE, signal.SIG_DFL) but the Python
+> > documentation clearly says "Don't do it".
+> >
+> > I cannot fix all Python scripts since there are so many.
+> > I fixed some in the scripts/ directory.
+>=20
+> That's ok; "Rome wasn't built in a day." This is a good start!
+> Thank you for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>=20
+> >
+> > [1]: https://lore.kernel.org/all/202211161056.1B9611A@keescook/
+> > [2]: https://github.com/llvm/llvm-project/issues/59037
+> > [3]: https://github.com/llvm/llvm-project/commit/4787efa38066adb51e2c04=
+9499d25b3610c0877b
+> > [4]: https://docs.python.org/3/library/signal.html#note-on-sigpipe
+> >
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/checkkconfigsymbols.py         | 13 ++++++++++++-
+> >  scripts/clang-tools/run-clang-tools.py | 21 ++++++++++++++-------
+> >  scripts/diffconfig                     | 16 ++++++++++++++--
+> >  3 files changed, 40 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbo=
+ls.py
+> > index 217d21abc86e..36c920e71313 100755
+> > --- a/scripts/checkkconfigsymbols.py
+> > +++ b/scripts/checkkconfigsymbols.py
+> > @@ -115,7 +115,7 @@ def parse_options():
+> >      return args
+> >
+> >
+> > -def main():
+> > +def print_undefined_symbols():
+> >      """Main function of this module."""
+> >      args =3D parse_options()
+> >
+> > @@ -467,5 +467,16 @@ def parse_kconfig_file(kfile):
+> >      return defined, references
+> >
+> >
+> > +def main():
+> > +    try:
+> > +        print_undefined_symbols()
+> > +    except BrokenPipeError:
+> > +        # Python flushes standard streams on exit; redirect remaining =
+output
+> > +        # to devnull to avoid another BrokenPipeError at shutdown
+> > +        devnull =3D os.open(os.devnull, os.O_WRONLY)
+> > +        os.dup2(devnull, sys.stdout.fileno())
+> > +        sys.exit(1)  # Python exits with error code 1 on EPIPE
+> > +
+> > +
+> >  if __name__ =3D=3D "__main__":
+> >      main()
+> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-too=
+ls/run-clang-tools.py
+> > index 56f2ec8f0f40..3266708a8658 100755
+> > --- a/scripts/clang-tools/run-clang-tools.py
+> > +++ b/scripts/clang-tools/run-clang-tools.py
+> > @@ -61,14 +61,21 @@ def run_analysis(entry):
+> >
+> >
+> >  def main():
+> > -    args =3D parse_arguments()
+> > +    try:
+> > +        args =3D parse_arguments()
+> >
+> > -    lock =3D multiprocessing.Lock()
+> > -    pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lock=
+, args))
+> > -    # Read JSON data into the datastore variable
+> > -    with open(args.path, "r") as f:
+> > -        datastore =3D json.load(f)
+> > -        pool.map(run_analysis, datastore)
+> > +        lock =3D multiprocessing.Lock()
+> > +        pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(=
+lock, args))
+> > +        # Read JSON data into the datastore variable
+> > +        with open(args.path, "r") as f:
+> > +            datastore =3D json.load(f)
+> > +            pool.map(run_analysis, datastore)
+> > +    except BrokenPipeError:
+> > +        # Python flushes standard streams on exit; redirect remaining =
+output
+> > +        # to devnull to avoid another BrokenPipeError at shutdown
+> > +        devnull =3D os.open(os.devnull, os.O_WRONLY)
+> > +        os.dup2(devnull, sys.stdout.fileno())
+> > +        sys.exit(1)  # Python exits with error code 1 on EPIPE
+> >
+> >
+> >  if __name__ =3D=3D "__main__":
+> > diff --git a/scripts/diffconfig b/scripts/diffconfig
+> > index d5da5fa05d1d..43f0f3d273ae 100755
+> > --- a/scripts/diffconfig
+> > +++ b/scripts/diffconfig
+> > @@ -65,7 +65,7 @@ def print_config(op, config, value, new_value):
+> >          else:
+> >              print(" %s %s -> %s" % (config, value, new_value))
+> >
+> > -def main():
+> > +def show_diff():
+> >      global merge_style
+> >
+> >      # parse command line args
+> > @@ -129,4 +129,16 @@ def main():
+> >      for config in new:
+> >          print_config("+", config, None, b[config])
+> >
+> > -main()
+> > +def main():
+> > +    try:
+> > +        show_diff()
+> > +    except BrokenPipeError:
+> > +        # Python flushes standard streams on exit; redirect remaining =
+output
+> > +        # to devnull to avoid another BrokenPipeError at shutdown
+> > +        devnull =3D os.open(os.devnull, os.O_WRONLY)
+> > +        os.dup2(devnull, sys.stdout.fileno())
+> > +        sys.exit(1)  # Python exits with error code 1 on EPIPE
+> > +
+> > +
+> > +if __name__ =3D=3D '__main__':
+> > +    main()
+> > --
+> > 2.34.1
+> >
+>=20
+>=20
+> --=20
+> Thanks,
+> ~Nick Desaulniers
+
+
+--7ESul6TuRCN2yDNb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmPAcEwACgkQB1IKcBYm
-Eml90g//Qq0msUrlto/hLtRrjPmQVn/zodLU2GjxYShMzh26FxskQin/pu6eaH3a
-qvRk0sQXEireXfPSJKkjlgfeTc8qocUNx5ueOyl3B/ZPOEYfvn8dC+wGFB0yseOO
-SGiKChCk7mTpDvlieElc8dNwZsm7j1BWRwxMiXyviyR8K7JHndbAh2RvDu0ek4yM
-yFd3UOMAOX4wvz8m4Zwl2sqJXqGOSYkcvJWFs1PxpYJRpfjIrzbVVFd9LIkG0iKa
-jQQX0uHUxXzvSji2Ewz/iAFYvq5FKS25xAopL8Ms0p91h8jRoUYzg4qWTVezOM3Q
-QPXs5Af7EUiR8QwlvMCda3G0yaYC7g/rAX1zjQL/zndHbrnEj0RPr4CGa5ymQWsZ
-Hc+/ijjNQYKzu/h3y8hqtE1C14YwZzI6IiCHq9hmnUoD2pKah3CjRfCfR7fclJz9
-iQP/39VRBlCMQnIF7vuf1HdDzw6wRxMn0CXRLVq4AlnMXP2nPwCyphNsOnVGpelG
-ruExqeR44uNbB7kUdri0sTIUU95KyS0JXnOu3VhR8GmJ5NMjWgDxEBeUzNf8VbQE
-88rezTHCsYcCC2tE9q1qTxKc5DL+YcxZzLCDaqhSOnlVjrmgKJTIggXh72ca/LPm
-2xbd2z9MTA3dcPkIASh6ffcTCvbfRbBs51eCV46x4l3/3i/GAic=
-=egz2
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmPAeEMACgkQB1IKcBYm
+EmlO1Q/8D91AJiaysQV1sTZSYys92zoVSAW1yR+rr7ugnr1AWXspaS2qYKX39ppf
+Ur77qOaVuhW2s3eT+NO9JaVxL1va4/Y3KEklp+tQygoyz1C09TUih6XbR/YH7En0
+uk5oWVLNOSQ8p+2BxOsxEuP8VDYe4s42J4QsR2vgV/9GhuD9RAX37HhCSwkoQFwP
+ROP8mq4bFazar/uzod8r4e3b7F0eGOoRnAQkG+KwB7m5fLxrV/1faKW6JikEZIkN
+U3B4rMqzIYwjotA/aIe5ir+nz/7tNdNyaTkAffypIyymOwlCi6zTcWpmY5G0Wmfy
+Via88vVcZGFE1NBZFs5ZUvhlKkOvym739MvwRs6rpo+Jayu4dzyHgXZrR2nix/rp
+3GIPE9O28bCdOHfR4HJ5WgcfllaC1IHYYe05P3PM51I15PDyGp/YmCaScaydp+fL
+JyL7Z6RquaTGKDpNtksX3fZtR7p/bbFyUdHyo6VgotsfXxd7toCoKF4oat8tvJbo
+Qke6a3+7hu66MGeo2CwXlC6IVe88HBWh+qskm6cD4X3aS8kpURklaKbAOR9ceDHx
+6NmK/kpjVXAP/Plslb2J/gJM9m4qx72shawlpyLnH4x/DRn6ulxVYwLxTw+q251d
+sWKBnym4z7hWq8eqYy5HD620YdsuUMEX/inyRtAVVTvi8MAk6G0=
+=sgKe
 -----END PGP SIGNATURE-----
 
---hgmatHOWyR+UeKy1--
+--7ESul6TuRCN2yDNb--
