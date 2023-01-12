@@ -1,99 +1,147 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F4779F8
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 17:41:46 +0000 (UTC)
-Received: by mail-wm1-f50.google.com with SMTP id o15so13712925wmr.4
-        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 09:41:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D6D8468
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 18:03:09 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id s25so20192883lji.2
+        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 10:03:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=54IpTTLCvVxPXX0cuxhQWkS9k8SzAShMuo4+1zTXdSU=;
-        b=aFSBCj+Oeq9NCQMXQH6o+/4AuCAP25BuIZNDqxPfUDr8KwfVSHky63qo+yVM9P65lu
-         cgcOa1KUP9RQOB3hTDbV857Lb+30VhXq3Nvz0oI03HX8p+yoFfyXerazEU76tuTbVC6i
-         Yu6wrxI0q5DTviXs5LTrvjp2pRHiUuTQSNqyfA/wlmTWxfG1uSJ5/Or1d6aijdlpqKmw
-         fIk2S0CJI4RNBjBS7tX4Zt6D+dv/xil05Tt5Db2kxg7WzKXn0xTYA1j66FUAvIeiXN7D
-         zxxbwLQFon6IHRyfGaVbsqehpGpXG0sQ1FxJs2V8zj93ymxBxKcpTMg8gOlB17QWVy4f
-         VuSQ==
+        bh=Ndh3l6uBoXa06zj+WBg5LiMdLFR8aWNRgARJ4DfSidI=;
+        b=LmNrxNiZmnVFVPOM8BmikHO+4MdtaTs310NFHCrQYh4OmFV5ncP+XH0c5dQn01fuwx
+         n5W72KOXp97Bj7YGCaO+z3yCVVIFae1JbKOuUx15pk1F3J3j36/X+daLs+rGgB6Nu/6X
+         2YYgycZXiW3ADy31jqqUzgaR6RqVP6Z3joMShb/qD9lPd5woGyZKRdvyULhnqPp+KGTx
+         Ohq1acwDyvdHJ9p3h+pcfbKHd2I8DbNWwZazTj7QDILzRh2vWEl0UUdCyyY5e6w0G85o
+         hnqIlntQ6RfWEpqrc8MRRd3+k369cYBzvHCRGDUBXCY2cWVyRnAYwvfWQHJ92Xp9QFxr
+         9X7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=54IpTTLCvVxPXX0cuxhQWkS9k8SzAShMuo4+1zTXdSU=;
-        b=ozL8EMzy+eCKDtN59Hc5FfYrLNfkZRFlfLxlwACwwlPX2XkdD+cSr6IJbRs/jeKmcg
-         F1R8WtoumkCX5fQWQIFfZaK8PkQqOyMIQ/BIMiAmzHQtMTOWL3aT8Dn+GBuzWBuXbEYj
-         uQgGsKMr6q4mDqs5CcZGihVPpm9bEsV4JKgi0J0Pe8TAFGg2o5SXxBR3xZG2a9m8S4Fo
-         Ecz3f4vRVKitM+OqBTX9b13vWMaVQ6RrWmVE1MoreUDgQLv1DM5dZdwZCDCqEJtrg/y2
-         pyWAHaPB3+QRO0tkZmdve8+pM1xoB1IezHOp4HgDd78ejHuwu2Uy2MAOtX/LDzt9UKfh
-         6Ccw==
-X-Gm-Message-State: AFqh2koJJl1x45xvybi/MIh+8v38qKEO2GEnR5KYNDtbnjJnUMd+6mow
-	Q4CTvW8rpg6c3H1ozPnIOm4iz63Fh7aDrjfRWMhx2w==
-X-Google-Smtp-Source: AMrXdXuFZ2C7o7YbTwxkOSStFcLhjn763mSHYuDCjoxTnyQK4NOxZsXpWrL0qO3bnQp1ENxkqUNAH2M5UN1hDKAeMiI=
-X-Received: by 2002:a05:600c:3b04:b0:3d0:50c4:432c with SMTP id
- m4-20020a05600c3b0400b003d050c4432cmr3955313wms.67.1673545304812; Thu, 12 Jan
- 2023 09:41:44 -0800 (PST)
+        bh=Ndh3l6uBoXa06zj+WBg5LiMdLFR8aWNRgARJ4DfSidI=;
+        b=EMSBFoH2Jt+ujYZcDIr9JeuLFa9PvQmPnjRlXzvt/TQWDmTJGJ2V3kFF7gwkUZ0C1/
+         U7AvhLh1i+BDmZXTjSzwzVZBDkQW+/y8iROv03iUxTeO7om7Jbv4E9oreTiThyfy4gFP
+         sNAR4iVQYPEmnXW8oaAJjnQlJLJ7YzcbjKQ8Cmf+iT3ckyaLGG7p8an9HXOUHjeFDWT4
+         K7EtqSc1kxVtQh+8AN8JY+oHTM7r/tIdThLEcuR7yIDpjqHEjOQuJePaetb1H8OqYScE
+         FRYujXsk+0wFj6W/wDcKLnM3oHp5Kmx3/CLiGEz/wWoa54658ihrhkT22osY8Zn7nQk3
+         c7Qg==
+X-Gm-Message-State: AFqh2koFSo1UpbKagJ7qDZAAeVobmf5evr3F4RvSUFf9IZajkbJD1lTg
+	oddGXiis8D7PWc6B193vI4HGh/Y/HGCITtSHo+4=
+X-Google-Smtp-Source: AMrXdXuetufdJJeJC/X+XoCQxfcd8EltY+2hSGpOCciWaJv9pAZNP5cadqHRPbtuWDUUhvtwkyKs6ebexWS/akbSPeI=
+X-Received: by 2002:a05:651c:124f:b0:27f:c535:5ec2 with SMTP id
+ h15-20020a05651c124f00b0027fc5355ec2mr2707171ljh.204.1673546587258; Thu, 12
+ Jan 2023 10:03:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230105090155.357604-1-irogers@google.com>
-In-Reply-To: <20230105090155.357604-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 12 Jan 2023 09:41:31 -0800
-Message-ID: <CAP-5=fUmJutjku92vn_6OxLJZKJ60yhkS_XLbL7C7p_ska+xZw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] objtool build improvements
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Stephane Eranian <eranian@google.com>, Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org> <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org>
+In-Reply-To: <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Thu, 12 Jan 2023 19:02:30 +0100
+Message-ID: <CA+icZUUgq-dnSTRbdynPA8bEWg6SsCE9GYBMF6iViVmo9DfaFA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/14] powerpc/vdso: Improve linker flags
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu, 
+	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, 
+	linuxppc-dev@lists.ozlabs.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jan 5, 2023 at 1:02 AM Ian Rogers <irogers@google.com> wrote:
+On Thu, Jan 12, 2023 at 4:06 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Install libsubcmd and then get headers from there, this avoids
-> inadvertent dependencies on things in tools/lib. Fix V=1
-> support. Clean up how HOSTCC is used to override CC to avoid CFLAGS
-> being set for say gcc, and then CC being overridden to clang. Support
-> HOSTCFLAGS as a make option.
+> When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, there
+> are several warnings in the PowerPC vDSO:
 >
-> v3. Is a rebase that removes the merged "tools lib subcmd: Add install
->     target" patch. In:
-> https://lore.kernel.org/lkml/CAKwvOd=kgXmpfbVa1wiEvwL0tX3gu+dDTGi-HEiRXSojwCLRrg@mail.gmail.com/
->     Nick rightly points out that:
-> WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
->     became:
-> WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
->     losing the EXTRA_WARNINGS which v3 now adds back in. Previous
->     testing had added the warnings to the end rather than the
->     beginning, thereby causing unexpected build issues that aren't present in v3.
-> v2. Include required "tools lib subcmd: Add install target" that is
->     already in Arnaldo's tree:
-> https://lore.kernel.org/lkml/20221109184914.1357295-3-irogers@google.com/
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=630ae80ea1dd253609cb50cff87f3248f901aca3
->     When building libsubcmd.a from objtool's Makefile, clear the
->     subdir to avoid it being appended onto OUTPUT and breaking the
->     build.
+>   clang-16: error: -Wl,-soname=linux-vdso32.so.1: 'linker' input unused [-Werror,-Wunused-command-line-argument]
+>   clang-16: error: -Wl,--hash-style=both: 'linker' input unused [-Werror,-Wunused-command-line-argument]
+>   clang-16: error: argument unused during compilation: '-shared' [-Werror,-Wunused-command-line-argument]
 >
-> Ian Rogers (3):
->   objtool: Install libsubcmd in build
->   objtool: Properly support make V=1
->   objtool: Alter how HOSTCC is forced
+>   clang-16: error: argument unused during compilation: '-nostdinc' [-Werror,-Wunused-command-line-argument]
+>   clang-16: error: argument unused during compilation: '-Wa,-maltivec' [-Werror,-Wunused-command-line-argument]
 >
->  tools/objtool/Build    |  2 --
->  tools/objtool/Makefile | 66 ++++++++++++++++++++++++++++++------------
->  2 files changed, 47 insertions(+), 21 deletions(-)
+> The first group of warnings point out that linker flags were being added
+> to all invocations of $(CC), even though they will only be used during
+> the final vDSO link. Move those flags to ldflags-y.
+>
+> The second group of warnings are compiler or assembler flags that will
+> be unused during linking. Filter them out from KBUILD_CFLAGS so that
+> they are not used during linking.
+>
+> Additionally, '-z noexecstack' was added directly to the ld_and_check
+> rule in commit 1d53c0192b15 ("powerpc/vdso: link with -z noexecstack")
+> but now that there is a common ldflags variable, it can be moved there.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Cc: mpe@ellerman.id.au
+> Cc: npiggin@gmail.com
+> Cc: christophe.leroy@csgroup.eu
+> Cc: linuxppc-dev@lists.ozlabs.org
+> ---
+>  arch/powerpc/kernel/vdso/Makefile | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+> index 45c0cc5d34b6..4337b3aa9171 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -47,13 +47,17 @@ KCOV_INSTRUMENT := n
+>  UBSAN_SANITIZE := n
+>  KASAN_SANITIZE := n
+>
+> -ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
+> -ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
+> -
+> -CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
+> +ccflags-y := -fno-common -fno-builtin
+> +ldflags-y := -Wl,--hash-style=both -nostdlib -shared -z noexecstack
+> +ldflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
+> +# Filter flags that clang will warn are unused for linking
+> +ldflags-y += $(filter-out $(CC_FLAGS_FTRACE) -Wa$(comma)%, $(KBUILD_CFLAGS))
+> +
+> +CC32FLAGS := -m32
+> +LD32FLAGS := -Wl,-soname=linux-vdso32.so.1
+>  AS32FLAGS := -D__VDSO32__
+>
+> -CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
 
-Ping. Relatively small set of patches, with Reviewed-by and Tested-by,
-would be nice to land. Thanks!
+Set CC64FLAGS := -m64 ?
 
-Ian
+> +LD64FLAGS := -Wl,-soname=linux-vdso64.so.1
+>  AS64FLAGS := -D__VDSO64__
+>
+>  targets += vdso32.lds
+> @@ -92,14 +96,14 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.dbg FORCE
+>
+>  # actual build commands
+>  quiet_cmd_vdso32ld_and_check = VDSO32L $@
+> -      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
+> +      cmd_vdso32ld_and_check = $(VDSOCC) $(ldflags-y) $(CC32FLAGS) $(LD32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
+>  quiet_cmd_vdso32as = VDSO32A $@
+>        cmd_vdso32as = $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c -o $@ $<
+>  quiet_cmd_vdso32cc = VDSO32C $@
+>        cmd_vdso32cc = $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
+>
+>  quiet_cmd_vdso64ld_and_check = VDSO64L $@
+> -      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
+> +      cmd_vdso64ld_and_check = $(VDSOCC) $(ldflags-y) $(CC64FLAGS) $(LD64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
 
+If no CC64FLAGS := xxx is set, this can go?
+
+-Sedat-
+
+>  quiet_cmd_vdso64as = VDSO64A $@
+>        cmd_vdso64as = $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c -o $@ $<
+>
+>
 > --
-> 2.39.0.314.g84b9a713c41-goog
+> 2.39.0
 >
