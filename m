@@ -1,147 +1,145 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D6D8468
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 18:03:09 +0000 (UTC)
-Received: by mail-lj1-f169.google.com with SMTP id s25so20192883lji.2
-        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 10:03:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ndh3l6uBoXa06zj+WBg5LiMdLFR8aWNRgARJ4DfSidI=;
-        b=LmNrxNiZmnVFVPOM8BmikHO+4MdtaTs310NFHCrQYh4OmFV5ncP+XH0c5dQn01fuwx
-         n5W72KOXp97Bj7YGCaO+z3yCVVIFae1JbKOuUx15pk1F3J3j36/X+daLs+rGgB6Nu/6X
-         2YYgycZXiW3ADy31jqqUzgaR6RqVP6Z3joMShb/qD9lPd5woGyZKRdvyULhnqPp+KGTx
-         Ohq1acwDyvdHJ9p3h+pcfbKHd2I8DbNWwZazTj7QDILzRh2vWEl0UUdCyyY5e6w0G85o
-         hnqIlntQ6RfWEpqrc8MRRd3+k369cYBzvHCRGDUBXCY2cWVyRnAYwvfWQHJ92Xp9QFxr
-         9X7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ndh3l6uBoXa06zj+WBg5LiMdLFR8aWNRgARJ4DfSidI=;
-        b=EMSBFoH2Jt+ujYZcDIr9JeuLFa9PvQmPnjRlXzvt/TQWDmTJGJ2V3kFF7gwkUZ0C1/
-         U7AvhLh1i+BDmZXTjSzwzVZBDkQW+/y8iROv03iUxTeO7om7Jbv4E9oreTiThyfy4gFP
-         sNAR4iVQYPEmnXW8oaAJjnQlJLJ7YzcbjKQ8Cmf+iT3ckyaLGG7p8an9HXOUHjeFDWT4
-         K7EtqSc1kxVtQh+8AN8JY+oHTM7r/tIdThLEcuR7yIDpjqHEjOQuJePaetb1H8OqYScE
-         FRYujXsk+0wFj6W/wDcKLnM3oHp5Kmx3/CLiGEz/wWoa54658ihrhkT22osY8Zn7nQk3
-         c7Qg==
-X-Gm-Message-State: AFqh2koFSo1UpbKagJ7qDZAAeVobmf5evr3F4RvSUFf9IZajkbJD1lTg
-	oddGXiis8D7PWc6B193vI4HGh/Y/HGCITtSHo+4=
-X-Google-Smtp-Source: AMrXdXuetufdJJeJC/X+XoCQxfcd8EltY+2hSGpOCciWaJv9pAZNP5cadqHRPbtuWDUUhvtwkyKs6ebexWS/akbSPeI=
-X-Received: by 2002:a05:651c:124f:b0:27f:c535:5ec2 with SMTP id
- h15-20020a05651c124f00b0027fc5355ec2mr2707171ljh.204.1673546587258; Thu, 12
- Jan 2023 10:03:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8918468
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 18:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBD6C433EF;
+	Thu, 12 Jan 2023 18:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1673547690;
+	bh=zU0W/ixbxhGlNk7l8h1iQ6WAW3/hfGh7nutuaMxsG8w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HcZ5/NbbOhTTEwkjVeFJcDuCynL6oFEAKRnrXJ5jWe0CEbCW9HFqp2QFs/fcYBqLN
+	 bt+f/WdadvFG3qKvbgEd/UZQv6YIUfaWVpUROWZuQ9iHSEIaUKP+oeTFZ0KnHKIKBD
+	 A9MXlk2i/m64cptadiQ/2X7x17Q0iOP2iM9hHGnrozu51nJmOknyaIWZTURE0z2+gJ
+	 4QOAVnJCQAGnfABHBa+2QA/k0Zr1Afq4e93NZ1jXS0+FVVyHFYHxAmTSGRkbug6Jbm
+	 pJlQ+W05XrYfiKrWlrOmv0YDXXsoV7Pwvk1xVaUIcqypaI1+W+YiGTuN8JeV+4s3xB
+	 /HDV/xnf7zHVg==
+Date: Thu, 12 Jan 2023 11:21:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
+	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 07/14] powerpc/vdso: Improve linker flags
+Message-ID: <Y8BPp905fJciHNa2@dev-arch.thelio-3990X>
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+ <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org>
+ <CA+icZUUgq-dnSTRbdynPA8bEWg6SsCE9GYBMF6iViVmo9DfaFA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org> <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org>
-In-Reply-To: <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 12 Jan 2023 19:02:30 +0100
-Message-ID: <CA+icZUUgq-dnSTRbdynPA8bEWg6SsCE9GYBMF6iViVmo9DfaFA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/14] powerpc/vdso: Improve linker flags
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu, 
-	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, 
-	linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUUgq-dnSTRbdynPA8bEWg6SsCE9GYBMF6iViVmo9DfaFA@mail.gmail.com>
 
-On Thu, Jan 12, 2023 at 4:06 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, there
-> are several warnings in the PowerPC vDSO:
->
->   clang-16: error: -Wl,-soname=linux-vdso32.so.1: 'linker' input unused [-Werror,-Wunused-command-line-argument]
->   clang-16: error: -Wl,--hash-style=both: 'linker' input unused [-Werror,-Wunused-command-line-argument]
->   clang-16: error: argument unused during compilation: '-shared' [-Werror,-Wunused-command-line-argument]
->
->   clang-16: error: argument unused during compilation: '-nostdinc' [-Werror,-Wunused-command-line-argument]
->   clang-16: error: argument unused during compilation: '-Wa,-maltivec' [-Werror,-Wunused-command-line-argument]
->
-> The first group of warnings point out that linker flags were being added
-> to all invocations of $(CC), even though they will only be used during
-> the final vDSO link. Move those flags to ldflags-y.
->
-> The second group of warnings are compiler or assembler flags that will
-> be unused during linking. Filter them out from KBUILD_CFLAGS so that
-> they are not used during linking.
->
-> Additionally, '-z noexecstack' was added directly to the ld_and_check
-> rule in commit 1d53c0192b15 ("powerpc/vdso: link with -z noexecstack")
-> but now that there is a common ldflags variable, it can be moved there.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
-> Cc: mpe@ellerman.id.au
-> Cc: npiggin@gmail.com
-> Cc: christophe.leroy@csgroup.eu
-> Cc: linuxppc-dev@lists.ozlabs.org
-> ---
->  arch/powerpc/kernel/vdso/Makefile | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-> index 45c0cc5d34b6..4337b3aa9171 100644
-> --- a/arch/powerpc/kernel/vdso/Makefile
-> +++ b/arch/powerpc/kernel/vdso/Makefile
-> @@ -47,13 +47,17 @@ KCOV_INSTRUMENT := n
->  UBSAN_SANITIZE := n
->  KASAN_SANITIZE := n
->
-> -ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
-> -ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
-> -
-> -CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
-> +ccflags-y := -fno-common -fno-builtin
-> +ldflags-y := -Wl,--hash-style=both -nostdlib -shared -z noexecstack
-> +ldflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
-> +# Filter flags that clang will warn are unused for linking
-> +ldflags-y += $(filter-out $(CC_FLAGS_FTRACE) -Wa$(comma)%, $(KBUILD_CFLAGS))
-> +
-> +CC32FLAGS := -m32
-> +LD32FLAGS := -Wl,-soname=linux-vdso32.so.1
->  AS32FLAGS := -D__VDSO32__
->
-> -CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
+Hi Sedat,
 
-Set CC64FLAGS := -m64 ?
+On Thu, Jan 12, 2023 at 07:02:30PM +0100, Sedat Dilek wrote:
+> On Thu, Jan 12, 2023 at 4:06 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, there
+> > are several warnings in the PowerPC vDSO:
+> >
+> >   clang-16: error: -Wl,-soname=linux-vdso32.so.1: 'linker' input unused [-Werror,-Wunused-command-line-argument]
+> >   clang-16: error: -Wl,--hash-style=both: 'linker' input unused [-Werror,-Wunused-command-line-argument]
+> >   clang-16: error: argument unused during compilation: '-shared' [-Werror,-Wunused-command-line-argument]
+> >
+> >   clang-16: error: argument unused during compilation: '-nostdinc' [-Werror,-Wunused-command-line-argument]
+> >   clang-16: error: argument unused during compilation: '-Wa,-maltivec' [-Werror,-Wunused-command-line-argument]
+> >
+> > The first group of warnings point out that linker flags were being added
+> > to all invocations of $(CC), even though they will only be used during
+> > the final vDSO link. Move those flags to ldflags-y.
+> >
+> > The second group of warnings are compiler or assembler flags that will
+> > be unused during linking. Filter them out from KBUILD_CFLAGS so that
+> > they are not used during linking.
+> >
+> > Additionally, '-z noexecstack' was added directly to the ld_and_check
+> > rule in commit 1d53c0192b15 ("powerpc/vdso: link with -z noexecstack")
+> > but now that there is a common ldflags variable, it can be moved there.
+> >
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > ---
+> > Cc: mpe@ellerman.id.au
+> > Cc: npiggin@gmail.com
+> > Cc: christophe.leroy@csgroup.eu
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > ---
+> >  arch/powerpc/kernel/vdso/Makefile | 18 +++++++++++-------
+> >  1 file changed, 11 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+> > index 45c0cc5d34b6..4337b3aa9171 100644
+> > --- a/arch/powerpc/kernel/vdso/Makefile
+> > +++ b/arch/powerpc/kernel/vdso/Makefile
+> > @@ -47,13 +47,17 @@ KCOV_INSTRUMENT := n
+> >  UBSAN_SANITIZE := n
+> >  KASAN_SANITIZE := n
+> >
+> > -ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
+> > -ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
+> > -
+> > -CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
+> > +ccflags-y := -fno-common -fno-builtin
+> > +ldflags-y := -Wl,--hash-style=both -nostdlib -shared -z noexecstack
+> > +ldflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
+> > +# Filter flags that clang will warn are unused for linking
+> > +ldflags-y += $(filter-out $(CC_FLAGS_FTRACE) -Wa$(comma)%, $(KBUILD_CFLAGS))
+> > +
+> > +CC32FLAGS := -m32
+> > +LD32FLAGS := -Wl,-soname=linux-vdso32.so.1
+> >  AS32FLAGS := -D__VDSO32__
+> >
+> > -CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
+> 
+> Set CC64FLAGS := -m64 ?
 
-> +LD64FLAGS := -Wl,-soname=linux-vdso64.so.1
->  AS64FLAGS := -D__VDSO64__
->
->  targets += vdso32.lds
-> @@ -92,14 +96,14 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.dbg FORCE
->
->  # actual build commands
->  quiet_cmd_vdso32ld_and_check = VDSO32L $@
-> -      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
-> +      cmd_vdso32ld_and_check = $(VDSOCC) $(ldflags-y) $(CC32FLAGS) $(LD32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
->  quiet_cmd_vdso32as = VDSO32A $@
->        cmd_vdso32as = $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c -o $@ $<
->  quiet_cmd_vdso32cc = VDSO32C $@
->        cmd_vdso32cc = $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
->
->  quiet_cmd_vdso64ld_and_check = VDSO64L $@
-> -      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
-> +      cmd_vdso64ld_and_check = $(VDSOCC) $(ldflags-y) $(CC64FLAGS) $(LD64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
+I do not think it is necessary. ldflags-y is filtered from
+KBUILD_CFLAGS, which should already include '-m64' (search for
+'HAS_BIARCH' in arch/powerpc/Makefile). We would have seen a problem
+with this already if a 32-bit target (powerpc-linux-gnu-) CROSS_COMPILE
+value since $(c_flags) uses the main kernel's CROSS_COMPILE value.
 
-If no CC64FLAGS := xxx is set, this can go?
+> > +LD64FLAGS := -Wl,-soname=linux-vdso64.so.1
+> >  AS64FLAGS := -D__VDSO64__
+> >
+> >  targets += vdso32.lds
+> > @@ -92,14 +96,14 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.dbg FORCE
+> >
+> >  # actual build commands
+> >  quiet_cmd_vdso32ld_and_check = VDSO32L $@
+> > -      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
+> > +      cmd_vdso32ld_and_check = $(VDSOCC) $(ldflags-y) $(CC32FLAGS) $(LD32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
+> >  quiet_cmd_vdso32as = VDSO32A $@
+> >        cmd_vdso32as = $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c -o $@ $<
+> >  quiet_cmd_vdso32cc = VDSO32C $@
+> >        cmd_vdso32cc = $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
+> >
+> >  quiet_cmd_vdso64ld_and_check = VDSO64L $@
+> > -      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
+> > +      cmd_vdso64ld_and_check = $(VDSOCC) $(ldflags-y) $(CC64FLAGS) $(LD64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
+> 
+> If no CC64FLAGS := xxx is set, this can go?
 
--Sedat-
+Good catch! CC64FLAGS can be removed. Masahiro, I am happy to send a v3
+when I am back online next week but if you are able to fix it up during
+application, please feel free to do so (once the PowerPC folks give
+their Acks of course).
 
->  quiet_cmd_vdso64as = VDSO64A $@
->        cmd_vdso64as = $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c -o $@ $<
->
->
-> --
-> 2.39.0
->
+> >  quiet_cmd_vdso64as = VDSO64A $@
+> >        cmd_vdso64as = $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c -o $@ $<
+> >
+> >
+> > --
+> > 2.39.0
+> >
+
+Thanks for the review, cheers!
+Nathan
