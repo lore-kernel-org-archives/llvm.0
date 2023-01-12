@@ -1,164 +1,97 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B668F44
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 21:24:46 +0000 (UTC)
-Received: by mail-ej1-f43.google.com with SMTP id ss4so40655263ejb.11
-        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 13:24:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AB08F44
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 22:06:51 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9so21567098pll.9
+        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 14:06:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yeksMNOkbmrgHJ4AqWxk7sw5tPdmMMAaJsdHsSRA27Y=;
-        b=hJrP2Iz8OyG5R1gO+FWRlS+W8NKiUKvsen/zm8TIJzaVyg6tN+U4OQPxt2raQnFjXU
-         psKTbOOUdJPSzav7zHohbStMPSm7pLgGqm6hHjnGlvxKAUEu8D9wD2nFSc4YPW8HYSFz
-         PTdJsZHAeESWeGpjEoxr2SXWCxzMCx7+Gl6AFKw6uH4nEedOkH3LtOEMV/dX1gerz2If
-         Zr3BRCPlnBKqrDzg0IKONdY6Uj6rVcc3pTsXScvXsgRVBOcroccPnRE9hHO4JbyGmnxd
-         4QHfpzN/2Z45uLulknC9T7Dx0QlMQj3VqsD8VyEBVQhQj4aP70/3raZ1Ac0RmVHdR4du
-         H/RA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FnbKiO7ajEV7SWU0kUyNEcHLUgki6RWJkndix3Av1gE=;
+        b=BfK7XPga9+5vXyUQP/v/aDW7Ka8vj9ZKyVNeKr+vpx+bcmPMsQuyUDO1oFuXEe6JG+
+         rKdPLD7AC6VpKpBGiGrG+5uT+b+rkVYgt/1ErXvL76wmK9aiIrDKpRW4ymU8kWJfn73s
+         ZVx7dMRxLaxDIBX+1sE9G0T/Pm4T9KAQw+UXU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yeksMNOkbmrgHJ4AqWxk7sw5tPdmMMAaJsdHsSRA27Y=;
-        b=azS8J7ycJCcSs3FY4G3HR5lBjrO8mMAu5yck6lAkLWnZLrwy2B1o8+9KbsVoC06Sfi
-         kHJf8fGYfWmcz3WyFQLac6whdQmw8m3ci26AtpTWWNndSnoh8xXPaEf/W4oCJFYmxYfD
-         hPqa3PnW82NYH5nmsACc0v0GQsFiWaHowlEN1q0rNFjYZRIOU7AUuKQJY8WIDWWzf/7f
-         GJmY5XSuO78+jwfODl3OdyuFU2wnlZZdBleehGeYbD4H5oh/9FHx4XUuUjtdKXaZr3Qe
-         KyzEbeDLQvFZD4RfOfrZMmUfd/V6ozc/4fzhXQZeSIPTKRXg5eBk2KAofwTzwyj9oJeZ
-         vhKQ==
-X-Gm-Message-State: AFqh2koFegcOcOZfGhPucEq90a26Jhy1SDAAXUTpck7go1Hvb9E2nKTP
-	b3l3WmRVP1puuWHHhhwrbVoC4ceAw/syrMgEHjg=
-X-Google-Smtp-Source: AMrXdXuP55t2ljOrWNp0T39mVI3QnX7074tWlxDcai8A37qWz2L/rRiYy0Lexz3XiZN5XL0/KjrFAg098oDD0QjhlcI=
-X-Received: by 2002:a17:906:a18c:b0:7c0:f2cf:3515 with SMTP id
- s12-20020a170906a18c00b007c0f2cf3515mr5429727ejy.327.1673558684971; Thu, 12
- Jan 2023 13:24:44 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FnbKiO7ajEV7SWU0kUyNEcHLUgki6RWJkndix3Av1gE=;
+        b=0pF1O8SuXMlxwWlMlqzii0t9G7gM0VMgDwv5Xic+mYROZzvSZF/i4gI2ykAb5m5t7C
+         uUWM3u4qy+cApopGLebYDrj2TINVklgMUB+EiYeDZsGF3A4ZmNCexQlJGxSFHU6z/DJh
+         aBaBDx/yIvjENkrfYTCsSMjyGhwz+3QLgMUSxNT6ZgPzsZJO9/1L28G0/zPaBMOR01Ue
+         9UnQysj0PmpOqBp0pdBM8TCvg/yp9yWlELkS+k+/HwWxKEIBHKAYbrOxQ1DevFAo2GL2
+         vqn/g+HtqkdUhp6s8ma4zecTtVlS3LvV1h5zIi5QRx005TPQ3vKFP37vPZwEppFbtrzx
+         chuw==
+X-Gm-Message-State: AFqh2kpyuWbylMwixnfMTxFWd54Dki3kkGWtfZlN3NYYOGo7qOxk/wX/
+	zLs4UHLqixcF+UhJr6HWosEbvA==
+X-Google-Smtp-Source: AMrXdXs8n0YkIxD05d524WSSC25s1n3FfRw1ADxQs7JTf7HSV70djM+27SyCQh2Rsa5KQa+0i78IpQ==
+X-Received: by 2002:a17:902:6a87:b0:194:6d39:5911 with SMTP id n7-20020a1709026a8700b001946d395911mr490309plk.40.1673561210990;
+        Thu, 12 Jan 2023 14:06:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b001946a3f4d9csm226007plg.38.2023.01.12.14.06.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 14:06:50 -0800 (PST)
+Date: Thu, 12 Jan 2023 14:06:49 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
+Message-ID: <202301121403.599806C597@keescook>
+References: <20230112023006.1873859-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <edc95bad-aada-9cfc-ffe2-fa9bb206583c@cs.fau.de> <20230109150544.41465-1-gerhorst@cs.fau.de>
-In-Reply-To: <20230109150544.41465-1-gerhorst@cs.fau.de>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 12 Jan 2023 13:24:33 -0800
-Message-ID: <CAADnVQLFtAC5NvVfakhAisKzEQar+yqhFygG4_n+7FWoSnGuwg@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Fix pointer-leak due to insufficient speculative
- store bypass mitigation
-To: Luis Gerhorst <gerhorst@cs.fau.de>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Piotr Krysiuk <piotras@gmail.com>, Benedict Schlueter <benedict.schlueter@rub.de>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	stefan.saecherl@use.startmail.com, 
-	Henriette Hofmeier <henriette.hofmeier@rub.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230112023006.1873859-1-masahiroy@kernel.org>
 
-On Mon, Jan 9, 2023 at 7:07 AM Luis Gerhorst <gerhorst@cs.fau.de> wrote:
->
-> To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
-> insufficient speculative store bypass mitigation") inserts lfence
-> instructions after 1) initializing a stack slot and 2) spilling a
-> pointer to the stack.
->
-> However, this does not cover cases where a stack slot is first
-> initialized with a pointer (subject to sanitization) but then
-> overwritten with a scalar (not subject to sanitization because the slot
-> was already initialized). In this case, the second write may be subject
-> to speculative store bypass (SSB) creating a speculative
-> pointer-as-scalar type confusion. This allows the program to
-> subsequently leak the numerical pointer value using, for example, a
-> branch-based cache side channel.
->
-> To fix this, also sanitize scalars if they write a stack slot that
-> previously contained a pointer. Assuming that pointer-spills are only
-> generated by LLVM on register-pressure, the performance impact on most
-> real-world BPF programs should be small.
->
-> The following unprivileged BPF bytecode drafts a minimal exploit and the
-> mitigation:
->
->   [...]
->   // r6 = 0 or 1 (skalar, unknown user input)
->   // r7 = accessible ptr for side channel
->   // r10 = frame pointer (fp), to be leaked
->   //
->   r9 = r10 # fp alias to encourage ssb
->   *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
->   // lfence added here because of pointer spill to stack.
->   //
->   // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
->   // for no r9-r10 dependency.
->   //
->   *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
->   // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
->   // store may be subject to SSB
->   //
->   // fix: also add an lfence when the slot contained a ptr
->   //
->   r8 = *(u64 *)(r9 - 8)
->   // r8 = architecturally a scalar, speculatively a ptr
->   //
->   // leak ptr using branch-based cache side channel:
->   r8 &= 1 // choose bit to leak
->   if r8 == 0 goto SLOW // no mispredict
->   // architecturally dead code if input r6 is 0,
->   // only executes speculatively iff ptr bit is 1
->   r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
-> SLOW:
->   [...]
->
-> After running this, the program can time the access to *(r7 + 0) to
-> determine whether the chosen pointer bit was 0 or 1. Repeat this 64
-> times to recover the whole address on amd64.
->
-> In summary, sanitization can only be skipped if one scalar is
-> overwritten with another scalar. Scalar-confusion due to speculative
-> store bypass can not lead to invalid accesses because the pointer bounds
-> deducted during verification are enforced using branchless logic. See
-> 979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
-> arithmetic") for details.
->
-> Do not make the mitigation depend on
-> !env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
-> likely unexpected if these were enabled. For example, leaking the
-> address to a protected log file may be acceptable while disabling the
-> mitigation might unintentionally leak the address into the cached-state
-> of a map that is accessible to unprivileged processes.
->
-> Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
+On Thu, Jan 12, 2023 at 11:30:06AM +0900, Masahiro Yamada wrote:
+>     def main():
+>         try:
+>             # simulate large output (your code replaces this loop)
+>             for x in range(10000):
+>                 print("y")
+>             # flush output here to force SIGPIPE to be triggered
+>             # while inside this try block.
+>             sys.stdout.flush()
+>         except BrokenPipeError:
+>             # Python flushes standard streams on exit; redirect remaining output
+>             # to devnull to avoid another BrokenPipeError at shutdown
+>             devnull = os.open(os.devnull, os.O_WRONLY)
+>             os.dup2(devnull, sys.stdout.fileno())
+>             sys.exit(1)  # Python exits with error code 1 on EPIPE
 
-All makes sense to me.
-Daniel,
+I still think this is wrong -- they should not continue piping, and
+should just die with SIGPIPE. It should simply be:
 
-please take a look.
+signal(SIGPIPE, SIG_DFL);
 
-> Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
-> Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
-> ---
->  kernel/bpf/verifier.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a5255a0dcbb6..5e3aa4a75bd6 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3287,7 +3287,8 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
->                 bool sanitize = reg && is_spillable_regtype(reg->type);
->
->                 for (i = 0; i < size; i++) {
-> -                       if (state->stack[spi].slot_type[i] == STACK_INVALID) {
-> +                       u8 type = state->stack[spi].slot_type[i];
-> +                       if (type != STACK_MISC && type != STACK_ZERO) {
->                                 sanitize = true;
->                                 break;
->                         }
-> --
-> 2.34.1
->
+Nothing else needed. No wasted CPU cycles, shell handling continues as
+per normal.
+
+>     if __name__ == '__main__':
+>         main()
+> 
+>   Do not set SIGPIPE’s disposition to SIG_DFL in order to avoid
+>   BrokenPipeError. Doing that would cause your program to exit
+>   unexpectedly whenever any socket connection is interrupted while
+>   your program is still writing to it.
+
+This advise is for socket programs, not command-line tools.
+
+
+-Kees
+
+-- 
+Kees Cook
