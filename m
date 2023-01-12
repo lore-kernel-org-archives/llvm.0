@@ -1,109 +1,98 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A395137D
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 08:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673513124;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QRkGofy0rOYQohBlbN5nSy8RN48skKljdqEjml4OAaw=;
-	b=iPnMDtmuILR/vGcbTYDNaQGz47PI5WZj/cC7BTD/fhENPTfGhgeveKCxycIG18gy3bZBZY
-	4f3/YQNz2MhgEUk4QHoAFZ6i95mM6Kcoa4Eb3t7EF0fvjfh0M3LNqDUb802lP3VfjrD79u
-	oW3AMbphzV8caluzXLcn84CMrxjSDB8=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-318-n_DVltVZN5KC0_rKDVmT4A-1; Thu, 12 Jan 2023 03:45:23 -0500
-X-MC-Unique: n_DVltVZN5KC0_rKDVmT4A-1
-Received: by mail-ej1-f72.google.com with SMTP id sd1-20020a1709076e0100b00810be49e7afso12397742ejc.22
-        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 00:45:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26591396
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 09:16:22 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id t15so17968815ybq.4
+        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 01:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dJZw00JqIDxZsH6vnh8PN+9M8r5KlwJJ+NaoX/4aFqY=;
+        b=DIk2ZbXAGqxIc98kTjzGTVFpdPsR+Vj+7STCldjr7kKAsQMHIDY6XZuyjF9Ycpq5n+
+         cjIhUcyrpttqhYnUX250OHS59gBEMg+8/n021gZ0xYc2j1lK+frz2V8qycTk6QMDr38o
+         mrMyDdPz6wExrKzN/V6B7S5+DXxaauBFz015mq2I8tk61GytE96CmJoVr4rfhu9g1Jt5
+         X7i+iGPOV/EM3u8+4zRRYkQp3wr9SJI9h7E+8lTSErtrHkGgm/3Ju5T/L0K+3QsXj8Tl
+         lYIaPDLjxw34ipX/x4xh9MpShxkSKemI2PIEMXbD5t2wJvLGWC7k35qCkFUY1kksUM+d
+         reVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QRkGofy0rOYQohBlbN5nSy8RN48skKljdqEjml4OAaw=;
-        b=sqcxFTzE+g28ON+OXKfoyHKx51KzZ4SvRZZgVkOOWil7IJTRLymQC8LoTUzoLaKlcJ
-         ojQFmq4KA7rayE/vvL9HekKGfEnhPuFdwQrTIUx/qv2kOG+W4vYco6zf8yj9YRlsccNJ
-         r2cLFcW8XsMm8SxjyEF0UA8BBYiresFKqVmPah8M79gUPKnF3qI34V0BTRfwKvn3GrxP
-         ackXSFlQ7a75BQRxedYdl5pGiyoTZdsxbEEjtn46IhdhAyocrrbIQX88PC2nlTbjhD91
-         HSSuCVFI2fqqEQ8fuR2GoC4uRRB24z26CeARsVt+c4iuDGVJoO3+73yK9x9GWuNuk6Y8
-         zZew==
-X-Gm-Message-State: AFqh2koo7FAD2Q21aDQ+FaPX1PVVxHQ+ai8k0WJnRIYw0+EUZPv9cUAr
-	ynQHA9aCLyMS7l4izRdaJ+nVx2Lh9gGGnO9Z3Jv3ihgYCPlPf0A3ptcrZirgElaZIhxIEgBlZw0
-	KjMLYv3KmY8EQ7Q==
-X-Received: by 2002:a17:907:1b0b:b0:7c1:6344:84a with SMTP id mp11-20020a1709071b0b00b007c16344084amr102056843ejc.5.1673513122002;
-        Thu, 12 Jan 2023 00:45:22 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu54vDYgLEuxRyxp1eTz+c6OzQAOq5kS8s1aP1PTT89lIebzPDO4yj3/Xck4uxhw5HLniQNWw==
-X-Received: by 2002:a17:907:1b0b:b0:7c1:6344:84a with SMTP id mp11-20020a1709071b0b00b007c16344084amr102056814ejc.5.1673513121707;
-        Thu, 12 Jan 2023 00:45:21 -0800 (PST)
-Received: from [192.168.42.222] (nat-cgn9-185-107-15-52.static.kviknet.net. [185.107.15.52])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090609c200b007bd28b50305sm7182953eje.200.2023.01.12.00.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 00:45:21 -0800 (PST)
-From: Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <95ea32dd-8605-f1ac-3799-400918e29e07@redhat.com>
-Date: Thu, 12 Jan 2023 09:45:19 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dJZw00JqIDxZsH6vnh8PN+9M8r5KlwJJ+NaoX/4aFqY=;
+        b=7tmFv9F/P4s9INxH8cg7T98DTYRoLALzbfP8Ttn2H/J2ucXxxuvPrSGcMRPzjv+iuu
+         MTH7D+uffH2U3oI21bB+wDUBIBLTIc6xM9JqUeEcYA5dLt2JJnTn1VbmWtPg/7UU2tYl
+         n0jejx3aZskZqbbVDxu83F3N2A7a3e2uQKPlkHQNQCv7E9GzsavGGh+0f/XAtPMsq55A
+         yeyWYyy/VRiMt5zXmPk40ZJeCPzGnzzQ0lM5E8PH5kHQxm47Sn1z6fy0Z33ZWfY1t31F
+         RIaup6x0YqhgDdP6Xj6VDotu6A+jxhdx5MCEA7+OD/tcVYy5Yfb6HooW5dcnXqWkS+rj
+         tIbQ==
+X-Gm-Message-State: AFqh2krsGNyNfZJT8AFGPeCpNJqCC+gOmMUlFn5GfO44aUZ4WbmOJpc3
+	z2iu97jflMJ4rp0ngggNVqRGwrce4RMU2Kicmcnbvg==
+X-Google-Smtp-Source: AMrXdXt2lVd6aozoCXeSt7NSXmiNzaXsWeeyaX9h6lphmB1XW0lYoL40g5Ni8QumcqWq083M2Et4gXna6qIiPWAonH0=
+X-Received: by 2002:a05:6902:1c1:b0:7c9:71e:e241 with SMTP id
+ u1-20020a05690201c100b007c9071ee241mr139273ybh.242.1673514981561; Thu, 12 Jan
+ 2023 01:16:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc: brouer@redhat.com, Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, linux-mm@kvack.org,
- Shakeel Butt <shakeelb@google.com>,
- Jesse Brandeburg <jesse.brandeburg@intel.com>,
- Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: Re: [PATCH v3 18/26] page_pool: Allow page_pool_recycle_direct() to
- take a netmem or a page
-To: Matthew Wilcox <willy@infradead.org>, kernel test robot <lkp@intel.com>
-References: <20230111042214.907030-19-willy@infradead.org>
- <202301112022.zmClDxtO-lkp@intel.com> <Y769E3ZpCCuykk94@casper.infradead.org>
-In-Reply-To: <Y769E3ZpCCuykk94@casper.infradead.org>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <202301020356.dFruA4I5-lkp@intel.com> <aa722a69-8493-b449-c80c-a7cc1cf8a1b6@suse.cz>
+ <CAG_fn=XmHKvpev4Gxv=SFOf2Kz0AwiuudXPqPjVJJo2gN=yOcg@mail.gmail.com> <953dda90-5a73-01f0-e5b7-2607e67dec13@suse.cz>
+In-Reply-To: <953dda90-5a73-01f0-e5b7-2607e67dec13@suse.cz>
+From: Alexander Potapenko <glider@google.com>
+Date: Thu, 12 Jan 2023 10:15:45 +0100
+Message-ID: <CAG_fn=Vz47zvCDoUENX5kH7Giena+w=yifWbMo28ayAUKU7kyQ@mail.gmail.com>
+Subject: Re: mm/kmsan/instrumentation.c:41:26: warning: no previous prototype
+ for function '__msan_metadata_ptr_for_load_n'
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Christoph Lameter <cl@linux-foundation.org>, 
+	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+> > Would it also make sense to exclude KMSAN with CONFIG_SLUB_TINY?
+>
+> If the root causes are fixed, then it's not necessary? AFAIK SLUB_TINY on=
+ly
+> indirectly caused KMSAN to be newly enabled in some configs, but there's =
+no
+> fundamental incompatibility that I know of.
 
-On 11/01/2023 14.43, Matthew Wilcox wrote:
-> On Wed, Jan 11, 2023 at 08:48:30PM +0800, kernel test robot wrote:
->>>> drivers/net/ethernet/broadcom/bnxt/bnxt.c:2978:4: error: controlling expression type 'void *' not compatible with any generic association type
->>                             page_pool_recycle_direct(rxr->page_pool, data);
->>                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> I swear I did an allmodconfig build ... don't know how I missed this
-> one.  I think I'll make the page_pool_recycle_direct() macro accept
-> void * as well, and treat it as a page.  Once we finish the conversion
-> to netmem, this problem will go away.
-> 
-> ie this:
-> 
-> +++ b/include/net/page_pool.h
-> @@ -485,7 +485,8 @@ static inline void __page_pool_recycle_page_direct(struct page_pool *pool,
->   
->   #define page_pool_recycle_direct(pool, mem)    _Generic((mem),         \
->          struct netmem *: __page_pool_recycle_direct(pool, (struct netmem *)mem),                \
-> -       struct page *:   __page_pool_recycle_page_direct(pool, (struct page *)mem))
-> +       struct page *:   __page_pool_recycle_page_direct(pool, (struct page *)mem),     \
-> +       void *:  __page_pool_recycle_page_direct(pool, (struct page *)mem))
->   
+So far I couldn't manage to boot KMSAN with SLUB_TINY, it just dies
+somewhere very early with the following stacktrace:
 
-I'm okay with this change, and you can add my acked by.
+#0  0xffffffff9044134a in native_halt () at ./arch/x86/include/asm/irqflags=
+.h:57
+#1  halt () at ./arch/x86/include/asm/irqflags.h:98
+#2  early_fixup_exception (regs=3Dregs@entry=3D0xffffffff8fa03d08,
+trapnr=3Dtrapnr@entry=3D14) at arch/x86/mm/extable.c:340
+#3  0xffffffff903c23db in do_early_exception (regs=3D0xffffffff8fa03d08,
+trapnr=3D14) at arch/x86/kernel/head64.c:424
+#4  0xffffffff903c214f in early_idt_handler_common () at
+arch/x86/kernel/head_64.S:483
+#5  0x0000000000000000 in ?? ()
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+The same kernel boots (to some extent) without CONFIG_KMSAN, so my
+guess is that we're instrumenting something that is not supposed to be
+instrumented.
+But SLUB_TINY doesn't add new source files, and it's also unlikely to
+kick in before mm_init(), right?
 
-Maybe broadcom/bnxt driver should (later) be converted to not use void
-pointers... cc. Andy.
+--=20
+Alexander Potapenko
+Software Engineer
 
---Jesper
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
