@@ -1,265 +1,167 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D153D8470
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 18:55:52 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id 20so9068186pfu.13
-        for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 10:55:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j+NRbTNiLmeYUADil1PoK0LGG/uPHqXhDMm4lsmIdtM=;
-        b=nDzN9TwaVepTI4JV1CwYJSALuJFKTnskXh0c3eKxM76cQADzIF8k4QJNXr5mQ/x1bo
-         0DpTZUTmHFuBjscdaIQZPyGFza3TIXAllmjPsLWwXZRN1ETM839IwF4cNTCTUh4XSmzc
-         5YE1s//l4fqyuzFY8c5UdSm2xw3wU++yYZc678/Eo77PvzmmUGSUQTMcwNHjqtH9gkv+
-         ZDHKKaG1KEEAYK03xSXWDJ2OeBynn2slTSp/LFyL24HqUraN5+CNfTldF4qvRmCz7NyE
-         49+tAQ+KUBmgYOGSbXDP4ORjeehSewbWgwhfc2Kh299pzbcMtT8V4NItvTPngjNqe3Tn
-         Bc2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j+NRbTNiLmeYUADil1PoK0LGG/uPHqXhDMm4lsmIdtM=;
-        b=VDKzLfHZFMhsf5wKEo8er/8lhDWmcRbvQzv5h1EpF+R7rpw4QX2Ui8RQMKfGZrf4W1
-         A8vXpb9/g/7X2QirZyMpzafZbIlMZfsYe58LV2UEIxcOmvpp6FSAvc6up54XMv46F1pE
-         6qjXAri6+wZEZENr2b77bKGfkbCaGvRqxiWsr6H0zpKBljNKVuh2zLcI7lLkz5l/2Eqm
-         A0lPDaVmRogtMbc1ouFMxC2tdlRHo+sgpvOg3vh0DUdNKrEJeje2VPJdFj+jBQ21AO3m
-         ax3PaamSsSrYa6xJDZknUapL17j1QgJMa0rXyjjph8ha8YOzizngYN9LmquOKIbYGafq
-         YVGA==
-X-Gm-Message-State: AFqh2kqtOJGDRtRTTpyfn0/Cuuai3EeXsLJtkswulkAU5nYs0+3I91vh
-	SuQgyZt6/RYpDGSGV36Qra/9xbE5Lx5ddt7fsZQwyw==
-X-Google-Smtp-Source: AMrXdXuRsx/dID9s7vPNCdE3ysm0ZN/YTdpjQD8e+0PMDJN5HzzxmR5n62jAhFsDyc16t+/iWo5qN1TaqH8e66p8ZWs=
-X-Received: by 2002:a63:c50:0:b0:494:7a78:4bb0 with SMTP id
- 16-20020a630c50000000b004947a784bb0mr4810678pgm.427.1673549751960; Thu, 12
- Jan 2023 10:55:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F0E8476
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 19:11:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673550700;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QJUwinpQJuLvmjevvdwd7WrWZvPuxX8wBQbGEkG1tsY=;
+	b=boPWXK14JOyLl1+Z9yam82qCEYdb/nsGO+8PNpo2sfN2VA9fOlt0rpUjaeBdWqbcU7edwS
+	9s7u8xzAOiMGmjz8JJGW2ubOhvksyRsu3b1WGv36oOaQ26OlOdzYSXh21itj5FYTx6Ufbx
+	pPu3BCxcnuajTlsSfzuxSme6PNv6+oQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-MMDDc3B1NDuCw2eJJoJjaA-1; Thu, 12 Jan 2023 14:11:39 -0500
+X-MC-Unique: MMDDc3B1NDuCw2eJJoJjaA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C03791C05130
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 19:11:38 +0000 (UTC)
+Received: from [172.64.10.55] (unknown [10.30.32.123])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B082640C2064;
+	Thu, 12 Jan 2023 19:11:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (28/383 SKIPPED): Test report for master
+ (6.2.0-rc3, mainline.kernel.org-clang, e8f60cd7)
+Date: Thu, 12 Jan 2023 19:11:38 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230112023006.1873859-1-masahiroy@kernel.org>
-In-Reply-To: <20230112023006.1873859-1-masahiroy@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 12 Jan 2023 10:55:45 -0800
-Message-ID: <CAKwvOd=k=veNG=Q-bZxX4iX4q14e2ozO_sHZhdCz1+BwBxq=cQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <43075.123011214113900814@us-mta-644.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 11, 2023 at 6:30 PM Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
->
-> In the follow-up of commit fb3041d61f68 ("kbuild: fix SIGPIPE error
-> message for AR=3Dgcc-ar and AR=3Dllvm-ar"), Kees Cook pointed out that
-> tools should _not_ catch their own SIGPIPEs [1] [2].
->
-> Based on his feedback, LLVM was fixed [3].
->
-> However, Python's default behavior is to show noisy bracktrace when
-> SIGPIPE is sent. So, scripts written in Python are basically in the
-> same situation as the buggy llvm tools.
->
-> Example:
->
->   $ make -s allnoconfig
->   $ make -s allmodconfig
->   $ scripts/diffconfig .config.old .config | head -n1
->   -ALIX n
->   Traceback (most recent call last):
->     File "/home/masahiro/linux/scripts/diffconfig", line 132, in <module>
->       main()
->     File "/home/masahiro/linux/scripts/diffconfig", line 130, in main
->       print_config("+", config, None, b[config])
->     File "/home/masahiro/linux/scripts/diffconfig", line 64, in print_con=
-fig
->       print("+%s %s" % (config, new_value))
->   BrokenPipeError: [Errno 32] Broken pipe
->
-> Python documentatin [4] notes how to make scripts die immediately and
+Hi, we tested your kernel and here are the results:
 
-typo: s/documentatin/documentation/
-
-> silently:
->
->   """
->   Piping output of your program to tools like head(1) will cause a
->   SIGPIPE signal to be sent to your process when the receiver of its
->   standard output closes early. This results in an exception like
->   BrokenPipeError: [Errno 32] Broken pipe. To handle this case,
->   wrap your entry point to catch this exception as follows:
->
->     import os
->     import sys
->
->     def main():
->         try:
->             # simulate large output (your code replaces this loop)
->             for x in range(10000):
->                 print("y")
->             # flush output here to force SIGPIPE to be triggered
->             # while inside this try block.
->             sys.stdout.flush()
->         except BrokenPipeError:
->             # Python flushes standard streams on exit; redirect remaining=
- output
->             # to devnull to avoid another BrokenPipeError at shutdown
->             devnull =3D os.open(os.devnull, os.O_WRONLY)
->             os.dup2(devnull, sys.stdout.fileno())
->             sys.exit(1)  # Python exits with error code 1 on EPIPE
->
->     if __name__ =3D=3D '__main__':
->         main()
->
->   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avoid
->   BrokenPipeError. Doing that would cause your program to exit
->   unexpectedly whenever any socket connection is interrupted while
->   your program is still writing to it.
->   """
->
-> Currently, tools/perf/scripts/python/intel-pt-events.py seems the
-> only script that fixes the issue that way.
->
-> tools/perf/scripts/python/compaction-times.py uses another approach
-> signal.signal(signal.SIGPIPE, signal.SIG_DFL) but the Python
-> documentation clearly says "Don't do it".
->
-> I cannot fix all Python scripts since there are so many.
-> I fixed some in the scripts/ directory.
-
-That's ok; "Rome wasn't built in a day." This is a good start!
-Thank you for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> [1]: https://lore.kernel.org/all/202211161056.1B9611A@keescook/
-> [2]: https://github.com/llvm/llvm-project/issues/59037
-> [3]: https://github.com/llvm/llvm-project/commit/4787efa38066adb51e2c0494=
-99d25b3610c0877b
-> [4]: https://docs.python.org/3/library/signal.html#note-on-sigpipe
->
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/checkkconfigsymbols.py         | 13 ++++++++++++-
->  scripts/clang-tools/run-clang-tools.py | 21 ++++++++++++++-------
->  scripts/diffconfig                     | 16 ++++++++++++++--
->  3 files changed, 40 insertions(+), 10 deletions(-)
->
-> diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols=
-.py
-> index 217d21abc86e..36c920e71313 100755
-> --- a/scripts/checkkconfigsymbols.py
-> +++ b/scripts/checkkconfigsymbols.py
-> @@ -115,7 +115,7 @@ def parse_options():
->      return args
->
->
-> -def main():
-> +def print_undefined_symbols():
->      """Main function of this module."""
->      args =3D parse_options()
->
-> @@ -467,5 +467,16 @@ def parse_kconfig_file(kfile):
->      return defined, references
->
->
-> +def main():
-> +    try:
-> +        print_undefined_symbols()
-> +    except BrokenPipeError:
-> +        # Python flushes standard streams on exit; redirect remaining ou=
-tput
-> +        # to devnull to avoid another BrokenPipeError at shutdown
-> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
-> +        os.dup2(devnull, sys.stdout.fileno())
-> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
-> +
-> +
->  if __name__ =3D=3D "__main__":
->      main()
-> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools=
-/run-clang-tools.py
-> index 56f2ec8f0f40..3266708a8658 100755
-> --- a/scripts/clang-tools/run-clang-tools.py
-> +++ b/scripts/clang-tools/run-clang-tools.py
-> @@ -61,14 +61,21 @@ def run_analysis(entry):
->
->
->  def main():
-> -    args =3D parse_arguments()
-> +    try:
-> +        args =3D parse_arguments()
->
-> -    lock =3D multiprocessing.Lock()
-> -    pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lock, =
-args))
-> -    # Read JSON data into the datastore variable
-> -    with open(args.path, "r") as f:
-> -        datastore =3D json.load(f)
-> -        pool.map(run_analysis, datastore)
-> +        lock =3D multiprocessing.Lock()
-> +        pool =3D multiprocessing.Pool(initializer=3Dinit, initargs=3D(lo=
-ck, args))
-> +        # Read JSON data into the datastore variable
-> +        with open(args.path, "r") as f:
-> +            datastore =3D json.load(f)
-> +            pool.map(run_analysis, datastore)
-> +    except BrokenPipeError:
-> +        # Python flushes standard streams on exit; redirect remaining ou=
-tput
-> +        # to devnull to avoid another BrokenPipeError at shutdown
-> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
-> +        os.dup2(devnull, sys.stdout.fileno())
-> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
->
->
->  if __name__ =3D=3D "__main__":
-> diff --git a/scripts/diffconfig b/scripts/diffconfig
-> index d5da5fa05d1d..43f0f3d273ae 100755
-> --- a/scripts/diffconfig
-> +++ b/scripts/diffconfig
-> @@ -65,7 +65,7 @@ def print_config(op, config, value, new_value):
->          else:
->              print(" %s %s -> %s" % (config, value, new_value))
->
-> -def main():
-> +def show_diff():
->      global merge_style
->
->      # parse command line args
-> @@ -129,4 +129,16 @@ def main():
->      for config in new:
->          print_config("+", config, None, b[config])
->
-> -main()
-> +def main():
-> +    try:
-> +        show_diff()
-> +    except BrokenPipeError:
-> +        # Python flushes standard streams on exit; redirect remaining ou=
-tput
-> +        # to devnull to avoid another BrokenPipeError at shutdown
-> +        devnull =3D os.open(os.devnull, os.O_WRONLY)
-> +        os.dup2(devnull, sys.stdout.fileno())
-> +        sys.exit(1)  # Python exits with error code 1 on EPIPE
-> +
-> +
-> +if __name__ =3D=3D '__main__':
-> +    main()
-> --
-> 2.34.1
->
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
---=20
-Thanks,
-~Nick Desaulniers
+Kernel information:
+    Commit message: Merge tag 'perf-tools-fixes-for-v6.2-2-2023-01-11' of g=
+it://git.kernel.org/pub/scm/linux/kernel/git/acme/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/65388
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6637320
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid simple_reshape
+        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
+ree+0x53/0x80
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1359
+            Affected tests:
+                  x86_64 (debug) - Storage - swraid simple_reshape
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
