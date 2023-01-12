@@ -1,70 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBEF979C9;
-	Thu, 12 Jan 2023 15:56:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2EBC433F0;
-	Thu, 12 Jan 2023 15:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673539019;
-	bh=jVnUX1HGL2gh5Pn/FhhNok6HWG0zem3mXf+tFOv4oTo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PsM6lFByFZNcJejpqXWxQ75oEuqp47dI16BAXhtaV4bMK8m0zTc57+HOqw8A+Q6gg
-	 009T5f+JKmgNaj3O8RJ3a8bT5xdCwqCoANeIvSkhbTiAugRd4qlwZoeibQwDfTCSOo
-	 KrByOMAJdLwSr+JPfsiY0JmEU7u3QdOqFJ0T3nl+4U+0lATl02LC0tai9IuVzjickU
-	 qFAZ2kloCjPf1MwMpRJJQ1tlgVq7TYrxACs9af/t4WfIL0NEfrNxJU8Zt2Y4y/Z3FX
-	 2ZsmP/C0LDUzgOaQdpvRkox9ItTl5HyZrCqI9UQ8Ok8Ox48EwvAgmuQWstQnbAUjyz
-	 Bsdofl/i76t0A==
-Date: Thu, 12 Jan 2023 08:56:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jocelyn Falempe <jfalempe@redhat.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Kees Cook <keescook@chromium.org>, Tom Rix <trix@redhat.com>,
-	intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>
-Subject: Re: [PATCH v2] drm/i915: Fix CFI violations in gt_sysfs
-Message-ID: <Y8Atycuni0bl8std@dev-arch.thelio-3990X>
-References: <20221013205909.1282545-1-nathan@kernel.org>
- <4dcf830e-62a5-837b-7590-ac5395f84c14@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF72079EA;
+	Thu, 12 Jan 2023 16:15:05 +0000 (UTC)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1AE8F1EC04F0;
+	Thu, 12 Jan 2023 17:14:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1673540097;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=kXgGOS0t1Dmzod2SUlVqdk8NheeeK7L+8V9FBwGiZ2c=;
+	b=m3JMpkzRjC8s+Ax3AVMnGYV4D08mDT/nAPRGVvPn9MS6OIJBqz47llq3S/Zr//hgi7Lujd
+	RfYRnQupWB15RFD0Ey1QDe50Yidqw1+88F0QbkzxSoFaZpIW7gSVU8GDD+LIHhxRpbC2uN
+	+Peu+rXB3xj9M6aLYIr4P12WzeD3V5I=
+Date: Thu, 12 Jan 2023 17:14:52 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
+	lkml <linux-kernel@vger.kernel.org>,
+	Yujie Liu <yujie.liu@intel.com>
+Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
+ transitively contain a `#[repr(align)]` type
+Message-ID: <Y8Ax/I5qOcVDZljG@zn.tnic>
+References: <202212272003.rgQDX8DQ-lkp@intel.com>
+ <Y6r4mXz5NS0+HVXo@zn.tnic>
+ <CANiq72kc60aPcx5LwFhOGL4AXOhZsZj32iOg75K5ZxLaaRaYkg@mail.gmail.com>
+ <Y7i1h3lCMKfxB532@zn.tnic>
+ <CANiq72khMLU6tF8vGD9fs7mLNAAQu8wJ2n1SLM3th2QMMfGPPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4dcf830e-62a5-837b-7590-ac5395f84c14@redhat.com>
+In-Reply-To: <CANiq72khMLU6tF8vGD9fs7mLNAAQu8wJ2n1SLM3th2QMMfGPPA@mail.gmail.com>
 
-Hi Jocelyn,
+On Sat, Jan 07, 2023 at 01:38:42AM +0100, Miguel Ojeda wrote:
+> You are of course right that the instructions are not complete, I just
+> meant to add a bit of context, i.e. that Rust got enabled due to the
+> config, but as far as I understand, it shouldn't be getting enabled in
+> the other ones for the moment.
 
-On Thu, Jan 12, 2023 at 11:08:17AM +0100, Jocelyn Falempe wrote:
-> This patch does also solve a kernel crash when reading
-> /sys/class/drm/card1/gt/gt0/* on a skylake machine:
-> https://bugzilla.redhat.com/show_bug.cgi?id=2154880
+Right, or at least the repro instructions should state it clear.
 
-Interesting, I wonder what aspect of this patch fixes this because I am
-not sure that is an intended consequence of this change but that is
-still good to hear!
+Btw, this is part of a long-running feedback process we're giving to the 0day
+bot in order to make their reports as user friendly as possible.
 
-For the record, this is commit a8a4f0467d70 ("drm/i915: Fix CFI
-violations in gt_sysfs") in mainline.
+> My point was that the script expects some variables set by `Makefile`,
+> similar to `$CC` etc., so that output does not imply you have (or not)
+> a suitable Rust toolchain installed (i.e. it will currently also fail
+> if you have it installed).
 
-> Do you think it can be backported to stable releases ?
-> Conflicts are trivial on top of v6.0 at least.
+Aha.
 
-I had a report from another user of this crash affecting them with kCFI
-so it is on my TODO to backport it to 6.1 (6.0 just went EOL) but I am
-currently out of the office until next Wednesday so I won't be able to
-get to it until then (as I would like to test the backport on affected
-hardware). If someone wants to beat me to it, I won't complain ;)
+> Meanwhile (of course it is not the same as proper reproduction
+> instructions since the LKP team may do something different), the
+> documentation on how to set it up for a normal developer is at:
+> https://www.kernel.org/doc/html/latest/rust/quick-start.html, in case
+> it helps (if you are up for it... :)
 
-Cheers,
-Nathan
+Probably that link should be part of those reproduction instructions.
+
+> > And while we're reporting bugs: the error message from the compiler itself could
+> > use some "humanization" - I have zero clue what it is trying to tell me.
+> 
+> What would you want to see? We can ask the relevant Rust team to see
+> if they can improve it.
+> 
+> In general, note that you can ask `rustc` to further explain an error
+> giving it the code with `--explain`. The compiler suggests this
+> itself, but sadly the robot cut it out :(
+
+Well, I find having an --explain option too much. But there are perhaps reasons
+for it.
+
+One improvement could be, IMHO, they could turn on --explain automatically when
+it results in a build error. So that you don't have to do it yourself.
+
+What would be better, tho, is if there were no --explain option at all and the
+warnings are as human readable as possible.
+
+>     For more information about this error, try `rustc --explain E0588`
+> 
+> In this case, it gives:
+> 
+>     A type with `packed` representation hint has a field with `align`
+>     representation hint.
+> ...
+
+so the struct is:
+
+struct alt_instr {
+        s32 instr_offset;       /* original instruction */
+        s32 repl_offset;        /* offset to replacement instruction */
+
+        union {
+                struct {
+                        u32 cpuid: 16;  /* CPUID bit set for replacement */
+                        u32 flags: 16;  /* patching control flags */
+                };
+                u32 ft_flags;
+        };
+
+        u8  instrlen;           /* length of original instruction */
+        u8  replacementlen;     /* length of new instruction */
+} __packed;
+
+and everything is naturally aligned.
+
+So I'm guessing this is a rust bindings glue shortcoming or so...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
