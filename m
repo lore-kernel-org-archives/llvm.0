@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7F338D
-	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 03:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE64AC433F1;
-	Thu, 12 Jan 2023 03:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEAA38B
+	for <llvm@lists.linux.dev>; Thu, 12 Jan 2023 03:05:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55EC7C43396;
+	Thu, 12 Jan 2023 03:05:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1673492737;
-	bh=iDpwete7KRRtx7xm+tCbXm0Lyr2zptLdbj1MM4EGk8w=;
+	s=k20201202; t=1673492739;
+	bh=uAHgiJSCHpIUV5vt/SRkX0KHkpA5UbELEGGq1ql5Qak=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=GftI4P/BZ/0kxd28y1ROdVK+k29BXoH1LWNqUk3FAga+GFaMTegb4HeUwWJpU3ZmS
-	 XDncVLjuOWjaBbAa/cqu2RbhUmbX9NEDsCxvG41hVLFWqMoPdfJs7V2Qvj9nc6mgYl
-	 1upj+nGwqMkw+j5api3ljyzg11f/j554YyFegZ8EtnmzkZ6jGmKv/kEpjuA+8x4PUO
-	 RhKiACCirnyhfRSjmpNwUrCKN8izJfjjlBEoTqXJ8hilOy4ArK3+GsRwD924SHsn+T
-	 5Wc3M23glFStB9HoSOXLTYaX+VibOOlQijpmnN/GVzoRFUVooAmA0CDwTczu5LAQ2+
-	 cWUgwffkOIeog==
+	b=rVLVuVeTlHKtoWOmjZ+358Jzlf1tfQeNy3bGkJhjSwHJwEzQaTmi6iPfn2zhd8yku
+	 SiiOIO+WX200NtX3TyIeXFL/bdCbJzy/kMaON0d45nND6Eqp+Jiry2COytuXnikcEO
+	 1YXC9A33GD+XdvMFxhw2H176oSqMa7Y4yO6mfVp9eo8b3gIFV2HufvV11EJSkWtEMp
+	 POPdtD3fo5IsDGCgj6X6JYilQwEtNnKWRWLsWPs0OhFvA0nhwDVZMwNHdEt5Kxl/4L
+	 kdN7a2veO8GsJo9UOm4Vpd9nBa2DGLbmW/6cxfxIH/ottwRHZUzZcCYMNQo7izHb+P
+	 Ik7a2Ii3YN+6w==
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 11 Jan 2023 20:05:01 -0700
-Subject: [PATCH v2 04/14] kbuild: Update assembler calls to use proper
- flags and language target
+Date: Wed, 11 Jan 2023 20:05:03 -0700
+Subject: [PATCH v2 06/14] powerpc/vdso: Remove unused '-s' flag from
+ ASFLAGS
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -26,138 +26,70 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221228-drop-qunused-arguments-v2-4-9adbddd20d86@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221228-drop-qunused-arguments-v2-6-9adbddd20d86@kernel.org>
 References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
 In-Reply-To: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
 To: masahiroy@kernel.org
 Cc: ndesaulniers@google.com, nicolas@fjasle.eu, trix@redhat.com, 
  linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
+ Nathan Chancellor <nathan@kernel.org>, 
+ Segher Boessenkool <segher@kernel.crashing.org>, mpe@ellerman.id.au, 
+ npiggin@gmail.com, christophe.leroy@csgroup.eu, 
+ linuxppc-dev@lists.ozlabs.org
 X-Mailer: b4 0.12-dev-78c63
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5349; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ygBZ1B4cc2ZDEctLp77RGqvNTcRd7amEhdM91D44bsY=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMn7K36Xln54Jekq5+1dP/XWgRx3I7WmXbsf/9K7su9+yaYF
- /VY/O0pZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEpjUw/DOI6/yuaDpxzi6xqbVVH5
- 3+/l24IVh+zZ+t8yadWK647lgHI8PecwJztXrb/R5eOsi8cdGz/hcNB411/6yS6F5cknNLoYMZAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1751; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=uAHgiJSCHpIUV5vt/SRkX0KHkpA5UbELEGGq1ql5Qak=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDMn7K37Luf5TSJn1zGJGs5WDEWtGnPySzwmOwleXi5y7GMc1
+ LUaxo5SFQYyDQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEyEgYuRYdKPQG4+2+5fz2Y7PqucK2
+ V3YumbB5PKOXc9ursgvuacygxGhiPeFmF7Jdj7jnBc+ZpmGWXzfAWTQrbrjFs11zznMDEe4wYA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, it
+warns:
 
-as-instr uses KBUILD_AFLAGS, but as-option uses KBUILD_CFLAGS. This can
-cause as-option to fail unexpectedly when CONFIG_WERROR is set, because
-clang will emit -Werror,-Wunused-command-line-argument for various -m
-and -f flags in KBUILD_CFLAGS for assembler sources.
+  clang-16: error: argument unused during compilation: '-s' [-Werror,-Wunused-command-line-argument]
 
-Callers of as-option and as-instr should be adding flags to
-KBUILD_AFLAGS / aflags-y, not KBUILD_CFLAGS / cflags-y. Use
-KBUILD_AFLAGS in all macros to clear up the initial problem.
+The compiler's '-s' flag is a linking option (it is passed along to the
+linker directly), which means it does nothing when the linker is not
+invoked by the compiler. The kernel builds all .o files with '-c', which
+stops the compilation pipeline before linking, so '-s' can be safely
+dropped from ASFLAGS.
 
-Unfortunately, -Wunused-command-line-argument can still be triggered
-with clang by the presence of warning flags or macro definitions because
-'-x assembler' is used, instead of '-x assembler-with-cpp', which will
-consume these flags. Switch to '-x assembler-with-cpp' in places where
-'-x assembler' is used, as the compiler is always used as the driver for
-out of line assembler sources in the kernel.
-
-Finally, add -Werror to these macros so that they behave consistently
-whether or not CONFIG_WERROR is set.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1699
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-[nathan: Reworded and expanded on problems in commit message
-         Use '-x assembler-with-cpp' in a couple more places]
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
 ---
-Benchmarking '-x assembler' vs. '-x assembler-with-cpp' does show that
-invoking the preprocessor incurs some overhead but my kernel builds do
-not show any noticeable slowdowns due to how infrequently these macros
-are used.
+Cc: mpe@ellerman.id.au
+Cc: npiggin@gmail.com
+Cc: christophe.leroy@csgroup.eu
+Cc: linuxppc-dev@lists.ozlabs.org
 
-$ hyperfine -L lang assembler,assembler-with-cpp -N -w 5 "/usr/bin/gcc -x {lang} -c -o /dev/null /dev/null"
-Benchmark 1: /usr/bin/gcc -x assembler -c -o /dev/null /dev/null
-  Time (mean ± σ):       5.5 ms ±   0.5 ms    [User: 4.1 ms, System: 1.3 ms]
-  Range (min … max):     4.3 ms …   6.3 ms    472 runs
-
-Benchmark 2: /usr/bin/gcc -x assembler-with-cpp -c -o /dev/null /dev/null
-  Time (mean ± σ):      12.7 ms ±   1.0 ms    [User: 9.1 ms, System: 3.6 ms]
-  Range (min … max):     9.6 ms …  14.2 ms    225 runs
-
-Summary
-  '/usr/bin/gcc -x assembler -c -o /dev/null /dev/null' ran
-    2.29 ± 0.28 times faster than '/usr/bin/gcc -x assembler-with-cpp -c -o /dev/null /dev/null'
-
-$ hyperfine -L lang assembler,assembler-with-cpp -N -w 5 "/usr/bin/clang -x {lang} -c -o /dev/null /dev/null"
-Benchmark 1: /usr/bin/clang -x assembler -c -o /dev/null /dev/null
-  Time (mean ± σ):      21.0 ms ±   1.1 ms    [User: 9.6 ms, System: 11.1 ms]
-  Range (min … max):    13.9 ms …  22.0 ms    138 runs
-
-Benchmark 2: /usr/bin/clang -x assembler-with-cpp -c -o /dev/null /dev/null
-  Time (mean ± σ):      56.9 ms ±   3.2 ms    [User: 27.2 ms, System: 29.5 ms]
-  Range (min … max):    53.9 ms …  62.1 ms    48 runs
-
-Summary
-  '/usr/bin/clang -x assembler -c -o /dev/null /dev/null' ran
-    2.71 ± 0.20 times faster than '/usr/bin/clang -x assembler-with-cpp -c -o /dev/null /dev/null'
+As I mentioned before, it is possible that we should add '-s' to
+ldflags-y in the following patch but I assume someone would have noticed
+by now if that was a problem.
 ---
- scripts/Kconfig.include   | 2 +-
- scripts/Makefile.compiler | 8 ++++----
- scripts/as-version.sh     | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ arch/powerpc/kernel/vdso/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
-index 274125307ebd..5a84b6443875 100644
---- a/scripts/Kconfig.include
-+++ b/scripts/Kconfig.include
-@@ -33,7 +33,7 @@ ld-option = $(success,$(LD) -v $(1))
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+index 6a977b0d8ffc..45c0cc5d34b6 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -51,10 +51,10 @@ ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
+ ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
  
- # $(as-instr,<instr>)
- # Return y if the assembler supports <instr>, n otherwise
--as-instr = $(success,printf "%b\n" "$(1)" | $(CC) $(CLANG_FLAGS) -c -x assembler -o /dev/null -)
-+as-instr = $(success,printf "%b\n" "$(1)" | $(CC) $(CLANG_FLAGS) -c -x assembler-with-cpp -o /dev/null -)
+ CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
+-AS32FLAGS := -D__VDSO32__ -s
++AS32FLAGS := -D__VDSO32__
  
- # check if $(CC) and $(LD) exist
- $(error-if,$(failure,command -v $(CC)),C compiler '$(CC)' not found)
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 3d8adfd34af1..7aa1fbc4aafe 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -29,16 +29,16 @@ try-run = $(shell set -e;		\
- 	fi)
+ CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
+-AS64FLAGS := -D__VDSO64__ -s
++AS64FLAGS := -D__VDSO64__
  
- # as-option
--# Usage: cflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
-+# Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
- 
- as-option = $(call try-run,\
--	$(CC) $(KBUILD_CFLAGS) $(1) -c -x assembler /dev/null -o "$$TMP",$(1),$(2))
-+	$(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
- 
- # as-instr
--# Usage: cflags-y += $(call as-instr,instr,option1,option2)
-+# Usage: aflags-y += $(call as-instr,instr,option1,option2)
- 
- as-instr = $(call try-run,\
--	printf "%b\n" "$(1)" | $(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" -,$(2),$(3))
-+	printf "%b\n" "$(1)" | $(CC) -Werror $(KBUILD_AFLAGS) -c -x assembler-with-cpp -o "$$TMP" -,$(2),$(3))
- 
- # __cc-option
- # Usage: MY_CFLAGS += $(call __cc-option,$(CC),$(MY_CFLAGS),-march=winchip-c6,-march=i586)
-diff --git a/scripts/as-version.sh b/scripts/as-version.sh
-index 1a21495e9ff0..af717476152d 100755
---- a/scripts/as-version.sh
-+++ b/scripts/as-version.sh
-@@ -45,7 +45,7 @@ orig_args="$@"
- # Get the first line of the --version output.
- IFS='
- '
--set -- $(LC_ALL=C "$@" -Wa,--version -c -x assembler /dev/null -o /dev/null 2>/dev/null)
-+set -- $(LC_ALL=C "$@" -Wa,--version -c -x assembler-with-cpp /dev/null -o /dev/null 2>/dev/null)
- 
- # Split the line on spaces.
- IFS=' '
+ targets += vdso32.lds
+ CPPFLAGS_vdso32.lds += -P -C -Upowerpc
 
 -- 
 2.39.0
