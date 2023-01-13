@@ -1,142 +1,97 @@
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id D247F2F2A
-	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 15:29:01 +0000 (UTC)
-Received: (qmail 22532 invoked by uid 1000); 13 Jan 2023 10:22:20 -0500
-Date: Fri, 13 Jan 2023 10:22:20 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-  Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
-  Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
-  Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
-  Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
-  Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>,
-  Joel Fernandes <joel@joelfernandes.org>, linux-kernel@vger.kernel.org,
-  linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-  Marco Elver <elver@google.com>,
-  Charalampos Mainas <charalampos.mainas@gmail.com>,
-  Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-  Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-  Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
- <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
- <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1728F76
+	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 15:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673624202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I700DdA5+87CqalrCgVe0wgjpImXv87ud6g5vJ4qa4U=;
+	b=XtZkmSOm7mAheFiANi2xeNLMzlTPZyVPXg0pSVZpvmdyFs9hXPnXUN4hG3d80kwBOLMg8e
+	88PNlZwqcfKXcoE5Q2Pdl2/duMR4ogu2Vebl8Aqwn53zVsOI+klxpmCxbBUcITbq5pGDNp
+	Xhb9YgaFth+yhe0G0tLnHKVg5ZPPdOE=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-613-VoER2PkoPK2LIQAK19dlTQ-1; Fri, 13 Jan 2023 10:36:41 -0500
+X-MC-Unique: VoER2PkoPK2LIQAK19dlTQ-1
+Received: by mail-vs1-f72.google.com with SMTP id a62-20020a671a41000000b003c08f2a8d7bso5301234vsa.14
+        for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 07:36:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I700DdA5+87CqalrCgVe0wgjpImXv87ud6g5vJ4qa4U=;
+        b=pVubQF0PjYVvufCPUiD91QjbQP7i0nMaEE9ZqO4+x4z51gRJ0BdNuM3wg6OUaHcfmW
+         9oA2NescFtNQ/i6mHUph9h0kZDowjEoHLmSZqA0eFtTQiyc19JjZV+4QHHWn3ObVuPU8
+         Z1Ax1nZkGbNxv3YEVJ1Fsa7vCTHLXszgS24JL1MH88wGqn/YbqkfnuRcG4aGQRzpItW1
+         DUZKtl2mP0erQiKSMDoY+NgcXlEZqP2fwUMMaLErn6SD54QCsoT1tU4Z3RcJ2TE+O9DY
+         JyWl4F62LIB6+FRlz9uikxXs+Q4hA+Wx7cEM+zlP44IDWxswcZfF0QVPJ/wMNH0L2bQz
+         h/Rw==
+X-Gm-Message-State: AFqh2koofcWn3Cej7nzDaHEk7oitDY/ysqnuH8iW/InNcaegHfgUNjs7
+	s7dwLCYwq3tNIV+XTNQK9RS8Nd1r2ATylxY52vZahFXJJ8WJhbNbYUtyF7YmONoP9nmtugZF2Mc
+	8gNkqM8mGh5Vx7HLJa5kKDkTNlhDsIQ==
+X-Received: by 2002:a05:6122:e20:b0:3dd:f386:1bca with SMTP id bk32-20020a0561220e2000b003ddf3861bcamr108735vkb.33.1673624199263;
+        Fri, 13 Jan 2023 07:36:39 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsTcquavVHh2LGJon70r35hTGFJQHVvioXxV5viax0L+CXfJlSCxa4WETUFcgzBaSXMtuGTn7XNGrboTMumTbM=
+X-Received: by 2002:a05:6122:e20:b0:3dd:f386:1bca with SMTP id
+ bk32-20020a0561220e2000b003ddf3861bcamr108726vkb.33.1673624199039; Fri, 13
+ Jan 2023 07:36:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+References: <202301062107.EPkAEoe2-lkp@intel.com>
+In-Reply-To: <202301062107.EPkAEoe2-lkp@intel.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Fri, 13 Jan 2023 16:36:27 +0100
+Message-ID: <CABgObfZQC3qaiKqLifcfiPoRPrqti3A16G-hyvmFW2F3TvFNnA@mail.gmail.com>
+Subject: Re: [kvm:queue 121/153] arch/arm64/kvm/arm.c:2211: warning: expecting
+ prototype for Initialize Hyp(). Prototype was for kvm_arm_init() instead
+To: kernel test robot <lkp@intel.com>
+Cc: Sean Christopherson <seanjc@google.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	kvm@vger.kernel.org, Robert Hu <robert.hu@intel.com>, 
+	Farrah Chen <farrah.chen@intel.com>, Danmei Wei <danmei.wei@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
-> Hi all,
-> 
-> FWIW, here are two more broken address dependencies, both very similar to the
-> one discussed in this thread. From what I can tell, both are protected by a
-> lock, so, again, nothing to worry about right now? Would you agree?
+On Fri, Jan 6, 2023 at 2:52 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+> head:   91dc252b0dbb6879e4067f614df1e397fec532a1
+> commit: db139c0c865d775b19709cc4671e2e611815e575 [121/153] KVM: arm64: Do arm/arch initialization without bouncing through kvm_init()
+> config: arm64-randconfig-r022-20230106
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 8d9828ef5aa9688500657d36cd2aefbe12bbd162)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=db139c0c865d775b19709cc4671e2e611815e575
+>         git remote add kvm https://git.kernel.org/pub/scm/virt/kvm/kvm.git
+>         git fetch --no-tags kvm queue
+>         git checkout db139c0c865d775b19709cc4671e2e611815e575
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/gpu/drm/mxsfb/ drivers/gpu/drm/udl/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>    arch/arm64/kvm/arm.c:133: warning: Function parameter or member 'type' not described in 'kvm_arch_init_vm'
+>    arch/arm64/kvm/arm.c:1933: warning: expecting prototype for Inits Hyp(). Prototype was for init_hyp_mode() instead
+> >> arch/arm64/kvm/arm.c:2211: warning: expecting prototype for Initialize Hyp(). Prototype was for kvm_arm_init() instead
 
-FWIW, my opinion is that in both cases the broken dependency can be 
-removed entirely.
+Ok, this is just a "/**" comment where one ought to have just "/*" instead.
 
-> Comments marked with "AD:" were added by me for readability.
-> 
-> 1. drivers/hwtracing/stm/core.c::1050 - 1085
-> 
->         /**
->          * __stm_source_link_drop() - detach stm_source from an stm device
->          * @src:	stm_source device
->          * @stm:	stm device
->          *
->          * If @stm is @src::link, disconnect them from one another and put the
->          * reference on the @stm device.
->          *
->          * Caller must hold stm::link_mutex.
->          */
->         static int __stm_source_link_drop(struct stm_source_device *src,
->                                           struct stm_device *stm)
->         {
->                 struct stm_device *link;
->                 int ret = 0;
-> 
->                 lockdep_assert_held(&stm->link_mutex);
-> 
->                 /* for stm::link_list modification, we hold both mutex and spinlock */
->                 spin_lock(&stm->link_lock);
->                 spin_lock(&src->link_lock);
-> 
->                 /* AD: Beginning of the address dependency. */
->                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
-> 
->                 /*
->                  * The linked device may have changed since we last looked, because
->                  * we weren't holding the src::link_lock back then; if this is the
->                  * case, tell the caller to retry.
->                  */
->                 if (link != stm) {
->                         ret = -EAGAIN;
->                         goto unlock;
->                 }
-> 
->                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
->                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
-> 
->                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
->                 pm_runtime_mark_last_busy(&link->dev);
+Paolo
 
-In both of these statements, link can safely be replaced by stm.
-
-(There's also a control dependency which the LKMM isn't aware of.  This 
-makes it all the more safe.)
-
-> 2. kernel/locking/lockdep.c::6319 - 6348
-> 
->         /*
->          * Unregister a dynamically allocated key.
->          *
->          * Unlike lockdep_register_key(), a search is always done to find a matching
->          * key irrespective of debug_locks to avoid potential invalid access to freed
->          * memory in lock_class entry.
->          */
->         void lockdep_unregister_key(struct lock_class_key *key)
->         {
->                 struct hlist_head *hash_head = keyhashentry(key);
->                 struct lock_class_key *k;
->                 struct pending_free *pf;
->                 unsigned long flags;
->                 bool found = false;
-> 
->                 might_sleep();
-> 
->                 if (WARN_ON_ONCE(static_obj(key)))
->                         return;
-> 
->                 raw_local_irq_save(flags);
->                 lockdep_lock();
-> 
->                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
->                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
->                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
->                         if (k == key) {
->                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
->                                 hlist_del_rcu(&k->hash_entry);
-
-And here k could safely be replaced with key.  (And again there is a 
-control dependency, but this is one that the LKMM would detect.)
-
-Alan Stern
-
->                                 found = true;
->                                 break;
->                         }
->                 }
-> 
-> Many thanks,
-> Paul
