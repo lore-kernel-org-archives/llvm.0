@@ -1,119 +1,75 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993EA7EF
-	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 08:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673596990;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=11A68i/ujjvlvNOTfu4F5ZXcyPx1UEmLo0fXGnHQZCM=;
-	b=fMBJiTWycdwHuq0qkh8vxiwrI8ev5QebDUv6qsJyxf99cc9JQpSwQ/jLD19SrIkNq+oJ4i
-	+SRIz3L0EylSeLdzp1TLuKBi9Vh57KNP9BBmdhq9OWIt5zyBndZassuSbtEPEqUsaLBXwt
-	Q/UZAvzNV8u86jwqhQxlAfbQg4ceLvc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-557-8PI_gqanOAGc7NhAOEFuyA-1; Fri, 13 Jan 2023 03:03:08 -0500
-X-MC-Unique: 8PI_gqanOAGc7NhAOEFuyA-1
-Received: by mail-wr1-f71.google.com with SMTP id y5-20020adfc7c5000000b002bc02b72d2dso3236015wrg.19
-        for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 00:03:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=11A68i/ujjvlvNOTfu4F5ZXcyPx1UEmLo0fXGnHQZCM=;
-        b=RenwnjS+HjQR9QY742uapCnnhsc9mQlhi0q3sjpFyZkSrzzs1mmBR03rdaydxNjHRs
-         58SvHgtp+2u56IdHvqVHgWyUScNCy1/IYkCIUkRwgQs8VP7C2LrzxfTTRfhZ3OWDimJq
-         JsfShHmN8YT5hKLZjZ/XzseelmyuNiuv02mn2arsFxJfIoE2zMuOS/JQ4HjTB3JPEw6Y
-         jHB80NMAIw26YohRJlrZeN72S9/UF1CcmcEfsP9gZVzCk4IUtPIhJuInTQCGOLOfmU3T
-         7KA0vIpjVkXBav+44+q0Sw+kmMwbjVDvWxTZdtzzNoITcx5Oy0TCI1s6pWKe+uG0uApr
-         mbnA==
-X-Gm-Message-State: AFqh2kr0Z2JI9TKo1fnGDpDlNuSgRgeVJIgWmYRNz53nki7p2t6Y1bK/
-	Wp5dhhFv2Xzq8DnMICn5/mZKGvJKgLaqGj7BdI/Mqf9dFMmq/xcRP8/B3XMRg5aA0YBQyXTw7fd
-	oOcMN6ZzSDaSWAw==
-X-Received: by 2002:a05:600c:5128:b0:3c6:e62e:2e67 with SMTP id o40-20020a05600c512800b003c6e62e2e67mr58697250wms.2.1673596987501;
-        Fri, 13 Jan 2023 00:03:07 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvVwsf1Jjnk65GgTwR1x8Y5bh32fZraLo5RnjXtvxHHUeem4xVwqG2giy3CQPNe9luzSHMqkw==
-X-Received: by 2002:a05:600c:5128:b0:3c6:e62e:2e67 with SMTP id o40-20020a05600c512800b003c6e62e2e67mr58697233wms.2.1673596987293;
-        Fri, 13 Jan 2023 00:03:07 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:c:37e0:38da:a7d9:7cc9:db3e? ([2a01:e0a:c:37e0:38da:a7d9:7cc9:db3e])
-        by smtp.gmail.com with ESMTPSA id n7-20020a05600c4f8700b003c6bd12ac27sm27381636wmq.37.2023.01.13.00.03.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:03:06 -0800 (PST)
-Message-ID: <e54977a6-d767-7ea4-5259-d9735e5a68e9@redhat.com>
-Date: Fri, 13 Jan 2023 09:03:05 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7062B7EC
+	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 09:27:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=OJRRczjdnZrMUyBr4WxyQN5pLb8AWpdjYYHf5LsEHfc=; b=ptNivekeyqVdwUJ+qf34fN61lQ
+	KFdIvGx7iIPl2rNxqBZSqMyVFbVTdtjuwwlALl3ZxMVjaQeuQ3pVst3safTQ+t2UzdC4dVFnND/Ow
+	udWRTiBl4/EwdK8CMWTj09c1JZkK3kOND4SY9VEwEDVc8OgEWFfYeunlBvAcxSzzSxtfLLwV8NSxe
+	84ZoVn+tw/Q1GsdjTbGTfziKq4HQk+dOtgOtVNDLamRbHI8QhACs2laWjHSpit42cCQAw7gWazvnv
+	O02OxcOxZFwrnlB4eCyeoATiRTXc+4cXfncuPT11dTs7xg28OeUiX7E16afFLJ2+eHOk0QWxLx2ze
+	XOo9w2Yg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1pGGLi-005xom-HO; Fri, 13 Jan 2023 09:27:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3B99300642;
+	Fri, 13 Jan 2023 10:27:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B94052013A2A1; Fri, 13 Jan 2023 10:27:32 +0100 (CET)
+Date: Fri, 13 Jan 2023 10:27:32 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] kbuild: Fix CFI hash randomization with KASAN
+Message-ID: <Y8EkBKUCWKs2M7hk@hirez.programming.kicks-ass.net>
+References: <20230112224948.1479453-1-samitolvanen@google.com>
+ <20230112224948.1479453-2-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] drm/i915: Fix CFI violations in gt_sysfs
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- Kees Cook <keescook@chromium.org>, Tom Rix <trix@redhat.com>,
- intel-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
- Nick Desaulniers <ndesaulniers@google.com>, patches@lists.linux.dev,
- dri-devel@lists.freedesktop.org, Andrzej Hajda <andrzej.hajda@intel.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- Andi Shyti <andi.shyti@linux.intel.com>
-References: <20221013205909.1282545-1-nathan@kernel.org>
- <4dcf830e-62a5-837b-7590-ac5395f84c14@redhat.com>
- <Y8Atycuni0bl8std@dev-arch.thelio-3990X>
-From: Jocelyn Falempe <jfalempe@redhat.com>
-In-Reply-To: <Y8Atycuni0bl8std@dev-arch.thelio-3990X>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112224948.1479453-2-samitolvanen@google.com>
 
-On 12/01/2023 16:56, Nathan Chancellor wrote:
-> Hi Jocelyn,
+On Thu, Jan 12, 2023 at 10:49:48PM +0000, Sami Tolvanen wrote:
+> Clang emits a asan.module_ctor constructor to each object file
+> when KASAN is enabled, and these functions are indirectly called
+> in do_ctors. With CONFIG_CFI_CLANG, the compiler also emits a CFI
+> type hash before each address-taken global function so they can
+> pass indirect call checks.
 > 
-> On Thu, Jan 12, 2023 at 11:08:17AM +0100, Jocelyn Falempe wrote:
->> This patch does also solve a kernel crash when reading
->> /sys/class/drm/card1/gt/gt0/* on a skylake machine:
->> https://bugzilla.redhat.com/show_bug.cgi?id=2154880
+> However, in commit 0c3e806ec0f9 ("x86/cfi: Add boot time hash
+> randomization"), x86 implemented boot time hash randomization,
+> which relies on the .cfi_sites section generated by objtool. As
+> objtool is run against vmlinux.o instead of individual object
+> files with X86_KERNEL_IBT (enabled by default), CFI types in
+> object files that are not part of vmlinux.o end up not being
+> included in .cfi_sites, and thus won't get randomized and trip
+> CFI when called.
 > 
-> Interesting, I wonder what aspect of this patch fixes this because I am
-> not sure that is an intended consequence of this change but that is
-> still good to hear!
+> Only .vmlinux.export.o and init/version-timestamp.o are linked
+> into vmlinux separately from vmlinux.o. As these files don't
+> contain any functions, disable KASAN for both of them to avoid
+> breaking hash randomization.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1742
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-I wasn't able to find the root cause, but basically the kobj pointer 
-given in the sysfs callback, is not the good one on this machine, so it 
-either return garbage or crash.
-By chance I found this patch, tried it, and it solves the issue.
-> 
-> For the record, this is commit a8a4f0467d70 ("drm/i915: Fix CFI
-> violations in gt_sysfs") in mainline.
-> 
->> Do you think it can be backported to stable releases ?
->> Conflicts are trivial on top of v6.0 at least.
-> 
-> I had a report from another user of this crash affecting them with kCFI
-> so it is on my TODO to backport it to 6.1 (6.0 just went EOL) but I am
-> currently out of the office until next Wednesday so I won't be able to
-> get to it until then (as I would like to test the backport on affected
-> hardware). If someone wants to beat me to it, I won't complain ;)
+Must've been 'fun' to figure out, Thanks!
 
-Thanks for taking care of it, I will wait next week then.
-
-> 
-> Cheers,
-> Nathan
-> 
-
--- 
-
-Jocelyn
-
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
