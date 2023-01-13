@@ -1,131 +1,202 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB942F2A
-	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 16:23:01 +0000 (UTC)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1pGMp4-000DRc-S9; Fri, 13 Jan 2023 17:22:30 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-	by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1pGMp4-000Dff-6W; Fri, 13 Jan 2023 17:22:30 +0100
-Subject: Re: [PATCH] bpf: Fix pointer-leak due to insufficient speculative
- store bypass mitigation
-To: Luis Gerhorst <gerhorst@cs.fau.de>, Alexei Starovoitov <ast@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Piotr Krysiuk <piotras@gmail.com>,
- Benedict Schlueter <benedict.schlueter@rub.de>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: stefan.saecherl@use.startmail.com,
- Henriette Hofmeier <henriette.hofmeier@rub.de>
-References: <20230109150544.41465-1-gerhorst@cs.fau.de>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <b643a86c-87cd-348c-8695-e14c7670871b@iogearbox.net>
-Date: Fri, 13 Jan 2023 17:22:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54F67EF
+	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 16:31:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673627500;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SkpIRXzGoGaAoEwcGKoFFqNMmzmD1fw5Eojkwm5TBAc=;
+	b=g2RERQVP0hgXiDpgmiZTa4rLvdfWq8rfFrv5Ey/t0zL7j+8HFtQZ7vrZh+GLYTybWzBps8
+	6Lzpv6XpqVs3VOLg08MclCsZqgxUyMmUI9Zz0PNpltaPfzoEop85Q2OyyHMSrFpe+/xdK0
+	HJrQfi3FC+XX6PTSSYaoDf8J617lpfI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-345-pYBum1k1OomIlwIYcW7Qvw-1; Fri, 13 Jan 2023 11:31:39 -0500
+X-MC-Unique: pYBum1k1OomIlwIYcW7Qvw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15A381C05136
+	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 16:31:39 +0000 (UTC)
+Received: from [172.64.10.55] (unknown [10.30.32.123])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 02AAB40C2064;
+	Fri, 13 Jan 2023 16:31:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (23/383 SKIPPED): Test report for master
+ (6.2.0-rc3, mainline.kernel.org-clang, 772d0e91)
+Date: Fri, 13 Jan 2023 16:31:38 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230109150544.41465-1-gerhorst@cs.fau.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26780/Fri Jan 13 09:37:02 2023)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <52962.123011311313901883@us-mta-345.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/9/23 4:05 PM, Luis Gerhorst wrote:
-> To mitigate Spectre v4, 2039f26f3aca ("bpf: Fix leakage due to
-> insufficient speculative store bypass mitigation") inserts lfence
-> instructions after 1) initializing a stack slot and 2) spilling a
-> pointer to the stack.
-> 
-> However, this does not cover cases where a stack slot is first
-> initialized with a pointer (subject to sanitization) but then
-> overwritten with a scalar (not subject to sanitization because the slot
-> was already initialized). In this case, the second write may be subject
-> to speculative store bypass (SSB) creating a speculative
-> pointer-as-scalar type confusion. This allows the program to
-> subsequently leak the numerical pointer value using, for example, a
-> branch-based cache side channel.
-> 
-> To fix this, also sanitize scalars if they write a stack slot that
-> previously contained a pointer. Assuming that pointer-spills are only
-> generated by LLVM on register-pressure, the performance impact on most
-> real-world BPF programs should be small.
-> 
-> The following unprivileged BPF bytecode drafts a minimal exploit and the
-> mitigation:
-> 
->    [...]
->    // r6 = 0 or 1 (skalar, unknown user input)
->    // r7 = accessible ptr for side channel
->    // r10 = frame pointer (fp), to be leaked
->    //
->    r9 = r10 # fp alias to encourage ssb
->    *(u64 *)(r9 - 8) = r10 // fp[-8] = ptr, to be leaked
->    // lfence added here because of pointer spill to stack.
->    //
->    // Ommitted: Dummy bpf_ringbuf_output() here to train alias predictor
->    // for no r9-r10 dependency.
->    //
->    *(u64 *)(r10 - 8) = r6 // fp[-8] = scalar, overwrites ptr
->    // 2039f26f3aca: no lfence added because stack slot was not STACK_INVALID,
->    // store may be subject to SSB
->    //
->    // fix: also add an lfence when the slot contained a ptr
->    //
->    r8 = *(u64 *)(r9 - 8)
->    // r8 = architecturally a scalar, speculatively a ptr
->    //
->    // leak ptr using branch-based cache side channel:
->    r8 &= 1 // choose bit to leak
->    if r8 == 0 goto SLOW // no mispredict
->    // architecturally dead code if input r6 is 0,
->    // only executes speculatively iff ptr bit is 1
->    r8 = *(u64 *)(r7 + 0) # encode bit in cache (0: slow, 1: fast)
-> SLOW:
->    [...]
-> 
-> After running this, the program can time the access to *(r7 + 0) to
-> determine whether the chosen pointer bit was 0 or 1. Repeat this 64
-> times to recover the whole address on amd64.
-> 
-> In summary, sanitization can only be skipped if one scalar is
-> overwritten with another scalar. Scalar-confusion due to speculative
-> store bypass can not lead to invalid accesses because the pointer bounds
-> deducted during verification are enforced using branchless logic. See
-> 979d63d50c0c ("bpf: prevent out of bounds speculation on pointer
-> arithmetic") for details.
-> 
-> Do not make the mitigation depend on
-> !env->allow_{uninit_stack,ptr_leaks} because speculative leaks are
-> likely unexpected if these were enabled. For example, leaking the
-> address to a protected log file may be acceptable while disabling the
-> mitigation might unintentionally leak the address into the cached-state
-> of a map that is accessible to unprivileged processes.
-> 
-> Fixes: 2039f26f3aca ("bpf: Fix leakage due to insufficient speculative store bypass mitigation")
-> Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
-> Acked-by: Henriette Hofmeier <henriette.hofmeier@rub.de>
+Hi, we tested your kernel and here are the results:
 
-This looks good to me, thank you for the research on this topic! Applied
-to bpf tree. (I've also added a link tag to your other mail.)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=e4f4db47794c9f474b184ee1418f42e6a07412b6
 
-Thanks,
-Daniel
+Kernel information:
+    Commit message: Merge tag 'timers-urgent-2023-01-12' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/65581
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6659203
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
+UT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1374
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: Storage - software RAID testing: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1382
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1172
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: [rawhide][s390x] avc:  denied  { transition } for  pid=3D135=
+5 comm=3D"runcon" path=3D"/usr/bin/true" dev=3D"dm-0" ino=3D17226318 sconte=
+xt=3Dsystem_u:system_r:unconfined_service_t:s0 tcontext=3Dunconfined_u:unco=
+nfined_r:unconfined_t:s0-s0:c0.c1023 tclass=3Dprocess permissive=3D1
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5628421
+            Affected tests:
+                   s390x - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
