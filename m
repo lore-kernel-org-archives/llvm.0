@@ -1,84 +1,67 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9472115
-	for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 18:57:50 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-4c16ff0159eso239936097b3.17
-        for <llvm@lists.linux.dev>; Fri, 13 Jan 2023 10:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s0i2zZBdrCWRI9lmKA/36c64wVimSwf1CiL2+om4mgI=;
-        b=e6pfazQiYivaHP9XqMCP5fL6vnwPvriEHQad3NVSdxFMeQuXIIff+6pWflu0WlYXdC
-         QSJgNpOHrcy2L8irdpn2EEuVQOOZcA7dXwJzAFkLPCKJaDSdw9yU64m5hu3zqlX79ZDt
-         wEJ1B3RaFiU+7nsE57mp1uu/psdWgbR+JAoxPekkl0pishgP5Y2rD7ajxh5VZpC6fc8N
-         XI9lzEk+uKqwbSqSUE/aN9LI4a92Vaw51ACQQjTd1r8/Z94PCWvKZXPn95CupEv1GTyL
-         LqpE41JbjiwNh+sOCn4MCi4IbTXXv9aXkhuzaqxEmbWytJZNEhJJ8HZQlxdbQBCeBN05
-         6cAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s0i2zZBdrCWRI9lmKA/36c64wVimSwf1CiL2+om4mgI=;
-        b=6FlMjnFsxhAwYooCw4X0TT1lMy+jG33F6JNouXdQhpBNdd3cEi8smndfYhcVsvfWl3
-         mtrzCydv5M2xzzwwixZ0fI6qLgKuhFUrMAyocpfQPKOk51nvS1+mrQgeG3uLE+VgfNBG
-         lbfOqd5ZrE4ky12dMSDFyXpxnnINrowuIdbXCTz2y1iSLddDDVj/vdJiXFdMzX6WwO2w
-         XKqI8ffGj23dn7C7pmE9+Ibie7GsOS8NOXjcwHJFNTtodmqh6mWSAcFc3/eEgq+BjXur
-         iDo8WC6eA+/zFrkPUlRj0UdYuwNJuj4oh+nu492xdnkuAZXzkdc14VecQ5ZjUIBOv+9a
-         Sz/Q==
-X-Gm-Message-State: AFqh2kpWIMhqvid9y3mxnyQSLTDxrA1x1T/B3IBbN3HU6N3bpw8jwvmR
-	+dpOmUXzQxbwXf3Hd5Bf9kPOTYUSjv9Z
-X-Google-Smtp-Source: AMrXdXuIfeiMj4FfTSA3IXDlo2QLb1EWzOITknF00Kz9b9grv9RndDgACvilj1UWEWIPTzvvj7mN5CvRe4Ft
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:fa4e:1fbc:95a:3ea6])
- (user=irogers job=sendgmr) by 2002:a25:dd84:0:b0:756:35b9:e2de with SMTP id
- u126-20020a25dd84000000b0075635b9e2demr9383227ybg.117.1673636269620; Fri, 13
- Jan 2023 10:57:49 -0800 (PST)
-Date: Fri, 13 Jan 2023 10:57:32 -0800
-Message-Id: <20230113185732.134861-1-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FFFBA40;
+	Fri, 13 Jan 2023 21:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6511DC4339C;
+	Fri, 13 Jan 2023 21:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1673644856;
+	bh=Tdf6cUFrRR0hwdAWI/Kfn7YtQl15TbwB8vYhi1fhtIw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=MyH7bb6ZwkVGaHib10/pqZMusN2vC57bhG7ZlE+9/ivMwb7R2R28MuIhsv+OGJXDS
+	 0YBC1meOAVNLgmmr8+6KVKUtM1FeDCOHv08oUS32VF1FV0Nv5I9LLOMr9BTJZN5nlN
+	 VkifR/qzchmK0oeCCNzNznT4zsO4YnvvN4kcbXlM2lE5iGA6eZ6hNIHxMq+jKMMQ+i
+	 8sh0YPSO9xIKSzpHFXKz2yr4QGxugxnz1sQ+SGBKmXIKBn4xqTKnknjqbk3HYMonNr
+	 hjfWv9T+WRyw2xawruOCxbTBVfGbsYL2FBq5q4pihGFb1Yu+dIj3OozwTscWEIAH15
+	 LjrC7Rx8WB93w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5325BE21EE2;
+	Fri, 13 Jan 2023 21:20:56 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH] perf buildid: Avoid copy of uninitialized memory
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] platform/chrome: cros_ec_lpc: initialize the buf variable
+From: patchwork-bot+chrome-platform@kernel.org
+Message-Id: 
+ <167364485633.21086.16143246139018637708.git-patchwork-notify@kernel.org>
+Date: Fri, 13 Jan 2023 21:20:56 +0000
+References: <20230110193611.3573777-1-trix@redhat.com>
+In-Reply-To: <20230110193611.3573777-1-trix@redhat.com>
+To: Tom Rix <trix@redhat.com>
+Cc: bleung@chromium.org, groeck@chromium.org, nathan@kernel.org,
+ ndesaulniers@google.com, chrome-platform@lists.linux.dev,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-build_id__init only copies the buildid data up to size leaving the
-rest of the data array uninitialized. Copying the full array during
-synthesis means the written event contains uninitialized memory.  This
-was detected by the Clang/LLVM memory sanitizer.
+Hello:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/synthetic-events.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 3ab6a92b1a6d..348d05e4ec03 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -2219,7 +2219,7 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
- 
- 	len = pos->long_name_len + 1;
- 	len = PERF_ALIGN(len, NAME_ALIGN);
--	memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
-+	memcpy(&ev.build_id.build_id, pos->bid.data, pos->bid.size);
- 	ev.build_id.size = pos->bid.size;
- 	ev.build_id.header.type = PERF_RECORD_HEADER_BUILD_ID;
- 	ev.build_id.header.misc = misc | PERF_RECORD_MISC_BUILD_ID_SIZE;
+On Tue, 10 Jan 2023 14:36:11 -0500 you wrote:
+> Clang static analysis reports this problem
+> drivers/platform/chrome/cros_ec_lpc.c:379:13: warning: The left operand
+>   of '!=' is a garbage value [core.UndefinedBinaryOperatorResult]
+>     if (buf[0] != 'E' || buf[1] != 'C') {
+>          ~~~~~~ ^
+> 
+> The check depends on the side effect of the read.  When the read fails
+> or is short, a buf containing garbage could be mistaken as correct.
+> 
+> [...]
+
+Here is the summary with links:
+  - platform/chrome: cros_ec_lpc: initialize the buf variable
+    https://git.kernel.org/chrome-platform/c/2ae3c610e7d2
+
+You are awesome, thank you!
 -- 
-2.39.0.314.g84b9a713c41-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
