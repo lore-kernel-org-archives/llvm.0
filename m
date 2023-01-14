@@ -1,227 +1,131 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BF87C
-	for <llvm@lists.linux.dev>; Sat, 14 Jan 2023 16:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D635E7C
+	for <llvm@lists.linux.dev>; Sat, 14 Jan 2023 17:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1673713897;
+	s=mimecast20190719; t=1673715678;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=ihqDmgvAezNpCPe/y5IhXLSMVPGgsfctHWpCQbJ9fRw=;
-	b=JHNSXGirtyyQV82HChNXG8uoUWgnSSbpaduPhOGmbu0n4IFhJoxuFqZg+dT5PEvF6XlPlX
-	adbGpADu/0aufYtGUfWP6J5GqtJBSAnPU7ojNkUHDdj2c7LTWikyObEgr+CZ6jj5Ef2SE/
-	blJ/VY0ge623ao7K4MwwG6eAtOCIWzg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-gYTsuo7hMKOVJao051Il3Q-1; Sat, 14 Jan 2023 11:31:36 -0500
-X-MC-Unique: gYTsuo7hMKOVJao051Il3Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D3B13803903
-	for <llvm@lists.linux.dev>; Sat, 14 Jan 2023 16:31:36 +0000 (UTC)
-Received: from [172.64.10.55] (unknown [10.30.32.123])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id F10B714171B7;
-	Sat, 14 Jan 2023 16:31:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (19/383 SKIPPED): Test report for master
- (6.2.0-rc3, mainline.kernel.org-clang, 97ec4d55)
-Date: Sat, 14 Jan 2023 16:31:35 -0000
-To: llvm@lists.linux.dev
+	bh=UL5uNX54JKFtg06F7nCs9+yy2MAYTYW/oHNsNWT8Z7o=;
+	b=ZhrFuhQkzllrna0V9p3bBMjNzT1DMngJk7Sys03fFmi4HtX+P/D4ETvVlZ6G1+g2ifg1qO
+	ZLHN2QiSqb8pLXbDTJC2GnzN9OYCFDmJDTdFkNMDENXkcQCCwyQUWv0AnPnxgN1PpVUw7S
+	Uo62YcV0MbIewsrGEtju1J3ZIFQHSs8=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-138-dCjqnDrpMpqDOoacGuQ1wA-1; Sat, 14 Jan 2023 12:01:17 -0500
+X-MC-Unique: dCjqnDrpMpqDOoacGuQ1wA-1
+Received: by mail-yb1-f199.google.com with SMTP id h66-20020a252145000000b0071a7340eea9so26078340ybh.6
+        for <llvm@lists.linux.dev>; Sat, 14 Jan 2023 09:01:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UL5uNX54JKFtg06F7nCs9+yy2MAYTYW/oHNsNWT8Z7o=;
+        b=MfJ6GLbhoxHK35i/mLsHnR50roCizzoE84Ntb4bZUnmN1Zyme3Oc5euJNuA9WkyzWm
+         87EbyhGx8ZLdV55mHU4IzP1tLjjdvkwZOwyCN2O8LZoW9VItCsMcdyVO7YSd6GrJ06Vw
+         9KQWdTdHtab+l2vYSrsZ9I0Sgqj7itRtmMvasb/7t57l7Vuv15PTaIAE1CNOXeXtzPEw
+         10/m382TnTKUGhyNE/pnCG8itJxRwmcrapFglMKRmIx8BFvLnUEab1lcPrDBNwt9CC0/
+         MWysXJW3mUPCM2r3ht6UiI5jumxYw5wEtbfDfY67tZobjl135JbS4inTXcFpthnfRxdN
+         QN/Q==
+X-Gm-Message-State: AFqh2krRqBLMSAbANPuDWQLAzx59BXO7hOni1SbHLbW10lYICZCW1rm4
+	CeJ3+SqqaY44m/JjBT+1UAD7+CPVGZO253JPnpWPS6tsSeDcg23YU6YVRGTOEcL4itbwcm1uOj7
+	2uvn7eCudiRYK3w==
+X-Received: by 2002:a25:e792:0:b0:7d1:d26b:7eaa with SMTP id e140-20020a25e792000000b007d1d26b7eaamr3683923ybh.39.1673715676744;
+        Sat, 14 Jan 2023 09:01:16 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtr8avWN03TzTzhlRuzCN6sYiu2T5Bek5rUhuA0So+cSWahDMdGma5psLhGPToohX8uBWTwcg==
+X-Received: by 2002:a25:e792:0:b0:7d1:d26b:7eaa with SMTP id e140-20020a25e792000000b007d1d26b7eaamr3683890ybh.39.1673715676289;
+        Sat, 14 Jan 2023 09:01:16 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id bl41-20020a05620a1aa900b007059c5929b8sm14637969qkb.21.2023.01.14.09.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 09:01:15 -0800 (PST)
+From: Tom Rix <trix@redhat.com>
+To: tim@cyberelk.net,
+	axboe@kernel.dk,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] paride/pcd: return earlier when an error happens in pcd_atapi()
+Date: Sat, 14 Jan 2023 12:01:13 -0500
+Message-Id: <20230114170113.3985630-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <04416.123011411313600255@us-mta-532.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi, we tested your kernel and here are the results:
+clang static analysis reports
+drivers/block/paride/pcd.c:856:36: warning: The left operand of '&'
+  is a garbage value [core.UndefinedBinaryOperatorResult]
+  tocentry->cdte_ctrl = buffer[5] & 0xf;
+                        ~~~~~~~~~ ^
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+When the call to pcd_atapi() fails, buffer[] is in an unknown state,
+so return early.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/block/paride/pcd.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Kernel information:
-    Commit message: Merge tag 'block-6.2-2023-01-13' of git://git.kernel.dk=
-/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/65693
-
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-          x86_64 (debug) - Boot test
-                   Issue: Kernel panic - not syncing: VFS: Unable to mount =
-root fs on unknown-block
-                          https://projects.engineering.redhat.com/browse/FA=
-STMOVING-2156
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6675980
-
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6675670
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
-teger expression expected
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1455
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - ext4: FAIL: Fetching task filesystems/xfs/xfstest=
-s
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6247518
-            Affected tests:
-                  x86_64 (debug) - xfstests - ext4
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 ppc64le - Networking cki netfilter test
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
-Objects remaining in bio-152 on __kmem_cache_shutdown()
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1255
-            Affected tests:
-                  x86_64 - Storage - swraid simple_reshape
-        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
-ree+0x53/0x80
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1359
-            Affected tests:
-                  x86_64 - Storage - swraid simple_reshape
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1172
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                 aarch64 - Storage - block - storage fio numa
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/block/paride/pcd.c b/drivers/block/paride/pcd.c
+index a5ab40784119..4524d8880463 100644
+--- a/drivers/block/paride/pcd.c
++++ b/drivers/block/paride/pcd.c
+@@ -827,12 +827,13 @@ static int pcd_audio_ioctl(struct cdrom_device_info *cdi, unsigned int cmd, void
+ 			char buffer[32];
+ 			int r;
+ 
+-			r = pcd_atapi(cd, cmd, 12, buffer, "read toc header");
++			if (pcd_atapi(cd, cmd, 12, buffer, "read toc header"))
++				return -EIO;
+ 
+ 			tochdr->cdth_trk0 = buffer[2];
+ 			tochdr->cdth_trk1 = buffer[3];
+ 
+-			return r ? -EIO : 0;
++			return 0;
+ 		}
+ 
+ 	case CDROMREADTOCENTRY:
+@@ -845,13 +846,13 @@ static int pcd_audio_ioctl(struct cdrom_device_info *cdi, unsigned int cmd, void
+ 			struct cdrom_tocentry *tocentry =
+ 			    (struct cdrom_tocentry *) arg;
+ 			unsigned char buffer[32];
+-			int r;
+ 
+ 			cmd[1] =
+ 			    (tocentry->cdte_format == CDROM_MSF ? 0x02 : 0);
+ 			cmd[6] = tocentry->cdte_track;
+ 
+-			r = pcd_atapi(cd, cmd, 12, buffer, "read toc entry");
++			if (pcd_atapi(cd, cmd, 12, buffer, "read toc entry"))
++				return -EIO;
+ 
+ 			tocentry->cdte_ctrl = buffer[5] & 0xf;
+ 			tocentry->cdte_adr = buffer[5] >> 4;
+@@ -866,7 +867,7 @@ static int pcd_audio_ioctl(struct cdrom_device_info *cdi, unsigned int cmd, void
+ 				    (((((buffer[8] << 8) + buffer[9]) << 8)
+ 				      + buffer[10]) << 8) + buffer[11];
+ 
+-			return r ? -EIO : 0;
++			return 0;
+ 		}
+ 
+ 	default:
+-- 
+2.27.0
 
