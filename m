@@ -1,509 +1,206 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6350410E3
-	for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 09:52:08 +0000 (UTC)
-Received: by mail-ej1-f53.google.com with SMTP id hw16so49895903ejc.10
-        for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 01:52:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e5PAT5gbvWpFDd1BNXjDXD80icdVt9qEy9mpZ08aYmo=;
-        b=WQ4Xd3o0yl7OwvS0CQuGLOkQt7LhxH97PP1tRKaLpsp8qT66GRhTYKK7Krd9u08srU
-         Ose2Bxt3LyQbxOUr67gy9Gq3dKftWNikDYnc8Rt5NzFLl0r2xUygvixzShVudLm/AZ8M
-         2aoidnTW2MhFnkxftgjMUAOwHOEGjUrB/Z+HbUvNktMNu1TcsOBqVoSc2UIEyQD5Hzk8
-         Ec4z6y2XWUq/0Lhiq+rCV7P2tWMUo8y1YfuCIOMH+D0xNdu29eAKQQgNDK8Wg5mAF7Q5
-         wJDi4vJdIpAaBfFdSTXLB3987jySetsU2c3uCC63cwIx1wl4BHO0pHamaSoTN0pCxRl4
-         hPrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e5PAT5gbvWpFDd1BNXjDXD80icdVt9qEy9mpZ08aYmo=;
-        b=lksYQtLBW9ALGJ6dmOM1ZDofodh6D8SIAJuH5BBFV7ezq3Yc2Ok55XjVn+LwramdjP
-         jV6sjMCQdqbSR1PDEnVqs97pJWXmCBIO6uRDfUcMwVC/O4Ng+ssPmhGGmcwbcEyfu3YC
-         94no3NAyE1NM0UDPGJzFoZtfMAXdulBm3NGSM6pPldgCJHTCVHMuIi3f//vOQaBsbLfQ
-         MNmyruJOCACJiyXcBpag9nDXBITxI76un9TkjcwGhqUx1HOFJAXYEVVqzKny5Q3pbSyi
-         beilo6qBFm84VauJB7l0PTv4MGKKWZ+i/ImsycPWnEPbl3LNW0n+kjfNj7B7pKQD5+l3
-         QRGA==
-X-Gm-Message-State: AFqh2krOGFvR27NZ1zgLgv4ZhUSad9+g01mpiUu+s1QZ2wcRkg80A4r2
-	HwClsPjJwMyh/n9zfo06RehZoL9S+bnQXAobs/8=
-X-Google-Smtp-Source: AMrXdXuvjhkV2ClOM+3EpkLdKMrORPwLfBO58Wf3CxxW7d8MbpeXD7S7sYjkBAemUJorzQ8FZWS6J8eVwUrFgsnZsv8=
-X-Received: by 2002:a17:906:cf84:b0:84d:3b6b:74d9 with SMTP id
- um4-20020a170906cf8400b0084d3b6b74d9mr3040829ejb.281.1673776326442; Sun, 15
- Jan 2023 01:52:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8364B10E3
+	for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 10:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1673776901;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=T/8Dka+7s6td1+JuXJ/4OVw51qaQKDPpPvZhonKXJYw=;
+	b=Im75kZL2LEorClXAThgAnLp2Gub1hB7lI/KVF/ZkqPA5nn/EFOPYxWa8l86TJPD7Q9kL44
+	PvS1sevLR3jifeQNxnE9rr1Bd6GkFna63tR5Jnfgtz6nOYLOFGKH3KGf5MmYLCxankFaNu
+	AjbmFZAdRo2KAX4hcwG39H2Rqc5sVa8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-2lbgt5Y6OBufxvz-7yD7Cg-1; Sun, 15 Jan 2023 05:01:39 -0500
+X-MC-Unique: 2lbgt5Y6OBufxvz-7yD7Cg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E173638145A6
+	for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 10:01:38 +0000 (UTC)
+Received: from [172.64.10.55] (unknown [10.30.32.123])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CD54D2026D68;
+	Sun, 15 Jan 2023 10:01:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (35/383 SKIPPED): Test report for master
+ (6.2.0-rc3, mainline.kernel.org-clang, 7c698440)
+Date: Sun, 15 Jan 2023 10:01:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221217044436.4138642-1-davidgow@google.com> <20221217044436.4138642-4-davidgow@google.com>
-In-Reply-To: <20221217044436.4138642-4-davidgow@google.com>
-From: =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
-Date: Sun, 15 Jan 2023 10:51:29 +0100
-Message-ID: <CAA76j92tenVrXX_GfpbUnLBWLdMm1NUrOFqj9Ff8FTzu9P0h9Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rust: arch/um: Add support for CONFIG_RUST under
- x86_64 UML
-To: David Gow <davidgow@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-um@lists.infradead.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, 
-	kunit-dev@googlegroups.com, x86@kernel.org, linux-kernel@vger.kernel.org, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, Daniel Latypov <dlatypov@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <96168.123011505013900537@us-mta-108.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 17 Dec 2022 at 05:48, David Gow <davidgow@google.com> wrote:
->
-> CONFIG_RUST currently supports x86_64, but does not support it under
-> UML. With the previous patches applied, adding support is trivial:
-> add CONFIG_HAVE_RUST to UML if X86_64 is set.
->
-> The scripts/generate_rust_target.rs file already checks for
-> CONFIG_X86_64, not CONFIG_X86, so is prepared for UML support.
->
-> The Rust support does not currently support X86_32.
->
-> Also, update the Rust architecture support documentation to not that
-> this is being maintained: I intend to look after this as best I can.
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  Documentation/rust/arch-support.rst | 2 ++
->  arch/um/Kconfig                     | 1 +
->  2 files changed, 3 insertions(+)
->
-> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arc=
-h-support.rst
-> index 6982b63775da..a526ca1c688b 100644
-> --- a/Documentation/rust/arch-support.rst
-> +++ b/Documentation/rust/arch-support.rst
-> @@ -17,3 +17,5 @@ Architecture  Level of support  Constraints
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
->  ``x86``       Maintained        ``x86_64`` only.
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> +``um``        Maintained        ``x86_64`` only.
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index ad4ff3b0e91e..4db186f019ae 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -28,6 +28,7 @@ config UML
->         select TRACE_IRQFLAGS_SUPPORT
->         select TTY # Needed for line.c
->         select HAVE_ARCH_VMAP_STACK
-> +       select HAVE_RUST                        if X86_64
->
->  config MMU
->         bool
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+Hi, we tested your kernel and here are the results:
 
-Tested-by: Sergio Gonz=C3=A1lez Collado <sergio.collado@gmail.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-sergio@laptop:~/repos/rust-for-linux$ git log -4 --oneline
-888468208678 (HEAD) rust: arch/um: Add support for CONFIG_RUST under x86_64=
- UML
-055730a58ded rust: arch/um: Disable FP/SIMD instruction to match x86
-924ccc99887f rust: arch/um: Use 'pie' relocation mode under UML
-615131b8e9bc (tag: rust-v6.1-rc1, origin/for-next/rust) MAINTAINERS: Rust
-sergio@laptop:~/repos/rust-for-linux$ ./tools/testing/kunit/kunit.py
-run --kconfig_add CONFIG_RUST=3Dy --make_options LLVM=3D1
-[10:43:28] Configuring KUnit Kernel ...
-[10:43:28] Building KUnit Kernel ...
-Populating config with:
-$ make ARCH=3Dum O=3D.kunit olddefconfig LLVM=3D1
-Building with:
-$ make ARCH=3Dum O=3D.kunit --jobs=3D12 LLVM=3D1
-/usr/bin/ld: warning: arch/x86/um/vdso/vdso.o: missing .note.GNU-stack
-section implies executable stack
-/usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in
-a future version of the linker
-/usr/bin/ld: init/main.o: warning: relocation in read-only section `.ref.te=
-xt'
-/usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with
-RWX permissions
-/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
-/usr/bin/ld: warning: .tmp_vmlinux.kallsyms1.o: missing
-.note.GNU-stack section implies executable stack
-/usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in
-a future version of the linker
-/usr/bin/ld: init/main.o: warning: relocation in read-only section `.ref.te=
-xt'
-/usr/bin/ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with
-RWX permissions
-/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
-/usr/bin/ld: warning: .tmp_vmlinux.kallsyms2.o: missing
-.note.GNU-stack section implies executable stack
-/usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in
-a future version of the linker
-/usr/bin/ld: init/main.o: warning: relocation in read-only section `.ref.te=
-xt'
-/usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
-/usr/bin/ld: warning: creating DT_TEXTREL in a PIE
 
-[10:44:20] Starting KUnit Kernel (1/1)...
-[10:44:20] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D time_test_cases (1=
- subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] time64_to_tm_test_date_range
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] tim=
-e_test_cases =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D resource =
-(2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] resource_test_union
-[10:44:21] [PASSED] resource_test_intersection
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] resource =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D sysctl_test (10=
- subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] sysctl_test_api_dointvec_null_tbl_data
-[10:44:21] [PASSED] sysctl_test_api_dointvec_table_maxlen_unset
-[10:44:21] [PASSED] sysctl_test_api_dointvec_table_len_is_zero
-[10:44:21] [PASSED] sysctl_test_api_dointvec_table_read_but_position_set
-[10:44:21] [PASSED] sysctl_test_dointvec_read_happy_single_positive
-[10:44:21] [PASSED] sysctl_test_dointvec_read_happy_single_negative
-[10:44:21] [PASSED] sysctl_test_dointvec_write_happy_single_positive
-[10:44:21] [PASSED] sysctl_test_dointvec_write_happy_single_negative
-[10:44:21] [PASSED] sysctl_test_api_dointvec_write_single_less_int_min
-[10:44:21] [PASSED] sysctl_test_api_dointvec_write_single_greater_int_max
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSE=
-D] sysctl_test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D binfmt_el=
-f (1 subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] total_mapping_size_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSE=
-D] binfmt_elf =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D cpumas=
-k (6 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] test_cpumask_weight
-[10:44:21] [PASSED] test_cpumask_first
-[10:44:21] [PASSED] test_cpumask_last
-[10:44:21] [PASSED] test_cpumask_next
-[10:44:21] [PASSED] test_cpumask_iterators
-[10:44:21] [PASSED] test_cpumask_iterators_builtin
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-[PASSED] cpumask =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D has=
-h (2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] [PASSED] test_string_or
-[10:44:21] [PASSED] test_hash_or
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D [PASSED] hash =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D list_sort=
- (1 subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] list_sort_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] list_sort =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D lib_so=
-rt (1 subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] test_sort
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] lib_sort =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit_executor_test (4 s=
-ubtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] parse_filter_test
-[10:44:21] [PASSED] filter_suites_test
-[10:44:21] [PASSED] filter_suites_test_glob_test
-[10:44:21] [PASSED] filter_suites_to_empty_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] kunit_exe=
-cutor_test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit-try-catch-test (2 sub=
-tests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] kunit_test_try_catch_successful_try_no_catch
-[10:44:21] [PASSED] kunit_test_try_catch_unsuccessful_try_does_catch
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] kunit-try-ca=
-tch-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit-resource-test (8 s=
-ubtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] kunit_resource_test_init_resources
-[10:44:21] [PASSED] kunit_resource_test_alloc_resource
-[10:44:21] [PASSED] kunit_resource_test_destroy_resource
-[10:44:21] [PASSED] kunit_resource_test_remove_resource
-[10:44:21] [PASSED] kunit_resource_test_cleanup_resources
-[10:44:21] [PASSED] kunit_resource_test_proper_free_ordering
-[10:44:21] [PASSED] kunit_resource_test_static
-[10:44:21] [PASSED] kunit_resource_test_named
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] kunit-res=
-ource-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit-log-test =
-(1 subtest) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] kunit_log_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] kun=
-it-log-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit_status (2=
- subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] kunit_status_set_failure_test
-[10:44:21] [PASSED] kunit_status_mark_skipped_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] =
-kunit_status =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D string-stream-test (3 su=
-btests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] string_stream_test_empty_on_creation
-[10:44:21] [PASSED] string_stream_test_not_empty_after_add
-[10:44:21] [PASSED] string_stream_test_get_string
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] string-st=
-ream-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D exampl=
-e (4 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] example_simple_test
-[10:44:21] [SKIPPED] example_skip_test
-[10:44:21] [SKIPPED] example_mark_skipped_test
-[10:44:21] [PASSED] example_all_expect_macros_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-[PASSED] example =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D bitfields=
- (2 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] test_bitfields_constants
-[10:44:21] [PASSED] test_bitfields_variables
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] bitfields =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D list-kunit-test (39 s=
-ubtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] list_test_list_init
-[10:44:21] [PASSED] list_test_list_add
-[10:44:21] [PASSED] list_test_list_add_tail
-[10:44:21] [PASSED] list_test_list_del
-[10:44:21] [PASSED] list_test_list_replace
-[10:44:21] [PASSED] list_test_list_replace_init
-[10:44:21] [PASSED] list_test_list_swap
-[10:44:21] [PASSED] list_test_list_del_init
-[10:44:21] [PASSED] list_test_list_del_init_careful
-[10:44:21] [PASSED] list_test_list_move
-[10:44:21] [PASSED] list_test_list_move_tail
-[10:44:21] [PASSED] list_test_list_bulk_move_tail
-[10:44:21] [PASSED] list_test_list_is_head
-[10:44:21] [PASSED] list_test_list_is_first
-[10:44:21] [PASSED] list_test_list_is_last
-[10:44:21] [PASSED] list_test_list_empty
-[10:44:21] [PASSED] list_test_list_empty_careful
-[10:44:21] [PASSED] list_test_list_rotate_left
-[10:44:21] [PASSED] list_test_list_rotate_to_front
-[10:44:21] [PASSED] list_test_list_is_singular
-[10:44:21] [PASSED] list_test_list_cut_position
-[10:44:21] [PASSED] list_test_list_cut_before
-[10:44:21] [PASSED] list_test_list_splice
-[10:44:21] [PASSED] list_test_list_splice_tail
-[10:44:21] [PASSED] list_test_list_splice_init
-[10:44:21] [PASSED] list_test_list_splice_tail_init
-[10:44:21] [PASSED] list_test_list_entry
-[10:44:21] [PASSED] list_test_list_entry_is_head
-[10:44:21] [PASSED] list_test_list_first_entry
-[10:44:21] [PASSED] list_test_list_last_entry
-[10:44:21] [PASSED] list_test_list_first_entry_or_null
-[10:44:21] [PASSED] list_test_list_next_entry
-[10:44:21] [PASSED] list_test_list_prev_entry
-[10:44:21] [PASSED] list_test_list_for_each
-[10:44:21] [PASSED] list_test_list_for_each_prev
-[10:44:21] [PASSED] list_test_list_for_each_safe
-[10:44:21] [PASSED] list_test_list_for_each_prev_safe
-[10:44:21] [PASSED] list_test_list_for_each_entry
-[10:44:21] [PASSED] list_test_list_for_each_entry_reverse
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] lis=
-t-kunit-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D hlist =
-(18 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] hlist_test_init
-[10:44:21] [PASSED] hlist_test_unhashed
-[10:44:21] [PASSED] hlist_test_unhashed_lockless
-[10:44:21] [PASSED] hlist_test_del
-[10:44:21] [PASSED] hlist_test_del_init
-[10:44:21] [PASSED] hlist_test_add
-[10:44:21] [PASSED] hlist_test_fake
-[10:44:21] [PASSED] hlist_test_is_singular_node
-[10:44:21] [PASSED] hlist_test_empty
-[10:44:21] [PASSED] hlist_test_move_list
-[10:44:21] [PASSED] hlist_test_entry
-[10:44:21] [PASSED] hlist_test_entry_safe
-[10:44:21] [PASSED] hlist_test_for_each
-[10:44:21] [PASSED] hlist_test_for_each_safe
-[10:44:21] [PASSED] hlist_test_for_each_entry
-[10:44:21] [PASSED] hlist_test_for_each_entry_continue
-[10:44:21] [PASSED] hlist_test_for_each_entry_from
-[10:44:21] [PASSED] hlist_test_for_each_entry_safe
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D [PASSED] hlist =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D bits-test=
- (3 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] genmask_test
-[10:44:21] [PASSED] genmask_ull_test
-[10:44:21] [PASSED] genmask_input_check_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] bits-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D cmdlin=
-e (4 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] cmdline_test_noint
-[10:44:21] [PASSED] cmdline_test_lead_int
-[10:44:21] [PASSED] cmdline_test_tail_int
-[10:44:21] [PASSED] cmdline_test_range
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-[PASSED] cmdline =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D slub_test=
- (5 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] test_clobber_zone
-[10:44:21] [PASSED] test_next_pointer
-[10:44:21] [PASSED] test_first_word
-[10:44:21] [PASSED] test_clobber_50th_byte
-[10:44:21] [PASSED] test_clobber_redzone_free
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] slub_test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D memcpy=
- (3 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] memset_test
-[10:44:21] [PASSED] memcpy_test
-[10:44:21] [PASSED] memmove_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =
-[PASSED] memcpy =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D overflow =
-(11 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] u8_overflow_test
-[10:44:21] [PASSED] s8_overflow_test
-[10:44:21] [PASSED] u16_overflow_test
-[10:44:21] [PASSED] s16_overflow_test
-[10:44:21] [PASSED] u32_overflow_test
-[10:44:21] [PASSED] s32_overflow_test
-[10:44:21] [PASSED] u64_overflow_test
-[10:44:21] [PASSED] s64_overflow_test
-[10:44:21] [PASSED] overflow_shift_test
-[10:44:21] [PASSED] overflow_allocation_test
-[10:44:21] [PASSED] overflow_size_helpers_test
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] overflow =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D stackinit (6=
-5 subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] test_u8_zero
-[10:44:21] [PASSED] test_u16_zero
-[10:44:21] [PASSED] test_u32_zero
-[10:44:21] [PASSED] test_u64_zero
-[10:44:21] [PASSED] test_char_array_zero
-[10:44:21] [PASSED] test_small_hole_zero
-[10:44:21] [PASSED] test_big_hole_zero
-[10:44:21] [PASSED] test_trailing_hole_zero
-[10:44:21] [PASSED] test_packed_zero
-[10:44:21] [PASSED] test_small_hole_dynamic_partial
-[10:44:21] [PASSED] test_big_hole_dynamic_partial
-[10:44:21] [PASSED] test_trailing_hole_dynamic_partial
-[10:44:21] [PASSED] test_packed_dynamic_partial
-[10:44:21] [PASSED] test_small_hole_assigned_dynamic_partial
-[10:44:21] [PASSED] test_big_hole_assigned_dynamic_partial
-[10:44:21] [PASSED] test_trailing_hole_assigned_dynamic_partial
-[10:44:21] [PASSED] test_packed_assigned_dynamic_partial
-[10:44:21] [PASSED] test_small_hole_static_partial
-[10:44:21] [PASSED] test_big_hole_static_partial
-[10:44:21] [PASSED] test_trailing_hole_static_partial
-[10:44:21] [PASSED] test_packed_static_partial
-[10:44:21] [PASSED] test_small_hole_static_all
-[10:44:21] [PASSED] test_big_hole_static_all
-[10:44:21] [PASSED] test_trailing_hole_static_all
-[10:44:21] [PASSED] test_packed_static_all
-[10:44:21] [PASSED] test_small_hole_dynamic_all
-[10:44:21] [PASSED] test_big_hole_dynamic_all
-[10:44:21] [PASSED] test_trailing_hole_dynamic_all
-[10:44:21] [PASSED] test_packed_dynamic_all
-[10:44:21] [PASSED] test_small_hole_runtime_partial
-[10:44:21] [PASSED] test_big_hole_runtime_partial
-[10:44:21] [PASSED] test_trailing_hole_runtime_partial
-[10:44:21] [PASSED] test_packed_runtime_partial
-[10:44:21] [PASSED] test_small_hole_runtime_all
-[10:44:21] [PASSED] test_big_hole_runtime_all
-[10:44:21] [PASSED] test_trailing_hole_runtime_all
-[10:44:21] [PASSED] test_packed_runtime_all
-[10:44:21] [PASSED] test_small_hole_assigned_static_partial
-[10:44:21] [PASSED] test_big_hole_assigned_static_partial
-[10:44:21] [PASSED] test_trailing_hole_assigned_static_partial
-[10:44:21] [PASSED] test_packed_assigned_static_partial
-[10:44:21] [PASSED] test_small_hole_assigned_static_all
-[10:44:21] [PASSED] test_big_hole_assigned_static_all
-[10:44:21] [PASSED] test_trailing_hole_assigned_static_all
-[10:44:21] [PASSED] test_packed_assigned_static_all
-[10:44:21] [PASSED] test_small_hole_assigned_dynamic_all
-[10:44:21] [PASSED] test_big_hole_assigned_dynamic_all
-[10:44:21] [PASSED] test_trailing_hole_assigned_dynamic_all
-[10:44:21] [PASSED] test_packed_assigned_dynamic_all
-[10:44:21] [SKIPPED] test_small_hole_assigned_copy
-[10:44:21] [SKIPPED] test_big_hole_assigned_copy
-[10:44:21] [SKIPPED] test_trailing_hole_assigned_copy
-[10:44:21] [PASSED] test_packed_assigned_copy
-[10:44:21] [PASSED] test_u8_none
-[10:44:21] [PASSED] test_u16_none
-[10:44:21] [PASSED] test_u32_none
-[10:44:21] [PASSED] test_u64_none
-[10:44:21] [PASSED] test_char_array_none
-[10:44:21] [SKIPPED] test_switch_1_none
-[10:44:21] [SKIPPED] test_switch_2_none
-[10:44:21] [PASSED] test_small_hole_none
-[10:44:21] [PASSED] test_big_hole_none
-[10:44:21] [PASSED] test_trailing_hole_none
-[10:44:21] [PASSED] test_packed_none
-[10:44:21] [PASSED] test_user
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PA=
-SSED] stackinit =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D qos-kunit-test (3 =
-subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] freq_qos_test_min
-[10:44:21] [PASSED] freq_qos_test_maxdef
-[10:44:21] [PASSED] freq_qos_test_readd
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] qos=
--kunit-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D property-entry (7 =
-subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] [PASSED] pe_test_uints
-[10:44:21] [PASSED] pe_test_uint_arrays
-[10:44:21] [PASSED] pe_test_strings
-[10:44:21] [PASSED] pe_test_bool
-[10:44:21] [PASSED] pe_test_move_inline_u8
-[10:44:21] [PASSED] pe_test_move_inline_str
-[10:44:21] [PASSED] pe_test_reference
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] pro=
-perty-entry =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[10:44:21] Testing complete. Ran 208 tests: passed: 201, skipped: 7
-[10:44:21] Elapsed time: 52.940s total, 0.001s configuring, 52.223s
-building, 0.696s running
+Kernel information:
+    Commit message: Merge tag 'iommu-fixes-v6.2-rc3' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/joro/iommu
 
-sergio@laptop:~/repos/rust-for-linux$ date
-dom 15 ene 2023 10:44:26 CET
-sergio@laptop:~/repos/rust-for-linux$ grep CONFIG_RUST .kunit/.config
-CONFIG_RUST_IS_AVAILABLE=3Dy
-CONFIG_RUST=3Dy
-CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.62.0 (a8314ef7d 2022-06-27)"
-# CONFIG_RUST_DEBUG_ASSERTIONS is not set
-CONFIG_RUST_OVERFLOW_CHECKS=3Dy
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/65741
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6681825
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: ./service.sh: line 74: [: %rhel: in=
+teger expression expected
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1455
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
+Objects remaining in bio-152 on __kmem_cache_shutdown()
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1255
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
+ree+0x53/0x80
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1359
+            Affected tests:
+                  x86_64 - Storage - swraid simple_reshape
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1172
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
