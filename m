@@ -1,78 +1,60 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4841366;
-	Sun, 15 Jan 2023 12:53:10 +0000 (UTC)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-15ebfdf69adso9369115fac.0;
-        Sun, 15 Jan 2023 04:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cuFC+CU68Zm4Gv/Jgl+OAWcmLe3MlLeYnjNYVoXEMK4=;
-        b=NwnsAAenWGqe6WqK7i/+6ZzKNGUroS90qk/AdhfXlro9MiXj6YFrLQ4GP9I7NvNQwV
-         5ezzb/GIJHd+Ilzyas3t5ISdmr4K4FtkofJyw4Lr9cRCxag6ceHmSYf8pO4vqUiN0WHU
-         O6r8BuXKhCHJyIB6qOy1W62Rr7hDM5CUt0mWjhrrwQf0NqYaVsg31uaRKG+mSKHnkYtz
-         xZ80f9R7wL4sGXx+WwE6bH7To8QtdIhqiyjTnzKKStdh7Rq1MKScwge8Mm0V7WYUqm8C
-         9mkekS4CROSUUrxElGz8Vl67eSE09vg5L3tgh/ruGe+40bdHPBy0HLcj0S6F9Cg15kEv
-         ksIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cuFC+CU68Zm4Gv/Jgl+OAWcmLe3MlLeYnjNYVoXEMK4=;
-        b=hC6dixRoQSTCBWw8BkRXtZDnCsOFPUeaBVlBkAD+/VDfNGuJHaaYrdqmG5XXbQqEa2
-         9G4KnwMptMFLxMN07JfVprMm9uKMAOBqbsq+tCVenmZxLn/ZwTY0526F47A4pPh3RoDG
-         fCpoleK759LuL6bqo3uqRZolTIznGy0PFiuD+JLQNl9uT47j7nytKjYdU76GO+NbGhV8
-         SbDzdtjcwIa/YQPD4V/X97yBqijmhPXxe2gNeOKn3Z+cf+/hcb0Fr3czIYQPTFTauxz7
-         0Hcenp5CWKxHdvCFvAXdnqLOF9R+6nAXpoFiGen499fWr1e9X0r1xIXSd0l9r8Y78KEY
-         JqBA==
-X-Gm-Message-State: AFqh2kpg0k9pXmHOK4oh6ind5wXufW8XmHbxb0ec4aTUPP/TF2bWwqgo
-	REiSyxGZXOmHRvvOfFyOY8lmZdui8lj376r4s8s=
-X-Google-Smtp-Source: AMrXdXu35iozYlLRuKTTZCPk/rNPtl+u9bT910Vge89r7gjmuVCArOSnjt9SAzUQE6FDc4slCEzv9NWp6I9Jygg8NSE=
-X-Received: by 2002:a05:6870:b291:b0:15e:db95:923f with SMTP id
- c17-20020a056870b29100b0015edb95923fmr797032oao.144.1673787189666; Sun, 15
- Jan 2023 04:53:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFC91366;
+	Sun, 15 Jan 2023 14:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73752C433D2;
+	Sun, 15 Jan 2023 14:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1673792069;
+	bh=EvGEQ7u39+taKoDMf5d9jjV5Rwv8HCE3B95mKlhXVr8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zn1rkTI8QJ5BKucDQQcgS71svB8c75bujhU7AyQstnrIj8SMa28y0YtuOeu86DKZc
+	 iysF491gHLjbkzWULrBXHdRKIB6Fa3wdlXtITG+9pao/Bz/bHhql/R83vCvAvO1Eli
+	 EtxONBvJgNIY4GiH9E3S7RvPDmCKuqtUljm9t2+o=
+Date: Sun, 15 Jan 2023 15:14:27 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Sasha Levin <sashal@kernel.org>
+Subject: Re: [stable:linux-5.15.y 1642/9999] ERROR: Input tree has errors,
+ aborting (use -f to force output)
+Message-ID: <Y8QKQ1XKEZvtmJYc@kroah.com>
+References: <202301150959.RAvfuBjG-lkp@intel.com>
+ <aa73cfb8-99ed-20b4-071c-9858399aee0a@arinc9.com>
+ <CAMhs-H_fykbcZjSQ0LKOmtWMLjekDgUHsJjNNqSvYvbY=wbkHQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202301150959.RAvfuBjG-lkp@intel.com> <aa73cfb8-99ed-20b4-071c-9858399aee0a@arinc9.com>
-In-Reply-To: <aa73cfb8-99ed-20b4-071c-9858399aee0a@arinc9.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Sun, 15 Jan 2023 13:52:58 +0100
-Message-ID: <CAMhs-H_fykbcZjSQ0LKOmtWMLjekDgUHsJjNNqSvYvbY=wbkHQ@mail.gmail.com>
-Subject: Re: [stable:linux-5.15.y 1642/9999] ERROR: Input tree has errors,
- aborting (use -f to force output)
-To: =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMhs-H_fykbcZjSQ0LKOmtWMLjekDgUHsJjNNqSvYvbY=wbkHQ@mail.gmail.com>
 
-On Sun, Jan 15, 2023 at 10:05 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arin=
-c9.com> wrote:
->
-> Sergio, this issue hasn't seem to gone away. If you haven't sent the
-> patch you mentioned here [1], I think Greg taking your upstream commit
-> [2] to 5.15.y tree would be the easiest solution.
->
-> [1]:
-> https://lore.kernel.org/all/CAMhs-H8BLheXBc+BcDH_PKmDg+_bWF9OmiS_grw1mO+R=
-xW+J8Q@mail.gmail.com/
-> [2]:
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commi=
-t/drivers/staging/mt7621-dts/mt7621.dtsi?id=3Dce835dbd04d7b24f9fd50d9a9c59b=
-e46304aaa8a
+On Sun, Jan 15, 2023 at 01:52:58PM +0100, Sergio Paracuellos wrote:
+> On Sun, Jan 15, 2023 at 10:05 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+> >
+> > Sergio, this issue hasn't seem to gone away. If you haven't sent the
+> > patch you mentioned here [1], I think Greg taking your upstream commit
+> > [2] to 5.15.y tree would be the easiest solution.
+> >
+> > [1]:
+> > https://lore.kernel.org/all/CAMhs-H8BLheXBc+BcDH_PKmDg+_bWF9OmiS_grw1mO+RxW+J8Q@mail.gmail.com/
+> > [2]:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/drivers/staging/mt7621-dts/mt7621.dtsi?id=ce835dbd04d7b24f9fd50d9a9c59be46304aaa8a
+> 
+> I forgot I sent [2] at some point :). Yes, taking directly that patch
+> sounds easier.
 
-I forgot I sent [2] at some point :). Yes, taking directly that patch
-sounds easier.
+<formletter>
 
-Thanks,
-    Sergio Paracuellos
->
-> Ar=C4=B1n=C3=A7
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
+
+</formletter>
