@@ -1,52 +1,53 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CF110E3
-	for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 09:48:17 +0000 (UTC)
-Received: by mail-ej1-f54.google.com with SMTP id v6so18722890ejg.6
-        for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 01:48:17 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479CB10E3
+	for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 09:50:15 +0000 (UTC)
+Received: by mail-ed1-f54.google.com with SMTP id b4so17488057edf.0
+        for <llvm@lists.linux.dev>; Sun, 15 Jan 2023 01:50:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U91tZ1pcL+C5oCwSnm2ekb7b6jfm6xqHe6fUGsu0ktM=;
-        b=nnDDnTlzHuKvIuOwtJ8+Uq5p94FYTsvGa/hjrDCWnj4igFQ/+5OMt9b+0VuOvJTSsF
-         i7+CnSb7s3qDZ5PosseVVS+xilrMjkv66/dEb67/IwDMbVkd7NyGVdjB24XPEYyqnQ7G
-         poVHSWf4P6kv4bpOGH+YVXZjL11kNMKRdc7WZptXhqg+Hqbc4efIfYqaywEeLmjDywSG
-         dO0O1tWss+0Xi1jD3BdkpFUgRn/dHyE6iZY+36C0mjvBQPFYXt+LmoC08/DDGLnFNO5T
-         uG1aFnm6Ik/Ma6VQ0kYR0VA6lJ3U2SM0Q/bUtuAyB73YzxZQDViaE1Ew7hh8tTSW93J2
-         si4w==
+        bh=SJbXc+feWdrqTlshVGwB3Z4oTlL8/3Lfs4lGSV6qQxc=;
+        b=SVOysDXI/KdXRRvrXHp0ya1LDMJuBWI61lpO+oK8r+0aY0CcpgvqzbUtdCl5zqYJLW
+         isB7u9qMSzWpo6eY0TS6hauX8sJOWcviFR8RAwzFr2CVRXF+oTMAIriKigeZazZK1CoG
+         HAj3ZyuY+W4j0jj7VINqFaK7aCX9jhqKoGUgeCxNZWPwaoV89H7JPZhUHTnSQ37a+ALA
+         An3bX5fpT35o0TEQYAp4jWgWOenmUfSx+1MTB1cmFUnuvINZu6sXRMGqFil3Lm4ES5iF
+         wc3mFjKJUT8wzf0E0mecWKemtuHyjH1qnsuIEFd0u81BWAam9kVqlmsm3FYamSyDkUMf
+         tBJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U91tZ1pcL+C5oCwSnm2ekb7b6jfm6xqHe6fUGsu0ktM=;
-        b=FG7pRbXSdTYjOMUdT3slNnWtIq+U9HcT9YOzChL4TJzQqHf5STVaod1K2wLfSgsMy/
-         /j7l7GbIhx0hjlL7dX86ijc3QNd7bksrrOnzHsWcb2OWjChKGpqDpbe2AQZ4CksMiHxn
-         Oiik6N+xbfaVkVnWPoyoYt1ayUJYDylUgl+rfafcQNQK8BRKNh2UADPOi6N1wd1q+0Dk
-         34RgceApzlT0gors8k+GwTe4bn2jM9NSLQztDd1k6MgnVE9Q/b0tYFV9HEMwzUf37lhK
-         ZOiCIj7SuiV9ujq3XRjWVkM2/j/nTUjGlEA7EXHOY/Jpq7LHJWGSohPKjOuWYA/9z0gt
-         u9AA==
-X-Gm-Message-State: AFqh2koDBVZja4NgCC2+rkVIzWOHn+fnYqDDFJWGR/XPzgXvtKdU8kn7
-	Me+vG/n3PINttXQe8dMPl8upWnay4tPDwFpjfHY=
-X-Google-Smtp-Source: AMrXdXut/jQfPnLAZ0P8wTjeVheBJGzDy1oXd+fLbIjFFvMb2cO1l1wWanUjf0idLIAT+L4AoNQ/GeLj+GyV7h2w9sI=
-X-Received: by 2002:a17:906:d217:b0:7c1:8a0b:f915 with SMTP id
- w23-20020a170906d21700b007c18a0bf915mr6150975ejz.42.1673776096219; Sun, 15
- Jan 2023 01:48:16 -0800 (PST)
+        bh=SJbXc+feWdrqTlshVGwB3Z4oTlL8/3Lfs4lGSV6qQxc=;
+        b=PQ32QGBxRukJlz8fnbyjh+3fqOceTSLORMozaXxNWqY5LLpY7aEQFJmMUvM5Tt8c6d
+         xX98Dj1jkvy0Ir13Y96b1+4sRSzr2q4s7CaTd7Vw+9EszMKLCFemKhSzJ/EAD0WdwD8i
+         nbQ0gTM5kWl91d8JF5JMZzuIHVWtrdoTKi9E+lgjQwM7VMPXbFcXHxyA6qXYrX1s4ANb
+         ALFOCQF7tQhK+J615H63knH0rUj9XwXFeCKX4JFdi7O1aHM5/oxg0rg8J56Fs1caDF2D
+         I2YJgQ3RKBFSqzVbxs7blTQq6kzxxZzqJkgg7l7WWepLO06hwN/WGRCxqC7o+VGB/J1k
+         1rrg==
+X-Gm-Message-State: AFqh2kp2Sp4IBg4iYLrLeaH353QfdKlc2nzIzK9ccVz8MU+TsUUtJrdi
+	NaMkVai9cdHU6BcGJ0IwInJOppho0vhVTVOEO0k=
+X-Google-Smtp-Source: AMrXdXuUzOa2guBRIiKB1uwuexgzh4m3A+XUo+2InfVEBiNvpDerXJvdg/SBbJSjUz5jF+ZBXJGEE0fQbEC1OHVw1eI=
+X-Received: by 2002:aa7:cc13:0:b0:49c:bc23:e5c0 with SMTP id
+ q19-20020aa7cc13000000b0049cbc23e5c0mr964850edt.252.1673776213567; Sun, 15
+ Jan 2023 01:50:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221217044436.4138642-1-davidgow@google.com> <20221217044436.4138642-3-davidgow@google.com>
-In-Reply-To: <20221217044436.4138642-3-davidgow@google.com>
+References: <20221217044436.4138642-1-davidgow@google.com> <20221217044436.4138642-4-davidgow@google.com>
+In-Reply-To: <20221217044436.4138642-4-davidgow@google.com>
 From: =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
-Date: Sun, 15 Jan 2023 10:47:39 +0100
-Message-ID: <CAA76j91Kn62Rqs9843njNSmuvb2XEyNLnC996Bmmz1obTbCX9w@mail.gmail.com>
-Subject: Re: [PATCH 2/3] rust: arch/um: Disable FP/SIMD instruction to match x86
+Date: Sun, 15 Jan 2023 10:49:37 +0100
+Message-ID: <CAA76j91c1Uxo04Ymg8HszPOmiMjCzC08iDGL05m1ABa+u_Pw1A@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rust: arch/um: Add support for CONFIG_RUST under
+ x86_64 UML
 To: David Gow <davidgow@google.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
@@ -61,44 +62,58 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 17 Dec 2022 at 05:49, David Gow <davidgow@google.com> wrote:
+On Sat, 17 Dec 2022 at 05:48, David Gow <davidgow@google.com> wrote:
 >
-> The kernel disables all SSE and similar FP/SIMD instructions on
-> x86-based architectures (partly because we shouldn't be using floats in
-> the kernel, and partly to avoid the need for stack alignment, see:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D53383 )
+> CONFIG_RUST currently supports x86_64, but does not support it under
+> UML. With the previous patches applied, adding support is trivial:
+> add CONFIG_HAVE_RUST to UML if X86_64 is set.
 >
-> UML does not do the same thing, which isn't in itself a problem, but
-> does add to the list of differences between UML and "normal" x86 builds.
+> The scripts/generate_rust_target.rs file already checks for
+> CONFIG_X86_64, not CONFIG_X86, so is prepared for UML support.
 >
-> In addition, there was a crash bug with LLVM < 15 / rustc < 1.65 when
-> building with SSE, so disabling it fixes rust builds with earlier
-> compiler versions, see:
-> https://github.com/Rust-for-Linux/linux/pull/881
+> The Rust support does not currently support X86_32.
+>
+> Also, update the Rust architecture support documentation to not that
+> this is being maintained: I intend to look after this as best I can.
 >
 > Signed-off-by: David Gow <davidgow@google.com>
 > ---
->  arch/x86/Makefile.um | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  Documentation/rust/arch-support.rst | 2 ++
+>  arch/um/Kconfig                     | 1 +
+>  2 files changed, 3 insertions(+)
 >
-> diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
-> index b3c1ae084180..d2e95d1d4db7 100644
-> --- a/arch/x86/Makefile.um
-> +++ b/arch/x86/Makefile.um
-> @@ -1,6 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0
->  core-y +=3D arch/x86/crypto/
+> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arc=
+h-support.rst
+> index 6982b63775da..a526ca1c688b 100644
+> --- a/Documentation/rust/arch-support.rst
+> +++ b/Documentation/rust/arch-support.rst
+> @@ -17,3 +17,5 @@ Architecture  Level of support  Constraints
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+>  ``x86``       Maintained        ``x86_64`` only.
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +``um``        Maintained        ``x86_64`` only.
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+> index ad4ff3b0e91e..4db186f019ae 100644
+> --- a/arch/um/Kconfig
+> +++ b/arch/um/Kconfig
+> @@ -28,6 +28,7 @@ config UML
+>         select TRACE_IRQFLAGS_SUPPORT
+>         select TTY # Needed for line.c
+>         select HAVE_ARCH_VMAP_STACK
+> +       select HAVE_RUST                        if X86_64
 >
-> +#
-> +# Disable SSE and other FP/SIMD instructions to match normal x86
-> +#
-> +KBUILD_CFLAGS +=3D -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
-> +KBUILD_RUSTFLAGS +=3D -Ctarget-feature=3D-sse,-sse2,-sse3,-ssse3,-sse4.1=
-,-sse4.2,-avx,-avx2
-> +
->  ifeq ($(CONFIG_X86_32),y)
->  START :=3D 0x8048000
->
+>  config MMU
+>         bool
 > --
 > 2.39.0.314.g84b9a713c41-goog
 >
