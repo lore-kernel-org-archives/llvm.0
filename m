@@ -1,147 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F3246B5;
-	Mon, 16 Jan 2023 16:05:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BDB3C433D2;
-	Mon, 16 Jan 2023 16:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1673885136;
-	bh=CSrRJ986c/JIm2YrOkIYvHtg6w8N8JFB+1PNV4e3WI8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=n5CwCPtSMMWOAAO0nb90IReqvzU66ULDp2HFjqlZwqS8Sm+NqdSJRsChjazyGl4Vo
-	 oOyQDUX9fE8P9Y2uW7moidI3Rrx8r0u4h6OasWMgvaTdICeOTq/uWydeRe0RtM56wt
-	 KS1WEomp7E+aD+N+GCjExOViKE3an/hgLNKJFNvc=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Willy Tarreau <w@1wt.eu>,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 64/86] tools/nolibc: Remove .global _start from the entry point code
-Date: Mon, 16 Jan 2023 16:51:38 +0100
-Message-Id: <20230116154749.706768804@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230116154747.036911298@linuxfoundation.org>
-References: <20230116154747.036911298@linuxfoundation.org>
-User-Agent: quilt/0.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5FD6FA0
+	for <llvm@lists.linux.dev>; Mon, 16 Jan 2023 16:40:48 +0000 (UTC)
+Received: by mail-il1-f199.google.com with SMTP id i7-20020a056e021b0700b003033a763270so21377804ilv.19
+        for <llvm@lists.linux.dev>; Mon, 16 Jan 2023 08:40:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yKSVY9R0PyWFm6q5WbYUWAgUkoXMWUhechkQnutsCkM=;
+        b=s7Wd/5EvQ+3jc0WWOTfTpo5ehaXDJUmc7uJj6Y/N3FXumouLN5dSQKFoe64OfQ1yq3
+         tFRqBS44umqXeiwclNGtEnxT0q1jOEqQMN1q7gogslWhA5c19XMnbeM2pZo+n9FcFmGX
+         1MB4XrLjvuLKnR/qKgIKEKm1n7GyUueydyRuYH6kYKaMPiez0OH5U/CFjO/MxLebQkVA
+         +Nwqqpxm1XghnVVaQujIeUp/VMbCg4FqF5JtWiktJ3aeVC78SdlI2o774cCr9d1AESvT
+         rkjeothjJW+fpZ/DNxIdSkzyEg1HQrwWP+k2Y2+lKvJ4OiIPnKhmvFt8enIudJHAGhdd
+         lsKw==
+X-Gm-Message-State: AFqh2kpexXpowc78XiLNfu+lwkSDB1PcWVGLIZsEXfdNzqW2U3yM0kPQ
+	B6YY5un27PQQBHhlVqw1LDu9/aXCTAlnh9Gu9P1RxXXJcpgv
+X-Google-Smtp-Source: AMrXdXtYCbHxBReCTOYYE0cauQL7T2xdJy/mPts7o7ZzizVhX3hkCmgye1713awmFvtJXDx3XQ1+FbFvT0gWzeO7/lrrGDtWNVdW
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a02:aa18:0:b0:39e:a033:90c with SMTP id
+ r24-20020a02aa18000000b0039ea033090cmr2178992jam.254.1673887247286; Mon, 16
+ Jan 2023 08:40:47 -0800 (PST)
+Date: Mon, 16 Jan 2023 08:40:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c4c9d405f2643e01@google.com>
+Subject: [syzbot] possible deadlock in br_multicast_rcv (3)
+From: syzbot <syzbot+d7b7f1412c02134efa6d@syzkaller.appspotmail.com>
+To: axboe@fb.com, bridge@lists.linux-foundation.org, davem@davemloft.net, 
+	edumazet@google.com, hch@lst.de, ivecera@redhat.com, jiri@resnulli.us, 
+	kbusch@kernel.org, kuba@kernel.org, lengchao@huawei.com, 
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, razor@blackwall.org, 
+	roopa@nvidia.com, sagi@grimberg.me, syzkaller-bugs@googlegroups.com, 
+	trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Hello,
 
-[ Upstream commit 1590c59836dace3a20945bad049fe8802c4e6f3f ]
+syzbot found the following issue on:
 
-Building with clang yields the following error:
-```
-  <inline asm>:3:1: error: _start changed binding to STB_GLOBAL
-  .global _start
-  ^
-  1 error generated.
-```
-Make sure only specify one between `.global _start` and `.weak _start`.
-Remove `.global _start`.
+HEAD commit:    60d86034b14e Merge tag 'mlx5-updates-2023-01-10' of git://..
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1745e1ce480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=de2f853811ba4e08
+dashboard link: https://syzkaller.appspot.com/bug?extid=d7b7f1412c02134efa6d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16aa9b6e480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16645fd6480000
 
-Cc: llvm@lists.linux.dev
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Stable-dep-of: 184177c3d6e0 ("tools/nolibc: restore mips branch ordering in the _start block")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b5b394a217aa/disk-60d86034.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f129c2da4b3a/vmlinux-60d86034.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6dbc96a4303d/bzImage-60d86034.xz
+
+The issue was bisected to:
+
+commit dda3248e7fc306e0ce3612ae96bdd9a36e2ab04f
+Author: Chao Leng <lengchao@huawei.com>
+Date:   Thu Feb 4 07:55:11 2021 +0000
+
+    nvme: introduce a nvme_host_path_error helper
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1564ba0e480000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1764ba0e480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1364ba0e480000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d7b7f1412c02134efa6d@syzkaller.appspotmail.com
+Fixes: dda3248e7fc3 ("nvme: introduce a nvme_host_path_error helper")
+
+============================================
+WARNING: possible recursive locking detected
+6.2.0-rc2-syzkaller-00378-g60d86034b14e #0 Not tainted
+--------------------------------------------
+ksoftirqd/0/15 is trying to acquire lock:
+ffff88814b52d338 (&br->multicast_lock){+.-.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ffff88814b52d338 (&br->multicast_lock){+.-.}-{2:2}, at: br_ip6_multicast_query net/bridge/br_multicast.c:3351 [inline]
+ffff88814b52d338 (&br->multicast_lock){+.-.}-{2:2}, at: br_multicast_ipv6_rcv net/bridge/br_multicast.c:3747 [inline]
+ffff88814b52d338 (&br->multicast_lock){+.-.}-{2:2}, at: br_multicast_rcv+0x2019/0x6830 net/bridge/br_multicast.c:3802
+
+but task is already holding lock:
+ffff88807ac21338 (&br->multicast_lock){+.-.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ffff88807ac21338 (&br->multicast_lock){+.-.}-{2:2}, at: br_multicast_port_query_expired+0x61/0x360 net/bridge/br_multicast.c:1752
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&br->multicast_lock);
+  lock(&br->multicast_lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+5 locks held by ksoftirqd/0/15:
+ #0: ffffc90000147c50 ((&pmctx->ip6_own_query.timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
+ #0: ffffc90000147c50 ((&pmctx->ip6_own_query.timer)){+.-.}-{0:0}, at: call_timer_fn+0xd4/0x7c0 kernel/time/timer.c:1690
+ #1: ffff88807ac21338 (&br->multicast_lock){+.-.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ #1: ffff88807ac21338 (&br->multicast_lock){+.-.}-{2:2}, at: br_multicast_port_query_expired+0x61/0x360 net/bridge/br_multicast.c:1752
+ #2: ffffffff8c791b20 (rcu_read_lock_bh){....}-{1:2}, at: __dev_queue_xmit+0x237/0x3ba0 net/core/dev.c:4166
+ #3: ffffffff8c791b20 (rcu_read_lock_bh){....}-{1:2}, at: __dev_queue_xmit+0x237/0x3ba0 net/core/dev.c:4166
+ #4: ffffffff8c791b80 (rcu_read_lock){....}-{1:2}, at: br_dev_xmit+0x4/0x1620 net/bridge/br_device.c:29
+
+stack backtrace:
+CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.2.0-rc2-syzkaller-00378-g60d86034b14e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2990 [inline]
+ check_deadlock kernel/locking/lockdep.c:3033 [inline]
+ validate_chain kernel/locking/lockdep.c:3818 [inline]
+ __lock_acquire.cold+0x116/0x3a7 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ br_ip6_multicast_query net/bridge/br_multicast.c:3351 [inline]
+ br_multicast_ipv6_rcv net/bridge/br_multicast.c:3747 [inline]
+ br_multicast_rcv+0x2019/0x6830 net/bridge/br_multicast.c:3802
+ br_dev_xmit+0x726/0x1620 net/bridge/br_device.c:89
+ __netdev_start_xmit include/linux/netdevice.h:4865 [inline]
+ netdev_start_xmit include/linux/netdevice.h:4879 [inline]
+ xmit_one net/core/dev.c:3583 [inline]
+ dev_hard_start_xmit+0x1c2/0x990 net/core/dev.c:3599
+ __dev_queue_xmit+0x2cdf/0x3ba0 net/core/dev.c:4249
+ dev_queue_xmit include/linux/netdevice.h:3035 [inline]
+ vlan_dev_hard_start_xmit+0x1bc/0x5c0 net/8021q/vlan_dev.c:124
+ __netdev_start_xmit include/linux/netdevice.h:4865 [inline]
+ netdev_start_xmit include/linux/netdevice.h:4879 [inline]
+ xmit_one net/core/dev.c:3583 [inline]
+ dev_hard_start_xmit+0x1c2/0x990 net/core/dev.c:3599
+ __dev_queue_xmit+0x2cdf/0x3ba0 net/core/dev.c:4249
+ dev_queue_xmit include/linux/netdevice.h:3035 [inline]
+ br_dev_queue_push_xmit+0x26e/0x740 net/bridge/br_forward.c:53
+ NF_HOOK include/linux/netfilter.h:302 [inline]
+ __br_multicast_send_query+0x11c6/0x3b70 net/bridge/br_multicast.c:1656
+ br_multicast_send_query+0x266/0x4b0 net/bridge/br_multicast.c:1735
+ br_multicast_port_query_expired+0x2c3/0x360 net/bridge/br_multicast.c:1760
+ call_timer_fn+0x1da/0x7c0 kernel/time/timer.c:1700
+ expire_timers+0x2c6/0x5c0 kernel/time/timer.c:1751
+ __run_timers kernel/time/timer.c:2022 [inline]
+ __run_timers kernel/time/timer.c:1995 [inline]
+ run_timer_softirq+0x326/0x910 kernel/time/timer.c:2035
+ __do_softirq+0x1fb/0xadc kernel/softirq.c:571
+ run_ksoftirqd kernel/softirq.c:934 [inline]
+ run_ksoftirqd+0x31/0x60 kernel/softirq.c:926
+ smpboot_thread_fn+0x659/0xa20 kernel/smpboot.c:164
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
 ---
- tools/include/nolibc/arch-aarch64.h | 1 -
- tools/include/nolibc/arch-arm.h     | 1 -
- tools/include/nolibc/arch-i386.h    | 1 -
- tools/include/nolibc/arch-mips.h    | 1 -
- tools/include/nolibc/arch-riscv.h   | 1 -
- tools/include/nolibc/arch-x86_64.h  | 1 -
- 6 files changed, 6 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
-index 87d9e434820c..2dbd80d633cb 100644
---- a/tools/include/nolibc/arch-aarch64.h
-+++ b/tools/include/nolibc/arch-aarch64.h
-@@ -184,7 +184,6 @@ struct sys_stat_struct {
- /* startup code */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     "ldr x0, [sp]\n"              // argc (x0) was in the stack
-     "add x1, sp, 8\n"             // argv (x1) = sp
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 001a3c8c9ad5..1191395b5acd 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -177,7 +177,6 @@ struct sys_stat_struct {
- /* startup code */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
- #if defined(__THUMBEB__) || defined(__THUMBEL__)
-     /* We enter here in 32-bit mode but if some previous functions were in
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index d7e4d53325a3..125a691fc631 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -176,7 +176,6 @@ struct sys_stat_struct {
-  */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     "pop %eax\n"                // argc   (first arg, %eax)
-     "mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index c9a6aac87c6d..1a124790c99f 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -192,7 +192,6 @@ struct sys_stat_struct {
- asm(".section .text\n"
-     ".weak __start\n"
-     ".set nomips16\n"
--    ".global __start\n"
-     ".set    noreorder\n"
-     ".option pic0\n"
-     ".ent __start\n"
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index bc10b7b5706d..511d67fc534e 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -185,7 +185,6 @@ struct sys_stat_struct {
- /* startup code */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     ".option push\n"
-     ".option norelax\n"
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index fe517c16cd4d..b1af63ce1cb0 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -199,7 +199,6 @@ struct sys_stat_struct {
-  */
- asm(".section .text\n"
-     ".weak _start\n"
--    ".global _start\n"
-     "_start:\n"
-     "pop %rdi\n"                // argc   (first arg, %rdi)
-     "mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
--- 
-2.35.1
-
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
