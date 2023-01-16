@@ -1,144 +1,138 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71D51FB4
-	for <llvm@lists.linux.dev>; Mon, 16 Jan 2023 12:59:59 +0000 (UTC)
-Received: by mail-ej1-f46.google.com with SMTP id v6so24897839ejg.6
-        for <llvm@lists.linux.dev>; Mon, 16 Jan 2023 04:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IAZguNTJVi/a6qoNeng/AApLOsYaM+FNkT6jN5FeRBo=;
-        b=fcpft07FKnXkA5Fdv/XkfosHhmd2dr3mQUQXXiiyNlTXFZa6ui4wATziWFKR5vfMUw
-         z/yU7/3iI6h3icE9LDf3LFg/j3RA3qWjF8HkLmjvyATJQvDl+tRBzbX5W+WaHRHVsuuN
-         YFPLiXzPJy8RcIS9gwAO3g3xE3m9HMZP/XY7s4krb9ylVkCed/cQlCVShPABSUvUMoX0
-         ZLyfehF3K1+0JxvaAflqmqqc7NPE2rvkCnu8phW74qL0JiX2NQQA3AmcXSfawCRAmhHE
-         hvVVX1nRtZKy/HT/UsCW4AbBpxSkwww35EgYq5HodIohOP2fdJoUp+mgkBT7zp0qY52P
-         yuHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IAZguNTJVi/a6qoNeng/AApLOsYaM+FNkT6jN5FeRBo=;
-        b=Ir/gDjwLE1kmNdH8KYCPvFw8DyuWOGGvKL+h4ObHeC5qtfvszkblQ6ENr7DFfnpE3k
-         aux+WSESDGYlDrRBQ0hMsm0qujwpv66jq4fSdUpfqPppes7E27oacgf9uuuMshKi1++u
-         vC1x/b/6FnQXkiLDmpttG2bG7DezvyZj7K2MPZ3VMTlA/EpjS/g3USWaXuy2WZBQdC7c
-         AYqaJwi9rNDTokPyBBeQ1Jos3id5+zsuxUuJDBQLRn4jJxiwQJ3/GVI1KGS6LhJG4v3u
-         u6XZ2/2R9cSP0rYgbRHVlBsRz5R+p63RP4/NFHJkPOdsmydzBfe1M2VpNja+TFsUpEv8
-         iuug==
-X-Gm-Message-State: AFqh2kr5iH5iMBLwvReqWt55JG5izU4/LEMdjqo3aZgO/dNsvqKpflrL
-	2/iqCU9qywfx2VREtQImCLo=
-X-Google-Smtp-Source: AMrXdXt+KIsbGtUUAJ5IN1palYinCuWmotGeAPr4XqskjrlDpAxK8fm5qeFPnzEf8newqhjWwz99zg==
-X-Received: by 2002:a17:907:b68c:b0:870:4986:2ce with SMTP id vm12-20020a170907b68c00b00870498602cemr4795680ejc.58.1673873998114;
-        Mon, 16 Jan 2023 04:59:58 -0800 (PST)
-Received: from [192.168.1.113] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id lj1-20020a170906f9c100b0078d22b0bcf2sm11734515ejb.168.2023.01.16.04.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 04:59:57 -0800 (PST)
-Message-ID: <194f38f2dc7d521375e5a660baaf1be31536be9a.camel@gmail.com>
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Quentin Monnet <quentin@isovalent.com>, Peter Foley
- <pefoley2@pefoley.com>,  Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Mon, 16 Jan 2023 14:59:56 +0200
-In-Reply-To: <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-	 <cb03b745-26b8-706c-de40-80ae991e29fd@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CF0257A
+	for <llvm@lists.linux.dev>; Mon, 16 Jan 2023 14:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C1FC433D2;
+	Mon, 16 Jan 2023 14:45:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1673880306;
+	bh=lUZaH+1G+kNfvawM7MZyTt01BvbG+LMdUGsyODpCT+E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zqsrRw/rU1nE7Md/hSbmvlu3T6DAMQcvH9WgZZ+oDAKjG1v+h89UiYtCT9ChGhHLN
+	 zXgB9kSUjBxuBVt86rC7dohQLluXeWF4FkSIBur1jRczRPIf5UJwQzsSPZtVFrywR8
+	 LaoVhcMbXpxMli8u/1yCH+luHhRL74xG8v/EwENo=
+Date: Mon, 16 Jan 2023 15:45:03 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, Jocelyn Falempe <jfalempe@redhat.com>,
+	llvm@lists.linux.dev, stable@vger.kernel.org,
+	Andi Shyti <andi.shyti@linux.intel.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 6.1] drm/i915: Fix CFI violations in gt_sysfs
+Message-ID: <Y8Vi7+jDz64IMyUm@kroah.com>
+References: <20230116033551.191731-1-nathan@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230116033551.191731-1-nathan@kernel.org>
 
-On Mon, 2023-01-16 at 10:30 +0000, Quentin Monnet wrote:
-> 2023-01-14 18:00 UTC-0500 ~ Peter Foley <pefoley2@pefoley.com>
-> > Avoid build errors on distros that force the stack protector on by
-> > default.
-> > e.g.
-> >   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
-> > skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__sta=
-ck_chk_fail' is not supported.
-> > int iter(struct bpf_iter__task_file *ctx)
-> >     ^
-> > 1 error generated.
-> >=20
-> > Signed-off-by: Peter Foley <pefoley2@pefoley.com>
-> > ---
-> >  tools/bpf/bpftool/Makefile    | 1 +
-> >  tools/bpf/runqslower/Makefile | 5 +++--
-> >  2 files changed, 4 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> > index f610e184ce02a..36ac0002e386f 100644
-> > --- a/tools/bpf/bpftool/Makefile
-> > +++ b/tools/bpf/bpftool/Makefile
-> > @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux=
-.h $(LIBBPF_BOOTSTRAP)
-> >  		-I$(or $(OUTPUT),.) \
-> >  		-I$(srctree)/tools/include/uapi/ \
-> >  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
-> > +		-fno-stack-protector \
-> >  		-g -O2 -Wall -target bpf -c $< -o $@
-> >  	$(Q)$(LLVM_STRIP) -g $@
-> > =20
->=20
-> For bpftool, a similar patch was already submitted and merged to the
-> bpf-next tree last Friday: 878625e1c7a1 ("bpftool: Always disable stack
-> protection for BPF objects").
->=20
-> > diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makef=
-ile
-> > index 8b3d87b82b7a2..f7313cc966a04 100644
-> > --- a/tools/bpf/runqslower/Makefile
-> > +++ b/tools/bpf/runqslower/Makefile
-> > @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
-> >  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
-> > =20
-> >  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
-> > -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
-> > -		 -c $(filter %.c,$^) -o $@ &&				      \
-> > +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
-> > +		 -fno-stack-protector 					\
-> > +		 -c $(filter %.c,$^) -o $@ &&				\
-> >  	$(LLVM_STRIP) -g $@
-> > =20
-> >  $(OUTPUT)/%.o: %.c | $(OUTPUT)
->=20
-> This one looks good, thanks!
->=20
-> I note a few more places in the repository where we compile to BPF using
-> clang. Given that there have been patches to add -fno-stack-protector at
-> several locations already, have you checked if any of these also need
-> the flag, by any chance, so we could fix this once and for all?
->=20
-> $ git grep -l 'target bpf ' | egrep -v '(Documentation|bpftool)'
-> kernel/bpf/preload/iterators/Makefile
-> samples/bpf/Makefile
-> samples/bpf/test_lwt_bpf.sh
-> tools/bpf/runqslower/Makefile
-> tools/build/feature/Makefile
-> tools/perf/Makefile.perf
-> tools/perf/util/llvm-utils.c
-> tools/testing/selftests/bpf/Makefile
-> tools/testing/selftests/net/bpf/Makefile
-> tools/testing/selftests/tc-testing/Makefile
+On Sun, Jan 15, 2023 at 08:35:52PM -0700, Nathan Chancellor wrote:
+> commit a8a4f0467d706fc22d286dfa973946e5944b793c upstream.
+> 
+> When booting with CONFIG_CFI_CLANG, there are numerous violations when
+> accessing the files under
+> /sys/devices/pci0000:00/0000:00:02.0/drm/card0/gt/gt0:
+> 
+>   $ cd /sys/devices/pci0000:00/0000:00:02.0/drm/card0/gt/gt0
+> 
+>   $ grep . *
+>   id:0
+>   punit_req_freq_mhz:350
+>   rc6_enable:1
+>   rc6_residency_ms:214934
+>   rps_act_freq_mhz:1300
+>   rps_boost_freq_mhz:1300
+>   rps_cur_freq_mhz:350
+>   rps_max_freq_mhz:1300
+>   rps_min_freq_mhz:350
+>   rps_RP0_freq_mhz:1300
+>   rps_RP1_freq_mhz:350
+>   rps_RPn_freq_mhz:350
+>   throttle_reason_pl1:0
+>   throttle_reason_pl2:0
+>   throttle_reason_pl4:0
+>   throttle_reason_prochot:0
+>   throttle_reason_ratl:0
+>   throttle_reason_status:0
+>   throttle_reason_thermal:0
+>   throttle_reason_vr_tdc:0
+>   throttle_reason_vr_thermalert:0
+> 
+>   $ sudo dmesg &| grep "CFI failure at"
+>   [  214.595903] CFI failure at kobj_attr_show+0x19/0x30 (target: id_show+0x0/0x70 [i915]; expected type: 0xc527b809)
+>   [  214.596064] CFI failure at kobj_attr_show+0x19/0x30 (target: punit_req_freq_mhz_show+0x0/0x40 [i915]; expected type: 0xc527b809)
+>   [  214.596407] CFI failure at kobj_attr_show+0x19/0x30 (target: rc6_enable_show+0x0/0x40 [i915]; expected type: 0xc527b809)
+>   [  214.596528] CFI failure at kobj_attr_show+0x19/0x30 (target: rc6_residency_ms_show+0x0/0x270 [i915]; expected type: 0xc527b809)
+>   [  214.596682] CFI failure at kobj_attr_show+0x19/0x30 (target: act_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.596792] CFI failure at kobj_attr_show+0x19/0x30 (target: boost_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.596893] CFI failure at kobj_attr_show+0x19/0x30 (target: cur_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.596996] CFI failure at kobj_attr_show+0x19/0x30 (target: max_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.597099] CFI failure at kobj_attr_show+0x19/0x30 (target: min_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.597198] CFI failure at kobj_attr_show+0x19/0x30 (target: RP0_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.597301] CFI failure at kobj_attr_show+0x19/0x30 (target: RP1_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.597405] CFI failure at kobj_attr_show+0x19/0x30 (target: RPn_freq_mhz_show+0x0/0xe0 [i915]; expected type: 0xc527b809)
+>   [  214.597538] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.597701] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.597836] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.597952] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.598071] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.598177] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.598307] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.598439] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+>   [  214.598542] CFI failure at kobj_attr_show+0x19/0x30 (target: throttle_reason_bool_show+0x0/0x50 [i915]; expected type: 0xc527b809)
+> 
+> With kCFI, indirect calls are validated against their expected type
+> versus actual type and failures occur when the two types do not match.
+> The ultimate issue is that these sysfs functions are expecting to be
+> called via dev_attr_show() but they may also be called via
+> kobj_attr_show(), as certain files are created under two different
+> kobjects that have two different sysfs_ops in intel_gt_sysfs_register(),
+> hence the warnings above. When accessing the gt_ files under
+> /sys/devices/pci0000:00/0000:00:02.0/drm/card0, which are using the same
+> sysfs functions, there are no violations, meaning the functions are
+> being called with the proper type.
+> 
+> To make everything work properly, adjust certain functions to match the
+> type of the ->show() and ->store() members in 'struct kobj_attribute'.
+> Add a macro to generate functions for that can be called via both
+> dev_attr_{show,store}() or kobj_attr_{show,store}() so that they can be
+> called through both kobject locations without violating kCFI and adjust
+> the attribute groups to account for this.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1716
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+> Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Andi Shyti <andi.shyti@linux.intel.com>
+> Link: https://patchwork.freedesktop.org/patch/msgid/20221013205909.1282545-1-nathan@kernel.org
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> 
+> Hi Greg and Sasha,
+> 
+> I received a report from a user of kCFI in 6.1 that the violation fixed
+> by this patch is visible there (which is expected, since this was only
+> merged in 6.2-rc1). This has been boot tested on real hardware and
+> confirmed to fix that crash.
+> 
+> Additionally, Jocelyn reports that this patch also fixes a separate
+> crash:
+> 
+> https://lore.kernel.org/4dcf830e-62a5-837b-7590-ac5395f84c14@redhat.com/
+> 
+> The patch is a little on the larger side of things but it should be
+> pretty safe (the i915 folks can override me if they feel this is out of
+> place).
+> 
 
-A bit tangential, but since BPF LLVM backend does not support the
-stack protector (should it?) there is also an option to adjust LLVM
-to avoid this instrumentation, WDYT?
+Seems sane, now queued up, thanks.
 
+greg k-h
