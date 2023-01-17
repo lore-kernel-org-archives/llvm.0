@@ -1,108 +1,121 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A850D532
-	for <llvm@lists.linux.dev>; Tue, 17 Jan 2023 19:29:44 +0000 (UTC)
-Received: by mail-pl1-f176.google.com with SMTP id r21so2489411plg.13
-        for <llvm@lists.linux.dev>; Tue, 17 Jan 2023 11:29:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gRpqq+2LxugqpZNX3s+wDiUYVm6GWNq9r7NcJVznttI=;
-        b=DDL10rALn1z1FRoOFnw2dnP+4blUFM0iSm4tQ+rKvADmrEBfKO4DE+cHNhsOUk/lZM
-         2xlZ5mLD71Pan3w8wL/z1Z3QPjnt3q+svnrggrB32gsUHn7e+LA1RgeXFKfKp60gvb0c
-         3BYQ+iVZEa1Ulyahd4XWoCOV7Yat17xcCUUXrfNxxqhTR2+tza0X6jlZ6grUng+a/y1y
-         iY+FHGeS5IDHLwUsft7YY/YHKIsFpq8qKQPNSDdaWabVD1GEMZNexuHF3nx1sur5GuO4
-         yYrwdnSb9kbKnEJ/wwYeoNqyRIgTVT1WOwHluYP/L902eOEFRKQ13yP5sfQSMYdqSDoB
-         Djcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gRpqq+2LxugqpZNX3s+wDiUYVm6GWNq9r7NcJVznttI=;
-        b=3UMX9HIQhHxo0DS4G3iRzejlL6PJP2EOttUCOoc//C3Cqru85oB1MAIck9bBlhzm8l
-         XnKY7sKPq2mFj/5trbi0SjHJEWFGIRo2lwN7j5DfJ/T8o6o5/6jjT+hOlBD9VTqDNFr/
-         lnJtEOVKuT+RywW95NnUJHAyVtQJhc9xVZM8dr5eziA5IsDeB3Dbv3vXaLxdZ40nqbxj
-         X3kN/cmIdSjfS9ZVS49Vo6TgsiPeFGEZJRsSb+8jXEpRYEe6nFfvvu1wE4JgprsJhP+W
-         JTVRqkn1lS6Nb9hbPkxkOGRPJytjtLJwRmzXHW+cYZDWP47XoD/VYwMk5EoYqDW/afhf
-         +QJQ==
-X-Gm-Message-State: AFqh2kr9EfHfa/W9rit9/b5pyEeDKkrLxYntWfaHisx0ZNYvzcPiqJM1
-	EzNMeIQoOogbEXWj8dZLpiLJWg==
-X-Google-Smtp-Source: AMrXdXs5jEoPdwvpIvhpWsoNZ3dwLlPfm/N/TqJwrTUTJCQIR/xEnhuSGfUHyd3nbcshsUxFjBAa6w==
-X-Received: by 2002:a17:902:ec82:b0:194:9874:7ece with SMTP id x2-20020a170902ec8200b0019498747ecemr5863503plg.29.1673983783644;
-        Tue, 17 Jan 2023 11:29:43 -0800 (PST)
-Received: from google.com ([2620:15c:2d1:203:c3b2:a57d:8316:74e6])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170902da8200b00188ea79fae0sm21625839plx.48.2023.01.17.11.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 11:29:43 -0800 (PST)
-Date: Tue, 17 Jan 2023 11:29:38 -0800
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Nilesh Javali <njavali@marvell.com>,
-	GR-QLogic-Storage-Upstream@marvell.com,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Himanshu Madhani <himanshu.madhani@oracle.com>,
-	Quinn Tran <qutran@marvell.com>, Arnd Bergmann <arnd@arndb.de>,
-	Saurav Kashyap <skashyap@marvell.com>, Tom Rix <trix@redhat.com>,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] qla2xxx: fix printk format string
-Message-ID: <20230117192938.nryt2tlgjymkr5ux@google.com>
-References: <20230117170029.2387516-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD81D53F
+	for <llvm@lists.linux.dev>; Tue, 17 Jan 2023 20:01:25 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 108925C00E9;
+	Tue, 17 Jan 2023 15:01:24 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 17 Jan 2023 15:01:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1673985684; x=1674072084; bh=tMyHBVcYNG
+	0ERO4S5Q8/K/ngC+15RRvO4SZa46EllSw=; b=e/I7Bu6JmmSGgy3u4WX+iD+QMX
+	i2eQ5+cEbaTu38BxSpYEjKFtGNT7PSo4U7WFgF4ABTLwLQ7Xh+N5CCqUebDEkUiX
+	aYahBdbKsHZu43my0QuBJ5Uclm6GNOp/2XmtY1lCkijJdiOeZGWidyeT0pI0OEeb
+	wJf2cmmrFYDhXztF2bQ5jLjW+FIdZ8Fc2YDIC3R8THV7H10UAW1WCJTpGR5lz/s5
+	97JI1LDDjqyYs684EKx673zOjv5kmJbEq81LOYrawAaz6XIpZdS7CVuHnuPp5Atb
+	s8p547yb1vivVMq6SaW6n7fZChEjkoYVlGkFBa4GjtxVPE+VGxQ/EGYEvnoA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1673985684; x=1674072084; bh=tMyHBVcYNG0ERO4S5Q8/K/ngC+15
+	RRvO4SZa46EllSw=; b=r0/igWbp96bDczPUdGiDuVQOZk8DlgxsYWPQXTZq9fJ4
+	cbF2zV+baxa3Ca9K/3BAxQEYq/FOgnP/kKebLY6L5cyR6v5a2VWUJjMwWPBW/wg9
+	ohKcrpd4OdmuVIrhfXUQyRzghFXJ4Ra45NcS3FAOlfSxxsSnbTYuS86CpEMzPU8V
+	ypWiQgVmg/llOUBdFWRQfDCnqp7mpBYaEV0xYBNJcA+G27Ba2vreV1jP3AKu0Lp3
+	SmkaMFnDLx3BggpIa8EdbDx/QmqXf6yLAOGZdB3YD34+5tkODhp2VII4p5hE4fLJ
+	1NVEz9GnMx1Hz4KMtAwZz8F/ur/YZdhmbpLH+eGQqA==
+X-ME-Sender: <xms:k_7GY8LW8h2_wNKJSUM2TFzFq56zfzh_EiHL4v4e57MQuLmniUnaUA>
+    <xme:k_7GY8LYJWyfAJs1_c_mWNnr4ZJDz46ELzc_HWIcTPzheWUirzILxNR5Iw5sslUUw
+    tQGWFi3q7cdnAMrfko>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtiedgudefudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:k_7GY8vuExMOsyJ81lxn_vgndy1Y-xDoEhpmxcsvofAiP-ITIAPkfA>
+    <xmx:k_7GY5Z6Dnp88oXouzKtLwyKb1DWtOu9uC4pnL_E9WIQsHuz7OxO2g>
+    <xmx:k_7GYza62EwHI5CUM1-hB40biML0yder_VcCrH57XwRSnAkME6WnDQ>
+    <xmx:lP7GY5sqpwy3X9FiXGNCey3fbbDJTBqnXvKJjiXMrRfogFAbcVEsUw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 69C92B60086; Tue, 17 Jan 2023 15:01:23 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1187-g678636ba0d-fm-20230113.001-g678636ba
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117170029.2387516-1-arnd@kernel.org>
+Mime-Version: 1.0
+Message-Id: <4c4478d3-5b11-450a-9b6d-9e30e52b8f6d@app.fastmail.com>
+In-Reply-To: <98636010-fb0b-1771-e81f-cce90740d358@gmail.com>
+References: <20230117172825.3170190-1-arnd@kernel.org>
+ <98636010-fb0b-1771-e81f-cce90740d358@gmail.com>
+Date: Tue, 17 Jan 2023 21:01:03 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Tariq Toukan" <ttoukan.linux@gmail.com>,
+ "Arnd Bergmann" <arnd@kernel.org>, "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Leon Romanovsky" <leon@kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ "Tariq Toukan" <tariqt@nvidia.com>,
+ "Maxim Mikityanskiy" <maximmi@nvidia.com>, "Gal Pressman" <gal@nvidia.com>,
+ "Lama Kayal" <lkayal@nvidia.com>, "Moshe Tal" <moshet@nvidia.com>,
+ Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] mlx5: reduce stack usage in mlx5_setup_tc
+Content-Type: text/plain
 
-On Tue, Jan 17, 2023 at 06:00:15PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Printing a size_t value that is the result of the sizeof() operator requires
-> using the %z format string modifier to avoid a warning on 32-bit architectures:
-> 
-> drivers/scsi/qla2xxx/qla_mid.c: In function 'qla_create_buf_pool':
-> drivers/scsi/qla2xxx/qla_mid.c:1094:51: error: format '%ld' expects argument of type 'long int', but argument 5 has type 'unsigned int' [-Werror=format=]
->  1094 |                     "Failed to allocate buf_map(%ld).\n", sz * sizeof(unsigned long));
->       |                                                 ~~^       ~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                                                   |          |
->       |                                                   long int   unsigned int
->       |                                                 %d
-> 
-> Fixes: 82d8dfd2a238 ("scsi: qla2xxx: edif: Fix performance dip due to lock contention")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jan 17, 2023, at 18:46, Tariq Toukan wrote:
+> On 17/01/2023 19:28, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> Clang warns about excessive stack usage on 32-bit targets:
+>> 
+>> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1184) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
+>> static int mlx5e_setup_tc(struct net_device *dev, enum tc_setup_type type,
+>> 
+>> It turns out that both the mlx5e_setup_tc_mqprio_dcb() function and
+>> the mlx5e_safe_switch_params() function it calls have a copy of
+>> 'struct mlx5e_params' on the stack, and this structure is fairly
+>> large.
+>> 
+>> Use dynamic allocation for both.
+>> 
 
-Thanks for the patch!
+>>   
+>> -	err = mlx5e_safe_switch_params(priv, &new_params,
+>> +	err = mlx5e_safe_switch_params(priv, new_params,
+>>   				       mlx5e_num_channels_changed_ctx, NULL, true);
+>>   
+>
+> Is this change really required, even after new_chs are dynamically 
+> allocated?
+> As this code pattern of static local new_params repeats in all callers 
+> of mlx5e_safe_switch_params, let's not change this one alone if not 
+> necessary.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Link: https://lore.kernel.org/llvm/63c4ddba.170a0220.1547e.db75@mx.google.com/
+I'm not sure any more now, I actually did the patch a few weeks ago
+and only now came across it while going through my backlog.
 
-> ---
->  drivers/scsi/qla2xxx/qla_mid.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-> index c6ca39b8e23d..1483f6258f92 100644
-> --- a/drivers/scsi/qla2xxx/qla_mid.c
-> +++ b/drivers/scsi/qla2xxx/qla_mid.c
-> @@ -1091,7 +1091,7 @@ int qla_create_buf_pool(struct scsi_qla_host *vha, struct qla_qpair *qp)
->  	qp->buf_pool.buf_map   = kcalloc(sz, sizeof(long), GFP_KERNEL);
->  	if (!qp->buf_pool.buf_map) {
->  		ql_log(ql_log_warn, vha, 0x0186,
-> -		    "Failed to allocate buf_map(%ld).\n", sz * sizeof(unsigned long));
-> +		    "Failed to allocate buf_map(%zd).\n", sz * sizeof(unsigned long));
->  		return -ENOMEM;
->  	}
->  	sz = qp->req->length * sizeof(void *);
-> -- 
-> 2.39.0
-> 
-> 
+Generally speaking, the 'new_params' structure on the stack is
+too large, but I no longer see warnings after my patch.
+
+> Same for the noinline_for_stack. Are they really needed even after using 
+> dynamic allocation for new_chs?
+
+I've reverted both of those hunks now, let me try reproducing the
+original randconfig reports and see what still happens.
+
+   Arnd
