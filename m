@@ -1,44 +1,49 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829C12F3A;
-	Wed, 18 Jan 2023 14:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DD32F3A;
+	Wed, 18 Jan 2023 14:26:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674051353; x=1705587353;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ExSxMGo/2xKeNFhZxTWMnzdZWLZQe7hwQn1jBMq3Xjk=;
-  b=SZrfWKFb3bX/xTHHz0depJq7G977JY2ueUr2h5hl1G/8/I1B9oNzwdIA
-   E8fslCNL0fOwW0WOAA4NMiGJHpv7abOCY4B+NvvVxk42Xf4HZuhB5Bs4j
-   0kmOdpx848Pcs3itOtdIDHb4PGhqMpehGXOGN/9mSc9ZZCmp5KQSxY5yl
-   JwHLW/O5LYBTKtnYO78ILt+qs8hj3+wENEEdCB4fx6h4YgzDwdIFWalff
-   tnbzUl5KHS1y552zof0bNk208gSVzZYssvOmmVVGVxeIYzXlwahDEr78V
-   0hXChlNCbZKiARozUg84RRS+neJuKazYUQNtZTzM1H5zvq5g7AGiLFjjx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="322678829"
+  t=1674052015; x=1705588015;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bShIF2GzN0uCjfJDJnHZS1KX11YWPQMysT+sSLBfayw=;
+  b=RgUwyQ6hCyoBpQBqg1XxSN5uvARGhhKfaWfDWYSrreceLGhX7KumrUNC
+   6PjmXlH4biswLqfCoDWkF7ThmIOGDOsyyaBYxS1lE3wwkb4FDDS2i7LKk
+   gZ//+HQar/DI0TDRkG896U6PLsvU/jes0UWd/aAYUb+b0abs2yqupfORf
+   lyWDYZxKEIH/ENCW5uDUQ34Y0Rq4Uz/iVPzF8XmTvueLrbvJfn6U11RZe
+   Yayv1tFKNBhzo15UceucYP/YXniDvviCXS44IicQZjHYcCMH673C0lVjs
+   NiQ7HhhrpLq4xdZ1bg1Ndx0x3ezsJStTaw1N37vh3VRmotjcEdWw4mSc0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="323678288"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="322678829"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 06:15:52 -0800
+   d="scan'208";a="323678288"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 06:26:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="988559115"
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="652961213"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="988559115"
+   d="scan'208";a="652961213"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Jan 2023 06:15:50 -0800
+  by orsmga007.jf.intel.com with ESMTP; 18 Jan 2023 06:26:51 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pI9EE-0000Pk-08;
-	Wed, 18 Jan 2023 14:15:50 +0000
-Date: Wed, 18 Jan 2023 22:15:44 +0800
+	id 1pI9Ot-0000Qe-0n;
+	Wed, 18 Jan 2023 14:26:51 +0000
+Date: Wed, 18 Jan 2023 22:26:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: mm/filemap.c:2190:6: warning: unused function 'folio_more_pages'
-Message-ID: <202301182254.XhRmZw9A-lkp@intel.com>
+	Shravan Sudhakar <s.shravan@intel.com>,
+	Intel Corporation <linuxwwan@intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v1 1/1] platform/x86: int1092: Switch to use
+ acpi_evaluate_dsm_typed()
+Message-ID: <202301182233.vDnTdKEG-lkp@intel.com>
+References: <20230118095152.41427-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,57 +52,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230118095152.41427-1-andriy.shevchenko@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c1649ec55708ae42091a2f1bca1ab49ecd722d55
-commit: 48658d8509d2db3391c95aa74308a2b1fc8e8461 filemap: remove find_get_pages_contig()
-date:   4 months ago
-config: arm-randconfig-r026-20230116 (https://download.01.org/0day-ci/archive/20230118/202301182254.XhRmZw9A-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+Hi Andy,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc4 next-20230118]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/platform-x86-int1092-Switch-to-use-acpi_evaluate_dsm_typed/20230118-184845
+patch link:    https://lore.kernel.org/r/20230118095152.41427-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/1] platform/x86: int1092: Switch to use acpi_evaluate_dsm_typed()
+config: i386-randconfig-a004-20230116 (https://download.01.org/0day-ci/archive/20230118/202301182233.vDnTdKEG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=48658d8509d2db3391c95aa74308a2b1fc8e8461
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 48658d8509d2db3391c95aa74308a2b1fc8e8461
+        # https://github.com/intel-lab-lkp/linux/commit/6051c9fba08cdbd6ea1baeac8664b8f4462b427d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/platform-x86-int1092-Switch-to-use-acpi_evaluate_dsm_typed/20230118-184845
+        git checkout 6051c9fba08cdbd6ea1baeac8664b8f4462b427d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/int1092/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> mm/filemap.c:2190:6: warning: unused function 'folio_more_pages' [-Wunused-function]
-   bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
-        ^
+>> drivers/platform/x86/intel/int1092/intel_sar.c:134:6: warning: unused variable 'value' [-Wunused-variable]
+           int value;
+               ^
    1 warning generated.
 
 
-vim +/folio_more_pages +2190 mm/filemap.c
+vim +/value +134 drivers/platform/x86/intel/int1092/intel_sar.c
 
-be0ced5e9cb81a Matthew Wilcox (Oracle  2022-06-03  2188) 
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2189) static inline
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27 @2190) bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2191) {
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2192) 	if (!folio_test_large(folio) || folio_test_hugetlb(folio))
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2193) 		return false;
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2194) 	if (index >= max)
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2195) 		return false;
-6b24ca4a1a8d4e Matthew Wilcox (Oracle  2020-06-27  2196) 	return index < folio->index + folio_nr_pages(folio) - 1;
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2197  }
-^1da177e4c3f41 Linus Torvalds          2005-04-16  2198  
-
-:::::: The code at line 2190 was first introduced by commit
-:::::: 6b24ca4a1a8d4ee3221d6d44ddbb99f542e4bda3 mm: Use multi-index entries in the page cache
-
-:::::: TO: Matthew Wilcox (Oracle) <willy@infradead.org>
-:::::: CC: Matthew Wilcox (Oracle) <willy@infradead.org>
+dcfbd31ef4bcf6 Shravan S       2021-07-24  117  
+dcfbd31ef4bcf6 Shravan S       2021-07-24  118  /**
+dcfbd31ef4bcf6 Shravan S       2021-07-24  119   * sar_get_device_mode: Extraction of information from BIOS via DSM calls
+dcfbd31ef4bcf6 Shravan S       2021-07-24  120   * @device: ACPI device for which to retrieve the data
+dcfbd31ef4bcf6 Shravan S       2021-07-24  121   *
+dcfbd31ef4bcf6 Shravan S       2021-07-24  122   * Retrieve the current device mode information from the BIOS.
+dcfbd31ef4bcf6 Shravan S       2021-07-24  123   *
+dcfbd31ef4bcf6 Shravan S       2021-07-24  124   * Return:
+dcfbd31ef4bcf6 Shravan S       2021-07-24  125   * AE_OK on success
+dcfbd31ef4bcf6 Shravan S       2021-07-24  126   * AE_ERROR on error
+dcfbd31ef4bcf6 Shravan S       2021-07-24  127   */
+dcfbd31ef4bcf6 Shravan S       2021-07-24  128  static acpi_status sar_get_device_mode(struct platform_device *device)
+dcfbd31ef4bcf6 Shravan S       2021-07-24  129  {
+dcfbd31ef4bcf6 Shravan S       2021-07-24  130  	struct wwan_sar_context *context = dev_get_drvdata(&device->dev);
+dcfbd31ef4bcf6 Shravan S       2021-07-24  131  	acpi_status status = AE_OK;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  132  	union acpi_object *out;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  133  	u32 rev = 0;
+dcfbd31ef4bcf6 Shravan S       2021-07-24 @134  	int value;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  135  
+6051c9fba08cdb Andy Shevchenko 2023-01-18  136  	out = acpi_evaluate_dsm_typed(context->handle, &context->guid, rev,
+6051c9fba08cdb Andy Shevchenko 2023-01-18  137  				      COMMAND_ID_DEV_MODE, NULL, ACPI_TYPE_INTEGER);
+6051c9fba08cdb Andy Shevchenko 2023-01-18  138  	if (!out) {
+dcfbd31ef4bcf6 Shravan S       2021-07-24  139  		dev_err(&device->dev, "DSM cmd:%d Failed to retrieve value\n", COMMAND_ID_DEV_MODE);
+dcfbd31ef4bcf6 Shravan S       2021-07-24  140  		status = AE_ERROR;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  141  		goto dev_mode_error;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  142  	}
+6051c9fba08cdb Andy Shevchenko 2023-01-18  143  	context->sar_data.device_mode = out->integer.value;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  144  	update_sar_data(context);
+dcfbd31ef4bcf6 Shravan S       2021-07-24  145  	sysfs_notify(&device->dev.kobj, NULL, SYSFS_DATANAME);
+dcfbd31ef4bcf6 Shravan S       2021-07-24  146  
+dcfbd31ef4bcf6 Shravan S       2021-07-24  147  dev_mode_error:
+dcfbd31ef4bcf6 Shravan S       2021-07-24  148  	ACPI_FREE(out);
+dcfbd31ef4bcf6 Shravan S       2021-07-24  149  	return status;
+dcfbd31ef4bcf6 Shravan S       2021-07-24  150  }
+dcfbd31ef4bcf6 Shravan S       2021-07-24  151  
 
 -- 
 0-DAY CI Kernel Test Service
