@@ -1,44 +1,44 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C268C18;
-	Wed, 18 Jan 2023 22:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF88C2F34;
+	Wed, 18 Jan 2023 23:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674080480; x=1705616480;
+  t=1674084801; x=1705620801;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Txv43mcB9ItRh4MQ34mw53GfTCOT5XfTZSuSXaOpShI=;
-  b=B0BPzXO7zj2D6CAu6HvlxaVcCD4EU9TvEyX+trdoHfgxb0I7oYqlpVWV
-   ZEsA0PK8LjmzLPV695u8sZpxIzxrJjWJFhbbqkmnJKxG2bgX2d5NB+VF7
-   wyQUHppisfidLQIsooBEMHEz1fQUy6dPeOnQ8ZThx+Ey4VDGE963SH0cF
-   yylCXQTHf7Sbjuhf+DXYVE252YfNZyadTS0QsIkTDyjBEdds9yhcpA7c4
-   r1DOME8NtJY6fugM1hDcOtpjQ8FJJvmmn5jkfD2mPMMK0/8rgaZaJIIVX
-   8xF2LU89z2Yfg4UjgJKNOBRTtbx4xVqF/o7FznvcgK6u4SkAptLahyXQo
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327192949"
+  bh=DuB4F4aJsIU6f0uJdqNQ9DFJRtGMSAUcmAKbN6T1GnE=;
+  b=hqrkP3MTsOmm3I8mVXOXBjZo1Rzk70PjZtM/f8XJAs+XO44lO9II7Ypl
+   mYe6aQTh/1G2hxhrCKiz6/hPMii5We1HmI+Huzn5CNNsH2/sOMvIaKc9f
+   W1Dz2aczYwbY3XxQUgfORPaU/QukiAuaMCHDGuwJB7p3AGdyPbpSCNuMG
+   LCnhBhm1IctrFZLD9NgFoQvG+qIWDUBi/v/0E44dyE8Su5Qwf8p2qN4oP
+   iiZFEAIkK8nJwjm+I0RtJpynee3wRL98YZILtO0D4Q2sMbjaRVqKUlUvL
+   hjjcEg0xLHuMWn+Ijsrc/zECneEOm95nJnSmpcyD9jBZUC0xiEBsCb2fh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327209690"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="327192949"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 14:21:19 -0800
+   d="scan'208";a="327209690"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 15:33:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="637455087"
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="609860042"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="637455087"
+   d="scan'208";a="609860042"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 18 Jan 2023 14:21:17 -0800
+  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2023 15:33:19 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIGo0-0000li-2s;
-	Wed, 18 Jan 2023 22:21:16 +0000
-Date: Thu, 19 Jan 2023 06:20:42 +0800
+	id 1pIHvi-0000oG-34;
+	Wed, 18 Jan 2023 23:33:18 +0000
+Date: Thu, 19 Jan 2023 07:32:50 +0800
 From: kernel test robot <lkp@intel.com>
 To: Michal Suchanek <msuchanek@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Rob Herring <robh@kernel.org>
 Subject: [robh:dt/linus 5/5] drivers/of/platform.c:570:24: warning:
  incompatible pointer to integer conversion passing 'char[14]' to parameter
- of type 'size_t' (aka 'unsigned int')
-Message-ID: <202301190652.dPT5niRJ-lkp@intel.com>
+ of type 'unsigned long'
+Message-ID: <202301190745.4S9lZiR2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +51,7 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/linus
 head:   2d681d6a23a14e6507e536605d83e38acfab9018
 commit: 2d681d6a23a14e6507e536605d83e38acfab9018 [5/5] of: Make of framebuffer devices unique
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230119/202301190652.dPT5niRJ-lkp@intel.com/config)
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230119/202301190745.4S9lZiR2-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -62,8 +62,8 @@ reproduce (this is a W=1 build):
         git checkout 2d681d6a23a14e6507e536605d83e38acfab9018
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/of/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/of/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
@@ -76,13 +76,13 @@ All warnings (new ones prefixed by >>):
    include/linux/kernel.h:213:20: note: passing argument to parameter 'buf' here
    int snprintf(char *buf, size_t size, const char *fmt, ...);
                       ^
->> drivers/of/platform.c:570:24: warning: incompatible pointer to integer conversion passing 'char[14]' to parameter of type 'size_t' (aka 'unsigned int') [-Wint-conversion]
+>> drivers/of/platform.c:570:24: warning: incompatible pointer to integer conversion passing 'char[14]' to parameter of type 'unsigned long' [-Wint-conversion]
                            ret = snprintf(buf, "of-display-%d", display_number++);
                                                ^~~~~~~~~~~~~~~
    include/linux/kernel.h:213:32: note: passing argument to parameter 'size' here
    int snprintf(char *buf, size_t size, const char *fmt, ...);
                                   ^
->> drivers/of/platform.c:570:41: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
+   drivers/of/platform.c:570:41: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
                            ret = snprintf(buf, "of-display-%d", display_number++);
                                                                 ^~~~~~~~~~~~~~~~
    include/linux/kernel.h:213:50: note: passing argument to parameter 'fmt' here
