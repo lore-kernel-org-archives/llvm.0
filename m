@@ -1,171 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7B2539E
-	for <llvm@lists.linux.dev>; Wed, 18 Jan 2023 18:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9721C433D2;
-	Wed, 18 Jan 2023 18:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F48E53A7;
+	Wed, 18 Jan 2023 19:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCB3C433D2;
+	Wed, 18 Jan 2023 19:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674065369;
-	bh=5pgmP1P8QMML9UWJonanxl6exLIq+UTuWfh1kpgwlMQ=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=OYJ/6BjV5zvb3qTyeNhOmHfwQEXdWLGHzwnfS9uTfzzqTptvGNfo7WXHAaQVBYczW
-	 lTluE8eWeI5V3JV9WEn6mLFmuEAdIKv7yD7/V7bF1bVDsiWJBMgiwK1BLUj94QVmdV
-	 9QzrR67GHiLb3jyNbKFFPi/ivxkIZMwkHd/LnxSZbyDbWsBGQRHHNWWkdEaQ8U94FL
-	 zF/DG0VokbF9ptUlghNLUf3JbtjdlOZo3efFXBvdHAIHVtfJnCIcOj0FA9Ute0eRj2
-	 nAnA0iOmt6Cm0eNMLy91jiUfC5A3k/5UHIiNYOBXdrn5Tz8h3c9HKuZlaGH4gz+QJK
-	 GPfoqMneLxP7g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 3FF0B5C0920; Wed, 18 Jan 2023 10:09:29 -0800 (PST)
-Date: Wed, 18 Jan 2023 10:09:29 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-	Charalampos Mainas <charalampos.mainas@gmail.com>,
-	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-	Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <20230118180929.GE2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
- <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
- <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
- <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
- <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+	s=k20201202; t=1674069802;
+	bh=0ya5K5vjVFPW7YzbbDzDGC2Lwm5m4bGSEj8L7qF73aE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=EwpuW/gobuiyeXJs2dQ4kbN14sQEOWf/f8Lxa8Kkrf9gX2uBQW8IikL84yL5nqOUU
+	 jLtjRLiYds2rRqxwDqod9XyJS36xOD68fxAIl4pWMI8O7FxAlQYfIxSyVA/H4Z5uBl
+	 nHQCRDmzy/GghPNk+Vc1RIg3PfgqLu7Vj0vX0DbcLc8WTDOdCTo6i3w7G/FSqQm1Zn
+	 vxJXpPlstBhJBnp5VnqmL+IyeFDBkcxfm7c9vKNt9zV5X3N0bLLmodEbSCUUS1uL4I
+	 +ItgfsgroRhpr3DYHGcEX4MP01SoVAX5FK19SaXLMPyH20SsfPhMviowjvA9ioT+eE
+	 39vvDeYR6IwqA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 18 Jan 2023 12:22:59 -0700
+Subject: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABRHyGMC/x2N0QqDMAxFf0XyvICts0x/ZfhQ02wGXJVEZCD++
+ +rgvhwuh3OAsQob9NUByruYLLmAu1VAU8xvRkmFwde+qZ174H4v23CeE7qAXUhtaomaQB6KM0Zj
+ HDVmmi7rE21jvY5V+SXff+g5nOcPBT2DQXgAAAA=
+To: linux@armlinux.org.uk, arnd@arndb.de
+Cc: ndesaulniers@google.com, trix@redhat.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2188; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=0ya5K5vjVFPW7YzbbDzDGC2Lwm5m4bGSEj8L7qF73aE=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDMkn3DX7ptX3yk/buub+p7cHnHw+Ho74v3H/xcuZm7Zo5B3c
+ pBZY1VHKwiDGwSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmsqSBkaGFr9akoUciZIb4grYGp3
+ WX7luftRZ7qJvY+N5CZFb0lFBGhht8B/S9lZgZ9KXKRMTr/WMOCO06m3vGdnf+icBtr+1VmAE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Wed, Jan 18, 2023 at 11:42:23AM +0100, Paul Heidekrüger wrote:
-> On 13 Jan 2023, at 16:22, Alan Stern wrote:
-> 
-> > On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
-> >> Hi all,
-> >>
-> >> FWIW, here are two more broken address dependencies, both very similar to the
-> >> one discussed in this thread. From what I can tell, both are protected by a
-> >> lock, so, again, nothing to worry about right now? Would you agree?
-> >
-> > FWIW, my opinion is that in both cases the broken dependency can be
-> > removed entirely.
-> >
-> >> Comments marked with "AD:" were added by me for readability.
-> >>
-> >> 1. drivers/hwtracing/stm/core.c::1050 - 1085
-> >>
-> >>         /**
-> >>          * __stm_source_link_drop() - detach stm_source from an stm device
-> >>          * @src:	stm_source device
-> >>          * @stm:	stm device
-> >>          *
-> >>          * If @stm is @src::link, disconnect them from one another and put the
-> >>          * reference on the @stm device.
-> >>          *
-> >>          * Caller must hold stm::link_mutex.
-> >>          */
-> >>         static int __stm_source_link_drop(struct stm_source_device *src,
-> >>                                           struct stm_device *stm)
-> >>         {
-> >>                 struct stm_device *link;
-> >>                 int ret = 0;
-> >>
-> >>                 lockdep_assert_held(&stm->link_mutex);
-> >>
-> >>                 /* for stm::link_list modification, we hold both mutex and spinlock */
-> >>                 spin_lock(&stm->link_lock);
-> >>                 spin_lock(&src->link_lock);
-> >>
-> >>                 /* AD: Beginning of the address dependency. */
-> >>                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
-> >>
-> >>                 /*
-> >>                  * The linked device may have changed since we last looked, because
-> >>                  * we weren't holding the src::link_lock back then; if this is the
-> >>                  * case, tell the caller to retry.
-> >>                  */
-> >>                 if (link != stm) {
-> >>                         ret = -EAGAIN;
-> >>                         goto unlock;
-> >>                 }
-> >>
-> >>                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
-> >>                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
-> >>
-> >>                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
-> >>                 pm_runtime_mark_last_busy(&link->dev);
-> >
-> > In both of these statements, link can safely be replaced by stm.
-> >
-> > (There's also a control dependency which the LKMM isn't aware of.  This
-> > makes it all the more safe.)
-> >
-> >> 2. kernel/locking/lockdep.c::6319 - 6348
-> >>
-> >>         /*
-> >>          * Unregister a dynamically allocated key.
-> >>          *
-> >>          * Unlike lockdep_register_key(), a search is always done to find a matching
-> >>          * key irrespective of debug_locks to avoid potential invalid access to freed
-> >>          * memory in lock_class entry.
-> >>          */
-> >>         void lockdep_unregister_key(struct lock_class_key *key)
-> >>         {
-> >>                 struct hlist_head *hash_head = keyhashentry(key);
-> >>                 struct lock_class_key *k;
-> >>                 struct pending_free *pf;
-> >>                 unsigned long flags;
-> >>                 bool found = false;
-> >>
-> >>                 might_sleep();
-> >>
-> >>                 if (WARN_ON_ONCE(static_obj(key)))
-> >>                         return;
-> >>
-> >>                 raw_local_irq_save(flags);
-> >>                 lockdep_lock();
-> >>
-> >>                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
-> >>                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
-> >>                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
-> >>                         if (k == key) {
-> >>                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
-> >>                                 hlist_del_rcu(&k->hash_entry);
-> >
-> > And here k could safely be replaced with key.  (And again there is a
-> > control dependency, but this is one that the LKMM would detect.)
-> 
-> Ha, I didn't even notice the control dependencies - of course! In that case,
-> this doesn't warrant a patch though, given that nothing is really breaking?
+Commit 6a7ee50f8f56 ("ARM: disallow pre-ARMv5 builds with ld.lld")
+prevented v4 or v4t kernels when ld.lld will link the kernel due to
+inserting unsupported blx instructions.
 
-Up to the maintainers, but if any of the code that I maintain was relying
-on a control dependency, I would want that code commented.  But in this
-case, lockdep_unregister_key() isn't called very often, correct?  If so,
-and if this control dependency really is relied on, perhaps some stronger
-and less fragile ordering should be used.
+ld.lld has been fixed in current main (16.0.0) to avoid inserting these
+instructions by inserting position independent thunks instead. Allow
+these configurations to be enabled when ld.lld 16.0.0 is used to link
+the kernel.
 
-But again, maintainers' choice!
+Additionally, add a link to the upstream LLVM issue so that the reason
+for this dependency is clearly documented.
 
-							Thanx, Paul
+Link: https://github.com/ClangBuiltLinux/linux/issues/964
+Link: https://github.com/llvm/llvm-project/commit/6f9ff1beee9d12aca0c9caa9ae0051dc6d0a718c
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I just build tested:
+
+- multi_v4t_defconfig without 6a7ee50f8f56 with LLVM 15: warning
+- multi_v4t_defconfig with this patch with LLVM 16: no warning
+
+and the configuration cannot be selected under the old and new conditions
+still.
+---
+ arch/arm/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 43c7773b89ae..874c5b56cf9a 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -345,14 +345,16 @@ comment "CPU Core family selection"
+ config ARCH_MULTI_V4
+ 	bool "ARMv4 based platforms (FA526, StrongARM)"
+ 	depends on !ARCH_MULTI_V6_V7
+-	depends on !LD_IS_LLD
++	# https://github.com/llvm/llvm-project/issues/50764
++	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+ 	select ARCH_MULTI_V4_V5
+ 	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
+ 
+ config ARCH_MULTI_V4T
+ 	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
+ 	depends on !ARCH_MULTI_V6_V7
+-	depends on !LD_IS_LLD
++	# https://github.com/llvm/llvm-project/issues/50764
++	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+ 	select ARCH_MULTI_V4_V5
+ 	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
+ 		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
+
+---
+base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+change-id: 20230118-v4-v4t-lld-16-96d5d5cc36c2
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
