@@ -1,134 +1,213 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94C353A7
-	for <llvm@lists.linux.dev>; Wed, 18 Jan 2023 19:28:23 +0000 (UTC)
-Received: by mail-wm1-f46.google.com with SMTP id g10so25482055wmo.1
-        for <llvm@lists.linux.dev>; Wed, 18 Jan 2023 11:28:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CyUR5YUMm8ysaAa5DWj670ggKcKYPCTZKk4awAgiO1I=;
-        b=jEiGMsYrAxCjCLHs6mkQRY+H0loWMOrPpIXi1xkSgx//vqy9s+DozWfgjSS4YBRZBs
-         MtHd3ILPtW2L3CSBBpV7fwzVyyasFhif6BaagMScsM10cwqj34DAnecbPHQ3g3qaZylV
-         BOK+XkMpujyyYY1flwZ5ef1MvNyiKhVcAHfBwO61evwXCkrreDof6lpvLAtEm5wlmCD2
-         CNnu0Nykkr2AbmJlXwgPf1lWdkjNVz+izsra+0L3KHH9il/gIgUrRF8z9t4JCDyT0pHA
-         5PC+tL/QI5wOYSz42qniVZWNiLATcIzp+3DxOAKnG46f0ANvCW3rwKhcSDBi34NCO1iJ
-         xodg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CyUR5YUMm8ysaAa5DWj670ggKcKYPCTZKk4awAgiO1I=;
-        b=4nkTef1w4yWTlZH59yDTJUghu27OpvAmSVMOU1jnhublMPbJNuD6Y8EBM/RdkAg+tm
-         94/DJcmWIvJ8PgVOBRRGpZs88Wjepesr3+/ETppgYolpXnjJDpopCYmOvgvCU41K2ZoY
-         jsI70A6f5xumU118Ul4ZHaMO9uXLNh1E18NFy9E70MR4C7mdIhKwBPyK0uAzhRGitaHu
-         d6FIQVij+78w57vQSxM9QVGgxSU/Wz4N33dEuvaP0gjU/6O9mfIDIZaeUokyi/JDbbdT
-         v/S8RyVYw8GofoLI5wmo+bcPZhwF8O05BbXhdmeKVynSWD5hTgk8ifWPcvlclKVUxkS0
-         YKxA==
-X-Gm-Message-State: AFqh2kpObqo/MvofFErd+dirAU7dtJ3rCNhrNFhWiHefQhrW3aNrXdrh
-	oOmK7JPlm8JWyjt0cV80Vn8=
-X-Google-Smtp-Source: AMrXdXulDIOu6MQaY7fUorwFYHMU0SwJNoQe3B8HRZ22ZyxAxesr3erXMXwcA+pNQZqED4LmDew5rA==
-X-Received: by 2002:a05:600c:5d1:b0:3d0:761b:f86 with SMTP id p17-20020a05600c05d100b003d0761b0f86mr7756738wmd.28.1674070102037;
-        Wed, 18 Jan 2023 11:28:22 -0800 (PST)
-Received: from [192.168.1.113] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id z6-20020a05600c0a0600b003d04e4ed873sm3398843wmp.22.2023.01.18.11.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 11:28:21 -0800 (PST)
-Message-ID: <701abf4bbf5b7957a24d2f164c643e1d9f586fad.camel@gmail.com>
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Peter Foley <pefoley2@pefoley.com>, Quentin Monnet
- <quentin@isovalent.com>,  Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
- <trix@redhat.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Wed, 18 Jan 2023 21:28:19 +0200
-In-Reply-To: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802EB3D72;
+	Wed, 18 Jan 2023 20:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674073637; x=1705609637;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6sPLbjLpRMrut6mkwWGe3o7oYxtT9A6KI8WUTNIxVsk=;
+  b=lPdzzuVK54MgYaDaXZaQ1Xg5kvC6aVpm8SoGqpQFb4V78l8MyP2H3z9t
+   lJEYZIwQm3gpS8heQ0a8q934BMSrTdeaq+aP54APmhfcHlwl7KtsEOvla
+   HCqitTfn4T1+dAWZcddPMdga4xhkePjTtAXcPAcLNk5TD7DEsufZZ/QH4
+   Kj1ujAHEni6vHslRq/Rgozi0D0wtEmy7Vcy19u9ge1L85aIpwbqgN6zNO
+   jzAWoH2Jn+ZcwsTTChEQj4lACw8euO/1vmzschpWiepfEVGUfFo9JCoiV
+   1UHDMkyiwXxmM0EkNa5V4RKliK5ClN8uAKSD54lgkCkwPyb/wsm8uEp/T
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="308652986"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="308652986"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:27:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="767907627"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="767907627"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jan 2023 12:27:13 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIF1c-0000gg-1U;
+	Wed, 18 Jan 2023 20:27:12 +0000
+Date: Thu, 19 Jan 2023 04:27:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	paulo.r.zanoni@intel.com, jani.nikula@intel.com,
+	thomas.hellstrom@intel.com, matthew.auld@intel.com,
+	daniel.vetter@intel.com, christian.koenig@amd.com
+Subject: Re: [Intel-gfx] [PATCH v10 23/23] drm/i915/vm_bind: Support capture
+ of persistent mappings
+Message-ID: <202301190440.EuujWDwh-lkp@intel.com>
+References: <20230118071609.17572-24-niranjana.vishwanathapura@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118071609.17572-24-niranjana.vishwanathapura@intel.com>
 
-On Sat, 2023-01-14 at 18:00 -0500, Peter Foley wrote:
-> Avoid build errors on distros that force the stack protector on by
-> default.
-> e.g.
->   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
-> skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__stack=
-_chk_fail' is not supported.
-> int iter(struct bpf_iter__task_file *ctx)
->     ^
-> 1 error generated.
->=20
-> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
-> ---
->  tools/bpf/bpftool/Makefile    | 1 +
->  tools/bpf/runqslower/Makefile | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index f610e184ce02a..36ac0002e386f 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h=
- $(LIBBPF_BOOTSTRAP)
->  		-I$(or $(OUTPUT),.) \
->  		-I$(srctree)/tools/include/uapi/ \
->  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
-> +		-fno-stack-protector \
+Hi Niranjana,
 
-While working on clang patch to disable stack protector
-for BPF target I've noticed that there is an option to
-disable default configuration file altogether [1]:
+Thank you for the patch! Yet something to improve:
 
-  --no-default-config
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-intel/for-linux-next-fixes drm-tip/drm-tip drm/drm-next drm-exynos/exynos-drm-next drm-misc/drm-misc-next linus/master v6.2-rc4 next-20230118]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Should we consider it instead of -fno-stack-protector
-to shield ourselves from any potential distro-specific
-changes?
+url:    https://github.com/intel-lab-lkp/linux/commits/Niranjana-Vishwanathapura/drm-i915-vm_bind-Expose-vm-lookup-function/20230118-151845
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20230118071609.17572-24-niranjana.vishwanathapura%40intel.com
+patch subject: [Intel-gfx] [PATCH v10 23/23] drm/i915/vm_bind: Support capture of persistent mappings
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230119/202301190440.EuujWDwh-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/251fbfd52586e3ff4677b44a136d08f9580d79e2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Niranjana-Vishwanathapura/drm-i915-vm_bind-Expose-vm-lookup-function/20230118-151845
+        git checkout 251fbfd52586e3ff4677b44a136d08f9580d79e2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-[1] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-cl=
-ang-no-default-config
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
->  		-g -O2 -Wall -target bpf -c $< -o $@
->  	$(Q)$(LLVM_STRIP) -g $@
-> =20
-> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefil=
-e
-> index 8b3d87b82b7a2..f7313cc966a04 100644
-> --- a/tools/bpf/runqslower/Makefile
-> +++ b/tools/bpf/runqslower/Makefile
-> @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
->  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
-> =20
->  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
-> -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
-> -		 -c $(filter %.c,$^) -o $@ &&				      \
-> +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
-> +		 -fno-stack-protector 					\
-> +		 -c $(filter %.c,$^) -o $@ &&				\
->  	$(LLVM_STRIP) -g $@
-> =20
->  $(OUTPUT)/%.o: %.c | $(OUTPUT)
->=20
-> ---
-> base-commit: 97ec4d559d939743e8af83628be5af8da610d9dc
-> change-id: 20230114-bpf-918ae127b77a
->=20
-> Best regards,
+All errors (new ones prefixed by >>):
 
+>> drivers/gpu/drm/i915/i915_gem.c:181:43: error: no member named 'vm_capture_lock' in 'struct i915_address_space'
+                   if (!mutex_lock_interruptible(&vma->vm->vm_capture_lock)) {
+                                                  ~~~~~~~  ^
+   include/linux/mutex.h:188:72: note: expanded from macro 'mutex_lock_interruptible'
+   #define mutex_lock_interruptible(lock) mutex_lock_interruptible_nested(lock, 0)
+                                                                          ^~~~
+>> drivers/gpu/drm/i915/i915_gem.c:182:36: error: no member named 'vm_capture_link' in 'struct i915_vma'
+                           sync_unbind = !list_empty(&vma->vm_capture_link);
+                                                      ~~~  ^
+   drivers/gpu/drm/i915/i915_gem.c:183:27: error: no member named 'vm_capture_lock' in 'struct i915_address_space'
+                           mutex_unlock(&vma->vm->vm_capture_lock);
+                                         ~~~~~~~  ^
+   3 errors generated.
+
+
+vim +181 drivers/gpu/drm/i915/i915_gem.c
+
+   116	
+   117	int i915_gem_object_unbind(struct drm_i915_gem_object *obj,
+   118				   unsigned long flags)
+   119	{
+   120		struct intel_runtime_pm *rpm = &to_i915(obj->base.dev)->runtime_pm;
+   121		bool vm_trylock = !!(flags & I915_GEM_OBJECT_UNBIND_VM_TRYLOCK);
+   122		LIST_HEAD(still_in_list);
+   123		intel_wakeref_t wakeref;
+   124		struct i915_vma *vma;
+   125		int ret;
+   126	
+   127		assert_object_held(obj);
+   128	
+   129		if (list_empty(&obj->vma.list))
+   130			return 0;
+   131	
+   132		/*
+   133		 * As some machines use ACPI to handle runtime-resume callbacks, and
+   134		 * ACPI is quite kmalloc happy, we cannot resume beneath the vm->mutex
+   135		 * as they are required by the shrinker. Ergo, we wake the device up
+   136		 * first just in case.
+   137		 */
+   138		wakeref = intel_runtime_pm_get(rpm);
+   139	
+   140	try_again:
+   141		ret = 0;
+   142		spin_lock(&obj->vma.lock);
+   143		while (!ret && (vma = list_first_entry_or_null(&obj->vma.list,
+   144							       struct i915_vma,
+   145							       obj_link))) {
+   146			bool sync_unbind = true;
+   147	
+   148			list_move_tail(&vma->obj_link, &still_in_list);
+   149			if (!i915_vma_is_bound(vma, I915_VMA_BIND_MASK))
+   150				continue;
+   151	
+   152			if (flags & I915_GEM_OBJECT_UNBIND_TEST) {
+   153				ret = -EBUSY;
+   154				break;
+   155			}
+   156	
+   157			/*
+   158			 * Requiring the vm destructor to take the object lock
+   159			 * before destroying a vma would help us eliminate the
+   160			 * i915_vm_tryget() here, AND thus also the barrier stuff
+   161			 * at the end. That's an easy fix, but sleeping locks in
+   162			 * a kthread should generally be avoided.
+   163			 */
+   164			ret = -EAGAIN;
+   165			if (!i915_vm_tryget(vma->vm))
+   166				break;
+   167	
+   168			spin_unlock(&obj->vma.lock);
+   169	
+   170			/*
+   171			 * Since i915_vma_parked() takes the object lock
+   172			 * before vma destruction, it won't race us here,
+   173			 * and destroy the vma from under us.
+   174			 */
+   175	
+   176			/*
+   177			 * Synchronously unbind persistent mappings with capture
+   178			 * request so that vma->resource is valid in the error capture
+   179			 * path without needing extra reference taking in execbuf path.
+   180			 */
+ > 181			if (!mutex_lock_interruptible(&vma->vm->vm_capture_lock)) {
+ > 182				sync_unbind = !list_empty(&vma->vm_capture_link);
+   183				mutex_unlock(&vma->vm->vm_capture_lock);
+   184			}
+   185	
+   186			ret = -EBUSY;
+   187			if (!sync_unbind && (flags & I915_GEM_OBJECT_UNBIND_ASYNC)) {
+   188				assert_object_held(vma->obj);
+   189				ret = i915_vma_unbind_async(vma, vm_trylock);
+   190			}
+   191	
+   192			if (ret == -EBUSY && (flags & I915_GEM_OBJECT_UNBIND_ACTIVE ||
+   193					      !i915_vma_is_active(vma))) {
+   194				if (vm_trylock) {
+   195					if (mutex_trylock(&vma->vm->mutex)) {
+   196						ret = __i915_vma_unbind(vma);
+   197						mutex_unlock(&vma->vm->mutex);
+   198					}
+   199				} else {
+   200					ret = i915_vma_unbind(vma);
+   201				}
+   202			}
+   203	
+   204			i915_vm_put(vma->vm);
+   205			spin_lock(&obj->vma.lock);
+   206		}
+   207		list_splice_init(&still_in_list, &obj->vma.list);
+   208		spin_unlock(&obj->vma.lock);
+   209	
+   210		if (ret == -EAGAIN && flags & I915_GEM_OBJECT_UNBIND_BARRIER) {
+   211			rcu_barrier(); /* flush the i915_vm_release() */
+   212			goto try_again;
+   213		}
+   214	
+   215		intel_runtime_pm_put(rpm, wakeref);
+   216	
+   217		return ret;
+   218	}
+   219	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
