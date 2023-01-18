@@ -1,44 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF88C2F34;
-	Wed, 18 Jan 2023 23:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A522F34;
+	Wed, 18 Jan 2023 23:33:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674084801; x=1705620801;
+  t=1674084806; x=1705620806;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DuB4F4aJsIU6f0uJdqNQ9DFJRtGMSAUcmAKbN6T1GnE=;
-  b=hqrkP3MTsOmm3I8mVXOXBjZo1Rzk70PjZtM/f8XJAs+XO44lO9II7Ypl
-   mYe6aQTh/1G2hxhrCKiz6/hPMii5We1HmI+Huzn5CNNsH2/sOMvIaKc9f
-   W1Dz2aczYwbY3XxQUgfORPaU/QukiAuaMCHDGuwJB7p3AGdyPbpSCNuMG
-   LCnhBhm1IctrFZLD9NgFoQvG+qIWDUBi/v/0E44dyE8Su5Qwf8p2qN4oP
-   iiZFEAIkK8nJwjm+I0RtJpynee3wRL98YZILtO0D4Q2sMbjaRVqKUlUvL
-   hjjcEg0xLHuMWn+Ijsrc/zECneEOm95nJnSmpcyD9jBZUC0xiEBsCb2fh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327209690"
+  bh=Ql2C606+BkMpSn9QP/JMFEPNp2qTrdtpiO3nmxylxvo=;
+  b=TEZ8pkL9dHrQ7FvvLkBi2/j4/BCeEpWCqo/GTSciC26f5/w3qh05wQLv
+   HTC9UMiiKyLWsz0MWCKzBb0p4WGxL/5X6ZmJSHk+Q8M1eFYWHLVp6M0QY
+   Z3TgeirJhsrwLqmDPxxtjGzH75NLauNVKOYZdmuwY1wLHC1odE06n3A7B
+   D6gnLfSmB/ND25FSdtakkaV6N76Dawsjvc5mbruHBx3FviPUbfdG/ifTZ
+   WjLuCzNFUT1Rv7spbGFNdqI4S6hsbpMu6TKjMhzuNvyBTJe0iWpwOK1kX
+   oFrSJeCyNVaomLn13NXbirpcFfQhp+jsP5390BuXQ+48kt8qEzf24aKTm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411373747"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="327209690"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 15:33:21 -0800
+   d="scan'208";a="411373747"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 15:33:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="609860042"
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="905297128"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="609860042"
+   d="scan'208";a="905297128"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2023 15:33:19 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 18 Jan 2023 15:33:24 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIHvi-0000oG-34;
+	id 1pIHvi-0000oI-37;
 	Wed, 18 Jan 2023 23:33:18 +0000
-Date: Thu, 19 Jan 2023 07:32:50 +0800
+Date: Thu, 19 Jan 2023 07:32:49 +0800
 From: kernel test robot <lkp@intel.com>
 To: Michal Suchanek <msuchanek@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Rob Herring <robh@kernel.org>
-Subject: [robh:dt/linus 5/5] drivers/of/platform.c:570:24: warning:
+Subject: [robh:dt/linus 5/5] drivers/of/platform.c:570:24: error:
  incompatible pointer to integer conversion passing 'char[14]' to parameter
- of type 'unsigned long'
-Message-ID: <202301190745.4S9lZiR2-lkp@intel.com>
+ of type 'unsigned int'
+Message-ID: <202301190734.vcxlYHO3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,8 +51,8 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/linus
 head:   2d681d6a23a14e6507e536605d83e38acfab9018
 commit: 2d681d6a23a14e6507e536605d83e38acfab9018 [5/5] of: Make of framebuffer devices unique
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230119/202301190745.4S9lZiR2-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: hexagon-randconfig-r041-20230118 (https://download.01.org/0day-ci/archive/20230119/202301190734.vcxlYHO3-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -62,27 +62,96 @@ reproduce (this is a W=1 build):
         git checkout 2d681d6a23a14e6507e536605d83e38acfab9018
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/of/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/of/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
+   In file included from drivers/of/platform.c:14:
+   In file included from include/linux/amba/bus.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/of/platform.c:14:
+   In file included from include/linux/amba/bus.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/of/platform.c:14:
+   In file included from include/linux/amba/bus.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
    drivers/of/platform.c:570:19: error: incompatible pointer types passing 'char *[14]' to parameter of type 'char *' [-Werror,-Wincompatible-pointer-types]
                            ret = snprintf(buf, "of-display-%d", display_number++);
                                           ^~~
    include/linux/kernel.h:213:20: note: passing argument to parameter 'buf' here
    int snprintf(char *buf, size_t size, const char *fmt, ...);
                       ^
->> drivers/of/platform.c:570:24: warning: incompatible pointer to integer conversion passing 'char[14]' to parameter of type 'unsigned long' [-Wint-conversion]
+>> drivers/of/platform.c:570:24: error: incompatible pointer to integer conversion passing 'char[14]' to parameter of type 'unsigned int' [-Wint-conversion]
                            ret = snprintf(buf, "of-display-%d", display_number++);
                                                ^~~~~~~~~~~~~~~
    include/linux/kernel.h:213:32: note: passing argument to parameter 'size' here
    int snprintf(char *buf, size_t size, const char *fmt, ...);
                                   ^
-   drivers/of/platform.c:570:41: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
+   drivers/of/platform.c:570:41: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
                            ret = snprintf(buf, "of-display-%d", display_number++);
                                                                 ^~~~~~~~~~~~~~~~
    include/linux/kernel.h:213:50: note: passing argument to parameter 'fmt' here
@@ -91,10 +160,10 @@ All warnings (new ones prefixed by >>):
    drivers/of/platform.c:573:36: error: incompatible pointer types passing 'char *[14]' to parameter of type 'const char *' [-Werror,-Wincompatible-pointer-types]
                            of_platform_device_create(node, buf, NULL);
                                                            ^~~
-   drivers/of/platform.c:216:15: note: passing argument to parameter here
-   EXPORT_SYMBOL(of_platform_device_create);
-                 ^
-   2 warnings and 2 errors generated.
+   drivers/of/platform.c:211:22: note: passing argument to parameter 'bus_id' here
+                                               const char *bus_id,
+                                                           ^
+   6 warnings and 4 errors generated.
 
 
 vim +570 drivers/of/platform.c
