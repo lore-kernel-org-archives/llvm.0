@@ -1,105 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F48E53A7;
-	Wed, 18 Jan 2023 19:23:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCB3C433D2;
-	Wed, 18 Jan 2023 19:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674069802;
-	bh=0ya5K5vjVFPW7YzbbDzDGC2Lwm5m4bGSEj8L7qF73aE=;
-	h=From:Date:Subject:To:Cc:From;
-	b=EwpuW/gobuiyeXJs2dQ4kbN14sQEOWf/f8Lxa8Kkrf9gX2uBQW8IikL84yL5nqOUU
-	 jLtjRLiYds2rRqxwDqod9XyJS36xOD68fxAIl4pWMI8O7FxAlQYfIxSyVA/H4Z5uBl
-	 nHQCRDmzy/GghPNk+Vc1RIg3PfgqLu7Vj0vX0DbcLc8WTDOdCTo6i3w7G/FSqQm1Zn
-	 vxJXpPlstBhJBnp5VnqmL+IyeFDBkcxfm7c9vKNt9zV5X3N0bLLmodEbSCUUS1uL4I
-	 +ItgfsgroRhpr3DYHGcEX4MP01SoVAX5FK19SaXLMPyH20SsfPhMviowjvA9ioT+eE
-	 39vvDeYR6IwqA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 18 Jan 2023 12:22:59 -0700
-Subject: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94C353A7
+	for <llvm@lists.linux.dev>; Wed, 18 Jan 2023 19:28:23 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id g10so25482055wmo.1
+        for <llvm@lists.linux.dev>; Wed, 18 Jan 2023 11:28:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CyUR5YUMm8ysaAa5DWj670ggKcKYPCTZKk4awAgiO1I=;
+        b=jEiGMsYrAxCjCLHs6mkQRY+H0loWMOrPpIXi1xkSgx//vqy9s+DozWfgjSS4YBRZBs
+         MtHd3ILPtW2L3CSBBpV7fwzVyyasFhif6BaagMScsM10cwqj34DAnecbPHQ3g3qaZylV
+         BOK+XkMpujyyYY1flwZ5ef1MvNyiKhVcAHfBwO61evwXCkrreDof6lpvLAtEm5wlmCD2
+         CNnu0Nykkr2AbmJlXwgPf1lWdkjNVz+izsra+0L3KHH9il/gIgUrRF8z9t4JCDyT0pHA
+         5PC+tL/QI5wOYSz42qniVZWNiLATcIzp+3DxOAKnG46f0ANvCW3rwKhcSDBi34NCO1iJ
+         xodg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CyUR5YUMm8ysaAa5DWj670ggKcKYPCTZKk4awAgiO1I=;
+        b=4nkTef1w4yWTlZH59yDTJUghu27OpvAmSVMOU1jnhublMPbJNuD6Y8EBM/RdkAg+tm
+         94/DJcmWIvJ8PgVOBRRGpZs88Wjepesr3+/ETppgYolpXnjJDpopCYmOvgvCU41K2ZoY
+         jsI70A6f5xumU118Ul4ZHaMO9uXLNh1E18NFy9E70MR4C7mdIhKwBPyK0uAzhRGitaHu
+         d6FIQVij+78w57vQSxM9QVGgxSU/Wz4N33dEuvaP0gjU/6O9mfIDIZaeUokyi/JDbbdT
+         v/S8RyVYw8GofoLI5wmo+bcPZhwF8O05BbXhdmeKVynSWD5hTgk8ifWPcvlclKVUxkS0
+         YKxA==
+X-Gm-Message-State: AFqh2kpObqo/MvofFErd+dirAU7dtJ3rCNhrNFhWiHefQhrW3aNrXdrh
+	oOmK7JPlm8JWyjt0cV80Vn8=
+X-Google-Smtp-Source: AMrXdXulDIOu6MQaY7fUorwFYHMU0SwJNoQe3B8HRZ22ZyxAxesr3erXMXwcA+pNQZqED4LmDew5rA==
+X-Received: by 2002:a05:600c:5d1:b0:3d0:761b:f86 with SMTP id p17-20020a05600c05d100b003d0761b0f86mr7756738wmd.28.1674070102037;
+        Wed, 18 Jan 2023 11:28:22 -0800 (PST)
+Received: from [192.168.1.113] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05600c0a0600b003d04e4ed873sm3398843wmp.22.2023.01.18.11.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 11:28:21 -0800 (PST)
+Message-ID: <701abf4bbf5b7957a24d2f164c643e1d9f586fad.camel@gmail.com>
+Subject: Re: [PATCH] tools: bpf: Disable stack protector
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Peter Foley <pefoley2@pefoley.com>, Quentin Monnet
+ <quentin@isovalent.com>,  Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix
+ <trix@redhat.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Wed, 18 Jan 2023 21:28:19 +0200
+In-Reply-To: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
+References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
-X-B4-Tracking: v=1; b=H4sIABRHyGMC/x2N0QqDMAxFf0XyvICts0x/ZfhQ02wGXJVEZCD++
- +rgvhwuh3OAsQob9NUByruYLLmAu1VAU8xvRkmFwde+qZ174H4v23CeE7qAXUhtaomaQB6KM0Zj
- HDVmmi7rE21jvY5V+SXff+g5nOcPBT2DQXgAAAA=
-To: linux@armlinux.org.uk, arnd@arndb.de
-Cc: ndesaulniers@google.com, trix@redhat.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2188; i=nathan@kernel.org;
- h=from:subject:message-id; bh=0ya5K5vjVFPW7YzbbDzDGC2Lwm5m4bGSEj8L7qF73aE=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMkn3DX7ptX3yk/buub+p7cHnHw+Ho74v3H/xcuZm7Zo5B3c
- pBZY1VHKwiDGwSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmsqSBkaGFr9akoUciZIb4grYGp3
- WX7luftRZ7qJvY+N5CZFb0lFBGhht8B/S9lZgZ9KXKRMTr/WMOCO06m3vGdnf+icBtr+1VmAE=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Commit 6a7ee50f8f56 ("ARM: disallow pre-ARMv5 builds with ld.lld")
-prevented v4 or v4t kernels when ld.lld will link the kernel due to
-inserting unsupported blx instructions.
+On Sat, 2023-01-14 at 18:00 -0500, Peter Foley wrote:
+> Avoid build errors on distros that force the stack protector on by
+> default.
+> e.g.
+>   CLANG   /home/peter/linux/work/tools/bpf/bpftool/pid_iter.bpf.o
+> skeleton/pid_iter.bpf.c:53:5: error: A call to built-in function '__stack=
+_chk_fail' is not supported.
+> int iter(struct bpf_iter__task_file *ctx)
+>     ^
+> 1 error generated.
+>=20
+> Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+> ---
+>  tools/bpf/bpftool/Makefile    | 1 +
+>  tools/bpf/runqslower/Makefile | 5 +++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index f610e184ce02a..36ac0002e386f 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -215,6 +215,7 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h=
+ $(LIBBPF_BOOTSTRAP)
+>  		-I$(or $(OUTPUT),.) \
+>  		-I$(srctree)/tools/include/uapi/ \
+>  		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
+> +		-fno-stack-protector \
 
-ld.lld has been fixed in current main (16.0.0) to avoid inserting these
-instructions by inserting position independent thunks instead. Allow
-these configurations to be enabled when ld.lld 16.0.0 is used to link
-the kernel.
+While working on clang patch to disable stack protector
+for BPF target I've noticed that there is an option to
+disable default configuration file altogether [1]:
 
-Additionally, add a link to the upstream LLVM issue so that the reason
-for this dependency is clearly documented.
+  --no-default-config
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/964
-Link: https://github.com/llvm/llvm-project/commit/6f9ff1beee9d12aca0c9caa9ae0051dc6d0a718c
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I just build tested:
+Should we consider it instead of -fno-stack-protector
+to shield ourselves from any potential distro-specific
+changes?
 
-- multi_v4t_defconfig without 6a7ee50f8f56 with LLVM 15: warning
-- multi_v4t_defconfig with this patch with LLVM 16: no warning
+[1] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-cl=
+ang-no-default-config
 
-and the configuration cannot be selected under the old and new conditions
-still.
----
- arch/arm/Kconfig | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+>  		-g -O2 -Wall -target bpf -c $< -o $@
+>  	$(Q)$(LLVM_STRIP) -g $@
+> =20
+> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefil=
+e
+> index 8b3d87b82b7a2..f7313cc966a04 100644
+> --- a/tools/bpf/runqslower/Makefile
+> +++ b/tools/bpf/runqslower/Makefile
+> @@ -60,8 +60,9 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+>  	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+> =20
+>  $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+> -	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
+> -		 -c $(filter %.c,$^) -o $@ &&				      \
+> +	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		\
+> +		 -fno-stack-protector 					\
+> +		 -c $(filter %.c,$^) -o $@ &&				\
+>  	$(LLVM_STRIP) -g $@
+> =20
+>  $(OUTPUT)/%.o: %.c | $(OUTPUT)
+>=20
+> ---
+> base-commit: 97ec4d559d939743e8af83628be5af8da610d9dc
+> change-id: 20230114-bpf-918ae127b77a
+>=20
+> Best regards,
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 43c7773b89ae..874c5b56cf9a 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -345,14 +345,16 @@ comment "CPU Core family selection"
- config ARCH_MULTI_V4
- 	bool "ARMv4 based platforms (FA526, StrongARM)"
- 	depends on !ARCH_MULTI_V6_V7
--	depends on !LD_IS_LLD
-+	# https://github.com/llvm/llvm-project/issues/50764
-+	depends on !LD_IS_LLD || LLD_VERSION >= 160000
- 	select ARCH_MULTI_V4_V5
- 	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
- 
- config ARCH_MULTI_V4T
- 	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
- 	depends on !ARCH_MULTI_V6_V7
--	depends on !LD_IS_LLD
-+	# https://github.com/llvm/llvm-project/issues/50764
-+	depends on !LD_IS_LLD || LLD_VERSION >= 160000
- 	select ARCH_MULTI_V4_V5
- 	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
- 		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
-
----
-base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
-change-id: 20230118-v4-v4t-lld-16-96d5d5cc36c2
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
