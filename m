@@ -1,45 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BA02F3A;
-	Wed, 18 Jan 2023 13:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BEE2F52;
+	Wed, 18 Jan 2023 13:55:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674048891; x=1705584891;
+  t=1674050151; x=1705586151;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rktdZw79cZP+azJjcZRKC/HpN/RSWY1Q9yE47uINJ+w=;
-  b=X9xUZInlx0+NtLgNFL6lClyG1U7GcV3TuPVL45OiInfSwjKjY0v68piH
-   4Mhjut1Np2X3Rr0L584CUwukh3l/8ZKWJkc1k8j5Hyj14P0+lzE4+GVoZ
-   onKaapsUsqdPL8vpuEhEdzUd73jcrT9KWqzuq7gSXY4sA8KdPbrfJuh8u
-   w5XOlirYJhJYZz0pMkY2ztALoENDnCQ4PrFuxrs4BkRr/nm+ihp65Jl6m
-   WQ4qWQ+1EitVR75dkWGOu/NV8Tm57DX6k/0bvfMNCkKpwXvptbonbaPGA
-   EIGU8sf3FOh7AkCe/bzgxl9GY+nBmv2YUJc95paBA6MISZX57OHY6AmBx
+  bh=ATQLY5GcAhxWBQxd2i39/Q19S+mjpJkCKAzTmphEH30=;
+  b=knq8Z4F6FQ7UPMYZLTiaLZTVFPuChWOWF8MNC20D3/N6XMdZxUqHVxnt
+   +WRA+BltxchYYRK/IeF3t3uNw1e3SQtGrjGl1fQokZ2zeFW5Liw8hiZgo
+   4SWE8OGL1aCjmoa2MOlJTOEQ9/YIn6qEsANPwOncN+DTrcBcpwnIZpSJm
+   V6Wz0U/ZM8S5VmXgnGhPq9FlMYiYpPwBgALGvFskin/WiakvYcFJeY2S2
+   MTKQ5HyI5mL7QmFwuHzkyF2eBQvwzS3Gz8uvrkXwN8AO/QmOOwyA8dZGn
+   ut8h39MfqK4izXZSPDJbUnmsQjOFX3fDw9P8s0rT9qd6peFShswY4ya4M
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="411219658"
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="327059708"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="411219658"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 05:34:50 -0800
+   d="scan'208";a="327059708"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 05:55:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="988545396"
+X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="609656405"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="988545396"
+   d="scan'208";a="609656405"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Jan 2023 05:34:48 -0800
+  by orsmga003.jf.intel.com with ESMTP; 18 Jan 2023 05:55:49 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pI8aV-0000LU-1X;
-	Wed, 18 Jan 2023 13:34:47 +0000
-Date: Wed, 18 Jan 2023 21:34:23 +0800
+	id 1pI8uq-0000NM-2b;
+	Wed, 18 Jan 2023 13:55:48 +0000
+Date: Wed, 18 Jan 2023 21:55:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>
+To: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Subject: [tip:irq/core 8/9] lib/group_cpus.c:43:23: warning: unused function
- 'alloc_node_to_cpumask'
-Message-ID: <202301182158.GgENalyU-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: kernel/trace/rv/monitors/wip/wip.c:20:1: warning: unused function
+ 'da_handle_start_run_event_wip'
+Message-ID: <202301182158.8nHlCmQ9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,86 +48,63 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
-head:   6a6dcae8f486c3f3298d0767d34505121c7b0b81
-commit: f7b3ea8cf72f3d6060fe08e461805181e7450a13 [8/9] genirq/affinity: Move group_cpus_evenly() into lib/
-config: i386-randconfig-a003-20230116 (https://download.01.org/0day-ci/archive/20230118/202301182158.GgENalyU-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Daniel,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c1649ec55708ae42091a2f1bca1ab49ecd722d55
+commit: 10bde81c74863472047f31304064018c40f488ee rv/monitor: Add the wip monitor
+date:   6 months ago
+config: mips-randconfig-r022-20230118 (https://download.01.org/0day-ci/archive/20230118/202301182158.8nHlCmQ9-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=f7b3ea8cf72f3d6060fe08e461805181e7450a13
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip irq/core
-        git checkout f7b3ea8cf72f3d6060fe08e461805181e7450a13
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=10bde81c74863472047f31304064018c40f488ee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 10bde81c74863472047f31304064018c40f488ee
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/trace/rv/ lib/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> lib/group_cpus.c:43:23: warning: unused function 'alloc_node_to_cpumask' [-Wunused-function]
-   static cpumask_var_t *alloc_node_to_cpumask(void)
-                         ^
->> lib/group_cpus.c:66:13: warning: unused function 'free_node_to_cpumask' [-Wunused-function]
-   static void free_node_to_cpumask(cpumask_var_t *masks)
-               ^
->> lib/group_cpus.c:75:13: warning: unused function 'build_node_to_cpumask' [-Wunused-function]
-   static void build_node_to_cpumask(cpumask_var_t *masks)
-               ^
->> lib/group_cpus.c:247:12: warning: unused function '__group_cpus_evenly' [-Wunused-function]
-   static int __group_cpus_evenly(unsigned int startgrp, unsigned int numgrps,
-              ^
-   4 warnings generated.
+>> kernel/trace/rv/monitors/wip/wip.c:20:1: warning: unused function 'da_handle_start_run_event_wip' [-Wunused-function]
+   DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+   ^
+   include/rv/da_monitor.h:532:48: note: expanded from macro 'DECLARE_DA_MON_PER_CPU'
+   DECLARE_DA_MON_INIT_PER_CPU(name, type)                                                         \
+                                                                                                   ^
+   include/rv/da_monitor.h:434:20: note: expanded from macro '\
+   DECLARE_DA_MON_MONITOR_HANDLER_IMPLICIT'
+   static inline bool da_handle_start_run_event_##name(enum events_##name event)                   \
+                      ^
+   <scratch space>:174:1: note: expanded from here
+   da_handle_start_run_event_wip
+   ^
+   1 warning generated.
 
 
-vim +/alloc_node_to_cpumask +43 lib/group_cpus.c
+vim +/da_handle_start_run_event_wip +20 kernel/trace/rv/monitors/wip/wip.c
 
-    42	
-  > 43	static cpumask_var_t *alloc_node_to_cpumask(void)
-    44	{
-    45		cpumask_var_t *masks;
-    46		int node;
-    47	
-    48		masks = kcalloc(nr_node_ids, sizeof(cpumask_var_t), GFP_KERNEL);
-    49		if (!masks)
-    50			return NULL;
-    51	
-    52		for (node = 0; node < nr_node_ids; node++) {
-    53			if (!zalloc_cpumask_var(&masks[node], GFP_KERNEL))
-    54				goto out_unwind;
-    55		}
-    56	
-    57		return masks;
-    58	
-    59	out_unwind:
-    60		while (--node >= 0)
-    61			free_cpumask_var(masks[node]);
-    62		kfree(masks);
-    63		return NULL;
-    64	}
-    65	
-  > 66	static void free_node_to_cpumask(cpumask_var_t *masks)
-    67	{
-    68		int node;
-    69	
-    70		for (node = 0; node < nr_node_ids; node++)
-    71			free_cpumask_var(masks[node]);
-    72		kfree(masks);
-    73	}
-    74	
-  > 75	static void build_node_to_cpumask(cpumask_var_t *masks)
-    76	{
-    77		int cpu;
-    78	
-    79		for_each_possible_cpu(cpu)
-    80			cpumask_set_cpu(cpu, masks[cpu_to_node(cpu)]);
-    81	}
-    82	
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  18  
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  19  struct rv_monitor rv_wip;
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @20  DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  21  
+
+:::::: The code at line 20 was first introduced by commit
+:::::: 8812d21219b9c649dd25eb93915e00939944aeb7 rv/monitor: Add the wip monitor skeleton created by dot2k
+
+:::::: TO: Daniel Bristot de Oliveira <bristot@kernel.org>
+:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
 
 -- 
 0-DAY CI Kernel Test Service
