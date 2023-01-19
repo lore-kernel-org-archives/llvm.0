@@ -1,133 +1,74 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4514A922
-	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 15:57:33 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id r9so2315445wrw.4
-        for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 07:57:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dMlJ2NJjcLXUx3bywthULxoc68gmDcbMG7dVreoK0ms=;
-        b=Fwxf5lPg5ufiIbwNNqoLqaEzgJnXZ/2W6Gb/VGmRrBmo2GLK0Rf0egVFm0m3g6yOuI
-         kcIzgo2LSVP+VDKUODHUvkkGtBq0EOVk8xrE30oqcTRTtLY03pklihlGn5twLlkMDbbh
-         b3zFHxyVLuSZKmYCRoSm3VTZFHCjoWjcLGMQFyO0dJDcGrcLawV1fG/5nMzDZhNvTi1v
-         q36SVefZjsmIy15U6BtckVrCDK86Hnvjx9g5DzIf+/BGoUSFQKJfNlzg/rrmoAhN9vRL
-         FyPtnTh2D5TbLpKipQwC1IrltRXYXpJ6W4MBvYimbG6AXHF2dRTN9NBXg7NL+HNHZeMi
-         +Evw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMlJ2NJjcLXUx3bywthULxoc68gmDcbMG7dVreoK0ms=;
-        b=HNpbBkBHJ211DxSH6ECKLlzcB3FGTw2KM8wN1uGh+4DyryyWkavAHoYzb/rATolOWh
-         HQsp2DOci6j4F7ZuPWAyKtGanFmu9DGGL123usEb48JHr2Tcv+eucY41gTMPRm/zAl3g
-         knLkCAKVC2m0o9+GieWGO4w2qp0Ado1ASgWLazbupCQkQaSitETr1YV/1sMs6WSSnPbV
-         i07Nu2A6zrhBZ8uGnk1J5DkoCOFWHBAzH9go6vrdGc/kSxHfe3kbugI46lLGrvAoI5ck
-         7bNgUqlP1UowIKIryax6qcKKaJF2A13IEmizCOKDhknuVbkYa+dX7zxDOP0jLRXgqUR3
-         QVFg==
-X-Gm-Message-State: AFqh2kob5dvE+0vXdtFrwdj9FQcoHoilRRsS0S9wmYWaL63zlDBnjJwO
-	BN4PoFxSvP5c3foPTojt+g+5IsLQFhTd3HHf0E/lBA==
-X-Google-Smtp-Source: AMrXdXsFhfAfshIXAkWu2W7aD4UHcJ+Dw1fXNzCOmComCE7xAZX+qctghVV11UxkyHAYmIPIY1NM5vZa2D6c4KYgZOE=
-X-Received: by 2002:a05:6000:124f:b0:2bd:df97:13f4 with SMTP id
- j15-20020a056000124f00b002bddf9713f4mr495083wrx.654.1674143851869; Thu, 19
- Jan 2023 07:57:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE874A922
+	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 16:05:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E54EC433D2;
+	Thu, 19 Jan 2023 16:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1674144332;
+	bh=UdfkIT4pkagNyMSdRnF01LnSFEp9DSwK99agBJfkJ78=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TKB6KRE98zltc/kjjU9D98v+Ga5C+RcDjgnAyuUqxVss90GnWTp3OygslYnxDAnvJ
+	 Utb4vpw4cmaO/J3u/a/x5Y+SOSbOknURjXhr7gUw8PEqDtay1JSXvI4LlEQF0BsFnG
+	 KIXD/YnSIn7/ZBYmOMfI8slzvsgwD5FMzk58u53oLnxJf+kCH+CcEIjCaWLGFhQF0s
+	 nKsX6FIq/gbH1UFNqcNEDCS7H1Z08+gwauzoGjktQKuITxiG4U69jjBP8Q3IX5W/Bo
+	 dSqpnzRFWzvtJAUenHEc1wNUxTTChgu7XuP8FkP0JNejS0w9J8fQlvU8OZbv2l8fb9
+	 SmJXl34zvgGKw==
+Date: Thu, 19 Jan 2023 16:05:26 +0000
+From: Lee Jones <lee@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Vincent Knecht <vincent.knecht@mailoo.org>,
+	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
+Subject: Re: [resent, PATCH v2 1/1] leds: is31fl319x: Wrap mutex_destroy()
+ for devm_add_action_or_rest()
+Message-ID: <Y8lqRjeM9I/rRrvv@google.com>
+References: <20230103131553.34124-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230105082609.344538-1-irogers@google.com>
-In-Reply-To: <20230105082609.344538-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 19 Jan 2023 07:57:19 -0800
-Message-ID: <CAP-5=fUCJEyrZ+bx6oMGmFm5wuF71uheM=7VD9ynjAD_TNZ78w@mail.gmail.com>
-Subject: Re: [PATCH v1] perf llvm: Fix inadvertent file creation
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ian Rogers <irogers@google.com>, Andrii Nakryiko <andrii@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230103131553.34124-1-andriy.shevchenko@linux.intel.com>
 
-On Thu, Jan 5, 2023 at 12:26 AM Ian Rogers <irogers@google.com> wrote:
->
-> The LLVM template is first echo-ed into command_out and then
-> command_out executed. The echo surrounds the template with double
-> quotes, however, the template itself may contain quotes. This is
-> generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
-> we see:
-> ...
-> SEC("func=null_lseek file->f_mode offset orig")
-> ...
-> where the first double quote ends the double quote of the echo, then
-> the > redirects output into a file called f_mode.
->
-> To avoid this inadvertent behavior substitute redirects and similar
-> characters to be ASCII control codes, then substitute the output in
-> the echo back again.
->
-> Fixes: 5eab5a7ee032 ("perf llvm: Display eBPF compiling command in debug output")
-> Signed-off-by: Ian Rogers <irogers@google.com>
+On Tue, 03 Jan 2023, Andy Shevchenko wrote:
 
-Ping. Not really a BPF/LLVM fix, it is just doing some string
-manipulation to avoid shell interpretation in the context of making
-BPF/LLVM.
-
-Thanks,
-Ian
-
+> Clang complains that devm_add_action() takes a parameter with a wrong type:
+> 
+> warning: cast from 'void (*)(struct mutex *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+>     err = devm_add_action(dev, (void (*)(void *))mutex_destroy, &is31->lock);
+>                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1 warning generated.
+> 
+> It appears that the commit e1af5c815586 ("leds: is31fl319x: Fix devm vs.
+> non-devm ordering") missed two things:
+> - while mention devm_add_action_or_reset() the actual change got
+>   devm_add_action() call by unknown reason
+> - strictly speaking the parameter is not compatible by type
+> 
+> Fix both issues by switching to devm_add_action_or_reset() and adding a
+> wrapper for mutex_destroy() call.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: e1af5c815586 ("leds: is31fl319x: Fix devm vs. non-devm ordering")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Vincent Knecht <vincent.knecht@mailoo.org>
 > ---
->  tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
->  1 file changed, 24 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-> index 650ffe336f3a..4e8e243a6e4b 100644
-> --- a/tools/perf/util/llvm-utils.c
-> +++ b/tools/perf/util/llvm-utils.c
-> @@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->
->         pr_debug("llvm compiling command template: %s\n", template);
->
-> +       /*
-> +        * Below, substitute control characters for values that can cause the
-> +        * echo to misbehave, then substitute the values back.
-> +        */
->         err = -ENOMEM;
-> -       if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
-> +       if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
->                 goto errout;
->
-> +#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
-> +       for (char *p = command_echo; *p; p++) {
-> +               SWAP_CHAR('<', '\001');
-> +               SWAP_CHAR('>', '\002');
-> +               SWAP_CHAR('"', '\003');
-> +               SWAP_CHAR('\'', '\004');
-> +               SWAP_CHAR('|', '\005');
-> +               SWAP_CHAR('&', '\006');
-> +               SWAP_CHAR('\a', '"');
-> +       }
->         err = read_from_pipe(command_echo, (void **) &command_out, NULL);
->         if (err)
->                 goto errout;
->
-> +       for (char *p = command_out; *p; p++) {
-> +               SWAP_CHAR('\001', '<');
-> +               SWAP_CHAR('\002', '>');
-> +               SWAP_CHAR('\003', '"');
-> +               SWAP_CHAR('\004', '\'');
-> +               SWAP_CHAR('\005', '|');
-> +               SWAP_CHAR('\006', '&');
-> +       }
-> +#undef SWAP_CHAR
->         pr_debug("llvm compiling command : %s\n", command_out);
->
->         err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+> 
+> v2 resent: resent as v2
+> v2: added tag (Vincent), Cc'ed to Lee                                                                            
+> 
+>  drivers/leds/leds-is31fl319x.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+
+Not sure what the differences were, but looks like I already applied v1.
+
+-- 
+Lee Jones [李琼斯]
