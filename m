@@ -1,49 +1,38 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32412A922
-	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 16:15:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674144944; x=1705680944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BfEES7hM/KFkzDhKaqvx+cc8oD5zFjJ0h/F4pzIFBEU=;
-  b=YI0yjfRzhn0xNURmLobQuVLqjdkwch6PercEbGDPhKV1aX03fv59ZwQO
-   mlFwyDD8oSkCST8yiRnOLW/xYtrZVFAwHD3G7HnJvsHg5grcupPEF11me
-   k6KmYj0e0/S7tHU9Bo+zJNnRjIALh6VpwBAPhFQG24cFBN43iWWgN+6gl
-   GNwHpxpeDI95fnV/Cj9vy4O4aroFiU9YZTZRQnvHqbKZFo49+t2rVnu/Q
-   iCXqlpydwatG9fbO9GXUR0QWWMrQ0gVJhLyX+WY0w5jTHsG8K0RZnezLB
-   aMpZ5dyvDlNLMzfLE5i8yUJoQgv177A6CUKuZmLFv1f/ffeXKHoOqRaQC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="387695426"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="387695426"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 08:13:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610115645"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="610115645"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2023 08:13:08 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1pIXXG-00BkPa-0Q;
-	Thu, 19 Jan 2023 18:13:06 +0200
-Date: Thu, 19 Jan 2023 18:13:05 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Lee Jones <lee@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Vincent Knecht <vincent.knecht@mailoo.org>,
-	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B485EA922
+	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 16:23:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0136FC433EF;
+	Thu, 19 Jan 2023 16:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1674145432;
+	bh=4iyv9ZQaCHKEyaKr1myAy/HD5rxKaeF7tIvs7Vo9l5g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Yn+ibebTUCXrBtlNavVLGTmp1RaMMMoJowna/FiWXuMtMkj8PaX8N2PzBD8B9CK0f
+	 Rc5Bu7TN1e88zoRuGUGNXfD9UrcX9fMNW0iw4MtonoEZShhp4J57AUMvXjylhXy4ko
+	 P9MQM8OfRBnFbJpPTaHs3s5ZGGZND/uGNP+rQzsutl4/xW59yOuZfTNusX+PttL4LR
+	 qUxdrJZHDnGe2H1Z615rL22ewBSVVQBAWQwrjjnzvnygDf7qZ1zUV+BoyQPnf/tq/F
+	 HogZbHDvRSNRUMymsgLrSKvgJDjkquzT8prtjpcwA1jwzKACs7Mk+O5jkfXT6j9y+H
+	 6PTU8I72qZymQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 20F6E405BE; Thu, 19 Jan 2023 13:23:47 -0300 (-03)
+Date: Thu, 19 Jan 2023 13:23:47 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: Re: [resent, PATCH v2 1/1] leds: is31fl319x: Wrap mutex_destroy()
- for devm_add_action_or_rest()
-Message-ID: <Y8lsEc2cFR3mMS0N@smile.fi.intel.com>
-References: <20230103131553.34124-1-andriy.shevchenko@linux.intel.com>
- <Y8lqRjeM9I/rRrvv@google.com>
+	Tom Rix <trix@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1] perf llvm: Fix inadvertent file creation
+Message-ID: <Y8luk2xVZFQusPUd@kernel.org>
+References: <20230105082609.344538-1-irogers@google.com>
+ <CAP-5=fUCJEyrZ+bx6oMGmFm5wuF71uheM=7VD9ynjAD_TNZ78w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,26 +41,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8lqRjeM9I/rRrvv@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAP-5=fUCJEyrZ+bx6oMGmFm5wuF71uheM=7VD9ynjAD_TNZ78w@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
-On Thu, Jan 19, 2023 at 04:05:26PM +0000, Lee Jones wrote:
-> On Tue, 03 Jan 2023, Andy Shevchenko wrote:
-
-...
-
-> > v2 resent: resent as v2
-> > v2: added tag (Vincent), Cc'ed to Lee
-> > 
-> >  drivers/leds/leds-is31fl319x.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
+Em Thu, Jan 19, 2023 at 07:57:19AM -0800, Ian Rogers escreveu:
+> On Thu, Jan 5, 2023 at 12:26 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > The LLVM template is first echo-ed into command_out and then
+> > command_out executed. The echo surrounds the template with double
+> > quotes, however, the template itself may contain quotes. This is
+> > generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+> > we see:
+> > ...
+> > SEC("func=null_lseek file->f_mode offset orig")
+> > ...
+> > where the first double quote ends the double quote of the echo, then
+> > the > redirects output into a file called f_mode.
+> >
+> > To avoid this inadvertent behavior substitute redirects and similar
+> > characters to be ASCII control codes, then substitute the output in
+> > the echo back again.
+> >
+> > Fixes: 5eab5a7ee032 ("perf llvm: Display eBPF compiling command in debug output")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > 
-> Not sure what the differences were, but looks like I already applied v1.
+> Ping. Not really a BPF/LLVM fix, it is just doing some string
+> manipulation to avoid shell interpretation in the context of making
+> BPF/LLVM.
 
-Codewise there is none. Thank you!
+Thanks, applied.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+- Arnaldo
 
