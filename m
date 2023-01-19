@@ -1,94 +1,276 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC516A922
-	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 16:08:26 +0000 (UTC)
-Received: by mail-wr1-f46.google.com with SMTP id n7so2346866wrx.5
-        for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 08:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fv4FveSXLtbMs8fIyKU7U7B1TC2c3Ol7CJ/N2mCREsE=;
-        b=Z6hdEw1xC+r9OZvwDwA+B122spz7EsoHP17f0Cp0vq9QAN4CfQCci6tDWJkxfZ9fNo
-         fzLNoMg3XjnZOQI0eUNHprxoWuzAK9gnijj0wJ8SfUeGbvhQ2b+9wuuf4KylcWf0dLQb
-         BV6YyUFFWnr4hylTSaSxk+vggHHkY2yrUXDhwbKtI8GscswMZcVgWjNYfu/gIejjmr4F
-         5Zl1MjBlBade7gjOmcbOKg4GIpxkJSXMHS7LZC/aoCoejUSyCUVMH6XTFveOZojxIvTK
-         DrXT+Z97kKkkykC2hxSjWJos0PWZ77JFKJ39E+jLcUrpe/YXXu9OTBWhoZ/N6vYGUPrq
-         9tNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fv4FveSXLtbMs8fIyKU7U7B1TC2c3Ol7CJ/N2mCREsE=;
-        b=WhcKGD0u45lhXMlelUkYV78fOB619i9+T2vJ5cfm3LeVtXAn8iOaNA53X8CIw+3img
-         8ulgzRzQ/RfcBn7Z1k30WaCwToHkX9UHkcInoOuapcYRgoMuzkGx+np8ypMdB6nWX3RK
-         PEjiNz6QBk1JhZxHJTUVQn0YlLVfLVMToxU/4+fY8x3nC6LRiBRRgs9Ydv1bgnN/dAD/
-         BBms4rKqXmn4G2/TdCi6tqgFEK9VbkQzodxMffj7flta5fVQvy7TXrm+tStZ62A2qxxI
-         o0uuJ3dkGKjCY9Ybtc1MejEl5/sjtEAtkO04dMQy8va9hbkLVlYrmyX+7D4sHhbW+ipR
-         g+zQ==
-X-Gm-Message-State: AFqh2kobFxOsnMAdKGpWo6SrkMkjvhjG78eR23W8ejHulBa0I4e/S5oL
-	IrePWCOTSgAA89abGxXoWGt16KCNEAG9iHK1cz7cGg==
-X-Google-Smtp-Source: AMrXdXuGSDCU/sElIGWgZvb6vilVuirMVBG1izak7wLK9Loxpwn63U0ajRG3KIbUTiISw4IRZxfZrt/XGomjC/ouxDk=
-X-Received: by 2002:a05:6000:124f:b0:2bd:df97:13f4 with SMTP id
- j15-20020a056000124f00b002bddf9713f4mr496689wrx.654.1674144504966; Thu, 19
- Jan 2023 08:08:24 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0962FA922;
+	Thu, 19 Jan 2023 16:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674144724; x=1705680724;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NsLpaKyJcTWOibQnC7VG8bOq2v1Vb5+vfiwmWU9lcG4=;
+  b=Nnx7liCRqwg9Wd4eg4ep35C+fKpwYm+TcddAszazMpUWL/6LCCO/RYAe
+   9pVT+k/vCofM7lx1nm5EFxT7UsPrJUUt6Mw0T10L+lsAZajF8P2kDcD0A
+   j6XjQ7mmJo8Z+zzy9RhvPbmxwGSZoHNMrDRMwjazNGUQIJ/1lSf+rthtz
+   /zODmavuSYefF/cMHUeCiOP71ltg9iPQBkgGPgIcS5/LRkhN3C6/JEz3l
+   JQ2TYivld42Lg0aNoJ3HmdTNvRSftJLc7azN7IrSPvcPX7Jb9kykEXGuc
+   L7C0pL/eC8hbfH5PybVyesKNUqpLbpiwAkiKJJ6kA04ORICzoyzk3gmux
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305004866"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="305004866"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 08:12:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="905569787"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="905569787"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Jan 2023 08:11:59 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIXWA-0001c6-1G;
+	Thu, 19 Jan 2023 16:11:58 +0000
+Date: Fri, 20 Jan 2023 00:11:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Blakey <paulb@nvidia.com>, netdev@vger.kernel.org,
+	Saeed Mahameed <saeedm@nvidia.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Oz Shlomo <ozsh@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+	Roi Dayan <roid@nvidia.com>, Vlad Buslov <vladbu@nvidia.com>
+Subject: Re: [PATCH net-next v3 1/6] net/sched: cls_api: Support hardware
+ miss to tc action
+Message-ID: <202301192318.qKmZxlm0-lkp@intel.com>
+References: <20230119082357.21744-2-paulb@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230113185732.134861-1-irogers@google.com>
-In-Reply-To: <20230113185732.134861-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 19 Jan 2023 08:08:13 -0800
-Message-ID: <CAP-5=fXg28wcW93tfiN6mdFHj0+eSRE3dL3LTv53bRYuezjZDg@mail.gmail.com>
-Subject: Re: [PATCH] perf buildid: Avoid copy of uninitialized memory
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119082357.21744-2-paulb@nvidia.com>
 
-On Fri, Jan 13, 2023 at 10:57 AM Ian Rogers <irogers@google.com> wrote:
->
-> build_id__init only copies the buildid data up to size leaving the
-> rest of the data array uninitialized. Copying the full array during
-> synthesis means the written event contains uninitialized memory.  This
-> was detected by the Clang/LLVM memory sanitizer.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/synthetic-events.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> index 3ab6a92b1a6d..348d05e4ec03 100644
-> --- a/tools/perf/util/synthetic-events.c
-> +++ b/tools/perf/util/synthetic-events.c
-> @@ -2219,7 +2219,7 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
->
->         len = pos->long_name_len + 1;
->         len = PERF_ALIGN(len, NAME_ALIGN);
-> -       memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
-> +       memcpy(&ev.build_id.build_id, pos->bid.data, pos->bid.size);
+Hi Paul,
 
-Ping. Should be an uncontroversial change to fix a copy of
-uninitialized memory into the perf.data file during synthesis.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
-Ian
+[auto build test WARNING on net-next/master]
 
->         ev.build_id.size = pos->bid.size;
->         ev.build_id.header.type = PERF_RECORD_HEADER_BUILD_ID;
->         ev.build_id.header.misc = misc | PERF_RECORD_MISC_BUILD_ID_SIZE;
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Blakey/net-sched-cls_api-Support-hardware-miss-to-tc-action/20230119-162743
+patch link:    https://lore.kernel.org/r/20230119082357.21744-2-paulb%40nvidia.com
+patch subject: [PATCH net-next v3 1/6] net/sched: cls_api: Support hardware miss to tc action
+config: hexagon-randconfig-r045-20230119 (https://download.01.org/0day-ci/archive/20230119/202301192318.qKmZxlm0-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5c85cf394445e1140823351fdfdbf3e541b9abb9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Blakey/net-sched-cls_api-Support-hardware-miss-to-tc-action/20230119-162743
+        git checkout 5c85cf394445e1140823351fdfdbf3e541b9abb9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/sched/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/sched/cls_api.c:18:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/sched/cls_api.c:18:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/sched/cls_api.c:18:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> net/sched/cls_api.c:1676:4: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (unlikely(!exts || n->exts != exts))
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/sched/cls_api.c:1703:7: note: uninitialized use occurs here
+                   if (err >= 0)
+                       ^~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   net/sched/cls_api.c:1676:4: note: remove the 'if' if its condition is always true
+                           if (unlikely(!exts || n->exts != exts))
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   net/sched/cls_api.c:1658:10: note: initialize the variable 'err' to silence this warning
+                   int err;
+                          ^
+                           = 0
+   net/sched/cls_api.c:3231:9: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
+           return err;
+                  ^~~
+   net/sched/cls_api.c:3200:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   8 warnings generated.
+
+
+vim +1676 net/sched/cls_api.c
+
+  1635	
+  1636	/* Main classifier routine: scans classifier chain attached
+  1637	 * to this qdisc, (optionally) tests for protocol and asks
+  1638	 * specific classifiers.
+  1639	 */
+  1640	static inline int __tcf_classify(struct sk_buff *skb,
+  1641					 const struct tcf_proto *tp,
+  1642					 const struct tcf_proto *orig_tp,
+  1643					 struct tcf_result *res,
+  1644					 bool compat_mode,
+  1645					 struct tcf_exts_miss_cookie_node *n,
+  1646					 int act_index,
+  1647					 u32 *last_executed_chain)
+  1648	{
+  1649	#ifdef CONFIG_NET_CLS_ACT
+  1650		const int max_reclassify_loop = 16;
+  1651		const struct tcf_proto *first_tp;
+  1652		int limit = 0;
+  1653	
+  1654	reclassify:
+  1655	#endif
+  1656		for (; tp; tp = rcu_dereference_bh(tp->next)) {
+  1657			__be16 protocol = skb_protocol(skb, false);
+  1658			int err;
+  1659	
+  1660			if (n) {
+  1661				struct tcf_exts *exts;
+  1662	
+  1663				if (n->tp_prio != tp->prio)
+  1664					continue;
+  1665	
+  1666				/* We re-lookup the tp and chain based on index instead
+  1667				 * of having hard refs and locks to them, so do a sanity
+  1668				 * check if any of tp,chain,exts was replaced by the
+  1669				 * time we got here with a cookie from hardware.
+  1670				 */
+  1671				if (unlikely(n->tp != tp || n->tp->chain != n->chain ||
+  1672					     !tp->ops->get_exts))
+  1673					return TC_ACT_SHOT;
+  1674	
+  1675				exts = tp->ops->get_exts(tp, n->handle);
+> 1676				if (unlikely(!exts || n->exts != exts))
+  1677					return TC_ACT_SHOT;
+  1678	
+  1679				n = NULL;
+  1680	#ifdef CONFIG_NET_CLS_ACT
+  1681				err = tcf_action_exec(skb, exts->actions + act_index,
+  1682						      exts->nr_actions - act_index,
+  1683						      res);
+  1684	#endif
+  1685			} else {
+  1686				if (tp->protocol != protocol &&
+  1687				    tp->protocol != htons(ETH_P_ALL))
+  1688					continue;
+  1689	
+  1690				err = tc_classify(skb, tp, res);
+  1691			}
+  1692	#ifdef CONFIG_NET_CLS_ACT
+  1693			if (unlikely(err == TC_ACT_RECLASSIFY && !compat_mode)) {
+  1694				first_tp = orig_tp;
+  1695				*last_executed_chain = first_tp->chain->index;
+  1696				goto reset;
+  1697			} else if (unlikely(TC_ACT_EXT_CMP(err, TC_ACT_GOTO_CHAIN))) {
+  1698				first_tp = res->goto_tp;
+  1699				*last_executed_chain = err & TC_ACT_EXT_VAL_MASK;
+  1700				goto reset;
+  1701			}
+  1702	#endif
+  1703			if (err >= 0)
+  1704				return err;
+  1705		}
+  1706	
+  1707		if (unlikely(n))
+  1708			return TC_ACT_SHOT;
+  1709	
+  1710		return TC_ACT_UNSPEC; /* signal: continue lookup */
+  1711	#ifdef CONFIG_NET_CLS_ACT
+  1712	reset:
+  1713		if (unlikely(limit++ >= max_reclassify_loop)) {
+  1714			net_notice_ratelimited("%u: reclassify loop, rule prio %u, protocol %02x\n",
+  1715					       tp->chain->block->index,
+  1716					       tp->prio & 0xffff,
+  1717					       ntohs(tp->protocol));
+  1718			return TC_ACT_SHOT;
+  1719		}
+  1720	
+  1721		tp = first_tp;
+  1722		goto reclassify;
+  1723	#endif
+  1724	}
+  1725	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
