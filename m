@@ -1,43 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BF323AE;
-	Thu, 19 Jan 2023 05:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F0723AE;
+	Thu, 19 Jan 2023 05:57:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674107258; x=1705643258;
+  t=1674107858; x=1705643858;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lRAXFhrwES6RtZm6J0tMBAQQrNufPov6iUsv3OLlBJg=;
-  b=YeR0qmVHI2/LwcD/lLI7eqsNppaaEGniJOQ7A5MvtrSuvrIZvABUIYsu
-   237T5ZfoJkbwerjRiFUOgZB8w5Yogb5e/LQXr3syBvDS2xrzqJs79DKGk
-   ybKBuElXa3f8use9zPA6prxrUPhogDONtP8h5jyYR0cwjHF1KvBe8dY7G
-   PGXOvURn5lLTezdww7Ks6UapaVp9LryOa4S0DM3PR50faz50VfgIcmsny
-   JVWEvH7vLeBAuh7wACo7QEC/eMIMu5KvXO+uRmtiIH2twXjGoKXnZEF9z
-   Yht7bI6Sh0Iy4uLwLAgVQShQz1XMbToktQBT9qpnjMMbLtI34SYPViv50
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="352457251"
+  bh=USLNaz6m8wVCc+3oDPwRr+uHauEXz7g1AirsVpBMpLw=;
+  b=iwqj2TcpatjUX+8+NWij2IjgUyoBUfqF9Ms4Qd1BnBCYOmjPEE5PNe1Y
+   BIf2fEPGVD8tn5Kko+GhfZY+BFx6Su2mDCGZeYxrfKKqd01jTPnsSEXKG
+   vaP/9VEV/MLtdvKpwbTg6GEc9zrxnHSy59teuj63UCsMuiJL4O8U8cVCe
+   MTCOU6rqPcyi0bUmaN8dPYI35mV+Q4KD15UX4QFeFi3/GgnDy3dUx58L3
+   OuUaI+Hxy1ZEEaKeLQfsXGvNKdtXtNYz4wuzhF3tkwV4H2mjF19tUEtLh
+   R59ZETlh7LmE5XNZMWgzhXg+3oN/INB7RznHCjuIiEGRp9/WosjmQYy3y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304890160"
 X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="352457251"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 21:47:37 -0800
+   d="scan'208";a="304890160"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 21:57:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="660069786"
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="637564994"
 X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
-   d="scan'208";a="660069786"
+   d="scan'208";a="637564994"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2023 21:47:35 -0800
+  by orsmga006.jf.intel.com with ESMTP; 18 Jan 2023 21:57:36 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pINlu-00019C-35;
-	Thu, 19 Jan 2023 05:47:34 +0000
-Date: Thu, 19 Jan 2023 13:46:58 +0800
+	id 1pINvb-00019p-14;
+	Thu, 19 Jan 2023 05:57:35 +0000
+Date: Thu, 19 Jan 2023 13:57:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Pirko <jiri@nvidia.com>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpirko-mlxsw:jiri_devel_work_devlink_various 24/25]
- drivers/net/ethernet/mellanox/mlx5/core/en/devlink.c:60:56: error: expected
- expression
-Message-ID: <202301191337.LhRjuuRL-lkp@intel.com>
+Subject: [jolsa-perf:bpf/tracing_multi_1 26/27] kernel/trace/ftrace.c:5853:5:
+ warning: no previous prototype for function 'set_filter_ftrace_direct_multi'
+Message-ID: <202301191328.JE8hBfYZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,66 +46,171 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_work_devlink_various
-head:   6667b78532ac7d8a8d2f9f05ae37446d6e4adebc
-commit: b935a1680b9e8e039142856f1df72496751a3172 [24/25] net/mlx5e: Move dl_port to struct mlx5e_dev
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230119/202301191337.LhRjuuRL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_1
+head:   747784185d106a06b429736196d8817cb2d12a6f
+commit: 7123e09cc1ac548e8e3baa43005779ae0dc181e0 [26/27] ftrace: Add set_filter_ftrace_direct_multi function
+config: arm-randconfig-r023-20230118 (https://download.01.org/0day-ci/archive/20230119/202301191328.JE8hBfYZ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/b935a1680b9e8e039142856f1df72496751a3172
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_work_devlink_various
-        git checkout b935a1680b9e8e039142856f1df72496751a3172
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=7123e09cc1ac548e8e3baa43005779ae0dc181e0
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tracing_multi_1
+        git checkout 7123e09cc1ac548e8e3baa43005779ae0dc181e0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/mellanox/mlx5/core/en/devlink.c:60:56: error: expected expression
-                   dl_port_index = mlx5_esw_vport_to_devlink_port_index(>mdev, 0);
-                                                                        ^
-   1 error generated.
+   In file included from kernel/trace/ftrace.c:46:
+   In file included from kernel/trace/trace_output.h:6:
+   In file included from kernel/trace/trace.h:17:
+   include/linux/trace_events.h:798:5: warning: no previous prototype for function 'bpf_tracing_multi_attach' [-Wmissing-prototypes]
+   int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+       ^
+   include/linux/trace_events.h:798:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
+   ^
+   static 
+   kernel/trace/ftrace.c:300:5: warning: no previous prototype for function '__register_ftrace_function' [-Wmissing-prototypes]
+   int __register_ftrace_function(struct ftrace_ops *ops)
+       ^
+   kernel/trace/ftrace.c:300:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __register_ftrace_function(struct ftrace_ops *ops)
+   ^
+   static 
+   kernel/trace/ftrace.c:343:5: warning: no previous prototype for function '__unregister_ftrace_function' [-Wmissing-prototypes]
+   int __unregister_ftrace_function(struct ftrace_ops *ops)
+       ^
+   kernel/trace/ftrace.c:343:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __unregister_ftrace_function(struct ftrace_ops *ops)
+   ^
+   static 
+   kernel/trace/ftrace.c:4010:15: warning: no previous prototype for function 'arch_ftrace_match_adjust' [-Wmissing-prototypes]
+   char * __weak arch_ftrace_match_adjust(char *str, const char *search)
+                 ^
+   kernel/trace/ftrace.c:4010:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   char * __weak arch_ftrace_match_adjust(char *str, const char *search)
+   ^
+   static 
+   kernel/trace/ftrace.c:5862:6: error: call to undeclared function 'check_direct_multi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (check_direct_multi(ops))
+               ^
+   kernel/trace/ftrace.c:5874:14: error: use of undeclared identifier 'direct_mutex'; did you mean 'event_mutex'?
+           mutex_lock(&direct_mutex);
+                       ^~~~~~~~~~~~
+                       event_mutex
+   include/linux/mutex.h:187:44: note: expanded from macro 'mutex_lock'
+   #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+                                              ^
+   kernel/trace/trace.h:1509:21: note: 'event_mutex' declared here
+   extern struct mutex event_mutex;
+                       ^
+   kernel/trace/ftrace.c:5894:8: error: call to undeclared function 'add_direct_functions_hash'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           err = add_direct_functions_hash(hash_add, addr, &free_hash);
+                 ^
+   kernel/trace/ftrace.c:5896:3: error: call to undeclared function 'remove_direct_functions_hash'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   remove_direct_functions_hash(hash_add, addr);
+                   ^
+   kernel/trace/ftrace.c:5900:2: error: call to undeclared function 'remove_direct_functions_hash'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           remove_direct_functions_hash(hash_del, addr);
+           ^
+   kernel/trace/ftrace.c:5909:16: error: use of undeclared identifier 'direct_mutex'; did you mean 'event_mutex'?
+           mutex_unlock(&direct_mutex);
+                         ^~~~~~~~~~~~
+                         event_mutex
+   kernel/trace/trace.h:1509:21: note: 'event_mutex' declared here
+   extern struct mutex event_mutex;
+                       ^
+>> kernel/trace/ftrace.c:5853:5: warning: no previous prototype for function 'set_filter_ftrace_direct_multi' [-Wmissing-prototypes]
+   int set_filter_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long *ips,
+       ^
+   kernel/trace/ftrace.c:5853:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int set_filter_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long *ips,
+   ^
+   static 
+   5 warnings and 6 errors generated.
 
 
-vim +60 drivers/net/ethernet/mellanox/mlx5/core/en/devlink.c
+vim +/set_filter_ftrace_direct_multi +5853 kernel/trace/ftrace.c
 
-    39	
-    40	int mlx5e_devlink_port_register(struct mlx5e_dev *mlx5e_dev,
-    41					struct mlx5_core_dev *mdev)
-    42	{
-    43		struct devlink *devlink = priv_to_devlink(mlx5e_dev);
-    44		struct devlink_port_attrs attrs = {};
-    45		struct netdev_phys_item_id ppid = {};
-    46		unsigned int dl_port_index;
-    47	
-    48		if (mlx5_core_is_pf(mdev)) {
-    49			attrs.flavour = DEVLINK_PORT_FLAVOUR_PHYSICAL;
-    50			attrs.phys.port_number = mlx5_get_dev_index(mdev);
-    51			if (MLX5_ESWITCH_MANAGER(mdev)) {
-    52				mlx5e_devlink_get_port_parent_id(mdev, &ppid);
-    53				memcpy(attrs.switch_id.id, ppid.id, ppid.id_len);
-    54				attrs.switch_id.id_len = ppid.id_len;
-    55			}
-    56			dl_port_index = mlx5_esw_vport_to_devlink_port_index(mdev,
-    57									     MLX5_VPORT_UPLINK);
-    58		} else {
-    59			attrs.flavour = DEVLINK_PORT_FLAVOUR_VIRTUAL;
-  > 60			dl_port_index = mlx5_esw_vport_to_devlink_port_index(>mdev, 0);
-    61		}
-    62	
-    63		devlink_port_attrs_set(&mlx5e_dev->dl_port, &attrs);
-    64	
-    65		return devlink_port_register(devlink, &mlx5e_dev->dl_port,
-    66					     dl_port_index);
-    67	}
-    68	
+  5852	
+> 5853	int set_filter_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long *ips,
+  5854					   unsigned int cnt, unsigned long addr)
+  5855	{
+  5856		struct ftrace_hash *free_hash = NULL, *rollback_hash = NULL;
+  5857		struct ftrace_hash *hash = ops->func_hash->filter_hash;
+  5858		struct ftrace_hash *hash_del = NULL, *hash_add = NULL;
+  5859		struct ftrace_func_entry *entry;
+  5860		int size, i, err = -ENOMEM;
+  5861	
+  5862		if (check_direct_multi(ops))
+  5863			return -EINVAL;
+  5864		if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+  5865			return -EINVAL;
+  5866	
+  5867		sort(ips, cnt, sizeof(*ips), ips_cmp, NULL);
+  5868	
+  5869		hash_add = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+  5870		hash_del = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+  5871		if (!hash_add || !hash_del)
+  5872			goto out;
+  5873	
+  5874		mutex_lock(&direct_mutex);
+  5875	
+  5876		size = 1 << hash->size_bits;
+  5877		for (i = 0; i < size; i++) {
+  5878			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+  5879				if (bsearch(&entry->ip, ips, cnt, sizeof(*ips), ips_cmp))
+  5880					continue;
+  5881				if (add_hash_entry(hash_del, entry->ip) < 0)
+  5882					goto out_unlock;
+  5883			}
+  5884		}
+  5885	
+  5886		for (i = 0; i < cnt; i++) {
+  5887			entry = ftrace_lookup_ip(hash, ips[i]);
+  5888			if (!entry)
+  5889				continue;
+  5890			if (add_hash_entry(hash_add, entry->ip) < 0)
+  5891				goto out_unlock;
+  5892		}
+  5893	
+  5894		err = add_direct_functions_hash(hash_add, addr, &free_hash);
+  5895		if (err) {
+  5896			remove_direct_functions_hash(hash_add, addr);
+  5897			goto out_unlock;
+  5898		}
+  5899	
+  5900		remove_direct_functions_hash(hash_del, addr);
+  5901	
+  5902		err = ftrace_set_filter_ips(ops, ips, cnt, 0, 1);
+  5903		if (err) {
+  5904			WARN_ON_ONCE(add_direct_functions_hash(hash_del, addr, &rollback_hash));
+  5905			remove_direct_functions_hash(hash_add, addr);
+  5906		}
+  5907	
+  5908	out_unlock:
+  5909		mutex_unlock(&direct_mutex);
+  5910	out:
+  5911		if (free_hash || rollback_hash) {
+  5912			synchronize_rcu_tasks();
+  5913			free_ftrace_hash(free_hash);
+  5914			free_ftrace_hash(rollback_hash);
+  5915		}
+  5916		free_ftrace_hash(hash_add);
+  5917		free_ftrace_hash(hash_del);
+  5918		return err;
+  5919	}
+  5920	
 
 -- 
 0-DAY CI Kernel Test Service
