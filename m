@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A20817CD;
-	Thu, 19 Jan 2023 03:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BF323AE;
+	Thu, 19 Jan 2023 05:47:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674100473; x=1705636473;
+  t=1674107258; x=1705643258;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fKnSuL5JDmKqjH3nFy804uYKh7V2Mwa9PISlu/ncOLQ=;
-  b=K0jIwRYWFNVv0NM8WgHHykQmzpF9aGRPSCnDthhzXSjdCNjO5/d3F0+V
-   DCr3kbZPjFpbzMpDVjxkUa625IMaLPck9SN0De2gqffN9NE2DQp53nlls
-   pFt1bzEJYZNib02MR82L5gZkpLSsgQnRJKfo7mv88Bhu3Vy+U0UvJlfWh
-   owrvX7gPk6MBW6JgxEWfFFXUi4D5sNEYXkdl/Un+0gLGUGiqyjYhpls1s
-   nqpYP8O7YAhEECJQXfzXkeKSiqp+JyZH6GZm43yAAgNbWjnTKNnvdyD3/
-   A6ZBNhRWRdifJuWAekmYL6Kene0lncCelIc0tHmwubn2BSSASffb2AJem
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323869391"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="323869391"
+  bh=lRAXFhrwES6RtZm6J0tMBAQQrNufPov6iUsv3OLlBJg=;
+  b=YeR0qmVHI2/LwcD/lLI7eqsNppaaEGniJOQ7A5MvtrSuvrIZvABUIYsu
+   237T5ZfoJkbwerjRiFUOgZB8w5Yogb5e/LQXr3syBvDS2xrzqJs79DKGk
+   ybKBuElXa3f8use9zPA6prxrUPhogDONtP8h5jyYR0cwjHF1KvBe8dY7G
+   PGXOvURn5lLTezdww7Ks6UapaVp9LryOa4S0DM3PR50faz50VfgIcmsny
+   JVWEvH7vLeBAuh7wACo7QEC/eMIMu5KvXO+uRmtiIH2twXjGoKXnZEF9z
+   Yht7bI6Sh0Iy4uLwLAgVQShQz1XMbToktQBT9qpnjMMbLtI34SYPViv50
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="352457251"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="352457251"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 19:54:32 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 21:47:37 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="660043118"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="660043118"
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="660069786"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="660069786"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2023 19:54:31 -0800
+  by orsmga002.jf.intel.com with ESMTP; 18 Jan 2023 21:47:35 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIM0U-00013O-18;
-	Thu, 19 Jan 2023 03:54:30 +0000
-Date: Thu, 19 Jan 2023 11:53:51 +0800
+	id 1pINlu-00019C-35;
+	Thu, 19 Jan 2023 05:47:34 +0000
+Date: Thu, 19 Jan 2023 13:46:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
+To: Jiri Pirko <jiri@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/tracing_multi_1 14/27]
- kernel/bpf/trampoline.c:1330:6: warning: variable 'tr_new' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202301191114.biPXnVOe-lkp@intel.com>
+Subject: [jpirko-mlxsw:jiri_devel_work_devlink_various 24/25]
+ drivers/net/ethernet/mellanox/mlx5/core/en/devlink.c:60:56: error: expected
+ expression
+Message-ID: <202301191337.LhRjuuRL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,109 +47,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_1
-head:   747784185d106a06b429736196d8817cb2d12a6f
-commit: d1a374a693976022b52761f1d659367447982194 [14/27] bpf: Make single trampolines aware of multi trampolines
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230119/202301191114.biPXnVOe-lkp@intel.com/config)
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_work_devlink_various
+head:   6667b78532ac7d8a8d2f9f05ae37446d6e4adebc
+commit: b935a1680b9e8e039142856f1df72496751a3172 [24/25] net/mlx5e: Move dl_port to struct mlx5e_dev
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230119/202301191337.LhRjuuRL-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=d1a374a693976022b52761f1d659367447982194
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tracing_multi_1
-        git checkout d1a374a693976022b52761f1d659367447982194
+        # https://github.com/jpirko/linux_mlxsw/commit/b935a1680b9e8e039142856f1df72496751a3172
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_work_devlink_various
+        git checkout b935a1680b9e8e039142856f1df72496751a3172
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/trampoline.c:1330:6: warning: variable 'tr_new' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!bmap_new || !bmap_tmp) {
-               ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/trampoline.c:1362:9: note: uninitialized use occurs here
-           return tr_new;
-                  ^~~~~~
-   kernel/bpf/trampoline.c:1330:2: note: remove the 'if' if its condition is always false
-           if (!bmap_new || !bmap_tmp) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/bpf/trampoline.c:1330:6: warning: variable 'tr_new' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-           if (!bmap_new || !bmap_tmp) {
-               ^~~~~~~~~
-   kernel/bpf/trampoline.c:1362:9: note: uninitialized use occurs here
-           return tr_new;
-                  ^~~~~~
-   kernel/bpf/trampoline.c:1330:6: note: remove the '||' if its condition is always false
-           if (!bmap_new || !bmap_tmp) {
-               ^~~~~~~~~~~~
-   kernel/bpf/trampoline.c:1315:36: note: initialize the variable 'tr_new' to silence this warning
-           struct bpf_trampoline *tr, *tr_new;
-                                             ^
-                                              = NULL
-   2 warnings generated.
+>> drivers/net/ethernet/mellanox/mlx5/core/en/devlink.c:60:56: error: expected expression
+                   dl_port_index = mlx5_esw_vport_to_devlink_port_index(>mdev, 0);
+                                                                        ^
+   1 error generated.
 
 
-vim +1330 kernel/bpf/trampoline.c
+vim +60 drivers/net/ethernet/mellanox/mlx5/core/en/devlink.c
 
-  1311	
-  1312	static struct bpf_trampoline* check_multi_trampoline(u64 key)
-  1313	{
-  1314		struct btf_bitmap *bmap_tmp, *bmap_new;
-  1315		struct bpf_trampoline *tr, *tr_new;
-  1316		u32 obj_id, btf_id;
-  1317		int err;
-  1318		unsigned long *ip;
-  1319	
-  1320		bpf_trampoline_unpack_key(key, &obj_id, &btf_id);
-  1321		if (obj_id != btf_obj_id(btf_vmlinux))
-  1322			return NULL;
-  1323	
-  1324		tr = in_multi_trampoline(btf_id);
-  1325		if (!tr)
-  1326			return NULL;
-  1327	
-  1328		bmap_new = btf_bitmap_funcs_id(btf_id);
-  1329		bmap_tmp = btf_bitmap_funcs_alloc();
-> 1330		if (!bmap_new || !bmap_tmp) {
-  1331			err = -ENOMEM;
-  1332			goto out;
-  1333		}
-  1334	
-  1335		tr_new = trampoline_multi_split_trampoline(tr, bmap_new);
-  1336		if (IS_ERR(tr_new))
-  1337			goto out;
-  1338	
-  1339		btf_bitmap_funcs_resolve(bmap_new, &ip);
-  1340		tr_new->func.addr = (void*) *ip;
-  1341		kfree(ip);
-  1342	
-  1343		btf_bitmap_copy(bmap_tmp, tr->multi.bmap);
-  1344		btf_bitmap_andnot(tr->multi.bmap, tr->multi.bmap, bmap_new);
-  1345		err = trampoline_multi_reset_bmap(tr);
-  1346		if (err) {
-  1347			tr_new = ERR_PTR(err);
-  1348			goto out_rollback;
-  1349		}
-  1350	
-  1351		err = bpf_trampoline_update(tr_new, true);
-  1352	
-  1353	out_rollback:
-  1354		if (err) {
-  1355			btf_bitmap_copy(tr->multi.bmap, bmap_tmp);
-  1356			bpf_trampoline_free(tr_new);
-  1357			tr_new = ERR_PTR(err);
-  1358		}
-  1359	out:
-  1360		btf_bitmap_free(bmap_new);
-  1361		btf_bitmap_free(bmap_tmp);
-  1362		return tr_new;
-  1363	}
-  1364	
+    39	
+    40	int mlx5e_devlink_port_register(struct mlx5e_dev *mlx5e_dev,
+    41					struct mlx5_core_dev *mdev)
+    42	{
+    43		struct devlink *devlink = priv_to_devlink(mlx5e_dev);
+    44		struct devlink_port_attrs attrs = {};
+    45		struct netdev_phys_item_id ppid = {};
+    46		unsigned int dl_port_index;
+    47	
+    48		if (mlx5_core_is_pf(mdev)) {
+    49			attrs.flavour = DEVLINK_PORT_FLAVOUR_PHYSICAL;
+    50			attrs.phys.port_number = mlx5_get_dev_index(mdev);
+    51			if (MLX5_ESWITCH_MANAGER(mdev)) {
+    52				mlx5e_devlink_get_port_parent_id(mdev, &ppid);
+    53				memcpy(attrs.switch_id.id, ppid.id, ppid.id_len);
+    54				attrs.switch_id.id_len = ppid.id_len;
+    55			}
+    56			dl_port_index = mlx5_esw_vport_to_devlink_port_index(mdev,
+    57									     MLX5_VPORT_UPLINK);
+    58		} else {
+    59			attrs.flavour = DEVLINK_PORT_FLAVOUR_VIRTUAL;
+  > 60			dl_port_index = mlx5_esw_vport_to_devlink_port_index(>mdev, 0);
+    61		}
+    62	
+    63		devlink_port_attrs_set(&mlx5e_dev->dl_port, &attrs);
+    64	
+    65		return devlink_port_register(devlink, &mlx5e_dev->dl_port,
+    66					     dl_port_index);
+    67	}
+    68	
 
 -- 
 0-DAY CI Kernel Test Service
