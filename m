@@ -1,124 +1,133 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25637485;
-	Thu, 19 Jan 2023 15:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674143462; x=1705679462;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aOUZMiKF3NX0nh5cZ7E09kHUs0CRUzV9PhmnGZt+OnA=;
-  b=BfDH9SRts8Qwnc6aBLnLuZb3IxMSfynCvfJdT0bc1i/1Dmj8WwY8acp7
-   y4sy0EWJtBO1cmjr9Dw+6fWja+aePDoSFVzXtk9GKC1CuVtA1fFMw9EFo
-   yuYA9337iX0qmk3rNl5Yh90mnMgv/406rIxoOESy8pxCnqwQxhTilhwL9
-   5BL31mRjcVGxv75JaT2mV0zeFfhiHfot0+FE8UEljcIin/ZPDbrDgSpNC
-   8X86KtStImyiKYVRm0yyOZzoLCOstVWnPI6M3w3a9w4zYtPzjUmDJhUBl
-   cscLJC0j/c/gQvrtIfVBRwQHe2BhZCoQlUkZANz977vAVFIBmLyHERbcA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="326601211"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="326601211"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 07:51:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="692463392"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="692463392"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2023 07:50:58 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pIXBp-0001ag-0c;
-	Thu, 19 Jan 2023 15:50:57 +0000
-Date: Thu, 19 Jan 2023 23:50:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Blakey <paulb@nvidia.com>, netdev@vger.kernel.org,
-	Saeed Mahameed <saeedm@nvidia.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oz Shlomo <ozsh@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-	Roi Dayan <roid@nvidia.com>, Vlad Buslov <vladbu@nvidia.com>
-Subject: Re: [PATCH net-next v3 1/6] net/sched: cls_api: Support hardware
- miss to tc action
-Message-ID: <202301192343.MPDnhYo1-lkp@intel.com>
-References: <20230119082357.21744-2-paulb@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4514A922
+	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 15:57:33 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id r9so2315445wrw.4
+        for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 07:57:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dMlJ2NJjcLXUx3bywthULxoc68gmDcbMG7dVreoK0ms=;
+        b=Fwxf5lPg5ufiIbwNNqoLqaEzgJnXZ/2W6Gb/VGmRrBmo2GLK0Rf0egVFm0m3g6yOuI
+         kcIzgo2LSVP+VDKUODHUvkkGtBq0EOVk8xrE30oqcTRTtLY03pklihlGn5twLlkMDbbh
+         b3zFHxyVLuSZKmYCRoSm3VTZFHCjoWjcLGMQFyO0dJDcGrcLawV1fG/5nMzDZhNvTi1v
+         q36SVefZjsmIy15U6BtckVrCDK86Hnvjx9g5DzIf+/BGoUSFQKJfNlzg/rrmoAhN9vRL
+         FyPtnTh2D5TbLpKipQwC1IrltRXYXpJ6W4MBvYimbG6AXHF2dRTN9NBXg7NL+HNHZeMi
+         +Evw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dMlJ2NJjcLXUx3bywthULxoc68gmDcbMG7dVreoK0ms=;
+        b=HNpbBkBHJ211DxSH6ECKLlzcB3FGTw2KM8wN1uGh+4DyryyWkavAHoYzb/rATolOWh
+         HQsp2DOci6j4F7ZuPWAyKtGanFmu9DGGL123usEb48JHr2Tcv+eucY41gTMPRm/zAl3g
+         knLkCAKVC2m0o9+GieWGO4w2qp0Ado1ASgWLazbupCQkQaSitETr1YV/1sMs6WSSnPbV
+         i07Nu2A6zrhBZ8uGnk1J5DkoCOFWHBAzH9go6vrdGc/kSxHfe3kbugI46lLGrvAoI5ck
+         7bNgUqlP1UowIKIryax6qcKKaJF2A13IEmizCOKDhknuVbkYa+dX7zxDOP0jLRXgqUR3
+         QVFg==
+X-Gm-Message-State: AFqh2kob5dvE+0vXdtFrwdj9FQcoHoilRRsS0S9wmYWaL63zlDBnjJwO
+	BN4PoFxSvP5c3foPTojt+g+5IsLQFhTd3HHf0E/lBA==
+X-Google-Smtp-Source: AMrXdXsFhfAfshIXAkWu2W7aD4UHcJ+Dw1fXNzCOmComCE7xAZX+qctghVV11UxkyHAYmIPIY1NM5vZa2D6c4KYgZOE=
+X-Received: by 2002:a05:6000:124f:b0:2bd:df97:13f4 with SMTP id
+ j15-20020a056000124f00b002bddf9713f4mr495083wrx.654.1674143851869; Thu, 19
+ Jan 2023 07:57:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119082357.21744-2-paulb@nvidia.com>
+References: <20230105082609.344538-1-irogers@google.com>
+In-Reply-To: <20230105082609.344538-1-irogers@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 19 Jan 2023 07:57:19 -0800
+Message-ID: <CAP-5=fUCJEyrZ+bx6oMGmFm5wuF71uheM=7VD9ynjAD_TNZ78w@mail.gmail.com>
+Subject: Re: [PATCH v1] perf llvm: Fix inadvertent file creation
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Ian Rogers <irogers@google.com>, Andrii Nakryiko <andrii@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Paul,
+On Thu, Jan 5, 2023 at 12:26 AM Ian Rogers <irogers@google.com> wrote:
+>
+> The LLVM template is first echo-ed into command_out and then
+> command_out executed. The echo surrounds the template with double
+> quotes, however, the template itself may contain quotes. This is
+> generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+> we see:
+> ...
+> SEC("func=null_lseek file->f_mode offset orig")
+> ...
+> where the first double quote ends the double quote of the echo, then
+> the > redirects output into a file called f_mode.
+>
+> To avoid this inadvertent behavior substitute redirects and similar
+> characters to be ASCII control codes, then substitute the output in
+> the echo back again.
+>
+> Fixes: 5eab5a7ee032 ("perf llvm: Display eBPF compiling command in debug output")
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Thank you for the patch! Perhaps something to improve:
+Ping. Not really a BPF/LLVM fix, it is just doing some string
+manipulation to avoid shell interpretation in the context of making
+BPF/LLVM.
 
-[auto build test WARNING on net-next/master]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Blakey/net-sched-cls_api-Support-hardware-miss-to-tc-action/20230119-162743
-patch link:    https://lore.kernel.org/r/20230119082357.21744-2-paulb%40nvidia.com
-patch subject: [PATCH net-next v3 1/6] net/sched: cls_api: Support hardware miss to tc action
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230119/202301192343.MPDnhYo1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5c85cf394445e1140823351fdfdbf3e541b9abb9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Blakey/net-sched-cls_api-Support-hardware-miss-to-tc-action/20230119-162743
-        git checkout 5c85cf394445e1140823351fdfdbf3e541b9abb9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/sched/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/sched/cls_api.c:3224:6: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-           if (err)
-               ^~~
-   net/sched/cls_api.c:3200:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/err +3224 net/sched/cls_api.c
-
-  3214	
-  3215		exts->action = action;
-  3216		exts->police = police;
-  3217	
-  3218		if (!use_action_miss)
-  3219			return 0;
-  3220	
-  3221	#if IS_ENABLED(CONFIG_NET_TC_SKB_EXT)
-  3222		err = tcf_exts_miss_cookie_base_alloc(exts, tp, handle);
-  3223	#endif
-> 3224		if (err)
-  3225			goto err_miss_alloc;
-  3226	
-  3227		return 0;
-  3228	
-  3229	err_miss_alloc:
-  3230		tcf_exts_destroy(exts);
-  3231		return err;
-  3232	}
-  3233	EXPORT_SYMBOL(tcf_exts_init_ex);
-  3234	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+> index 650ffe336f3a..4e8e243a6e4b 100644
+> --- a/tools/perf/util/llvm-utils.c
+> +++ b/tools/perf/util/llvm-utils.c
+> @@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+>
+>         pr_debug("llvm compiling command template: %s\n", template);
+>
+> +       /*
+> +        * Below, substitute control characters for values that can cause the
+> +        * echo to misbehave, then substitute the values back.
+> +        */
+>         err = -ENOMEM;
+> -       if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
+> +       if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
+>                 goto errout;
+>
+> +#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
+> +       for (char *p = command_echo; *p; p++) {
+> +               SWAP_CHAR('<', '\001');
+> +               SWAP_CHAR('>', '\002');
+> +               SWAP_CHAR('"', '\003');
+> +               SWAP_CHAR('\'', '\004');
+> +               SWAP_CHAR('|', '\005');
+> +               SWAP_CHAR('&', '\006');
+> +               SWAP_CHAR('\a', '"');
+> +       }
+>         err = read_from_pipe(command_echo, (void **) &command_out, NULL);
+>         if (err)
+>                 goto errout;
+>
+> +       for (char *p = command_out; *p; p++) {
+> +               SWAP_CHAR('\001', '<');
+> +               SWAP_CHAR('\002', '>');
+> +               SWAP_CHAR('\003', '"');
+> +               SWAP_CHAR('\004', '\'');
+> +               SWAP_CHAR('\005', '|');
+> +               SWAP_CHAR('\006', '&');
+> +       }
+> +#undef SWAP_CHAR
+>         pr_debug("llvm compiling command : %s\n", command_out);
+>
+>         err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
