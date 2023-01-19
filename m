@@ -1,43 +1,44 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C06615A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46F615AD;
 	Thu, 19 Jan 2023 00:56:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1674089787; x=1705625787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SJCizNWOGOaPMJbPH65X7PJl5zBJyJuiFNiFFXhBuHk=;
-  b=DTuL+g8hIShxk6Q1VmxbEbZltz4GgiWmSrDMD/Wj/pCEaWndEftkUdIZ
-   3sUG0rXf0bJmpgGMn1NfL1SCZNjhAwh2NZHZef+T5YePUPe7e0jWTGpk3
-   fCqCleBKRS+f3ZRWgEmrIMGElQkn/AuRDV63gM0EwG8X3aryclIGzLMo3
-   NXT+9nRTsyWYbSoU968UMXhPEUH+Qfusx26Jpp+qBZ+96hpHoaMzQakym
-   js/IJ0XKbUmxv0vXnz/w79DzxPh0u7WPRE3b5WnnLA4GXXa7IVav+AoSL
-   O81aFGe7QRLvkF5G9TBWWAF8v8udsxCtbtVCwBqsa53c+kkX99tgppVYT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323836547"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1xdb5ixrOsUzWmHPydI10ogyRQlabzU6bvkXRZlEU/Q=;
+  b=fgb7YbvCjdppl9kDefRUd7dQYwgYhQS4VuY++02JfzHrKypC6hPpTnAt
+   2h0y1YdKVzaV/I3Ar6JO/6A5TZ6moc3XpNcdg/bBcr8q+Hu2NiOluzTmX
+   XVkcaccvgoTiQYNWQUH46KJgmJ25Y8CD/EXmZKL7udE2WOBjUPWBXiiXf
+   F4PASRduhYJcZVGIKDfbNIClYOZTPx4PR33pYzLsvhaZaGDfe/uzPAJ4A
+   0/eeL3FRAHfA4xlSeYdAI2ne8t9WeoSGHNXZlKwnnK7YHWsCfClCWD1gO
+   Oz2V06rVHO7WtgBIDAz5dlow+tKQqJd48d5732ULYXp9FdWLfYecmpv8D
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323836549"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="323836547"
+   d="scan'208";a="323836549"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 16:56:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="661942530"
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="661942528"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="661942530"
+   d="scan'208";a="661942528"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
   by fmsmga007.fm.intel.com with ESMTP; 18 Jan 2023 16:56:23 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIJE6-0000tk-2V;
+	id 1pIJE6-0000tg-2K;
 	Thu, 19 Jan 2023 00:56:22 +0000
-Date: Thu, 19 Jan 2023 08:55:48 +0800
+Date: Thu, 19 Jan 2023 08:55:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2] mm/hugetlb: convert get_hwpoison_huge_page() to folios
-Message-ID: <202301190833.olO4HOkZ-lkp@intel.com>
-References: <20230118174039.14247-1-sidhartha.kumar@oracle.com>
+To: Michal Suchanek <msuchanek@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rob Herring <robh@kernel.org>
+Subject: [robh:dt/linus 5/5] drivers/of/platform.c:570:19: error:
+ incompatible pointer types passing 'char *[14]' to parameter of type 'char
+ *'
+Message-ID: <202301190812.uoPlw0Uq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,82 +47,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118174039.14247-1-sidhartha.kumar@oracle.com>
 
-Hi Sidhartha,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sidhartha-Kumar/mm-hugetlb-convert-get_hwpoison_huge_page-to-folios/20230119-014337
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230118174039.14247-1-sidhartha.kumar%40oracle.com
-patch subject: [PATCH v2] mm/hugetlb: convert get_hwpoison_huge_page() to folios
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230119/202301190833.olO4HOkZ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/linus
+head:   2d681d6a23a14e6507e536605d83e38acfab9018
+commit: 2d681d6a23a14e6507e536605d83e38acfab9018 [5/5] of: Make of framebuffer devices unique
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230119/202301190812.uoPlw0Uq-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6704f4eff6775ce3ccc4156b41b9d1c4d091eb14
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sidhartha-Kumar/mm-hugetlb-convert-get_hwpoison_huge_page-to-folios/20230119-014337
-        git checkout 6704f4eff6775ce3ccc4156b41b9d1c4d091eb14
+        # https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?id=2d681d6a23a14e6507e536605d83e38acfab9018
+        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
+        git fetch --no-tags robh dt/linus
+        git checkout 2d681d6a23a14e6507e536605d83e38acfab9018
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> mm/memory-failure.c:1335:8: error: implicit declaration of function 'get_hwpoison_hugetlb_folio' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, false);
+>> drivers/of/platform.c:570:19: error: incompatible pointer types passing 'char *[14]' to parameter of type 'char *' [-Werror,-Wincompatible-pointer-types]
+                           ret = snprintf(buf, "of-display-%d", display_number++);
+                                          ^~~
+   include/linux/kernel.h:213:20: note: passing argument to parameter 'buf' here
+   int snprintf(char *buf, size_t size, const char *fmt, ...);
+                      ^
+   drivers/of/platform.c:570:24: warning: incompatible pointer to integer conversion passing 'char[14]' to parameter of type 'size_t' (aka 'unsigned int') [-Wint-conversion]
+                           ret = snprintf(buf, "of-display-%d", display_number++);
+                                               ^~~~~~~~~~~~~~~
+   include/linux/kernel.h:213:32: note: passing argument to parameter 'size' here
+   int snprintf(char *buf, size_t size, const char *fmt, ...);
+                                  ^
+   drivers/of/platform.c:570:41: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
+                           ret = snprintf(buf, "of-display-%d", display_number++);
+                                                                ^~~~~~~~~~~~~~~~
+   include/linux/kernel.h:213:50: note: passing argument to parameter 'fmt' here
+   int snprintf(char *buf, size_t size, const char *fmt, ...);
+                                                    ^
+>> drivers/of/platform.c:573:36: error: incompatible pointer types passing 'char *[14]' to parameter of type 'const char *' [-Werror,-Wincompatible-pointer-types]
+                           of_platform_device_create(node, buf, NULL);
+                                                           ^~~
+   drivers/of/platform.c:216:15: note: passing argument to parameter here
+   EXPORT_SYMBOL(of_platform_device_create);
                  ^
-   mm/memory-failure.c:1335:8: note: did you mean 'get_hwpoison_huge_page'?
-   include/linux/hugetlb.h:420:19: note: 'get_hwpoison_huge_page' declared here
-   static inline int get_hwpoison_huge_page(struct page *page, bool *hugetlb, bool unpoison)
-                     ^
-   mm/memory-failure.c:1425:8: error: implicit declaration of function 'get_hwpoison_hugetlb_folio' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, true);
-                 ^
-   2 errors generated.
+   2 warnings and 2 errors generated.
 
 
-vim +/get_hwpoison_hugetlb_folio +1335 mm/memory-failure.c
+vim +570 drivers/of/platform.c
 
-  1328	
-  1329	static int __get_hwpoison_page(struct page *page, unsigned long flags)
-  1330	{
-  1331		struct folio *folio = page_folio(page);
-  1332		int ret = 0;
-  1333		bool hugetlb = false;
-  1334	
-> 1335		ret = get_hwpoison_hugetlb_folio(folio, &hugetlb, false);
-  1336		if (hugetlb)
-  1337			return ret;
-  1338	
-  1339		/*
-  1340		 * This check prevents from calling folio_try_get() for any
-  1341		 * unsupported type of folio in order to reduce the risk of unexpected
-  1342		 * races caused by taking a folio refcount.
-  1343		 */
-  1344		if (!HWPoisonHandlable(&folio->page, flags))
-  1345			return -EBUSY;
-  1346	
-  1347		if (folio_try_get(folio)) {
-  1348			if (folio == page_folio(page))
-  1349				return 1;
-  1350	
-  1351			pr_info("%#lx cannot catch tail\n", page_to_pfn(page));
-  1352			folio_put(folio);
-  1353		}
-  1354	
-  1355		return 0;
-  1356	}
-  1357	
+   515	
+   516	static int __init of_platform_default_populate_init(void)
+   517	{
+   518		struct device_node *node;
+   519	
+   520		device_links_supplier_sync_state_pause();
+   521	
+   522		if (!of_have_populated_dt())
+   523			return -ENODEV;
+   524	
+   525		if (IS_ENABLED(CONFIG_PPC)) {
+   526			struct device_node *boot_display = NULL;
+   527			struct platform_device *dev;
+   528			int display_number = 1;
+   529			int ret;
+   530	
+   531			/* Check if we have a MacOS display without a node spec */
+   532			if (of_get_property(of_chosen, "linux,bootx-noscreen", NULL)) {
+   533				/*
+   534				 * The old code tried to work out which node was the MacOS
+   535				 * display based on the address. I'm dropping that since the
+   536				 * lack of a node spec only happens with old BootX versions
+   537				 * (users can update) and with this code, they'll still get
+   538				 * a display (just not the palette hacks).
+   539				 */
+   540				dev = platform_device_alloc("bootx-noscreen", 0);
+   541				if (WARN_ON(!dev))
+   542					return -ENOMEM;
+   543				ret = platform_device_add(dev);
+   544				if (WARN_ON(ret)) {
+   545					platform_device_put(dev);
+   546					return ret;
+   547				}
+   548			}
+   549	
+   550			/*
+   551			 * For OF framebuffers, first create the device for the boot display,
+   552			 * then for the other framebuffers. Only fail for the boot display;
+   553			 * ignore errors for the rest.
+   554			 */
+   555			for_each_node_by_type(node, "display") {
+   556				if (!of_get_property(node, "linux,opened", NULL) ||
+   557				    !of_get_property(node, "linux,boot-display", NULL))
+   558					continue;
+   559				dev = of_platform_device_create(node, "of-display", NULL);
+   560				if (WARN_ON(!dev))
+   561					return -ENOMEM;
+   562				boot_display = node;
+   563				break;
+   564			}
+   565	
+   566			for_each_node_by_type(node, "display") {
+   567				char *buf[14];
+   568				if (!of_get_property(node, "linux,opened", NULL) || node == boot_display)
+   569					continue;
+ > 570				ret = snprintf(buf, "of-display-%d", display_number++);
+   571				if (ret >= sizeof(buf))
+   572					continue;
+ > 573				of_platform_device_create(node, buf, NULL);
+   574			}
+   575	
+   576		} else {
+   577			/*
+   578			 * Handle certain compatibles explicitly, since we don't want to create
+   579			 * platform_devices for every node in /reserved-memory with a
+   580			 * "compatible",
+   581			 */
+   582			for_each_matching_node(node, reserved_mem_matches)
+   583				of_platform_device_create(node, NULL, NULL);
+   584	
+   585			node = of_find_node_by_path("/firmware");
+   586			if (node) {
+   587				of_platform_populate(node, NULL, NULL, NULL);
+   588				of_node_put(node);
+   589			}
+   590	
+   591			node = of_get_compatible_child(of_chosen, "simple-framebuffer");
+   592			of_platform_device_create(node, NULL, NULL);
+   593			of_node_put(node);
+   594	
+   595			/* Populate everything else. */
+   596			of_platform_default_populate(NULL, NULL, NULL);
+   597		}
+   598	
+   599		return 0;
+   600	}
+   601	arch_initcall_sync(of_platform_default_populate_init);
+   602	
 
 -- 
 0-DAY CI Kernel Test Service
