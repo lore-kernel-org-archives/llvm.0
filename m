@@ -1,2221 +1,282 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1C82905
-	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 07:39:11 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id k13so1614024plg.0
-        for <llvm@lists.linux.dev>; Wed, 18 Jan 2023 23:39:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jL2TawLa5arJJQqDnzC23xHTp5ifbFhW+YXTns+dNRs=;
-        b=ArfX4zdKHbborYZXywFRXSZW9MviUgiIqMBjySyPcj/2FKFvaM/Z+bhiitCUssolxP
-         cVkg5ufR2xs/EipsOYnpH9t4mivxw5WtsagNN9NgZcNPY/9ZC5nZQHkwADIF5PUU3GFy
-         y4zPhbQaVc+nYz7k9rhetXGY9booE4HhV1ieM64ZAsPeIdzanAegkM0Q50Vt1rmzeOE0
-         35hOdDs61b9YhJ/dI4APNZ4CY5pnFs195sNHH6tfPVn0BbVLVXdgZK3stLG4Y0lLm5ji
-         Y5SzBUq2dOAiVvSXKLzIPagNzJy/kQywXtIm8I5fN215jPMXd65lq0WG+Qo/AgFqzMZz
-         b4Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jL2TawLa5arJJQqDnzC23xHTp5ifbFhW+YXTns+dNRs=;
-        b=Ugils3N3BvUVEIoD+QPIs3AmEx2XMkG6ZA+xaIvHrUJIK4in2nrl0J0qaXHoDleM7Z
-         nOVKqQfX51/Mq6h0nmYITGx+5JwHc/affQaWPzZZIWXspX9CbpXVuyKcdPW+AGERIBzG
-         QYSvy8J25+aLWX5/lX6iF7665giCxdd73QQPyyXfqbgqiDaQsAi5EPJS7j2gOgcF9WkA
-         zOL6MU79wDrnAQ+bsTK7X0QYXcpWBC3KSg1vMY1qeMRG2bin12bWojCkgFbq1bQeIprW
-         VrQy6gFxUqW2XpV35whQ0+rKes/DxtX3eT1KGVwlZw1+4bT4P+z3k7Z62BcVn6j8nu4N
-         Md+Q==
-X-Gm-Message-State: AFqh2kokO87y6A7r2zRV4Cc9ZbO1Nb8gpq/WM043PK8gR3FoOqXo7RoN
-	VfUqfKImiloxib8xoSEevXH2BjoIWQof3+AC8PcWUQ==
-X-Google-Smtp-Source: AMrXdXvx+dIgnCqnvRNEkF/RWDdlPwNSXLAuwjMo28ENcOv+mCjNiMkPPiMpXW9KhiRgnZVQFuX48Q==
-X-Received: by 2002:a17:903:25c3:b0:18f:a5b6:54f9 with SMTP id jc3-20020a17090325c300b0018fa5b654f9mr10615007plb.11.1674113949140;
-        Wed, 18 Jan 2023 23:39:09 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902694300b00194a53ab3e6sm4857412plt.286.2023.01.18.23.39.08
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 23:39:08 -0800 (PST)
-Message-ID: <63c8f39c.170a0220.b004f.88a5@mx.google.com>
-Date: Wed, 18 Jan 2023 23:39:08 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4102C9C;
+	Thu, 19 Jan 2023 08:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674115846; x=1705651846;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=E/okNHikAAoKVc/CQXihZxFd4TNVN/RlMAbLoqcFGVw=;
+  b=G1eaqb/J3JFHKhlBzubXwE5LrE/DZ6Q7B08otVJ8wXSixfWPdPD5TQxx
+   IE4jD6on56OZL6opGwYU+TThZRrEShGJyJNAsFtI1i5GEeyTXNS/+IcZz
+   Goz/nDqq8is7QHd+dgNjr9fndrTpnHYh9QpDrpy6ovor8wy4ulP8tLxt9
+   1tM78e+Djl20CtRpFwHxU0lMhEXmzFu8G0jzj8lj2CkXhUakeP/18eHWG
+   Do9/QeHjLfQANcpGsVcpR+zgl2UKdOTkh00vq4n0vTA1EMvs1Q/cho2JO
+   STHlVLR7jX9EXlykFgAjvrL1vxWbi1TtNHStceyNLrsCCXqmfaPhXJrjA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411463848"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="411463848"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 00:10:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="692328620"
+X-IronPort-AV: E=Sophos;i="5.97,228,1669104000"; 
+   d="scan'208";a="692328620"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2023 00:10:42 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIQ0P-0001Hc-2K;
+	Thu, 19 Jan 2023 08:10:41 +0000
+Date: Thu, 19 Jan 2023 16:10:02 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [akpm-mm:mm-everything 255/354] vmlinux.o: warning: objtool:
+ ___ksymtab_gpl+_RNvXs3h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_5NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0:
+ data relocation to !ENDBR: _RNvXs3h_NtCs3XUU1alqrUZ_8bindings12bindings...
+Message-ID: <202301191643.lpz6Fy8B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20230119
-X-Kernelci-Report-Type: build
-Subject: next/master build: 210 builds: 11 failed, 199 passed, 46 errors,
- 567 warnings (next-20230119)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
-
-next/master build: 210 builds: 11 failed, 199 passed, 46 errors, 567 warnin=
-gs (next-20230119)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230119/
-
-Tree: next
-Branch: master
-Git Describe: next-20230119
-Git Commit: aa5c49149a823599764e6953229b028e4bf6e9cc
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 8 unique architectures
-
-Build Failures Detected:
-
-arc:
-    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
-
-arm:
-    allmodconfig: (clang-16) FAIL
-    allmodconfig: (gcc-10) FAIL
-    imx_v6_v7_defconfig: (gcc-10) FAIL
-    pxa3xx_defconfig: (gcc-10) FAIL
-    qcom_defconfig: (gcc-10) FAIL
-    rpc_defconfig: (gcc-10) FAIL
-
-i386:
-    allmodconfig: (clang-16) FAIL
-
-mips:
-    32r2el_defconfig+debug: (gcc-10) FAIL
-    decstation_64_defconfig: (gcc-10) FAIL
-
-x86_64:
-    x86_64_defconfig+rust: (rustc-1.62) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
-
-arm64:
-
-arm:
-    allmodconfig (clang-16): 12 errors
-    allmodconfig (gcc-10): 20 errors, 1 warning
-    imx_v6_v7_defconfig (gcc-10): 1 error
-    imxrt_defconfig (gcc-10): 51 warnings
-    lpc18xx_defconfig (gcc-10): 53 warnings
-    milbeaut_m10v_defconfig (gcc-10): 79 warnings
-    mps2_defconfig (gcc-10): 50 warnings
-    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 123 warnings
-    nhk8815_defconfig (gcc-10): 2 warnings
-    pxa3xx_defconfig (gcc-10): 1 error
-    pxa_defconfig (gcc-10): 2 warnings
-    qcom_defconfig (gcc-10): 1 error, 2 warnings
-    rpc_defconfig (gcc-10): 2 errors
-    sp7021_defconfig (gcc-10): 65 warnings
-    stm32_defconfig (gcc-10): 48 warnings
-    vf610m4_defconfig (gcc-10): 47 warnings
-
-i386:
-    allmodconfig (clang-16): 3 errors
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-    32r2el_defconfig+debug (gcc-10): 1 warning
-    32r2el_defconfig+kselftest (gcc-10): 1 warning
-    bmips_be_defconfig (gcc-10): 2 warnings
-    bmips_stb_defconfig (gcc-10): 2 warnings
-    fuloong2e_defconfig (gcc-10): 1 error
-    ip22_defconfig (gcc-10): 2 warnings
-    jazz_defconfig (gcc-10): 2 warnings
-    lemote2f_defconfig (gcc-10): 1 error
-    loongson2k_defconfig (gcc-10): 1 error
-    loongson3_defconfig (gcc-10): 1 error
-    malta_qemu_32r6_defconfig (gcc-10): 2 warnings
-    maltaaprp_defconfig (gcc-10): 2 warnings
-    maltasmvp_defconfig (gcc-10): 2 warnings
-    maltasmvp_eva_defconfig (gcc-10): 2 warnings
-    maltaup_defconfig (gcc-10): 2 warnings
-    mtx1_defconfig (gcc-10): 2 warnings
-    rb532_defconfig (gcc-10): 1 warning
-    rm200_defconfig (gcc-10): 2 warnings
-
-riscv:
-
-sparc:
-    allnoconfig (gcc-10): 1 warning
-    sparc32_defconfig (gcc-10): 2 warnings
-    sparc64_defconfig (gcc-10): 4 warnings
-    sparc64_defconfig+debug (gcc-10): 2 warnings
-    sparc64_defconfig+kselftest (gcc-10): 2 warnings
-    tinyconfig (gcc-10): 1 warning
-
-x86_64:
-    x86_64_defconfig+debug (gcc-10): 3 warnings
-    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
-    x86_64_defconfig+rust (rustc-1.62): 1 error
-
-Errors summary:
-
-    4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
-=80=98-mhard-float=E2=80=99
-    2    drivers/gpu/drm/msm/msm_drv.h:237:38: error: field =E2=80=98gpu_de=
-vfreq_config=E2=80=99 has incomplete type
-    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
-directory
-    1    fs/cifs/cifs_debug.c:481:9: error: format specifies type 'unsigned=
- long' but the argument has type 'size_t' (aka 'unsigned int') [-Werror,-Wf=
-ormat]
-    1    fs/cifs/cifs_debug.c:480:9: error: format specifies type 'unsigned=
- long' but the argument has type 'size_t' (aka 'unsigned int') [-Werror,-Wf=
-ormat]
-    1    error: aborting due to previous error
-    1    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3602:12: error: =
-stack frame size (1076) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-=
-Wframe-larger-than]
-    1    drivers/gpio/gpio-zevio.c:219:25: error: a parameter list without =
-types is only allowed in a function definition
-    1    drivers/gpio/gpio-zevio.c:219:1: error: type specifier missing, de=
-faults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-=
-int]
-    1    drivers/gpio/gpio-zevio.c:219:1: error: type defaults to =E2=80=98=
-int=E2=80=99 in declaration of =E2=80=98builtin_platform_driver=E2=80=99 [-=
-Werror=3Dimplicit-int]
-    1    drivers/gpio/gpio-zevio.c:219:1: error: parameter names (without t=
-ypes) in function declaration [-Werror]
-    1    drivers/gpio/gpio-zevio.c:219:1: error: data definition has no typ=
-e or storage class [-Werror]
-    1    drivers/gpio/gpio-zevio.c:217:3: error: =E2=80=98struct platform_d=
-river=E2=80=99 has no member named =E2=80=98probe=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:217:12: error: excess elements in struct=
- initializer [-Werror]
-    1    drivers/gpio/gpio-zevio.c:212:3: error: =E2=80=98struct platform_d=
-river=E2=80=99 has no member named =E2=80=98driver=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:212:13: error: extra brace group at end =
-of initializer
-    1    drivers/gpio/gpio-zevio.c:212:13: error: excess elements in struct=
- initializer [-Werror]
-    1    drivers/gpio/gpio-zevio.c:211:31: error: =E2=80=98zevio_gpio_drive=
-r=E2=80=99 defined but not used [-Werror=3Dunused-variable]
-    1    drivers/gpio/gpio-zevio.c:211:31: error: variable has incomplete t=
-ype 'struct platform_driver'
-    1    drivers/gpio/gpio-zevio.c:211:31: error: storage size of =E2=80=98=
-zevio_gpio_driver=E2=80=99 isn=E2=80=99t known
-    1    drivers/gpio/gpio-zevio.c:211:15: error: variable =E2=80=98zevio_g=
-pio_driver=E2=80=99 has initializer but incomplete type
-    1    drivers/gpio/gpio-zevio.c:191:16: error: invalid use of undefined =
-type =E2=80=98struct platform_device=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:191:16: error: incomplete definition of =
-type 'struct platform_device'
-    1    drivers/gpio/gpio-zevio.c:189:39: error: invalid use of undefined =
-type =E2=80=98struct platform_device=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:189:39: error: incomplete definition of =
-type 'struct platform_device'
-    1    drivers/gpio/gpio-zevio.c:186:29: error: invalid use of undefined =
-type =E2=80=98struct platform_device=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:186:29: error: incomplete definition of =
-type 'struct platform_device'
-    1    drivers/gpio/gpio-zevio.c:184:21: error: implicit declaration of f=
-unction =E2=80=98devm_platform_ioremap_resource=E2=80=99; did you mean =E2=
-=80=98devm_ioremap_resource=E2=80=99? [-Werror=3Dimplicit-function-declarat=
-ion]
-    1    drivers/gpio/gpio-zevio.c:184:21: error: call to undeclared functi=
-on 'devm_platform_ioremap_resource'; ISO C99 and later do not support impli=
-cit function declarations [-Wimplicit-function-declaration]
-    1    drivers/gpio/gpio-zevio.c:184:19: error: incompatible integer to p=
-ointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-    1    drivers/gpio/gpio-zevio.c:184:19: error: assignment to =E2=80=98vo=
-id *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from integer without=
- a cast [-Werror=3Dint-conversion]
-    1    drivers/gpio/gpio-zevio.c:182:33: error: invalid use of undefined =
-type =E2=80=98struct platform_device=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:182:33: error: incomplete definition of =
-type 'struct platform_device'
-    1    drivers/gpio/gpio-zevio.c:178:2: error: implicit declaration of fu=
-nction =E2=80=98platform_set_drvdata=E2=80=99 [-Werror=3Dimplicit-function-=
-declaration]
-    1    drivers/gpio/gpio-zevio.c:178:2: error: call to undeclared functio=
-n 'platform_set_drvdata'; ISO C99 and later do not support implicit functio=
-n declarations [-Wimplicit-function-declaration]
-    1    drivers/gpio/gpio-zevio.c:174:33: error: invalid use of undefined =
-type =E2=80=98struct platform_device=E2=80=99
-    1    drivers/gpio/gpio-zevio.c:174:33: error: incomplete definition of =
-type 'struct platform_device'
-    1    drivers/gpio/gpio-zevio.c:169:36: error: =E2=80=98struct platform_=
-device=E2=80=99 declared inside parameter list will not be visible outside =
-of this definition or declaration [-Werror]
-    1    drivers/gpio/gpio-zevio.c:169:36: error: declaration of 'struct pl=
-atform_device' will not be visible outside of this function [-Werror,-Wvisi=
-bility]
-    1    arch/arm/mach-pxa/pxa320.h:6:10: fatal error: mfp-pxa320.h: No suc=
-h file or directory
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
-=3D0x'
-    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
-=3D0x'
-
-Warnings summary:
-
-    516  <command-line>: warning: "__thumb2__" redefined
-    14   fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99=
- expects argument of type =E2=80=98long unsigned int=E2=80=99, but argument=
- 4 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [=
--Wformat=3D]
-    14   fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99=
- expects argument of type =E2=80=98long unsigned int=E2=80=99, but argument=
- 3 has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [=
--Wformat=3D]
-    10   <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    3    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
- !ENDBR: .text+0x143336
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
- !ENDBR: .text+0x1434ab
-    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
-!ENDBR: native_write_cr4+0x4
-    1    vmlinux.o: warning: objtool: __asan_memset+0x36: call to __memset(=
-) with UACCESS enabled
-    1    vmlinux.o: warning: objtool: __asan_memmove+0x4f: call to __memmov=
-e() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: __asan_memcpy+0x4f: call to __memcpy(=
-) with UACCESS enabled
-    1    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 require=
-s 44 bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift=
--overflow=3D]
-    1    cc1: all warnings being treated as errors
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warni=
-ng, 0 section mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, clang-16) =E2=80=94 FAIL, 12 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    drivers/gpio/gpio-zevio.c:169:36: error: declaration of 'struct platfor=
-m_device' will not be visible outside of this function [-Werror,-Wvisibilit=
-y]
-    drivers/gpio/gpio-zevio.c:174:33: error: incomplete definition of type =
-'struct platform_device'
-    drivers/gpio/gpio-zevio.c:178:2: error: call to undeclared function 'pl=
-atform_set_drvdata'; ISO C99 and later do not support implicit function dec=
-larations [-Wimplicit-function-declaration]
-    drivers/gpio/gpio-zevio.c:182:33: error: incomplete definition of type =
-'struct platform_device'
-    drivers/gpio/gpio-zevio.c:184:21: error: call to undeclared function 'd=
-evm_platform_ioremap_resource'; ISO C99 and later do not support implicit f=
-unction declarations [-Wimplicit-function-declaration]
-    drivers/gpio/gpio-zevio.c:184:19: error: incompatible integer to pointe=
-r conversion assigning to 'void *' from 'int' [-Wint-conversion]
-    drivers/gpio/gpio-zevio.c:186:29: error: incomplete definition of type =
-'struct platform_device'
-    drivers/gpio/gpio-zevio.c:189:39: error: incomplete definition of type =
-'struct platform_device'
-    drivers/gpio/gpio-zevio.c:191:16: error: incomplete definition of type =
-'struct platform_device'
-    drivers/gpio/gpio-zevio.c:211:31: error: variable has incomplete type '=
-struct platform_driver'
-    drivers/gpio/gpio-zevio.c:219:1: error: type specifier missing, default=
-s to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    drivers/gpio/gpio-zevio.c:219:25: error: a parameter list without types=
- is only allowed in a function definition
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-10) =E2=80=94 FAIL, 20 errors, 1 warning, 0 section =
-mismatches
-
-Errors:
-    drivers/gpio/gpio-zevio.c:169:36: error: =E2=80=98struct platform_devic=
-e=E2=80=99 declared inside parameter list will not be visible outside of th=
-is definition or declaration [-Werror]
-    drivers/gpio/gpio-zevio.c:174:33: error: invalid use of undefined type =
-=E2=80=98struct platform_device=E2=80=99
-    drivers/gpio/gpio-zevio.c:178:2: error: implicit declaration of functio=
-n =E2=80=98platform_set_drvdata=E2=80=99 [-Werror=3Dimplicit-function-decla=
-ration]
-    drivers/gpio/gpio-zevio.c:182:33: error: invalid use of undefined type =
-=E2=80=98struct platform_device=E2=80=99
-    drivers/gpio/gpio-zevio.c:184:21: error: implicit declaration of functi=
-on =E2=80=98devm_platform_ioremap_resource=E2=80=99; did you mean =E2=80=98=
-devm_ioremap_resource=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-    drivers/gpio/gpio-zevio.c:184:19: error: assignment to =E2=80=98void *=
-=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from integer without a c=
-ast [-Werror=3Dint-conversion]
-    drivers/gpio/gpio-zevio.c:186:29: error: invalid use of undefined type =
-=E2=80=98struct platform_device=E2=80=99
-    drivers/gpio/gpio-zevio.c:189:39: error: invalid use of undefined type =
-=E2=80=98struct platform_device=E2=80=99
-    drivers/gpio/gpio-zevio.c:191:16: error: invalid use of undefined type =
-=E2=80=98struct platform_device=E2=80=99
-    drivers/gpio/gpio-zevio.c:211:15: error: variable =E2=80=98zevio_gpio_d=
-river=E2=80=99 has initializer but incomplete type
-    drivers/gpio/gpio-zevio.c:212:3: error: =E2=80=98struct platform_driver=
-=E2=80=99 has no member named =E2=80=98driver=E2=80=99
-    drivers/gpio/gpio-zevio.c:212:13: error: extra brace group at end of in=
-itializer
-    drivers/gpio/gpio-zevio.c:212:13: error: excess elements in struct init=
-ializer [-Werror]
-    drivers/gpio/gpio-zevio.c:217:3: error: =E2=80=98struct platform_driver=
-=E2=80=99 has no member named =E2=80=98probe=E2=80=99
-    drivers/gpio/gpio-zevio.c:217:12: error: excess elements in struct init=
-ializer [-Werror]
-    drivers/gpio/gpio-zevio.c:219:1: error: data definition has no type or =
-storage class [-Werror]
-    drivers/gpio/gpio-zevio.c:219:1: error: type defaults to =E2=80=98int=
-=E2=80=99 in declaration of =E2=80=98builtin_platform_driver=E2=80=99 [-Wer=
-ror=3Dimplicit-int]
-    drivers/gpio/gpio-zevio.c:219:1: error: parameter names (without types)=
- in function declaration [-Werror]
-    drivers/gpio/gpio-zevio.c:211:31: error: storage size of =E2=80=98zevio=
-_gpio_driver=E2=80=99 isn=E2=80=99t known
-    drivers/gpio/gpio-zevio.c:211:31: error: =E2=80=98zevio_gpio_driver=E2=
-=80=99 defined but not used [-Werror=3Dunused-variable]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-allmodconfig (i386, clang-16) =E2=80=94 FAIL, 3 errors, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    fs/cifs/cifs_debug.c:480:9: error: format specifies type 'unsigned long=
-' but the argument has type 'size_t' (aka 'unsigned int') [-Werror,-Wformat]
-    fs/cifs/cifs_debug.c:481:9: error: format specifies type 'unsigned long=
-' but the argument has type 'size_t' (aka 'unsigned int') [-Werror,-Wformat]
-    drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3602:12: error: stack=
- frame size (1076) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wfram=
-e-larger-than]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_16K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, clang-16) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_ARM64_64K_PAGES=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-10) =E2=80=94 PASS, 0 error=
-s, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+debug (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+videodec (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
-ngs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
-rnings, 0 section mismatches
-
-Errors:
-    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
-tory
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    drivers/gpu/drm/msm/msm_drv.h:237:38: error: field =E2=80=98gpu_devfreq=
-_config=E2=80=99 has incomplete type
-
----------------------------------------------------------------------------=
------
-imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 51 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 se=
-ction mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
-section mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
-ection mismatches
-
-Errors:
-    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
-=98-mhard-float=E2=80=99
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 53 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnin=
-gs, 0 section mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings=
-, 0 section mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 79 warnings=
-, 0 section mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 50 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
-=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
- errors, 123 warnings, 0 section mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 0 warnings, 0 secti=
-on mismatches
-
-Errors:
-    arch/arm/mach-pxa/pxa320.h:6:10: fatal error: mfp-pxa320.h: No such fil=
-e or directory
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-10) =E2=80=94 FAIL, 1 error, 2 warnings, 0 section=
- mismatches
-
-Errors:
-    drivers/gpu/drm/msm/msm_drv.h:237:38: error: field =E2=80=98gpu_devfreq=
-_config=E2=80=99 has incomplete type
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    cc1: warning: result of =E2=80=98-117440512 << 16=E2=80=99 requires 44 =
-bits to represent, but =E2=80=98int=E2=80=99 only has 32 bits [-Wshift-over=
-flow=3D]
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/cifs/cifs_debug.c:478:47: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 3 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-    fs/cifs/cifs_debug.c:478:51: warning: format =E2=80=98%lu=E2=80=99 expe=
-cts argument of type =E2=80=98long unsigned int=E2=80=99, but argument 4 ha=
-s type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wfor=
-mat=3D]
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
-    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
-
----------------------------------------------------------------------------=
------
-rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 65 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
-s, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 war=
-nings, 0 section mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 48 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 47 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-    <command-line>: warning: "__thumb2__" redefined
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
-gs, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warning=
-s, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: __asan_memset+0x36: call to __memset() wit=
-h UACCESS enabled
-    vmlinux.o: warning: objtool: __asan_memmove+0x4f: call to __memmove() w=
-ith UACCESS enabled
-    vmlinux.o: warning: objtool: __asan_memcpy+0x4f: call to __memcpy() wit=
-h UACCESS enabled
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
- warnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
-BR: .text+0x1434ab
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
-BR: .text+0x143336
-    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
-R: native_write_cr4+0x4
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 FAIL, 1 error, 0 warni=
-ngs, 0 section mismatches
-
-Errors:
-    error: aborting due to previous error
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+rust-samples (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
-0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
-rrors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook+kselftest (x86_64, gcc-10) =E2=80=94 PASS, =
-0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0=
- warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+TO: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+head:   68fafbb62ae6e15ee62a761746da81192f675d53
+commit: 5a9b70092265874cad2791a90a5fabe7744d7653 [255/354] mm: move page->deferred_list to folio->_deferred_list
+config: x86_64-randconfig-r006-20230116 (https://download.01.org/0day-ci/archive/20230119/202301191643.lpz6Fy8B-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=5a9b70092265874cad2791a90a5fabe7744d7653
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch --no-tags akpm-mm mm-everything
+        git checkout 5a9b70092265874cad2791a90a5fabe7744d7653
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12fpregs_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12fpregs_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1A_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7fpstateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1A_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7fpstateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1C_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_3fpuNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1C_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_3fpuNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1D_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9fpu_guestNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1D_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9fpu_guestNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1E_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25cpuinfo_x86__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1E_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25cpuinfo_x86__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1F_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11cpuinfo_x86NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1F_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11cpuinfo_x86NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1H_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11entry_stackNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1H_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11entry_stackNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1I_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16entry_stack_pageNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1I_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16entry_stack_pageNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1J_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13x86_io_bitmapNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1J_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13x86_io_bitmapNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1K_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10tss_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1K_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10tss_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1L_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9irq_stackNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1L_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9irq_stackNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1M_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_17fixed_percpu_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1M_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_17fixed_percpu_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1N_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13thread_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1N_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13thread_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1P_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16preempt_notifierNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1P_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16preempt_notifierNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1Q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10llist_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1Q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10llist_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1R_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10llist_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1R_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10llist_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1S_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32___call_single_node__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1S_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32___call_single_node__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1T_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18___call_single_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1T_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18___call_single_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1U_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18___call_single_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1U_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18___call_single_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1V_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9lock_listNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1V_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9lock_listNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1W_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10lock_chainNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1W_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10lock_chainNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1Y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9held_lockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs1Y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9held_lockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs20_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_36spinlock__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs20_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_36spinlock__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs21_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_22spinlock__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs21_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_22spinlock__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs22_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8rwlock_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs22_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8rwlock_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs23_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16hlist_nulls_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs23_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16hlist_nulls_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs24_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16hlist_nulls_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs24_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16hlist_nulls_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs25_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16wait_queue_entryNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs25_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16wait_queue_entryNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs26_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15wait_queue_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs26_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15wait_queue_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs27_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_20optimistic_spin_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs27_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_20optimistic_spin_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs28_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_5mutexNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs28_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_5mutexNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs29_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8seqcountNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs29_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8seqcountNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2a_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_21seqcount_raw_spinlockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2a_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_21seqcount_raw_spinlockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2b_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_17seqcount_spinlockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2b_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_17seqcount_spinlockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2c_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15seqcount_rwlockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2c_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15seqcount_rwlockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2d_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14seqcount_mutexNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2d_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14seqcount_mutexNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2e_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16seqcount_latch_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2e_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16seqcount_latch_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2f_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9seqlock_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2f_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9seqlock_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2g_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15pcpu_group_infoNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2g_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15pcpu_group_infoNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15pcpu_alloc_infoNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15pcpu_alloc_infoNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2i_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9page_fragNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2i_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9page_fragNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2j_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7rb_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2j_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7rb_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2k_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7rb_rootNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2k_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7rb_rootNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2l_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14rb_root_cachedNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2l_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14rb_root_cachedNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2m_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_42maple_range_64__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2m_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_42maple_range_64__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2n_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_28maple_range_64__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2n_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_28maple_range_64__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2o_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14maple_range_64NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2o_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14maple_range_64NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2p_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15maple_arange_64NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2p_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15maple_arange_64NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11maple_allocNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11maple_allocNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2r_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13maple_topiaryNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2r_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13maple_topiaryNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2s_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_24maple_tree__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2s_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_24maple_tree__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2t_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10maple_treeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2t_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10maple_treeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2u_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_38maple_node__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2u_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_38maple_node__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2v_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_38maple_node__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2v_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_38maple_node__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2w_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_24maple_node__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2w_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_24maple_node__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2x_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10maple_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2x_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10maple_nodeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10ma_topiaryNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10ma_topiaryNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8ma_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8ma_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2A_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11ma_wr_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2A_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11ma_wr_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2B_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12rw_semaphoreNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2B_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12rw_semaphoreNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2C_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16swait_queue_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2C_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16swait_queue_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2D_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11swait_queueNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2D_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11swait_queueNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2E_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10completionNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2E_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10completionNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2F_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15uprobe_consumerNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2F_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15uprobe_consumerNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2G_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14___kernel_timexNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2G_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14___kernel_timexNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2I_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11old_timex32NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2I_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11old_timex32NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2J_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_20system_time_snapshotNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2J_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_20system_time_snapshotNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2K_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19system_counterval_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2K_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19system_counterval_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2L_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9debug_objNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2L_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9debug_objNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2M_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15debug_obj_descrNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2M_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15debug_obj_descrNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2N_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10timer_listNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2N_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10timer_listNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2O_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11work_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2O_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11work_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2P_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12delayed_workNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2P_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12delayed_workNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2Q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8rcu_workNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2Q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8rcu_workNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2R_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12execute_workNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2R_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12execute_workNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2S_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10rcu_cblistNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2S_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10rcu_cblistNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2T_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13rcu_segcblistNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2T_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13rcu_segcblistNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2U_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11srcu_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2U_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11srcu_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2V_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14notifier_blockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2V_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14notifier_blockNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2W_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_20atomic_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2W_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_20atomic_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2X_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_22blocking_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2X_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_22blocking_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2Y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_17raw_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2Y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_17raw_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2Z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18srcu_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs2Z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18srcu_notifier_headNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs30_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25arch_uprobe__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs30_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25arch_uprobe__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs31_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25arch_uprobe__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs31_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25arch_uprobe__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs32_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11arch_uprobeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs32_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11arch_uprobeNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs33_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_39uprobe_task__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs33_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_39uprobe_task__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs34_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25uprobe_task__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs34_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25uprobe_task__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs35_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11uprobe_taskNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs35_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11uprobe_taskNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs36_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15return_instanceNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs36_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15return_instanceNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs37_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13uprobes_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs37_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13uprobes_stateNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs38_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12mm_context_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs38_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12mm_context_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs39_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_60page__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs39_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_60page__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3a_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3a_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3b_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3b_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3c_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3c_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3d_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_2__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3d_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_2__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3e_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3e_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3f_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_4NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3f_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_4NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3g_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_5__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3g_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_46page__bindgen_ty_1__bindgen_ty_5__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+>> vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_5NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_5NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3i_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_6NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3i_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_32page__bindgen_ty_1__bindgen_ty_6NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3j_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18page__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3j_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18page__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3k_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18page__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3k_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18page__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3l_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_4pageNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3l_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_4pageNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3m_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_61folio__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3m_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_61folio__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3n_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_47folio__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3n_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_47folio__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3o_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_33folio__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3o_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_33folio__bindgen_ty_1__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3p_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19folio__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3p_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19folio__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19folio__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19folio__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3r_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_33folio__bindgen_ty_3__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3r_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_33folio__bindgen_ty_3__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3s_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_33folio__bindgen_ty_3__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3s_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_33folio__bindgen_ty_3__bindgen_ty_2NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3t_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19folio__bindgen_ty_3NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3t_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19folio__bindgen_ty_3NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3u_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_5folioNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3u_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_5folioNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3v_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15page_frag_cacheNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3v_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15page_frag_cacheNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3w_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9vm_regionNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3w_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9vm_regionNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_28vm_area_struct__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3y_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_28vm_area_struct__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14vm_area_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3z_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14vm_area_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3A_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_23mm_struct__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3A_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_23mm_struct__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3B_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9mm_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3B_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9mm_structNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3C_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12vma_iteratorNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3C_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12vma_iteratorNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3D_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18vm_special_mappingNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3D_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_18vm_special_mappingNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3E_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12local_lock_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3E_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_12local_lock_tNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3F_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9free_areaNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3F_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_9free_areaNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3G_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_6lruvecNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3G_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_6lruvecNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3H_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13per_cpu_pagesNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3H_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13per_cpu_pagesNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3I_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16per_cpu_nodestatNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3I_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16per_cpu_nodestatNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3J_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_4zoneNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3J_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_4zoneNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3K_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7zonerefNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3K_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_7zonerefNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3L_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8zonelistNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3L_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_8zonelistNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3M_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14deferred_splitNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3M_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_14deferred_splitNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3N_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11pglist_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3N_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11pglist_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3O_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10mhp_paramsNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3O_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10mhp_paramsNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3P_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11mem_sectionNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3P_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_11mem_sectionNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3Q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15scale_freq_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3Q_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15scale_freq_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3R_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15percpu_ref_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3R_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_15percpu_ref_dataNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3T_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10percpu_refNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3T_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10percpu_refNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3U_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19x86_legacy_featuresNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3U_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_19x86_legacy_featuresNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3V_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16x86_platform_opsNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs3V_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_16x86_platform_opsNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs45_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25local_apic__bindgen_ty_20NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs45_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25local_apic__bindgen_ty_20NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs47_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_39local_apic__bindgen_ty_29__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs47_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_39local_apic__bindgen_ty_29__bindgen_ty_1NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs49_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25local_apic__bindgen_ty_29NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs49_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_25local_apic__bindgen_ty_29NtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs4h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10local_apicNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs4h_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_10local_apicNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs4i_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13___va_list_tagNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0: data relocation to !ENDBR: _RNvXs4i_NtCs3XUU1alqrUZ_8bindings12bindings_rawNtB6_13___va_list_tagNtNtCs3yuwAp0waWO_4core7default7Default7default+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RINvMs0_NtNtCs3yuwAp0waWO_4core3ops5rangeINtB6_5RangehE8containshECsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RINvMs0_NtNtCs3yuwAp0waWO_4core3ops5rangeINtB6_5RangehE8containshECsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RINvYINtNtNtCs3yuwAp0waWO_4core3ops5range5RangehEINtB6_11RangeBoundshE8containshECsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RINvYINtNtNtCs3yuwAp0waWO_4core3ops5range5RangehEINtB6_11RangeBoundshE8containshECsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMs_NtCsdvv6pRyacSq_5alloc7raw_vecINtB4_6RawVechE14current_memoryCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvMs_NtCsdvv6pRyacSq_5alloc7raw_vecINtB4_6RawVechE14current_memoryCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMs_NtCsdvv6pRyacSq_5alloc7raw_vecINtB4_6RawVechE15try_allocate_inCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvMs_NtCsdvv6pRyacSq_5alloc7raw_vecINtB4_6RawVechE15try_allocate_inCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMs_NtCsdvv6pRyacSq_5alloc7raw_vecINtB4_6RawVechE6new_inCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvMs_NtCsdvv6pRyacSq_5alloc7raw_vecINtB4_6RawVechE6new_inCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtB2_5Write10write_charBw_+0x0: data relocation to !ENDBR: _RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtB2_5Write10write_charBw_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvYNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtNtCs3yuwAp0waWO_4core3fmt5Write10write_charB6_+0x0: data relocation to !ENDBR: _RNvYNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtNtCs3yuwAp0waWO_4core3fmt5Write10write_charB6_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtB2_5Write9write_fmtBw_+0x0: data relocation to !ENDBR: _RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtB2_5Write9write_fmtBw_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtB2_5Write9write_strBw_+0x0: data relocation to !ENDBR: _RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtB2_5Write9write_strBw_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str9FormatterNtB2_5Write10write_charBw_+0x0: data relocation to !ENDBR: _RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str9FormatterNtB2_5Write10write_charBw_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvYNtNtCsfATHBUcknU9_6kernel3str9FormatterNtNtCs3yuwAp0waWO_4core3fmt5Write10write_charB6_+0x0: data relocation to !ENDBR: _RNvYNtNtCsfATHBUcknU9_6kernel3str9FormatterNtNtCs3yuwAp0waWO_4core3fmt5Write10write_charB6_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str9FormatterNtB2_5Write9write_fmtBw_+0x0: data relocation to !ENDBR: _RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str9FormatterNtB2_5Write9write_fmtBw_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str9FormatterNtB2_5Write9write_strBw_+0x0: data relocation to !ENDBR: _RNvXNtCs3yuwAp0waWO_4core3fmtQNtNtCsfATHBUcknU9_6kernel3str9FormatterNtB2_5Write9write_strBw_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1_NtCs3yuwAp0waWO_4core7convertINtNtNtB7_3ptr6unique6UniquehEINtB5_4IntoINtNtBD_8non_null7NonNullhEE4intoCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs1_NtCs3yuwAp0waWO_4core7convertINtNtNtB7_3ptr6unique6UniquehEINtB5_4IntoINtNtBD_8non_null7NonNullhEE4intoCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1_NtCs3yuwAp0waWO_4core7convertNtNtCsdvv6pRyacSq_5alloc11collections19TryReserveErrorKindINtB5_4IntoNtBA_15TryReserveErrorE4intoCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs1_NtCs3yuwAp0waWO_4core7convertNtNtCsdvv6pRyacSq_5alloc11collections19TryReserveErrorKindINtB5_4IntoNtBA_15TryReserveErrorE4intoCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1_NtCsdvv6pRyacSq_5alloc7raw_vecINtB5_6RawVechENtNtNtCs3yuwAp0waWO_4core3ops4drop4Drop4dropCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs1_NtCsdvv6pRyacSq_5alloc7raw_vecINtB5_6RawVechENtNtNtCs3yuwAp0waWO_4core3ops4drop4Drop4dropCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2_NtCs3yuwAp0waWO_4core7convertNtNtB7_5alloc10AllocErrorINtB5_4FromBy_E4fromCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs2_NtCs3yuwAp0waWO_4core7convertNtNtB7_5alloc10AllocErrorINtB5_4FromBy_E4fromCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2_NtCs3yuwAp0waWO_4core7convertNtNtCsdvv6pRyacSq_5alloc11collections15TryReserveErrorINtB5_4FromBy_E4fromCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs2_NtCs3yuwAp0waWO_4core7convertNtNtCsdvv6pRyacSq_5alloc11collections15TryReserveErrorINtB5_4FromBy_E4fromCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2_NtCs3yuwAp0waWO_4core7convertNtNtNtB7_5alloc6layout11LayoutErrorINtB5_4FromBy_E4fromCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs2_NtCs3yuwAp0waWO_4core7convertNtNtNtB7_5alloc6layout11LayoutErrorINtB5_4FromBy_E4fromCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs8_NtCsdvv6pRyacSq_5alloc3vecINtB5_3VechENtNtNtCs3yuwAp0waWO_4core3ops5deref5Deref5derefCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXs8_NtCsdvv6pRyacSq_5alloc3vecINtB5_3VechENtNtNtCs3yuwAp0waWO_4core3ops5deref5Deref5derefCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsR_NtCs3yuwAp0waWO_4core3fmtRNtNtNtB7_5panic10panic_info9PanicInfoNtB5_7Display3fmtCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXsR_NtCs3yuwAp0waWO_4core3fmtRNtNtNtB7_5panic10panic_info9PanicInfoNtB5_7Display3fmtCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsg_NtNtCs3yuwAp0waWO_4core3ops5rangeINtB5_5RangehEINtB5_11RangeBoundshE11start_boundCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXsg_NtNtCs3yuwAp0waWO_4core3ops5rangeINtB5_5RangehEINtB5_11RangeBoundshE11start_boundCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsg_NtNtCs3yuwAp0waWO_4core3ops5rangeINtB5_5RangehEINtB5_11RangeBoundshE9end_boundCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXsg_NtNtCs3yuwAp0waWO_4core3ops5rangeINtB5_5RangehEINtB5_11RangeBoundshE9end_boundCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsk_NtCsdvv6pRyacSq_5alloc3vecINtB5_3VechENtNtNtCs3yuwAp0waWO_4core3ops4drop4Drop4dropCsfATHBUcknU9_6kernel+0x0: data relocation to !ENDBR: _RNvXsk_NtCsdvv6pRyacSq_5alloc3vecINtB5_3VechENtNtNtCs3yuwAp0waWO_4core3ops4drop4Drop4dropCsfATHBUcknU9_6kernel+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvYNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_fmtB6_+0x0: data relocation to !ENDBR: _RNvYNtNtCsfATHBUcknU9_6kernel3str12RawFormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_fmtB6_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvYNtNtCsfATHBUcknU9_6kernel3str9FormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_fmtB6_+0x0: data relocation to !ENDBR: _RNvYNtNtCsfATHBUcknU9_6kernel3str9FormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_fmtB6_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvYNtNtCsfATHBUcknU9_6kernel9allocator15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc12alloc_zeroedB6_+0x0: data relocation to !ENDBR: _RNvYNtNtCsfATHBUcknU9_6kernel9allocator15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc12alloc_zeroedB6_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvYNtNtCsfATHBUcknU9_6kernel9allocator15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc7reallocB6_+0x0: data relocation to !ENDBR: _RNvYNtNtCsfATHBUcknU9_6kernel9allocator15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc7reallocB6_+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCsfATHBUcknU9_6kernel9allocatorNtB2_15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc5alloc+0x0: data relocation to !ENDBR: _RNvXNtCsfATHBUcknU9_6kernel9allocatorNtB2_15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc5alloc+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXNtCsfATHBUcknU9_6kernel9allocatorNtB2_15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc7dealloc+0x0: data relocation to !ENDBR: _RNvXNtCsfATHBUcknU9_6kernel9allocatorNtB2_15KernelAllocatorNtNtNtCs3yuwAp0waWO_4core5alloc6global11GlobalAlloc7dealloc+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+__rust_alloc+0x0: data relocation to !ENDBR: __rust_alloc+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+__rust_dealloc+0x0: data relocation to !ENDBR: __rust_dealloc+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+__rust_realloc+0x0: data relocation to !ENDBR: __rust_realloc+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+__rust_alloc_zeroed+0x0: data relocation to !ENDBR: __rust_alloc_zeroed+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMNtCsfATHBUcknU9_6kernel5errorNtB2_5Error15to_kernel_errno+0x0: data relocation to !ENDBR: _RNvMNtCsfATHBUcknU9_6kernel5errorNtB2_5Error15to_kernel_errno+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs_NtCsfATHBUcknU9_6kernel5errorNtB4_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtBN_5alloc10AllocErrorE4from+0x0: data relocation to !ENDBR: _RNvXs_NtCsfATHBUcknU9_6kernel5errorNtB4_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtBN_5alloc10AllocErrorE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs0_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtNtBO_3num5error15TryFromIntErrorE4from+0x0: data relocation to !ENDBR: _RNvXs0_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtNtBO_3num5error15TryFromIntErrorE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtNtBO_3str5error9Utf8ErrorE4from+0x0: data relocation to !ENDBR: _RNvXs1_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtNtBO_3str5error9Utf8ErrorE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs2_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtCsdvv6pRyacSq_5alloc11collections15TryReserveErrorE4from+0x0: data relocation to !ENDBR: _RNvXs2_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtCsdvv6pRyacSq_5alloc11collections15TryReserveErrorE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs3_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtNtBO_5alloc6layout11LayoutErrorE4from+0x0: data relocation to !ENDBR: _RNvXs3_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtNtBO_5alloc6layout11LayoutErrorE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs4_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtBO_3fmt5ErrorE4from+0x0: data relocation to !ENDBR: _RNvXs4_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtNtBO_3fmt5ErrorE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs5_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtBM_10InfallibleE4from+0x0: data relocation to !ENDBR: _RNvXs5_NtCsfATHBUcknU9_6kernel5errorNtB5_5ErrorINtNtCs3yuwAp0waWO_4core7convert4FromNtBM_10InfallibleE4from+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+rust_fmt_argument+0x0: data relocation to !ENDBR: rust_fmt_argument+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvNtNtCsfATHBUcknU9_6kernel5print14format_strings8generate+0x0: data relocation to !ENDBR: _RNvNtNtCsfATHBUcknU9_6kernel5print14format_strings8generate+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvNtCsfATHBUcknU9_6kernel5print11call_printk+0x0: data relocation to !ENDBR: _RNvNtCsfATHBUcknU9_6kernel5print11call_printk+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvNtCsfATHBUcknU9_6kernel5print16call_printk_cont+0x0: data relocation to !ENDBR: _RNvNtCsfATHBUcknU9_6kernel5print16call_printk_cont+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMs_NtCsfATHBUcknU9_6kernel3strNtB4_4CStr19from_bytes_with_nul+0x0: data relocation to !ENDBR: _RNvMs_NtCsfATHBUcknU9_6kernel3strNtB4_4CStr19from_bytes_with_nul+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs0_NtCsfATHBUcknU9_6kernel3strNtB5_4CStrNtNtCs3yuwAp0waWO_4core3fmt7Display3fmt+0x0: data relocation to !ENDBR: _RNvXs0_NtCsfATHBUcknU9_6kernel3strNtB5_4CStrNtNtCs3yuwAp0waWO_4core3fmt7Display3fmt+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs1_NtCsfATHBUcknU9_6kernel3strNtB5_4CStrNtNtCs3yuwAp0waWO_4core3fmt5Debug3fmt+0x0: data relocation to !ENDBR: _RNvXs1_NtCsfATHBUcknU9_6kernel3strNtB5_4CStrNtNtCs3yuwAp0waWO_4core3fmt5Debug3fmt+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXs8_NtCsfATHBUcknU9_6kernel3strNtB5_12RawFormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_str+0x0: data relocation to !ENDBR: _RNvXs8_NtCsfATHBUcknU9_6kernel3strNtB5_12RawFormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_str+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsa_NtCsfATHBUcknU9_6kernel3strNtB5_9FormatterNtNtNtCs3yuwAp0waWO_4core3ops5deref5Deref5deref+0x0: data relocation to !ENDBR: _RNvXsa_NtCsfATHBUcknU9_6kernel3strNtB5_9FormatterNtNtNtCs3yuwAp0waWO_4core3ops5deref5Deref5deref+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsb_NtCsfATHBUcknU9_6kernel3strNtB5_9FormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_str+0x0: data relocation to !ENDBR: _RNvXsb_NtCsfATHBUcknU9_6kernel3strNtB5_9FormatterNtNtCs3yuwAp0waWO_4core3fmt5Write9write_str+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMsc_NtCsfATHBUcknU9_6kernel3strNtB5_7CString12try_from_fmt+0x0: data relocation to !ENDBR: _RNvMsc_NtCsfATHBUcknU9_6kernel3strNtB5_7CString12try_from_fmt+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvXsd_NtCsfATHBUcknU9_6kernel3strNtB5_7CStringNtNtNtCs3yuwAp0waWO_4core3ops5deref5Deref5deref+0x0: data relocation to !ENDBR: _RNvXsd_NtCsfATHBUcknU9_6kernel3strNtB5_7CStringNtNtNtCs3yuwAp0waWO_4core3ops5deref5Deref5deref+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+_RNvMs_CsfATHBUcknU9_6kernelNtB4_10ThisModule8from_ptr+0x0: data relocation to !ENDBR: _RNvMs_CsfATHBUcknU9_6kernelNtB4_10ThisModule8from_ptr+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+rust_begin_unwind+0x0: data relocation to !ENDBR: rust_begin_unwind+0x0
+   vmlinux.o: warning: objtool: ___ksymtab_gpl+__rg_alloc+0x0: data relocation to !ENDBR: __rg_alloc+0x0
+
+
+objdump-func vmlinux.o ___ksymtab_gpl:
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
