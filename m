@@ -1,44 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0250AA93E;
-	Thu, 19 Jan 2023 17:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E835A950;
+	Thu, 19 Jan 2023 18:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674147789; x=1705683789;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tb+2X4CHzKp5LNh1H+Of2aok4bomjhfO2l2hfHcLn0Q=;
-  b=eNqsqx5bk3HPrQKvUSpJ5oSDZ35XqJY0U39geIVDgfS/s1kWGqHWUU7q
-   odANBD+HXbVH11Yn/i+gb42tRAQS8UUMdTYXIbUkQjdMb8ZgZ2U9YfYz8
-   M+COHXKif9ZVAXtOwvVnSQV/S0cKZ17Pxuc74twC7G5CoicKNCr/k62SH
-   u5R8MEwQBuXzdWNOCuQGR+R3MuccBJQCBJxexIfzIFjqWNowkdcK+3A1G
-   oSxggRAgg+c9bbKHPAaq8BOUSwTa4CrtGYW3q0LG5+AVlR+vSC/dFLKST
-   4JEIto5w6FjhDDuLDLY9Hlkn4RhqbO4kLTJcnC+CKZ1ttvZ0DzDIeDjIp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="352599748"
+  t=1674152134; x=1705688134;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AuObEufoA3Wm8tjf1nQYv9YRCZkJED8LzXERE8u9S8E=;
+  b=MQh34vZ8QzzXl/mLlUHwyYcwGLchbHAsoH3j1S0m31dzOV97Uw9aO5Yl
+   r8os4r6mNFmTroNcnmoQqziUxwLgn3W10wiH0ZUvF8yY/9wFg9sELJ8+B
+   YidspZBGjGG/sXoqtXYd/URq/cPrMqsJVl+VAcGGv+SmHNOIKrRcnJrtL
+   sk1TKUsxoKOmOj5911fL0psVhIXVysw0aor2emXEaiW/pfTHu7AaMZICk
+   4ANjtSWwyRC/G+ldhPxdNygG9S1l4l21MzFflEZbGiepaAaDJufXnEnpT
+   P62V257HrnBneYVx13sTbBWV6od2fSIh98cCZpuwqVpVkagjHFr/GL8Kz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="324058304"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="352599748"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 09:03:03 -0800
+   d="scan'208";a="324058304"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 10:15:12 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="692495822"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="834082782"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="692495822"
+   d="scan'208";a="834082782"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Jan 2023 09:03:01 -0800
+  by orsmga005.jf.intel.com with ESMTP; 19 Jan 2023 10:15:10 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIYJY-0001eu-1C;
-	Thu, 19 Jan 2023 17:03:00 +0000
-Date: Fri, 20 Jan 2023 01:02:53 +0800
+	id 1pIZRI-0001iQ-1T;
+	Thu, 19 Jan 2023 18:15:04 +0000
+Date: Fri, 20 Jan 2023 02:14:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: [intel-tdx:kvm-upstream 96/190] ./usr/include/asm/kvm.h:599:22:
- warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at
- the end of a struct or class is a GNU extension
-Message-ID: <202301200137.cQZNeF30-lkp@intel.com>
+To: Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
+	mengyuanlou@net-swift.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH net-next 01/10] net: libwx: Add irq flow functions
+Message-ID: <202301200204.6nSc8Rre-lkp@intel.com>
+References: <20230118065504.3075474-2-jiawenwu@trustnetic.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,34 +47,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230118065504.3075474-2-jiawenwu@trustnetic.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream
-head:   6a57a45197c90b4d3fade588d2c49ab13ced5957
-commit: a0b5c459cce27c83a1275a3108f810299635d217 [96/190] KVM: TDX: initialize VM with TDX specific parameters
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230120/202301200137.cQZNeF30-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Jiawen,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiawen-Wu/net-libwx-Add-irq-flow-functions/20230118-154258
+patch link:    https://lore.kernel.org/r/20230118065504.3075474-2-jiawenwu%40trustnetic.com
+patch subject: [PATCH net-next 01/10] net: libwx: Add irq flow functions
+config: arm-randconfig-c002-20230118 (https://download.01.org/0day-ci/archive/20230120/202301200204.6nSc8Rre-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/a0b5c459cce27c83a1275a3108f810299635d217
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream
-        git checkout a0b5c459cce27c83a1275a3108f810299635d217
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/f807094d578ff552800fe8f9fd9f29ad766384b6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jiawen-Wu/net-libwx-Add-irq-flow-functions/20230118-154258
+        git checkout f807094d578ff552800fe8f9fd9f29ad766384b6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/wangxun/libwx/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/asm/kvm.h:599:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-                           struct kvm_cpuid2 cpuid;
-                                             ^
+>> drivers/net/ethernet/wangxun/libwx/wx_hw.c:890:41: warning: shift count >= width of type [-Wshift-count-overflow]
+           wr32(wx, WX_PX_ISB_ADDR_H, wx->isb_dma >> 32);
+                                                  ^  ~~
+   drivers/net/ethernet/wangxun/libwx/wx_type.h:478:37: note: expanded from macro 'wr32'
+   #define wr32(a, reg, value)     writel((value), ((a)->hw_addr + (reg)))
+                                           ^~~~~
+   arch/arm/include/asm/io.h:290:51: note: expanded from macro 'writel'
+   #define writel(v,c)             ({ __iowmb(); writel_relaxed(v,c); })
+                                                                ^
+   arch/arm/include/asm/io.h:282:68: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                                          ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
    1 warning generated.
+
+
+vim +890 drivers/net/ethernet/wangxun/libwx/wx_hw.c
+
+   885	
+   886	static void wx_configure_isb(struct wx *wx)
+   887	{
+   888		/* set ISB Address */
+   889		wr32(wx, WX_PX_ISB_ADDR_L, wx->isb_dma & DMA_BIT_MASK(32));
+ > 890		wr32(wx, WX_PX_ISB_ADDR_H, wx->isb_dma >> 32);
+   891	}
+   892	
 
 -- 
 0-DAY CI Kernel Test Service
