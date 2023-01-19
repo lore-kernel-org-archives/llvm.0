@@ -1,46 +1,40 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFA52C9C;
-	Thu, 19 Jan 2023 16:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674145984; x=1705681984;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ypde+LN+g2wDNHqn9/Asfg7XhMoC21zejHshDH5glOw=;
-  b=Tt60Og+BP5lR++5za4juACwaeXMoP2lcVPJx9a1fBrwNWvuIEReyn7AW
-   3fX/QvmZ9Lb0iGpEHCH/K4hL5qFdVLsSB7Sf40vaq/if0HLmb/Pj1vf2c
-   g7RRa9E/SEcOrX67lhDGsUNAxEgLo83hsEH3B3rwqPObh3Uut9b/2NXhA
-   dYq0MA8sB7Xig2FufTaEP/ePSk2e4104n4yNwk92NJ7KX6V0pXRiPk99O
-   /wvrAqvQTGsALJnvt+MQgtbl4kDqSE+Rm/vgYxiyZUmRhGS+GdvUYuKBL
-   tSC/CozJeqS7RfjXWV7k6MWDaQX/CAliLHzUw1VaHh478WQjCEuFVI5nQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="325377961"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="325377961"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 08:33:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="784119243"
-X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="784119243"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 08:33:00 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pIXqV-0001dC-17;
-	Thu, 19 Jan 2023 16:32:59 +0000
-Date: Fri, 20 Jan 2023 00:32:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Acayan <mailingradian@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Sam Ravnborg <sam@ravnborg.org>
-Subject: [drm-misc:drm-misc-next 3/7]
- drivers/gpu/drm/panel/panel-visionox-vtdr6130.c:249:6: warning: variable
- 'ret' is uninitialized when used here
-Message-ID: <202301200041.hwrKmLMy-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F942C9C
+	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 16:39:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DA9C433F2;
+	Thu, 19 Jan 2023 16:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1674146392;
+	bh=EzuLhfS+PRjXH8DDjLzCLF1bGHoITDNogKA9OB2ppdk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GTnd95ALmwH1RfdzNVzY3XsWXjhSDLkQP0z+4QwuWJH0j74kwq4YFdY8ucRi99rVM
+	 j7Xvgcz8TWoGJFsqJqqdkzGPrmeRc9gk2VsuMtuePJKR3iEFczd315/xcgIZysh9IN
+	 tkQiwy3tdJ4NE5Oztlscdb+w1+5x08D4ifuZzc9mjRuWqZit923u3z2C5YYrNC0uAG
+	 JrsycoqXtP8nFHVGmwfeN4tiWhEk7lNhM6jqYk/yMeP698743+KyK7rNhtsPulQo5k
+	 1ou5H+0GO3/OI/c7TSWrsVsXmblV2rr35xAs3Lv2JTP0mZ4M2hcjnqQs4k7Gzaw//s
+	 WlXh3IaFEFwpQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 311E1405BE; Thu, 19 Jan 2023 13:39:49 -0300 (-03)
+Date: Thu, 19 Jan 2023 13:39:49 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf buildid: Avoid copy of uninitialized memory
+Message-ID: <Y8lyVTwQqzWk0mLd@kernel.org>
+References: <20230113185732.134861-1-irogers@google.com>
+ <CAP-5=fXg28wcW93tfiN6mdFHj0+eSRE3dL3LTv53bRYuezjZDg@mail.gmail.com>
+ <Y8lv6oclCytPk7hN@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,63 +43,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Y8lv6oclCytPk7hN@kernel.org>
+X-Url: http://acmel.wordpress.com
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   43bde505d66a41c2ad706d603e97b2c8aa2fbe4a
-commit: 9402cde9347eca050e14ea9e47270e84a6899162 [3/7] drm/panel: vtdr6130: Use 16-bit brightness function
-config: mips-randconfig-r031-20230119 (https://download.01.org/0day-ci/archive/20230120/202301200041.hwrKmLMy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout 9402cde9347eca050e14ea9e47270e84a6899162
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/panel/
+Em Thu, Jan 19, 2023 at 01:29:30PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Jan 19, 2023 at 08:08:13AM -0800, Ian Rogers escreveu:
+> > On Fri, Jan 13, 2023 at 10:57 AM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > build_id__init only copies the buildid data up to size leaving the
+> > > rest of the data array uninitialized. Copying the full array during
+> > > synthesis means the written event contains uninitialized memory.  This
+> > > was detected by the Clang/LLVM memory sanitizer.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/util/synthetic-events.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+> > > index 3ab6a92b1a6d..348d05e4ec03 100644
+> > > --- a/tools/perf/util/synthetic-events.c
+> > > +++ b/tools/perf/util/synthetic-events.c
+> > > @@ -2219,7 +2219,7 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
+> > >
+> > >         len = pos->long_name_len + 1;
+> > >         len = PERF_ALIGN(len, NAME_ALIGN);
+> > > -       memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
+> > > +       memcpy(&ev.build_id.build_id, pos->bid.data, pos->bid.size);
+> > 
+> > Ping. Should be an uncontroversial change to fix a copy of
+> > uninitialized memory into the perf.data file during synthesis.
+> 
+> Indeed, applied.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Humm, don't we better do it as:
 
-All warnings (new ones prefixed by >>):
++       memcpy(&ev.build_id.build_id, pos->bid.data, min(pos->bid.size, sizeof(pos->bid.data));
 
->> drivers/gpu/drm/panel/panel-visionox-vtdr6130.c:249:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           if (ret < 0)
-               ^~~
-   drivers/gpu/drm/panel/panel-visionox-vtdr6130.c:246:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+Lemme check what is setting that pos->bid.size....
 
+Things like sysfs__read_build_id() that does such checks, but perhaps we
+should be defensive and do it in this function as well?
 
-vim +/ret +249 drivers/gpu/drm/panel/panel-visionox-vtdr6130.c
+- Arnaldo
 
-2349183d32d83a7 Neil Armstrong 2023-01-09  241  
-2349183d32d83a7 Neil Armstrong 2023-01-09  242  static int visionox_vtdr6130_bl_update_status(struct backlight_device *bl)
-2349183d32d83a7 Neil Armstrong 2023-01-09  243  {
-2349183d32d83a7 Neil Armstrong 2023-01-09  244  	struct mipi_dsi_device *dsi = bl_get_data(bl);
-2349183d32d83a7 Neil Armstrong 2023-01-09  245  	u16 brightness = backlight_get_brightness(bl);
-2349183d32d83a7 Neil Armstrong 2023-01-09  246  	int ret;
-2349183d32d83a7 Neil Armstrong 2023-01-09  247  
-9402cde9347eca0 Richard Acayan 2023-01-16  248  	mipi_dsi_dcs_set_display_brightness_large(dsi, brightness);
-2349183d32d83a7 Neil Armstrong 2023-01-09 @249  	if (ret < 0)
-2349183d32d83a7 Neil Armstrong 2023-01-09  250  		return ret;
-2349183d32d83a7 Neil Armstrong 2023-01-09  251  
-2349183d32d83a7 Neil Armstrong 2023-01-09  252  	return 0;
-2349183d32d83a7 Neil Armstrong 2023-01-09  253  }
-2349183d32d83a7 Neil Armstrong 2023-01-09  254  
-
-:::::: The code at line 249 was first introduced by commit
-:::::: 2349183d32d83a7635baa804934813bcad13fd62 drm/panel: add visionox vtdr6130 DSI panel driver
-
-:::::: TO: Neil Armstrong <neil.armstrong@linaro.org>
-:::::: CC: Neil Armstrong <neil.armstrong@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
