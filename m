@@ -1,178 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83145B425
-	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 18:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674154239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3iyB43M1TZeIrw3k8Sb6tZuZvB/h4Pid9sglBCL2odA=;
-	b=IJGC+MpQul/dPCuTwPwDfcTuHUiqdB7uaTi/SmcY3Fg0O2SPUYnbWEmjHQA/HBtwi11syk
-	KelrYjz0rF2/uCp1RQqFAe4VMleanwWQ2BhI/JZgTuUHSZEMu1iKl7jsc6HNj6Xw120zBm
-	qrwAJJJUrTGFWvww3QpM+dk6bzhlU9I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-647-sfGASz5dPBid2B81DwCm2g-1; Thu, 19 Jan 2023 13:50:38 -0500
-X-MC-Unique: sfGASz5dPBid2B81DwCm2g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E170C3C14103
-	for <llvm@lists.linux.dev>; Thu, 19 Jan 2023 18:50:37 +0000 (UTC)
-Received: from [172.64.0.101] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D22B140C2064;
-	Thu, 19 Jan 2023 18:50:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (35/383 SKIPPED): Test report for master
- (6.2.0-rc4, mainline.kernel.org-clang, 7287904c)
-Date: Thu, 19 Jan 2023 18:50:37 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4785EB36;
+	Thu, 19 Jan 2023 19:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674157694; x=1705693694;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r3frNLJx/8tkQ3XOoDV2BjOvJvEf1oUMfhHDiNIrhmE=;
+  b=Jnhk+kGpLH9k48si1Y96HEgsbGgpH7/IW1NpCk+5VTAkqubdPPrHIzZR
+   1M1/II3HHjdHelDzpkBuoMq7s9Y3FY+2IaVnYqcl3nKi2KnmPVX/Cyojw
+   xTh7+znUCAGbJoIxSjridpd9RlLtXiNajpKa/iopdE+TfFiOBJi0wJQGd
+   1TrDZX/J08GB+NJihKAuOm7GOR+xJtrpSV8Cf9G8UHXPs9bZvzZ0D9ZAo
+   H0hEDSGs88w3YyPg6L1Gjbou4IiXAFD4vZmIPt7NvrzyzYtMkYJGPhFRa
+   It2GziMiihzELYq6o+alCPWktCld4meAHqoFKjVjefff9YhSQIV99ezzs
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="324087779"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="324087779"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 11:48:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="989110098"
+X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
+   d="scan'208";a="989110098"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Jan 2023 11:48:10 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIatN-0001ng-0v;
+	Thu, 19 Jan 2023 19:48:09 +0000
+Date: Fri, 20 Jan 2023 03:47:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: alejandro.lucero-palau@amd.com, netdev@vger.kernel.org,
+	linux-net-drivers@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+	edumazet@google.com, habetsm@gmail.com, ecree.xilinx@gmail.com,
+	Alejandro Lucero <alejandro.lucero-palau@amd.com>
+Subject: Re: [PATCH net-next 5/7] sfc: obtain device mac address based on
+ firmware handle for ef100
+Message-ID: <202301200333.BjjkOStI-lkp@intel.com>
+References: <20230119113140.20208-6-alejandro.lucero-palau@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <05471.123011913503800327@us-mta-647.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119113140.20208-6-alejandro.lucero-palau@amd.com>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on net-next/master]
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-2023011801' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/hid/hid
+url:    https://github.com/intel-lab-lkp/linux/commits/alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230119-193440
+patch link:    https://lore.kernel.org/r/20230119113140.20208-6-alejandro.lucero-palau%40amd.com
+patch subject: [PATCH net-next 5/7] sfc: obtain device mac address based on firmware handle for ef100
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230120/202301200333.BjjkOStI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/94535fc2c87743925490d5ce0573b8e9b4b2690c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230119-193440
+        git checkout 94535fc2c87743925490d5ce0573b8e9b4b2690c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/sfc/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/66227
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6733896
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Storage - swraid simple_reshape: BUG bio-152 (Not tainted): =
-Objects remaining in bio-152 on __kmem_cache_shutdown()
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1255
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid simple_reshape
-        Issue: Storage - swraid simple_reshape: (panic) RIP: 0010:mempool_f=
-ree+0x53/0x80
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1359
-            Affected tests:
-                  x86_64 (debug) - Storage - swraid simple_reshape
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 ppc64le - Networking cki netfilter test
-                   s390x - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1172
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> drivers/net/ethernet/sfc/ef100_nic.c:1127:21: warning: unused variable 'net_dev' [-Wunused-variable]
+           struct net_device *net_dev = efx->net_dev;
+                              ^
+>> drivers/net/ethernet/sfc/ef100_nic.c:1172:9: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
+           return rc;
+                  ^~
+   drivers/net/ethernet/sfc/ef100_nic.c:1128:8: note: initialize the variable 'rc' to silence this warning
+           int rc;
+                 ^
+                  = 0
+   2 warnings generated.
 
 
+vim +/net_dev +1127 drivers/net/ethernet/sfc/ef100_nic.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+51b35a454efdcd Edward Cree      2020-07-27  1123  
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  1124  int ef100_probe_netdev_pf(struct efx_nic *efx)
+51b35a454efdcd Edward Cree      2020-07-27  1125  {
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  1126  	struct ef100_nic_data *nic_data = efx->nic_data;
+29ec1b27e73990 Edward Cree      2020-07-27 @1127  	struct net_device *net_dev = efx->net_dev;
+98ff4c7c8ac7f5 Jonathan Cooper  2022-06-28  1128  	int rc;
+29ec1b27e73990 Edward Cree      2020-07-27  1129  
+6f6838aabff5ea Edward Cree      2022-07-28  1130  	if (!nic_data->grp_mae)
+6f6838aabff5ea Edward Cree      2022-07-28  1131  		return 0;
+6f6838aabff5ea Edward Cree      2022-07-28  1132  
+6f6838aabff5ea Edward Cree      2022-07-28  1133  #ifdef CONFIG_SFC_SRIOV
+67ab160ed08f5b Edward Cree      2022-07-28  1134  	rc = efx_init_struct_tc(efx);
+67ab160ed08f5b Edward Cree      2022-07-28  1135  	if (rc)
+67ab160ed08f5b Edward Cree      2022-07-28  1136  		return rc;
+67ab160ed08f5b Edward Cree      2022-07-28  1137  
+6f6838aabff5ea Edward Cree      2022-07-28  1138  	rc = efx_ef100_get_base_mport(efx);
+6f6838aabff5ea Edward Cree      2022-07-28  1139  	if (rc) {
+6f6838aabff5ea Edward Cree      2022-07-28  1140  		netif_warn(efx, probe, net_dev,
+6f6838aabff5ea Edward Cree      2022-07-28  1141  			   "Failed to probe base mport rc %d; representors will not function\n",
+6f6838aabff5ea Edward Cree      2022-07-28  1142  			   rc);
+f393f2642abb0e Alejandro Lucero 2023-01-19  1143  	} else {
+f393f2642abb0e Alejandro Lucero 2023-01-19  1144  		if (efx_probe_devlink(efx))
+f393f2642abb0e Alejandro Lucero 2023-01-19  1145  			netif_warn(efx, probe, net_dev,
+f393f2642abb0e Alejandro Lucero 2023-01-19  1146  				   "Failed to register devlink\n");
+1542af777ce523 Alejandro Lucero 2023-01-19  1147  		rc = efx_init_mae(efx);
+1542af777ce523 Alejandro Lucero 2023-01-19  1148  		if (rc)
+1542af777ce523 Alejandro Lucero 2023-01-19  1149  			pci_warn(efx->pci_dev,
+1542af777ce523 Alejandro Lucero 2023-01-19  1150  				 "Failed to init MAE rc %d; representors will not function\n",
+1542af777ce523 Alejandro Lucero 2023-01-19  1151  				 rc);
+1542af777ce523 Alejandro Lucero 2023-01-19  1152  		else
+1542af777ce523 Alejandro Lucero 2023-01-19  1153  			efx_ef100_init_reps(efx);
+6f6838aabff5ea Edward Cree      2022-07-28  1154  	}
+67ab160ed08f5b Edward Cree      2022-07-28  1155  
+67ab160ed08f5b Edward Cree      2022-07-28  1156  	rc = efx_init_tc(efx);
+67ab160ed08f5b Edward Cree      2022-07-28  1157  	if (rc) {
+67ab160ed08f5b Edward Cree      2022-07-28  1158  		/* Either we don't have an MAE at all (i.e. legacy v-switching),
+67ab160ed08f5b Edward Cree      2022-07-28  1159  		 * or we do but we failed to probe it.  In the latter case, we
+67ab160ed08f5b Edward Cree      2022-07-28  1160  		 * may not have set up default rules, in which case we won't be
+67ab160ed08f5b Edward Cree      2022-07-28  1161  		 * able to pass any traffic.  However, we don't fail the probe,
+67ab160ed08f5b Edward Cree      2022-07-28  1162  		 * because the user might need to use the netdevice to apply
+67ab160ed08f5b Edward Cree      2022-07-28  1163  		 * configuration changes to fix whatever's wrong with the MAE.
+67ab160ed08f5b Edward Cree      2022-07-28  1164  		 */
+67ab160ed08f5b Edward Cree      2022-07-28  1165  		netif_warn(efx, probe, net_dev, "Failed to probe MAE rc %d\n",
+67ab160ed08f5b Edward Cree      2022-07-28  1166  			   rc);
+9dc0cad203ab57 Edward Cree      2022-09-26  1167  	} else {
+9dc0cad203ab57 Edward Cree      2022-09-26  1168  		net_dev->features |= NETIF_F_HW_TC;
+9dc0cad203ab57 Edward Cree      2022-09-26  1169  		efx->fixed_features |= NETIF_F_HW_TC;
+67ab160ed08f5b Edward Cree      2022-07-28  1170  	}
+6f6838aabff5ea Edward Cree      2022-07-28  1171  #endif
+29ec1b27e73990 Edward Cree      2020-07-27 @1172  	return rc;
+51b35a454efdcd Edward Cree      2020-07-27  1173  }
+51b35a454efdcd Edward Cree      2020-07-27  1174  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
