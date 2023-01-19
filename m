@@ -1,44 +1,45 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF716FC2;
-	Thu, 19 Jan 2023 12:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4976517CD;
+	Thu, 19 Jan 2023 13:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674131216; x=1705667216;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H269WeIV3twGlKdC3pI/QmxkXXeeNvBc5MicwYiQYEc=;
-  b=AHvUeoqXHS0zVMCJGSNGEwAxYMPoISZu2nLHpDOoATW1XTOy80YHtUMT
-   mbdUtfBNIMHTntZnJcbL5BO2OovA/+pBJ0Cb+JGNBxFTdVdfbGg/hJx5I
-   L3ChPk/FfncAPAhvX0Y4yKbIn+3pOKbjBz+ZW2cy05+ihurwbdTDt8oBl
-   UpjP66MoOlcXh0vP56UgZ7NwG54MSuEzP6mOOHtAtCNEGDRUzdisTmuyl
-   J8AEV0uuvhNuUjARiNj40yZjGO/n+TFMfbku6zdkNUax0Fv9KtaWmdv3n
-   5NrWPKG6FxFubIIDYJH411FIQ6cWdKnYzaAnHnMF97jyrVEtQrTQQwUco
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411509851"
+  t=1674133675; x=1705669675;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JHXr2lVCMfu9VDmArbixtj+Zpgn0iNLOM99dk1iotyE=;
+  b=aQq9ZMTj127kchDpNuYrPM2tAXfR4Ep59NVG8Fpr/RhagPkyX5wOp6rH
+   QUkHmxA43sh/7tJXHVKyjIoBfETKwiLrI7Ze7oFG5eZibTMEuHOgkWXwv
+   NxjDqFSxt8KnP9vY+dg/NVu6QrZZzJlvYx4XEY5dsYQepbg91HtWr1w0R
+   gnjrLLlMBE52yiMZA7aIkMDSLMgYPQsFT74+2CxLbV1L9/1z027Pbqrh6
+   GtmfhgajglS9vZbeFN7Mgeciao14cNWJhEKKI0JolSQMX/+t70lIBM3gj
+   BpFgbQzjkoFaNV+XtdRJBNdCayt23P2rKV9VpjkBqdM1K3w+uxf6lmDSD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="327356187"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="411509851"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 04:26:56 -0800
+   d="scan'208";a="327356187"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 05:07:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="784050177"
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="768213831"
 X-IronPort-AV: E=Sophos;i="5.97,229,1669104000"; 
-   d="scan'208";a="784050177"
+   d="scan'208";a="768213831"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jan 2023 04:26:55 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2023 05:07:52 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIU0H-0001Re-29;
-	Thu, 19 Jan 2023 12:26:49 +0000
-Date: Thu, 19 Jan 2023 20:26:02 +0800
+	id 1pIUdz-0001Tg-1y;
+	Thu, 19 Jan 2023 13:07:51 +0000
+Date: Thu, 19 Jan 2023 21:06:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zhang Yi <yi.zhang@huaweicloud.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/2] jbd2: cycled record log on clean journal logging
- area
-Message-ID: <202301192010.lD5VIFC1-lkp@intel.com>
-References: <20230119034600.3431194-2-yi.zhang@huaweicloud.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: drivers/gpu/drm/rockchip/cdn-dp-core.c:54:34: warning: unused
+ variable 'cdn_dp_dt_ids'
+Message-ID: <202301192035.D1DRWUt4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,128 +48,265 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119034600.3431194-2-yi.zhang@huaweicloud.com>
 
-Hi Zhang,
+Hi Masahiro,
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master v6.2-rc4 next-20230119]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+First bad commit (maybe != root cause):
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Yi/jbd2-cycled-record-log-on-clean-journal-logging-area/20230119-131055
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230119034600.3431194-2-yi.zhang%40huaweicloud.com
-patch subject: [RFC PATCH 1/2] jbd2: cycled record log on clean journal logging area
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230119/202301192010.lD5VIFC1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7287904c8771b77b9504f53623bb477065c19a58
+commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
+date:   1 year, 10 months ago
+config: s390-randconfig-r015-20230119 (https://download.01.org/0day-ci/archive/20230119/202301192035.D1DRWUt4-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d06b20c3b83cb41caf3ae4c0fdc0fbae9697dc20
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhang-Yi/jbd2-cycled-record-log-on-clean-journal-logging-area/20230119-131055
-        git checkout d06b20c3b83cb41caf3ae4c0fdc0fbae9697dc20
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ea29b20a828511de3348334e529a3d046a180416
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/jbd2/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/gpu/drm/rockchip/ drivers/pci/controller/dwc/ kernel/locking/ sound/soc/codecs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/jbd2/recovery.c:330:38: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
-                     journal->j_transaction_sequence, journal->j_head);
-                                                      ^~~~~~~~~~~~~~~
-   include/linux/jbd2.h:63:52: note: expanded from macro 'jbd2_debug'
-   #define jbd2_debug(n, fmt, a...)  no_printk(fmt, ##a)
-                                               ~~~    ^
-   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:457:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:14:
+   In file included from include/linux/blk-cgroup.h:23:
+   In file included from include/linux/blkdev.h:26:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/gpu/drm/rockchip/cdn-dp-core.c:12:
+   In file included from include/linux/phy/phy.h:17:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:14:
+   In file included from include/linux/blk-cgroup.h:23:
+   In file included from include/linux/blkdev.h:26:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/gpu/drm/rockchip/cdn-dp-core.c:12:
+   In file included from include/linux/phy/phy.h:17:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:14:
+   In file included from include/linux/blk-cgroup.h:23:
+   In file included from include/linux/blkdev.h:26:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/gpu/drm/rockchip/cdn-dp-core.c:12:
+   In file included from include/linux/phy/phy.h:17:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:22:
+   In file included from include/linux/writeback.h:14:
+   In file included from include/linux/blk-cgroup.h:23:
+   In file included from include/linux/blkdev.h:26:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/gpu/drm/rockchip/cdn-dp-core.c:54:34: warning: unused variable 'cdn_dp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id cdn_dp_dt_ids[] = {
+                                    ^
+   drivers/gpu/drm/rockchip/cdn-dp-core.c:1124:12: warning: unused function 'cdn_dp_resume' [-Wunused-function]
+   static int cdn_dp_resume(struct device *dev)
+              ^
+   22 warnings generated.
+--
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
+                     ^
+   In file included from drivers/pci/controller/dwc/pcie-armada8k.c:19:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
+                     ^
+   In file included from drivers/pci/controller/dwc/pcie-armada8k.c:19:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
+                     ^
+   In file included from drivers/pci/controller/dwc/pcie-armada8k.c:19:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
+           ___constant_swab32(x) :                 \
+                              ^
+   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
+           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+                     ^
+   In file included from drivers/pci/controller/dwc/pcie-armada8k.c:19:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
+           __fswab32(x))
+                     ^
+   In file included from drivers/pci/controller/dwc/pcie-armada8k.c:19:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:80:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/pci/controller/dwc/pcie-armada8k.c:337:34: warning: unused variable 'armada8k_pcie_of_match' [-Wunused-const-variable]
+   static const struct of_device_id armada8k_pcie_of_match[] = {
+                                    ^
+   21 warnings generated.
 
 
-vim +330 fs/jbd2/recovery.c
+vim +/cdn_dp_dt_ids +54 drivers/gpu/drm/rockchip/cdn-dp-core.c
 
-   277	
-   278	/**
-   279	 * jbd2_journal_recover - recovers a on-disk journal
-   280	 * @journal: the journal to recover
-   281	 *
-   282	 * The primary function for recovering the log contents when mounting a
-   283	 * journaled device.
-   284	 *
-   285	 * Recovery is done in three passes.  In the first pass, we look for the
-   286	 * end of the log.  In the second, we assemble the list of revoke
-   287	 * blocks.  In the third and final pass, we replay any un-revoked blocks
-   288	 * in the log.
-   289	 */
-   290	int jbd2_journal_recover(journal_t *journal)
-   291	{
-   292		int			err, err2;
-   293		journal_superblock_t *	sb;
-   294	
-   295		struct recovery_info	info;
-   296	
-   297		memset(&info, 0, sizeof(info));
-   298		sb = journal->j_superblock;
-   299	
-   300		/*
-   301		 * The journal superblock's s_start field (the current log head)
-   302		 * is always zero if, and only if, the journal was cleanly
-   303		 * unmounted.
-   304		 */
-   305		if (!sb->s_start) {
-   306			jbd2_debug(1, "No recovery required, last transaction %d, head block %u\n",
-   307				  be32_to_cpu(sb->s_sequence), be32_to_cpu(sb->s_head));
-   308			journal->j_transaction_sequence = be32_to_cpu(sb->s_sequence) + 1;
-   309			journal->j_head = be32_to_cpu(sb->s_head);
-   310			return 0;
-   311		}
-   312	
-   313		err = do_one_pass(journal, &info, PASS_SCAN);
-   314		if (!err)
-   315			err = do_one_pass(journal, &info, PASS_REVOKE);
-   316		if (!err)
-   317			err = do_one_pass(journal, &info, PASS_REPLAY);
-   318	
-   319		jbd2_debug(1, "JBD2: recovery, exit status %d, "
-   320			  "recovered transactions %u to %u\n",
-   321			  err, info.start_transaction, info.end_transaction);
-   322		jbd2_debug(1, "JBD2: Replayed %d and revoked %d/%d blocks\n",
-   323			  info.nr_replays, info.nr_revoke_hits, info.nr_revokes);
-   324	
-   325		/* Restart the log at the next transaction ID, thus invalidating
-   326		 * any existing commit records in the log. */
-   327		journal->j_transaction_sequence = ++info.end_transaction;
-   328		journal->j_head = info.head_block;
-   329		jbd2_debug(1, "JBD2: last transaction %d, head block %u\n",
- > 330			  journal->j_transaction_sequence, journal->j_head);
-   331	
-   332		jbd2_journal_clear_revoke(journal);
-   333		err2 = sync_blockdev(journal->j_fs_dev);
-   334		if (!err)
-   335			err = err2;
-   336		/* Make sure all replayed data is on permanent storage */
-   337		if (journal->j_flags & JBD2_BARRIER) {
-   338			err2 = blkdev_issue_flush(journal->j_fs_dev);
-   339			if (!err)
-   340				err = err2;
-   341		}
-   342		return err;
-   343	}
-   344	
+1a0f7ed3abe29c Chris Zhong 2017-02-05  53  
+1a0f7ed3abe29c Chris Zhong 2017-02-05 @54  static const struct of_device_id cdn_dp_dt_ids[] = {
+1a0f7ed3abe29c Chris Zhong 2017-02-05  55  	{ .compatible = "rockchip,rk3399-cdn-dp",
+1a0f7ed3abe29c Chris Zhong 2017-02-05  56  		.data = (void *)&rk3399_cdn_dp },
+1a0f7ed3abe29c Chris Zhong 2017-02-05  57  	{}
+1a0f7ed3abe29c Chris Zhong 2017-02-05  58  };
+1a0f7ed3abe29c Chris Zhong 2017-02-05  59  
+
+:::::: The code at line 54 was first introduced by commit
+:::::: 1a0f7ed3abe29cff8e652c69a8ad89aec2c40f00 drm/rockchip: cdn-dp: add cdn DP support for rk3399
+
+:::::: TO: Chris Zhong <zyw@rock-chips.com>
+:::::: CC: Mark Yao <mark.yao@rock-chips.com>
 
 -- 
 0-DAY CI Kernel Test Service
