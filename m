@@ -1,43 +1,49 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4635B17E6;
-	Fri, 20 Jan 2023 10:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E71BD1B;
+	Fri, 20 Jan 2023 10:42:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674210118; x=1705746118;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XyT1HyQebNHPSHKbRZII44QqKqxeBiybIZwwJCwDm9c=;
-  b=B7GnIgyr3fKKkFHMwYF2Kqeq4ppLCrTCpN3L7obyKcjsBP4M5b4skZyT
-   L3GJ50UA0t6waBknWcboLzCR+IcYvhSoJJk9nxrjuo3SWoOWPZRyOQ0Dh
-   CzNZ2yyOPO9D4yN4gb7BRZcvJT/loEusS+jsuIK98QefA83e+IQCQmieb
-   ior2TAwhaDp3l/B0KpCRZqvMdS1a0s0Dc5u0rNMtSOvTAGP8mEiibOoa9
-   mMDZ04blNMloKDOHW65sNDzkSrOd+tzdTEoT9Hf8yVxOH+oofb8uvt+/7
-   5C+lUxeZOHGShRiNJyW9tnEOFdOZ7mJvvIVw03lR/r7ob+rB8MVuJIwm7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="411781195"
+  t=1674211321; x=1705747321;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XPxVO354YpreWss5276fPUvT7LOCPFt0rGnfz3brLiE=;
+  b=oBO1+8n8/b6FcEHUY+2okeoEQMpt4VrFIvR6BNqdCrAIgvI7S1jAruve
+   tCK9YrMzcW3ACZL7O8Zke3HhpFaOXV0OG1G7aFap+PtYN5UJVL/0kC70F
+   6sznLXpWSOfr9NwZKZOrSEfZQDRtzdfdtZnVQwAqyMz0oaetL/fqJUdvD
+   eCz/PLrRKYBUoTYor4/Qs9LfzG5ZQtoh42taIikyXnvJe2pwFtJbSOGZp
+   lz2TguZosjNN0B6UTi0JcFuuPgdpwOf7i+QmCwjgf6l40obXTK9AeCfwK
+   9tujbdZn1K1QPaymmghjNK6MX/mdaqKwROO83DOrLizA416mX3+h9QXsa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="352805947"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="411781195"
+   d="scan'208";a="352805947"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 02:21:57 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 02:42:00 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="638115166"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="638120096"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="638115166"
+   d="scan'208";a="638120096"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 02:21:55 -0800
+  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 02:41:56 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pIoWx-0002TG-0c;
-	Fri, 20 Jan 2023 10:21:55 +0000
-Date: Fri, 20 Jan 2023 18:21:15 +0800
+	id 1pIoqJ-0002Ti-1f;
+	Fri, 20 Jan 2023 10:41:55 +0000
+Date: Fri, 20 Jan 2023 18:41:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Suraj Jitindar Singh <sjitindarsingh@gmail.com>
-Subject: [madvenka786:orc_v3 20/21] kernel/trace/ftrace.c:2766:13: error:
- redefinition of 'ftrace_instruction_pointer_set'
-Message-ID: <202301201855.2M51dYdX-lkp@intel.com>
+To: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, jackmanb@google.com, renauld@google.com,
+	paul@paul-moore.com, casey@schaufler-ca.com, song@kernel.org,
+	revest@chromium.org, keescook@chromium.org,
+	KP Singh <kpsingh@kernel.org>
+Subject: Re: [PATCH RESEND bpf-next 3/4] security: Replace indirect LSM hook
+ calls with static calls
+Message-ID: <202301201845.mf9dWfym-lkp@intel.com>
+References: <20230120000818.1324170-4-kpsingh@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,61 +52,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230120000818.1324170-4-kpsingh@kernel.org>
 
-tree:   https://github.com/madvenka786/linux orc_v3
-head:   a0c212ed0823caa5a7ec431d3a5ec07b46964384
-commit: 1fabd84ba1fcc2dffd5d1c9cdb4844f780947738 [20/21] arm64: Miscellaneous changes required for enabling livepatch
-config: s390-randconfig-r044-20230119 (https://download.01.org/0day-ci/archive/20230120/202301201855.2M51dYdX-lkp@intel.com/config)
+Hi KP,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/KP-Singh/kernel-Add-helper-macros-for-loop-unrolling/20230120-133309
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230120000818.1324170-4-kpsingh%40kernel.org
+patch subject: [PATCH RESEND bpf-next 3/4] security: Replace indirect LSM hook calls with static calls
+config: hexagon-randconfig-r041-20230119 (https://download.01.org/0day-ci/archive/20230120/202301201845.mf9dWfym-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/madvenka786/linux/commit/1fabd84ba1fcc2dffd5d1c9cdb4844f780947738
-        git remote add madvenka786 https://github.com/madvenka786/linux
-        git fetch --no-tags madvenka786 orc_v3
-        git checkout 1fabd84ba1fcc2dffd5d1c9cdb4844f780947738
+        # https://github.com/intel-lab-lkp/linux/commit/1dfb90849b42d8af6e854cd6ae8cd96d1ebfc50a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review KP-Singh/kernel-Add-helper-macros-for-loop-unrolling/20230120-133309
+        git checkout 1dfb90849b42d8af6e854cd6ae8cd96d1ebfc50a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
+   In file included from kernel/bpf/syscall.c:5:
+   In file included from include/linux/bpf-cgroup.h:11:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __raw_readb(PCI_IOBASE + addr);
                              ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/bpf/syscall.c:5:
+   In file included from include/linux/bpf-cgroup.h:11:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/ftrace.c:18:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/bpf/syscall.c:5:
+   In file included from include/linux/bpf-cgroup.h:11:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writeb(value, PCI_IOBASE + addr);
                                ~~~~~~~~~~ ^
@@ -110,71 +134,20 @@ All errors (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   kernel/trace/ftrace.c:299:5: warning: no previous prototype for function '__register_ftrace_function' [-Wmissing-prototypes]
-   int __register_ftrace_function(struct ftrace_ops *ops)
-       ^
-   kernel/trace/ftrace.c:299:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __register_ftrace_function(struct ftrace_ops *ops)
-   ^
-   static 
-   kernel/trace/ftrace.c:342:5: warning: no previous prototype for function '__unregister_ftrace_function' [-Wmissing-prototypes]
-   int __unregister_ftrace_function(struct ftrace_ops *ops)
-       ^
-   kernel/trace/ftrace.c:342:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __unregister_ftrace_function(struct ftrace_ops *ops)
-   ^
-   static 
-   kernel/trace/ftrace.c:2766:6: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void __weak ftrace_instruction_pointer_set(struct ftrace_regs *fregs,
-        ^
-   include/linux/compiler_attributes.h:373:56: note: expanded from macro '__weak'
-   #define __weak                          __attribute__((__weak__))
-                                                          ^
-   arch/s390/include/asm/ftrace.h:57:29: note: previous definition is here
-   static __always_inline void ftrace_instruction_pointer_set(struct ftrace_regs *fregs,
-                               ^
->> kernel/trace/ftrace.c:2766:13: error: redefinition of 'ftrace_instruction_pointer_set'
-   void __weak ftrace_instruction_pointer_set(struct ftrace_regs *fregs,
-               ^
-   arch/s390/include/asm/ftrace.h:57:29: note: previous definition is here
-   static __always_inline void ftrace_instruction_pointer_set(struct ftrace_regs *fregs,
-                               ^
-   kernel/trace/ftrace.c:4004:15: warning: no previous prototype for function 'arch_ftrace_match_adjust' [-Wmissing-prototypes]
-   char * __weak arch_ftrace_match_adjust(char *str, const char *search)
-                 ^
-   kernel/trace/ftrace.c:4004:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   char * __weak arch_ftrace_match_adjust(char *str, const char *search)
-   ^
-   static 
-   16 warnings and 1 error generated.
+   In file included from kernel/bpf/syscall.c:31:
+   In file included from include/linux/bpf_lsm.h:12:
+>> include/linux/lsm_hooks.h:36:10: fatal error: 'generated/lsm_count.h' file not found
+   #include <generated/lsm_count.h>
+            ^~~~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
-vim +/ftrace_instruction_pointer_set +2766 kernel/trace/ftrace.c
+vim +36 include/linux/lsm_hooks.h
 
-  2765	
-> 2766	void __weak ftrace_instruction_pointer_set(struct ftrace_regs *fregs,
-  2767						   unsigned long pc)
-  2768	{
-  2769	}
-  2770	
+    34	
+    35	/* Include the generated MAX_LSM_COUNT */
+  > 36	#include <generated/lsm_count.h>
+    37	
 
 -- 
 0-DAY CI Kernel Test Service
