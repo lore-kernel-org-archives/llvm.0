@@ -1,91 +1,73 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341EB7474;
-	Fri, 20 Jan 2023 21:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674249691; x=1705785691;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+LPXapS4CaPeAk20B5zbKNGlz1ZD0Z9f9AOdtAx4To8=;
-  b=gZOY63LR+tA5fAGRF29huN1jFI/iQoLfTQapy1s1AHwIXl50k7y7Zyvu
-   33Key4LLEtZS6GHOXwsrLc74QiTzCmsR4uJ5n25b+VluvQ2B0DeP87Jjp
-   A9Gtbm2Etonn5e5DkpF/vgmZzehSv1oHRVT1SQMYbCIlPin4H5WZD9jhF
-   LgdWW4alkh1LSHilpa2pNnKda3mYvipFkTvdedjD+Fp3rvYlU7aCb64B4
-   jgqSUwEwezI2HSsaH15gRBqAwnKFfEzP003KPGiRXPTYRGmYaBBazwf/k
-   9ECwEy/7NVclq6at+vzqLCs0c/1N5BRh3m3Na5giU+WyRGcIKui8Pqh9M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="305368002"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="305368002"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 13:21:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="989533300"
-X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="989533300"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Jan 2023 13:21:27 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pIypC-0002yc-1G;
-	Fri, 20 Jan 2023 21:21:26 +0000
-Date: Sat, 21 Jan 2023 05:21:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: alejandro.lucero-palau@amd.com, netdev@vger.kernel.org,
-	linux-net-drivers@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-	edumazet@google.com, habetsm@gmail.com, ecree.xilinx@gmail.com,
-	Alejandro Lucero <alejandro.lucero-palau@amd.com>
-Subject: Re: [PATCH net-next 4/7] sfc: add devlink port support for ef100
-Message-ID: <202301210559.Gj6wK4CN-lkp@intel.com>
-References: <20230119113140.20208-5-alejandro.lucero-palau@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0157474;
+	Fri, 20 Jan 2023 21:41:51 +0000 (UTC)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-4ff07dae50dso45727527b3.2;
+        Fri, 20 Jan 2023 13:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mOYAowSd7KdH13kScqSab02fekUH0oBpoj4QfPYHtOU=;
+        b=obSzTawbgOHAY/jNsW686SIXhdTy7YEp1CcM6JVTU5MzND0BY3RSw+ILQM+ujtNh7Z
+         vQHy7uDMXafbLGj5PcXvi56BlXkY3iqNEc2Qu2h6JgGWUnqyWiaWVkmALsuXIl6yB7zG
+         BDf6s6DuczALhA01QXnNOsjE9Lf4RdUPeOdVvomqTcNwoH3rLMxKy02CRuGwWZZgxwe6
+         ejETJdyb68hgpzfWWKZdBqDXZSlxTqz8MS7BGA8XHSM1y6CaJX0hSpInuX074spj9uD/
+         ckfzVi50cNTjYxBCQfWCzGY+eHa2LNVZz69L4Iq4eTg0T+NxGP+WSQ/SqEBUt66GWVSZ
+         Gv3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mOYAowSd7KdH13kScqSab02fekUH0oBpoj4QfPYHtOU=;
+        b=lADs5lwDMh4BnT4rL772n3rNPeOF9X/JMAyYt2KK4M5WXUd6KUlCnpOgyfE8RBkLJt
+         yxnio6m44ErC9SQreIvX6Xf5iiolO9Ep8dxoK1L7LVY41tT/wf37QX0YJgOwadYbD5e+
+         bm8/Fm/1zPdSyiKV0gYlGy+BVL9CtUmarkBNbHnqOI4jjA5Rr4Pt6vPEiydqd6eq8EEY
+         esfoV2jtqm0prfsNSJLY//CGV5582314GDhSgT8CHufFXWx/WFCcPQYXcu6UyCsWSTgx
+         oIQhMBR2GPnkzlBAvB+iAAd8lzb5/uL2NI6cQWXGrmnWw1KoQFnQMFccJDxreBAqvCOW
+         Ox1Q==
+X-Gm-Message-State: AFqh2kqarnsmJFvQ3dz8RmbuZN36rMAva3/UqeSpP8BdLAdETNkxgHhG
+	chXeCx2up+1k2HgiQI7wgoD4iRZIkjXp41Po3/8=
+X-Google-Smtp-Source: AMrXdXs5hoII1AVkYzBjAEblS9wLMone8oD7aZCaO6dCFaR1LTvUeUtEEe//6jWbZtAjFcCMdmJYpPKSwNduchhu6wc=
+X-Received: by 2002:a81:57d6:0:b0:501:2887:8c8e with SMTP id
+ l205-20020a8157d6000000b0050128878c8emr382936ywb.256.1674250910832; Fri, 20
+ Jan 2023 13:41:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119113140.20208-5-alejandro.lucero-palau@amd.com>
+References: <202301201612.50oSpQHu-lkp@intel.com>
+In-Reply-To: <202301201612.50oSpQHu-lkp@intel.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 20 Jan 2023 22:41:39 +0100
+Message-ID: <CANiq72=UD2Wnx4WgJSeKyL6WGytadG9p0Dt8YHL2cD-0zhsc4Q@mail.gmail.com>
+Subject: Re: [PATCH 4/5] rust: types: implement `ForeignOwnable` for the unit type
+To: kernel test robot <lkp@intel.com>, Yujie Liu <yujie.liu@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi kernel test robot, Yujie,
 
-Thank you for the patch! Yet something to improve:
+On Fri, Jan 20, 2023 at 9:15 AM kernel test robot <lkp@intel.com> wrote:
+>
+> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230120/202301201612.50oSpQHu-lkp@intel.com/config)
 
-[auto build test ERROR on net-next/master]
+Could you please disable `CONFIG_RETPOLINE` and
+`CONFIG_X86_KERNEL_IBT` for the Rust config? (e.g. like in KernelCI
+https://github.com/kernelci/kernelci-core/blob/main/config/core/build-configs.yaml#L410)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230119-193440
-patch link:    https://lore.kernel.org/r/20230119113140.20208-5-alejandro.lucero-palau%40amd.com
-patch subject: [PATCH net-next 4/7] sfc: add devlink port support for ef100
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230121/202301210559.Gj6wK4CN-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5b06b1ae6605af55ed8127878054f8d69046b83c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230119-193440
-        git checkout 5b06b1ae6605af55ed8127878054f8d69046b83c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+We are discussing whether to add a `depends on !` or other approaches
+on the kernel side, which may make that redundant, but meanwhile it
+would be great if you could update the config.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-ERROR: modpost: "efx_ef100_fini_reps" [drivers/net/ethernet/sfc/sfc.ko] undefined!
-ERROR: modpost: "efx_fini_mae" [drivers/net/ethernet/sfc/sfc.ko] undefined!
->> ERROR: modpost: "efx_mae_lookup_mport" [drivers/net/ethernet/sfc/sfc.ko] undefined!
->> ERROR: modpost: "efx_mae_get_mport" [drivers/net/ethernet/sfc/sfc.ko] undefined!
->> ERROR: modpost: "ef100_mport_on_local_intf" [drivers/net/ethernet/sfc/sfc.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Miguel
