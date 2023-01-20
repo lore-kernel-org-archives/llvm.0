@@ -1,42 +1,47 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB4B256E;
-	Fri, 20 Jan 2023 23:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13696256E;
+	Fri, 20 Jan 2023 23:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674257074; x=1705793074;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i2Kz2Ki18gYc4Eh9rn7zozY5S7hTLmiNvjzBVfSWqeU=;
-  b=QEGpLCGkID2dDsFSVzpJCblnh5qSSHcv4yiIILOeXkLDTxpjMU/AHX1B
-   t4t4Ct7nm60vlCaGIY47MwchWPUZBAYsf69gg2LTHixHoeC2e/20A12JT
-   KBbnUyqEQWwvvjBn/EbJNR5pNERawf5QKZMp8YZo7iS7ygTyxpExiqWWV
-   MZa+/Rw2TmEKZL9X7HibL7wdh/+JXxaAUM6RwulMZ4df8hyAZZ0OobuSU
-   YlB1+xR27LJb+QGvfFSmitJjLTWjsounRqiewrM4n/PmSKA59+Ief2qJv
-   6Lluu7JAuQ8G5frHfjoS0R7pEPyPprAT4iaCPItETLE14jzrNkRvcE2aH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="388084177"
+  t=1674257676; x=1705793676;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ekt4X4xR1TAIasVRR9OHuNebiCvC80dSkNaTSp9S32E=;
+  b=IoU/V4IstOBvaGOyFLypl4QDQQFUbP40evXobSfbwhpZtLHaZ2nWy3So
+   nJu7KgVJkf9wxsta14ilICcns+YHwYFFjVaziSrgBaRokqB+T0nUIYTEY
+   moNh8AFYTrn1zNngLL5/ZW7Lb52OJj5Kae28KqI8VQaWuzSfHm4RS9FRN
+   KNToyq6NduMoRw7YBNkujDuFoIb0akTjUJ46/2yLOSyIMzs8cmd5cPxHS
+   2ZiO2K5e2t+9g/Vm2Sj3NnTZz+Shd581tjeGqNCc+uLB5NAVN/Im13FyV
+   AbM5Q16d731eihZHP/gVymqAoJr1UU5SYUDy/7K7YbFslSpxbnLiUz2pd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="313613667"
 X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="388084177"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 15:24:33 -0800
+   d="scan'208";a="313613667"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 15:34:35 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="610624383"
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="749525893"
 X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
-   d="scan'208";a="610624383"
+   d="scan'208";a="749525893"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 20 Jan 2023 15:24:32 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jan 2023 15:34:32 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pJ0kJ-00035m-0B;
-	Fri, 20 Jan 2023 23:24:31 +0000
-Date: Sat, 21 Jan 2023 07:23:33 +0800
+	id 1pJ0tz-00036K-2C;
+	Fri, 20 Jan 2023 23:34:31 +0000
+Date: Sat, 21 Jan 2023 07:34:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/attach_btfid 1/2] net/bpf/test_func_2.c:8:5:
- warning: no previous prototype for function 'bpf_test_func2_globl'
-Message-ID: <202301210742.Zfz0SOHI-lkp@intel.com>
+To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, jk@ozlabs.org, joel@jms.id.au,
+	alistair@popple.id.au, devicetree@vger.kernel.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	Eddie James <eajames@linux.ibm.com>
+Subject: Re: [PATCH 2/2] fsi: Add IBM I2C Responder virtual FSI master
+Message-ID: <202301210758.mY8JSNOf-lkp@intel.com>
+References: <20230119174714.1486042-3-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,61 +50,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230119174714.1486042-3-eajames@linux.ibm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/attach_btfid
-head:   cfc34e8e2edc1d8ab7dde3a065bf708448ee9680
-commit: 52454dab859150561a4e93ff6c98a7d9be86679c [1/2] bpf: Add multiple bpf_test_func functions
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230121/202301210742.Zfz0SOHI-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Eddie,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.2-rc4 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/dt-bindings-fsi-Document-the-IBM-I2C-Responder-virtual-FSI-master/20230120-014831
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230119174714.1486042-3-eajames%40linux.ibm.com
+patch subject: [PATCH 2/2] fsi: Add IBM I2C Responder virtual FSI master
+config: arm-randconfig-c002-20230120 (https://download.01.org/0day-ci/archive/20230121/202301210758.mY8JSNOf-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=52454dab859150561a4e93ff6c98a7d9be86679c
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/attach_btfid
-        git checkout 52454dab859150561a4e93ff6c98a7d9be86679c
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/1312ba80b81ef02457d213ee6bc6ee80739c3e01
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eddie-James/dt-bindings-fsi-Document-the-IBM-I2C-Responder-virtual-FSI-master/20230120-014831
+        git checkout 1312ba80b81ef02457d213ee6bc6ee80739c3e01
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/fsi/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/bpf/test_func_2.c:8:5: warning: no previous prototype for function 'bpf_test_func2_globl' [-Wmissing-prototypes]
-   int bpf_test_func2_globl(int a)
-       ^
-   net/bpf/test_func_2.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_test_func2_globl(int a)
-   ^
-   static 
-   1 warning generated.
---
->> net/bpf/test_func_1.c:9:5: warning: no previous prototype for function 'bpf_test_func1_globl' [-Wmissing-prototypes]
-   int bpf_test_func1_globl(struct bpf_prog *prog)
-       ^
-   net/bpf/test_func_1.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_test_func1_globl(struct bpf_prog *prog)
-   ^
-   static 
-   1 warning generated.
---
->> net/bpf/test_func_3.c:9:5: warning: no previous prototype for function 'bpf_test_func3_globl' [-Wmissing-prototypes]
-   int bpf_test_func3_globl(struct bpf_prog *prog)
-       ^
-   net/bpf/test_func_3.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_test_func3_globl(struct bpf_prog *prog)
-   ^
-   static 
-   1 warning generated.
+>> drivers/fsi/fsi-master-i2cr.c:214:12: error: incompatible function pointer types initializing 'void (*)(struct i2c_client *)' with an expression of type 'int (struct i2c_client *)' [-Wincompatible-function-pointer-types]
+           .remove = i2cr_remove,
+                     ^~~~~~~~~~~
+   1 error generated.
 
 
-vim +/bpf_test_func2_globl +8 net/bpf/test_func_2.c
+vim +214 drivers/fsi/fsi-master-i2cr.c
 
-     7	
-   > 8	int bpf_test_func2_globl(int a)
+   211	
+   212	static struct i2c_driver i2cr_driver = {
+   213		.probe_new = i2cr_probe,
+ > 214		.remove = i2cr_remove,
+   215		.driver = {
+   216			.name = "i2cr",
+   217			.of_match_table = i2cr_i2c_ids,
+   218		},
+   219	};
+   220	
 
 -- 
 0-DAY CI Kernel Test Service
