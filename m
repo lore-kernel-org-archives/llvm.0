@@ -1,91 +1,127 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466F220EF
-	for <llvm@lists.linux.dev>; Fri, 20 Jan 2023 18:58:40 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-4c8e781bc0aso60182727b3.22
-        for <llvm@lists.linux.dev>; Fri, 20 Jan 2023 10:58:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=68orcaC6zz4yh42URgC/a9ocEH5eMY9g7tAnmpuRu0U=;
-        b=WNTK3yTY8uIAwslAVYOxaLgjPBSTBNADsLlJcs4wVM2i+mwdBi98fG+N9/9iPIS0yc
-         LJKYipiY96DE871/jJLOP3SwwmvmFPqp84J33MN2EAZ2qeN5YfjPCXEi0gULzYbSNTY6
-         /4ORT31UDpsWZRnmMmw7Wfzmv2BH/cokhri/PMFTqukUo5fIH14Kof+5ijzON08bA9b6
-         fA6z2ycBL+DUd8C+Ik8O5Pk2AOda7/XOQOSs4XUn4LISrg8FbEm3KIU+wyHPvgr69tE2
-         cz1zFUYSB8UJkHgr4t78a9r/DSw3tqQvC5q0My+SN8T+3IfpHpcJ7qiXgIpzlURBul2p
-         p1OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=68orcaC6zz4yh42URgC/a9ocEH5eMY9g7tAnmpuRu0U=;
-        b=xcmLfz9Ab5l/5763paTzbXZRo7LexL36z+QHDvbd3bDlJfLfYo55eqCSLPTdjW0+bD
-         LPdWEdqDVj0OnwgObZ2L2FZMERgYSvzKKUaNHiHvq/BCu4r8djmitzUh7IqDduw+li3o
-         M0itKMmg8F7TP5v9ekSZJm2BZcGhWKKlblFtNH80st3NYpmG4/vvcJPLY37crAYfer9D
-         9rq34n2ygGGYqmXRhzswqyfoNKGq/23OfCmCrPNoBGcaeSctyiTIfEcqXpgDzznHApua
-         ftr9Ua/oM4spnkDXRrY8HZIrPi3km69nfbVj8O4F4dZKyp9MHDfvL/dW7r9I9sy7xPCq
-         oNWQ==
-X-Gm-Message-State: AFqh2kr4cNKtHS3uutyPaMqqzWg3ML9Aw298jjHCn3RWVmrGusZMJRc+
-	8CwberTV6QWYa+srPktmjrVsqyCI/H0Y
-X-Google-Smtp-Source: AMrXdXuR0UGEvg0tmZsuCJFjqwMeNjP70VdhJX4rPI/yED1obovEegVXuTIVRHcRLI9m8lPABvuYksRokxPA
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a736:5d8d:4ad8:4e50])
- (user=irogers job=sendgmr) by 2002:a05:690c:887:b0:500:ac2c:80fb with SMTP id
- cd7-20020a05690c088700b00500ac2c80fbmr278306ywb.90.1674241119207; Fri, 20 Jan
- 2023 10:58:39 -0800 (PST)
-Date: Fri, 20 Jan 2023 10:58:28 -0800
-Message-Id: <20230120185828.43231-1-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E86569E;
+	Fri, 20 Jan 2023 19:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674241705; x=1705777705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xtYLh5cCbuko2Qpbfy5LnQspRBl8mkaXM2fjsHpiBBQ=;
+  b=EQDY1qW3Y8rAsqvOMbobJ9PKOxLLmSy4zCnmBjMbxGYdOXrTo+tWmFNS
+   kgb+1brhfPJeGpRJs8ImQXy+VKYz5Neg6rkc5GcgfE1QFdAS9+m3pYquD
+   HEw8M+RzQ8vZwad6yvHegDvOqmKHmGeR5T+JcF0Ii+EXPnoREM71pSe7K
+   xez1g9qbf9aQl2FQMfzLQZpBES0KZhtKvN8tDQhuIBOLFxtOIj6HQ4wgl
+   7FHYvkWYBCLoMZ3S3y30tjmP/lpZAUnfNxCHgD5ADbQ44JTxTkvPzVdYb
+   XRL+tODHpo3exprSkZU5GjZUQkakzndJK+MYxaaTkQ3nZuZr1X5Nu3212
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="309236499"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="309236499"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 11:08:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="662634474"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="662634474"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jan 2023 11:08:18 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIwkL-0002py-2L;
+	Fri, 20 Jan 2023 19:08:17 +0000
+Date: Sat, 21 Jan 2023 03:08:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	XU pengfei <xupengfei@nfschina.com>
+Subject: Re: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*)
+ conversions
+Message-ID: <202301210322.r2vwtdN5-lkp@intel.com>
+References: <20230111043729.3792-1-xupengfei@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Subject: [PATCH v2] perf buildid: Avoid copy of uninitialized memory
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Stephane Eranian <eranian@google.com>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230111043729.3792-1-xupengfei@nfschina.com>
 
-build_id__init only copies the buildid data up to size leaving the
-rest of the data array uninitialized. Copying the full array during
-synthesis means the written event contains uninitialized
-memory. Ensure the size is less that the buffer size and only copy the
-bytes that were initialized. This was detected by the Clang/LLVM
-memory sanitizer.
+Hi XU,
 
-Suggested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
+Thank you for the patch! Yet something to improve:
 
-v2. Avoids the potential for copying too much as suggested by Arnaldo.
----
- tools/perf/util/synthetic-events.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.2-rc4 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 3ab6a92b1a6d..9ab9308ee80c 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -2219,8 +2219,8 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
- 
- 	len = pos->long_name_len + 1;
- 	len = PERF_ALIGN(len, NAME_ALIGN);
--	memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
--	ev.build_id.size = pos->bid.size;
-+	ev.build_id.size = min(pos->bid.size, sizeof(pos->bid.data));
-+	memcpy(&ev.build_id.build_id, pos->bid.data, ev.build_id.size);
- 	ev.build_id.header.type = PERF_RECORD_HEADER_BUILD_ID;
- 	ev.build_id.header.misc = misc | PERF_RECORD_MISC_BUILD_ID_SIZE;
- 	ev.build_id.pid = machine->pid;
+url:    https://github.com/intel-lab-lkp/linux/commits/XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230111043729.3792-1-xupengfei%40nfschina.com
+patch subject: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*) conversions
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230121/202301210322.r2vwtdN5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2eb252eb3b198f857b200cd1b3aee679a7129baa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+        git checkout 2eb252eb3b198f857b200cd1b3aee679a7129baa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/powr1220.c:177:24: error: initializing 'struct powr1220_data *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           struct powr1220_data *chip_data = data;
+                                 ^           ~~~~
+   1 error generated.
+
+
+vim +177 drivers/hwmon/powr1220.c
+
+   172	
+   173	static umode_t
+   174	powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+   175			    attr, int channel)
+   176	{
+ > 177		struct powr1220_data *chip_data = data;
+   178	
+   179		if (channel >= chip_data->max_channels)
+   180			return 0;
+   181	
+   182		switch (type) {
+   183		case hwmon_in:
+   184			switch (attr) {
+   185			case hwmon_in_input:
+   186			case hwmon_in_highest:
+   187			case hwmon_in_label:
+   188				return 0444;
+   189			default:
+   190				break;
+   191			}
+   192			break;
+   193		default:
+   194			break;
+   195		}
+   196	
+   197		return 0;
+   198	}
+   199	
+
 -- 
-2.39.0.246.g2a6d74b583-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
