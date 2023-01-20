@@ -1,40 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A043C38
-	for <llvm@lists.linux.dev>; Fri, 20 Jan 2023 17:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E56C433EF;
-	Fri, 20 Jan 2023 17:46:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674236788;
-	bh=axk4Q29thU+/2qOWoJvqnkruSHK8wbJBV2o6Qc9n6nc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U7zTUSMp5DLb5y7gvaWzY6j3Hu8wrRIfMxCbD8/r8KoWEZa8qMCnaUsx93HGztcGQ
-	 gt6c/ErGOhZ0AcyFnz59XM+/fcrWhXm7NhfHBcj0z4ztJ6DbqLjmXsAqb7npn49kn6
-	 GLUXc6e0/D6oTCiXT2b0DkjMR5AxJXgxl+OKW86sF/Ckx0Hqph1WzYL9mMITYSAkr8
-	 1CAlivJ6Aam/CYBrACQvxvHyTGKiVxvMZEXEE/hIRTf9Gte0muCNoMVAl7rRF4j6Gq
-	 H7xwwMY3MXw1Fvi+hTiU53DR4a2ko/1HarDDvi9tkE+ZB/yjM96kZkSufrwLRRKtTo
-	 4xy5knsWtW40A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 6E824405BE; Fri, 20 Jan 2023 14:46:25 -0300 (-03)
-Date: Fri, 20 Jan 2023 14:46:25 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org, Nathan Chancellor <natechancellor@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Subject: Re: pahole: New version 1.25 release?
-Message-ID: <Y8rTcfB78f0G7C1j@kernel.org>
-References: <CA+icZUVbv2T7SExVULn6Bh1mB=VpmYGbH-4U63PKrHPyi6uULQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148183C38;
+	Fri, 20 Jan 2023 18:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674239245; x=1705775245;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bK/QfWInN9l3kz5q4PkVtOoQHNxxsyUB2TiL2Yk9kJ0=;
+  b=VxMToYYwWpsRgF5n1nr84yJzmbagMU1C2AiK57JidYL3jerQ31SpgwS0
+   pvVi6pWTE9WMSCBK02ol6uA2Hbdi0isj7xPRZBiFzj1jWK6EUfyOSIWob
+   5LULO8C+8U1qtNDaij2ab8HfkOHr+nPPD+06xfmasGxYM27aCIPuvEWXC
+   AvZedJW10aNp6PdcTnWPpZSGopgNjN+syIB5TzIN/Q9bDTK4ZekNO3+A1
+   bVpsgdKi1WXO+wate5WRS3FMocdI2IK7iytnzAhq+zkSNGIU8+0EzXIZD
+   aUX6TW+YpSzNXG46EaibP44ms+Skb3b9g4cdJUBnyUYXu6HUzfeC4beH0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="305325485"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="305325485"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 10:27:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="691145006"
+X-IronPort-AV: E=Sophos;i="5.97,233,1669104000"; 
+   d="scan'208";a="691145006"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jan 2023 10:27:21 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIw6d-0002o3-2q;
+	Fri, 20 Jan 2023 18:27:15 +0000
+Date: Sat, 21 Jan 2023 02:26:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: XU pengfei <xupengfei@nfschina.com>, jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	XU pengfei <xupengfei@nfschina.com>
+Subject: Re: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*)
+ conversions
+Message-ID: <202301210219.P2QHV5eM-lkp@intel.com>
+References: <20230111043729.3792-1-xupengfei@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,115 +50,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+icZUVbv2T7SExVULn6Bh1mB=VpmYGbH-4U63PKrHPyi6uULQ@mail.gmail.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20230111043729.3792-1-xupengfei@nfschina.com>
 
-Em Fri, Jan 20, 2023 at 06:40:38PM +0100, Sedat Dilek escreveu:
-> Hi Arnaldo,
-> 
-> I use CONFIG_DEBUG_INFO_BTF=y with LLVM-15.
-> 
-> Darkly, I remember I needed some post-v1.24 fixes.
-> 
-> Currently, I use:
-> 
-> $ git describe
-> v1.24-26-gb72f5188856d
-> 
-> commit b72f5188856d
-> "dwarves: Zero-initialize struct cu in cu__new() to prevent incorrect BTF types"
-> 
-> Any plans to release a pahole version 1.25?
+Hi XU,
 
-Probably next week, I just have to differentiate a file with split dwarf
-to remove a slight hack I have right now.
+Thank you for the patch! Yet something to improve:
 
-- Arnaldo
- 
-> Thanks.
-> 
-> Best regards,
-> -Sedat-
-> 
-> P.S.: I still carry this diff around (attached as diff as Gmail might
-> truncate the following lines):
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.2-rc4 next-20230120]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ok, that is in the same function I have to differentiate if the file
-makes reference to another DWARF file (the split dwarf, .dwz thing),
-I'll check this patch, thanks!
- 
-> $ cd /path/to/pahole.git
-> 
-> $ git diff dwarf_loader.c
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 5a74035c5708..96ce5db4f5bc 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -2808,8 +2808,8 @@ static int __cus__load_debug_types(struct
-> conf_load *conf, Dwfl_Module *mod, Dwa
->        return 0;
-> }
-> 
-> -/* Match the define in linux:include/linux/elfnote.h */
-> -#define LINUX_ELFNOTE_BUILD_LTO                0x101
-> +/* Match the define in linux:include/linux/elfnote-lto.h */
-> +#define LINUX_ELFNOTE_LTO_INFO         0x101
-> 
-> static bool cus__merging_cu(Dwarf *dw, Elf *elf)
-> {
-> @@ -2827,7 +2827,7 @@ static bool cus__merging_cu(Dwarf *dw, Elf *elf)
->                        size_t name_off, desc_off, offset = 0;
->                        GElf_Nhdr hdr;
->                        while ((offset = gelf_getnote(data, offset,
-> &hdr, &name_off, &desc_off)) != 0) {
-> -                               if (hdr.n_type != LINUX_ELFNOTE_BUILD_LTO)
-> +                               if (hdr.n_type != LINUX_ELFNOTE_LTO_INFO)
->                                        continue;
-> 
->                                /* owner is Linux */
-> 
-> $ cd /path/to/linux.git
-> 
-> $ git describe
-> v6.2-rc4-77-gd368967cb103
-> 
-> $ git grep LINUX_ELFNOTE_LTO_INFO include/linux/elfnote-lto.h
-> include/linux/elfnote-lto.h:#define LINUX_ELFNOTE_LTO_INFO      0x101
-> include/linux/elfnote-lto.h:#define BUILD_LTO_INFO
-> ELFNOTE32("Linux", LINUX_ELFNOTE_LTO_INFO, 1)
-> include/linux/elfnote-lto.h:#define BUILD_LTO_INFO
-> ELFNOTE32("Linux", LINUX_ELFNOTE_LTO_INFO, 0)
-> dileks@iniza:~/src/linux/git$ git describe
-> v6.2-rc4-195-gf609936e078d
-> 
-> -EOT-
+url:    https://github.com/intel-lab-lkp/linux/commits/XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230111043729.3792-1-xupengfei%40nfschina.com
+patch subject: [PATCH 1/1] hwmon: powr1220: remove unnecessary (void*) conversions
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230121/202301210219.P2QHV5eM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2eb252eb3b198f857b200cd1b3aee679a7129baa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review XU-pengfei/hwmon-powr1220-remove-unnecessary-void-conversions/20230111-123826
+        git checkout 2eb252eb3b198f857b200cd1b3aee679a7129baa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/
 
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 5a74035c5708..96ce5db4f5bc 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -2808,8 +2808,8 @@ static int __cus__load_debug_types(struct conf_load *conf, Dwfl_Module *mod, Dwa
->  	return 0;
->  }
->  
-> -/* Match the define in linux:include/linux/elfnote.h */
-> -#define LINUX_ELFNOTE_BUILD_LTO		0x101
-> +/* Match the define in linux:include/linux/elfnote-lto.h */
-> +#define LINUX_ELFNOTE_LTO_INFO		0x101
->  
->  static bool cus__merging_cu(Dwarf *dw, Elf *elf)
->  {
-> @@ -2827,7 +2827,7 @@ static bool cus__merging_cu(Dwarf *dw, Elf *elf)
->  			size_t name_off, desc_off, offset = 0;
->  			GElf_Nhdr hdr;
->  			while ((offset = gelf_getnote(data, offset, &hdr, &name_off, &desc_off)) != 0) {
-> -				if (hdr.n_type != LINUX_ELFNOTE_BUILD_LTO)
-> +				if (hdr.n_type != LINUX_ELFNOTE_LTO_INFO)
->  					continue;
->  
->  				/* owner is Linux */
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/powr1220.c:177:24: error: initializing 'struct powr1220_data *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           struct powr1220_data *chip_data = data;
+                                 ^           ~~~~
+   1 error generated.
+
+
+vim +177 drivers/hwmon/powr1220.c
+
+   172	
+   173	static umode_t
+   174	powr1220_is_visible(const void *data, enum hwmon_sensor_types type, u32
+   175			    attr, int channel)
+   176	{
+ > 177		struct powr1220_data *chip_data = data;
+   178	
+   179		if (channel >= chip_data->max_channels)
+   180			return 0;
+   181	
+   182		switch (type) {
+   183		case hwmon_in:
+   184			switch (attr) {
+   185			case hwmon_in_input:
+   186			case hwmon_in_highest:
+   187			case hwmon_in_label:
+   188				return 0444;
+   189			default:
+   190				break;
+   191			}
+   192			break;
+   193		default:
+   194			break;
+   195		}
+   196	
+   197		return 0;
+   198	}
+   199	
 
 -- 
-
-- Arnaldo
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
