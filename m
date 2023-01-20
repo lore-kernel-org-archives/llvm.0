@@ -1,81 +1,88 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EAAF17F1
-	for <llvm@lists.linux.dev>; Fri, 20 Jan 2023 11:11:03 +0000 (UTC)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 41E5A660230B;
-	Fri, 20 Jan 2023 11:11:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1674213062;
-	bh=k6CDrFMFNBBTo0iy9o/fuYF/D5i8QlRkB7/+jV9nrOk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nR+3UleAsemunHhYoEqXI5W7peTA3EirkVKy8eb6C+4stfe002V6194laqGu7APx1
-	 Vq9FjWlC9bupqdQXvEZSuubvETGn5mVVAiGo6JeGHEI5HjZpq6MT4jVHnak7WngAFL
-	 YF6GHS9RY5/nqHCkgKb2388iTWbVBhGhyB9L1emHwn7UWjM2+na5qPs7Zlg51LMpBQ
-	 o0rW2bDLmAu8JFLLVDi9Hf80IfUnlwNrO5xvkse0ZyS3nEXk9V9wuy/waegO3ba95E
-	 AGTnlCQBFIcsl5vN0wL2kZiePJT9uhgIe18rh6jeRhoX5q3FakFtEUmdb4bxIcNUrb
-	 +NruoKUBw4hqg==
-Message-ID: <91627ce5-1eb0-1a8d-3e73-4966cb7a817f@collabora.com>
-Date: Fri, 20 Jan 2023 12:10:59 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D6D20FE;
+	Fri, 20 Jan 2023 12:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674218884; x=1705754884;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LUBHi1ynB6nfqeRM3/q0ASSVR/uoti55AgThzFFaECE=;
+  b=ngjjfErRARYV3TN1TyHo1clN/5vu/4byI0HN5mnETJNd32+s2COt9qul
+   78+EToocqaImXkFQyqE6UCJvxmBahMRDQyCKvAKZ/5ZvyeVIcKdi2zIoT
+   r3jCEFBiX4HR89ZE33lor+3ugb3E9VRiS2lLQuBx5DMmSjFDMc47cpEo/
+   gRA0LAF7de5rnOc7aK1NmNSqvQmqASsRiImlaFhYoOCBIKoRxATSvTbsP
+   jhTBF1P+VWIEUeOHoplvL4he0yERC+pEcN0iXZQ8ClaADQ6+3ggESE5t6
+   +JzK6o5QFlwcFUrrUluvS1nxyiFuXR7mNxelw3gbzUxgfk8J+f5wRMhtv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="313457288"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="313457288"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 04:48:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="660573932"
+X-IronPort-AV: E=Sophos;i="5.97,232,1669104000"; 
+   d="scan'208";a="660573932"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 20 Jan 2023 04:48:00 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIqoK-0002Ys-0E;
+	Fri, 20 Jan 2023 12:48:00 +0000
+Date: Fri, 20 Jan 2023 20:47:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: alejandro.lucero-palau@amd.com, netdev@vger.kernel.org,
+	linux-net-drivers@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+	edumazet@google.com, habetsm@gmail.com, ecree.xilinx@gmail.com,
+	Alejandro Lucero <alejandro.lucero-palau@amd.com>
+Subject: Re: [PATCH net-next 2/7] sfc: enumerate mports in ef100
+Message-ID: <202301202052.7U4BpPHW-lkp@intel.com>
+References: <20230119113140.20208-3-alejandro.lucero-palau@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v30 00/11] Add MediaTek SoC(vdosys1) support for mt8195
-Content-Language: en-US
-To: "Nancy.Lin" <nancy.lin@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, CK Hu <ck.hu@mediatek.com>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
- Nathan Lu <nathan.lu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
- Xinlei Lee <xinlei.lee@mediatek.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, llvm@lists.linux.dev,
- singo.chang@mediatek.com, Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230113104434.28023-1-nancy.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230113104434.28023-1-nancy.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119113140.20208-3-alejandro.lucero-palau@amd.com>
 
-Il 13/01/23 11:44, Nancy.Lin ha scritto:
-> The hardware path of vdosys1 with DPTx output need to go through by several modules, such as, OVL_ADAPTOR and MERGE.
-> 
-> Add mmsys and mutex modules support by the patches below:
-> 
-> Changes in v30:
+Hi,
 
-Matthias, can you please pick this one?
+Thank you for the patch! Yet something to improve:
 
-It reached -> v30 <-.... I think that's way beyond being enough versions :-P
+[auto build test ERROR on net-next/master]
 
-P.S.: We have MT8195 support and Tomato Chromebook support, but the display
-       doesn't work because of the VDOSYS1 soc+drm[1] not being there...
-       I'd really like to get this machine fully upstreamed.
+url:    https://github.com/intel-lab-lkp/linux/commits/alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230119-193440
+patch link:    https://lore.kernel.org/r/20230119113140.20208-3-alejandro.lucero-palau%40amd.com
+patch subject: [PATCH net-next 2/7] sfc: enumerate mports in ef100
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230120/202301202052.7U4BpPHW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1542af777ce523b4aab61fcb7c17d63a68db4cea
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230119-193440
+        git checkout 1542af777ce523b4aab61fcb7c17d63a68db4cea
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=707095
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Also, CK, please can you coordinate with Matthias so that we get both series
-merged in now?
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Thanks,
-Angelo
+>> ERROR: modpost: "efx_ef100_fini_reps" [drivers/net/ethernet/sfc/sfc.ko] undefined!
+>> ERROR: modpost: "efx_fini_mae" [drivers/net/ethernet/sfc/sfc.ko] undefined!
 
-> - rebase to next-20230113
-> - fix reviewer comment in v29
->    - fix mmysy binding doc for vdosys1
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
