@@ -1,42 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8E217C8
-	for <llvm@lists.linux.dev>; Fri, 20 Jan 2023 01:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CFAC433EF;
-	Fri, 20 Jan 2023 01:15:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674177303;
-	bh=lLzTOxxNjaiQKOPlo3L6pPfggeDPqcWEZB1PMvTcy6A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NQNuijB4n4kkGrzv324l0NBBy1ipJBEK+maRGfVoBchwhY9nt4uuL9KykH5Tix8mV
-	 Atk+0PxofGkqOdSDgM7IauQa47LEegSTOe0s08ouVyZglvAUpz+t6cetrcabg5TSoi
-	 TadqePjFJLI+jiOuLOnZ5FqRw2wWn1wKvKCWfyx6w4Wyvw1r45fZDv5v0ZMB07O5S9
-	 9YEsrrzHLh/akN4Qkc/I2GE0cAanh4ncw2pJwvhh22rbzMiFkryABySJEvyD2YiKcd
-	 FiHt9duGkQfBlJ2/s34CXH4HLiLjBB2seQcz+OHGR2/91yBdGvCXgSg+AVzjmJYfIt
-	 MJzY4cEZkYg/g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 8D44B405BE; Thu, 19 Jan 2023 22:15:00 -0300 (-03)
-Date: Thu, 19 Jan 2023 22:15:00 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Adrian Hunter <adrian.hunter@intel.com>,
-	Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf buildid: Avoid copy of uninitialized memory
-Message-ID: <Y8nrFOt/Vf8qbfhC@kernel.org>
-References: <20230113185732.134861-1-irogers@google.com>
- <CAP-5=fXg28wcW93tfiN6mdFHj0+eSRE3dL3LTv53bRYuezjZDg@mail.gmail.com>
- <Y8lv6oclCytPk7hN@kernel.org>
- <Y8lyVTwQqzWk0mLd@kernel.org>
- <CAP-5=fVWgHGxUqvn2pw8+dfQ7gXpLHJA0ewQUuR-sgH10744aA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BB5BD25;
+	Fri, 20 Jan 2023 06:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674194572; x=1705730572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qM+DFnnvJkoyvR1H6whsmmQlNslV3KwkAOtUcsz+XpQ=;
+  b=B3CpRZK6Xi3awaN+fyeL9HYibhQsJKnpJAn5Rl/fOXLcvgl2gojUDvQd
+   WiWlgxrKa+mlay9c4aX6TAZl0OE9ecMyj29smiEseNv890C1zsDiNYMHk
+   syMuSqmpjOV+RIjvyWsy6O1vmBKeUv+23Zr6Ox23pXmnJ726AUiudIGGh
+   uiPDT6Dg7wt4oDt8KtpFuVxBxZ4pnwZwfXJps5inGK2rHJrQo/XVs4qOH
+   /h9eUVCsDQmiKbPLfhOKH3yabuHS4g9PyZqHiOJ7gRsE/BPqyC1bNcU/e
+   4PZ6oK74qdireKT0352pdHrSjOOEPMnjWTZO8eIFSS03yTxyb57m/yXE7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305879812"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="305879812"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 22:02:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="610365725"
+X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
+   d="scan'208";a="610365725"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jan 2023 22:02:43 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pIkU5-0002FI-34;
+	Fri, 20 Jan 2023 06:02:41 +0000
+Date: Fri, 20 Jan 2023 14:01:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Vernet <void@manifault.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yhs@meta.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+	jolsa@kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com, tj@kernel.org
+Subject: Re: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested
+ pointers
+Message-ID: <202301201328.KZrjrJXf-lkp@intel.com>
+References: <20230119235833.2948341-2-void@manifault.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,55 +52,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fVWgHGxUqvn2pw8+dfQ7gXpLHJA0ewQUuR-sgH10744aA@mail.gmail.com>
-X-Url: http://acmel.wordpress.com
+In-Reply-To: <20230119235833.2948341-2-void@manifault.com>
 
-Em Thu, Jan 19, 2023 at 08:57:21AM -0800, Ian Rogers escreveu:
-> On Thu, Jan 19, 2023 at 8:39 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Thu, Jan 19, 2023 at 01:29:30PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Thu, Jan 19, 2023 at 08:08:13AM -0800, Ian Rogers escreveu:
-> > > > On Fri, Jan 13, 2023 at 10:57 AM Ian Rogers <irogers@google.com> wrote:
-> > > > >
-> > > > > build_id__init only copies the buildid data up to size leaving the
-> > > > > rest of the data array uninitialized. Copying the full array during
-> > > > > synthesis means the written event contains uninitialized memory.  This
-> > > > > was detected by the Clang/LLVM memory sanitizer.
-> > > > >
-> > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > ---
-> > > > >  tools/perf/util/synthetic-events.c | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> > > > > index 3ab6a92b1a6d..348d05e4ec03 100644
-> > > > > --- a/tools/perf/util/synthetic-events.c
-> > > > > +++ b/tools/perf/util/synthetic-events.c
-> > > > > @@ -2219,7 +2219,7 @@ int perf_event__synthesize_build_id(struct perf_tool *tool, struct dso *pos, u16
-> > > > >
-> > > > >         len = pos->long_name_len + 1;
-> > > > >         len = PERF_ALIGN(len, NAME_ALIGN);
-> > > > > -       memcpy(&ev.build_id.build_id, pos->bid.data, sizeof(pos->bid.data));
-> > > > > +       memcpy(&ev.build_id.build_id, pos->bid.data, pos->bid.size);
-> > > >
-> > > > Ping. Should be an uncontroversial change to fix a copy of
-> > > > uninitialized memory into the perf.data file during synthesis.
-> > >
-> > > Indeed, applied.
-> >
-> > Humm, don't we better do it as:
-> >
-> > +       memcpy(&ev.build_id.build_id, pos->bid.data, min(pos->bid.size, sizeof(pos->bid.data));
-> >
-> > Lemme check what is setting that pos->bid.size....
-> >
-> > Things like sysfs__read_build_id() that does such checks, but perhaps we
-> > should be defensive and do it in this function as well?
-> 
-> Defensive is good, another option would be an assert but they can be
-> compiled out. Do you want me to repost?
+Hi David,
 
-Please.
+Thank you for the patch! Perhaps something to improve:
 
-- Arnaldo
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230119235833.2948341-2-void%40manifault.com
+patch subject: [PATCH bpf-next 1/8] bpf: Enable annotating trusted nested pointers
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230120/202301201328.KZrjrJXf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8f6df14342b1be3516f8e21037edf771df851427
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Vernet/bpf-Enable-annotating-trusted-nested-pointers/20230120-080139
+        git checkout 8f6df14342b1be3516f8e21037edf771df851427
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/btf.c:533:5: warning: no previous prototype for function 'bpf_find_btf_id' [-Wmissing-prototypes]
+   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+       ^
+   kernel/bpf/btf.c:533:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/bpf_find_btf_id +533 kernel/bpf/btf.c
+
+   532	
+ > 533	s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p)
+   534	{
+   535		struct btf *btf;
+   536		s32 ret;
+   537		int id;
+   538	
+   539		btf = bpf_get_btf_vmlinux();
+   540		if (IS_ERR(btf))
+   541			return PTR_ERR(btf);
+   542		if (!btf)
+   543			return -EINVAL;
+   544	
+   545		ret = btf_find_by_name_kind(btf, name, kind);
+   546		/* ret is never zero, since btf_find_by_name_kind returns
+   547		 * positive btf_id or negative error.
+   548		 */
+   549		if (ret > 0) {
+   550			btf_get(btf);
+   551			*btf_p = btf;
+   552			return ret;
+   553		}
+   554	
+   555		/* If name is not found in vmlinux's BTF then search in module's BTFs */
+   556		spin_lock_bh(&btf_idr_lock);
+   557		idr_for_each_entry(&btf_idr, btf, id) {
+   558			if (!btf_is_module(btf))
+   559				continue;
+   560			/* linear search could be slow hence unlock/lock
+   561			 * the IDR to avoiding holding it for too long
+   562			 */
+   563			btf_get(btf);
+   564			spin_unlock_bh(&btf_idr_lock);
+   565			ret = btf_find_by_name_kind(btf, name, kind);
+   566			if (ret > 0) {
+   567				*btf_p = btf;
+   568				return ret;
+   569			}
+   570			spin_lock_bh(&btf_idr_lock);
+   571			btf_put(btf);
+   572		}
+   573		spin_unlock_bh(&btf_idr_lock);
+   574		return ret;
+   575	}
+   576	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
