@@ -1,81 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E5BBD2C;
-	Sat, 21 Jan 2023 10:12:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C1BC433EF;
-	Sat, 21 Jan 2023 10:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674295924;
-	bh=V8MuxpP8Pi4nAo/iKbDQz0IVxXMZzusqzi08ucS3huo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pCEiqGdMg7Kmyme9ku4G6/FgCLG24oj128JxZx9nt4ZpU3Bm+nJ/+6LSWdBEIiAR8
-	 8oHoV3UtyoTETH6bsS88DBX/x+kqSN7Yc8a6leFJhD4sMkDiDdwPwnNYsE5qW1p4Qv
-	 axJjjmL+VDnk4tqX9JyqvEwgO2RZeDToxQJp1JXe6P95/WMp0wQwqHqCv+qxagnvBP
-	 CTgjmTOO0Q/u2Rinqbn3u0IGL03At9NFYFETimbwgOBSyiq3W7AxT2DQAs26d2lzxa
-	 jleAuSZcJG1zk6ykCKoUcND936na5GSsdHjLvxb5RWUJBn0ACSbInX60d3gK4HfRt9
-	 GdCqZZ6MpeSrQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Miles Chen <miles.chen@mediatek.com>,
-	kernel test robot <lkp@intel.com>,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH] mm/sparse: fix "unused function 'pgdat_to_phys'" warning
-Date: Sat, 21 Jan 2023 12:11:51 +0200
-Message-Id: <20230121101151.1703292-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3733517EA;
+	Sat, 21 Jan 2023 10:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674297568; x=1705833568;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UG1+XnRS6RjeWE8GQFcLpqgnWRjPBdRyK3D53H+c8wo=;
+  b=ALPBPq06puEjNat/sBVhJMXN7jnGo/aLUHNnKy7oz2Y32RAehys78GXF
+   OMw7QK2YYBY8Knb0MOHHZpu5+tBF8kuwoitU7Cshm/EUID7hif/M0eehI
+   uWWBuQhlLuazu4CYfyFbwppD+glVB2soe5bm+heeKMDE8CHDZeTr8Y94K
+   wOguXpO9OpsdJ7H0utpGvBkz/zNyclLbWfKOZ9YJDqtl/wUuy+bCjmqgO
+   V/jAU1U8NDQb3RfgsMWTotf+z6OpVYWrqyNOKFCAEgzxLvrbjsmpxiCEf
+   bpCWH1Cm4sCCDd3bShRyhYP2p01JkyC0ZSDw8CzBVetWx+/2dQizd41s/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="323463825"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="323463825"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 02:39:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="724236668"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="724236668"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2023 02:39:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1pJBHQ-00CkTI-1i;
+	Sat, 21 Jan 2023 12:39:24 +0200
+Date: Sat, 21 Jan 2023 12:39:24 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [brgl:gpio/for-next 43/49] drivers/gpio/gpio-zevio.c:174:33:
+ error: incomplete definition of type 'struct platform_device'
+Message-ID: <Y8vA3L90ymwcqNf3@smile.fi.intel.com>
+References: <202301210447.JPSHmqrO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202301210447.JPSHmqrO-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-W=1 build with clangs complains:
+On Sat, Jan 21, 2023 at 04:19:46AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+> head:   e464c96eae336dd2f81a1926c30523f061469f64
+> commit: 899f6a9c43644d60dcae381f8cbb1fff3fbcbe64 [43/49] gpio: zevio: Use proper headers and drop OF_GPIO dependency
+> config: arm-randconfig-c002-20230120 (https://download.01.org/0day-ci/archive/20230121/202301210447.JPSHmqrO-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/commit/?id=899f6a9c43644d60dcae381f8cbb1fff3fbcbe64
+>         git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+>         git fetch --no-tags brgl gpio/for-next
+>         git checkout 899f6a9c43644d60dcae381f8cbb1fff3fbcbe64
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
 
-mm/sparse.c:347:27: warning: unused function 'pgdat_to_phys' [-Wunused-function]
-static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
-                             ^
-1 warning generated.
+It's strange, I guess I have sent a v2 of the series where this one has to be addressed.
+Let me check.
 
-pgdat_to_phys() is only used by functions defined when
-CONFIG_MEMORY_HOTREMOVE=y.
-
-Move pgdat_to_phys() under #ifdef CONFIG_MEMORY_HOTREMOVE
-to make clang happy.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202301210155.1E5zABb5-lkp@intel.com
-Signed-off-by: Mike Rapoport <rppt@kernel.org>
----
- mm/sparse.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/sparse.c b/mm/sparse.c
-index 2779b419ef2a..fb7aeb1899a4 100644
---- a/mm/sparse.c
-+++ b/mm/sparse.c
-@@ -318,6 +318,7 @@ size_t mem_section_usage_size(void)
- 	return sizeof(struct mem_section_usage) + usemap_size();
- }
- 
-+#ifdef CONFIG_MEMORY_HOTREMOVE
- static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
- {
- #ifndef CONFIG_NUMA
-@@ -328,7 +329,6 @@ static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
- #endif
- }
- 
--#ifdef CONFIG_MEMORY_HOTREMOVE
- static struct mem_section_usage * __init
- sparse_early_usemaps_alloc_pgdat_section(struct pglist_data *pgdat,
- 					 unsigned long size)
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
