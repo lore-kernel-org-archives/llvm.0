@@ -1,37 +1,37 @@
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE24123A6;
-	Sat, 21 Jan 2023 13:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91260257B;
+	Sat, 21 Jan 2023 13:05:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674306327; x=1705842327;
+  t=1674306329; x=1705842329;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4a3N1Km9mHK9ZXK0JuIPrz6+ArmsXDbFxAx8IVWpHzo=;
-  b=N1E30/iEnlStDMG130B/H/mdsvoLUBLR0g33ip4ehv7V4RPkf0ywogqv
-   s2ilN8InkK7b3HV8VhhOvmfRv9ci1BTkKNZeJRq5Zo2/PTqLlw3QsSFgK
-   rMrlbnREUgZvsTT0AmjRcsopEaE0GQva/G3Ms3Wxb2OnqIz/VYwPNDz4w
-   caWlvSJtGR8Y5DSHalG2RZkFs369sz0c20hEvjuWEwHDN8IKmfxlQmkar
-   OUyxFZ8nKKAV08l42Xb+cZWgITFyHCnYGMGJM2cl9EJoPPKknvc2Yp8s3
-   N/gcCQTP4wsxwfddvW/2TnnjV9nd/cAsn7TePNetU4Gc/QTroiqqJxAuG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="412015619"
+  bh=mYPaUET6yMOwGGV2IxKGzIaVsssVsIa9IyUsova1n/0=;
+  b=Yb+6K4T9E7Mnzn7nJcf7lFPcgeaWr+OeD0TuFv8oywwFMYysPcO6wr78
+   xFC0fhXb4YhO42hGFZ1sw9CIZH+wH9/b5ClJRP19q7Ok4lKw2zQoA1u/W
+   GLETlJttLtFj6pV4k637GXZbjIJq33cIft+nhvGC4h19rCxPJkDxiyQa4
+   MWSTaOmaOtL4F6X18L1iTm1Srm3mN2YjuVmoWVKaJQuIs2v+QS8okrlt9
+   Gujp92/rKs88X+UTlDCxjXDM5Tdaxkn5Vx5R8AAvUHnZL3UU84LYCmYej
+   ODQxccemYXTMjpPks5mKdDlJrRMXsUIlw1HOiUc9WATSMMDR97rDrYzFn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="412015643"
 X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="412015619"
+   d="scan'208";a="412015643"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 05:05:27 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 05:05:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="654087126"
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="654087129"
 X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="654087126"
+   d="scan'208";a="654087129"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 21 Jan 2023 05:05:22 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pJDYf-00045I-15;
+	id 1pJDYf-00045M-1L;
 	Sat, 21 Jan 2023 13:05:21 +0000
-Date: Sat, 21 Jan 2023 21:04:31 +0800
+Date: Sat, 21 Jan 2023 21:04:32 +0800
 From: kernel test robot <lkp@intel.com>
 To: Gregory Price <gourry.memverge@gmail.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -43,7 +43,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
 Subject: Re: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc
  status
-Message-ID: <202301212023.KjbRqxRz-lkp@intel.com>
+Message-ID: <202301212030.OheLeUFY-lkp@intel.com>
 References: <20230121102316.331935-3-gregory.price@memverge.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -68,7 +68,7 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
 patch link:    https://lore.kernel.org/r/20230121102316.331935-3-gregory.price%40memverge.com
 patch subject: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc status
-config: hexagon-randconfig-r041-20230119 (https://download.01.org/0day-ci/archive/20230121/202301212023.KjbRqxRz-lkp@intel.com/config)
+config: hexagon-randconfig-r016-20230119 (https://download.01.org/0day-ci/archive/20230121/202301212030.OheLeUFY-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -144,7 +144,7 @@ All errors (new ones prefixed by >>):
    include/linux/thread_info.h:168:45: note: expanded from macro 'test_syscall_work'
            test_ti_thread_flag(current_thread_info(), TIF_##fl)
                                                       ^
-   <scratch space>:70:1: note: expanded from here
+   <scratch space>:37:1: note: expanded from here
    TIF_SYSCALL_USER_DISPATCH
    ^
    6 warnings and 1 error generated.
