@@ -1,45 +1,50 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6812D386;
-	Sat, 21 Jan 2023 04:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5F236E;
+	Sat, 21 Jan 2023 04:42:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674274311; x=1705810311;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Jx5V5KL2mb4/MyFWSwW04LmF5935XxWdgcYTCAArtIA=;
-  b=kJhdhqejg47Fb3Bixn16eJT/+UepprNFRCwq8Bd6t3iPE22dHf0M4Btw
-   2vJ5XoC7MGLp/32fIWyOAjxs+HNYRX6hWR6TajWgVEuynPoJlJ/u6bmW2
-   V09iEs9r91iPQuZvLooCtdaX0bpVgm61w93Ue7lcSBRISvJ1HcII+t903
-   Nfj8o9sMOaBDr11OJgInXtIRWT6jMaDiU84K+9voSr2sAKFB0l69mrB9K
-   Sy3hI4jymDMlmoBkXA37X1ZRsYEDyVVWkjeB54nIlvz1hOWb1crof1Ii1
-   dd6t9cYTw2dRjN9UhTp/gaUlCX02MmPvd03iHOGHnE3RYnYa0NTncjgw4
+  t=1674276178; x=1705812178;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MjbzbjiZDXv+mKGfE+rmDazoRKi5ngCxDJGRVWJTC3o=;
+  b=Zag1UA9S9lL564pu5p7nbWB2jBLfOBXdzA5Etc1Re9e/lDvjtBFqkI9K
+   /FA0cLJS57PHNg1IketRlZKJ4WoaYUr3/6iz6BFqBxQshIrMiy2UQCYfe
+   0POynozlC+yLdzjhRzZ1hQ4MPWml7oaeRKlCfOo4YwKZbZmse4984V87X
+   9FD3qFeIx/GReGnDUgeYYSqQq6aG4U5d4RYM4eOGsr4vUSenz1+h+Nrp9
+   urBikSQhh6C4TQt0+PeZwQznXoxGIUgTF2chclUxxhUnE/dv//wmYVDrK
+   Bnd6sAONfpigDQfl1qTj/Kw3XW8RdcTX8T0OAOXrbJOqiLO6pBZLOAgwa
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="388116200"
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="306117875"
 X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
-   d="scan'208";a="388116200"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 20:11:50 -0800
+   d="scan'208";a="306117875"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 20:42:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="724179990"
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="662767019"
 X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
-   d="scan'208";a="724179990"
+   d="scan'208";a="662767019"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Jan 2023 20:11:48 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jan 2023 20:42:52 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pJ5EJ-0003Pu-12;
-	Sat, 21 Jan 2023 04:11:47 +0000
-Date: Sat, 21 Jan 2023 12:11:31 +0800
+	id 1pJ5iN-0003UY-0W;
+	Sat, 21 Jan 2023 04:42:51 +0000
+Date: Sat, 21 Jan 2023 12:42:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
+To: Anjana Hari <quic_ahari@quicinc.com>, agross@kernel.org,
+	andersson@kernel.org, jejb@linux.ibm.com,
+	martin.petersen@oracle.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/nmitest.2023.01.20a 4/5]
- arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function
- 'set_nmi_torture'
-Message-ID: <202301211247.Isi7qGD5-lkp@intel.com>
+	alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+	konrad.dybcio@linaro.org, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_narepall@quicinc.com,
+	quic_nitirawa@quicinc.com, quic_rampraka@quicinc.com,
+	Anjana Hari <quic_ahari@quicinc.com>
+Subject: Re: [PATCH v3 1/1] scsi: ufs: Add hibernation callbacks
+Message-ID: <202301211209.4byNcJjL-lkp@intel.com>
+References: <20230120113321.30433-2-quic_ahari@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,54 +53,127 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230120113321.30433-2-quic_ahari@quicinc.com>
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/nmitest.2023.01.20a
-head:   53e298568bde2c728ee2aac4ac634cca8550a4b4
-commit: 1f061ebc3647245564abc8b5a47882645af82199 [4/5] x86/nmi: Add a set_nmi_torture() function to control NMI testing
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230121/202301211247.Isi7qGD5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Anjana,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on next-20230120]
+[cannot apply to jejb-scsi/for-next linus/master v6.2-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anjana-Hari/scsi-ufs-Add-hibernation-callbacks/20230120-193447
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230120113321.30433-2-quic_ahari%40quicinc.com
+patch subject: [PATCH v3 1/1] scsi: ufs: Add hibernation callbacks
+config: riscv-randconfig-r042-20230119 (https://download.01.org/0day-ci/archive/20230121/202301211209.4byNcJjL-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/1f061ebc3647245564abc8b5a47882645af82199
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/nmitest.2023.01.20a
-        git checkout 1f061ebc3647245564abc8b5a47882645af82199
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/239ad2244616006dd39bc9a5380108435d168a86
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anjana-Hari/scsi-ufs-Add-hibernation-callbacks/20230120-193447
+        git checkout 239ad2244616006dd39bc9a5380108435d168a86
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ufs/core/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
-   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-        ^
-   arch/x86/kernel/nmi.c:441:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-   ^
-   static 
-   1 warning generated.
+>> drivers/ufs/core/ufshcd.c:10004:8: error: call to undeclared function 'ufshcd_system_suspend'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = ufshcd_system_suspend(dev);
+                 ^
+>> drivers/ufs/core/ufshcd.c:10017:9: error: call to undeclared function 'ufshcd_system_resume'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return ufshcd_system_resume(dev);
+                  ^
+   drivers/ufs/core/ufshcd.c:10017:9: note: did you mean 'ufshcd_system_restore'?
+   drivers/ufs/core/ufshcd.c:10011:5: note: 'ufshcd_system_restore' declared here
+   int ufshcd_system_restore(struct device *dev)
+       ^
+   drivers/ufs/core/ufshcd.c:10024:9: error: call to undeclared function 'ufshcd_system_resume'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return ufshcd_system_resume(dev);
+                  ^
+   drivers/ufs/core/ufshcd.c:10048:44: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   drivers/ufs/core/ufshcd.c:10048:44: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   drivers/ufs/core/ufshcd.c:10048:44: warning: shift count >= width of type [-Wshift-count-overflow]
+                   if (!dma_set_mask_and_coherent(hba->dev, DMA_BIT_MASK(64)))
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                       ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   3 warnings and 3 errors generated.
 
 
-vim +/set_nmi_torture +441 arch/x86/kernel/nmi.c
+vim +/ufshcd_system_suspend +10004 drivers/ufs/core/ufshcd.c
 
-   439	
-   440	/* Set the test values as desired. */
- > 441	void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-   442	{
-   443		WRITE_ONCE(nmi_delay, nmi_delay_in);
-   444		WRITE_ONCE(nmi_halt1, nmi_halt1_in);
-   445		WRITE_ONCE(nmi_halt2, nmi_halt2_in);
-   446		WRITE_ONCE(nmi_halt3, nmi_halt3_in);
-   447		pr_info("%s: Set NMI test parameters nmi_delay=%d nmi_halt1=%d nmi_halt2=%d nmi_halt3=%d\n",
-   448			__func__, nmi_delay, nmi_halt1, nmi_halt2, nmi_halt3);
-   449	}
-   450	EXPORT_SYMBOL_GPL(set_nmi_torture);
-   451	
+  9993	
+  9994		struct ufs_hba *hba = dev_get_drvdata(dev);
+  9995		int ret = 0;
+  9996	
+  9997		/*
+  9998		 * Run time resume the controller to make sure
+  9999		 * the PM work queue threads do not try to resume
+ 10000		 * the child (scsi host), which leads to errors as
+ 10001		 * the controller is not yet resumed.
+ 10002		 */
+ 10003		pm_runtime_get_sync(hba->dev);
+ 10004		ret = ufshcd_system_suspend(dev);
+ 10005		pm_runtime_put_sync(hba->dev);
+ 10006	
+ 10007		return ret;
+ 10008	}
+ 10009	EXPORT_SYMBOL_GPL(ufshcd_system_freeze);
+ 10010	
+ 10011	int ufshcd_system_restore(struct device *dev)
+ 10012	{
+ 10013	
+ 10014		struct ufs_hba *hba = dev_get_drvdata(dev);
+ 10015	
+ 10016		hba->restore = true;
+ 10017		return ufshcd_system_resume(dev);
+ 10018	
 
 -- 
 0-DAY CI Kernel Test Service
