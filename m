@@ -1,166 +1,191 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91260257B;
-	Sat, 21 Jan 2023 13:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674306329; x=1705842329;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mYPaUET6yMOwGGV2IxKGzIaVsssVsIa9IyUsova1n/0=;
-  b=Yb+6K4T9E7Mnzn7nJcf7lFPcgeaWr+OeD0TuFv8oywwFMYysPcO6wr78
-   xFC0fhXb4YhO42hGFZ1sw9CIZH+wH9/b5ClJRP19q7Ok4lKw2zQoA1u/W
-   GLETlJttLtFj6pV4k637GXZbjIJq33cIft+nhvGC4h19rCxPJkDxiyQa4
-   MWSTaOmaOtL4F6X18L1iTm1Srm3mN2YjuVmoWVKaJQuIs2v+QS8okrlt9
-   Gujp92/rKs88X+UTlDCxjXDM5Tdaxkn5Vx5R8AAvUHnZL3UU84LYCmYej
-   ODQxccemYXTMjpPks5mKdDlJrRMXsUIlw1HOiUc9WATSMMDR97rDrYzFn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="412015643"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="412015643"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 05:05:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="654087129"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="654087129"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Jan 2023 05:05:22 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pJDYf-00045M-1L;
-	Sat, 21 Jan 2023 13:05:21 +0000
-Date: Sat, 21 Jan 2023 21:04:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry.memverge@gmail.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, krisman@collabora.com,
-	tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
-	peterz@infradead.org, ebiederm@xmission.com,
-	akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-	shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc
- status
-Message-ID: <202301212030.OheLeUFY-lkp@intel.com>
-References: <20230121102316.331935-3-gregory.price@memverge.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0862561
+	for <llvm@lists.linux.dev>; Sat, 21 Jan 2023 13:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674307232;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uIy/la782jNs2dT4/1UNNW8vqGTFqA+d87w4aFyOzsI=;
+	b=ScgbRHU6f7Q+sD2ElNqxBSVW1WaRfrxT0uZjG0n2pJjIqDVYNhqf99tWJi+j0N1qWYMFf1
+	4Zfrh5CWBt5tjHJjyZIIb8iaw/CGMPSKC0pFwr0ZNFXUdTzik5hf+X8Nj4b3EuaoiPYBqG
+	XBJewmKJNwca0UMEbdiRY6ufc4gmyNc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-645-KMlcbCT9PbGESzkefyyeuA-1; Sat, 21 Jan 2023 08:20:31 -0500
+X-MC-Unique: KMlcbCT9PbGESzkefyyeuA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F17468533DA
+	for <llvm@lists.linux.dev>; Sat, 21 Jan 2023 13:20:30 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D35B0140EBF4;
+	Sat, 21 Jan 2023 13:20:30 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (27/383 SKIPPED): Test report for master
+ (6.2.0-rc4, mainline.kernel.org-clang, 26e57507)
+Date: Sat, 21 Jan 2023 13:20:30 -0000
+To: mhoyer@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230121102316.331935-3-gregory.price@memverge.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <78611.123012108203100386@us-mta-645.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Gregory,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[cannot apply to tip/core/entry]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
-patch link:    https://lore.kernel.org/r/20230121102316.331935-3-gregory.price%40memverge.com
-patch subject: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc status
-config: hexagon-randconfig-r016-20230119 (https://download.01.org/0day-ci/archive/20230121/202301212030.OheLeUFY-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a2cb8440d45e7d3030e7349c7c598971a951e5f2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
-        git checkout a2cb8440d45e7d3030e7349c7c598971a951e5f2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/proc/array.c:61:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/proc/array.c:61:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/proc/array.c:61:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/proc/array.c:435:8: error: use of undeclared identifier 'TIF_SYSCALL_USER_DISPATCH'
-                               test_syscall_work(SYSCALL_USER_DISPATCH));
-                               ^
-   include/linux/thread_info.h:168:45: note: expanded from macro 'test_syscall_work'
-           test_ti_thread_flag(current_thread_info(), TIF_##fl)
-                                                      ^
-   <scratch space>:37:1: note: expanded from here
-   TIF_SYSCALL_USER_DISPATCH
-   ^
-   6 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/TIF_SYSCALL_USER_DISPATCH +435 fs/proc/array.c
+Kernel information:
+    Commit message: Merge tag 'for-6.2-rc4-tag' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/kdave/linux
 
-   430	
-   431	static inline void task_syscall_user_dispatch(struct seq_file *m,
-   432							struct task_struct *p)
-   433	{
-   434		seq_put_decimal_ull(m, "\nSyscall_user_dispatch:\t",
- > 435				    test_syscall_work(SYSCALL_USER_DISPATCH));
-   436	}
-   437	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/66544
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6767637
+         ppc64le - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6767773
+           s390x - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6767717
+          x86_64 - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6767858
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6767506
+          x86_64 (debug) - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6767554
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: [rawhide][s390x] avc:  denied  { transition } for  pid=3D135=
+5 comm=3D"runcon" path=3D"/usr/bin/true" dev=3D"dm-0" ino=3D17226318 sconte=
+xt=3Dsystem_u:system_r:unconfined_service_t:s0 tcontext=3Dunconfined_u:unco=
+nfined_r:unconfined_t:s0-s0:c0.c1023 tclass=3Dprocess permissive=3D1
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/5628421
+            Affected tests:
+                   s390x - Reboot test
+        Issue: [upstream] WARNING: CPU: 120 PID: 1 at arch/powerpc/include/=
+asm/book3s/64/tlbflush.h:166 change_protection+0x10d8/0x1470
+            URL: https://lore.kernel.org/all/20221019122106.a525f33bafeb74d=
+e59fd0d99@danny.cz/
+            Affected tests:
+                 ppc64le - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
