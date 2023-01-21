@@ -1,137 +1,192 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B487E;
-	Sat, 21 Jan 2023 15:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674316171; x=1705852171;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qXKP29H7TTX5eM4j8mswyDZwPaI8Bztl17Da0IlZWnQ=;
-  b=ayimkQUUQvBH8PvWf+nTpaFcqqhWwhI7mPXtSUDuucUS+brcHwhXblzG
-   fgXfuDZzi2bVVdHbdRKPy1A+NnK1y9sGGX4P95X0CYtFcBYe5uSZEsbRH
-   enQpPXGLnWF7n3bMRqq7J7zQc2clLO6ftC9FMOfvL4CI1OIwPW/nQMx4U
-   VUzCoi3imnjfu8zjlodhSs1edjStTRlu8gXzAUKcdVe0DBKBLR3WWNgic
-   z0ivxp+oUQTPqFRpOYDejzQ+ve34dOhtaE9mb1CKFFGYielgb+/Bg5mTE
-   A/wqT4V5ZI031+P4SeIg+H+MnCCZ7Ionw5yY6b9Lm6J0zBj+FfHiCzX3n
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="324481480"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="324481480"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 07:49:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="989721476"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="989721476"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Jan 2023 07:49:29 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pJG7U-0004Du-0v;
-	Sat, 21 Jan 2023 15:49:28 +0000
-Date: Sat, 21 Jan 2023 23:49:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Christopher M. Riedl" <cmr@bluescreens.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Benjamin Gray <bgray@linux.ibm.com>
-Subject: arch/powerpc/include/asm/book3s/32/tlbflush.h:83:2: error: call to
- '__compiletime_assert_175' declared with 'error' attribute: BUILD_BUG failed
-Message-ID: <202301212348.eDkowvfF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D427E
+	for <llvm@lists.linux.dev>; Sat, 21 Jan 2023 16:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674316891;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CvBcR6qCKGMi94LWR9kKcSVaaUAYLAtWMYyOYZE9Zyg=;
+	b=htYlo7KSqdI47d4iwoElzz+yvTZZgzvD1gL3xWbQD4GHpUVTmh178IdE5KiWHH9Ix7fTeE
+	P8K7yD0Ym7HeGv0AT6LumsOoq0yYE+ZlHKUPyPJORvL9prmyI++PYRFPk5vp/yoAIZAPFm
+	xeOMgm1dOmJ31cXZn2+Ursc4LrHQJIw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445--0Saa_2oNj2wRKf-8SlcjQ-1; Sat, 21 Jan 2023 11:01:30 -0500
+X-MC-Unique: -0Saa_2oNj2wRKf-8SlcjQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 452253828887
+	for <llvm@lists.linux.dev>; Sat, 21 Jan 2023 16:01:30 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1C4EB1731B;
+	Sat, 21 Jan 2023 16:01:30 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (26/383 SKIPPED): Test report for master
+ (6.2.0-rc4, mainline.kernel.org-clang, 4e31bada)
+Date: Sat, 21 Jan 2023 16:01:30 -0000
+To: mhoyer@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <42276.123012111013001596@us-mta-445.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christopher,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f883675bf6522b52cd75dc3de791680375961769
-commit: c28c15b6d28a776538482101522cbcd9f906b15c powerpc/code-patching: Use temporary mm for Radix MMU
-date:   7 weeks ago
-config: powerpc-buildonly-randconfig-r001-20230121 (https://download.01.org/0day-ci/archive/20230121/202301212348.eDkowvfF-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c28c15b6d28a776538482101522cbcd9f906b15c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c28c15b6d28a776538482101522cbcd9f906b15c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/lib/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/powerpc/lib/code-patching.c:6:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:29:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/powerpc/include/asm/pgtable.h:11:
-   In file included from arch/powerpc/include/asm/tlbflush.h:6:
-   In file included from arch/powerpc/include/asm/book3s/tlbflush.h:8:
->> arch/powerpc/include/asm/book3s/32/tlbflush.h:83:2: error: call to '__compiletime_assert_175' declared with 'error' attribute: BUILD_BUG failed
-           BUILD_BUG();
-           ^
-   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
-   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-                       ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ^
-   include/linux/compiler_types.h:357:2: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ^
-   include/linux/compiler_types.h:345:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:338:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:194:1: note: expanded from here
-   __compiletime_assert_175
-   ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +83 arch/powerpc/include/asm/book3s/32/tlbflush.h
+Kernel information:
+    Commit message: Merge tag '6.2-rc4-smb3-client-fixes' of git://git.samb=
+a.org/sfrench/cifs-2.6
 
-274d842fa1efd9 Benjamin Gray 2022-11-09  79  
-274d842fa1efd9 Benjamin Gray 2022-11-09  80  static inline void local_flush_tlb_page_psize(struct mm_struct *mm,
-274d842fa1efd9 Benjamin Gray 2022-11-09  81  					      unsigned long vmaddr, int psize)
-274d842fa1efd9 Benjamin Gray 2022-11-09  82  {
-274d842fa1efd9 Benjamin Gray 2022-11-09 @83  	BUILD_BUG();
-274d842fa1efd9 Benjamin Gray 2022-11-09  84  }
-274d842fa1efd9 Benjamin Gray 2022-11-09  85  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/66565
 
-:::::: The code at line 83 was first introduced by commit
-:::::: 274d842fa1efd9449e62222c8896e0be11621f1f powerpc/tlb: Add local flush for page given mm_struct and psize
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6770277
+         ppc64le - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6770341
+           s390x - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6770411
+          x86_64 - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6770498
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6770204
+          x86_64 (debug) - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6770572
 
-:::::: TO: Benjamin Gray <bgray@linux.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                   s390x - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: stress: stress-ng - memory: stress-ng --memrate TIMEOUT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1172
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
