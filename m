@@ -1,87 +1,66 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3733517EA;
-	Sat, 21 Jan 2023 10:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674297568; x=1705833568;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UG1+XnRS6RjeWE8GQFcLpqgnWRjPBdRyK3D53H+c8wo=;
-  b=ALPBPq06puEjNat/sBVhJMXN7jnGo/aLUHNnKy7oz2Y32RAehys78GXF
-   OMw7QK2YYBY8Knb0MOHHZpu5+tBF8kuwoitU7Cshm/EUID7hif/M0eehI
-   uWWBuQhlLuazu4CYfyFbwppD+glVB2soe5bm+heeKMDE8CHDZeTr8Y94K
-   wOguXpO9OpsdJ7H0utpGvBkz/zNyclLbWfKOZ9YJDqtl/wUuy+bCjmqgO
-   V/jAU1U8NDQb3RfgsMWTotf+z6OpVYWrqyNOKFCAEgzxLvrbjsmpxiCEf
-   bpCWH1Cm4sCCDd3bShRyhYP2p01JkyC0ZSDw8CzBVetWx+/2dQizd41s/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="323463825"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="323463825"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 02:39:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="724236668"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="724236668"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2023 02:39:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1pJBHQ-00CkTI-1i;
-	Sat, 21 Jan 2023 12:39:24 +0200
-Date: Sat, 21 Jan 2023 12:39:24 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [brgl:gpio/for-next 43/49] drivers/gpio/gpio-zevio.c:174:33:
- error: incomplete definition of type 'struct platform_device'
-Message-ID: <Y8vA3L90ymwcqNf3@smile.fi.intel.com>
-References: <202301210447.JPSHmqrO-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C242717F8;
+	Sat, 21 Jan 2023 11:16:10 +0000 (UTC)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-4c131bede4bso107608227b3.5;
+        Sat, 21 Jan 2023 03:16:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a2O34i5CsNioP0eCABfFtx7Vk0f6PNVdQGYia8oaXbE=;
+        b=iV0sMu6KOF4N9KBtXJ44nvAPthhSaj/kY87AvZ2mgnYI8yk12agsZIR0JGWaCe6kWW
+         kGDXKK/ahmQmSVdP4gdHaogTrRHfydM7HzHoRk+YVWScldCq3ZmMTIUHRAm5janLwUiz
+         BjOL2pw7ZOBsLEpyG28AB9TDUEN3ZA7r7Rwc0ZFinvRKDWOJY5S8PgXnDSc4pVpQMS/V
+         ircQjRO/n1IMj51R91kMSLWLCNi/dkMTLgt77SMKPA9rlSimqL2uqj4GRjVAUlh7yNf9
+         i2AbpMHRrjpbOQHJQxEUx5UNsAMmmf+/lKD8FPu0WHPXPI4bQRvGp3/8qfJBtF9tJdmX
+         Zrkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a2O34i5CsNioP0eCABfFtx7Vk0f6PNVdQGYia8oaXbE=;
+        b=H1EnAXzAdn9lVeEEWlsugJXslfSLGBFl6/yTTMNSVd6YF1AGYY9j0DUrvVvV0uZHkS
+         Vrx6OoF+i5GxJ1ZEeTpbKhj5YpFS59Mhm+jk21ZGsjZcRYl3H3kfwLVHOTRyhughS2Bm
+         AW3mhWqxWYwUA6nOM8M3Orgkfj3672APRv7Pm0RoeU32j//gsOmDpBcYI8jSNRGUaZp5
+         eyDzV7NTdlpGKMSDfA55i/1QN+LyPCzRc1szhGDuItUUTY1yEjtcs9eJkEjkvcQZg10J
+         qy7rLCvHPYBuLwQE7JeKodMq7PnW7/TZP9fqsp9stWNxjj0rhHvI/JK/Z8grOBG5SzO8
+         MnJA==
+X-Gm-Message-State: AFqh2krGIDzFgK5PtpJ2dt6HEcUzmSC6TGMxtCXVsiCcFiV6xXHNoKSI
+	QjbOaV8lZ7bJlY9EyUZW588nU7UDrFFraXsUe7U=
+X-Google-Smtp-Source: AMrXdXss9OFffmg+fxrHHIi8AQW9+ipUC5Tb6qX3Or/MJZSfKqmkR6jBHJwWoPL8icGZEWJOhW17rO3ZxQLTP3/rpA4=
+X-Received: by 2002:a81:bb54:0:b0:506:c44:ca69 with SMTP id
+ a20-20020a81bb54000000b005060c44ca69mr2322ywl.67.1674299769674; Sat, 21 Jan
+ 2023 03:16:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301210447.JPSHmqrO-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <202301201612.50oSpQHu-lkp@intel.com> <CANiq72=UD2Wnx4WgJSeKyL6WGytadG9p0Dt8YHL2cD-0zhsc4Q@mail.gmail.com>
+ <Y8tRMZAwcl6rb6Jd@rli9-mobl>
+In-Reply-To: <Y8tRMZAwcl6rb6Jd@rli9-mobl>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 21 Jan 2023 12:15:58 +0100
+Message-ID: <CANiq72nqsSiF2sTOZK-hC2BU8pMHJWHYHVyz=r3qxp2tPEAvww@mail.gmail.com>
+Subject: Re: [PATCH 4/5] rust: types: implement `ForeignOwnable` for the unit type
+To: Philip Li <philip.li@intel.com>
+Cc: kernel test robot <lkp@intel.com>, Yujie Liu <yujie.liu@intel.com>, oe-kbuild-all@lists.linux.dev, 
+	llvm@lists.linux.dev, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Jan 21, 2023 at 04:19:46AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-> head:   e464c96eae336dd2f81a1926c30523f061469f64
-> commit: 899f6a9c43644d60dcae381f8cbb1fff3fbcbe64 [43/49] gpio: zevio: Use proper headers and drop OF_GPIO dependency
-> config: arm-randconfig-c002-20230120 (https://download.01.org/0day-ci/archive/20230121/202301210447.JPSHmqrO-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/commit/?id=899f6a9c43644d60dcae381f8cbb1fff3fbcbe64
->         git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
->         git fetch --no-tags brgl gpio/for-next
->         git checkout 899f6a9c43644d60dcae381f8cbb1fff3fbcbe64
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
+On Sat, Jan 21, 2023 at 3:43 AM Philip Li <philip.li@intel.com> wrote:
+>
+> Got it Miguel, we will disable them for rust related configs.
+>
+> thanks, we will do it asap.
 
-It's strange, I guess I have sent a v2 of the series where this one has to be addressed.
-Let me check.
+Thanks Philip for the quick reply! (and sorry, I should have Cc'd you too!)
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Cheers,
+Miguel
