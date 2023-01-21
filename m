@@ -1,43 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F3B7E;
-	Sat, 21 Jan 2023 15:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B487E;
+	Sat, 21 Jan 2023 15:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674314310; x=1705850310;
+  t=1674316171; x=1705852171;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DsMqa/zXlzR0Aaym96D10eCxFkhYfJ9jH8HBI64p46Y=;
-  b=W/WbK8YhmDj3+8cCty1LG/NsmLHUdnFRVbeiqURkSph1eIv0ijwGkM83
-   dDy0aktaLrV+qguaMTUI3C0DxH4/AAv8Y6otSohZrHGquW6wwl9WNr/G3
-   J3oROhwhHKIf31wNIx3Zw+ZYIXH2VzkuJAh4GNyNGEFgF8Sq2dTnAn/1w
-   Rv5lKCwr53obcS2xUadhJ4UxMccP9UhnyBVd6hmscHZMjLLr2B+Y1Wcxt
-   BUqCM2vl4q0dbicLGSoRzcK7k6RQDV0EKTm0CEIUSC8ghjuRvnkQ/4OO6
-   UnkQu//wOklTtfn7vFwPJJkOISed+mQ0qORf35NR/yQdGC3JZi2Jsh8A7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="353047369"
+  bh=qXKP29H7TTX5eM4j8mswyDZwPaI8Bztl17Da0IlZWnQ=;
+  b=ayimkQUUQvBH8PvWf+nTpaFcqqhWwhI7mPXtSUDuucUS+brcHwhXblzG
+   fgXfuDZzi2bVVdHbdRKPy1A+NnK1y9sGGX4P95X0CYtFcBYe5uSZEsbRH
+   enQpPXGLnWF7n3bMRqq7J7zQc2clLO6ftC9FMOfvL4CI1OIwPW/nQMx4U
+   VUzCoi3imnjfu8zjlodhSs1edjStTRlu8gXzAUKcdVe0DBKBLR3WWNgic
+   z0ivxp+oUQTPqFRpOYDejzQ+ve34dOhtaE9mb1CKFFGYielgb+/Bg5mTE
+   A/wqT4V5ZI031+P4SeIg+H+MnCCZ7Ionw5yY6b9Lm6J0zBj+FfHiCzX3n
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="324481480"
 X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="353047369"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 07:18:29 -0800
+   d="scan'208";a="324481480"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 07:49:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="784888002"
+X-IronPort-AV: E=McAfee;i="6500,9779,10597"; a="989721476"
 X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="784888002"
+   d="scan'208";a="989721476"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jan 2023 07:18:27 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 21 Jan 2023 07:49:29 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pJFdT-0004CS-07;
-	Sat, 21 Jan 2023 15:18:27 +0000
-Date: Sat, 21 Jan 2023 23:18:26 +0800
+	id 1pJG7U-0004Du-0v;
+	Sat, 21 Jan 2023 15:49:28 +0000
+Date: Sat, 21 Jan 2023 23:49:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:gpu/rust-wip 31/408]
- drivers/soc/apple/rtkit-crashlog.c:130:21: error: use of undeclared
- identifier 'PSR_MODE_MASK'
-Message-ID: <202301212316.LGptTQLA-lkp@intel.com>
+To: "Christopher M. Riedl" <cmr@bluescreens.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Benjamin Gray <bgray@linux.ibm.com>
+Subject: arch/powerpc/include/asm/book3s/32/tlbflush.h:83:2: error: call to
+ '__compiletime_assert_175' declared with 'error' attribute: BUILD_BUG failed
+Message-ID: <202301212348.eDkowvfF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,114 +48,89 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux gpu/rust-wip
-head:   795db7e16a5eb642fbb1649baf22bdee9f1594c8
-commit: decc95a7a22f8fa3676163d5ddaf54909ff02640 [31/408] soc: apple: rtkit: Add register dump decoding to crashlog
-config: riscv-randconfig-r021-20230121 (https://download.01.org/0day-ci/archive/20230121/202301212316.LGptTQLA-lkp@intel.com/config)
+Hi Christopher,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f883675bf6522b52cd75dc3de791680375961769
+commit: c28c15b6d28a776538482101522cbcd9f906b15c powerpc/code-patching: Use temporary mm for Radix MMU
+date:   7 weeks ago
+config: powerpc-buildonly-randconfig-r001-20230121 (https://download.01.org/0day-ci/archive/20230121/202301212348.eDkowvfF-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/decc95a7a22f8fa3676163d5ddaf54909ff02640
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux gpu/rust-wip
-        git checkout decc95a7a22f8fa3676163d5ddaf54909ff02640
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c28c15b6d28a776538482101522cbcd9f906b15c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c28c15b6d28a776538482101522cbcd9f906b15c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/apple/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/lib/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/apple/rtkit-crashlog.c:130:21: error: use of undeclared identifier 'PSR_MODE_MASK'
-           switch (regs.psr & PSR_MODE_MASK) {
-                              ^
->> drivers/soc/apple/rtkit-crashlog.c:131:8: error: use of undeclared identifier 'PSR_MODE_EL0t'
-                   case PSR_MODE_EL0t:
-                        ^
->> drivers/soc/apple/rtkit-crashlog.c:134:8: error: use of undeclared identifier 'PSR_MODE_EL1t'
-                   case PSR_MODE_EL1t:
-                        ^
->> drivers/soc/apple/rtkit-crashlog.c:137:8: error: use of undeclared identifier 'PSR_MODE_EL1h'
-                   case PSR_MODE_EL1h:
-                        ^
->> drivers/soc/apple/rtkit-crashlog.c:140:8: error: use of undeclared identifier 'PSR_MODE_EL2t'
-                   case PSR_MODE_EL2t:
-                        ^
->> drivers/soc/apple/rtkit-crashlog.c:143:8: error: use of undeclared identifier 'PSR_MODE_EL2h'
-                   case PSR_MODE_EL2h:
-                        ^
-   6 errors generated.
+   In file included from arch/powerpc/lib/code-patching.c:6:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:10:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:29:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/powerpc/include/asm/pgtable.h:11:
+   In file included from arch/powerpc/include/asm/tlbflush.h:6:
+   In file included from arch/powerpc/include/asm/book3s/tlbflush.h:8:
+>> arch/powerpc/include/asm/book3s/32/tlbflush.h:83:2: error: call to '__compiletime_assert_175' declared with 'error' attribute: BUILD_BUG failed
+           BUILD_BUG();
+           ^
+   include/linux/build_bug.h:59:21: note: expanded from macro 'BUILD_BUG'
+   #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+                       ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:357:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:345:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:338:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:194:1: note: expanded from here
+   __compiletime_assert_175
+   ^
+   1 error generated.
 
 
-vim +/PSR_MODE_MASK +130 drivers/soc/apple/rtkit-crashlog.c
+vim +83 arch/powerpc/include/asm/book3s/32/tlbflush.h
 
-   115	
-   116	static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
-   117						   size_t size)
-   118	{
-   119		struct apple_rtkit_crashlog_regs regs;
-   120		const char *el;
-   121		int i;
-   122	
-   123		if (size < sizeof(regs)) {
-   124			dev_warn(rtk->dev, "RTKit: Regs section too small: 0x%lx", size);
-   125			return;
-   126		}
-   127	
-   128		memcpy(&regs, bfr, sizeof(regs));
-   129	
- > 130		switch (regs.psr & PSR_MODE_MASK) {
- > 131			case PSR_MODE_EL0t:
-   132				el = "EL0t";
-   133				break;
- > 134			case PSR_MODE_EL1t:
-   135				el = "EL1t";
-   136				break;
- > 137			case PSR_MODE_EL1h:
-   138				el = "EL1h";
-   139				break;
- > 140			case PSR_MODE_EL2t:
-   141				el = "EL2t";
-   142				break;
- > 143			case PSR_MODE_EL2h:
-   144				el = "EL2h";
-   145				break;
-   146			default:
-   147				el = "unknown";
-   148				break;
-   149		}
-   150	
-   151		dev_warn(rtk->dev, "RTKit: Exception dump:");
-   152		dev_warn(rtk->dev, "  == Exception taken from %s ==", el);
-   153		dev_warn(rtk->dev, "  PSR    = 0x%llx", regs.psr);
-   154		dev_warn(rtk->dev, "  PC     = 0x%llx\n", regs.pc);
-   155		dev_warn(rtk->dev, "  ESR    = 0x%llx\n", regs.esr);
-   156		dev_warn(rtk->dev, "  FAR    = 0x%llx\n", regs.far);
-   157		dev_warn(rtk->dev, "  SP     = 0x%llx\n", regs.sp);
-   158		dev_warn(rtk->dev, "\n");
-   159	
-   160		for (i = 0; i < 31; i += 4) {
-   161			if (i < 28)
-   162				dev_warn(rtk->dev,
-   163						 "  x%02d-x%02d = %016llx %016llx %016llx %016llx\n",
-   164						 i, i + 3,
-   165						 regs.regs[i], regs.regs[i + 1],
-   166						 regs.regs[i + 2], regs.regs[i + 3]);
-   167			else
-   168				dev_warn(rtk->dev,
-   169						 "  x%02d-x%02d = %016llx %016llx %016llx\n", i, i + 3,
-   170						 regs.regs[i], regs.regs[i + 1], regs.regs[i + 2]);
-   171		}
-   172	
-   173		dev_warn(rtk->dev, "\n");
-   174	}
-   175	
+274d842fa1efd9 Benjamin Gray 2022-11-09  79  
+274d842fa1efd9 Benjamin Gray 2022-11-09  80  static inline void local_flush_tlb_page_psize(struct mm_struct *mm,
+274d842fa1efd9 Benjamin Gray 2022-11-09  81  					      unsigned long vmaddr, int psize)
+274d842fa1efd9 Benjamin Gray 2022-11-09  82  {
+274d842fa1efd9 Benjamin Gray 2022-11-09 @83  	BUILD_BUG();
+274d842fa1efd9 Benjamin Gray 2022-11-09  84  }
+274d842fa1efd9 Benjamin Gray 2022-11-09  85  
+
+:::::: The code at line 83 was first introduced by commit
+:::::: 274d842fa1efd9449e62222c8896e0be11621f1f powerpc/tlb: Add local flush for page given mm_struct and psize
+
+:::::: TO: Benjamin Gray <bgray@linux.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
 -- 
 0-DAY CI Kernel Test Service
