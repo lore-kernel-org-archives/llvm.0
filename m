@@ -1,177 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97E7322E
-	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 17:29:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CFF0C43442
-	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 17:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EAE2598
+	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 17:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC5DC4339C
+	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 17:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674408549;
-	bh=I5pV/HoNpTTtkCpHa3T7LwdnAQwwVwXQ/luDQGSOteE=;
+	s=k20201202; t=1674410383;
+	bh=D2pedExuLZNrqCvaz8leJ1LLl8TDRo55BvOVbQvnsHw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=L3R3VeuI8b7SphmS83VI3MhZIjgDm6ANfUG/6GLDdAssBf8R7BhAf78erSlDbdCOA
-	 SHR+IgQ6/XkSHZgpJfPyQerUVWvlHhmeN4a9pX9i1iiMGQR1NCtYmJ1cXwTwfhZX7o
-	 nSUmSWPnPqViFik1ksvVU9V1IDz/9d4RBT2fojd5aUL4rHTIN4194hnchaX8aC+BTF
-	 BVqo/UYoMw7a7dCGuw7CuV/Pc986UJI4q+9eT9V3NhMq3b5TVJgU4xKxtdcd/uUXK3
-	 PYu79weFDNfEExeZDTIf8YARqxjWnMGBiR5AM+Sg0Tc3PNXSMv1Gk/Hn9eD63agM4/
-	 o6TOm8IVHvoHg==
-Received: by mail-oi1-f173.google.com with SMTP id v17so8552236oie.5
-        for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 09:29:09 -0800 (PST)
-X-Gm-Message-State: AFqh2kqlmzQo0Uh7aXeF5mLSG7PA8gfmvBo13ediUEjWXJLi0ELY8dlR
-	AYdvexDRyO5g7LYCxULcHHBJeAao2RN2Kpo0H9w=
-X-Google-Smtp-Source: AMrXdXv8T6XTJrOgPfMqPTdeIlKFiVnKdMrLMQCnsb/JOpLPDdW3j/ypXqu3QgM9nVl1xzM73W2o7XvcmK9sHyhknFM=
-X-Received: by 2002:a05:6808:1786:b0:35e:7c55:b015 with SMTP id
- bg6-20020a056808178600b0035e7c55b015mr1279449oib.287.1674408548537; Sun, 22
- Jan 2023 09:29:08 -0800 (PST)
+	b=XeN8NIhI+PlG/yfWOyYUlW0zFARxrYBSjBSadr/9jb+D4OB13s5gjH4jZS9OXhv+w
+	 pZeKdBWNNCDu7vt7UdT82aKIfXQEP2krdV+Zx1UA7tNkvvDT3Fh3TwBlsVc2xg2tBk
+	 K0i5OlM+8CrJTdgDPPyN/AIZz/yOq8LOSC1QH89u+pOwVhVqRlTHWjzH4yy7z4X5c6
+	 M4w2Ec37+EdGecPdVSz4R+SEmINCUQVhFEYviFB5CLYUU363YWl42eEdED+ZPtTkrt
+	 bkDiFBlYVa5CSVkJOSkQ0HgCtUoLqra4pUhI7cGwHdnOHfa8axujsF+ItQ0Og+eSz4
+	 Hj+SYv/4bvWXA==
+Received: by mail-ot1-f42.google.com with SMTP id f88-20020a9d03e1000000b00684c4041ff1so6092590otf.8
+        for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 09:59:42 -0800 (PST)
+X-Gm-Message-State: AFqh2ko89MmY3XDujq/pYl3nrWuuSYRp2d184crMM7lRM6Pm4cKlLIfS
+	WJk5ZB8WDkLBtnc9G7nukfdUrf21oXPA0nn1bxk=
+X-Google-Smtp-Source: AMrXdXv+qtyo8rkIgtdEIum0rnVQ7nA9lGu+dYgdpObD9i+RSncPEFAN4enCYSMJPIkQXTz+zrtc/hI56H8Zxw7puU4=
+X-Received: by 2002:a9d:6a4c:0:b0:684:a3ad:87e8 with SMTP id
+ h12-20020a9d6a4c000000b00684a3ad87e8mr1295263otn.225.1674410381648; Sun, 22
+ Jan 2023 09:59:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
-In-Reply-To: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+References: <20230112023006.1873859-1-masahiroy@kernel.org>
+ <202301121403.599806C597@keescook> <CAK7LNARaXH9gJVCJKR5GLuyEiJarxhcXoUyxXDo=MZYKLxFmyA@mail.gmail.com>
+In-Reply-To: <CAK7LNARaXH9gJVCJKR5GLuyEiJarxhcXoUyxXDo=MZYKLxFmyA@mail.gmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 23 Jan 2023 02:28:32 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ-HmyKYAWbF2MHEU1FzBzKOvE2DU7Js6tntszLrtUkDg@mail.gmail.com>
-Message-ID: <CAK7LNAQ-HmyKYAWbF2MHEU1FzBzKOvE2DU7Js6tntszLrtUkDg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, nicolas@fjasle.eu, trix@redhat.com, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, tglx@linutronix.de, 
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
-	kernel test robot <lkp@intel.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	=?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>, 
-	linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com, 
-	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org, 
-	Segher Boessenkool <segher@kernel.crashing.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org, 
-	Alex Deucher <alexander.deucher@amd.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org
+Date: Mon, 23 Jan 2023 02:59:05 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATOzfM_5ntS9TiT1=04u28tBvmPJsUWyTptZkS630B-oQ@mail.gmail.com>
+Message-ID: <CAK7LNATOzfM_5ntS9TiT1=04u28tBvmPJsUWyTptZkS630B-oQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts: handle BrokenPipeError for python scripts
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 12, 2023 at 12:05 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Sun, Jan 15, 2023 at 12:04 PM Masahiro Yamada <masahiroy@kernel.org> wro=
+te:
 >
-> Hi all,
+> On Fri, Jan 13, 2023 at 7:06 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Jan 12, 2023 at 11:30:06AM +0900, Masahiro Yamada wrote:
+> > >     def main():
+> > >         try:
+> > >             # simulate large output (your code replaces this loop)
+> > >             for x in range(10000):
+> > >                 print("y")
+> > >             # flush output here to force SIGPIPE to be triggered
+> > >             # while inside this try block.
+> > >             sys.stdout.flush()
+> > >         except BrokenPipeError:
+> > >             # Python flushes standard streams on exit; redirect remai=
+ning output
+> > >             # to devnull to avoid another BrokenPipeError at shutdown
+> > >             devnull =3D os.open(os.devnull, os.O_WRONLY)
+> > >             os.dup2(devnull, sys.stdout.fileno())
+> > >             sys.exit(1)  # Python exits with error code 1 on EPIPE
+> >
+> > I still think this is wrong -- they should not continue piping, and
+> > should just die with SIGPIPE. It should simply be:
+> >
+> > signal(SIGPIPE, SIG_DFL);
+> >
+> > Nothing else needed. No wasted CPU cycles, shell handling continues as
+> > per normal.
 >
-> Clang can emit a few different warnings when it encounters a flag that it
-> recognizes but does not support internally. These warnings are elevated to
-> errors within {as,cc}-option via -Werror to catch unsupported flags that should
-> not be added to KBUILD_{A,C}FLAGS; see commit c3f0d0bc5b01 ("kbuild, LLVMLinux:
-> Add -Werror to cc-option to support clang").
 >
-> If an unsupported flag is unconditionally to KBUILD_{A,C}FLAGS, all subsequent
-> {as,cc}-option will always fail, preventing supported and even potentially
-> necessary flags from getting adding to the tool flags.
+> I prefer try-and-except because it is Python's coding style,
+> and we can do something before the exit.
+> (for example, clean up temporary files)
 >
-> One would expect these warnings to be visible in the kernel build logs since
-> they are added to KBUILD_{A,C}FLAGS but unfortunately, these warnings are
-> hidden with clang's -Qunused-arguments flag, which is added to KBUILD_CPPFLAGS
-> and used for both compiling and assembling files.
 >
-> Patches 1-4 address the internal inconsistencies of invoking the assembler
-> within kbuild by using KBUILD_AFLAGS consistently and using '-x
-> assembler-with-cpp' over '-x assembler'. This matches how assembly files are
-> built across the kernel and helps avoid problems in situations where macro
-> definitions or warning flags are present in KBUILD_AFLAGS, which cause
-> instances of -Wunused-command-line-argument when the preprocessor is not called
-> to consume them. There were a couple of places in architecture code where this
-> change would break things so those are fixed first.
+> >
+> > >     if __name__ =3D=3D '__main__':
+> > >         main()
+> > >
+> > >   Do not set SIGPIPE=E2=80=99s disposition to SIG_DFL in order to avo=
+id
+> > >   BrokenPipeError. Doing that would cause your program to exit
+> > >   unexpectedly whenever any socket connection is interrupted while
+> > >   your program is still writing to it.
+> >
+> > This advise is for socket programs, not command-line tools.
 >
-> Patches 5-12 clean up warnings that will show up when -Qunused-argument is
-> dropped. I hope none of these are controversial.
 >
-> Patch 13 turns two warnings into errors so that the presence of unused flags
-> cannot be easily ignored.
+> I still do not understand what is bad
+> about using this for command-line tools.
 >
-> Patch 14 drops -Qunused-argument. This is done last so that it can be easily
-> reverted if need be.
 >
-> This series has seen my personal test framework, which tests several different
-> configurations and architectures, with LLVM tip of tree (16.0.0). I have done
-> defconfig, allmodconfig, and allnoconfig builds for arm, arm64, i386, mips,
-> powerpc, riscv, s390, and x86_64 with GCC 12.2.0 as well but I am hoping the
-> rest of the test infrastructure will catch any lurking problems.
+> >
+> > -Kees
+> >
+> > --
+> > Kees Cook
 >
-> I would like this series to stay together so that there is no opportunity for
-> breakage so please consider giving acks so that this can be carried via the
-> kbuild tree (and many thanks to the people who have already provided such
-> tags).
-
-
-All applied to linux-kbuild. Thanks.
-
-I left small comments in 07/14.
-
-
-
-
-
-
-
-
-> ---
-> Changes in v2:
-> - Pick up tags where provided (thank you everyone!)
-> - Patch 6 and 9: Clarify that '-s' is a compiler flag that is only relevant to
->   the linking phase and remove all mention of the assembler's '-s' flag, as the
->   assembler is never directly invoked (Nick, Segher)
-> - Patch 7: Move '-z noexecstack' into new ldflags-y variable (Nick)
-> - Patch 8: Reword commit message to explain the problem in a clearer manner
->   (Nick)
-> - Link to v1: https://lore.kernel.org/r/20221228-drop-qunused-arguments-v1-0-658cbc8fc592@kernel.org
 >
-> ---
-> Nathan Chancellor (12):
->       MIPS: Always use -Wa,-msoft-float and eliminate GAS_HAS_SET_HARDFLOAT
->       MIPS: Prefer cc-option for additions to cflags
->       powerpc: Remove linker flag from KBUILD_AFLAGS
->       powerpc/vdso: Remove unused '-s' flag from ASFLAGS
->       powerpc/vdso: Improve linker flags
->       powerpc/vdso: Remove an unsupported flag from vgettimeofday-32.o with clang
->       s390/vdso: Drop unused '-s' flag from KBUILD_AFLAGS_64
->       s390/vdso: Drop '-shared' from KBUILD_CFLAGS_64
->       s390/purgatory: Remove unused '-MD' and unnecessary '-c' flags
->       drm/amd/display: Do not add '-mhard-float' to dml_ccflags for clang
->       kbuild: Turn a couple more of clang's unused option warnings into errors
->       kbuild: Stop using '-Qunused-arguments' with clang
 >
-> Nick Desaulniers (2):
->       x86/boot/compressed: prefer cc-option for CFLAGS additions
->       kbuild: Update assembler calls to use proper flags and language target
->
->  Makefile                                    |  1 -
->  arch/mips/Makefile                          | 13 ++-------
->  arch/mips/include/asm/asmmacro-32.h         |  4 +--
->  arch/mips/include/asm/asmmacro.h            | 42 ++++++++++++++---------------
->  arch/mips/include/asm/fpregdef.h            | 14 ----------
->  arch/mips/include/asm/mipsregs.h            | 20 +++-----------
->  arch/mips/kernel/genex.S                    |  2 +-
->  arch/mips/kernel/r2300_fpu.S                |  4 +--
->  arch/mips/kernel/r4k_fpu.S                  | 12 ++++-----
->  arch/mips/kvm/fpu.S                         |  6 ++---
->  arch/mips/loongson2ef/Platform              |  2 +-
->  arch/powerpc/Makefile                       |  2 +-
->  arch/powerpc/kernel/vdso/Makefile           | 25 +++++++++++------
->  arch/s390/kernel/vdso64/Makefile            |  4 +--
->  arch/s390/purgatory/Makefile                |  2 +-
->  arch/x86/boot/compressed/Makefile           |  2 +-
->  drivers/gpu/drm/amd/display/dc/dml/Makefile |  3 ++-
->  scripts/Kconfig.include                     |  2 +-
->  scripts/Makefile.clang                      |  2 ++
->  scripts/Makefile.compiler                   |  8 +++---
->  scripts/as-version.sh                       |  2 +-
->  21 files changed, 74 insertions(+), 98 deletions(-)
-> ---
-> base-commit: 88603b6dc419445847923fcb7fe5080067a30f98
-> change-id: 20221228-drop-qunused-arguments-0c5c7dae54fb
->
-> Best regards,
 > --
-> Nathan Chancellor <nathan@kernel.org>
->
+> Best Regards
+> Masahiro Yamada
 
 
---
+
+
+Applied with the typos fixes.
+
+
+
+
+--=20
 Best Regards
 Masahiro Yamada
