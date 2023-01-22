@@ -1,256 +1,158 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209683D9F;
-	Sun, 22 Jan 2023 20:09:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674418183; x=1705954183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oQLkUGhy72RRBJNTpngo0DRv1LKKtWD9XpE1XZkpgVo=;
-  b=UL3Zgp/Hsbua6Zh5C3edmrX2xyfJcXM/a3zqYn43ngA7Dfhki+Ho5FHF
-   XNHFSHtI4CHxklG3OZRQ41Wdp0JXdLydX/8QuYhXL+vq007E6Gt3g2f6W
-   oNDdHq9jbmnamxY3YZLq73cru7AFkDSFpscPVEZA2OTuE9dk8kRUwiv2E
-   /kHlcBwVSxgDv+nMQ7wgBgl7vPYGd3cHqzUNhI1nCCdstqJddbTD5o2TS
-   Q+87zI+Ehx8mmPRFh6J2MZeiTi85D19P+reF3JuGYJeZDv320OzvlfywA
-   mVikt3uli+RmRT3BEZfJVtlGM7DQTjhl7nqQXV6CIQsEDYt1bg5dnDDrE
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="388293479"
-X-IronPort-AV: E=Sophos;i="5.97,237,1669104000"; 
-   d="scan'208";a="388293479"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 12:09:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="654690130"
-X-IronPort-AV: E=Sophos;i="5.97,237,1669104000"; 
-   d="scan'208";a="654690130"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Jan 2023 12:09:38 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pJgen-0005Dj-2C;
-	Sun, 22 Jan 2023 20:09:37 +0000
-Date: Mon, 23 Jan 2023 04:09:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
-	mhiramat@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	chinglinyu@google.com, namit@vmware.com, srivatsab@vmware.com,
-	srivatsa@csail.mit.edu, amakhalov@vmware.com,
-	vsirnapalli@vmware.com, tkundu@vmware.com, er.ajay.kaher@gmail.com,
-	Ajay Kaher <akaher@vmware.com>
-Subject: Re: [PATCH 5/8] eventfs: adding functions to create eventfs files
- and directories
-Message-ID: <202301230304.kKbSbIeq-lkp@intel.com>
-References: <1674407228-49109-5-git-send-email-akaher@vmware.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E376180C
+	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 20:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674419495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aCyB6XwLwo+afAnjgzgC5iTNrAOgMEYnS4Ir4C6aVUU=;
+	b=YbAVQWEDAS4pdUD7yUIIGUTjDPiE2aBIyxG4A6IY8uTU4qDO2pU2Wr/HoJgqQknfTa/i1G
+	1ZOB1rBYcsGlGzAUSYiJPItGGQ8Lxo+e7X+WmaI1P/rbU4V0c1jDW45ia1RuIyUzIwu8Ap
+	on6wKoREN5NxO+5uPMDx+5UdMig0vT4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-270-7IlUQJlvMbiN21QXJJPrEw-1; Sun, 22 Jan 2023 15:31:33 -0500
+X-MC-Unique: 7IlUQJlvMbiN21QXJJPrEw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D31685C064
+	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 20:31:33 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 637832026D68;
+	Sun, 22 Jan 2023 20:31:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (134/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, 2241ab53)
+Date: Sun, 22 Jan 2023 20:31:33 -0000
+To: mhoyer@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674407228-49109-5-git-send-email-akaher@vmware.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <82431.123012215313302787@us-mta-270.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ajay,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-patch link:    https://lore.kernel.org/r/1674407228-49109-5-git-send-email-akaher%40vmware.com
-patch subject: [PATCH 5/8] eventfs: adding functions to create eventfs files and directories
-config: riscv-buildonly-randconfig-r003-20230123 (https://download.01.org/0day-ci/archive/20230123/202301230304.kKbSbIeq-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/950ac8561471b622eac5555b4a7502bcd8c20663
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
-        git checkout 950ac8561471b622eac5555b4a7502bcd8c20663
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/tracefs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/tracefs/event_inode.c:48:16: warning: no previous prototype for function 'eventfs_create_file' [-Wmissing-prototypes]
-   struct dentry *eventfs_create_file(const char *name, umode_t mode,
-                  ^
-   fs/tracefs/event_inode.c:48:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dentry *eventfs_create_file(const char *name, umode_t mode,
-   ^
-   static 
->> fs/tracefs/event_inode.c:117:16: warning: no previous prototype for function 'eventfs_create_dir' [-Wmissing-prototypes]
-   struct dentry *eventfs_create_dir(const char *name, umode_t mode,
-                  ^
-   fs/tracefs/event_inode.c:117:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dentry *eventfs_create_dir(const char *name, umode_t mode,
-   ^
-   static 
-   2 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
-   Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
-   Selected by [y]:
-   - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/eventfs_create_file +48 fs/tracefs/event_inode.c
+Kernel information:
+    Commit message: Linux 6.2-rc5
 
-    23	
-    24	/**
-    25	 * eventfs_create_file - create a file in the tracefs filesystem
-    26	 * @name: a pointer to a string containing the name of the file to create.
-    27	 * @mode: the permission that the file should have.
-    28	 * @parent: a pointer to the parent dentry for this file.  This should be a
-    29	 *          directory dentry if set.  If this parameter is NULL, then the
-    30	 *          file will be created in the root of the tracefs filesystem.
-    31	 * @data: a pointer to something that the caller will want to get to later
-    32	 *        on.  The inode.i_private pointer will point to this value on
-    33	 *        the open() call.
-    34	 * @fops: a pointer to a struct file_operations that should be used for
-    35	 *        this file.
-    36	 *
-    37	 * This is the basic "create a file" function for tracefs.  It allows for a
-    38	 * wide range of flexibility in creating a file.
-    39	 *
-    40	 * This function will return a pointer to a dentry if it succeeds.  This
-    41	 * pointer must be passed to the tracefs_remove() function when the file is
-    42	 * to be removed (no automatic cleanup happens if your module is unloaded,
-    43	 * you are responsible here.)  If an error occurs, %NULL will be returned.
-    44	 *
-    45	 * If tracefs is not enabled in the kernel, the value -%ENODEV will be
-    46	 * returned.
-    47	 */
-  > 48	struct dentry *eventfs_create_file(const char *name, umode_t mode,
-    49					   struct dentry *parent, void *data,
-    50					   const struct file_operations *fop,
-    51					   bool anon)
-    52	{
-    53		struct tracefs_inode *ti;
-    54		struct dentry *dentry;
-    55		struct inode *inode;
-    56	
-    57		if (security_locked_down(LOCKDOWN_TRACEFS))
-    58			return NULL;
-    59	
-    60		if (!(mode & S_IFMT))
-    61			mode |= S_IFREG;
-    62	
-    63		if (WARN_ON_ONCE(!S_ISREG(mode)))
-    64			return NULL;
-    65	
-    66		dentry = eventfs_start_creating(name, parent);
-    67	
-    68		if (IS_ERR(dentry))
-    69			return dentry;
-    70	
-    71		inode = tracefs_get_inode(dentry->d_sb);
-    72		if (unlikely(!inode))
-    73			return eventfs_failed_creating(dentry);
-    74	
-    75		inode->i_mode = mode;
-    76		inode->i_fop = fop;
-    77		inode->i_private = data;
-    78	
-    79		ti = get_tracefs(inode);
-    80		ti->flags |= TRACEFS_EVENT_INODE;
-    81	
-    82		if (anon)
-    83			d_instantiate_anon(dentry, inode);
-    84		else
-    85			d_instantiate(dentry, inode);
-    86	
-    87		fsnotify_create(dentry->d_parent->d_inode, dentry);
-    88		return eventfs_end_creating(dentry);
-    89	}
-    90	
-    91	/**
-    92	 * eventfs_create_dir - create a dir in the tracefs filesystem
-    93	 * @name: a pointer to a string containing the name of the file to create.
-    94	 * @mode: the permission that the file should have.
-    95	 * @parent: a pointer to the parent dentry for this file.  This should be a
-    96	 *          directory dentry if set.  If this parameter is NULL, then the
-    97	 *          file will be created in the root of the tracefs filesystem.
-    98	 * @data: a pointer to something that the caller will want to get to later
-    99	 *        on.  The inode.i_private pointer will point to this value on
-   100	 *        the open() call.
-   101	 * @fop: a pointer to a struct file_operations that should be used for
-   102	 *        this dir.
-   103	 * @iop: a pointer to a struct inode_operations that should be used for
-   104	 *        this dir.
-   105	 *
-   106	 * This is the basic "create a dir" function for eventfs.  It allows for a
-   107	 * wide range of flexibility in creating a dir.
-   108	 *
-   109	 * This function will return a pointer to a dentry if it succeeds.  This
-   110	 * pointer must be passed to the tracefs_remove() function when the file is
-   111	 * to be removed (no automatic cleanup happens if your module is unloaded,
-   112	 * you are responsible here.)  If an error occurs, %NULL will be returned.
-   113	 *
-   114	 * If tracefs is not enabled in the kernel, the value -%ENODEV will be
-   115	 * returned.
-   116	 */
- > 117	struct dentry *eventfs_create_dir(const char *name, umode_t mode,
-   118					  struct dentry *parent, void *data,
-   119					  const struct file_operations *fop,
-   120					  const struct inode_operations *iop,
-   121					  bool anon)
-   122	{
-   123		struct tracefs_inode *ti;
-   124		struct dentry *dentry;
-   125		struct inode *inode;
-   126	
-   127		if (security_locked_down(LOCKDOWN_TRACEFS))
-   128			return NULL;
-   129	
-   130		WARN_ON(!S_ISDIR(mode));
-   131	
-   132		dentry = eventfs_start_creating(name, parent);
-   133	
-   134		if (IS_ERR(dentry))
-   135			return dentry;
-   136	
-   137		inode = tracefs_get_inode(dentry->d_sb);
-   138		if (unlikely(!inode))
-   139			return eventfs_failed_creating(dentry);
-   140	
-   141		inode->i_mode = mode;
-   142		inode->i_op = iop;
-   143		inode->i_fop = fop;
-   144		inode->i_private = data;
-   145	
-   146		ti = get_tracefs(inode);
-   147		ti->flags |= TRACEFS_EVENT_INODE;
-   148	
-   149		inc_nlink(inode);
-   150		if (anon)
-   151			d_instantiate_anon(dentry, inode);
-   152		else
-   153			d_instantiate(dentry, inode);
-   154		inc_nlink(dentry->d_parent->d_inode);
-   155		fsnotify_mkdir(dentry->d_parent->d_inode, dentry);
-   156		return eventfs_end_creating(dentry);
-   157	}
-   158	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/66598
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6773832
+          x86_64 (debug) - Storage - targetcli basic
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6774128
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 aarch64 - Networking cki netfilter test
+                 ppc64le - Networking cki netfilter test
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
