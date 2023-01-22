@@ -1,34 +1,43 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FF233D8
-	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 18:01:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815A6C433EF;
-	Sun, 22 Jan 2023 18:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674410486;
-	bh=ZGiCjszJqpHiIFSAq3hgbJBEIhIKVjiFIcdUwUi83q0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VY65pI9zOzf5Af1dwN1TzzmPaGvB30Z4TTP8WtMbLii3inEeuMp6dAjuzgzwlB2Li
-	 9fMnwmdNr30j6nmSq7p2aMpqEj9QgzTSG9DB0ozm0W1AbwVRh74tZKfEMf44GZTLxy
-	 haome2sNLyo9B/ReHtRrhmtrA7MkR3cbysu5xLHnPu2q8kFqzpt31hs80Tt1NcyEZl
-	 dqXcaffRhDKKasuXhwiTiAHOOiMPBcj3R1rx9QNFzu6Vv2QEySehex+kOlTHac5VX4
-	 Y/kXjKLBsfTNM25bDohNMupqpAeJ1zuI60nPLEYon0zv8q6G7J5Xlxh0/QUDqHhbGB
-	 pUhxx38MOJE1Q==
-Date: Sun, 22 Jan 2023 11:01:23 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>, ndesaulniers@google.com,
-	nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, mpe@ellerman.id.au, npiggin@gmail.com,
-	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 07/14] powerpc/vdso: Improve linker flags
-Message-ID: <Y81588GQh3fNY3fO@dev-arch.thelio-3990X>
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
- <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org>
- <CA+icZUUgq-dnSTRbdynPA8bEWg6SsCE9GYBMF6iViVmo9DfaFA@mail.gmail.com>
- <Y8BPp905fJciHNa2@dev-arch.thelio-3990X>
- <CAK7LNATRetne7hK4xNeEpn7a1=Eaxr42X6nRWohJzWGYiyiPww@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CD33C1C;
+	Sun, 22 Jan 2023 19:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674415719; x=1705951719;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ulwsytVuXIqYkaG7ErwEZYIxX5CJ+kB5FeiME/JeBHo=;
+  b=W5YeHAlmTniMAwdBn3NiTlH2tciEbEe2BWDPwLqvscspcLgEfm3/+8ir
+   lEO//pkujba0/6K39UB4NpObU4lPlp6kL3aGIp5s88EaTvZIDI7d8cgKb
+   yT7uy6QsJk3pqn4f0kuWsmgWCmaXykdvW6Zm8GoAfRLITcvpHfw4x2PMY
+   YaPcidmvLDLw2Uq4yG/AaKc45y+Xrx7Xdkxq8WnWVL1pw1kKmS8Uxx2RV
+   j40lrIPv5rqv/oZ72A+1lUGLgtF1cn/Cs7Vv2A89Ldl32LYl2HksKoaOC
+   WtGtVfKsWOA1ShrKh+N3knEDu8HmzhAqsgNdqQvTm7WIKTeqfkGZJ3jgW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="328021416"
+X-IronPort-AV: E=Sophos;i="5.97,237,1669104000"; 
+   d="scan'208";a="328021416"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 11:28:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="835251622"
+X-IronPort-AV: E=Sophos;i="5.97,237,1669104000"; 
+   d="scan'208";a="835251622"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2023 11:28:37 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pJg16-0005Ce-2d;
+	Sun, 22 Jan 2023 19:28:36 +0000
+Date: Mon, 23 Jan 2023 03:27:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/mm/copypage-xscale.c:84:6: warning: no previous prototype
+ for function 'xscale_mc_copy_user_highpage'
+Message-ID: <202301230336.JTD7TDdA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,135 +46,109 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNATRetne7hK4xNeEpn7a1=Eaxr42X6nRWohJzWGYiyiPww@mail.gmail.com>
 
-On Mon, Jan 23, 2023 at 02:27:51AM +0900, Masahiro Yamada wrote:
-> On Fri, Jan 13, 2023 at 3:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Sedat,
-> >
-> > On Thu, Jan 12, 2023 at 07:02:30PM +0100, Sedat Dilek wrote:
-> > > On Thu, Jan 12, 2023 at 4:06 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, there
-> > > > are several warnings in the PowerPC vDSO:
-> > > >
-> > > >   clang-16: error: -Wl,-soname=linux-vdso32.so.1: 'linker' input unused [-Werror,-Wunused-command-line-argument]
-> > > >   clang-16: error: -Wl,--hash-style=both: 'linker' input unused [-Werror,-Wunused-command-line-argument]
-> > > >   clang-16: error: argument unused during compilation: '-shared' [-Werror,-Wunused-command-line-argument]
-> > > >
-> > > >   clang-16: error: argument unused during compilation: '-nostdinc' [-Werror,-Wunused-command-line-argument]
-> > > >   clang-16: error: argument unused during compilation: '-Wa,-maltivec' [-Werror,-Wunused-command-line-argument]
-> > > >
-> > > > The first group of warnings point out that linker flags were being added
-> > > > to all invocations of $(CC), even though they will only be used during
-> > > > the final vDSO link. Move those flags to ldflags-y.
-> > > >
-> > > > The second group of warnings are compiler or assembler flags that will
-> > > > be unused during linking. Filter them out from KBUILD_CFLAGS so that
-> > > > they are not used during linking.
-> > > >
-> > > > Additionally, '-z noexecstack' was added directly to the ld_and_check
-> > > > rule in commit 1d53c0192b15 ("powerpc/vdso: link with -z noexecstack")
-> > > > but now that there is a common ldflags variable, it can be moved there.
-> > > >
-> > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > > ---
-> > > > Cc: mpe@ellerman.id.au
-> > > > Cc: npiggin@gmail.com
-> > > > Cc: christophe.leroy@csgroup.eu
-> > > > Cc: linuxppc-dev@lists.ozlabs.org
-> > > > ---
-> > > >  arch/powerpc/kernel/vdso/Makefile | 18 +++++++++++-------
-> > > >  1 file changed, 11 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-> > > > index 45c0cc5d34b6..4337b3aa9171 100644
-> > > > --- a/arch/powerpc/kernel/vdso/Makefile
-> > > > +++ b/arch/powerpc/kernel/vdso/Makefile
-> > > > @@ -47,13 +47,17 @@ KCOV_INSTRUMENT := n
-> > > >  UBSAN_SANITIZE := n
-> > > >  KASAN_SANITIZE := n
-> > > >
-> > > > -ccflags-y := -shared -fno-common -fno-builtin -nostdlib -Wl,--hash-style=both
-> > > > -ccflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
-> > > > -
-> > > > -CC32FLAGS := -Wl,-soname=linux-vdso32.so.1 -m32
-> > > > +ccflags-y := -fno-common -fno-builtin
-> > > > +ldflags-y := -Wl,--hash-style=both -nostdlib -shared -z noexecstack
-> > > > +ldflags-$(CONFIG_LD_IS_LLD) += $(call cc-option,--ld-path=$(LD),-fuse-ld=lld)
-> > > > +# Filter flags that clang will warn are unused for linking
-> > > > +ldflags-y += $(filter-out $(CC_FLAGS_FTRACE) -Wa$(comma)%, $(KBUILD_CFLAGS))
-> > > > +
-> > > > +CC32FLAGS := -m32
-> > > > +LD32FLAGS := -Wl,-soname=linux-vdso32.so.1
-> > > >  AS32FLAGS := -D__VDSO32__
-> > > >
-> > > > -CC64FLAGS := -Wl,-soname=linux-vdso64.so.1
-> > >
-> > > Set CC64FLAGS := -m64 ?
-> >
-> > I do not think it is necessary. ldflags-y is filtered from
-> > KBUILD_CFLAGS, which should already include '-m64' (search for
-> > 'HAS_BIARCH' in arch/powerpc/Makefile). We would have seen a problem
-> > with this already if a 32-bit target (powerpc-linux-gnu-) CROSS_COMPILE
-> > value since $(c_flags) uses the main kernel's CROSS_COMPILE value.
-> >
-> > > > +LD64FLAGS := -Wl,-soname=linux-vdso64.so.1
-> > > >  AS64FLAGS := -D__VDSO64__
-> > > >
-> > > >  targets += vdso32.lds
-> > > > @@ -92,14 +96,14 @@ include/generated/vdso64-offsets.h: $(obj)/vdso64.so.dbg FORCE
-> > > >
-> > > >  # actual build commands
-> > > >  quiet_cmd_vdso32ld_and_check = VDSO32L $@
-> > > > -      cmd_vdso32ld_and_check = $(VDSOCC) $(c_flags) $(CC32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
-> > > > +      cmd_vdso32ld_and_check = $(VDSOCC) $(ldflags-y) $(CC32FLAGS) $(LD32FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
-> > > >  quiet_cmd_vdso32as = VDSO32A $@
-> > > >        cmd_vdso32as = $(VDSOCC) $(a_flags) $(CC32FLAGS) $(AS32FLAGS) -c -o $@ $<
-> > > >  quiet_cmd_vdso32cc = VDSO32C $@
-> > > >        cmd_vdso32cc = $(VDSOCC) $(c_flags) $(CC32FLAGS) -c -o $@ $<
-> > > >
-> > > >  quiet_cmd_vdso64ld_and_check = VDSO64L $@
-> > > > -      cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) -z noexecstack ; $(cmd_vdso_check)
-> > > > +      cmd_vdso64ld_and_check = $(VDSOCC) $(ldflags-y) $(CC64FLAGS) $(LD64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^); $(cmd_vdso_check)
-> > >
-> > > If no CC64FLAGS := xxx is set, this can go?
-> >
-> > Good catch! CC64FLAGS can be removed. Masahiro, I am happy to send a v3
-> > when I am back online next week but if you are able to fix it up during
-> > application, please feel free to do so (once the PowerPC folks give
-> > their Acks of course).
-> 
-> I removed CC64FLAGS locally.
+Hi Arnd,
 
-Thank you!
+First bad commit (maybe != root cause):
 
-> Just two comments.
-> 
-> - Is 7f3d349065d0c643f7f7013fbf9bc9f2c90b675f
->   applicable to powerpc too?
-> 
->   Maybe, as a follow-up cleanup, use $(LD)
->   and remove -Wl, prefixes.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2241ab53cbb5cdb08a6b2d4688feb13971058f65
+commit: 7036440eab3e2d47a775d4616909f8235488d714 ARM: omap1: enable multiplatform
+date:   8 months ago
+config: arm-randconfig-r046-20230122 (https://download.01.org/0day-ci/archive/20230123/202301230336.JTD7TDdA-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7036440eab3e2d47a775d4616909f8235488d714
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7036440eab3e2d47a775d4616909f8235488d714
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
-Yes, that should be possible to do here as well. Nick attempted it some
-time ago but there was some complications with older tools, so we
-decided to use ld.lld via the compiler in commit 4406b12214f6
-("powerpc/vdso: Link with ld.lld when requested").
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> - ldflags-y still pulls $(KBUILD_CFLAGS).
->   Potentially, a new flag addition to KBUILD_CFLAGS
->   may trigger a new -Wunused-command-line-argument warning.
+All warnings (new ones prefixed by >>):
 
-Right, this is certainly possible. Hopefully it will not happen
-frequently enough to be problematic.
+>> arch/arm/mm/copypage-xscale.c:84:6: warning: no previous prototype for function 'xscale_mc_copy_user_highpage' [-Wmissing-prototypes]
+   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
+        ^
+   arch/arm/mm/copypage-xscale.c:84:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
+   ^
+   static 
+>> arch/arm/mm/copypage-xscale.c:107:1: warning: no previous prototype for function 'xscale_mc_clear_user_highpage' [-Wmissing-prototypes]
+   xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+   ^
+   arch/arm/mm/copypage-xscale.c:106:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   2 warnings generated.
 
->   I hope somebody takes a closer look at which flags
->   are really needed for the linker.
 
-This is definitely not a bad idea.
+vim +/xscale_mc_copy_user_highpage +84 arch/arm/mm/copypage-xscale.c
 
-Cheers,
-Nathan
+f8f98a9335db4a Russell King    2005-06-08   83  
+063b0a4207e43a Russell King    2008-10-31  @84  void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
+f00a75c094c340 Russell King    2009-10-05   85  	unsigned long vaddr, struct vm_area_struct *vma)
+f8f98a9335db4a Russell King    2005-06-08   86  {
+5472e862de2bc4 Cong Wang       2011-11-25   87  	void *kto = kmap_atomic(to);
+1c9d3df5e88ad7 Richard Purdie  2006-12-30   88  
+c01778001a4f5a Catalin Marinas 2010-09-13   89  	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
+cb9f753a3731f7 Huang Ying      2018-04-05   90  		__flush_dcache_page(page_mapping_file(from), from);
+1c9d3df5e88ad7 Richard Purdie  2006-12-30   91  
+bd31b85960a7fc Thomas Gleixner 2009-07-03   92  	raw_spin_lock(&minicache_lock);
+f8f98a9335db4a Russell King    2005-06-08   93  
+67ece1443174d8 Russell King    2011-07-02   94  	set_top_pte(COPYPAGE_MINICACHE, mk_pte(from, minicache_pgprot));
+f8f98a9335db4a Russell King    2005-06-08   95  
+f8f98a9335db4a Russell King    2005-06-08   96  	mc_copy_user_page((void *)COPYPAGE_MINICACHE, kto);
+f8f98a9335db4a Russell King    2005-06-08   97  
+bd31b85960a7fc Thomas Gleixner 2009-07-03   98  	raw_spin_unlock(&minicache_lock);
+063b0a4207e43a Russell King    2008-10-31   99  
+5472e862de2bc4 Cong Wang       2011-11-25  100  	kunmap_atomic(kto);
+f8f98a9335db4a Russell King    2005-06-08  101  }
+f8f98a9335db4a Russell King    2005-06-08  102  
+f8f98a9335db4a Russell King    2005-06-08  103  /*
+f8f98a9335db4a Russell King    2005-06-08  104   * XScale optimised clear_user_page
+f8f98a9335db4a Russell King    2005-06-08  105   */
+303c6443659bc1 Russell King    2008-10-31  106  void
+303c6443659bc1 Russell King    2008-10-31 @107  xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+f8f98a9335db4a Russell King    2005-06-08  108  {
+5472e862de2bc4 Cong Wang       2011-11-25  109  	void *ptr, *kaddr = kmap_atomic(page);
+c7b68049943079 Arnd Bergmann   2019-08-09  110  	asm volatile("\
+c7b68049943079 Arnd Bergmann   2019-08-09  111  .arch xscale					\n\
+c7b68049943079 Arnd Bergmann   2019-08-09  112  	mov	r1, %2				\n\
+f8f98a9335db4a Russell King    2005-06-08  113  	mov	r2, #0				\n\
+f8f98a9335db4a Russell King    2005-06-08  114  	mov	r3, #0				\n\
+303c6443659bc1 Russell King    2008-10-31  115  1:	mov	ip, %0				\n\
+bc2eca9a682881 Nicolas Pitre   2018-11-09  116  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre   2018-11-09  117  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre   2018-11-09  118  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre   2018-11-09  119  	strd	r2, r3, [%0], #8		\n\
+f8f98a9335db4a Russell King    2005-06-08  120  	mcr	p15, 0, ip, c7, c10, 1		@ clean D line\n\
+f8f98a9335db4a Russell King    2005-06-08  121  	subs	r1, r1, #1			\n\
+f8f98a9335db4a Russell King    2005-06-08  122  	mcr	p15, 0, ip, c7, c6, 1		@ invalidate D line\n\
+303c6443659bc1 Russell King    2008-10-31  123  	bne	1b"
+43ae286b7d4d8c Nicolas Pitre   2008-11-04  124  	: "=r" (ptr)
+43ae286b7d4d8c Nicolas Pitre   2008-11-04  125  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
+303c6443659bc1 Russell King    2008-10-31  126  	: "r1", "r2", "r3", "ip");
+5472e862de2bc4 Cong Wang       2011-11-25  127  	kunmap_atomic(kaddr);
+f8f98a9335db4a Russell King    2005-06-08  128  }
+f8f98a9335db4a Russell King    2005-06-08  129  
+
+:::::: The code at line 84 was first introduced by commit
+:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
+
+:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
