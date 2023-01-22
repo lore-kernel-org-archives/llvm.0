@@ -1,91 +1,151 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E072115
-	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 22:27:55 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id u1-20020a17090a450100b0022936a63a21so13713644pjg.4
-        for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 14:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/dAZopDqbAo3QdY1k+KfmF5laZlZPUhPOvXWpz29n6Q=;
-        b=Te1loueT5FFT0///54ss+EGi5NnqZVnF66p9MrcSE2rlWW1aIYLlCCmGTCSW0F6DSF
-         zGy/XhMPjWNOg0DTMdyryIdeC6S94qekXqZk6buO+/Y1zMPfGEuPKe1HnPmE+ScrERWn
-         xI0FN6LDwN/9ZhC6ZxOtaJRABzDIs/aJ7ag5KnguVVe25wjnO9VF6p7+lMwTFL65IFcD
-         gYlMIM1RXLCrAEXfPrPZoDmNxd0gYLglpwxFXhBXpa316k2GQE2o2N4FFVpLefP8Lhf9
-         Xcqt1FTx9L0iCGSIFzYdmU532nJrR280DdX4Ubcy0mcevXrzERjnxXMMVfUgJYIabw5P
-         V7TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/dAZopDqbAo3QdY1k+KfmF5laZlZPUhPOvXWpz29n6Q=;
-        b=M7lrB4MIdImO2IX8cuHImxRgfyFToDS0WOD6CJyofveh17IU3XVu+4jwuPAhT1WnCf
-         K+nphL7hRXUy1X8PPi+Hj1LhRbePPLJM6qSSCtYKqkqgFjAv/g3/g5qL6nFKAmD/HCq9
-         VCEZBQgASDy6sc9z+Md3o8MYEmuoDZMkulay9BAEQeufldP3OlcchJszYDmfEzXlroxG
-         u0NQEmAYxK/NWuinNwlJLa+n1cROTDwU2/p+OtHiubhZ0HqicfZUG1Y0YdkBpSbbpMLO
-         HVwbib5PFqzbgAZv1o4MdlquDAIGXtA5ZovUCQ4SpeHmFKXAERf7yat3aqdcP3qIU7dX
-         MLqg==
-X-Gm-Message-State: AFqh2krK+EiKLXBjFKjwlqkw2Yg9EmHxNx7Q5Ijy4bx0GNTBt5gZcPdQ
-	CzDffhW7aTQL78ih20By7D5CRw==
-X-Google-Smtp-Source: AMrXdXvaxXC+r8949o3MWU3crnBc0kvErgg9rRt/S+eh5ENhV+3MuHcztG7rmUXpDJjEAnKh9bEC/A==
-X-Received: by 2002:a17:902:9041:b0:193:3a44:c436 with SMTP id w1-20020a170902904100b001933a44c436mr5527342plz.6.1674426475215;
-        Sun, 22 Jan 2023 14:27:55 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id t16-20020a1709028c9000b001947ba0ac8fsm3706940plo.236.2023.01.22.14.27.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 14:27:54 -0800 (PST)
-Message-ID: <1ce4f09a-f4c3-ccd5-556e-3eb3aaa143f1@kernel.dk>
-Date: Sun, 22 Jan 2023 15:27:53 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA371320F;
+	Sun, 22 Jan 2023 23:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674429230; x=1705965230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p4zihUGlUVon576ZG2MBamybWBvtrWsAIn3m0PxR2aY=;
+  b=mGhb+qUhRzbiyuT8zA6xr7ynWRrkQJ8jTweRZjDYFzvbu9pbNU6Quqbv
+   Bs2rfUA1Xxn9/yAnGDD2Zv5STp37eGjUeky8ckig9rTn9EHVMc1eYlllD
+   D3s4i/tbuUdQRofGiPrDDt0ZP6vVD82Q/L3u8URPdfgKBzSMwdy3mDAnK
+   /suatnXa2Yw5MIqpEHAjILiZB/clQj8ZeN12Oz+aX/bbDaNk/wbNjfHBS
+   ejtbdR/b7xawvCrRzuyx1dWdfTbxVTWzfXGt5qCUDdsiTAa4D0x2mbg5H
+   eFJmi11c25XMySq+nYlNPwgQFY/WAkIDXbQ7LiZnLA4k6tGxhnUrck0wG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="305611254"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="305611254"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 15:13:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="750137575"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="750137575"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Jan 2023 15:13:45 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pJjWy-0005Ho-2A;
+	Sun, 22 Jan 2023 23:13:44 +0000
+Date: Mon, 23 Jan 2023 07:13:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+	mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v3] media: verisilicon: HEVC: Only propose 10 bits
+ compatible pixels formats
+Message-ID: <202301230653.0LvIKTcP-lkp@intel.com>
+References: <20230119084723.133576-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] paride/pcd: return earlier when an error happens in
- pcd_atapi()
-Content-Language: en-US
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Tom Rix <trix@redhat.com>, tim@cyberelk.net, nathan@kernel.org,
- ndesaulniers@google.com, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230122154901.505142-1-trix@redhat.com>
- <1a501bc9-7058-6c47-0ebf-44459bc0e730@kernel.dk> <Y820PCtcJv12fJpI@ZenIV>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y820PCtcJv12fJpI@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119084723.133576-1-benjamin.gaignard@collabora.com>
 
-On 1/22/23 3:10 PM, Al Viro wrote:
-> On Sun, Jan 22, 2023 at 01:49:00PM -0700, Jens Axboe wrote:
->> On 1/22/23 8:49 AM, Tom Rix wrote:
->>> clang static analysis reports
->>> drivers/block/paride/pcd.c:856:36: warning: The left operand of '&'
->>>   is a garbage value [core.UndefinedBinaryOperatorResult]
->>>   tocentry->cdte_ctrl = buffer[5] & 0xf;
->>>                         ~~~~~~~~~ ^
->>
->> Has this one been compiled? I'm guessing not tested...
->>
->> In any case, this code is going away hopefully shortly, so let's not
->> bother with changes like this.
-> 
-> 	Look at the callers - the value left in entry is discarded if
-> ->audio_ioctl(..., CDROMREADTOCENTRY, &entry) returns non-zero.  Sure,
-> it's a nasal daemon territory, but realistically it's not going to be
-> caught by testing.
+Hi Benjamin,
 
-I don't expect anyone really to be able to test it, but v1 had a pretty
-basic issue that would've surely triggered a compiler warning had it
-been compiled.
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on sailus-media-tree/streams linus/master v6.2-rc5 next-20230120]
+[cannot apply to pza/reset/next pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-verisilicon-HEVC-Only-propose-10-bits-compatible-pixels-formats/20230119-164844
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230119084723.133576-1-benjamin.gaignard%40collabora.com
+patch subject: [PATCH v3] media: verisilicon: HEVC: Only propose 10 bits compatible pixels formats
+config: arm-randconfig-r022-20230122 (https://download.01.org/0day-ci/archive/20230123/202301230653.0LvIKTcP-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/11b698515c987afb9699f60be773dd7c52cea592
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Gaignard/media-verisilicon-HEVC-Only-propose-10-bits-compatible-pixels-formats/20230119-164844
+        git checkout 11b698515c987afb9699f60be773dd7c52cea592
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/platform/verisilicon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:20:
+   In file included from include/linux/videodev2.h:61:
+   include/uapi/linux/videodev2.h:1779:2: warning: field  within 'struct v4l2_ext_control' is less aligned than 'union v4l2_ext_control::(anonymous at include/uapi/linux/videodev2.h:1779:2)' and is usually due to 'struct v4l2_ext_control' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union {
+           ^
+>> drivers/media/platform/verisilicon/hantro_drv.c:293:3: error: expected expression
+                   const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
+                   ^
+>> drivers/media/platform/verisilicon/hantro_drv.c:294:19: error: use of undeclared identifier 'sps'
+                   int bit_depth = sps->bit_depth_luma_minus8 + 8;
+                                   ^
+   drivers/media/platform/verisilicon/hantro_drv.c:294:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+                   int bit_depth = sps->bit_depth_luma_minus8 + 8;
+                       ^
+   drivers/media/platform/verisilicon/hantro_drv.c:1004:46: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                          ^~~~~
+   3 warnings and 2 errors generated.
+
+
+vim +293 drivers/media/platform/verisilicon/hantro_drv.c
+
+   281	
+   282	static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+   283	{
+   284		struct hantro_ctx *ctx;
+   285	
+   286		ctx = container_of(ctrl->handler,
+   287				   struct hantro_ctx, ctrl_handler);
+   288	
+   289		vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
+   290	
+   291		switch (ctrl->id) {
+   292		case V4L2_CID_STATELESS_HEVC_SPS:
+ > 293			const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
+ > 294			int bit_depth = sps->bit_depth_luma_minus8 + 8;
+   295	
+   296			if (ctx->bit_depth != bit_depth) {
+   297				ctx->bit_depth = bit_depth;
+   298				return hantro_reset_raw_fmt(ctx);
+   299			}
+   300			break;
+   301		default:
+   302			return -EINVAL;
+   303		}
+   304	
+   305		return 0;
+   306	}
+   307	
 
 -- 
-Jens Axboe
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
