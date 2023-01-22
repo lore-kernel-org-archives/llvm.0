@@ -1,158 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E376180C
-	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 20:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674419495;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=aCyB6XwLwo+afAnjgzgC5iTNrAOgMEYnS4Ir4C6aVUU=;
-	b=YbAVQWEDAS4pdUD7yUIIGUTjDPiE2aBIyxG4A6IY8uTU4qDO2pU2Wr/HoJgqQknfTa/i1G
-	1ZOB1rBYcsGlGzAUSYiJPItGGQ8Lxo+e7X+WmaI1P/rbU4V0c1jDW45ia1RuIyUzIwu8Ap
-	on6wKoREN5NxO+5uPMDx+5UdMig0vT4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-7IlUQJlvMbiN21QXJJPrEw-1; Sun, 22 Jan 2023 15:31:33 -0500
-X-MC-Unique: 7IlUQJlvMbiN21QXJJPrEw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D31685C064
-	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 20:31:33 +0000 (UTC)
-Received: from [172.64.0.101] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 637832026D68;
-	Sun, 22 Jan 2023 20:31:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (134/383 SKIPPED): Test report for master
- (6.2.0-rc5, mainline.kernel.org-clang, 2241ab53)
-Date: Sun, 22 Jan 2023 20:31:33 -0000
-To: mhoyer@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9949C2115
+	for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 20:49:03 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso9405283pjf.1
+        for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 12:49:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5WJZMQA7v4Th1qcxlhjbVBkGKPGVYQAd/RZT7qOQl8U=;
+        b=kt0tafUOm0RxWZP0+BbaOKGRYiP89lUi7mOxliO2REmvNBNgn9fWT/DAzXu7XM80pa
+         rPM2c1goiHbQvBrorvYNcJrw4hH5ecLv9x5JD3v3ge5Q7xOmfjLweHJfYaeMxVKZB2De
+         mO5XMZz42JyiZZPhCDrr3U2JXm0lhDXDjXqETAxBrjxTMNUQieZldZbCnW1k8I1nnB/V
+         CIdwKKY9zbKcppBWDB7ZuScmHMuhVjtGvPNuCbDluI7dU/71myIXe/9ncMi4g4D3ufbr
+         quI/wu9Iezx4w6+VeE5QV60qhFYxrPDYtlH925ztGlqdwqW7MCjWE+isA3HWV6r4qc2H
+         qItg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WJZMQA7v4Th1qcxlhjbVBkGKPGVYQAd/RZT7qOQl8U=;
+        b=fRbrmaMo6GAL/g5776ziWxM5K+S8BXEKfmcbXVtEhqRPEqcyo3UrvvD+2OFZF88YUO
+         TgwQpM6d4zC9vDGAtXBQ3luxwmG7K1vak7rPsPHoz49Z9haUibi2Q3r19Hy5jY/9G+HN
+         mpCLc5e1mNCogKeV5ZjlnHiDp3j8RYY8zBOF9QAjFzylCTCxCQdW86z7bDJG2FcS+a28
+         tlM69eyn22fdp8VPvaSzeBZv0XOPuZq0mdtfQ3mnf5Dbet+03z8ELLadu3zmq/t9ltZn
+         bGHdj7CdygrrLdJ+b8XpxGwyYoGLORFMnqSTNJYKHVWOqxVmng749ISLv+73KJ//gOOr
+         FJyA==
+X-Gm-Message-State: AFqh2koXk2Mj+nQu3Ra36rrjsTNs29RKruHb/QqUwGJrK5qVrHMEXWBE
+	RYxXadeaZipCKRoYF2XYaiMm9Q==
+X-Google-Smtp-Source: AMrXdXvyQSV+qYXNvJm+cGGxO2TAXRsOirLpHAx65emFQK0O6KYlUqfGqEx6JIp+BtRNcviWHOKlbQ==
+X-Received: by 2002:a05:6a20:429e:b0:b5:f664:b4bc with SMTP id o30-20020a056a20429e00b000b5f664b4bcmr7108121pzj.2.1674420542819;
+        Sun, 22 Jan 2023 12:49:02 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u64-20020a627943000000b00581816425f3sm29636220pfc.112.2023.01.22.12.49.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 12:49:02 -0800 (PST)
+Message-ID: <1a501bc9-7058-6c47-0ebf-44459bc0e730@kernel.dk>
+Date: Sun, 22 Jan 2023 13:49:00 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <82431.123012215313302787@us-mta-270.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] paride/pcd: return earlier when an error happens in
+ pcd_atapi()
+To: Tom Rix <trix@redhat.com>, tim@cyberelk.net, nathan@kernel.org,
+ ndesaulniers@google.com
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230122154901.505142-1-trix@redhat.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230122154901.505142-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+On 1/22/23 8:49 AM, Tom Rix wrote:
+> clang static analysis reports
+> drivers/block/paride/pcd.c:856:36: warning: The left operand of '&'
+>   is a garbage value [core.UndefinedBinaryOperatorResult]
+>   tocentry->cdte_ctrl = buffer[5] & 0xf;
+>                         ~~~~~~~~~ ^
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Has this one been compiled? I'm guessing not tested...
 
+In any case, this code is going away hopefully shortly, so let's not
+bother with changes like this.
 
-Kernel information:
-    Commit message: Linux 6.2-rc5
+-- 
+Jens Axboe
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/66598
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6773832
-          x86_64 (debug) - Storage - targetcli basic
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6774128
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 ppc64le - Networking cki netfilter test
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
