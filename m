@@ -1,46 +1,45 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E3E320F;
-	Sun, 22 Jan 2023 23:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCF9624;
+	Mon, 23 Jan 2023 01:46:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674429829; x=1705965829;
+  t=1674438412; x=1705974412;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7CJQ0jmsEt+dJReSCxVWoW2tGWdndhsW2nRcoMURKAw=;
-  b=npAxR24nR0JeD36R5BZ0rR5ZZrwycjN0iWnbtFl/S7NX+k74y7KE73v4
-   la/N9bvQfOiV9lmqkxtBzZ4/wZyrDAWvTlxj4CqGNdsMiieLvDmlzlT9x
-   gXHaw4+hAiPb53xpbhqL2UWzUZOtnAHtXPrfYsiW4yxcFnoioeYVyVNoJ
-   elkfoUwiRI9axfGl1X2psBUiC9z9k2WtITAd+FXYup7fLf4WsF2Fkssv9
-   HV9lKqJ/34UtvQSeMCPiKFCE4WJ3d0yju7NVSvWWb4iTlOSHhMopCcbn/
-   D1IUdUgxvGwK542PvmwsYbidZNsxKdfcrz/q+2hIKVwLPQsh6JpqTwO1E
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="412180924"
+  bh=EGJof3QWY+8pgi5OVYQh1ZQYF1aRBf7Ze6eSZ+OAmEM=;
+  b=X3WUgqo6dei5Zoz0/PHULWjXhKZmMjh+9uyu6F8gPm3IzSRxUx+Za4X2
+   aQAVwr4QzsTavpOuyuBTvfTt/R2e9sLyyN82ELeTfKpL2W/5hNAgCGAyw
+   OtWdWeCVQjaeez4VEruaXYqyPndvHKt8uGXDnwoFWeMr5QV7eIHfTDXsv
+   P6F7ZsU+5CQFSbfbTwf/i6frrhXUtHmYo8ywhbXLBrKLunNCfJnJ30O/d
+   ANiRaUxCXhHSKSYilHsK5Wm3XWzp4Ln1hDyVETefxnXqx5YZg5pLsgOQU
+   IRZRfefbgK5n92+cgutP7gFHLdPecy9VpWHpDk1dTLfuPfrAi0n65jPtX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="309534185"
 X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="412180924"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 15:23:48 -0800
+   d="scan'208";a="309534185"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 17:46:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="693675428"
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="835308337"
 X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="693675428"
+   d="scan'208";a="835308337"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jan 2023 15:23:45 -0800
+  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2023 17:46:49 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pJjge-0005I4-2i;
-	Sun, 22 Jan 2023 23:23:44 +0000
-Date: Mon, 23 Jan 2023 07:23:27 +0800
+	id 1pJlv6-0005LY-1a;
+	Mon, 23 Jan 2023 01:46:48 +0000
+Date: Mon, 23 Jan 2023 09:46:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shazad Hussain <quic_shazhuss@quicinc.com>
+To: Graham Sider <Graham.Sider@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [linux-next:master 5692/6912] drivers/clk/qcom/gcc-sa8775p.c:313:32:
- warning: unused variable 'gcc_parent_map_10'
-Message-ID: <202301230743.Xnut0Zvc-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38:
+ warning: variable 'sq_int_priv' set but not used
+Message-ID: <202301230955.jdrEG3k9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,178 +49,154 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   d514392f17fd4d386cfadde7f849d97db4ca1fb0
-commit: 08c51ceb12f7ce2252513a38ad8a8ed26103a4e2 [5692/6912] clk: qcom: add the GCC driver for sa8775p
-config: riscv-randconfig-c006-20230122 (https://download.01.org/0day-ci/archive/20230123/202301230743.Xnut0Zvc-lkp@intel.com/config)
+Hi Graham,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2475bf0250dee99b477e0c56d7dc9d7ac3f04117
+commit: 664883ddde67971d59764f2dda855183ecf8bc46 drm/amdkfd: fix dropped interrupt in kfd_int_process_v11
+date:   4 months ago
+config: arm64-randconfig-r012-20230123 (https://download.01.org/0day-ci/archive/20230123/202301230955.jdrEG3k9-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=08c51ceb12f7ce2252513a38ad8a8ed26103a4e2
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 08c51ceb12f7ce2252513a38ad8a8ed26103a4e2
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=664883ddde67971d59764f2dda855183ecf8bc46
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 664883ddde67971d59764f2dda855183ecf8bc46
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clk/qcom/ drivers/media/platform/verisilicon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/clk/qcom/gcc-sa8775p.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/clk/qcom/gcc-sa8775p.c:313:32: warning: unused variable 'gcc_parent_map_10' [-Wunused-const-variable]
-   static const struct parent_map gcc_parent_map_10[] = {
-                                  ^
->> drivers/clk/qcom/gcc-sa8775p.c:318:37: warning: unused variable 'gcc_parent_data_10' [-Wunused-const-variable]
-   static const struct clk_parent_data gcc_parent_data_10[] = {
-                                       ^
->> drivers/clk/qcom/gcc-sa8775p.c:333:32: warning: unused variable 'gcc_parent_map_12' [-Wunused-const-variable]
-   static const struct parent_map gcc_parent_map_12[] = {
-                                  ^
->> drivers/clk/qcom/gcc-sa8775p.c:338:37: warning: unused variable 'gcc_parent_data_12' [-Wunused-const-variable]
-   static const struct clk_parent_data gcc_parent_data_12[] = {
-                                       ^
-   17 warnings generated.
+>> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38: warning: variable 'sq_int_priv' set but not used [-Wunused-but-set-variable]
+           uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
+                                               ^
+   1 warning generated.
 
 
-vim +/gcc_parent_map_10 +313 drivers/clk/qcom/gcc-sa8775p.c
+vim +/sq_int_priv +282 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c
 
-   312	
- > 313	static const struct parent_map gcc_parent_map_10[] = {
-   314		{ P_PCIE_0_PIPE_CLK, 0 },
-   315		{ P_BI_TCXO, 2 },
-   316	};
-   317	
- > 318	static const struct clk_parent_data gcc_parent_data_10[] = {
-   319		{ .index = DT_PCIE_0_PIPE_CLK },
-   320		{ .index = DT_BI_TCXO },
-   321	};
-   322	
-   323	static const struct parent_map gcc_parent_map_11[] = {
-   324		{ P_PCIE_PHY_AUX_CLK, 1 },
-   325		{ P_BI_TCXO, 2 },
-   326	};
-   327	
-   328	static const struct clk_parent_data gcc_parent_data_11[] = {
-   329		{ .index = DT_PCIE_PHY_AUX_CLK },
-   330		{ .index = DT_BI_TCXO },
-   331	};
-   332	
- > 333	static const struct parent_map gcc_parent_map_12[] = {
-   334		{ P_PCIE_1_PIPE_CLK, 0 },
-   335		{ P_BI_TCXO, 2 },
-   336	};
-   337	
- > 338	static const struct clk_parent_data gcc_parent_data_12[] = {
-   339		{ .index = DT_PCIE_1_PIPE_CLK },
-   340		{ .index = DT_BI_TCXO },
-   341	};
-   342	
+cc009e613de656 Mukul Joshi  2022-04-26  276  
+cc009e613de656 Mukul Joshi  2022-04-26  277  static void event_interrupt_wq_v11(struct kfd_dev *dev,
+cc009e613de656 Mukul Joshi  2022-04-26  278  					const uint32_t *ih_ring_entry)
+cc009e613de656 Mukul Joshi  2022-04-26  279  {
+cc009e613de656 Mukul Joshi  2022-04-26  280  	uint16_t source_id, client_id, ring_id, pasid, vmid;
+cc009e613de656 Mukul Joshi  2022-04-26  281  	uint32_t context_id0, context_id1;
+cc009e613de656 Mukul Joshi  2022-04-26 @282  	uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
+cc009e613de656 Mukul Joshi  2022-04-26  283  	struct kfd_vm_fault_info info = {0};
+cc009e613de656 Mukul Joshi  2022-04-26  284  	struct kfd_hsa_memory_exception_data exception_data;
+cc009e613de656 Mukul Joshi  2022-04-26  285  
+cc009e613de656 Mukul Joshi  2022-04-26  286  	source_id = SOC15_SOURCE_ID_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  287  	client_id = SOC15_CLIENT_ID_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  288  	ring_id = SOC15_RING_ID_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  289  	pasid = SOC15_PASID_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  290  	vmid = SOC15_VMID_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  291  	context_id0 = SOC15_CONTEXT_ID0_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  292  	context_id1 = SOC15_CONTEXT_ID1_FROM_IH_ENTRY(ih_ring_entry);
+cc009e613de656 Mukul Joshi  2022-04-26  293  
+cc009e613de656 Mukul Joshi  2022-04-26  294  	/* VMC, UTCL2 */
+cc009e613de656 Mukul Joshi  2022-04-26  295  	if (client_id == SOC21_IH_CLIENTID_VMC ||
+cc009e613de656 Mukul Joshi  2022-04-26  296  	     ((client_id == SOC21_IH_CLIENTID_GFX) &&
+cc009e613de656 Mukul Joshi  2022-04-26  297  	     (source_id == UTCL2_1_0__SRCID__FAULT))) {
+cc009e613de656 Mukul Joshi  2022-04-26  298  
+cc009e613de656 Mukul Joshi  2022-04-26  299  		info.vmid = vmid;
+cc009e613de656 Mukul Joshi  2022-04-26  300  		info.mc_id = client_id;
+cc009e613de656 Mukul Joshi  2022-04-26  301  		info.page_addr = ih_ring_entry[4] |
+cc009e613de656 Mukul Joshi  2022-04-26  302  			(uint64_t)(ih_ring_entry[5] & 0xf) << 32;
+cc009e613de656 Mukul Joshi  2022-04-26  303  		info.prot_valid = ring_id & 0x08;
+cc009e613de656 Mukul Joshi  2022-04-26  304  		info.prot_read  = ring_id & 0x10;
+cc009e613de656 Mukul Joshi  2022-04-26  305  		info.prot_write = ring_id & 0x20;
+cc009e613de656 Mukul Joshi  2022-04-26  306  
+cc009e613de656 Mukul Joshi  2022-04-26  307  		memset(&exception_data, 0, sizeof(exception_data));
+cc009e613de656 Mukul Joshi  2022-04-26  308  		exception_data.gpu_id = dev->id;
+cc009e613de656 Mukul Joshi  2022-04-26  309  		exception_data.va = (info.page_addr) << PAGE_SHIFT;
+cc009e613de656 Mukul Joshi  2022-04-26  310  		exception_data.failure.NotPresent = info.prot_valid ? 1 : 0;
+cc009e613de656 Mukul Joshi  2022-04-26  311  		exception_data.failure.NoExecute = info.prot_exec ? 1 : 0;
+cc009e613de656 Mukul Joshi  2022-04-26  312  		exception_data.failure.ReadOnly = info.prot_write ? 1 : 0;
+cc009e613de656 Mukul Joshi  2022-04-26  313  		exception_data.failure.imprecise = 0;
+cc009e613de656 Mukul Joshi  2022-04-26  314  
+cc009e613de656 Mukul Joshi  2022-04-26  315  		/*kfd_set_dbg_ev_from_interrupt(dev, pasid, -1,
+cc009e613de656 Mukul Joshi  2022-04-26  316  					      KFD_EC_MASK(EC_DEVICE_MEMORY_VIOLATION),
+cc009e613de656 Mukul Joshi  2022-04-26  317  					      &exception_data, sizeof(exception_data));*/
+cc009e613de656 Mukul Joshi  2022-04-26  318  		kfd_smi_event_update_vmfault(dev, pasid);
+cc009e613de656 Mukul Joshi  2022-04-26  319  
+cc009e613de656 Mukul Joshi  2022-04-26  320  	/* GRBM, SDMA, SE, PMM */
+cc009e613de656 Mukul Joshi  2022-04-26  321  	} else if (client_id == SOC21_IH_CLIENTID_GRBM_CP ||
+cc009e613de656 Mukul Joshi  2022-04-26  322  		   client_id == SOC21_IH_CLIENTID_GFX) {
+cc009e613de656 Mukul Joshi  2022-04-26  323  
+cc009e613de656 Mukul Joshi  2022-04-26  324  		/* CP */
+cc009e613de656 Mukul Joshi  2022-04-26  325  		if (source_id == SOC15_INTSRC_CP_END_OF_PIPE)
+cc009e613de656 Mukul Joshi  2022-04-26  326  			kfd_signal_event_interrupt(pasid, context_id0, 32);
+cc009e613de656 Mukul Joshi  2022-04-26  327  		/*else if (source_id == SOC15_INTSRC_CP_BAD_OPCODE)
+cc009e613de656 Mukul Joshi  2022-04-26  328  			kfd_set_dbg_ev_from_interrupt(dev, pasid,
+cc009e613de656 Mukul Joshi  2022-04-26  329  				KFD_CTXID0_DOORBELL_ID(context_id0),
+cc009e613de656 Mukul Joshi  2022-04-26  330  				KFD_EC_MASK(KFD_CTXID0_CP_BAD_OP_ECODE(context_id0)),
+cc009e613de656 Mukul Joshi  2022-04-26  331  				NULL, 0);*/
+cc009e613de656 Mukul Joshi  2022-04-26  332  
+cc009e613de656 Mukul Joshi  2022-04-26  333  		/* SDMA */
+cc009e613de656 Mukul Joshi  2022-04-26  334  		else if (source_id == SOC21_INTSRC_SDMA_TRAP)
+cc009e613de656 Mukul Joshi  2022-04-26  335  			kfd_signal_event_interrupt(pasid, context_id0 & 0xfffffff, 28);
+cc009e613de656 Mukul Joshi  2022-04-26  336  		else if (source_id == SOC21_INTSRC_SDMA_ECC) {
+cc009e613de656 Mukul Joshi  2022-04-26  337  			event_interrupt_poison_consumption_v11(dev, pasid, source_id);
+cc009e613de656 Mukul Joshi  2022-04-26  338  			return;
+cc009e613de656 Mukul Joshi  2022-04-26  339  		}
+cc009e613de656 Mukul Joshi  2022-04-26  340  
+cc009e613de656 Mukul Joshi  2022-04-26  341  		/* SQ */
+cc009e613de656 Mukul Joshi  2022-04-26  342  		else if (source_id == SOC15_INTSRC_SQ_INTERRUPT_MSG) {
+cc009e613de656 Mukul Joshi  2022-04-26  343  			sq_int_enc = REG_GET_FIELD(context_id1,
+cc009e613de656 Mukul Joshi  2022-04-26  344  					SQ_INTERRUPT_WORD_WAVE_CTXID1, ENCODING);
+cc009e613de656 Mukul Joshi  2022-04-26  345  			switch (sq_int_enc) {
+cc009e613de656 Mukul Joshi  2022-04-26  346  			case SQ_INTERRUPT_WORD_ENCODING_AUTO:
+cc009e613de656 Mukul Joshi  2022-04-26  347  				print_sq_intr_info_auto(context_id0, context_id1);
+cc009e613de656 Mukul Joshi  2022-04-26  348  				break;
+cc009e613de656 Mukul Joshi  2022-04-26  349  			case SQ_INTERRUPT_WORD_ENCODING_INST:
+cc009e613de656 Mukul Joshi  2022-04-26  350  				print_sq_intr_info_inst(context_id0, context_id1);
+cc009e613de656 Mukul Joshi  2022-04-26  351  				sq_int_priv = REG_GET_FIELD(context_id0,
+cc009e613de656 Mukul Joshi  2022-04-26  352  						SQ_INTERRUPT_WORD_WAVE_CTXID0, PRIV);
+664883ddde6797 Graham Sider 2022-09-23  353  				/*if (sq_int_priv && (kfd_set_dbg_ev_from_interrupt(dev, pasid,
+cc009e613de656 Mukul Joshi  2022-04-26  354  						KFD_CTXID0_DOORBELL_ID(context_id0),
+cc009e613de656 Mukul Joshi  2022-04-26  355  						KFD_CTXID0_TRAP_CODE(context_id0),
+664883ddde6797 Graham Sider 2022-09-23  356  						NULL, 0)))
+664883ddde6797 Graham Sider 2022-09-23  357  					return;*/
+cc009e613de656 Mukul Joshi  2022-04-26  358  				break;
+cc009e613de656 Mukul Joshi  2022-04-26  359  			case SQ_INTERRUPT_WORD_ENCODING_ERROR:
+cc009e613de656 Mukul Joshi  2022-04-26  360  				print_sq_intr_info_error(context_id0, context_id1);
+cc009e613de656 Mukul Joshi  2022-04-26  361  				sq_int_errtype = REG_GET_FIELD(context_id0,
+cc009e613de656 Mukul Joshi  2022-04-26  362  						SQ_INTERRUPT_WORD_ERROR_CTXID0, TYPE);
+cc009e613de656 Mukul Joshi  2022-04-26  363  				if (sq_int_errtype != SQ_INTERRUPT_ERROR_TYPE_ILLEGAL_INST &&
+cc009e613de656 Mukul Joshi  2022-04-26  364  				    sq_int_errtype != SQ_INTERRUPT_ERROR_TYPE_MEMVIOL) {
+cc009e613de656 Mukul Joshi  2022-04-26  365  					event_interrupt_poison_consumption_v11(
+cc009e613de656 Mukul Joshi  2022-04-26  366  							dev, pasid, source_id);
+cc009e613de656 Mukul Joshi  2022-04-26  367  					return;
+cc009e613de656 Mukul Joshi  2022-04-26  368  				}
+cc009e613de656 Mukul Joshi  2022-04-26  369  				break;
+cc009e613de656 Mukul Joshi  2022-04-26  370  			default:
+cc009e613de656 Mukul Joshi  2022-04-26  371  				break;
+cc009e613de656 Mukul Joshi  2022-04-26  372  			}
+cc009e613de656 Mukul Joshi  2022-04-26  373  			kfd_signal_event_interrupt(pasid, context_id0 & 0xffffff, 24);
+cc009e613de656 Mukul Joshi  2022-04-26  374  		}
+cc009e613de656 Mukul Joshi  2022-04-26  375  
+cc009e613de656 Mukul Joshi  2022-04-26  376  	/*} else if (KFD_IRQ_IS_FENCE(client_id, source_id)) {
+cc009e613de656 Mukul Joshi  2022-04-26  377  		kfd_process_close_interrupt_drain(pasid);*/
+cc009e613de656 Mukul Joshi  2022-04-26  378  	}
+cc009e613de656 Mukul Joshi  2022-04-26  379  }
+cc009e613de656 Mukul Joshi  2022-04-26  380  
+
+:::::: The code at line 282 was first introduced by commit
+:::::: cc009e613de6560eb499f8bc92c80a737752cb30 drm/amdkfd: Add KFD support for soc21 v3
+
+:::::: TO: Mukul Joshi <mukul.joshi@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 -- 
 0-DAY CI Kernel Test Service
