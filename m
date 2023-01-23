@@ -1,203 +1,82 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCF9624;
-	Mon, 23 Jan 2023 01:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674438412; x=1705974412;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EGJof3QWY+8pgi5OVYQh1ZQYF1aRBf7Ze6eSZ+OAmEM=;
-  b=X3WUgqo6dei5Zoz0/PHULWjXhKZmMjh+9uyu6F8gPm3IzSRxUx+Za4X2
-   aQAVwr4QzsTavpOuyuBTvfTt/R2e9sLyyN82ELeTfKpL2W/5hNAgCGAyw
-   OtWdWeCVQjaeez4VEruaXYqyPndvHKt8uGXDnwoFWeMr5QV7eIHfTDXsv
-   P6F7ZsU+5CQFSbfbTwf/i6frrhXUtHmYo8ywhbXLBrKLunNCfJnJ30O/d
-   ANiRaUxCXhHSKSYilHsK5Wm3XWzp4Ln1hDyVETefxnXqx5YZg5pLsgOQU
-   IRZRfefbgK5n92+cgutP7gFHLdPecy9VpWHpDk1dTLfuPfrAi0n65jPtX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="309534185"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="309534185"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 17:46:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="835308337"
-X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
-   d="scan'208";a="835308337"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2023 17:46:49 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pJlv6-0005LY-1a;
-	Mon, 23 Jan 2023 01:46:48 +0000
-Date: Mon, 23 Jan 2023 09:46:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Graham Sider <Graham.Sider@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38:
- warning: variable 'sq_int_priv' set but not used
-Message-ID: <202301230955.jdrEG3k9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8E77E6
+	for <llvm@lists.linux.dev>; Mon, 23 Jan 2023 04:28:28 +0000 (UTC)
+Received: by mail-ua1-f47.google.com with SMTP id g12so2593416uae.6
+        for <llvm@lists.linux.dev>; Sun, 22 Jan 2023 20:28:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pefoley.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vjjHK/TOmoBm6O8k+2N7BkktCx3pSWAVz7qW+oPVNVE=;
+        b=hPpsuvAwLZh1RRCrs7FTPeEjeZ1bFN6J74cr1RlkEBHsUWLp1jcyckOkVISwJOsUJd
+         ocwNmh7jSMAxjyZr95W33Vdo0HkqHvnUYFOqLpAwJBZASXSAMVc+L8dHPjYvGMrJac7t
+         hGiweTAlxha7IXjucOyG1O4TnBDS1rqatTJ7o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vjjHK/TOmoBm6O8k+2N7BkktCx3pSWAVz7qW+oPVNVE=;
+        b=xYGOU7jZmq261MAKF/rBBsPVuVBvvtQXwTNzrxts1FcJhfTvA5jtbnn17yfVIHPhgq
+         WB4U8XVUPkl/P0Zz3YaILhPjyNJqndePVsFHZ4pymCmumbwoVCpwZCQS5iQy8jLLUXQO
+         DoWU9Pzu1Uj1UtrjV8x7Y5JhM7Ydsdx//meEROXzBVlQJ1hG/ZrppBWwvcWXRz4FLRnq
+         n/CwN1UzRtEZyCf2OLrkwyiesPfvPalbEviVnFhT/51bAQaZbs83XR3qCg028hnuZ7M4
+         XkkEw5vFQVNvgmSgBMRW5DaGXk+5OrdOXE4/i+CCl/2H+iFKXdq3tB8Bz+McwTxsCnqT
+         7/ZA==
+X-Gm-Message-State: AFqh2kqc+zYDM6Ih9SSTt9s8/hBJ7lE5q/fU2U3r2LMXczzIjU6r9MIC
+	fy7TRf7BWi7lLxru6bt2p7/9+bHvRnOxatm7K08hPQ==
+X-Google-Smtp-Source: AMrXdXsdoh8iqfsdbvQAPcLKMxmJ8Wx/zLXGK4/3eZvXbxxCNwT+oiDSGJknhi0DYvFAGaxJ3CyQrZHmh0JrQHnX4I0=
+X-Received: by 2002:ab0:1427:0:b0:5f7:89e9:d714 with SMTP id
+ b36-20020ab01427000000b005f789e9d714mr2463881uae.0.1674448107340; Sun, 22 Jan
+ 2023 20:28:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com> <701abf4bbf5b7957a24d2f164c643e1d9f586fad.camel@gmail.com>
+ <4dc6a571-8564-b38c-31df-0d9741dfc592@meta.com>
+In-Reply-To: <4dc6a571-8564-b38c-31df-0d9741dfc592@meta.com>
+From: Peter Foley <pefoley2@pefoley.com>
+Date: Sun, 22 Jan 2023 20:28:15 -0800
+Message-ID: <CAOFdcFOh_rNt3pfkNHPPeK=Kojro==Kpgmmu-VnLuaMYfFoiwg@mail.gmail.com>
+Subject: Re: [PATCH] tools: bpf: Disable stack protector
+To: Yonghong Song <yhs@meta.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Quentin Monnet <quentin@isovalent.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Graham,
+On Wed, Jan 18, 2023 at 11:34 PM Yonghong Song <yhs@meta.com> wrote:
+> On 1/18/23 11:28 AM, Eduard Zingerman wrote:
+> >
+> > While working on clang patch to disable stack protector
+> > for BPF target I've noticed that there is an option to
+> > disable default configuration file altogether [1]:
+> >
+> >    --no-default-config
+> >
+> > Should we consider it instead of -fno-stack-protector
+> > to shield ourselves from any potential distro-specific
+> > changes?
+>
+> Peter, could you help check whether adding --no-default-config works
+> in your environment or not?
+>
+> >
+> > [1] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-no-default-config
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2475bf0250dee99b477e0c56d7dc9d7ac3f04117
-commit: 664883ddde67971d59764f2dda855183ecf8bc46 drm/amdkfd: fix dropped interrupt in kfd_int_process_v11
-date:   4 months ago
-config: arm64-randconfig-r012-20230123 (https://download.01.org/0day-ci/archive/20230123/202301230955.jdrEG3k9-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=664883ddde67971d59764f2dda855183ecf8bc46
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 664883ddde67971d59764f2dda855183ecf8bc46
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38: warning: variable 'sq_int_priv' set but not used [-Wunused-but-set-variable]
-           uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-                                               ^
-   1 warning generated.
-
-
-vim +/sq_int_priv +282 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c
-
-cc009e613de656 Mukul Joshi  2022-04-26  276  
-cc009e613de656 Mukul Joshi  2022-04-26  277  static void event_interrupt_wq_v11(struct kfd_dev *dev,
-cc009e613de656 Mukul Joshi  2022-04-26  278  					const uint32_t *ih_ring_entry)
-cc009e613de656 Mukul Joshi  2022-04-26  279  {
-cc009e613de656 Mukul Joshi  2022-04-26  280  	uint16_t source_id, client_id, ring_id, pasid, vmid;
-cc009e613de656 Mukul Joshi  2022-04-26  281  	uint32_t context_id0, context_id1;
-cc009e613de656 Mukul Joshi  2022-04-26 @282  	uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-cc009e613de656 Mukul Joshi  2022-04-26  283  	struct kfd_vm_fault_info info = {0};
-cc009e613de656 Mukul Joshi  2022-04-26  284  	struct kfd_hsa_memory_exception_data exception_data;
-cc009e613de656 Mukul Joshi  2022-04-26  285  
-cc009e613de656 Mukul Joshi  2022-04-26  286  	source_id = SOC15_SOURCE_ID_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  287  	client_id = SOC15_CLIENT_ID_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  288  	ring_id = SOC15_RING_ID_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  289  	pasid = SOC15_PASID_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  290  	vmid = SOC15_VMID_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  291  	context_id0 = SOC15_CONTEXT_ID0_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  292  	context_id1 = SOC15_CONTEXT_ID1_FROM_IH_ENTRY(ih_ring_entry);
-cc009e613de656 Mukul Joshi  2022-04-26  293  
-cc009e613de656 Mukul Joshi  2022-04-26  294  	/* VMC, UTCL2 */
-cc009e613de656 Mukul Joshi  2022-04-26  295  	if (client_id == SOC21_IH_CLIENTID_VMC ||
-cc009e613de656 Mukul Joshi  2022-04-26  296  	     ((client_id == SOC21_IH_CLIENTID_GFX) &&
-cc009e613de656 Mukul Joshi  2022-04-26  297  	     (source_id == UTCL2_1_0__SRCID__FAULT))) {
-cc009e613de656 Mukul Joshi  2022-04-26  298  
-cc009e613de656 Mukul Joshi  2022-04-26  299  		info.vmid = vmid;
-cc009e613de656 Mukul Joshi  2022-04-26  300  		info.mc_id = client_id;
-cc009e613de656 Mukul Joshi  2022-04-26  301  		info.page_addr = ih_ring_entry[4] |
-cc009e613de656 Mukul Joshi  2022-04-26  302  			(uint64_t)(ih_ring_entry[5] & 0xf) << 32;
-cc009e613de656 Mukul Joshi  2022-04-26  303  		info.prot_valid = ring_id & 0x08;
-cc009e613de656 Mukul Joshi  2022-04-26  304  		info.prot_read  = ring_id & 0x10;
-cc009e613de656 Mukul Joshi  2022-04-26  305  		info.prot_write = ring_id & 0x20;
-cc009e613de656 Mukul Joshi  2022-04-26  306  
-cc009e613de656 Mukul Joshi  2022-04-26  307  		memset(&exception_data, 0, sizeof(exception_data));
-cc009e613de656 Mukul Joshi  2022-04-26  308  		exception_data.gpu_id = dev->id;
-cc009e613de656 Mukul Joshi  2022-04-26  309  		exception_data.va = (info.page_addr) << PAGE_SHIFT;
-cc009e613de656 Mukul Joshi  2022-04-26  310  		exception_data.failure.NotPresent = info.prot_valid ? 1 : 0;
-cc009e613de656 Mukul Joshi  2022-04-26  311  		exception_data.failure.NoExecute = info.prot_exec ? 1 : 0;
-cc009e613de656 Mukul Joshi  2022-04-26  312  		exception_data.failure.ReadOnly = info.prot_write ? 1 : 0;
-cc009e613de656 Mukul Joshi  2022-04-26  313  		exception_data.failure.imprecise = 0;
-cc009e613de656 Mukul Joshi  2022-04-26  314  
-cc009e613de656 Mukul Joshi  2022-04-26  315  		/*kfd_set_dbg_ev_from_interrupt(dev, pasid, -1,
-cc009e613de656 Mukul Joshi  2022-04-26  316  					      KFD_EC_MASK(EC_DEVICE_MEMORY_VIOLATION),
-cc009e613de656 Mukul Joshi  2022-04-26  317  					      &exception_data, sizeof(exception_data));*/
-cc009e613de656 Mukul Joshi  2022-04-26  318  		kfd_smi_event_update_vmfault(dev, pasid);
-cc009e613de656 Mukul Joshi  2022-04-26  319  
-cc009e613de656 Mukul Joshi  2022-04-26  320  	/* GRBM, SDMA, SE, PMM */
-cc009e613de656 Mukul Joshi  2022-04-26  321  	} else if (client_id == SOC21_IH_CLIENTID_GRBM_CP ||
-cc009e613de656 Mukul Joshi  2022-04-26  322  		   client_id == SOC21_IH_CLIENTID_GFX) {
-cc009e613de656 Mukul Joshi  2022-04-26  323  
-cc009e613de656 Mukul Joshi  2022-04-26  324  		/* CP */
-cc009e613de656 Mukul Joshi  2022-04-26  325  		if (source_id == SOC15_INTSRC_CP_END_OF_PIPE)
-cc009e613de656 Mukul Joshi  2022-04-26  326  			kfd_signal_event_interrupt(pasid, context_id0, 32);
-cc009e613de656 Mukul Joshi  2022-04-26  327  		/*else if (source_id == SOC15_INTSRC_CP_BAD_OPCODE)
-cc009e613de656 Mukul Joshi  2022-04-26  328  			kfd_set_dbg_ev_from_interrupt(dev, pasid,
-cc009e613de656 Mukul Joshi  2022-04-26  329  				KFD_CTXID0_DOORBELL_ID(context_id0),
-cc009e613de656 Mukul Joshi  2022-04-26  330  				KFD_EC_MASK(KFD_CTXID0_CP_BAD_OP_ECODE(context_id0)),
-cc009e613de656 Mukul Joshi  2022-04-26  331  				NULL, 0);*/
-cc009e613de656 Mukul Joshi  2022-04-26  332  
-cc009e613de656 Mukul Joshi  2022-04-26  333  		/* SDMA */
-cc009e613de656 Mukul Joshi  2022-04-26  334  		else if (source_id == SOC21_INTSRC_SDMA_TRAP)
-cc009e613de656 Mukul Joshi  2022-04-26  335  			kfd_signal_event_interrupt(pasid, context_id0 & 0xfffffff, 28);
-cc009e613de656 Mukul Joshi  2022-04-26  336  		else if (source_id == SOC21_INTSRC_SDMA_ECC) {
-cc009e613de656 Mukul Joshi  2022-04-26  337  			event_interrupt_poison_consumption_v11(dev, pasid, source_id);
-cc009e613de656 Mukul Joshi  2022-04-26  338  			return;
-cc009e613de656 Mukul Joshi  2022-04-26  339  		}
-cc009e613de656 Mukul Joshi  2022-04-26  340  
-cc009e613de656 Mukul Joshi  2022-04-26  341  		/* SQ */
-cc009e613de656 Mukul Joshi  2022-04-26  342  		else if (source_id == SOC15_INTSRC_SQ_INTERRUPT_MSG) {
-cc009e613de656 Mukul Joshi  2022-04-26  343  			sq_int_enc = REG_GET_FIELD(context_id1,
-cc009e613de656 Mukul Joshi  2022-04-26  344  					SQ_INTERRUPT_WORD_WAVE_CTXID1, ENCODING);
-cc009e613de656 Mukul Joshi  2022-04-26  345  			switch (sq_int_enc) {
-cc009e613de656 Mukul Joshi  2022-04-26  346  			case SQ_INTERRUPT_WORD_ENCODING_AUTO:
-cc009e613de656 Mukul Joshi  2022-04-26  347  				print_sq_intr_info_auto(context_id0, context_id1);
-cc009e613de656 Mukul Joshi  2022-04-26  348  				break;
-cc009e613de656 Mukul Joshi  2022-04-26  349  			case SQ_INTERRUPT_WORD_ENCODING_INST:
-cc009e613de656 Mukul Joshi  2022-04-26  350  				print_sq_intr_info_inst(context_id0, context_id1);
-cc009e613de656 Mukul Joshi  2022-04-26  351  				sq_int_priv = REG_GET_FIELD(context_id0,
-cc009e613de656 Mukul Joshi  2022-04-26  352  						SQ_INTERRUPT_WORD_WAVE_CTXID0, PRIV);
-664883ddde6797 Graham Sider 2022-09-23  353  				/*if (sq_int_priv && (kfd_set_dbg_ev_from_interrupt(dev, pasid,
-cc009e613de656 Mukul Joshi  2022-04-26  354  						KFD_CTXID0_DOORBELL_ID(context_id0),
-cc009e613de656 Mukul Joshi  2022-04-26  355  						KFD_CTXID0_TRAP_CODE(context_id0),
-664883ddde6797 Graham Sider 2022-09-23  356  						NULL, 0)))
-664883ddde6797 Graham Sider 2022-09-23  357  					return;*/
-cc009e613de656 Mukul Joshi  2022-04-26  358  				break;
-cc009e613de656 Mukul Joshi  2022-04-26  359  			case SQ_INTERRUPT_WORD_ENCODING_ERROR:
-cc009e613de656 Mukul Joshi  2022-04-26  360  				print_sq_intr_info_error(context_id0, context_id1);
-cc009e613de656 Mukul Joshi  2022-04-26  361  				sq_int_errtype = REG_GET_FIELD(context_id0,
-cc009e613de656 Mukul Joshi  2022-04-26  362  						SQ_INTERRUPT_WORD_ERROR_CTXID0, TYPE);
-cc009e613de656 Mukul Joshi  2022-04-26  363  				if (sq_int_errtype != SQ_INTERRUPT_ERROR_TYPE_ILLEGAL_INST &&
-cc009e613de656 Mukul Joshi  2022-04-26  364  				    sq_int_errtype != SQ_INTERRUPT_ERROR_TYPE_MEMVIOL) {
-cc009e613de656 Mukul Joshi  2022-04-26  365  					event_interrupt_poison_consumption_v11(
-cc009e613de656 Mukul Joshi  2022-04-26  366  							dev, pasid, source_id);
-cc009e613de656 Mukul Joshi  2022-04-26  367  					return;
-cc009e613de656 Mukul Joshi  2022-04-26  368  				}
-cc009e613de656 Mukul Joshi  2022-04-26  369  				break;
-cc009e613de656 Mukul Joshi  2022-04-26  370  			default:
-cc009e613de656 Mukul Joshi  2022-04-26  371  				break;
-cc009e613de656 Mukul Joshi  2022-04-26  372  			}
-cc009e613de656 Mukul Joshi  2022-04-26  373  			kfd_signal_event_interrupt(pasid, context_id0 & 0xffffff, 24);
-cc009e613de656 Mukul Joshi  2022-04-26  374  		}
-cc009e613de656 Mukul Joshi  2022-04-26  375  
-cc009e613de656 Mukul Joshi  2022-04-26  376  	/*} else if (KFD_IRQ_IS_FENCE(client_id, source_id)) {
-cc009e613de656 Mukul Joshi  2022-04-26  377  		kfd_process_close_interrupt_drain(pasid);*/
-cc009e613de656 Mukul Joshi  2022-04-26  378  	}
-cc009e613de656 Mukul Joshi  2022-04-26  379  }
-cc009e613de656 Mukul Joshi  2022-04-26  380  
-
-:::::: The code at line 282 was first introduced by commit
-:::::: cc009e613de6560eb499f8bc92c80a737752cb30 drm/amdkfd: Add KFD support for soc21 v3
-
-:::::: TO: Mukul Joshi <mukul.joshi@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I guess I could, but I'm not convinced that's the right thing to do.
+Ideally problems with distro-specific configs would cause loud
+failures (like this one) and result in fixes like the changes being
+made to upstream clang/gcc.
+Simply unconditionally disabling distro configs seems to be the wrong
+way to approach this and makes it less likely that future problems
+will be reported in the first place.
