@@ -1,545 +1,310 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DEC1391;
-	Mon, 23 Jan 2023 12:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674477130; x=1706013130;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LdF/LrO9o7dKzP+t+DD21BJ8xMQE1m43Fiad1UUWHmk=;
-  b=b2RsdPeipewolmdlb4vT4wLPPEW8EfChHMXE8DOwhJybFsUFzaVHu1Sf
-   kz1+LFRdp5/q/0JlecL+txkKZVYeGdoVjUk0XwyWzRLAZyGC3nbWQfNO6
-   TkFifg+C0ygD9XSU6gtmsE5SWbV/0IR+RxlvfwCkQk4YyyN5OCtC5keZL
-   zCK1maZa7fb3B7cA2Ot2wwS3oE8KsJ8rPbCPWDqFpKeTUvOigp+I0T/xF
-   F5r+FTN/UcQlPh82YpiaYXHLtGCNy0HZx1t73nv7de900u3hG18kr4ZVn
-   A1sXpHuhVC/GptKUnF8d8tIKPxkRvnobjnsCXQX7chBU17pMpCJrqTbnT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="353290592"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="353290592"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 04:32:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="693833363"
-X-IronPort-AV: E=Sophos;i="5.97,239,1669104000"; 
-   d="scan'208";a="693833363"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jan 2023 04:32:07 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pJvza-0005dY-0f;
-	Mon, 23 Jan 2023 12:32:06 +0000
-Date: Mon, 23 Jan 2023 20:31:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:misc/pfn_valid/v0 1/1] drivers/mmc/core/mmc.c:115:22: warning:
- shift count >= width of type
-Message-ID: <202301232003.VhrDpnUt-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DFE2F49
+	for <llvm@lists.linux.dev>; Mon, 23 Jan 2023 13:58:22 +0000 (UTC)
+Received: by mail-vs1-f42.google.com with SMTP id p1so12930262vsr.5
+        for <llvm@lists.linux.dev>; Mon, 23 Jan 2023 05:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AXeVUOI3tJuZ9T2gK/O+SpNhk9weOWc0rxA2abMay4I=;
+        b=f+oPJtggRr/AYVdmrJrdS5cvNI2FHQdGZvYkdPk4YSPwKdkthwTzW0LGvrv+2Iev18
+         LTtk76HyV0eGltMB3lS7aV0gQHsu9A1aU8DBeAponH7TvZkQzuskeukPsYCeynQufcNx
+         fcxG8G7laVPAYJTAJev/5kHxuvP9AnL/z8S8antD4PXc+eAkzF7StSQ9Ky39fB1TN97Y
+         nVN9P85z2XjZIqX09CDbuOASyb1TZw/uKqwphI+nSKTLlutEnW87WeXVKH6HSG9UBGGN
+         sWMlv/GrLlc0Lm0WpHYvhLjd613mF9cwKcT35EILIGcTtDy3u7eB1q9hGBJzz2ddczCD
+         HR7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AXeVUOI3tJuZ9T2gK/O+SpNhk9weOWc0rxA2abMay4I=;
+        b=GS1Z7TI3RH/v3bxaOXpfvDNWZqrxrF/B9CqAa6fTCz97CnbUeHe/rwj+uIVnMFiK8N
+         tJu01IG6vwkdePxyWh2mf78BoX3yCU7WvzoLQYJkq9p4X3YKFtwYIcA3geBBPG6zZv7Z
+         dyzRUpmyONnpYUHaCaIJRO/RLNJJI6u71YrDlDJDZcI4DsgVTKVsuzGQvwFDUmAkKyXe
+         7DDa/4EKf4ez6oHmCD0GPsjW8s+XbemgLG513iGfavf6XEplAss8LrFlomwgaPwb/u69
+         Wh2/R/HnpQAKCawnO+u2IV50qxx/f4UtBdGDOp6pnyUAYyBxt3D7n/Z/IsiS7HU50VW1
+         mFAg==
+X-Gm-Message-State: AFqh2kpS52rHJyI3SZBW0qSo1xIGrjhE9IiSKL1Si9u0DxWm5HvbtPpb
+	e+E/WRGvBUlvcV92UXT6gxU0ZNqpzQxUq4vDQp3//A==
+X-Google-Smtp-Source: AMrXdXv3SdbW1OMymcwSw+UKgdSwlNT3pqbo79BE5ANCHiPz/DLfWupVOzWQju3/tf20XCLIQDK8JmT9SUQGBmNn37g=
+X-Received: by 2002:a67:f9d8:0:b0:3d0:8947:f6f6 with SMTP id
+ c24-20020a67f9d8000000b003d08947f6f6mr3340629vsq.3.1674482300949; Mon, 23 Jan
+ 2023 05:58:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+In-Reply-To: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 23 Jan 2023 19:28:10 +0530
+Message-ID: <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu, 
+	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, 
+	kernel test robot <lkp@intel.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	=?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>, 
+	linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com, 
+	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org, 
+	Segher Boessenkool <segher@kernel.crashing.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org, 
+	Alex Deucher <alexander.deucher@amd.com>, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git misc/pfn_valid/v0
-head:   2cb3404accfc161b66866cd03c42953f57700677
-commit: 2cb3404accfc161b66866cd03c42953f57700677 [1/1] mm, arch: add generic implementation of pfn_valid() for FLATMEM
-config: hexagon-randconfig-r041-20230123 (https://download.01.org/0day-ci/archive/20230123/202301232003.VhrDpnUt-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=2cb3404accfc161b66866cd03c42953f57700677
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt misc/pfn_valid/v0
-        git checkout 2cb3404accfc161b66866cd03c42953f57700677
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/comedi/ drivers/mmc/core/ drivers/mmc/host/ drivers/net/wireless/broadcom/b43/ drivers/platform/goldfish/ drivers/vdpa/vdpa_user/ drivers/vhost/ fs/ kernel/dma/ kernel/events/ lib/ mm/ net/bpf/ net/core/
+Hi Nathan,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+On Thu, 12 Jan 2023 at 08:35, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi all,
+>
+> Clang can emit a few different warnings when it encounters a flag that it
+> recognizes but does not support internally. These warnings are elevated t=
+o
+> errors within {as,cc}-option via -Werror to catch unsupported flags that =
+should
+> not be added to KBUILD_{A,C}FLAGS; see commit c3f0d0bc5b01 ("kbuild, LLVM=
+Linux:
+> Add -Werror to cc-option to support clang").
+>
+> If an unsupported flag is unconditionally to KBUILD_{A,C}FLAGS, all subse=
+quent
+> {as,cc}-option will always fail, preventing supported and even potentiall=
+y
+> necessary flags from getting adding to the tool flags.
+>
+> One would expect these warnings to be visible in the kernel build logs si=
+nce
+> they are added to KBUILD_{A,C}FLAGS but unfortunately, these warnings are
+> hidden with clang's -Qunused-arguments flag, which is added to KBUILD_CPP=
+FLAGS
+> and used for both compiling and assembling files.
+>
+> Patches 1-4 address the internal inconsistencies of invoking the assemble=
+r
+> within kbuild by using KBUILD_AFLAGS consistently and using '-x
+> assembler-with-cpp' over '-x assembler'. This matches how assembly files =
+are
+> built across the kernel and helps avoid problems in situations where macr=
+o
+> definitions or warning flags are present in KBUILD_AFLAGS, which cause
+> instances of -Wunused-command-line-argument when the preprocessor is not =
+called
+> to consume them. There were a couple of places in architecture code where=
+ this
+> change would break things so those are fixed first.
+>
+> Patches 5-12 clean up warnings that will show up when -Qunused-argument i=
+s
+> dropped. I hope none of these are controversial.
+>
+> Patch 13 turns two warnings into errors so that the presence of unused fl=
+ags
+> cannot be easily ignored.
+>
+> Patch 14 drops -Qunused-argument. This is done last so that it can be eas=
+ily
+> reverted if need be.
+>
+> This series has seen my personal test framework, which tests several diff=
+erent
+> configurations and architectures, with LLVM tip of tree (16.0.0). I have =
+done
+> defconfig, allmodconfig, and allnoconfig builds for arm, arm64, i386, mip=
+s,
+> powerpc, riscv, s390, and x86_64 with GCC 12.2.0 as well but I am hoping =
+the
+> rest of the test infrastructure will catch any lurking problems.
+>
+> I would like this series to stay together so that there is no opportunity=
+ for
+> breakage so please consider giving acks so that this can be carried via t=
+he
+> kbuild tree (and many thanks to the people who have already provided such
+> tags).
+>
+> ---
+> Changes in v2:
+> - Pick up tags where provided (thank you everyone!)
+> - Patch 6 and 9: Clarify that '-s' is a compiler flag that is only releva=
+nt to
+>   the linking phase and remove all mention of the assembler's '-s' flag, =
+as the
+>   assembler is never directly invoked (Nick, Segher)
+> - Patch 7: Move '-z noexecstack' into new ldflags-y variable (Nick)
+> - Patch 8: Reword commit message to explain the problem in a clearer mann=
+er
+>   (Nick)
+> - Link to v1: https://lore.kernel.org/r/20221228-drop-qunused-arguments-v=
+1-0-658cbc8fc592@kernel.org
+>
+> ---
+> Nathan Chancellor (12):
+>       MIPS: Always use -Wa,-msoft-float and eliminate GAS_HAS_SET_HARDFLO=
+AT
+>       MIPS: Prefer cc-option for additions to cflags
+>       powerpc: Remove linker flag from KBUILD_AFLAGS
+>       powerpc/vdso: Remove unused '-s' flag from ASFLAGS
+>       powerpc/vdso: Improve linker flags
+>       powerpc/vdso: Remove an unsupported flag from vgettimeofday-32.o wi=
+th clang
+>       s390/vdso: Drop unused '-s' flag from KBUILD_AFLAGS_64
+>       s390/vdso: Drop '-shared' from KBUILD_CFLAGS_64
+>       s390/purgatory: Remove unused '-MD' and unnecessary '-c' flags
+>       drm/amd/display: Do not add '-mhard-float' to dml_ccflags for clang
+>       kbuild: Turn a couple more of clang's unused option warnings into e=
+rrors
+>       kbuild: Stop using '-Qunused-arguments' with clang
+>
+> Nick Desaulniers (2):
+>       x86/boot/compressed: prefer cc-option for CFLAGS additions
+>       kbuild: Update assembler calls to use proper flags and language tar=
+get
+>
+>  Makefile                                    |  1 -
+>  arch/mips/Makefile                          | 13 ++-------
+>  arch/mips/include/asm/asmmacro-32.h         |  4 +--
+>  arch/mips/include/asm/asmmacro.h            | 42 ++++++++++++++---------=
+------
+>  arch/mips/include/asm/fpregdef.h            | 14 ----------
+>  arch/mips/include/asm/mipsregs.h            | 20 +++-----------
+>  arch/mips/kernel/genex.S                    |  2 +-
+>  arch/mips/kernel/r2300_fpu.S                |  4 +--
+>  arch/mips/kernel/r4k_fpu.S                  | 12 ++++-----
+>  arch/mips/kvm/fpu.S                         |  6 ++---
+>  arch/mips/loongson2ef/Platform              |  2 +-
+>  arch/powerpc/Makefile                       |  2 +-
+>  arch/powerpc/kernel/vdso/Makefile           | 25 +++++++++++------
+>  arch/s390/kernel/vdso64/Makefile            |  4 +--
+>  arch/s390/purgatory/Makefile                |  2 +-
+>  arch/x86/boot/compressed/Makefile           |  2 +-
+>  drivers/gpu/drm/amd/display/dc/dml/Makefile |  3 ++-
+>  scripts/Kconfig.include                     |  2 +-
+>  scripts/Makefile.clang                      |  2 ++
+>  scripts/Makefile.compiler                   |  8 +++---
+>  scripts/as-version.sh                       |  2 +-
+>  21 files changed, 74 insertions(+), 98 deletions(-)
 
-All warnings (new ones prefixed by >>):
 
-   In file included from drivers/mmc/core/mmc.c:18:
-   In file included from include/linux/mmc/host.h:18:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   include/linux/mm.h:1632:34: error: expected expression
-           return page_to_pfn(&folio->page);
-                                           ^
-   include/linux/mm.h:1720:35: error: expected expression
-           if (is_zero_pfn(page_to_pfn(page)))
-                                            ^
-   include/linux/mm.h:1860:9: error: expected expression
-           return page_to_virt(page);
-                  ^
-   arch/hexagon/include/asm/page.h:131:33: note: expanded from macro 'page_to_virt'
-   #define page_to_virt(page)      __va(page_to_phys(page))
-                                        ^
-   arch/hexagon/include/asm/page.h:126:52: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)      (page_to_pfn(page) << PAGE_SHIFT)
-                                                      ^
-   In file included from drivers/mmc/core/mmc.c:18:
-   In file included from include/linux/mmc/host.h:18:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/mmc/core/mmc.c:18:
-   In file included from include/linux/mmc/host.h:18:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/mmc/core/mmc.c:18:
-   In file included from include/linux/mmc/host.h:18:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/mmc/core/mmc.c:115:22: warning: shift count >= width of type [-Wshift-count-overflow]
-                   card->cid.serial        = UNSTUFF_BITS(resp, 16, 32);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/core/mmc.c:57:39: note: expanded from macro 'UNSTUFF_BITS'
-                   const u32 __mask = (__size < 32 ? 1 << __size : 0) - 1; \
-                                                       ^  ~~~~~~
-   7 warnings and 3 errors generated.
+FYI,
+[ please provide comments, feedback and improvements on build/ ltp smoke te=
+sts ]
+
+LKFT test farm have fetched your patch series [1]
+[PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
+ [1] https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v2-0-9adb=
+ddd20d86@kernel.org/
+
+Following build warnings and errors reported.
+
+sh:
+gcc-11-defconfig =E2=80=94 FAIL
+gcc-11-shx3_defconfig =E2=80=94 FAIL
+https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/h=
+ttps___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d=
+86_kernel_org/testrun/14221835/suite/build/tests/
+
+mainline getting passed.
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/tes=
+trun/14298156/suite/build/test/gcc-11-defconfig/history/
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/tes=
+trun/14298156/suite/build/test/gcc-11-shx3_defconfig/history/
+
+Build error:
+In function 'follow_pmd_mask',
+    inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
+    inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
+    inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
+/builds/linux/include/linux/compiler_types.h:358:45: error: call to
+'__compiletime_assert_263' declared with attribute error: Unsupported
+access size for {READ,WRITE}_ONCE().
+  358 |         _compiletime_assert(condition, msg,
+__compiletime_assert_, __COUNTER__)
+
+
+s390:
+clang-15-defconfig =E2=80=94 FAIL
+https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/h=
+ttps___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d=
+86_kernel_org/testrun/14221913/suite/build/tests/
+
+mainline getting passed.
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/tes=
+trun/14300495/suite/build/test/clang-15-defconfig/history/
+
+Build error:
+make --silent --keep-going --jobs=3D8
+O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=3D0 ARCH=3Ds390
+CROSS_COMPILE=3Ds390x-linux-gnu- 'HOSTCC=3Dsccache clang' 'CC=3Dsccache
+clang'
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
+defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
+defined in discarded section `.exit.text' of crypto/algboss.o
+`.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
+defined in discarded section `.exit.text' of drivers/scsi/sd.o
+`.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
+defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+drivers/md/md.o: defined in discarded section `.exit.text' of
+drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+drivers/md/md.o: defined in discarded section `.exit.text' of
+drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of
+net/iucv/iucv.o: defined in discarded section `.exit.text' of
+net/iucv/iucv.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/cio/qdio_thinint.o: defined in discarded section
+`.exit.text' of drivers/s390/cio/qdio_thinint.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/net/qeth_l3_main.o: defined in discarded section
+`.exit.text' of drivers/s390/net/qeth_l3_main.o
+`.exit.text' referenced in section `__bug_table' of
+drivers/s390/net/qeth_l3_main.o: defined in discarded section
+`.exit.text' of drivers/s390/net/qeth_l3_main.o
+s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
+fail ../../bfd/elf64-s390.c:3349
+make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
+
+But,
+Build and boot pass on arm64, arm, x86_64 and i386.
+Build test performed for mips, parisc, riscv, s390, sh, sparc and
+powerpc (known build errors for maple_defconfig and cell_defconfig),
+
+Please refer following link for detailed build, boot, LTP smoketest.
+https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/h=
+ttps___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d=
+86_kernel_org/?failures_only=3Dfalse&results_layout=3Dtable#!#test-results
+
+Best regards
+Naresh Kamboju
+
 --
-   In file included from drivers/mmc/core/sd.c:16:
-   In file included from include/linux/scatterlist.h:8:
-   include/linux/mm.h:1632:34: error: expected expression
-           return page_to_pfn(&folio->page);
-                                           ^
-   include/linux/mm.h:1720:35: error: expected expression
-           if (is_zero_pfn(page_to_pfn(page)))
-                                            ^
-   include/linux/mm.h:1860:9: error: expected expression
-           return page_to_virt(page);
-                  ^
-   arch/hexagon/include/asm/page.h:131:33: note: expanded from macro 'page_to_virt'
-   #define page_to_virt(page)      __va(page_to_phys(page))
-                                        ^
-   arch/hexagon/include/asm/page.h:126:52: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)      (page_to_pfn(page) << PAGE_SHIFT)
-                                                      ^
-   In file included from drivers/mmc/core/sd.c:16:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/mmc/core/sd.c:16:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/mmc/core/sd.c:16:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from drivers/mmc/core/sd.c:16:
-   include/linux/scatterlist.h:329:9: error: expected expression
-           return page_to_phys(sg_page(sg)) + sg->offset;
-                  ^
-   arch/hexagon/include/asm/page.h:126:52: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)      (page_to_pfn(page) << PAGE_SHIFT)
-                                                      ^
->> drivers/mmc/core/sd.c:106:22: warning: shift count >= width of type [-Wshift-count-overflow]
-           card->cid.serial                = UNSTUFF_BITS(resp, 24, 32);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/core/sd.c:61:39: note: expanded from macro 'UNSTUFF_BITS'
-                   const u32 __mask = (__size < 32 ? 1 << __size : 0) - 1; \
-                                                       ^  ~~~~~~
-   7 warnings and 4 errors generated.
---
-   In file included from fs/statfs.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   include/linux/mm.h:1632:34: error: expected expression
-           return page_to_pfn(&folio->page);
-                                           ^
-   include/linux/mm.h:1720:35: error: expected expression
-           if (is_zero_pfn(page_to_pfn(page)))
-                                            ^
-   include/linux/mm.h:1860:9: error: expected expression
-           return page_to_virt(page);
-                  ^
-   arch/hexagon/include/asm/page.h:131:33: note: expanded from macro 'page_to_virt'
-   #define page_to_virt(page)      __va(page_to_phys(page))
-                                        ^
-   arch/hexagon/include/asm/page.h:126:52: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)      (page_to_pfn(page) << PAGE_SHIFT)
-                                                      ^
-   In file included from fs/statfs.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/statfs.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/statfs.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/statfs.c:131:3: warning: 'memcpy' will always overflow; destination buffer has size 64, but size argument is 88 [-Wfortify-source]
-                   memcpy(&buf, st, sizeof(*st));
-                   ^
-   7 warnings and 3 errors generated.
---
-   In file included from fs/exec.c:30:
-   include/linux/mm.h:1632:34: error: expected expression
-           return page_to_pfn(&folio->page);
-                                           ^
-   include/linux/mm.h:1720:35: error: expected expression
-           if (is_zero_pfn(page_to_pfn(page)))
-                                            ^
-   include/linux/mm.h:1860:9: error: expected expression
-           return page_to_virt(page);
-                  ^
-   arch/hexagon/include/asm/page.h:131:33: note: expanded from macro 'page_to_virt'
-   #define page_to_virt(page)      __va(page_to_phys(page))
-                                        ^
-   arch/hexagon/include/asm/page.h:126:52: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)      (page_to_pfn(page) << PAGE_SHIFT)
-                                                      ^
-   In file included from fs/exec.c:33:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/exec.c:33:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/exec.c:33:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from fs/exec.c:70:
-   In file included from arch/hexagon/include/asm/mmu_context.h:15:
-   arch/hexagon/include/asm/pgalloc.h:51:54: error: expected expression
-           set_pmd(pmd, __pmd(((unsigned long)page_to_pfn(pte) << PAGE_SHIFT) |
-                                                               ^
-   arch/hexagon/include/asm/pgalloc.h:51:2: error: expected '}'
-           set_pmd(pmd, __pmd(((unsigned long)page_to_pfn(pte) << PAGE_SHIFT) |
-           ^
-   arch/hexagon/include/asm/pgtable.h:343:54: note: expanded from macro 'set_pmd'
-   #define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
-                                                        ^
-   arch/hexagon/include/asm/pgalloc.h:51:15: note: to match this '{'
-           set_pmd(pmd, __pmd(((unsigned long)page_to_pfn(pte) << PAGE_SHIFT) |
-                        ^
-   include/asm-generic/pgtable-nopmd.h:53:30: note: expanded from macro '__pmd'
-   #define __pmd(x)                                ((pmd_t) { __pud(x) } )
-                                                            ^
-   fs/exec.c:245:52: error: expected expression
-           flush_cache_page(bprm->vma, pos, page_to_pfn(page));
-                                                             ^
->> fs/exec.c:405:51: warning: declaration of 'struct user_arg_ptr' will not be visible outside of this function [-Wvisibility]
-   static const char __user *get_user_arg_ptr(struct user_arg_ptr argv, int nr)
-                                                     ^
-   fs/exec.c:406:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:429:25: warning: declaration of 'struct user_arg_ptr' will not be visible outside of this function [-Wvisibility]
-   static int count(struct user_arg_ptr argv, int max)
-                           ^
-   fs/exec.c:430:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:456:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:473:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:518:42: warning: declaration of 'struct user_arg_ptr' will not be visible outside of this function [-Wvisibility]
-   static int copy_strings(int argc, struct user_arg_ptr argv,
-                                            ^
-   fs/exec.c:520:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:614:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:652:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:679:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:749:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:901:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:948:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:977:1: error: function definition is not allowed here
-   {
-   ^
-   fs/exec.c:1041:1: error: function definition is not allowed here
-   {
-   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   9 warnings and 20 errors generated.
-..
+Linaro LKFT
+https://lkft.linaro.org
 
-
-vim +115 drivers/mmc/core/mmc.c
-
-7ea239d9e6d699 Pierre Ossman   2006-12-31   53  
-7ea239d9e6d699 Pierre Ossman   2006-12-31   54  #define UNSTUFF_BITS(resp,start,size)					\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   55  	({								\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   56  		const int __size = size;				\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   57  		const u32 __mask = (__size < 32 ? 1 << __size : 0) - 1;	\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   58  		const int __off = 3 - ((start) / 32);			\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   59  		const int __shft = (start) & 31;			\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   60  		u32 __res;						\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   61  									\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   62  		__res = resp[__off] >> __shft;				\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   63  		if (__size + __shft > 32)				\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   64  			__res |= resp[__off-1] << ((32 - __shft) % 32);	\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   65  		__res & __mask;						\
-7ea239d9e6d699 Pierre Ossman   2006-12-31   66  	})
-7ea239d9e6d699 Pierre Ossman   2006-12-31   67  
-7ea239d9e6d699 Pierre Ossman   2006-12-31   68  /*
-7ea239d9e6d699 Pierre Ossman   2006-12-31   69   * Given the decoded CSD structure, decode the raw CID to our CID structure.
-7ea239d9e6d699 Pierre Ossman   2006-12-31   70   */
-bd766312618d2e Pierre Ossman   2007-05-01   71  static int mmc_decode_cid(struct mmc_card *card)
-7ea239d9e6d699 Pierre Ossman   2006-12-31   72  {
-7ea239d9e6d699 Pierre Ossman   2006-12-31   73  	u32 *resp = card->raw_cid;
-7ea239d9e6d699 Pierre Ossman   2006-12-31   74  
-ac9d25557dcc9f Linus Walleij   2022-04-25   75  	/*
-ac9d25557dcc9f Linus Walleij   2022-04-25   76  	 * Add the raw card ID (cid) data to the entropy pool. It doesn't
-ac9d25557dcc9f Linus Walleij   2022-04-25   77  	 * matter that not all of it is unique, it's just bonus entropy.
-ac9d25557dcc9f Linus Walleij   2022-04-25   78  	 */
-ac9d25557dcc9f Linus Walleij   2022-04-25   79  	add_device_randomness(&card->raw_cid, sizeof(card->raw_cid));
-ac9d25557dcc9f Linus Walleij   2022-04-25   80  
-7ea239d9e6d699 Pierre Ossman   2006-12-31   81  	/*
-7ea239d9e6d699 Pierre Ossman   2006-12-31   82  	 * The selection of the format here is based upon published
-7ea239d9e6d699 Pierre Ossman   2006-12-31   83  	 * specs from sandisk and from what people have reported.
-7ea239d9e6d699 Pierre Ossman   2006-12-31   84  	 */
-7ea239d9e6d699 Pierre Ossman   2006-12-31   85  	switch (card->csd.mmca_vsn) {
-7ea239d9e6d699 Pierre Ossman   2006-12-31   86  	case 0: /* MMC v1.0 - v1.2 */
-7ea239d9e6d699 Pierre Ossman   2006-12-31   87  	case 1: /* MMC v1.4 */
-7ea239d9e6d699 Pierre Ossman   2006-12-31   88  		card->cid.manfid	= UNSTUFF_BITS(resp, 104, 24);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   89  		card->cid.prod_name[0]	= UNSTUFF_BITS(resp, 96, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   90  		card->cid.prod_name[1]	= UNSTUFF_BITS(resp, 88, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   91  		card->cid.prod_name[2]	= UNSTUFF_BITS(resp, 80, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   92  		card->cid.prod_name[3]	= UNSTUFF_BITS(resp, 72, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   93  		card->cid.prod_name[4]	= UNSTUFF_BITS(resp, 64, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   94  		card->cid.prod_name[5]	= UNSTUFF_BITS(resp, 56, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   95  		card->cid.prod_name[6]	= UNSTUFF_BITS(resp, 48, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   96  		card->cid.hwrev		= UNSTUFF_BITS(resp, 44, 4);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   97  		card->cid.fwrev		= UNSTUFF_BITS(resp, 40, 4);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   98  		card->cid.serial	= UNSTUFF_BITS(resp, 16, 24);
-7ea239d9e6d699 Pierre Ossman   2006-12-31   99  		card->cid.month		= UNSTUFF_BITS(resp, 12, 4);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  100  		card->cid.year		= UNSTUFF_BITS(resp, 8, 4) + 1997;
-7ea239d9e6d699 Pierre Ossman   2006-12-31  101  		break;
-7ea239d9e6d699 Pierre Ossman   2006-12-31  102  
-7ea239d9e6d699 Pierre Ossman   2006-12-31  103  	case 2: /* MMC v2.0 - v2.2 */
-7ea239d9e6d699 Pierre Ossman   2006-12-31  104  	case 3: /* MMC v3.1 - v3.3 */
-7ea239d9e6d699 Pierre Ossman   2006-12-31  105  	case 4: /* MMC v4 */
-7ea239d9e6d699 Pierre Ossman   2006-12-31  106  		card->cid.manfid	= UNSTUFF_BITS(resp, 120, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  107  		card->cid.oemid		= UNSTUFF_BITS(resp, 104, 16);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  108  		card->cid.prod_name[0]	= UNSTUFF_BITS(resp, 96, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  109  		card->cid.prod_name[1]	= UNSTUFF_BITS(resp, 88, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  110  		card->cid.prod_name[2]	= UNSTUFF_BITS(resp, 80, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  111  		card->cid.prod_name[3]	= UNSTUFF_BITS(resp, 72, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  112  		card->cid.prod_name[4]	= UNSTUFF_BITS(resp, 64, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  113  		card->cid.prod_name[5]	= UNSTUFF_BITS(resp, 56, 8);
-51e7e8b632d8e5 Bernie Thompson 2013-02-27  114  		card->cid.prv		= UNSTUFF_BITS(resp, 48, 8);
-7ea239d9e6d699 Pierre Ossman   2006-12-31 @115  		card->cid.serial	= UNSTUFF_BITS(resp, 16, 32);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  116  		card->cid.month		= UNSTUFF_BITS(resp, 12, 4);
-7ea239d9e6d699 Pierre Ossman   2006-12-31  117  		card->cid.year		= UNSTUFF_BITS(resp, 8, 4) + 1997;
-7ea239d9e6d699 Pierre Ossman   2006-12-31  118  		break;
-7ea239d9e6d699 Pierre Ossman   2006-12-31  119  
-7ea239d9e6d699 Pierre Ossman   2006-12-31  120  	default:
-a3c76eb9d4a1e6 Girish K S      2011-10-11  121  		pr_err("%s: card has unknown MMCA version %d\n",
-7ea239d9e6d699 Pierre Ossman   2006-12-31  122  			mmc_hostname(card->host), card->csd.mmca_vsn);
-bd766312618d2e Pierre Ossman   2007-05-01  123  		return -EINVAL;
-7ea239d9e6d699 Pierre Ossman   2006-12-31  124  	}
-bd766312618d2e Pierre Ossman   2007-05-01  125  
-bd766312618d2e Pierre Ossman   2007-05-01  126  	return 0;
-7ea239d9e6d699 Pierre Ossman   2006-12-31  127  }
-7ea239d9e6d699 Pierre Ossman   2006-12-31  128  
-
-:::::: The code at line 115 was first introduced by commit
-:::::: 7ea239d9e6d6993469a6a8ca83ff23834dfc3fce mmc: add bus handler
-
-:::::: TO: Pierre Ossman <drzeus@drzeus.cx>
-:::::: CC: Pierre Ossman <drzeus@drzeus.cx>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+> base-commit: 88603b6dc419445847923fcb7fe5080067a30f98
+> change-id: 20221228-drop-qunused-arguments-0c5c7dae54fb
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
+>
