@@ -1,163 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7F963C4
-	for <llvm@lists.linux.dev>; Mon, 23 Jan 2023 16:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC20C433EF;
-	Mon, 23 Jan 2023 16:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674490317;
-	bh=45mhFq9YDMVcNdd2xkCq4u+U7UCgDMs1bAiH53dwA5g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YjiD3zZtEFJIkA+Nor+5GCqgslFnaX5gEiCIFf0yNlmFHAVZXoLk57mUvhhZFjOaF
-	 kWMXW2bDKxSnTvn1pt8WMauceMZhWdbXzymXk94z+XrBUS6HfWdn1TJshmre8OiQZn
-	 fOAdnMEXacbTs4G9yC7ZrgvhVHrLdnaTwDqlDnTRvsZZJV4aDg6QKcya511GvE5uq5
-	 kZhuhklNnmb3B0aNLy63mtrZalOeiz6gJirUHcUWx+/2Bp9i/LL1rKnDZ2bm2igyJ+
-	 I7kRtRgnWJWse7sgv1KSq1G7R68QmB3slY2POODY2LOv2rHYEGOC28wPaEiBp8X6sp
-	 HnKIGE9JiGgQQ==
-Date: Mon, 23 Jan 2023 09:11:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu,
-	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org,
-	kernel test robot <lkp@intel.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-	linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
-	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
-	Segher Boessenkool <segher@kernel.crashing.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	lkft-triage@lists.linaro.org
-Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from
- KBUILD_CPPFLAGS
-Message-ID: <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
- <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF91D880A;
+	Mon, 23 Jan 2023 20:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674507324; x=1706043324;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B5Bpc+znc62sNJYhec5oWCnTZ3NsyrqmKocP7D05VJU=;
+  b=P3c+u2/sHxMvDFNa75Yweob0ABb0gNPhWUu/yvQtdVkOOuK6BoIrMmjN
+   DjgXcV3i/wWArJ5QfdCdTgGy+rFDB7unFhIoU0uP+cwEH7zhXxO7ArmSA
+   hcIxvR5qHRE49qyU5j+XAQUFehbm6eHaiDY2sr+nYc7v0xojPsauYAoHz
+   VsqxxN/qXrisYdX+OXLk4GONgkknnhF6ox2tgk1eaC1QH3RO4/68gZoPt
+   OR1gEHqH1p6xYDw/7rXEPQFPHskvavXtEYSs+fjyV77511kK/XkD/OQzl
+   RKUMQo8JQecDB/ojGWmclQpwcgVD9V+GG+UssyRZL5kMfuAyz2AhTXyru
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="314044916"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="314044916"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 12:55:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="655164071"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="655164071"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 23 Jan 2023 12:55:22 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pK3qb-0005tC-2I;
+	Mon, 23 Jan 2023 20:55:21 +0000
+Date: Tue, 24 Jan 2023 04:54:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pierluigi Passaro <pierluigi.p@variscite.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [brgl:gpio/for-current 2/2] include/linux/gpio/driver.h:782:33:
+ error: variable has incomplete type 'enum gpio_lookup_flags'
+Message-ID: <202301240439.wYz6uU0k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com>
 
-Hi Naresh,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-current
+head:   de5f701724ac1078deaf19ca2aa8dbf4bcd4b04f
+commit: de5f701724ac1078deaf19ca2aa8dbf4bcd4b04f [2/2] gpiolib: fix linker errors when GPIOLIB is disabled
+config: i386-randconfig-a014-20230123 (https://download.01.org/0day-ci/archive/20230124/202301240439.wYz6uU0k-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/commit/?id=de5f701724ac1078deaf19ca2aa8dbf4bcd4b04f
+        git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+        git fetch --no-tags brgl gpio/for-current
+        git checkout de5f701724ac1078deaf19ca2aa8dbf4bcd4b04f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On Mon, Jan 23, 2023 at 07:28:10PM +0530, Naresh Kamboju wrote:
-> FYI,
-> [ please provide comments, feedback and improvements on build/ ltp smoke tests ]
-> 
-> LKFT test farm have fetched your patch series [1]
-> [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
->  [1] https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org/
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Thank you a lot for testing this series, it is much appreciated!
+All errors (new ones prefixed by >>):
 
-It looks like this was applied on top of 6.2-rc3 if I am reading your
-logs right but your mainline testing is recent, 6.2-rc5. I think the
-errors you are seeing here are just existing mainline regressions that
-were later fixed.
+   In file included from arch/x86/kernel/early-quirks.c:17:
+   In file included from include/linux/bcma/bcma.h:9:
+   In file included from include/linux/bcma/bcma_driver_chipcommon.h:7:
+>> include/linux/gpio/driver.h:782:33: error: variable has incomplete type 'enum gpio_lookup_flags'
+                                               enum gpio_lookup_flags lflags,
+                                                                      ^
+   include/linux/gpio/driver.h:24:6: note: forward declaration of 'enum gpio_lookup_flags'
+   enum gpio_lookup_flags;
+        ^
+>> include/linux/gpio/driver.h:783:27: error: variable has incomplete type 'enum gpiod_flags'
+                                               enum gpiod_flags dflags)
+                                                                ^
+   include/linux/gpio/driver.h:23:6: note: forward declaration of 'enum gpiod_flags'
+   enum gpiod_flags;
+        ^
+   2 errors generated.
+--
+   In file included from drivers/regulator/max8997-regulator.c:13:
+   In file included from include/linux/of_gpio.h:14:
+>> include/linux/gpio/driver.h:782:33: error: variable has incomplete type 'enum gpio_lookup_flags'
+                                               enum gpio_lookup_flags lflags,
+                                                                      ^
+   include/linux/gpio/driver.h:24:6: note: forward declaration of 'enum gpio_lookup_flags'
+   enum gpio_lookup_flags;
+        ^
+>> include/linux/gpio/driver.h:783:27: error: variable has incomplete type 'enum gpiod_flags'
+                                               enum gpiod_flags dflags)
+                                                                ^
+   include/linux/gpio/driver.h:23:6: note: forward declaration of 'enum gpiod_flags'
+   enum gpiod_flags;
+        ^
+   In file included from drivers/regulator/max8997-regulator.c:17:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/regulator/max8997-regulator.c:17:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/regulator/max8997-regulator.c:17:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/regulator/max8997-regulator.c:17:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/regulator/max8997-regulator.c:17:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/regulator/max8997-regulator.c:17:
+   In file included from include/linux/regulator/driver.h:18:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+--
+   In file included from drivers/mtd/nand/raw/nand_base.c:45:
+   In file included from include/linux/of_gpio.h:14:
+>> include/linux/gpio/driver.h:782:33: error: variable has incomplete type 'enum gpio_lookup_flags'
+                                               enum gpio_lookup_flags lflags,
+                                                                      ^
+   include/linux/gpio/driver.h:24:6: note: forward declaration of 'enum gpio_lookup_flags'
+   enum gpio_lookup_flags;
+        ^
+   1 error generated.
 
-> Following build warnings and errors reported.
-> 
-> sh:
-> gcc-11-defconfig — FAIL
-> gcc-11-shx3_defconfig — FAIL
-> https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d86_kernel_org/testrun/14221835/suite/build/tests/
-> 
-> mainline getting passed.
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/testrun/14298156/suite/build/test/gcc-11-defconfig/history/
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/testrun/14298156/suite/build/test/gcc-11-shx3_defconfig/history/
-> 
-> Build error:
-> In function 'follow_pmd_mask',
->     inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
->     inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
->     inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
-> /builds/linux/include/linux/compiler_types.h:358:45: error: call to
-> '__compiletime_assert_263' declared with attribute error: Unsupported
-> access size for {READ,WRITE}_ONCE().
->   358 |         _compiletime_assert(condition, msg,
-> __compiletime_assert_, __COUNTER__)
 
-I think this was fixed with mainline commit 526970be53d5 ("sh/mm: Fix
-pmd_t for real"), released in 6.2-rc4. You can see a previous build
-failing in the same manner:
+vim +782 include/linux/gpio/driver.h
 
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9-g5a41237ad1d4/testrun/14056384/suite/build/tests/
+   778	
+   779	static inline struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
+   780						    unsigned int hwnum,
+   781						    const char *label,
+ > 782						    enum gpio_lookup_flags lflags,
+ > 783						    enum gpiod_flags dflags)
+   784	{
+   785		/* GPIO can never have been requested */
+   786		WARN_ON(1);
+   787		return ERR_PTR(-ENODEV);
+   788	}
+   789	
 
-> s390:
-> clang-15-defconfig — FAIL
-> https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbddd20d86_kernel_org/testrun/14221913/suite/build/tests/
-> 
-> mainline getting passed.
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5/testrun/14300495/suite/build/test/clang-15-defconfig/history/
-> 
-> Build error:
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=0 ARCH=s390
-> CROSS_COMPILE=s390x-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
-> clang'
-> `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
-> defined in discarded section `.exit.text' of fs/fuse/inode.o
-> `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
-> defined in discarded section `.exit.text' of fs/fuse/inode.o
-> `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-> defined in discarded section `.exit.text' of crypto/algboss.o
-> `.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
-> defined in discarded section `.exit.text' of drivers/scsi/sd.o
-> `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
-> defined in discarded section `.exit.text' of drivers/md/md.o
-> `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
-> defined in discarded section `.exit.text' of drivers/md/md.o
-> `.exit.text' referenced in section `.altinstructions' of
-> drivers/md/md.o: defined in discarded section `.exit.text' of
-> drivers/md/md.o
-> `.exit.text' referenced in section `.altinstructions' of
-> drivers/md/md.o: defined in discarded section `.exit.text' of
-> drivers/md/md.o
-> `.exit.text' referenced in section `.altinstructions' of
-> net/iucv/iucv.o: defined in discarded section `.exit.text' of
-> net/iucv/iucv.o
-> `.exit.text' referenced in section `__bug_table' of
-> drivers/s390/cio/qdio_thinint.o: defined in discarded section
-> `.exit.text' of drivers/s390/cio/qdio_thinint.o
-> `.exit.text' referenced in section `__bug_table' of
-> drivers/s390/net/qeth_l3_main.o: defined in discarded section
-> `.exit.text' of drivers/s390/net/qeth_l3_main.o
-> `.exit.text' referenced in section `__bug_table' of
-> drivers/s390/net/qeth_l3_main.o: defined in discarded section
-> `.exit.text' of drivers/s390/net/qeth_l3_main.o
-> s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
-> fail ../../bfd/elf64-s390.c:3349
-> make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-
-This should be fixed with mainline commit a494398bde27 ("s390: define
-RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36"), released in
-6.2-rc4 as well. Same as before, visible in mainline at one point
-without this series:
-
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9-g5a41237ad1d4/testrun/14057142/suite/build/tests/
-
-> But,
-> Build and boot pass on arm64, arm, x86_64 and i386.
-> Build test performed for mips, parisc, riscv, s390, sh, sparc and
-> powerpc (known build errors for maple_defconfig and cell_defconfig),
-
-Good to hear!
-
-Please consider retesting this series on top of 6.2-rc5 or testing the
-current kbuild tree, which has this series applied in it:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/log/?h=for-next
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
