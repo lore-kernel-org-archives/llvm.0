@@ -1,179 +1,136 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E874B7C
-	for <llvm@lists.linux.dev>; Mon, 23 Jan 2023 05:22:52 +0000 (UTC)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 30N3pOvM015364;
-	Sun, 22 Jan 2023 21:22:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=E0baI9dnhxcRGdZ8o/YBsvgq57eRbS7+B6WUIIoTXsg=;
- b=KAjP3EP77p5IbecLwxHSf7hCz0sKmZvzUJc+vHiUanBlp0JA9+krkowo0rPVK3LRGNJ7
- iD1GB0KQQ7eQR6J1s1kthd5otgo+ORuy/qTISg+/V32/4Yq36B2yDGha/of7BENNycN9
- W6quoii+gkVT2SuaJw6pbkDar98OnNlptf/+ZttWUFTbDlVEQYTviA9nayVhxtgMH8qV
- vrEGLYXgKDOrq1ZL2vAgxFIWkzIHa70KOfkKOORc/wDwW7SIIUAZeNDAvgmRwEzJVbkG
- 3XiUiWdaicF54OOHUmXUCgZI6ZfOxiEwLr8SS/GZnXE6BAZt8seQSThi2rh5iIXXWW1T EA== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-	by m0089730.ppops.net (PPS) with ESMTPS id 3n8ceeqyex-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Jan 2023 21:22:33 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c/ZSaJyufaOxlbW/GSyBmQNHlylYiG1FDhzKBRk7nn7hf6lGmX8Ddy7OgVh3e3S5h0l7kTFtP2JTKgGOOK12kA9hmI243vKdW+FNq8IDgfq3tNzQqUp6aukuSiaSujrscOBVSmeyk86ixmZ7IE90I3QsYB+xosxhNVP9tGa9BP/j7F3Vb4VedWdFaOf2d0TY5Oue57k1JvuYkKrpMeLBT5jkmQ+aopMk0Acw9Zun2INJu3MgksHxtfhCWR8/IoDzVsSln0YkaLV1cb2uwtjX4Ow95AZT7AFjmY5c6iwAp3Z5gWed7RMf4BeAAbIF+eTd44/mJyfgED5nC3hpqqX1BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eauWNfkudqoJ3zZgt+sshjBnZbTQYYyMX3t4LkO3LyU=;
- b=oELKOcTF0Ws2jpdA3mjMpyJ/Ne70/ujUteq3dLlboAKYyg5VUpq9TKof+g3jCr6nUNdj3rpWYBH/q4pk1PMu9XLQpG523L2lFHljZ1M9hwBplNij9NoJcm0k32qOgT4autTfpEtIJeaWg01VAELjBscvkCxDiVA1OPrza/OQgjW91k0KuD4/S9tduGgWUekyVYU3EaXOkgTYMkgXmWxjUAKqx8sdHaUmJipajGY4Mwsyvrp475LUy9vg53jM0V2F93j7fIqOVwqKxIRZGXwd9amLjA7YupcIf8mFQEvcW7uL48XGzlHlpQvxsc7aI+T69Uq7Y8fCOZF6tyFGml/6PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA1PR15MB4449.namprd15.prod.outlook.com (2603:10b6:806:194::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.28; Mon, 23 Jan
- 2023 05:22:31 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::a595:5e4d:d501:dc18]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::a595:5e4d:d501:dc18%4]) with mapi id 15.20.6002.033; Mon, 23 Jan 2023
- 05:22:31 +0000
-Message-ID: <302afd51-07c2-04b3-98a0-ee9d8fc5397c@meta.com>
-Date: Sun, 22 Jan 2023 21:22:28 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] tools: bpf: Disable stack protector
-Content-Language: en-US
-To: Peter Foley <pefoley2@pefoley.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20230114-bpf-v1-1-f836695a8b62@pefoley.com>
- <701abf4bbf5b7957a24d2f164c643e1d9f586fad.camel@gmail.com>
- <4dc6a571-8564-b38c-31df-0d9741dfc592@meta.com>
- <CAOFdcFOh_rNt3pfkNHPPeK=Kojro==Kpgmmu-VnLuaMYfFoiwg@mail.gmail.com>
-From: Yonghong Song <yhs@meta.com>
-In-Reply-To: <CAOFdcFOh_rNt3pfkNHPPeK=Kojro==Kpgmmu-VnLuaMYfFoiwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-ClientProxiedBy: SJ0PR05CA0187.namprd05.prod.outlook.com
- (2603:10b6:a03:330::12) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SA1PR15MB4449:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1726a2aa-1bad-4cd4-9fc2-08dafd01d353
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	nuiEz/bakibKCE/bBCjtlTo3XLEp1PKPmOK6XYOXHqopezdZvZfRyaqHYTVrgNi7h7zCVocnqBl8isZLbPVu/qxs8OBYNOaijGAiIsDV4CP1te5sSeG+YHqKvLwnsm1sHpB9DoQRE1D1jiAGcZoloDJUIHNhCsWFNDOjth6skFcwsTYw9MOzdFv2F3ZI4orBbXIu5C12LwfFxyUdQ9au/+5v81NEY6mcUztmd5lytKxhoT5G3c83lsXCqlQ7xzmWaI3zt/rQopl8oZviSfntIw2xKgfTA/t21sfPs6UdeBVKY1+yJLW13aOoCszuYN8CL2JDKO2ei2EK7/2xD9ZdELgoW1Y/XpUF3O51m3bCizDpceosmwtLoZGzdHkgVHsT2ggsZ6mV5ReUdC2mXNRv4cWf4xcH+z+mGuD8Ri7DMA6zZUk5x6uPRSg7wolVdB8GdEb2wPpEcmaRRO3Kbd+3NlRa/9lm/Vmr4nh44lAnC2EdUXEdc5xW0S9Zb1lc0nQp+JtjG9nt/17Uz7JyA7NGvJahx6wUU/XmlCllXqcaSBkL+D97tbTjHYuYGsr5inbOrVNkFH+qMW8qCxz1YOqJC7Pfu4HoLlhdUYWftedPmjEaGGfcy/zxZCU6VTYPScEedAPI3scCEVFMjHkDUUzr+/tYrT//RJBXT2zdGfOLAak8mFMg6skK0alJ2jiEL3kk6prf/rpJ/oMNii7xg2V/aNs9szYk2556kjr/QKHbrVJzcniD2KRF6cWqx6frjXp1FZh0xmLzE+ijcwZ3FkIkOA==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(366004)(376002)(396003)(136003)(451199015)(86362001)(31696002)(6916009)(4326008)(41300700001)(2906002)(66556008)(66476007)(6512007)(186003)(478600001)(8676002)(66946007)(2616005)(6486002)(966005)(53546011)(6666004)(54906003)(6506007)(5660300002)(8936002)(38100700002)(7416002)(316002)(83380400001)(66899015)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?OFhkMk5vYjNnZHVsM2pRUnoySkh1b1JBdytvLzQ5NStlTkFhVTAxSlJZWnh3?=
- =?utf-8?B?N0d0bDBwb3crNmhJSTRNbGlVRlFLNHVzZUd3WGp1dHZUbUU1NDRDMWVDYmtH?=
- =?utf-8?B?Vk80NjVsVm1ZN2xyc1dXem5TVTI4VDdVcDB4aU1KOWxUbGxNSmVQUGNjaDNH?=
- =?utf-8?B?dWRFWlhIelZteXNXS2orMTlDVzE0M1VGQS9PNTMrNGZoMnlraGVyWmc1cUxB?=
- =?utf-8?B?bnhYK082K2tuWG5CLzdwRngwcVBCdnlJcnhGMi9uNktoTEw5ZDdLN3FkbG1k?=
- =?utf-8?B?Yzl2S0crODl1aFpFdndGRkJBbExFdEhEdldFRVJ2QkpBTTA0T05Yc2lSSmZp?=
- =?utf-8?B?blJIblI3a1VHeEJwclYyVjFVK2x0dE8wU1R5aVI5ZDhpbElqMEhWYnZ5V0pH?=
- =?utf-8?B?Y0J3M1didWRoTmR0eWhDWWJqNWFpVTNnek1YTHhWVy95dHU1bU0xdFRCTTQ2?=
- =?utf-8?B?OFBTaVZtTUllNXZpQ29YVCtMM0lFUlJyMVo4UnpUckVzUFIyVm9jcGs0S2E4?=
- =?utf-8?B?RXVTSk00Z1YwTXhjdlhiT1ZzMmtpZU9YekNDS3dTc3NRbkZIdEZFMUY0dUtx?=
- =?utf-8?B?c1dmU3VEcE11allyVDVMNWh6T0diK3dNbkRzc3pPQVVFVnk1dUdHYlYrd2Ri?=
- =?utf-8?B?dTBzUUkySGpnS0YvTC84WjJUVFJ6L1BPL1hUT2Rsb2ppd3NuUHh1eXJYOXBi?=
- =?utf-8?B?L2lJa0NSLzVKbFBvNUU0Z09HbHFGT2xiTS9KSDhLaUMxb0RLckdkcU9nTWhZ?=
- =?utf-8?B?bUN5L3hBY1BlejlLZEZPdUNtS3VkV21wbXI0OWY0TGYvRk0xM0l2NGdSZG9Y?=
- =?utf-8?B?ZmZVOFZ6ZUhKVGREbnczZlpVZ0Y4bVRoS3dBWmVLUVc4b3d2UXJpakJaUGg3?=
- =?utf-8?B?bmozdUdTRDdiRUNOc0RRMWZvcWV3SEVlS1RzcWcyYkcxeDl6SmFIWkpJSXU1?=
- =?utf-8?B?S0FRRHRYVFd5eGJPaEMvQ0ZCdUYzZlZGY2xmZlJUcXZvQzVzMDdKK0N5dGU5?=
- =?utf-8?B?YzdwdnJQMGk0aWZUL3JjUk0wdUxBRVJXdlBieENuOUo0YTlVN3BzemxOMDhO?=
- =?utf-8?B?Z012MnhaZkFpQmFaUnFxQ1dQcEpGeVVteGVHdGlOSXl5czFtMDBLTFN3RzhN?=
- =?utf-8?B?OExRZnZySGxQQVppd2VaMHBMMmZHODczUCtTKzJaT1hoWFpHVzczNWdRWFd6?=
- =?utf-8?B?Ulp2T0t2SWJOUUE2RkUxYU5LTVJ1NWFEeHg0cnJIdTNOWFdPVERDNkx0ZlRC?=
- =?utf-8?B?TXA5SnVpb1J2YjdocFRDMEpHUElsZkFRRW9kd01RQUJhaTByVnIrMCtsMG1Y?=
- =?utf-8?B?emJYeFNvbzhqbkE2ZVNZMXYvWmpuMkViS0R3OFBpTWg3QkJwVHhoaHdmS1B0?=
- =?utf-8?B?azNUYU93ak1LNlpFYTNCdEc0T21FaHh2REJ5b2YzV1JMdlEwL25oM0c1Rk1S?=
- =?utf-8?B?bXpCaUUrQXg1SE9CRlMvNDZjYU9NRU5jUjZ4VHdqQ3AvaHFiTHZXRk1qaStz?=
- =?utf-8?B?Y1l5Sk5sbC80U25LMURxUkw5UEt2WWNhNEh3MFNsNkZGZlRieHFIOWhOeHJJ?=
- =?utf-8?B?YVB2N0tWSWgvR2c5QUpzdVZGS1VvTGJTZEd1T1YwQ3lkc2Y3SVFCY1YwL0Rx?=
- =?utf-8?B?RnYxOWp4cUxLV2ZuL2RCTWNONi9mcDJmNzluMlduZzBVSG1iVVVrNjExc29n?=
- =?utf-8?B?MVhadVlOU3J1Ry9lMlNVQll3SFdNZE0weDBDbnZZSTNKUzVhVDdVZnVKajdu?=
- =?utf-8?B?WWF3ZTdSaVhVT09FQ29sSW05aHpxU1ovdmxCZHhHMFBxK2ZkR3dpcmNnam5h?=
- =?utf-8?B?OWdDODA2ZVN0eWl4SkNXbFJuSzdxbHFqNHVVelVIbXROVDBTcUkvN1gxeGRk?=
- =?utf-8?B?bjdzVmtsc05YMFFRVVNYZzBZK2t5UEdWaDdlRzhsaWY5U01qM011SzFGME1B?=
- =?utf-8?B?Y01IbEtyN1NBeERwSlpGbnlQR29oYnV1STlqV0RlS3ROOEsrQXBud0xCSUx5?=
- =?utf-8?B?MUhtU3R6Z2N2dzh0K0pvOVh0TTVTZDVIZEVtaE9zOEQ4TFJWNWRMWmNUSCty?=
- =?utf-8?B?RGxvL3dUSThSSmwvcXFWbFpSbkpWMDhNSGl1WkZyZEJGanNUYktCdFJwN3FC?=
- =?utf-8?B?cHJtMVl5ZWJ5REdCV1NkUHJZcm5WQzNRbVArdGhtcno2OEg4dXJjRFJjNFE2?=
- =?utf-8?B?MVE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1726a2aa-1bad-4cd4-9fc2-08dafd01d353
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2023 05:22:31.0332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SdS2eNoMogO7NHvNUo3DfpMxzw4QXtGBLAopf4GK7syl7DwlZxC/pG9tf0gGEjjz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4449
-X-Proofpoint-GUID: _y5cf-hvKDSw5Zf_KjtBmRO7uWN_SxNv
-X-Proofpoint-ORIG-GUID: _y5cf-hvKDSw5Zf_KjtBmRO7uWN_SxNv
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 1 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115B47C;
+	Mon, 23 Jan 2023 05:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674452523; x=1705988523;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D5ZVsnzfS0IsUQd28/HSjk63wo2zAOeT9wlqvkhHaLk=;
+  b=M7+2CZqy6B/+W6sSkq2Q2ezSUlBEk2jvcWFlfFbVFK4Q0ag8ZZqCfDA+
+   5Mc+FGygvcotKLthOyb6iSPjDuF7lqJSaMAwkxFblBdvjeZzP/Cb6igkG
+   l5zAlID9GcDne9gYjGgDJol3qNHOLGyWTIF5wSlrV3ZS57egYZ4eW06yV
+   Z0/x3KhdExcuESYxXlsK3DbDI4bIbYY3bhbh6Zq3h5Ph2Sjuw+srBvnhP
+   vjnuVDr748hDvbP3g0XsewzLloLeqqfpcue5OGDMi/oAO/cw/5AoHuZQ7
+   Odth98fltFTOJb301MhHHtA3QGss1iT0M6NESdejqgln/cAKDh4IDb5hL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="353237165"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="353237165"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2023 21:42:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10598"; a="730054622"
+X-IronPort-AV: E=Sophos;i="5.97,238,1669104000"; 
+   d="scan'208";a="730054622"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Jan 2023 21:41:58 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pJpaf-0005S0-21;
+	Mon, 23 Jan 2023 05:41:57 +0000
+Date: Mon, 23 Jan 2023 13:41:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ajay Kaher <akaher@vmware.com>, rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	chinglinyu@google.com, namit@vmware.com, srivatsab@vmware.com,
+	srivatsa@csail.mit.edu, amakhalov@vmware.com,
+	vsirnapalli@vmware.com, tkundu@vmware.com, er.ajay.kaher@gmail.com,
+	Ajay Kaher <akaher@vmware.com>
+Subject: Re: [PATCH 1/8] eventfs: introducing struct tracefs_inode
+Message-ID: <202301231320.vExYuIWP-lkp@intel.com>
+References: <1674407228-49109-1-git-send-email-akaher@vmware.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-23_02,2023-01-20_01,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1674407228-49109-1-git-send-email-akaher@vmware.com>
+
+Hi Ajay,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+patch link:    https://lore.kernel.org/r/1674407228-49109-1-git-send-email-akaher%40vmware.com
+patch subject: [PATCH 1/8] eventfs: introducing struct tracefs_inode
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230123/202301231320.vExYuIWP-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/926ba0e4029baa4bbc7c283854148d1769642d50
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ajay-Kaher/eventfs-adding-eventfs-dir-add-functions/20230123-010956
+        git checkout 926ba0e4029baa4bbc7c283854148d1769642d50
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/tracefs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/tracefs/inode.c:130:15: warning: no previous prototype for function 'tracefs_get_inode' [-Wmissing-prototypes]
+   struct inode *tracefs_get_inode(struct super_block *sb)
+                 ^
+   fs/tracefs/inode.c:130:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct inode *tracefs_get_inode(struct super_block *sb)
+   ^
+   static 
+>> fs/tracefs/inode.c:402:16: warning: no previous prototype for function 'tracefs_start_creating' [-Wmissing-prototypes]
+   struct dentry *tracefs_start_creating(const char *name, struct dentry *parent)
+                  ^
+   fs/tracefs/inode.c:402:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct dentry *tracefs_start_creating(const char *name, struct dentry *parent)
+   ^
+   static 
+>> fs/tracefs/inode.c:440:16: warning: no previous prototype for function 'tracefs_failed_creating' [-Wmissing-prototypes]
+   struct dentry *tracefs_failed_creating(struct dentry *dentry)
+                  ^
+   fs/tracefs/inode.c:440:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct dentry *tracefs_failed_creating(struct dentry *dentry)
+   ^
+   static 
+>> fs/tracefs/inode.c:448:16: warning: no previous prototype for function 'tracefs_end_creating' [-Wmissing-prototypes]
+   struct dentry *tracefs_end_creating(struct dentry *dentry)
+                  ^
+   fs/tracefs/inode.c:448:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct dentry *tracefs_end_creating(struct dentry *dentry)
+   ^
+   static 
+   4 warnings generated.
 
 
+vim +/tracefs_get_inode +130 fs/tracefs/inode.c
 
-On 1/22/23 8:28 PM, Peter Foley wrote:
-> On Wed, Jan 18, 2023 at 11:34 PM Yonghong Song <yhs@meta.com> wrote:
->> On 1/18/23 11:28 AM, Eduard Zingerman wrote:
->>>
->>> While working on clang patch to disable stack protector
->>> for BPF target I've noticed that there is an option to
->>> disable default configuration file altogether [1]:
->>>
->>>     --no-default-config
->>>
->>> Should we consider it instead of -fno-stack-protector
->>> to shield ourselves from any potential distro-specific
->>> changes?
->>
->> Peter, could you help check whether adding --no-default-config works
->> in your environment or not?
->>
->>>
->>> [1] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-no-default-config
-> 
-> I guess I could, but I'm not convinced that's the right thing to do.
-> Ideally problems with distro-specific configs would cause loud
-> failures (like this one) and result in fixes like the changes being
-> made to upstream clang/gcc.
-> Simply unconditionally disabling distro configs seems to be the wrong
-> way to approach this and makes it less likely that future problems
-> will be reported in the first place.
+   129	
+ > 130	struct inode *tracefs_get_inode(struct super_block *sb)
+   131	{
+   132		struct inode *inode = new_inode(sb);
+   133		if (inode) {
+   134			inode->i_ino = get_next_ino();
+   135			inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
+   136		}
+   137		return inode;
+   138	}
+   139	
 
-Thanks for confirming. Eduard has implemented a proper fix in clang
-(https://reviews.llvm.org/D142046) which will warn if -fstack-protector
-is enabled. In gentoo case, since -fno-stack-protector is appended to
-compilation flags, no warning will be issued, so we are all good here.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
