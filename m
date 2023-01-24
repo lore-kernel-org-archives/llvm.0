@@ -1,99 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE277C
-	for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 12:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674565098;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93AA7C;
+	Tue, 24 Jan 2023 13:05:44 +0000 (UTC)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2459B1EC0622;
+	Tue, 24 Jan 2023 14:05:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1674565542;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZSi6S+muZGTgBwtIdsJ5fCvNBIzBTV5J3NQ7wnrMIF8=;
-	b=UBUUb7q94Swu2dGxlbFY3C4wr2qz5kR8dw/VL2FOk6dab+kSJ9VynEwjlB7j8l2ac6N2wR
-	PI5EMpGXChb1+qbxe2jeysElv95D8my0hmN2i7mPflYMJoGlFBEDWgfd7Klo6rgh+DvlX7
-	OOzVFvMr1QRqxMtNJeUjZtNmsWQtyMo=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-47-DtnP-WvmPC20mWM7-w6tAg-1; Tue, 24 Jan 2023 07:58:17 -0500
-X-MC-Unique: DtnP-WvmPC20mWM7-w6tAg-1
-Received: by mail-qt1-f198.google.com with SMTP id br26-20020a05622a1e1a00b003b62dc86831so5885307qtb.8
-        for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 04:58:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZSi6S+muZGTgBwtIdsJ5fCvNBIzBTV5J3NQ7wnrMIF8=;
-        b=WS9jvOxLqk5KqzfbBrKSEYfX42T0iMoLVD62KkQbmF3+HmrIUt0m1jUwkpYR2TdlIV
-         sha0LoIKkFl5y2BZk0AIaIK9pkQrJIrQf7JeYuRyvwlHzTDkFoMfIZnO1fPtQLBhQ0L2
-         4ysiIwbeKXo7XrE00h4FMl73WemgibBz3pK2Kn1SaJAYIvKTDx7dCcZG03/oOS6xYBj9
-         P1EL5RwvdqToCkirLh2yNhPMMuOwPxpsSCvkHheK2aKKxAbHaWZlW4oLXeXHA7rtQRlC
-         zPhHHtgTbV9DM4zSnulZQFehayvH4LXP6dG8PU+601m4nEA353PeVv257UrHH5F+XlGs
-         ArSw==
-X-Gm-Message-State: AFqh2kpcfVYrPZerP24DgvBCfdMOyfURTxg940loV+mMvv3lreGQnZ7z
-	G6JHVPC/KJXiPT4cZvHLM1BQ9EQyVahqcrfgNMWbskPqg4RjG3PyzY1YbIj2x0xR926uJgY3d8F
-	7B2kB5QYY7qi9sw==
-X-Received: by 2002:ac8:7350:0:b0:3b6:90c4:b13a with SMTP id q16-20020ac87350000000b003b690c4b13amr27608079qtp.58.1674565096637;
-        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtLt3U69T2XRyfXT9r14cbZA03RVHPgFC5vWRm+j1Qb42uI3X9erIeuPmuCPjOI5VnlnIACFQ==
-X-Received: by 2002:ac8:7350:0:b0:3b6:90c4:b13a with SMTP id q16-20020ac87350000000b003b690c4b13amr27608059qtp.58.1674565096385;
-        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id r22-20020ac87ef6000000b003ab7aee56a0sm1192570qtc.39.2023.01.24.04.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
-From: Tom Rix <trix@redhat.com>
-To: axboe@kernel.dk,
-	asml.silence@gmail.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] io_uring: initialize count variable to 0
-Date: Tue, 24 Jan 2023 04:58:05 -0800
-Message-Id: <20230124125805.630359-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=PmF6+4QENiIdARF8/6Ph7VMasHMPcP62KrTC+HYAlLQ=;
+	b=go5y2Q1CaMrGAiq492t0yOEMROdHZfy1Vo5Njpqq8/d833YSgIKF1e8pG1YrEWH86RXPTh
+	aQxbtvMs0JqgcBgeXQRAB/QQqDM3KmbVgCKKvJIeDckH626AJjObA68lgTQ+iILADH83c6
+	Evxn+c4TkTquumzjiXrcOLbFlwOe7Ek=
+Date: Tue, 24 Jan 2023 14:05:37 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: kernel test robot <lkp@intel.com>
+Cc: Babu Moger <babu.moger@amd.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [tip:x86/cache 9/13]
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
+ not used
+Message-ID: <Y8/XoT23HVXHSY73@zn.tnic>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202301242015.kbzkVteJ-lkp@intel.com>
 
-The clang build fails with
-io_uring/io_uring.c:1240:3: error: variable 'count' is uninitialized
-  when used here [-Werror,-Wuninitialized]
-  count += handle_tw_list(node, &ctx, &uring_locked, &fake);
-  ^~~~~
+On Tue, Jan 24, 2023 at 08:37:14PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
+> head:   0a363fb23ee2f7beb08437ad7db86d195878d79f
+> commit: dc2a3e857981f859889933cf66ded117d74edff1 [9/13] x86/resctrl: Add interface to read mbm_total_bytes_config
 
-The commit listed in the fixes: removed the initialization of count.
+These patches have been around for a long while now. How come you test them just
+now, after I take them?
 
-Fixes: b5b57128d0cd ("io_uring: refactor tctx_task_work")
-Signed-off-by: Tom Rix <trix@redhat.com>
+> >> arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but not used [-Wunused-but-set-variable]
+>            u32 h;
+>                ^
+
+The fix is simple - use rsmsrl(), see below.
+
+If it weren't that simple I'd simply ignore this warning altogether. Yes, it is
+unused because the damn high MSR value needs to go somewhere, for chrissakes.
+And if it didn't need that masking with MAX_EVT_CONFIG_BITS but the low 32-bit
+MSR value would fit right into mon_info->mon_config, then I would've ignored
+this one even faster.
+
+And besides, I'm wondering if you're spending your 0day resources properly if
+you're testing patches one-by-one for W=1 warnings?!
+
+If it were me, I'd prefer if you build-test patches on lkml for build *errors*,
+*before* they get picked up in some tree instead of testing the applied branches
+already for some questionable warnings...
+
+Thx.
+
 ---
- io_uring/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 734d074cdd94..4cb409ae9840 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1227,7 +1227,7 @@ void tctx_task_work(struct callback_head *cb)
- 	struct llist_node fake = {};
- 	struct llist_node *node;
- 	unsigned int loops = 0;
--	unsigned int count;
-+	unsigned int count = 0;
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index cd4e668e5019..9bd0eb050e7a 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -1453,17 +1453,17 @@ static void mon_event_config_read(void *info)
+ {
+ 	struct mon_config_info *mon_info = info;
+ 	unsigned int index;
+-	u32 h;
++	u64 msrval;
  
- 	if (unlikely(current->flags & PF_EXITING)) {
- 		io_fallback_tw(tctx);
--- 
-2.26.3
+ 	index = mon_event_config_index_get(mon_info->evtid);
+ 	if (index == INVALID_CONFIG_INDEX) {
+ 		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
+ 		return;
+ 	}
+-	rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
++	rdmsrl(MSR_IA32_EVT_CFG_BASE + index, msrval);
+ 
+ 	/* Report only the valid event configuration bits */
+-	mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
++	mon_info->mon_config = msrval & MAX_EVT_CONFIG_BITS;
+ }
+ 
+ static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
 
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
