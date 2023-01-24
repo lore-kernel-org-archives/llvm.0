@@ -1,180 +1,267 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2045.outbound.protection.outlook.com [40.107.93.45])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518ED8F4B;
-	Tue, 24 Jan 2023 18:44:13 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UDtYHQ7vnws6s94NKip1icPb+AxtajAwLE6QBuIwOWKNY/VDekhe6sH5n5I57pGVSkPXUizOFen+sHv+q4NW4WK4zTWVV4A7dBVzyUntwTcbkphorR0tiKG0lEcsKHuhB8EOL7yB0LWt6c3v9NQtT2e/8TOBP3QKtShQb3VAwQpyUVyzprMRXpZurQLqBFdhY93R7JMMMQd5X+EYqwg9TZrnouHJ8u5xfvCgD3vNYkyF1058//EyamaL/t7zflMSXVAlWWnK2WWpa5/b3iMRI2LeR9psqCWecQo6MiwxST9L8d+24O87toVRx10MnzVS/5FAfagdVwBMwglKn0eUsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7CboyaZ8rsoVnjSaZ0IQ1mL5Z65IzNIVaByJsAYxkks=;
- b=kmGa7cTNuWi6PdBuJMGSSCKH6ZiWSyL2VwYyzvV/of3696ecVelXaimVNy0tBD5XQeqw54yWC20WYRkfRc+o2quNTpmzlDgWAbQKq/+XuVwY2hdc7sytycytYvLTwkaunCpOKxyjPcO9tcYK2NVLcGWOKpm9UPYMmDYWdRkJ2iYGxvgQ5VEuVqeB53j+6JmyZXm+g4vFHp0jiNWiOG8jDjOkUIhvW6dlIjeUDvzt5en+1Z4q0SEI6epzFgADaNNOvJH8Eujf6ueUvnSp4htLF2utLwldDfV9k445h4zbki1vX05LyS9obYYiyq7jm45dMjkA8/8fACE6WPYQyLjd6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7CboyaZ8rsoVnjSaZ0IQ1mL5Z65IzNIVaByJsAYxkks=;
- b=Xuj1+04sJoT35Rx3RfbaMgC1j5CwxWrKoCfZaDc9+dte4U3H5bMUhEuo68fDaiynq0HTIxVaXoEvVEop59EvP30qX3MzvHOljqqUTngwhJ+xv+TNMPPYgoMn6KCH7kpWYDrBXka0DCxvSfhL+dwWMQFen9XMRkG214WEJLqNEnk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by IA1PR12MB6161.namprd12.prod.outlook.com (2603:10b6:208:3eb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Tue, 24 Jan
- 2023 18:44:10 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::790c:da77:2d05:6098]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::790c:da77:2d05:6098%9]) with mapi id 15.20.6002.033; Tue, 24 Jan 2023
- 18:44:10 +0000
-Message-ID: <8537e27a-b565-2618-43d0-b70a1a4390e4@amd.com>
-Date: Tue, 24 Jan 2023 12:44:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH] x86/resctrl: Fix a silly -Wunused-but-set-variable
- warning
-Content-Language: en-US
-To: Borislav Petkov <bp@alien8.de>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org,
- Reinette Chatre <reinette.chatre@intel.com>
-References: <202301242015.kbzkVteJ-lkp@intel.com> <Y8/XoT23HVXHSY73@zn.tnic>
- <Y9AftBkWXcFflHbm@zn.tnic>
-From: "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <Y9AftBkWXcFflHbm@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0104.namprd03.prod.outlook.com
- (2603:10b6:610:cd::19) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214298F6B;
+	Tue, 24 Jan 2023 21:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674595826; x=1706131826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rknlUi0ps5Ma9KVM47aCx69s2nZPi0dkaBPilmYcYPs=;
+  b=Ig0HAKTXRKIuLf8uUtEiDlW3A1V0o/f5otiL349a9UF2O5nP3mOo3LLK
+   EErZIdp4KJ6FrmP/YC49b8yReuEKcajBKvVzfcMPDXN12jW1emvOPJwuD
+   Gjx75+YGvuocXzOgrM08aUIAgUrb5ezcXxa1tkVXxTHb7pry1O2XfRWi/
+   q7z8097RhDH/rJHBvSF/MYdv3w022X2bh15QZCUj65y8uel89xqbqU54l
+   jZuIugFr/GfLgZq5GWdHc6ndY3Pqjz3uR3Aq9mB5P/AIJy5TsoiPEdfFA
+   MyhPlNaDUMMMs4vKV2W1hWknt/mDbOwXNcaS7bHQpQGrVk6u/55hMsCgC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="314312680"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="314312680"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:30:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="612182894"
+X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
+   d="scan'208";a="612182894"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2023 13:30:22 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pKQs1-0006nN-2g;
+	Tue, 24 Jan 2023 21:30:21 +0000
+Date: Wed, 25 Jan 2023 05:29:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Guralnik <michaelgur@nvidia.com>, jgg@nvidia.com,
+	leonro@nvidia.com, linux-rdma@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, maorg@nvidia.com,
+	aharonl@nvidia.com, Michael Guralnik <michaelgur@nvidia.com>
+Subject: Re: [PATCH v4 rdma-next 4/6] RDMA/mlx5: Introduce mlx5r_cache_rb_key
+Message-ID: <202301250543.S3rDnUPI-lkp@intel.com>
+References: <20230115133454.29000-5-michaelgur@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|IA1PR12MB6161:EE_
-X-MS-Office365-Filtering-Correlation-Id: abb0b48c-d7c2-467a-bcef-08dafe3afb4a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Kard3BuMuOn1By29ZaiEMPjr0eK+nDJoib8Ha1mQoeh6So/CqZJv2WBexRrl3JzAt7jwh5mI4QX5/tsX52aftLAjh6N9NJcqBLYlquauRaTgSjBbcK2bXc+k2G7zwO1wVYoiNHzcVI+3aGUhTEV7BaOgoyWbWORVe7Nw5hbS8vy8Mc+F51Mr+6ntFPkRtVk52lICBkqm78D/YOgkd7wnpFIjeMIG/6aD+GrI3dIFcjVRoY/lhrZg7Dyg9BbipXV9QHnvuGJZ7rE/roZUI7YhMQhEygx61qvrVUeXtuPdDaKa//Rt9AI7Vk0oufHInnDLCf19AAPEjjNbjDjJ6XarSUFYflJU5YwQiWxrYqEvOtzymqG66OYmzXI9SaA/NZRTpwRnnbkJVARK4XxSjfGkGSrP9YChm2ZYPGEOvZlrxBsNlXBDBnXJjbEWkcu7Rfn4dGXJDuaMhT06gTJg9o+fi6zaoJYpclWNDLvVQws1s3hbqtEJ6v0zS0BQWRdxQHKogz3ZFOjkZ+6H9tNKDiqFBTdj8G60vWPAnwS04Otn3V0sZEVphhnMHFxI0QoWDHBSKe5u+cN21i4dNeB4ZGKd7xH9TaUHWpwXI4OR6NzU/6RZvE6Z93GVQRoR6PvP3BqZschm8Q1/PYrILyNTZaU8E29+asr9fEUwQlrLp1BH/4LJHzRvcyAzwKTm+W+73ksa2ReCXt5rTRTNNr7kzUd3XtNHzH4mP4cGFPfXoRN/Kl40LUy2QiS3IYCD0PjrfkNvOUJ+WhNStNk1kUO9azzXig==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230024)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(451199017)(31686004)(2616005)(3450700001)(2906002)(31696002)(38100700002)(8936002)(5660300002)(6486002)(54906003)(4326008)(8676002)(66476007)(66556008)(41300700001)(966005)(86362001)(6916009)(316002)(26005)(6512007)(186003)(53546011)(83380400001)(66946007)(36756003)(6506007)(478600001)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M2JrSGN3Y0ViWEk3aHRvdVpjdW1ISFh2azE1aUozRW5hR2ljaC9WQlljeXJP?=
- =?utf-8?B?eDZNT3Qwc0NuTVpBc0p0dmFqa1YrcHE5dU5hQ2FjelIxRGRrNlFxaElHS2tV?=
- =?utf-8?B?WVNwYTMyWS94UVMwOTZDeUxHRllMbko2SlIwaEJBWXRDUkdpblJrckwrU2hS?=
- =?utf-8?B?VlE5M3RPbmJKenBYb2NyZCtyMHF5OVBWWk5xTXo4Y1JmV05GeTNQMXJ1a2FS?=
- =?utf-8?B?ZExrRFYrSlQ0eEhzc2lSRnE0TmhtZjNtNkJ5Vm1Va0YraVRBY2tGZk5JNTl2?=
- =?utf-8?B?d1VnZWVJZWUrNVgyL0p5N29KNnRFbCs3Q1ZDR01LanQzS09YWkVnK0UwNzB2?=
- =?utf-8?B?Rm9WNGhBaGQ0emxLUUdrNUVvOUFaQkRjVmtMd1JSWk1MQS81ai9BM3Rhc3FO?=
- =?utf-8?B?VDBCcEdYVTBkWDU3QmF4M2RXUlBaOWFralk4N2U3dGFjVy9HazVwVWxab0pM?=
- =?utf-8?B?OTY1K2gvcnlmMVZOZVFvUlVnZXRkSHU5U3hvZjNiUzFueWxFTWRFWGZ4R25s?=
- =?utf-8?B?a0Rwd045SnNlV1VtWmE4bkRvb3hOTEVlUzduenJ4cFlWK2Y2UkVBYndyWDZK?=
- =?utf-8?B?MWJlUHRUL29xZk15ZTdQeTRKZlovZHYwTzZueXRvaGRBcXZRd0pzVmxLTFdk?=
- =?utf-8?B?bXJ2QUh2MGM5V1U4dHljT3JpUWVHdTIrYXVHTUJHSHNtSjhOZUx0OTJVWkgr?=
- =?utf-8?B?M3RHc1dZT005Si8xbGsxUjlpNURjMEZIdVYyc0kvbW45V0tmZFJxOXI2NUZL?=
- =?utf-8?B?Q2IvU1FSd3lNdnc3eEZRTlpDd3YwanhYUS90REh4V0s2dFhjVFVyaldDZ0Jy?=
- =?utf-8?B?QlNGUUhpb0p6c2NIdWJ5N2FjRzRVWHd2M0VObmxVdittMG1JRVFYbGZrT2xv?=
- =?utf-8?B?Tk9rQzFqL3VNbzlRL0czNHdKSzBENUtVOWplbkYrTWk3QVZ3bXBWN3k1NGcx?=
- =?utf-8?B?dXYrMGNBTDZNMDF0a0NOUGpCZzRQRjhFUk5CWVZQYmJlSWwyUm9ub25xdFhM?=
- =?utf-8?B?cUs4RVNMM2s4UE9ibkxZNktHMExJTmZZa3NlTUV1R3FXdGhZUVlvL3pVMXNl?=
- =?utf-8?B?Mm56ZjB4UUNaMDVndlkwVHhRTGI3WFJpNnRGZGU2UDJuZ2EzcCszbHMvcGRx?=
- =?utf-8?B?K3R0aTkvTkR5QzRZVUc5RUZPbTlXVE5xdVk1eWNMWmxPNnVrb2E1ZTFGbElD?=
- =?utf-8?B?Tzk1Q2RmZGxqSFczL2dBU1JpQndGVXBoWHdTcUlWOVFyb0RZa3NVTFhCNk9t?=
- =?utf-8?B?bVhYWmVzRFNvRWMyaW9hMWJjLzUyNVJ1bSs0SndOYWtVTnVoUFB2OWpEZ0dC?=
- =?utf-8?B?M0ZUYmdhemNZMlhnL1VEdjF3MHRpSWxqbDVXOWdOL0wzaHBYc2JVNmtraGRl?=
- =?utf-8?B?Vk44T29KYWZNWWRJQUVXaGY1ZWxxemk2QkpGandVTnM1V3lGKzVHdjlESnln?=
- =?utf-8?B?WGg5bDNyZVpqRFhCdXNlOVJEVFNvWkpzaWZvUmYzbjQ2dDJWTkQwbzMwWkxR?=
- =?utf-8?B?ZXdFK1JrRHhHbVRPNVR3N09QazFkc2lBclhJRHdPamdhdmJCWWFPOHBoMCtZ?=
- =?utf-8?B?ZGFuTjBVYkdlcDV1eUdRcmJMRjkrMjBiQy9HaXVzQmExb2NEMFlIemowT3lm?=
- =?utf-8?B?bENpb3pGZzlSMlJnYzNNK0h2VkRaTkRCSk83WnJFM2VGWXVGVi9CYzdJVUND?=
- =?utf-8?B?VTIyRVUzc0JCQVloUzltZXlkUldYLzlpVG5uRVVSQVMrRWw4SHpycTcxTFJT?=
- =?utf-8?B?VWJKZ0V4Nll2MmttYjk0R1VheVY0Sy9FUWZYRVF3eEdGeDhxbVBCeXd6b0lU?=
- =?utf-8?B?S1duMUNDQ09FMGpRSm1zb21lcjdXZ3JaeG9oQ0FkSHRMdGVvTHJaZFpFOENI?=
- =?utf-8?B?SUZ2VHN4VjF1bzJiR1I4ODZEMFYydGRvcW92SW95MnpDTGVzcjNyZEx4dEhU?=
- =?utf-8?B?YUZhdUtLdjRpYURWb1FiVHhRR3g2c256LzRJRjFObHF0ZXEzaFBuampJU0R0?=
- =?utf-8?B?dEtZZmNlMXd3YUVjWXBVR1EwaDZVL09SNFgrcHFFM0FKU1pmTGdycmIxMk00?=
- =?utf-8?B?bDE3YXRhemw1ekswcS9nang1WHpHVCtuV3BiVFd2REFySEsyalRFOEl4RXlH?=
- =?utf-8?Q?Gt25PO4V9R1+6vT6Vu8WuJxx4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abb0b48c-d7c2-467a-bcef-08dafe3afb4a
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 18:44:10.5914
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rnkhg16GIKPXC1yoJtzGALPScdMjsNH9Yb/VuY1oxrLsh8GFqjdvDvYRx4be0PPh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6161
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230115133454.29000-5-michaelgur@nvidia.com>
 
-Boris, Thanks for the fix.
+Hi Michael,
 
-Tested-by: Babu Moger <babu.moger@amd.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on rdma/for-next]
+[also build test WARNING on linus/master v6.2-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Guralnik/RDMA-mlx5-Don-t-keep-umrable-page_shift-in-cache-entries/20230115-213631
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/20230115133454.29000-5-michaelgur%40nvidia.com
+patch subject: [PATCH v4 rdma-next 4/6] RDMA/mlx5: Introduce mlx5r_cache_rb_key
+config: x86_64-randconfig-r021-20230123 (https://download.01.org/0day-ci/archive/20230125/202301250543.S3rDnUPI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b248641a9895ca71c30d10b95b4be730fd65576a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Michael-Guralnik/RDMA-mlx5-Don-t-keep-umrable-page_shift-in-cache-entries/20230115-213631
+        git checkout b248641a9895ca71c30d10b95b4be730fd65576a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/infiniband/hw/mlx5/ah.c:33:
+>> drivers/infiniband/hw/mlx5/mlx5_ib.h:1378:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return NULL;
+                  ^~~~
+   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
+   1 warning generated.
 
 
-On 1/24/23 12:13, Borislav Petkov wrote:
-> From: "Borislav Petkov (AMD)" <bp@alien8.de>
->
-> clang correctly complains
->
->   arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable \
->      'h' set but not used [-Wunused-but-set-variable]
->           u32 h;
->               ^
->
-> but it can't know whether this use is innocuous or really a problem.
-> There's a reason why those warning switches are behind a W=1 and not
-> enabled by default - yes, one needs to do:
->
->   make W=1 CC=clang HOSTCC=clang arch/x86/kernel/cpu/resctrl/
->
-> with clang 14 in order to trigger it.
->
-> I would normally not take a silly fix like that but this one is simple
-> and doesn't make the code uglier so...
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-> Link: https://lore.kernel.org/r/202301242015.kbzkVteJ-lkp@intel.com
-> ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> index 5990589f8a21..e2c1599d1b37 100644
-> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-> @@ -1453,17 +1453,17 @@ static void mon_event_config_read(void *info)
->  {
->  	struct mon_config_info *mon_info = info;
->  	unsigned int index;
-> -	u32 h;
-> +	u64 msrval;
->  
->  	index = mon_event_config_index_get(mon_info->evtid);
->  	if (index == INVALID_CONFIG_INDEX) {
->  		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
->  		return;
->  	}
-> -	rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
-> +	rdmsrl(MSR_IA32_EVT_CFG_BASE + index, msrval);
->  
->  	/* Report only the valid event configuration bits */
-> -	mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
-> +	mon_info->mon_config = msrval & MAX_EVT_CONFIG_BITS;
->  }
->  
->  static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
+vim +1378 drivers/infiniband/hw/mlx5/mlx5_ib.h
+
+  1217	
+  1218	int mlx5_ib_db_map_user(struct mlx5_ib_ucontext *context, unsigned long virt,
+  1219				struct mlx5_db *db);
+  1220	void mlx5_ib_db_unmap_user(struct mlx5_ib_ucontext *context, struct mlx5_db *db);
+  1221	void __mlx5_ib_cq_clean(struct mlx5_ib_cq *cq, u32 qpn, struct mlx5_ib_srq *srq);
+  1222	void mlx5_ib_cq_clean(struct mlx5_ib_cq *cq, u32 qpn, struct mlx5_ib_srq *srq);
+  1223	void mlx5_ib_free_srq_wqe(struct mlx5_ib_srq *srq, int wqe_index);
+  1224	int mlx5_ib_create_ah(struct ib_ah *ah, struct rdma_ah_init_attr *init_attr,
+  1225			      struct ib_udata *udata);
+  1226	int mlx5_ib_query_ah(struct ib_ah *ibah, struct rdma_ah_attr *ah_attr);
+  1227	static inline int mlx5_ib_destroy_ah(struct ib_ah *ah, u32 flags)
+  1228	{
+  1229		return 0;
+  1230	}
+  1231	int mlx5_ib_create_srq(struct ib_srq *srq, struct ib_srq_init_attr *init_attr,
+  1232			       struct ib_udata *udata);
+  1233	int mlx5_ib_modify_srq(struct ib_srq *ibsrq, struct ib_srq_attr *attr,
+  1234			       enum ib_srq_attr_mask attr_mask, struct ib_udata *udata);
+  1235	int mlx5_ib_query_srq(struct ib_srq *ibsrq, struct ib_srq_attr *srq_attr);
+  1236	int mlx5_ib_destroy_srq(struct ib_srq *srq, struct ib_udata *udata);
+  1237	int mlx5_ib_post_srq_recv(struct ib_srq *ibsrq, const struct ib_recv_wr *wr,
+  1238				  const struct ib_recv_wr **bad_wr);
+  1239	int mlx5_ib_enable_lb(struct mlx5_ib_dev *dev, bool td, bool qp);
+  1240	void mlx5_ib_disable_lb(struct mlx5_ib_dev *dev, bool td, bool qp);
+  1241	int mlx5_ib_create_qp(struct ib_qp *qp, struct ib_qp_init_attr *init_attr,
+  1242			      struct ib_udata *udata);
+  1243	int mlx5_ib_modify_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
+  1244			      int attr_mask, struct ib_udata *udata);
+  1245	int mlx5_ib_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *qp_attr, int qp_attr_mask,
+  1246			     struct ib_qp_init_attr *qp_init_attr);
+  1247	int mlx5_ib_destroy_qp(struct ib_qp *qp, struct ib_udata *udata);
+  1248	void mlx5_ib_drain_sq(struct ib_qp *qp);
+  1249	void mlx5_ib_drain_rq(struct ib_qp *qp);
+  1250	int mlx5_ib_read_wqe_sq(struct mlx5_ib_qp *qp, int wqe_index, void *buffer,
+  1251				size_t buflen, size_t *bc);
+  1252	int mlx5_ib_read_wqe_rq(struct mlx5_ib_qp *qp, int wqe_index, void *buffer,
+  1253				size_t buflen, size_t *bc);
+  1254	int mlx5_ib_read_wqe_srq(struct mlx5_ib_srq *srq, int wqe_index, void *buffer,
+  1255				 size_t buflen, size_t *bc);
+  1256	int mlx5_ib_create_cq(struct ib_cq *ibcq, const struct ib_cq_init_attr *attr,
+  1257			      struct ib_udata *udata);
+  1258	int mlx5_ib_destroy_cq(struct ib_cq *cq, struct ib_udata *udata);
+  1259	int mlx5_ib_poll_cq(struct ib_cq *ibcq, int num_entries, struct ib_wc *wc);
+  1260	int mlx5_ib_arm_cq(struct ib_cq *ibcq, enum ib_cq_notify_flags flags);
+  1261	int mlx5_ib_modify_cq(struct ib_cq *cq, u16 cq_count, u16 cq_period);
+  1262	int mlx5_ib_resize_cq(struct ib_cq *ibcq, int entries, struct ib_udata *udata);
+  1263	struct ib_mr *mlx5_ib_get_dma_mr(struct ib_pd *pd, int acc);
+  1264	struct ib_mr *mlx5_ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
+  1265					  u64 virt_addr, int access_flags,
+  1266					  struct ib_udata *udata);
+  1267	struct ib_mr *mlx5_ib_reg_user_mr_dmabuf(struct ib_pd *pd, u64 start,
+  1268						 u64 length, u64 virt_addr,
+  1269						 int fd, int access_flags,
+  1270						 struct ib_udata *udata);
+  1271	int mlx5_ib_advise_mr(struct ib_pd *pd,
+  1272			      enum ib_uverbs_advise_mr_advice advice,
+  1273			      u32 flags,
+  1274			      struct ib_sge *sg_list,
+  1275			      u32 num_sge,
+  1276			      struct uverbs_attr_bundle *attrs);
+  1277	int mlx5_ib_alloc_mw(struct ib_mw *mw, struct ib_udata *udata);
+  1278	int mlx5_ib_dealloc_mw(struct ib_mw *mw);
+  1279	struct mlx5_ib_mr *mlx5_ib_alloc_implicit_mr(struct mlx5_ib_pd *pd,
+  1280						     int access_flags);
+  1281	void mlx5_ib_free_implicit_mr(struct mlx5_ib_mr *mr);
+  1282	void mlx5_ib_free_odp_mr(struct mlx5_ib_mr *mr);
+  1283	struct ib_mr *mlx5_ib_rereg_user_mr(struct ib_mr *ib_mr, int flags, u64 start,
+  1284					    u64 length, u64 virt_addr, int access_flags,
+  1285					    struct ib_pd *pd, struct ib_udata *udata);
+  1286	int mlx5_ib_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata);
+  1287	struct ib_mr *mlx5_ib_alloc_mr(struct ib_pd *pd, enum ib_mr_type mr_type,
+  1288				       u32 max_num_sg);
+  1289	struct ib_mr *mlx5_ib_alloc_mr_integrity(struct ib_pd *pd,
+  1290						 u32 max_num_sg,
+  1291						 u32 max_num_meta_sg);
+  1292	int mlx5_ib_map_mr_sg(struct ib_mr *ibmr, struct scatterlist *sg, int sg_nents,
+  1293			      unsigned int *sg_offset);
+  1294	int mlx5_ib_map_mr_sg_pi(struct ib_mr *ibmr, struct scatterlist *data_sg,
+  1295				 int data_sg_nents, unsigned int *data_sg_offset,
+  1296				 struct scatterlist *meta_sg, int meta_sg_nents,
+  1297				 unsigned int *meta_sg_offset);
+  1298	int mlx5_ib_process_mad(struct ib_device *ibdev, int mad_flags, u32 port_num,
+  1299				const struct ib_wc *in_wc, const struct ib_grh *in_grh,
+  1300				const struct ib_mad *in, struct ib_mad *out,
+  1301				size_t *out_mad_size, u16 *out_mad_pkey_index);
+  1302	int mlx5_ib_alloc_xrcd(struct ib_xrcd *xrcd, struct ib_udata *udata);
+  1303	int mlx5_ib_dealloc_xrcd(struct ib_xrcd *xrcd, struct ib_udata *udata);
+  1304	int mlx5_query_ext_port_caps(struct mlx5_ib_dev *dev, unsigned int port);
+  1305	int mlx5_query_mad_ifc_system_image_guid(struct ib_device *ibdev,
+  1306						 __be64 *sys_image_guid);
+  1307	int mlx5_query_mad_ifc_max_pkeys(struct ib_device *ibdev,
+  1308					 u16 *max_pkeys);
+  1309	int mlx5_query_mad_ifc_vendor_id(struct ib_device *ibdev,
+  1310					 u32 *vendor_id);
+  1311	int mlx5_query_mad_ifc_node_desc(struct mlx5_ib_dev *dev, char *node_desc);
+  1312	int mlx5_query_mad_ifc_node_guid(struct mlx5_ib_dev *dev, __be64 *node_guid);
+  1313	int mlx5_query_mad_ifc_pkey(struct ib_device *ibdev, u32 port, u16 index,
+  1314				    u16 *pkey);
+  1315	int mlx5_query_mad_ifc_gids(struct ib_device *ibdev, u32 port, int index,
+  1316				    union ib_gid *gid);
+  1317	int mlx5_query_mad_ifc_port(struct ib_device *ibdev, u32 port,
+  1318				    struct ib_port_attr *props);
+  1319	int mlx5_ib_query_port(struct ib_device *ibdev, u32 port,
+  1320			       struct ib_port_attr *props);
+  1321	void mlx5_ib_populate_pas(struct ib_umem *umem, size_t page_size, __be64 *pas,
+  1322				  u64 access_flags);
+  1323	void mlx5_ib_copy_pas(u64 *old, u64 *new, int step, int num);
+  1324	int mlx5_ib_get_cqe_size(struct ib_cq *ibcq);
+  1325	int mlx5_mkey_cache_init(struct mlx5_ib_dev *dev);
+  1326	int mlx5_mkey_cache_cleanup(struct mlx5_ib_dev *dev);
+  1327	struct mlx5_cache_ent *mlx5r_cache_create_ent(struct mlx5_ib_dev *dev,
+  1328						      struct mlx5r_cache_rb_key rb_key,
+  1329						      bool persistent_entry);
+  1330	
+  1331	struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+  1332					       int access_flags, int access_mode,
+  1333					       int ndescs);
+  1334	
+  1335	int mlx5_ib_check_mr_status(struct ib_mr *ibmr, u32 check_mask,
+  1336				    struct ib_mr_status *mr_status);
+  1337	struct ib_wq *mlx5_ib_create_wq(struct ib_pd *pd,
+  1338					struct ib_wq_init_attr *init_attr,
+  1339					struct ib_udata *udata);
+  1340	int mlx5_ib_destroy_wq(struct ib_wq *wq, struct ib_udata *udata);
+  1341	int mlx5_ib_modify_wq(struct ib_wq *wq, struct ib_wq_attr *wq_attr,
+  1342			      u32 wq_attr_mask, struct ib_udata *udata);
+  1343	int mlx5_ib_create_rwq_ind_table(struct ib_rwq_ind_table *ib_rwq_ind_table,
+  1344					 struct ib_rwq_ind_table_init_attr *init_attr,
+  1345					 struct ib_udata *udata);
+  1346	int mlx5_ib_destroy_rwq_ind_table(struct ib_rwq_ind_table *wq_ind_table);
+  1347	struct ib_mr *mlx5_ib_reg_dm_mr(struct ib_pd *pd, struct ib_dm *dm,
+  1348					struct ib_dm_mr_attr *attr,
+  1349					struct uverbs_attr_bundle *attrs);
+  1350	
+  1351	#ifdef CONFIG_INFINIBAND_ON_DEMAND_PAGING
+  1352	int mlx5_ib_odp_init_one(struct mlx5_ib_dev *ibdev);
+  1353	int mlx5r_odp_create_eq(struct mlx5_ib_dev *dev, struct mlx5_ib_pf_eq *eq);
+  1354	void mlx5_ib_odp_cleanup_one(struct mlx5_ib_dev *ibdev);
+  1355	int __init mlx5_ib_odp_init(void);
+  1356	void mlx5_ib_odp_cleanup(void);
+  1357	int mlx5_odp_init_mkey_cache(struct mlx5_ib_dev *dev);
+  1358	void mlx5_odp_populate_xlt(void *xlt, size_t idx, size_t nentries,
+  1359				   struct mlx5_ib_mr *mr, int flags);
+  1360	
+  1361	int mlx5_ib_advise_mr_prefetch(struct ib_pd *pd,
+  1362				       enum ib_uverbs_advise_mr_advice advice,
+  1363				       u32 flags, struct ib_sge *sg_list, u32 num_sge);
+  1364	int mlx5_ib_init_odp_mr(struct mlx5_ib_mr *mr);
+  1365	int mlx5_ib_init_dmabuf_mr(struct mlx5_ib_mr *mr);
+  1366	#else /* CONFIG_INFINIBAND_ON_DEMAND_PAGING */
+  1367	static inline int mlx5_ib_odp_init_one(struct mlx5_ib_dev *ibdev) { return 0; }
+  1368	static inline int mlx5r_odp_create_eq(struct mlx5_ib_dev *dev,
+  1369					      struct mlx5_ib_pf_eq *eq)
+  1370	{
+  1371		return 0;
+  1372	}
+  1373	static inline void mlx5_ib_odp_cleanup_one(struct mlx5_ib_dev *ibdev) {}
+  1374	static inline int mlx5_ib_odp_init(void) { return 0; }
+  1375	static inline void mlx5_ib_odp_cleanup(void)				    {}
+  1376	static inline int mlx5_odp_init_mkey_cache(struct mlx5_ib_dev *dev)
+  1377	{
+> 1378		return NULL;
+  1379	}
+  1380	static inline void mlx5_odp_populate_xlt(void *xlt, size_t idx, size_t nentries,
+  1381						 struct mlx5_ib_mr *mr, int flags) {}
+  1382	
 
 -- 
-Thanks
-Babu Moger
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
