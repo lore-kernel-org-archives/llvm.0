@@ -1,103 +1,155 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93AA7C;
-	Tue, 24 Jan 2023 13:05:44 +0000 (UTC)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2459B1EC0622;
-	Tue, 24 Jan 2023 14:05:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1674565542;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=PmF6+4QENiIdARF8/6Ph7VMasHMPcP62KrTC+HYAlLQ=;
-	b=go5y2Q1CaMrGAiq492t0yOEMROdHZfy1Vo5Njpqq8/d833YSgIKF1e8pG1YrEWH86RXPTh
-	aQxbtvMs0JqgcBgeXQRAB/QQqDM3KmbVgCKKvJIeDckH626AJjObA68lgTQ+iILADH83c6
-	Evxn+c4TkTquumzjiXrcOLbFlwOe7Ek=
-Date: Tue, 24 Jan 2023 14:05:37 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Babu Moger <babu.moger@amd.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [tip:x86/cache 9/13]
- arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
- not used
-Message-ID: <Y8/XoT23HVXHSY73@zn.tnic>
-References: <202301242015.kbzkVteJ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB5B63BF;
+	Tue, 24 Jan 2023 13:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674566341; x=1706102341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JOdCk0DiV45l316tFtpeTfnFpjQvJyYgP2HBIHZN350=;
+  b=Vlw77vbLwZklTAj1ecwOxv29322dGIIfEnhuU/yih2DfJ63+VGJT/BL1
+   tVq6Kg2lGiy7NV/KYt8SSHW/uS86nX8BW0YmBr7XNTsH+ACCv3zEDj44i
+   lrZoCHwR4TfMa1oRDoxm5mW3r0qeBGke7x8OgTVw/kg8R9iJcRlvMhq6r
+   kRZx2UeHDPyODaSOYPAY4PzFZFtLyOZ5/7IHBtS7I1P0xlapsqQLpCVnM
+   aLDmxW+CTuINmjAbhCoJTMKfO2NHltQaO8NmoJ4WspA7AmS/EV0T/tuLE
+   PA5NhjyfRLKW7Putc4h+pwHuRiOazT+UmCudvA3iHOQ438pSrASStYBsJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="314191242"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="314191242"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 05:19:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="725468695"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="725468695"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2023 05:18:57 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pKJCS-0006VE-2H;
+	Tue, 24 Jan 2023 13:18:56 +0000
+Date: Tue, 24 Jan 2023 21:18:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, hannes@cmpxchg.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	bfoster@redhat.com, willy@infradead.org, linux-api@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH v7 2/3] cachestat: implement cachestat syscall
+Message-ID: <202301242133.cLyYLZH6-lkp@intel.com>
+References: <20230124021118.154078-3-nphamcs@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202301242015.kbzkVteJ-lkp@intel.com>
+In-Reply-To: <20230124021118.154078-3-nphamcs@gmail.com>
 
-On Tue, Jan 24, 2023 at 08:37:14PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
-> head:   0a363fb23ee2f7beb08437ad7db86d195878d79f
-> commit: dc2a3e857981f859889933cf66ded117d74edff1 [9/13] x86/resctrl: Add interface to read mbm_total_bytes_config
+Hi Nhat,
 
-These patches have been around for a long while now. How come you test them just
-now, after I take them?
+Thank you for the patch! Perhaps something to improve:
 
-> >> arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but not used [-Wunused-but-set-variable]
->            u32 h;
->                ^
+[auto build test WARNING on 1440f576022887004f719883acb094e7e0dd4944]
 
-The fix is simple - use rsmsrl(), see below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
+base:   1440f576022887004f719883acb094e7e0dd4944
+patch link:    https://lore.kernel.org/r/20230124021118.154078-3-nphamcs%40gmail.com
+patch subject: [PATCH v7 2/3] cachestat: implement cachestat syscall
+config: mips-randconfig-r006-20230123 (https://download.01.org/0day-ci/archive/20230124/202301242133.cLyYLZH6-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f902a360bb453bd6885cd89d4f9ad4a40205fd15
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230124-101311
+        git checkout f902a360bb453bd6885cd89d4f9ad4a40205fd15
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
 
-If it weren't that simple I'd simply ignore this warning altogether. Yes, it is
-unused because the damn high MSR value needs to go somewhere, for chrissakes.
-And if it didn't need that masking with MAX_EVT_CONFIG_BITS but the low 32-bit
-MSR value would fit right into mon_info->mon_config, then I would've ignored
-this one even faster.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-And besides, I'm wondering if you're spending your 0day resources properly if
-you're testing patches one-by-one for W=1 warnings?!
+All warnings (new ones prefixed by >>):
 
-If it were me, I'd prefer if you build-test patches on lkml for build *errors*,
-*before* they get picked up in some tree instead of testing the applied branches
-already for some questionable warnings...
-
-Thx.
-
----
-
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index cd4e668e5019..9bd0eb050e7a 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -1453,17 +1453,17 @@ static void mon_event_config_read(void *info)
- {
- 	struct mon_config_info *mon_info = info;
- 	unsigned int index;
--	u32 h;
-+	u64 msrval;
- 
- 	index = mon_event_config_index_get(mon_info->evtid);
- 	if (index == INVALID_CONFIG_INDEX) {
- 		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
- 		return;
- 	}
--	rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
-+	rdmsrl(MSR_IA32_EVT_CFG_BASE + index, msrval);
- 
- 	/* Report only the valid event configuration bits */
--	mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
-+	mon_info->mon_config = msrval & MAX_EVT_CONFIG_BITS;
- }
- 
- static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
-
+>> <stdin>:1565:2: warning: syscall cachestat not implemented [-W#warnings]
+   #warning syscall cachestat not implemented
+    ^
+   1 warning generated.
+--
+>> <stdin>:1565:2: warning: syscall cachestat not implemented [-W#warnings]
+   #warning syscall cachestat not implemented
+    ^
+   1 warning generated.
+--
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
+   void output_ptreg_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_ptreg_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
+   void output_task_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_task_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
+   void output_thread_info_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_info_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
+   void output_thread_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
+   void output_mm_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_mm_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:213:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
+   void output_sc_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:213:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_sc_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:248:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
+   void output_signal_defined(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:248:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_signal_defined(void)
+   ^
+   static 
+   7 warnings generated.
+>> <stdin>:1565:2: warning: syscall cachestat not implemented [-W#warnings]
+   #warning syscall cachestat not implemented
+    ^
+   1 warning generated.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
