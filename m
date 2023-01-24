@@ -1,44 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175618F6A;
-	Tue, 24 Jan 2023 21:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A7A322A;
+	Tue, 24 Jan 2023 22:42:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674597085; x=1706133085;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6yqOdH/2HoadqY1VxzYmOkpFkB8rIyff+f2r+IfhnRM=;
-  b=nvvDwmFnhCyeI7WhMgj8JdWAWzwNxVpIdTMKQi3tuibGkzrMjxzAH0in
-   Z0SkGUY18IWcQFLYbQVdq3pxxCmc4dfE3g3yAEILrpmaL7XyM/Gu8270i
-   ISLpWrkYyqe8vcJlYGdlFcRnaJYjxVhZGjs/hQxyY/oQuXPHA3K7o1dfY
-   8YVoll5hxqqAgB39Wc/XhvgJzRgRtSmSTZRSSmpsm/f5VtdBbyBYMZZWM
-   tGslmNemJ2B1u2YNVex2zbjDooQM7a+OFN1KS7XxlmzlKNmZWD3IeRmAC
-   yGnFVLB6Mm4NE3I8C47Xu58KS3iKQq4NrW94MBQP9vGMdNfbOynu7Sxhf
+  t=1674600147; x=1706136147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iMqGUpaat2M/41NFExMis4vWSlWmm+dwBlVykhSgI9E=;
+  b=AJRg9HQ6VHUiBXDh6wo6THfYvgK7VL2OQvy4IZMSmCPlwGkn61LE8k40
+   j/GXoj6Hdgj9r/QdZMEaxi9Bky+KhDYekTn00Jp+HFdUNzAplZYdtEvoN
+   ZKTTNKrM0O11Tbr1IpqvaQLT/17LfjKuJWQMaw/CfHWJn72OlPJ46zUEH
+   CREviIXHX+sCNugP+KjOLRYMNpStCWNCyHbFIQALWat++cYYKnTP0Aasg
+   sMOhMuG/7H19yq3653E7TPRMmqQPWmtjCUjnM2wVtXqqVsn5k8F6rr6Vk
+   xdzTPsX0gSpxo/HxqwlYuGHLdhXYK+PzBbul6/wPHd/WQ0bPrV35D1KMb
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="325089346"
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="328514505"
 X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="325089346"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 13:51:24 -0800
+   d="scan'208";a="328514505"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 14:42:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="804769364"
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="664264332"
 X-IronPort-AV: E=Sophos;i="5.97,243,1669104000"; 
-   d="scan'208";a="804769364"
+   d="scan'208";a="664264332"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jan 2023 13:51:23 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2023 14:42:24 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pKRCM-0006o8-0n;
-	Tue, 24 Jan 2023 21:51:22 +0000
-Date: Wed, 25 Jan 2023 05:50:25 +0800
+	id 1pKRzk-0006qm-0n;
+	Tue, 24 Jan 2023 22:42:24 +0000
+Date: Wed, 25 Jan 2023 06:41:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 6983/7678] ERROR: modpost:
- "ethtool_aggregate_pause_stats"
- [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] undefined!
-Message-ID: <202301250515.IMqsaFXE-lkp@intel.com>
+To: Asahi Lina <lina@asahilina.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2] soc: apple: rtkit: Add register dump decoding to
+ crashlog
+Message-ID: <202301250612.UZ8rgt6i-lkp@intel.com>
+References: <20230123031728.22515-1-lina@asahilina.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,36 +47,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230123031728.22515-1-lina@asahilina.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   a54df7622717a40ddec95fd98086aff8ba7839a6
-commit: ab3f97a9610a8d90dc9934517e82c3272d4e98a0 [6983/7678] net: mscc: ocelot: export ethtool MAC Merge stats for Felix VSC9959
-config: hexagon-randconfig-r022-20230123 (https://download.01.org/0day-ci/archive/20230125/202301250515.IMqsaFXE-lkp@intel.com/config)
+Hi Asahi,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.2-rc5 next-20230124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Asahi-Lina/soc-apple-rtkit-Add-register-dump-decoding-to-crashlog/20230123-112025
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20230123031728.22515-1-lina%40asahilina.net
+patch subject: [PATCH v2] soc: apple: rtkit: Add register dump decoding to crashlog
+config: powerpc-buildonly-randconfig-r006-20230123 (https://download.01.org/0day-ci/archive/20230125/202301250612.UZ8rgt6i-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ab3f97a9610a8d90dc9934517e82c3272d4e98a0
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout ab3f97a9610a8d90dc9934517e82c3272d4e98a0
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/e505dcb428ededed4847191eaa3504d3dae39bea
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Asahi-Lina/soc-apple-rtkit-Add-register-dump-decoding-to-crashlog/20230123-112025
+        git checkout e505dcb428ededed4847191eaa3504d3dae39bea
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "ethtool_aggregate_pause_stats" [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] undefined!
->> ERROR: modpost: "ethtool_aggregate_rmon_stats" [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] undefined!
->> ERROR: modpost: "ethtool_aggregate_ctrl_stats" [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] undefined!
->> ERROR: modpost: "ethtool_aggregate_mac_stats" [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] undefined!
->> ERROR: modpost: "ethtool_aggregate_phy_stats" [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] undefined!
-ERROR: modpost: "vpss_enable_clock" [drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.ko] undefined!
-ERROR: modpost: "vpss_select_ccdc_source" [drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.ko] undefined!
+>> drivers/soc/apple/rtkit-crashlog.c:186:6: warning: stack frame size (1040) exceeds limit (1024) in 'apple_rtkit_crashlog_dump' [-Wframe-larger-than]
+   void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
+        ^
+   164/1040 (15.77%) spills, 876/1040 (84.23%) variables
+   1 warning generated.
+
+
+vim +/apple_rtkit_crashlog_dump +186 drivers/soc/apple/rtkit-crashlog.c
+
+e505dcb428eded Asahi Lina 2023-01-23  185  
+9bd1d9a0d8bb1a Sven Peter 2022-05-01 @186  void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
 
 -- 
 0-DAY CI Kernel Test Service
