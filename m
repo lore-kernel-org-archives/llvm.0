@@ -1,62 +1,99 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1424E33C4
-	for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 16:37:28 +0000 (UTC)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 30OGUo7N008108;
-	Tue, 24 Jan 2023 10:30:50 -0600
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 30OGUmel008107;
-	Tue, 24 Jan 2023 10:30:48 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 24 Jan 2023 10:30:48 -0600
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, nicolas@fjasle.eu, linux-kbuild@vger.kernel.org,
-        trix@redhat.com, llvm@lists.linux.dev, ndesaulniers@google.com,
-        npiggin@gmail.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 07/14] powerpc/vdso: Improve linker flags
-Message-ID: <20230124163048.GL25951@gate.crashing.org>
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org> <20221228-drop-qunused-arguments-v2-7-9adbddd20d86@kernel.org> <20230123150716.GJ25951@gate.crashing.org> <Y9AD/Mejnv6jp7Np@dev-arch.thelio-3990X>
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCA68BEC;
+	Tue, 24 Jan 2023 18:13:20 +0000 (UTC)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 42AFE1EC052A;
+	Tue, 24 Jan 2023 19:13:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1674583993;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=3OaM/Y7cpBAJC25XKxOdjIh925a815HwLPCmt8PUDd8=;
+	b=p3MCMLxU/XSZCSU4FcOfH7BSFsLViqs0jWglNhNj9YL9CH0VdQ78XOJjxu/3xrO80+jlUU
+	EckGi1HJUI+t2niKhmrv307y1fR4fT3hMyCK4YtYSS5+OfdQgNSBREzzGTa5AXnlR/i9F9
+	ecPGlkkj9ttT7s96xe1lGeVQS0gUOIs=
+Date: Tue, 24 Jan 2023 19:13:08 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Babu Moger <babu.moger@amd.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>
+Subject: [PATCH] x86/resctrl: Fix a silly -Wunused-but-set-variable warning
+Message-ID: <Y9AftBkWXcFflHbm@zn.tnic>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
+ <Y8/XoT23HVXHSY73@zn.tnic>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y9AD/Mejnv6jp7Np@dev-arch.thelio-3990X>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <Y8/XoT23HVXHSY73@zn.tnic>
 
-On Tue, Jan 24, 2023 at 09:14:52AM -0700, Nathan Chancellor wrote:
-> On Mon, Jan 23, 2023 at 09:07:16AM -0600, Segher Boessenkool wrote:
-> > And here it is even more obviously fine.  If you need obfuscation like
-> > in your patch, it is better not to do this imo.
-> 
-> I do not think this patch really obfuscates anything? The filtering is
-> pretty clear to me.
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-And not having such filtering is more obvious and more clear.
+clang correctly complains
 
-It doesn't matter much for just this patch of course, but it will make
-the code significantly harder to read (and deal with in other ways) if
-this continues.
+  arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable \
+     'h' set but not used [-Wunused-but-set-variable]
+          u32 h;
+              ^
 
-> If this is a real objection to the patch, I suppose we could just
-> localize '-Qunused-arguments' to this Makefile and be done with it but I
-> do not think this change is a bad solution to the problem either.
+but it can't know whether this use is innocuous or really a problem.
+There's a reason why those warning switches are behind a W=1 and not
+enabled by default - yes, one needs to do:
 
-It is a comment about the direction this patch is moving us in.  I don't
-think it is a good idea at all to try to avoid all warnings, and even
-more so it is a bad idea to make objectively worse source code just to
-appease a trigger-happy and questionable warning.
+  make W=1 CC=clang HOSTCC=clang arch/x86/kernel/cpu/resctrl/
 
-As I said, you can often avoid warnings by writing better code, like
-part of the patch did.  That is a good reaction to warnings.  Making
-worse code to avoid warnings is not a good idea normally.
+with clang 14 in order to trigger it.
 
-Just don't use -Werror by default, and don't make other people suffer
-its yoke!
+I would normally not take a silly fix like that but this one is simple
+and doesn't make the code uglier so...
 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/202301242015.kbzkVteJ-lkp@intel.com
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Segher
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index 5990589f8a21..e2c1599d1b37 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -1453,17 +1453,17 @@ static void mon_event_config_read(void *info)
+ {
+ 	struct mon_config_info *mon_info = info;
+ 	unsigned int index;
+-	u32 h;
++	u64 msrval;
+ 
+ 	index = mon_event_config_index_get(mon_info->evtid);
+ 	if (index == INVALID_CONFIG_INDEX) {
+ 		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
+ 		return;
+ 	}
+-	rdmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, h);
++	rdmsrl(MSR_IA32_EVT_CFG_BASE + index, msrval);
+ 
+ 	/* Report only the valid event configuration bits */
+-	mon_info->mon_config &= MAX_EVT_CONFIG_BITS;
++	mon_info->mon_config = msrval & MAX_EVT_CONFIG_BITS;
+ }
+ 
+ static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
+-- 
+2.35.1
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
