@@ -1,337 +1,99 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5DA7C;
-	Tue, 24 Jan 2023 12:58:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674565085; x=1706101085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vh3ewC0bzSD54uzrUW+Ja1+iDTgLvZthe7PVj9TYz90=;
-  b=ETs4Zv5U5w6EyEMmaR4JbNVoHk50Iu9q49aV4bl3LFWtJ5r0SQoV1gY8
-   WqkZdbVYxIcWxZIpSdLwu0hARQfyH3GexDtCitKBuOUI4sp93cKY58gaz
-   STFbf2qiN64yBALpjqS0Sdn+RER2u5Cs5yWYAEkry6KawYpiPXhGJS1P8
-   kGqZmIM7K/i+a+SM/EG7W6GRQ+rDpBWydS5+UdyHl+LOuvAYb5uQqtftk
-   wcct8+M6Ys4sbUnxbb7UN8V0C7DsjOjCALu/HevAzllR+sLc0R5zzJQJQ
-   VXfgV7IMYL+l3nL1J2X0Ka/nb2CvM6XrYWPpTuzynpSyz+VuSlK49urKw
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412518455"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="412518455"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 04:58:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="725462266"
-X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
-   d="scan'208";a="725462266"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2023 04:57:57 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pKIs8-0006UK-0p;
-	Tue, 24 Jan 2023 12:57:56 +0000
-Date: Tue, 24 Jan 2023 20:57:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Emma Anholt <emma@anholt.net>, amd-gfx@lists.freedesktop.org,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Alain Volmat <alain.volmat@foss.st.com>, Pan@freedesktop.org,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Jonas Karlman <jonas@kwiboo.se>, jani.nikula@intel.com,
-	linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Maxime Ripard <mripard@kernel.org>, Inki Dae <inki.dae@samsung.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	linux-mediatek@lists.infradead.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Xinhui <Xinhui.Pan@amd.com>, Seung-Woo Kim <sw0312.kim@samsung.com>,
-	Robert Foss <robert.foss@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	freedreno@lists.freedesktop.org,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Subject: Re: [Intel-gfx] [PATCH 3/3] drm/connector: move ELD and video/audio
- latencies to display info
-Message-ID: <202301242053.vCYJQIUE-lkp@intel.com>
-References: <20230124094154.2282778-3-jani.nikula@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE277C
+	for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 12:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674565098;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZSi6S+muZGTgBwtIdsJ5fCvNBIzBTV5J3NQ7wnrMIF8=;
+	b=UBUUb7q94Swu2dGxlbFY3C4wr2qz5kR8dw/VL2FOk6dab+kSJ9VynEwjlB7j8l2ac6N2wR
+	PI5EMpGXChb1+qbxe2jeysElv95D8my0hmN2i7mPflYMJoGlFBEDWgfd7Klo6rgh+DvlX7
+	OOzVFvMr1QRqxMtNJeUjZtNmsWQtyMo=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-47-DtnP-WvmPC20mWM7-w6tAg-1; Tue, 24 Jan 2023 07:58:17 -0500
+X-MC-Unique: DtnP-WvmPC20mWM7-w6tAg-1
+Received: by mail-qt1-f198.google.com with SMTP id br26-20020a05622a1e1a00b003b62dc86831so5885307qtb.8
+        for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 04:58:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZSi6S+muZGTgBwtIdsJ5fCvNBIzBTV5J3NQ7wnrMIF8=;
+        b=WS9jvOxLqk5KqzfbBrKSEYfX42T0iMoLVD62KkQbmF3+HmrIUt0m1jUwkpYR2TdlIV
+         sha0LoIKkFl5y2BZk0AIaIK9pkQrJIrQf7JeYuRyvwlHzTDkFoMfIZnO1fPtQLBhQ0L2
+         4ysiIwbeKXo7XrE00h4FMl73WemgibBz3pK2Kn1SaJAYIvKTDx7dCcZG03/oOS6xYBj9
+         P1EL5RwvdqToCkirLh2yNhPMMuOwPxpsSCvkHheK2aKKxAbHaWZlW4oLXeXHA7rtQRlC
+         zPhHHtgTbV9DM4zSnulZQFehayvH4LXP6dG8PU+601m4nEA353PeVv257UrHH5F+XlGs
+         ArSw==
+X-Gm-Message-State: AFqh2kpcfVYrPZerP24DgvBCfdMOyfURTxg940loV+mMvv3lreGQnZ7z
+	G6JHVPC/KJXiPT4cZvHLM1BQ9EQyVahqcrfgNMWbskPqg4RjG3PyzY1YbIj2x0xR926uJgY3d8F
+	7B2kB5QYY7qi9sw==
+X-Received: by 2002:ac8:7350:0:b0:3b6:90c4:b13a with SMTP id q16-20020ac87350000000b003b690c4b13amr27608079qtp.58.1674565096637;
+        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtLt3U69T2XRyfXT9r14cbZA03RVHPgFC5vWRm+j1Qb42uI3X9erIeuPmuCPjOI5VnlnIACFQ==
+X-Received: by 2002:ac8:7350:0:b0:3b6:90c4:b13a with SMTP id q16-20020ac87350000000b003b690c4b13amr27608059qtp.58.1674565096385;
+        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id r22-20020ac87ef6000000b003ab7aee56a0sm1192570qtc.39.2023.01.24.04.58.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 04:58:16 -0800 (PST)
+From: Tom Rix <trix@redhat.com>
+To: axboe@kernel.dk,
+	asml.silence@gmail.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] io_uring: initialize count variable to 0
+Date: Tue, 24 Jan 2023 04:58:05 -0800
+Message-Id: <20230124125805.630359-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124094154.2282778-3-jani.nikula@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Jani,
+The clang build fails with
+io_uring/io_uring.c:1240:3: error: variable 'count' is uninitialized
+  when used here [-Werror,-Wuninitialized]
+  count += handle_tw_list(node, &ctx, &uring_locked, &fake);
+  ^~~~~
 
-I love your patch! Yet something to improve:
+The commit listed in the fixes: removed the initialization of count.
 
-[auto build test ERROR on drm-tip/drm-tip]
+Fixes: b5b57128d0cd ("io_uring: refactor tctx_task_work")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ io_uring/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-connector-move-HDR-sink-metadata-to-display-info/20230124-174322
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230124094154.2282778-3-jani.nikula%40intel.com
-patch subject: [Intel-gfx] [PATCH 3/3] drm/connector: move ELD and video/audio latencies to display info
-config: hexagon-randconfig-r045-20230123 (https://download.01.org/0day-ci/archive/20230124/202301242053.vCYJQIUE-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1e92b5478cfc1b0df66153652111117e9548b0d5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jani-Nikula/drm-connector-move-HDR-sink-metadata-to-display-info/20230124-174322
-        git checkout 1e92b5478cfc1b0df66153652111117e9548b0d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/bridge/ drivers/gpu/drm/i2c/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/bridge/sii902x.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/bridge/sii902x.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/bridge/sii902x.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/gpu/drm/bridge/sii902x.c:736:33: error: no member named 'eld' in 'struct drm_connector'
-           memcpy(buf, sii902x->connector.eld,
-                       ~~~~~~~~~~~~~~~~~~ ^
-   drivers/gpu/drm/bridge/sii902x.c:737:39: error: no member named 'eld' in 'struct drm_connector'
-                  min(sizeof(sii902x->connector.eld), len));
-                             ~~~~~~~~~~~~~~~~~~ ^
-   include/linux/minmax.h:67:33: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                                         ^
-   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                            ^
-   include/linux/minmax.h:26:16: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                                ^
-   include/linux/minmax.h:20:21: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                              ^
-   drivers/gpu/drm/bridge/sii902x.c:737:39: error: no member named 'eld' in 'struct drm_connector'
-                  min(sizeof(sii902x->connector.eld), len));
-                             ~~~~~~~~~~~~~~~~~~ ^
-   include/linux/minmax.h:67:33: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                                         ^
-   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                            ^
-   include/linux/minmax.h:26:43: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                                                           ^
-   include/linux/minmax.h:23:19: note: expanded from macro '__no_side_effects'
-                   (__is_constexpr(x) && __is_constexpr(y))
-                                   ^
-   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
-           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-                                                         ^
-   6 warnings and 3 errors generated.
---
-   In file included from drivers/gpu/drm/i2c/tda998x_drv.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/i2c/tda998x_drv.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/i2c/tda998x_drv.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/gpu/drm/i2c/tda998x_drv.c:1156:30: error: no member named 'eld' in 'struct drm_connector'
-           memcpy(buf, priv->connector.eld,
-                       ~~~~~~~~~~~~~~~ ^
-   drivers/gpu/drm/i2c/tda998x_drv.c:1157:36: error: no member named 'eld' in 'struct drm_connector'
-                  min(sizeof(priv->connector.eld), len));
-                             ~~~~~~~~~~~~~~~ ^
-   include/linux/minmax.h:67:33: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                                         ^
-   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                            ^
-   include/linux/minmax.h:26:16: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                                ^
-   include/linux/minmax.h:20:21: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                              ^
-   drivers/gpu/drm/i2c/tda998x_drv.c:1157:36: error: no member named 'eld' in 'struct drm_connector'
-                  min(sizeof(priv->connector.eld), len));
-                             ~~~~~~~~~~~~~~~ ^
-   include/linux/minmax.h:67:33: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                                         ^
-   include/linux/minmax.h:36:35: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                            ^
-   include/linux/minmax.h:26:43: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                                                           ^
-   include/linux/minmax.h:23:19: note: expanded from macro '__no_side_effects'
-                   (__is_constexpr(x) && __is_constexpr(y))
-                                   ^
-   include/linux/const.h:12:48: note: expanded from macro '__is_constexpr'
-           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-                                                         ^
-   6 warnings and 3 errors generated.
-
-
-vim +736 drivers/gpu/drm/bridge/sii902x.c
-
-ff5781634c4116 Jyri Sarha 2019-05-27  728  
-ff5781634c4116 Jyri Sarha 2019-05-27  729  static int sii902x_audio_get_eld(struct device *dev, void *data,
-ff5781634c4116 Jyri Sarha 2019-05-27  730  				 uint8_t *buf, size_t len)
-ff5781634c4116 Jyri Sarha 2019-05-27  731  {
-ff5781634c4116 Jyri Sarha 2019-05-27  732  	struct sii902x *sii902x = dev_get_drvdata(dev);
-ff5781634c4116 Jyri Sarha 2019-05-27  733  
-ff5781634c4116 Jyri Sarha 2019-05-27  734  	mutex_lock(&sii902x->mutex);
-ff5781634c4116 Jyri Sarha 2019-05-27  735  
-ff5781634c4116 Jyri Sarha 2019-05-27 @736  	memcpy(buf, sii902x->connector.eld,
-ff5781634c4116 Jyri Sarha 2019-05-27  737  	       min(sizeof(sii902x->connector.eld), len));
-ff5781634c4116 Jyri Sarha 2019-05-27  738  
-ff5781634c4116 Jyri Sarha 2019-05-27  739  	mutex_unlock(&sii902x->mutex);
-ff5781634c4116 Jyri Sarha 2019-05-27  740  
-ff5781634c4116 Jyri Sarha 2019-05-27  741  	return 0;
-ff5781634c4116 Jyri Sarha 2019-05-27  742  }
-ff5781634c4116 Jyri Sarha 2019-05-27  743  
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 734d074cdd94..4cb409ae9840 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1227,7 +1227,7 @@ void tctx_task_work(struct callback_head *cb)
+ 	struct llist_node fake = {};
+ 	struct llist_node *node;
+ 	unsigned int loops = 0;
+-	unsigned int count;
++	unsigned int count = 0;
+ 
+ 	if (unlikely(current->flags & PF_EXITING)) {
+ 		io_fallback_tw(tctx);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.26.3
+
