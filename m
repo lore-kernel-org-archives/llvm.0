@@ -1,55 +1,62 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D8A7C;
-	Tue, 24 Jan 2023 06:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600067C;
+	Tue, 24 Jan 2023 08:00:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674542328; x=1706078328;
+  t=1674547254; x=1706083254;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=nCllPZY6zrzrfh4fFvccqk4bgDomrRfcoK4PfShWMzQ=;
-  b=KwR+bIrJ8od/KfJySIUfd5lRGtkmRTNAajbNqPvP6sZ+BcsEgtBxkeA9
-   YjRHpiePxk+J/uFLLqwsAuYhB6RCJNYmEU39t+Z0KQE8LY7BLNfiNiqbC
-   Y/ZriBtPEGRrIRGjHC6XRdOJERIRdHvCNTQWME1QT/uVs87MM65Z9QWbU
-   9H/kD8tWryevzM17tE28vOzRssZ1Huno3Djx/YHFHF9ktB9JiOFV5qySg
-   6pYLCOpCuVj3du0kFN7xXPMBiAmhn7/V4P8tKahxwHOVZn20SOzrceDIw
-   cb/sCo37xD91h/AHPogJw/1QRfpgBexZBv/t3MCvHYxgiJ/Wv2hQVFqeB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="388584538"
+  bh=xc2SUtCeobW/ezSFCjJCHss3YwaPNlCk6liXkETTUwY=;
+  b=jiP6haUVzmhLZtgxgYRxZXy5v8Zb/OijVAVY/9mng5argdsPyFMeQUWG
+   msC7n9ZHwJhYpK2jiZ2jwP++mt2AFXV60vmHvUaU6DtA4wQW1s9rpAFKa
+   SmI1xnJLHHDsZl2DM/OCRUqwg4XrSJQY+mOMjPbcqdv5n7B1s3cOwK+VY
+   Jx81ALVnffH81BMpcmS8s9ynijbyn3QYn2Mi8n9sEn7boofhKklUakykK
+   BGc2ModED7u01whriQQeG+ysmLN4nmGSS0kYtVI0eJyRK0H4MIpFvYsAT
+   oDB2gcAsa4F97aGkwoqX1LSl7MdS2gG2cCEPq0tdSlTB7CBvte1MGjDg7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="324920705"
 X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
-   d="scan'208";a="388584538"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 22:38:47 -0800
+   d="scan'208";a="324920705"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 00:00:52 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="639475752"
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="692510306"
 X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
-   d="scan'208";a="639475752"
+   d="scan'208";a="692510306"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Jan 2023 22:38:43 -0800
+  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2023 00:00:46 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pKCx8-0006D6-1U;
-	Tue, 24 Jan 2023 06:38:42 +0000
-Date: Tue, 24 Jan 2023 14:38:37 +0800
+	id 1pKEEX-0006Fs-1k;
+	Tue, 24 Jan 2023 08:00:45 +0000
+Date: Tue, 24 Jan 2023 15:59:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Francesco Dolcini <francesco@dolcini.it>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+To: Leon Romanovsky <leon@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1 3/4] Bluetooth: hci_mrvl: Add serdev support for
- 88W8997
-Message-ID: <202301241423.sEVD92vC-lkp@intel.com>
-References: <20230118122817.42466-4-francesco@dolcini.it>
+	Veaceslav Falico <vfalico@gmail.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jay Vosburgh <j.vosburgh@gmail.com>, oss-drivers@corigine.com,
+	linux-doc@vger.kernel.org, Raju Rangoju <rajur@chelsio.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	Ayush Sawal <ayush.sawal@chelsio.com>,
+	Simon Horman <simon.horman@corigine.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Andy Gospodarek <andy@greyhouse.net>
+Subject: Re: [Intel-wired-lan] [PATCH net-next 04/10] net/mlx5e: Fill IPsec
+ state validation failure reason
+Message-ID: <202301241552.GWkgnAH7-lkp@intel.com>
+References: <a5426033528ccef6e0e71fe06b55ae56c5596e85.1674481435.git.leon@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,118 +65,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118122817.42466-4-francesco@dolcini.it>
+In-Reply-To: <a5426033528ccef6e0e71fe06b55ae56c5596e85.1674481435.git.leon@kernel.org>
 
-Hi Francesco,
+Hi Leon,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on bluetooth-next/master bluetooth/master horms-ipvs/master net/master net-next/master linus/master v6.2-rc5 next-20230123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Francesco-Dolcini/dt-bindings-bluetooth-marvell-add-88W8997-DT-binding/20230118-210919
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230118122817.42466-4-francesco%40dolcini.it
-patch subject: [PATCH v1 3/4] Bluetooth: hci_mrvl: Add serdev support for 88W8997
-config: hexagon-randconfig-r021-20230123 (https://download.01.org/0day-ci/archive/20230124/202301241423.sEVD92vC-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Romanovsky/xfrm-extend-add-policy-callback-to-set-failure-reason/20230123-220422
+patch link:    https://lore.kernel.org/r/a5426033528ccef6e0e71fe06b55ae56c5596e85.1674481435.git.leon%40kernel.org
+patch subject: [Intel-wired-lan] [PATCH net-next 04/10] net/mlx5e: Fill IPsec state validation failure reason
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20230124/202301241552.GWkgnAH7-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2ae116c8ad209e0bf11559519915e511c44c28be
+        # https://github.com/intel-lab-lkp/linux/commit/bd6a3bcc8978f551f83f85b9c18d199c71c29d7c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Francesco-Dolcini/dt-bindings-bluetooth-marvell-add-88W8997-DT-binding/20230118-210919
-        git checkout 2ae116c8ad209e0bf11559519915e511c44c28be
+        git fetch --no-tags linux-review Leon-Romanovsky/xfrm-extend-add-policy-callback-to-set-failure-reason/20230123-220422
+        git checkout bd6a3bcc8978f551f83f85b9c18d199c71c29d7c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/ lib/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/chelsio/inline_crypto/ch_ipsec/ drivers/net/ethernet/mellanox/mlx5/core/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/bluetooth/hci_mrvl.c:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/bluetooth/hci_mrvl.c:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/bluetooth/hci_mrvl.c:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/bluetooth/hci_mrvl.c:450:36: warning: unused variable 'mrvl_proto_8997' [-Wunused-const-variable]
-   static const struct hci_uart_proto mrvl_proto_8997 = {
-                                      ^
-   7 warnings generated.
+>> drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c:276:22: error: use of undeclared identifier 'extackx'; did you mean 'extack'?
+                   NL_SET_ERR_MSG_MOD(extackx, "Unsupported xfrm offload type");
+                                      ^~~~~~~
+                                      extack
+   include/linux/netlink.h:128:18: note: expanded from macro 'NL_SET_ERR_MSG_MOD'
+           NL_SET_ERR_MSG((extack), KBUILD_MODNAME ": " msg)
+                           ^
+   include/linux/netlink.h:100:38: note: expanded from macro 'NL_SET_ERR_MSG'
+           struct netlink_ext_ack *__extack = (extack);    \
+                                               ^
+   drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c:167:34: note: 'extack' declared here
+                                        struct netlink_ext_ack *extack)
+                                                                ^
+   1 error generated.
 
 
-vim +/mrvl_proto_8997 +450 drivers/bluetooth/hci_mrvl.c
+vim +276 drivers/net/ethernet/mellanox/mlx5/core/en_accel/ipsec.c
 
-   449	
- > 450	static const struct hci_uart_proto mrvl_proto_8997 = {
-   451		.id		= HCI_UART_MRVL,
-   452		.name		= "Marvell 8997",
-   453		.init_speed	= 115200,
-   454		.oper_speed	= 3000000,
-   455		.open		= mrvl_open,
-   456		.close		= mrvl_close,
-   457		.flush		= mrvl_flush,
-   458		.set_baudrate   = mrvl_set_baudrate,
-   459		.recv		= mrvl_recv,
-   460		.enqueue	= mrvl_enqueue,
-   461		.dequeue	= mrvl_dequeue,
-   462	};
-   463	
+   164	
+   165	static int mlx5e_xfrm_validate_state(struct mlx5_core_dev *mdev,
+   166					     struct xfrm_state *x,
+   167					     struct netlink_ext_ack *extack)
+   168	{
+   169		if (x->props.aalgo != SADB_AALG_NONE) {
+   170			NL_SET_ERR_MSG_MOD(extack, "Cannot offload authenticated xfrm states");
+   171			return -EINVAL;
+   172		}
+   173		if (x->props.ealgo != SADB_X_EALG_AES_GCM_ICV16) {
+   174			NL_SET_ERR_MSG_MOD(extack, "Only AES-GCM-ICV16 xfrm state may be offloaded");
+   175			return -EINVAL;
+   176		}
+   177		if (x->props.calgo != SADB_X_CALG_NONE) {
+   178			NL_SET_ERR_MSG_MOD(extack, "Cannot offload compressed xfrm states");
+   179			return -EINVAL;
+   180		}
+   181		if (x->props.flags & XFRM_STATE_ESN &&
+   182		    !(mlx5_ipsec_device_caps(mdev) & MLX5_IPSEC_CAP_ESN)) {
+   183			NL_SET_ERR_MSG_MOD(extack, "Cannot offload ESN xfrm states");
+   184			return -EINVAL;
+   185		}
+   186		if (x->props.family != AF_INET &&
+   187		    x->props.family != AF_INET6) {
+   188			NL_SET_ERR_MSG_MOD(extack, "Only IPv4/6 xfrm states may be offloaded");
+   189			return -EINVAL;
+   190		}
+   191		if (x->id.proto != IPPROTO_ESP) {
+   192			NL_SET_ERR_MSG_MOD(extack, "Only ESP xfrm state may be offloaded");
+   193			return -EINVAL;
+   194		}
+   195		if (x->encap) {
+   196			NL_SET_ERR_MSG_MOD(extack, "Encapsulated xfrm state may not be offloaded");
+   197			return -EINVAL;
+   198		}
+   199		if (!x->aead) {
+   200			NL_SET_ERR_MSG_MOD(extack, "Cannot offload xfrm states without aead");
+   201			return -EINVAL;
+   202		}
+   203		if (x->aead->alg_icv_len != 128) {
+   204			NL_SET_ERR_MSG_MOD(extack, "Cannot offload xfrm states with AEAD ICV length other than 128bit");
+   205			return -EINVAL;
+   206		}
+   207		if ((x->aead->alg_key_len != 128 + 32) &&
+   208		    (x->aead->alg_key_len != 256 + 32)) {
+   209			NL_SET_ERR_MSG_MOD(extack, "Cannot offload xfrm states with AEAD key length other than 128/256 bit");
+   210			return -EINVAL;
+   211		}
+   212		if (x->tfcpad) {
+   213			NL_SET_ERR_MSG_MOD(extack, "Cannot offload xfrm states with tfc padding");
+   214			return -EINVAL;
+   215		}
+   216		if (!x->geniv) {
+   217			NL_SET_ERR_MSG_MOD(extack, "Cannot offload xfrm states without geniv");
+   218			return -EINVAL;
+   219		}
+   220		if (strcmp(x->geniv, "seqiv")) {
+   221			NL_SET_ERR_MSG_MOD(extack, "Cannot offload xfrm states with geniv other than seqiv");
+   222			return -EINVAL;
+   223		}
+   224		switch (x->xso.type) {
+   225		case XFRM_DEV_OFFLOAD_CRYPTO:
+   226			if (!(mlx5_ipsec_device_caps(mdev) & MLX5_IPSEC_CAP_CRYPTO)) {
+   227				NL_SET_ERR_MSG_MOD(extack, "Crypto offload is not supported");
+   228				return -EINVAL;
+   229			}
+   230	
+   231			if (x->props.mode != XFRM_MODE_TRANSPORT &&
+   232			    x->props.mode != XFRM_MODE_TUNNEL) {
+   233				NL_SET_ERR_MSG_MOD(extack, "Only transport and tunnel xfrm states may be offloaded");
+   234				return -EINVAL;
+   235			}
+   236			break;
+   237		case XFRM_DEV_OFFLOAD_PACKET:
+   238			if (!(mlx5_ipsec_device_caps(mdev) &
+   239			      MLX5_IPSEC_CAP_PACKET_OFFLOAD)) {
+   240				NL_SET_ERR_MSG_MOD(extack, "Packet offload is not supported");
+   241				return -EINVAL;
+   242			}
+   243	
+   244			if (x->props.mode != XFRM_MODE_TRANSPORT) {
+   245				NL_SET_ERR_MSG_MOD(extack, "Only transport xfrm states may be offloaded in packet mode");
+   246				return -EINVAL;
+   247			}
+   248	
+   249			if (x->replay_esn && x->replay_esn->replay_window != 32 &&
+   250			    x->replay_esn->replay_window != 64 &&
+   251			    x->replay_esn->replay_window != 128 &&
+   252			    x->replay_esn->replay_window != 256) {
+   253				NL_SET_ERR_MSG_MOD(extack, "Unsupported replay window size");
+   254				return -EINVAL;
+   255			}
+   256	
+   257			if (!x->props.reqid) {
+   258				NL_SET_ERR_MSG_MOD(extack, "Cannot offload without reqid");
+   259				return -EINVAL;
+   260			}
+   261	
+   262			if (x->lft.hard_byte_limit != XFRM_INF ||
+   263			    x->lft.soft_byte_limit != XFRM_INF) {
+   264				NL_SET_ERR_MSG_MOD(extack, "Device doesn't support limits in bytes");
+   265				return -EINVAL;
+   266			}
+   267	
+   268			if (x->lft.soft_packet_limit >= x->lft.hard_packet_limit &&
+   269			    x->lft.hard_packet_limit != XFRM_INF) {
+   270				/* XFRM stack doesn't prevent such configuration :(. */
+   271				NL_SET_ERR_MSG_MOD(extack, "Hard packet limit must be greater than soft one");
+   272				return -EINVAL;
+   273			}
+   274			break;
+   275		default:
+ > 276			NL_SET_ERR_MSG_MOD(extackx, "Unsupported xfrm offload type");
+   277			return -EINVAL;
+   278		}
+   279		return 0;
+   280	}
+   281	
 
 -- 
 0-DAY CI Kernel Test Service
