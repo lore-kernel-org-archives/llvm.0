@@ -1,226 +1,393 @@
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BE28839
-	for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 15:30:11 +0000 (UTC)
-Received: by mail-ua1-f50.google.com with SMTP id bx24so3837374uab.4
-        for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 07:30:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UyCfMSVt5YQ93dvQzsfOUKEDIKXZpwg4MvkDLyqNHiA=;
-        b=XZ2VY4ncaYA9BICy27D7vfCt1S+bUXYea16Cc2fJhPUE0OX1kj8HsB47D77IsDONZl
-         U6Cf5/aXnbFjyoJeW1LaVZ0Kw7VnuZvBsCo/9vOQkt8jCc6eTkSOZJaQ35OEDIebTY4e
-         wjfhJgqG6HfeXBAulPceXNd5fs697ZnmJhzHhbgdi8A72RuX/LdvU2wr7GWOWSyJ6p3P
-         vXBUBFY+QVUd9X8Out3vC1ZXZ7XMAtzXt/A5seZeMwxTDUohxC6h/ktDqD4qVtfwcrDA
-         qpxk9+y+gGehYvlG9VMUupGcLXEPj8YK5MYH8uzIwwlrpGSEhJZdRnBGcARX68T3MR2A
-         ys1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UyCfMSVt5YQ93dvQzsfOUKEDIKXZpwg4MvkDLyqNHiA=;
-        b=Nfmokb4BwtWYWA2i4f6903StHk3/WE9ylqDRslLPyrlc0AYxr5oQvltfp45+6Z8JYC
-         7vibgzxfrXy+FFYak61L+0PqermtszyWy5NtChpixzvr/W2toYYFoRkclLcq+oZ27N5m
-         QvKl6NlnvNtqBsp6D0XS80PYsew+WQXeu81gpmUY6HEVHQg4pVMq2UECHUR2+mcV6z/x
-         rjKa0YsN7mhIqFifrRs2PGiws4k4LmMoJr5swZiFh6XRIMrZGUtHWeuOM5F/MpKjrWG4
-         sOlPz27G66N6bbtoUE8+2w1dI7HsOs29asYNQU0aLRC1PYyhGZB4QBxVZPQF4aOVQyyb
-         bTsQ==
-X-Gm-Message-State: AFqh2krlWtr9sLN8/UTp4WqZ+X1EQIzLURTJT6+8T5ZOcQwMAmBrxylu
-	znuKXBYTMp9v51woAe9zCW10KbPpwloDLQ3GCmKczQ==
-X-Google-Smtp-Source: AMrXdXuKRuAD41xpguf1eHKBlJO8W4vD7lac7tM28Emygp2ffmu3CfYnqjmwkMJDzMpgKkJSkz2p0bDht+YE9XQTmVE=
-X-Received: by 2002:a9f:3263:0:b0:5d5:d02:8626 with SMTP id
- y32-20020a9f3263000000b005d50d028626mr3149869uad.115.1674574209956; Tue, 24
- Jan 2023 07:30:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B87883E;
+	Tue, 24 Jan 2023 15:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674574948; x=1706110948;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jMEgRgBZsBtvYBCL5dvCPMplczKke3txLIJeX2iqR7Q=;
+  b=UMeA2W07sn/E2wDXltHXWHiNRkGJ02kMVydNHUYnXEqrBT3tHBXngkMB
+   IF/qR95SN8YBBc6+cVStfAqwT7A5iPrlvK2Cd8OFD65MPcTIfE2lJNTxo
+   mjaicXUvDMCElgoncXNf639HfALRrEoO86M6BbSOFjxKEMfgQKv56bztb
+   sE3aEJ8MogCu4PURF8B92R9lrdEAqWUMf9z05ZP1HPzcECVd3IvcG30FW
+   xccQpxVrUI1lfpAWGhQnmVgNEUge7GKJLRTV/fVhIcmG8q0FfRR68qbBS
+   24rgcS7/kVHHyV+6hhphgKrxR6WfiZq+KIi3BuATO0lQ4h5QwYjfTTHge
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="412551866"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="412551866"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 07:42:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="786122938"
+X-IronPort-AV: E=Sophos;i="5.97,242,1669104000"; 
+   d="scan'208";a="786122938"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2023 07:42:05 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pKLQy-0006Zo-2o;
+	Tue, 24 Jan 2023 15:42:04 +0000
+Date: Tue, 24 Jan 2023 23:41:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alistair Popple <apopple@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Message-ID: <202301242339.dF4Cw6vY-lkp@intel.com>
+References: <183372b80aac73e640d9f5ac3c742d505fc6c1f2.1674538665.git-series.apopple@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
- <CA+G9fYs58vWj705MdaBKomVfHxNJ5ekSTmf53S4=4oVmc43CZg@mail.gmail.com> <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
-In-Reply-To: <Y86xyqe+Rd9wri7I@dev-arch.thelio-3990X>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 24 Jan 2023 20:59:58 +0530
-Message-ID: <CA+G9fYv1cAfGUDmz-+XC-E7aXQdU55D7SW=-WFc_RiUuNgGNsw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, nicolas@fjasle.eu, 
-	trix@redhat.com, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, 
-	kernel test robot <lkp@intel.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	=?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>, 
-	linux-mips@vger.kernel.org, mpe@ellerman.id.au, npiggin@gmail.com, 
-	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org, 
-	Segher Boessenkool <segher@kernel.crashing.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org, 
-	Alex Deucher <alexander.deucher@amd.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, lkft-triage@lists.linaro.org, 
-	Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <183372b80aac73e640d9f5ac3c742d505fc6c1f2.1674538665.git-series.apopple@nvidia.com>
 
-Hi Nathan,
+Hi Alistair,
 
-On Mon, 23 Jan 2023 at 21:41, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Naresh,
->
-> On Mon, Jan 23, 2023 at 07:28:10PM +0530, Naresh Kamboju wrote:
-> > FYI,
-> > [ please provide comments, feedback and improvements on build/ ltp smok=
-e tests ]
-> >
-> > LKFT test farm have fetched your patch series [1]
-> > [PATCH v2 00/14] Remove clang's -Qunused-arguments from KBUILD_CPPFLAGS
-> >  [1] https://lore.kernel.org/llvm/20221228-drop-qunused-arguments-v2-0-=
-9adbddd20d86@kernel.org/
->
-> Thank you a lot for testing this series, it is much appreciated!
->
-> It looks like this was applied on top of 6.2-rc3 if I am reading your
-> logs right but your mainline testing is recent, 6.2-rc5. I think the
-> errors you are seeing here are just existing mainline regressions that
-> were later fixed.
->
-> > Following build warnings and errors reported.
-> >
-> > sh:
-> > gcc-11-defconfig =E2=80=94 FAIL
-> > gcc-11-shx3_defconfig =E2=80=94 FAIL
-> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/bui=
-ld/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbdd=
-d20d86_kernel_org/testrun/14221835/suite/build/tests/
-> >
-> > mainline getting passed.
-> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
-/testrun/14298156/suite/build/test/gcc-11-defconfig/history/
-> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
-/testrun/14298156/suite/build/test/gcc-11-shx3_defconfig/history/
-> >
-> > Build error:
-> > In function 'follow_pmd_mask',
-> >     inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
-> >     inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
-> >     inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
-> > /builds/linux/include/linux/compiler_types.h:358:45: error: call to
-> > '__compiletime_assert_263' declared with attribute error: Unsupported
-> > access size for {READ,WRITE}_ONCE().
-> >   358 |         _compiletime_assert(condition, msg,
-> > __compiletime_assert_, __COUNTER__)
->
-> I think this was fixed with mainline commit 526970be53d5 ("sh/mm: Fix
-> pmd_t for real"), released in 6.2-rc4. You can see a previous build
-> failing in the same manner:
->
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9=
--g5a41237ad1d4/testrun/14056384/suite/build/tests/
->
-> > s390:
-> > clang-15-defconfig =E2=80=94 FAIL
-> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/bui=
-ld/https___lore_kernel_org_llvm_20221228-drop-qunused-arguments-v2-1-9adbdd=
-d20d86_kernel_org/testrun/14221913/suite/build/tests/
-> >
-> > mainline getting passed.
-> > https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc5=
-/testrun/14300495/suite/build/test/clang-15-defconfig/history/
-> >
-> > Build error:
-> > make --silent --keep-going --jobs=3D8
-> > O=3D/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM_IAS=3D0 ARCH=3Ds3=
-90
-> > CROSS_COMPILE=3Ds390x-linux-gnu- 'HOSTCC=3Dsccache clang' 'CC=3Dsccache
-> > clang'
-> > `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
-> > defined in discarded section `.exit.text' of fs/fuse/inode.o
-> > `.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o:
-> > defined in discarded section `.exit.text' of fs/fuse/inode.o
-> > `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-> > defined in discarded section `.exit.text' of crypto/algboss.o
-> > `.exit.text' referenced in section `__bug_table' of drivers/scsi/sd.o:
-> > defined in discarded section `.exit.text' of drivers/scsi/sd.o
-> > `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
-> > defined in discarded section `.exit.text' of drivers/md/md.o
-> > `.exit.text' referenced in section `__jump_table' of drivers/md/md.o:
-> > defined in discarded section `.exit.text' of drivers/md/md.o
-> > `.exit.text' referenced in section `.altinstructions' of
-> > drivers/md/md.o: defined in discarded section `.exit.text' of
-> > drivers/md/md.o
-> > `.exit.text' referenced in section `.altinstructions' of
-> > drivers/md/md.o: defined in discarded section `.exit.text' of
-> > drivers/md/md.o
-> > `.exit.text' referenced in section `.altinstructions' of
-> > net/iucv/iucv.o: defined in discarded section `.exit.text' of
-> > net/iucv/iucv.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/s390/cio/qdio_thinint.o: defined in discarded section
-> > `.exit.text' of drivers/s390/cio/qdio_thinint.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/s390/net/qeth_l3_main.o: defined in discarded section
-> > `.exit.text' of drivers/s390/net/qeth_l3_main.o
-> > `.exit.text' referenced in section `__bug_table' of
-> > drivers/s390/net/qeth_l3_main.o: defined in discarded section
-> > `.exit.text' of drivers/s390/net/qeth_l3_main.o
-> > s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion
-> > fail ../../bfd/elf64-s390.c:3349
-> > make[2]: *** [/builds/linux/scripts/Makefile.vmlinux:34: vmlinux] Error=
- 1
->
-> This should be fixed with mainline commit a494398bde27 ("s390: define
-> RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36"), released in
-> 6.2-rc4 as well. Same as before, visible in mainline at one point
-> without this series:
->
-> https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.2-rc3-9=
--g5a41237ad1d4/testrun/14057142/suite/build/tests/
->
-> > But,
-> > Build and boot pass on arm64, arm, x86_64 and i386.
-> > Build test performed for mips, parisc, riscv, s390, sh, sparc and
-> > powerpc (known build errors for maple_defconfig and cell_defconfig),
->
-> Good to hear!
->
-> Please consider retesting this series on top of 6.2-rc5 or testing the
-> current kbuild tree, which has this series applied in it:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on 2241ab53cbb5cdb08a6b2d4688feb13971058f65]
 
-This is the perfect place to test.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/mm-Introduce-vm_account/20230124-135027
+base:   2241ab53cbb5cdb08a6b2d4688feb13971058f65
+patch link:    https://lore.kernel.org/r/183372b80aac73e640d9f5ac3c742d505fc6c1f2.1674538665.git-series.apopple%40nvidia.com
+patch subject: [RFC PATCH 14/19] mm: Introduce a cgroup for pinned memory
+config: arm-randconfig-r036-20230123 (https://download.01.org/0day-ci/archive/20230124/202301242339.dF4Cw6vY-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/4eba1da312a889b27469e42f20c216183d19cd4d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alistair-Popple/mm-Introduce-vm_account/20230124-135027
+        git checkout 4eba1da312a889b27469e42f20c216183d19cd4d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.gi=
-t/log/?h=3Dfor-next
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Build test pass on arm, arm64, i386, mips, parisc, powerpc, riscv, s390, sh=
-,
-sparc and x86_64.
-Boot and LTP smoke pass on qemu-arm64, qemu-armv7, qemu-i386 and qemu-x86_6=
-4.
+All error/warnings (new ones prefixed by >>):
 
-  Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-  Tested-by: Anders Roxell <anders.roxell@linaro.org>
+>> mm/pins_cgroup.c:19:29: error: field has incomplete type 'struct cgroup_subsys_state'
+           struct cgroup_subsys_state      css;
+                                           ^
+   include/linux/kthread.h:218:8: note: forward declaration of 'struct cgroup_subsys_state'
+   struct cgroup_subsys_state;
+          ^
+>> mm/pins_cgroup.c:24:22: error: field has incomplete type 'struct cgroup_file'
+           struct cgroup_file              events_file;
+                                           ^
+   mm/pins_cgroup.c:24:9: note: forward declaration of 'struct cgroup_file'
+           struct cgroup_file              events_file;
+                  ^
+>> mm/pins_cgroup.c:40:18: error: call to undeclared function 'task_get_css'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return css_pins(task_get_css(task, pins_cgrp_id));
+                           ^
+>> mm/pins_cgroup.c:40:37: error: use of undeclared identifier 'pins_cgrp_id'
+           return css_pins(task_get_css(task, pins_cgrp_id));
+                                              ^
+>> mm/pins_cgroup.c:76:6: warning: no previous prototype for function 'pins_cancel' [-Wmissing-prototypes]
+   void pins_cancel(struct pins_cgroup *pins, int num)
+        ^
+   mm/pins_cgroup.c:76:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void pins_cancel(struct pins_cgroup *pins, int num)
+   ^
+   static 
+>> mm/pins_cgroup.c:146:35: warning: declaration of 'struct cgroup_taskset' will not be visible outside of this function [-Wvisibility]
+   static int pins_can_attach(struct cgroup_taskset *tset)
+                                     ^
+>> mm/pins_cgroup.c:151:2: error: call to undeclared function 'cgroup_taskset_for_each'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           cgroup_taskset_for_each(task, dst_css, tset) {
+           ^
+>> mm/pins_cgroup.c:151:46: error: expected ';' after expression
+           cgroup_taskset_for_each(task, dst_css, tset) {
+                                                       ^
+                                                       ;
+>> mm/pins_cgroup.c:156:13: error: call to undeclared function 'task_css'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   old_css = task_css(task, pins_cgrp_id);
+                             ^
+   mm/pins_cgroup.c:156:13: note: did you mean 'task_cpu'?
+   include/linux/sched.h:2240:28: note: 'task_cpu' declared here
+   static inline unsigned int task_cpu(const struct task_struct *p)
+                              ^
+   mm/pins_cgroup.c:156:28: error: use of undeclared identifier 'pins_cgrp_id'
+                   old_css = task_css(task, pins_cgrp_id);
+                                            ^
+   mm/pins_cgroup.c:166:39: warning: declaration of 'struct cgroup_taskset' will not be visible outside of this function [-Wvisibility]
+   static void pins_cancel_attach(struct cgroup_taskset *tset)
+                                         ^
+   mm/pins_cgroup.c:171:2: error: call to undeclared function 'cgroup_taskset_for_each'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           cgroup_taskset_for_each(task, dst_css, tset) {
+           ^
+   mm/pins_cgroup.c:171:46: error: expected ';' after expression
+           cgroup_taskset_for_each(task, dst_css, tset) {
+                                                       ^
+                                                       ;
+   mm/pins_cgroup.c:176:13: error: call to undeclared function 'task_css'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   old_css = task_css(task, pins_cgrp_id);
+                             ^
+   mm/pins_cgroup.c:176:28: error: use of undeclared identifier 'pins_cgrp_id'
+                   old_css = task_css(task, pins_cgrp_id);
+                                            ^
+>> mm/pins_cgroup.c:188:36: error: call to undeclared function 'of_css'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct cgroup_subsys_state *css = of_css(of);
+                                             ^
+>> mm/pins_cgroup.c:188:30: error: incompatible integer to pointer conversion initializing 'struct cgroup_subsys_state *' with an expression of type 'int' [-Wint-conversion]
+           struct cgroup_subsys_state *css = of_css(of);
+                                       ^     ~~~~~~~~~~
+>> mm/pins_cgroup.c:217:36: error: call to undeclared function 'seq_css'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct cgroup_subsys_state *css = seq_css(sf);
+                                             ^
+   mm/pins_cgroup.c:217:30: error: incompatible integer to pointer conversion initializing 'struct cgroup_subsys_state *' with an expression of type 'int' [-Wint-conversion]
+           struct cgroup_subsys_state *css = seq_css(sf);
+                                       ^     ~~~~~~~~~~~
+>> mm/pins_cgroup.c:230:16: warning: declaration of 'struct cftype' will not be visible outside of this function [-Wvisibility]
+                                struct cftype *cft)
+                                       ^
+   mm/pins_cgroup.c:239:38: error: call to undeclared function 'seq_css'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct pins_cgroup *pins = css_pins(seq_css(sf));
+                                               ^
+>> mm/pins_cgroup.c:239:38: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct cgroup_subsys_state *' [-Wint-conversion]
+           struct pins_cgroup *pins = css_pins(seq_css(sf));
+                                               ^~~~~~~~~~~
+   mm/pins_cgroup.c:28:65: note: passing argument to parameter 'css' here
+   static struct pins_cgroup *css_pins(struct cgroup_subsys_state *css)
+                                                                   ^
+>> mm/pins_cgroup.c:245:32: error: array has incomplete element type 'struct cftype'
+   static struct cftype pins_files[] = {
+                                  ^
+   mm/pins_cgroup.c:245:15: note: forward declaration of 'struct cftype'
+   static struct cftype pins_files[] = {
+                 ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   4 warnings and 20 errors generated.
 
-Please refer to the following link for details of testing.
-  https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build=
-/linux-kbuild_masahiroy-branch-kbuild-20230124/?failures_only=3Dfalse&resul=
-ts_layout=3Dtable#!#test-results
 
-metadata:
-  git_describe : v6.2-rc5-46-ga778c9dd138b
-  git_repo : https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linu=
-x-kbuild.git
-  git_sha : a778c9dd138b4f4410779705b444d58ce6f8fc44
-  git_short_log : a778c9dd138b ("builddeb: clean generated package content"=
-)
+vim +19 mm/pins_cgroup.c
 
---
-Linaro LKFT
-https://lkft.linaro.org
+    17	
+    18	struct pins_cgroup {
+  > 19		struct cgroup_subsys_state	css;
+    20	
+    21		atomic64_t			counter;
+    22		atomic64_t			limit;
+    23	
+  > 24		struct cgroup_file		events_file;
+    25		atomic64_t			events_limit;
+    26	};
+    27	
+    28	static struct pins_cgroup *css_pins(struct cgroup_subsys_state *css)
+    29	{
+    30		return container_of(css, struct pins_cgroup, css);
+    31	}
+    32	
+    33	static struct pins_cgroup *parent_pins(struct pins_cgroup *pins)
+    34	{
+    35		return css_pins(pins->css.parent);
+    36	}
+    37	
+    38	struct pins_cgroup *get_pins_cg(struct task_struct *task)
+    39	{
+  > 40		return css_pins(task_get_css(task, pins_cgrp_id));
+    41	}
+    42	
+    43	void put_pins_cg(struct pins_cgroup *cg)
+    44	{
+    45		css_put(&cg->css);
+    46	}
+    47	
+    48	static struct cgroup_subsys_state *
+    49	pins_css_alloc(struct cgroup_subsys_state *parent)
+    50	{
+    51		struct pins_cgroup *pins;
+    52	
+    53		pins = kzalloc(sizeof(struct pins_cgroup), GFP_KERNEL);
+    54		if (!pins)
+    55			return ERR_PTR(-ENOMEM);
+    56	
+    57		atomic64_set(&pins->counter, 0);
+    58		atomic64_set(&pins->limit, PINS_MAX);
+    59		atomic64_set(&pins->events_limit, 0);
+    60		return &pins->css;
+    61	}
+    62	
+    63	static void pins_css_free(struct cgroup_subsys_state *css)
+    64	{
+    65		kfree(css_pins(css));
+    66	}
+    67	
+    68	/**
+    69	 * pins_cancel - uncharge the local pin count
+    70	 * @pins: the pin cgroup state
+    71	 * @num: the number of pins to cancel
+    72	 *
+    73	 * This function will WARN if the pin count goes under 0, because such a case is
+    74	 * a bug in the pins controller proper.
+    75	 */
+  > 76	void pins_cancel(struct pins_cgroup *pins, int num)
+    77	{
+    78		/*
+    79		 * A negative count (or overflow for that matter) is invalid,
+    80		 * and indicates a bug in the `pins` controller proper.
+    81		 */
+    82		WARN_ON_ONCE(atomic64_add_negative(-num, &pins->counter));
+    83	}
+    84	
+    85	/**
+    86	 * pins_uncharge - hierarchically uncharge the pin count
+    87	 * @pins: the pin cgroup state
+    88	 * @num: the number of pins to uncharge
+    89	 */
+    90	void pins_uncharge(struct pins_cgroup *pins, int num)
+    91	{
+    92		struct pins_cgroup *p;
+    93	
+    94		for (p = pins; parent_pins(p); p = parent_pins(p))
+    95			pins_cancel(p, num);
+    96	}
+    97	
+    98	/**
+    99	 * pins_charge - hierarchically charge the pin count
+   100	 * @pins: the pin cgroup state
+   101	 * @num: the number of pins to charge
+   102	 *
+   103	 * This function does *not* follow the pin limit set. It cannot fail and the new
+   104	 * pin count may exceed the limit. This is only used for reverting failed
+   105	 * attaches, where there is no other way out than violating the limit.
+   106	 */
+   107	static void pins_charge(struct pins_cgroup *pins, int num)
+   108	{
+   109		struct pins_cgroup *p;
+   110	
+   111		for (p = pins; parent_pins(p); p = parent_pins(p))
+   112			atomic64_add(num, &p->counter);
+   113	}
+   114	
+   115	/**
+   116	 * pins_try_charge - hierarchically try to charge the pin count
+   117	 * @pins: the pin cgroup state
+   118	 * @num: the number of pins to charge
+   119	 *
+   120	 * This function follows the set limit. It will fail if the charge would cause
+   121	 * the new value to exceed the hierarchical limit. Returns 0 if the charge
+   122	 * succeeded, otherwise -EAGAIN.
+   123	 */
+   124	int pins_try_charge(struct pins_cgroup *pins, int num)
+   125	{
+   126		struct pins_cgroup *p, *q;
+   127	
+   128		for (p = pins; parent_pins(p); p = parent_pins(p)) {
+   129			uint64_t new = atomic64_add_return(num, &p->counter);
+   130			uint64_t limit = atomic64_read(&p->limit);
+   131	
+   132			if (limit != PINS_MAX && new > limit)
+   133				goto revert;
+   134		}
+   135	
+   136		return 0;
+   137	
+   138	revert:
+   139		for (q = pins; q != p; q = parent_pins(q))
+   140			pins_cancel(q, num);
+   141		pins_cancel(p, num);
+   142	
+   143		return -EAGAIN;
+   144	}
+   145	
+ > 146	static int pins_can_attach(struct cgroup_taskset *tset)
+   147	{
+   148		struct cgroup_subsys_state *dst_css;
+   149		struct task_struct *task;
+   150	
+ > 151		cgroup_taskset_for_each(task, dst_css, tset) {
+   152			struct pins_cgroup *pins = css_pins(dst_css);
+   153			struct cgroup_subsys_state *old_css;
+   154			struct pins_cgroup *old_pins;
+   155	
+ > 156			old_css = task_css(task, pins_cgrp_id);
+   157			old_pins = css_pins(old_css);
+   158	
+   159			pins_charge(pins, task->mm->locked_vm);
+   160			pins_uncharge(old_pins, task->mm->locked_vm);
+   161		}
+   162	
+   163		return 0;
+   164	}
+   165	
+   166	static void pins_cancel_attach(struct cgroup_taskset *tset)
+   167	{
+   168		struct cgroup_subsys_state *dst_css;
+   169		struct task_struct *task;
+   170	
+   171		cgroup_taskset_for_each(task, dst_css, tset) {
+   172			struct pins_cgroup *pins = css_pins(dst_css);
+   173			struct cgroup_subsys_state *old_css;
+   174			struct pins_cgroup *old_pins;
+   175	
+   176			old_css = task_css(task, pins_cgrp_id);
+   177			old_pins = css_pins(old_css);
+   178	
+   179			pins_charge(old_pins, task->mm->locked_vm);
+   180			pins_uncharge(pins, task->mm->locked_vm);
+   181		}
+   182	}
+   183	
+   184	
+   185	static ssize_t pins_max_write(struct kernfs_open_file *of, char *buf,
+   186				      size_t nbytes, loff_t off)
+   187	{
+ > 188		struct cgroup_subsys_state *css = of_css(of);
+   189		struct pins_cgroup *pins = css_pins(css);
+   190		uint64_t limit;
+   191		int err;
+   192	
+   193		buf = strstrip(buf);
+   194		if (!strcmp(buf, PINS_MAX_STR)) {
+   195			limit = PINS_MAX;
+   196			goto set_limit;
+   197		}
+   198	
+   199		err = kstrtoll(buf, 0, &limit);
+   200		if (err)
+   201			return err;
+   202	
+   203		if (limit < 0 || limit >= PINS_MAX)
+   204			return -EINVAL;
+   205	
+   206	set_limit:
+   207		/*
+   208		 * Limit updates don't need to be mutex'd, since it isn't
+   209		 * critical that any racing fork()s follow the new limit.
+   210		 */
+   211		atomic64_set(&pins->limit, limit);
+   212		return nbytes;
+   213	}
+   214	
+   215	static int pins_max_show(struct seq_file *sf, void *v)
+   216	{
+ > 217		struct cgroup_subsys_state *css = seq_css(sf);
+   218		struct pins_cgroup *pins = css_pins(css);
+   219		uint64_t limit = atomic64_read(&pins->limit);
+   220	
+   221		if (limit >= PINS_MAX)
+   222			seq_printf(sf, "%s\n", PINS_MAX_STR);
+   223		else
+   224			seq_printf(sf, "%lld\n", limit);
+   225	
+   226		return 0;
+   227	}
+   228	
 
->
-> Cheers,
-> Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
