@@ -1,52 +1,48 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE821FB4;
-	Wed, 25 Jan 2023 12:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDA723C4;
+	Wed, 25 Jan 2023 12:55:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674648782; x=1706184782;
+  t=1674651311; x=1706187311;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BlYL5ZWxfpIGJfWCOvZGguBgymIDRUM5a8fZph+HpbU=;
-  b=IVms/xwalWAAxbxSySt4IZtjNoJfVX+X4bN6bFWWFIeJC4tNGsBhus6Y
-   Bv+2jVbRe75jnV0o+m4bmtbRLZcaGpu/aKmB9ifJLs/MYpqRiAXS82j6v
-   2yGtPPHHqWH9vcaEY/JhBdH5KyxGqlswSO9FK7ctcEtjVDUz6MWGAF0lQ
-   TMABESVcDhXcoGhriDVw8iG32Uw5qchAasm6RGwVX0HbF1GTJHd9fz//v
-   ZOxLM86mF/3lzcLlB2y4KYCTNUTt8IVaSEWRKWGYQYruBM80FzwSi4qP+
-   XFh5tmLm9GpeV9g4CS6GoAJU9FXKhubop6iSwOf+7AXcMA4ljDyq4sGG1
+  bh=MDLw4SI9AuliqMuFsm+CU5yI64+eZZfEdC5qdusTYOc=;
+  b=ct5G4JGJcA2TqWE10wTEJ+CFpOUH92JE25tYOCbaxE6rx4smWi7bYaaD
+   8/rdu/rSWPdwkt0WbHUaS0apmkl0+5+fVsWgPezgWesWD+hKqnvEKnfgT
+   A0QtT+QgyqhnSj8JXkgka2vSW2ijRdQTu0YIk0ZmcFOVUH1yuCmj4M/Kl
+   Dj17Wiz5wre+v76+/nvzs0lhnpAxGJ2T8vSZjkx0q8APSPdbM0eSCHpqM
+   K0I3g0E27ABQHkiYcBphyOdTpf4WLB/KD5+ln3WtsqrKv8ov/EmaE77ku
+   hTx9FlcCz2la1FDd+mDIYl7ENNZTBa6/3E1KxRvW2WDonWR53QpNVwPsk
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="391044967"
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="306209624"
 X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="391044967"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 04:13:02 -0800
+   d="scan'208";a="306209624"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 04:55:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="725833858"
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="751180484"
 X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="725833858"
+   d="scan'208";a="751180484"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Jan 2023 04:12:57 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2023 04:55:07 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pKee9-0007He-0L;
-	Wed, 25 Jan 2023 12:12:57 +0000
-Date: Wed, 25 Jan 2023 20:12:30 +0800
+	id 1pKfIx-0007JE-0c;
+	Wed, 25 Jan 2023 12:55:07 +0000
+Date: Wed, 25 Jan 2023 20:54:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, airlied@gmail.com,
-	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, javierm@redhat.com
+To: Zach O'Keefe <zokeefe@google.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	amd-gfx@lists.freedesktop.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	linux-tegra@vger.kernel.org, freedreno@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [Intel-gfx] [PATCH v2 06/10] drm/fb-helper: Initialize
- fb-helper's preferred BPP in prepare function
-Message-ID: <202301252016.vm7ksFra-lkp@intel.com>
-References: <20230124134010.30263-7-tzimmermann@suse.de>
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hugh Dickins <hughd@google.com>, Yang Shi <shy828301@gmail.com>,
+	Zach O'Keefe <zokeefe@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
+Message-ID: <202301252033.HoFIRXm4-lkp@intel.com>
+References: <20230125015738.912924-2-zokeefe@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,91 +51,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124134010.30263-7-tzimmermann@suse.de>
+In-Reply-To: <20230125015738.912924-2-zokeefe@google.com>
 
-Hi Thomas,
+Hi Zach,
 
-I love your patch! Yet something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on 7d3e7f64a42d66ba8da6e7b66a8d85457ef84570]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-client-Test-for-connectors-before-sending-hotplug-event/20230124-214220
-base:   7d3e7f64a42d66ba8da6e7b66a8d85457ef84570
-patch link:    https://lore.kernel.org/r/20230124134010.30263-7-tzimmermann%40suse.de
-patch subject: [Intel-gfx] [PATCH v2 06/10] drm/fb-helper: Initialize fb-helper's preferred BPP in prepare function
-config: x86_64-randconfig-a014-20230123 (https://download.01.org/0day-ci/archive/20230125/202301252016.vm7ksFra-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zach-O-Keefe/mm-MADV_COLLAPSE-catch-none-huge-bad-pmd-lookups/20230125-095954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230125015738.912924-2-zokeefe%40google.com
+patch subject: [PATCH 2/2] mm/MADV_COLLAPSE: catch !none !huge !bad pmd lookups
+config: x86_64-randconfig-r025-20230123 (https://download.01.org/0day-ci/archive/20230125/202301252033.HoFIRXm4-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/70e38534e74e4d12bb02b3b352bba2aed417f541
+        # https://github.com/intel-lab-lkp/linux/commit/6001eb9a8f1687a1d0b72831d991886106cac37b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Thomas-Zimmermann/drm-client-Test-for-connectors-before-sending-hotplug-event/20230124-214220
-        git checkout 70e38534e74e4d12bb02b3b352bba2aed417f541
+        git fetch --no-tags linux-review Zach-O-Keefe/mm-MADV_COLLAPSE-catch-none-huge-bad-pmd-lookups/20230125-095954
+        git checkout 6001eb9a8f1687a1d0b72831d991886106cac37b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/gma500/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/gma500/framebuffer.c:412:44: error: too many arguments to function call, expected 3, have 4
-           drm_fb_helper_prepare(dev, fb_helper, 32, &psb_fb_helper_funcs);
-           ~~~~~~~~~~~~~~~~~~~~~                     ^~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_fb_helper.h:295:20: note: 'drm_fb_helper_prepare' declared here
-   static inline void drm_fb_helper_prepare(struct drm_device *dev,
-                      ^
->> drivers/gpu/drm/gma500/framebuffer.c:421:46: error: too few arguments to function call, expected 2, have 1
-           ret = drm_fb_helper_initial_config(fb_helper);
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~          ^
-   include/drm/drm_fb_helper.h:459:19: note: 'drm_fb_helper_initial_config' declared here
-   static inline int drm_fb_helper_initial_config(struct drm_fb_helper *fb_helper,
-                     ^
-   2 errors generated.
+>> mm/khugepaged.c:972:17: error: passing 'pmd_t **' to parameter of incompatible type 'pmd_t'
+           if (pmd_devmap(pmd))
+                          ^~~
+   arch/x86/include/asm/pgtable.h:254:36: note: passing argument to parameter 'pmd' here
+   static inline int pmd_devmap(pmd_t pmd)
+                                      ^
+   1 error generated.
 
 
-vim +412 drivers/gpu/drm/gma500/framebuffer.c
+vim +972 mm/khugepaged.c
 
-   397	
-   398	int psb_fbdev_init(struct drm_device *dev)
-   399	{
-   400		struct drm_fb_helper *fb_helper;
-   401		struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
-   402		int ret;
-   403	
-   404		fb_helper = kzalloc(sizeof(*fb_helper), GFP_KERNEL);
-   405		if (!fb_helper) {
-   406			dev_err(dev->dev, "no memory\n");
-   407			return -ENOMEM;
-   408		}
-   409	
-   410		dev_priv->fb_helper = fb_helper;
-   411	
- > 412		drm_fb_helper_prepare(dev, fb_helper, 32, &psb_fb_helper_funcs);
-   413	
-   414		ret = drm_fb_helper_init(dev, fb_helper);
-   415		if (ret)
-   416			goto free;
-   417	
-   418		/* disable all the possible outputs/crtcs before entering KMS mode */
-   419		drm_helper_disable_unused_functions(dev);
-   420	
- > 421		ret = drm_fb_helper_initial_config(fb_helper);
-   422		if (ret)
-   423			goto fini;
-   424	
-   425		return 0;
-   426	
-   427	fini:
-   428		drm_fb_helper_fini(fb_helper);
-   429	free:
-   430		kfree(fb_helper);
-   431		return ret;
-   432	}
-   433	
+   945	
+   946	/*
+   947	 * See pmd_trans_unstable() for how the result may change out from
+   948	 * underneath us, even if we hold mmap_lock in read.
+   949	 */
+   950	static int find_pmd_or_thp_or_none(struct mm_struct *mm,
+   951					   unsigned long address,
+   952					   pmd_t **pmd)
+   953	{
+   954		pmd_t pmde;
+   955	
+   956		*pmd = mm_find_pmd(mm, address);
+   957		if (!*pmd)
+   958			return SCAN_PMD_NULL;
+   959	
+   960		pmde = pmdp_get_lockless(*pmd);
+   961	
+   962	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+   963		/* See comments in pmd_none_or_trans_huge_or_clear_bad() */
+   964		barrier();
+   965	#endif
+   966		if (pmd_none(pmde))
+   967			return SCAN_PMD_NONE;
+   968		if (!pmd_present(pmde))
+   969			return SCAN_PMD_NULL;
+   970		if (pmd_trans_huge(pmde))
+   971			return SCAN_PMD_MAPPED;
+ > 972		if (pmd_devmap(pmd))
+   973			return SCAN_PMD_NULL;
+   974		if (pmd_bad(pmde))
+   975			return SCAN_PMD_NULL;
+   976		return SCAN_SUCCEED;
+   977	}
+   978	
 
 -- 
 0-DAY CI Kernel Test Service
