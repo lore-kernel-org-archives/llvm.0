@@ -1,132 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C234C84
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 16:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF02C4339E
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 16:43:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674664986;
-	bh=6mKPy2dJzEuiQUdKGQzrXXioCbg4fI1rvtq4Xn35+B4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CDjcrWkGDT/E0M9wkHSS5Ll3eUyV3UeAGBXBCcvyys86Ve8Zpn8EwDWd/Szy2RGgn
-	 FoZOM1boxzbUyvqKoK0B5udPBuzLtzy8T0XnaKT2gWZy1swToygfDaCsmUvcUVZGPB
-	 yf1zZ0ohTIxhG7YOxb9R70bGjI8mDbyChVD30plYBpHmj9NdRSgpMegEzj9fIn7aiI
-	 LHhSobztARfPwAbHM6Jr3aTMrSMytUBkHD8TYfpiDsYOZhkcn8iHvmplZvp+X5fwYi
-	 Hn1PBizR6siO6pCJvQyfQyKWHpgt9KKFgapcwHxiOUSxlMhUjpHVxjEjt7rE9XZfrJ
-	 YbmrlKJFInt+A==
-Received: by mail-lj1-f181.google.com with SMTP id c3so21026891ljh.1
-        for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 08:43:06 -0800 (PST)
-X-Gm-Message-State: AO0yUKWHnzUCGQaDUztjDFWQp/gIor3SMa1+ksww76T/4G4bBZKyTICq
-	TN/tl+XOnAP3Y8k4fjluA5Y0f+e7SM0mOJSesb0=
-X-Google-Smtp-Source: AK7set81Q7IaCX3y+aR1udGQYaD72lDfZJftu+ONjPh8p/FgouhLJD3SEw4ZmfLHMjdWvtyWW+LOALvDY88Dkte6Kd8=
-X-Received: by 2002:a2e:920c:0:b0:28d:ca43:8eec with SMTP id
- k12-20020a2e920c000000b0028dca438eecmr194625ljg.516.1674664984601; Wed, 25
- Jan 2023 08:43:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1365395
+	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 17:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674666100;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xWWan1cCyp7844qw2zcxnN/N+il2C6TxhhP7Cv0hSmQ=;
+	b=H/YL1gvLKDFlB+qjr30D6ejYrGIgpQ/o7zIBp5y5UBJaiqyv3LaSCTo3hIgbS4oK07EF8L
+	ctO+Jl9ShbBClvsIRCiG1JthcdzsbSlHUxIF/lxkIo9KjPLBVJsoTIMkXOaFGFUJPgEscW
+	Uuuo3geJTrY8oeVrp22oo45r4rScBWE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-668-IXceX1pIOYaUmg-yzwYiTg-1; Wed, 25 Jan 2023 12:01:37 -0500
+X-MC-Unique: IXceX1pIOYaUmg-yzwYiTg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05C3B8030D6
+	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 17:01:37 +0000 (UTC)
+Received: from [172.64.0.88] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E25C7C15BA0;
+	Wed, 25 Jan 2023 17:01:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (97/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, fb6e71db)
+Date: Wed, 25 Jan 2023 17:01:36 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230111102236.1430401-1-ardb@kernel.org> <20230111102236.1430401-5-ardb@kernel.org>
- <Y9FZsBEu8hSVVIA8@dev-arch.thelio-3990X>
-In-Reply-To: <Y9FZsBEu8hSVVIA8@dev-arch.thelio-3990X>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 25 Jan 2023 17:42:53 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE9h_Qc8rTtsVwYhbdJ94qXXRDbnq2XSGaoVC7Up5Y3dg@mail.gmail.com>
-Message-ID: <CAMj1kXE9h_Qc8rTtsVwYhbdJ94qXXRDbnq2XSGaoVC7Up5Y3dg@mail.gmail.com>
-Subject: Re: [PATCH v7 4/6] arm64: head: avoid cache invalidation when
- entering with the MMU on
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Will Deacon <will@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Marc Zyngier <maz@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <50195.123012512013704496@us-mta-668.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 25 Jan 2023 at 17:32, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Ard,
->
-> On Wed, Jan 11, 2023 at 11:22:34AM +0100, Ard Biesheuvel wrote:
-> > If we enter with the MMU on, there is no need for explicit cache
-> > invalidation for stores to memory, as they will be coherent with the
-> > caches.
-> >
-> > Let's take advantage of this, and create the ID map with the MMU still
-> > enabled if that is how we entered, and avoid any cache invalidation
-> > calls in that case.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/arm64/kernel/head.S | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-> > index c3b898efd3b5288d..d75f419206451d07 100644
-> > --- a/arch/arm64/kernel/head.S
-> > +++ b/arch/arm64/kernel/head.S
-> > @@ -89,9 +89,9 @@
-> >  SYM_CODE_START(primary_entry)
-> >       bl      record_mmu_state
-> >       bl      preserve_boot_args
-> > +     bl      create_idmap
-> >       bl      init_kernel_el                  // w0=cpu_boot_mode
-> >       mov     x20, x0
-> > -     bl      create_idmap
-> >
-> >       /*
-> >        * The following calls CPU setup code, see arch/arm64/mm/proc.S for
-> > @@ -377,12 +377,13 @@ SYM_FUNC_START_LOCAL(create_idmap)
-> >        * accesses (MMU disabled), invalidate those tables again to
-> >        * remove any speculatively loaded cache lines.
-> >        */
-> > +     cbnz    x19, 0f                         // skip cache invalidation if MMU is on
-> >       dmb     sy
-> >
-> >       adrp    x0, init_idmap_pg_dir
-> >       adrp    x1, init_idmap_pg_end
-> >       bl      dcache_inval_poc
-> > -     ret     x28
-> > +0:   ret     x28
-> >  SYM_FUNC_END(create_idmap)
-> >
-> >  SYM_FUNC_START_LOCAL(create_kernel_mapping)
-> > --
-> > 2.39.0
-> >
->
-> Our CI started reporting a boot failure in QEMU with defconfig +
-> CONFIG_CPU_BIG_ENDIAN=y after this patch as commit 32b135a7fafe ("arm64:
-> head: avoid cache invalidation when entering with the MMU on") in the
-> arm64 tree (and now next-20230125).
->
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4001750912/jobs/6868612292
->
-> $ timeout --foreground 3m qemu-system-aarch64 \
-> -cpu max,pauth-impdef=true \
-> -machine virt,gic-version=max,virtualization=true \
-> -kernel Image.gz \
-> -append "console=ttyAMA0 earlycon" \
-> -display none \
-> -initrd rootfs.cpio
-> -m 512m \
-> -nodefaults \
-> -no-reboot \
-> -serial mon:stdio
-> qemu-system-aarch64: terminating on signal 15 from pid 389 (timeout)
->
-> defconfig is fine at the same change.
->
-> There is no output, which makes sense since this is pretty early in
-> boot. We are not booting via EFI, in case that matters. This does not
-> appear to be a toolchain problem, as I can reproduce it with the
-> kernel.org GCC toolchains.
->
+Hi, we tested your kernel and here are the results:
 
-Thanks for the report.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-With this patch, the ID map is populated before the switch to BE mode,
-and so the descriptors are written in the wrong byte order.
 
-This should be easy to fix - I'll have a patch out shortly.
+Kernel information:
+    Commit message: Merge tag 'nfsd-6.2-5' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/cel/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/66961
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6807311
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
+client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
+22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1501
+            Affected tests:
+                 ppc64le - Networking cki netfilter test
+                  x86_64 - Networking cki netfilter test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
