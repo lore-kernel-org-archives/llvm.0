@@ -1,149 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB2E10ED
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 04:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674620528;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2CIvJoncd+cMbTvFwEVufPVNSJh/Qxt1pY5CiU+Fa6Y=;
-	b=HowahLG7OAdJfaBYCPdVmO4ZZljuN9TJIUftx3QotzZWODF0xvoU0PsHMYfgORR0aiuQ6n
-	rn7h3KYxCnFIIzQamfd+coU9hwQDTHjCLWKNj3pgr9l78MkPAyFtuNA/jmKsEYoT/OG6Un
-	wISxFhLjFsK8rCKyOJPLv4jyhbLQRAY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-675-FxstQjx9PZ2xLf7m9xVXJA-1; Tue, 24 Jan 2023 23:22:06 -0500
-X-MC-Unique: FxstQjx9PZ2xLf7m9xVXJA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93FC63C0CD3F
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 04:22:06 +0000 (UTC)
-Received: from [172.64.13.8] (unknown [10.30.33.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7BA0A1121330;
-	Wed, 25 Jan 2023 04:22:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (124/383 SKIPPED): Test report for master
- (6.2.0-rc5, mainline.kernel.org-clang, 2475bf02)
-Date: Wed, 25 Jan 2023 04:22:06 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7F31102;
+	Wed, 25 Jan 2023 04:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674622308; x=1706158308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KD4JMgqxwED5gr4VrmwBvzAy0O3wbRpFXRdRP7EMoe0=;
+  b=FEmgoNLWyBgjAyPlTsiv+aLs/9XXJtHbBIyAFsk7d5g6QpLykFjpZxcx
+   V6TTlOqHrNaexg/SOq8jWsuSm1Fbe98PN6DWJCEB0ls7/hs86/vvI1cfK
+   37ObPlwEAIn0rm09S3wOBmNAyaFfwTeYjBUPsV/KtWxgsdymxrTWHsfEb
+   S1Zqp7Yi/1Cy2FzwUmFAC21ogl5YCYndkVWcF1xMSCgVtGbRjnRkrpdc2
+   bGL+JEjUQUbrwtoWoRKAwL5iG4BSQpIS6VlYP1O7Ecz1BWYNvbLSSI1C0
+   3XWsnwwaJwDzkLnKFK2Zsp5ojFdDDodt58TqAHds9+LVwPpkZjCD+jT/2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="310057103"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="310057103"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 20:51:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="725743677"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="725743677"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2023 20:51:42 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pKXl7-00072i-39;
+	Wed, 25 Jan 2023 04:51:41 +0000
+Date: Wed, 25 Jan 2023 12:51:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, airlied@gmail.com,
+	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, javierm@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	linux-tegra@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [Intel-gfx] [PATCH v2 06/10] drm/fb-helper: Initialize
+ fb-helper's preferred BPP in prepare function
+Message-ID: <202301251250.eyIn4zjn-lkp@intel.com>
+References: <20230124134010.30263-7-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <03603.123012423220600486@us-mta-675.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124134010.30263-7-tzimmermann@suse.de>
 
-Hi, we tested your kernel and here are the results:
+Hi Thomas,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I love your patch! Yet something to improve:
 
+[auto build test ERROR on 7d3e7f64a42d66ba8da6e7b66a8d85457ef84570]
 
-Kernel information:
-    Commit message: Merge tag 'sched_urgent_for_v6.2_rc6' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/tip/tip
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-client-Test-for-connectors-before-sending-hotplug-event/20230124-214220
+base:   7d3e7f64a42d66ba8da6e7b66a8d85457ef84570
+patch link:    https://lore.kernel.org/r/20230124134010.30263-7-tzimmermann%40suse.de
+patch subject: [Intel-gfx] [PATCH v2 06/10] drm/fb-helper: Initialize fb-helper's preferred BPP in prepare function
+config: riscv-randconfig-r042-20230123 (https://download.01.org/0day-ci/archive/20230125/202301251250.eyIn4zjn-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/70e38534e74e4d12bb02b3b352bba2aed417f541
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Zimmermann/drm-client-Test-for-connectors-before-sending-hotplug-event/20230124-214220
+        git checkout 70e38534e74e4d12bb02b3b352bba2aed417f541
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/radeon/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/66614
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6777550
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 aarch64 - Networking cki netfilter test
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> drivers/gpu/drm/radeon/radeon_fb.c:352:10: error: too many arguments to function call, expected 3, have 4
+                                 &radeon_fb_helper_funcs);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_fb_helper.h:295:20: note: 'drm_fb_helper_prepare' declared here
+   static inline void drm_fb_helper_prepare(struct drm_device *dev,
+                      ^
+>> drivers/gpu/drm/radeon/radeon_fb.c:361:52: error: too few arguments to function call, expected 2, have 1
+           ret = drm_fb_helper_initial_config(&rfbdev->helper);
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                ^
+   include/drm/drm_fb_helper.h:459:19: note: 'drm_fb_helper_initial_config' declared here
+   static inline int drm_fb_helper_initial_config(struct drm_fb_helper *fb_helper,
+                     ^
+   2 errors generated.
 
 
+vim +352 drivers/gpu/drm/radeon/radeon_fb.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+386516744ba45d Dave Airlie       2010-03-30  326  
+386516744ba45d Dave Airlie       2010-03-30  327  int radeon_fbdev_init(struct radeon_device *rdev)
+386516744ba45d Dave Airlie       2010-03-30  328  {
+8be48d924c307e Dave Airlie       2010-03-30  329  	struct radeon_fbdev *rfbdev;
+4abe35204af82a Dave Airlie       2010-03-30  330  	int bpp_sel = 32;
+5a79395b2791cc Chris Wilson      2010-06-06  331  	int ret;
+4abe35204af82a Dave Airlie       2010-03-30  332  
+e5f243bd2edd95 Alex Deucher      2016-03-10  333  	/* don't enable fbdev if no connectors */
+e5f243bd2edd95 Alex Deucher      2016-03-10  334  	if (list_empty(&rdev->ddev->mode_config.connector_list))
+e5f243bd2edd95 Alex Deucher      2016-03-10  335  		return 0;
+e5f243bd2edd95 Alex Deucher      2016-03-10  336  
+7b8bd6bb4298ac Egbert Eich       2017-07-18  337  	/* select 8 bpp console on 8MB cards, or 16 bpp on RN50 or 32MB */
+7b8bd6bb4298ac Egbert Eich       2017-07-18  338  	if (rdev->mc.real_vram_size <= (8*1024*1024))
+4abe35204af82a Dave Airlie       2010-03-30  339  		bpp_sel = 8;
+7b8bd6bb4298ac Egbert Eich       2017-07-18  340  	else if (ASIC_IS_RN50(rdev) ||
+7b8bd6bb4298ac Egbert Eich       2017-07-18  341  		 rdev->mc.real_vram_size <= (32*1024*1024))
+7b8bd6bb4298ac Egbert Eich       2017-07-18  342  		bpp_sel = 16;
+8be48d924c307e Dave Airlie       2010-03-30  343  
+8be48d924c307e Dave Airlie       2010-03-30  344  	rfbdev = kzalloc(sizeof(struct radeon_fbdev), GFP_KERNEL);
+8be48d924c307e Dave Airlie       2010-03-30  345  	if (!rfbdev)
+8be48d924c307e Dave Airlie       2010-03-30  346  		return -ENOMEM;
+771fe6b912fca5 Jerome Glisse     2009-06-05  347  
+8be48d924c307e Dave Airlie       2010-03-30  348  	rfbdev->rdev = rdev;
+8be48d924c307e Dave Airlie       2010-03-30  349  	rdev->mode_info.rfbdev = rfbdev;
+10a231026574f9 Thierry Reding    2014-06-27  350  
+70e38534e74e4d Thomas Zimmermann 2023-01-24  351  	drm_fb_helper_prepare(rdev->ddev, &rfbdev->helper, bpp_sel,
+10a231026574f9 Thierry Reding    2014-06-27 @352  			      &radeon_fb_helper_funcs);
+785b93ef8c3097 Dave Airlie       2009-08-28  353  
+2dea2d1182179e Pankaj Bharadiya  2020-03-05  354  	ret = drm_fb_helper_init(rdev->ddev, &rfbdev->helper);
+01934c2a691882 Thierry Reding    2014-12-19  355  	if (ret)
+01934c2a691882 Thierry Reding    2014-12-19  356  		goto free;
+5a79395b2791cc Chris Wilson      2010-06-06  357  
+76a39dbfb2d1bc Daniel Vetter     2013-01-20  358  	/* disable all the possible outputs/crtcs before entering KMS mode */
+76a39dbfb2d1bc Daniel Vetter     2013-01-20  359  	drm_helper_disable_unused_functions(rdev->ddev);
+76a39dbfb2d1bc Daniel Vetter     2013-01-20  360  
+70e38534e74e4d Thomas Zimmermann 2023-01-24 @361  	ret = drm_fb_helper_initial_config(&rfbdev->helper);
+01934c2a691882 Thierry Reding    2014-12-19  362  	if (ret)
+01934c2a691882 Thierry Reding    2014-12-19  363  		goto fini;
+01934c2a691882 Thierry Reding    2014-12-19  364  
+771fe6b912fca5 Jerome Glisse     2009-06-05  365  	return 0;
+01934c2a691882 Thierry Reding    2014-12-19  366  
+01934c2a691882 Thierry Reding    2014-12-19  367  fini:
+01934c2a691882 Thierry Reding    2014-12-19  368  	drm_fb_helper_fini(&rfbdev->helper);
+01934c2a691882 Thierry Reding    2014-12-19  369  free:
+01934c2a691882 Thierry Reding    2014-12-19  370  	kfree(rfbdev);
+01934c2a691882 Thierry Reding    2014-12-19  371  	return ret;
+386516744ba45d Dave Airlie       2010-03-30  372  }
+386516744ba45d Dave Airlie       2010-03-30  373  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
