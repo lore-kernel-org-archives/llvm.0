@@ -1,167 +1,231 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1365395
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 17:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674666100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xWWan1cCyp7844qw2zcxnN/N+il2C6TxhhP7Cv0hSmQ=;
-	b=H/YL1gvLKDFlB+qjr30D6ejYrGIgpQ/o7zIBp5y5UBJaiqyv3LaSCTo3hIgbS4oK07EF8L
-	ctO+Jl9ShbBClvsIRCiG1JthcdzsbSlHUxIF/lxkIo9KjPLBVJsoTIMkXOaFGFUJPgEscW
-	Uuuo3geJTrY8oeVrp22oo45r4rScBWE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-IXceX1pIOYaUmg-yzwYiTg-1; Wed, 25 Jan 2023 12:01:37 -0500
-X-MC-Unique: IXceX1pIOYaUmg-yzwYiTg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05C3B8030D6
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 17:01:37 +0000 (UTC)
-Received: from [172.64.0.88] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E25C7C15BA0;
-	Wed, 25 Jan 2023 17:01:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (97/383 SKIPPED): Test report for master
- (6.2.0-rc5, mainline.kernel.org-clang, fb6e71db)
-Date: Wed, 25 Jan 2023 17:01:36 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354961C08
+	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 20:40:15 +0000 (UTC)
+Received: by mail-qt1-f171.google.com with SMTP id s4so17105026qtx.6
+        for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 12:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TbYtMBxWJl7HpH4aniDM9ZTHtsKnBM7hjRN8LJEWG5U=;
+        b=SkX9TEr3sg3dy87SAvWq8DIz54ZpEt00ln13tm3rnhMcBSkDncjNjyjopwu55pkOkW
+         wB/A5QfPb+K/SfXxLsM+zITxPTeERnRpAZqKDxNCbQTYKQ3fqdckGXVhU6xzy4Ttq32n
+         EbEFtmNq921vBglrens74rrOpNelQGwVidJGqKutmnVPTHP3+QHkRUJesYNTvPlAAlNf
+         whrlP5ijRbEuN5F7vInqOcBvgJ07xH/d/FY1sY4ve+VTERMoGH7dlC+unRv/rHeRC6Sd
+         jjA2SUXivg3KJTQ1ppahckzJbOJZtGRN+a4usNCdBBJMfr723331Ii/Th9Ssr+T9mf8p
+         R2Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TbYtMBxWJl7HpH4aniDM9ZTHtsKnBM7hjRN8LJEWG5U=;
+        b=SUp08S65/hL1uJRBS3w0vLWv7nX1VFmAqVsvTzS68HVljnsjSmY+PmrG/QHSAgy0u+
+         Bz5XxDMXaHf+KTyGBh7V/NjnzETNavajo8nWHFHGWfl3Hb+uu9jHl2PtXtA6qhpeTvcU
+         udWuHxMTNO6pqaak9AO45A8e4VoYl6ePxC8OHslUZT7/8jCBDDJz8ElJEV5JX0Ea+3hj
+         VPqzGoPY38ExM+L6nsuOcmm5LPzp3Ooc6JoPOXtJWMtujHkfZrch2HnpVNTUQ2KftFiH
+         2ZHDdd19LduTRiFnmxgXHln9mNAQCVftjVsYgNn8Acqstze40xrfM9OYGNh67QhLS+sp
+         lPmw==
+X-Gm-Message-State: AFqh2kr89dJWQQ8Mw7Aeq7XUb8WCfkB7DdbTjQhEdSc4yX8sb6NENN8c
+	rciIasAOcen7Y0doNJvPxp8=
+X-Google-Smtp-Source: AMrXdXuFfJ7DtS0nw+1SzLJ987RhPcov55CYCRP5qlLRxSV17/tCRMv6yE0Nt0iKhUpCqmPZyh/ZFw==
+X-Received: by 2002:ac8:41c7:0:b0:3b6:3042:277a with SMTP id o7-20020ac841c7000000b003b63042277amr42953916qtm.12.1674679214078;
+        Wed, 25 Jan 2023 12:40:14 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id x11-20020a05620a098b00b007055dce4cecsm4100016qkx.97.2023.01.25.12.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 12:40:13 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailauth.nyi.internal (Postfix) with ESMTP id AF8AE27C005B;
+	Wed, 25 Jan 2023 15:40:12 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 25 Jan 2023 15:40:12 -0500
+X-ME-Sender: <xms:q5PRY_l7JY8FvysGIoGGWKO4YIxkXtYzy3JqA5l5veQtCPiUc7c07A>
+    <xme:q5PRYy2b2R-B0UVxLWQSmSmPkwYd3n6ftAyXXlyoFLDa8BtMzmH-8k6pR9_tYOCt2
+    ZJOscQPLHmrVdfGsQ>
+X-ME-Received: <xmr:q5PRY1rY7RuzcvgR7s-tw13iY_ZXp8o7L0ASdkhOxVNGAj1VypqS_S9esXc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddgudegudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepueho
+    qhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtf
+    frrghtthgvrhhnpedtgeehleevffdujeffgedvlefghffhleekieeifeegveetjedvgeev
+    ueffieehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeeh
+    tdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmse
+    hfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:q5PRY3lmgViXOGsu1v2Ci0XXvrwExFGeDK-TmilSZjBlcXv3lOaKiQ>
+    <xmx:q5PRY90b-ZL8cnKz4m8yxUYF2U97SCf47Dfvhra2UQyn8EnxKb_a6Q>
+    <xmx:q5PRY2sHvDnQT3I_uTPl48iN5hsfovfsXolY-zIfNI_Kr66_-d2a6A>
+    <xmx:rJPRY-ecmjsMiy3M6GeV2MTcdjWkVgZ8Lm3wrmqCkSGmiAXe5rbJjg>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Jan 2023 15:40:11 -0500 (EST)
+Date: Wed, 25 Jan 2023 12:39:29 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+	Charalampos Mainas <charalampos.mainas@gmail.com>,
+	Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+	Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+	Martin Fink <martin.fink@in.tum.de>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <Y9GTgdMnGu6OxUZC@boqun-archlinux>
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+ <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+ <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+ <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
+ <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <50195.123012512013704496@us-mta-668.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[Cc Rust-for-Linux folks]
 
+No hurries but is your tool avaiable somewhere so that we can have a
+try.
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.2-5' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/cel/linux
+Although Rust doesn't support dependencies ordering, but it's good to
+know which dependency is reserved after optimization. 
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/66961
+Regards,
+Boqun
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6807311
+On Wed, Jan 18, 2023 at 11:42:23AM +0100, Paul Heidekrüger wrote:
+> On 13 Jan 2023, at 16:22, Alan Stern wrote:
+> 
+> > On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
+> >> Hi all,
+> >>
+> >> FWIW, here are two more broken address dependencies, both very similar to the
+> >> one discussed in this thread. From what I can tell, both are protected by a
+> >> lock, so, again, nothing to worry about right now? Would you agree?
+> >
+> > FWIW, my opinion is that in both cases the broken dependency can be
+> > removed entirely.
+> >
+> >> Comments marked with "AD:" were added by me for readability.
+> >>
+> >> 1. drivers/hwtracing/stm/core.c::1050 - 1085
+> >>
+> >>         /**
+> >>          * __stm_source_link_drop() - detach stm_source from an stm device
+> >>          * @src:	stm_source device
+> >>          * @stm:	stm device
+> >>          *
+> >>          * If @stm is @src::link, disconnect them from one another and put the
+> >>          * reference on the @stm device.
+> >>          *
+> >>          * Caller must hold stm::link_mutex.
+> >>          */
+> >>         static int __stm_source_link_drop(struct stm_source_device *src,
+> >>                                           struct stm_device *stm)
+> >>         {
+> >>                 struct stm_device *link;
+> >>                 int ret = 0;
+> >>
+> >>                 lockdep_assert_held(&stm->link_mutex);
+> >>
+> >>                 /* for stm::link_list modification, we hold both mutex and spinlock */
+> >>                 spin_lock(&stm->link_lock);
+> >>                 spin_lock(&src->link_lock);
+> >>
+> >>                 /* AD: Beginning of the address dependency. */
+> >>                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
+> >>
+> >>                 /*
+> >>                  * The linked device may have changed since we last looked, because
+> >>                  * we weren't holding the src::link_lock back then; if this is the
+> >>                  * case, tell the caller to retry.
+> >>                  */
+> >>                 if (link != stm) {
+> >>                         ret = -EAGAIN;
+> >>                         goto unlock;
+> >>                 }
+> >>
+> >>                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
+> >>                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
+> >>
+> >>                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
+> >>                 pm_runtime_mark_last_busy(&link->dev);
+> >
+> > In both of these statements, link can safely be replaced by stm.
+> >
+> > (There's also a control dependency which the LKMM isn't aware of.  This
+> > makes it all the more safe.)
+> >
+> >> 2. kernel/locking/lockdep.c::6319 - 6348
+> >>
+> >>         /*
+> >>          * Unregister a dynamically allocated key.
+> >>          *
+> >>          * Unlike lockdep_register_key(), a search is always done to find a matching
+> >>          * key irrespective of debug_locks to avoid potential invalid access to freed
+> >>          * memory in lock_class entry.
+> >>          */
+> >>         void lockdep_unregister_key(struct lock_class_key *key)
+> >>         {
+> >>                 struct hlist_head *hash_head = keyhashentry(key);
+> >>                 struct lock_class_key *k;
+> >>                 struct pending_free *pf;
+> >>                 unsigned long flags;
+> >>                 bool found = false;
+> >>
+> >>                 might_sleep();
+> >>
+> >>                 if (WARN_ON_ONCE(static_obj(key)))
+> >>                         return;
+> >>
+> >>                 raw_local_irq_save(flags);
+> >>                 lockdep_lock();
+> >>
+> >>                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
+> >>                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
+> >>                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
+> >>                         if (k == key) {
+> >>                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
+> >>                                 hlist_del_rcu(&k->hash_entry);
+> >
+> > And here k could safely be replaced with key.  (And again there is a
+> > control dependency, but this is one that the LKMM would detect.)
+> 
+> Ha, I didn't even notice the control dependencies - of course! In that case,
+> this doesn't warrant a patch though, given that nothing is really breaking?
+> 
+> Many thanks,
+> Paul
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Networking cki netfilter test: FAIL: Command 'ip netns exec =
-client timeout 5 sctp_test -H 2001:db8:ffff:21::1 -P 6013 -h 2001:db8:ffff:=
-22::2 -p 9999 -s -c 1 -x 1 -X 1' (Expected 0, got 124)
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1501
-            Affected tests:
-                 ppc64le - Networking cki netfilter test
-                  x86_64 - Networking cki netfilter test
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
