@@ -1,144 +1,206 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F141102
-	for <llvm@lists.linux.dev>; Wed, 25 Jan 2023 06:00:50 +0000 (UTC)
-Received: by mail-il1-f197.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so12043283iln.21
-        for <llvm@lists.linux.dev>; Tue, 24 Jan 2023 22:00:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qBGPZb6W6r5Wl7tWTN+SABGezf4q6l6ydN5u7wmCR/U=;
-        b=euVItVyfW/pt15Ngpok/hWpi91DIg8B5WCT7IBKitl+VnqfUi1Kd+81SUzbC+LRByG
-         R6Nax1QLw61sb04n2Kb6YqZlkWR/+CWPuVW30gGD19oA0a7LOCtjv+cfjJQMbI9qd/Wl
-         LMQCAVxUsphoAQHH80VRWUTYHdDzd84t8K6fHmV1wtNrPhqoOfbUS4tFXndltEna7q3C
-         Ld1gp3saEEsGA8endYQ1SPLwKpkxl92eEZ1ivl14xYOUMPlCI+6pD0Fa6QYoBMyu5VpP
-         lvhXtX7aHHZqos8pUzS+mlLy5s3jw0UWRlfVN3b9rvV9HApPJJ0DUPlKHVMEpQhGP4KO
-         kSZw==
-X-Gm-Message-State: AO0yUKWDg6IBwHqUsUVGW1Vw2p7bArtdO0ekIseEcaq9UQ1j7Ncbd+Ld
-	kTyYiWUcxOvrhMRFsI9fiddnnpWH2gZkZ31NbFwscZA1HS9+
-X-Google-Smtp-Source: AK7set8AKCbYFU2q6LfBWqSeL6/Jw0zYVJpgtMr8kw8kyITYGNSySHqGGbnSIzK6sPhWRNGmER4+AQknECHlbdvkDNvtWeP8It4+
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC291381;
+	Wed, 25 Jan 2023 07:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674633412; x=1706169412;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vzWdDF0dNodN2Xse6XuZgwHDAfYRfn2RPrMdYCSQG+A=;
+  b=FLRJdewh2dIWBfUtxxzX+ra9upd6KsV8lVQEQKOdMjKMX2Da7yoiMElo
+   cV/t2UmKi6qcicDUyycrih/2PwOR6Uoi00mDT+26kBJZv8Ffk8zq15t3o
+   wdHm3FQOxVPI08XvneDroOz4gPeDDW9L19sfn5tgFronz35sdlQw3xMcx
+   oj/1TejvXRNFPxN9U0XSHBx0tIZ4Ei8U2rJGW51TSCLU6z2PjQueV5vtf
+   Ju9ecW99Y6ItFQwpIn2RaJ+a46oVKFScmrLVn58SDuD1yy1f3jo6NQ0Z2
+   Y497R1ryiIG+E++VFWXbgu73hmtwLONeHYpqlcMANaCO7DpbuGHnS2tA5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="325176990"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="325176990"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2023 23:56:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="692870377"
+X-IronPort-AV: E=Sophos;i="5.97,244,1669104000"; 
+   d="scan'208";a="692870377"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2023 23:56:49 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pKaeH-00079c-05;
+	Wed, 25 Jan 2023 07:56:49 +0000
+Date: Wed, 25 Jan 2023 15:56:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 04/11] staging: rtl8192e: Remove unused variables
+ numpacket.. and received_pre..
+Message-ID: <202301251527.mB6KfScg-lkp@intel.com>
+References: <c90c54f7b0e122914d5c02d6849447897a268f16.1674596722.git.philipp.g.hortmann@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a08:b0:310:9776:db80 with SMTP id
- s8-20020a056e021a0800b003109776db80mr583251ild.40.1674626449658; Tue, 24 Jan
- 2023 22:00:49 -0800 (PST)
-Date: Tue, 24 Jan 2023 22:00:49 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a9dc0705f3105a26@google.com>
-Subject: [syzbot] kernel BUG in free_huge_page
-From: syzbot <syzbot+83cc82a0254bc0c17b52@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c90c54f7b0e122914d5c02d6849447897a268f16.1674596722.git.philipp.g.hortmann@gmail.com>
 
-Hello,
+Hi Philipp,
 
-syzbot found the following issue on:
+Thank you for the patch! Perhaps something to improve:
 
-HEAD commit:    691781f561e9 Add linux-next specific files for 20230123
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1393d0ac480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=804cddf7ddbc6c64
-dashboard link: https://syzkaller.appspot.com/bug?extid=83cc82a0254bc0c17b52
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+[auto build test WARNING on staging/staging-testing]
 
-Unfortunately, I don't have any reproducer for this issue yet.
+url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Hortmann/staging-rtl8192e-Remove-unused-variables-rxrdu-and-rxok/20230125-060703
+patch link:    https://lore.kernel.org/r/c90c54f7b0e122914d5c02d6849447897a268f16.1674596722.git.philipp.g.hortmann%40gmail.com
+patch subject: [PATCH 04/11] staging: rtl8192e: Remove unused variables numpacket.. and received_pre..
+config: i386-randconfig-a011-20230123 (https://download.01.org/0day-ci/archive/20230125/202301251527.mB6KfScg-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6e636a3b2ef9d90cd6fe7dba2a4acb627f13ba3e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Philipp-Hortmann/staging-rtl8192e-Remove-unused-variables-rxrdu-and-rxok/20230125-060703
+        git checkout 6e636a3b2ef9d90cd6fe7dba2a4acb627f13ba3e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/rtl8192e/rtl8192e/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/95b9320565c9/disk-691781f5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c5f3482fee79/vmlinux-691781f5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/63516279b1a1/bzImage-691781f5.xz
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+83cc82a0254bc0c17b52@syzkaller.appspotmail.com
+All warnings (new ones prefixed by >>):
 
- follow_hugetlb_page+0x6ab/0x1e40 mm/hugetlb.c:6524
- __get_user_pages+0x29b/0xfc0 mm/gup.c:1125
- __get_user_pages_locked mm/gup.c:1373 [inline]
- __gup_longterm_locked+0x1bd/0x25d0 mm/gup.c:2058
- get_user_pages_unlocked+0xe8/0x1b0 mm/gup.c:2250
- internal_get_user_pages_fast+0x1633/0x3190 mm/gup.c:2935
- get_user_pages_fast+0x6a/0xa0 mm/gup.c:3027
- __iov_iter_get_pages_alloc+0x39f/0x2250 lib/iov_iter.c:1461
- iov_iter_get_pages+0xb0/0x100 lib/iov_iter.c:1504
- __bio_iov_iter_get_pages block/bio.c:1276 [inline]
- bio_iov_iter_get_pages+0x2a0/0x11e0 block/bio.c:1347
-page_owner free stack trace missing
-------------[ cut here ]------------
-kernel BUG at mm/hugetlb.c:1865!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 8927 Comm: syz-executor.5 Not tainted 6.2.0-rc5-next-20230123-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:free_huge_page+0xa5b/0xe80 mm/hugetlb.c:1865
-Code: 0f 0b e8 08 98 b7 ff 4c 89 e7 e8 00 3e f7 ff 89 c3 e9 a0 f9 ff ff e8 f4 97 b7 ff 48 c7 c6 a0 6f 59 8a 4c 89 e7 e8 55 8b ef ff <0f> 0b e8 de 97 b7 ff 48 8d 7b 17 48 b8 00 00 00 00 00 fc ff df 4c
-RSP: 0018:ffffc9000557f908 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc900062ea000
-RDX: 0000000000040000 RSI: ffffffff81ca564b RDI: 0000000000000000
-RBP: ffffffff91c45bf8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 1ffffffff21798de R12: ffffea0002580000
-R13: ffffea0002580090 R14: 0000000000000000 R15: ffffea0002580034
-FS:  00007f42bf3be700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2349dabf84 CR3: 0000000021513000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __folio_put_large mm/swap.c:119 [inline]
- __folio_put+0x109/0x140 mm/swap.c:127
- folio_put include/linux/mm.h:1203 [inline]
- put_page+0x21b/0x280 include/linux/mm.h:1272
- hugetlb_fault+0x153e/0x23f0 mm/hugetlb.c:6130
- follow_hugetlb_page+0x6ab/0x1e40 mm/hugetlb.c:6524
- __get_user_pages+0x29b/0xfc0 mm/gup.c:1125
- populate_vma_page_range+0x241/0x320 mm/gup.c:1526
- __mm_populate+0x105/0x3b0 mm/gup.c:1640
- do_mlock+0x370/0x6d0 mm/mlock.c:608
- __do_sys_mlock mm/mlock.c:616 [inline]
- __se_sys_mlock mm/mlock.c:614 [inline]
- __x64_sys_mlock+0x59/0x80 mm/mlock.c:614
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f42be68c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f42bf3be168 EFLAGS: 00000246 ORIG_RAX: 0000000000000095
-RAX: ffffffffffffffda RBX: 00007f42be7ac050 RCX: 00007f42be68c0c9
-RDX: 0000000000000000 RSI: 0000000000003000 RDI: 0000000020308000
-RBP: 00007f42be6e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe0e3b671f R14: 00007f42bf3be300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:free_huge_page+0xa5b/0xe80 mm/hugetlb.c:1865
-Code: 0f 0b e8 08 98 b7 ff 4c 89 e7 e8 00 3e f7 ff 89 c3 e9 a0 f9 ff ff e8 f4 97 b7 ff 48 c7 c6 a0 6f 59 8a 4c 89 e7 e8 55 8b ef ff <0f> 0b e8 de 97 b7 ff 48 8d 7b 17 48 b8 00 00 00 00 00 fc ff df 4c
-RSP: 0018:ffffc9000557f908 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: 0000000000000001 RCX: ffffc900062ea000
-RDX: 0000000000040000 RSI: ffffffff81ca564b RDI: 0000000000000000
-RBP: ffffffff91c45bf8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 1ffffffff21798de R12: ffffea0002580000
-R13: ffffea0002580090 R14: 0000000000000000 R15: ffffea0002580034
-FS:  00007f42bf3be700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2349dabf84 CR3: 0000000021513000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c:1702:6: warning: variable 'preamble_guardinterval' set but not used [-Wunused-but-set-variable]
+           u32 preamble_guardinterval;
+               ^
+   1 warning generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +/preamble_guardinterval +1702 drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1694  
+77055c56a71bcc drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c Mateusz Kulikowski 2015-09-20  1695  static void _rtl92e_update_received_rate_histogram_stats(
+49aab5fd9df153 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1696  					   struct net_device *dev,
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1697  					   struct rtllib_rx_stats *pstats)
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1698  {
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1699  	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1700  	u32 rcvType = 1;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1701  	u32 rateIndex;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23 @1702  	u32 preamble_guardinterval;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1703  
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1704  	if (pstats->bCRC)
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1705  		rcvType = 2;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1706  	else if (pstats->bICV)
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1707  		rcvType = 3;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1708  
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1709  	if (pstats->bShortPreamble)
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1710  		preamble_guardinterval = 1;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1711  	else
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1712  		preamble_guardinterval = 0;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1713  
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1714  	switch (pstats->rate) {
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1715  	case MGN_1M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1716  		rateIndex = 0;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1717  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1718  	case MGN_2M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1719  		rateIndex = 1;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1720  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1721  	case MGN_5_5M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1722  		rateIndex = 2;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1723  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1724  	case MGN_11M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1725  		rateIndex = 3;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1726  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1727  	case MGN_6M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1728  		rateIndex = 4;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1729  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1730  	case MGN_9M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1731  		rateIndex = 5;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1732  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1733  	case MGN_12M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1734  		rateIndex = 6;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1735  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1736  	case MGN_18M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1737  		rateIndex = 7;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1738  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1739  	case MGN_24M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1740  		rateIndex = 8;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1741  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1742  	case MGN_36M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1743  		rateIndex = 9;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1744  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1745  	case MGN_48M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1746  		rateIndex = 10;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1747  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1748  	case MGN_54M:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1749  		rateIndex = 11;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1750  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1751  	case MGN_MCS0:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1752  		rateIndex = 12;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1753  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1754  	case MGN_MCS1:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1755  		rateIndex = 13;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1756  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1757  	case MGN_MCS2:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1758  		rateIndex = 14;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1759  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1760  	case MGN_MCS3:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1761  		rateIndex = 15;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1762  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1763  	case MGN_MCS4:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1764  		rateIndex = 16;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1765  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1766  	case MGN_MCS5:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1767  		rateIndex = 17;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1768  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1769  	case MGN_MCS6:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1770  		rateIndex = 18;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1771  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1772  	case MGN_MCS7:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1773  		rateIndex = 19;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1774  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1775  	case MGN_MCS8:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1776  		rateIndex = 20;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1777  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1778  	case MGN_MCS9:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1779  		rateIndex = 21;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1780  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1781  	case MGN_MCS10:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1782  		rateIndex = 22;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1783  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1784  	case MGN_MCS11:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1785  		rateIndex = 23;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1786  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1787  	case MGN_MCS12:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1788  		rateIndex = 24;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1789  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1790  	case MGN_MCS13:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1791  		rateIndex = 25;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1792  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1793  	case MGN_MCS14:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1794  		rateIndex = 26;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1795  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1796  	case MGN_MCS15:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1797  		rateIndex = 27;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1798  		break;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1799  	default:
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1800  		rateIndex = 28;
+526294770c72e9 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-25  1801  		break;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1802  	}
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1803  	priv->stats.received_rate_histogram[0][rateIndex]++;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1804  	priv->stats.received_rate_histogram[rcvType][rateIndex]++;
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1805  }
+94a799425eee82 drivers/staging/rtl8192e/r8192E_dev.c          Larry Finger       2011-08-23  1806  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
