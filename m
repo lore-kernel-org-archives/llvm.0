@@ -1,48 +1,52 @@
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96741C29;
-	Wed, 25 Jan 2023 11:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE821FB4;
+	Wed, 25 Jan 2023 12:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674645660; x=1706181660;
+  t=1674648782; x=1706184782;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VN0QQh82k1BcojhCMMpLNoUwuv+wMO6dQc/9vOAZnWI=;
-  b=htQiqR1Ju3bs8i3aoJFTKI5gVKMxmpqskZpQtS/I0uZiMEzRFZSrYrwq
-   IyU/FBJ5zq5koZ9qccaWYx+vd8738BvEhtrs+sr/xp0y1pd99dUxm3j0t
-   l5N4irQFCoxP5IFX7kal1iKVBuP3Xn72c2tD6ph3IgUikykS4EARAkMxw
-   piXhCBkWNslS0EwkLE1VofisZmJTjNU3insIhyhiqHMszgjCH93BR9mpk
-   eyaYFUHXZkLFQsDyt/irhew5KisVvYOOcHOIuZP9iBaS8Ioyk1zcOSWgN
-   inr1GCrGWNdOyXHKA1llKDxphDNOBe5e2Q+eg+x7tfYu1RITm03imtXce
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="391037107"
+  bh=BlYL5ZWxfpIGJfWCOvZGguBgymIDRUM5a8fZph+HpbU=;
+  b=IVms/xwalWAAxbxSySt4IZtjNoJfVX+X4bN6bFWWFIeJC4tNGsBhus6Y
+   Bv+2jVbRe75jnV0o+m4bmtbRLZcaGpu/aKmB9ifJLs/MYpqRiAXS82j6v
+   2yGtPPHHqWH9vcaEY/JhBdH5KyxGqlswSO9FK7ctcEtjVDUz6MWGAF0lQ
+   TMABESVcDhXcoGhriDVw8iG32Uw5qchAasm6RGwVX0HbF1GTJHd9fz//v
+   ZOxLM86mF/3lzcLlB2y4KYCTNUTt8IVaSEWRKWGYQYruBM80FzwSi4qP+
+   XFh5tmLm9GpeV9g4CS6GoAJU9FXKhubop6iSwOf+7AXcMA4ljDyq4sGG1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="391044967"
 X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="391037107"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 03:20:59 -0800
+   d="scan'208";a="391044967"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 04:13:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="751160490"
+X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="725833858"
 X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="751160490"
+   d="scan'208";a="725833858"
 Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2023 03:20:56 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 25 Jan 2023 04:12:57 -0800
 Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pKdpo-0007GT-03;
-	Wed, 25 Jan 2023 11:20:56 +0000
-Date: Wed, 25 Jan 2023 19:20:40 +0800
+	id 1pKee9-0007He-0L;
+	Wed, 25 Jan 2023 12:12:57 +0000
+Date: Wed, 25 Jan 2023 20:12:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: alejandro.lucero-palau@amd.com, netdev@vger.kernel.org,
-	linux-net-drivers@amd.com
+To: Thomas Zimmermann <tzimmermann@suse.de>, airlied@gmail.com,
+	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, javierm@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-	edumazet@google.com, habetsm.xilinx@gmail.com,
-	ecree.xilinx@gmail.com,
-	Alejandro Lucero <alejandro.lucero-palau@amd.com>
-Subject: Re: [PATCH v2 net-next 2/8] sfc: add devlink info support for ef100
-Message-ID: <202301251924.Vt4cZmeM-lkp@intel.com>
-References: <20230124223029.51306-3-alejandro.lucero-palau@amd.com>
+	linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	linux-tegra@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [Intel-gfx] [PATCH v2 06/10] drm/fb-helper: Initialize
+ fb-helper's preferred BPP in prepare function
+Message-ID: <202301252016.vm7ksFra-lkp@intel.com>
+References: <20230124134010.30263-7-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,42 +55,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124223029.51306-3-alejandro.lucero-palau@amd.com>
+In-Reply-To: <20230124134010.30263-7-tzimmermann@suse.de>
 
-Hi,
+Hi Thomas,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on net-next/master]
+[auto build test ERROR on 7d3e7f64a42d66ba8da6e7b66a8d85457ef84570]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230125-063245
-patch link:    https://lore.kernel.org/r/20230124223029.51306-3-alejandro.lucero-palau%40amd.com
-patch subject: [PATCH v2 net-next 2/8] sfc: add devlink info support for ef100
-config: i386-randconfig-a016-20230123 (https://download.01.org/0day-ci/archive/20230125/202301251924.Vt4cZmeM-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-client-Test-for-connectors-before-sending-hotplug-event/20230124-214220
+base:   7d3e7f64a42d66ba8da6e7b66a8d85457ef84570
+patch link:    https://lore.kernel.org/r/20230124134010.30263-7-tzimmermann%40suse.de
+patch subject: [Intel-gfx] [PATCH v2 06/10] drm/fb-helper: Initialize fb-helper's preferred BPP in prepare function
+config: x86_64-randconfig-a014-20230123 (https://download.01.org/0day-ci/archive/20230125/202301252016.vm7ksFra-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c6a73da54918310be8c54a4b2caf2ab4a3419594
+        # https://github.com/intel-lab-lkp/linux/commit/70e38534e74e4d12bb02b3b352bba2aed417f541
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review alejandro-lucero-palau-amd-com/sfc-add-devlink-support-for-ef100/20230125-063245
-        git checkout c6a73da54918310be8c54a4b2caf2ab4a3419594
+        git fetch --no-tags linux-review Thomas-Zimmermann/drm-client-Test-for-connectors-before-sending-hotplug-event/20230124-214220
+        git checkout 70e38534e74e4d12bb02b3b352bba2aed417f541
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/gma500/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "efx_mcdi_nvram_metadata" [drivers/net/ethernet/sfc/sfc.ko] undefined!
---
->> drivers/net/ethernet/sfc/efx_devlink.c:350:20: warning: variable 'offset' set but not used [-Wunused-but-set-variable]
-size_t outlength, offset;
-^
-1 warning generated.
+>> drivers/gpu/drm/gma500/framebuffer.c:412:44: error: too many arguments to function call, expected 3, have 4
+           drm_fb_helper_prepare(dev, fb_helper, 32, &psb_fb_helper_funcs);
+           ~~~~~~~~~~~~~~~~~~~~~                     ^~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_fb_helper.h:295:20: note: 'drm_fb_helper_prepare' declared here
+   static inline void drm_fb_helper_prepare(struct drm_device *dev,
+                      ^
+>> drivers/gpu/drm/gma500/framebuffer.c:421:46: error: too few arguments to function call, expected 2, have 1
+           ret = drm_fb_helper_initial_config(fb_helper);
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~          ^
+   include/drm/drm_fb_helper.h:459:19: note: 'drm_fb_helper_initial_config' declared here
+   static inline int drm_fb_helper_initial_config(struct drm_fb_helper *fb_helper,
+                     ^
+   2 errors generated.
+
+
+vim +412 drivers/gpu/drm/gma500/framebuffer.c
+
+   397	
+   398	int psb_fbdev_init(struct drm_device *dev)
+   399	{
+   400		struct drm_fb_helper *fb_helper;
+   401		struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
+   402		int ret;
+   403	
+   404		fb_helper = kzalloc(sizeof(*fb_helper), GFP_KERNEL);
+   405		if (!fb_helper) {
+   406			dev_err(dev->dev, "no memory\n");
+   407			return -ENOMEM;
+   408		}
+   409	
+   410		dev_priv->fb_helper = fb_helper;
+   411	
+ > 412		drm_fb_helper_prepare(dev, fb_helper, 32, &psb_fb_helper_funcs);
+   413	
+   414		ret = drm_fb_helper_init(dev, fb_helper);
+   415		if (ret)
+   416			goto free;
+   417	
+   418		/* disable all the possible outputs/crtcs before entering KMS mode */
+   419		drm_helper_disable_unused_functions(dev);
+   420	
+ > 421		ret = drm_fb_helper_initial_config(fb_helper);
+   422		if (ret)
+   423			goto fini;
+   424	
+   425		return 0;
+   426	
+   427	fini:
+   428		drm_fb_helper_fini(fb_helper);
+   429	free:
+   430		kfree(fb_helper);
+   431		return ret;
+   432	}
+   433	
 
 -- 
 0-DAY CI Kernel Test Service
