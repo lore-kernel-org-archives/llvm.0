@@ -1,106 +1,65 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C670F1C3F
-	for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 07:36:18 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id EE47D5C04C9;
-	Thu, 26 Jan 2023 02:36:17 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 02:36:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1674718577; x=1674804977; bh=r5GoeYBjFo
-	+WeG7azm3XT3+ZR1ttmIhAZMOKMfD4BxU=; b=QIvUG/1RSl99XWYCEHehynLsc3
-	otBaFpoM5K3+gnY/Xv2Qiw/r7pHGugJyyfUD8MnH2BbNFU24riYsNjKfV5WBej5a
-	3Huf4wpPYoUlmYubMH/bKLNj/neuhoNntr02nu3jdg1APPYCHMippRzGqBLHHkt1
-	8V5HLaJPUigLp4vABf5dBqOc9bFPCbKfo58LcerWlnUYUbogV3ZCatihG4jocqwr
-	kw20eTsbxPppA0kGQzNEBX0rsmfrs3GWPpy/Rs3Vq2uq6C0sg+Xq+qewjhC/eE5g
-	jMWjzdP72u1rhLxOprCe7UOoq5IIAjAVvrdQDxMpvb4jRIUJH49aZdAh7GVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1674718577; x=1674804977; bh=r5GoeYBjFo+WeG7azm3XT3+ZR1tt
-	mIhAZMOKMfD4BxU=; b=YH4dGZ3+Fz45U89pHXuWSx5NAFmJ5SLP5emLKpuBQ7t+
-	lRcGqxn33Jgdl04Zn9TOMkc0/HQ9v4vYFn1faUDQWG0+fJ0+0CLMI8GVqLHaMmAL
-	mD/10n1DT0Ej9K5m1wsIadDWOublDP03eN7dzcb3jEtLsgye4+CZciUJKN4dRiUn
-	bCs4TqriMgONNR4NONuvtdVFstwlziCw0D9UzrkBBIBupXvKc+byivR9HVqzjzIu
-	VS5wInAYTP08HSRAj0Sxd+TqOyDFHDoTpbjI7JpTGdSBRAu9rtauiyI9lVZX5gGY
-	33DRrwhmmr5cSlQ0vb2nef+dZIv2x6eQ4r4rA2Gjmw==
-X-ME-Sender: <xms:cS3SYzsr0pFR8xXF09ufUY1Ik0NAqv5FnM3uXR_ntex9aIFry6WzcA>
-    <xme:cS3SY0eGrTWIGD9YUC8ScX1sTpU32oI0ytqf7Wqs1sx3Uj2qxmF-mlUNmxEEW3Z31
-    ljcaWsU18FOW3hiXts>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkjghffffhvfevufgtse
-    httdertderredtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgu
-    segrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepffehueegteeihfegtefhjefgtd
-    eugfegjeelheejueethfefgeeghfektdekteffnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cS3SY2xOWhRRRYrsLF_uPnPBb5rKBvkqALTnARXrdsBPgonrzETVkw>
-    <xmx:cS3SYyPYWwUNOim3MnTT8pekiOTUQAmX33EaChJPLmSW5_T7nARLVg>
-    <xmx:cS3SYz890qIj26lzE2DM_j4j5zv1UzwZHvLRV_YAojcqXeHgCFPJYQ>
-    <xmx:cS3SYwFNQkj9Bzl0vao19HVNkitloEOMJSgZWdMMYfljlP8Zf6zx_A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id AD0CDB60086; Thu, 26 Jan 2023 02:36:17 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B53A1FA1
+	for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 08:13:17 +0000 (UTC)
+Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso783659ilj.17
+        for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 00:13:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MEfpfP62XIqchPRHLndjuTCyLWg79Hv36f/NXAdlpAs=;
+        b=wSMNOr65qIskbcxSIpP1zMwOtvAcxUv7Gz1bSnHUcVJxEJcgE9I/nbFZaGzyRStSH9
+         RqY1VXubZEi2apFYUCC2YGwWdTVIF2U5xfxqYZs/CD0QQ4IN9lh0Rz4q3QoZn5yy4xKq
+         RUJur2Ot5vnjFh93LJiq1EfwY78NlKrmeMnCpedBqRhBbwCeH/UUGWL4If97PwMGHdIr
+         Jy9I8ziz0/yrk1iCrSXmhpobiQhnuPIf8FlnQEapgFn5aA0aC1BRfumUhdCtrRHs/Fnp
+         8JhuRcb3gOocjAjg/zoAH4OSqyxphZiplITkTO7A3cPe5siE+y5epyBXRTUawvl8T+0v
+         4aFA==
+X-Gm-Message-State: AFqh2krXFnG6y/sQ3KsjQeIYmK3idCgeyV6Lfdq3Hf8Gzfk28evbTVl3
+	qxsNEPCapPv/U9H8KdQosWaeUjGzCuB5GPsfu0y8ID4COU3v
+X-Google-Smtp-Source: AMrXdXsQG5JQdoaLSZYANWYd/5p96G8xroKqzn7EOH/B///qz3B0WtGEa/YaV/oAUEqZ9dapP40iNAIaLjwH/eN2pWh/x7CIJWVN
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <65706593-66f8-4c15-84b8-5c1514b6dfcf@app.fastmail.com>
-In-Reply-To: <936824449.4202.1674688110564@jenkins.jenkins>
-References: <936824449.4202.1674688110564@jenkins.jenkins>
-Date: Thu, 26 Jan 2023 08:35:57 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: ci_notify@linaro.org
-Cc: llvm@lists.linux.dev, "Arnd Bergmann" <arnd@linaro.org>
-Subject: Re: [TCWG CI] Failure after v6.2-rc1-10-gc09846fc1ff4: ARM: orion: remove
- unused board files
-Content-Type: text/plain
+MIME-Version: 1.0
+X-Received: by 2002:a6b:e019:0:b0:6df:5aa3:393c with SMTP id
+ z25-20020a6be019000000b006df5aa3393cmr3225578iog.81.1674720796499; Thu, 26
+ Jan 2023 00:13:16 -0800 (PST)
+Date: Thu, 26 Jan 2023 00:13:16 -0800
+In-Reply-To: <0000000000005af92105e80510f2@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c692505f3265254@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_get_ea
+From: syzbot <syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, dan.carpenter@oracle.com, 
+	eadaivs@sina.com, eadavis@sina.com, eadvis@sina.com, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev, 
+	nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	pjwatson999@gmail.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jan 26, 2023, at 00:08, ci_notify@linaro.org wrote:
-> Failure after v6.2-rc1-10-gc09846fc1ff4: ARM: orion: remove unused board files:
->
-> Results changed to
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 21023
-> # First few build errors in logs:
-> # 00:21:35 drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack 
-> frame size (1040) exceeds limit (1024) in '__drm_test_mm_reserve' 
-> [-Werror,-Wframe-larger-than]
-> # 00:21:35 make[5]: *** [scripts/Makefile.build:252: 
-> drivers/gpu/drm/tests/drm_mm_test.o] Error 1
-> # 00:21:41 make[4]: *** [scripts/Makefile.build:504: 
-> drivers/gpu/drm/tests] Error 2
-> # 00:54:50 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: 
-> error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' 
-> [-Werror,-Wframe-larger-than]
+syzbot suspects this issue was fixed by commit:
 
+commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
+Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Date:   Mon Oct 10 10:15:33 2022 +0000
 
-> from
-...
+    fs/ntfs3: Check fields while reading
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15cc6199480000
+start commit:   fef7fd48922d Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7341d0f941b3356
+dashboard link: https://syzkaller.appspot.com/bug?extid=c4d950787fd5553287b7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133d4479880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13f05e71880000
 
-Sorry, but I don't see any difference between those two logs. 
-I believe I have sent patches for both of the build failures.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-The patch that ended up as the bisection result is clearly
-unrelated to both of them, so my guess would be there is a bug
-in the CI tooling rather than the kernel.
+#syz fix: fs/ntfs3: Check fields while reading
 
-     Arnd
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
