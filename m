@@ -1,156 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD42B1841
-	for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 01:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EA1C433D2;
-	Thu, 26 Jan 2023 01:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F841841
+	for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 02:07:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA24C433D2;
+	Thu, 26 Jan 2023 02:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674697784;
-	bh=mkXTZAlnUvQp4xBJz9AaQKaSqMGaCsbGS5FQIjxN6oY=;
+	s=k20201202; t=1674698846;
+	bh=iDE4VETN4jaTIfHsOYmXJe6CouDOc+jNMaZZeQ0kuik=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jkpqxWDLvWazYFLkwTru4yD6TRaNks/ERH7h4Tl8NLPua2tImd9+ZWg4ryQKwHlOy
-	 +1+g3APugVqo6FdDJT420pPfKZRE2z6g44U/sdAflueoYKz3v0O+Q4blUW+AFfpoJ8
-	 kUq3EifCwZ8xcv1Wdn3SU8VP6xwEW+kSZ/vEWvr8ccgVAW7ZwsRZolunzvyYKMa85U
-	 wvgiQtARwVD7uaxvSRmt5CFskzxLZB7mxHYzRC7akAPpiFA5ibg79qx85/oSPKDTl/
-	 56c24l1WSWHIpzMwU1HfK8Nr1JKm0YIpp9qODTJdGE3J1ttaVfS+vE+iLqw+phWkzE
-	 UQsJavsZ0/jUw==
-Date: Wed, 25 Jan 2023 17:49:42 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH v3 3/3] objtool: Alter how HOSTCC is forced
-Message-ID: <20230126014942.kuynrl56b2u4npj6@treble>
-References: <20230105090155.357604-1-irogers@google.com>
- <20230105090155.357604-4-irogers@google.com>
+	b=Y/afT4MbpJ33okTS4d577X4WXr8yyUKZG7CbK6x96mmxW29k4Bct/SByOmGvV3Z7R
+	 eLbmTPS2neoJVeM4uGy1Gp0IQeDDtrb68xbMS1K3MclF/eVrCDwhNa+6ty/+Pjt0Wx
+	 2VOrfEbXLnudEqDrEC00/KvShOMgG8D0f+loDVdKudn/7cdp/u7Ek8ZzBaQ26znNBH
+	 WbQFYGDEBzHj/exLdMBJ3zTYF8qPPrE8xo992Pg+LwrkfM6PCjvxdO86Pl/Fv8rW0e
+	 26eIOlRYXdoT123MTXtS1dqaNVVY+xkmyCvkr8KegJcxSEwXn73l1ZN5XrbQ2zVczS
+	 bkRPHz7lZGN9g==
+Date: Wed, 25 Jan 2023 19:07:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, ndesaulniers@google.com,
+	nicolas@fjasle.eu, trix@redhat.com, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, npiggin@gmail.com,
+	christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 05/14] powerpc: Remove linker flag from KBUILD_AFLAGS
+Message-ID: <Y9HgXE9kmcfmva1C@dev-arch.thelio-3990X>
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+ <20221228-drop-qunused-arguments-v2-5-9adbddd20d86@kernel.org>
+ <871qnjqmmq.fsf@mpe.ellerman.id.au>
+ <CAK7LNAR2ASj6bGS6sR5x=cDCDDFW3ZkHRTdsHAY_+JEqojTUNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230105090155.357604-4-irogers@google.com>
+In-Reply-To: <CAK7LNAR2ASj6bGS6sR5x=cDCDDFW3ZkHRTdsHAY_+JEqojTUNQ@mail.gmail.com>
 
-On Thu, Jan 05, 2023 at 01:01:55AM -0800, Ian Rogers wrote:
-> HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
-> happens after tools/scripts/Makefile.include is included, meaning
-> flags are set assuming say CC is gcc, but then it can be later set to
-> HOSTCC which may be clang. tools/scripts/Makefile.include is needed
-> for host set up and common macros in objtool's Makefile. Rather than
-> override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
-> libsubcmd builds and the linkage step. This means the Makefiles don't
-> see things like CC changing and tool flag determination, and similar,
-> work properly.
+On Thu, Jan 26, 2023 at 10:29:54AM +0900, Masahiro Yamada wrote:
+> On Wed, Jan 25, 2023 at 1:11 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+> >
+> > Nathan Chancellor <nathan@kernel.org> writes:
+> > > When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, it
+> > > points out that KBUILD_AFLAGS contains a linker flag, which will be
+> > > used:
+> >
+> > Should that say "unused" ?
+> 
+> 
+> 
+> Nathan, shall I fix it up locally?
+> (it will change the commit hash, though.)
 
-I'm having trouble parsing this last sentence, can you rephrase or
-restructure it?
+Yes please, if you would not mind. Sorry about that and thank you for
+spotting it Michael!
 
-> To avoid mixing CFLAGS from different compilers just
-> the objtool CFLAGS are determined with the exception of
-> EXTRA_WARNINGS.
+Since you have to rebase to fix it, you can include Michael's acks?
 
-I'm not really sure what this one means either.
+Cheers,
+Nathan
 
-> HOSTCFLAGS is added to these so that command line
-> flags can add to the CFLAGS.
-
-Overall this patch description is a big wall of dense text which I found
-hard to decipher.  Please split it up into paragraphs and make it more
-legible and logical.
-
-For example, un-jumble the ordering, with the background first, then the
-problem(s), then the fix(es).  (At least three paragraphs)
-
-If possible, the subject should describe the end result for the user,
-something like
-
-  objtool: Fix HOSTCFLAGS cmdline support
-
-... unless I'm misunderstanding the point of the patch.
-
-HOSTCFLAGS from the cmdline *used* to work, a git bisect shows it
-stopped working with
-
-  96f14fe738b6 ("kbuild: Rename HOSTCFLAGS to KBUILD_HOSTCFLAGS")
-
-... so please add a "Fixes" tag for that commit.
-
-> +MAKE = make -S
-
-Why?
-
->  LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
->  ifneq ($(OUTPUT),)
->    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-> @@ -37,12 +33,19 @@ INCLUDES := -I$(srctree)/tools/include \
->  	    -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
->  	    -I$(LIBSUBCMD_OUTPUT)/include
->  WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-> -CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
-> -LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
-> +OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
-
-I *think* I understand the reason for the switch from KBUILD_HOSTCFLAGS
-to HOSTCFLAGS -- because KBUILD_HOSTCFLAGS is defined in the top-level
-kernel Makefile which isn't included here so it's undefined? -- but
-regardless that should be called out more explicitly as a problem being
-fixed in the commit log.
-
-This issue really has me scratching my head, as I could have sworn
-objtool was being built with -O2.
-
-> +OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
-
-Is there a reason to not include $(HOSTLDFLAGS) here?
-
->  # Allow old libelf to be used:
->  elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
-> -CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> +OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
-> +
-> +# Always want host compilation.
-> +HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
-> +		  LD="$(HOSTLD)" AR="$(HOSTAR)"
-> +BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
-> +			LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
-> +			AR="$(HOSTAR)"
-
-Maybe it depends on your perspective, but I'm thinking that some of
-these aren't really overrides, but rather normal expected flags.  And
-the distinction between these two variables is muddy: it's not only
-Build vs non-Build, but also objtool vs libsubcmd.
-
-How about just
-
-  HOST_OVERRIDES := CC="$(HOSTCC) "LD="$(HOSTLD)" AR="$(HOSTAR)"
-
-And then specifying the {EXTRA_}CFLAGS and LDFLAGS below where needed.
-
->  AWK = awk
->  MKDIR = mkdir
-> @@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
->  
->  $(OBJTOOL_IN): fixdep FORCE
->  	$(Q)$(CONFIG_SHELL) ./sync-check.sh
-> -	$(Q)$(MAKE) $(build)=objtool
-> +	$(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
-> +
->  
->  $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
-> -	$(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
-> +	$(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
-
-Does KBUILD_HOSTLDFLAGS even work here?
-
--- 
-Josh
+> > >   clang: error: -Wl,-a32: 'linker' input unused [-Werror,-Wunused-command-line-argument]
+> > >
+> > > This was likely supposed to be '-Wa,-a$(BITS)'. However, this change is
+> > > unnecessary, as all supported versions of clang and gcc will pass '-a64'
+> > > or '-a32' to GNU as based on the value of '-m'; the behavior of the
+> > > latest stable release of the oldest supported major version of each
+> > > compiler is shown below and each compiler's latest release exhibits the
+> > > same behavior (GCC 12.2.0 and Clang 15.0.6).
+> > >
+> > >   $ powerpc64-linux-gcc --version | head -1
+> > >   powerpc64-linux-gcc (GCC) 5.5.0
+> > >
+> > >   $ powerpc64-linux-gcc -m64 -### -x assembler-with-cpp -c -o /dev/null /dev/null &| grep 'as '
+> > >   .../as -a64 -mppc64 -many -mbig -o /dev/null /tmp/cctwuBzZ.s
+> > >
+> > >   $ powerpc64-linux-gcc -m32 -### -x assembler-with-cpp -c -o /dev/null /dev/null &| grep 'as '
+> > >   .../as -a32 -mppc -many -mbig -o /dev/null /tmp/ccaZP4mF.sg
+> > >
+> > >   $ clang --version | head -1
+> > >   Ubuntu clang version 11.1.0-++20211011094159+1fdec59bffc1-1~exp1~20211011214622.5
+> > >
+> > >   $ clang --target=powerpc64-linux-gnu -fno-integrated-as -m64 -### \
+> > >     -x assembler-with-cpp -c -o /dev/null /dev/null &| grep gnu-as
+> > >    "/usr/bin/powerpc64-linux-gnu-as" "-a64" "-mppc64" "-many" "-o" "/dev/null" "/tmp/null-80267c.s"
+> > >
+> > >   $ clang --target=powerpc64-linux-gnu -fno-integrated-as -m64 -### \
+> > >     -x assembler-with-cpp -c -o /dev/null /dev/null &| grep gnu-as
+> > >    "/usr/bin/powerpc64-linux-gnu-as" "-a32" "-mppc" "-many" "-o" "/dev/null" "/tmp/null-ab8f8d.s"
+> > >
+> > > Remove this flag altogether to avoid future issues.
+> > >
+> > > Fixes: 1421dc6d4829 ("powerpc/kbuild: Use flags variables rather than overriding LD/CC/AS")
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > ---
+> > > Cc: mpe@ellerman.id.au
+> >
+> > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> >
+> > cheers
+> 
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
