@@ -1,65 +1,76 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B53A1FA1
-	for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 08:13:17 +0000 (UTC)
-Received: by mail-il1-f197.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso783659ilj.17
-        for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 00:13:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MEfpfP62XIqchPRHLndjuTCyLWg79Hv36f/NXAdlpAs=;
-        b=wSMNOr65qIskbcxSIpP1zMwOtvAcxUv7Gz1bSnHUcVJxEJcgE9I/nbFZaGzyRStSH9
-         RqY1VXubZEi2apFYUCC2YGwWdTVIF2U5xfxqYZs/CD0QQ4IN9lh0Rz4q3QoZn5yy4xKq
-         RUJur2Ot5vnjFh93LJiq1EfwY78NlKrmeMnCpedBqRhBbwCeH/UUGWL4If97PwMGHdIr
-         Jy9I8ziz0/yrk1iCrSXmhpobiQhnuPIf8FlnQEapgFn5aA0aC1BRfumUhdCtrRHs/Fnp
-         8JhuRcb3gOocjAjg/zoAH4OSqyxphZiplITkTO7A3cPe5siE+y5epyBXRTUawvl8T+0v
-         4aFA==
-X-Gm-Message-State: AFqh2krXFnG6y/sQ3KsjQeIYmK3idCgeyV6Lfdq3Hf8Gzfk28evbTVl3
-	qxsNEPCapPv/U9H8KdQosWaeUjGzCuB5GPsfu0y8ID4COU3v
-X-Google-Smtp-Source: AMrXdXsQG5JQdoaLSZYANWYd/5p96G8xroKqzn7EOH/B///qz3B0WtGEa/YaV/oAUEqZ9dapP40iNAIaLjwH/eN2pWh/x7CIJWVN
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145081FAC
+	for <llvm@lists.linux.dev>; Thu, 26 Jan 2023 10:05:57 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4P2btw0J1Wz4xZb;
+	Thu, 26 Jan 2023 21:05:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1674727549;
+	bh=P+pKB31T+nGljehfFqRVXunWhIcYvj3vXGbYNYsut+g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=bIX2pRRDeu7g+dWGMkZsM3GN1RksgQ0vg8jSRQ9hXRcrl+77Sq7usFghmvF/YwEL8
+	 QN1DqRIrmUnHbUkbkEoydqQLi78FZpgGsGFYKaHA5gWF8Om33Qu5yNwIEY24CptzMU
+	 NV87WaPFTdj7+K3/ZwQ5A1QM5whAc8BYTSP7Z8uP0sS73VJahbROKSUlhkTI86iB9C
+	 OTdhJaqhjFCzKTHRiujbfmDhjmyJd9WoeXBbCmZZpqtohOaIPBP8Re/t4+tkjTB+0T
+	 c+2xWY76nUHDStcvNUQhWPURaHyJ6tbRQQd5Jytfa4uiir2mdVlhFA9Ym/PFIVJDgI
+	 3DtzUqzp2b9mA==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>
+Cc: ndesaulniers@google.com, nicolas@fjasle.eu, trix@redhat.com,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, npiggin@gmail.com,
+ christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 05/14] powerpc: Remove linker flag from KBUILD_AFLAGS
+In-Reply-To: <CAK7LNAROfEi7021v+SkDd=uU1hM_vzuGYvDD6OQ0bJ2Tu0yjvA@mail.gmail.com>
+References: <20221228-drop-qunused-arguments-v2-0-9adbddd20d86@kernel.org>
+ <20221228-drop-qunused-arguments-v2-5-9adbddd20d86@kernel.org>
+ <871qnjqmmq.fsf@mpe.ellerman.id.au>
+ <CAK7LNAR2ASj6bGS6sR5x=cDCDDFW3ZkHRTdsHAY_+JEqojTUNQ@mail.gmail.com>
+ <Y9HgXE9kmcfmva1C@dev-arch.thelio-3990X>
+ <CAK7LNAROfEi7021v+SkDd=uU1hM_vzuGYvDD6OQ0bJ2Tu0yjvA@mail.gmail.com>
+Date: Thu, 26 Jan 2023 21:05:43 +1100
+Message-ID: <87ilgtpq4o.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e019:0:b0:6df:5aa3:393c with SMTP id
- z25-20020a6be019000000b006df5aa3393cmr3225578iog.81.1674720796499; Thu, 26
- Jan 2023 00:13:16 -0800 (PST)
-Date: Thu, 26 Jan 2023 00:13:16 -0800
-In-Reply-To: <0000000000005af92105e80510f2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c692505f3265254@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_get_ea
-From: syzbot <syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, dan.carpenter@oracle.com, 
-	eadaivs@sina.com, eadavis@sina.com, eadvis@sina.com, kbuild-all@lists.01.org, 
-	linux-kernel@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev, 
-	nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	pjwatson999@gmail.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-syzbot suspects this issue was fixed by commit:
+Masahiro Yamada <masahiroy@kernel.org> writes:
+> On Thu, Jan 26, 2023 at 11:07 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> On Thu, Jan 26, 2023 at 10:29:54AM +0900, Masahiro Yamada wrote:
+>> > On Wed, Jan 25, 2023 at 1:11 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>> > >
+>> > > Nathan Chancellor <nathan@kernel.org> writes:
+>> > > > When clang's -Qunused-arguments is dropped from KBUILD_CPPFLAGS, it
+>> > > > points out that KBUILD_AFLAGS contains a linker flag, which will be
+>> > > > used:
+>> > >
+>> > > Should that say "unused" ?
+>> >
+>> >
+>> >
+>> > Nathan, shall I fix it up locally?
+>> > (it will change the commit hash, though.)
+>>
+>> Yes please, if you would not mind. Sorry about that and thank you for
+>> spotting it Michael!
+>>
+>> Since you have to rebase to fix it, you can include Michael's acks?
+>>
+>> Cheers,
+>> Nathan
+>
+> Done.
 
-commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Mon Oct 10 10:15:33 2022 +0000
+Thanks.
 
-    fs/ntfs3: Check fields while reading
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15cc6199480000
-start commit:   fef7fd48922d Merge tag 'scsi-fixes' of git://git.kernel.or..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7341d0f941b3356
-dashboard link: https://syzkaller.appspot.com/bug?extid=c4d950787fd5553287b7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133d4479880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13f05e71880000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: fs/ntfs3: Check fields while reading
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+cheers
