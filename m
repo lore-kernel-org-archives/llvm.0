@@ -1,165 +1,180 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE9E3232;
-	Sat, 28 Jan 2023 11:53:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674906811; x=1706442811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v56gkPCfVmp/5J0sTIEWbfckxqrXa5C8j87HJqOVgQA=;
-  b=e0DfkXeYxPhkERCC0I6UZzivxRcxm2Erf4wvr/3I3xjJFDuVz6/OSvi9
-   8h2sGubwDa3Hj/rxFJU287A2rfJVGV/F0tOJreuzBLHeolAOaLVyKp+nH
-   dvi/w/cn2JySWv839vfWhyFJuuLzWtIkLDIsxH3FFcvOxAprF6E4SF27t
-   vK3z+VOmtxqVWfnJV/PkZue0jazmPizcFJw0KM/g9MuhqJOPjkEb1p7q6
-   tqn+bB7kns+knMDecPOjDPYw/R63jO9MJhFbqUhWM7lvFYO/cTc0E48PN
-   1ZNM4LpYvPKh3YWan+w8ThPU3oUJgOoW2qX7m/J6otRkQIjfXHHHNRsUb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="329412099"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="329412099"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 03:53:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="992368716"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="992368716"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2023 03:53:27 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLjlv-0000cP-06;
-	Sat, 28 Jan 2023 11:53:27 +0000
-Date: Sat, 28 Jan 2023 19:52:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
-	kevin.tian@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, yi.l.liu@intel.com,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
-Message-ID: <202301281943.Jdvwci2p-lkp@intel.com>
-References: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99733D6A
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 12:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674909641;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8K22omSV0cr6660RoHsFoieEgHV/hHuNHkVHEucq1Bk=;
+	b=RLUaFUa4cyJ3Vo8rsNDr49Acv5zbV8pgWsKRPnnJxl2DFI6bTLg6cn78h3f5ryVZNawjj+
+	s96MnqO3OiKGho/bEuV/pe0PxvTCrsKEsfytLmcYtQd2tI/euNdbZ/zVh4Z1gvUaLsl8rV
+	J/YAU050r77vdZB4PhTj9px/SHnG+Ro=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-iC6fkxzKMjytd9t9eQoo0g-1; Sat, 28 Jan 2023 07:40:39 -0500
+X-MC-Unique: iC6fkxzKMjytd9t9eQoo0g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DE7729AA3BF
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 12:40:39 +0000 (UTC)
+Received: from [172.64.14.22] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 60AD840C141B;
+	Sat, 28 Jan 2023 12:40:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (29/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, 76e26e3c)
+Date: Sat, 28 Jan 2023 12:40:39 -0000
+To: efuller@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <26908.123012807403900146@us-mta-608.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nicolin,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on v6.2-rc5]
-[also build test WARNING on linus/master next-20230127]
-[cannot apply to joro-iommu/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommufd-Add-devices_users-to-track-the-hw_pagetable-usage-by-device/20230128-150429
-patch link:    https://lore.kernel.org/r/25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc%40nvidia.com
-patch subject: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
-config: x86_64-randconfig-a011-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281943.Jdvwci2p-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4d48fdd86375f6d888bbcf830a10c48720008955
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nicolin-Chen/iommufd-Add-devices_users-to-track-the-hw_pagetable-usage-by-device/20230128-150429
-        git checkout 4d48fdd86375f6d888bbcf830a10c48720008955
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/iommufd/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iommu/iommufd/device.c:279:23: warning: variable 'hwpt' is uninitialized when used here [-Wuninitialized]
-           lockdep_assert_held(&hwpt->ioas->mutex);
-                                ^~~~
-   include/linux/lockdep.h:319:33: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-                                          ^
-   include/linux/lockdep.h:286:47: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                          ^~~~
-   include/linux/lockdep.h:313:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                                         ^~~~
-   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/iommu/iommufd/device.c:276:35: note: initialize the variable 'hwpt' to silence this warning
-           struct iommufd_hw_pagetable *hwpt;
-                                            ^
-                                             = NULL
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/hwpt +279 drivers/iommu/iommufd/device.c
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2023-01-27' of git://anongit.freed=
+esktop.org/drm/drm
 
-   267	
-   268	/*
-   269	 * When automatically managing the domains we search for a compatible domain in
-   270	 * the iopt and if one is found use it, otherwise create a new domain.
-   271	 * Automatic domain selection will never pick a manually created domain.
-   272	 */
-   273	static int iommufd_device_auto_get_domain(struct iommufd_device *idev,
-   274						  struct iommufd_ioas *ioas)
-   275	{
-   276		struct iommufd_hw_pagetable *hwpt;
-   277		int rc;
-   278	
- > 279		lockdep_assert_held(&hwpt->ioas->mutex);
-   280	
-   281		/*
-   282		 * There is no differentiation when domains are allocated, so any domain
-   283		 * that is willing to attach to the device is interchangeable with any
-   284		 * other.
-   285		 */
-   286		list_for_each_entry(hwpt, &ioas->hwpt_list, hwpt_item) {
-   287			if (!hwpt->auto_domain)
-   288				continue;
-   289	
-   290			rc = iommufd_device_do_attach(idev, hwpt);
-   291	
-   292			/*
-   293			 * -EINVAL means the domain is incompatible with the device.
-   294			 * Other error codes should propagate to userspace as failure.
-   295			 * Success means the domain is attached.
-   296			 */
-   297			if (rc == -EINVAL)
-   298				continue;
-   299			return rc;
-   300		}
-   301	
-   302		hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev->dev);
-   303		if (IS_ERR(hwpt))
-   304			return PTR_ERR(hwpt);
-   305		hwpt->auto_domain = true;
-   306	
-   307		rc = iommufd_device_do_attach(idev, hwpt);
-   308		if (rc)
-   309			goto out_abort;
-   310	
-   311		iommufd_object_finalize(idev->ictx, &hwpt->obj);
-   312		return 0;
-   313	
-   314	out_abort:
-   315		iommufd_object_abort_and_destroy(idev->ictx, &hwpt->obj);
-   316		return rc;
-   317	}
-   318	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67404
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6850580
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6850060
+          x86_64 (debug) - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6850782
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
