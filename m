@@ -1,337 +1,185 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3A02F47;
-	Sat, 28 Jan 2023 16:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674923564; x=1706459564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SVe32qLBK3zJriPFW1WjuUxsKF06TKzMXle7qN1YO50=;
-  b=Y+Tmkz8czTLZyjkxhiZjNOLFvKi2CMz+X/09bOzjY/kju+u0XY9pnEhI
-   oUIJvOkRt7KItl5Xo3x6tX0c8wFt1OqLO6k+JMW2g4Qiv7uQxfSd0TzYH
-   oT69V5c4+wzKvx8IylSkFztVQpdnA3LCCKHng2oblQuvzG3Lvup6fceYk
-   2WxuzmoyiVsr+Mofujq0xgDh24rVqy7P4eV5620lFUxiUFxIBRqLgyjWm
-   qfn+KWlOuVueZKbkN6XCJCo0F7/usGEeDEm8lkqCDWKPhXoClpkq9tKaM
-   VqnzVoRnfrOOGXNz6/CeGWeao8Lv2ZFU8n4yqZq9MgyvJwZj0xJx3VNSx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="310927850"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="310927850"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 08:32:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="656959297"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="656959297"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jan 2023 08:32:43 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLo8A-0000uc-12;
-	Sat, 28 Jan 2023 16:32:42 +0000
-Date: Sun, 29 Jan 2023 00:32:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexey Gladkov <legion@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v1 5/6] proc: Validate incoming allowlist
-Message-ID: <202301290038.jSJhkuqz-lkp@intel.com>
-References: <18bb5a8c0c81211cba5b865b4fbb5c2dd6b9e688.1674660533.git.legion@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7182F47
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 16:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674924044;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TPKrN+0aTLnW+N1VpLJJXxkMGDTe9xvUwraDvkEVp8w=;
+	b=XtYO6WcYK3/I0pwywlgQogAvGAn0eCtFGiBP51cmHlbXpMAtXjb1nlfOslO3R3qUhwfHc4
+	WMAsYlUuEVB97UekrQjm9MImWKk8f6Rb/NJyfaVWuQiMOh8saIBTxeiPBXdHDInniuNAPv
+	wRqrCz1NFQ1rbxi2ZN81X0Kx1i5Fucs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-185-wojcnipeNt6A3hGLQSXGTA-1; Sat, 28 Jan 2023 11:40:43 -0500
+X-MC-Unique: wojcnipeNt6A3hGLQSXGTA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BCE6F1C05143
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 16:40:42 +0000 (UTC)
+Received: from [172.64.14.22] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A6A7B14171BE;
+	Sat, 28 Jan 2023 16:40:42 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (28/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, 83abd4d4)
+Date: Sat, 28 Jan 2023 16:40:42 -0000
+To: efuller@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18bb5a8c0c81211cba5b865b4fbb5c2dd6b9e688.1674660533.git.legion@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <44955.123012811404300351@us-mta-185.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexey,
+Hi, we tested your kernel and here are the results:
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Gladkov/proc-Fix-separator-for-subset-option/20230128-150138
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/18bb5a8c0c81211cba5b865b4fbb5c2dd6b9e688.1674660533.git.legion%40kernel.org
-patch subject: [RFC PATCH v1 5/6] proc: Validate incoming allowlist
-config: hexagon-randconfig-r045-20230123 (https://download.01.org/0day-ci/archive/20230129/202301290038.jSJhkuqz-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2be09bb9025a1c3e735bf5bc1ba3c2a3e51539f8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexey-Gladkov/proc-Fix-separator-for-subset-option/20230128-150138
-        git checkout 2be09bb9025a1c3e735bf5bc1ba3c2a3e51539f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/proc_namespace.c:16:
->> fs/proc/internal.h:341:59: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                             ^
-   fs/proc/internal.h:341:73: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                           ^
-   fs/proc/internal.h:341:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                                   ^
-   fs/proc/internal.h:345:58: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void proc_allowlist_free(struct list_head *)
-                                                            ^
-   4 warnings generated.
---
-   In file included from fs/proc/kcore.c:22:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/proc/kcore.c:22:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/proc/kcore.c:22:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from fs/proc/kcore.c:35:
->> fs/proc/internal.h:341:59: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                             ^
-   fs/proc/internal.h:341:73: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                           ^
-   fs/proc/internal.h:341:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                                   ^
-   fs/proc/internal.h:345:58: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void proc_allowlist_free(struct list_head *)
-                                                            ^
-   10 warnings generated.
---
-   In file included from fs/proc/task_mmu.c:3:
-   In file included from include/linux/mm_inline.h:7:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/proc/task_mmu.c:3:
-   In file included from include/linux/mm_inline.h:7:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/proc/task_mmu.c:3:
-   In file included from include/linux/mm_inline.h:7:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from fs/proc/task_mmu.c:26:
->> fs/proc/internal.h:341:59: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                             ^
-   fs/proc/internal.h:341:73: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                           ^
-   fs/proc/internal.h:341:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                                   ^
-   fs/proc/internal.h:345:58: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void proc_allowlist_free(struct list_head *)
-                                                            ^
-   fs/proc/task_mmu.c:764:33: warning: unused variable 'smaps_shmem_walk_ops' [-Wunused-const-variable]
-   static const struct mm_walk_ops smaps_shmem_walk_ops = {
-                                   ^
-   11 warnings generated.
---
-   In file included from fs/proc/meminfo.c:6:
-   In file included from include/linux/hugetlb.h:10:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/proc/meminfo.c:6:
-   In file included from include/linux/hugetlb.h:10:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/proc/meminfo.c:6:
-   In file included from include/linux/hugetlb.h:10:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from fs/proc/meminfo.c:20:
->> fs/proc/internal.h:341:59: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                             ^
-   fs/proc/internal.h:341:73: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                           ^
-   fs/proc/internal.h:341:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
-                                                                                   ^
-   fs/proc/internal.h:345:58: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void proc_allowlist_free(struct list_head *)
-                                                            ^
-   fs/proc/meminfo.c:22:28: warning: no previous prototype for function 'arch_report_meminfo' [-Wmissing-prototypes]
-   void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
-                              ^
-   fs/proc/meminfo.c:22:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
-   ^
-   static 
-   11 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +341 fs/proc/internal.h
+Kernel information:
+    Commit message: Merge tag 'platform-drivers-x86-v6.2-3' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
 
-   332	
-   333	/*
-   334	 * proc_allowlist.c
-   335	 */
-   336	#ifdef CONFIG_PROC_ALLOW_LIST
-   337	extern int proc_allowlist_append(struct list_head *, const char *, size_t);
-   338	extern void proc_allowlist_free(struct list_head *);
-   339	extern bool proc_pde_access_allowed(struct proc_fs_info *, struct proc_dir_entry *);
-   340	#else
- > 341	static inline int proc_allowlist_append(struct list_head *, const char *, size_t)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67391
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6849321
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6848887
+          x86_64 (debug) - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6849239
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
+amdgpu]
+            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
+33a3db@linux.intel.com/
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
