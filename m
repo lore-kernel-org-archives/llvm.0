@@ -1,58 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79795CBA;
-	Sat, 28 Jan 2023 14:38:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813AB5CBA;
+	Sat, 28 Jan 2023 15:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674916720; x=1706452720;
+  t=1674918580; x=1706454580;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TIWAIiE/Um0/DDy4ue9IDiDz57FjmJ1SOy/S5NjSc+k=;
-  b=ODGHJ8mvM3XdyYoe49pIV/SI4nASaLwPgD52VSeaf/NJy9h5YLEuRJ6P
-   CIE7ux6KDmctesQRMCfX1+uCwElfiOokFpg4hI/1K/Dh4hlMn5Z5jOSWm
-   GGVPOIsA+XuOhRrB60ks4wSreO2tlhtyQ597EKlviJtXHR8ln+C55P/+i
-   QBKk8xfqnvju3vke7CYI2Juam+OJ5qtaciMU1FdMq6yoHZbiC9c6jkNIC
-   f1pz5KjJqaQJ9vtcSrASVRGEk+DHK/87m4FyJwfxbiyzhjPX+jjR/n4G4
-   57o4Zc21jC+nmP5FxvOpGLTkxVqhmddJG9ETVcvvDCdpPd5rYulmRfiFL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="306944587"
+  bh=sz/oOMsdjPZPIOSXT9noSLRbwktYPl9DzEblX23lJmw=;
+  b=ekGIOb0lXWrbzIM7Or07vch+6FgMOzVz2hFtY9zJmz+6Qy5chP7Emk3l
+   UyU+JI0/4B7WsjcW5ajR9f+lW0jeqO24630eizkaZPGEq1B8mxIzRAHRc
+   //o/me7aUTeFzIpUIpVDTZfHkuc7nrpL3mN9JUzECFyRj1C7Vomv2afzf
+   BFxttu6/I6egmeLeRIaKoJ+KOkrSto7PPo5gDMcLF9Omt34gGShCE+ORE
+   Ifvv4jC/YzsQ3+jJciCgXaMUuv3JAAPqoQyFdpa1rbSl+GVdTRy/7o7S+
+   98igEm6IxZtd3WqqjUq9vTQ/dCHkdmPLuvZe/6pT+YffHAhVwGZfLE0bz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="315252665"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="306944587"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 06:38:40 -0800
+   d="scan'208";a="315252665"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 07:09:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="908984119"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="727004058"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="908984119"
+   d="scan'208";a="727004058"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jan 2023 06:38:35 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jan 2023 07:09:37 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLmLi-0000nh-2j;
-	Sat, 28 Jan 2023 14:38:34 +0000
-Date: Sat, 28 Jan 2023 22:38:19 +0800
+	id 1pLmpk-0000pR-21;
+	Sat, 28 Jan 2023 15:09:36 +0000
+Date: Sat, 28 Jan 2023 23:09:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>
+To: Zack Rusin <zack@kde.org>, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-Message-ID: <202301282258.RvVJOYVA-lkp@intel.com>
-References: <20230125212608.1860251-13-scgl@linux.ibm.com>
+	krastevm@vmware.com, banackm@vmware.com, mombasawalam@vmware.com
+Subject: Re: [PATCH 6/7] drm/vmwgfx: Abstract placement selection
+Message-ID: <202301282318.DOogLmvQ-lkp@intel.com>
+References: <20230126173813.602748-7-zack@kde.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,241 +47,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125212608.1860251-13-scgl@linux.ibm.com>
+In-Reply-To: <20230126173813.602748-7-zack@kde.org>
 
-Hi Janis,
+Hi Zack,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on kvm/queue]
-[also build test ERROR on lwn/docs-next linus/master v6.2-rc5 next-20230127]
-[cannot apply to kvms390/next kvm/linux-next]
+[auto build test WARNING on drm-intel/for-linux-next-fixes]
+[also build test WARNING on linus/master v6.2-rc5]
+[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip next-20230127]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Janis-Schoetterl-Glausch/KVM-s390-selftest-memop-Pass-mop_desc-via-pointer/20230128-132603
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20230125212608.1860251-13-scgl%40linux.ibm.com
-patch subject: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
-config: s390-randconfig-r022-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282258.RvVJOYVA-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zack-Rusin/drm-vmwgfx-Use-the-common-gem-mmap-instead-of-the-custom-code/20230128-112136
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
+patch link:    https://lore.kernel.org/r/20230126173813.602748-7-zack%40kde.org
+patch subject: [PATCH 6/7] drm/vmwgfx: Abstract placement selection
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230128/202301282318.DOogLmvQ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/6e6b3d99b9978a70b148b989d46b039feda3a3c3
+        # https://github.com/intel-lab-lkp/linux/commit/9083af8be713dc1052ca4bd2b39579979345e47b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Janis-Schoetterl-Glausch/KVM-s390-selftest-memop-Pass-mop_desc-via-pointer/20230128-132603
-        git checkout 6e6b3d99b9978a70b148b989d46b039feda3a3c3
+        git fetch --no-tags linux-review Zack-Rusin/drm-vmwgfx-Use-the-common-gem-mmap-instead-of-the-custom-code/20230128-112136
+        git checkout 9083af8be713dc1052ca4bd2b39579979345e47b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/ drivers/gpu/drm/vmwgfx/ kernel/entry/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/s390/kvm/gaccess.c:16:
-   In file included from arch/s390/kvm/kvm-s390.h:17:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from arch/s390/kvm/gaccess.c:16:
-   In file included from arch/s390/kvm/kvm-s390.h:17:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from arch/s390/kvm/gaccess.c:16:
-   In file included from arch/s390/kvm/kvm-s390.h:17:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:27:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> arch/s390/kvm/gaccess.c:1217:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
-                         ^
-   arch/s390/kvm/gaccess.c:1217:9: note: did you mean 'copy_to_user_key'?
-   arch/s390/include/asm/uaccess.h:51:1: note: 'copy_to_user_key' declared here
-   copy_to_user_key(void __user *to, const void *from, unsigned long n, unsigned long key)
-   ^
-   arch/s390/kvm/gaccess.c:1225:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
-                         ^
-   arch/s390/kvm/gaccess.c:1233:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
-                         ^
-   arch/s390/kvm/gaccess.c:1241:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
-                         ^
-   arch/s390/kvm/gaccess.c:1249:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
-                         ^
-   12 warnings and 5 errors generated.
+>> drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c:509:29: warning: variable 'dst_pitch' is uninitialized when used here [-Wuninitialized]
+           src_offset = ddirty->top * dst_pitch + ddirty->left * stdu->cpp;
+                                      ^~~~~~~~~
+   drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c:492:26: note: initialize the variable 'dst_pitch' to silence this warning
+           s32 src_pitch, dst_pitch;
+                                   ^
+                                    = 0
+   1 warning generated.
 
 
-vim +/cmpxchg_user_key +1217 arch/s390/kvm/gaccess.c
+vim +/dst_pitch +509 drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
 
-  1163	
-  1164	/**
-  1165	 * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
-  1166	 * @kvm: Virtual machine instance.
-  1167	 * @gpa: Absolute guest address of the location to be changed.
-  1168	 * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
-  1169	 *       non power of two will result in failure.
-  1170	 * @old_addr: Pointer to old value. If the location at @gpa contains this value,
-  1171	 *            the exchange will succeed. After calling cmpxchg_guest_abs_with_key()
-  1172	 *            *@old_addr contains the value at @gpa before the attempt to
-  1173	 *            exchange the value.
-  1174	 * @new: The value to place at @gpa.
-  1175	 * @access_key: The access key to use for the guest access.
-  1176	 * @success: output value indicating if an exchange occurred.
-  1177	 *
-  1178	 * Atomically exchange the value at @gpa by @new, if it contains *@old.
-  1179	 * Honors storage keys.
-  1180	 *
-  1181	 * Return: * 0: successful exchange
-  1182	 *         * a program interruption code indicating the reason cmpxchg could
-  1183	 *           not be attempted
-  1184	 *         * -EINVAL: address misaligned or len not power of two
-  1185	 *         * -EAGAIN: transient failure (len 1 or 2)
-  1186	 *         * -EOPNOTSUPP: read-only memslot (should never occur)
-  1187	 */
-  1188	int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-  1189				       __uint128_t *old_addr, __uint128_t new,
-  1190				       u8 access_key, bool *success)
-  1191	{
-  1192		gfn_t gfn = gpa >> PAGE_SHIFT;
-  1193		struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
-  1194		bool writable;
-  1195		hva_t hva;
-  1196		int ret;
-  1197	
-  1198		if (!IS_ALIGNED(gpa, len))
-  1199			return -EINVAL;
-  1200	
-  1201		hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
-  1202		if (kvm_is_error_hva(hva))
-  1203			return PGM_ADDRESSING;
-  1204		/*
-  1205		 * Check if it's a read-only memslot, even though that cannot occur
-  1206		 * since those are unsupported.
-  1207		 * Don't try to actually handle that case.
-  1208		 */
-  1209		if (!writable)
-  1210			return -EOPNOTSUPP;
-  1211	
-  1212		hva += offset_in_page(gpa);
-  1213		switch (len) {
-  1214		case 1: {
-  1215			u8 old;
-  1216	
-> 1217			ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
-  1218			*success = !ret && old == *old_addr;
-  1219			*old_addr = old;
-  1220			break;
-  1221		}
-  1222		case 2: {
-  1223			u16 old;
-  1224	
-  1225			ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
-  1226			*success = !ret && old == *old_addr;
-  1227			*old_addr = old;
-  1228			break;
-  1229		}
-  1230		case 4: {
-  1231			u32 old;
-  1232	
-  1233			ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
-  1234			*success = !ret && old == *old_addr;
-  1235			*old_addr = old;
-  1236			break;
-  1237		}
-  1238		case 8: {
-  1239			u64 old;
-  1240	
-  1241			ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
-  1242			*success = !ret && old == *old_addr;
-  1243			*old_addr = old;
-  1244			break;
-  1245		}
-  1246		case 16: {
-  1247			__uint128_t old;
-  1248	
-  1249			ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
-  1250			*success = !ret && old == *old_addr;
-  1251			*old_addr = old;
-  1252			break;
-  1253		}
-  1254		default:
-  1255			return -EINVAL;
-  1256		}
-  1257		mark_page_dirty_in_slot(kvm, slot, gfn);
-  1258		/*
-  1259		 * Assume that the fault is caused by protection, either key protection
-  1260		 * or user page write protection.
-  1261		 */
-  1262		if (ret == -EFAULT)
-  1263			ret = PGM_PROTECTION;
-  1264		return ret;
-  1265	}
-  1266	
+   475	
+   476	
+   477	/**
+   478	 * vmw_stdu_bo_cpu_commit - Callback to do a CPU blit from buffer object
+   479	 *
+   480	 * @dirty: The closure structure.
+   481	 *
+   482	 * For the special case when we cannot create a proxy surface in a
+   483	 * 2D VM, we have to do a CPU blit ourselves.
+   484	 */
+   485	static void vmw_stdu_bo_cpu_commit(struct vmw_kms_dirty *dirty)
+   486	{
+   487		struct vmw_stdu_dirty *ddirty =
+   488			container_of(dirty, struct vmw_stdu_dirty, base);
+   489		struct vmw_screen_target_display_unit *stdu =
+   490			container_of(dirty->unit, typeof(*stdu), base);
+   491		s32 width, height;
+   492		s32 src_pitch, dst_pitch;
+   493		struct ttm_buffer_object *src_bo, *dst_bo;
+   494		u32 src_offset, dst_offset;
+   495		struct vmw_diff_cpy diff = VMW_CPU_BLIT_DIFF_INITIALIZER(stdu->cpp);
+   496	
+   497		if (!dirty->num_hits)
+   498			return;
+   499	
+   500		width = ddirty->right - ddirty->left;
+   501		height = ddirty->bottom - ddirty->top;
+   502	
+   503		if (width == 0 || height == 0)
+   504			return;
+   505	
+   506		/* Assume we are blitting from Guest (bo) to Host (display_srf) */
+   507		src_pitch = stdu->display_srf->metadata.base_size.width * stdu->cpp;
+   508		src_bo = &stdu->display_srf->res.backup->base;
+ > 509		src_offset = ddirty->top * dst_pitch + ddirty->left * stdu->cpp;
+   510	
+   511		dst_pitch = ddirty->pitch;
+   512		dst_bo = &ddirty->buf->base;
+   513		dst_offset = ddirty->fb_top * src_pitch + ddirty->fb_left * stdu->cpp;
+   514	
+   515		(void) vmw_bo_cpu_blit(dst_bo, dst_offset, dst_pitch,
+   516				       src_bo, src_offset, src_pitch,
+   517				       width * stdu->cpp, height, &diff);
+   518	}
+   519	
 
 -- 
 0-DAY CI Kernel Test Service
