@@ -1,156 +1,180 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9F633F7;
-	Sat, 28 Jan 2023 19:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674935396; x=1706471396;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eFlt0dTWqnmYysHAAyNP29UYwkWzHS840iyUSaKI5YI=;
-  b=hzSC34Ubp/zVUSChsVjfwvSVr9xKguvSLLQpzF2Nq1pVGf19GW4HhA+w
-   SwSrn27qlHiX7MjE9AIMsA7YB6Ui+OqKyMXhQMcWiS3SNAcfiFd+1jJpS
-   wPa0y/7lDmqaHkzen1i8y/2ZJYWQt1awUF7x+YdoviINvDZZMVlOtCXl0
-   VNtst0/Slklb6nAZQ5M3x+Srm9on8UCl4e4Zt/sqMA9DRv/rQMRw2ECgZ
-   k/AWzEW1G+4us/Jyhk127+B/DJm0YCjSpYP7HCgQXLv4Ek0pH9kNL/GVR
-   zTSewnefYp09uBvXBU4Bh7TQlSiKSt4RLyY7s8pOqBJ8wbpvB8EdMBCXo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="413548373"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="413548373"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 11:49:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="732231778"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="732231778"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jan 2023 11:49:55 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLrCv-000137-1J;
-	Sat, 28 Jan 2023 19:49:49 +0000
-Date: Sun, 29 Jan 2023 03:49:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:riscv_sbi_nested_v1 35/52]
- arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202301290307.OaC4P0U7-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C38733F7
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 20:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674936101;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qDizrJicKivVbNytNaf3NvRXCNlHZdTUO5sG0pH62A8=;
+	b=UBKhiCKUrBLQXIccpkbVxCGh5TBTvLxF41sHCkm3bHERr0FzPQXu4+guPvMaGXWmMGtwWS
+	jDBLA6xmmEmI/e9UYq+PE5HPkpD0F3xgWRumvrD/WXYQcKkEgIB4taA3JYtb7yabutvTlF
+	fBd5Yc/nzvqOhfT8gswg3gDfB3dFwrM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-rSRTE_biPRuBQVUtWu1X4A-1; Sat, 28 Jan 2023 15:01:40 -0500
+X-MC-Unique: rSRTE_biPRuBQVUtWu1X4A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A74A3185A78B
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 20:01:39 +0000 (UTC)
+Received: from [172.64.14.22] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8FA231121314;
+	Sat, 28 Jan 2023 20:01:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, 90aaef4e)
+Date: Sat, 28 Jan 2023 20:01:39 -0000
+To: efuller@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <40665.123012815014000251@us-mta-633.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
-head:   d04f10f89dd06562a982bfad9f8eac0569204d60
-commit: d215844ff37ecccad7be31db0b38cc9a12927a2c [35/52] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r014-20230129 (https://download.01.org/0day-ci/archive/20230129/202301290307.OaC4P0U7-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/d215844ff37ecccad7be31db0b38cc9a12927a2c
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_nested_v1
-        git checkout d215844ff37ecccad7be31db0b38cc9a12927a2c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+Kernel information:
+    Commit message: Merge tag 'block-6.2-2023-01-27' of git://git.kernel.dk=
+/linux
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67408
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6851200
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6850986
+          x86_64 (debug) - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6851276
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
