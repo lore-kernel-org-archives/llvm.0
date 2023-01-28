@@ -1,176 +1,105 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCA35CA1;
-	Sat, 28 Jan 2023 13:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674911796; x=1706447796;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KRmd5MYbEcOfghc67ZmOtkZNFZ09ey2vz+tgilfcqtw=;
-  b=mCSIWxToMxoKnITRHJAXsqwQOipi4fatRr9dxhjskmE6hyZoVP1Hlot/
-   KiuRU6JhMmeQksZUStI/Ew06RaYjGLB88AnZmus5qYBlvZjm6vYrTBS0h
-   A1wn7IjPrezvEJpIKDWqXVUdXqgboFdvT3eY+7E9akV2z9f22cLkS88W2
-   cASXAeVDhRagh9Sq4aRHAMV74YFNnJgYvz1GJXrhC7aE96ET/i8F7U9BR
-   NV8l9BFkLXVdHfgZnJyQgqBnUIWcP1CiDh3yzy4MuFtHfqkdKTm5jQjEb
-   eE5sfAr/iU28f3uNhnA0JTzP7TriW7WyByaDDbg0nlgBkwGpUCGyNTV8S
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="324983318"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="324983318"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 05:16:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="695857334"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="695857334"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jan 2023 05:16:30 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLl4H-0000fZ-1u;
-	Sat, 28 Jan 2023 13:16:29 +0000
-Date: Sat, 28 Jan 2023 21:15:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vinay Gannevaram <quic_vganneva@quicinc.com>, johannes@sipsolutions.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org
-Subject: Re: [PATCH v2] nl80211: Allow authentication frames and set keys on
- NAN interface
-Message-ID: <202301282105.N0kd49zG-lkp@intel.com>
-References: <1674845256-4300-1-git-send-email-quic_vganneva@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C735CA1;
+	Sat, 28 Jan 2023 13:43:09 +0000 (UTC)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18C355A9;
+	Sat, 28 Jan 2023 14:43:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1674913380;
+	bh=mg2QTtYoEN8yJTU9f0Qyg8++AvAue9LCNVJ0YuZygYA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AENaBXf941yU9bTQ0qseJGKrzt7+mgZeI0ufbNIbbn2k1L/v6rvKB7Utez0PIFn0B
+	 +qwn4iNIl+jv5zPsQJYYD4G8vjOssRXkJv8ZG5LYCJO9U1eyLLAjf3nW4YtVn7WCBq
+	 kfk7SmVuiEtskzy5tGRbQqeiWsmm9L0hdC4nuL0M=
+Date: Sat, 28 Jan 2023 15:42:56 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, Mark Gross <mgross@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-gpio@vger.kernel.org,
+	Kate Hsuan <hpa@redhat.com>, Mark Pearson <markpearson@lenovo.com>,
+	Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>
+Subject: Re: [PATCH v6 1/5] media: v4l2-core: Make the v4l2-core code
+ enable/disable the privacy LED if present
+Message-ID: <Y9UmYOJI3zvpne09@pendragon.ideasonboard.com>
+References: <20230127203729.10205-2-hdegoede@redhat.com>
+ <202301281534.9Z8xRsrX-lkp@intel.com>
+ <17f5f57e-0003-2b6b-bfaa-18b03a6d1874@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1674845256-4300-1-git-send-email-quic_vganneva@quicinc.com>
+In-Reply-To: <17f5f57e-0003-2b6b-bfaa-18b03a6d1874@redhat.com>
 
-Hi Vinay,
+Hi Hans,
 
-Thank you for the patch! Perhaps something to improve:
+On Sat, Jan 28, 2023 at 10:41:15AM +0100, Hans de Goede wrote:
+> On 1/28/23 08:35, kernel test robot wrote:
+> > Hi Hans,
+> > 
+> > I love your patch! Yet something to improve:
+> > 
+> > [auto build test ERROR on linus/master]
+> > [also build test ERROR on v6.2-rc5]
+> > [cannot apply to media-tree/master]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/media-v4l2-core-Make-the-v4l2-core-code-enable-disable-the-privacy-LED-if-present/20230128-131233
+> > patch link:    https://lore.kernel.org/r/20230127203729.10205-2-hdegoede%40redhat.com
+> > patch subject: [PATCH v6 1/5] media: v4l2-core: Make the v4l2-core code enable/disable the privacy LED if present
+> > config: riscv-randconfig-r026-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281534.9Z8xRsrX-lkp@intel.com/config)
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install riscv cross compiling tool for clang build
+> >         # apt-get install binutils-riscv64-linux-gnu
+> >         # https://github.com/intel-lab-lkp/linux/commit/000ccec1824b3256e3fc1a94079bb953f19faab5
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review Hans-de-Goede/media-v4l2-core-Make-the-v4l2-core-code-enable-disable-the-privacy-LED-if-present/20230128-131233
+> >         git checkout 000ccec1824b3256e3fc1a94079bb953f19faab5
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/media/v4l2-core/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >>> drivers/media/v4l2-core/v4l2-subdev.c:1124:20: error: call to undeclared function 'led_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+> >            sd->privacy_led = led_get(sd->dev, "privacy-led");
+> >                              ^
+> >>> drivers/media/v4l2-core/v4l2-subdev.c:1124:18: error: incompatible integer to pointer conversion assigning to 'struct led_classdev *' from 'int' [-Wint-conversion]
+> >            sd->privacy_led = led_get(sd->dev, "privacy-led");
+> >                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    2 errors generated.
+> 
+> As mentioned in the cover-letter this series depends on this immutable-branch:
+> 
+> https://lore.kernel.org/platform-driver-x86/Y9QGcA+9nlmOOy2d@google.com/
+> 
+> That branch not being present in the base used by LKP is what is causing this
+> error.
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main linus/master v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vinay-Gannevaram/nl80211-Allow-authentication-frames-and-set-keys-on-NAN-interface/20230128-145815
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/1674845256-4300-1-git-send-email-quic_vganneva%40quicinc.com
-patch subject: [PATCH v2] nl80211: Allow authentication frames and set keys on NAN interface
-config: mips-buildonly-randconfig-r005-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282105.N0kd49zG-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/954d2dd8f85ced417476083a99011b8920d68161
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vinay-Gannevaram/nl80211-Allow-authentication-frames-and-set-keys-on-NAN-interface/20230128-145815
-        git checkout 954d2dd8f85ced417476083a99011b8920d68161
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/wireless/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/wireless/nl80211.c:1555:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           case NL80211_IFTYPE_UNSPECIFIED:
-           ^
-   net/wireless/nl80211.c:1555:2: note: insert '__attribute__((fallthrough));' to silence this warning
-           case NL80211_IFTYPE_UNSPECIFIED:
-           ^
-           __attribute__((fallthrough)); 
-   net/wireless/nl80211.c:1555:2: note: insert 'break;' to avoid fall-through
-           case NL80211_IFTYPE_UNSPECIFIED:
-           ^
-           break; 
-   net/wireless/nl80211.c:12262:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   net/wireless/nl80211.c:12262:2: note: insert '__attribute__((fallthrough));' to silence this warning
-           default:
-           ^
-           __attribute__((fallthrough)); 
-   net/wireless/nl80211.c:12262:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   net/wireless/nl80211.c:12322:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   net/wireless/nl80211.c:12322:2: note: insert '__attribute__((fallthrough));' to silence this warning
-           default:
-           ^
-           __attribute__((fallthrough)); 
-   net/wireless/nl80211.c:12322:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   net/wireless/nl80211.c:12462:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   net/wireless/nl80211.c:12462:2: note: insert '__attribute__((fallthrough));' to silence this warning
-           default:
-           ^
-           __attribute__((fallthrough)); 
-   net/wireless/nl80211.c:12462:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   4 warnings generated.
-
-
-vim +1555 net/wireless/nl80211.c
-
-fffd0934b9390f Johannes Berg    2009-07-08  1531  
-fffd0934b9390f Johannes Berg    2009-07-08  1532  static int nl80211_key_allowed(struct wireless_dev *wdev)
-fffd0934b9390f Johannes Berg    2009-07-08  1533  {
-fffd0934b9390f Johannes Berg    2009-07-08  1534  	ASSERT_WDEV_LOCK(wdev);
-fffd0934b9390f Johannes Berg    2009-07-08  1535  
-fffd0934b9390f Johannes Berg    2009-07-08  1536  	switch (wdev->iftype) {
-fffd0934b9390f Johannes Berg    2009-07-08  1537  	case NL80211_IFTYPE_AP:
-fffd0934b9390f Johannes Berg    2009-07-08  1538  	case NL80211_IFTYPE_AP_VLAN:
-074ac8df9f93f2 Johannes Berg    2010-09-16  1539  	case NL80211_IFTYPE_P2P_GO:
-ff973af74aa693 Thomas Pedersen  2011-05-03  1540  	case NL80211_IFTYPE_MESH_POINT:
-fffd0934b9390f Johannes Berg    2009-07-08  1541  		break;
-fffd0934b9390f Johannes Berg    2009-07-08  1542  	case NL80211_IFTYPE_ADHOC:
-7b0a0e3c3a8826 Johannes Berg    2022-04-14  1543  		if (wdev->u.ibss.current_bss)
-7b0a0e3c3a8826 Johannes Berg    2022-04-14  1544  			return 0;
-7b0a0e3c3a8826 Johannes Berg    2022-04-14  1545  		return -ENOLINK;
-fffd0934b9390f Johannes Berg    2009-07-08  1546  	case NL80211_IFTYPE_STATION:
-074ac8df9f93f2 Johannes Berg    2010-09-16  1547  	case NL80211_IFTYPE_P2P_CLIENT:
-7b0a0e3c3a8826 Johannes Berg    2022-04-14  1548  		if (wdev->connected)
-7b0a0e3c3a8826 Johannes Berg    2022-04-14  1549  			return 0;
-fffd0934b9390f Johannes Berg    2009-07-08  1550  		return -ENOLINK;
-954d2dd8f85ced Vinay Gannevaram 2023-01-28  1551  	case NL80211_IFTYPE_NAN:
-954d2dd8f85ced Vinay Gannevaram 2023-01-28  1552  		if (wiphy_ext_feature_isset(wdev->wiphy,
-954d2dd8f85ced Vinay Gannevaram 2023-01-28  1553  					    NL80211_EXT_FEATURE_SECURE_NAN))
-954d2dd8f85ced Vinay Gannevaram 2023-01-28  1554  			return 0;
-de4fcbadde68e3 Johannes Berg    2014-10-31 @1555  	case NL80211_IFTYPE_UNSPECIFIED:
-6e0bd6c35b021d Rostislav Lisovy 2014-11-03  1556  	case NL80211_IFTYPE_OCB:
-de4fcbadde68e3 Johannes Berg    2014-10-31  1557  	case NL80211_IFTYPE_MONITOR:
-de4fcbadde68e3 Johannes Berg    2014-10-31  1558  	case NL80211_IFTYPE_P2P_DEVICE:
-de4fcbadde68e3 Johannes Berg    2014-10-31  1559  	case NL80211_IFTYPE_WDS:
-de4fcbadde68e3 Johannes Berg    2014-10-31  1560  	case NUM_NL80211_IFTYPES:
-fffd0934b9390f Johannes Berg    2009-07-08  1561  		return -EINVAL;
-fffd0934b9390f Johannes Berg    2009-07-08  1562  	}
-fffd0934b9390f Johannes Berg    2009-07-08  1563  
-fffd0934b9390f Johannes Berg    2009-07-08  1564  	return 0;
-fffd0934b9390f Johannes Berg    2009-07-08  1565  }
-fffd0934b9390f Johannes Berg    2009-07-08  1566  
+The --base argument to git-format-patch will record the base commit ID
+in the cover letter, that can possibly help bots getting it right.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+
+Laurent Pinchart
