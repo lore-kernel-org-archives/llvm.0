@@ -1,253 +1,186 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFCD2908;
-	Sat, 28 Jan 2023 07:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CC5199;
+	Sat, 28 Jan 2023 08:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674891995; x=1706427995;
+  t=1674895051; x=1706431051;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z2XYMfIj1jdvBuGFknlCYVhV0le0R/9Zvjo9QIX6thc=;
-  b=AQoIZ9qDjKuxwKoa2KdqkdJjehV5upsBlyGRHkX6Df50ao38tFa3/rbV
-   eZul3uwf+hidSjG+Sr+zXI9yjhnZyw52WYh23vd0rT/3JR1jCTYNkR0ca
-   U9KxsfvZESNDjFpsenccmcQ/n14QtFBxXeNKL3njf9d1dYuoqhTamj12f
-   VwP7VmaWqPYVR/rh1i221wS7L/sXJ1xy4PjMf3izrPO8oBh3keDRunk+u
-   cbNG3r08RdaHzyW0hE00mYM3+u0PkJ5iXJqSre/Bv0J2GkDAmnuL9uKCu
-   KeBmGajVPEVfrBVUA7BZ7aqATqA3NhrAIbjlYsNmL6OehkNKxleSXnYr/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="327289361"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=DISRV7v/oTwHpYIjTRlE+uOwvlFszaNIrQuxT+Up7mI=;
+  b=CquwjS2mzqr+1MZEBUdI6Snks4Rq0Li5j3rsLXQPT0ZhicQ2kmpYMqLh
+   JjgV4lR5NRIsfM9OyiyEqn0dlRwfOlA27+/Ez2PHs6lhWYGqK/B6n/hXx
+   dLsQRdBxQ90+mGCWxou9ssRGWZFC/rl0G1PIMwTWO8rLQKlyH4FQaAw6r
+   wgw2tn7v4yF2dDo4sAeXZtWwjHABPWtnB0nqbpDWzujNc1P1reT8mlhJl
+   xN6hP5dLGpH+5q0LMM0wyDnsX9562ksvT+WUtZOrchlkQwLRGSgl14vYj
+   RV9isOLUD3sxlDY553e5iQ0VNsDx/Mo3E1tXnbjc5zAA9DzrSRrvIj1w4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="327292358"
 X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="327289361"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:46:33 -0800
+   d="scan'208";a="327292358"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 00:37:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="726946178"
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="806096747"
 X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="726946178"
+   d="scan'208";a="806096747"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Jan 2023 23:46:22 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 28 Jan 2023 00:37:29 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLfun-0000V9-2x;
-	Sat, 28 Jan 2023 07:46:21 +0000
-Date: Sat, 28 Jan 2023 15:45:42 +0800
+	id 1pLgiB-0000Wd-12;
+	Sat, 28 Jan 2023 08:37:23 +0000
+Date: Sat, 28 Jan 2023 16:37:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roman Kagan <rkagan@amazon.de>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Ben Segall <bsegall@google.com>,
-	Zhang Qiao <zhangqiao22@huawei.com>, Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Mel Gorman <mgorman@suse.de>, Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH] sched/fair: sanitize vruntime of entity being placed
-Message-ID: <202301281536.CiaoBlBO-lkp@intel.com>
-References: <20230127163230.3339408-1-rkagan@amazon.de>
+To: Grant Seltzer <grantseltzer@gmail.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
+	grantseltzer@gmail.com
+Subject: Re: [PATCH bpf-next] Add support for tracing programs in BPF_PROG_RUN
+Message-ID: <202301281621.DfTZgf4X-lkp@intel.com>
+References: <20230127214353.628551-1-grantseltzer@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230127163230.3339408-1-rkagan@amazon.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230127214353.628551-1-grantseltzer@gmail.com>
 
-Hi Roman,
+Hi Grant,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on linus/master v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kagan/sched-fair-sanitize-vruntime-of-entity-being-placed/20230128-130846
-patch link:    https://lore.kernel.org/r/20230127163230.3339408-1-rkagan%40amazon.de
-patch subject: [PATCH] sched/fair: sanitize vruntime of entity being placed
-config: hexagon-randconfig-r041-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281536.CiaoBlBO-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Grant-Seltzer/Add-support-for-tracing-programs-in-BPF_PROG_RUN/20230128-130222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230127214353.628551-1-grantseltzer%40gmail.com
+patch subject: [PATCH bpf-next] Add support for tracing programs in BPF_PROG_RUN
+config: i386-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281621.DfTZgf4X-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2db31a18bcb88c280481672d7721f7e003d8df5a
+        # https://github.com/intel-lab-lkp/linux/commit/990088d6233eb15a4a42a83a998f47432305d4d7
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roman-Kagan/sched-fair-sanitize-vruntime-of-entity-being-placed/20230128-130846
-        git checkout 2db31a18bcb88c280481672d7721f7e003d8df5a
+        git fetch --no-tags linux-review Grant-Seltzer/Add-support-for-tracing-programs-in-BPF_PROG_RUN/20230128-130222
+        git checkout 990088d6233eb15a4a42a83a998f47432305d4d7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> kernel/sched/fair.c:4697:27: warning: overflow in expression; result is -129542144 with type 'long' [-Winteger-overflow]
-           if ((s64)sleep_time > 60 * NSEC_PER_SEC)
-                                    ^
-   kernel/sched/fair.c:6078:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-        ^
-   kernel/sched/fair.c:6078:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-   ^
-   static 
-   kernel/sched/fair.c:12498:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-   void free_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12498:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:12500:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/fair.c:12500:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/fair.c:12505:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-   void online_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12505:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void online_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:12507:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   void unregister_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12507:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:535:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
-   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
-                      ^
-   kernel/sched/fair.c:556:19: warning: unused function 'tg_is_idle' [-Wunused-function]
-   static inline int tg_is_idle(struct task_group *tg)
-                     ^
-   kernel/sched/fair.c:6051:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
-   static inline bool cfs_bandwidth_used(void)
-                      ^
-   kernel/sched/fair.c:6059:20: warning: unused function 'sync_throttle' [-Wunused-function]
-   static inline void sync_throttle(struct task_group *tg, int cpu) {}
-                      ^
-   kernel/sched/fair.c:6084:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
-   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
-                                       ^
-   kernel/sched/fair.c:6088:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
-   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-                      ^
-   18 warnings generated.
+>> net/bpf/test_run.c:818:23: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+           u16 side_effect = 0, ret = 0;
+                                ^
+>> net/bpf/test_run.c:818:6: warning: variable 'side_effect' set but not used [-Wunused-but-set-variable]
+           u16 side_effect = 0, ret = 0;
+               ^
+   2 warnings generated.
 
 
-vim +/long +4697 kernel/sched/fair.c
+vim +/ret +818 net/bpf/test_run.c
 
-  4654	
-  4655	static void
-  4656	place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-  4657	{
-  4658		u64 vruntime = cfs_rq->min_vruntime;
-  4659		u64 sleep_time;
-  4660	
-  4661		/*
-  4662		 * The 'current' period is already promised to the current tasks,
-  4663		 * however the extra weight of the new task will slow them down a
-  4664		 * little, place the new task so that it fits in the slot that
-  4665		 * stays open at the end.
-  4666		 */
-  4667		if (initial && sched_feat(START_DEBIT))
-  4668			vruntime += sched_vslice(cfs_rq, se);
-  4669	
-  4670		/* sleeps up to a single latency don't count. */
-  4671		if (!initial) {
-  4672			unsigned long thresh;
-  4673	
-  4674			if (se_is_idle(se))
-  4675				thresh = sysctl_sched_min_granularity;
-  4676			else
-  4677				thresh = sysctl_sched_latency;
-  4678	
-  4679			/*
-  4680			 * Halve their sleep time's effect, to allow
-  4681			 * for a gentler effect of sleepers:
-  4682			 */
-  4683			if (sched_feat(GENTLE_FAIR_SLEEPERS))
-  4684				thresh >>= 1;
-  4685	
-  4686			vruntime -= thresh;
-  4687		}
-  4688	
-  4689		/*
-  4690		 * Pull vruntime of the entity being placed to the base level of
-  4691		 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
-  4692		 * slept for a long time, don't even try to compare its vruntime with
-  4693		 * the base as it may be too far off and the comparison may get
-  4694		 * inversed due to s64 overflow.
-  4695		 */
-  4696		sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-> 4697		if ((s64)sleep_time > 60 * NSEC_PER_SEC)
-  4698			se->vruntime = vruntime;
-  4699		else
-  4700			se->vruntime = max_vruntime(se->vruntime, vruntime);
-  4701	}
-  4702	
+990088d6233eb1 Grant Seltzer          2023-01-27  812  
+da00d2f117a08f KP Singh               2020-03-04  813  int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+da00d2f117a08f KP Singh               2020-03-04  814  			      const union bpf_attr *kattr,
+da00d2f117a08f KP Singh               2020-03-04  815  			      union bpf_attr __user *uattr)
+da00d2f117a08f KP Singh               2020-03-04  816  {
+d923021c2ce12a Yonghong Song          2020-06-30  817  	struct bpf_fentry_test_t arg = {};
+3d08b6f29cf33a KP Singh               2020-03-04 @818  	u16 side_effect = 0, ret = 0;
+990088d6233eb1 Grant Seltzer          2023-01-27  819  	int b = 2, err = -EFAULT, current_cpu;
+990088d6233eb1 Grant Seltzer          2023-01-27  820  
+990088d6233eb1 Grant Seltzer          2023-01-27  821  	void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
+990088d6233eb1 Grant Seltzer          2023-01-27  822  	__u32 ctx_size_in = kattr->test.ctx_size_in;
+990088d6233eb1 Grant Seltzer          2023-01-27  823  	struct bpf_tracing_test_run_info info;
+990088d6233eb1 Grant Seltzer          2023-01-27  824  	int cpu = kattr->test.cpu;
+da00d2f117a08f KP Singh               2020-03-04  825  
+b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  826  	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
+1b4d60ec162f82 Song Liu               2020-09-25  827  		return -EINVAL;
+1b4d60ec162f82 Song Liu               2020-09-25  828  
+da00d2f117a08f KP Singh               2020-03-04  829  	switch (prog->expected_attach_type) {
+da00d2f117a08f KP Singh               2020-03-04  830  	case BPF_TRACE_FENTRY:
+da00d2f117a08f KP Singh               2020-03-04  831  	case BPF_TRACE_FEXIT:
+faeb2dce084aff Alexei Starovoitov     2019-11-14  832  		if (bpf_fentry_test1(1) != 2 ||
+faeb2dce084aff Alexei Starovoitov     2019-11-14  833  		    bpf_fentry_test2(2, 3) != 5 ||
+faeb2dce084aff Alexei Starovoitov     2019-11-14  834  		    bpf_fentry_test3(4, 5, 6) != 15 ||
+faeb2dce084aff Alexei Starovoitov     2019-11-14  835  		    bpf_fentry_test4((void *)7, 8, 9, 10) != 34 ||
+faeb2dce084aff Alexei Starovoitov     2019-11-14  836  		    bpf_fentry_test5(11, (void *)12, 13, 14, 15) != 65 ||
+d923021c2ce12a Yonghong Song          2020-06-30  837  		    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) != 111 ||
+d923021c2ce12a Yonghong Song          2020-06-30  838  		    bpf_fentry_test7((struct bpf_fentry_test_t *)0) != 0 ||
+d923021c2ce12a Yonghong Song          2020-06-30  839  		    bpf_fentry_test8(&arg) != 0)
+da00d2f117a08f KP Singh               2020-03-04  840  			goto out;
+da00d2f117a08f KP Singh               2020-03-04  841  		break;
+3d08b6f29cf33a KP Singh               2020-03-04  842  	case BPF_MODIFY_RETURN:
+3d08b6f29cf33a KP Singh               2020-03-04  843  		ret = bpf_modify_return_test(1, &b);
+3d08b6f29cf33a KP Singh               2020-03-04  844  		if (b != 2)
+3d08b6f29cf33a KP Singh               2020-03-04  845  			side_effect = 1;
+3d08b6f29cf33a KP Singh               2020-03-04  846  		break;
+da00d2f117a08f KP Singh               2020-03-04  847  	default:
+da00d2f117a08f KP Singh               2020-03-04  848  		goto out;
+a25ecd9d1e6024 Colin Ian King         2019-11-18  849  	}
+da00d2f117a08f KP Singh               2020-03-04  850  
+990088d6233eb1 Grant Seltzer          2023-01-27  851  	/* doesn't support data_in/out, ctx_out, duration, or repeat */
+990088d6233eb1 Grant Seltzer          2023-01-27  852  	if (kattr->test.data_in || kattr->test.data_out ||
+990088d6233eb1 Grant Seltzer          2023-01-27  853  	    kattr->test.ctx_out || kattr->test.duration ||
+990088d6233eb1 Grant Seltzer          2023-01-27  854  	    kattr->test.repeat || kattr->test.batch_size)
+990088d6233eb1 Grant Seltzer          2023-01-27  855  		return -EINVAL;
+990088d6233eb1 Grant Seltzer          2023-01-27  856  
+990088d6233eb1 Grant Seltzer          2023-01-27  857  	if (ctx_size_in < prog->aux->max_ctx_offset ||
+990088d6233eb1 Grant Seltzer          2023-01-27  858  	    ctx_size_in > MAX_BPF_FUNC_ARGS * sizeof(u64))
+990088d6233eb1 Grant Seltzer          2023-01-27  859  		return -EINVAL;
+990088d6233eb1 Grant Seltzer          2023-01-27  860  
+990088d6233eb1 Grant Seltzer          2023-01-27  861  	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 && cpu != 0)
+990088d6233eb1 Grant Seltzer          2023-01-27  862  		return -EINVAL;
+990088d6233eb1 Grant Seltzer          2023-01-27  863  
+990088d6233eb1 Grant Seltzer          2023-01-27  864  	if (ctx_size_in) {
+990088d6233eb1 Grant Seltzer          2023-01-27  865  		info.ctx = memdup_user(ctx_in, ctx_size_in);
+990088d6233eb1 Grant Seltzer          2023-01-27  866  		if (IS_ERR(info.ctx))
+990088d6233eb1 Grant Seltzer          2023-01-27  867  			return PTR_ERR(info.ctx);
+990088d6233eb1 Grant Seltzer          2023-01-27  868  	} else {
+990088d6233eb1 Grant Seltzer          2023-01-27  869  		info.ctx = NULL;
+990088d6233eb1 Grant Seltzer          2023-01-27  870  	}
+3d08b6f29cf33a KP Singh               2020-03-04  871  
+da00d2f117a08f KP Singh               2020-03-04  872  	err = 0;
+990088d6233eb1 Grant Seltzer          2023-01-27  873  	info.prog = prog;
+990088d6233eb1 Grant Seltzer          2023-01-27  874  
+990088d6233eb1 Grant Seltzer          2023-01-27  875  	current_cpu = get_cpu();
+990088d6233eb1 Grant Seltzer          2023-01-27  876  	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 ||
+990088d6233eb1 Grant Seltzer          2023-01-27  877  	    cpu == current_cpu) {
+990088d6233eb1 Grant Seltzer          2023-01-27  878  		__bpf_prog_test_run_tracing(&info);
+990088d6233eb1 Grant Seltzer          2023-01-27  879  	} else if (cpu >= nr_cpu_ids || !cpu_online(cpu)) {
+990088d6233eb1 Grant Seltzer          2023-01-27  880  		/* smp_call_function_single() also checks cpu_online()
+990088d6233eb1 Grant Seltzer          2023-01-27  881  		 * after csd_lock(). However, since cpu is from user
+990088d6233eb1 Grant Seltzer          2023-01-27  882  		 * space, let's do an extra quick check to filter out
+990088d6233eb1 Grant Seltzer          2023-01-27  883  		 * invalid value before smp_call_function_single().
+990088d6233eb1 Grant Seltzer          2023-01-27  884  		 */
+990088d6233eb1 Grant Seltzer          2023-01-27  885  		err = -ENXIO;
+990088d6233eb1 Grant Seltzer          2023-01-27  886  	} else {
+990088d6233eb1 Grant Seltzer          2023-01-27  887  		err = smp_call_function_single(cpu, __bpf_prog_test_run_tracing,
+990088d6233eb1 Grant Seltzer          2023-01-27  888  					       &info, 1);
+990088d6233eb1 Grant Seltzer          2023-01-27  889  	}
+990088d6233eb1 Grant Seltzer          2023-01-27  890  	put_cpu();
+990088d6233eb1 Grant Seltzer          2023-01-27  891  
+990088d6233eb1 Grant Seltzer          2023-01-27  892  	if (!err &&
+990088d6233eb1 Grant Seltzer          2023-01-27  893  	    copy_to_user(&uattr->test.retval, &info.retval, sizeof(u32)))
+990088d6233eb1 Grant Seltzer          2023-01-27  894  		err = -EFAULT;
+990088d6233eb1 Grant Seltzer          2023-01-27  895  
+990088d6233eb1 Grant Seltzer          2023-01-27  896  	kfree(info.ctx);
+990088d6233eb1 Grant Seltzer          2023-01-27  897  
+da00d2f117a08f KP Singh               2020-03-04  898  out:
+da00d2f117a08f KP Singh               2020-03-04  899  	trace_bpf_test_finish(&err);
+da00d2f117a08f KP Singh               2020-03-04  900  	return err;
+1cf1cae963c2e6 Alexei Starovoitov     2017-03-30  901  }
+1cf1cae963c2e6 Alexei Starovoitov     2017-03-30  902  
 
 -- 
 0-DAY CI Kernel Test Service
