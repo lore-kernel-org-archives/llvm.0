@@ -1,46 +1,58 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0BF85CA1;
-	Sat, 28 Jan 2023 14:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B89A5CB7;
+	Sat, 28 Jan 2023 14:38:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674916119; x=1706452119;
+  t=1674916720; x=1706452720;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=6nfcuYKU8JjQ7rf68glII7YLgTST5nBCALoULewdYMA=;
-  b=T6/qsolpdZzV/xfL+mqIOQ7ggNB+pUND+d5YiC7DbPD/0k9OGXFVSYGc
-   +wwiDHKgLbYdu0q95oNMTHytb8COX/BmsVcRDS6d8dVH8xfDnrIWD4F+7
-   2jz6PHJ851SOCMMSbDNcimyp/96DBEaHB8Y5TsoHqQzmn3xMrpwKieg0W
-   uzVmv0HFl2/N+r6TjOn2ay3L/xt5vONafisR3HqiSiGY7skI2ctvI9eb+
-   TvmUTbHWiJVERYGZbwyUaKSKReeCeIZ0lFJTH4eYdJ/7GP3lKFL0Krvqu
-   pKxwABak0gyVlWHTZfhqxBLa2A5pJzcqtuqYCeP6q4bTNGrmBPKS0nh/J
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="315248365"
+  bh=7tzz0OFAYxOocSKroByLjFR0he9CM8tPp7zRmAddfEA=;
+  b=V+4vg7rkb3qW45x6X4EqDQ3tiLh2ijOLQsEoR/ATCQ2jq+e+eibjwKwV
+   IaI5rzLjRcLErqkpk2O18LTUxdxXm9/YWKZWFUWIDH12XP9YV4hAEltVB
+   vgxoimOlCnd8RILpYSmnffhzz/RXa0Pmyi3dpsLu37dgYmg/Iw+21sXb3
+   FndjWI6uyMGXkPkSw41Ji7e7V5/zVmJ44Zcj/7m37tPD/vW6+Yy+Lav+g
+   SthJTxv9nsJqYbrdYIUKFZ+w+8jqaNFt5/kd0NFBXMOYaBQCFp4mN8wX2
+   OblRBLAl4SstNWwNje9iA6jmH2CwNCDbCgC9p9GzkV6+jx08tFg7l0nD/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="306944584"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="315248365"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 06:28:39 -0800
+   d="scan'208";a="306944584"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 06:38:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="732182647"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="908984118"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="732182647"
+   d="scan'208";a="908984118"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jan 2023 06:28:35 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 28 Jan 2023 06:38:35 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLmC2-0000nV-2B;
-	Sat, 28 Jan 2023 14:28:34 +0000
-Date: Sat, 28 Jan 2023 22:27:44 +0800
+	id 1pLmLi-0000nf-2b;
+	Sat, 28 Jan 2023 14:38:34 +0000
+Date: Sat, 28 Jan 2023 22:38:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joanne Koong <joannelkoong@gmail.com>, bpf@vger.kernel.org
+To: Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-	ast@kernel.org, netdev@vger.kernel.org, memxor@gmail.com,
-	kernel-team@fb.com, Joanne Koong <joannelkoong@gmail.com>
-Subject: Re: [PATCH v8 bpf-next 2/5] bpf: Allow initializing dynptrs in kfuncs
-Message-ID: <202301282240.BuACl7kr-lkp@intel.com>
-References: <20230126233439.3739120-3-joannelkoong@gmail.com>
+	Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+	David Hildenbrand <david@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+Message-ID: <202301282223.YafIuB1E-lkp@intel.com>
+References: <20230125212608.1860251-13-scgl@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,176 +61,241 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126233439.3739120-3-joannelkoong@gmail.com>
+In-Reply-To: <20230125212608.1860251-13-scgl@linux.ibm.com>
 
-Hi Joanne,
+Hi Janis,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on lwn/docs-next linus/master v6.2-rc5 next-20230127]
+[cannot apply to kvms390/next kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/bpf-Allow-sk_buff-and-xdp_buff-as-valid-kfunc-arg-types/20230128-170947
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230126233439.3739120-3-joannelkoong%40gmail.com
-patch subject: [PATCH v8 bpf-next 2/5] bpf: Allow initializing dynptrs in kfuncs
-config: i386-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282240.BuACl7kr-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Janis-Schoetterl-Glausch/KVM-s390-selftest-memop-Pass-mop_desc-via-pointer/20230128-132603
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20230125212608.1860251-13-scgl%40linux.ibm.com
+patch subject: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+config: s390-randconfig-r044-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282223.YafIuB1E-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7993ffba3295a3a3c01c4b62099117b5abd48242
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6e6b3d99b9978a70b148b989d46b039feda3a3c3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Joanne-Koong/bpf-Allow-sk_buff-and-xdp_buff-as-valid-kfunc-arg-types/20230128-170947
-        git checkout 7993ffba3295a3a3c01c4b62099117b5abd48242
+        git fetch --no-tags linux-review Janis-Schoetterl-Glausch/KVM-s390-selftest-memop-Pass-mop_desc-via-pointer/20230128-132603
+        git checkout 6e6b3d99b9978a70b148b989d46b039feda3a3c3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/ net/core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/bpf/verifier.c:6150:5: warning: no previous prototype for function 'process_dynptr_func' [-Wmissing-prototypes]
-   int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
-       ^
-   kernel/bpf/verifier.c:6150:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
+   In file included from arch/s390/kvm/gaccess.c:16:
+   In file included from arch/s390/kvm/kvm-s390.h:17:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kvm/gaccess.c:16:
+   In file included from arch/s390/kvm/kvm-s390.h:17:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kvm/gaccess.c:16:
+   In file included from arch/s390/kvm/kvm-s390.h:17:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/kvm/gaccess.c:1217:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
+                         ^
+   arch/s390/kvm/gaccess.c:1217:9: note: did you mean 'copy_to_user_key'?
+   arch/s390/include/asm/uaccess.h:51:1: note: 'copy_to_user_key' declared here
+   copy_to_user_key(void __user *to, const void *from, unsigned long n, unsigned long key)
    ^
-   static 
-   1 warning generated.
+   arch/s390/kvm/gaccess.c:1225:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
+                         ^
+   arch/s390/kvm/gaccess.c:1233:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
+                         ^
+   arch/s390/kvm/gaccess.c:1241:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
+                         ^
+   arch/s390/kvm/gaccess.c:1249:9: error: call to undeclared function 'cmpxchg_user_key'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
+                         ^
+   12 warnings and 5 errors generated.
 
 
-vim +/process_dynptr_func +6150 kernel/bpf/verifier.c
+vim +/cmpxchg_user_key +1217 arch/s390/kvm/gaccess.c
 
-  6124	
-  6125	/* There are two register types representing a bpf_dynptr, one is PTR_TO_STACK
-  6126	 * which points to a stack slot, and the other is CONST_PTR_TO_DYNPTR.
-  6127	 *
-  6128	 * In both cases we deal with the first 8 bytes, but need to mark the next 8
-  6129	 * bytes as STACK_DYNPTR in case of PTR_TO_STACK. In case of
-  6130	 * CONST_PTR_TO_DYNPTR, we are guaranteed to get the beginning of the object.
-  6131	 *
-  6132	 * Mutability of bpf_dynptr is at two levels, one is at the level of struct
-  6133	 * bpf_dynptr itself, i.e. whether the helper is receiving a pointer to struct
-  6134	 * bpf_dynptr or pointer to const struct bpf_dynptr. In the former case, it can
-  6135	 * mutate the view of the dynptr and also possibly destroy it. In the latter
-  6136	 * case, it cannot mutate the bpf_dynptr itself but it can still mutate the
-  6137	 * memory that dynptr points to.
-  6138	 *
-  6139	 * The verifier will keep track both levels of mutation (bpf_dynptr's in
-  6140	 * reg->type and the memory's in reg->dynptr.type), but there is no support for
-  6141	 * readonly dynptr view yet, hence only the first case is tracked and checked.
-  6142	 *
-  6143	 * This is consistent with how C applies the const modifier to a struct object,
-  6144	 * where the pointer itself inside bpf_dynptr becomes const but not what it
-  6145	 * points to.
-  6146	 *
-  6147	 * Helpers which do not mutate the bpf_dynptr set MEM_RDONLY in their argument
-  6148	 * type, and declare it as 'const struct bpf_dynptr *' in their prototype.
-  6149	 */
-> 6150	int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
-  6151				enum bpf_arg_type arg_type)
-  6152	{
-  6153		struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-  6154		int err;
-  6155	
-  6156		/* MEM_UNINIT and MEM_RDONLY are exclusive, when applied to an
-  6157		 * ARG_PTR_TO_DYNPTR (or ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_*):
-  6158		 */
-  6159		if ((arg_type & (MEM_UNINIT | MEM_RDONLY)) == (MEM_UNINIT | MEM_RDONLY)) {
-  6160			verbose(env, "verifier internal error: misconfigured dynptr helper type flags\n");
-  6161			return -EFAULT;
-  6162		}
-  6163	
-  6164		/*  MEM_UNINIT - Points to memory that is an appropriate candidate for
-  6165		 *		 constructing a mutable bpf_dynptr object.
-  6166		 *
-  6167		 *		 Currently, this is only possible with PTR_TO_STACK
-  6168		 *		 pointing to a region of at least 16 bytes which doesn't
-  6169		 *		 contain an existing bpf_dynptr.
-  6170		 *
-  6171		 *  MEM_RDONLY - Points to a initialized bpf_dynptr that will not be
-  6172		 *		 mutated or destroyed. However, the memory it points to
-  6173		 *		 may be mutated.
-  6174		 *
-  6175		 *  None       - Points to a initialized dynptr that can be mutated and
-  6176		 *		 destroyed, including mutation of the memory it points
-  6177		 *		 to.
-  6178		 */
-  6179		if (arg_type & MEM_UNINIT) {
-  6180			int i, spi;
-  6181	
-  6182			if (base_type(reg->type) == CONST_PTR_TO_DYNPTR) {
-  6183				verbose(env, "verifier internal error: CONST_PTR_TO_DYNPTR cannot be initialized\n");
-  6184				return -EFAULT;
-  6185			}
-  6186	
-  6187			/* For -ERANGE (i.e. spi not falling into allocated stack slots),
-  6188			 * check_mem_access will check and update stack bounds, so this
-  6189			 * is okay.
-  6190			 */
-  6191			spi = dynptr_get_spi(env, reg);
-  6192			if (spi < 0 && spi != -ERANGE)
-  6193				return spi;
-  6194	
-  6195			/* we write BPF_DW bits (8 bytes) at a time */
-  6196			for (i = 0; i < BPF_DYNPTR_SIZE; i += 8) {
-  6197				err = check_mem_access(env, insn_idx, regno,
-  6198						       i, BPF_DW, BPF_WRITE, -1, false);
-  6199				if (err)
-  6200					return err;
-  6201			}
-  6202	
-  6203			/* Please note that we allow overwriting existing unreferenced STACK_DYNPTR
-  6204			 * slots (mark_stack_slots_dynptr calls destroy_if_dynptr_stack_slot
-  6205			 * to ensure dynptr objects at the slots we are touching are completely
-  6206			 * destructed before we reinitialize them for a new one). For referenced
-  6207			 * ones, destroy_if_dynptr_stack_slot returns an error early instead of
-  6208			 * delaying it until the end where the user will get "Unreleased
-  6209			 * reference" error.
-  6210			 */
-  6211			err = mark_stack_slots_dynptr(env, reg, arg_type, insn_idx);
-  6212		} else /* MEM_RDONLY and None case from above */ {
-  6213			/* For the reg->type == PTR_TO_STACK case, bpf_dynptr is never const */
-  6214			if (reg->type == CONST_PTR_TO_DYNPTR && !(arg_type & MEM_RDONLY)) {
-  6215				verbose(env, "cannot pass pointer to const bpf_dynptr, the helper mutates it\n");
-  6216				return -EINVAL;
-  6217			}
-  6218	
-  6219			if (!is_dynptr_reg_valid_init(env, reg)) {
-  6220				verbose(env, "Expected an initialized dynptr as arg #%d\n",
-  6221					regno);
-  6222				return -EINVAL;
-  6223			}
-  6224	
-  6225			/* Fold modifiers (in this case, MEM_RDONLY) when checking expected type */
-  6226			if (!is_dynptr_type_expected(env, reg, arg_type & ~MEM_RDONLY)) {
-  6227				const char *err_extra = "";
-  6228	
-  6229				switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
-  6230				case DYNPTR_TYPE_LOCAL:
-  6231					err_extra = "local";
-  6232					break;
-  6233				case DYNPTR_TYPE_RINGBUF:
-  6234					err_extra = "ringbuf";
-  6235					break;
-  6236				default:
-  6237					err_extra = "<unknown>";
-  6238					break;
-  6239				}
-  6240				verbose(env,
-  6241					"Expected a dynptr of type %s as arg #%d\n",
-  6242					err_extra, regno);
-  6243				return -EINVAL;
-  6244			}
-  6245	
-  6246			err = mark_dynptr_read(env, reg);
-  6247		}
-  6248		return err;
-  6249	}
-  6250	
+  1163	
+  1164	/**
+  1165	 * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
+  1166	 * @kvm: Virtual machine instance.
+  1167	 * @gpa: Absolute guest address of the location to be changed.
+  1168	 * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
+  1169	 *       non power of two will result in failure.
+  1170	 * @old_addr: Pointer to old value. If the location at @gpa contains this value,
+  1171	 *            the exchange will succeed. After calling cmpxchg_guest_abs_with_key()
+  1172	 *            *@old_addr contains the value at @gpa before the attempt to
+  1173	 *            exchange the value.
+  1174	 * @new: The value to place at @gpa.
+  1175	 * @access_key: The access key to use for the guest access.
+  1176	 * @success: output value indicating if an exchange occurred.
+  1177	 *
+  1178	 * Atomically exchange the value at @gpa by @new, if it contains *@old.
+  1179	 * Honors storage keys.
+  1180	 *
+  1181	 * Return: * 0: successful exchange
+  1182	 *         * a program interruption code indicating the reason cmpxchg could
+  1183	 *           not be attempted
+  1184	 *         * -EINVAL: address misaligned or len not power of two
+  1185	 *         * -EAGAIN: transient failure (len 1 or 2)
+  1186	 *         * -EOPNOTSUPP: read-only memslot (should never occur)
+  1187	 */
+  1188	int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+  1189				       __uint128_t *old_addr, __uint128_t new,
+  1190				       u8 access_key, bool *success)
+  1191	{
+  1192		gfn_t gfn = gpa >> PAGE_SHIFT;
+  1193		struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+  1194		bool writable;
+  1195		hva_t hva;
+  1196		int ret;
+  1197	
+  1198		if (!IS_ALIGNED(gpa, len))
+  1199			return -EINVAL;
+  1200	
+  1201		hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
+  1202		if (kvm_is_error_hva(hva))
+  1203			return PGM_ADDRESSING;
+  1204		/*
+  1205		 * Check if it's a read-only memslot, even though that cannot occur
+  1206		 * since those are unsupported.
+  1207		 * Don't try to actually handle that case.
+  1208		 */
+  1209		if (!writable)
+  1210			return -EOPNOTSUPP;
+  1211	
+  1212		hva += offset_in_page(gpa);
+  1213		switch (len) {
+  1214		case 1: {
+  1215			u8 old;
+  1216	
+> 1217			ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
+  1218			*success = !ret && old == *old_addr;
+  1219			*old_addr = old;
+  1220			break;
+  1221		}
+  1222		case 2: {
+  1223			u16 old;
+  1224	
+  1225			ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
+  1226			*success = !ret && old == *old_addr;
+  1227			*old_addr = old;
+  1228			break;
+  1229		}
+  1230		case 4: {
+  1231			u32 old;
+  1232	
+  1233			ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
+  1234			*success = !ret && old == *old_addr;
+  1235			*old_addr = old;
+  1236			break;
+  1237		}
+  1238		case 8: {
+  1239			u64 old;
+  1240	
+  1241			ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
+  1242			*success = !ret && old == *old_addr;
+  1243			*old_addr = old;
+  1244			break;
+  1245		}
+  1246		case 16: {
+  1247			__uint128_t old;
+  1248	
+  1249			ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
+  1250			*success = !ret && old == *old_addr;
+  1251			*old_addr = old;
+  1252			break;
+  1253		}
+  1254		default:
+  1255			return -EINVAL;
+  1256		}
+  1257		mark_page_dirty_in_slot(kvm, slot, gfn);
+  1258		/*
+  1259		 * Assume that the fault is caused by protection, either key protection
+  1260		 * or user page write protection.
+  1261		 */
+  1262		if (ret == -EFAULT)
+  1263			ret = PGM_PROTECTION;
+  1264		return ret;
+  1265	}
+  1266	
 
 -- 
 0-DAY CI Kernel Test Service
