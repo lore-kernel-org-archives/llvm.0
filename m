@@ -1,55 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED8D3C0B;
-	Sat, 28 Jan 2023 10:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D008D197;
+	Sat, 28 Jan 2023 10:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674900691; x=1706436691;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HQXTqqo0KdDTfmzzZvVs+t3mYNxq/PJALwewAE+8Cms=;
-  b=dfy3O9ZnzabzmF4ZctymmAbLPkcXyUWA6h4RRA5bcS+rV4i/66DS/vEf
-   BmwK+ZOYlTlkVx3Styz8sR+3z0Y/450hwqX+E8BN4svZpmn6TpBVMaDRw
-   t3u72PmOeZTvNEwDYWAzW+XX3s6LDjNgo3yqbUZ1YAptlwXOLBohkwo4e
-   NosRjM7Mo4mYf7sO+rxNFx3DEW14lt++DAG6xNkYDUTCBdCW3+Oogv6YB
-   XZcqPXSJ3XZx+FHsdUnBRG54pckvO1f9UTu7pR7/oqT2Pj36sv5dZUxMB
-   L621xdW6ibpKFd1B67yPvUwRlJ3IdTbpik5P/0gRW2rRvZ7vCT32KkmCA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="315234185"
+  t=1674901888; x=1706437888;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WNf9+k9hyV+V/vSmI7FcWBXcL8oeVW+CR7Z/0naDkxQ=;
+  b=idagt/74BtUuzwfple+2mBdIgSc8eQMQZQSYBgvusmruNatDhC5XX/JT
+   XoH4yJKGew1ipuzWy7eqC+aE7B3C9c5QYwlW5lHf2ytDQFpaTke2g06TM
+   ShI2wYpBV4oAhKBcIfeVcFumC0AgMJV+zK4DsvbksQ3TYPFhTeXyC8TSX
+   rtbG9Toy7mbpFf+Rz/8gyDXOlPIDz16uTKycmRlPlLZgotGTJFkeEko6K
+   S0q+ZxeNp9dmx+twqpdu8FCTmS0XmxMU7in0PfXjZ10O5ZWP69KjsIkOe
+   Lo76kbZXEB9p+LDf/C6BtIU8/hI5gntOGgGG9EW7IuhBaSFiRom07rs1+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310902686"
 X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="315234185"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 02:11:31 -0800
+   d="scan'208";a="310902686"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 02:31:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="771876082"
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="837442522"
 X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="771876082"
+   d="scan'208";a="837442522"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2023 02:11:26 -0800
+  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2023 02:31:26 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLiBB-0000Zn-1M;
-	Sat, 28 Jan 2023 10:11:25 +0000
-Date: Sat, 28 Jan 2023 18:10:42 +0800
+	id 1pLiUX-0000aC-25;
+	Sat, 28 Jan 2023 10:31:25 +0000
+Date: Sat, 28 Jan 2023 18:31:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <mgross@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Palmer Dabbelt <palmerdabbelt@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-	platform-driver-x86@vger.kernel.org, linux-gpio@vger.kernel.org,
-	Kate Hsuan <hpa@redhat.com>, Mark Pearson <markpearson@lenovo.com>,
-	Andy Yeh <andy.yeh@intel.com>, Hao Yao <hao.yao@intel.com>
-Subject: Re: [PATCH v6 3/5] platform/x86: int3472/discrete: Create a LED
- class device for the privacy LED
-Message-ID: <202301281800.sm8woBKh-lkp@intel.com>
-References: <20230127203729.10205-4-hdegoede@redhat.com>
+	0day robot <lkp@intel.com>
+Subject: init/main.c:108:10: fatal error: 'asm/setup.h' file not found
+Message-ID: <202301281849.TD6gcH6I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,105 +45,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127203729.10205-4-hdegoede@redhat.com>
 
-Hi Hans,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.2-rc5 next-20230127]
-[cannot apply to media-tree/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-de-Goede/media-v4l2-core-Make-the-v4l2-core-code-enable-disable-the-privacy-LED-if-present/20230128-131233
-patch link:    https://lore.kernel.org/r/20230127203729.10205-4-hdegoede%40redhat.com
-patch subject: [PATCH v6 3/5] platform/x86: int3472/discrete: Create a LED class device for the privacy LED
-config: x86_64-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281800.sm8woBKh-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
+head:   06897a0964c21c88d28d72b2d7959fc8651a6d21
+commit: 3e261a30a338475c3efe666377daa612924b1129 asm-generic: Remove COMMAND_LINE_SIZE from uapi
+date:   3 days ago
+config: riscv-randconfig-r014-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281849.TD6gcH6I-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d71a1bce9c9ea0bd5b98920b2d72a5b0a36ca19d
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3e261a30a338475c3efe666377daa612924b1129
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-de-Goede/media-v4l2-core-Make-the-v4l2-core-code-enable-disable-the-privacy-LED-if-present/20230128-131233
-        git checkout d71a1bce9c9ea0bd5b98920b2d72a5b0a36ca19d
+        git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
+        git checkout 3e261a30a338475c3efe666377daa612924b1129
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ drivers/ata/ drivers/firmware/efi/libstub/ drivers/mmc/host/ drivers/of/ init/ lib/kunit/ mm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/platform/x86/intel/int3472/discrete.c:17:
->> drivers/platform/x86/intel/int3472/common.h:107:26: error: field has incomplete type 'struct led_lookup_data'
-                   struct led_lookup_data lookup;
-                                          ^
-   drivers/platform/x86/intel/int3472/common.h:107:10: note: forward declaration of 'struct led_lookup_data'
-                   struct led_lookup_data lookup;
-                          ^
+>> init/main.c:108:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
    1 error generated.
 --
-   In file included from drivers/platform/x86/intel/int3472/led.c:7:
->> drivers/platform/x86/intel/int3472/common.h:107:26: error: field has incomplete type 'struct led_lookup_data'
-                   struct led_lookup_data lookup;
-                                          ^
-   drivers/platform/x86/intel/int3472/common.h:107:10: note: forward declaration of 'struct led_lookup_data'
-                   struct led_lookup_data lookup;
-                          ^
->> drivers/platform/x86/intel/int3472/led.c:57:2: error: implicit declaration of function 'led_add_lookup' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           led_add_lookup(&int3472->pled.lookup);
-           ^
->> drivers/platform/x86/intel/int3472/led.c:71:2: error: implicit declaration of function 'led_remove_lookup' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           led_remove_lookup(&int3472->pled.lookup);
-           ^
-   3 errors generated.
+>> arch/riscv/kernel/setup.c:29:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
+   1 error generated.
+--
+>> arch/riscv/kernel/elf_kexec.c:22:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/ata/libata-core.c:59:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/of/fdt.c:31:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+            ^~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/firmware/efi/libstub/efi-stub-helper.c:15:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/firmware/efi/libstub/gop.c:14:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/firmware/efi/libstub/printk.c:10:10: fatal error: 'asm/setup.h' file not found
+   #include <asm/setup.h>
+            ^~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +107 drivers/platform/x86/intel/int3472/common.h
+vim +108 init/main.c
 
-    80	
-    81	struct int3472_discrete_device {
-    82		struct acpi_device *adev;
-    83		struct device *dev;
-    84		struct acpi_device *sensor;
-    85		const char *sensor_name;
-    86	
-    87		const struct int3472_sensor_config *sensor_config;
-    88	
-    89		struct int3472_gpio_regulator {
-    90			char regulator_name[GPIO_REGULATOR_NAME_LENGTH];
-    91			char supply_name[GPIO_REGULATOR_SUPPLY_NAME_LENGTH];
-    92			struct gpio_desc *gpio;
-    93			struct regulator_dev *rdev;
-    94			struct regulator_desc rdesc;
-    95		} regulator;
-    96	
-    97		struct int3472_gpio_clock {
-    98			struct clk *clk;
-    99			struct clk_hw clk_hw;
-   100			struct clk_lookup *cl;
-   101			struct gpio_desc *ena_gpio;
-   102			u32 frequency;
-   103		} clock;
-   104	
-   105		struct int3472_pled {
-   106			struct led_classdev classdev;
- > 107			struct led_lookup_data lookup;
-   108			char name[INT3472_LED_MAX_NAME_LEN];
-   109			struct gpio_desc *gpio;
-   110		} pled;
-   111	
-   112		unsigned int ngpios; /* how many GPIOs have we seen */
-   113		unsigned int n_sensor_gpios; /* how many have we mapped to sensor */
-   114		struct gpiod_lookup_table gpios;
-   115	};
-   116	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  105  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  106  #include <asm/io.h>
+^1da177e4c3f41 Linus Torvalds   2005-04-16  107  #include <asm/bugs.h>
+^1da177e4c3f41 Linus Torvalds   2005-04-16 @108  #include <asm/setup.h>
+a940199f206dcf Andi Kleen       2005-07-28  109  #include <asm/sections.h>
+37b73c82818573 Arjan van de Ven 2006-01-06  110  #include <asm/cacheflush.h>
+^1da177e4c3f41 Linus Torvalds   2005-04-16  111  
 
 -- 
 0-DAY CI Kernel Test Service
