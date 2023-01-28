@@ -1,281 +1,158 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F5A2F47;
-	Sat, 28 Jan 2023 17:03:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674925426; x=1706461426;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Oz5Qitx6MIN8m1O+Y6EpEtV7KVwZAu7xdxkF/oTRkeg=;
-  b=OoscvK810AjCFNqy+n/b39CNc+5s7NWgV3wi6bZ2KxLtzoLhL5BnEK5B
-   wQIRHO48uk/RT2jt/olOfCnI5A+ceW44eZle8WJzygtL2/wise58zGNIX
-   q8lGInZZzKACAhREl2eC16zFB2EDmJTNpTi1z+BY7Osc+Pqr3JbxhKJhA
-   wetu42W8eVKKt6D/1Vhp06j7dRDLKC1xZZKYpryo/NEagVZWyIJAalpYG
-   EgqrL+wk8xzWu+w9EL8a6JhRoKsv34GO9tGIpdeKQhO7lfMhzBG3NZIfn
-   ZbZgTBwdFSlN4YOzRD5OJ0XWmS9RwOmtD1DK450YNqV2v1G5P2yJZrg6r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="328597089"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="328597089"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 09:03:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="771942295"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="771942295"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2023 09:03:44 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLocB-0000w1-2S;
-	Sat, 28 Jan 2023 17:03:43 +0000
-Date: Sun, 29 Jan 2023 01:03:36 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/mac80211/he.c:158:33: warning: taking address of packed member
- 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value
-Message-ID: <202301290013.VifWSWdY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396E86FBB
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 17:38:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AB3C4339B;
+	Sat, 28 Jan 2023 17:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1674927530;
+	bh=v3mGrohSr9bDJCU80FA5vw5BtHfkP5BeWMETdmxm4ig=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=BJ77Hd9pAM2KjrvlAv7HMI+wb6gmzEBp0khlIkiklt15F6IdOiKaoQ+ctKHDdQQ3T
+	 Qwnwxnnkn5iiRHWRcnoWV31HAMhIAQM7rVeQdBApeS1+eoijx2RAWdhOuY5XHpduAU
+	 tibyai5jwb+Md3UW01iGzsg7n/R1hBXfCVX6cU7qBm4P3IQVWSrjMdg0XNQYTQlek5
+	 U8fR58y7chseduKcSV+NUyCOt9P6tYeFnBkHe9/r9AUGTB5Hu1WSyeGEOXRrxBE+ET
+	 jzoHbWkQ0pA0v5bYufGHaQ2HtDv5ObWbzyMldFkbbgky27DnJx3IJIkpDhQlS7ozsm
+	 92FgL92Q9Wfuw==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH 2/4] kbuild: deb-pkg: create source package without cleaning
+Date: Sun, 29 Jan 2023 02:38:41 +0900
+Message-Id: <20230128173843.765212-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230128173843.765212-1-masahiroy@kernel.org>
+References: <20230128173843.765212-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-net/mac80211/he.c: 158:33: warning: taking address of packed member
- 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 160:12: warning: taking address of packed member
- 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 169:34: warning: taking address of packed member
- 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 171:13: warning: taking address of packed member
- 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 186:34: warning: taking address of packed member
- 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
- in an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 188:13: warning: taking address of packed member
- 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
- in an unaligned pointer value [-Waddress-of-packed-member]
+Content-Transfer-Encoding: 8bit
 
-TO: Wen Gong <wgong@codeaurora.org>
-CC: Johannes Berg <johannes.berg@intel.com>
+If you run 'make deb-pkg', all objects are lost due to 'make clean',
+which makes the incremental builds impossible.
 
-Hi Wen,
+Instead of cleaning, pass the exclude list to tar's --exclude-from
+option.
 
-FYI, the error/warning still remains.
+Previously, *.diff.gz contained some check-in files such as
+.clang-format, .cocciconfig.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git queue/5.15
-head:   efa1f8bff26d9cd24223252db137b5080c6cfa97
-commit: 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6 mac80211: reduce peer HE MCS/NSS to own capabilities
-date:   2 years ago
-config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20230129/202301290013.VifWSWdY-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus linux-stable-rc/queue/5.15
-        git checkout 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/ net/ipv6/ net/mac80211/
+With this commit, *.diff.gz will only contain the .config and debian/.
+The other source files will go into the tarball.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-All warnings (new ones prefixed by >>):
+ scripts/Makefile.package | 27 ++++++++++++++++++++++-----
+ scripts/package/mkdebian | 27 +++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 5 deletions(-)
 
-   In file included from net/mac80211/he.c:9:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/net/checksum.h:22:
-   arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
-           : "0" ((__force unsigned long)daddr),
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/mac80211/he.c:9:
-   In file included from net/mac80211/ieee80211_i.h:30:
-   In file included from include/net/mac80211.h:22:
-   In file included from include/net/codel.h:48:
-   In file included from include/net/inet_ecn.h:9:
-   In file included from include/net/inet_sock.h:22:
-   In file included from include/net/sock.h:61:
-   include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                           ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                                       ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
->> net/mac80211/he.c:158:33: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:159:12: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &he_cap->he_mcs_nss_supp.rx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:160:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:161:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &he_cap->he_mcs_nss_supp.tx_mcs_80);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:169:34: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:170:13: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.rx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:171:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:172:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.tx_mcs_160);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:174:29: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:175:29: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:186:34: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:187:13: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:188:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:189:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:191:29: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:192:29: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   18 warnings and 1 error generated.
-
-
-vim +158 net/mac80211/he.c
-
-   105	
-   106	void
-   107	ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
-   108					  struct ieee80211_supported_band *sband,
-   109					  const u8 *he_cap_ie, u8 he_cap_len,
-   110					  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
-   111					  struct sta_info *sta)
-   112	{
-   113		struct ieee80211_sta_he_cap *he_cap = &sta->sta.he_cap;
-   114		struct ieee80211_sta_he_cap own_he_cap = sband->iftype_data->he_cap;
-   115		struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
-   116		u8 he_ppe_size;
-   117		u8 mcs_nss_size;
-   118		u8 he_total_size;
-   119		bool own_160, peer_160, own_80p80, peer_80p80;
-   120	
-   121		memset(he_cap, 0, sizeof(*he_cap));
-   122	
-   123		if (!he_cap_ie || !ieee80211_get_he_sta_cap(sband))
-   124			return;
-   125	
-   126		/* Make sure size is OK */
-   127		mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem);
-   128		he_ppe_size =
-   129			ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
-   130							mcs_nss_size],
-   131					      he_cap_ie_elem->phy_cap_info);
-   132		he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
-   133				he_ppe_size;
-   134		if (he_cap_len < he_total_size)
-   135			return;
-   136	
-   137		memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
-   138	
-   139		/* HE Tx/Rx HE MCS NSS Support Field */
-   140		memcpy(&he_cap->he_mcs_nss_supp,
-   141		       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
-   142	
-   143		/* Check if there are (optional) PPE Thresholds */
-   144		if (he_cap->he_cap_elem.phy_cap_info[6] &
-   145		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
-   146			memcpy(he_cap->ppe_thres,
-   147			       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
-   148			       he_ppe_size);
-   149	
-   150		he_cap->has_he = true;
-   151	
-   152		sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(sta);
-   153		sta->sta.bandwidth = ieee80211_sta_cur_vht_bw(sta);
-   154	
-   155		if (sband->band == NL80211_BAND_6GHZ && he_6ghz_capa)
-   156			ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, sta);
-   157	
- > 158		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
- > 159					      &he_cap->he_mcs_nss_supp.rx_mcs_80,
- > 160					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
- > 161					      &he_cap->he_mcs_nss_supp.tx_mcs_80);
-   162	
-   163		own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
-   164			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   165		peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
-   166			   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   167	
-   168		if (peer_160 && own_160) {
- > 169			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
-   170						      &he_cap->he_mcs_nss_supp.rx_mcs_160,
- > 171						      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
- > 172						      &he_cap->he_mcs_nss_supp.tx_mcs_160);
-   173		} else if (peer_160 && !own_160) {
-   174			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
- > 175			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
-   176			he_cap->he_cap_elem.phy_cap_info[0] &=
-   177				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   178		}
-   179	
-   180		own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
-   181			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   182		peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
-   183			     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   184	
-   185		if (peer_80p80 && own_80p80) {
- > 186			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
-   187						      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
- > 188						      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
-   189						      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-   190		} else if (peer_80p80 && !own_80p80) {
-   191			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
-   192			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-   193			he_cap->he_cap_elem.phy_cap_info[0] &=
-   194				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   195		}
-   196	}
-   197	
-
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index dfbf40454a99..cb135c99a273 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -50,6 +50,21 @@ fi ; \
+ tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
+ 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
+ 
++# Source Tarball
++# ---------------------------------------------------------------------------
++
++quiet_cmd_exclude_list = GEN     $@
++      cmd_exclude_list = $(srctree)/scripts/gen-exclude.py --prefix=./ --rootdir=$(srctree) > $@; echo "./$@" >> $@
++
++.exclude-list: FORCE
++	$(call cmd,exclude_list)
++
++quiet_cmd_tar = TAR     $@
++      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --transform 's:^\.:linux:S' .
++
++%.tar.gz: .exclude-list
++	$(call cmd,tar)
++
+ # rpm-pkg
+ # ---------------------------------------------------------------------------
+ PHONY += rpm-pkg
+@@ -81,12 +96,11 @@ binrpm-pkg:
+ 
+ PHONY += deb-pkg
+ deb-pkg:
+-	$(MAKE) clean
+ 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
+-	$(call cmd,src_tar,$(KDEB_SOURCENAME))
+-	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
+-		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
+-	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
++	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
++		$(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
++	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
++		--build=source,binary --source-option=-sP -nc -us -uc
+ 
+ PHONY += bindeb-pkg
+ bindeb-pkg:
+@@ -174,4 +188,7 @@ help:
+ 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
+ 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
+ 
++PHONY += FORCE
++FORCE:
++
+ .PHONY: $(PHONY)
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index c3bbef7a6754..12c057ffbe6e 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -84,6 +84,8 @@ set_debarch() {
+ 	fi
+ }
+ 
++rm -rf debian
++
+ # Some variables and settings used throughout the script
+ version=$KERNELRELEASE
+ if [ -n "$KDEB_PKGVERSION" ]; then
+@@ -135,6 +137,31 @@ fi
+ mkdir -p debian/source/
+ echo "1.0" > debian/source/format
+ 
++cat<<'EOF' > debian/source/local-options
++#
++# Ugly: ignore anything except .config or debian/
++# (is there a cleaner way to do this?)
++#
++diff-ignore
++
++extend-diff-ignore = ^[^.d]
++
++extend-diff-ignore = ^\.[^c]
++extend-diff-ignore = ^\.c($|[^o])
++extend-diff-ignore = ^\.co($|[^n])
++extend-diff-ignore = ^\.con($|[^f])
++extend-diff-ignore = ^\.conf($|[^i])
++extend-diff-ignore = ^\.confi($|[^g])
++extend-diff-ignore = ^\.config.
++
++extend-diff-ignore = ^d($|[^e])
++extend-diff-ignore = ^de($|[^b])
++extend-diff-ignore = ^deb($|[^i])
++extend-diff-ignore = ^debi($|[^a])
++extend-diff-ignore = ^debia($|[^n])
++extend-diff-ignore = ^debian[^/]
++EOF
++
+ echo $debarch > debian/arch
+ extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
+ extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
