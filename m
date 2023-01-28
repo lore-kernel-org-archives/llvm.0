@@ -1,158 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396E86FBB
-	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 17:38:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AB3C4339B;
-	Sat, 28 Jan 2023 17:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674927530;
-	bh=v3mGrohSr9bDJCU80FA5vw5BtHfkP5BeWMETdmxm4ig=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BJ77Hd9pAM2KjrvlAv7HMI+wb6gmzEBp0khlIkiklt15F6IdOiKaoQ+ctKHDdQQ3T
-	 Qwnwxnnkn5iiRHWRcnoWV31HAMhIAQM7rVeQdBApeS1+eoijx2RAWdhOuY5XHpduAU
-	 tibyai5jwb+Md3UW01iGzsg7n/R1hBXfCVX6cU7qBm4P3IQVWSrjMdg0XNQYTQlek5
-	 U8fR58y7chseduKcSV+NUyCOt9P6tYeFnBkHe9/r9AUGTB5Hu1WSyeGEOXRrxBE+ET
-	 jzoHbWkQ0pA0v5bYufGHaQ2HtDv5ObWbzyMldFkbbgky27DnJx3IJIkpDhQlS7ozsm
-	 92FgL92Q9Wfuw==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH 2/4] kbuild: deb-pkg: create source package without cleaning
-Date: Sun, 29 Jan 2023 02:38:41 +0900
-Message-Id: <20230128173843.765212-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230128173843.765212-1-masahiroy@kernel.org>
-References: <20230128173843.765212-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3E86FBB
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 17:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1674928245;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9gzUrPs1+GClqsj4J+LRinBe9PQa8u4GBkAhYOQCsM4=;
+	b=LbE1yiySGyq4CP3MYcweWszR7OsQlANjiN9kYFz+rFCCFfPMVOFt43WoL4wAzY6hwIOuxs
+	99klgY6NjpSJEaxSUJa0YlkXclkgKGPQrIknyS4U44AgVYMvgl8vTvm4FF7f3iof4sNxFt
+	29QyMqySGsOU0spmydaFh9qnUADgv4E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-msken-BkN6qA6zp0S558qA-1; Sat, 28 Jan 2023 12:50:43 -0500
+X-MC-Unique: msken-BkN6qA6zp0S558qA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CD2A1C05143
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 17:50:43 +0000 (UTC)
+Received: from [172.64.14.22] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 521FC53AA;
+	Sat, 28 Jan 2023 17:50:43 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, 04ad927c)
+Date: Sat, 28 Jan 2023 17:50:43 -0000
+To: efuller@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <56369.123012812504300508@us-mta-658.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-If you run 'make deb-pkg', all objects are lost due to 'make clean',
-which makes the incremental builds impossible.
+Hi, we tested your kernel and here are the results:
 
-Instead of cleaning, pass the exclude list to tar's --exclude-from
-option.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Previously, *.diff.gz contained some check-in files such as
-.clang-format, .cocciconfig.
 
-With this commit, *.diff.gz will only contain the .config and debian/.
-The other source files will go into the tarball.
+Kernel information:
+    Commit message: Merge tag 'acpi-6.2-rc6' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/rafael/linux-pm
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67402
 
- scripts/Makefile.package | 27 ++++++++++++++++++++++-----
- scripts/package/mkdebian | 27 +++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+), 5 deletions(-)
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6849819
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6849603
+          x86_64 (debug) - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6850039
 
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index dfbf40454a99..cb135c99a273 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -50,6 +50,21 @@ fi ; \
- tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
- 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
- 
-+# Source Tarball
-+# ---------------------------------------------------------------------------
-+
-+quiet_cmd_exclude_list = GEN     $@
-+      cmd_exclude_list = $(srctree)/scripts/gen-exclude.py --prefix=./ --rootdir=$(srctree) > $@; echo "./$@" >> $@
-+
-+.exclude-list: FORCE
-+	$(call cmd,exclude_list)
-+
-+quiet_cmd_tar = TAR     $@
-+      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --transform 's:^\.:linux:S' .
-+
-+%.tar.gz: .exclude-list
-+	$(call cmd,tar)
-+
- # rpm-pkg
- # ---------------------------------------------------------------------------
- PHONY += rpm-pkg
-@@ -81,12 +96,11 @@ binrpm-pkg:
- 
- PHONY += deb-pkg
- deb-pkg:
--	$(MAKE) clean
- 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
--	$(call cmd,src_tar,$(KDEB_SOURCENAME))
--	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
--		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
-+	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-+		$(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-+	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
-+		--build=source,binary --source-option=-sP -nc -us -uc
- 
- PHONY += bindeb-pkg
- bindeb-pkg:
-@@ -174,4 +188,7 @@ help:
- 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
- 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
- 
-+PHONY += FORCE
-+FORCE:
-+
- .PHONY: $(PHONY)
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index c3bbef7a6754..12c057ffbe6e 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -84,6 +84,8 @@ set_debarch() {
- 	fi
- }
- 
-+rm -rf debian
-+
- # Some variables and settings used throughout the script
- version=$KERNELRELEASE
- if [ -n "$KDEB_PKGVERSION" ]; then
-@@ -135,6 +137,31 @@ fi
- mkdir -p debian/source/
- echo "1.0" > debian/source/format
- 
-+cat<<'EOF' > debian/source/local-options
-+#
-+# Ugly: ignore anything except .config or debian/
-+# (is there a cleaner way to do this?)
-+#
-+diff-ignore
-+
-+extend-diff-ignore = ^[^.d]
-+
-+extend-diff-ignore = ^\.[^c]
-+extend-diff-ignore = ^\.c($|[^o])
-+extend-diff-ignore = ^\.co($|[^n])
-+extend-diff-ignore = ^\.con($|[^f])
-+extend-diff-ignore = ^\.conf($|[^i])
-+extend-diff-ignore = ^\.confi($|[^g])
-+extend-diff-ignore = ^\.config.
-+
-+extend-diff-ignore = ^d($|[^e])
-+extend-diff-ignore = ^de($|[^b])
-+extend-diff-ignore = ^deb($|[^i])
-+extend-diff-ignore = ^debi($|[^a])
-+extend-diff-ignore = ^debia($|[^n])
-+extend-diff-ignore = ^debian[^/]
-+EOF
-+
- echo $debarch > debian/arch
- extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
- extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
--- 
-2.34.1
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
