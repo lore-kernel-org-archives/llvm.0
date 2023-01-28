@@ -1,105 +1,400 @@
-Received: from outbound.mail.protection.outlook.com (mail-mw2nam04on2059.outbound.protection.outlook.com [40.107.101.59])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C157481;
-	Sat, 28 Jan 2023 20:27:51 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=em4/aD5CzJvob46igR62D2NHChN5L6BFKe3bfBsAUyN24rgk786OZ+zFETo0yFNSOc+gTsOiOhKEJhD3Z1YM4OG0W6Fc6Vxs7/DOp4whO9MDEVFAN4Q06krSmIVJBR37pk/FkEh5J259+Lr5x5rmrt8/psfO+aZv1Qt8aGdywMPO4cmDHsaXA8cDvjsLclhAU9muN6g4vh2Qlqucr+rmVpqc9W0DcNvl2wt50ax7K/56MvLNp4byPDe0IvaDM6QIg+m+Xm/erXVYKp/bVnOA60pMO4oXNb2KE7dKCTVMtcWTPyXVVub10rcLXEhELU1YqPE1jMHkEoFeaOYNzwWh6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=amJQYjNi3OKa4VAcyXiEE3GC+puyM1XPVAsv7ALTcv8=;
- b=mCFktX4XTioqQRKGayZSrDAZU9GQmFIGyeRvzOvf7L8AzW2YrqkVCbK4gzoJUq+kdcmCc6F0O3FIeG2EMz5i13+bA/z/ZpgiMZzLnoGDvM/oLwDZ83YFqnVmMatQiidFS55bPZTaDC/d6Drn9MUUmvAQsDsxAuoeSuXwuQI0KD5H4+jagSTS5rURFwdBHpPcSKU/4a/hUDzcCVefS4u8N/2SbfsqQAHvKf7/eKdnzTOyoC8Q2wYe7Y3tv3zYfYzIvwPLFpD1PyosatJc9ZFvUaWgfA0y7Jpp71WrmZZRKS1H/SDBLELdrDr0/NxLMrwMAUHH/sYI6si3USgBQaFDzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=amJQYjNi3OKa4VAcyXiEE3GC+puyM1XPVAsv7ALTcv8=;
- b=GaU/BzCkOHIAEpIeq2/oRl44RNpZIYfMj6QXnNDevXv9mqdWpAoHwptMtW4CpvhulFMH2kYzvwHXnTtrCUcK9o544mDu0pS6yjCkUOVkGHIlLppXVCaQUlwGM2PtpOaICEXGFexakzmd2gHXOC+KkMCvEr/gUsQoDAL36nWJN1o1d8I12l9ZDrN6WLGZHoHlTtIEKO0VX3sD96ZKx4M27EnXCRWMQMz6YBkK6Mh+G8sH9Dqx2DhrV5/jFVvJkGCHa6SsjcKwTydRM+RFUKD5upLuRJuPNKazfEMp+2pjm4MmWq690vpiIM37ZmkYOru85Q0HZ3wxoNCUpLQwlxsXfw==
-Received: from BN9P220CA0015.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::20)
- by DM4PR12MB6232.namprd12.prod.outlook.com (2603:10b6:8:a5::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.25; Sat, 28 Jan 2023 20:27:50 +0000
-Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13e:cafe::4f) by BN9P220CA0015.outlook.office365.com
- (2603:10b6:408:13e::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.30 via Frontend
- Transport; Sat, 28 Jan 2023 20:27:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.30 via Frontend Transport; Sat, 28 Jan 2023 20:27:49 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sat, 28 Jan
- 2023 12:27:46 -0800
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sat, 28 Jan 2023 12:27:46 -0800
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Sat, 28 Jan 2023 12:27:45 -0800
-Date: Sat, 28 Jan 2023 12:27:44 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, kernel test robot
-	<lkp@intel.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<yi.l.liu@intel.com>, <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
-Message-ID: <Y9WFQDP1qURYxtCa@Asurada-Nvidia>
-References: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
- <202301281943.Jdvwci2p-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873BA192;
+	Sat, 28 Jan 2023 20:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674937855; x=1706473855;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=71y1W1b1xJ8x2JzNe2W+jUdox0W00D7Z1eylzyt4Inw=;
+  b=HB6svOYgQ9/zYthX+1NQ9xEDtGdIrTEo9vebSPR6o3430on3htRiIIVT
+   XY7ETfm6AhhUEq2FNV/qYnMVQ3NQ+HFiD6gCsfrtQAmr/qlkdlRgzBj2x
+   afrN4Z+/cwLV56/EaMlG/mp8LTdcicWpYEWdlwEnF4ArCOY8bRXC21JST
+   ruNtG5AMNLkrrFtv2fGCle5FK4UWxAIofVmBS+P/878nNZs16PqlaxRqj
+   n+7mBaTIZEMLxfGSuxsp+3dgtQa6x3LOGTxmhJUShDyaLZPduY0kVRDyz
+   3Luyqn5qdflHqmbOe7frg+ntGoRmsN3XGRa05GwAxFyb1Of+p+EMJvUz9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="325025757"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="325025757"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 12:30:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="837533309"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="837533309"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2023 12:30:51 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pLrqc-00015G-2p;
+	Sat, 28 Jan 2023 20:30:50 +0000
+Date: Sun, 29 Jan 2023 04:30:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: wolfgang@linogate.de, steffen.klassert@secunet.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Wolfgang Nothdurft <wolfgang@linogate.de>
+Subject: Re: [PATCH net] xfrm: remove inherited bridge info from skb
+Message-ID: <202301290439.F9s2CEim-lkp@intel.com>
+References: <20230126125637.91969-1-wolfgang@linogate.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202301281943.Jdvwci2p-lkp@intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT005:EE_|DM4PR12MB6232:EE_
-X-MS-Office365-Filtering-Correlation-Id: aad7e3ec-8668-4d1c-25a2-08db016e201d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	wKkl7+v/UO7KQvnlxw1Eyak/ZpI5XmmXgRw0qIECCYRXPdr5xCKRhPtUJdduKZROPoiuErhd7loAE5v1L1SL0V+gc10mJAYLC7JbBXB5JOYptjX+3uyV5X8III0Bac+X32Xn3MjoKfgymEA9BVxsu95KC9GCxa+MrBBH0yv9guJvRaBKWZtbxBQ1evIRDd1L3NAwC6Zi88erEN/YuO/LyMbEq2u97UMctrW/gLyVayrL+lRJfNpAC2U3T4ZkuSPTAJ06CPVpSUMzf9tmJAmjthxVf1BWeOPq0GGZNUO7gU9epcePI7o9GBGri+8aIuAfsLq4qNnalQ0KEzwfKcdPg+JY+8vmJmzL++WnZy/7Dmxs7H6Qlae/OsUJxyLVlrabtVUOvW6deakgPteRaVQSBqXVeEXXGxXXdXlbbJRRo/NY6FVzCrPvutxDyrDb3Znp221qqgy+hn74r13SNAN4Ee5sDiE6IXHsQZutrkuDLCpdIySlW3tjesi7flncKZLjV0sZ8I2T1cfxfEyeaGM1UYLN+ZuCz/DIl9slsSvgwCEB117NpLSpP9KKoovTbc4oOISCmLxdQ6UCwqsMnGoqrVVIqNrm5U+efZEvFsnBzGz9d34oWUEvyJje0Vs35LuoK/lK9twxgFd9NRb6hnUHvbfvU6118Ky/IBmC+URkXvihR/Y3X9i9lWWy9YYwqQiit5ymGp8RVlayQKRHjgz1/A==
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199018)(46966006)(40470700004)(36840700001)(47076005)(5660300002)(356005)(316002)(8936002)(82740400003)(110136005)(54906003)(70206006)(70586007)(7636003)(4326008)(41300700001)(8676002)(36860700001)(2906002)(40480700001)(40460700003)(4744005)(55016003)(478600001)(83380400001)(426003)(33716001)(186003)(86362001)(336012)(26005)(82310400005)(9686003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2023 20:27:49.7837
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aad7e3ec-8668-4d1c-25a2-08db016e201d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6232
+In-Reply-To: <20230126125637.91969-1-wolfgang@linogate.de>
 
-On Sat, Jan 28, 2023 at 07:52:54PM +0800, kernel test robot wrote:
+Hi,
 
-> >> drivers/iommu/iommufd/device.c:279:23: warning: variable 'hwpt' is uninitialized when used here [-Wuninitialized]
->            lockdep_assert_held(&hwpt->ioas->mutex);
->                                 ^~~~
+Thank you for the patch! Yet something to improve:
 
-A mistake here...will fix with a v2:
-            lockdep_assert_held(&ioas->mutex);
+[auto build test ERROR on net/master]
 
-Thanks
-Nicolin
+url:    https://github.com/intel-lab-lkp/linux/commits/wolfgang-linogate-de/xfrm-remove-inherited-bridge-info-from-skb/20230128-180508
+patch link:    https://lore.kernel.org/r/20230126125637.91969-1-wolfgang%40linogate.de
+patch subject: [PATCH net] xfrm: remove inherited bridge info from skb
+config: i386-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230129/202301290439.F9s2CEim-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d1ea8e936ffdff6ceddc242e516a79730af3a017
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review wolfgang-linogate-de/xfrm-remove-inherited-bridge-info-from-skb/20230128-180508
+        git checkout d1ea8e936ffdff6ceddc242e516a79730af3a017
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> net/xfrm/xfrm_input.c:545:25: error: use of undeclared identifier 'SKB_EXT_BRIDGE_NF'
+           if (skb_ext_exist(skb, SKB_EXT_BRIDGE_NF))
+                                  ^
+   net/xfrm/xfrm_input.c:546:20: error: use of undeclared identifier 'SKB_EXT_BRIDGE_NF'
+                   skb_ext_del(skb, SKB_EXT_BRIDGE_NF);
+                                    ^
+   2 errors generated.
+
+
+vim +/SKB_EXT_BRIDGE_NF +545 net/xfrm/xfrm_input.c
+
+   460	
+   461	int xfrm_input(struct sk_buff *skb, int nexthdr, __be32 spi, int encap_type)
+   462	{
+   463		const struct xfrm_state_afinfo *afinfo;
+   464		struct net *net = dev_net(skb->dev);
+   465		const struct xfrm_mode *inner_mode;
+   466		int err;
+   467		__be32 seq;
+   468		__be32 seq_hi;
+   469		struct xfrm_state *x = NULL;
+   470		xfrm_address_t *daddr;
+   471		u32 mark = skb->mark;
+   472		unsigned int family = AF_UNSPEC;
+   473		int decaps = 0;
+   474		int async = 0;
+   475		bool xfrm_gro = false;
+   476		bool crypto_done = false;
+   477		struct xfrm_offload *xo = xfrm_offload(skb);
+   478		struct sec_path *sp;
+   479	
+   480		if (encap_type < 0) {
+   481			x = xfrm_input_state(skb);
+   482	
+   483			if (unlikely(x->km.state != XFRM_STATE_VALID)) {
+   484				if (x->km.state == XFRM_STATE_ACQ)
+   485					XFRM_INC_STATS(net, LINUX_MIB_XFRMACQUIREERROR);
+   486				else
+   487					XFRM_INC_STATS(net,
+   488						       LINUX_MIB_XFRMINSTATEINVALID);
+   489	
+   490				if (encap_type == -1)
+   491					dev_put(skb->dev);
+   492				goto drop;
+   493			}
+   494	
+   495			family = x->outer_mode.family;
+   496	
+   497			/* An encap_type of -1 indicates async resumption. */
+   498			if (encap_type == -1) {
+   499				async = 1;
+   500				seq = XFRM_SKB_CB(skb)->seq.input.low;
+   501				goto resume;
+   502			}
+   503	
+   504			/* encap_type < -1 indicates a GRO call. */
+   505			encap_type = 0;
+   506			seq = XFRM_SPI_SKB_CB(skb)->seq;
+   507	
+   508			if (xo && (xo->flags & CRYPTO_DONE)) {
+   509				crypto_done = true;
+   510				family = XFRM_SPI_SKB_CB(skb)->family;
+   511	
+   512				if (!(xo->status & CRYPTO_SUCCESS)) {
+   513					if (xo->status &
+   514					    (CRYPTO_TRANSPORT_AH_AUTH_FAILED |
+   515					     CRYPTO_TRANSPORT_ESP_AUTH_FAILED |
+   516					     CRYPTO_TUNNEL_AH_AUTH_FAILED |
+   517					     CRYPTO_TUNNEL_ESP_AUTH_FAILED)) {
+   518	
+   519						xfrm_audit_state_icvfail(x, skb,
+   520									 x->type->proto);
+   521						x->stats.integrity_failed++;
+   522						XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEPROTOERROR);
+   523						goto drop;
+   524					}
+   525	
+   526					if (xo->status & CRYPTO_INVALID_PROTOCOL) {
+   527						XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEPROTOERROR);
+   528						goto drop;
+   529					}
+   530	
+   531					XFRM_INC_STATS(net, LINUX_MIB_XFRMINBUFFERERROR);
+   532					goto drop;
+   533				}
+   534	
+   535				if (xfrm_parse_spi(skb, nexthdr, &spi, &seq)) {
+   536					XFRM_INC_STATS(net, LINUX_MIB_XFRMINHDRERROR);
+   537					goto drop;
+   538				}
+   539			}
+   540	
+   541			goto lock;
+   542		}
+   543	
+   544		/* strip bridge info from skb */
+ > 545		if (skb_ext_exist(skb, SKB_EXT_BRIDGE_NF))
+   546			skb_ext_del(skb, SKB_EXT_BRIDGE_NF);
+   547	
+   548		family = XFRM_SPI_SKB_CB(skb)->family;
+   549	
+   550		/* if tunnel is present override skb->mark value with tunnel i_key */
+   551		switch (family) {
+   552		case AF_INET:
+   553			if (XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip4)
+   554				mark = be32_to_cpu(XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip4->parms.i_key);
+   555			break;
+   556		case AF_INET6:
+   557			if (XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip6)
+   558				mark = be32_to_cpu(XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip6->parms.i_key);
+   559			break;
+   560		}
+   561	
+   562		sp = secpath_set(skb);
+   563		if (!sp) {
+   564			XFRM_INC_STATS(net, LINUX_MIB_XFRMINERROR);
+   565			goto drop;
+   566		}
+   567	
+   568		seq = 0;
+   569		if (!spi && xfrm_parse_spi(skb, nexthdr, &spi, &seq)) {
+   570			secpath_reset(skb);
+   571			XFRM_INC_STATS(net, LINUX_MIB_XFRMINHDRERROR);
+   572			goto drop;
+   573		}
+   574	
+   575		daddr = (xfrm_address_t *)(skb_network_header(skb) +
+   576					   XFRM_SPI_SKB_CB(skb)->daddroff);
+   577		do {
+   578			sp = skb_sec_path(skb);
+   579	
+   580			if (sp->len == XFRM_MAX_DEPTH) {
+   581				secpath_reset(skb);
+   582				XFRM_INC_STATS(net, LINUX_MIB_XFRMINBUFFERERROR);
+   583				goto drop;
+   584			}
+   585	
+   586			x = xfrm_state_lookup(net, mark, daddr, spi, nexthdr, family);
+   587			if (x == NULL) {
+   588				secpath_reset(skb);
+   589				XFRM_INC_STATS(net, LINUX_MIB_XFRMINNOSTATES);
+   590				xfrm_audit_state_notfound(skb, family, spi, seq);
+   591				goto drop;
+   592			}
+   593	
+   594			skb->mark = xfrm_smark_get(skb->mark, x);
+   595	
+   596			sp->xvec[sp->len++] = x;
+   597	
+   598			skb_dst_force(skb);
+   599			if (!skb_dst(skb)) {
+   600				XFRM_INC_STATS(net, LINUX_MIB_XFRMINERROR);
+   601				goto drop;
+   602			}
+   603	
+   604	lock:
+   605			spin_lock(&x->lock);
+   606	
+   607			if (unlikely(x->km.state != XFRM_STATE_VALID)) {
+   608				if (x->km.state == XFRM_STATE_ACQ)
+   609					XFRM_INC_STATS(net, LINUX_MIB_XFRMACQUIREERROR);
+   610				else
+   611					XFRM_INC_STATS(net,
+   612						       LINUX_MIB_XFRMINSTATEINVALID);
+   613				goto drop_unlock;
+   614			}
+   615	
+   616			if ((x->encap ? x->encap->encap_type : 0) != encap_type) {
+   617				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMISMATCH);
+   618				goto drop_unlock;
+   619			}
+   620	
+   621			if (xfrm_replay_check(x, skb, seq)) {
+   622				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATESEQERROR);
+   623				goto drop_unlock;
+   624			}
+   625	
+   626			if (xfrm_state_check_expire(x)) {
+   627				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEEXPIRED);
+   628				goto drop_unlock;
+   629			}
+   630	
+   631			spin_unlock(&x->lock);
+   632	
+   633			if (xfrm_tunnel_check(skb, x, family)) {
+   634				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMODEERROR);
+   635				goto drop;
+   636			}
+   637	
+   638			seq_hi = htonl(xfrm_replay_seqhi(x, seq));
+   639	
+   640			XFRM_SKB_CB(skb)->seq.input.low = seq;
+   641			XFRM_SKB_CB(skb)->seq.input.hi = seq_hi;
+   642	
+   643			dev_hold(skb->dev);
+   644	
+   645			if (crypto_done)
+   646				nexthdr = x->type_offload->input_tail(x, skb);
+   647			else
+   648				nexthdr = x->type->input(x, skb);
+   649	
+   650			if (nexthdr == -EINPROGRESS)
+   651				return 0;
+   652	resume:
+   653			dev_put(skb->dev);
+   654	
+   655			spin_lock(&x->lock);
+   656			if (nexthdr < 0) {
+   657				if (nexthdr == -EBADMSG) {
+   658					xfrm_audit_state_icvfail(x, skb,
+   659								 x->type->proto);
+   660					x->stats.integrity_failed++;
+   661				}
+   662				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEPROTOERROR);
+   663				goto drop_unlock;
+   664			}
+   665	
+   666			/* only the first xfrm gets the encap type */
+   667			encap_type = 0;
+   668	
+   669			if (xfrm_replay_recheck(x, skb, seq)) {
+   670				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATESEQERROR);
+   671				goto drop_unlock;
+   672			}
+   673	
+   674			xfrm_replay_advance(x, seq);
+   675	
+   676			x->curlft.bytes += skb->len;
+   677			x->curlft.packets++;
+   678			x->lastused = ktime_get_real_seconds();
+   679	
+   680			spin_unlock(&x->lock);
+   681	
+   682			XFRM_MODE_SKB_CB(skb)->protocol = nexthdr;
+   683	
+   684			inner_mode = &x->inner_mode;
+   685	
+   686			if (x->sel.family == AF_UNSPEC) {
+   687				inner_mode = xfrm_ip2inner_mode(x, XFRM_MODE_SKB_CB(skb)->protocol);
+   688				if (inner_mode == NULL) {
+   689					XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMODEERROR);
+   690					goto drop;
+   691				}
+   692			}
+   693	
+   694			if (xfrm_inner_mode_input(x, inner_mode, skb)) {
+   695				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMODEERROR);
+   696				goto drop;
+   697			}
+   698	
+   699			if (x->outer_mode.flags & XFRM_MODE_FLAG_TUNNEL) {
+   700				decaps = 1;
+   701				break;
+   702			}
+   703	
+   704			/*
+   705			 * We need the inner address.  However, we only get here for
+   706			 * transport mode so the outer address is identical.
+   707			 */
+   708			daddr = &x->id.daddr;
+   709			family = x->outer_mode.family;
+   710	
+   711			err = xfrm_parse_spi(skb, nexthdr, &spi, &seq);
+   712			if (err < 0) {
+   713				XFRM_INC_STATS(net, LINUX_MIB_XFRMINHDRERROR);
+   714				goto drop;
+   715			}
+   716			crypto_done = false;
+   717		} while (!err);
+   718	
+   719		err = xfrm_rcv_cb(skb, family, x->type->proto, 0);
+   720		if (err)
+   721			goto drop;
+   722	
+   723		nf_reset_ct(skb);
+   724	
+   725		if (decaps) {
+   726			sp = skb_sec_path(skb);
+   727			if (sp)
+   728				sp->olen = 0;
+   729			if (skb_valid_dst(skb))
+   730				skb_dst_drop(skb);
+   731			gro_cells_receive(&gro_cells, skb);
+   732			return 0;
+   733		} else {
+   734			xo = xfrm_offload(skb);
+   735			if (xo)
+   736				xfrm_gro = xo->flags & XFRM_GRO;
+   737	
+   738			err = -EAFNOSUPPORT;
+   739			rcu_read_lock();
+   740			afinfo = xfrm_state_afinfo_get_rcu(x->inner_mode.family);
+   741			if (likely(afinfo))
+   742				err = afinfo->transport_finish(skb, xfrm_gro || async);
+   743			rcu_read_unlock();
+   744			if (xfrm_gro) {
+   745				sp = skb_sec_path(skb);
+   746				if (sp)
+   747					sp->olen = 0;
+   748				if (skb_valid_dst(skb))
+   749					skb_dst_drop(skb);
+   750				gro_cells_receive(&gro_cells, skb);
+   751				return err;
+   752			}
+   753	
+   754			return err;
+   755		}
+   756	
+   757	drop_unlock:
+   758		spin_unlock(&x->lock);
+   759	drop:
+   760		xfrm_rcv_cb(skb, family, x && x->type ? x->type->proto : nexthdr, -1);
+   761		kfree_skb(skb);
+   762		return 0;
+   763	}
+   764	EXPORT_SYMBOL(xfrm_input);
+   765	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
