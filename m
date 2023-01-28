@@ -1,181 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B7D6FBB
-	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 17:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674928283;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ucciiiHp5QrEh/o33mZsr2Tuxd5M1NV1nVa8bHn9iBI=;
-	b=fD28j638X/Xnr9uxx9ThlPDTyH4negTMRyD2nU24+1NFLH6Y/DXjBNWaq9xjr5QDWYRQQm
-	vT4iBdt0cpku40GA6LYOwr5DlGYpmepvYphO/LxYW63/hTGgu3Jj23W4eUs6K88itZT7Xp
-	1Mub6F4Bzr3no0V4EuuvURO2RWVcKkI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-DE3LE3poNjqbeQhvHGXe2w-1; Sat, 28 Jan 2023 12:51:20 -0500
-X-MC-Unique: DE3LE3poNjqbeQhvHGXe2w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7AD8F3C0D19A
-	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 17:51:20 +0000 (UTC)
-Received: from [172.64.14.22] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6669440C2064;
-	Sat, 28 Jan 2023 17:51:20 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (29/383 SKIPPED): Test report for master
- (6.2.0-rc5, mainline.kernel.org-clang, e6f2f6ac)
-Date: Sat, 28 Jan 2023 17:51:20 -0000
-To: efuller@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F89F6FD7;
+	Sat, 28 Jan 2023 18:26:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674930408; x=1706466408;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=I3vX1pUQm9R/YDan066kBrNQPJLrTXZ6jPsjpr5GuzU=;
+  b=CsauQmyXXT1CWOcEdO72S7U12xICKre9R0bvkrrbbqf1j54Zoja76dnJ
+   eu3z9J4/MMGpphWVtnd+3uP4A6w4ve67N+MiExF3ywEtO81C+d/YHovTx
+   SV/z/dpwrblW4zfs30Il4sjwAAA+PGSSLcS76vYaW3Ga/wmdR9tAx4iKn
+   nt/UTSUCOlGYiJ3jJDCRxlxkYvCJwdZ/v5XOtgwCVHTbWFs85wKxsSM0K
+   TsuQKKWf+K1cGz3NiNlz6e6R+b3ZJ3SSopJ/r1AIYRvFrakqBagjURbxF
+   1IBl5ThnBRw0GQiDXvGnr0zjvzsQnyKYk7YiliR70TIY3Hj0atzHf7c8f
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="307660935"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="307660935"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 10:26:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="613556305"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="613556305"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2023 10:26:46 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pLpuX-0000z6-26;
+	Sat, 28 Jan 2023 18:26:45 +0000
+Date: Sun, 29 Jan 2023 02:26:33 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [tip:x86/tdx 3/7] vmlinux.o: warning: objtool: __tdx_hypercall+0x7f:
+ return with modified stack frame
+Message-ID: <202301290255.buUBs99R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <48395.123012812512000299@us-mta-612.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: linux-kernel@vger.kernel.org
+CC: x86@kernel.org
+TO: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Hi Kirill,
 
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Kernel information:
-    Commit message: Merge tag 'i2c-for-6.2-rc6' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/wsa/linux
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
+head:   8de62af018cc9262649d7688f7eb1409b2d8f594
+commit: c30c4b2555ba93b845559a036293fcaf7ffd2b82 [3/7] x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
+config: x86_64-randconfig-a013-20230123 (https://download.01.org/0day-ci/archive/20230129/202301290255.buUBs99R-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c30c4b2555ba93b845559a036293fcaf7ffd2b82
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/tdx
+        git checkout c30c4b2555ba93b845559a036293fcaf7ffd2b82
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/67399
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - Usex - version 1.9-29
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6850126
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6849598
-          x86_64 (debug) - Usex - version 1.9-29
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6850296
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] _panic: _pfx_dmub_abm_set_pipe.isra.0+0x10/0x10 [=
-amdgpu]
-            URL: https://lore.kernel.org/all/aea57c5f-2d20-c589-ad44-a63f11=
-33a3db@linux.intel.com/
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> vmlinux.o: warning: objtool: __tdx_hypercall+0x7f: return with modified stack frame
+   vmlinux.o: warning: objtool: ibt_selftest+0x14: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: sync_regs+0x27: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x2d: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: ibt_selftest+0x1e: return with modified stack frame
 
 
+objdump-func vmlinux.o __tdx_hypercall:
+0000 00000000000052a0 <__tdx_hypercall>:
+0000     52a0:	f3 0f 1e fa          	endbr64
+0004     52a4:	55                   	push   %rbp
+0005     52a5:	48 89 e5             	mov    %rsp,%rbp
+0008     52a8:	41 57                	push   %r15
+000a     52aa:	41 56                	push   %r14
+000c     52ac:	41 55                	push   %r13
+000e     52ae:	41 54                	push   %r12
+0010     52b0:	55                   	push   %rbp
+0011     52b1:	48 89 f8             	mov    %rdi,%rax
+0014     52b4:	48 89 f5             	mov    %rsi,%rbp
+0017     52b7:	4c 8b 50 10          	mov    0x10(%rax),%r10
+001b     52bb:	4c 8b 58 18          	mov    0x18(%rax),%r11
+001f     52bf:	4c 8b 60 20          	mov    0x20(%rax),%r12
+0023     52c3:	4c 8b 68 28          	mov    0x28(%rax),%r13
+0027     52c7:	4c 8b 70 30          	mov    0x30(%rax),%r14
+002b     52cb:	4c 8b 78 38          	mov    0x38(%rax),%r15
+002f     52cf:	50                   	push   %rax
+0030     52d0:	31 c0                	xor    %eax,%eax
+0032     52d2:	b9 00 fc 00 00       	mov    $0xfc00,%ecx
+0037     52d7:	48 f7 c5 02 00 00 00 	test   $0x2,%rbp
+003e     52de:	74 01                	je     52e1 <__tdx_hypercall+0x41>
+0040     52e0:	fb                   	sti
+0041     52e1:	66 0f 01 cc          	tdcall
+0045     52e5:	48 85 c0             	test   %rax,%rax
+0048     52e8:	75 36                	jne    5320 <__tdx_hypercall+0x80>
+004a     52ea:	58                   	pop    %rax
+004b     52eb:	48 f7 c5 01 00 00 00 	test   $0x1,%rbp
+0052     52f2:	74 18                	je     530c <__tdx_hypercall+0x6c>
+0054     52f4:	4c 89 50 10          	mov    %r10,0x10(%rax)
+0058     52f8:	4c 89 58 18          	mov    %r11,0x18(%rax)
+005c     52fc:	4c 89 60 20          	mov    %r12,0x20(%rax)
+0060     5300:	4c 89 68 28          	mov    %r13,0x28(%rax)
+0064     5304:	4c 89 70 30          	mov    %r14,0x30(%rax)
+0068     5308:	4c 89 78 38          	mov    %r15,0x38(%rax)
+006c     530c:	4c 89 d0             	mov    %r10,%rax
+006f     530f:	45 31 d2             	xor    %r10d,%r10d
+0072     5312:	45 31 db             	xor    %r11d,%r11d
+0075     5315:	5d                   	pop    %rbp
+0076     5316:	41 5c                	pop    %r12
+0078     5318:	41 5d                	pop    %r13
+007a     531a:	41 5e                	pop    %r14
+007c     531c:	41 5f                	pop    %r15
+007e     531e:	5d                   	pop    %rbp
+007f     531f:	c3                   	ret
+0080     5320:	e8 00 00 00 00       	call   5325 <__tdx_hypercall+0x85>	5321: R_X86_64_PLT32	__tdx_hypercall_failed-0x4
+0085     5325:	eb f9                	jmp    5320 <__tdx_hypercall+0x80>
+0087     5327:	cc                   	int3
+0088     5328:	cc                   	int3
+0089     5329:	cc                   	int3
+008a     532a:	cc                   	int3
+008b     532b:	cc                   	int3
+008c     532c:	cc                   	int3
+008d     532d:	cc                   	int3
+008e     532e:	cc                   	int3
+008f     532f:	cc                   	int3
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
