@@ -1,42 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D008D197;
-	Sat, 28 Jan 2023 10:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE9E3232;
+	Sat, 28 Jan 2023 11:53:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674901888; x=1706437888;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WNf9+k9hyV+V/vSmI7FcWBXcL8oeVW+CR7Z/0naDkxQ=;
-  b=idagt/74BtUuzwfple+2mBdIgSc8eQMQZQSYBgvusmruNatDhC5XX/JT
-   XoH4yJKGew1ipuzWy7eqC+aE7B3C9c5QYwlW5lHf2ytDQFpaTke2g06TM
-   ShI2wYpBV4oAhKBcIfeVcFumC0AgMJV+zK4DsvbksQ3TYPFhTeXyC8TSX
-   rtbG9Toy7mbpFf+Rz/8gyDXOlPIDz16uTKycmRlPlLZgotGTJFkeEko6K
-   S0q+ZxeNp9dmx+twqpdu8FCTmS0XmxMU7in0PfXjZ10O5ZWP69KjsIkOe
-   Lo76kbZXEB9p+LDf/C6BtIU8/hI5gntOGgGG9EW7IuhBaSFiRom07rs1+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310902686"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="310902686"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 02:31:28 -0800
+  t=1674906811; x=1706442811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v56gkPCfVmp/5J0sTIEWbfckxqrXa5C8j87HJqOVgQA=;
+  b=e0DfkXeYxPhkERCC0I6UZzivxRcxm2Erf4wvr/3I3xjJFDuVz6/OSvi9
+   8h2sGubwDa3Hj/rxFJU287A2rfJVGV/F0tOJreuzBLHeolAOaLVyKp+nH
+   dvi/w/cn2JySWv839vfWhyFJuuLzWtIkLDIsxH3FFcvOxAprF6E4SF27t
+   vK3z+VOmtxqVWfnJV/PkZue0jazmPizcFJw0KM/g9MuhqJOPjkEb1p7q6
+   tqn+bB7kns+knMDecPOjDPYw/R63jO9MJhFbqUhWM7lvFYO/cTc0E48PN
+   1ZNM4LpYvPKh3YWan+w8ThPU3oUJgOoW2qX7m/J6otRkQIjfXHHHNRsUb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="329412099"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="329412099"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 03:53:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="837442522"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="837442522"
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="992368716"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="992368716"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2023 02:31:26 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2023 03:53:27 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLiUX-0000aC-25;
-	Sat, 28 Jan 2023 10:31:25 +0000
-Date: Sat, 28 Jan 2023 18:31:13 +0800
+	id 1pLjlv-0000cP-06;
+	Sat, 28 Jan 2023 11:53:27 +0000
+Date: Sat, 28 Jan 2023 19:52:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	0day robot <lkp@intel.com>
-Subject: init/main.c:108:10: fatal error: 'asm/setup.h' file not found
-Message-ID: <202301281849.TD6gcH6I-lkp@intel.com>
+To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+	kevin.tian@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, yi.l.liu@intel.com,
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
+Message-ID: <202301281943.Jdvwci2p-lkp@intel.com>
+References: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,82 +48,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
-head:   06897a0964c21c88d28d72b2d7959fc8651a6d21
-commit: 3e261a30a338475c3efe666377daa612924b1129 asm-generic: Remove COMMAND_LINE_SIZE from uapi
-date:   3 days ago
-config: riscv-randconfig-r014-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281849.TD6gcH6I-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+Hi Nicolin,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on v6.2-rc5]
+[also build test WARNING on linus/master next-20230127]
+[cannot apply to joro-iommu/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommufd-Add-devices_users-to-track-the-hw_pagetable-usage-by-device/20230128-150429
+patch link:    https://lore.kernel.org/r/25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc%40nvidia.com
+patch subject: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
+config: x86_64-randconfig-a011-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281943.Jdvwci2p-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3e261a30a338475c3efe666377daa612924b1129
+        # https://github.com/intel-lab-lkp/linux/commit/4d48fdd86375f6d888bbcf830a10c48720008955
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Split-early-and-final-KASAN-population-functions/20230125-163113
-        git checkout 3e261a30a338475c3efe666377daa612924b1129
+        git fetch --no-tags linux-review Nicolin-Chen/iommufd-Add-devices_users-to-track-the-hw_pagetable-usage-by-device/20230128-150429
+        git checkout 4d48fdd86375f6d888bbcf830a10c48720008955
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ drivers/ata/ drivers/firmware/efi/libstub/ drivers/mmc/host/ drivers/of/ init/ lib/kunit/ mm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/iommufd/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> init/main.c:108:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> arch/riscv/kernel/setup.c:29:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> arch/riscv/kernel/elf_kexec.c:22:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/ata/libata-core.c:59:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/of/fdt.c:31:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/firmware/efi/libstub/efi-stub-helper.c:15:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/firmware/efi/libstub/gop.c:14:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/firmware/efi/libstub/printk.c:10:10: fatal error: 'asm/setup.h' file not found
-   #include <asm/setup.h>
-            ^~~~~~~~~~~~~
-   1 error generated.
+>> drivers/iommu/iommufd/device.c:279:23: warning: variable 'hwpt' is uninitialized when used here [-Wuninitialized]
+           lockdep_assert_held(&hwpt->ioas->mutex);
+                                ^~~~
+   include/linux/lockdep.h:319:33: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+                                          ^
+   include/linux/lockdep.h:286:47: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                          ^~~~
+   include/linux/lockdep.h:313:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                                         ^~~~
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/iommu/iommufd/device.c:276:35: note: initialize the variable 'hwpt' to silence this warning
+           struct iommufd_hw_pagetable *hwpt;
+                                            ^
+                                             = NULL
+   1 warning generated.
 
 
-vim +108 init/main.c
+vim +/hwpt +279 drivers/iommu/iommufd/device.c
 
-^1da177e4c3f41 Linus Torvalds   2005-04-16  105  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  106  #include <asm/io.h>
-^1da177e4c3f41 Linus Torvalds   2005-04-16  107  #include <asm/bugs.h>
-^1da177e4c3f41 Linus Torvalds   2005-04-16 @108  #include <asm/setup.h>
-a940199f206dcf Andi Kleen       2005-07-28  109  #include <asm/sections.h>
-37b73c82818573 Arjan van de Ven 2006-01-06  110  #include <asm/cacheflush.h>
-^1da177e4c3f41 Linus Torvalds   2005-04-16  111  
+   267	
+   268	/*
+   269	 * When automatically managing the domains we search for a compatible domain in
+   270	 * the iopt and if one is found use it, otherwise create a new domain.
+   271	 * Automatic domain selection will never pick a manually created domain.
+   272	 */
+   273	static int iommufd_device_auto_get_domain(struct iommufd_device *idev,
+   274						  struct iommufd_ioas *ioas)
+   275	{
+   276		struct iommufd_hw_pagetable *hwpt;
+   277		int rc;
+   278	
+ > 279		lockdep_assert_held(&hwpt->ioas->mutex);
+   280	
+   281		/*
+   282		 * There is no differentiation when domains are allocated, so any domain
+   283		 * that is willing to attach to the device is interchangeable with any
+   284		 * other.
+   285		 */
+   286		list_for_each_entry(hwpt, &ioas->hwpt_list, hwpt_item) {
+   287			if (!hwpt->auto_domain)
+   288				continue;
+   289	
+   290			rc = iommufd_device_do_attach(idev, hwpt);
+   291	
+   292			/*
+   293			 * -EINVAL means the domain is incompatible with the device.
+   294			 * Other error codes should propagate to userspace as failure.
+   295			 * Success means the domain is attached.
+   296			 */
+   297			if (rc == -EINVAL)
+   298				continue;
+   299			return rc;
+   300		}
+   301	
+   302		hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev->dev);
+   303		if (IS_ERR(hwpt))
+   304			return PTR_ERR(hwpt);
+   305		hwpt->auto_domain = true;
+   306	
+   307		rc = iommufd_device_do_attach(idev, hwpt);
+   308		if (rc)
+   309			goto out_abort;
+   310	
+   311		iommufd_object_finalize(idev->ictx, &hwpt->obj);
+   312		return 0;
+   313	
+   314	out_abort:
+   315		iommufd_object_abort_and_destroy(idev->ictx, &hwpt->obj);
+   316		return rc;
+   317	}
+   318	
 
 -- 
 0-DAY CI Kernel Test Service
