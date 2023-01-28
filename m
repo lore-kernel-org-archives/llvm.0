@@ -1,44 +1,54 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813AB5CBA;
-	Sat, 28 Jan 2023 15:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF89A5CBA;
+	Sat, 28 Jan 2023 15:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674918580; x=1706454580;
+  t=1674919244; x=1706455244;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sz/oOMsdjPZPIOSXT9noSLRbwktYPl9DzEblX23lJmw=;
-  b=ekGIOb0lXWrbzIM7Or07vch+6FgMOzVz2hFtY9zJmz+6Qy5chP7Emk3l
-   UyU+JI0/4B7WsjcW5ajR9f+lW0jeqO24630eizkaZPGEq1B8mxIzRAHRc
-   //o/me7aUTeFzIpUIpVDTZfHkuc7nrpL3mN9JUzECFyRj1C7Vomv2afzf
-   BFxttu6/I6egmeLeRIaKoJ+KOkrSto7PPo5gDMcLF9Omt34gGShCE+ORE
-   Ifvv4jC/YzsQ3+jJciCgXaMUuv3JAAPqoQyFdpa1rbSl+GVdTRy/7o7S+
-   98igEm6IxZtd3WqqjUq9vTQ/dCHkdmPLuvZe/6pT+YffHAhVwGZfLE0bz
+  bh=MTadVaHuNSrAWek3uXcZTKVCMsw+1O+SvEEAAMoi1tI=;
+  b=WN2OHnT/4n99/Zetkpm7ULPgLJfCCqzfl+VVqazMgMPxMN3lZHalOUA0
+   9aoc5PW7LOr0Sjo3iEzemBRuLDvuFJ4IX+T1/lmIlZdOklxiMGNIr80c/
+   dE0QtoJybethO6B0CTdmNMbc/wKlCQ04NlMtIG5jqV3yIuV9pENUHq1l3
+   /8tjSE5K1POfw/App3/NJXy+6GLVyFmR+QF2/9nQ+PsjiRXeYeSYgqqZe
+   a/jMyBbbztXpIas7I5dxMoZsxblqDJfBNDsojBY+ZagFW3EmTBtMV0pbz
+   CYf8+y8FyLQA34IAk33rvWaTMkOaoiN0wnYiWb1R+C3hLB31Hzd4U+CSi
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="315252665"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="324992082"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="315252665"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 07:09:39 -0800
+   d="scan'208";a="324992082"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 07:20:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="727004058"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="665580238"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="727004058"
+   d="scan'208";a="665580238"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jan 2023 07:09:37 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 28 Jan 2023 07:20:38 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLmpk-0000pR-21;
-	Sat, 28 Jan 2023 15:09:36 +0000
-Date: Sat, 28 Jan 2023 23:09:31 +0800
+	id 1pLn0P-0000q9-27;
+	Sat, 28 Jan 2023 15:20:37 +0000
+Date: Sat, 28 Jan 2023 23:19:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zack Rusin <zack@kde.org>, dri-devel@lists.freedesktop.org
+To: Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Will Deacon <will@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	krastevm@vmware.com, banackm@vmware.com, mombasawalam@vmware.com
-Subject: Re: [PATCH 6/7] drm/vmwgfx: Abstract placement selection
-Message-ID: <202301282318.DOogLmvQ-lkp@intel.com>
-References: <20230126173813.602748-7-zack@kde.org>
+	Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
+	Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] sched: Store restrict_cpus_allowed_ptr() call state
+Message-ID: <202301282334.C5NLDEZd-lkp@intel.com>
+References: <20230127015527.466367-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,99 +57,277 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126173813.602748-7-zack@kde.org>
+In-Reply-To: <20230127015527.466367-1-longman@redhat.com>
 
-Hi Zack,
+Hi Waiman,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on drm-intel/for-linux-next-fixes]
-[also build test WARNING on linus/master v6.2-rc5]
-[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-tip/drm-tip next-20230127]
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on tip/master tip/auto-latest linux/master linus/master v6.2-rc5 next-20230127]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zack-Rusin/drm-vmwgfx-Use-the-common-gem-mmap-instead-of-the-custom-code/20230128-112136
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next-fixes
-patch link:    https://lore.kernel.org/r/20230126173813.602748-7-zack%40kde.org
-patch subject: [PATCH 6/7] drm/vmwgfx: Abstract placement selection
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230128/202301282318.DOogLmvQ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/sched-Store-restrict_cpus_allowed_ptr-call-state/20230128-155441
+patch link:    https://lore.kernel.org/r/20230127015527.466367-1-longman%40redhat.com
+patch subject: [PATCH v3] sched: Store restrict_cpus_allowed_ptr() call state
+config: hexagon-randconfig-r041-20230124 (https://download.01.org/0day-ci/archive/20230128/202301282334.C5NLDEZd-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9083af8be713dc1052ca4bd2b39579979345e47b
+        # https://github.com/intel-lab-lkp/linux/commit/25582b263f75c0348a967ce5da36c1f87fd5d175
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zack-Rusin/drm-vmwgfx-Use-the-common-gem-mmap-instead-of-the-custom-code/20230128-112136
-        git checkout 9083af8be713dc1052ca4bd2b39579979345e47b
+        git fetch --no-tags linux-review Waiman-Long/sched-Store-restrict_cpus_allowed_ptr-call-state/20230128-155441
+        git checkout 25582b263f75c0348a967ce5da36c1f87fd5d175
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/ drivers/gpu/drm/vmwgfx/ kernel/entry/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/ kernel/sched/ net/core/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c:509:29: warning: variable 'dst_pitch' is uninitialized when used here [-Wuninitialized]
-           src_offset = ddirty->top * dst_pitch + ddirty->left * stdu->cpp;
-                                      ^~~~~~~~~
-   drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c:492:26: note: initialize the variable 'dst_pitch' to silence this warning
-           s32 src_pitch, dst_pitch;
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/sched/core.c:9:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/sched/core.c:3021:9: error: no member named 'user_cpu_ptr' in 'struct task_struct'; did you mean 'user_cpus_ptr'?
+           if (p->user_cpu_ptr &&
+                  ^~~~~~~~~~~~
+                  user_cpus_ptr
+   include/linux/sched.h:830:15: note: 'user_cpus_ptr' declared here
+           cpumask_t                       *user_cpus_ptr;
+                                            ^
+   kernel/sched/core.c:3022:32: error: no member named 'user_cpu_ptr' in 'struct task_struct'; did you mean 'user_cpus_ptr'?
+               !cpumask_and(new_mask, p->user_cpu_ptr, subset_mask)) {
+                                         ^~~~~~~~~~~~
+                                         user_cpus_ptr
+   include/linux/sched.h:830:15: note: 'user_cpus_ptr' declared here
+           cpumask_t                       *user_cpus_ptr;
+                                            ^
+>> kernel/sched/core.c:3091:33: error: expected '}'
+                   .new_mask  = cpu_possible_mask;
+                                                 ^
+   kernel/sched/core.c:3090:31: note: to match this '{'
+           struct affinity_context ac = {
+                                        ^
+>> kernel/sched/core.c:3092:3: error: expected expression
+                   .flags     = SCA_CLR_RESTRICT,
+                   ^
+>> kernel/sched/core.c:3097:2: error: expected identifier or '('
+           if (!data_race(p->cpus_allowed_restricted))
+           ^
+>> kernel/sched/core.c:3104:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+           ret = __sched_setaffinity(p, &ac);
+           ^
+           int
+>> kernel/sched/core.c:3104:28: error: use of undeclared identifier 'p'
+           ret = __sched_setaffinity(p, &ac);
+                                     ^
+>> kernel/sched/core.c:3104:32: error: use of undeclared identifier 'ac'
+           ret = __sched_setaffinity(p, &ac);
+                                         ^
+   kernel/sched/core.c:3105:2: error: expected identifier or '('
+           WARN_ON_ONCE(ret);
+           ^
+   include/asm-generic/bug.h:180:33: note: expanded from macro 'WARN_ON_ONCE'
+   #define WARN_ON_ONCE(condition) WARN_ON(condition)
                                    ^
-                                    = 0
-   1 warning generated.
+   include/asm-generic/bug.h:166:29: note: expanded from macro 'WARN_ON'
+   #define WARN_ON(condition) ({                                           \
+                               ^
+>> kernel/sched/core.c:3105:2: error: expected ')'
+   include/asm-generic/bug.h:180:33: note: expanded from macro 'WARN_ON_ONCE'
+   #define WARN_ON_ONCE(condition) WARN_ON(condition)
+                                   ^
+   include/asm-generic/bug.h:166:29: note: expanded from macro 'WARN_ON'
+   #define WARN_ON(condition) ({                                           \
+                               ^
+   kernel/sched/core.c:3105:2: note: to match this '('
+   include/asm-generic/bug.h:180:33: note: expanded from macro 'WARN_ON_ONCE'
+   #define WARN_ON_ONCE(condition) WARN_ON(condition)
+                                   ^
+   include/asm-generic/bug.h:166:28: note: expanded from macro 'WARN_ON'
+   #define WARN_ON(condition) ({                                           \
+                              ^
+>> kernel/sched/core.c:3106:1: error: extraneous closing brace ('}')
+   }
+   ^
+   6 warnings and 11 errors generated.
 
 
-vim +/dst_pitch +509 drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
+vim +3021 kernel/sched/core.c
 
-   475	
-   476	
-   477	/**
-   478	 * vmw_stdu_bo_cpu_commit - Callback to do a CPU blit from buffer object
-   479	 *
-   480	 * @dirty: The closure structure.
-   481	 *
-   482	 * For the special case when we cannot create a proxy surface in a
-   483	 * 2D VM, we have to do a CPU blit ourselves.
-   484	 */
-   485	static void vmw_stdu_bo_cpu_commit(struct vmw_kms_dirty *dirty)
-   486	{
-   487		struct vmw_stdu_dirty *ddirty =
-   488			container_of(dirty, struct vmw_stdu_dirty, base);
-   489		struct vmw_screen_target_display_unit *stdu =
-   490			container_of(dirty->unit, typeof(*stdu), base);
-   491		s32 width, height;
-   492		s32 src_pitch, dst_pitch;
-   493		struct ttm_buffer_object *src_bo, *dst_bo;
-   494		u32 src_offset, dst_offset;
-   495		struct vmw_diff_cpy diff = VMW_CPU_BLIT_DIFF_INITIALIZER(stdu->cpp);
-   496	
-   497		if (!dirty->num_hits)
-   498			return;
-   499	
-   500		width = ddirty->right - ddirty->left;
-   501		height = ddirty->bottom - ddirty->top;
-   502	
-   503		if (width == 0 || height == 0)
-   504			return;
-   505	
-   506		/* Assume we are blitting from Guest (bo) to Host (display_srf) */
-   507		src_pitch = stdu->display_srf->metadata.base_size.width * stdu->cpp;
-   508		src_bo = &stdu->display_srf->res.backup->base;
- > 509		src_offset = ddirty->top * dst_pitch + ddirty->left * stdu->cpp;
-   510	
-   511		dst_pitch = ddirty->pitch;
-   512		dst_bo = &ddirty->buf->base;
-   513		dst_offset = ddirty->fb_top * src_pitch + ddirty->fb_left * stdu->cpp;
-   514	
-   515		(void) vmw_bo_cpu_blit(dst_bo, dst_offset, dst_pitch,
-   516				       src_bo, src_offset, src_pitch,
-   517				       width * stdu->cpp, height, &diff);
-   518	}
-   519	
+  2986	
+  2987	/*
+  2988	 * Change a given task's CPU affinity to the intersection of its current
+  2989	 * affinity mask and @subset_mask, writing the resulting mask to @new_mask.
+  2990	 * The cpus_allowed_restricted bit is set to indicate to a later
+  2991	 * relax_compatible_cpus_allowed_ptr() call to relax the cpumask.
+  2992	 *
+  2993	 * If the resulting mask is empty, leave the affinity unchanged and return
+  2994	 * -EINVAL.
+  2995	 */
+  2996	static int restrict_cpus_allowed_ptr(struct task_struct *p,
+  2997					     struct cpumask *new_mask,
+  2998					     const struct cpumask *subset_mask)
+  2999	{
+  3000		struct affinity_context ac = {
+  3001			.new_mask  = new_mask,
+  3002			.flags     = 0,
+  3003		};
+  3004		struct rq_flags rf;
+  3005		struct rq *rq;
+  3006		int err;
+  3007	
+  3008		rq = task_rq_lock(p, &rf);
+  3009		p->cpus_allowed_restricted = 1;
+  3010	
+  3011		/*
+  3012		 * Forcefully restricting the affinity of a deadline task is
+  3013		 * likely to cause problems, so fail and noisily override the
+  3014		 * mask entirely.
+  3015		 */
+  3016		if (task_has_dl_policy(p) && dl_bandwidth_enabled()) {
+  3017			err = -EPERM;
+  3018			goto err_unlock;
+  3019		}
+  3020	
+> 3021		if (p->user_cpu_ptr &&
+> 3022		    !cpumask_and(new_mask, p->user_cpu_ptr, subset_mask)) {
+  3023			err = -EINVAL;
+  3024			goto err_unlock;
+  3025		}
+  3026	
+  3027		return __set_cpus_allowed_ptr_locked(p, &ac, rq, &rf);
+  3028	
+  3029	err_unlock:
+  3030		task_rq_unlock(rq, p, &rf);
+  3031		return err;
+  3032	}
+  3033	
+  3034	/*
+  3035	 * Restrict the CPU affinity of task @p so that it is a subset of
+  3036	 * task_cpu_possible_mask(). If the resulting mask is empty, we warn
+  3037	 * and walk up the cpuset hierarchy until we find a suitable mask.
+  3038	 */
+  3039	void force_compatible_cpus_allowed_ptr(struct task_struct *p)
+  3040	{
+  3041		cpumask_var_t new_mask;
+  3042		const struct cpumask *override_mask = task_cpu_possible_mask(p);
+  3043	
+  3044		alloc_cpumask_var(&new_mask, GFP_KERNEL);
+  3045	
+  3046		/*
+  3047		 * __migrate_task() can fail silently in the face of concurrent
+  3048		 * offlining of the chosen destination CPU, so take the hotplug
+  3049		 * lock to ensure that the migration succeeds.
+  3050		 */
+  3051		cpus_read_lock();
+  3052		if (!cpumask_available(new_mask))
+  3053			goto out_set_mask;
+  3054	
+  3055		if (!restrict_cpus_allowed_ptr(p, new_mask, override_mask))
+  3056			goto out_free_mask;
+  3057	
+  3058		/*
+  3059		 * We failed to find a valid subset of the affinity mask for the
+  3060		 * task, so override it based on its cpuset hierarchy.
+  3061		 */
+  3062		cpuset_cpus_allowed(p, new_mask);
+  3063		override_mask = new_mask;
+  3064	
+  3065	out_set_mask:
+  3066		if (printk_ratelimit()) {
+  3067			printk_deferred("Overriding affinity for process %d (%s) to CPUs %*pbl\n",
+  3068					task_pid_nr(p), p->comm,
+  3069					cpumask_pr_args(override_mask));
+  3070		}
+  3071	
+  3072		WARN_ON(set_cpus_allowed_ptr(p, override_mask));
+  3073	out_free_mask:
+  3074		cpus_read_unlock();
+  3075		free_cpumask_var(new_mask);
+  3076	}
+  3077	
+  3078	static int
+  3079	__sched_setaffinity(struct task_struct *p, struct affinity_context *ctx);
+  3080	
+  3081	/*
+  3082	 * Restore the affinity of a task @p which was previously restricted by a
+  3083	 * call to force_compatible_cpus_allowed_ptr().
+  3084	 *
+  3085	 * It is the caller's responsibility to serialise this with any calls to
+  3086	 * force_compatible_cpus_allowed_ptr(@p).
+  3087	 */
+  3088	void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
+  3089	{
+> 3090		struct affinity_context ac = {
+> 3091			.new_mask  = cpu_possible_mask;
+> 3092			.flags     = SCA_CLR_RESTRICT,
+  3093		};
+  3094		int ret;
+  3095	
+  3096		/* Return if no previous force_compatible_cpus_allowed_ptr() call */
+> 3097		if (!data_race(p->cpus_allowed_restricted))
+  3098			return;
+  3099	
+  3100		/*
+  3101		 * Try to restore the old affinity mask with __sched_setaffinity().
+  3102		 * Cpuset masking will be done there too.
+  3103		 */
+> 3104		ret = __sched_setaffinity(p, &ac);
+> 3105		WARN_ON_ONCE(ret);
+> 3106	}
+  3107	
 
 -- 
 0-DAY CI Kernel Test Service
