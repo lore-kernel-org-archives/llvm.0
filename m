@@ -1,174 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C97079D6
-	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 21:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1674941448;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KZdV9TRoHC6evWfsUmDxmALsW2z8yIUn4WglXNwZJU4=;
-	b=f9d2dguJERosRjACRxtvzma65QQyrfGr7+/bYxHDkMi+C2Y4mvGp8NglpBD2ksLBGZEeLz
-	h177oaV+KBzM4pLf550XXz4+K9w+kb+0bpsJCXSdOiJPDEM+W0T7aSzKj55vK4VCTONJKP
-	NzMhtybjZtDJWtO17YqH6aGmfU6NH60=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-36-h3DIZ1INNveNJ5rt6BSP5w-1; Sat, 28 Jan 2023 16:30:46 -0500
-X-MC-Unique: h3DIZ1INNveNJ5rt6BSP5w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 028FE802818
-	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 21:30:46 +0000 (UTC)
-Received: from [172.64.14.22] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DE582400D795;
-	Sat, 28 Jan 2023 21:30:45 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc5, mainline.kernel.org-clang, 5af6ce70)
-Date: Sat, 28 Jan 2023 21:30:45 -0000
-To: efuller@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38C779D6;
+	Sat, 28 Jan 2023 21:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674942184; x=1706478184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MBTI/xeOVZdfcIhLedNEUnD+z6zRjs1Py93ubAFIyxU=;
+  b=m7ZL1laxLRfRJfoyEZqFfj2UaMyhnIb9QbErtmeS2TNlQWPORPOA8Xwm
+   D2Xym23j66DbjrLZ4E72l7aaHav65appuiSW1lX8IduaormDiBGdxthpK
+   iA0zwUw5ivlXNP0I1C0opRcwfl1XQ39GawyZHwzLc6o4mh4AM9uXoUylZ
+   8y3iN/uoIAMPM9TyXoH//gptyAXKUfkiiUvQtJ11rA0f2Rkbu14NedrQo
+   rj3dCyyPLJilBtZBgtrpHkQWfVYMqaA9ks82JUdZ5rPAvaI8UVwHTJ7N/
+   EAHMAckh4W4rzv+9nSznwWh94190434CdpYBFJ8w1oAKbJzigcfA1FgeS
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="326009592"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="326009592"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 13:43:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="992446764"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="992446764"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2023 13:42:59 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pLsyL-00018c-2X;
+	Sat, 28 Jan 2023 21:42:53 +0000
+Date: Sun, 29 Jan 2023 05:42:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vfedorenko@novek.ru>, Vadim Fedorenko <vadfed@fb.com>,
+	Aya Levin <ayal@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
+	Jakub Kicinski <kuba@kernel.org>, Gal Pressman <gal@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net v3 2/2] mlx5: fix possible ptp queue fifo
+ use-after-free
+Message-ID: <202301290528.ZvflGIBO-lkp@intel.com>
+References: <20230126010206.13483-3-vfedorenko@novek.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <11110.123012816304600383@us-mta-36.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126010206.13483-3-vfedorenko@novek.ru>
 
-Hi, we tested your kernel and here are the results:
+Hi Vadim,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I love your patch! Yet something to improve:
 
+[auto build test ERROR on net/master]
 
-Kernel information:
-    Commit message: Merge tag '6.2-rc5-smb3-client-fixes' of git://git.samb=
-a.org/sfrench/cifs-2.6
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/mlx5-fix-skb-leak-while-fifo-resync-and-push/20230128-120805
+patch link:    https://lore.kernel.org/r/20230126010206.13483-3-vfedorenko%40novek.ru
+patch subject: [PATCH net v3 2/2] mlx5: fix possible ptp queue fifo use-after-free
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230129/202301290528.ZvflGIBO-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2516a9785583b92ac82262a813203de696096ccd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vadim-Fedorenko/mlx5-fix-skb-leak-while-fifo-resync-and-push/20230128-120805
+        git checkout 2516a9785583b92ac82262a813203de696096ccd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/67411
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - Usex - version 1.9-29
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6852328
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6852262
-          x86_64 (debug) - Usex - version 1.9-29
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6852624
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+   drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c:93:18: warning: unused variable 'skb' [-Wunused-variable]
+           struct sk_buff *skb;
+                           ^
+   drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c:92:30: warning: unused variable 'hwts' [-Wunused-variable]
+           struct skb_shared_hwtstamps hwts = {};
+                                       ^
+>> drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c:102:2: error: expected identifier or '('
+           while (skb_cc != skb_id && (skb = mlx5e_skb_fifo_pop(&ptpsq->skb_fifo))) {
+           ^
+   drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c:110:2: error: expected identifier or '('
+           if (!skb)
+           ^
+   drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c:113:2: error: expected identifier or '('
+           return true;
+           ^
+>> drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c:114:1: error: extraneous closing brace ('}')
+   }
+   ^
+   2 warnings and 4 errors generated.
 
 
+vim +102 drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    88	
+    89	static bool mlx5e_ptp_skb_fifo_ts_cqe_resync(struct mlx5e_ptpsq *ptpsq, u16 skb_cc,
+    90						     u16 skb_id, int budget)
+    91	{
+    92		struct skb_shared_hwtstamps hwts = {};
+    93		struct sk_buff *skb;
+    94	
+    95		ptpsq->cq_stats->resync_event++;
+    96	
+    97		if (skb_cc > skb_id || PTP_WQE_CTR2IDX(ptpsq->skb_fifo_pc) < skb_id)
+    98			pr_err_ratelimited("mlx5e: out-of-order ptp cqe\n");
+    99			return false;
+   100		}
+   101	
+ > 102		while (skb_cc != skb_id && (skb = mlx5e_skb_fifo_pop(&ptpsq->skb_fifo))) {
+   103			hwts.hwtstamp = mlx5e_skb_cb_get_hwts(skb)->cqe_hwtstamp;
+   104			skb_tstamp_tx(skb, &hwts);
+   105			ptpsq->cq_stats->resync_cqe++;
+   106			napi_consume_skb(skb, budget);
+   107			skb_cc = PTP_WQE_CTR2IDX(ptpsq->skb_fifo_cc);
+   108		}
+   109	
+   110		if (!skb)
+   111			return false;
+   112	
+   113		return true;
+ > 114	}
+   115	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
