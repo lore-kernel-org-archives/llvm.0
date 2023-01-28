@@ -1,44 +1,45 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873BA192;
-	Sat, 28 Jan 2023 20:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E19EE192;
+	Sat, 28 Jan 2023 20:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674937855; x=1706473855;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=71y1W1b1xJ8x2JzNe2W+jUdox0W00D7Z1eylzyt4Inw=;
-  b=HB6svOYgQ9/zYthX+1NQ9xEDtGdIrTEo9vebSPR6o3430on3htRiIIVT
-   XY7ETfm6AhhUEq2FNV/qYnMVQ3NQ+HFiD6gCsfrtQAmr/qlkdlRgzBj2x
-   afrN4Z+/cwLV56/EaMlG/mp8LTdcicWpYEWdlwEnF4ArCOY8bRXC21JST
-   ruNtG5AMNLkrrFtv2fGCle5FK4UWxAIofVmBS+P/878nNZs16PqlaxRqj
-   n+7mBaTIZEMLxfGSuxsp+3dgtQa6x3LOGTxmhJUShDyaLZPduY0kVRDyz
-   3Luyqn5qdflHqmbOe7frg+ntGoRmsN3XGRa05GwAxFyb1Of+p+EMJvUz9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="325025757"
+  t=1674939114; x=1706475114;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GLaT6oc+okyZu1qwx2iWRukgx4530tkAvqfrBV5G63o=;
+  b=f21od4kqUl21NsaMJGSlLKNnEf1QoAlLMw433iOmU6o0CS0rH2Kqhkqu
+   B5mEIBpvfaVikVqJ+RYI6CJSHKk9krs2J1sKSj90OZZ7rWkdpPTTtbVZT
+   tgX9px+I7ka6vTsifbCDrKyVFzjRodS1gVvqWLKzwUxppfVeYbNSaexTE
+   MCowrmWohvs+nK7IJbm6M838N6Ht645H08UjDWFO4/r85pwJLdcaGjtXo
+   drM6xZKgaFj1jgkTNlVoQfAKZb7WyhcVMl6OpcHC+Xo2KAeSujy3HsNc7
+   hvrueKGR6p3iKmNOC/mmAyfxicCOLvnFX9WE8qs3tFjVULUtrkZzStnQd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="328619537"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="325025757"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 12:30:54 -0800
+   d="scan'208";a="328619537"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 12:51:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="837533309"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="656989763"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="837533309"
+   d="scan'208";a="656989763"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jan 2023 12:30:51 -0800
+  by orsmga007.jf.intel.com with ESMTP; 28 Jan 2023 12:51:52 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLrqc-00015G-2p;
-	Sat, 28 Jan 2023 20:30:50 +0000
-Date: Sun, 29 Jan 2023 04:30:30 +0800
+	id 1pLsAx-000162-1D;
+	Sat, 28 Jan 2023 20:51:51 +0000
+Date: Sun, 29 Jan 2023 04:51:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: wolfgang@linogate.de, steffen.klassert@secunet.com
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Wolfgang Nothdurft <wolfgang@linogate.de>
-Subject: Re: [PATCH net] xfrm: remove inherited bridge info from skb
-Message-ID: <202301290439.F9s2CEim-lkp@intel.com>
-References: <20230126125637.91969-1-wolfgang@linogate.de>
+	linux-gpio@vger.kernel.org
+Subject: [linusw-gpio:gpiochip-no-driver-h 5/5]
+ arch/arm/mach-omap1/irq.c:236:11: error: call to undeclared function
+ 'irq_domain_add_legacy'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202301290451.rXX4STQA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,353 +48,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126125637.91969-1-wolfgang@linogate.de>
 
-Hi,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on net/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/wolfgang-linogate-de/xfrm-remove-inherited-bridge-info-from-skb/20230128-180508
-patch link:    https://lore.kernel.org/r/20230126125637.91969-1-wolfgang%40linogate.de
-patch subject: [PATCH net] xfrm: remove inherited bridge info from skb
-config: i386-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230129/202301290439.F9s2CEim-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git gpiochip-no-driver-h
+head:   df771cce328bbd37333797d0df3471c2e03ecb03
+commit: df771cce328bbd37333797d0df3471c2e03ecb03 [5/5] gpio: Make the legacy <linux/gpio.h> consumer-only
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20230129/202301290451.rXX4STQA-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d1ea8e936ffdff6ceddc242e516a79730af3a017
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review wolfgang-linogate-de/xfrm-remove-inherited-bridge-info-from-skb/20230128-180508
-        git checkout d1ea8e936ffdff6ceddc242e516a79730af3a017
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git/commit/?id=df771cce328bbd37333797d0df3471c2e03ecb03
+        git remote add linusw-gpio https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git
+        git fetch --no-tags linusw-gpio gpiochip-no-driver-h
+        git checkout df771cce328bbd37333797d0df3471c2e03ecb03
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> net/xfrm/xfrm_input.c:545:25: error: use of undeclared identifier 'SKB_EXT_BRIDGE_NF'
-           if (skb_ext_exist(skb, SKB_EXT_BRIDGE_NF))
-                                  ^
-   net/xfrm/xfrm_input.c:546:20: error: use of undeclared identifier 'SKB_EXT_BRIDGE_NF'
-                   skb_ext_del(skb, SKB_EXT_BRIDGE_NF);
-                                    ^
-   2 errors generated.
+>> arch/arm/mach-omap1/irq.c:236:11: error: call to undeclared function 'irq_domain_add_legacy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           domain = irq_domain_add_legacy(NULL, nr_irqs, irq_base, 0,
+                    ^
+>> arch/arm/mach-omap1/irq.c:237:13: error: use of undeclared identifier 'irq_domain_simple_ops'
+                                          &irq_domain_simple_ops, NULL);
+                                           ^
+>> arch/arm/mach-omap1/irq.c:269:23: error: call to undeclared function 'irq_find_mapping'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           d = irq_get_irq_data(irq_find_mapping(domain, omap_l2_irq));
+                                ^
+   3 errors generated.
 
 
-vim +/SKB_EXT_BRIDGE_NF +545 net/xfrm/xfrm_input.c
+vim +/irq_domain_add_legacy +236 arch/arm/mach-omap1/irq.c
 
-   460	
-   461	int xfrm_input(struct sk_buff *skb, int nexthdr, __be32 spi, int encap_type)
-   462	{
-   463		const struct xfrm_state_afinfo *afinfo;
-   464		struct net *net = dev_net(skb->dev);
-   465		const struct xfrm_mode *inner_mode;
-   466		int err;
-   467		__be32 seq;
-   468		__be32 seq_hi;
-   469		struct xfrm_state *x = NULL;
-   470		xfrm_address_t *daddr;
-   471		u32 mark = skb->mark;
-   472		unsigned int family = AF_UNSPEC;
-   473		int decaps = 0;
-   474		int async = 0;
-   475		bool xfrm_gro = false;
-   476		bool crypto_done = false;
-   477		struct xfrm_offload *xo = xfrm_offload(skb);
-   478		struct sec_path *sp;
-   479	
-   480		if (encap_type < 0) {
-   481			x = xfrm_input_state(skb);
-   482	
-   483			if (unlikely(x->km.state != XFRM_STATE_VALID)) {
-   484				if (x->km.state == XFRM_STATE_ACQ)
-   485					XFRM_INC_STATS(net, LINUX_MIB_XFRMACQUIREERROR);
-   486				else
-   487					XFRM_INC_STATS(net,
-   488						       LINUX_MIB_XFRMINSTATEINVALID);
-   489	
-   490				if (encap_type == -1)
-   491					dev_put(skb->dev);
-   492				goto drop;
-   493			}
-   494	
-   495			family = x->outer_mode.family;
-   496	
-   497			/* An encap_type of -1 indicates async resumption. */
-   498			if (encap_type == -1) {
-   499				async = 1;
-   500				seq = XFRM_SKB_CB(skb)->seq.input.low;
-   501				goto resume;
-   502			}
-   503	
-   504			/* encap_type < -1 indicates a GRO call. */
-   505			encap_type = 0;
-   506			seq = XFRM_SPI_SKB_CB(skb)->seq;
-   507	
-   508			if (xo && (xo->flags & CRYPTO_DONE)) {
-   509				crypto_done = true;
-   510				family = XFRM_SPI_SKB_CB(skb)->family;
-   511	
-   512				if (!(xo->status & CRYPTO_SUCCESS)) {
-   513					if (xo->status &
-   514					    (CRYPTO_TRANSPORT_AH_AUTH_FAILED |
-   515					     CRYPTO_TRANSPORT_ESP_AUTH_FAILED |
-   516					     CRYPTO_TUNNEL_AH_AUTH_FAILED |
-   517					     CRYPTO_TUNNEL_ESP_AUTH_FAILED)) {
-   518	
-   519						xfrm_audit_state_icvfail(x, skb,
-   520									 x->type->proto);
-   521						x->stats.integrity_failed++;
-   522						XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEPROTOERROR);
-   523						goto drop;
-   524					}
-   525	
-   526					if (xo->status & CRYPTO_INVALID_PROTOCOL) {
-   527						XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEPROTOERROR);
-   528						goto drop;
-   529					}
-   530	
-   531					XFRM_INC_STATS(net, LINUX_MIB_XFRMINBUFFERERROR);
-   532					goto drop;
-   533				}
-   534	
-   535				if (xfrm_parse_spi(skb, nexthdr, &spi, &seq)) {
-   536					XFRM_INC_STATS(net, LINUX_MIB_XFRMINHDRERROR);
-   537					goto drop;
-   538				}
-   539			}
-   540	
-   541			goto lock;
-   542		}
-   543	
-   544		/* strip bridge info from skb */
- > 545		if (skb_ext_exist(skb, SKB_EXT_BRIDGE_NF))
-   546			skb_ext_del(skb, SKB_EXT_BRIDGE_NF);
-   547	
-   548		family = XFRM_SPI_SKB_CB(skb)->family;
-   549	
-   550		/* if tunnel is present override skb->mark value with tunnel i_key */
-   551		switch (family) {
-   552		case AF_INET:
-   553			if (XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip4)
-   554				mark = be32_to_cpu(XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip4->parms.i_key);
-   555			break;
-   556		case AF_INET6:
-   557			if (XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip6)
-   558				mark = be32_to_cpu(XFRM_TUNNEL_SKB_CB(skb)->tunnel.ip6->parms.i_key);
-   559			break;
-   560		}
-   561	
-   562		sp = secpath_set(skb);
-   563		if (!sp) {
-   564			XFRM_INC_STATS(net, LINUX_MIB_XFRMINERROR);
-   565			goto drop;
-   566		}
-   567	
-   568		seq = 0;
-   569		if (!spi && xfrm_parse_spi(skb, nexthdr, &spi, &seq)) {
-   570			secpath_reset(skb);
-   571			XFRM_INC_STATS(net, LINUX_MIB_XFRMINHDRERROR);
-   572			goto drop;
-   573		}
-   574	
-   575		daddr = (xfrm_address_t *)(skb_network_header(skb) +
-   576					   XFRM_SPI_SKB_CB(skb)->daddroff);
-   577		do {
-   578			sp = skb_sec_path(skb);
-   579	
-   580			if (sp->len == XFRM_MAX_DEPTH) {
-   581				secpath_reset(skb);
-   582				XFRM_INC_STATS(net, LINUX_MIB_XFRMINBUFFERERROR);
-   583				goto drop;
-   584			}
-   585	
-   586			x = xfrm_state_lookup(net, mark, daddr, spi, nexthdr, family);
-   587			if (x == NULL) {
-   588				secpath_reset(skb);
-   589				XFRM_INC_STATS(net, LINUX_MIB_XFRMINNOSTATES);
-   590				xfrm_audit_state_notfound(skb, family, spi, seq);
-   591				goto drop;
-   592			}
-   593	
-   594			skb->mark = xfrm_smark_get(skb->mark, x);
-   595	
-   596			sp->xvec[sp->len++] = x;
-   597	
-   598			skb_dst_force(skb);
-   599			if (!skb_dst(skb)) {
-   600				XFRM_INC_STATS(net, LINUX_MIB_XFRMINERROR);
-   601				goto drop;
-   602			}
-   603	
-   604	lock:
-   605			spin_lock(&x->lock);
-   606	
-   607			if (unlikely(x->km.state != XFRM_STATE_VALID)) {
-   608				if (x->km.state == XFRM_STATE_ACQ)
-   609					XFRM_INC_STATS(net, LINUX_MIB_XFRMACQUIREERROR);
-   610				else
-   611					XFRM_INC_STATS(net,
-   612						       LINUX_MIB_XFRMINSTATEINVALID);
-   613				goto drop_unlock;
-   614			}
-   615	
-   616			if ((x->encap ? x->encap->encap_type : 0) != encap_type) {
-   617				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMISMATCH);
-   618				goto drop_unlock;
-   619			}
-   620	
-   621			if (xfrm_replay_check(x, skb, seq)) {
-   622				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATESEQERROR);
-   623				goto drop_unlock;
-   624			}
-   625	
-   626			if (xfrm_state_check_expire(x)) {
-   627				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEEXPIRED);
-   628				goto drop_unlock;
-   629			}
-   630	
-   631			spin_unlock(&x->lock);
-   632	
-   633			if (xfrm_tunnel_check(skb, x, family)) {
-   634				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMODEERROR);
-   635				goto drop;
-   636			}
-   637	
-   638			seq_hi = htonl(xfrm_replay_seqhi(x, seq));
-   639	
-   640			XFRM_SKB_CB(skb)->seq.input.low = seq;
-   641			XFRM_SKB_CB(skb)->seq.input.hi = seq_hi;
-   642	
-   643			dev_hold(skb->dev);
-   644	
-   645			if (crypto_done)
-   646				nexthdr = x->type_offload->input_tail(x, skb);
-   647			else
-   648				nexthdr = x->type->input(x, skb);
-   649	
-   650			if (nexthdr == -EINPROGRESS)
-   651				return 0;
-   652	resume:
-   653			dev_put(skb->dev);
-   654	
-   655			spin_lock(&x->lock);
-   656			if (nexthdr < 0) {
-   657				if (nexthdr == -EBADMSG) {
-   658					xfrm_audit_state_icvfail(x, skb,
-   659								 x->type->proto);
-   660					x->stats.integrity_failed++;
-   661				}
-   662				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEPROTOERROR);
-   663				goto drop_unlock;
-   664			}
-   665	
-   666			/* only the first xfrm gets the encap type */
-   667			encap_type = 0;
-   668	
-   669			if (xfrm_replay_recheck(x, skb, seq)) {
-   670				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATESEQERROR);
-   671				goto drop_unlock;
-   672			}
-   673	
-   674			xfrm_replay_advance(x, seq);
-   675	
-   676			x->curlft.bytes += skb->len;
-   677			x->curlft.packets++;
-   678			x->lastused = ktime_get_real_seconds();
-   679	
-   680			spin_unlock(&x->lock);
-   681	
-   682			XFRM_MODE_SKB_CB(skb)->protocol = nexthdr;
-   683	
-   684			inner_mode = &x->inner_mode;
-   685	
-   686			if (x->sel.family == AF_UNSPEC) {
-   687				inner_mode = xfrm_ip2inner_mode(x, XFRM_MODE_SKB_CB(skb)->protocol);
-   688				if (inner_mode == NULL) {
-   689					XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMODEERROR);
-   690					goto drop;
-   691				}
-   692			}
-   693	
-   694			if (xfrm_inner_mode_input(x, inner_mode, skb)) {
-   695				XFRM_INC_STATS(net, LINUX_MIB_XFRMINSTATEMODEERROR);
-   696				goto drop;
-   697			}
-   698	
-   699			if (x->outer_mode.flags & XFRM_MODE_FLAG_TUNNEL) {
-   700				decaps = 1;
-   701				break;
-   702			}
-   703	
-   704			/*
-   705			 * We need the inner address.  However, we only get here for
-   706			 * transport mode so the outer address is identical.
-   707			 */
-   708			daddr = &x->id.daddr;
-   709			family = x->outer_mode.family;
-   710	
-   711			err = xfrm_parse_spi(skb, nexthdr, &spi, &seq);
-   712			if (err < 0) {
-   713				XFRM_INC_STATS(net, LINUX_MIB_XFRMINHDRERROR);
-   714				goto drop;
-   715			}
-   716			crypto_done = false;
-   717		} while (!err);
-   718	
-   719		err = xfrm_rcv_cb(skb, family, x->type->proto, 0);
-   720		if (err)
-   721			goto drop;
-   722	
-   723		nf_reset_ct(skb);
-   724	
-   725		if (decaps) {
-   726			sp = skb_sec_path(skb);
-   727			if (sp)
-   728				sp->olen = 0;
-   729			if (skb_valid_dst(skb))
-   730				skb_dst_drop(skb);
-   731			gro_cells_receive(&gro_cells, skb);
-   732			return 0;
-   733		} else {
-   734			xo = xfrm_offload(skb);
-   735			if (xo)
-   736				xfrm_gro = xo->flags & XFRM_GRO;
-   737	
-   738			err = -EAFNOSUPPORT;
-   739			rcu_read_lock();
-   740			afinfo = xfrm_state_afinfo_get_rcu(x->inner_mode.family);
-   741			if (likely(afinfo))
-   742				err = afinfo->transport_finish(skb, xfrm_gro || async);
-   743			rcu_read_unlock();
-   744			if (xfrm_gro) {
-   745				sp = skb_sec_path(skb);
-   746				if (sp)
-   747					sp->olen = 0;
-   748				if (skb_valid_dst(skb))
-   749					skb_dst_drop(skb);
-   750				gro_cells_receive(&gro_cells, skb);
-   751				return err;
-   752			}
-   753	
-   754			return err;
-   755		}
-   756	
-   757	drop_unlock:
-   758		spin_unlock(&x->lock);
-   759	drop:
-   760		xfrm_rcv_cb(skb, family, x && x->type ? x->type->proto : nexthdr, -1);
-   761		kfree_skb(skb);
-   762		return 0;
-   763	}
-   764	EXPORT_SYMBOL(xfrm_input);
-   765	
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  219  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  220  	for (i = 0; i < irq_bank_count; i++) {
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  221  		irq_banks[i].va = ioremap(irq_banks[i].base_reg, 0xff);
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  222  		if (WARN_ON(!irq_banks[i].va))
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  223  			return;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  224  	}
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  225  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  226  	nr_irqs = irq_bank_count * 32;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  227  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  228  	irq_base = irq_alloc_descs(-1, 0, nr_irqs, 0);
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  229  	if (irq_base < 0) {
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  230  		pr_warn("Couldn't allocate IRQ numbers\n");
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  231  		irq_base = 0;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  232  	}
+b694331cfb2ec3 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  233  	omap_l2_irq = cpu_is_omap7xx() ? irq_base + 1 : irq_base;
+685e2d08c54b1a arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  234  	omap_l2_irq -= NR_IRQS_LEGACY;
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  235  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20 @236  	domain = irq_domain_add_legacy(NULL, nr_irqs, irq_base, 0,
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20 @237  				       &irq_domain_simple_ops, NULL);
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  238  
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  239  	pr_info("Total of %lu interrupts in %i interrupt banks\n",
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  240  		nr_irqs, irq_bank_count);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  241  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  242  	/* Mask and clear all interrupts */
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  243  	for (i = 0; i < irq_bank_count; i++) {
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  244  		irq_bank_writel(~0x0, i, IRQ_MIR_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  245  		irq_bank_writel(0x0, i, IRQ_ITR_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  246  	}
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  247  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  248  	/* Clear any pending interrupts */
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  249  	irq_bank_writel(0x03, 0, IRQ_CONTROL_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  250  	irq_bank_writel(0x03, 1, IRQ_CONTROL_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  251  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  252  	/* Enable interrupts in global mask */
+59185eeeaad1f0 arch/arm/mach-omap1/irq.c Zebediah C. McClure 2009-03-23  253  	if (cpu_is_omap7xx())
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  254  		irq_bank_writel(0x0, 0, IRQ_GMR_REG_OFFSET);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  255  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  256  	/* Install the interrupt handlers for each bank */
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  257  	for (i = 0; i < irq_bank_count; i++) {
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  258  		for (j = i * 32; j < (i + 1) * 32; j++) {
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  259  			int irq_trigger;
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  260  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  261  			irq_trigger = irq_banks[i].trigger_map >> IRQ_BIT(j);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  262  			omap_irq_set_cfg(j, 0, 0, irq_trigger);
+e8d36d5dbb6a6e arch/arm/mach-omap1/irq.c Rob Herring         2015-07-27  263  			irq_clear_status_flags(j, IRQ_NOREQUEST);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  264  		}
+55b44774438959 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20  265  		omap_alloc_gc(irq_banks[i].va, irq_base + i * 32, 32);
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  266  	}
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  267  
+^1da177e4c3f41 arch/arm/mach-omap/irq.c  Linus Torvalds      2005-04-16  268  	/* Unmask level 2 handler */
+b694331cfb2ec3 arch/arm/mach-omap1/irq.c Tony Lindgren       2015-05-20 @269  	d = irq_get_irq_data(irq_find_mapping(domain, omap_l2_irq));
+
+:::::: The code at line 236 was first introduced by commit
+:::::: 55b44774438959a957e717ecbdd9f2874b07ab31 ARM: OMAP1: Switch to use generic irqchip in preparation for sparse IRQ
+
+:::::: TO: Tony Lindgren <tony@atomide.com>
+:::::: CC: Tony Lindgren <tony@atomide.com>
 
 -- 
 0-DAY CI Kernel Test Service
