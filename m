@@ -1,187 +1,111 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mail.kapsi.fi (mail.kapsi.fi [91.232.154.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CC5199;
-	Sat, 28 Jan 2023 08:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674895051; x=1706431051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=DISRV7v/oTwHpYIjTRlE+uOwvlFszaNIrQuxT+Up7mI=;
-  b=CquwjS2mzqr+1MZEBUdI6Snks4Rq0Li5j3rsLXQPT0ZhicQ2kmpYMqLh
-   JjgV4lR5NRIsfM9OyiyEqn0dlRwfOlA27+/Ez2PHs6lhWYGqK/B6n/hXx
-   dLsQRdBxQ90+mGCWxou9ssRGWZFC/rl0G1PIMwTWO8rLQKlyH4FQaAw6r
-   wgw2tn7v4yF2dDo4sAeXZtWwjHABPWtnB0nqbpDWzujNc1P1reT8mlhJl
-   xN6hP5dLGpH+5q0LMM0wyDnsX9562ksvT+WUtZOrchlkQwLRGSgl14vYj
-   RV9isOLUD3sxlDY553e5iQ0VNsDx/Mo3E1tXnbjc5zAA9DzrSRrvIj1w4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="327292358"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="327292358"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 00:37:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="806096747"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="806096747"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jan 2023 00:37:29 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLgiB-0000Wd-12;
-	Sat, 28 Jan 2023 08:37:23 +0000
-Date: Sat, 28 Jan 2023 16:37:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Grant Seltzer <grantseltzer@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
-	grantseltzer@gmail.com
-Subject: Re: [PATCH bpf-next] Add support for tracing programs in BPF_PROG_RUN
-Message-ID: <202301281621.DfTZgf4X-lkp@intel.com>
-References: <20230127214353.628551-1-grantseltzer@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59CA6199
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 08:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+	s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=vLpchkzEUKvtWSQnseIYZdMDBaGfP5kVaR4wnUmvEEQ=; b=GEjRytbk6BZNgR+TLSTvlLv739
+	F9gpXR7MS46BKc2ngfRylLO8Em1c7DDuEoGU0xKAoC2LOPF0qxvTMm1+xIJAie1A/u5FqW1xT91lc
+	nWK2QP9aDTeixZfjYqGjDS2Weoa5ce6aWjw7DnC4z/Ci7loIAQDj4Q9dHaKONW7JnbsKqWzvKuLjM
+	tU0kOxWSaMGr/EWJe4ivHHA96Lt/KF+mW5BViKA/4+zu9p0MIbSS/qao5tshY7uXdi8TzS2YIY451
+	ln6KYeD3NoxQd9gR+/BOIv3l+BvMPmpEYQDSfkrSdww1MLg+dwHm3jx36SuXnzBGDXhWoUqs+46fF
+	o3zIo2oA==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
+	by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94.2)
+	(envelope-from <cyndis@kapsi.fi>)
+	id 1pLgJs-009HDo-HM; Sat, 28 Jan 2023 10:12:16 +0200
+Message-ID: <46a462ec-bc80-cbb7-4833-d9c430f4e9c3@kapsi.fi>
+Date: Sat, 28 Jan 2023 10:12:15 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230127214353.628551-1-grantseltzer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ Robin Murphy <robin.murphy@arm.com>, dri-devel@lists.freedesktop.org,
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230127221418.2522612-1-arnd@kernel.org>
+ <Y9RbvPRP5Yw/fUMM@dev-arch.thelio-3990X>
+From: Mikko Perttunen <cyndis@kapsi.fi>
+In-Reply-To: <Y9RbvPRP5Yw/fUMM@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 
-Hi Grant,
+On 1/28/23 01:18, Nathan Chancellor wrote:
+> On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The error handling for platform_get_irq() failing no longer
+>> works after a recent change, clang now points this out with
+>> a warning:
+>>
+>> drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+>>          if (syncpt_irq < 0)
+>>              ^~~~~~~~~~
+>>
+>> Fix this by removing the variable and checking the correct
+>> error status.
+>>
+>> Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> I had the same diff pending but civic duty called today :)
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+>> ---
+>>   drivers/gpu/host1x/dev.c | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+>> index 4872d183d860..aae2efeef503 100644
+>> --- a/drivers/gpu/host1x/dev.c
+>> +++ b/drivers/gpu/host1x/dev.c
+>> @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
+>>   static int host1x_probe(struct platform_device *pdev)
+>>   {
+>>   	struct host1x *host;
+>> -	int syncpt_irq;
+>>   	int err;
+>>   
+>>   	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+>> @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
+>>   	}
+>>   
+>>   	host->syncpt_irq = platform_get_irq(pdev, 0);
+>> -	if (syncpt_irq < 0)
+>> -		return syncpt_irq;
+>> +	if (host->syncpt_irq < 0)
+>> +		return host->syncpt_irq;
+>>   
+>>   	mutex_init(&host->devices_lock);
+>>   	INIT_LIST_HEAD(&host->devices);
+>> -- 
+>> 2.39.0
+>>
 
-Thank you for the patch! Perhaps something to improve:
+Thanks both for the fix :)
 
-[auto build test WARNING on bpf-next/master]
+FWIW,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Grant-Seltzer/Add-support-for-tracing-programs-in-BPF_PROG_RUN/20230128-130222
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230127214353.628551-1-grantseltzer%40gmail.com
-patch subject: [PATCH bpf-next] Add support for tracing programs in BPF_PROG_RUN
-config: i386-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281621.DfTZgf4X-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/990088d6233eb15a4a42a83a998f47432305d4d7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Grant-Seltzer/Add-support-for-tracing-programs-in-BPF_PROG_RUN/20230128-130222
-        git checkout 990088d6233eb15a4a42a83a998f47432305d4d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/bpf/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> net/bpf/test_run.c:818:23: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           u16 side_effect = 0, ret = 0;
-                                ^
->> net/bpf/test_run.c:818:6: warning: variable 'side_effect' set but not used [-Wunused-but-set-variable]
-           u16 side_effect = 0, ret = 0;
-               ^
-   2 warnings generated.
-
-
-vim +/ret +818 net/bpf/test_run.c
-
-990088d6233eb1 Grant Seltzer          2023-01-27  812  
-da00d2f117a08f KP Singh               2020-03-04  813  int bpf_prog_test_run_tracing(struct bpf_prog *prog,
-da00d2f117a08f KP Singh               2020-03-04  814  			      const union bpf_attr *kattr,
-da00d2f117a08f KP Singh               2020-03-04  815  			      union bpf_attr __user *uattr)
-da00d2f117a08f KP Singh               2020-03-04  816  {
-d923021c2ce12a Yonghong Song          2020-06-30  817  	struct bpf_fentry_test_t arg = {};
-3d08b6f29cf33a KP Singh               2020-03-04 @818  	u16 side_effect = 0, ret = 0;
-990088d6233eb1 Grant Seltzer          2023-01-27  819  	int b = 2, err = -EFAULT, current_cpu;
-990088d6233eb1 Grant Seltzer          2023-01-27  820  
-990088d6233eb1 Grant Seltzer          2023-01-27  821  	void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
-990088d6233eb1 Grant Seltzer          2023-01-27  822  	__u32 ctx_size_in = kattr->test.ctx_size_in;
-990088d6233eb1 Grant Seltzer          2023-01-27  823  	struct bpf_tracing_test_run_info info;
-990088d6233eb1 Grant Seltzer          2023-01-27  824  	int cpu = kattr->test.cpu;
-da00d2f117a08f KP Singh               2020-03-04  825  
-b530e9e1063ed2 Toke Høiland-Jørgensen 2022-03-09  826  	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
-1b4d60ec162f82 Song Liu               2020-09-25  827  		return -EINVAL;
-1b4d60ec162f82 Song Liu               2020-09-25  828  
-da00d2f117a08f KP Singh               2020-03-04  829  	switch (prog->expected_attach_type) {
-da00d2f117a08f KP Singh               2020-03-04  830  	case BPF_TRACE_FENTRY:
-da00d2f117a08f KP Singh               2020-03-04  831  	case BPF_TRACE_FEXIT:
-faeb2dce084aff Alexei Starovoitov     2019-11-14  832  		if (bpf_fentry_test1(1) != 2 ||
-faeb2dce084aff Alexei Starovoitov     2019-11-14  833  		    bpf_fentry_test2(2, 3) != 5 ||
-faeb2dce084aff Alexei Starovoitov     2019-11-14  834  		    bpf_fentry_test3(4, 5, 6) != 15 ||
-faeb2dce084aff Alexei Starovoitov     2019-11-14  835  		    bpf_fentry_test4((void *)7, 8, 9, 10) != 34 ||
-faeb2dce084aff Alexei Starovoitov     2019-11-14  836  		    bpf_fentry_test5(11, (void *)12, 13, 14, 15) != 65 ||
-d923021c2ce12a Yonghong Song          2020-06-30  837  		    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) != 111 ||
-d923021c2ce12a Yonghong Song          2020-06-30  838  		    bpf_fentry_test7((struct bpf_fentry_test_t *)0) != 0 ||
-d923021c2ce12a Yonghong Song          2020-06-30  839  		    bpf_fentry_test8(&arg) != 0)
-da00d2f117a08f KP Singh               2020-03-04  840  			goto out;
-da00d2f117a08f KP Singh               2020-03-04  841  		break;
-3d08b6f29cf33a KP Singh               2020-03-04  842  	case BPF_MODIFY_RETURN:
-3d08b6f29cf33a KP Singh               2020-03-04  843  		ret = bpf_modify_return_test(1, &b);
-3d08b6f29cf33a KP Singh               2020-03-04  844  		if (b != 2)
-3d08b6f29cf33a KP Singh               2020-03-04  845  			side_effect = 1;
-3d08b6f29cf33a KP Singh               2020-03-04  846  		break;
-da00d2f117a08f KP Singh               2020-03-04  847  	default:
-da00d2f117a08f KP Singh               2020-03-04  848  		goto out;
-a25ecd9d1e6024 Colin Ian King         2019-11-18  849  	}
-da00d2f117a08f KP Singh               2020-03-04  850  
-990088d6233eb1 Grant Seltzer          2023-01-27  851  	/* doesn't support data_in/out, ctx_out, duration, or repeat */
-990088d6233eb1 Grant Seltzer          2023-01-27  852  	if (kattr->test.data_in || kattr->test.data_out ||
-990088d6233eb1 Grant Seltzer          2023-01-27  853  	    kattr->test.ctx_out || kattr->test.duration ||
-990088d6233eb1 Grant Seltzer          2023-01-27  854  	    kattr->test.repeat || kattr->test.batch_size)
-990088d6233eb1 Grant Seltzer          2023-01-27  855  		return -EINVAL;
-990088d6233eb1 Grant Seltzer          2023-01-27  856  
-990088d6233eb1 Grant Seltzer          2023-01-27  857  	if (ctx_size_in < prog->aux->max_ctx_offset ||
-990088d6233eb1 Grant Seltzer          2023-01-27  858  	    ctx_size_in > MAX_BPF_FUNC_ARGS * sizeof(u64))
-990088d6233eb1 Grant Seltzer          2023-01-27  859  		return -EINVAL;
-990088d6233eb1 Grant Seltzer          2023-01-27  860  
-990088d6233eb1 Grant Seltzer          2023-01-27  861  	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 && cpu != 0)
-990088d6233eb1 Grant Seltzer          2023-01-27  862  		return -EINVAL;
-990088d6233eb1 Grant Seltzer          2023-01-27  863  
-990088d6233eb1 Grant Seltzer          2023-01-27  864  	if (ctx_size_in) {
-990088d6233eb1 Grant Seltzer          2023-01-27  865  		info.ctx = memdup_user(ctx_in, ctx_size_in);
-990088d6233eb1 Grant Seltzer          2023-01-27  866  		if (IS_ERR(info.ctx))
-990088d6233eb1 Grant Seltzer          2023-01-27  867  			return PTR_ERR(info.ctx);
-990088d6233eb1 Grant Seltzer          2023-01-27  868  	} else {
-990088d6233eb1 Grant Seltzer          2023-01-27  869  		info.ctx = NULL;
-990088d6233eb1 Grant Seltzer          2023-01-27  870  	}
-3d08b6f29cf33a KP Singh               2020-03-04  871  
-da00d2f117a08f KP Singh               2020-03-04  872  	err = 0;
-990088d6233eb1 Grant Seltzer          2023-01-27  873  	info.prog = prog;
-990088d6233eb1 Grant Seltzer          2023-01-27  874  
-990088d6233eb1 Grant Seltzer          2023-01-27  875  	current_cpu = get_cpu();
-990088d6233eb1 Grant Seltzer          2023-01-27  876  	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 ||
-990088d6233eb1 Grant Seltzer          2023-01-27  877  	    cpu == current_cpu) {
-990088d6233eb1 Grant Seltzer          2023-01-27  878  		__bpf_prog_test_run_tracing(&info);
-990088d6233eb1 Grant Seltzer          2023-01-27  879  	} else if (cpu >= nr_cpu_ids || !cpu_online(cpu)) {
-990088d6233eb1 Grant Seltzer          2023-01-27  880  		/* smp_call_function_single() also checks cpu_online()
-990088d6233eb1 Grant Seltzer          2023-01-27  881  		 * after csd_lock(). However, since cpu is from user
-990088d6233eb1 Grant Seltzer          2023-01-27  882  		 * space, let's do an extra quick check to filter out
-990088d6233eb1 Grant Seltzer          2023-01-27  883  		 * invalid value before smp_call_function_single().
-990088d6233eb1 Grant Seltzer          2023-01-27  884  		 */
-990088d6233eb1 Grant Seltzer          2023-01-27  885  		err = -ENXIO;
-990088d6233eb1 Grant Seltzer          2023-01-27  886  	} else {
-990088d6233eb1 Grant Seltzer          2023-01-27  887  		err = smp_call_function_single(cpu, __bpf_prog_test_run_tracing,
-990088d6233eb1 Grant Seltzer          2023-01-27  888  					       &info, 1);
-990088d6233eb1 Grant Seltzer          2023-01-27  889  	}
-990088d6233eb1 Grant Seltzer          2023-01-27  890  	put_cpu();
-990088d6233eb1 Grant Seltzer          2023-01-27  891  
-990088d6233eb1 Grant Seltzer          2023-01-27  892  	if (!err &&
-990088d6233eb1 Grant Seltzer          2023-01-27  893  	    copy_to_user(&uattr->test.retval, &info.retval, sizeof(u32)))
-990088d6233eb1 Grant Seltzer          2023-01-27  894  		err = -EFAULT;
-990088d6233eb1 Grant Seltzer          2023-01-27  895  
-990088d6233eb1 Grant Seltzer          2023-01-27  896  	kfree(info.ctx);
-990088d6233eb1 Grant Seltzer          2023-01-27  897  
-da00d2f117a08f KP Singh               2020-03-04  898  out:
-da00d2f117a08f KP Singh               2020-03-04  899  	trace_bpf_test_finish(&err);
-da00d2f117a08f KP Singh               2020-03-04  900  	return err;
-1cf1cae963c2e6 Alexei Starovoitov     2017-03-30  901  }
-1cf1cae963c2e6 Alexei Starovoitov     2017-03-30  902  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
