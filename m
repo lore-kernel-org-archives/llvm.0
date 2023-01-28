@@ -1,35 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFF8522D
-	for <llvm@lists.linux.dev>; Fri, 27 Jan 2023 23:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDCC3C433EF;
-	Fri, 27 Jan 2023 23:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1674861502;
-	bh=CXUhXt0vaAEeA5azgtYG8dHIkQ0F6fZe8brBxX+dbzw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RdC12Sna/LXNHYtASD7sP87NEW4wwxX8Vz0EVtsPp7oAEug9P8HXexyVQX2M9Yizf
-	 EmDCljirqWn6Ft2hO/w7PHtTWitdILR4YImeiDGo4haJZtl8kFs0bsssh1B2AQl1+f
-	 0eo0rLTSHbhLnSkgKnRaR3AnIDhlSH/dDc/rnT4apOoCPqPhljGUkdRp+OgXvInV/b
-	 GkHuz10SIfqHsv6YWvl9gh6VV/BbdtYFBlfwonDhXgtNcJCUy17esH5uetnzSlFLOP
-	 ESbEUs6re68CcDB4BlQrZunygZNWjXA7tBDJ1aXZP9b8rGkwoaKLClk7Bgn+VGVhO2
-	 Hi4NA8mERmjGg==
-Date: Fri, 27 Jan 2023 16:18:20 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Robin Murphy <robin.murphy@arm.com>,
-	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-Message-ID: <Y9RbvPRP5Yw/fUMM@dev-arch.thelio-3990X>
-References: <20230127221418.2522612-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F6E23A2;
+	Sat, 28 Jan 2023 04:47:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674881241; x=1706417241;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TMaPEK/flWHkegvDhPNIMpyJEF1mxwCi9JdCIBlRCTg=;
+  b=WBGXhR3JIOHFtUxNQgoVpOGncM0mkr3rpAccaYKxZtn+RkZSm/0+4Pxv
+   2YgevCjxK0rz91x4n0o4XI316D5072wh1GXi56/mzUqTMSkkJ9hRIsHPm
+   tkIjjNN4HEtn4FF7SahtWulSfwuyQnO9rNGUAwUBRCkQ1/YsQ1AlNxeBx
+   nQYWH5MEW/25XeV8BXZ7bfIYMfMGYXYGpxDU7eTahp+K732ZDoRgrnd3Z
+   QTwzPTz3Q2D8WsojuQGKRq3IAVaS3tS2J4fsLpEwVcdkzGupJ6njcMdjX
+   Aw4TVPK7K8rPfIxPNaJ0cKpsTg6kOfq1MeC9fa5Gt6zMo3V5WuPOBHsw1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="328549690"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="328549690"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 20:47:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="665486817"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="665486817"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jan 2023 20:47:17 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pLd7V-0000Oz-0I;
+	Sat, 28 Jan 2023 04:47:17 +0000
+Date: Sat, 28 Jan 2023 12:46:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Ben Widawsky <ben.widawsky@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>, linux-cxl@vger.kernel.org
+Subject: [cxl:for-6.3/cxl-ram-region 14/18] drivers/cxl/core/region.c:1479:7:
+ warning: variable 'rc' set but not used
+Message-ID: <202301281217.NvoiwL4w-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,56 +50,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127221418.2522612-1-arnd@kernel.org>
 
-On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The error handling for platform_get_irq() failing no longer
-> works after a recent change, clang now points this out with
-> a warning:
-> 
-> drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
->         if (syncpt_irq < 0)
->             ^~~~~~~~~~
-> 
-> Fix this by removing the variable and checking the correct
-> error status.
-> 
-> Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git for-6.3/cxl-ram-region
+head:   a7cf664d7e997ac36b0f466af2e2be33464ab598
+commit: d5c71004c2cb69354ab7f1bb9b0a33ae9f7edf9d [14/18] cxl/region: Refactor attach_target() for autodiscovery
+config: i386-randconfig-a012-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281217.NvoiwL4w-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=d5c71004c2cb69354ab7f1bb9b0a33ae9f7edf9d
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl for-6.3/cxl-ram-region
+        git checkout d5c71004c2cb69354ab7f1bb9b0a33ae9f7edf9d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
 
-I had the same diff pending but civic duty called today :)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+All warnings (new ones prefixed by >>):
 
-> ---
->  drivers/gpu/host1x/dev.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-> index 4872d183d860..aae2efeef503 100644
-> --- a/drivers/gpu/host1x/dev.c
-> +++ b/drivers/gpu/host1x/dev.c
-> @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
->  static int host1x_probe(struct platform_device *pdev)
->  {
->  	struct host1x *host;
-> -	int syncpt_irq;
->  	int err;
->  
->  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-> @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
->  	}
->  
->  	host->syncpt_irq = platform_get_irq(pdev, 0);
-> -	if (syncpt_irq < 0)
-> -		return syncpt_irq;
-> +	if (host->syncpt_irq < 0)
-> +		return host->syncpt_irq;
->  
->  	mutex_init(&host->devices_lock);
->  	INIT_LIST_HEAD(&host->devices);
-> -- 
-> 2.39.0
-> 
+>> drivers/cxl/core/region.c:1479:7: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
+                   int rc;
+                       ^
+>> drivers/cxl/core/region.c:1482:7: warning: variable 'rc' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (!dev)
+                       ^~~~
+   drivers/cxl/core/region.c:1496:6: note: uninitialized use occurs here
+           if (rc < 0)
+               ^~
+   drivers/cxl/core/region.c:1482:3: note: remove the 'if' if its condition is always true
+                   if (!dev)
+                   ^~~~~~~~~
+   drivers/cxl/core/region.c:1473:8: note: initialize the variable 'rc' to silence this warning
+           int rc;
+                 ^
+                  = 0
+   2 warnings generated.
+
+
+vim +/rc +1479 drivers/cxl/core/region.c
+
+  1469	
+  1470	static size_t store_targetN(struct cxl_region *cxlr, const char *buf, int pos,
+  1471				    size_t len)
+  1472	{
+  1473		int rc;
+  1474	
+  1475		if (sysfs_streq(buf, "\n"))
+  1476			rc = detach_target(cxlr, pos);
+  1477		else {
+  1478			struct device *dev;
+> 1479			int rc;
+  1480	
+  1481			dev = bus_find_device_by_name(&cxl_bus_type, NULL, buf);
+> 1482			if (!dev)
+  1483				return -ENODEV;
+  1484	
+  1485			if (!is_endpoint_decoder(dev)) {
+  1486				rc = -EINVAL;
+  1487				goto out;
+  1488			}
+  1489	
+  1490			rc = attach_target(cxlr, to_cxl_endpoint_decoder(dev), pos,
+  1491					   TASK_INTERRUPTIBLE);
+  1492	out:
+  1493			put_device(dev);
+  1494		}
+  1495	
+  1496		if (rc < 0)
+  1497			return rc;
+  1498		return len;
+  1499	}
+  1500	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
