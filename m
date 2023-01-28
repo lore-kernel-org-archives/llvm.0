@@ -1,103 +1,193 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5A0849C;
-	Sat, 28 Jan 2023 21:53:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674942836; x=1706478836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l7oU3DJF0JNzMtot3i3RGBhQ/tTptATyWLIXXM7b4k0=;
-  b=lknFEVbbHkktQ7tlCb8qjgXHsikTDwckb87x4tOG+6qGAzDczMTtw7p/
-   58roh/xdqxtPVdt2GoAsQ73sTr4hqU/hNbIufXuw1Xy30bzLAdoIaaL57
-   1zZ+qzci/K0HNXW4hGB3ouwKkTrO/bTP0jhFP2jYIu+UEkutsbRdYwyap
-   GM9UJ9inK3kmwLinVCYpShef4ikiboYvbhD4L3ljPncO/TL+9OeMVdGGG
-   NP4dCmZqVCQjtYklcBAh+rb6Rh3vlU1OEfIAi1zVZludJDTbYzpduDbUp
-   jWE5MEoKwrF1/0G5wuGaIIwr7FCy1z0Euii/dxZHs9HqEbwAzNh+OSqWU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="329467404"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="329467404"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 13:53:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="752368319"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="752368319"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2023 13:53:54 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pLt90-00018u-05;
-	Sat, 28 Jan 2023 21:53:54 +0000
-Date: Sun, 29 Jan 2023 05:53:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
- provider has sync_state
-Message-ID: <202301290508.UGRbj8v8-lkp@intel.com>
-References: <20230127104054.895129-1-abel.vesa@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAF93C0B
+	for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 23:31:19 +0000 (UTC)
+Received: by mail-lf1-f42.google.com with SMTP id bp15so13825253lfb.13
+        for <llvm@lists.linux.dev>; Sat, 28 Jan 2023 15:31:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I0S3B5PU0WSUcNuHyr1ZtmRb3x1+XFor4xpSEEFcyEE=;
+        b=o1jprqTqTnaJ47gNeIwm9EbYvAI/0rr6zGeOvntePSEWWxCmabKNsHdi6IkHAruUiI
+         jF44IJDhWCDM4BNfKHJVLocX84JZW2AKazEUlRdM1zP+72iEd6m1lIV9fJiIR3RqjSkI
+         bvlbSU7c4jpo7JMqhUaLcqLE78p4tE3zvS9kNcDn0bCDa/sfCQkxNakj15FLrjvwqQgN
+         /+1IJdCXasE6KvQnzzMHZJq5sgkKrmAvGFYzAqIc8LkLjAS8SilZo6aFuFI3c2n0qYNi
+         bhf+0WduvyXGsm/weGiGuJj1mMu0JObc9UKpqfwLI1a5faj7TezU4fgqUX75q7cw3m5n
+         IadA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I0S3B5PU0WSUcNuHyr1ZtmRb3x1+XFor4xpSEEFcyEE=;
+        b=yF+SghdVyfiFB/efgHw9vccWotzQNclwwsTg9ppIEA42seqyZl7SNnUXaoYwi6tJUR
+         6SPT3JwQ7h4hRpLfRXqw+yge6cwTGARCwh3XBQcO/DnLPX5cfBca3MqYRa1nfejeb+CY
+         ygjBdaQsfB7X0es8/oki7tQQKxTYXy7AhFNSkgmVGgP/1NmIvFfNvD8T0ZWfh2wstOXv
+         mczk1FqRIRUwx0fuV1tj7zjBqFTFdspKtMaVe0IGRTOJGIs3DcjPQgqfnjr5CHCMh73v
+         98kvi/1fZfai5Q3OpJsTbV6TT2nFApZQIr8PwPie9/4E6grDM7Yl9LXddlKIjLuBihsq
+         JvWQ==
+X-Gm-Message-State: AO0yUKWIeyhAIvofFIuc1nEZQ5s/3LhJKHBGWJIS3NxoYcUZMPYZNftC
+	UWWxvrUGO/Dw0fA0tjUAm83gymP7QLeuiKq6Thc=
+X-Google-Smtp-Source: AK7set/fVQq6PZZoBWoE3stX7Y00RBCgPwhDtkEBaVRmWzHDHLpg96Vnov8LOYXQoXWxhIexEmfkJ7DaihD6KesnMAs=
+X-Received: by 2002:ac2:538a:0:b0:4d8:580b:2f23 with SMTP id
+ g10-20020ac2538a000000b004d8580b2f23mr623686lfh.132.1674948677422; Sat, 28
+ Jan 2023 15:31:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127104054.895129-1-abel.vesa@linaro.org>
+References: <20230128173843.765212-1-masahiroy@kernel.org> <20230128173843.765212-2-masahiroy@kernel.org>
+In-Reply-To: <20230128173843.765212-2-masahiroy@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sun, 29 Jan 2023 00:30:40 +0100
+Message-ID: <CA+icZUWTdAihUVSjEgV2BVOVCktUYccd--9y3bv18PrJDX5nhw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kbuild: deb-pkg: create source package without cleaning
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Abel,
+On Sat, Jan 28, 2023 at 6:40 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> If you run 'make deb-pkg', all objects are lost due to 'make clean',
+> which makes the incremental builds impossible.
+>
+> Instead of cleaning, pass the exclude list to tar's --exclude-from
+> option.
+>
+> Previously, *.diff.gz contained some check-in files such as
+> .clang-format, .cocciconfig.
+>
+> With this commit, *.diff.gz will only contain the .config and debian/.
+> The other source files will go into the tarball.
+>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.2-rc5 next-20230127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the patch.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/soc-qcom-rmphpd-Call-the-genpd-unused-power-off-sync-state-callback/20230128-180808
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230127104054.895129-1-abel.vesa%40linaro.org
-patch subject: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if provider has sync_state
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230129/202301290508.UGRbj8v8-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a550a6ee3e0da4ce9e716305c628afa9a9d22362
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Abel-Vesa/soc-qcom-rmphpd-Call-the-genpd-unused-power-off-sync-state-callback/20230128-180808
-        git checkout a550a6ee3e0da4ce9e716305c628afa9a9d22362
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/mei/
+While at this...
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+...why not switch over to Debian's packaging default XZ compressor:
+*.orig.xz and *.diff.xz (or *.debian.tar.xz)?
 
-All errors (new ones prefixed by >>):
+EXAMPLE binutils:
 
-   In file included from drivers/misc/mei/pci-me.c:17:
->> include/linux/pm_domain.h:419:15: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-   static inline genpd_power_off_unused_sync_state(struct device *dev) {}
-   ~~~~~~~~~~~~~ ^
->> include/linux/pm_domain.h:419:70: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   static inline genpd_power_off_unused_sync_state(struct device *dev) {}
-                                                                        ^
-   2 errors generated.
+DSC: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40-2.dsc
+TAR: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40.orig.tar.xz
+DIFF: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40-2.debian.tar.xz
 
+-Sedat-
 
-vim +/int +419 include/linux/pm_domain.h
+[1] https://packages.debian.org/sid/binutils
 
-   418	
- > 419	static inline genpd_power_off_unused_sync_state(struct device *dev) {}
-   420	#endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
-   421	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/Makefile.package | 27 ++++++++++++++++++++++-----
+>  scripts/package/mkdebian | 27 +++++++++++++++++++++++++++
+>  2 files changed, 49 insertions(+), 5 deletions(-)
+>
+> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+> index dfbf40454a99..cb135c99a273 100644
+> --- a/scripts/Makefile.package
+> +++ b/scripts/Makefile.package
+> @@ -50,6 +50,21 @@ fi ; \
+>  tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
+>         --transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
+>
+> +# Source Tarball
+> +# ---------------------------------------------------------------------------
+> +
+> +quiet_cmd_exclude_list = GEN     $@
+> +      cmd_exclude_list = $(srctree)/scripts/gen-exclude.py --prefix=./ --rootdir=$(srctree) > $@; echo "./$@" >> $@
+> +
+> +.exclude-list: FORCE
+> +       $(call cmd,exclude_list)
+> +
+> +quiet_cmd_tar = TAR     $@
+> +      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --transform 's:^\.:linux:S' .
+> +
+> +%.tar.gz: .exclude-list
+> +       $(call cmd,tar)
+> +
+>  # rpm-pkg
+>  # ---------------------------------------------------------------------------
+>  PHONY += rpm-pkg
+> @@ -81,12 +96,11 @@ binrpm-pkg:
+>
+>  PHONY += deb-pkg
+>  deb-pkg:
+> -       $(MAKE) clean
+>         $(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
+> -       $(call cmd,src_tar,$(KDEB_SOURCENAME))
+> -       origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
+> -               mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
+> -       +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
+> +       $(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
+> +               $(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
+> +       +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
+> +               --build=source,binary --source-option=-sP -nc -us -uc
+>
+>  PHONY += bindeb-pkg
+>  bindeb-pkg:
+> @@ -174,4 +188,7 @@ help:
+>         @echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
+>         @echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
+>
+> +PHONY += FORCE
+> +FORCE:
+> +
+>  .PHONY: $(PHONY)
+> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> index c3bbef7a6754..12c057ffbe6e 100755
+> --- a/scripts/package/mkdebian
+> +++ b/scripts/package/mkdebian
+> @@ -84,6 +84,8 @@ set_debarch() {
+>         fi
+>  }
+>
+> +rm -rf debian
+> +
+>  # Some variables and settings used throughout the script
+>  version=$KERNELRELEASE
+>  if [ -n "$KDEB_PKGVERSION" ]; then
+> @@ -135,6 +137,31 @@ fi
+>  mkdir -p debian/source/
+>  echo "1.0" > debian/source/format
+>
+> +cat<<'EOF' > debian/source/local-options
+> +#
+> +# Ugly: ignore anything except .config or debian/
+> +# (is there a cleaner way to do this?)
+> +#
+> +diff-ignore
+> +
+> +extend-diff-ignore = ^[^.d]
+> +
+> +extend-diff-ignore = ^\.[^c]
+> +extend-diff-ignore = ^\.c($|[^o])
+> +extend-diff-ignore = ^\.co($|[^n])
+> +extend-diff-ignore = ^\.con($|[^f])
+> +extend-diff-ignore = ^\.conf($|[^i])
+> +extend-diff-ignore = ^\.confi($|[^g])
+> +extend-diff-ignore = ^\.config.
+> +
+> +extend-diff-ignore = ^d($|[^e])
+> +extend-diff-ignore = ^de($|[^b])
+> +extend-diff-ignore = ^deb($|[^i])
+> +extend-diff-ignore = ^debi($|[^a])
+> +extend-diff-ignore = ^debia($|[^n])
+> +extend-diff-ignore = ^debian[^/]
+> +EOF
+> +
+>  echo $debarch > debian/arch
+>  extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
+>  extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
+> --
+> 2.34.1
+>
