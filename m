@@ -1,43 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BB228F4;
-	Sun, 29 Jan 2023 18:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BE2182;
+	Sun, 29 Jan 2023 18:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675015762; x=1706551762;
+  t=1675017022; x=1706553022;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w52DeAdWkbaAkgb1cR/4HVzapxxMStljzG1ZESfc/s4=;
-  b=PxsXBMYn4PCftaviUdee2bxUxByqT2cxR/bQM3T1hf2FXCqGjVQxzr1Z
-   3IRQm/VXGCwG/52bwYdSLas2nhvPSUjka6QebRNBfmo3AsnDyjXcHXgaJ
-   QXJTc+KeVQrdvWnFSkxwqW6BKw+bJdV7mCf1F9dHvcgY3QbHGjkCn53nY
-   5eCWTi+EY8wA86CH9xqANuxKlPj00Zt8qMFP1vMWuRnloKTeQCP0V2C4n
-   mQyIUFExCDKU8bBVP+ub+Y+v2wWnhaWkdTp+9/H4o5y/kO96JVYu4gTIH
-   HjBDN+7cHV7UCXCp8P9egHfWMelwkObpBdEfM6M496Ktu+kMZLZvbm4Fc
+  bh=J/edoHyyrnNXO4lt2VGl45UhgRZ+2VH1J8JkDJN/KY4=;
+  b=FjYHZo5Zoa1QTObjeSrrI/Dov0JGBbWDLcrzruUYffRvNGi6VMwtWSoL
+   s7R5tz4WTlP2z0GlDbWvyzoYwqlh/Ea3iLxz7wb/fJQVRe6qiz5DFtceE
+   dUKoqf1Ddfibjf1AbX9XEci4L4ZhvJGFrKgUBH/UK4I2uRQydZ3wDTvqa
+   AbUQ1z+q+TVABbF3r4g82DoYZiYYfEghv8aYqacr9oUulZUFgEpf218O1
+   RP0D6fqM05j5AubKYCNSSh9gN2Pg9hhXRFsODgfx/D5g6ndpma6vqop1Z
+   QpmLM7p0TwbB9SQB0TuMYoDcWvbR1KDfSpOwnjHWgSAPK8UDRUpYmVIHS
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="307763492"
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="413641315"
 X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="307763492"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 10:09:21 -0800
+   d="scan'208";a="413641315"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 10:30:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="641315293"
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="727262454"
 X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="641315293"
+   d="scan'208";a="727262454"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jan 2023 10:09:19 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jan 2023 10:30:20 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pMC7C-00030E-34;
-	Sun, 29 Jan 2023 18:09:18 +0000
-Date: Mon, 30 Jan 2023 02:08:24 +0800
+	id 1pMCRX-000313-1p;
+	Sun, 29 Jan 2023 18:30:19 +0000
+Date: Mon, 30 Jan 2023 02:29:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:dev-test 4/6] fs/f2fs/data.c:995:17: warning: implicit
- truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1
-Message-ID: <202301300239.gneoADGa-lkp@intel.com>
+To: Qais Yousef <qyousef@layalina.io>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [qais-yousef:uclamp-spare-capacity-fixes 4/6]
+ kernel/sched/fair.c:7460:28: warning: '&&' within '||'
+Message-ID: <202301300236.utI2BPtE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,132 +46,286 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev-test
-head:   056e15537d6822ad8ca6fadc55ba0a9f6d23c73d
-commit: f859d84b708de34ddecf8a4217f264e0ea4abc90 [4/6] f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info
-config: riscv-randconfig-r042-20230129 (https://download.01.org/0day-ci/archive/20230130/202301300239.gneoADGa-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+tree:   https://github.com/qais-yousef/linux uclamp-spare-capacity-fixes
+head:   a3ceff1a59cb681052ff29d3e21c89ec8927d620
+commit: eb7cae7d9708a8bd005b137d0a6b3532e286686b [4/6] sched/uclamp: Set max_spare_cap_cpu even if max_spare_cap is 0
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230130/202301300236.utI2BPtE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=f859d84b708de34ddecf8a4217f264e0ea4abc90
-        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
-        git fetch --no-tags chao dev-test
-        git checkout f859d84b708de34ddecf8a4217f264e0ea4abc90
+        # https://github.com/qais-yousef/linux/commit/eb7cae7d9708a8bd005b137d0a6b3532e286686b
+        git remote add qais-yousef https://github.com/qais-yousef/linux
+        git fetch --no-tags qais-yousef uclamp-spare-capacity-fixes
+        git checkout eb7cae7d9708a8bd005b137d0a6b3532e286686b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/f2fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/sched/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> fs/f2fs/data.c:995:17: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-           fio->submitted = true;
-                          ^ ~~~~
-   fs/f2fs/data.c:1011:15: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-                           fio->retry = true;
-                                      ^ ~~~~
-   2 warnings generated.
---
->> fs/f2fs/segment.c:3350:16: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-                   fio->in_list = true;
-                                ^ ~~~~
-   1 warning generated.
+   kernel/sched/fair.c:7461:59: error: expected ')'
+                                      (cpu_cap > max_spare_cap || max_spare_cap == -1UL) {
+                                                                                         ^
+   kernel/sched/fair.c:7460:8: note: to match this '('
+                                      ((fits == max_fits) &&
+                                      ^
+>> kernel/sched/fair.c:7460:28: warning: '&&' within '||' [-Wlogical-op-parentheses]
+                                      ((fits == max_fits) &&
+                                       ~~~~~~~~~~~~~~~~~~~^~
+   kernel/sched/fair.c:7460:28: note: place parentheses around the '&&' expression to silence this warning
+                                      ((fits == max_fits) &&
+                                                          ^
+                                       (
+   kernel/sched/fair.c:7471:3: error: expected ')'
+                   }
+                   ^
+   kernel/sched/fair.c:7459:14: note: to match this '('
+                           } else if ((fits > max_fits) ||
+                                     ^
+   kernel/sched/fair.c:7471:3: error: expected statement
+                   }
+                   ^
+   1 warning and 3 errors generated.
 
 
-vim +/int +995 fs/f2fs/data.c
+vim +7460 kernel/sched/fair.c
 
-8648de2c581eed Chao Yu           2019-02-19   961  
-fe16efe6a7952f Chao Yu           2018-05-28   962  void f2fs_submit_page_write(struct f2fs_io_info *fio)
-93dfe2ac516250 Jaegeuk Kim       2013-11-30   963  {
-05ca3632e5a73b Jaegeuk Kim       2015-04-23   964  	struct f2fs_sb_info *sbi = fio->sbi;
-458e6197c37de5 Jaegeuk Kim       2013-12-11   965  	enum page_type btype = PAGE_TYPE_OF_BIO(fio->type);
-a912b54d3aaa01 Jaegeuk Kim       2017-05-10   966  	struct f2fs_bio_info *io = sbi->write_io[btype] + fio->temp;
-4375a33664de17 Jaegeuk Kim       2015-04-23   967  	struct page *bio_page;
-93dfe2ac516250 Jaegeuk Kim       2013-11-30   968  
-b9109b0e49b93b Jaegeuk Kim       2017-05-10   969  	f2fs_bug_on(sbi, is_read_io(fio->op));
-93dfe2ac516250 Jaegeuk Kim       2013-11-30   970  
-e4544b63a7ee49 Tim Murray        2022-01-07   971  	f2fs_down_write(&io->io_rwsem);
-fb830fc5cfc90b Chao Yu           2017-05-19   972  next:
-fb830fc5cfc90b Chao Yu           2017-05-19   973  	if (fio->in_list) {
-fb830fc5cfc90b Chao Yu           2017-05-19   974  		spin_lock(&io->io_lock);
-fb830fc5cfc90b Chao Yu           2017-05-19   975  		if (list_empty(&io->io_list)) {
-fb830fc5cfc90b Chao Yu           2017-05-19   976  			spin_unlock(&io->io_lock);
-fe16efe6a7952f Chao Yu           2018-05-28   977  			goto out;
-fb830fc5cfc90b Chao Yu           2017-05-19   978  		}
-fb830fc5cfc90b Chao Yu           2017-05-19   979  		fio = list_first_entry(&io->io_list,
-fb830fc5cfc90b Chao Yu           2017-05-19   980  						struct f2fs_io_info, list);
-fb830fc5cfc90b Chao Yu           2017-05-19   981  		list_del(&fio->list);
-fb830fc5cfc90b Chao Yu           2017-05-19   982  		spin_unlock(&io->io_lock);
-fb830fc5cfc90b Chao Yu           2017-05-19   983  	}
-93dfe2ac516250 Jaegeuk Kim       2013-11-30   984  
-93770ab7a6e963 Chao Yu           2019-04-15   985  	verify_fio_blkaddr(fio);
-93dfe2ac516250 Jaegeuk Kim       2013-11-30   986  
-4c8ff7095bef64 Chao Yu           2019-11-01   987  	if (fio->encrypted_page)
-4c8ff7095bef64 Chao Yu           2019-11-01   988  		bio_page = fio->encrypted_page;
-4c8ff7095bef64 Chao Yu           2019-11-01   989  	else if (fio->compressed_page)
-4c8ff7095bef64 Chao Yu           2019-11-01   990  		bio_page = fio->compressed_page;
-4c8ff7095bef64 Chao Yu           2019-11-01   991  	else
-4c8ff7095bef64 Chao Yu           2019-11-01   992  		bio_page = fio->page;
-36951b38d13ac7 Chao Yu           2016-11-16   993  
-ebf7c522fdc2ec Thomas Meyer      2017-10-07   994  	/* set submitted = true as a return value */
-ebf7c522fdc2ec Thomas Meyer      2017-10-07  @995  	fio->submitted = true;
-d68f735b3bc934 Jaegeuk Kim       2017-02-03   996  
-36951b38d13ac7 Chao Yu           2016-11-16   997  	inc_page_count(sbi, WB_DATA_TYPE(bio_page));
-36951b38d13ac7 Chao Yu           2016-11-16   998  
-27aacd28ea3b89 Satya Tangirala   2020-07-02   999  	if (io->bio &&
-27aacd28ea3b89 Satya Tangirala   2020-07-02  1000  	    (!io_is_mergeable(sbi, io->bio, io, fio, io->last_block_in_bio,
-27aacd28ea3b89 Satya Tangirala   2020-07-02  1001  			      fio->new_blkaddr) ||
-27aacd28ea3b89 Satya Tangirala   2020-07-02  1002  	     !f2fs_crypt_mergeable_bio(io->bio, fio->page->mapping->host,
-27aacd28ea3b89 Satya Tangirala   2020-07-02  1003  				       bio_page->index, fio)))
-458e6197c37de5 Jaegeuk Kim       2013-12-11  1004  		__submit_merged_bio(io);
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1005  alloc_new:
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1006  	if (io->bio == NULL) {
-8223ecc456d079 Chao Yu           2019-08-28  1007  		if (F2FS_IO_ALIGNED(sbi) &&
-8223ecc456d079 Chao Yu           2019-08-28  1008  				(fio->type == DATA || fio->type == NODE) &&
-0a595ebaaa6b53 Jaegeuk Kim       2016-12-14  1009  				fio->new_blkaddr & F2FS_IO_SIZE_MASK(sbi)) {
-0a595ebaaa6b53 Jaegeuk Kim       2016-12-14  1010  			dec_page_count(sbi, WB_DATA_TYPE(bio_page));
-fe16efe6a7952f Chao Yu           2018-05-28  1011  			fio->retry = true;
-fe16efe6a7952f Chao Yu           2018-05-28  1012  			goto skip;
-0a595ebaaa6b53 Jaegeuk Kim       2016-12-14  1013  		}
-a8affc03a9b375 Christoph Hellwig 2021-03-11  1014  		io->bio = __bio_alloc(fio, BIO_MAX_VECS);
-27aacd28ea3b89 Satya Tangirala   2020-07-02  1015  		f2fs_set_bio_crypt_ctx(io->bio, fio->page->mapping->host,
-27aacd28ea3b89 Satya Tangirala   2020-07-02  1016  				       bio_page->index, fio, GFP_NOIO);
-458e6197c37de5 Jaegeuk Kim       2013-12-11  1017  		io->fio = *fio;
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1018  	}
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1019  
-a912b54d3aaa01 Jaegeuk Kim       2017-05-10  1020  	if (bio_add_page(io->bio, bio_page, PAGE_SIZE, 0) < PAGE_SIZE) {
-458e6197c37de5 Jaegeuk Kim       2013-12-11  1021  		__submit_merged_bio(io);
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1022  		goto alloc_new;
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1023  	}
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1024  
-578c647879f74c Yufen Yu          2018-01-09  1025  	if (fio->io_wbc)
-34e51a5e1a6e93 Tejun Heo         2019-06-27  1026  		wbc_account_cgroup_owner(fio->io_wbc, bio_page, PAGE_SIZE);
-578c647879f74c Yufen Yu          2018-01-09  1027  
-7a9d75481b85d5 Chao Yu           2016-02-22  1028  	io->last_block_in_bio = fio->new_blkaddr;
-fb830fc5cfc90b Chao Yu           2017-05-19  1029  
-fb830fc5cfc90b Chao Yu           2017-05-19  1030  	trace_f2fs_submit_page_write(fio->page, fio);
-fe16efe6a7952f Chao Yu           2018-05-28  1031  skip:
-fb830fc5cfc90b Chao Yu           2017-05-19  1032  	if (fio->in_list)
-fb830fc5cfc90b Chao Yu           2017-05-19  1033  		goto next;
-fe16efe6a7952f Chao Yu           2018-05-28  1034  out:
-4354994f097d06 Daniel Rosenberg  2018-08-20  1035  	if (is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN) ||
-00e09c0bccc718 Chao Yu           2019-08-23  1036  				!f2fs_is_checkpoint_ready(sbi))
-5ce805869cbed9 Jaegeuk Kim       2018-09-06  1037  		__submit_merged_bio(io);
-e4544b63a7ee49 Tim Murray        2022-01-07  1038  	f2fs_up_write(&io->io_rwsem);
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1039  }
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  1040  
-
-:::::: The code at line 995 was first introduced by commit
-:::::: ebf7c522fdc2ec2fa0fc2351ef613841f79586e5 f2fs: Fix bool initialization/comparison
-
-:::::: TO: Thomas Meyer <thomas@m3y3r.de>
-:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
+  7312	
+  7313	/*
+  7314	 * find_energy_efficient_cpu(): Find most energy-efficient target CPU for the
+  7315	 * waking task. find_energy_efficient_cpu() looks for the CPU with maximum
+  7316	 * spare capacity in each performance domain and uses it as a potential
+  7317	 * candidate to execute the task. Then, it uses the Energy Model to figure
+  7318	 * out which of the CPU candidates is the most energy-efficient.
+  7319	 *
+  7320	 * The rationale for this heuristic is as follows. In a performance domain,
+  7321	 * all the most energy efficient CPU candidates (according to the Energy
+  7322	 * Model) are those for which we'll request a low frequency. When there are
+  7323	 * several CPUs for which the frequency request will be the same, we don't
+  7324	 * have enough data to break the tie between them, because the Energy Model
+  7325	 * only includes active power costs. With this model, if we assume that
+  7326	 * frequency requests follow utilization (e.g. using schedutil), the CPU with
+  7327	 * the maximum spare capacity in a performance domain is guaranteed to be among
+  7328	 * the best candidates of the performance domain.
+  7329	 *
+  7330	 * In practice, it could be preferable from an energy standpoint to pack
+  7331	 * small tasks on a CPU in order to let other CPUs go in deeper idle states,
+  7332	 * but that could also hurt our chances to go cluster idle, and we have no
+  7333	 * ways to tell with the current Energy Model if this is actually a good
+  7334	 * idea or not. So, find_energy_efficient_cpu() basically favors
+  7335	 * cluster-packing, and spreading inside a cluster. That should at least be
+  7336	 * a good thing for latency, and this is consistent with the idea that most
+  7337	 * of the energy savings of EAS come from the asymmetry of the system, and
+  7338	 * not so much from breaking the tie between identical CPUs. That's also the
+  7339	 * reason why EAS is enabled in the topology code only for systems where
+  7340	 * SD_ASYM_CPUCAPACITY is set.
+  7341	 *
+  7342	 * NOTE: Forkees are not accepted in the energy-aware wake-up path because
+  7343	 * they don't have any useful utilization data yet and it's not possible to
+  7344	 * forecast their impact on energy consumption. Consequently, they will be
+  7345	 * placed by find_idlest_cpu() on the least loaded CPU, which might turn out
+  7346	 * to be energy-inefficient in some use-cases. The alternative would be to
+  7347	 * bias new tasks towards specific types of CPUs first, or to try to infer
+  7348	 * their util_avg from the parent task, but those heuristics could hurt
+  7349	 * other use-cases too. So, until someone finds a better way to solve this,
+  7350	 * let's keep things simple by re-using the existing slow path.
+  7351	 */
+  7352	static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+  7353	{
+  7354		struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
+  7355		unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
+  7356		unsigned long p_util_min = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MIN) : 0;
+  7357		unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
+  7358		struct root_domain *rd = this_rq()->rd;
+  7359		int cpu, best_energy_cpu, target = -1;
+  7360		int prev_fits = -1, best_fits = -1;
+  7361		unsigned long best_thermal_cap = 0;
+  7362		unsigned long prev_thermal_cap = 0;
+  7363		struct sched_domain *sd;
+  7364		struct perf_domain *pd;
+  7365		struct energy_env eenv;
+  7366	
+  7367		rcu_read_lock();
+  7368		pd = rcu_dereference(rd->pd);
+  7369		if (!pd || READ_ONCE(rd->overutilized))
+  7370			goto unlock;
+  7371	
+  7372		/*
+  7373		 * Energy-aware wake-up happens on the lowest sched_domain starting
+  7374		 * from sd_asym_cpucapacity spanning over this_cpu and prev_cpu.
+  7375		 */
+  7376		sd = rcu_dereference(*this_cpu_ptr(&sd_asym_cpucapacity));
+  7377		while (sd && !cpumask_test_cpu(prev_cpu, sched_domain_span(sd)))
+  7378			sd = sd->parent;
+  7379		if (!sd)
+  7380			goto unlock;
+  7381	
+  7382		target = prev_cpu;
+  7383	
+  7384		sync_entity_load_avg(&p->se);
+  7385		if (!uclamp_task_util(p, p_util_min, p_util_max))
+  7386			goto unlock;
+  7387	
+  7388		eenv_task_busy_time(&eenv, p, prev_cpu);
+  7389	
+  7390		for (; pd; pd = pd->next) {
+  7391			unsigned long util_min = p_util_min, util_max = p_util_max;
+  7392			unsigned long cpu_cap, cpu_thermal_cap, util;
+  7393			unsigned long cur_delta, max_spare_cap = -1UL;
+  7394			unsigned long rq_util_min, rq_util_max;
+  7395			unsigned long prev_spare_cap = -1UL;
+  7396			int max_spare_cap_cpu = -1;
+  7397			unsigned long base_energy;
+  7398			int fits, max_fits = -1;
+  7399	
+  7400			cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+  7401	
+  7402			if (cpumask_empty(cpus))
+  7403				continue;
+  7404	
+  7405			/* Account thermal pressure for the energy estimation */
+  7406			cpu = cpumask_first(cpus);
+  7407			cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
+  7408			cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
+  7409	
+  7410			eenv.cpu_cap = cpu_thermal_cap;
+  7411			eenv.pd_cap = 0;
+  7412	
+  7413			for_each_cpu(cpu, cpus) {
+  7414				eenv.pd_cap += cpu_thermal_cap;
+  7415	
+  7416				if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
+  7417					continue;
+  7418	
+  7419				if (!cpumask_test_cpu(cpu, p->cpus_ptr))
+  7420					continue;
+  7421	
+  7422				util = cpu_util_next(cpu, p, cpu);
+  7423				cpu_cap = capacity_of(cpu);
+  7424	
+  7425				/*
+  7426				 * Skip CPUs that cannot satisfy the capacity request.
+  7427				 * IOW, placing the task there would make the CPU
+  7428				 * overutilized. Take uclamp into account to see how
+  7429				 * much capacity we can get out of the CPU; this is
+  7430				 * aligned with sched_cpu_util().
+  7431				 */
+  7432				if (uclamp_is_used()) {
+  7433					if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
+  7434						/*
+  7435						 * Open code uclamp_rq_util_with() except for
+  7436						 * the clamp() part. Ie: apply max aggregation
+  7437						 * only. util_fits_cpu() logic requires to
+  7438						 * operate on non clamped util but must use the
+  7439						 * max-aggregated uclamp_{min, max}.
+  7440						 */
+  7441						rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+  7442						rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+  7443	
+  7444						util_min = max(rq_util_min, p_util_min);
+  7445						util_max = max(rq_util_max, p_util_max);
+  7446					}
+  7447				}
+  7448	
+  7449				fits = util_fits_cpu(util, util_min, util_max, cpu);
+  7450				if (!fits)
+  7451					continue;
+  7452	
+  7453				lsub_positive(&cpu_cap, util);
+  7454	
+  7455				if (cpu == prev_cpu) {
+  7456					/* Always use prev_cpu as a candidate. */
+  7457					prev_spare_cap = cpu_cap;
+  7458					prev_fits = fits;
+  7459				} else if ((fits > max_fits) ||
+> 7460					   ((fits == max_fits) &&
+  7461					   (cpu_cap > max_spare_cap || max_spare_cap == -1UL) {
+  7462					/*
+  7463					 * Find the CPU with the maximum spare capacity
+  7464					 * among the remaining CPUs in the performance
+  7465					 * domain.
+  7466					 */
+  7467					max_spare_cap = cpu_cap;
+  7468					max_spare_cap_cpu = cpu;
+  7469					max_fits = fits;
+  7470				}
+  7471			}
+  7472	
+  7473			if (max_spare_cap_cpu < 0 && prev_spare_cap == -1UL)
+  7474				continue;
+  7475	
+  7476			eenv_pd_busy_time(&eenv, cpus, p);
+  7477			/* Compute the 'base' energy of the pd, without @p */
+  7478			base_energy = compute_energy(&eenv, pd, cpus, p, -1);
+  7479	
+  7480			/* Evaluate the energy impact of using prev_cpu. */
+  7481			if (prev_spare_cap != -1UL) {
+  7482				prev_delta = compute_energy(&eenv, pd, cpus, p,
+  7483							    prev_cpu);
+  7484				/* CPU utilization has changed */
+  7485				if (prev_delta < base_energy)
+  7486					goto unlock;
+  7487				prev_delta -= base_energy;
+  7488				prev_thermal_cap = cpu_thermal_cap;
+  7489				best_delta = min(best_delta, prev_delta);
+  7490			}
+  7491	
+  7492			/* Evaluate the energy impact of using max_spare_cap_cpu. */
+  7493			if (max_spare_cap_cpu >= 0 &&
+  7494			    (max_spare_cap > prev_spare_cap || prev_spare_cap == -1UL)) {
+  7495				/* Current best energy cpu fits better */
+  7496				if (max_fits < best_fits)
+  7497					continue;
+  7498	
+  7499				/*
+  7500				 * Both don't fit performance hint (i.e. uclamp_min)
+  7501				 * but best energy cpu has better capacity.
+  7502				 */
+  7503				if ((max_fits < 0) &&
+  7504				    (cpu_thermal_cap <= best_thermal_cap))
+  7505					continue;
+  7506	
+  7507				cur_delta = compute_energy(&eenv, pd, cpus, p,
+  7508							   max_spare_cap_cpu);
+  7509				/* CPU utilization has changed */
+  7510				if (cur_delta < base_energy)
+  7511					goto unlock;
+  7512				cur_delta -= base_energy;
+  7513	
+  7514				/*
+  7515				 * Both fit for the task but best energy cpu has lower
+  7516				 * energy impact.
+  7517				 */
+  7518				if ((max_fits > 0) && (best_fits > 0) &&
+  7519				    (cur_delta >= best_delta))
+  7520					continue;
+  7521	
+  7522				best_delta = cur_delta;
+  7523				best_energy_cpu = max_spare_cap_cpu;
+  7524				best_fits = max_fits;
+  7525				best_thermal_cap = cpu_thermal_cap;
+  7526			}
+  7527		}
+  7528		rcu_read_unlock();
+  7529	
+  7530		if ((best_fits > prev_fits) ||
+  7531		    ((best_fits > 0) && (best_delta < prev_delta)) ||
+  7532		    ((best_fits < 0) && (best_thermal_cap > prev_thermal_cap)))
+  7533			target = best_energy_cpu;
+  7534	
+  7535		return target;
+  7536	
+  7537	unlock:
+  7538		rcu_read_unlock();
+  7539	
+  7540		return target;
+  7541	}
+  7542	
 
 -- 
 0-DAY CI Kernel Test Service
