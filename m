@@ -1,44 +1,43 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCE728F5;
-	Sun, 29 Jan 2023 16:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BB228F4;
+	Sun, 29 Jan 2023 18:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675009579; x=1706545579;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IBfcEJePtLxxmERmSdbCtQfofdl2QFsxTcVlB4+YHwc=;
-  b=CwvH638GHQk6FMLaDo/MjWyAgucbP0zxvWpap/Oz2V+uCa3zBR5PMC6a
-   S+CI6H/yXc4DWnf/mekY3/nh5pKgYCbf4PAPKH3wLAxYzKpNlyWSekXXI
-   FAn5Duh2lLf59XvhveWHNnMVclulKy3NSCk6moNxQsFcpdbBgoCxIIW5D
-   sQfPvLb4RJr+Jq28feuOq6iDxswEZpyc7bGlvNSPsMKhAR1VaFgFSn/5Q
-   zn1Pn/h8fx2JeRceJI2IMKgMVXVphaTt4EzMis1jNT8fZF7a0rvD0f7eV
-   7abV5XYjJq+UjcRlF/AhhOTaV5LcU7XzC+F8JiKiKgmulbnXb0YRVZq3s
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="307752972"
+  t=1675015762; x=1706551762;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w52DeAdWkbaAkgb1cR/4HVzapxxMStljzG1ZESfc/s4=;
+  b=PxsXBMYn4PCftaviUdee2bxUxByqT2cxR/bQM3T1hf2FXCqGjVQxzr1Z
+   3IRQm/VXGCwG/52bwYdSLas2nhvPSUjka6QebRNBfmo3AsnDyjXcHXgaJ
+   QXJTc+KeVQrdvWnFSkxwqW6BKw+bJdV7mCf1F9dHvcgY3QbHGjkCn53nY
+   5eCWTi+EY8wA86CH9xqANuxKlPj00Zt8qMFP1vMWuRnloKTeQCP0V2C4n
+   mQyIUFExCDKU8bBVP+ub+Y+v2wWnhaWkdTp+9/H4o5y/kO96JVYu4gTIH
+   HjBDN+7cHV7UCXCp8P9egHfWMelwkObpBdEfM6M496Ktu+kMZLZvbm4Fc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="307763492"
 X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="307752972"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 08:26:17 -0800
+   d="scan'208";a="307763492"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 10:09:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="909223789"
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="641315293"
 X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="909223789"
+   d="scan'208";a="641315293"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Jan 2023 08:26:15 -0800
+  by orsmga006.jf.intel.com with ESMTP; 29 Jan 2023 10:09:19 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pMAVS-0002w2-3C;
-	Sun, 29 Jan 2023 16:26:15 +0000
-Date: Mon, 30 Jan 2023 00:25:52 +0800
+	id 1pMC7C-00030E-34;
+	Sun, 29 Jan 2023 18:09:18 +0000
+Date: Mon, 30 Jan 2023 02:08:24 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] f2fs: reduce stack memory cost by using bitfield in
- struct f2fs_io_info
-Message-ID: <202301300046.Sxi29bMU-lkp@intel.com>
-References: <20230129083045.7754-1-chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:dev-test 4/6] fs/f2fs/data.c:995:17: warning: implicit
+ truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1
+Message-ID: <202301300239.gneoADGa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,37 +46,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230129083045.7754-1-chao@kernel.org>
 
-Hi Chao,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on jaegeuk-f2fs/dev-test]
-[also build test WARNING on jaegeuk-f2fs/dev linus/master v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chao-Yu/f2fs-reduce-stack-memory-cost-by-using-bitfield-in-struct-f2fs_io_info/20230129-220837
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-patch link:    https://lore.kernel.org/r/20230129083045.7754-1-chao%40kernel.org
-patch subject: [PATCH] f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info
-config: mips-randconfig-r006-20230129 (https://download.01.org/0day-ci/archive/20230130/202301300046.Sxi29bMU-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git dev-test
+head:   056e15537d6822ad8ca6fadc55ba0a9f6d23c73d
+commit: f859d84b708de34ddecf8a4217f264e0ea4abc90 [4/6] f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info
+config: riscv-randconfig-r042-20230129 (https://download.01.org/0day-ci/archive/20230130/202301300239.gneoADGa-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/de0eb98b767c053132c5ffc724041551d315f69a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chao-Yu/f2fs-reduce-stack-memory-cost-by-using-bitfield-in-struct-f2fs_io_info/20230129-220837
-        git checkout de0eb98b767c053132c5ffc724041551d315f69a
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git/commit/?id=f859d84b708de34ddecf8a4217f264e0ea4abc90
+        git remote add chao https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git
+        git fetch --no-tags chao dev-test
+        git checkout f859d84b708de34ddecf8a4217f264e0ea4abc90
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/f2fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/f2fs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
@@ -90,112 +77,12 @@ All warnings (new ones prefixed by >>):
    fs/f2fs/data.c:1011:15: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
                            fio->retry = true;
                                       ^ ~~~~
-   In file included from fs/f2fs/data.c:8:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/mips/include/asm/atomic.h:17:
-   In file included from include/linux/irqflags.h:16:
-   arch/mips/include/asm/irqflags.h:127:3: error: instruction requires a CPU feature not currently enabled
-           "       mfc0    %[flags], $12                                   \n"
-            ^
-   <inline asm>:3:2: note: instantiated into assembly here
-           mfc0    $2, $12                                 
-           ^
-   2 warnings and 1 error generated.
+   2 warnings generated.
 --
 >> fs/f2fs/segment.c:3350:16: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
                    fio->in_list = true;
                                 ^ ~~~~
-   In file included from fs/f2fs/segment.c:8:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/mips/include/asm/atomic.h:17:
-   In file included from include/linux/irqflags.h:16:
-   arch/mips/include/asm/irqflags.h:127:3: error: instruction requires a CPU feature not currently enabled
-           "       mfc0    %[flags], $12                                   \n"
-            ^
-   <inline asm>:3:2: note: instantiated into assembly here
-           mfc0    $2, $12                                 
-           ^
-   In file included from fs/f2fs/segment.c:8:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/mips/include/asm/atomic.h:17:
-   In file included from include/linux/irqflags.h:16:
-   arch/mips/include/asm/irqflags.h:127:3: error: instruction requires a CPU feature not currently enabled
-           "       mfc0    %[flags], $12                                   \n"
-            ^
-   <inline asm>:3:2: note: instantiated into assembly here
-           mfc0    $2, $12                                 
-           ^
-   In file included from fs/f2fs/segment.c:8:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/mips/include/asm/atomic.h:17:
-   In file included from include/linux/irqflags.h:16:
-   arch/mips/include/asm/irqflags.h:127:3: error: instruction requires a CPU feature not currently enabled
-           "       mfc0    %[flags], $12                                   \n"
-            ^
-   <inline asm>:3:2: note: instantiated into assembly here
-           mfc0    $2, $12                                 
-           ^
-   In file included from fs/f2fs/segment.c:8:
-   In file included from include/linux/fs.h:6:
-   In file included from include/linux/wait_bit.h:8:
-   In file included from include/linux/wait.h:9:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/mips/include/asm/thread_info.h:16:
-   In file included from arch/mips/include/asm/processor.h:14:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/mips/include/asm/atomic.h:17:
-   In file included from include/linux/irqflags.h:16:
-   arch/mips/include/asm/irqflags.h:127:3: error: instruction requires a CPU feature not currently enabled
-           "       mfc0    %[flags], $12                                   \n"
-            ^
-   <inline asm>:3:2: note: instantiated into assembly here
-           mfc0    $2, $12                                 
-           ^
-   1 warning and 4 errors generated.
+   1 warning generated.
 
 
 vim +/int +995 fs/f2fs/data.c
@@ -280,6 +167,12 @@ fe16efe6a7952f Chao Yu           2018-05-28  1034  out:
 e4544b63a7ee49 Tim Murray        2022-01-07  1038  	f2fs_up_write(&io->io_rwsem);
 93dfe2ac516250 Jaegeuk Kim       2013-11-30  1039  }
 93dfe2ac516250 Jaegeuk Kim       2013-11-30  1040  
+
+:::::: The code at line 995 was first introduced by commit
+:::::: ebf7c522fdc2ec2fa0fc2351ef613841f79586e5 f2fs: Fix bool initialization/comparison
+
+:::::: TO: Thomas Meyer <thomas@m3y3r.de>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
