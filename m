@@ -1,252 +1,128 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8845BBD34
-	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 08:22:25 +0000 (UTC)
-Received: by mail-lf1-f43.google.com with SMTP id cf42so14817676lfb.1
-        for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 00:22:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hKBnKR2iW3XxM9u27njnGJ4qF4jEIutX4Q4b0kirsZs=;
-        b=DtAGRxVmOqZbLVSXMFja8IUkY5CHCp8lje31f8iSPCyxDFREP/hcGoSROd5z0xdzSK
-         URaUrGZ+WfSmV4xyllpsZTW9Us3hjkKQaOvAwdUrko3CfVrb2psF3rJqnOc9Z6WzlPk5
-         Rj/jHSj2/tpqY9FO2R9IgzBzBmlWmVSwKziST8njOqSTTFRNawQ8MijJ82r16K8EEoLa
-         SB/yr5/yKC99zcYPPf0jsEwf2wP0YpQ8822gXqnfoFLOJtylOYtvDhJb4Xz7dOHNN3jW
-         1cUpnNqeOtuTx762t28xv4959Lb5DIoVv66JS/KhNi5UlIOBH0W0LtCxDxRs45tZABVd
-         x3hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hKBnKR2iW3XxM9u27njnGJ4qF4jEIutX4Q4b0kirsZs=;
-        b=fbWj+hVxSulPfqviz1nLAZAn2wS1XLUw16Zyvw/ymRfVq9tVr5KPTP+Gj0Vn9mc6F2
-         pL+38LUcL6CO+LeY2dwC+3yPHBVsfMmHUnelVcUIbOYA+MQS98R+G5W1c+NinR/UIcxG
-         TEwxCgJ9uY2x97s3DQ4K6G12INm28nMYY05aNCIvN0bNcL2k1em4E/zcViaEFikflDXL
-         0ifs/86ORDzboZPKmlLvu4xw5gc7GGZUP8cIZzDqmR6jMjsK20edXK5pRFu/V0aC13bs
-         cMYrYtOXHUsVYJYZX14zwHWCNyqDzEnDiPLE6xYEpXdnLB+XmY9pUZipEdle7JDO3PxS
-         /zzQ==
-X-Gm-Message-State: AFqh2ko5ZclYh5owAqzt8Nama/dMlLxfbTeX48wgEoZOw09c7P/OOSur
-	d9YC3NwbDQkotBwH/sgkq+4kI5+NzABXsyR/hcU=
-X-Google-Smtp-Source: AMrXdXt3zTUW1/rT8yTMHEqwbBtNV+lMZJT5DHJEzzu6Ci94ZyAmSzzftThcsQZTA5k2MHKNz3OFI8zsWUmhvGclAhA=
-X-Received: by 2002:ac2:4c51:0:b0:4a2:2c23:a6d4 with SMTP id
- o17-20020ac24c51000000b004a22c23a6d4mr2822884lfk.257.1674980543255; Sun, 29
- Jan 2023 00:22:23 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D6E17D9
+	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 09:41:13 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 250135C00B0;
+	Sun, 29 Jan 2023 04:41:12 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sun, 29 Jan 2023 04:41:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm2; t=1674985272; x=1675071672; bh=gvxX2jQcdH
+	c8rEvuygTvx/0yZ0YB/qwhzET6CC1ytVU=; b=j0/+et4h9SvryZn386nVoG+ih5
+	tNkMssAnF/F5rN+AbcnR/Y4n3e7Z1rQ9zeXt4PYjv2SdNulKNFg6qU4Q8WI1M6XK
+	rQNM+lki858UnMXGnYIwi76+Ijnd73ERIQbcM5MLoLpbW5qXHoNDCJMrgxsSVVKv
+	wcfBgmZJu7TYrl2jfTDXNQ7SmZpo2tAQX6xcmOGx+AToeqmR5Wvp/T7ecxFtJc6z
+	G3xzaAVGuk6iraweQ3PE4YCl3wy2Yu7631mEklQfO3JGaZTp1FcR0wZFigvlf2Sh
+	7dKnHSK6R/NWaYRTqBDHhqktzCETC63og4S9pBOLnz1bC+dHF4iRMHsYOeZA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1674985272; x=1675071672; bh=gvxX2jQcdHc8rEvuygTvx/0yZ0YB
+	/qwhzET6CC1ytVU=; b=Y8x3UCB/c49ZclwZEFalH75PkOheb1apgnscp5hrkv45
+	8b4EjtWoIQt4Oxz/+8ir3zkb/dAC9l2t6Cuqb6KLe7x1hVF2TMiWR0hVOBSDyaFE
+	6WxX8KuWmR8xkXSPJrs/YYpKp98gYOiyDWuPCcCI61xEofqP0AdYJ2w7Av7YMDry
+	lFCywUIn9KySYP3a4bCX1LcWywKEV5VrD1k8wqmGJnm4oie9W+/QrMP83YLgR0HE
+	fmV/K2oQGauWd16yPrxSWOKJfcgDwOMl+t1nou/Z0V3deDb4gUYmuFS3q3mN0JRo
+	7xrq63XxJCaHj5j3doLTiGQyyBdjFXTDdlPAfF/+2g==
+X-ME-Sender: <xms:Nz_WYwkz8jvMsybynVvVRLdqXADbjHp0BQkcXpuay2tpj1RtmLhgnA>
+    <xme:Nz_WY_3sO0JjFJcPJQ9_FgmXVCvPskj7-1ywKer9fuRINAov1MTRU9kCETdDvvmZu
+    fIkvx47bb46VnUpAOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeftddgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
+    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
+    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeffheeugeetiefhgeethfejgfdtue
+    fggeejleehjeeutefhfeeggefhkedtkeetffenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Nz_WY-qNC-HzkAHfgnYUy4DHRHU6TtQxf94m9edA7vKZNl0cGkBtFw>
+    <xmx:Nz_WY8kUBzhNkz7dR9F9ULS2D9NKivi14jxN31hc59gyiPbDTCAUkQ>
+    <xmx:Nz_WY-0zQOtFYXhNEq0epGGgzR5XGpQ5dnQARRPprGNwEEkgptgwdA>
+    <xmx:OD_WYz--wDAuqQf0XknzspJX8CNjl750osyDEqXl2OK8Ouccyjfd2w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id C33AFB60086; Sun, 29 Jan 2023 04:41:11 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230128173843.765212-1-masahiroy@kernel.org> <20230128173843.765212-2-masahiroy@kernel.org>
- <CA+icZUWTdAihUVSjEgV2BVOVCktUYccd--9y3bv18PrJDX5nhw@mail.gmail.com> <CAK7LNAQSLCPEKcxJBzaGkR8xMYM0zgQrQOJpYMnodcfjy2vumQ@mail.gmail.com>
-In-Reply-To: <CAK7LNAQSLCPEKcxJBzaGkR8xMYM0zgQrQOJpYMnodcfjy2vumQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 29 Jan 2023 09:21:45 +0100
-Message-ID: <CA+icZUUT2TpgCSrGZA_tLLq3LmYppOmyxh2o8V6w9B+t-J_CLQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kbuild: deb-pkg: create source package without cleaning
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Message-Id: <f49c86cd-1bf0-4237-ad52-cfa4a3dd7e0f@app.fastmail.com>
+In-Reply-To: <594801854.6143.1674979105470@jenkins.jenkins>
+References: <594801854.6143.1674979105470@jenkins.jenkins>
+Date: Sun, 29 Jan 2023 10:40:52 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: ci_notify <ci_notify@linaro.org>
+Cc: llvm@lists.linux.dev, "Arnd Bergmann" <arnd@linaro.org>
+Subject: Re: [TCWG CI] Failure after v6.2-rc1-1-gc476a78f19ef: ARM: remove
+ CONFIG_UNUSED_BOARD_FILES
+Content-Type: text/plain
 
-On Sun, Jan 29, 2023 at 9:08 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sun, Jan 29, 2023, at 08:58, ci_notify@linaro.org wrote:
+> Failure after v6.2-rc1-1-gc476a78f19ef: ARM: remove CONFIG_UNUSED_BOARD_FILES:
 >
-> On Sun, Jan 29, 2023 at 8:31 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Sat, Jan 28, 2023 at 6:40 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > If you run 'make deb-pkg', all objects are lost due to 'make clean',
-> > > which makes the incremental builds impossible.
-> > >
-> > > Instead of cleaning, pass the exclude list to tar's --exclude-from
-> > > option.
-> > >
-> > > Previously, *.diff.gz contained some check-in files such as
-> > > .clang-format, .cocciconfig.
-> > >
-> > > With this commit, *.diff.gz will only contain the .config and debian/.
-> > > The other source files will go into the tarball.
-> > >
-> >
-> > Thanks for the patch.
-> >
-> > While at this...
-> >
-> > ...why not switch over to Debian's packaging default XZ compressor:
-> > *.orig.xz and *.diff.xz (or *.debian.tar.xz)?
->
->
-> Does debian support *.diff.xz?
-> I do not think so.
->
-> *.debian.tar.xz requires "Format: 3.0 (quilt)" migration.
->
->
-> See scripts/package/mkdebian.
-> We use "Format: 1.0", which only supports gzip.
->
+> Results changed to
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
 
-Ah OK.
+Again, another bisection seems to have gone wrong. The patch you
+listed clearly has no effect on this driver. Whatever  the CI
+is doing fails to detect the root cause.
 
->
-> It is true the Debian kernel uses "Format: 3.0 (quilt)",
-> but I do not think it will fit to the upstream kernel.
->
-> Rather, I want to use the Native format since I do not
-> see much sense in the *.orig.tar.gz / *.diff.gz split
-> for the upstream project.
->
->
-> My plan is to stop cleaning first,
-> then change the source format if it is desirable.
->
+Unrelated to this, the patch I mad for fixing this bug was
+merged  on Dec 23 and is part of linux-6.1-rc3.
 
-Yes, makes sense.
+      Arnd
 
--Sedat-
-
+> 21005
+> # First few build errors in logs:
+> # 00:33:08 drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack 
+> frame size (1040) exceeds limit (1024) in '__drm_test_mm_reserve' 
+> [-Werror,-Wframe-larger-than]
+> # 00:33:08 make[5]: *** [scripts/Makefile.build:252: 
+> drivers/gpu/drm/tests/drm_mm_test.o] Error 1
+> # 00:33:14 make[4]: *** [scripts/Makefile.build:504: 
+> drivers/gpu/drm/tests] Error 2
+> # 01:16:13 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: 
+> error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' 
+> [-Werror,-Wframe-larger-than]
+> # 01:16:14 make[6]: *** [scripts/Makefile.build:252: 
+> drivers/net/ethernet/mellanox/mlx5/core/en_main.o] Error 1
+> # 01:19:43 make[5]: *** [scripts/Makefile.build:504: 
+> drivers/net/ethernet/mellanox/mlx5/core] Error 2
+> # 01:19:43 make[4]: *** [scripts/Makefile.build:504: 
+> drivers/net/ethernet/mellanox] Error 2
+> # 01:19:43 make[3]: *** [scripts/Makefile.build:504: 
+> drivers/net/ethernet] Error 2
+> # 01:19:43 make[2]: *** [scripts/Makefile.build:504: drivers/net] Error 
+> 2
+> # 01:19:46 make[3]: *** [scripts/Makefile.build:504: drivers/gpu/drm] 
+> Error 2
 >
+> from
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 21030
 >
->
->
-> >
-> > EXAMPLE binutils:
-> >
-> > DSC: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40-2.dsc
->
-> This is "Format: 3.0 (quilt)".
->
->
-> > TAR: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40.orig.tar.xz
-> > DIFF: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40-2.debian.tar.xz
->
->
-> This is not a diff.  It is a tarball of the debian/ directory.
-> Real diffs are stored in debian/patches/.
->
->
->
->
->
-> >
-> > -Sedat-
-> >
-> > [1] https://packages.debian.org/sid/binutils
-> >
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > ---
-> > >
-> > >  scripts/Makefile.package | 27 ++++++++++++++++++++++-----
-> > >  scripts/package/mkdebian | 27 +++++++++++++++++++++++++++
-> > >  2 files changed, 49 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> > > index dfbf40454a99..cb135c99a273 100644
-> > > --- a/scripts/Makefile.package
-> > > +++ b/scripts/Makefile.package
-> > > @@ -50,6 +50,21 @@ fi ; \
-> > >  tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
-> > >         --transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
-> > >
-> > > +# Source Tarball
-> > > +# ---------------------------------------------------------------------------
-> > > +
-> > > +quiet_cmd_exclude_list = GEN     $@
-> > > +      cmd_exclude_list = $(srctree)/scripts/gen-exclude.py --prefix=./ --rootdir=$(srctree) > $@; echo "./$@" >> $@
-> > > +
-> > > +.exclude-list: FORCE
-> > > +       $(call cmd,exclude_list)
-> > > +
-> > > +quiet_cmd_tar = TAR     $@
-> > > +      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --transform 's:^\.:linux:S' .
-> > > +
-> > > +%.tar.gz: .exclude-list
-> > > +       $(call cmd,tar)
-> > > +
-> > >  # rpm-pkg
-> > >  # ---------------------------------------------------------------------------
-> > >  PHONY += rpm-pkg
-> > > @@ -81,12 +96,11 @@ binrpm-pkg:
-> > >
-> > >  PHONY += deb-pkg
-> > >  deb-pkg:
-> > > -       $(MAKE) clean
-> > >         $(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
-> > > -       $(call cmd,src_tar,$(KDEB_SOURCENAME))
-> > > -       origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-> > > -               mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-> > > -       +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
-> > > +       $(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-> > > +               $(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-> > > +       +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
-> > > +               --build=source,binary --source-option=-sP -nc -us -uc
-> > >
-> > >  PHONY += bindeb-pkg
-> > >  bindeb-pkg:
-> > > @@ -174,4 +188,7 @@ help:
-> > >         @echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
-> > >         @echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
-> > >
-> > > +PHONY += FORCE
-> > > +FORCE:
-> > > +
-> > >  .PHONY: $(PHONY)
-> > > diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> > > index c3bbef7a6754..12c057ffbe6e 100755
-> > > --- a/scripts/package/mkdebian
-> > > +++ b/scripts/package/mkdebian
-> > > @@ -84,6 +84,8 @@ set_debarch() {
-> > >         fi
-> > >  }
-> > >
-> > > +rm -rf debian
-> > > +
-> > >  # Some variables and settings used throughout the script
-> > >  version=$KERNELRELEASE
-> > >  if [ -n "$KDEB_PKGVERSION" ]; then
-> > > @@ -135,6 +137,31 @@ fi
-> > >  mkdir -p debian/source/
-> > >  echo "1.0" > debian/source/format
-> > >
-> > > +cat<<'EOF' > debian/source/local-options
-> > > +#
-> > > +# Ugly: ignore anything except .config or debian/
-> > > +# (is there a cleaner way to do this?)
-> > > +#
-> > > +diff-ignore
-> > > +
-> > > +extend-diff-ignore = ^[^.d]
-> > > +
-> > > +extend-diff-ignore = ^\.[^c]
-> > > +extend-diff-ignore = ^\.c($|[^o])
-> > > +extend-diff-ignore = ^\.co($|[^n])
-> > > +extend-diff-ignore = ^\.con($|[^f])
-> > > +extend-diff-ignore = ^\.conf($|[^i])
-> > > +extend-diff-ignore = ^\.confi($|[^g])
-> > > +extend-diff-ignore = ^\.config.
-> > > +
-> > > +extend-diff-ignore = ^d($|[^e])
-> > > +extend-diff-ignore = ^de($|[^b])
-> > > +extend-diff-ignore = ^deb($|[^i])
-> > > +extend-diff-ignore = ^debi($|[^a])
-> > > +extend-diff-ignore = ^debia($|[^n])
-> > > +extend-diff-ignore = ^debian[^/]
-> > > +EOF
-> > > +
-> > >  echo $debarch > debian/arch
-> > >  extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
-> > >  extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
-> > > --
-> > > 2.34.1
-> > >
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, 
+> REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
