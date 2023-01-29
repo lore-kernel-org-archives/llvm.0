@@ -1,128 +1,358 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D6E17D9
-	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 09:41:13 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 250135C00B0;
-	Sun, 29 Jan 2023 04:41:12 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 29 Jan 2023 04:41:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm2; t=1674985272; x=1675071672; bh=gvxX2jQcdH
-	c8rEvuygTvx/0yZ0YB/qwhzET6CC1ytVU=; b=j0/+et4h9SvryZn386nVoG+ih5
-	tNkMssAnF/F5rN+AbcnR/Y4n3e7Z1rQ9zeXt4PYjv2SdNulKNFg6qU4Q8WI1M6XK
-	rQNM+lki858UnMXGnYIwi76+Ijnd73ERIQbcM5MLoLpbW5qXHoNDCJMrgxsSVVKv
-	wcfBgmZJu7TYrl2jfTDXNQ7SmZpo2tAQX6xcmOGx+AToeqmR5Wvp/T7ecxFtJc6z
-	G3xzaAVGuk6iraweQ3PE4YCl3wy2Yu7631mEklQfO3JGaZTp1FcR0wZFigvlf2Sh
-	7dKnHSK6R/NWaYRTqBDHhqktzCETC63og4S9pBOLnz1bC+dHF4iRMHsYOeZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1674985272; x=1675071672; bh=gvxX2jQcdHc8rEvuygTvx/0yZ0YB
-	/qwhzET6CC1ytVU=; b=Y8x3UCB/c49ZclwZEFalH75PkOheb1apgnscp5hrkv45
-	8b4EjtWoIQt4Oxz/+8ir3zkb/dAC9l2t6Cuqb6KLe7x1hVF2TMiWR0hVOBSDyaFE
-	6WxX8KuWmR8xkXSPJrs/YYpKp98gYOiyDWuPCcCI61xEofqP0AdYJ2w7Av7YMDry
-	lFCywUIn9KySYP3a4bCX1LcWywKEV5VrD1k8wqmGJnm4oie9W+/QrMP83YLgR0HE
-	fmV/K2oQGauWd16yPrxSWOKJfcgDwOMl+t1nou/Z0V3deDb4gUYmuFS3q3mN0JRo
-	7xrq63XxJCaHj5j3doLTiGQyyBdjFXTDdlPAfF/+2g==
-X-ME-Sender: <xms:Nz_WYwkz8jvMsybynVvVRLdqXADbjHp0BQkcXpuay2tpj1RtmLhgnA>
-    <xme:Nz_WY_3sO0JjFJcPJQ9_FgmXVCvPskj7-1ywKer9fuRINAov1MTRU9kCETdDvvmZu
-    fIkvx47bb46VnUpAOg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeftddgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
-    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeffheeugeetiefhgeethfejgfdtue
-    fggeejleehjeeutefhfeeggefhkedtkeetffenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Nz_WY-qNC-HzkAHfgnYUy4DHRHU6TtQxf94m9edA7vKZNl0cGkBtFw>
-    <xmx:Nz_WY8kUBzhNkz7dR9F9ULS2D9NKivi14jxN31hc59gyiPbDTCAUkQ>
-    <xmx:Nz_WY-0zQOtFYXhNEq0epGGgzR5XGpQ5dnQARRPprGNwEEkgptgwdA>
-    <xmx:OD_WYz--wDAuqQf0XknzspJX8CNjl750osyDEqXl2OK8Ouccyjfd2w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id C33AFB60086; Sun, 29 Jan 2023 04:41:11 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5E017D9
+	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 09:59:25 +0000 (UTC)
+Received: by mail-lj1-f177.google.com with SMTP id e16so9976572ljn.3
+        for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 01:59:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aPipLoV9xpeZrMSZnRkjHG1ExEX/WmrAWbw2HYLcp7w=;
+        b=E17nfm30HjfVmHMD7hVNo6B6xo45S15vUrhCxnZ2ifMErkB61spvUvLILT4LOOsLB7
+         FBnkQCIZceGxcGzJEWgWvuKaQTM49xEXB0NIYK2tL/xgdHl15bE/GqUu0zzzHJgbPgfP
+         dOZaMbYzKU+IzGxp11Lrny04OmjALMynKZ6CNlvf8srN2z8wYQmxoLddFe4jrSQK7ZWh
+         Qn8WL+tEOIVqaAysrDAmvG0Gw7WUMgSm2OwMAzo2YeBEMJ3lqP50KDnqin2WVUv8x1o0
+         u3Sh6+eCsVi00C2o8yg73RKniooRkrWg65WcBjeB90KnNmUSO+vgwlflZbtDQUjDgTOK
+         cL4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPipLoV9xpeZrMSZnRkjHG1ExEX/WmrAWbw2HYLcp7w=;
+        b=smC+IQHEJxisTZ6Hdz9XMOCnyl3XyLJnWpsTy3gCwwkKjBY+jr+NyWhw/exU3z47xV
+         Yqot4KCC7FgJ1s77HQ6pbFhuXJYj3TiHiD77E1Jccp/BTNXHmJBqUH7Hz4owxDNhaNGq
+         D3TTSt3mJY0j9iwRXtJsmqmaq3uDRLlEQdzYmy1K7IJiERFMkBYV/1qpoohHUeGW0jXJ
+         nkys4peM1Vg7p7DA1U964aS5Aud3l5sBnI83JjrNnDMgrcQ6OP6Mondrz6p7W6InEeht
+         fzbCEkw+70TH1+OGNkG/Ic37PgyAqdO2+LBj4znM91t0uDd1Fiy5qGEwVe9VZRPKbpHc
+         3s6g==
+X-Gm-Message-State: AO0yUKV9ztall3w5G71X1+QYZUpiJTLJ22g609cGu9LgkBvjgLJZ649m
+	QXkzOwfKAVT0ccvg/+VSfIcRq18fw4EC66aE3e0=
+X-Google-Smtp-Source: AK7set9Ybn3OVstxhp/3flSGQAZ5B3zyUnwgJBGTAQOmJrgGY4GmDx6Rzr5lAu2P5zBOsJ3Sa+pndbn6i4ZkQ+2RntM=
+X-Received: by 2002:a2e:2a42:0:b0:290:3f19:e955 with SMTP id
+ q63-20020a2e2a42000000b002903f19e955mr685589ljq.315.1674986363452; Sun, 29
+ Jan 2023 01:59:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <f49c86cd-1bf0-4237-ad52-cfa4a3dd7e0f@app.fastmail.com>
-In-Reply-To: <594801854.6143.1674979105470@jenkins.jenkins>
-References: <594801854.6143.1674979105470@jenkins.jenkins>
-Date: Sun, 29 Jan 2023 10:40:52 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: ci_notify <ci_notify@linaro.org>
-Cc: llvm@lists.linux.dev, "Arnd Bergmann" <arnd@linaro.org>
-Subject: Re: [TCWG CI] Failure after v6.2-rc1-1-gc476a78f19ef: ARM: remove
- CONFIG_UNUSED_BOARD_FILES
-Content-Type: text/plain
+MIME-Version: 1.0
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sun, 29 Jan 2023 10:58:45 +0100
+Message-ID: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+Subject: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+To: Arnaldo Carvalho de Melo <acme@redhat.com>, Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev, 
+	Ben Hutchings <benh@debian.org>
+Content-Type: multipart/mixed; boundary="00000000000032cc8705f3642789"
 
-On Sun, Jan 29, 2023, at 08:58, ci_notify@linaro.org wrote:
-> Failure after v6.2-rc1-1-gc476a78f19ef: ARM: remove CONFIG_UNUSED_BOARD_FILES:
->
-> Results changed to
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
+--00000000000032cc8705f3642789
+Content-Type: text/plain; charset="UTF-8"
 
-Again, another bisection seems to have gone wrong. The patch you
-listed clearly has no effect on this driver. Whatever  the CI
-is doing fails to detect the root cause.
+[ CC LLVM linux folks + Ben from Debian kernel team ]
 
-Unrelated to this, the patch I mad for fixing this bug was
-merged  on Dec 23 and is part of linux-6.1-rc3.
+Hi,
 
-      Arnd
+I am playing with LLVM version 16.0.0-rc1 which was released yesterday and PERF.
 
-> 21005
-> # First few build errors in logs:
-> # 00:33:08 drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack 
-> frame size (1040) exceeds limit (1024) in '__drm_test_mm_reserve' 
-> [-Werror,-Wframe-larger-than]
-> # 00:33:08 make[5]: *** [scripts/Makefile.build:252: 
-> drivers/gpu/drm/tests/drm_mm_test.o] Error 1
-> # 00:33:14 make[4]: *** [scripts/Makefile.build:504: 
-> drivers/gpu/drm/tests] Error 2
-> # 01:16:13 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: 
-> error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' 
-> [-Werror,-Wframe-larger-than]
-> # 01:16:14 make[6]: *** [scripts/Makefile.build:252: 
-> drivers/net/ethernet/mellanox/mlx5/core/en_main.o] Error 1
-> # 01:19:43 make[5]: *** [scripts/Makefile.build:504: 
-> drivers/net/ethernet/mellanox/mlx5/core] Error 2
-> # 01:19:43 make[4]: *** [scripts/Makefile.build:504: 
-> drivers/net/ethernet/mellanox] Error 2
-> # 01:19:43 make[3]: *** [scripts/Makefile.build:504: 
-> drivers/net/ethernet] Error 2
-> # 01:19:43 make[2]: *** [scripts/Makefile.build:504: drivers/net] Error 
-> 2
-> # 01:19:46 make[3]: *** [scripts/Makefile.build:504: drivers/gpu/drm] 
-> Error 2
->
-> from
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 21030
->
-> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, 
-> REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+After building my selfmade LLVM toolchain, I built perf and run some
+perf tests here on my Intel SandyBridge CPU (details see below).
+
+perf all metrics test: FAILED!
+
+...with both Debian's perf version 6.1.7 and my selfmade version 6.2-rc5.
+
+Just noticed:
+
+Couldn't bump rlimit(MEMLOCK), failures may take place when creating
+BPF maps, etc
+
+Run the below tests with `sudo` - made this go away - still FAILED.
+
+But maybe I am missing to activate some sysfs/debug or whatever other stuff?
+
+Last perf version which was OK:
+
+~/bin/perf -v
+perf version 6.0.0
+
+echo "linux-perf: Adjust limited access to performance monitoring and
+observability operations"
+echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+0
+
+~/bin/perf test 10 86 92 93 94 95
+10: PMU events                                                      :
+10.1: PMU event table sanity                                        : Ok
+10.2: PMU event map aliases                                         : Ok
+10.3: Parsing of PMU event table metrics                            : Ok
+10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+86: perf record tests                                               : Ok
+92: perf stat tests                                                 : Ok
+93: perf all metricgroups test                                      : Ok
+94: perf all metrics test                                           : Ok
+95: perf all PMU test                                               : Ok
+
+echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+echo "linux-perf: Reset limited access to performance monitoring and
+observability operations"
+
+If you need further information, please let me know.
+
+Thanks.
+
+Regards,
+-Sedat-
+
+P.S. Instructions
+
+[ REPRODUCER ]
+
+LLVM_MVER="16"
+
+# Debian LLVM
+##LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
+# Selfmade LLVM
+LLVM_TOOLCHAIN_PATH="/opt/llvm/bin"
+if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+   export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
+fi
+
+PYTHON_VER="3.11"
+MAKE="make"
+MAKE_OPTS="V=1 -j1 HOSTCC=clang-$LLVM_MVER HOSTLD=ld.lld
+HOSTAR=llvm-ar CC=clang-$LLVM_MVER LD=ld.lld AR=llvm-ar
+STRIP=llvm-strip"
+
+echo "LLVM MVER ........ $LLVM_MVER"
+echo "Path settings .... $PATH"
+echo "Python version ... $PYTHON_VER"
+echo "make line ........ $MAKE $MAKE_OPTS"
+
+LANG=C LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
+
+LANG=C LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
+../make-log_perf-install_bin_python${PYTHON_VER}_llvm${LLVM_MVER}.txt
+
+
+[ TESTS ]
+
+[ TESTS - START ]
+
+echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+
+[ TESTS - DEBIAN ]
+
+/usr/bin/perf -v
+perf version 6.1.7
+
+/usr/bin/perf test 10 92 98 99 100 101
+
+ 10: PMU events                                                      :
+ 10.1: PMU event table sanity                                        : Ok
+ 10.2: PMU event map aliases                                         : Ok
+ 10.3: Parsing of PMU event table metrics                            : Ok
+ 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+ 92: perf record tests                                               : Ok
+ 98: perf stat tests                                                 : Ok
+ 99: perf all metricgroups test                                      : Ok
+100: perf all metrics test                                           : FAILED!
+101: perf all PMU test                                               : Ok
+
+[ TESTS - DILEKS ]
+
+~/bin/perf -v
+perf version 6.2.0-rc5
+
+~/bin/perf test 7 87 93 94 95 96
+
+  7: PMU events                                                      :
+  7.1: PMU event table sanity                                        : Ok
+  7.2: PMU event map aliases                                         : Ok
+  7.3: Parsing of PMU event table metrics                            : Ok
+  7.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+ 87: perf record tests                                               : Ok
+ 93: perf stat tests                                                 : Ok
+ 94: perf all metricgroups test                                      : Ok
+ 95: perf all metrics test                                           : FAILED!
+ 96: perf all PMU test                                               : Ok
+
+[ TESTS - FAILED ]
+
+/usr/bin/perf test --verbose 100 2>&1 | tee
+perf-test-verbose-100-perf-all-metrics-test_debian-perf-6-1-7.txt
+
+~/bin/perf test --verbose 95 2>&1 | tee
+perf-test-verbose-95-perf-all-metrics-test_dileks-perf-6-2-rc5.txt
+
+[ TESTS - STOP ]
+
+echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+
+- EOT -
+
+--00000000000032cc8705f3642789
+Content-Type: text/plain; charset="US-ASCII"; 
+	name="debian-perf-6-1-7_test-verbose-100-perf-all-metrics-test.txt"
+Content-Disposition: attachment; 
+	filename="debian-perf-6-1-7_test-verbose-100-perf-all-metrics-test.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ldh7lvfx0>
+X-Attachment-Id: f_ldh7lvfx0
+
+Q291bGRuJ3QgYnVtcCBybGltaXQoTUVNTE9DSyksIGZhaWx1cmVzIG1heSB0YWtlIHBsYWNlIHdo
+ZW4gY3JlYXRpbmcgQlBGIG1hcHMsIGV0YwoxMDA6IHBlcmYgYWxsIG1ldHJpY3MgdGVzdCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6Ci0tLSBzdGFydCAtLS0KdGVz
+dCBjaGlsZCBmb3JrZWQsIHBpZCAzOTQzMgpUZXN0aW5nIEF2ZXJhZ2VfRnJlcXVlbmN5ClRlc3Rp
+bmcgQzJfUGtnX1Jlc2lkZW5jeQpUZXN0aW5nIEMzX0NvcmVfUmVzaWRlbmN5ClRlc3RpbmcgQzNf
+UGtnX1Jlc2lkZW5jeQpUZXN0aW5nIEM2X0NvcmVfUmVzaWRlbmN5ClRlc3RpbmcgQzZfUGtnX1Jl
+c2lkZW5jeQpUZXN0aW5nIEM3X0NvcmVfUmVzaWRlbmN5ClRlc3RpbmcgQzdfUGtnX1Jlc2lkZW5j
+eQpUZXN0aW5nIENMS1MKVGVzdGluZyBDT1JFX0NMS1MKVGVzdGluZyBDUEkKVGVzdGluZyBDUFVf
+VXRpbGl6YXRpb24KVGVzdGluZyBDb3JlSVBDClRlc3RpbmcgRFJBTV9CV19Vc2UKVGVzdGluZyBE
+U0JfQ292ZXJhZ2UKVGVzdGluZyBFeGVjdXRlX3Blcl9Jc3N1ZQpUZXN0aW5nIEZMT1BjClRlc3Rp
+bmcgR0ZMT1BzClRlc3RpbmcgSUxQClRlc3RpbmcgSVBDClRlc3RpbmcgSW5zdHJ1Y3Rpb25zClRl
+c3RpbmcgSXBGYXJCcmFuY2gKVGVzdGluZyBLZXJuZWxfQ1BJClRlc3RpbmcgS2VybmVsX1V0aWxp
+emF0aW9uClRlc3RpbmcgTUVNX1BhcmFsbGVsX1JlcXVlc3RzClRlc3RpbmcgTUVNX1JlcXVlc3Rf
+TGF0ZW5jeQpUZXN0aW5nIFJldGlyZQpUZXN0aW5nIFNMT1RTClRlc3RpbmcgU01UXzJUX1V0aWxp
+emF0aW9uClRlc3RpbmcgVHVyYm9fVXRpbGl6YXRpb24KVGVzdGluZyBVUEkKVGVzdGluZyB0bWFf
+YmFja2VuZF9ib3VuZApUZXN0aW5nIHRtYV9iYWRfc3BlY3VsYXRpb24KVGVzdGluZyB0bWFfYnJh
+bmNoX21pc3ByZWRpY3RzClRlc3RpbmcgdG1hX2JyYW5jaF9yZXN0ZWVycwpUZXN0aW5nIHRtYV9j
+b3JlX2JvdW5kClRlc3RpbmcgdG1hX2RpdmlkZXIKVGVzdGluZyB0bWFfZHJhbV9ib3VuZApNZXRy
+aWMgJ3RtYV9kcmFtX2JvdW5kJyBub3QgcHJpbnRlZCBpbjoKIyBSdW5uaW5nICdpbnRlcm5hbHMv
+c3ludGhlc2l6ZScgYmVuY2htYXJrOgpDb21wdXRpbmcgcGVyZm9ybWFuY2Ugb2Ygc2luZ2xlIHRo
+cmVhZGVkIHBlcmYgZXZlbnQgc3ludGhlc2lzIGJ5CnN5bnRoZXNpemluZyBldmVudHMgb24gdGhl
+IHBlcmYgcHJvY2VzcyBpdHNlbGY6CiAgQXZlcmFnZSBzeW50aGVzaXMgdG9vazogMjAzLjkyMiB1
+c2VjICgrLSAwLjE5MSB1c2VjKQogIEF2ZXJhZ2UgbnVtLiBldmVudHM6IDMwLjAwMCAoKy0gMC4w
+MDApCiAgQXZlcmFnZSB0aW1lIHBlciBldmVudCA2Ljc5NyB1c2VjCiAgQXZlcmFnZSBkYXRhIHN5
+bnRoZXNpcyB0b29rOiAyMTkuNzMwIHVzZWMgKCstIDAuMjE2IHVzZWMpCiAgQXZlcmFnZSBudW0u
+IGV2ZW50czogMTU5LjAwMCAoKy0gMC4wMDApCiAgQXZlcmFnZSB0aW1lIHBlciBldmVudCAxLjM4
+MiB1c2VjCgogUGVyZm9ybWFuY2UgY291bnRlciBzdGF0cyBmb3IgJ3BlcmYgYmVuY2ggaW50ZXJu
+YWxzIHN5bnRoZXNpemUnOgoKICAgICA8bm90IGNvdW50ZWQ+ICAgICAgTUVNX0xPQURfVU9QU19S
+RVRJUkVELkxMQ19ISVQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKDAsMDAl
+KQogICAgIDxub3QgY291bnRlZD4gICAgICBDWUNMRV9BQ1RJVklUWS5TVEFMTFNfTDJfUEVORElO
+RyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoMCwwMCUpCiAgICAgPG5vdCBj
+b3VudGVkPiAgICAgIENQVV9DTEtfVU5IQUxURUQuVEhSRUFEICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgKDAsMDAlKQogICAgIDxub3QgY291bnRlZD4gICAgICBNRU1fTE9B
+RF9VT1BTX01JU0NfUkVUSVJFRC5MTENfTUlTUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAoMCwwMCUpCgogICAgICAgNCw0NTYzNzU1MzIgc2Vjb25kcyB0aW1lIGVsYXBzZWQK
+CiAgICAgICAxLDQxNTgyOTAwMCBzZWNvbmRzIHVzZXIKICAgICAgIDMsMDI3MDgzMDAwIHNlY29u
+ZHMgc3lzClRlc3RpbmcgdG1hX2RzYl9zd2l0Y2hlcwpUZXN0aW5nIHRtYV9kdGxiX2xvYWQKVGVz
+dGluZyB0bWFfZmV0Y2hfYmFuZHdpZHRoClRlc3RpbmcgdG1hX2ZldGNoX2xhdGVuY3kKVGVzdGlu
+ZyB0bWFfZnBfYXJpdGgKVGVzdGluZyB0bWFfZnBfc2NhbGFyClRlc3RpbmcgdG1hX2ZwX3ZlY3Rv
+cgpUZXN0aW5nIHRtYV9mcm9udGVuZF9ib3VuZApUZXN0aW5nIHRtYV9oZWF2eV9vcGVyYXRpb25z
+ClRlc3RpbmcgdG1hX2l0bGJfbWlzc2VzClRlc3RpbmcgdG1hX2wzX2JvdW5kCk1ldHJpYyAndG1h
+X2wzX2JvdW5kJyBub3QgcHJpbnRlZCBpbjoKIyBSdW5uaW5nICdpbnRlcm5hbHMvc3ludGhlc2l6
+ZScgYmVuY2htYXJrOgpDb21wdXRpbmcgcGVyZm9ybWFuY2Ugb2Ygc2luZ2xlIHRocmVhZGVkIHBl
+cmYgZXZlbnQgc3ludGhlc2lzIGJ5CnN5bnRoZXNpemluZyBldmVudHMgb24gdGhlIHBlcmYgcHJv
+Y2VzcyBpdHNlbGY6CiAgQXZlcmFnZSBzeW50aGVzaXMgdG9vazogMjA0LjE5OSB1c2VjICgrLSAw
+LjIyOCB1c2VjKQogIEF2ZXJhZ2UgbnVtLiBldmVudHM6IDMwLjAwMCAoKy0gMC4wMDApCiAgQXZl
+cmFnZSB0aW1lIHBlciBldmVudCA2LjgwNyB1c2VjCiAgQXZlcmFnZSBkYXRhIHN5bnRoZXNpcyB0
+b29rOiAyMTkuOTM0IHVzZWMgKCstIDAuMjMyIHVzZWMpCiAgQXZlcmFnZSBudW0uIGV2ZW50czog
+MTU5LjAwMCAoKy0gMC4wMDApCiAgQXZlcmFnZSB0aW1lIHBlciBldmVudCAxLjM4MyB1c2VjCgog
+UGVyZm9ybWFuY2UgY291bnRlciBzdGF0cyBmb3IgJ3BlcmYgYmVuY2ggaW50ZXJuYWxzIHN5bnRo
+ZXNpemUnOgoKICAgICA8bm90IGNvdW50ZWQ+ICAgICAgTUVNX0xPQURfVU9QU19SRVRJUkVELkxM
+Q19ISVQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKDAsMDAlKQogICAgIDxu
+b3QgY291bnRlZD4gICAgICBDWUNMRV9BQ1RJVklUWS5TVEFMTFNfTDJfUEVORElORyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoMCwwMCUpCiAgICAgPG5vdCBjb3VudGVkPiAg
+ICAgIENQVV9DTEtfVU5IQUxURUQuVEhSRUFEICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgKDAsMDAlKQogICAgIDxub3QgY291bnRlZD4gICAgICBNRU1fTE9BRF9VT1BTX01J
+U0NfUkVUSVJFRC5MTENfTUlTUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAo
+MCwwMCUpCgogICAgICAgNCw0NTg5NDM0NTMgc2Vjb25kcyB0aW1lIGVsYXBzZWQKCiAgICAgICAx
+LDQ2ODI1MTAwMCBzZWNvbmRzIHVzZXIKICAgICAgIDIsOTc2NDAwMDAwIHNlY29uZHMgc3lzClRl
+c3RpbmcgdG1hX2xjcApUZXN0aW5nIHRtYV9saWdodF9vcGVyYXRpb25zClRlc3RpbmcgdG1hX21h
+Y2hpbmVfY2xlYXJzClRlc3RpbmcgdG1hX21lbV9iYW5kd2lkdGgKVGVzdGluZyB0bWFfbWVtX2xh
+dGVuY3kKVGVzdGluZyB0bWFfbWVtb3J5X2JvdW5kClRlc3RpbmcgdG1hX21pY3JvY29kZV9zZXF1
+ZW5jZXIKVGVzdGluZyB0bWFfbXNfc3dpdGNoZXMKVGVzdGluZyB0bWFfcG9ydHNfdXRpbGl6YXRp
+b24KVGVzdGluZyB0bWFfcmV0aXJpbmcKVGVzdGluZyB0bWFfc3RvcmVfYm91bmQKVGVzdGluZyB0
+bWFfeDg3X3VzZQp0ZXN0IGNoaWxkIGZpbmlzaGVkIHdpdGggLTEKLS0tLSBlbmQgLS0tLQpwZXJm
+IGFsbCBtZXRyaWNzIHRlc3Q6IEZBSUxFRCEK
+--00000000000032cc8705f3642789
+Content-Type: text/plain; charset="US-ASCII"; 
+	name="dileks-perf-6-2-rc5-test-verbose-95-perf-all-metrics-test.txt"
+Content-Disposition: attachment; 
+	filename="dileks-perf-6-2-rc5-test-verbose-95-perf-all-metrics-test.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ldh7lxvt1>
+X-Attachment-Id: f_ldh7lxvt1
+
+Q291bGRuJ3QgYnVtcCBybGltaXQoTUVNTE9DSyksIGZhaWx1cmVzIG1heSB0YWtlIHBsYWNlIHdo
+ZW4gY3JlYXRpbmcgQlBGIG1hcHMsIGV0YwogOTU6IHBlcmYgYWxsIG1ldHJpY3MgdGVzdCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6Ci0tLSBzdGFydCAtLS0KdGVz
+dCBjaGlsZCBmb3JrZWQsIHBpZCAzOTE5OApUZXN0aW5nIElMUApUZXN0aW5nIHRtYV9jb3JlX2Jv
+dW5kClRlc3RpbmcgdG1hX21lbW9yeV9ib3VuZApUZXN0aW5nIHRtYV9icmFuY2hfbWlzcHJlZGlj
+dHMKVGVzdGluZyB0bWFfbWFjaGluZV9jbGVhcnMKVGVzdGluZyB0bWFfaXRsYl9taXNzZXMKVGVz
+dGluZyBJcEZhckJyYW5jaApUZXN0aW5nIHRtYV9sM19ib3VuZApNZXRyaWMgJ3RtYV9sM19ib3Vu
+ZCcgbm90IHByaW50ZWQgaW46CiMgUnVubmluZyAnaW50ZXJuYWxzL3N5bnRoZXNpemUnIGJlbmNo
+bWFyazoKQ29tcHV0aW5nIHBlcmZvcm1hbmNlIG9mIHNpbmdsZSB0aHJlYWRlZCBwZXJmIGV2ZW50
+IHN5bnRoZXNpcyBieQpzeW50aGVzaXppbmcgZXZlbnRzIG9uIHRoZSBwZXJmIHByb2Nlc3MgaXRz
+ZWxmOgogIEF2ZXJhZ2Ugc3ludGhlc2lzIHRvb2s6IDIwOC4wMzMgdXNlYyAoKy0gMC4yMTQgdXNl
+YykKICBBdmVyYWdlIG51bS4gZXZlbnRzOiAzMC4wMDAgKCstIDAuMDAwKQogIEF2ZXJhZ2UgdGlt
+ZSBwZXIgZXZlbnQgNi45MzQgdXNlYwogIEF2ZXJhZ2UgZGF0YSBzeW50aGVzaXMgdG9vazogMjE2
+LjcyOCB1c2VjICgrLSAwLjE4MiB1c2VjKQogIEF2ZXJhZ2UgbnVtLiBldmVudHM6IDE2Mi4wMDAg
+KCstIDAuMDAwKQogIEF2ZXJhZ2UgdGltZSBwZXIgZXZlbnQgMS4zMzggdXNlYwoKIFBlcmZvcm1h
+bmNlIGNvdW50ZXIgc3RhdHMgZm9yICdwZXJmIGJlbmNoIGludGVybmFscyBzeW50aGVzaXplJzoK
+CiAgICAgPG5vdCBjb3VudGVkPiAgICAgIE1FTV9MT0FEX1VPUFNfUkVUSVJFRC5MTENfSElUICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICgwLDAwJSkKICAgICA8bm90
+IGNvdW50ZWQ+ICAgICAgQ1lDTEVfQUNUSVZJVFkuU1RBTExTX0wyX1BFTkRJTkcgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKDAsMDAlKQogICAgIDxub3QgY291bnRlZD4g
+ICAgICBDUFVfQ0xLX1VOSEFMVEVELlRIUkVBRCAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAoMCwwMCUpCiAgICAgPG5vdCBjb3VudGVkPiAgICAgIE1FTV9M
+T0FEX1VPUFNfTUlTQ19SRVRJUkVELkxMQ19NSVNTICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICgwLDAwJSkKCiAgICAgICA0LDU1NTIyODQ4MCBzZWNvbmRzIHRpbWUgZWxh
+cHNlZAoKICAgICAgIDEsNTA0MTM3MDAwIHNlY29uZHMgdXNlcgogICAgICAgMywwNDAxOTMwMDAg
+c2Vjb25kcyBzeXMKVGVzdGluZyB0bWFfZnBfc2NhbGFyClRlc3RpbmcgdG1hX2ZwX3ZlY3RvcgpU
+ZXN0aW5nIHRtYV94ODdfdXNlClRlc3RpbmcgRXhlY3V0ZV9wZXJfSXNzdWUKVGVzdGluZyBHRkxP
+UHMKVGVzdGluZyBEU0JfQ292ZXJhZ2UKVGVzdGluZyB0bWFfZHNiX3N3aXRjaGVzClRlc3Rpbmcg
+dG1hX2ZldGNoX2JhbmR3aWR0aApUZXN0aW5nIHRtYV9icmFuY2hfcmVzdGVlcnMKVGVzdGluZyB0
+bWFfbGNwClRlc3RpbmcgdG1hX21zX3N3aXRjaGVzClRlc3RpbmcgRkxPUGMKVGVzdGluZyB0bWFf
+ZmV0Y2hfbGF0ZW5jeQpUZXN0aW5nIENQVV9VdGlsaXphdGlvbgpUZXN0aW5nIERSQU1fQldfVXNl
+ClRlc3RpbmcgdG1hX2ZwX2FyaXRoClRlc3RpbmcgQ1BJClRlc3RpbmcgTUVNX1BhcmFsbGVsX1Jl
+cXVlc3RzClRlc3RpbmcgTUVNX1JlcXVlc3RfTGF0ZW5jeQpUZXN0aW5nIHRtYV9tZW1fYmFuZHdp
+ZHRoClRlc3RpbmcgdG1hX2RyYW1fYm91bmQKTWV0cmljICd0bWFfZHJhbV9ib3VuZCcgbm90IHBy
+aW50ZWQgaW46CiMgUnVubmluZyAnaW50ZXJuYWxzL3N5bnRoZXNpemUnIGJlbmNobWFyazoKQ29t
+cHV0aW5nIHBlcmZvcm1hbmNlIG9mIHNpbmdsZSB0aHJlYWRlZCBwZXJmIGV2ZW50IHN5bnRoZXNp
+cyBieQpzeW50aGVzaXppbmcgZXZlbnRzIG9uIHRoZSBwZXJmIHByb2Nlc3MgaXRzZWxmOgogIEF2
+ZXJhZ2Ugc3ludGhlc2lzIHRvb2s6IDIwNy42ODAgdXNlYyAoKy0gMC4xNzYgdXNlYykKICBBdmVy
+YWdlIG51bS4gZXZlbnRzOiAzMC4wMDAgKCstIDAuMDAwKQogIEF2ZXJhZ2UgdGltZSBwZXIgZXZl
+bnQgNi45MjMgdXNlYwogIEF2ZXJhZ2UgZGF0YSBzeW50aGVzaXMgdG9vazogMjE3LjgzMyB1c2Vj
+ICgrLSAwLjIwMiB1c2VjKQogIEF2ZXJhZ2UgbnVtLiBldmVudHM6IDE2MS4wMDAgKCstIDAuMDAw
+KQogIEF2ZXJhZ2UgdGltZSBwZXIgZXZlbnQgMS4zNTMgdXNlYwoKIFBlcmZvcm1hbmNlIGNvdW50
+ZXIgc3RhdHMgZm9yICdwZXJmIGJlbmNoIGludGVybmFscyBzeW50aGVzaXplJzoKCiAgICAgPG5v
+dCBjb3VudGVkPiAgICAgIE1FTV9MT0FEX1VPUFNfUkVUSVJFRC5MTENfSElUICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICgwLDAwJSkKICAgICA8bm90IGNvdW50ZWQ+
+ICAgICAgQ1lDTEVfQUNUSVZJVFkuU1RBTExTX0wyX1BFTkRJTkcgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgKDAsMDAlKQogICAgIDxub3QgY291bnRlZD4gICAgICBDUFVf
+Q0xLX1VOSEFMVEVELlRIUkVBRCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAoMCwwMCUpCiAgICAgPG5vdCBjb3VudGVkPiAgICAgIE1FTV9MT0FEX1VPUFNf
+TUlTQ19SRVRJUkVELkxMQ19NSVNTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICgwLDAwJSkKCiAgICAgICA0LDU1NTY5ODg2MyBzZWNvbmRzIHRpbWUgZWxhcHNlZAoKICAg
+ICAgIDEsNDgxNzY5MDAwIHNlY29uZHMgdXNlcgogICAgICAgMywwNjMzODcwMDAgc2Vjb25kcyBz
+eXMKVGVzdGluZyB0bWFfc3RvcmVfYm91bmQKVGVzdGluZyB0bWFfbWVtX2xhdGVuY3kKVGVzdGlu
+ZyB0bWFfZHRsYl9sb2FkClRlc3RpbmcgdG1hX21pY3JvY29kZV9zZXF1ZW5jZXIKVGVzdGluZyBL
+ZXJuZWxfQ1BJClRlc3RpbmcgS2VybmVsX1V0aWxpemF0aW9uClRlc3RpbmcgdG1hX2Zyb250ZW5k
+X2JvdW5kClRlc3RpbmcgQ0xLUwpUZXN0aW5nIFJldGlyZQpUZXN0aW5nIFVQSQpUZXN0aW5nIHRt
+YV9wb3J0c191dGlsaXphdGlvbgpUZXN0aW5nIEF2ZXJhZ2VfRnJlcXVlbmN5ClRlc3RpbmcgQzJf
+UGtnX1Jlc2lkZW5jeQpUZXN0aW5nIEMzX0NvcmVfUmVzaWRlbmN5ClRlc3RpbmcgQzNfUGtnX1Jl
+c2lkZW5jeQpUZXN0aW5nIEM2X0NvcmVfUmVzaWRlbmN5ClRlc3RpbmcgQzZfUGtnX1Jlc2lkZW5j
+eQpUZXN0aW5nIEM3X0NvcmVfUmVzaWRlbmN5ClRlc3RpbmcgQzdfUGtnX1Jlc2lkZW5jeQpUZXN0
+aW5nIFR1cmJvX1V0aWxpemF0aW9uClRlc3RpbmcgQ29yZUlQQwpUZXN0aW5nIElQQwpUZXN0aW5n
+IHRtYV9oZWF2eV9vcGVyYXRpb25zClRlc3RpbmcgdG1hX2xpZ2h0X29wZXJhdGlvbnMKVGVzdGlu
+ZyBDT1JFX0NMS1MKVGVzdGluZyBTTVRfMlRfVXRpbGl6YXRpb24KVGVzdGluZyBTb2NrZXRfQ0xL
+UwpUZXN0aW5nIFVOQ09SRV9GUkVRClRlc3RpbmcgSW5zdHJ1Y3Rpb25zClRlc3RpbmcgdG1hX2Jh
+Y2tlbmRfYm91bmQKVGVzdGluZyB0bWFfYmFkX3NwZWN1bGF0aW9uClRlc3RpbmcgdG1hX3JldGly
+aW5nClRlc3RpbmcgdG1hX2RpdmlkZXIKVGVzdGluZyBTTE9UUwp0ZXN0IGNoaWxkIGZpbmlzaGVk
+IHdpdGggLTEKLS0tLSBlbmQgLS0tLQpwZXJmIGFsbCBtZXRyaWNzIHRlc3Q6IEZBSUxFRCEK
+--00000000000032cc8705f3642789--
