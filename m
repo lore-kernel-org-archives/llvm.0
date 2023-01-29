@@ -1,218 +1,249 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951A7BD1A
-	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 22:32:41 +0000 (UTC)
-Received: by mail-wr1-f42.google.com with SMTP id y1so9515736wru.2
-        for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 14:32:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1F73C27
+	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 23:21:46 +0000 (UTC)
+Received: by mail-wr1-f45.google.com with SMTP id m14so9092470wrg.13
+        for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 15:21:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7j/opjQcBJFhO/7sFqax3PHAlfqJlQKdnWL2pZ2q83A=;
-        b=TSg4mLdkDrnwNmUqL3w8We7X9Eo6dMUwEkxAWakF+TPnXA83gh1mTWh8r3WvpCTXy1
-         CeR7lMPHldfNn5r9parql1rTWVEHdimfe45wemDlw66owyZQN0OkI74HUKvbLSAkzhKX
-         sTPd1etlRsjyTLmm3nZ5yAgAdRf7F1doGkmxl6/yA0VUocrARmEkNJZ96nY61SRuBjsp
-         mTIkcGiS7/uQF+UrpxCSvdZt39a+mdTVf7mOyHgcqL3j4HosW2LLl7LkS/GaJK/+cY+2
-         3Tle3X5AE5fiWITjNwJYNGylo3vOTQkql9/zwt6YfSOd81zg33cUniiODbKgTtRKtL35
-         C76Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OlYExLmij+YlfdSJkSV26C1wi634B/cTlM0CDNG/aUs=;
+        b=LAIBiPES1XsrOv2JitoA/JptV9N8SnVd0v1B+q+/pRTiWQXdZjxvz4xK9d+gJTS3xS
+         IY6qOboLgPCmRD8+/NPl3I2ZSKzm9Fp0M35XiHiePp+fViUJzbrQfy888dvVwE/re3cJ
+         z+UvKae6SkcU0re6wq6FVtKgI6czWhFagL4W4DVlBi7FpledEG71JJHSSGjPBiWndtav
+         +zjwYiEct69Jw3WrEaD7/MQfUmCV42P1kh7+/nj5tikMzSBhEmFn5iixyCSq+61o4X2H
+         CCB8NxBKN0bv1UNiYiDuNyxsWTz+hygwj5jyNkhra1oLAfXfHkMYRW0a9zeO7zVtNwlI
+         tM6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7j/opjQcBJFhO/7sFqax3PHAlfqJlQKdnWL2pZ2q83A=;
-        b=lQY+0+yzns70Nr2ts+ulkSsceCEUlW4JJMSWGbWtqtDwijnfB8GiMq7ERsrmzi/jMb
-         K7+g5K0AEXEI4qok4r1iCCLL5DkalpWf9YTX8HyrFLpx47hFXwIHjkQH7J4o+eECQDy9
-         yc8FYgf5yjCiJIEl+w8sb9Ja2oMXroJpiRhl+snSbjRgPqXeLWIimcq213s7acsreBSn
-         OuhpeRCAbQ6yRU9xaGiu+cPeAGmLXQCIZSZ5KomOvsCp+MJ/P1qU2OtmG1HECuXlAx2R
-         Z4zdcHggynG4YpHBOB3HxY23C+mxORmgLMgor3GZQT8zyp1Gty6cZShwNg5kOdpFr1ZF
-         w80Q==
-X-Gm-Message-State: AO0yUKUb0Bmy5BVajsCYdCbMEPAgCk79cT+EbelFeK16Mpx+l7LcvOh/
-	tY2fkORzt/MjN83MSpN6miUBhA==
-X-Google-Smtp-Source: AK7set8fSBM8ef7siY+iN0tVgmY/86gjTqL6gndqYy1+Mqo+6f8rLqEO7lVtPCWu80QI60x78yJC3Q==
-X-Received: by 2002:adf:d1ee:0:b0:2bf:e5cc:91c1 with SMTP id g14-20020adfd1ee000000b002bfe5cc91c1mr4352438wrd.52.1675031559808;
-        Sun, 29 Jan 2023 14:32:39 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id z4-20020a5d44c4000000b002bfcc9d9607sm9084623wrr.68.2023.01.29.14.32.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 14:32:39 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sun, 29 Jan 2023 22:32:37 +0000 (UTC)
-To: Jan Kara <jack@suse.cz>
-Cc: llvm@lists.linux.dev, arnd@linaro.org
-Message-ID: <1030144190.6515.1675031559447@jenkins.jenkins>
-Subject: [TCWG CI] Failure after v6.2-rc3-45-gbd904f3c7496: udf: Unify types
- in anchor block detection
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OlYExLmij+YlfdSJkSV26C1wi634B/cTlM0CDNG/aUs=;
+        b=ZM5xdKvifNaRPHXWX2ShVfCypCH7EhP+j95g7AWK5yyfv3q714rGoTt+sUu24N+duB
+         jB5yosSKhgb2MhdnG6oOJ54P6FybOtRRTPwJwtPqmTMeTZU9fs8ckH3Y9ow6c5qLI9z+
+         Nx88heJiMccw19+hUiS8Wf6Py9/Yk3sFXyXPm3FDeuFVEmiGQD5vizQyfzdRVHzhzv2N
+         59lQF48LF+qcVUtrAnaq91zOdZJOa9RcGCFbG0S6OHzSwcb3cwdqxhRsqbt9REy0ucXw
+         gYOrJ+Ng8upvddppK56UHty+h9AIB2xEmUcihZQ/f4YMk3DGaZp1RvBiwXCc8WGBnRIh
+         PAzw==
+X-Gm-Message-State: AO0yUKXTBQxJC1i55umTBJsOD4r7tMahpTiPwz8Fk2EQIH6e2KI5GkYS
+	9QJEYmTkTYj/yv0v4UDn7qD0fCz+jFxeRjYyQuurDw==
+X-Google-Smtp-Source: AK7set+lRjLGXFDbALYS1psgg3KJRulUIMMBybGx4aU6G/ZrCvVgbCJGW2O9b8nz5575wmvZ0V+9m0cPFH5f/aZQEyI=
+X-Received: by 2002:a5d:55d1:0:b0:2bf:c5eb:e303 with SMTP id
+ i17-20020a5d55d1000000b002bfc5ebe303mr502098wrw.40.1675034504458; Sun, 29 Jan
+ 2023 15:21:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_6514_2047847466.1675031558898"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allyesconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+In-Reply-To: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Sun, 29 Jan 2023 15:21:29 -0800
+Message-ID: <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+To: sedat.dilek@gmail.com
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev, 
+	Ben Hutchings <benh@debian.org>
+Content-Type: text/plain; charset="UTF-8"
 
-------=_Part_6514_2047847466.1675031558898
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Sun, Jan 29, 2023 at 1:59 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> [ CC LLVM linux folks + Ben from Debian kernel team ]
+>
+> Hi,
+>
+> I am playing with LLVM version 16.0.0-rc1 which was released yesterday and PERF.
+>
+> After building my selfmade LLVM toolchain, I built perf and run some
+> perf tests here on my Intel SandyBridge CPU (details see below).
+>
+> perf all metrics test: FAILED!
+>
+> ...with both Debian's perf version 6.1.7 and my selfmade version 6.2-rc5.
+>
+> Just noticed:
+>
+> Couldn't bump rlimit(MEMLOCK), failures may take place when creating
+> BPF maps, etc
+>
+> Run the below tests with `sudo` - made this go away - still FAILED.
+>
+> But maybe I am missing to activate some sysfs/debug or whatever other stuff?
 
-Failure after v6.2-rc3-45-gbd904f3c7496: udf: Unify types in anchor block detection:
+Hi Sedat,
 
-Results changed to
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21636
-# First few build errors in logs:
-# 01:01:50 fs/udf/super.c:1942:29: error: incompatible pointer types passing 'sector_t *' (aka 'unsigned long long *') to parameter of type 'udf_pblk_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-# 01:01:50 fs/udf/super.c:1950:29: error: incompatible pointer types passing 'sector_t *' (aka 'unsigned long long *') to parameter of type 'udf_pblk_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-# 01:01:50 fs/udf/super.c:1956:29: error: incompatible pointer types passing 'sector_t *' (aka 'unsigned long long *') to parameter of type 'udf_pblk_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-# 01:01:50 make[3]: *** [scripts/Makefile.build:252: fs/udf/super.o] Error 1
-# 01:02:34 make[2]: *** [scripts/Makefile.build:504: fs/udf] Error 2
-# 01:40:30 make[1]: *** [scripts/Makefile.build:504: fs] Error 2
-# 01:55:42 make: *** [Makefile:2008: .] Error 2
+things have been improving wrt metrics and so this failure may have
+just been because of the addition of a previously missing metric. The
+rlimit thing shouldn't affect things but maybe file descriptors?
+Looking at the test output the issue is:
 
-from
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21715
-# linux build successful:
-all
+```
+Metric 'tma_dram_bound' not printed in:
+# Running 'internals/synthesize' benchmark:
+Computing performance of single threaded perf event synthesis by
+synthesizing events on the perf process itself:
+  Average synthesis took: 207.680 usec (+- 0.176 usec)
+  Average num. events: 30.000 (+- 0.000)
+  Average time per event 6.923 usec
+  Average data synthesis took: 217.833 usec (+- 0.202 usec)
+  Average num. events: 161.000 (+- 0.000)
+  Average time per event 1.353 usec
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+ Performance counter stats for 'perf bench internals synthesize':
 
-For latest status see comments in https://linaro.atlassian.net/browse/LLVM-647 .
-Status of v6.2-rc3-45-gbd904f3c7496 commit for tcwg_kernel:
-commit bd904f3c74969442b0ac42f81c0d02da54cd47eb
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Jan 18 13:55:31 2023 +0100
+     <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+                         (0,00%)
+     <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                         (0,00%)
+     <not counted>      CPU_CLK_UNHALTED.THREAD
+                         (0,00%)
+     <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                            (0,00%)
+```
 
-    udf: Unify types in anchor block detection
-    
-    When detecting last recorded block and from it derived anchor block
-    position, we were mixing unsigned long, u32, and sector_t types. Since
-    udf supports only 32-bit block numbers this is harmless but sometimes
-    makes things awkward. Convert everything to udf_pblk_t and also handle
-    the situation when block device size would not fit into udf_pblk_t.
-    
-    Signed-off-by: Jan Kara <jack@suse.cz>
-* llvm-master-aarch64-next-allyesconfig
-** Failure after v6.2-rc3-45-gbd904f3c7496: udf: Unify types in anchor block detection:
-** https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allyesconfig/740/
+So the test was checking to see whether the tma_dram_bound metric
+could be computed on your Sandybridge and it failed. The event counts
+below show that every event came back "<not counted>" which is usually
+indicative of a permissions problem - it is also not surprising given
+this that the metric wasn't computed. You could try repeating the
+command the test is trying with something like "perf stat -M
+tma_dram_bound -a sleep 1", but running as root should have resolved
+that issue. Does that give you enough to keep exploring?
 
-Bad  build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allyesconfig/740/artifact/artifacts
-Good build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allyesconfig/739/artifact/artifacts
+Thanks,
+Ian
 
-Reproduce current build:
-<cut>
-mkdir -p investigate-linux-bd904f3c74969442b0ac42f81c0d02da54cd47eb
-cd investigate-linux-bd904f3c74969442b0ac42f81c0d02da54cd47eb
-
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests for bad and good builds
-mkdir -p bad/artifacts good/artifacts
-curl -o bad/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allyesconfig/740/artifact/artifacts/manifest.sh --fail
-curl -o good/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-next-allyesconfig/739/artifact/artifacts/manifest.sh --fail
-
-# Reproduce bad build
-(cd bad; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-# Reproduce good build
-(cd good; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit bd904f3c74969442b0ac42f81c0d02da54cd47eb
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Jan 18 13:55:31 2023 +0100
-
-    udf: Unify types in anchor block detection
-    
-    When detecting last recorded block and from it derived anchor block
-    position, we were mixing unsigned long, u32, and sector_t types. Since
-    udf supports only 32-bit block numbers this is harmless but sometimes
-    makes things awkward. Convert everything to udf_pblk_t and also handle
-    the situation when block device size would not fit into udf_pblk_t.
-    
-    Signed-off-by: Jan Kara <jack@suse.cz>
----
- fs/udf/lowlevel.c | 7 +++++--
- fs/udf/super.c    | 4 ++--
- fs/udf/udfdecl.h  | 2 +-
- 3 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/fs/udf/lowlevel.c b/fs/udf/lowlevel.c
-index 46d697172197..c87ed942d076 100644
---- a/fs/udf/lowlevel.c
-+++ b/fs/udf/lowlevel.c
-@@ -45,7 +45,7 @@ unsigned int udf_get_last_session(struct super_block *sb)
- 	return 0;
- }
- 
--unsigned long udf_get_last_block(struct super_block *sb)
-+udf_pblk_t udf_get_last_block(struct super_block *sb)
- {
- 	struct cdrom_device_info *cdi = disk_to_cdi(sb->s_bdev->bd_disk);
- 	unsigned long lblock = 0;
-@@ -54,8 +54,11 @@ unsigned long udf_get_last_block(struct super_block *sb)
- 	 * The cdrom layer call failed or returned obviously bogus value?
- 	 * Try using the device size...
- 	 */
--	if (!cdi || cdrom_get_last_written(cdi, &lblock) || lblock == 0)
-+	if (!cdi || cdrom_get_last_written(cdi, &lblock) || lblock == 0) {
-+		if (sb_bdev_nr_blocks(sb) > ~(udf_pblk_t)0)
-+			return 0;
- 		lblock = sb_bdev_nr_blocks(sb);
-+	}
- 
- 	if (lblock)
- 		return lblock - 1;
-diff --git a/fs/udf/super.c b/fs/udf/super.c
-index 241b40e886b3..c756d903a862 100644
---- a/fs/udf/super.c
-+++ b/fs/udf/super.c
-@@ -1861,10 +1861,10 @@ static int udf_check_anchor_block(struct super_block *sb, sector_t block,
-  * Returns < 0 on error, 0 on success. -EAGAIN is special - try next set
-  * of anchors.
-  */
--static int udf_scan_anchors(struct super_block *sb, sector_t *lastblock,
-+static int udf_scan_anchors(struct super_block *sb, udf_pblk_t *lastblock,
- 			    struct kernel_lb_addr *fileset)
- {
--	sector_t last[6];
-+	udf_pblk_t last[6];
- 	int i;
- 	struct udf_sb_info *sbi = UDF_SB(sb);
- 	int last_count = 0;
-diff --git a/fs/udf/udfdecl.h b/fs/udf/udfdecl.h
-index d35aa42bb577..eaf9e6fd201e 100644
---- a/fs/udf/udfdecl.h
-+++ b/fs/udf/udfdecl.h
-@@ -196,7 +196,7 @@ extern void udf_new_tag(char *, uint16_t, uint16_t, uint16_t, uint32_t, int);
- 
- /* lowlevel.c */
- extern unsigned int udf_get_last_session(struct super_block *);
--extern unsigned long udf_get_last_block(struct super_block *);
-+udf_pblk_t udf_get_last_block(struct super_block *);
- 
- /* partition.c */
- extern uint32_t udf_get_pblock(struct super_block *, uint32_t, uint16_t,
-</cut>
-------=_Part_6514_2047847466.1675031558898--
+> Last perf version which was OK:
+>
+> ~/bin/perf -v
+> perf version 6.0.0
+>
+> echo "linux-perf: Adjust limited access to performance monitoring and
+> observability operations"
+> echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> /proc/sys/kernel/perf_event_paranoid
+> 0
+>
+> ~/bin/perf test 10 86 92 93 94 95
+> 10: PMU events                                                      :
+> 10.1: PMU event table sanity                                        : Ok
+> 10.2: PMU event map aliases                                         : Ok
+> 10.3: Parsing of PMU event table metrics                            : Ok
+> 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> 86: perf record tests                                               : Ok
+> 92: perf stat tests                                                 : Ok
+> 93: perf all metricgroups test                                      : Ok
+> 94: perf all metrics test                                           : Ok
+> 95: perf all PMU test                                               : Ok
+>
+> echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> /proc/sys/kernel/perf_event_paranoid
+> echo "linux-perf: Reset limited access to performance monitoring and
+> observability operations"
+>
+> If you need further information, please let me know.
+>
+> Thanks.
+>
+> Regards,
+> -Sedat-
+>
+> P.S. Instructions
+>
+> [ REPRODUCER ]
+>
+> LLVM_MVER="16"
+>
+> # Debian LLVM
+> ##LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
+> # Selfmade LLVM
+> LLVM_TOOLCHAIN_PATH="/opt/llvm/bin"
+> if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+>    export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
+> fi
+>
+> PYTHON_VER="3.11"
+> MAKE="make"
+> MAKE_OPTS="V=1 -j1 HOSTCC=clang-$LLVM_MVER HOSTLD=ld.lld
+> HOSTAR=llvm-ar CC=clang-$LLVM_MVER LD=ld.lld AR=llvm-ar
+> STRIP=llvm-strip"
+>
+> echo "LLVM MVER ........ $LLVM_MVER"
+> echo "Path settings .... $PATH"
+> echo "Python version ... $PYTHON_VER"
+> echo "make line ........ $MAKE $MAKE_OPTS"
+>
+> LANG=C LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
+>
+> LANG=C LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+> PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
+> ../make-log_perf-install_bin_python${PYTHON_VER}_llvm${LLVM_MVER}.txt
+>
+>
+> [ TESTS ]
+>
+> [ TESTS - START ]
+>
+> echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> /proc/sys/kernel/perf_event_paranoid
+>
+> [ TESTS - DEBIAN ]
+>
+> /usr/bin/perf -v
+> perf version 6.1.7
+>
+> /usr/bin/perf test 10 92 98 99 100 101
+>
+>  10: PMU events                                                      :
+>  10.1: PMU event table sanity                                        : Ok
+>  10.2: PMU event map aliases                                         : Ok
+>  10.3: Parsing of PMU event table metrics                            : Ok
+>  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+>  92: perf record tests                                               : Ok
+>  98: perf stat tests                                                 : Ok
+>  99: perf all metricgroups test                                      : Ok
+> 100: perf all metrics test                                           : FAILED!
+> 101: perf all PMU test                                               : Ok
+>
+> [ TESTS - DILEKS ]
+>
+> ~/bin/perf -v
+> perf version 6.2.0-rc5
+>
+> ~/bin/perf test 7 87 93 94 95 96
+>
+>   7: PMU events                                                      :
+>   7.1: PMU event table sanity                                        : Ok
+>   7.2: PMU event map aliases                                         : Ok
+>   7.3: Parsing of PMU event table metrics                            : Ok
+>   7.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+>  87: perf record tests                                               : Ok
+>  93: perf stat tests                                                 : Ok
+>  94: perf all metricgroups test                                      : Ok
+>  95: perf all metrics test                                           : FAILED!
+>  96: perf all PMU test                                               : Ok
+>
+> [ TESTS - FAILED ]
+>
+> /usr/bin/perf test --verbose 100 2>&1 | tee
+> perf-test-verbose-100-perf-all-metrics-test_debian-perf-6-1-7.txt
+>
+> ~/bin/perf test --verbose 95 2>&1 | tee
+> perf-test-verbose-95-perf-all-metrics-test_dileks-perf-6-2-rc5.txt
+>
+> [ TESTS - STOP ]
+>
+> echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> /proc/sys/kernel/perf_event_paranoid
+>
+> - EOT -
