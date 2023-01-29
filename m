@@ -1,43 +1,42 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514C17C8;
-	Sun, 29 Jan 2023 00:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AF8BD03;
+	Sun, 29 Jan 2023 01:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674953227; x=1706489227;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1xLZJrP1WOhAOE8tSf2rctG3P9HMqo0HdKAtGrHT2uo=;
-  b=FVxYjvZ42Sev2uMfZ/UNg9G2lhMyw/Zb7STJhL29gCa6DEh9MSVgC9kp
-   EMMlFOVIJjYwXGBA2Iatxxq3mUy9FIXVIKmfXquPUn1B6vDF60ugxn7rD
-   CLc1ccPTE8Nbi0ZMzGn7qmvIC5O+sNUNFMESciLQCMH+jheqNY8TPKfxb
-   SduBnn+KrEPwkdeQn+fD4NssBxRxy5z9mRiDwX9IzU5FYukfh95eMVs6m
-   QDjf7TbPZSSLB6N1tjWvTxoli7LMUGgOcDR7vfdwFKD2HYfLPdgd9w6AY
-   2N12O7Hmx0gh5oDWAKeJEtSI8RlxoJVDdLqw3JBp0J75z3oz+i9Ew8PSz
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="329478146"
+  t=1674956885; x=1706492885;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=IfwC1uDezLs5r3oeEaBU+BWXPbPb1AaUTM0P8REO6Kw=;
+  b=fq3c4/JXP/RWHARk3UyDE0me/TLsmszkA35ltOSwnxTNHv9XRWSigDam
+   gI6jzJs24fwiiG4YTV9nK0nJ5NXSDtcMrMY/YR7DBuThOEuzyKPr8P/ty
+   KK25PmG9483WKJh40XIxVIPv4gdb4MEtC7hrXjVRrhk031q1Z3DXypX9G
+   1NEmd6o7So8aV54ZHiNONhYuwvGX4z20trjbOBWjwQQ74a5YuBFmuLlKD
+   cO/O3FqLav4tf3e+RimCsmafhWEsVxNvOOv0ElaKMC7rESv2uHO8fMFI5
+   JN4tAAIZs1K46pghZv8GkD2QUylNJdbJ+o6H8ATB/3J9LaCple8xsMRhp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="391911442"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="329478146"
+   d="scan'208";a="391911442"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 16:47:07 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 17:48:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="752390875"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="752398158"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="752390875"
+   d="scan'208";a="752398158"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2023 16:47:05 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2023 17:48:02 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pLvqW-0001H6-03;
-	Sun, 29 Jan 2023 00:47:00 +0000
-Date: Sun, 29 Jan 2023 08:46:44 +0800
+	id 1pLwna-0001Ka-0T;
+	Sun, 29 Jan 2023 01:48:02 +0000
+Date: Sun, 29 Jan 2023 09:47:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Price <steven.price@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 05/28] arm64: RME: Define the user ABI
-Message-ID: <202301290828.qs1XtUBs-lkp@intel.com>
-References: <20230127112932.38045-6-steven.price@arm.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/peterz.2023.01.26a 67/68]
+ vmlinux.o: warning: objtool: sched_clock+0x4: call to
+ __SCT__pv_sched_clock() leaves .noinstr.text section
+Message-ID: <202301290940.V1kdUGkz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,46 +45,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127112932.38045-6-steven.price@arm.com>
 
-Hi Steven,
+CC: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+CC: "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
+TO: Peter Zijlstra <peterz@infradead.org>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on linus/master v6.2-rc5 next-20230127]
-[cannot apply to kvmarm/next kvm/queue kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Price/arm64-RME-Add-SMC-definitions-for-calling-the-RMM/20230128-180035
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230127112932.38045-6-steven.price%40arm.com
-patch subject: [RFC PATCH 05/28] arm64: RME: Define the user ABI
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230129/202301290828.qs1XtUBs-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/peterz.2023.01.26a
+head:   f9588508f16615daf50ae4e3e16f40b6be874154
+commit: a154b2be84be9d2bb446f91236b690de7ebcc401 [67/68] x86: Mark sched_clock() noinstr
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230129/202301290940.V1kdUGkz-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8ea2cfe90a1d6ee4dff4fdedef77ac12daf037d1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Steven-Price/arm64-RME-Add-SMC-definitions-for-calling-the-RMM/20230128-180035
-        git checkout 8ea2cfe90a1d6ee4dff4fdedef77ac12daf037d1
+        # https://github.com/ammarfaizi2/linux-block/commit/a154b2be84be9d2bb446f91236b690de7ebcc401
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/peterz.2023.01.26a
+        git checkout a154b2be84be9d2bb446f91236b690de7ebcc401
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/kvm.h:1177:29: warning: // comments are not allowed in this language [-Wcomment]
-   #define KVM_CAP_ARM_RME 300 // FIXME: Large number to prevent conflicts
-                               ^
-   1 warning generated.
+   vmlinux.o: warning: objtool: sync_regs+0x23: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: sched_clock+0x4: call to __SCT__pv_sched_clock() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_enter+0x76: call to __kasan_check_write() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_exit+0x4b: call to __kasan_check_write() leaves .noinstr.text section
+
+
+objdump-func vmlinux.o sched_clock:
+0000 0000000000001a80 <sched_clock>:
+0000     1a80:	f3 0f 1e fa          	endbr64
+0004     1a84:	e9 00 00 00 00       	jmp    1a89 <sched_clock+0x9>	1a85: R_X86_64_PLT32	__SCT__pv_sched_clock-0x4
+0009     1a89:	cc                   	int3
+000a     1a8a:	cc                   	int3
+000b     1a8b:	cc                   	int3
+000c     1a8c:	cc                   	int3
+000d     1a8d:	cc                   	int3
+000e     1a8e:	cc                   	int3
+000f     1a8f:	cc                   	int3
 
 -- 
 0-DAY CI Kernel Test Service
