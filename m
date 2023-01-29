@@ -1,74 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57F919B;
-	Sun, 29 Jan 2023 14:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223F7C433EF;
-	Sun, 29 Jan 2023 14:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675003866;
-	bh=lCnGajDczmgjdfaOaigtlGKys56hqbLDWWrpKImZVQI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J9liH0mmRLx7j3YSfhxlIGHTXOIbsjhwWxrlUml/4CFcGmfwCIZGylUUfveJMhPEA
-	 WpteS9BJH/b3mnhdpzzThQc/zHlniwKln5qCvbSr/DLjAK61Wg64ZONPWIcf7QcsgV
-	 hhR/+9nLCWevQsrxrDmiqxXQevO9hFF6LU8hhHNuiBbDf5+LqAbtsuZNpAMbUNDM1i
-	 3TEz99Bv6fjscFhJ72WyG31a9fZvk9TMsQLa1pSuNfB+I7/8C87RjvZjFxlhi2a9cU
-	 TLX2gOhG5XOywyWt2nKg8Omsfevxris2wbEOKKnOfJS7FoJQV0WB3g8IOK0LfLDZt8
-	 LAdU+0Pt6bUFg==
-Date: Sun, 29 Jan 2023 07:51:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Russell King <linux@armlinux.org.uk>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-Message-ID: <Y9aH2AzDpwQXFlx+@dev-arch.thelio-3990X>
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
- <1206e990-23b3-44c8-97c9-869ec0aeead0@app.fastmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288E523A3
+	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 15:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675005701;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qtA7YjfOdwFszT+sc8m3ShBRTO+aBkYELD14ZV58oVc=;
+	b=aDWtXFbrO79QW/GVv7+rmmC0PbUKTzOBAYHvQ2K/HU/bmvK/PeyVIMcquszXzIS7wWuuYm
+	+A6LclNTyO+ol1N+0zx3av0aVnlVSYwVpcly/PAkwF6dPWq172+VE+wAeBrgNshzoEcQqW
+	UPaqad4ofUUpK/MW9hVcxhZ9+JdsL7k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-IRjHlIFdOPKEoDC64-PX8g-1; Sun, 29 Jan 2023 10:21:40 -0500
+X-MC-Unique: IRjHlIFdOPKEoDC64-PX8g-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F051F811E9C
+	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 15:21:39 +0000 (UTC)
+Received: from [172.64.14.22] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D4A0253AA;
+	Sun, 29 Jan 2023 15:21:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (24/383 SKIPPED): Test report for master
+ (6.2.0-rc5, mainline.kernel.org-clang, c9661827)
+Date: Sun, 29 Jan 2023 15:21:39 -0000
+To: efuller@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1206e990-23b3-44c8-97c9-869ec0aeead0@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <80360.123012910214000172@us-mta-550.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 27, 2023 at 10:56:06PM +0100, Arnd Bergmann wrote:
-> On Wed, Jan 18, 2023, at 20:22, Nathan Chancellor wrote:
-> > Commit 6a7ee50f8f56 ("ARM: disallow pre-ARMv5 builds with ld.lld")
-> > prevented v4 or v4t kernels when ld.lld will link the kernel due to
-> > inserting unsupported blx instructions.
-> >
-> > ld.lld has been fixed in current main (16.0.0) to avoid inserting these
-> > instructions by inserting position independent thunks instead. Allow
-> > these configurations to be enabled when ld.lld 16.0.0 is used to link
-> > the kernel.
-> >
-> > Additionally, add a link to the upstream LLVM issue so that the reason
-> > for this dependency is clearly documented.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/964
-> > Link: 
-> > https://github.com/llvm/llvm-project/commit/6f9ff1beee9d12aca0c9caa9ae0051dc6d0a718c
-> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Thanks a lot for getting this fixed!
-> 
-> I gave this a spin on my randconfig build setup, which showed
-> nothing unusual.
-> 
-> Tested-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Please add this to Russell's patch tracker.
+Hi, we tested your kernel and here are the results:
 
-Done, thanks for testing!
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-https://www.armlinux.org.uk/developer/patches/viewpatch.php?id=9289/1
 
-Cheers,
-Nathan
+Kernel information:
+    Commit message: Fix up more non-executable files marked executable
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67440
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6856837
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6856619
+          x86_64 (debug) - Usex - version 1.9-29
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6856755
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
