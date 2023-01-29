@@ -1,162 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A433328EA
-	for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 18:46:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85A1C433EF;
-	Sun, 29 Jan 2023 18:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675017972;
-	bh=2DxRXSOIA0PJV0SlxQTbRM2t2HM2EjEbxjF3YiHSM54=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q3H3hzW9rk0S1mPT3bjcB1QwF2xWXz5RlAYrepCRTs7HdPm2XOAP/rsUTOsv7RqCn
-	 NCxgM2AYLX3lhnksQBSMFqQvwvgkl7V3ns2OCmQ2UxBLU0DSVwd1i3JQgDvpbcA2+p
-	 QChZizXHpJSnD04eJZd2WqskGBfrAUzWpZPieLrU9SlO7xVT8hkXqmZKbwExXhjDdz
-	 YJZjALNRV7zVPHcpt66D7rIr4N7XFHEoc/a1PNmU13sw6oPyePeNBjKnqJFVXxX1C0
-	 /6PZZBPBgRrSoNGg3U8p05PLwSn+kEXaQBnFuQR6WwGJvM6XbX9q9RK4mexc39OwCe
-	 jhQpTPIlqJjqQ==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 2/5] kbuild: deb-pkg: create source package without cleaning
-Date: Mon, 30 Jan 2023 03:45:59 +0900
-Message-Id: <20230129184602.3974058-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230129184602.3974058-1-masahiroy@kernel.org>
-References: <20230129184602.3974058-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42124323D;
+	Sun, 29 Jan 2023 20:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675023210; x=1706559210;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=jf02FnoACxcRBld5MBvEKJIax2g2za47+nCi7fA/u9E=;
+  b=NhVArxaP1lOV6gvcNA8fIGP+h9C/jsuv5tqja4CDOZtz17hcp5tQQtNB
+   JgXNNRKA2EN3x+BWnO3+9cSvkzCfJn+vlBgHYv6ASjbEtEIzdxA1ovaYi
+   Xrwx8TH6st2v2axb+gOPW3/P8OZ0d8lCFQ9zxsEZJ/fZVzX/K2HymrNwj
+   JVgP6G7IBN2fTjMNHeaIGJiUBYIaoWuauuGSB/coqgDHX5b6k/v36UCu8
+   KnPrnbX1tcQOPlH5T4G3yek9xdix011ApqobrBpEcsRH9MEFSodO8xGRs
+   VU1zQ+MWsWBg11igPMZ9bqUV0dyqYO7o1KeXtxSH9CjeUgr9H7cgLcFWU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="307776220"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="307776220"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 12:13:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="663885283"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="663885283"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 29 Jan 2023 12:13:28 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pME3L-00035G-1L;
+	Sun, 29 Jan 2023 20:13:27 +0000
+Date: Mon, 30 Jan 2023 04:12:41 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [stable:linux-5.15.y 1982/9999] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function kallsyms_lookup_name: .text+0x58):
+ relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288,
+ 524287]; references kallsyms_names
+Message-ID: <202301300453.UCJOXHO2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If you run 'make deb-pkg', all objects are lost due to 'make clean',
-which makes the incremental builds impossible.
+TO: Kees Cook <keescook@chromium.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Marco Elver <elver@google.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
 
-Instead of cleaning, pass the exclude list to tar's --exclude-from
-option.
+Hi Kees,
 
-Previously, *.diff.gz contained some check-in files such as
-.clang-format, .cocciconfig.
+FYI, the error/warning still remains.
 
-With this commit, *.diff.gz will only contain the .config and debian/.
-The other source files will go into the tarball.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   aabd5ba7e9b03e9a211a4842ab4a93d46f684d2c
+commit: 33db9912ff7c491f839c89a08e98f755aa09598f [1982/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: riscv-randconfig-r026-20230129 (https://download.01.org/0day-ci/archive/20230130/202301300453.UCJOXHO2-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=33db9912ff7c491f839c89a08e98f755aa09598f
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout 33db9912ff7c491f839c89a08e98f755aa09598f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-(no changes since v1)
+All errors (new ones prefixed by >>):
 
- scripts/Makefile.package | 31 ++++++++++++++++++++++++++-----
- scripts/package/mkdebian | 25 +++++++++++++++++++++++++
- 2 files changed, 51 insertions(+), 5 deletions(-)
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_lookup_name: .text+0x58): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_lookup_buildid: .text+0x44c): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_lookup_buildid: .text+0x454): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x5c8): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x5d0): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_attrs: .text+0x734): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_lookup_name: .text+0x60): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function kallsyms_lookup_name: .text+0x68): relocation R_RISCV_PCREL_HI20 out of range: -524499 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by kallsyms.c
+   >>> defined in kernel/built-in.a(kallsyms.o)
 
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index dfbf40454a99..5ac0a2dec01d 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -50,6 +50,25 @@ fi ; \
- tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
- 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
- 
-+# Source Tarball
-+# ---------------------------------------------------------------------------
-+
-+PHONY += gen-exclude
-+gen-exclude:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile scripts_exclude
-+
-+quiet_cmd_exclude_list = GEN     $@
-+      cmd_exclude_list = scripts/gen-exclude --prefix=./ --rootdir=$(srctree) > $@; echo "./$@" >> $@
-+
-+.exclude-list: gen-exclude
-+	$(call cmd,exclude_list)
-+
-+quiet_cmd_tar = TAR     $@
-+      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --transform 's:^\.:linux:S' .
-+
-+%.tar.gz: .exclude-list
-+	$(call cmd,tar)
-+
- # rpm-pkg
- # ---------------------------------------------------------------------------
- PHONY += rpm-pkg
-@@ -81,12 +100,11 @@ binrpm-pkg:
- 
- PHONY += deb-pkg
- deb-pkg:
--	$(MAKE) clean
- 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
--	$(call cmd,src_tar,$(KDEB_SOURCENAME))
--	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
--		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
-+	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-+		$(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-+	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
-+		--build=source,binary --source-option=-sP -nc -us -uc
- 
- PHONY += bindeb-pkg
- bindeb-pkg:
-@@ -174,4 +192,7 @@ help:
- 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
- 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
- 
-+PHONY += FORCE
-+FORCE:
-+
- .PHONY: $(PHONY)
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index c3bbef7a6754..2f612617cbcf 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -84,6 +84,8 @@ set_debarch() {
- 	fi
- }
- 
-+rm -rf debian
-+
- # Some variables and settings used throughout the script
- version=$KERNELRELEASE
- if [ -n "$KDEB_PKGVERSION" ]; then
-@@ -135,6 +137,29 @@ fi
- mkdir -p debian/source/
- echo "1.0" > debian/source/format
- 
-+# Ugly: ignore anything except .config or debian/
-+# (is there a cleaner way to do this?)
-+cat<<'EOF' > debian/source/local-options
-+diff-ignore
-+
-+extend-diff-ignore = ^[^.d]
-+
-+extend-diff-ignore = ^\.[^c]
-+extend-diff-ignore = ^\.c($|[^o])
-+extend-diff-ignore = ^\.co($|[^n])
-+extend-diff-ignore = ^\.con($|[^f])
-+extend-diff-ignore = ^\.conf($|[^i])
-+extend-diff-ignore = ^\.confi($|[^g])
-+extend-diff-ignore = ^\.config.
-+
-+extend-diff-ignore = ^d($|[^e])
-+extend-diff-ignore = ^de($|[^b])
-+extend-diff-ignore = ^deb($|[^i])
-+extend-diff-ignore = ^debi($|[^a])
-+extend-diff-ignore = ^debia($|[^n])
-+extend-diff-ignore = ^debian[^/]
-+EOF
-+
- echo $debarch > debian/arch
- extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
- extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
