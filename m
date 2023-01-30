@@ -1,698 +1,141 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428D02560
-	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 13:48:32 +0000 (UTC)
-Received: by mail-wr1-f50.google.com with SMTP id q10so11116494wrm.4
-        for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 05:48:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JuaLuDY0z/yW4nwcBkTAjgnJzoPEQpYgtr0GQWd/sts=;
-        b=kwdhzhXpSxsVWQFtaNfIOdcMs+SyJtZKQf68Fwp6nF/9inCzFI7IJjvMS4AIcS141l
-         54nv6G6t5EUxNFxF8SwOoWP10uBRqPG1eOzV/xGoqNyHHPzsh8CfcfPJYbXHLwDWCk8j
-         yBByt3qogQ8xRmfHplD6S0XNU3onU1f424ko5KLKNkweQXf7DMgW8WxioI9VX+DG8bPX
-         izsMpy5fckckVk8XKJIgmD95c0iyAbmucPj1pHJl/nlMpg9eVFCY3BS8EU9EDMzk04oo
-         SsbJMprZdVG9+mtYlfMSM+RZyS8cYDcN4iMhmHDX+JlnY9/Ik6Sq+v43ay1OHSq9HYJd
-         rAFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=list-id:mime-version:subject:message-id:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuaLuDY0z/yW4nwcBkTAjgnJzoPEQpYgtr0GQWd/sts=;
-        b=XS846bpz+FmYMhImJYJvzF5a1XRSpiBG55fkfuDcfD3s6hZ8EQASAou2MCueZkOyQs
-         4BtVP7IfDEkiNwHueosnOMt1omH3g+t/odCPxVdsrnJY/Xje6mauqjo6D80oGrRS7tME
-         aI48dRcOQCVL9/Xtj0j+olUbzCl4sBnO7IzCAFsxMeVssdO/HoLfvqRp21Hiw1TrcK12
-         PUQE5w/RuzZTLZeEhil+1r3MNX9NNgrGUYp26v1oV7jEAhQ97LJ7z8x0p4YMg/Fyp/sI
-         UkqRu1botSl9CmwlreoCUl6StUSD/RbPThDLCZz9ZD2WUP0fIpDrhHeVAAZOmkHwNtHI
-         8RGg==
-X-Gm-Message-State: AO0yUKXeY+kvTMv526ZosftZo8We5e9ONkCY6gulq3r7fFMJgAZwCsV/
-	8QEkIEeP8qrNME7BPR6Q1dM0QQ==
-X-Google-Smtp-Source: AK7set9b+mzmH6jTeKXtxCRJX6qjXg1ahR2z0oW3qhG9n75NGojPfl+lM+RSUrNicf1xsyHnGLsYQA==
-X-Received: by 2002:a5d:42c7:0:b0:2bf:e05f:53ac with SMTP id t7-20020a5d42c7000000b002bfe05f53acmr6756203wrr.45.1675086510252;
-        Mon, 30 Jan 2023 05:48:30 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id r7-20020a5d52c7000000b002bdf5832843sm11874374wrv.66.2023.01.30.05.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 05:48:29 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Mon, 30 Jan 2023 13:48:28 +0000 (UTC)
-To: Florian Hahn <flo@fhahn.com>
-Cc: llvm@lists.linux.dev
-Message-ID: <674739929.6875.1675086509710@jenkins.jenkins>
-Subject: [TCWG CI] Failure after llvmorg-16-init-18491-gde122cb92008: [SCCP]
- Use range info to prove AddInst has NUW flag.
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE7A33CE;
+	Mon, 30 Jan 2023 14:20:47 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IyLyocJE36hh2DuPoRsrfsFs17XrqiYioMpb0TctPtTavuq5qm8ILqXi/7lrEEdsY114vmcn/lOIy08E/eqXq6gwn3qgonZMNTDrd/s0CstJu8QoTvx/EvpBrszYjOBom7e+K0OrPXRwC2mq5J62MDWzwTgDBU9sWX05qi+ef7TAvRucKR0Lc50HaE0jxxLzxsl03WZxTLh8MQBsNXh4EKce8dEDelT0XFZ7E2EGUvteDjXYoyxl2OS6G0CXWv10bKgNIJCA3BRPT1H7jl4EqiTFyP4y7WGXPwRIxnX6DQtuh9LC3W+PMa+KiOQqLYn4oE0eew7Q52yLRkV3TWH8Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6JvaiWa6RESmmruvGZDeB5WWjyCmjORZil+4RoIBbrU=;
+ b=YDTJ1y347zPvvEHXJd5g76V1P/gr64e2jlIRSnZoElol7T/LnvfgUaZQ2iewiOu27uh3taQS8wl6A4gIwVxFDS7GPzSo72JDrpiDLIXhuL8bvfmrtQkdd1/jf06dpWPpvuJfz/wr6psQqT4PGGzPaT1GnsqvpooPpwtXxKkRnD1sk14Bf9Byew/Zm1d6WiXj5UHvqBvIVTKjHtVV4yRjwGm0Yv5MFdChhHNI7csZXxmTwbOQbqIJetEDHMmMYAB0w9Bo0mPb+s9ZpPgicGsB4ASUPe1jFlgSX/LafSZICGwYVPXSFcPljDurqu7m7Pik0oK/2D4a/T6XEMeK4OKFgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6JvaiWa6RESmmruvGZDeB5WWjyCmjORZil+4RoIBbrU=;
+ b=sBOVw4OQeD6iQvBKZV47OpkISgnMvikc2PXviFSeiFXvuaa/BIcY34oXVobVtxgbHFOmrYacoQxGsTH0s3MvZm+1dyIGy4mENkaNL29N+DfQTqNItQqs1oAv/ZH7MEyyMOL/AWIpwGVBo6Xz9Ab2fKX3kUZ35m6OpkM8jxgsEis16jwxAzLNasog33MU4rTasQ2qpqJJJuldYdHbiL9A5tlTuafY/YB/+4U8wuORnlsLAzaTBl3oavrcCsShWrSqOm7KASnKpGkXpGq6FWzfg/5rnHrMWPl3wITxKrUY0i9kSPIrYYkbs31qdD/s+wUjaesyvRW2XOYKuN0vRo96TQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW4PR12MB6755.namprd12.prod.outlook.com (2603:10b6:303:1ea::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 14:20:46 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6043.033; Mon, 30 Jan 2023
+ 14:20:46 +0000
+Date: Mon, 30 Jan 2023 10:20:44 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org, will@kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org, hch@lst.de,
+	baolu.lu@linux.intel.com,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 7/8] iommu: Retire bus ops
+Message-ID: <Y9fSPLCyo8ZjLTYG@nvidia.com>
+References: <198e82a6b1a28605409c395da4ec1a67b0e1587b.1674753627.git.robin.murphy@arm.com>
+ <202301282015.hjj2YFYy-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202301282015.hjj2YFYy-lkp@intel.com>
+X-ClientProxiedBy: BL0PR02CA0105.namprd02.prod.outlook.com
+ (2603:10b6:208:51::46) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_6874_1020568495.1675086509127"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-mainline-allyesconfig
-X-Jenkins-Result: SUCCESS
-List-ID: 
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6755:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96326a0d-532e-428d-b045-08db02cd2d88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	cbJ+U6akWc8xldbzc9oMOfXMW9T+VK4FnjDuPS2HK9OuLUoOKgtrSTaY5/R+SNP/a4dtXnVM1F8VBfPpBqvVb1DGIzKjxIUgCdpAZ7VahxV/Exx25DHvva/uXbDYgpru736Mvj1Ie85wx+K5lIp/2eZy3TjL6RTVzPK2ti34rHkwDZAbLGu82otGQ6cqdPIkE10Jzvikz/SjT9OHQleyjndAk/0lBQanqWkfIeVUVsn6ps0vBf20Rlz7rGiIN8LBulZX2VPPVlVoAeSRoAtbgYKZI8rGTdC9DGd/cWZ36tRhvtPzvo5lx6xCJs9ZQD1JdWsUlflRXpaBZRSmPiFm+XHftjLTTZWD8ccnsv0fsAnV0hzsPwJfLYJFUXtYzsDzreBYRmStLLPlvvHEPPe80HT56MFR35TrJxlw1dYWOcQrUhIzRS8jZnzL7iD8YQvRKLLPd4NnbDoOmcdw5T7eIvr2qcj8SsOztZg7aTWnuR6r09rxVHYOBgBvK4YIAJWP53vveqJ2eV5o5yAg6vxe5jPVSPUNGAMikYFpEi5VX86kRCtiV1FqgbkJpncdL7bV1OIUiSqD8iIjoEZcK+fQep7h8oyNhFfm8MpD3bvP23tfS/ceugqfN6MwAUvMhaU1dx+phHg6fe+ROfRU6VjCTg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199018)(86362001)(38100700002)(36756003)(5660300002)(8936002)(54906003)(66946007)(66476007)(316002)(6916009)(4326008)(8676002)(66556008)(2906002)(7416002)(83380400001)(2616005)(6486002)(478600001)(41300700001)(26005)(6506007)(186003)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?hvardq2lR6LYPT2S8FiicRAVWm9NBYbSbwVfzlEYoar7TP5MSk7tg+PJp99I?=
+ =?us-ascii?Q?SZYY2ihctFlJzlnLgC67MqkscmdX54oz0VIrNtajC7IFYWzAOaVyf5CVZoc4?=
+ =?us-ascii?Q?4Crbp9uSIxHmuY3jEo4NFy1uktTojveXuFrTJmTpodYajVshB6Inh6XKb4kk?=
+ =?us-ascii?Q?4sBdNXB4tci+nBw2N+HwEb2HlQ1RKv26i5Lm9DkQFdwStuiR4NRhC3rXSX3p?=
+ =?us-ascii?Q?GrfwqONkM88GJRSVJ061Q1jHLNXf6JN3I1/ENtYqeqB5Mn21g54G7IAVjaMu?=
+ =?us-ascii?Q?7txPDvUh4DyLwKI2cZoktJGeR4NntGhYLwrLMsPtDt6KfZ4wq6RD1rZctW1U?=
+ =?us-ascii?Q?J88Q2VeQt39/d/zEV8YAADrOCaYf9heSJ/w9kMM1tiPX27nxbAlnMfIcl2uI?=
+ =?us-ascii?Q?C5+xIlV776yP/oEJnSIt1pztLDjXo1HPT1L92h9eqEm7URbdjiL3v6Q36lRE?=
+ =?us-ascii?Q?jZM+vDeDoN0/8YuOLkr5WeqQmdPdxXQYmY6k//aI9ZjIsmOam0OBHQzNnUud?=
+ =?us-ascii?Q?Ko2JWpZREBoaHpZHnHHq/HALr+tNNQmh4y5zr/eVGuPT9WtCANXiY/IgnHrL?=
+ =?us-ascii?Q?3Dbnu0bqt1qD4a3qgp3OckRbHPtKgVexwZ2PesGPB4FL+nv8Nyon3Ojc4Ahz?=
+ =?us-ascii?Q?jzy2xCZuqiD3kuTGnMBJxtVG1N+CG7RPxMDg9pJ3qQ85ko4FqWSU86gNE6LV?=
+ =?us-ascii?Q?qYgNTuGWRDkxGxCSR9OFMJ5N9nhpqqgQRP1X76qDIPoVfqgfbzB3cjxA3Og7?=
+ =?us-ascii?Q?5mbyJlRhTqwjVpbX68fEasrFucb63imKb0KaoY6rOktjl4zvloIXzUsVjAML?=
+ =?us-ascii?Q?1xKMgXMuUjMVX20ew/pYBL4Op3ueXHaZbd1lUq8I9LW/FrCWCxdnb1f8mJTm?=
+ =?us-ascii?Q?5/lkA7mnEap2cmKgsLuiFKmy112yG//Cz64fYTmddXNpCIpDAd2AWT46ytuH?=
+ =?us-ascii?Q?eOF0gkQOq65WO0PpT7xHwtq/yJkgGK2KbMEqHFqRO0SAnJ69vkPVY/Z4xmAF?=
+ =?us-ascii?Q?lLukqUBE538atWScLVsNVQ7wLtlnvwvHotU8qWkHfj5zAX6JR9ccscqV12fA?=
+ =?us-ascii?Q?UiqsSwO1cup6wBdkhBENYjV+Qq4naFzG0Z0vpE8LG74SYK34PfTbLcz4lMWb?=
+ =?us-ascii?Q?QOUhoAgq9tTZCZAw3mDsSoUbh2M2Euh1+6Pv1hHTrK5WPADBo3VasEpFGJrm?=
+ =?us-ascii?Q?IRuxV/DDOkRi5ETyUOME9aFA+l4V7ox1tIIJWq+zvGQGF1SBb+HxxbqjfSRQ?=
+ =?us-ascii?Q?tiEy9zos/UXD5qgsIp4Q7cZVz0j517e9x0OkDabYW7oRdrv5XDoAvi1YGuNM?=
+ =?us-ascii?Q?mC/Zi6ZjZYkUBTM29ib53dZF3x9MIJl1DvWOI8RycONuc8r8KVPFgPAckEax?=
+ =?us-ascii?Q?+laXhKN1LwmyNVtiVtY9Zacn8vElV/jc4YEU/tuDvKpV001U/9ejWEgYSS4C?=
+ =?us-ascii?Q?4hEsLgrZjHzLE9DxNXE66fFOtQ/LchT21Ty3FKX7ZlU43lHaZItBwwGXnFjX?=
+ =?us-ascii?Q?N837HbnpHY8SO9+UtPn8c9LGIvVWtdr35Kfu6EeS6qGQJ/VbBNVB07aFGgOb?=
+ =?us-ascii?Q?+dLlXgoygfitrShJgQEUCAS8uljt8wYbU9ehF6F2?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96326a0d-532e-428d-b045-08db02cd2d88
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 14:20:45.9332
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y0Nsz5guYCWuHODcSzgdN9j5eW0gCjNchKrKCXGe7TNJ2+eetLWwnUtdwXBd+uUH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6755
 
-------=_Part_6874_1020568495.1675086509127
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Sat, Jan 28, 2023 at 08:55:09PM +0800, kernel test robot wrote:
 
-Failure after llvmorg-16-init-18491-gde122cb92008: [SCCP] Use range info to prove AddInst has NUW flag.:
+> >> drivers/iommu/iommufd/selftest.c:276:39: error: field designator 'iommu_ops' does not refer to any field in type 'struct bus_type'
+>            static struct bus_type mock_bus = { .iommu_ops = &mock_ops };
 
-Results changed to
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21631
-# First few build errors in logs:
-# 00:01:23 clang-16: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-# 00:01:23 make[2]: *** [scripts/Makefile.build:252: mm/filemap.o] Error 1
-# 00:01:29 clang-16: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-# 00:01:30 make[2]: *** [scripts/Makefile.build:252: mm/oom_kill.o] Error 1
-# 00:01:44 clang-16: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-# 00:01:44 make[2]: *** [scripts/Makefile.build:252: mm/swap.o] Error 1
-# 00:02:28 clang-16: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-# 00:02:28 make[2]: *** [scripts/Makefile.build:252: mm/compaction.o] Error 1
-# 00:02:56 clang-16: error: clang frontend command failed with exit code 134 (use -v to see invocation)
-# 00:02:56 make[2]: *** [scripts/Makefile.build:252: mm/mprotect.o] Error 1
+So this shortcut isn't going to work..
 
-from
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-21716
-# linux build successful:
-all
+Probably something like this is the simplest thing:
 
-THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
-
-For latest status see comments in https://linaro.atlassian.net/browse/LLVM-646 .
-Status of llvmorg-16-init-18491-gde122cb92008 commit for tcwg_kernel:
-commit de122cb920080fd9e24b2777114271fbef932d5e
-Author: Florian Hahn <flo@fhahn.com>
-Date:   Tue Jan 24 20:53:06 2023 +0000
-
-    [SCCP] Use range info to prove AddInst has NUW flag.
-    
-    This patch updates SCCP to use the value ranges of AddInst operands to
-    try to prove the AddInst does not overflow in the unsigned sense and
-    adds the NUW flag. The reasoning is done with
-    makeGuaranteedNoWrapRegion (thanks @nikic for point it out!).
-    
-    Follow-ups will include adding NSW and extension to more
-    OverflowingBinaryOperators.
-    
-    Reviewed By: nikic
-    
-    Differential Revision: https://reviews.llvm.org/D142387
-* llvm-master-aarch64-mainline-allyesconfig
-** Failure after llvmorg-16-init-18491-gde122cb92008: [SCCP] Use range info to prove AddInst has NUW flag.:
-** https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-mainline-allyesconfig/550/
-
-Bad  build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-mainline-allyesconfig/550/artifact/artifacts
-Good build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-mainline-allyesconfig/549/artifact/artifacts
-
-Reproduce current build:
-<cut>
-mkdir -p investigate-llvm-de122cb920080fd9e24b2777114271fbef932d5e
-cd investigate-llvm-de122cb920080fd9e24b2777114271fbef932d5e
-
-# Fetch scripts
-git clone https://git.linaro.org/toolchain/jenkins-scripts
-
-# Fetch manifests for bad and good builds
-mkdir -p bad/artifacts good/artifacts
-curl -o bad/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-mainline-allyesconfig/550/artifact/artifacts/manifest.sh --fail
-curl -o good/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-aarch64-mainline-allyesconfig/549/artifact/artifacts/manifest.sh --fail
-
-# Reproduce bad build
-(cd bad; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-# Reproduce good build
-(cd good; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
-</cut>
-
-Full commit (up to 1000 lines):
-<cut>
-commit de122cb920080fd9e24b2777114271fbef932d5e
-Author: Florian Hahn <flo@fhahn.com>
-Date:   Tue Jan 24 20:53:06 2023 +0000
-
-    [SCCP] Use range info to prove AddInst has NUW flag.
-    
-    This patch updates SCCP to use the value ranges of AddInst operands to
-    try to prove the AddInst does not overflow in the unsigned sense and
-    adds the NUW flag. The reasoning is done with
-    makeGuaranteedNoWrapRegion (thanks @nikic for point it out!).
-    
-    Follow-ups will include adding NSW and extension to more
-    OverflowingBinaryOperators.
-    
-    Reviewed By: nikic
-    
-    Differential Revision: https://reviews.llvm.org/D142387
----
- llvm/lib/Transforms/Utils/SCCPSolver.cpp           | 49 ++++++++++++++++------
- llvm/test/Transforms/SCCP/add-nuw-nsw-flags.ll     | 10 ++---
- llvm/test/Transforms/SCCP/binaryops-constexprs.ll  |  2 +-
- .../SCCP/conditions-ranges-with-undef.ll           |  4 +-
- llvm/test/Transforms/SCCP/conditions-ranges.ll     |  6 +--
- llvm/test/Transforms/SCCP/ip-add-range-to-call.ll  |  2 +-
- llvm/test/Transforms/SCCP/ip-constant-ranges.ll    | 10 ++---
- llvm/test/Transforms/SCCP/ip-ranges-binaryops.ll   | 14 +++----
- llvm/test/Transforms/SCCP/ip-ranges-casts.ll       | 18 ++++----
- llvm/test/Transforms/SCCP/ip-ranges-phis.ll        | 24 +++++------
- llvm/test/Transforms/SCCP/ip-ranges-select.ll      |  4 +-
- llvm/test/Transforms/SCCP/return-argument.ll       |  4 +-
- llvm/test/Transforms/SCCP/return-constants.ll      |  2 +-
- llvm/test/Transforms/SCCP/widening.ll              | 18 ++++----
- 14 files changed, 95 insertions(+), 72 deletions(-)
-
-diff --git a/llvm/lib/Transforms/Utils/SCCPSolver.cpp b/llvm/lib/Transforms/Utils/SCCPSolver.cpp
-index 8d03a0d8a2c4..7b6fc62ac405 100644
---- a/llvm/lib/Transforms/Utils/SCCPSolver.cpp
-+++ b/llvm/lib/Transforms/Utils/SCCPSolver.cpp
-@@ -41,6 +41,14 @@ static ValueLatticeElement::MergeOptions getMaxWidenStepsOpts() {
-       MaxNumRangeExtensions);
- }
+diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
+index cfb5fe9a5e0ee8..27bab42b1ff841 100644
+--- a/drivers/iommu/iommufd/selftest.c
++++ b/drivers/iommu/iommufd/selftest.c
+@@ -274,6 +274,8 @@ static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
+                                    struct iommu_test_cmd *cmd)
+ {
+        static struct bus_type mock_bus = { .iommu_ops = &mock_ops };
++       static struct iommu_device mock_iommu = { .ops = &mock_ops };
++       static struct dev_iommu mock_dev_iommu = { .iommu_dev = &mock_iommu };
+        struct iommufd_hw_pagetable *hwpt;
+        struct selftest_obj *sobj;
+        struct iommufd_ioas *ioas;
+@@ -291,6 +293,7 @@ static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
+        sobj->idev.ictx = ucmd->ictx;
+        sobj->type = TYPE_IDEV;
+        sobj->idev.mock_dev.bus = &mock_bus;
++       sobj->idev.mock_dev.iommu = &mock_dev_iommu;
  
-+static ConstantRange getConstantRange(const ValueLatticeElement &LV, Type *Ty,
-+                                      bool UndefAllowed = true) {
-+  assert(Ty->isIntOrIntVectorTy() && "Should be int or int vector");
-+  if (LV.isConstantRange(UndefAllowed))
-+    return LV.getConstantRange();
-+  return ConstantRange::getFull(Ty->getScalarSizeInBits());
-+}
-+
- namespace llvm {
- 
- bool SCCPSolver::isConstant(const ValueLatticeElement &LV) {
-@@ -115,8 +123,10 @@ bool SCCPSolver::tryToReplaceWithConstant(Value *V) {
-   return true;
- }
- 
--/// Try to replace signed instructions with their unsigned equivalent.
--static bool replaceSignedInst(SCCPSolver &Solver,
-+/// Try to replace refine \p Inst with information of its value ranges from \p
-+/// Solver. For example, SExts are replaced by ZExt, if the value range of the
-+/// result is non-negative.
-+static bool refineInstruction(SCCPSolver &Solver,
-                               SmallPtrSetImpl<Value *> &InsertedValues,
-                               Instruction &Inst) {
-   // Determine if a signed value is known to be >= 0.
-@@ -164,6 +174,29 @@ static bool replaceSignedInst(SCCPSolver &Solver,
-     NewInst = BinaryOperator::Create(NewOpcode, Op0, Op1, "", &Inst);
-     break;
-   }
-+  case Instruction::Add: {
-+    auto GetRange = [&Solver, &InsertedValues](Value *Op) {
-+      unsigned Bitwidth = Op->getType()->getScalarSizeInBits();
-+      if (InsertedValues.contains(Op) || isa<UndefValue>(Op))
-+        return ConstantRange::getFull(Bitwidth);
-+      if (auto *Const = dyn_cast<ConstantInt>(Op))
-+        return ConstantRange(Const->getValue());
-+
-+      return getConstantRange(Solver.getLatticeValueFor(Op), Op->getType(),
-+                              /*UndefAllowed=*/false);
-+    };
-+
-+    auto RangeA = GetRange(Inst.getOperand(0));
-+    auto RangeB = GetRange(Inst.getOperand(1));
-+    auto NUWRange = ConstantRange::makeGuaranteedNoWrapRegion(
-+        Instruction::Add, RangeB, OverflowingBinaryOperator::NoUnsignedWrap);
-+    if (!Inst.hasNoUnsignedWrap() && NUWRange.contains(RangeA)) {
-+      Inst.setHasNoUnsignedWrap();
-+      return true;
-+    }
-+
-+    return false;
-+  }
-   default:
-     return false;
-   }
-@@ -192,7 +225,7 @@ bool SCCPSolver::simplifyInstsInBlock(BasicBlock &BB,
- 
-       MadeChanges = true;
-       ++InstRemovedStat;
--    } else if (replaceSignedInst(*this, InsertedValues, Inst)) {
-+    } else if (refineInstruction(*this, InsertedValues, Inst)) {
-       MadeChanges = true;
-       ++InstReplacedStat;
-     }
-@@ -682,7 +715,6 @@ public:
-   bool isStructLatticeConstant(Function *F, StructType *STy);
- 
-   Constant *getConstant(const ValueLatticeElement &LV) const;
--  ConstantRange getConstantRange(const ValueLatticeElement &LV, Type *Ty) const;
- 
-   SmallPtrSetImpl<Function *> &getArgumentTrackedFunctions() {
-     return TrackingIncomingArguments;
-@@ -783,15 +815,6 @@ Constant *SCCPInstVisitor::getConstant(const ValueLatticeElement &LV) const {
-   return nullptr;
- }
- 
--ConstantRange
--SCCPInstVisitor::getConstantRange(const ValueLatticeElement &LV,
--                                  Type *Ty) const {
--  assert(Ty->isIntOrIntVectorTy() && "Should be int or int vector");
--  if (LV.isConstantRange())
--    return LV.getConstantRange();
--  return ConstantRange::getFull(Ty->getScalarSizeInBits());
--}
--
- void SCCPInstVisitor::markArgInFuncSpecialization(
-     Function *F, const SmallVectorImpl<ArgInfo> &Args) {
-   assert(!Args.empty() && "Specialization without arguments");
-diff --git a/llvm/test/Transforms/SCCP/add-nuw-nsw-flags.ll b/llvm/test/Transforms/SCCP/add-nuw-nsw-flags.ll
-index 6ab9c41c20f6..a6f5f176e5ad 100644
---- a/llvm/test/Transforms/SCCP/add-nuw-nsw-flags.ll
-+++ b/llvm/test/Transforms/SCCP/add-nuw-nsw-flags.ll
-@@ -5,8 +5,8 @@ define i8 @range_from_lshr(i8 %a) {
- ; CHECK-LABEL: @range_from_lshr(
- ; CHECK-NEXT:  entry:
- ; CHECK-NEXT:    [[A_SHR:%.*]] = lshr i8 [[A:%.*]], 1
--; CHECK-NEXT:    [[ADD_1:%.*]] = add i8 [[A_SHR]], 1
--; CHECK-NEXT:    [[ADD_2:%.*]] = add i8 [[A_SHR]], -128
-+; CHECK-NEXT:    [[ADD_1:%.*]] = add nuw i8 [[A_SHR]], 1
-+; CHECK-NEXT:    [[ADD_2:%.*]] = add nuw i8 [[A_SHR]], -128
- ; CHECK-NEXT:    [[ADD_3:%.*]] = add i8 [[A_SHR]], -127
- ; CHECK-NEXT:    [[ADD_4:%.*]] = add i8 [[A_SHR]], -1
- ; CHECK-NEXT:    [[RES_1:%.*]] = xor i8 [[ADD_1]], [[ADD_2]]
-@@ -30,7 +30,7 @@ define i8 @a_and_15_add_1(i8 %a) {
- ; CHECK-LABEL: @a_and_15_add_1(
- ; CHECK-NEXT:  entry:
- ; CHECK-NEXT:    [[A_AND:%.*]] = and i8 [[A:%.*]], 15
--; CHECK-NEXT:    [[ADD_1:%.*]] = add i8 [[A_AND]], 1
-+; CHECK-NEXT:    [[ADD_1:%.*]] = add nuw i8 [[A_AND]], 1
- ; CHECK-NEXT:    ret i8 [[ADD_1]]
- ;
- entry:
-@@ -73,9 +73,9 @@ define i8 @sge_0_and_sle_90(i8 %a) {
- ; CHECK-NEXT:    [[AND:%.*]] = and i1 [[SGT]], [[SLT]]
- ; CHECK-NEXT:    br i1 [[AND]], label [[THEN:%.*]], label [[ELSE:%.*]]
- ; CHECK:       then:
--; CHECK-NEXT:    [[ADD_1:%.*]] = add i8 [[A]], 1
-+; CHECK-NEXT:    [[ADD_1:%.*]] = add nuw i8 [[A]], 1
- ; CHECK-NEXT:    [[ADD_2:%.*]] = add i8 [[A]], -1
--; CHECK-NEXT:    [[ADD_3:%.*]] = add i8 [[A]], -91
-+; CHECK-NEXT:    [[ADD_3:%.*]] = add nuw i8 [[A]], -91
- ; CHECK-NEXT:    [[ADD_4:%.*]] = add i8 [[A]], -90
- ; CHECK-NEXT:    [[RES_1:%.*]] = xor i8 [[ADD_1]], [[ADD_2]]
- ; CHECK-NEXT:    [[RES_2:%.*]] = xor i8 [[RES_1]], [[ADD_3]]
-diff --git a/llvm/test/Transforms/SCCP/binaryops-constexprs.ll b/llvm/test/Transforms/SCCP/binaryops-constexprs.ll
-index 43dacf23effd..ae69af82e68f 100644
---- a/llvm/test/Transforms/SCCP/binaryops-constexprs.ll
-+++ b/llvm/test/Transforms/SCCP/binaryops-constexprs.ll
-@@ -36,7 +36,7 @@ entry:
- define void @add_constexpr(i32 %a) {
- ; CHECK-LABEL: @add_constexpr(
- ; CHECK-NEXT:  entry:
--; CHECK-NEXT:    [[ADD_1:%.*]] = add i32 0, [[A:%.*]]
-+; CHECK-NEXT:    [[ADD_1:%.*]] = add nuw i32 0, [[A:%.*]]
- ; CHECK-NEXT:    call void @use.i32(i32 [[ADD_1]])
- ; CHECK-NEXT:    [[ADD_2:%.*]] = add i32 20, [[A]]
- ; CHECK-NEXT:    call void @use.i32(i32 [[ADD_2]])
-diff --git a/llvm/test/Transforms/SCCP/conditions-ranges-with-undef.ll b/llvm/test/Transforms/SCCP/conditions-ranges-with-undef.ll
-index ea45bc190657..78ad64b0a25b 100644
---- a/llvm/test/Transforms/SCCP/conditions-ranges-with-undef.ll
-+++ b/llvm/test/Transforms/SCCP/conditions-ranges-with-undef.ll
-@@ -8,7 +8,7 @@ declare void @use(i1)
- define void @val_undef_eq() {
- ; CHECK-LABEL: @val_undef_eq(
- ; CHECK-NEXT:  entry:
--; CHECK-NEXT:    [[A:%.*]] = add i32 undef, 0
-+; CHECK-NEXT:    [[A:%.*]] = add nuw i32 undef, 0
- ; CHECK-NEXT:    [[BC_1:%.*]] = icmp eq i32 [[A]], 10
- ; CHECK-NEXT:    br i1 [[BC_1]], label [[TRUE:%.*]], label [[FALSE:%.*]]
- ; CHECK:       true:
-@@ -41,7 +41,7 @@ declare void @use.i32(i32)
- define void @val_undef_range() {
- ; CHECK-LABEL: @val_undef_range(
- ; CHECK-NEXT:  entry:
--; CHECK-NEXT:    [[A:%.*]] = add i32 undef, 0
-+; CHECK-NEXT:    [[A:%.*]] = add nuw i32 undef, 0
- ; CHECK-NEXT:    [[BC_1:%.*]] = icmp ult i32 [[A]], 127
- ; CHECK-NEXT:    br i1 [[BC_1]], label [[TRUE:%.*]], label [[FALSE:%.*]]
- ; CHECK:       true:
-diff --git a/llvm/test/Transforms/SCCP/conditions-ranges.ll b/llvm/test/Transforms/SCCP/conditions-ranges.ll
-index 3de2e9ca72a9..a271e4d0064a 100644
---- a/llvm/test/Transforms/SCCP/conditions-ranges.ll
-+++ b/llvm/test/Transforms/SCCP/conditions-ranges.ll
-@@ -7,7 +7,7 @@ define void @f1(i32 %a, i32 %b) {
- ; CHECK-LABEL: @f1(
- ; CHECK-NEXT:  entry:
- ; CHECK-NEXT:    [[A_255:%.*]] = and i32 [[A:%.*]], 255
--; CHECK-NEXT:    [[A_2:%.*]] = add i32 [[A_255]], 20
-+; CHECK-NEXT:    [[A_2:%.*]] = add nuw i32 [[A_255]], 20
- ; CHECK-NEXT:    [[BC:%.*]] = icmp ugt i32 [[B:%.*]], [[A_2]]
- ; CHECK-NEXT:    br i1 [[BC]], label [[TRUE:%.*]], label [[FALSE:%.*]]
- ; CHECK:       true:
-@@ -260,7 +260,7 @@ define void @f8_nested_conds(i32 %a, i32 %b) {
- ; CHECK-LABEL: @f8_nested_conds(
- ; CHECK-NEXT:  entry:
- ; CHECK-NEXT:    [[A_255:%.*]] = and i32 [[A:%.*]], 255
--; CHECK-NEXT:    [[A_2:%.*]] = add i32 [[A_255]], 20
-+; CHECK-NEXT:    [[A_2:%.*]] = add nuw i32 [[A_255]], 20
- ; CHECK-NEXT:    [[BC_1:%.*]] = icmp ugt i32 [[B:%.*]], [[A_2]]
- ; CHECK-NEXT:    br i1 [[BC_1]], label [[TRUE:%.*]], label [[FALSE:%.*]]
- ; CHECK:       true:
-@@ -718,7 +718,7 @@ define void @loop() {
- ; CHECK-NEXT:    [[INC27]] = add nsw i32 [[I_0]], 1
- ; CHECK-NEXT:    br label [[FOR_COND]]
- ; CHECK:       for.body14:
--; CHECK-NEXT:    [[INC]] = add nsw i32 [[J_0]], 1
-+; CHECK-NEXT:    [[INC]] = add nuw nsw i32 [[J_0]], 1
- ; CHECK-NEXT:    br label [[FOR_COND11]]
- ;
- entry:
-diff --git a/llvm/test/Transforms/SCCP/ip-add-range-to-call.ll b/llvm/test/Transforms/SCCP/ip-add-range-to-call.ll
-index c114b7a95639..331f05088ab9 100644
---- a/llvm/test/Transforms/SCCP/ip-add-range-to-call.ll
-+++ b/llvm/test/Transforms/SCCP/ip-add-range-to-call.ll
-@@ -15,7 +15,7 @@ define i32 @caller1() {
- ; CHECK-LABEL: @caller1(
- ; CHECK-NEXT:    [[C1:%.*]] = call i32 @callee(i32 10), !range [[RNG0:![0-9]+]]
- ; CHECK-NEXT:    [[C2:%.*]] = call i32 @callee(i32 20), !range [[RNG0]]
--; CHECK-NEXT:    [[A:%.*]] = add i32 [[C1]], [[C2]]
-+; CHECK-NEXT:    [[A:%.*]] = add nuw i32 [[C1]], [[C2]]
- ; CHECK-NEXT:    ret i32 [[A]]
- ;
-   %c1 = call i32 @callee(i32 10)
-diff --git a/llvm/test/Transforms/SCCP/ip-constant-ranges.ll b/llvm/test/Transforms/SCCP/ip-constant-ranges.ll
-index 72f308bcd7ce..6e805f52e892 100644
---- a/llvm/test/Transforms/SCCP/ip-constant-ranges.ll
-+++ b/llvm/test/Transforms/SCCP/ip-constant-ranges.ll
-@@ -33,9 +33,9 @@ define internal i32 @f2(i32 %x) {
- ; CHECK-NEXT:    [[CMP4:%.*]] = icmp ugt i32 [[X]], 300
- ; CHECK-NEXT:    [[RES1:%.*]] = select i1 [[CMP]], i32 1, i32 2
- ; CHECK-NEXT:    [[RES4:%.*]] = select i1 [[CMP4]], i32 3, i32 4
--; CHECK-NEXT:    [[RES6:%.*]] = add i32 [[RES1]], 3
--; CHECK-NEXT:    [[RES7:%.*]] = add i32 5, [[RES4]]
--; CHECK-NEXT:    [[RES:%.*]] = add i32 [[RES6]], 5
-+; CHECK-NEXT:    [[RES6:%.*]] = add nuw i32 [[RES1]], 3
-+; CHECK-NEXT:    [[RES7:%.*]] = add nuw i32 5, [[RES4]]
-+; CHECK-NEXT:    [[RES:%.*]] = add nuw i32 [[RES6]], 5
- ; CHECK-NEXT:    ret i32 [[RES]]
- ;
- entry:
-@@ -63,8 +63,8 @@ define i32 @caller1() {
- ; CHECK-NEXT:    [[CALL2:%.*]] = tail call i32 @f1(i32 47, i32 999)
- ; CHECK-NEXT:    [[CALL3:%.*]] = tail call i32 @f2(i32 47)
- ; CHECK-NEXT:    [[CALL4:%.*]] = tail call i32 @f2(i32 301)
--; CHECK-NEXT:    [[RES_1:%.*]] = add nsw i32 12, [[CALL3]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add nsw i32 [[RES_1]], [[CALL4]]
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw nsw i32 12, [[CALL3]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw nsw i32 [[RES_1]], [[CALL4]]
- ; CHECK-NEXT:    ret i32 [[RES_2]]
- ;
- entry:
-diff --git a/llvm/test/Transforms/SCCP/ip-ranges-binaryops.ll b/llvm/test/Transforms/SCCP/ip-ranges-binaryops.ll
-index ab57d7aef4b9..2d29597b48c7 100644
---- a/llvm/test/Transforms/SCCP/ip-ranges-binaryops.ll
-+++ b/llvm/test/Transforms/SCCP/ip-ranges-binaryops.ll
-@@ -5,13 +5,13 @@
- ; x + y = [110, 221)
- define internal i1 @f.add(i32 %x, i32 %y) {
- ; CHECK-LABEL: @f.add(
--; CHECK-NEXT:    [[A_1:%.*]] = add i32 [[X:%.*]], [[Y:%.*]]
-+; CHECK-NEXT:    [[A_1:%.*]] = add nuw i32 [[X:%.*]], [[Y:%.*]]
- ; CHECK-NEXT:    [[C_2:%.*]] = icmp sgt i32 [[A_1]], 219
- ; CHECK-NEXT:    [[C_4:%.*]] = icmp slt i32 [[A_1]], 111
- ; CHECK-NEXT:    [[C_5:%.*]] = icmp eq i32 [[A_1]], 150
- ; CHECK-NEXT:    [[C_6:%.*]] = icmp slt i32 [[A_1]], 150
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], false
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw i1 [[RES_1]], false
- ; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], [[C_4]]
- ; CHECK-NEXT:    [[RES_4:%.*]] = add i1 [[RES_3]], [[C_5]]
- ; CHECK-NEXT:    [[RES_5:%.*]] = add i1 [[RES_4]], [[C_6]]
-@@ -55,8 +55,8 @@ define internal i1 @f.sub(i32 %x, i32 %y) {
- ; CHECK-NEXT:    [[C_4:%.*]] = icmp slt i32 [[A_1]], -189
- ; CHECK-NEXT:    [[C_5:%.*]] = icmp eq i32 [[A_1]], -150
- ; CHECK-NEXT:    [[C_6:%.*]] = icmp slt i32 [[A_1]], -150
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], false
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw i1 [[RES_1]], false
- ; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], [[C_4]]
- ; CHECK-NEXT:    [[RES_4:%.*]] = add i1 [[RES_3]], [[C_5]]
- ; CHECK-NEXT:    [[RES_5:%.*]] = add i1 [[RES_4]], [[C_6]]
-@@ -99,8 +99,8 @@ define internal i1 @f.mul(i32 %x, i32 %y) {
- ; CHECK-NEXT:    [[C_4:%.*]] = icmp slt i32 [[A_1]], 1001
- ; CHECK-NEXT:    [[C_5:%.*]] = icmp eq i32 [[A_1]], 1500
- ; CHECK-NEXT:    [[C_6:%.*]] = icmp slt i32 [[A_1]], 1500
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], false
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw i1 [[RES_1]], false
- ; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], [[C_4]]
- ; CHECK-NEXT:    [[RES_4:%.*]] = add i1 [[RES_3]], [[C_5]]
- ; CHECK-NEXT:    [[RES_5:%.*]] = add i1 [[RES_4]], [[C_6]]
-diff --git a/llvm/test/Transforms/SCCP/ip-ranges-casts.ll b/llvm/test/Transforms/SCCP/ip-ranges-casts.ll
-index bcbddb3c6b95..305c6231208c 100644
---- a/llvm/test/Transforms/SCCP/ip-ranges-casts.ll
-+++ b/llvm/test/Transforms/SCCP/ip-ranges-casts.ll
-@@ -7,8 +7,8 @@ define internal i1 @f.trunc(i32 %x) {
- ; CHECK-NEXT:    [[T_1:%.*]] = trunc i32 [[X:%.*]] to i16
- ; CHECK-NEXT:    [[C_2:%.*]] = icmp sgt i16 [[T_1]], 299
- ; CHECK-NEXT:    [[C_4:%.*]] = icmp slt i16 [[T_1]], 101
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], false
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw i1 [[RES_1]], false
- ; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], [[C_4]]
- ; CHECK-NEXT:    [[T_2:%.*]] = trunc i32 [[X]] to i8
- ; CHECK-NEXT:    [[C_5:%.*]] = icmp sgt i8 [[T_2]], 44
-@@ -62,8 +62,8 @@ define internal i1 @f.zext(i32 %x, i32 %y) {
- ; CHECK-NEXT:    [[T_1:%.*]] = zext i32 [[X:%.*]] to i64
- ; CHECK-NEXT:    [[C_2:%.*]] = icmp sgt i64 [[T_1]], 299
- ; CHECK-NEXT:    [[C_4:%.*]] = icmp slt i64 [[T_1]], 101
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], false
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw i1 [[RES_1]], false
- ; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], [[C_4]]
- ; CHECK-NEXT:    [[T_2:%.*]] = zext i32 [[Y:%.*]] to i64
- ; CHECK-NEXT:    [[C_5:%.*]] = icmp sgt i64 [[T_2]], 300
-@@ -71,7 +71,7 @@ define internal i1 @f.zext(i32 %x, i32 %y) {
- ; CHECK-NEXT:    [[C_8:%.*]] = icmp slt i64 [[T_2]], 1
- ; CHECK-NEXT:    [[RES_4:%.*]] = add i1 [[RES_3]], [[C_5]]
- ; CHECK-NEXT:    [[RES_5:%.*]] = add i1 [[RES_4]], [[C_6]]
--; CHECK-NEXT:    [[RES_6:%.*]] = add i1 [[RES_5]], false
-+; CHECK-NEXT:    [[RES_6:%.*]] = add nuw i1 [[RES_5]], false
- ; CHECK-NEXT:    [[RES_7:%.*]] = add i1 [[RES_6]], [[C_8]]
- ; CHECK-NEXT:    ret i1 [[RES_7]]
- ;
-@@ -115,15 +115,15 @@ define internal i1 @f.sext(i32 %x, i32 %y) {
- ; CHECK-NEXT:    [[T_1:%.*]] = zext i32 [[X:%.*]] to i64
- ; CHECK-NEXT:    [[C_2:%.*]] = icmp sgt i64 [[T_1]], 299
- ; CHECK-NEXT:    [[C_4:%.*]] = icmp slt i64 [[T_1]], 101
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
--; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], false
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_2:%.*]] = add nuw i1 [[RES_1]], false
- ; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], [[C_4]]
- ; CHECK-NEXT:    [[T_2:%.*]] = sext i32 [[Y:%.*]] to i64
- ; CHECK-NEXT:    [[C_6:%.*]] = icmp sgt i64 [[T_2]], 899
- ; CHECK-NEXT:    [[C_8:%.*]] = icmp slt i64 [[T_2]], -119
--; CHECK-NEXT:    [[RES_4:%.*]] = add i1 [[RES_3]], false
-+; CHECK-NEXT:    [[RES_4:%.*]] = add nuw i1 [[RES_3]], false
- ; CHECK-NEXT:    [[RES_5:%.*]] = add i1 [[RES_4]], [[C_6]]
--; CHECK-NEXT:    [[RES_6:%.*]] = add i1 [[RES_5]], false
-+; CHECK-NEXT:    [[RES_6:%.*]] = add nuw i1 [[RES_5]], false
- ; CHECK-NEXT:    [[RES_7:%.*]] = add i1 [[RES_6]], [[C_8]]
- ; CHECK-NEXT:    ret i1 [[RES_7]]
- ;
-diff --git a/llvm/test/Transforms/SCCP/ip-ranges-phis.ll b/llvm/test/Transforms/SCCP/ip-ranges-phis.ll
-index 42a4bd9cf227..7f1e14dc33ea 100644
---- a/llvm/test/Transforms/SCCP/ip-ranges-phis.ll
-+++ b/llvm/test/Transforms/SCCP/ip-ranges-phis.ll
-@@ -55,12 +55,12 @@ define internal i32 @f2(i32 %x, i32 %y, i32 %z, i1 %cmp.1, i1 %cmp.2) {
- ; CHECK-NEXT:    [[V_1:%.*]] = select i1 [[C_1]], i32 10, i32 100
- ; CHECK-NEXT:    [[V_2:%.*]] = select i1 [[C_2]], i32 20, i32 200
- ; CHECK-NEXT:    [[V_3:%.*]] = select i1 [[C_3]], i32 30, i32 300
--; CHECK-NEXT:    [[R_1:%.*]] = add i32 [[V_1]], [[V_2]]
--; CHECK-NEXT:    [[R_2:%.*]] = add i32 [[R_1]], [[V_3]]
--; CHECK-NEXT:    [[R_3:%.*]] = add i32 [[R_2]], 400
--; CHECK-NEXT:    [[R_4:%.*]] = add i32 [[R_3]], 50
--; CHECK-NEXT:    [[R_5:%.*]] = add i32 [[R_4]], 60
--; CHECK-NEXT:    [[R_6:%.*]] = add i32 [[R_4]], 700
-+; CHECK-NEXT:    [[R_1:%.*]] = add nuw i32 [[V_1]], [[V_2]]
-+; CHECK-NEXT:    [[R_2:%.*]] = add nuw i32 [[R_1]], [[V_3]]
-+; CHECK-NEXT:    [[R_3:%.*]] = add nuw i32 [[R_2]], 400
-+; CHECK-NEXT:    [[R_4:%.*]] = add nuw i32 [[R_3]], 50
-+; CHECK-NEXT:    [[R_5:%.*]] = add nuw i32 [[R_4]], 60
-+; CHECK-NEXT:    [[R_6:%.*]] = add nuw i32 [[R_4]], 700
- ; CHECK-NEXT:    ret i32 [[R_6]]
- ;
- 
-@@ -154,12 +154,12 @@ define internal i32 @f3(i32 %x, i32 %y, i1 %cmp.1) {
- ; CHECK-NEXT:    [[V_5:%.*]] = select i1 [[C_5]], i32 50, i32 500
- ; CHECK-NEXT:    [[V_6:%.*]] = select i1 [[C_6]], i32 60, i32 600
- ; CHECK-NEXT:    [[V_7:%.*]] = select i1 [[C_7]], i32 70, i32 700
--; CHECK-NEXT:    [[R_1:%.*]] = add i32 [[V_1]], [[V_2]]
--; CHECK-NEXT:    [[R_2:%.*]] = add i32 [[R_1]], [[V_3]]
--; CHECK-NEXT:    [[R_3:%.*]] = add i32 [[R_2]], [[V_4]]
--; CHECK-NEXT:    [[R_4:%.*]] = add i32 [[R_3]], [[V_5]]
--; CHECK-NEXT:    [[R_5:%.*]] = add i32 [[R_4]], [[V_6]]
--; CHECK-NEXT:    [[R_6:%.*]] = add i32 [[R_4]], [[V_7]]
-+; CHECK-NEXT:    [[R_1:%.*]] = add nuw i32 [[V_1]], [[V_2]]
-+; CHECK-NEXT:    [[R_2:%.*]] = add nuw i32 [[R_1]], [[V_3]]
-+; CHECK-NEXT:    [[R_3:%.*]] = add nuw i32 [[R_2]], [[V_4]]
-+; CHECK-NEXT:    [[R_4:%.*]] = add nuw i32 [[R_3]], [[V_5]]
-+; CHECK-NEXT:    [[R_5:%.*]] = add nuw i32 [[R_4]], [[V_6]]
-+; CHECK-NEXT:    [[R_6:%.*]] = add nuw i32 [[R_4]], [[V_7]]
- ; CHECK-NEXT:    ret i32 [[R_6]]
- ;
- 
-diff --git a/llvm/test/Transforms/SCCP/ip-ranges-select.ll b/llvm/test/Transforms/SCCP/ip-ranges-select.ll
-index 2173580cafb2..421fc3c5a2f8 100644
---- a/llvm/test/Transforms/SCCP/ip-ranges-select.ll
-+++ b/llvm/test/Transforms/SCCP/ip-ranges-select.ll
-@@ -44,9 +44,9 @@ define internal i1 @f1(i32 %x, i32 %y, i1 %cmp) {
- ; CHECK-NEXT:    [[SEL_1:%.*]] = select i1 [[CMP]], i32 [[X]], i32 [[Y]]
- ; CHECK-NEXT:    [[C_2:%.*]] = icmp sgt i32 [[SEL_1]], 100
- ; CHECK-NEXT:    [[C_3:%.*]] = icmp eq i32 [[SEL_1]], 50
--; CHECK-NEXT:    [[RES_1:%.*]] = add i1 false, [[C_2]]
-+; CHECK-NEXT:    [[RES_1:%.*]] = add nuw i1 false, [[C_2]]
- ; CHECK-NEXT:    [[RES_2:%.*]] = add i1 [[RES_1]], [[C_3]]
--; CHECK-NEXT:    [[RES_3:%.*]] = add i1 [[RES_2]], false
-+; CHECK-NEXT:    [[RES_3:%.*]] = add nuw i1 [[RES_2]], false
- ; CHECK-NEXT:    ret i1 [[RES_3]]
- ;
-   %sel.1 = select i1 %cmp, i32 %x, i32 %y
-diff --git a/llvm/test/Transforms/SCCP/return-argument.ll b/llvm/test/Transforms/SCCP/return-argument.ll
-index 3995966f994a..51a44fdd8b9f 100644
---- a/llvm/test/Transforms/SCCP/return-argument.ll
-+++ b/llvm/test/Transforms/SCCP/return-argument.ll
-@@ -33,7 +33,7 @@ F:              ; preds = %0
- ;; value
- define internal { i32, i32 } @foo(i32 %A, i32 %B) {
- ; CHECK-LABEL: @foo(
--; CHECK-NEXT:    [[X:%.*]] = add i32 [[A:%.*]], [[B:%.*]]
-+; CHECK-NEXT:    [[X:%.*]] = add nuw i32 [[A:%.*]], [[B:%.*]]
- ; CHECK-NEXT:    [[Y:%.*]] = insertvalue { i32, i32 } undef, i32 [[A]], 0
- ; CHECK-NEXT:    [[Z:%.*]] = insertvalue { i32, i32 } [[Y]], i32 [[X]], 1
- ; CHECK-NEXT:    ret { i32, i32 } [[Z]]
-@@ -54,7 +54,7 @@ define void @caller(i1 %C) personality ptr @__gxx_personality_v0 {
- ; CHECK-NEXT:    to label [[OK:%.*]] unwind label [[LPAD:%.*]]
- ; CHECK:       OK:
- ; CHECK-NEXT:    [[X2:%.*]] = extractvalue { i32, i32 } [[S2]], 0
--; CHECK-NEXT:    [[Z:%.*]] = add i32 [[X1]], [[X2]]
-+; CHECK-NEXT:    [[Z:%.*]] = add nuw i32 [[X1]], [[X2]]
- ; CHECK-NEXT:    store i32 [[Z]], ptr [[W]], align 4
- ; CHECK-NEXT:    br label [[RET:%.*]]
- ; CHECK:       LPAD:
-diff --git a/llvm/test/Transforms/SCCP/return-constants.ll b/llvm/test/Transforms/SCCP/return-constants.ll
-index 9f48844c0225..4286382a5bc9 100644
---- a/llvm/test/Transforms/SCCP/return-constants.ll
-+++ b/llvm/test/Transforms/SCCP/return-constants.ll
-@@ -50,7 +50,7 @@ define %0 @caller(i1 %Q) {
- ; CHECK-NEXT:    [[B:%.*]] = extractvalue [[TMP0]] [[X]], 1
- ; CHECK-NEXT:    [[Y:%.*]] = call [[TMP0]] @bar(i1 [[Q]])
- ; CHECK-NEXT:    [[D:%.*]] = extractvalue [[TMP0]] [[Y]], 1
--; CHECK-NEXT:    [[N:%.*]] = add i32 [[B]], [[D]]
-+; CHECK-NEXT:    [[N:%.*]] = add nuw i32 [[B]], [[D]]
- ; CHECK-NEXT:    ret [[TMP0]] [[X]]
- ;
-   %X = call %0 @foo(i1 %Q)
-diff --git a/llvm/test/Transforms/SCCP/widening.ll b/llvm/test/Transforms/SCCP/widening.ll
-index 68158654185f..3f43b0a15c52 100644
---- a/llvm/test/Transforms/SCCP/widening.ll
-+++ b/llvm/test/Transforms/SCCP/widening.ll
-@@ -16,7 +16,7 @@ define void @test_2_incoming_constants(i32 %x) {
- ; SCCP-NEXT:    br label [[EXIT]]
- ; SCCP:       exit:
- ; SCCP-NEXT:    [[P:%.*]] = phi i32 [ 0, [[ENTRY:%.*]] ], [ 1, [[BB1]] ]
--; SCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; SCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; SCCP-NEXT:    call void @use(i1 true)
- ; SCCP-NEXT:    call void @use(i1 false)
- ; SCCP-NEXT:    ret void
-@@ -29,7 +29,7 @@ define void @test_2_incoming_constants(i32 %x) {
- ; IPSCCP-NEXT:    br label [[EXIT]]
- ; IPSCCP:       exit:
- ; IPSCCP-NEXT:    [[P:%.*]] = phi i32 [ 0, [[ENTRY:%.*]] ], [ 1, [[BB1]] ]
--; IPSCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; IPSCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; IPSCCP-NEXT:    call void @use(i1 true)
- ; IPSCCP-NEXT:    call void @use(i1 false)
- ; IPSCCP-NEXT:    ret void
-@@ -63,7 +63,7 @@ define void @test_3_incoming_constants(i32 %x) {
- ; SCCP-NEXT:    br label [[EXIT]]
- ; SCCP:       exit:
- ; SCCP-NEXT:    [[P:%.*]] = phi i32 [ 0, [[ENTRY:%.*]] ], [ 1, [[BB1]] ], [ 2, [[BB2]] ]
--; SCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; SCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; SCCP-NEXT:    call void @use(i1 true)
- ; SCCP-NEXT:    call void @use(i1 false)
- ; SCCP-NEXT:    ret void
-@@ -79,7 +79,7 @@ define void @test_3_incoming_constants(i32 %x) {
- ; IPSCCP-NEXT:    br label [[EXIT]]
- ; IPSCCP:       exit:
- ; IPSCCP-NEXT:    [[P:%.*]] = phi i32 [ 0, [[ENTRY:%.*]] ], [ 1, [[BB1]] ], [ 2, [[BB2]] ]
--; IPSCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; IPSCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; IPSCCP-NEXT:    call void @use(i1 true)
- ; IPSCCP-NEXT:    call void @use(i1 false)
- ; IPSCCP-NEXT:    ret void
-@@ -123,7 +123,7 @@ define void @test_5_incoming_constants(i32 %x) {
- ; SCCP-NEXT:    br label [[EXIT]]
- ; SCCP:       exit:
- ; SCCP-NEXT:    [[P:%.*]] = phi i32 [ 0, [[ENTRY:%.*]] ], [ 1, [[BB1]] ], [ 2, [[BB2]] ], [ 3, [[BB3]] ], [ 4, [[BB4]] ]
--; SCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; SCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; SCCP-NEXT:    call void @use(i1 true)
- ; SCCP-NEXT:    call void @use(i1 false)
- ; SCCP-NEXT:    ret void
-@@ -145,7 +145,7 @@ define void @test_5_incoming_constants(i32 %x) {
- ; IPSCCP-NEXT:    br label [[EXIT]]
- ; IPSCCP:       exit:
- ; IPSCCP-NEXT:    [[P:%.*]] = phi i32 [ 0, [[ENTRY:%.*]] ], [ 1, [[BB1]] ], [ 2, [[BB2]] ], [ 3, [[BB3]] ], [ 4, [[BB4]] ]
--; IPSCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; IPSCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; IPSCCP-NEXT:    call void @use(i1 true)
- ; IPSCCP-NEXT:    call void @use(i1 false)
- ; IPSCCP-NEXT:    ret void
-@@ -196,7 +196,7 @@ define void @rotated_loop_2(i32 %x) {
- ; SCCP-NEXT:    br label [[EXIT]]
- ; SCCP:       exit:
- ; SCCP-NEXT:    [[P:%.*]] = phi i32 [ 1, [[ENTRY:%.*]] ], [ 3, [[BB1]] ], [ 2, [[BB2]] ], [ 5, [[BB3]] ]
--; SCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; SCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; SCCP-NEXT:    call void @use(i1 true)
- ; SCCP-NEXT:    call void @use(i1 false)
- ; SCCP-NEXT:    br label [[EXIT_1:%.*]]
-@@ -217,7 +217,7 @@ define void @rotated_loop_2(i32 %x) {
- ; IPSCCP-NEXT:    br label [[EXIT]]
- ; IPSCCP:       exit:
- ; IPSCCP-NEXT:    [[P:%.*]] = phi i32 [ 1, [[ENTRY:%.*]] ], [ 3, [[BB1]] ], [ 2, [[BB2]] ], [ 5, [[BB3]] ]
--; IPSCCP-NEXT:    [[A:%.*]] = add i32 [[P]], 1
-+; IPSCCP-NEXT:    [[A:%.*]] = add nuw i32 [[P]], 1
- ; IPSCCP-NEXT:    call void @use(i1 true)
- ; IPSCCP-NEXT:    call void @use(i1 false)
- ; IPSCCP-NEXT:    br label [[EXIT_1:%.*]]
-@@ -358,7 +358,7 @@ define void @loop_with_header_1(i32 %x) {
- ; IPSCCP-NEXT:    br i1 [[C_1]], label [[LOOP_BODY]], label [[EXIT:%.*]]
- ; IPSCCP:       loop.body:
- ; IPSCCP-NEXT:    call void @use(i1 true)
--; IPSCCP-NEXT:    [[IV_NEXT]] = add nsw i32 [[IV]], 1
-+; IPSCCP-NEXT:    [[IV_NEXT]] = add nuw nsw i32 [[IV]], 1
- ; IPSCCP-NEXT:    br label [[LOOP_HEADER]]
- ; IPSCCP:       exit:
- ; IPSCCP-NEXT:    ret void
-</cut>
-------=_Part_6874_1020568495.1675086509127--
+        hwpt = iommufd_device_selftest_attach(ucmd->ictx, ioas,
+                                              &sobj->idev.mock_dev);
+
+And then delete mock_bus at this patch
+
+Jason
