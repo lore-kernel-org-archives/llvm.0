@@ -1,126 +1,129 @@
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683003C13
-	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 16:24:30 +0000 (UTC)
-Received: by mail-vs1-f47.google.com with SMTP id k4so13074355vsc.4
-        for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 08:24:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TNjcl9ue4Yo+C3qXNF3I2IXLdPdV2VfDLb5UgrGwaNI=;
-        b=WtpdVSeOyj3NqmS8x1J7iyhRv/V7ha9AnHL68DNjFluRRqNbJK88sYdxcMnhkY8t6X
-         IFa4EfhuyatIkNKRKGkm9n+gDO0OX36QOSZ+tNcPWDzSffM3emrKCn8Da45DzuF8dJUT
-         ZmZlwopPfGtyO1AJaR6YCWLepNYkHtk3IFMrqL8qZfnPi86PsUI6yQ0X3Z9Lf7Fdgw4B
-         J6p5P3SBEf8maYUzvmVH64dIuvoot3NyC4rVF+MRJ+jiqD9lVJN7osAxX7oQ5ZEChSJX
-         Fisw6C68uToeMVoQj26/eL1mp7XloiMme5kZB+/UcvnYm07/ovfa4VCRT31K7f3vvLZJ
-         BrtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TNjcl9ue4Yo+C3qXNF3I2IXLdPdV2VfDLb5UgrGwaNI=;
-        b=CLiBKnLbILj+NhO4tzhivUAWQv7Yj0enfYDjChaB5sSIdiHjqmNyYftptUTXL9HwJo
-         PeRl8amXIuy5TCUGiMPU5XsLmNJMpSKnmHonqpFX0uXcYLvdONd0NF7eVxBZZe3AptFW
-         AwWp2jtv2ipI9JFN4gzy4lMfk/7I6G8H4oYlRMkR4xZkbnEl/CesGiv7dYAbyeiXR38O
-         SWSz2EDuOV9eim7i7m+X/hwUW9+NvdoslmpmEOtJVRT9npwfXhVBKIBHdPLdyk0YwdRX
-         PWt26MICJ1KU1Pq+CVsjcGeFzPZZdIHnx/Zarp9DpEBZ+cSWGDp37Ikj1e+ZljtaktKu
-         bq7Q==
-X-Gm-Message-State: AFqh2kqeBtFOBFWI8bIFLMLjf88RNUaoVev3eNRmtn9s/mVLTEZmjtzm
-	JSCzxVBSgyokgNzKva+/Qd2TiY/ilS0cwB//y0uwQw==
-X-Google-Smtp-Source: AMrXdXvS2Xawh4TMY7nGcG42X6+jgpIxV+dRdppy1YUwAh+MSFiMtT/oSRraGGu4VgjT0QR7HOIsuVThWjRInNDG+YU=
-X-Received: by 2002:a05:6102:5587:b0:3d1:2167:11ad with SMTP id
- dc7-20020a056102558700b003d1216711admr6493306vsb.2.1675095869214; Mon, 30 Jan
- 2023 08:24:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715B13D70;
+	Mon, 30 Jan 2023 16:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675096156; x=1706632156;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uOmtD6DCGmXjAqhlbykYDDLsIlNqsOOlSUyaWVTsLu8=;
+  b=FOvTT9jJGOsKQPRiwwKgBGdsIpHBKpRtrcOU5cEvo26rRi6C7vUAfPIt
+   mpY3jXgciAdYqWozUNQE6D/6z7AN3tAVCTGYrvvF8XmmG12nhUSz6/sF3
+   jPLOa8cBxKaOOwWjfdlbeASLyJhZjveQcsbmnN4AZxoRfO2uEZj1I11Vx
+   Ji2IbwsxuZN1Av1+e8/aeJxqyKnyFrubxz8PKmi3i+yO/ci7J1aNsVEqa
+   Qd4zjDPmu1MCAQtQ/UJ2/V/QMmQJ22R3uNtYexRTbVhsxpqn0Rd1+LRs6
+   T2bJkaD627qDFmPrxdlJQdOH6B0ufDtVlnV/cbuTxYovyR815+9vaYqXv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328879382"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="328879382"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 08:29:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="664153599"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="664153599"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 30 Jan 2023 08:29:09 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pMX1o-0003kM-2p;
+	Mon, 30 Jan 2023 16:29:08 +0000
+Date: Tue, 31 Jan 2023 00:28:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
+	Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Suzuki Poulose <suzuki.poulose@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V8 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
+Message-ID: <202301310047.b5iv9hM8-lkp@intel.com>
+References: <20230123125956.1350336-6-anshuman.khandual@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230125-tfp410_i2c-v1-4-66a4d4e390b7@criticallink.com> <202301290803.ouS19eab-lkp@intel.com>
-In-Reply-To: <202301290803.ouS19eab-lkp@intel.com>
-From: Jon Cormier <jcormier@criticallink.com>
-Date: Mon, 30 Jan 2023 11:24:18 -0500
-Message-ID: <CADL8D3bxCOwXU7NJ+jvN530LQByJCMRCGrH+HrGzCxR3+imZ2Q@mail.gmail.com>
-Subject: Re: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for polled
- HPD status.
-To: kernel test robot <lkp@intel.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <robert.foss@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Tomi Valkeinen <tomi.valkeinen@ti.com>, Jyri Sarha <jsarha@ti.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Michael Williamson <michael.williamson@criticallink.com>, Bob Duke <bduke@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123125956.1350336-6-anshuman.khandual@arm.com>
 
-On Sat, Jan 28, 2023 at 7:47 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Jonathan,
->
-> Thank you for the patch! Perhaps something to improve:
-Good bot.
->
-> [auto build test WARNING on 93f875a8526a291005e7f38478079526c843cbec]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cormier/dt-bindings-display-bridge-tfp410-Add-tfp410-i2c-example/20230128-183627
-> base:   93f875a8526a291005e7f38478079526c843cbec
-> patch link:    https://lore.kernel.org/r/20230125-tfp410_i2c-v1-4-66a4d4e390b7%40criticallink.com
-> patch subject: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for polled HPD status.
-> config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230129/202301290803.ouS19eab-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/c4659fa4c02b62087c095ca99978e5eac8b490de
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jonathan-Cormier/dt-bindings-display-bridge-tfp410-Add-tfp410-i2c-example/20230128-183627
->         git checkout c4659fa4c02b62087c095ca99978e5eac8b490de
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/bridge/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/gpu/drm/bridge/ti-tfp410.c:111:6: warning: unused variable 'val' [-Wunused-variable]
->            u32 val;
->                ^
->    1 warning generated.
-This has already been fixed in V2 of the patch series.
->
->
-> vim +/val +111 drivers/gpu/drm/bridge/ti-tfp410.c
->
->    106
->    107  static enum drm_connector_status
->    108  tfp410_connector_detect(struct drm_connector *connector, bool force)
->    109  {
->    110          struct tfp410 *dvi = drm_connector_to_tfp410(connector);
->  > 111          u32 val;
->    112          unsigned int ret;
->    113
->    114          if (dvi->i2c) {
->    115                  ret = regmap_test_bits(dvi->regmap, TFP410_REG_CTL_2_MODE, TFP410_BIT_HTPLG);
->    116                  if (ret < 0)
->    117                          dev_err(dvi->dev, "%s failed to read HTPLG bit : %d\n", __func__, ret);
->    118                  else
->    119                          return ret ? connector_status_connected : connector_status_disconnected;
->    120          }
->    121
->    122          return drm_bridge_detect(dvi->next_bridge);
->    123  }
->    124
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Hi Anshuman,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on tip/perf/core acme/perf/core linus/master v6.2-rc6 next-20230130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230123-210254
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20230123125956.1350336-6-anshuman.khandual%40arm.com
+patch subject: [PATCH V8 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
+config: arm64-randconfig-r016-20230130 (https://download.01.org/0day-ci/archive/20230131/202301310047.b5iv9hM8-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0deba04ac45f8632b8579cb5cbf908b9f4428402
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anshuman-Khandual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230123-210254
+        git checkout 0deba04ac45f8632b8579cb5cbf908b9f4428402
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/arm64/kernel/asm-offsets.c:15:
+   In file included from include/linux/kvm_host.h:45:
+   In file included from arch/arm64/include/asm/kvm_host.h:36:
+   In file included from include/kvm/arm_pmu.h:11:
+>> arch/arm64/include/asm/perf_event.h:280:20: warning: function 'has_branch_stack' has internal linkage but is not defined [-Wundefined-internal]
+   static inline bool has_branch_stack(struct perf_event *event);
+                      ^
+   arch/arm64/include/asm/perf_event.h:284:16: note: used here
+           WARN_ON_ONCE(!has_branch_stack(event));
+                         ^
+   1 warning generated.
+--
+   In file included from arch/arm64/kernel/asm-offsets.c:15:
+   In file included from include/linux/kvm_host.h:45:
+   In file included from arch/arm64/include/asm/kvm_host.h:36:
+   In file included from include/kvm/arm_pmu.h:11:
+>> arch/arm64/include/asm/perf_event.h:280:20: warning: function 'has_branch_stack' has internal linkage but is not defined [-Wundefined-internal]
+   static inline bool has_branch_stack(struct perf_event *event);
+                      ^
+   arch/arm64/include/asm/perf_event.h:284:16: note: used here
+           WARN_ON_ONCE(!has_branch_stack(event));
+                         ^
+   1 warning generated.
+
+
+vim +/has_branch_stack +280 arch/arm64/include/asm/perf_event.h
+
+   279	
+ > 280	static inline bool has_branch_stack(struct perf_event *event);
+   281	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
