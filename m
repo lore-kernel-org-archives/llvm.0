@@ -1,194 +1,360 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB183C27;
-	Sun, 29 Jan 2023 23:53:34 +0000 (UTC)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TLoJB4007608;
-	Sun, 29 Jan 2023 23:53:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=OzhLWbWDpk4a4nd6Ya8uBVlf0gQU3qKjOrOoN2g3/PQ=;
- b=3dKAloajmNS5h6W9/yiN8H3RUCwjybZ74EkAE1VJSwTT83DRIRMcD4p9PkrUvLvyO59Q
- /jOpmZWUP1hu93rn3oonMK3d6BGI8hJ/9UnDdz2IUo44+KoteClKFtBul3IO0ezncGmX
- OBBqfVf2+Ox8Bvef/Gtxx/kKsnDS6WmiBF8zhhrAi33qRM695Md8lgPuq/dqNP97q9F/
- YXZ5sw7fjZF9eyTdcdQwKkJS7nDy20oGqErXSVFZVYOPMVNUzimsFlbFkoR2xY99dvtY
- iuvw5JJ+UtOUNekWKaqFrRQvOm/+HA5c4eEfCdd1/zW71Z7OEyNe71U2ESHLmuaQH61A Lw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ncvp11scx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 29 Jan 2023 23:53:21 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30TJKAwO008014;
-	Sun, 29 Jan 2023 23:53:20 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2173.outbound.protection.outlook.com [104.47.73.173])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nct5a5uvw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 29 Jan 2023 23:53:20 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WRgiT/cWHNq9lOXcTFKgIAa4AktXJON8iMethxNRgeeXzek/XzGSMMnQx6hYn95Usdz5RnDJM3pBDex4RyEsuUlE7ra7UrDF6OVY73MbKknixICn4ZctGmuDXz2Ed8OowMfpAliJKAF3N9wA00lVXaoGRVmaqNcRkyr2eGqWYbSojCxg6Rv6LspAfLH8h9ccvxHmdU1QUQmzN8/mfNNSLNS+9rn111xX6/SvkEVNEke0qzDA6Umgr0qmTzu+arq++RHU0FBoSdaQCSUTxi1jwwFdNayyKRjycTy7DdyBg8PGA3azZKMsx76yjKm53WdUEOeZKAltvMQGS3f95gw7ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OzhLWbWDpk4a4nd6Ya8uBVlf0gQU3qKjOrOoN2g3/PQ=;
- b=D56LKjK6ABw/CwGFJB2EVFcc6B0VGFoC25s+ERXM1+RTQmo4+dfObt0ROY2wy+b200yLqu6Pmr3UcOAU8g6zNTt+nPve25plAsBvzIJBelWb1eqS5UIJh1jTYpDvXQ8QJfnz0zFKh/dTgwRb5ydpHkLSolgTrlELbgF3ZIHdz/lXz88p4Ihh6bQpJAeUglFqqOUf3zMkK5MkxRxm/bfLnKWSVNBsN4M9KrZbvBuAsszstquFRIrU7SbndPu+etF2colCIGzFGqCRwilnNQDRsCtl16tpIzJCr9g/rzK64foIYbWA9uqpognoOsOZTQ68Zh5epwehPaoO1iji6Z+/LQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5DF378
+	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 02:25:21 +0000 (UTC)
+Received: by mail-lf1-f47.google.com with SMTP id f34so16937908lfv.10
+        for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 18:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OzhLWbWDpk4a4nd6Ya8uBVlf0gQU3qKjOrOoN2g3/PQ=;
- b=sdyG22WKiP23zL1roYejeOJWLMd53+HHONPM0BLX4MAk7Fdvu4V6wdMHd1nLIcIPIBjvNSsO7XR1J0se29j8h10NLMq3NYIzI+tCmkqvA1sMctnCPh3BM1N4a/AWotdmyItQO+9UeLVhW6AMIUTe3Z9hBpLJFFpfGCeo7PkPuvk=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SA1PR10MB5734.namprd10.prod.outlook.com (2603:10b6:806:23f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.20; Sun, 29 Jan
- 2023 23:53:17 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::3a1:b634:7903:9d14%9]) with mapi id 15.20.6064.019; Sun, 29 Jan 2023
- 23:53:17 +0000
-Date: Sun, 29 Jan 2023 15:53:14 -0800
-From: Mike Kravetz <mike.kravetz@oracle.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [akpm-mm:mm-unstable 167/506] include/linux/hugetlb.h:1193:9:
- error: implicit declaration of function 'page_count' is invalid in C99
-Message-ID: <Y9cG6jS279CcBHsF@monkey>
-References: <202301282035.M6wJfQhs-lkp@intel.com>
- <20230129131123.416530fe0b73a45d44ab944f@linux-foundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230129131123.416530fe0b73a45d44ab944f@linux-foundation.org>
-X-ClientProxiedBy: MW4PR04CA0223.namprd04.prod.outlook.com
- (2603:10b6:303:87::18) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBuiJBVm2tNm0T5Xjj3NOb3iR5h5QCN0pN0vFZkrcBc=;
+        b=iLEAeHz90s4RrfB9u0qjxHhTom4GpA1Rb46JcmZP77Gq9y6Utj1bTHmgNdDJS6VB73
+         qyf6bVvf2j/okvngGYVW3WYPiWfpZqzEh9UxE9qQYXBpog+SmxpD0AQNojvO0ty4X2Fq
+         5kXakLaU0OMHObhvTgziH1jsbssG101RSiKJE1QulvObcZtNN/vfboyUp0lLK4PrL8E+
+         XgWYwPLuY4lyNi3LCfYgAXB4zQ+ydbW1wolbYCEmEVykimgOW/Y8qzLFXq9poxtVtZY7
+         6e2Vpobh8cMWJr630dSL2gojqNPTifJEER5c/tKSGWogGwrrExbaPkxkAjN2E50QEBlX
+         3TQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vBuiJBVm2tNm0T5Xjj3NOb3iR5h5QCN0pN0vFZkrcBc=;
+        b=PvLumcOd1HvyXfcDWVsxKiSBRLg70hqMeZO5ohgkcy/T90ZKiML3S4H1mtl76RSDhu
+         cSrJBaecClCHo4VVzwc6iRgAxZb2M3QVKi6rGbd3miqaz8gkpV7y5MEc2eCF0dmT79EM
+         QsS3LSz3oRnVeJJUGvHzsrfp5oKzTeki5iaAlkblVhu2A6LKku7SRRSpn8j8dotJlHVN
+         9kKfVnff/SqsBBl5T3X5h1Y2Mq3XqYJebA0HGuQrnGGsopxh7WRwEkk242Ea+YJOwctW
+         XTdyM75skB4L9LwH8lxNR3pa22YGUQPLk1TGYooqgdJgtTwVg2vbzDCdldMSoy0NNbR1
+         GKPQ==
+X-Gm-Message-State: AFqh2koLfFFqcZNsvSoXw/cu6TrMchDyXSVDuUI2gJsg/LLnlZihjBXO
+	sPXyDnXTQaG5vvGGw5YR3DieT5QplpsPdG3lguI=
+X-Google-Smtp-Source: AMrXdXt4gybyDRlvFlysn8lG7/slFK+PNcqRWxMlse6IWC/t668XMPgiODUqdnMZvaBPWektkErybg8DHl9YL9UERWg=
+X-Received: by 2002:a19:6901:0:b0:4d5:af91:f3e9 with SMTP id
+ e1-20020a196901000000b004d5af91f3e9mr2241585lfc.269.1675045518709; Sun, 29
+ Jan 2023 18:25:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SA1PR10MB5734:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8139af8d-fd03-4764-b845-08db0253fe1c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	f3jG5DQa3yevhBsC89/U9ptasn30Qo/N64yPUIoQYHu035cC2qlijQYfSlzZBqtAdvnySSwCzma/rG9izFmQtZfLC3h3vIDqqJ9jtouDqZOlbCu0MkKo/uj+dDX6T/B07/feIyLB10Q054Z5DVmDMM+PUlIxadOYo2VyboqHgtJJedm0Yyds2KqJTeJlFF0q7PG0tevE2ClD1PFf5gqEyw4CK2SiJTUJHYSWJ+eu/brCeZwNLJ9xN8oCFbA4KXMxkLGabdHF1lCKBTTF5UtwLYma7gi+R4LnrZlk/PVD7T1hBPX/VAhYOubEAxfiwJMV2UMoWVs8ZJLU6qNeHXVdRMbPWcsh6h3xsm8HbbABbpvronhJxC3OR82AHTBfmYUzgtQwxn3YoxagKj/FewVSFC6UKP/6fQOeN5KXxgyfFVp7u+tlI/9wQRJmJV9/vTMyDwFBZJUNYvTAVgJ+6tG3Dya//8PRLLL8/ARHcklYlXMh6Aw7rUgJ8CaFC67i8O1O0+kSGI+wNVHMrCTgGbPn38ILy5XqgCvX3M9+EoNApnkgDOb2OzTHKGfo+zdNcusbDIYojDZJWaVjFtkIYmeVAdN7eIPCL24viSt6Uv82VZkCh98R4UzSajIjf+lNoCmOjQun4httbg5P7rSEyswKaaUbkSq6xai1WOULdp8hS1bdz/urc26V1YC3BO4QsEaA6tu/bPU+vK/IQ6PmnC2OCg==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(39860400002)(366004)(346002)(396003)(376002)(451199018)(44832011)(83380400001)(86362001)(38100700002)(33716001)(2906002)(53546011)(6506007)(26005)(186003)(6512007)(9686003)(478600001)(966005)(6486002)(6666004)(8676002)(6916009)(8936002)(66476007)(41300700001)(4326008)(66556008)(54906003)(5660300002)(66946007)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?BoS6zEkqQa3deDKI1HO1YAIQTL0hCBDYYGROh/vCfOlIwdbT5XDNvVL4IYkU?=
- =?us-ascii?Q?6XL2YANDBzhKDOOUrgj3qlXFEfoEGo7vT37DBeIAzfmiOYmHCdL/uYBBYjBQ?=
- =?us-ascii?Q?ddgogTvcYGP/XlxYI03tCDMq+kRlMgJnkuQoOYvObJwnISy/HiqjUbznlW/E?=
- =?us-ascii?Q?9erohWGByJ8sUN2+zQB3lhT9JkMDOdA1dhVlrojhipPiwjau30t+WDjZSKpY?=
- =?us-ascii?Q?2fKhSqyt+p4bd61FGsX93YNdu+2fnwD6hfNCSfo8+Yn1SqKinFvQ/QtpESAR?=
- =?us-ascii?Q?AuhEuX0G96SujILvSAf6axYs9BVsQMfbcug7/A2f3GHJoY+uTbHpXgTOix0r?=
- =?us-ascii?Q?IXhQv1IHD7GJaQuepBwCRVQZAuNoyUpjOJxpQcrqHA/gD2w4raHQK518uNK+?=
- =?us-ascii?Q?jgZzGjOdQ683V0Akq1/jn2k0ZbSJtO6rrRHj4Ns3lLXX7CSI6mlzJWNzoJdc?=
- =?us-ascii?Q?Zfcjjd8zB2CEGhgZBvRoWSrhCVi9sPC27wBBcCiketQNwfpiawkU1Zf5qj/R?=
- =?us-ascii?Q?w5xOTIORZfXLq1VC9SGDESxDY10bfZMZ1ze2gAg97DTebjDg5YDoqm+IFVf8?=
- =?us-ascii?Q?dSMFBjr4dqgiQB2SA4bT39wnu7+U6pPkfFbR1NXs2FKSR+0G5pApa+fV7qrr?=
- =?us-ascii?Q?jz2kZkN45Z8pzdPjPMbiGr65/SBzF9oQOVUKi0Hmi9xnK8IQbjD0EXcKOUbL?=
- =?us-ascii?Q?y6TTqQWnT69tXcvcVf9TH9QNqlnCM9qfnAvVwvubUap3Y1sBVohJg9rPud4D?=
- =?us-ascii?Q?5Mw0s1mcOkXPrIeNqJxU3/hg/3BtAvHGJLdUEA2MfsGeQvLoSYL1ZBv0OiA1?=
- =?us-ascii?Q?Pw/SVWYu8t+7fAAEEqnicc14Yr5ZRmQMOXvgWnxfqz+zWfeJEoDaL5pBnGw3?=
- =?us-ascii?Q?+VHmUIKUYO929swrpK0CiWwGrXIBOJ4VXPKIraXR5PXfMxwUiheixK1JYVCm?=
- =?us-ascii?Q?4u2WNi3YqJL4lwUwnIEF8UVYncjhOi6ieyJHRFxvAXgVH1cXMPA3yncBGE98?=
- =?us-ascii?Q?uNBe0a/Q1aLX4pajSCTQhWbAzv6MfiVmf+hTZ3TPx46568DVjT7OL0Ynchum?=
- =?us-ascii?Q?aTaTWpgLa3QcNNaYbZbIEqgvboxx82vyi9EgV2qyOxOet+vHm0CM+Ws7cLVW?=
- =?us-ascii?Q?WTrsEUgt8VJVFjp7KFQnPmc7OvTiPfPvve9m7YuTIw10p3drr3puoYGUZghI?=
- =?us-ascii?Q?CVO/CLT4OeW0zrHZJrM0pIUoLlFfmqPm9L/vMMhBaDBtlLQC5IDYbqCDhxei?=
- =?us-ascii?Q?2/pD2yv82nQsyzRGLj1wFIeCnEMSRMFktqqC8xPgNr4Y2N44IlggI/guoJq/?=
- =?us-ascii?Q?qJwKiVq6IQ+t8B/uIGvWSo9LhozP2JQf7Jsg88DTwCSOkI7frJayFY16mbyK?=
- =?us-ascii?Q?Hx6X1bmzpSx1OEefptlLIfvnJusWEO11A3gux7HbLIqgCdIs8GFwTa/pP++8?=
- =?us-ascii?Q?NJFE7DgXbxIaaPPQqpnK5yFVLQiWylkuD4gyWpHJbJSd10ZRbRcLyr7XZBRO?=
- =?us-ascii?Q?e3l1nLjkNIzFgjcfeBOLNt0Kb1D8fQrhmvS060DY9tAemFdoPUp4KWfXLoYu?=
- =?us-ascii?Q?Km20II9GGZD0McDwJnkKszmGVVB8iie00n9guWLUIFhLZbK8SncO8V3LPVF/?=
- =?us-ascii?Q?uw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	LFnO2PZ2hpQHJrqUn0cfETpW5F6WeGrcMl3NRrW76rB3Snet7zD+oP9LB23Ixww5qhE6vUhwjDpApujxANZALOGBcC+yOwc7KWZJEBf52tYcSsLZ5l+fOvNYgoIZJnmeNtKPoMb5vS0sMtyfahxyVPQQ4+93xpx3crJRZpn5lwj3H+/e8zr5zMcDYlIMKSFdenUXgjocaAL+yIqG78CbojCwzD9wHcO3UjID8+47/fOR/G2XtnWVclDAAhZaMgOv/l7WOD23Rp5Xv2oSwgRsxYrykNWkKKXhO63eiDS8XpX8mVoHKnNTS1nf7L1DwlvthXKXo1Uw++2VDTgcfimDAh25ACtrslHVsoZ6g3Vwg8t7BRmzaFjgE9Ij+ElJZZ6n7nHywW/PUUjOitjEFTW77owj/spf9OXaKoLBvzMIramVv1uO40oXr0Kl1rx4RKIvvJZTA+7VbK+FdgqOKj+fBz8jQn/YsKz7x1Ym8xzdl7kOHrNZZ0RspX+u/JKQAxTxOLMQ7YAPGKKoscZYkPVdsKOYT+vMPF0fj9gLSrotNqNyejn2Btwqm1E1R56HSVgRk8blMv1oWx7nyCMUvt3m8LEXYrS4NFnjFrBvfvDfNF7pABLNG+HHq5gdr9mRv8SG705jOuxjPci4KNY5BhdPsVMAK/tnsMTFzH/rTflxvzyATlJZm4+G15J6p/TN1mnlVmIC0Czu05qvKFMjOWdBaF8HzbngTzz6IJQUH8rUDHxbEKUoXtI1N/FvsFeArJNp76AlP9hIgJbtRGjWirg19Uc3SHChEkZPEmnmZFsRLVt3Ym5MiA/xZkZ6lNU+cllBuRCnGFoYXTiWHedHZ+Cel5fyCEs9UgcXqir+bm45MRiRJYfRPDDTmmnOYopne6re
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8139af8d-fd03-4764-b845-08db0253fe1c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2023 23:53:17.3924
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KMqmdG1OrKly/VM5hOMbs7CMC77vhQWTmI6oM8aOFj6h8msbzxzYOY8deXQyKb6PtvVw1cHCqPJPQLf9f1jCSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5734
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_13,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
- adultscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301290237
-X-Proofpoint-GUID: 2msJqrH-SdIDCdryjr-QPX2L2nRbILIC
-X-Proofpoint-ORIG-GUID: 2msJqrH-SdIDCdryjr-QPX2L2nRbILIC
+References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+ <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+In-Reply-To: <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Mon, 30 Jan 2023 03:24:41 +0100
+Message-ID: <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
+Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+To: Ian Rogers <irogers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev, 
+	Ben Hutchings <benh@debian.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 01/29/23 13:11, Andrew Morton wrote:
-> On Sat, 28 Jan 2023 20:55:08 +0800 kernel test robot <lkp@intel.com> wrote:
-> 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-> > head:   ede43f2956cc25e387a5e225324104f22e715908
-> > commit: 6c096b0425160233d2a8c3ec3f3d82dae5c37678 [167/506] mm: hugetlb: proc: check for hugetlb shared PMD in /proc/PID/smaps
-> > config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230128/202301282035.M6wJfQhs-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=6c096b0425160233d2a8c3ec3f3d82dae5c37678
-> >         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-> >         git fetch --no-tags akpm-mm mm-unstable
-> >         git checkout 6c096b0425160233d2a8c3ec3f3d82dae5c37678
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/infiniband/core/ drivers/net/ethernet/mellanox/mlx5/core/ fs/cifs/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > Note: the akpm-mm/mm-unstable HEAD ede43f2956cc25e387a5e225324104f22e715908 builds fine.
-> >       It only hurts bisectability.
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    In file included from drivers/infiniband/core/umem_odp.c:41:
-> > >> include/linux/hugetlb.h:1193:9: error: implicit declaration of function 'page_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-> >            return page_count(virt_to_page(pte)) > 1;
-> >                   ^
-> 
-> Thanks.
-> 
-> I hesitate to include mm.h into hugetlb.h, but page_ref.h looks OK.
-> 
+?
 
-I was a bit confused because linux/hugetlb.h already includes linux/mm.h
-which includes linux/page_ref.h.  Have not yet looked into this more closely.
--- 
-Mike Kravetz
+On Mon, Jan 30, 2023 at 12:21 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Sun, Jan 29, 2023 at 1:59 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > [ CC LLVM linux folks + Ben from Debian kernel team ]
+> >
+> > Hi,
+> >
+> > I am playing with LLVM version 16.0.0-rc1 which was released yesterday and PERF.
+> >
+> > After building my selfmade LLVM toolchain, I built perf and run some
+> > perf tests here on my Intel SandyBridge CPU (details see below).
+> >
+> > perf all metrics test: FAILED!
+> >
+> > ...with both Debian's perf version 6.1.7 and my selfmade version 6.2-rc5.
+> >
+> > Just noticed:
+> >
+> > Couldn't bump rlimit(MEMLOCK), failures may take place when creating
+> > BPF maps, etc
+> >
+> > Run the below tests with `sudo` - made this go away - still FAILED.
+> >
+> > But maybe I am missing to activate some sysfs/debug or whatever other stuff?
+>
+> Hi Sedat,
+>
+> things have been improving wrt metrics and so this failure may have
+> just been because of the addition of a previously missing metric. The
+> rlimit thing shouldn't affect things but maybe file descriptors?
+> Looking at the test output the issue is:
+>
+> ```
+> Metric 'tma_dram_bound' not printed in:
+> # Running 'internals/synthesize' benchmark:
+> Computing performance of single threaded perf event synthesis by
+> synthesizing events on the perf process itself:
+>   Average synthesis took: 207.680 usec (+- 0.176 usec)
+>   Average num. events: 30.000 (+- 0.000)
+>   Average time per event 6.923 usec
+>   Average data synthesis took: 217.833 usec (+- 0.202 usec)
+>   Average num. events: 161.000 (+- 0.000)
+>   Average time per event 1.353 usec
+>
+>  Performance counter stats for 'perf bench internals synthesize':
+>
+>      <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+>                          (0,00%)
+>      <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>                          (0,00%)
+>      <not counted>      CPU_CLK_UNHALTED.THREAD
+>                          (0,00%)
+>      <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+>                             (0,00%)
+> ```
+>
+> So the test was checking to see whether the tma_dram_bound metric
+> could be computed on your Sandybridge and it failed. The event counts
+> below show that every event came back "<not counted>" which is usually
+> indicative of a permissions problem - it is also not surprising given
+> this that the metric wasn't computed. You could try repeating the
+> command the test is trying with something like "perf stat -M
+> tma_dram_bound -a sleep 1", but running as root should have resolved
+> that issue. Does that give you enough to keep exploring?
+>
 
-> --- a/include/linux/hugetlb.h~mm-hugetlb-proc-check-for-hugetlb-shared-pmd-in-proc-pid-smaps-fix-2
-> +++ a/include/linux/hugetlb.h
-> @@ -7,6 +7,7 @@
->  #include <linux/fs.h>
->  #include <linux/hugetlb_inline.h>
->  #include <linux/cgroup.h>
-> +#include <linux/page_ref.h>
->  #include <linux/list.h>
->  #include <linux/kref.h>
->  #include <linux/pgtable.h>
-> _
-> 
+Hi Ian,
+
+Thanks for your feedback!
+
+I booted into my Debian kernel - just to see what happens.
+
+# cat /proc/version
+Linux version 6.1.0-2-amd64 (debian-kernel@lists.debian.org) (gcc-12
+(Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1
+SMP PREEMPT_DYNAMIC Debian 6.1.7-1 (2023-01-18)
+
+All things run as root...
+
+# echo 0 | tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+0
+
+# /usr/bin/perf test 10 92 98 99 100 101
+10: PMU events                                                      :
+10.1: PMU event table sanity                                        : Ok
+10.2: PMU event map aliases                                         : Ok
+10.3: Parsing of PMU event table metrics                            : Ok
+10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+92: perf record tests                                               : Ok
+98: perf stat tests                                                 : Ok
+99: perf all metricgroups test                                      : Ok
+100: perf all metrics test                                           : FAILED!
+101: perf all PMU test                                               : Ok
+
+# perf stat -M tma_dram_bound -a sleep 1
+
+Performance counter stats for 'system wide':
+
+    <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+                  (0,00%)
+    <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                     (0,00%)
+    <not counted>      CPU_CLK_UNHALTED.THREAD
+              (0,00%)
+    <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                        (0,00%)
+
+      1,002148600 seconds time elapsed
+
+Hmm... looking at... Metric 'tma_l3_bound' ...
+
+Running...
+
+# perf stat --verbose -M tma_l3_bound -a sleep 1
+Using CPUID GenuineIntel-6-2A-7
+metric expr (MEM_LOAD_UOPS_RETIRED.LLC_HIT /
+(MEM_LOAD_UOPS_RETIRED.LLC_HIT + 7 *
+MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS)) *
+CYCLE_ACTIVITY.STALLS_L2_PENDING / CLKS for tma_l3_bound
+metric expr CPU_CLK_UNHALTED.THREAD for CLKS
+
+found event MEM_LOAD_UOPS_RETIRED.LLC_HIT
+found event CYCLE_ACTIVITY.STALLS_L2_PENDING
+found event CPU_CLK_UNHALTED.THREAD
+found event MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+
+Parsing metric events
+'{MEM_LOAD_UOPS_RETIRED.LLC_HIT/metric-id=MEM_LOAD_UOPS_RETIRED.LLC_HIT/,CYCLE_ACTIVITY.STALLS_L2_PENDING/metric-id=CYCLE_ACTIVITY.STALLS_L2_PEND
+ING/,CPU_CLK_UNHALTED.THREAD/metric-id=CPU_CLK_UNHALTED.THREAD/,MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/metric-id=MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/}:W'
+MEM_LOAD_UOPS_RETIRED.LLC_HIT -> cpu/event=0xd1,period=0xc365,umask=0x4/
+CYCLE_ACTIVITY.STALLS_L2_PENDING ->
+cpu/event=0xa3,cmask=0x5,period=0x1e8483,umask=0x5/
+CPU_CLK_UNHALTED.THREAD -> cpu/event=0x3c,period=0x1e8483/
+MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS -> cpu/event=0xd4,period=0x186a7,umask=0x2/
+
+Control descriptor is not initialized
+
+MEM_LOAD_UOPS_RETIRED.LLC_HIT: 0 4007421228 0
+CYCLE_ACTIVITY.STALLS_L2_PENDING: 0 4007421228 0
+CPU_CLK_UNHALTED.THREAD: 0 4007421228 0
+MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS: 0 4007421228 0
+
+Performance counter stats for 'system wide':
+
+    <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+                  (0,00%)
+    <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                     (0,00%)
+    <not counted>      CPU_CLK_UNHALTED.THREAD
+              (0,00%)
+    <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                        (0,00%)
+
+      1,002310013 seconds time elapsed
+
+So those events/metric-ids resulting in "<not counted>" are all found.
+
+What means "Control descriptor is not initialized"?
+
+To summarize:
+
+Those two tests in "100: perf all metrics test" FAILED:
+
+1. tma_dram_bound
+2. tma_l3_bound
+
+Best regards,
+-Sedat-
+
+> Thanks,
+> Ian
+>
+> > Last perf version which was OK:
+> >
+> > ~/bin/perf -v
+> > perf version 6.0.0
+> >
+> > echo "linux-perf: Adjust limited access to performance monitoring and
+> > observability operations"
+> > echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> > 0
+> >
+> > ~/bin/perf test 10 86 92 93 94 95
+> > 10: PMU events                                                      :
+> > 10.1: PMU event table sanity                                        : Ok
+> > 10.2: PMU event map aliases                                         : Ok
+> > 10.3: Parsing of PMU event table metrics                            : Ok
+> > 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> > 86: perf record tests                                               : Ok
+> > 92: perf stat tests                                                 : Ok
+> > 93: perf all metricgroups test                                      : Ok
+> > 94: perf all metrics test                                           : Ok
+> > 95: perf all PMU test                                               : Ok
+> >
+> > echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> > echo "linux-perf: Reset limited access to performance monitoring and
+> > observability operations"
+> >
+> > If you need further information, please let me know.
+> >
+> > Thanks.
+> >
+> > Regards,
+> > -Sedat-
+> >
+> > P.S. Instructions
+> >
+> > [ REPRODUCER ]
+> >
+> > LLVM_MVER="16"
+> >
+> > # Debian LLVM
+> > ##LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
+> > # Selfmade LLVM
+> > LLVM_TOOLCHAIN_PATH="/opt/llvm/bin"
+> > if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+> >    export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
+> > fi
+> >
+> > PYTHON_VER="3.11"
+> > MAKE="make"
+> > MAKE_OPTS="V=1 -j1 HOSTCC=clang-$LLVM_MVER HOSTLD=ld.lld
+> > HOSTAR=llvm-ar CC=clang-$LLVM_MVER LD=ld.lld AR=llvm-ar
+> > STRIP=llvm-strip"
+> >
+> > echo "LLVM MVER ........ $LLVM_MVER"
+> > echo "Path settings .... $PATH"
+> > echo "Python version ... $PYTHON_VER"
+> > echo "make line ........ $MAKE $MAKE_OPTS"
+> >
+> > LANG=C LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
+> >
+> > LANG=C LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+> > PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
+> > ../make-log_perf-install_bin_python${PYTHON_VER}_llvm${LLVM_MVER}.txt
+> >
+> >
+> > [ TESTS ]
+> >
+> > [ TESTS - START ]
+> >
+> > echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> >
+> > [ TESTS - DEBIAN ]
+> >
+> > /usr/bin/perf -v
+> > perf version 6.1.7
+> >
+> > /usr/bin/perf test 10 92 98 99 100 101
+> >
+> >  10: PMU events                                                      :
+> >  10.1: PMU event table sanity                                        : Ok
+> >  10.2: PMU event map aliases                                         : Ok
+> >  10.3: Parsing of PMU event table metrics                            : Ok
+> >  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> >  92: perf record tests                                               : Ok
+> >  98: perf stat tests                                                 : Ok
+> >  99: perf all metricgroups test                                      : Ok
+> > 100: perf all metrics test                                           : FAILED!
+> > 101: perf all PMU test                                               : Ok
+> >
+> > [ TESTS - DILEKS ]
+> >
+> > ~/bin/perf -v
+> > perf version 6.2.0-rc5
+> >
+> > ~/bin/perf test 7 87 93 94 95 96
+> >
+> >   7: PMU events                                                      :
+> >   7.1: PMU event table sanity                                        : Ok
+> >   7.2: PMU event map aliases                                         : Ok
+> >   7.3: Parsing of PMU event table metrics                            : Ok
+> >   7.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> >  87: perf record tests                                               : Ok
+> >  93: perf stat tests                                                 : Ok
+> >  94: perf all metricgroups test                                      : Ok
+> >  95: perf all metrics test                                           : FAILED!
+> >  96: perf all PMU test                                               : Ok
+> >
+> > [ TESTS - FAILED ]
+> >
+> > /usr/bin/perf test --verbose 100 2>&1 | tee
+> > perf-test-verbose-100-perf-all-metrics-test_debian-perf-6-1-7.txt
+> >
+> > ~/bin/perf test --verbose 95 2>&1 | tee
+> > perf-test-verbose-95-perf-all-metrics-test_dileks-perf-6-2-rc5.txt
+> >
+> > [ TESTS - STOP ]
+> >
+> > echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> >
+> > - EOT -
