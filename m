@@ -1,105 +1,84 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788CA6AA3;
-	Mon, 30 Jan 2023 18:19:50 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 896635C00A9;
-	Mon, 30 Jan 2023 13:19:49 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 30 Jan 2023 13:19:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1675102789; x=1675189189; bh=8FutbuCl/D
-	NR6Qsqy22oynbrQgR9pREAJal0Upg9trQ=; b=QVVyRlo9wMicMWSz+RpRPUi5j1
-	aOeVdg+ZgqkfmxSpvHIBB4EJSroOwPVaRMYGAyivkZbHJ8yruyBKBZNvUiginpw6
-	nu+0c6Ftuj2g5Et50cRwHNDOCo8ejiWv/PKMlPKQW2pmdHflq3Zbu+PAD45BjWpj
-	FfXW5ara1qmk1ME2VGYj0pXx7dZJigVu/izAZ0IPKe6DRnoiG2bY9iJHE5YsBJkj
-	9RtCx5ciQLzJ8RMy6OxBtBkKrm1LOu6K4EsCKKyvKe/nbyolOIFColtPJcmjwVEb
-	ZsxHjP50NisVKMbdhteeF8J1v/Swvx1WzRUgFOpwGYmbwrH8qAuXh5+0pDZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1675102789; x=1675189189; bh=8FutbuCl/DNR6Qsqy22oynbrQgR9
-	pREAJal0Upg9trQ=; b=EX9Y8/kVjckmt9+F81BT0c82vP2qkKpVWNwxOYUdRc+h
-	iwhGbWsiWwftaqsbKW+YvIELYEk3BgNhphf7t8stt2EpFG96LsMcY+bsK0cL2YBb
-	E5ydnC9xNEj0q7bi7drA6P9QuW5DIs057sJR2TCXZRmSwtg67hcuC8dqZj6j3lWE
-	LNh8HDu0i4q7vm+Ft29mZgVmlFv915ohRNi7Vtt2NlBLDqTr0XGtYEUch+06H5rb
-	ZWYAyOczliCWgA1JY9YNK2PY6RY6YJTL4gmRKUITjKM3P6GJn9WEuTN9clGhkPX1
-	JvGh0COOiI9wlopWlyFCL1D9RsXsmZhLPVaACXWKew==
-X-ME-Sender: <xms:RQrYYyAl0tyXfvr0RqyDj_HXhhDkw0qJB4CzrYpPmT-alAjd5U1vxg>
-    <xme:RQrYY8iqShS-BJVesOlWH6tqeKJ34jOYYlrwJqjRlrJAyIWnv-UIu5YdtTLhyX4V0
-    kJUNfohb3xs0zDIdtI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeejvddvvdduleduheejiedtheehiedvjefgleelffeigfevhffhueduhfeg
-    feefheenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RQrYY1m_-pDAvLiREiFxn_w0vRAbam-L7479rXhFXoPTgsymfpK8yA>
-    <xmx:RQrYYwzbnNtyVg1XwWrq23IrB4QHcE2FAqcEpA0usRTVwQrRk4do_g>
-    <xmx:RQrYY3TQ6QHpSvsKQ0StC7Um4ah5Exlg-wgNaCKzDSzOdksA8J6jlg>
-    <xmx:RQrYYwR3VBGEYOfemcsuO7BKA4tC_WjKuqg-KQCwquf7n7aXEB93og>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 426DCB60086; Mon, 30 Jan 2023 13:19:49 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-106-gfe3ab13a96-fm-20230124.001-gfe3ab13a
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86D86AA3;
+	Mon, 30 Jan 2023 18:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675102876; x=1706638876;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=nj/QF0lxsXCYbQWMsk0UNeaG7f4OkugXuOJNPpnBXXk=;
+  b=X9P/LsVKO0O1B2QFc3naWAb8PFDOUGiEqXhCvfCYRDh7mPtp0khPd9ME
+   tdsB6XprLlZTS3Pvk5XlxRqe4py0o3N64DmTUipnTIKOZwkV0UcS2rowX
+   sVu+Xt0wNZaOxifoiIAa4xpL1DIFhgasKP/haMo4aO5LC51BqqMoxY78W
+   M2kpL/+C6xkl5RVC2nJfjFx1hTmMvari1KM7GgLfe4LllXXSmYw/dIMlP
+   P9odlsUyRl53Y4mjJ/yvvxfyr2xreYNKqi5GKXKs+6YL/gOINOp5QjVqA
+   pfOAvhbZaMV9sXvvfbUaPn15UgVU1tsFVu/s4cTuW3XbLGkMnZMUtcxRI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="354954732"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="354954732"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 10:21:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="727586293"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="727586293"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Jan 2023 10:21:15 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pMYmI-0003oQ-2h;
+	Mon, 30 Jan 2023 18:21:14 +0000
+Date: Tue, 31 Jan 2023 02:20:59 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linux-stable-rc:linux-5.4.y 5553/7257] arch/x86/entry/entry_64.o:
+ warning: objtool: .entry.text+0x191: unsupported intra-function call
+Message-ID: <202301310202.zifHW9qF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
-In-Reply-To: <202301310149.euWWUSrD-lkp@intel.com>
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
- <202301310149.euWWUSrD-lkp@intel.com>
-Date: Mon, 30 Jan 2023 19:19:28 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <lkp@intel.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- patches@lists.linux.dev
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jan 30, 2023, at 19:10, kernel test robot wrote:
-> Hi Nathan,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on 5dc4c995db9eb45f6373a956eb1f69460e69e6d4]
->
-> url:    
-> https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
-> base:   5dc4c995db9eb45f6373a956eb1f69460e69e6d4
->>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
->    int __init sa11x0_pm_init(void)
->               ^
->    arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the 
-> function is not intended to be used outside of this translation unit
->    int __init sa11x0_pm_init(void)
->    ^
->    static 
->    1 warning generated.
-> --
+TO: Josh Poimboeuf <jpoimboe@kernel.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+CC: Borislav Petkov <bp@suse.de>
+CC: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
+Hi Josh,
 
-For refernece, these are all known problems, the patch just allowed
-the code to be built by clang/lld when that was previously not
-possible.
+First bad commit (maybe != root cause):
 
-After the 6.3 merge window, we can probably go through the much
-smaller set of board files are address most of the W=1 warnings that
-were previously overwhelming.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+head:   be75898dcb2bd9d267366ff03a32bf77e15cbb4f
+commit: 03a575a0f954450b1a89554d15bd64b5d9e861ac [5553/7257] x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230131/202301310202.zifHW9qF-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=03a575a0f954450b1a89554d15bd64b5d9e861ac
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.4.y
+        git checkout 03a575a0f954450b1a89554d15bd64b5d9e861ac
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-      Arnd
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0x191: unsupported intra-function call
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
