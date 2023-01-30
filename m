@@ -1,121 +1,105 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA916AA3;
-	Mon, 30 Jan 2023 18:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675102280; x=1706638280;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gXD0R29Ib6o2ty6I1G9sKFWkOOk8CVk6fMR1Zb5Z1wU=;
-  b=KU/ghU1BbI5bBf1R3tMLXHaeMGKs+FYYSn/RM8Iibc/m3q5bJzvrKvPD
-   YLX4J7mxP39wJ1RWiy7SieI+ZcpjarMSrqWulyhv0kFUrx0jPZ3KmRstD
-   oALJqVUakPbXEvuKN7OnB//aqry/AiCK3Wq3NY5/V2cqrbr31YfoqFvet
-   TtQyapfegMG9NCiSjSFQdrEzXzYtKGhB0aUggczZwHeak3rJuwKsDdet0
-   q0PghiKqf+cVl30TWDvuaDqZ/uQXWuxLMFsYM5ckozZGzKRjYtJ7q7OFV
-   y5f26o2GBz8qGKE8EDtgv4R0Iz+w/BGpvmhTI/GVXNdSNGkf4aexRZPsS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="327651845"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="327651845"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 10:11:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="694653248"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="694653248"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jan 2023 10:11:15 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pMYcc-0003oA-20;
-	Mon, 30 Jan 2023 18:11:14 +0000
-Date: Tue, 31 Jan 2023 02:10:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>, linux@armlinux.org.uk,
-	arnd@arndb.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-Message-ID: <202301310149.euWWUSrD-lkp@intel.com>
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788CA6AA3;
+	Mon, 30 Jan 2023 18:19:50 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 896635C00A9;
+	Mon, 30 Jan 2023 13:19:49 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 30 Jan 2023 13:19:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to; s=fm3; t=1675102789; x=1675189189; bh=8FutbuCl/D
+	NR6Qsqy22oynbrQgR9pREAJal0Upg9trQ=; b=QVVyRlo9wMicMWSz+RpRPUi5j1
+	aOeVdg+ZgqkfmxSpvHIBB4EJSroOwPVaRMYGAyivkZbHJ8yruyBKBZNvUiginpw6
+	nu+0c6Ftuj2g5Et50cRwHNDOCo8ejiWv/PKMlPKQW2pmdHflq3Zbu+PAD45BjWpj
+	FfXW5ara1qmk1ME2VGYj0pXx7dZJigVu/izAZ0IPKe6DRnoiG2bY9iJHE5YsBJkj
+	9RtCx5ciQLzJ8RMy6OxBtBkKrm1LOu6K4EsCKKyvKe/nbyolOIFColtPJcmjwVEb
+	ZsxHjP50NisVKMbdhteeF8J1v/Swvx1WzRUgFOpwGYmbwrH8qAuXh5+0pDZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:sender:subject:subject:to:to
+	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1675102789; x=1675189189; bh=8FutbuCl/DNR6Qsqy22oynbrQgR9
+	pREAJal0Upg9trQ=; b=EX9Y8/kVjckmt9+F81BT0c82vP2qkKpVWNwxOYUdRc+h
+	iwhGbWsiWwftaqsbKW+YvIELYEk3BgNhphf7t8stt2EpFG96LsMcY+bsK0cL2YBb
+	E5ydnC9xNEj0q7bi7drA6P9QuW5DIs057sJR2TCXZRmSwtg67hcuC8dqZj6j3lWE
+	LNh8HDu0i4q7vm+Ft29mZgVmlFv915ohRNi7Vtt2NlBLDqTr0XGtYEUch+06H5rb
+	ZWYAyOczliCWgA1JY9YNK2PY6RY6YJTL4gmRKUITjKM3P6GJn9WEuTN9clGhkPX1
+	JvGh0COOiI9wlopWlyFCL1D9RsXsmZhLPVaACXWKew==
+X-ME-Sender: <xms:RQrYYyAl0tyXfvr0RqyDj_HXhhDkw0qJB4CzrYpPmT-alAjd5U1vxg>
+    <xme:RQrYY8iqShS-BJVesOlWH6tqeKJ34jOYYlrwJqjRlrJAyIWnv-UIu5YdtTLhyX4V0
+    kJUNfohb3xs0zDIdtI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddugecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeejvddvvdduleduheejiedtheehiedvjefgleelffeigfevhffhueduhfeg
+    feefheenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:RQrYY1m_-pDAvLiREiFxn_w0vRAbam-L7479rXhFXoPTgsymfpK8yA>
+    <xmx:RQrYYwzbnNtyVg1XwWrq23IrB4QHcE2FAqcEpA0usRTVwQrRk4do_g>
+    <xmx:RQrYY3TQ6QHpSvsKQ0StC7Um4ah5Exlg-wgNaCKzDSzOdksA8J6jlg>
+    <xmx:RQrYYwR3VBGEYOfemcsuO7BKA4tC_WjKuqg-KQCwquf7n7aXEB93og>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 426DCB60086; Mon, 30 Jan 2023 13:19:49 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-106-gfe3ab13a96-fm-20230124.001-gfe3ab13a
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
+Mime-Version: 1.0
+Message-Id: <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
+In-Reply-To: <202301310149.euWWUSrD-lkp@intel.com>
+References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
+ <202301310149.euWWUSrD-lkp@intel.com>
+Date: Mon, 30 Jan 2023 19:19:28 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "kernel test robot" <lkp@intel.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Russell King" <linux@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ patches@lists.linux.dev
+Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+Content-Type: text/plain
 
-Hi Nathan,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on 5dc4c995db9eb45f6373a956eb1f69460e69e6d4]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
-base:   5dc4c995db9eb45f6373a956eb1f69460e69e6d4
-patch link:    https://lore.kernel.org/r/20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c%40kernel.org
-patch subject: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-config: arm-shannon_defconfig (https://download.01.org/0day-ci/archive/20230131/202301310149.euWWUSrD-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/197c1476db190ad6d2afe14bc0f90de0e82f63b6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
-        git checkout 197c1476db190ad6d2afe14bc0f90de0e82f63b6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-sa1100/ drivers/gpio/ drivers/video/fbdev/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
-   int __init sa11x0_pm_init(void)
-              ^
-   arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init sa11x0_pm_init(void)
-   ^
-   static 
-   1 warning generated.
---
->> drivers/gpio/gpio-sa1100.c:309:13: warning: no previous prototype for function 'sa1100_init_gpio' [-Wmissing-prototypes]
-   void __init sa1100_init_gpio(void)
-               ^
-   drivers/gpio/gpio-sa1100.c:309:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init sa1100_init_gpio(void)
-   ^
-   static 
-   1 warning generated.
---
->> drivers/video/fbdev/sa1100fb.c:1219:12: warning: no previous prototype for function 'sa1100fb_init' [-Wmissing-prototypes]
-   int __init sa1100fb_init(void)
-              ^
-   drivers/video/fbdev/sa1100fb.c:1219:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init sa1100fb_init(void)
-   ^
-   static 
-   1 warning generated.
+On Mon, Jan 30, 2023, at 19:10, kernel test robot wrote:
+> Hi Nathan,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on 5dc4c995db9eb45f6373a956eb1f69460e69e6d4]
+>
+> url:    
+> https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
+> base:   5dc4c995db9eb45f6373a956eb1f69460e69e6d4
+>>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
+>    int __init sa11x0_pm_init(void)
+>               ^
+>    arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the 
+> function is not intended to be used outside of this translation unit
+>    int __init sa11x0_pm_init(void)
+>    ^
+>    static 
+>    1 warning generated.
+> --
 
 
-vim +/sa11x0_pm_init +122 arch/arm/mach-sa1100/pm.c
+For refernece, these are all known problems, the patch just allowed
+the code to be built by clang/lld when that was previously not
+possible.
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  121  
-7fea1ba58e61c1 Shawn Guo      2012-04-26 @122  int __init sa11x0_pm_init(void)
+After the 6.3 merge window, we can probably go through the much
+smaller set of board files are address most of the W=1 warnings that
+were previously overwhelming.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+      Arnd
