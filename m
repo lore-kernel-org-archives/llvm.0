@@ -1,360 +1,178 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5DF378
-	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 02:25:21 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id f34so16937908lfv.10
-        for <llvm@lists.linux.dev>; Sun, 29 Jan 2023 18:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vBuiJBVm2tNm0T5Xjj3NOb3iR5h5QCN0pN0vFZkrcBc=;
-        b=iLEAeHz90s4RrfB9u0qjxHhTom4GpA1Rb46JcmZP77Gq9y6Utj1bTHmgNdDJS6VB73
-         qyf6bVvf2j/okvngGYVW3WYPiWfpZqzEh9UxE9qQYXBpog+SmxpD0AQNojvO0ty4X2Fq
-         5kXakLaU0OMHObhvTgziH1jsbssG101RSiKJE1QulvObcZtNN/vfboyUp0lLK4PrL8E+
-         XgWYwPLuY4lyNi3LCfYgAXB4zQ+ydbW1wolbYCEmEVykimgOW/Y8qzLFXq9poxtVtZY7
-         6e2Vpobh8cMWJr630dSL2gojqNPTifJEER5c/tKSGWogGwrrExbaPkxkAjN2E50QEBlX
-         3TQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vBuiJBVm2tNm0T5Xjj3NOb3iR5h5QCN0pN0vFZkrcBc=;
-        b=PvLumcOd1HvyXfcDWVsxKiSBRLg70hqMeZO5ohgkcy/T90ZKiML3S4H1mtl76RSDhu
-         cSrJBaecClCHo4VVzwc6iRgAxZb2M3QVKi6rGbd3miqaz8gkpV7y5MEc2eCF0dmT79EM
-         QsS3LSz3oRnVeJJUGvHzsrfp5oKzTeki5iaAlkblVhu2A6LKku7SRRSpn8j8dotJlHVN
-         9kKfVnff/SqsBBl5T3X5h1Y2Mq3XqYJebA0HGuQrnGGsopxh7WRwEkk242Ea+YJOwctW
-         XTdyM75skB4L9LwH8lxNR3pa22YGUQPLk1TGYooqgdJgtTwVg2vbzDCdldMSoy0NNbR1
-         GKPQ==
-X-Gm-Message-State: AFqh2koLfFFqcZNsvSoXw/cu6TrMchDyXSVDuUI2gJsg/LLnlZihjBXO
-	sPXyDnXTQaG5vvGGw5YR3DieT5QplpsPdG3lguI=
-X-Google-Smtp-Source: AMrXdXt4gybyDRlvFlysn8lG7/slFK+PNcqRWxMlse6IWC/t668XMPgiODUqdnMZvaBPWektkErybg8DHl9YL9UERWg=
-X-Received: by 2002:a19:6901:0:b0:4d5:af91:f3e9 with SMTP id
- e1-20020a196901000000b004d5af91f3e9mr2241585lfc.269.1675045518709; Sun, 29
- Jan 2023 18:25:18 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8711936E;
+	Mon, 30 Jan 2023 05:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675056292; x=1706592292;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6+zRfQ55SMJPNjqhp/luiBL1qxHZmhox2zrzAKZljDY=;
+  b=Urqj/7donco6uuPO/toyC+4YnI8WpoEgSd8NEqgfbYnX2GfSFz5ELDzy
+   wOpbZzp2pqLcOpn1cIE8ONMfaqhAjF0S4SRt0Z9y0og/0Z6SJUn8eRMPZ
+   YT9mNs3VHXm7e39GaIk+5O+Hf2L7oi4qFB94T3rS2uRFCuZcMLOo/LJaF
+   5D6rDHm8sClQLfaImlboPZWGKgNSAz8OvJcntudHKrGEgypuOZ2ZcrOEu
+   GBZr05ElsnwAtV69SZFDuThyYsur8XP+nEH1linvhZf2ZaPSP1M86iw2+
+   2ny9w/oFRSoq6TNeYGjTUBGlAIaj3hrQFggYSM5VYgmWxPypjYQyR2naE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325174122"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="325174122"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 21:24:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="732565447"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="732565447"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Jan 2023 21:24:49 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pMMeu-0003PK-1m;
+	Mon, 30 Jan 2023 05:24:48 +0000
+Date: Mon, 30 Jan 2023 13:23:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Haijun Liu <haijun.liu@mediatek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+	Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Subject: include/asm-generic/io.h:464:31: error: performing pointer
+ arithmetic on a null pointer has undefined behavior
+Message-ID: <202301301307.sAxDJudh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
- <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
-In-Reply-To: <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Mon, 30 Jan 2023 03:24:41 +0100
-Message-ID: <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
-Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
-To: Ian Rogers <irogers@google.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev, 
-	Ben Hutchings <benh@debian.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-?
+Hi Haijun,
 
-On Mon, Jan 30, 2023 at 12:21 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Sun, Jan 29, 2023 at 1:59 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > [ CC LLVM linux folks + Ben from Debian kernel team ]
-> >
-> > Hi,
-> >
-> > I am playing with LLVM version 16.0.0-rc1 which was released yesterday and PERF.
-> >
-> > After building my selfmade LLVM toolchain, I built perf and run some
-> > perf tests here on my Intel SandyBridge CPU (details see below).
-> >
-> > perf all metrics test: FAILED!
-> >
-> > ...with both Debian's perf version 6.1.7 and my selfmade version 6.2-rc5.
-> >
-> > Just noticed:
-> >
-> > Couldn't bump rlimit(MEMLOCK), failures may take place when creating
-> > BPF maps, etc
-> >
-> > Run the below tests with `sudo` - made this go away - still FAILED.
-> >
-> > But maybe I am missing to activate some sysfs/debug or whatever other stuff?
->
-> Hi Sedat,
->
-> things have been improving wrt metrics and so this failure may have
-> just been because of the addition of a previously missing metric. The
-> rlimit thing shouldn't affect things but maybe file descriptors?
-> Looking at the test output the issue is:
->
-> ```
-> Metric 'tma_dram_bound' not printed in:
-> # Running 'internals/synthesize' benchmark:
-> Computing performance of single threaded perf event synthesis by
-> synthesizing events on the perf process itself:
->   Average synthesis took: 207.680 usec (+- 0.176 usec)
->   Average num. events: 30.000 (+- 0.000)
->   Average time per event 6.923 usec
->   Average data synthesis took: 217.833 usec (+- 0.202 usec)
->   Average num. events: 161.000 (+- 0.000)
->   Average time per event 1.353 usec
->
->  Performance counter stats for 'perf bench internals synthesize':
->
->      <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
->                          (0,00%)
->      <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
->                          (0,00%)
->      <not counted>      CPU_CLK_UNHALTED.THREAD
->                          (0,00%)
->      <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
->                             (0,00%)
-> ```
->
-> So the test was checking to see whether the tma_dram_bound metric
-> could be computed on your Sandybridge and it failed. The event counts
-> below show that every event came back "<not counted>" which is usually
-> indicative of a permissions problem - it is also not surprising given
-> this that the metric wasn't computed. You could try repeating the
-> command the test is trying with something like "perf stat -M
-> tma_dram_bound -a sleep 1", but running as root should have resolved
-> that issue. Does that give you enough to keep exploring?
->
+FYI, the error/warning still remains.
 
-Hi Ian,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6d796c50f84ca79f1722bb131799e5a5710c4700
+commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
+date:   9 months ago
+config: s390-randconfig-r025-20230129 (https://download.01.org/0day-ci/archive/20230130/202301301307.sAxDJudh-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/wwan/t7xx/
 
-Thanks for your feedback!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-I booted into my Debian kernel - just to see what happens.
+All errors (new ones prefixed by >>):
 
-# cat /proc/version
-Linux version 6.1.0-2-amd64 (debian-kernel@lists.debian.org) (gcc-12
-(Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1
-SMP PREEMPT_DYNAMIC Debian 6.1.7-1 (2023-01-18)
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+>> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   12 errors generated.
 
-All things run as root...
 
-# echo 0 | tee /proc/sys/kernel/kptr_restrict
-/proc/sys/kernel/perf_event_paranoid
-0
+vim +464 include/asm-generic/io.h
 
-# /usr/bin/perf test 10 92 98 99 100 101
-10: PMU events                                                      :
-10.1: PMU event table sanity                                        : Ok
-10.2: PMU event map aliases                                         : Ok
-10.3: Parsing of PMU event table metrics                            : Ok
-10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-92: perf record tests                                               : Ok
-98: perf stat tests                                                 : Ok
-99: perf all metricgroups test                                      : Ok
-100: perf all metrics test                                           : FAILED!
-101: perf all PMU test                                               : Ok
+3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
+9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
+9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
+9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
+9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
+9216efafc52ff9 Thierry Reding 2014-10-01  455   */
+9216efafc52ff9 Thierry Reding 2014-10-01  456  
+f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
+f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
+214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
+9216efafc52ff9 Thierry Reding 2014-10-01  460  {
+87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
+87fe2d543f8173 Sinan Kaya     2018-04-05  462  
+87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
+87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
+abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
+87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
+9216efafc52ff9 Thierry Reding 2014-10-01  467  }
+9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
+9216efafc52ff9 Thierry Reding 2014-10-01  469  
 
-# perf stat -M tma_dram_bound -a sleep 1
+:::::: The code at line 464 was first introduced by commit
+:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
 
-Performance counter stats for 'system wide':
+:::::: TO: Sinan Kaya <okaya@codeaurora.org>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
-    <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
-                  (0,00%)
-    <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
-                     (0,00%)
-    <not counted>      CPU_CLK_UNHALTED.THREAD
-              (0,00%)
-    <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
-                        (0,00%)
-
-      1,002148600 seconds time elapsed
-
-Hmm... looking at... Metric 'tma_l3_bound' ...
-
-Running...
-
-# perf stat --verbose -M tma_l3_bound -a sleep 1
-Using CPUID GenuineIntel-6-2A-7
-metric expr (MEM_LOAD_UOPS_RETIRED.LLC_HIT /
-(MEM_LOAD_UOPS_RETIRED.LLC_HIT + 7 *
-MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS)) *
-CYCLE_ACTIVITY.STALLS_L2_PENDING / CLKS for tma_l3_bound
-metric expr CPU_CLK_UNHALTED.THREAD for CLKS
-
-found event MEM_LOAD_UOPS_RETIRED.LLC_HIT
-found event CYCLE_ACTIVITY.STALLS_L2_PENDING
-found event CPU_CLK_UNHALTED.THREAD
-found event MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
-
-Parsing metric events
-'{MEM_LOAD_UOPS_RETIRED.LLC_HIT/metric-id=MEM_LOAD_UOPS_RETIRED.LLC_HIT/,CYCLE_ACTIVITY.STALLS_L2_PENDING/metric-id=CYCLE_ACTIVITY.STALLS_L2_PEND
-ING/,CPU_CLK_UNHALTED.THREAD/metric-id=CPU_CLK_UNHALTED.THREAD/,MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/metric-id=MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/}:W'
-MEM_LOAD_UOPS_RETIRED.LLC_HIT -> cpu/event=0xd1,period=0xc365,umask=0x4/
-CYCLE_ACTIVITY.STALLS_L2_PENDING ->
-cpu/event=0xa3,cmask=0x5,period=0x1e8483,umask=0x5/
-CPU_CLK_UNHALTED.THREAD -> cpu/event=0x3c,period=0x1e8483/
-MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS -> cpu/event=0xd4,period=0x186a7,umask=0x2/
-
-Control descriptor is not initialized
-
-MEM_LOAD_UOPS_RETIRED.LLC_HIT: 0 4007421228 0
-CYCLE_ACTIVITY.STALLS_L2_PENDING: 0 4007421228 0
-CPU_CLK_UNHALTED.THREAD: 0 4007421228 0
-MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS: 0 4007421228 0
-
-Performance counter stats for 'system wide':
-
-    <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
-                  (0,00%)
-    <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
-                     (0,00%)
-    <not counted>      CPU_CLK_UNHALTED.THREAD
-              (0,00%)
-    <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
-                        (0,00%)
-
-      1,002310013 seconds time elapsed
-
-So those events/metric-ids resulting in "<not counted>" are all found.
-
-What means "Control descriptor is not initialized"?
-
-To summarize:
-
-Those two tests in "100: perf all metrics test" FAILED:
-
-1. tma_dram_bound
-2. tma_l3_bound
-
-Best regards,
--Sedat-
-
-> Thanks,
-> Ian
->
-> > Last perf version which was OK:
-> >
-> > ~/bin/perf -v
-> > perf version 6.0.0
-> >
-> > echo "linux-perf: Adjust limited access to performance monitoring and
-> > observability operations"
-> > echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
-> > /proc/sys/kernel/perf_event_paranoid
-> > 0
-> >
-> > ~/bin/perf test 10 86 92 93 94 95
-> > 10: PMU events                                                      :
-> > 10.1: PMU event table sanity                                        : Ok
-> > 10.2: PMU event map aliases                                         : Ok
-> > 10.3: Parsing of PMU event table metrics                            : Ok
-> > 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-> > 86: perf record tests                                               : Ok
-> > 92: perf stat tests                                                 : Ok
-> > 93: perf all metricgroups test                                      : Ok
-> > 94: perf all metrics test                                           : Ok
-> > 95: perf all PMU test                                               : Ok
-> >
-> > echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
-> > /proc/sys/kernel/perf_event_paranoid
-> > echo "linux-perf: Reset limited access to performance monitoring and
-> > observability operations"
-> >
-> > If you need further information, please let me know.
-> >
-> > Thanks.
-> >
-> > Regards,
-> > -Sedat-
-> >
-> > P.S. Instructions
-> >
-> > [ REPRODUCER ]
-> >
-> > LLVM_MVER="16"
-> >
-> > # Debian LLVM
-> > ##LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
-> > # Selfmade LLVM
-> > LLVM_TOOLCHAIN_PATH="/opt/llvm/bin"
-> > if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
-> >    export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
-> > fi
-> >
-> > PYTHON_VER="3.11"
-> > MAKE="make"
-> > MAKE_OPTS="V=1 -j1 HOSTCC=clang-$LLVM_MVER HOSTLD=ld.lld
-> > HOSTAR=llvm-ar CC=clang-$LLVM_MVER LD=ld.lld AR=llvm-ar
-> > STRIP=llvm-strip"
-> >
-> > echo "LLVM MVER ........ $LLVM_MVER"
-> > echo "Path settings .... $PATH"
-> > echo "Python version ... $PYTHON_VER"
-> > echo "make line ........ $MAKE $MAKE_OPTS"
-> >
-> > LANG=C LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
-> >
-> > LANG=C LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
-> > PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
-> > ../make-log_perf-install_bin_python${PYTHON_VER}_llvm${LLVM_MVER}.txt
-> >
-> >
-> > [ TESTS ]
-> >
-> > [ TESTS - START ]
-> >
-> > echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
-> > /proc/sys/kernel/perf_event_paranoid
-> >
-> > [ TESTS - DEBIAN ]
-> >
-> > /usr/bin/perf -v
-> > perf version 6.1.7
-> >
-> > /usr/bin/perf test 10 92 98 99 100 101
-> >
-> >  10: PMU events                                                      :
-> >  10.1: PMU event table sanity                                        : Ok
-> >  10.2: PMU event map aliases                                         : Ok
-> >  10.3: Parsing of PMU event table metrics                            : Ok
-> >  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-> >  92: perf record tests                                               : Ok
-> >  98: perf stat tests                                                 : Ok
-> >  99: perf all metricgroups test                                      : Ok
-> > 100: perf all metrics test                                           : FAILED!
-> > 101: perf all PMU test                                               : Ok
-> >
-> > [ TESTS - DILEKS ]
-> >
-> > ~/bin/perf -v
-> > perf version 6.2.0-rc5
-> >
-> > ~/bin/perf test 7 87 93 94 95 96
-> >
-> >   7: PMU events                                                      :
-> >   7.1: PMU event table sanity                                        : Ok
-> >   7.2: PMU event map aliases                                         : Ok
-> >   7.3: Parsing of PMU event table metrics                            : Ok
-> >   7.4: Parsing of PMU event table metrics with fake PMUs             : Ok
-> >  87: perf record tests                                               : Ok
-> >  93: perf stat tests                                                 : Ok
-> >  94: perf all metricgroups test                                      : Ok
-> >  95: perf all metrics test                                           : FAILED!
-> >  96: perf all PMU test                                               : Ok
-> >
-> > [ TESTS - FAILED ]
-> >
-> > /usr/bin/perf test --verbose 100 2>&1 | tee
-> > perf-test-verbose-100-perf-all-metrics-test_debian-perf-6-1-7.txt
-> >
-> > ~/bin/perf test --verbose 95 2>&1 | tee
-> > perf-test-verbose-95-perf-all-metrics-test_dileks-perf-6-2-rc5.txt
-> >
-> > [ TESTS - STOP ]
-> >
-> > echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
-> > /proc/sys/kernel/perf_event_paranoid
-> >
-> > - EOT -
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
