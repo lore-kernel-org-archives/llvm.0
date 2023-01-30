@@ -1,100 +1,85 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066098469
-	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 22:03:26 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id m2so8132761plg.4
-        for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 14:03:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQY9unmzOV7TCZ96aU2p1l97OntyBK2gZGuBkFiwM9A=;
-        b=kQ5/LBE4EPmy0MTjOLRhc7F+4NC2emrrWOeOsFIdDMoM6TY4QMWar6RfJKJvMjsYxf
-         5aGron06eS18nyIgvaYuvNjXzAW9psgcktCwJlm6XwmaTc2k/ECsXNAjasvPiENdvkMM
-         8sWFPzniRelG8krBvqHTNtdpxdqNSjGrONOHCYImQ/iZHfiMly0NDoypeYmfSQqYs+Kd
-         XE+DisN7vEDdePh/OQQ0v/6WCUY9QKF0yPRien8ylSn4Qu5UUYxciPC/mPumeOjcqHDc
-         Zr3x8WTqi23teJmdjv3iwTSuCfbzkUgswKW1D/epr7IQYPSoPbVVYVXwRVkMzFUzNtp/
-         nqRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BQY9unmzOV7TCZ96aU2p1l97OntyBK2gZGuBkFiwM9A=;
-        b=mnx9y3hQ+2E+cPxal7ncz0L17ToOHoImBTvopuTqd4FyuSC9D52JP0MeQGp2V3q4k9
-         ztZ/tJ8SF4lFKRvC2Rji/h6u6Wp4EUsACRUUfVOjObHK+oh/wmLlMV+MTZqec1XTLcMs
-         kMn/Y3DELswOE9Z7c/+yi3LZv9dIs+K5i0LJjAdwKnDvTr6Qrif0PbwBRqMqKrvxsrR/
-         lTRcaH/WiFXKs7De/QFOi7wQlSh0VcXMpcbl7H27fJgz9gyoxs4u2ySqHW7qv6s2xuni
-         7HOpZp/CEf7elJh5/1hBdepzhX39SffJZlXjMs4jlyO8Lh03IeCUeNC9xJh4PURgXgXV
-         6d1g==
-X-Gm-Message-State: AO0yUKWK2CiZ9Cgyg5i3/n5yvRLzYlkthckR4NMaLct17JG/c6+XFvSN
-	a+ISrxnDQ2MiBiQgk3Bw9DnzSfeta6gY5kRaM1Nk8g==
-X-Google-Smtp-Source: AK7set/bVllA+pXLc5bfi4Hr1MjNdTVvmsxv0RI7/gPQMOGYUc7EXoUGxxPyg9Z429Lxw5P7MYpHCt7QsgZFWpVdr5U=
-X-Received: by 2002:a17:90a:9c1:b0:22c:816f:3203 with SMTP id
- 59-20020a17090a09c100b0022c816f3203mr1221685pjo.28.1675116206022; Mon, 30 Jan
- 2023 14:03:26 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CC08803
+	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 23:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53308C433D2;
+	Mon, 30 Jan 2023 23:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675122423;
+	bh=NFcCQqMaQK7JCYrOjfKaS2ObsN2ap71CGfdIOBpl9AQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=rLkhY6uCOoPwPLYtXR8po3hLWO7GL75MtOXbfz2Sm6eQNKgi6bkfI9WnmjJJV4Zwl
+	 VdcDu1i7S5zBDKXU31JbhdkyTolEU3khtxGjLdxEIpsBJakZrJAtfWx7mbhdi5nzGQ
+	 tDtAbo14WGmyrrDA/Ht5j/4+GREaA1SrqYJuG91QxEnqDspsEf2oSNe+Sreo2qoloK
+	 w+ZN2eNGsa7l4RPFzwh7uL8BnxlDlk7EmTAr6gf6S7Q9P9tnLvIRe3EhvRd93nsZvV
+	 vs/QgHfbkQhuCIIOjMNaUJtkX7vN3Rk/nuWKyTBQVyGOrlKKpndunk9MEB34PfHpNZ
+	 J0LPdMCJsHh6Q==
+From: Mark Brown <broonie@kernel.org>
+Date: Mon, 30 Jan 2023 23:45:57 +0000
+Subject: [PATCH] kselftest/arm64: Remove redundant _start labels from
+ zt-test
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
- <202301310149.euWWUSrD-lkp@intel.com> <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
-In-Reply-To: <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 30 Jan 2023 14:03:14 -0800
-Message-ID: <CAKwvOd=GbixTFko8aGzPQiq8QBtDY0ZZncHKag-gjsgqUM_diA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Tom Rix <trix@redhat.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230130-arm64-fix-sme2-clang-v1-1-3ce81d99ea8f@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALRW2GMC/x2NywrCQAxFf6VkbWA6KVb8FXExj2iDdioJqFD67
+ 6Yuz+Ee7grGKmxw7lZQfovJ0hz6QwdlSu3OKNUZYogUegqYdD4OeJMv2swRy9NHSJmYR6rjqQ7
+ gaU7GmDW1Mu3xZ9HHrl/KHv7fLtdt+wGW3fLJfQAAAA==
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ llvm@lists.linux.dev, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=994; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NFcCQqMaQK7JCYrOjfKaS2ObsN2ap71CGfdIOBpl9AQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2Fb0wDa9KgtPRmh+mY5nB2KAk8sy9+pDILqY8k0a
+ a9wJI2CJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9hW9AAKCRAk1otyXVSH0Iv3CA
+ CGvQI0CfphWZzEiFs6kGrwl73f5ZazlQlFVkutB1pMMkc0JQLoOPrGdZBR/L9MUE1mE35MMBOWxWPH
+ nKWo+FCCOVBVFrqFCFQgahZU5w0Wa98YyqWY9k3Bn41KibXc0yPHrQZDVWXiEEHvBSN/BNTbl6h09h
+ ycRREOIEz+hDjGYxObFc99wdWYYK3uQtTxLQ5eI9sMV6jeqsuOTnd2f2LaGxqEKw0bel2VvBwWi9Bc
+ BYTy6mD46vCpY6GvATneqdpALLPwQ6UPTZyjlDyp0wAX2+lyAXRcB4yNg/zpVekDIrssXQs3Nzk9Gz
+ vjO7/Jw6hqGkou+9sZd1t73j1k9nY/
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon, Jan 30, 2023 at 10:19 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Jan 30, 2023, at 19:10, kernel test robot wrote:
-> > Hi Nathan,
-> >
-> > I love your patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on 5dc4c995db9eb45f6373a956eb1f69460e69e6d4]
-> >
-> > url:
-> > https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
-> > base:   5dc4c995db9eb45f6373a956eb1f69460e69e6d4
-> >>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
-> >    int __init sa11x0_pm_init(void)
-> >               ^
-> >    arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the
-> > function is not intended to be used outside of this translation unit
-> >    int __init sa11x0_pm_init(void)
-> >    ^
-> >    static
-> >    1 warning generated.
-> > --
->
->
-> For refernece, these are all known problems, the patch just allowed
-> the code to be built by clang/lld when that was previously not
-> possible.
->
-> After the 6.3 merge window, we can probably go through the much
-> smaller set of board files are address most of the W=1 warnings that
-> were previously overwhelming.
+The newly added zt-test program copied the pattern from the other FP
+stress test programs of having a redundant _start label which is
+rejected by clang, as we did in a parallel series for the other tests
+remove the label so we can build with clang.
 
-Yeah! I've filed
-https://github.com/ClangBuiltLinux/continuous-integration2/issues/509
-too so that we can wire up an ARMv4 test in our CI as well.
+No functional change.
 
->
->       Arnd
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/zt-test.S | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
+index 7ec90976cf5e..d63286397638 100644
+--- a/tools/testing/selftests/arm64/fp/zt-test.S
++++ b/tools/testing/selftests/arm64/fp/zt-test.S
+@@ -200,7 +200,6 @@ endfunction
+ // Main program entry point
+ .globl _start
+ function _start
+-_start:
+ 	mov	x23, #0		// signal count
+ 
+ 	mov	w0, #SIGINT
 
+---
+base-commit: 3eb1b41fba97a1586e3ecca8c10547071f541567
+change-id: 20230130-arm64-fix-sme2-clang-3b3ee73d78d4
 
+Best regards,
 -- 
-Thanks,
-~Nick Desaulniers
+Mark Brown <broonie@kernel.org>
+
