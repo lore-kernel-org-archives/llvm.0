@@ -1,196 +1,92 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5DD746A;
-	Mon, 30 Jan 2023 19:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675107801; x=1706643801;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=03AWtZ13nFWnK3DbtYbpEVJ2rzGSXBvw9WpxIDybsMY=;
-  b=JL1RmPzZfrZExBdzCdQnzg2LOsP0AO2YjGUCupaaq+54hnoQfB/F8srW
-   xFmdc3hh7zYMyRd3SRi7pVC1HYHIirY8YYsKNdGtmsOPpbDvrP22IN0VA
-   kyHS6NctBp8+d/++YLxJlq2KNpX/olD5CgHnS128dqR5RY2g8HTZxmPkf
-   pi/heJKTBeDe5lRrYP1ud35x7alf89JNKZgq7sCV8EjfrXGNMap4V74zj
-   YkT25xfEOKUFh7Re+xgGfDSNg17ioEK+ETfasbKAYEFYDbGywmoLhiIhe
-   Lr6bRcTo8hJWevnkvoaedN4ZXOBCxTjU7Fj3K0noc2iezMiW/VR0o+4by
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="327676265"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="327676265"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 11:43:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="806810662"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="806810662"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2023 11:43:18 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pMa3h-0003s2-3B;
-	Mon, 30 Jan 2023 19:43:17 +0000
-Date: Tue, 31 Jan 2023 03:43:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>, thierry.reding@gmail.com,
-	airlied@redhat.com, daniel@ffwll.ch, jonathanh@nvidia.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm/tegra: add scanout support for implicit tiling
- parameters
-Message-ID: <202301310334.4oiy5KGY-lkp@intel.com>
-References: <20230120105858.214440-3-diogo.ivo@tecnico.ulisboa.pt>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711E079F7
+	for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 21:31:29 +0000 (UTC)
+Received: by mail-pg1-f172.google.com with SMTP id 7so3728438pgh.7
+        for <llvm@lists.linux.dev>; Mon, 30 Jan 2023 13:31:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3DGLS6aiN2haRQRmmZBIBnI3OUSAOT+GVNpjSj7IVI=;
+        b=swoStqpnzaDcsLLq3p6Foz1OK+scWwFGMhGJHCEGy1ZVxsIy5nGbpMH+5RL8iJfzkY
+         cFeNC/bfYu6xT05Hkd0Cn173lLcZ0t823ihlYMAvo/w+yg+ltyplmfhcW3w57Xe6LzhD
+         Ktd1da4tPuRvhRe5ieMnKrKdHWT9MYfee5QkqQ2mE0SQmjSZEkLRomflmLCdycOXPmRN
+         4/eeHf6Z1TGDSrA9/H1Vpmtm4Wc3o7VUAK8tHqBu/Jx7zB/orQGzTF0Pg5yyunFZUIS3
+         o0yl8ewSLqJkl/0PtPf8+/6kekjp+Te4i2HGe7W0sd7n/rAwq3sgrseeAETWARElimMN
+         1uUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t3DGLS6aiN2haRQRmmZBIBnI3OUSAOT+GVNpjSj7IVI=;
+        b=YAskpxHLWe+eTMZ9p08Td00SnnCVkWQbv3osLAwn55Kd4bVR4CgcFS2lWdy5mO+0HN
+         F2oyN3Lfq13CnfIGUF04936DHyZGRoTxQEQhDRMQWXxuHeE3on/XiAYeTncfpLSBiXw7
+         UOO0K1ofXlIrpp7zKdr+bFgRKWRNw1IRBGRuPqoulO6SHF0iFDb6KuMUW2JmRPhK+rbz
+         cY0J2nroV0St+1MzjMF3Mr0XQTpa1bH8O557Foo8gjPdwpkUlvaDnR3Y58uRhtQfwuJH
+         x4VDXAT6nh6/p/dt6xTDLUdzQX/h4bk8jDBtg/Gt1/ug5Ty/Q/GroG138ohjMGuROOAR
+         B7fw==
+X-Gm-Message-State: AFqh2kqZ7ClGYOgYNtilkN0hrYFK7WKafbmP0G9xJp7yWR64NRtBldKv
+	72uYa7Pvr0QT5A3EWW4DxcqPeeV6alfvfvtD9O4VTQ==
+X-Google-Smtp-Source: AMrXdXt1VPRf5Qrcdy3mk9H7780cdO6g1p3VIEb2Iaqi3/NvNnSWViMH0oG2iS2J8ac4puLS4z8TluhGi/+NvlgT5BY=
+X-Received: by 2002:a63:1706:0:b0:497:3785:812e with SMTP id
+ x6-20020a631706000000b004973785812emr5230436pgl.13.1675114288305; Mon, 30 Jan
+ 2023 13:31:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120105858.214440-3-diogo.ivo@tecnico.ulisboa.pt>
+References: <202301300732.QfTDtiab-lkp@intel.com> <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
+In-Reply-To: <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 30 Jan 2023 13:31:16 -0800
+Message-ID: <CAKwvOdkeM6bNaXds7YpHbVBBZvwGq-Jky32+88PzoBxCpsDHcw@mail.gmail.com>
+Subject: Re: error: Undefined temporary symbol .LBB5_-1
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: kernel test robot <lkp@intel.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Vinod Koul <vkoul@kernel.org>, Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Diogo,
+On Mon, Jan 30, 2023 at 2:06 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Jan 30, 2023, at 00:48, kernel test robot wrote:
+> > Hi Christophe,
+> >
+> > FYI, the error/warning still remains.
+> >
+> > tree:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > master
+> > head:   6d796c50f84ca79f1722bb131799e5a5710c4700
+> > commit: a9f17d0c0778dd971dc9770fa0a2085a41d8c5e4 phy: ti: tusb1210: Fix
+> > an error handling path in tusb1210_probe()
+> > date:   10 months ago
+> > config: arm-randconfig-r006-20230130
+> > (https://download.01.org/0day-ci/archive/20230130/202301300732.QfTDtiab-lkp@intel.com/config)
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
+> > 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> > reproduce (this is a W=1 build):
+>
+> I reported this as a clang-16 regression, the tusb code looks fine:
+>
+> https://github.com/llvm/llvm-project/issues/60346
 
-Thank you for the patch! Yet something to improve:
+Thanks for the report.  I think I have a fix for this.
+https://github.com/llvm/llvm-project/issues/60346#issuecomment-1409326875
+clang-16 just branched, so once the fixes land, I'll make sure to
+cherry-pick them to the clang-16 branch so that this issue is avoided
+before the initial clang-16 release.
 
-[auto build test ERROR on tegra/for-next]
-[also build test ERROR on drm/drm-next tegra-drm/drm/tegra/for-next linus/master v6.2-rc6 next-20230130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+>      Arnd
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Diogo-Ivo/drm-tegra-add-sector-layout-to-SET-GET_TILING-IOCTLs/20230120-190334
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230120105858.214440-3-diogo.ivo%40tecnico.ulisboa.pt
-patch subject: [PATCH 2/2] drm/tegra: add scanout support for implicit tiling parameters
-config: arm64-randconfig-r016-20230130 (https://download.01.org/0day-ci/archive/20230131/202301310334.4oiy5KGY-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/fffef2135ccf679112cc60dee0532494c1389c78
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Diogo-Ivo/drm-tegra-add-sector-layout-to-SET-GET_TILING-IOCTLs/20230120-190334
-        git checkout fffef2135ccf679112cc60dee0532494c1389c78
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/tegra/fb.c:149:4: error: expected expression
-                           unsigned long height = planes[0]->tiling.value;
-                           ^
->> drivers/gpu/drm/tegra/fb.c:151:8: error: use of undeclared identifier 'height'
-                           if (height > 5) {
-                               ^
->> drivers/gpu/drm/tegra/fb.c:151:8: error: use of undeclared identifier 'height'
->> drivers/gpu/drm/tegra/fb.c:151:8: error: use of undeclared identifier 'height'
-   drivers/gpu/drm/tegra/fb.c:153:6: error: use of undeclared identifier 'height'
-                                           height);
-                                           ^
-   drivers/gpu/drm/tegra/fb.c:159:49: error: use of undeclared identifier 'height'
-                           modifier = DRM_FORMAT_MOD_NVIDIA_16BX2_BLOCK(height);
-                                                                        ^
-   6 errors generated.
-
-
-vim +149 drivers/gpu/drm/tegra/fb.c
-
-   110	
-   111	static struct drm_framebuffer *tegra_fb_alloc(struct drm_device *drm,
-   112						      const struct drm_mode_fb_cmd2 *mode_cmd,
-   113						      struct tegra_bo **planes,
-   114						      unsigned int num_planes)
-   115	{
-   116		struct drm_framebuffer *fb;
-   117		unsigned int i;
-   118		int err;
-   119		struct drm_mode_fb_cmd2 mode_cmd_local;
-   120	
-   121		fb = kzalloc(sizeof(*fb), GFP_KERNEL);
-   122		if (!fb)
-   123			return ERR_PTR(-ENOMEM);
-   124	
-   125		/* Check for implicitly defined modifiers using
-   126		 * the state defined by tegra_gem_set_tiling().
-   127		 */
-   128		if (!(mode_cmd->flags & DRM_MODE_FB_MODIFIERS)) {
-   129			uint64_t modifier;
-   130	
-   131			mode_cmd_local = *mode_cmd;
-   132	
-   133			switch (planes[0]->tiling.mode) {
-   134			case TEGRA_BO_TILING_MODE_PITCH:
-   135				modifier = DRM_FORMAT_MOD_LINEAR;
-   136				break;
-   137	
-   138			case TEGRA_BO_TILING_MODE_TILED:
-   139				modifier = DRM_FORMAT_MOD_NVIDIA_TEGRA_TILED;
-   140				break;
-   141	
-   142			/* With all rigour this reconstruction of the modifier is
-   143			 * incomplete, as it skips some fields (like page kind).
-   144			 * However, along with the sector layout below it should
-   145			 * contain all the bits of information needed by the
-   146			 * scanout hardware.
-   147			 */
-   148			case TEGRA_BO_TILING_MODE_BLOCK:
- > 149				unsigned long height = planes[0]->tiling.value;
-   150	
- > 151				if (height > 5) {
-   152					dev_err(drm->dev, "invalid block height value: %ld\n",
-   153						height);
-   154	
-   155					err = -EINVAL;
-   156					goto cleanup;
-   157				}
-   158	
-   159				modifier = DRM_FORMAT_MOD_NVIDIA_16BX2_BLOCK(height);
-   160				break;
-   161	
-   162			default:
-   163				dev_err(drm->dev, "invalid tiling mode\n");
-   164				err = -EINVAL;
-   165				goto cleanup;
-   166			}
-   167	
-   168			if (planes[0]->tiling.sector_layout == DRM_TEGRA_GEM_SECTOR_LAYOUT_GPU)
-   169				modifier |= DRM_FORMAT_MOD_NVIDIA_SECTOR_LAYOUT;
-   170	
-   171			mode_cmd_local.modifier[0] = modifier;
-   172	
-   173			mode_cmd = &mode_cmd_local;
-   174		}
-   175	
-   176		drm_helper_mode_fill_fb_struct(drm, fb, mode_cmd);
-   177	
-   178		for (i = 0; i < fb->format->num_planes; i++)
-   179			fb->obj[i] = &planes[i]->gem;
-   180	
-   181		err = drm_framebuffer_init(drm, fb, &tegra_fb_funcs);
-   182		if (err < 0) {
-   183			dev_err(drm->dev, "failed to initialize framebuffer: %d\n",
-   184				err);
-   185			goto cleanup;
-   186		}
-   187	
-   188		return fb;
-   189	
-   190	cleanup:
-   191		kfree(fb);
-   192		return ERR_PTR(err);
-   193	}
-   194	
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+~Nick Desaulniers
