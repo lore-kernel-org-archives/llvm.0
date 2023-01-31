@@ -1,124 +1,63 @@
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28928C12
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 15:37:00 +0000 (UTC)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1pMsQZ-00005l-Dn; Tue, 31 Jan 2023 16:20:07 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1pMsQZ-001igC-Fs; Tue, 31 Jan 2023 16:20:06 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1pMsQX-00HMbM-Vg; Tue, 31 Jan 2023 16:20:05 +0100
-Date: Tue, 31 Jan 2023 16:20:05 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>
-Subject: Re: [lee-mfd:for-mfd-next 36/37] drivers/mmc/host/tmio_mmc.c:141:12:
- error: no member named 'enable' in 'struct mfd_cell'
-Message-ID: <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
-References: <202301312253.oUVq9cys-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A428C1C
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 16:17:18 +0000 (UTC)
+Received: by mail-il1-f198.google.com with SMTP id v17-20020a92ab11000000b00310c6708243so7886627ilh.23
+        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 08:17:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iiAqoUAhSbXRWu7WwqUljNKrMQeqVBW7GAniuAjL2v8=;
+        b=Dy6+Ki+rCJp20d4y6ijse5/PNeNoYRHXz38PCshjeCHHskm6Z7l62q6LUmYtdsGgFV
+         pJFgbkUpdeG3QBpEzRCRy/P8s2GGwW5e/4xj6dsFlNGFhROAVj0i5XDG/zTijH9gOqk2
+         pmJtdE/BALfaBY9AScFRsnBdY6fzXvOwBb8DTRsHTrJq7GW/61O70Vz0mjTUTS0z9+E5
+         T9J9cQ9JphVTF85893NeW7+/zser0T92NB0X/XR8CletGyxK0jMZHL7Lu7MZiiPBvAqa
+         JZS5RkU23Kthr+9FFUdJzekiagmRiTvuWHOJkgRaiE+YExRHwVWWQWpyl5Nwg5RQQARr
+         JYgA==
+X-Gm-Message-State: AO0yUKXCCWHFd5g52Ei4/RyYHtKw/A5NDd2Fnx2hFvG3cKAszReojeal
+	pXeq/IHxexJMa+x9Q/s9l5FcTOhuMPcNedtMEQf2jjPVxz0W
+X-Google-Smtp-Source: AK7set/OHuRu/Wj6tf33O1Z3bSTQrgB1o8gZPL+3utcc+aaXpdr8cyGKqn5K0ftPFAMPNtpPy5ckI+3V6HgyfU38NTkTGcFgjtrJ
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vwjathqydnubcy3a"
-Content-Disposition: inline
-In-Reply-To: <202301312253.oUVq9cys-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+X-Received: by 2002:a02:a418:0:b0:3a9:67b6:18bd with SMTP id
+ c24-20020a02a418000000b003a967b618bdmr3800070jal.46.1675181837697; Tue, 31
+ Jan 2023 08:17:17 -0800 (PST)
+Date: Tue, 31 Jan 2023 08:17:17 -0800
+In-Reply-To: <0000000000008be6b405f01164f8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005eca3205f391aade@google.com>
+Subject: Re: [syzbot] [ntfs3?] KASAN: out-of-bounds Read in ntfs_set_ea
+From: syzbot <syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
+syzbot suspects this issue was fixed by commit:
 
---vwjathqydnubcy3a
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
+Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Date:   Mon Oct 10 10:15:33 2022 +0000
 
-Hello,
+    fs/ntfs3: Check fields while reading
 
-On Tue, Jan 31, 2023 at 10:48:48PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-m=
-fd-next
-> head:   a561a980c024193e342b6878f62e02ff9d018285
-> commit: 78e7ccec94380519919267670174cbf1711b7963 [36/37] mfd: Remove .ena=
-ble() and .disable() callbacks
-> config: hexagon-randconfig-r041-20230130 (https://download.01.org/0day-ci=
-/archive/20230131/202301312253.oUVq9cys-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196=
-ca3278f78c6e19246e54ab0ecb364e37d66a)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/com=
-mit/?id=3D78e7ccec94380519919267670174cbf1711b7963
->         git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kerne=
-l/git/lee/mfd.git
->         git fetch --no-tags lee-mfd for-mfd-next
->         git checkout 78e7ccec94380519919267670174cbf1711b7963
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dhexagon olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mmc/host/ drive=
-rs/video/fbdev/
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
-> [...]
-> >> drivers/mmc/host/tmio_mmc.c:186:12: error: no member named 'disable' i=
-n 'struct mfd_cell'
->            if (cell->disable)
->                ~~~~  ^
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11d9c385480000
+start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=8778f030156c6cd16d72
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136b8f57880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175ca3a3880000
 
-This driver doesn't exist in next any more (commit ecb92c1f4752). So I'm
-unsure what to do here.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-The obvious (to me) options are:
+#syz fix: fs/ntfs3: Check fields while reading
 
- a) ignore the problem
- b) merge ecb92c1f4752 into mfd before applying "mfd: Remove .enable()
-    and .disable() callbacks"
- c) drop "mfd: Remove .enable() and .disable() callbacks" for now and
-    reapply when ecb92c1f4752 is in Linus' tree (variant of b))
-
-Lee, what's your take here?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---vwjathqydnubcy3a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPZMaIACgkQwfwUeK3K
-7Ak5Ggf9FY4MIZnNjmJs1PVawSIY2mnjyQ+0uS2AiGSmZrMRXUO9GJ50wBUPy2Wx
-Mf4poXR8bw0J+A7uU1XzPUH071US0R3mmrysNDZlk1Vwn3a2styDb3U0RgrDa0Km
-YXuEoFov9VXTFFZS4RSfIAuEMGJUdjPkPfMXNpbfq55+/CIpNXLGIVUEIYHB4KBs
-5RJWpeMTEGc9uTQKUNIYd9qowYDvYOjd3DWhJbZPP8rGdxrJV52/61YY+Wf8Cqo3
-e9/IguW7osvPP/8A6N/jNZr9tPMzSfHW+wc/LxhC2wjE7MSCJo9F3pwhOJY3fC1u
-fpBNyXra9kKsNigy2XxAOJyXfOd80A==
-=6mw0
------END PGP SIGNATURE-----
-
---vwjathqydnubcy3a--
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
