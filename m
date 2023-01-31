@@ -1,144 +1,211 @@
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882418F78
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 17:33:37 +0000 (UTC)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1pMuVe-0001jC-8w; Tue, 31 Jan 2023 18:33:30 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1pMuVc-001jte-Cm; Tue, 31 Jan 2023 18:33:27 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1pMuVa-00HOQe-TB; Tue, 31 Jan 2023 18:33:26 +0100
-Date: Tue, 31 Jan 2023 18:33:26 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Lee Jones <lee@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Lee Jones <lee.jones@linaro.org>
-Subject: Re: [lee-mfd:for-mfd-next 36/37] drivers/mmc/host/tmio_mmc.c:141:12:
- error: no member named 'enable' in 'struct mfd_cell'
-Message-ID: <20230131173326.ynfx32g36hp5hcoi@pengutronix.de>
-References: <202301312253.oUVq9cys-lkp@intel.com>
- <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
- <Y9lNHyfzwE1+b+Ru@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A003A922
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 18:08:47 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id l8so10976944wms.3
+        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 10:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U3HmVJerFzkpeb8F8VIoRLz10S/UGvYmUy1GfvChxFY=;
+        b=bPqnDf0zMlABjuoFQa/6wpGy7pgFqfWQlHErUc/iSZkdKjNWcm8szh5petXGd2ohse
+         KRe86Zy6hL4PdXY8coIW9kV3zWm9mVt9xYo8V2eMzrEH4V8Kfnth4n6XqlOCfNdj/D/F
+         UvyvVvBWat33yqGZI40lSYC2olv79CICnVE7lHKwkPuco+OhNOUiWuZZYR78/RK8dwoN
+         gQ1BsN4TCnUzncb2au5v+KzG50AFAwklSaE5LJZMDdAyHAX/kcaHNzaq67S/Or6zBQuR
+         ndGc1wE6VNs2Nq5I/fcKWSoODGM/ly0ReGrB0mtWrM0iaCAdqZBXluzAoQYfQxs0tkhp
+         psjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U3HmVJerFzkpeb8F8VIoRLz10S/UGvYmUy1GfvChxFY=;
+        b=AMBVMGlje1bAnWdMCfZRzoeq4Cfwoa1TniZOk9v2dPe2J7jNVEUHqlPKtkCt6nGaUA
+         rVJUVjOYuILfK/SNgJnWJrUI+jZaQgtX0du1vLD3zUV+4UzNfYcnMJw4FoMIGhReYPc6
+         OQmp61yzQ18WRZu6Clgn6OJc0tmGJN3EGsPiZ+32IaJCrC6SLQtmPCKhQkxcaDyl6vb/
+         G5hqy+bUsygmdZhNgfWxb6mosV8PWQzEVq87nglWAnQkJ0+/c8nN8Wq3zWTbF0jOsBU6
+         JRGQfjMB7EOfHmU7omQJrFzpXCxtfDg4P+suA3i/pOHdK8bPr7AKG/fQJh3DrTJZPvfH
+         EAGA==
+X-Gm-Message-State: AFqh2kqUQaLGNR0BZzI5tcKXG0k4pYkRmgZgxDW/8F75ts4H9CVNCDFh
+	ojD3abt51msyDfa7y/D6Wjkz/j8L2DdBDTj9Rx9vow==
+X-Google-Smtp-Source: AMrXdXu4Q1XIm4ddS3d8Vr4z1BzBOlUP3KRITTyoLaWKe61xsL8nWqaIzj4tMCq0DDfs9YT7jjr6zZ+zfNJDvjEcESw=
+X-Received: by 2002:a1c:7404:0:b0:3da:b40f:c734 with SMTP id
+ p4-20020a1c7404000000b003dab40fc734mr4502674wmc.115.1675188525655; Tue, 31
+ Jan 2023 10:08:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="czaybyainuxhbdoa"
-Content-Disposition: inline
-In-Reply-To: <Y9lNHyfzwE1+b+Ru@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
-
-
---czaybyainuxhbdoa
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20230124064324.672022-1-irogers@google.com> <20230124064324.672022-2-irogers@google.com>
+ <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
+In-Reply-To: <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 31 Jan 2023 10:08:33 -0800
+Message-ID: <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Connor OBrien <connoro@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 31, 2023 at 05:17:19PM +0000, Lee Jones wrote:
-> On Tue, 31 Jan 2023, Uwe Kleine-K=F6nig wrote:
->=20
-> > Hello,
-> >=20
-> > On Tue, Jan 31, 2023 at 10:48:48PM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git f=
-or-mfd-next
-> > > head:   a561a980c024193e342b6878f62e02ff9d018285
-> > > commit: 78e7ccec94380519919267670174cbf1711b7963 [36/37] mfd: Remove =
-=2Eenable() and .disable() callbacks
-> > > config: hexagon-randconfig-r041-20230130 (https://download.01.org/0da=
-y-ci/archive/20230131/202301312253.oUVq9cys-lkp@intel.com/config)
-> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project =
-4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> > > reproduce (this is a W=3D1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git=
-/commit/?id=3D78e7ccec94380519919267670174cbf1711b7963
-> > >         git remote add lee-mfd https://git.kernel.org/pub/scm/linux/k=
-ernel/git/lee/mfd.git
-> > >         git fetch --no-tags lee-mfd for-mfd-next
-> > >         git checkout 78e7ccec94380519919267670174cbf1711b7963
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon olddefconfig
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mmc/host/ dr=
-ivers/video/fbdev/
-> > >=20
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > >=20
-> > > All errors (new ones prefixed by >>):
-> > >=20
-> > > [...]
-> > > >> drivers/mmc/host/tmio_mmc.c:186:12: error: no member named 'disabl=
-e' in 'struct mfd_cell'
-> > >            if (cell->disable)
-> > >                ~~~~  ^
-> >=20
-> > This driver doesn't exist in next any more (commit ecb92c1f4752). So I'm
-> > unsure what to do here.
-> >=20
-> > The obvious (to me) options are:
-> >=20
-> >  a) ignore the problem
-> >  b) merge ecb92c1f4752 into mfd before applying "mfd: Remove .enable()
-> >     and .disable() callbacks"
-> >  c) drop "mfd: Remove .enable() and .disable() callbacks" for now and
-> >     reapply when ecb92c1f4752 is in Linus' tree (variant of b))
-> >=20
-> > Lee, what's your take here?
->=20
-> We need to pull your patch for now.
+On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote=
+:
+>
+> Hi Ian,
+>
+> On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
+> > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
+> > after tools/scripts/Makefile.include is included, meaning flags are
+> > set assuming say CC is gcc, but then it can be later set to HOSTCC
+> > which may be clang. tools/scripts/Makefile.include is needed for host
+> > set up and common macros in objtool's Makefile. Rather than override
+> > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
+> > builds and the linkage step. This means the Makefiles don't see things
+> > like CC changing and tool flag determination, and similar, work
+> > properly.
+> >
+> > Also, clear the passed subdir as otherwise an outer build may break by
+> > inadvertently passing an inappropriate value.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+> >  1 file changed, 7 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfi=
+ds/Makefile
+> > index 1fe0082b2ecc..daed388aa5d7 100644
+> > --- a/tools/bpf/resolve_btfids/Makefile
+> > +++ b/tools/bpf/resolve_btfids/Makefile
+> > @@ -18,14 +18,11 @@ else
+> >  endif
+> >
+> >  # always use the host compiler
+> > -AR       =3D $(HOSTAR)
+> > -CC       =3D $(HOSTCC)
+> > -LD       =3D $(HOSTLD)
+> > -ARCH     =3D $(HOSTARCH)
+> > +HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"=
+ ARCH=3D"$(HOSTARCH)" \
+> > +               EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> > +
+> >  RM      ?=3D rm
+> >  CROSS_COMPILE =3D
+> > -CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
+> > -LDFLAGS :=3D $(KBUILD_HOSTLDFLAGS)
+> >
+> >  OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
+> >
+> > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+> >
+> >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=3D$(SUBCMD_OUT) \
+> > -                 DESTDIR=3D$(SUBCMD_DESTDIR) prefix=3D \
+> > +                 DESTDIR=3D$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix=
+=3D subdir=3D \
+> >                   $(abspath $@) install_headers
+> >
+> >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $=
+(LIBBPF_OUT)
+> >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=3D$(LIBBPF_=
+OUT)    \
+> > -                 DESTDIR=3D$(LIBBPF_DESTDIR) prefix=3D EXTRA_CFLAGS=3D=
+"$(CFLAGS)" \
+> > +                 DESTDIR=3D$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix=
+=3D subdir=3D \
+> >                   $(abspath $@) install_headers
+> >
+> >  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/nul=
+l)
+> > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
+> >  include $(srctree)/tools/build/Makefile.include
+> >
+> >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> > -     $(Q)$(MAKE) $(build)=3Dresolve_btfids
+> > +     $(Q)$(MAKE) $(build)=3Dresolve_btfids $(HOST_OVERRIDES)
+> >
+> >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+> >       $(call msg,LINK,$@)
+> > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(=
+LIBS)
+> > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) =
+$(SUBCMDOBJ) $(LIBS)
+> >
+> >  clean_objects :=3D $(wildcard $(OUTPUT)/*.o                \
+> >                              $(OUTPUT)/.*.o.cmd           \
+> > --
+> > 2.39.0.246.g2a6d74b583-goog
+> >
+>
+> I just bisected a linking failure when building resolve_btfids with
+> clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
+> Alter how HOSTCC is forced") in the bpf-next tree.
+>
+> It appears to be related to whether or not CROSS_COMPILE is specified,
+> which we have to do for certain architectures and configurations still.
+> arm64 is not one of those but it helps demonstrate the issue.
+>
+>   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
+>   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- H=
+OSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 defconfig menuconfig
+>
+>   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- H=
+OSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 prepare
+>   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o=
+ is incompatible with elf64-x86-64
+>   clang-17: error: linker command failed with exit code 1 (use -v to see =
+invocation)
+>   ...
+>
+> Before your change, with V=3D1, I see:
+>
+> clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINU=
+X_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-p=
+rototypes -O2 -fomit-frame-pointer -std=3Dgnu11 -Wdeclaration-after-stateme=
+nt -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_S=
+RC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_b=
+tfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/bpf/re=
+solve_btfids/main.o main.c
+>
+> After, I see:
+>
+> clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINU=
+X_SRC/tools/bpf/resolve_btfids/main.o --target=3Daarch64-linux-gnu -g -I$LI=
+NUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bp=
+f/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsu=
+bcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfid=
+s/main.o main.c
+>
+> We seem to have taken on a '--target=3Daarch64-linux-gnu' (changing the
+> target of resolve_btfids-in.o) and we dropped the warning flags.
+>
+> I think this comes from the clang block in
+> tools/scripts/Makefile.include, which is included into the
+> resolve_btfids Makefile via tools/lib/bpf/Makefile.
+>
+> I am not super familiar with the tools build system, otherwise I would
+> try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
+> simple variable ('=3D' -> ':=3D') and moving it to HOST_OVERRIDES but tho=
+se
+> did not appear to resolve it for me.
+>
+> If there is any other information I can provide or patches I can test,
+> please let me know.
+>
+> Cheers,
+> Nathan
 
-I guess that means c), right?
+Thanks Nathan, and thanks for all the details in the bug report. I'm
+looking into this.
 
-> See:
->=20
->   drivers/mmc/host/tmio_mmc.c
->   drivers/mtd/nand/raw/tmio_nand.c
->   drivers/usb/host/ohci-tmio.c
->   drivers/video/fbdev/tmiofb.c
->   drivers/w1/masters/ds1wm.c
-
-Huh, I only checked the first and wonder how I missed these. I guess I
-checked next only that already has these all dropped. Sorry.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---czaybyainuxhbdoa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPZUOMACgkQwfwUeK3K
-7Alr7wgAiMlfmgtgdAiKjt1cGchNuMBCeSxfXCua2qq36R9N8nPI76pQeVUc7WAQ
-oRWgvw5d9fsaQVUkjwK3sQo1l1oWwshzIJoZQo2EwtN8X2KnxBkbUdC4nHKoTBaP
-1ITryDkfs7lGjKwU4Q26SdRnJRBFfLQuxMCimbKe9FGKD3NyHEGXUquuNp99v237
-DLi44rACJwpV3Hdy2MH0pqozuP8fa8d/YxJrWJtU61Rk5CDoGn9lDQv36cZMtoiD
-INIPdr9T96v/bq13ThChI9fl62yR+Adt9tCzn6hR9g8SrP+AqYPud39AGEOMg20W
-MfnavDYu9Wq9zVeIZmuVhZ7xK8RRLg==
-=DP9z
------END PGP SIGNATURE-----
-
---czaybyainuxhbdoa--
+Ian
