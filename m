@@ -1,95 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8458F4B;
-	Tue, 31 Jan 2023 17:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69A2C433D2;
-	Tue, 31 Jan 2023 17:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2298F4B
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 17:20:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49748C433EF;
+	Tue, 31 Jan 2023 17:20:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675185444;
-	bh=s2zN+bqLHFVqdpmBkSxYj/+hCuUp3ef3EXfXxJ0ViQs=;
+	s=k20201202; t=1675185659;
+	bh=+pvUZxvhRwxJP5MRWV/FG2QALpGhPM4yg4kJFt4ZFlI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dI+IsCU7nn2vH4BlsEBDt/3ORc0kaLglh7JeHTqKktKaH4NKGRkbZHVR/k7f7nU6t
-	 KY7+t0ptRzXVGdNaFdkUEcSLVI2XFnQ/i5/YB2Li0EUdhcsqtLlm8ZxwM9WQuuvV2m
-	 9gi0xUgvZ8DAtyocRWrF1L39Ex4iY9OFntioPxx1cKhblQGs00QoX1rDFJkIMWkxG1
-	 MyVHT6SUXjnttH/ZRuuYzSoLutGnPD3GsOQG1r5cYtcP5d0d5gVUTJcVegxPfm8bpz
-	 1UpiL5ITZ6EAXl/LfDG9imkMFPZmCgLBywSEOL+YgOXpL4SrRqAM/lCcNs1CQpJUgG
-	 h+jVi88NXF1Eg==
-Date: Tue, 31 Jan 2023 17:17:19 +0000
-From: Lee Jones <lee@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Lee Jones <lee.jones@linaro.org>
-Subject: Re: [lee-mfd:for-mfd-next 36/37] drivers/mmc/host/tmio_mmc.c:141:12:
- error: no member named 'enable' in 'struct mfd_cell'
-Message-ID: <Y9lNHyfzwE1+b+Ru@google.com>
-References: <202301312253.oUVq9cys-lkp@intel.com>
- <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
+	b=FPKZBNkr4YMaum4++SVy1d+KjqgdDu04hJDzmRHOeWM9Rw4g69HGsE+J50iv0S43P
+	 052q+53XWlexnd48eQqCpsIJNW1uEY7PVJhPoNzXFw2DiD04IXHXB0faQNuLHaSuPS
+	 smV8LoJamcPlIQuTxPiKxxEKhyj0NdF9NuypU1FuTHfDnNzma/AfnksxfnhP5Y4LVV
+	 w9d2T0xHZWqXIz3nqK2rmYe4yx1tiSzdBBmXLj3vR6waNmcPhyc+MT3Vv3bVGkPzvn
+	 sQdaiCVDl566Z+33gbNAQX8emOTxTkm8eUac3GQTTfup+SH+Lit1/NHy5rX/WOiy0a
+	 sJYZdK5NKel9A==
+Date: Tue, 31 Jan 2023 10:20:56 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Connor OBrien <connoro@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+Message-ID: <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
+References: <20230124064324.672022-1-irogers@google.com>
+ <20230124064324.672022-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
+In-Reply-To: <20230124064324.672022-2-irogers@google.com>
 
-On Tue, 31 Jan 2023, Uwe Kleine-König wrote:
+Hi Ian,
 
-> Hello,
+On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
+> HOSTCC is always wanted when building. Setting CC to HOSTCC happens
+> after tools/scripts/Makefile.include is included, meaning flags are
+> set assuming say CC is gcc, but then it can be later set to HOSTCC
+> which may be clang. tools/scripts/Makefile.include is needed for host
+> set up and common macros in objtool's Makefile. Rather than override
+> CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
+> builds and the linkage step. This means the Makefiles don't see things
+> like CC changing and tool flag determination, and similar, work
+> properly.
 > 
-> On Tue, Jan 31, 2023 at 10:48:48PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-> > head:   a561a980c024193e342b6878f62e02ff9d018285
-> > commit: 78e7ccec94380519919267670174cbf1711b7963 [36/37] mfd: Remove .enable() and .disable() callbacks
-> > config: hexagon-randconfig-r041-20230130 (https://download.01.org/0day-ci/archive/20230131/202301312253.oUVq9cys-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?id=78e7ccec94380519919267670174cbf1711b7963
-> >         git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
-> >         git fetch --no-tags lee-mfd for-mfd-next
-> >         git checkout 78e7ccec94380519919267670174cbf1711b7963
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/video/fbdev/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > [...]
-> > >> drivers/mmc/host/tmio_mmc.c:186:12: error: no member named 'disable' in 'struct mfd_cell'
-> >            if (cell->disable)
-> >                ~~~~  ^
+> Also, clear the passed subdir as otherwise an outer build may break by
+> inadvertently passing an inappropriate value.
 > 
-> This driver doesn't exist in next any more (commit ecb92c1f4752). So I'm
-> unsure what to do here.
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+>  1 file changed, 7 insertions(+), 10 deletions(-)
 > 
-> The obvious (to me) options are:
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index 1fe0082b2ecc..daed388aa5d7 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -18,14 +18,11 @@ else
+>  endif
+>  
+>  # always use the host compiler
+> -AR       = $(HOSTAR)
+> -CC       = $(HOSTCC)
+> -LD       = $(HOSTLD)
+> -ARCH     = $(HOSTARCH)
+> +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+> +		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> +
+>  RM      ?= rm
+>  CROSS_COMPILE =
+> -CFLAGS  := $(KBUILD_HOSTCFLAGS)
+> -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
+>  
+>  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+>  
+> @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+>  
+>  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+>  	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+> -		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
+> +		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+>  		    $(abspath $@) install_headers
+>  
+>  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+>  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+> -		    DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
+> +		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+>  		    $(abspath $@) install_headers
+>  
+>  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+> @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
+>  include $(srctree)/tools/build/Makefile.include
+>  
+>  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> -	$(Q)$(MAKE) $(build)=resolve_btfids
+> +	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
+>  
+>  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+>  	$(call msg,LINK,$@)
+> -	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> +	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+>  
+>  clean_objects := $(wildcard $(OUTPUT)/*.o                \
+>                              $(OUTPUT)/.*.o.cmd           \
+> -- 
+> 2.39.0.246.g2a6d74b583-goog
 > 
->  a) ignore the problem
->  b) merge ecb92c1f4752 into mfd before applying "mfd: Remove .enable()
->     and .disable() callbacks"
->  c) drop "mfd: Remove .enable() and .disable() callbacks" for now and
->     reapply when ecb92c1f4752 is in Linus' tree (variant of b))
-> 
-> Lee, what's your take here?
 
-We need to pull your patch for now.
+I just bisected a linking failure when building resolve_btfids with
+clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
+Alter how HOSTCC is forced") in the bpf-next tree.
 
-See:
+It appears to be related to whether or not CROSS_COMPILE is specified,
+which we have to do for certain architectures and configurations still.
+arm64 is not one of those but it helps demonstrate the issue.
 
-  drivers/mmc/host/tmio_mmc.c
-  drivers/mtd/nand/raw/tmio_nand.c
-  drivers/usb/host/ohci-tmio.c
-  drivers/video/fbdev/tmiofb.c
-  drivers/w1/masters/ds1wm.c
+  # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
+  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
 
--- 
-Lee Jones [李琼斯]
+  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
+  ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
+  clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
+  ...
+
+Before your change, with V=1, I see:
+
+clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+
+After, I see:
+
+clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+
+We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
+target of resolve_btfids-in.o) and we dropped the warning flags.
+
+I think this comes from the clang block in
+tools/scripts/Makefile.include, which is included into the
+resolve_btfids Makefile via tools/lib/bpf/Makefile.
+
+I am not super familiar with the tools build system, otherwise I would
+try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
+simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
+did not appear to resolve it for me.
+
+If there is any other information I can provide or patches I can test,
+please let me know.
+
+Cheers,
+Nathan
