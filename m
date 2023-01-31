@@ -1,250 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7771A94F
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 21:17:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747D8C433EF;
-	Tue, 31 Jan 2023 21:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675199831;
-	bh=1ZY2ornX4VipZGKYMo7CwCySI7JYuyrC7tE6NUjGzj8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UI286SBhGfNgMn5RYR8rRHE5dY1MPed3drzQ1q45E9tcx5VYCEYFVKz3UGCgiI9TW
-	 D4pqQN77n9mDp6ulU3zxFlfhhtZBgIQTV0k3+eEnROL6379LKPRoIsa/ztw58L3dcU
-	 ll/NZ8pGJQky6nDL3W9XF+zqJYg5gkkLs4a1Y06eGbE9IcOI8XCL8dim3XvpNHXN2G
-	 ksLg0mFHOoN7cVV00fSs4NmYFxFTpsnZeOI10XSERGSooNekJ/a7VxvHwvT8DnouJv
-	 vSnJoZ3nEJ19bSNV7rD/idxkErptPpddYeypZXnzkKopJgi7xJbNNz8U+XVdp4/8+A
-	 2tdKrMUv5b6Vg==
-Date: Tue, 31 Jan 2023 14:17:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Connor OBrien <connoro@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
- <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
- <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
- <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E93A94F
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 21:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675200703;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ky2z72Dt/O9SZyxrZksY2P492zuFRZn3yZiID5ccNQU=;
+	b=W5v/31yG4VaPQKUBwZtsoz8vuNANYSwmCWF9lD61bdfUdyJy3fYI5qPaBe9uKzCKfTNpEB
+	vGGVPUMTLhkF54o54pzWcWblfcx62lZL5qrnOPfiBWAo/CxzAlrY9/O5HERmKI75Wuc0k+
+	4kF9wN0s6Y/uQs9r1bfp+HoYgcgapQE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-d5KK3akeOES0f2AXO2Ogvg-1; Tue, 31 Jan 2023 16:31:41 -0500
+X-MC-Unique: d5KK3akeOES0f2AXO2Ogvg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8D563815F6E
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 21:31:40 +0000 (UTC)
+Received: from [172.64.14.12] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D801440C2064;
+	Tue, 31 Jan 2023 21:31:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, 22b8077d)
+Date: Tue, 31 Jan 2023 21:31:40 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <75605.123013116314100741@us-mta-250.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
-> On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
-> > > >
-> > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > >
-> > > > > Hi Ian,
-> > > > >
-> > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> > > > > > after tools/scripts/Makefile.include is included, meaning flags are
-> > > > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
-> > > > > > which may be clang. tools/scripts/Makefile.include is needed for host
-> > > > > > set up and common macros in objtool's Makefile. Rather than override
-> > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> > > > > > builds and the linkage step. This means the Makefiles don't see things
-> > > > > > like CC changing and tool flag determination, and similar, work
-> > > > > > properly.
-> > > > > >
-> > > > > > Also, clear the passed subdir as otherwise an outer build may break by
-> > > > > > inadvertently passing an inappropriate value.
-> > > > > >
-> > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > > ---
-> > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > > >
-> > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > > @@ -18,14 +18,11 @@ else
-> > > > > >  endif
-> > > > > >
-> > > > > >  # always use the host compiler
-> > > > > > -AR       = $(HOSTAR)
-> > > > > > -CC       = $(HOSTCC)
-> > > > > > -LD       = $(HOSTLD)
-> > > > > > -ARCH     = $(HOSTARCH)
-> > > > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> > > > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > > > +
-> > > > > >  RM      ?= rm
-> > > > > >  CROSS_COMPILE =
-> > > > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> > > > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
-> > > > > >
-> > > > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > > > >
-> > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > > > >
-> > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> > > > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> > > > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > >                   $(abspath $@) install_headers
-> > > > > >
-> > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
-> > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> > > > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> > > > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > >                   $(abspath $@) install_headers
-> > > > > >
-> > > > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > > > >  include $(srctree)/tools/build/Makefile.include
-> > > > > >
-> > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
-> > > > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> > > > > >
-> > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > > > >       $(call msg,LINK,$@)
-> > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > >
-> > > > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> > > > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > > > --
-> > > > > > 2.39.0.246.g2a6d74b583-goog
-> > > > > >
-> > > > >
-> > > > > I just bisected a linking failure when building resolve_btfids with
-> > > > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > > > >
-> > > > > It appears to be related to whether or not CROSS_COMPILE is specified,
-> > > > > which we have to do for certain architectures and configurations still.
-> > > > > arm64 is not one of those but it helps demonstrate the issue.
-> > > > >
-> > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-> > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-> > > > >
-> > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-> > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> > > > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-> > > > >   ...
-> > > > >
-> > > > > Before your change, with V=1, I see:
-> > > > >
-> > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > >
-> > > > > After, I see:
-> > > > >
-> > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > >
-> > > > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-> > > > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > > > >
-> > > > > I think this comes from the clang block in
-> > > > > tools/scripts/Makefile.include, which is included into the
-> > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > > > >
-> > > > > I am not super familiar with the tools build system, otherwise I would
-> > > > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-> > > > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-> > > > > did not appear to resolve it for me.
-> > > > >
-> > > > > If there is any other information I can provide or patches I can test,
-> > > > > please let me know.
-> > > > >
-> > > > > Cheers,
-> > > > > Nathan
-> > > >
-> > > > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > > > looking into this.
-> > > >
-> > > > Ian
-> > >
-> > > Given the somewhat complicated cross compile I wasn't able to get a
-> > > reproduction. Could you see if the following addresses the problem:
-> >
-> > As long as you have an LLVM toolchain that targets AArch64 and your
-> > host, you should be able to reproduce this issue with those commands
-> > verbatim, as that command should not use any GNU binutils. I am pretty
-> > sure I tried it in a fresh container before reporting it but it is
-> > possible that I did not.
-> 
-> Thanks, do you have instructions on setting up the container?
+Hi, we tested your kernel and here are the results:
 
-Sure thing, this worked for me in the Linux source you would like to
-build (I marked it readonly to make sure any modifications were done in
-my host environment, remove the ':ro' if you would like to make edits to
-the source within the container). Docker should work as well but I did
-not test it.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-$ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
-# pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
-...
 
-# To turn on CONFIG_DEBUG_INFO_BTF
-# make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build defconfig menuconfig
+Kernel information:
+    Commit message: Merge tag 'fscache-fixes-20230130' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/dhowells/linux-fs
 
-# make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build prepare
-ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67680
 
-> > > ```
-> > > diff --git a/tools/bpf/resolve_btfids/Makefile
-> > > b/tools/bpf/resolve_btfids/Makefile
-> > > index daed388aa5d7..a06966841df4 100644
-> > > --- a/tools/bpf/resolv
-> 
-> Ian
-> e_btfids/Makefile
-> > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > @@ -19,10 +19,9 @@ endif
-> > >
-> > > # always use the host compiler
-> > > HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
-> > > ARCH="$(HOSTARCH)" \
-> > > -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > CROSS_COMPILE=""
-> > >
-> > > RM      ?= rm
-> > > -CROSS_COMPILE =
-> > >
-> > > OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > ```
-> > >
-> >
-> > Unfortunately, it does not. I still see '--target=' end up in the
-> > CFLAGS of those files.
-> >
-> > Cheers,
-> > Nathan
-> 
-> Hmm.. I can see the issue. We avoid this in places like libsubcmd
-> because the Makefile there includes tools/scripts/Makefile.include,
-> but here the Makefile.build inclusion is direct and we have CC set up
-> for cross compilation. This is messy and it will take some playing
-> around to come up with a simple fix.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6885282
 
-Ack, if you have any issues with reproducing it, please let me know.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
-Cheers,
-Nathan
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
