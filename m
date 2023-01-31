@@ -1,38 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2298F4B
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 17:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49748C433EF;
-	Tue, 31 Jan 2023 17:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675185659;
-	bh=+pvUZxvhRwxJP5MRWV/FG2QALpGhPM4yg4kJFt4ZFlI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FPKZBNkr4YMaum4++SVy1d+KjqgdDu04hJDzmRHOeWM9Rw4g69HGsE+J50iv0S43P
-	 052q+53XWlexnd48eQqCpsIJNW1uEY7PVJhPoNzXFw2DiD04IXHXB0faQNuLHaSuPS
-	 smV8LoJamcPlIQuTxPiKxxEKhyj0NdF9NuypU1FuTHfDnNzma/AfnksxfnhP5Y4LVV
-	 w9d2T0xHZWqXIz3nqK2rmYe4yx1tiSzdBBmXLj3vR6waNmcPhyc+MT3Vv3bVGkPzvn
-	 sQdaiCVDl566Z+33gbNAQX8emOTxTkm8eUac3GQTTfup+SH+Lit1/NHy5rX/WOiy0a
-	 sJYZdK5NKel9A==
-Date: Tue, 31 Jan 2023 10:20:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Connor OBrien <connoro@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318758F4B;
+	Tue, 31 Jan 2023 17:26:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675185969; x=1706721969;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6uRBLpzx0E9m0xMnCdpOBvHXWh8lf/kuFyC9J6dSreM=;
+  b=VtNT4Xi0W1UaPq/2YxfzbmAtWinyRDpaG9a1eZUrm+DiVU7TICQRsaG2
+   aU7aCQ7/IRF0C7EfHQ56Z6i5yWlHdM4nNPFzjbQOT4gS3cT64CjUGJ/PJ
+   yUWk4F+ojRuY9bH6DiQD9+tUS9iFHrJyE1meV2OqvMljSHXzIN6QL0clC
+   APexVinXbMuPhuYk9SiJ1y0KAtzasID28xnqnmA83wH2btUKQa1faGBo0
+   YtHRH91gVdjocrVWGy4ZzPUhmO+ykS0nLSbUStiT1X9uw3HodXyC6A4kc
+   f6EpW3Z8w3mRA8sBA5wVZOl4LVGdyny6gjitVWOccatJD1KVqDGvWgECB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="311521219"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="311521219"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 09:26:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="807209055"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="807209055"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 31 Jan 2023 09:26:06 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pMuOU-0004aI-0J;
+	Tue, 31 Jan 2023 17:26:06 +0000
+Date: Wed, 1 Feb 2023 01:25:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:sched/urgent 1/1] kernel/cgroup/cpuset.c:3749:1:
+ error: expected 'while' in do/while loop
+Message-ID: <202302010155.FaftGxmC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,122 +45,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230124064324.672022-2-irogers@google.com>
 
-Hi Ian,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/urgent
+head:   4f4d0b01796a0e1cae148d96b32520ebabb3951f
+commit: 4f4d0b01796a0e1cae148d96b32520ebabb3951f [1/1] cpuset: Fix cpuset_cpus_allowed() to not filter offline CPUs
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302010155.FaftGxmC-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=4f4d0b01796a0e1cae148d96b32520ebabb3951f
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/urgent
+        git checkout 4f4d0b01796a0e1cae148d96b32520ebabb3951f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> after tools/scripts/Makefile.include is included, meaning flags are
-> set assuming say CC is gcc, but then it can be later set to HOSTCC
-> which may be clang. tools/scripts/Makefile.include is needed for host
-> set up and common macros in objtool's Makefile. Rather than override
-> CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> builds and the linkage step. This means the Makefiles don't see things
-> like CC changing and tool flag determination, and similar, work
-> properly.
-> 
-> Also, clear the passed subdir as otherwise an outer build may break by
-> inadvertently passing an inappropriate value.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
->  1 file changed, 7 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 1fe0082b2ecc..daed388aa5d7 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -18,14 +18,11 @@ else
->  endif
->  
->  # always use the host compiler
-> -AR       = $(HOSTAR)
-> -CC       = $(HOSTCC)
-> -LD       = $(HOSTLD)
-> -ARCH     = $(HOSTARCH)
-> +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> +		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> +
->  RM      ?= rm
->  CROSS_COMPILE =
-> -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
->  
->  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
->  
-> @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->  
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
->  	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> -		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> +		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
->  		    $(abspath $@) install_headers
->  
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> -		    DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> +		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
->  		    $(abspath $@) install_headers
->  
->  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->  
->  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> -	$(Q)$(MAKE) $(build)=resolve_btfids
-> +	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
->  
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
->  	$(call msg,LINK,$@)
-> -	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> +	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
->  
->  clean_objects := $(wildcard $(OUTPUT)/*.o                \
->                              $(OUTPUT)/.*.o.cmd           \
-> -- 
-> 2.39.0.246.g2a6d74b583-goog
-> 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-I just bisected a linking failure when building resolve_btfids with
-clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-Alter how HOSTCC is forced") in the bpf-next tree.
+All errors (new ones prefixed by >>):
 
-It appears to be related to whether or not CROSS_COMPILE is specified,
-which we have to do for certain architectures and configurations still.
-arm64 is not one of those but it helps demonstrate the issue.
+>> kernel/cgroup/cpuset.c:3749:1: error: expected 'while' in do/while loop
+   bool cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+   ^
+   kernel/cgroup/cpuset.c:3721:2: note: to match this 'do'
+           do {
+           ^
+>> kernel/cgroup/cpuset.c:3975:1: error: function definition is not allowed here
+   {
+   ^
+   kernel/cgroup/cpuset.c:3986:1: error: function definition is not allowed here
+   {
+   ^
+>> kernel/cgroup/cpuset.c:4006:36: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
+   int cpuset_memory_pressure_enabled __read_mostly;
+                                      ^
+   arch/x86/include/asm/cache.h:11:23: note: expanded from macro '__read_mostly'
+   #define __read_mostly __section(".data..read_mostly")
+                         ^
+   include/linux/compiler_attributes.h:316:56: note: expanded from macro '__section'
+   #define __section(section)              __attribute__((__section__(section)))
+                                                          ^
+   kernel/cgroup/cpuset.c:4027:1: error: function definition is not allowed here
+   {
+   ^
+   kernel/cgroup/cpuset.c:4045:1: error: function definition is not allowed here
+   {
+   ^
+   kernel/cgroup/cpuset.c:4075:1: error: function definition is not allowed here
+   {
+   ^
+>> kernel/cgroup/cpuset.c:4080:2: error: expected '}'
+   }
+    ^
+   kernel/cgroup/cpuset.c:3713:1: note: to match this '{'
+   {
+   ^
+   kernel/cgroup/cpuset.c:3960:1: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+   EXPORT_SYMBOL_GPL(cpuset_mem_spread_node);
+   ^
+   include/linux/export.h:151:33: note: expanded from macro 'EXPORT_SYMBOL_GPL'
+   #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "_gpl")
+                                           ^
+   include/linux/export.h:147:34: note: expanded from macro '_EXPORT_SYMBOL'
+   #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
+                                           ^
+   include/linux/export.h:140:39: note: expanded from macro '__EXPORT_SYMBOL'
+   #define __EXPORT_SYMBOL(sym, sec, ns)   ___EXPORT_SYMBOL(sym, sec, ns)
+                                           ^
+   include/linux/export.h:88:20: note: expanded from macro '___EXPORT_SYMBOL'
+           extern const char __kstrtab_##sym[];                                    \
+                             ^
+   <scratch space>:213:1: note: expanded from here
+   __kstrtab_cpuset_mem_spread_node
+   ^
+   1 warning and 8 errors generated.
 
-  # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
 
-  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-  ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-  clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-  ...
+vim +/while +3749 kernel/cgroup/cpuset.c
 
-Before your change, with V=1, I see:
+^1da177e4c3f415 kernel/cpuset.c        Linus Torvalds 2005-04-16  3734  
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3735  /**
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3736   * cpuset_cpus_allowed_fallback - final fallback before complete catastrophe.
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3737   * @tsk: pointer to task_struct with which the scheduler is struggling
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3738   *
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3739   * Description: In the case that the scheduler cannot find an allowed cpu in
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3740   * tsk->cpus_allowed, we fall back to task_cs(tsk)->cpus_allowed. In legacy
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3741   * mode however, this value is the same as task_cs(tsk)->effective_cpus,
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3742   * which will not contain a sane cpumask during cases such as cpu hotplugging.
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3743   * This is the absolute last resort for the scheduler and it is only used if
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3744   * _every_ other avenue has been traveled.
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3745   *
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3746   * Returns true if the affinity of @tsk was changed, false otherwise.
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3747   **/
+d477f8c202d1f0d kernel/cgroup/cpuset.c Joel Savitz    2019-06-12  3748  
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30 @3749  bool cpuset_cpus_allowed_fallback(struct task_struct *tsk)
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3750  {
+d4b96fb92ae7fe7 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3751  	const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
+d4b96fb92ae7fe7 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3752  	const struct cpumask *cs_mask;
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3753  	bool changed = false;
+d4b96fb92ae7fe7 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3754  
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3755  	rcu_read_lock();
+d4b96fb92ae7fe7 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3756  	cs_mask = task_cs(tsk)->cpus_allowed;
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3757  	if (is_in_v2_mode() && cpumask_subset(cs_mask, possible_mask)) {
+d4b96fb92ae7fe7 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3758  		do_set_cpus_allowed(tsk, cs_mask);
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3759  		changed = true;
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3760  	}
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3761  	rcu_read_unlock();
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3762  
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3763  	/*
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3764  	 * We own tsk->cpus_allowed, nobody can change it under us.
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3765  	 *
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3766  	 * But we used cs && cs->cpus_allowed lockless and thus can
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3767  	 * race with cgroup_attach_task() or update_cpumask() and get
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3768  	 * the wrong tsk->cpus_allowed. However, both cases imply the
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3769  	 * subsequent cpuset_change_cpumask()->set_cpus_allowed_ptr()
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3770  	 * which takes task_rq_lock().
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3771  	 *
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3772  	 * If we are called after it dropped the lock we must see all
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3773  	 * changes in tsk_cs()->cpus_allowed. Otherwise we can temporary
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3774  	 * set any mask even if it is not right from task_cs() pov,
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3775  	 * the pending set_cpus_allowed_ptr() will fix things.
+2baab4e90495ebc kernel/cpuset.c        Peter Zijlstra 2012-03-20  3776  	 *
+2baab4e90495ebc kernel/cpuset.c        Peter Zijlstra 2012-03-20  3777  	 * select_fallback_rq() will fix things ups and set cpu_possible_mask
+2baab4e90495ebc kernel/cpuset.c        Peter Zijlstra 2012-03-20  3778  	 * if required.
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3779  	 */
+97c0054dbe2c3c5 kernel/cgroup/cpuset.c Will Deacon    2021-07-30  3780  	return changed;
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3781  }
+9084bb8246ea935 kernel/cpuset.c        Oleg Nesterov  2010-03-15  3782  
 
-clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+:::::: The code at line 3749 was first introduced by commit
+:::::: 97c0054dbe2c3c59d1156fd233f2d44e91981c8e cpuset: Cleanup cpuset_cpus_allowed_fallback() use in select_fallback_rq()
 
-After, I see:
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
-clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-
-We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-target of resolve_btfids-in.o) and we dropped the warning flags.
-
-I think this comes from the clang block in
-tools/scripts/Makefile.include, which is included into the
-resolve_btfids Makefile via tools/lib/bpf/Makefile.
-
-I am not super familiar with the tools build system, otherwise I would
-try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-did not appear to resolve it for me.
-
-If there is any other information I can provide or patches I can test,
-please let me know.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
