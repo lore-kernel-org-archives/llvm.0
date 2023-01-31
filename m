@@ -1,293 +1,379 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EBD627
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 22:40:43 +0000 (UTC)
-Received: by mail-ej1-f42.google.com with SMTP id mf7so27370783ejc.6
-        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 14:40:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E04627
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 22:50:41 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso93288wmq.5
+        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 14:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KUPztVm7TCSgk24kz0qZCmg6of4J1a8oSdbPBOcLku4=;
-        b=c/BEL643UCrCF82LoV3IKB+5KyuXz5WCgAF5qbQDzmz2rbq8SsdE869+V0tZVubxFo
-         kwynVei/99hhq1jWA3ffqaMRAEYrJJj1rIIf7DfLnUkDUpiBYTfVhzI9Z/Em8LpuZoQm
-         VYbF0i8vaAicCJ+CpzW2Ao8HIop4wQ3gqACGS6IimGmadtIe465foqUvE+rD4HfBNQe2
-         JrxI2gr9aN6FnTCUrCcjJlLQZmJQk9kTflb/21hb4xd+RERL8Nd9Gpsg3YRf+FGoycEe
-         xpM0PgS3Ou5QF8H4uRdOBMUrvYaf/9o4GLXeRYDlp+SSXjEdS/faBBI2N85KMpIJyosB
-         ZP0w==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A0LDbERO12laLmPDWTi8+TGflh7aG4vAdRmgw8+IF1Q=;
+        b=jlnWnt7nSMwLcUXQIhXN2JEVq6iNDvdZivkhZrKhvuL2zuEqI+h3WB7BXQ28OQhb/C
+         AURJ0HL3jIWx/O+QzijM8jTN5IYhVZJBURl0EhogFM5yVaMxpj0sCwW9UrzTmj5ABYe7
+         S2Ok1UIKDjdLSmMkWz0BD12N0bOyDVMlN/5r2AZSLPue3wrQQwD5qUUNyw9eFMiNPZhG
+         YF1dcVf3EIbvyQeKHTpQnUzTdVGkvBEKD3pZMVIzKVAYDVv6k/jC3BHntfQ5HHKSrytl
+         IE4FnQXfJUsA0/rt+KtW5rnjP7SQR2BYeI+6EbhePhKRCMO0npsyQADS7Xem0dezaiBw
+         UbBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KUPztVm7TCSgk24kz0qZCmg6of4J1a8oSdbPBOcLku4=;
-        b=sn9iSB/ZNXp7/ExQwWbs82OhxBL74PeichUQppmS2WbUFjGt3y9gDhWw4D1djG5i/Q
-         jthen1vt6amoNugdxsrA+cD5WLviwAODlE+HZlzyWyML8DMF4jdgK75c+gGlr1Xyb7Qj
-         AvZsa5fAilLXqJfvdAUWliypyjOWzJ+gTURKn6vYnE9X+P+C0VNmEGB3tFfKnk6eHjX5
-         +IQK78yndDfK+m9/Yku3ttrIlYZDUj0r51DXsGJ5bfZRQid/2hnY961EfImzebaioNgy
-         HTr5/lIZ3pNrejO1sKe8Dlt7HjW19c8AviH+Hj3GKSKHFtEVXwPV4PlOkHuv6r2ic7yb
-         fFgQ==
-X-Gm-Message-State: AO0yUKWWITvaLx9FOvGycpOa5tTta4oy8UgVingLZtpRWB3BSurM7+gn
-	sDbR6xlK1jq+noqpSRs/poI=
-X-Google-Smtp-Source: AK7set+p5JQV/1HfuHev8lqBJ9svYuBbwUUuVTlWdesok6lYa6PakehRGFDPx8aWSKlzUNXHD+Gqhg==
-X-Received: by 2002:a17:906:434b:b0:878:72f7:bd87 with SMTP id z11-20020a170906434b00b0087872f7bd87mr57007ejm.6.1675204841311;
-        Tue, 31 Jan 2023 14:40:41 -0800 (PST)
-Received: from krava ([83.240.61.48])
-        by smtp.gmail.com with ESMTPSA id a26-20020a170906685a00b008878909859bsm4388047ejs.152.2023.01.31.14.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 14:40:40 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 31 Jan 2023 23:40:39 +0100
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Connor OBrien <connoro@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9mY5woe+45nTvTM@krava>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
- <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
- <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
- <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
- <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A0LDbERO12laLmPDWTi8+TGflh7aG4vAdRmgw8+IF1Q=;
+        b=ercuiZ7uqEv8XgSBtCrf9NovaWAKg9u5ajf9ws4utvWi3UX00caTccCp6kUtM8lw4E
+         qnOg7svmMKv+blBMvmWflNYZrUzTxm5OEpgUMTQxpfTf2kVRfZrg4UDpNw6Mcn3PqLYV
+         iQBbYk//2BXHkV74grKHQBXAGLN0L1WQbW9vv+h1hr/Ec8516enowu7j3XPFP72A3M1p
+         hrpkST1JdgIZJikl7PxvNglbgltJXi5VwU3QIswc9CpSPOBDT+8vSiTmC2uBCPxOP8Jr
+         dPR83Y8Ke4DD1oWUuhepgNBVbr7UxYT4+TFSeKYMkuT0F4KWIRM6v5we99vt8cQ5P1Xu
+         TlLA==
+X-Gm-Message-State: AFqh2koIwplxLI/9xpRkzYzyeByKXYVgtdBXtDTZSJwyvyZbpgwydJEI
+	vqwo4akpU9JJipTMdHwSuPlplUSx19fRUNaLNZ5Lhg==
+X-Google-Smtp-Source: AMrXdXsILaDRFMCzV7v+w7tHyqSBq005Ff7hC4ApPZB8W6if6HOnW0wrkCggvzAbdIwKg065Q+wT0Ly5b6YI6PpIel4=
+X-Received: by 2002:a05:600c:6020:b0:3da:1bb6:ed44 with SMTP id
+ az32-20020a05600c602000b003da1bb6ed44mr3915205wmb.149.1675205439446; Tue, 31
+ Jan 2023 14:50:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
+References: <20230124064324.672022-1-irogers@google.com> <20230124064324.672022-2-irogers@google.com>
+ <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X> <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
+ <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
+ <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X> <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
+ <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X> <Y9mY5woe+45nTvTM@krava>
+In-Reply-To: <Y9mY5woe+45nTvTM@krava>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 31 Jan 2023 14:50:27 -0800
+Message-ID: <CAP-5=fVDE6a+1rxOFhFjheg3ybUMRxE51NPW=kKLc=O98TQHHA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Connor OBrien <connoro@google.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 31, 2023 at 02:17:08PM -0700, Nathan Chancellor wrote:
-> On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
-> > On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> > > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
+On Tue, Jan 31, 2023 at 2:40 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Tue, Jan 31, 2023 at 02:17:08PM -0700, Nathan Chancellor wrote:
+> > On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
+> > > On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+> > > >
+> > > > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
+> > > > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> =
+wrote:
+> > > > > >
+> > > > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > > > > > >
+> > > > > > > Hi Ian,
+> > > > > > >
+> > > > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
+> > > > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC=
+ happens
+> > > > > > > > after tools/scripts/Makefile.include is included, meaning f=
+lags are
+> > > > > > > > set assuming say CC is gcc, but then it can be later set to=
+ HOSTCC
+> > > > > > > > which may be clang. tools/scripts/Makefile.include is neede=
+d for host
+> > > > > > > > set up and common macros in objtool's Makefile. Rather than=
+ override
+> > > > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the=
+ libsubcmd
+> > > > > > > > builds and the linkage step. This means the Makefiles don't=
+ see things
+> > > > > > > > like CC changing and tool flag determination, and similar, =
+work
+> > > > > > > > properly.
+> > > > > > > >
+> > > > > > > > Also, clear the passed subdir as otherwise an outer build m=
+ay break by
+> > > > > > > > inadvertently passing an inappropriate value.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > > > > > ---
+> > > > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+> > > > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > > > > > > >
+> > > > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/=
+resolve_btfids/Makefile
+> > > > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
+> > > > > > > > --- a/tools/bpf/resolve_btfids/Makefile
+> > > > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > > > > > @@ -18,14 +18,11 @@ else
+> > > > > > > >  endif
+> > > > > > > >
+> > > > > > > >  # always use the host compiler
+> > > > > > > > -AR       =3D $(HOSTAR)
+> > > > > > > > -CC       =3D $(HOSTCC)
+> > > > > > > > -LD       =3D $(HOSTLD)
+> > > > > > > > -ARCH     =3D $(HOSTARCH)
+> > > > > > > > +HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=
+=3D"$(HOSTLD)" ARCH=3D"$(HOSTARCH)" \
+> > > > > > > > +               EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOST=
+CFLAGS)"
+> > > > > > > > +
+> > > > > > > >  RM      ?=3D rm
+> > > > > > > >  CROSS_COMPILE =3D
+> > > > > > > > -CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
+> > > > > > > > -LDFLAGS :=3D $(KBUILD_HOSTLDFLAGS)
+> > > > > > > >
+> > > > > > > >  OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
+> > > > > > > >
+> > > > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_=
+OUT):
+> > > > > > > >
+> > > > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> > > > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=3D$(SUBCMD_OUT) \
+> > > > > > > > -                 DESTDIR=3D$(SUBCMD_DESTDIR) prefix=3D \
+> > > > > > > > +                 DESTDIR=3D$(SUBCMD_DESTDIR) $(HOST_OVERRI=
+DES) prefix=3D subdir=3D \
+> > > > > > > >                   $(abspath $@) install_headers
+> > > > > > > >
+> > > > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/M=
+akefile) | $(LIBBPF_OUT)
+> > > > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=
+=3D$(LIBBPF_OUT)    \
+> > > > > > > > -                 DESTDIR=3D$(LIBBPF_DESTDIR) prefix=3D EXT=
+RA_CFLAGS=3D"$(CFLAGS)" \
+> > > > > > > > +                 DESTDIR=3D$(LIBBPF_DESTDIR) $(HOST_OVERRI=
+DES) prefix=3D subdir=3D \
+> > > > > > > >                   $(abspath $@) install_headers
+> > > > > > > >
+> > > > > > > >  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflag=
+s 2>/dev/null)
+> > > > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
+> > > > > > > >  include $(srctree)/tools/build/Makefile.include
+> > > > > > > >
+> > > > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> > > > > > > > -     $(Q)$(MAKE) $(build)=3Dresolve_btfids
+> > > > > > > > +     $(Q)$(MAKE) $(build)=3Dresolve_btfids $(HOST_OVERRIDE=
+S)
+> > > > > > > >
+> > > > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+> > > > > > > >       $(call msg,LINK,$@)
+> > > > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(S=
+UBCMDOBJ) $(LIBS)
+> > > > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $=
+@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > > > > > > >
+> > > > > > > >  clean_objects :=3D $(wildcard $(OUTPUT)/*.o               =
+ \
+> > > > > > > >                              $(OUTPUT)/.*.o.cmd           \
+> > > > > > > > --
+> > > > > > > > 2.39.0.246.g2a6d74b583-goog
+> > > > > > > >
+> > > > > > >
+> > > > > > > I just bisected a linking failure when building resolve_btfid=
+s with
+> > > > > > > clang to this change as commit 13e07691a16f ("tools/resolve_b=
+tfids:
+> > > > > > > Alter how HOSTCC is forced") in the bpf-next tree.
+> > > > > > >
+> > > > > > > It appears to be related to whether or not CROSS_COMPILE is s=
+pecified,
+> > > > > > > which we have to do for certain architectures and configurati=
+ons still.
+> > > > > > > arm64 is not one of those but it helps demonstrate the issue.
+> > > > > > >
+> > > > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEB=
+UG_INFO_BTF
+> > > > > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-=
+linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 defconfig menuconfig
+> > > > > > >
+> > > > > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-=
+linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 prepare
+> > > > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve=
+_btfids-in.o is incompatible with elf64-x86-64
+> > > > > > >   clang-17: error: linker command failed with exit code 1 (us=
+e -v to see invocation)
+> > > > > > >   ...
+> > > > > > >
+> > > > > > > Before your change, with V=3D1, I see:
+> > > > > > >
+> > > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -=
+Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototype=
+s -Wstrict-prototypes -O2 -fomit-frame-pointer -std=3Dgnu11 -Wdeclaration-a=
+fter-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uap=
+i -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/b=
+pf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/=
+tools/bpf/resolve_btfids/main.o main.c
+> > > > > > >
+> > > > > > > After, I see:
+> > > > > > >
+> > > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -=
+Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=3Daarch64-linux-=
+gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_=
+SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_=
+btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/bpf/r=
+esolve_btfids/main.o main.c
+> > > > > > >
+> > > > > > > We seem to have taken on a '--target=3Daarch64-linux-gnu' (ch=
+anging the
+> > > > > > > target of resolve_btfids-in.o) and we dropped the warning fla=
+gs.
+> > > > > > >
+> > > > > > > I think this comes from the clang block in
+> > > > > > > tools/scripts/Makefile.include, which is included into the
+> > > > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
+> > > > > > >
+> > > > > > > I am not super familiar with the tools build system, otherwis=
+e I would
+> > > > > > > try to provide a patch. I tried moving CROSS_COMPILE from a r=
+ecursive to
+> > > > > > > simple variable ('=3D' -> ':=3D') and moving it to HOST_OVERR=
+IDES but those
+> > > > > > > did not appear to resolve it for me.
+> > > > > > >
+> > > > > > > If there is any other information I can provide or patches I =
+can test,
+> > > > > > > please let me know.
+> > > > > > >
+> > > > > > > Cheers,
+> > > > > > > Nathan
+> > > > > >
+> > > > > > Thanks Nathan, and thanks for all the details in the bug report=
+. I'm
+> > > > > > looking into this.
+> > > > > >
+> > > > > > Ian
 > > > > >
-> > > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi Ian,
-> > > > > >
-> > > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> > > > > > > after tools/scripts/Makefile.include is included, meaning flags are
-> > > > > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
-> > > > > > > which may be clang. tools/scripts/Makefile.include is needed for host
-> > > > > > > set up and common macros in objtool's Makefile. Rather than override
-> > > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> > > > > > > builds and the linkage step. This means the Makefiles don't see things
-> > > > > > > like CC changing and tool flag determination, and similar, work
-> > > > > > > properly.
-> > > > > > >
-> > > > > > > Also, clear the passed subdir as otherwise an outer build may break by
-> > > > > > > inadvertently passing an inappropriate value.
-> > > > > > >
-> > > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > > > ---
-> > > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > > > @@ -18,14 +18,11 @@ else
-> > > > > > >  endif
-> > > > > > >
-> > > > > > >  # always use the host compiler
-> > > > > > > -AR       = $(HOSTAR)
-> > > > > > > -CC       = $(HOSTCC)
-> > > > > > > -LD       = $(HOSTLD)
-> > > > > > > -ARCH     = $(HOSTARCH)
-> > > > > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> > > > > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > > > > +
-> > > > > > >  RM      ?= rm
-> > > > > > >  CROSS_COMPILE =
-> > > > > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> > > > > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
-> > > > > > >
-> > > > > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > > > > >
-> > > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > > > > >
-> > > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> > > > > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> > > > > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > > >                   $(abspath $@) install_headers
-> > > > > > >
-> > > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
-> > > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> > > > > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> > > > > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > > >                   $(abspath $@) install_headers
-> > > > > > >
-> > > > > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> > > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > > > > >  include $(srctree)/tools/build/Makefile.include
-> > > > > > >
-> > > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
-> > > > > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> > > > > > >
-> > > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > > > > >       $(call msg,LINK,$@)
-> > > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > >
-> > > > > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> > > > > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > > > > --
-> > > > > > > 2.39.0.246.g2a6d74b583-goog
-> > > > > > >
-> > > > > >
-> > > > > > I just bisected a linking failure when building resolve_btfids with
-> > > > > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > > > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > > > > >
-> > > > > > It appears to be related to whether or not CROSS_COMPILE is specified,
-> > > > > > which we have to do for certain architectures and configurations still.
-> > > > > > arm64 is not one of those but it helps demonstrate the issue.
-> > > > > >
-> > > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-> > > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-> > > > > >
-> > > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-> > > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> > > > > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-> > > > > >   ...
-> > > > > >
-> > > > > > Before your change, with V=1, I see:
-> > > > > >
-> > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > > >
-> > > > > > After, I see:
-> > > > > >
-> > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > > >
-> > > > > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-> > > > > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > > > > >
-> > > > > > I think this comes from the clang block in
-> > > > > > tools/scripts/Makefile.include, which is included into the
-> > > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > > > > >
-> > > > > > I am not super familiar with the tools build system, otherwise I would
-> > > > > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-> > > > > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-> > > > > > did not appear to resolve it for me.
-> > > > > >
-> > > > > > If there is any other information I can provide or patches I can test,
-> > > > > > please let me know.
-> > > > > >
-> > > > > > Cheers,
-> > > > > > Nathan
-> > > > >
-> > > > > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > > > > looking into this.
-> > > > >
-> > > > > Ian
+> > > > > Given the somewhat complicated cross compile I wasn't able to get=
+ a
+> > > > > reproduction. Could you see if the following addresses the proble=
+m:
 > > > >
-> > > > Given the somewhat complicated cross compile I wasn't able to get a
-> > > > reproduction. Could you see if the following addresses the problem:
+> > > > As long as you have an LLVM toolchain that targets AArch64 and your
+> > > > host, you should be able to reproduce this issue with those command=
+s
+> > > > verbatim, as that command should not use any GNU binutils. I am pre=
+tty
+> > > > sure I tried it in a fresh container before reporting it but it is
+> > > > possible that I did not.
 > > >
-> > > As long as you have an LLVM toolchain that targets AArch64 and your
-> > > host, you should be able to reproduce this issue with those commands
-> > > verbatim, as that command should not use any GNU binutils. I am pretty
-> > > sure I tried it in a fresh container before reporting it but it is
-> > > possible that I did not.
-> > 
-> > Thanks, do you have instructions on setting up the container?
-> 
-> Sure thing, this worked for me in the Linux source you would like to
-> build (I marked it readonly to make sure any modifications were done in
-> my host environment, remove the ':ro' if you would like to make edits to
-> the source within the container). Docker should work as well but I did
-> not test it.
-> 
-> $ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
-> # pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
-> ...
-> 
-> # To turn on CONFIG_DEBUG_INFO_BTF
-> # make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build defconfig menuconfig
-> 
-> # make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build prepare
-> ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
-> 
-> > > > ```
-> > > > diff --git a/tools/bpf/resolve_btfids/Makefile
-> > > > b/tools/bpf/resolve_btfids/Makefile
-> > > > index daed388aa5d7..a06966841df4 100644
-> > > > --- a/tools/bpf/resolv
-> > 
-> > Ian
-> > e_btfids/Makefile
-> > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > @@ -19,10 +19,9 @@ endif
-> > > >
-> > > > # always use the host compiler
-> > > > HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
-> > > > ARCH="$(HOSTARCH)" \
-> > > > -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > CROSS_COMPILE=""
-> > > >
-> > > > RM      ?= rm
-> > > > -CROSS_COMPILE =
-> > > >
-> > > > OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > > ```
-> > > >
+> > > Thanks, do you have instructions on setting up the container?
+> >
+> > Sure thing, this worked for me in the Linux source you would like to
+> > build (I marked it readonly to make sure any modifications were done in
+> > my host environment, remove the ':ro' if you would like to make edits t=
+o
+> > the source within the container). Docker should work as well but I did
+> > not test it.
+> >
+> > $ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
+> > # pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
+> > ...
+> >
+> > # To turn on CONFIG_DEBUG_INFO_BTF
+> > # make -C /linux -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-li=
+nux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 O=3D/build defconfig menucon=
+fig
+> >
+> > # make -C /linux -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-li=
+nux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 O=3D/build prepare
+> > ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is =
+incompatible with elf64-x86-64
+> > clang-15: error: linker command failed with exit code 1 (use -v to see =
+invocation)
+> >
+> > > > > ```
+> > > > > diff --git a/tools/bpf/resolve_btfids/Makefile
+> > > > > b/tools/bpf/resolve_btfids/Makefile
+> > > > > index daed388aa5d7..a06966841df4 100644
+> > > > > --- a/tools/bpf/resolv
 > > >
-> > > Unfortunately, it does not. I still see '--target=' end up in the
-> > > CFLAGS of those files.
+> > > Ian
+> > > e_btfids/Makefile
+> > > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > > @@ -19,10 +19,9 @@ endif
+> > > > >
+> > > > > # always use the host compiler
+> > > > > HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOS=
+TLD)"
+> > > > > ARCH=3D"$(HOSTARCH)" \
+> > > > > -                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLA=
+GS)"
+> > > > > +                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLA=
+GS)"
+> > > > > CROSS_COMPILE=3D""
+> > > > >
+> > > > > RM      ?=3D rm
+> > > > > -CROSS_COMPILE =3D
+> > > > >
+> > > > > OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
+> > > > > ```
+> > > > >
+> > > >
+> > > > Unfortunately, it does not. I still see '--target=3D' end up in the
+> > > > CFLAGS of those files.
+>
+> hi,
+> I can reproduce that and I think the reason is that the patch removes
+> CFLAGS setup
+>
+>   CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
+>
+> so now the 'include ../../scripts/Makefile.include' will set CFLAGS
+> with the  --target=3D... and we fail
+>
+> I can compile with the change below.. we could also set CROSS_COMPILE
+> before including tools/scripts/Makefile.include ... not sure which
+> on is better
+>
+> also I need to check if we should keep LDFLAGS setup as well
+>
+> jirka
 
-hi,
-I can reproduce that and I think the reason is that the patch removes
-CFLAGS setup
+Right, but the code shouldn't be doing that - it was the purpose of
+the patch to remove it. If you include tools/scripts/Makefile.include,
+which is done on line 2, then a bunch of warnings, cflags, etc. are
+set based on CC. To then overwrite those values with various HOST
+values is at best confusing - CC no longer being CC but HOSTCC, but
+other values may or may not have changed. As we build using submakes,
+the goal here was to push the problem into the submake which will only
+ever see CC and other values being passed in.
 
-  CFLAGS  := $(KBUILD_HOSTCFLAGS)
+So perhaps:
+HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
+ARCH=3D"$(HOSTARCH)" \
+  EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)" CROSS_COMPILE=3D""
 
-so now the 'include ../../scripts/Makefile.include' will set CFLAGS
-with the  --target=... and we fail
+should be:
+HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
+ARCH=3D"$(HOSTARCH)" \
+  CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)" CROSS_COMPILE=3D""
 
-I can compile with the change below.. we could also set CROSS_COMPILE
-before including tools/scripts/Makefile.include ... not sure which
-on is better
+I'm still trying to get a reproduction.
 
-also I need to check if we should keep LDFLAGS setup as well
+Thanks,
+Ian
 
-jirka
-
-
----
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index daed388aa5d7..875e3fcce7cd 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -64,6 +64,7 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
- LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
- LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
- 
-+CFLAGS := $(KBUILD_HOSTCFLAGS)
- CFLAGS += -g \
-           -I$(srctree)/tools/include \
-           -I$(srctree)/tools/include/uapi \
-
+>
+> ---
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids=
+/Makefile
+> index daed388aa5d7..875e3fcce7cd 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -64,6 +64,7 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC=
+)/Makefile) | $(LIBBPF_OU
+>  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+>  LIBELF_LIBS  :=3D $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null ||=
+ echo -lelf)
+>
+> +CFLAGS :=3D $(KBUILD_HOSTCFLAGS)
+>  CFLAGS +=3D -g \
+>            -I$(srctree)/tools/include \
+>            -I$(srctree)/tools/include/uapi \
+>
