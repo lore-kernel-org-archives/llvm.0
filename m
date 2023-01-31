@@ -1,89 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0B18C04
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 15:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BA5C4339B;
-	Tue, 31 Jan 2023 15:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8328C04;
+	Tue, 31 Jan 2023 15:19:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93531C433D2;
+	Tue, 31 Jan 2023 15:19:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675177210;
-	bh=MsX6TvKUrOgdywcPMMp13ZeuJnNul08OEcEkHSl1LGk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JIMXqcqN4P735uRh7TVvxSJt2zkQpHkQaH8VaqsnOIyzEg/SnnJigI/Rqlj5nhNdl
-	 5jwfpZhQccbVXgezjr/yUUtlyriwwF0klQOHvutM53rBQDfhIg/X0e3NamSCqixOE4
-	 vFZQYqzVpyts/qmptczYHzqYD1L7w3X3oqsQ0S9GR9eLOw1+34O60HKKnKANswzGcS
-	 duJ1lCFnLyV8e3k7h7MT5XgHpXyAw6RKwEA78HQnRCR/d+WZpG+mytppgm0VMh2o8V
-	 nUISXzQu+zFMcYpXyH+vUHYcU/SwGo8z28yZR5q+FCb4MScbs+GeUYtHlZKbtqda6s
-	 x6sZRfDELasQw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sasha Levin <sashal@kernel.org>,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 11/20] x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block
-Date: Tue, 31 Jan 2023 09:59:37 -0500
-Message-Id: <20230131145946.1249850-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230131145946.1249850-1-sashal@kernel.org>
-References: <20230131145946.1249850-1-sashal@kernel.org>
+	s=k20201202; t=1675178369;
+	bh=R7MRKH92+BcxDHB0UXCf4d671vCDR0/6DYFMi0daeoQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h+eFVERnwW6onaLDCwawJoVuQlSjOd0KP8G10NVceNo+KTvXiMlRp82dwbGX8bBiH
+	 fDJCg4ZfsL/+7pxlxj9mUWZ994i4EdV8ElvDCgRmlhEcscwKRmrxGGV21UClUzcpal
+	 Sy/JzUE0z2V7Z4BpYs9wzk5n/JpLvK4oT6hbLwAmO9dcgKnDyvjfwmYHFbpVUXROiO
+	 5h7jNv6/rRASTiTGss1y8w5AchNs75/+DXnze+wSBelgoPtcrx+evLkmY6h1JGydKT
+	 /c6hRdiva35F7S1M7ZNPFxiXuRFAgmI4yFltvhLeJCi6P3vW4Ht2EpzxkJL/IV7ZOI
+	 TGjOheb9f7i9w==
+Date: Tue, 31 Jan 2023 23:19:26 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Guenter Roeck <groeck@chromium.org>
+Subject: Re: drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning:
+ stack frame size (1040) exceeds limit (1024) in
+ 'cros_ec_proto_test_get_sensor_count_legacy'
+Message-ID: <Y9kxfi4jtEN6YMe0@google.com>
+References: <202301311846.Y75Dbssa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202301311846.Y75Dbssa-lkp@intel.com>
 
-From: Nathan Chancellor <nathan@kernel.org>
+On Tue, Jan 31, 2023 at 06:22:29PM +0800, kernel test robot wrote:
+> Hi Tzung-Bi,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   22b8077d0fcec86c6ed0e0fce9f7e7e5a4c2d56a
+> commit: 33f0fdba6066b504ee0b5f1480b1f93b06050df6 platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
+> date:   7 months ago
+> config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230131/202301311846.Y75Dbssa-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=33f0fdba6066b504ee0b5f1480b1f93b06050df6
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 33f0fdba6066b504ee0b5f1480b1f93b06050df6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/steering/ drivers/platform/chrome/ drivers/staging/media/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack frame size (1040) exceeds limit (1024) in 'cros_ec_proto_test_get_sensor_count_legacy' [-Wframe-larger-than]
+>    static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+>                ^
+>    140/1040 (13.46%) spills, 900/1040 (86.54%) variables
+>    1 warning generated.
+> 
+> 
+> vim +/cros_ec_proto_test_get_sensor_count_legacy +2530 drivers/platform/chrome/cros_ec_proto_test.c
+> 
+>   2529	
+> > 2530	static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+>   2531	{
+>   2532		struct cros_ec_proto_test_priv *priv = test->priv;
+>   2533		struct cros_ec_device *ec_dev = &priv->ec_dev;
+>   2534		struct ec_xfer_mock *mock;
+>   2535		int ret, i;
+>   2536		struct cros_ec_dev ec;
 
-[ Upstream commit 27b5de622ea3fe0ad5a31a0ebd9f7a0a276932d1 ]
+The issue has been fixed in linux-next by [1].
 
-LLVM 16 will have support for this flag so move it out of the GCC-only
-block to allow LLVM builds to take advantage of it.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://github.com/ClangBuiltLinux/linux/issues/1665
-Link: https://github.com/llvm/llvm-project/commit/6f867f9102838ebe314c1f3661fdf95700386e5a
-Link: https://lore.kernel.org/r/20230120165826.2469302-1-nathan@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 415a5d138de4..3419ffa2a350 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -14,13 +14,13 @@ endif
- 
- ifdef CONFIG_CC_IS_GCC
- RETPOLINE_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-extern -mindirect-branch-register)
--RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
- RETPOLINE_VDSO_CFLAGS	:= $(call cc-option,-mindirect-branch=thunk-inline -mindirect-branch-register)
- endif
- ifdef CONFIG_CC_IS_CLANG
- RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
- RETPOLINE_VDSO_CFLAGS	:= -mretpoline
- endif
-+RETPOLINE_CFLAGS	+= $(call cc-option,-mindirect-branch-cs-prefix)
- 
- ifdef CONFIG_RETHUNK
- RETHUNK_CFLAGS		:= -mfunction-return=thunk-extern
--- 
-2.39.0
-
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/commit/?h=for-next&id=6514bac4a321daaf2fdf3a116a644c77e4908f20
