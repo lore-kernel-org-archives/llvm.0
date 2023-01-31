@@ -1,88 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8328C04;
-	Tue, 31 Jan 2023 15:19:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93531C433D2;
-	Tue, 31 Jan 2023 15:19:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675178369;
-	bh=R7MRKH92+BcxDHB0UXCf4d671vCDR0/6DYFMi0daeoQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h+eFVERnwW6onaLDCwawJoVuQlSjOd0KP8G10NVceNo+KTvXiMlRp82dwbGX8bBiH
-	 fDJCg4ZfsL/+7pxlxj9mUWZ994i4EdV8ElvDCgRmlhEcscwKRmrxGGV21UClUzcpal
-	 Sy/JzUE0z2V7Z4BpYs9wzk5n/JpLvK4oT6hbLwAmO9dcgKnDyvjfwmYHFbpVUXROiO
-	 5h7jNv6/rRASTiTGss1y8w5AchNs75/+DXnze+wSBelgoPtcrx+evLkmY6h1JGydKT
-	 /c6hRdiva35F7S1M7ZNPFxiXuRFAgmI4yFltvhLeJCi6P3vW4Ht2EpzxkJL/IV7ZOI
-	 TGjOheb9f7i9w==
-Date: Tue, 31 Jan 2023 23:19:26 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28928C12
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 15:37:00 +0000 (UTC)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1pMsQZ-00005l-Dn; Tue, 31 Jan 2023 16:20:07 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1pMsQZ-001igC-Fs; Tue, 31 Jan 2023 16:20:06 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1pMsQX-00HMbM-Vg; Tue, 31 Jan 2023 16:20:05 +0100
+Date: Tue, 31 Jan 2023 16:20:05 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Guenter Roeck <groeck@chromium.org>
-Subject: Re: drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning:
- stack frame size (1040) exceeds limit (1024) in
- 'cros_ec_proto_test_get_sensor_count_legacy'
-Message-ID: <Y9kxfi4jtEN6YMe0@google.com>
-References: <202301311846.Y75Dbssa-lkp@intel.com>
+	Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>
+Subject: Re: [lee-mfd:for-mfd-next 36/37] drivers/mmc/host/tmio_mmc.c:141:12:
+ error: no member named 'enable' in 'struct mfd_cell'
+Message-ID: <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
+References: <202301312253.oUVq9cys-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vwjathqydnubcy3a"
 Content-Disposition: inline
-In-Reply-To: <202301311846.Y75Dbssa-lkp@intel.com>
+In-Reply-To: <202301312253.oUVq9cys-lkp@intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-On Tue, Jan 31, 2023 at 06:22:29PM +0800, kernel test robot wrote:
-> Hi Tzung-Bi,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   22b8077d0fcec86c6ed0e0fce9f7e7e5a4c2d56a
-> commit: 33f0fdba6066b504ee0b5f1480b1f93b06050df6 platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
-> date:   7 months ago
-> config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230131/202301311846.Y75Dbssa-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+
+--vwjathqydnubcy3a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Tue, Jan 31, 2023 at 10:48:48PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-m=
+fd-next
+> head:   a561a980c024193e342b6878f62e02ff9d018285
+> commit: 78e7ccec94380519919267670174cbf1711b7963 [36/37] mfd: Remove .ena=
+ble() and .disable() callbacks
+> config: hexagon-randconfig-r041-20230130 (https://download.01.org/0day-ci=
+/archive/20230131/202301312253.oUVq9cys-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196=
+ca3278f78c6e19246e54ab0ecb364e37d66a)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=33f0fdba6066b504ee0b5f1480b1f93b06050df6
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 33f0fdba6066b504ee0b5f1480b1f93b06050df6
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/com=
+mit/?id=3D78e7ccec94380519919267670174cbf1711b7963
+>         git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kerne=
+l/git/lee/mfd.git
+>         git fetch --no-tags lee-mfd for-mfd-next
+>         git checkout 78e7ccec94380519919267670174cbf1711b7963
 >         # save the config file
 >         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/steering/ drivers/platform/chrome/ drivers/staging/media/
-> 
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dhexagon olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/mmc/host/ drive=
+rs/video/fbdev/
+>=20
 > If you fix the issue, kindly add following tag where applicable
 > | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack frame size (1040) exceeds limit (1024) in 'cros_ec_proto_test_get_sensor_count_legacy' [-Wframe-larger-than]
->    static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
->                ^
->    140/1040 (13.46%) spills, 900/1040 (86.54%) variables
->    1 warning generated.
-> 
-> 
-> vim +/cros_ec_proto_test_get_sensor_count_legacy +2530 drivers/platform/chrome/cros_ec_proto_test.c
-> 
->   2529	
-> > 2530	static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
->   2531	{
->   2532		struct cros_ec_proto_test_priv *priv = test->priv;
->   2533		struct cros_ec_device *ec_dev = &priv->ec_dev;
->   2534		struct ec_xfer_mock *mock;
->   2535		int ret, i;
->   2536		struct cros_ec_dev ec;
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+> [...]
+> >> drivers/mmc/host/tmio_mmc.c:186:12: error: no member named 'disable' i=
+n 'struct mfd_cell'
+>            if (cell->disable)
+>                ~~~~  ^
 
-The issue has been fixed in linux-next by [1].
+This driver doesn't exist in next any more (commit ecb92c1f4752). So I'm
+unsure what to do here.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/commit/?h=for-next&id=6514bac4a321daaf2fdf3a116a644c77e4908f20
+The obvious (to me) options are:
+
+ a) ignore the problem
+ b) merge ecb92c1f4752 into mfd before applying "mfd: Remove .enable()
+    and .disable() callbacks"
+ c) drop "mfd: Remove .enable() and .disable() callbacks" for now and
+    reapply when ecb92c1f4752 is in Linus' tree (variant of b))
+
+Lee, what's your take here?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vwjathqydnubcy3a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPZMaIACgkQwfwUeK3K
+7Ak5Ggf9FY4MIZnNjmJs1PVawSIY2mnjyQ+0uS2AiGSmZrMRXUO9GJ50wBUPy2Wx
+Mf4poXR8bw0J+A7uU1XzPUH071US0R3mmrysNDZlk1Vwn3a2styDb3U0RgrDa0Km
+YXuEoFov9VXTFFZS4RSfIAuEMGJUdjPkPfMXNpbfq55+/CIpNXLGIVUEIYHB4KBs
+5RJWpeMTEGc9uTQKUNIYd9qowYDvYOjd3DWhJbZPP8rGdxrJV52/61YY+Wf8Cqo3
+e9/IguW7osvPP/8A6N/jNZr9tPMzSfHW+wc/LxhC2wjE7MSCJo9F3pwhOJY3fC1u
+fpBNyXra9kKsNigy2XxAOJyXfOd80A==
+=6mw0
+-----END PGP SIGNATURE-----
+
+--vwjathqydnubcy3a--
