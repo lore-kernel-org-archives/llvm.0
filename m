@@ -1,63 +1,172 @@
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A428C1C
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 16:17:18 +0000 (UTC)
-Received: by mail-il1-f198.google.com with SMTP id v17-20020a92ab11000000b00310c6708243so7886627ilh.23
-        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 08:17:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iiAqoUAhSbXRWu7WwqUljNKrMQeqVBW7GAniuAjL2v8=;
-        b=Dy6+Ki+rCJp20d4y6ijse5/PNeNoYRHXz38PCshjeCHHskm6Z7l62q6LUmYtdsGgFV
-         pJFgbkUpdeG3QBpEzRCRy/P8s2GGwW5e/4xj6dsFlNGFhROAVj0i5XDG/zTijH9gOqk2
-         pmJtdE/BALfaBY9AScFRsnBdY6fzXvOwBb8DTRsHTrJq7GW/61O70Vz0mjTUTS0z9+E5
-         T9J9cQ9JphVTF85893NeW7+/zser0T92NB0X/XR8CletGyxK0jMZHL7Lu7MZiiPBvAqa
-         JZS5RkU23Kthr+9FFUdJzekiagmRiTvuWHOJkgRaiE+YExRHwVWWQWpyl5Nwg5RQQARr
-         JYgA==
-X-Gm-Message-State: AO0yUKXCCWHFd5g52Ei4/RyYHtKw/A5NDd2Fnx2hFvG3cKAszReojeal
-	pXeq/IHxexJMa+x9Q/s9l5FcTOhuMPcNedtMEQf2jjPVxz0W
-X-Google-Smtp-Source: AK7set/OHuRu/Wj6tf33O1Z3bSTQrgB1o8gZPL+3utcc+aaXpdr8cyGKqn5K0ftPFAMPNtpPy5ckI+3V6HgyfU38NTkTGcFgjtrJ
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99028C15
+	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 16:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F44BC4339E;
+	Tue, 31 Jan 2023 16:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675182444;
+	bh=MEVJM+cYgJvnZYTgb2e5vWc4TqT9kt49CgVxTgaytkY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=F102/jP5YNrcj7VmXmt+0OjraxeVoKQGKofrtpcQrhgbUGHLl2MtfVJhOdRQcETQQ
+	 5vXqcNpyDECjp91nzUddGRuGxkyL2jVMNvWEKnmGsII6pVM37ta90d/cSS4NMKHBR6
+	 BCzgi9wR14I8rZK68YHz7nwnJDTF0A+uZwarmjPDcy6Mw6Omlhrsp0If8uF5zDWxSE
+	 c9M9JjiWrkYi9CMfPZg0/iLXIphQ/p8wfJw93CY2Syiy39v4zPK4tV0ciiMoseNAmE
+	 3m1CwnekBV6iBFpNaDfq4tc2acLHNSSkg4Aro2h7+ncSSpcGpXGKqWn0aSRh0ImTvz
+	 MjIcKBlrEuLgg==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v3 2/5] kbuild: deb-pkg: create source package without cleaning
+Date: Wed,  1 Feb 2023 01:26:12 +0900
+Message-Id: <20230131162615.1575215-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230131162615.1575215-1-masahiroy@kernel.org>
+References: <20230131162615.1575215-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a418:0:b0:3a9:67b6:18bd with SMTP id
- c24-20020a02a418000000b003a967b618bdmr3800070jal.46.1675181837697; Tue, 31
- Jan 2023 08:17:17 -0800 (PST)
-Date: Tue, 31 Jan 2023 08:17:17 -0800
-In-Reply-To: <0000000000008be6b405f01164f8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005eca3205f391aade@google.com>
-Subject: Re: [syzbot] [ntfs3?] KASAN: out-of-bounds Read in ntfs_set_ea
-From: syzbot <syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot suspects this issue was fixed by commit:
+If you run 'make deb-pkg', all objects are lost due to 'make clean',
+which makes the incremental builds impossible.
 
-commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
-Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Date:   Mon Oct 10 10:15:33 2022 +0000
+Instead of cleaning, pass the exclude list to tar's --exclude-from
+option.
 
-    fs/ntfs3: Check fields while reading
+Previously, *.diff.gz contained some check-in files such as
+.clang-format, .cocciconfig.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11d9c385480000
-start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
-dashboard link: https://syzkaller.appspot.com/bug?extid=8778f030156c6cd16d72
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136b8f57880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175ca3a3880000
+With this commit, *.diff.gz will only contain the .config and debian/.
+The other source files will go into the tarball.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-#syz fix: fs/ntfs3: Check fields while reading
+Changes in v3:
+  - Add --extra-pattern='*.rej'
+  - Exclude symlinks at the toplevel
+  - Add --sort=name tar option
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+ scripts/Makefile.package | 38 +++++++++++++++++++++++++++++++++-----
+ scripts/package/mkdebian | 25 +++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+), 5 deletions(-)
+
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index dfbf40454a99..f4f44f01deb3 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -50,6 +50,32 @@ fi ; \
+ tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
+ 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
+ 
++# Source Tarball
++# ---------------------------------------------------------------------------
++
++PHONY += gen-exclude
++gen-exclude:
++	$(Q)$(MAKE) -f $(srctree)/Makefile scripts_exclude
++
++# - Commit 1f5d3a6b6532e25a5cdf1f311956b2b03d343a48 removed '*.rej' from
++#   .gitignoredoes, but it is definitely a generated file.
++# - The kernel tree has no symlink at the toplevel. If there exists one, it is
++#   a generated one.
++quiet_cmd_exclude_list = GEN     $@
++      cmd_exclude_list = \
++	scripts/gen-exclude --extra-pattern='*.rej' --prefix=./ --rootdir=$(srctree) > $@; \
++	find . -maxdepth 1 -type l >> $@; \
++	echo "./$@" >> $@
++
++.exclude-list: gen-exclude
++	$(call cmd,exclude_list)
++
++quiet_cmd_tar = TAR     $@
++      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --sort=name --transform 's:^\.:linux:S' .
++
++%.tar.gz: .exclude-list
++	$(call cmd,tar)
++
+ # rpm-pkg
+ # ---------------------------------------------------------------------------
+ PHONY += rpm-pkg
+@@ -81,12 +107,11 @@ binrpm-pkg:
+ 
+ PHONY += deb-pkg
+ deb-pkg:
+-	$(MAKE) clean
+ 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
+-	$(call cmd,src_tar,$(KDEB_SOURCENAME))
+-	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
+-		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
+-	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
++	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
++		$(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
++	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
++		--build=source,binary --source-option=-sP -nc -us -uc
+ 
+ PHONY += bindeb-pkg
+ bindeb-pkg:
+@@ -174,4 +199,7 @@ help:
+ 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
+ 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
+ 
++PHONY += FORCE
++FORCE:
++
+ .PHONY: $(PHONY)
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index c3bbef7a6754..2f612617cbcf 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -84,6 +84,8 @@ set_debarch() {
+ 	fi
+ }
+ 
++rm -rf debian
++
+ # Some variables and settings used throughout the script
+ version=$KERNELRELEASE
+ if [ -n "$KDEB_PKGVERSION" ]; then
+@@ -135,6 +137,29 @@ fi
+ mkdir -p debian/source/
+ echo "1.0" > debian/source/format
+ 
++# Ugly: ignore anything except .config or debian/
++# (is there a cleaner way to do this?)
++cat<<'EOF' > debian/source/local-options
++diff-ignore
++
++extend-diff-ignore = ^[^.d]
++
++extend-diff-ignore = ^\.[^c]
++extend-diff-ignore = ^\.c($|[^o])
++extend-diff-ignore = ^\.co($|[^n])
++extend-diff-ignore = ^\.con($|[^f])
++extend-diff-ignore = ^\.conf($|[^i])
++extend-diff-ignore = ^\.confi($|[^g])
++extend-diff-ignore = ^\.config.
++
++extend-diff-ignore = ^d($|[^e])
++extend-diff-ignore = ^de($|[^b])
++extend-diff-ignore = ^deb($|[^i])
++extend-diff-ignore = ^debi($|[^a])
++extend-diff-ignore = ^debia($|[^n])
++extend-diff-ignore = ^debian[^/]
++EOF
++
+ echo $debarch > debian/arch
+ extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
+ extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
+-- 
+2.34.1
+
