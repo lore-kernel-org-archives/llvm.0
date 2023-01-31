@@ -1,42 +1,51 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F85AA94F;
-	Tue, 31 Jan 2023 21:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F32627;
+	Tue, 31 Jan 2023 22:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675201410; x=1706737410;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N5pKVjnRbm/AFcF4+8mvc6nK/cwX4hjfN+puOvUUt58=;
-  b=J4fMcKGhhXD0GVNmJNbH3Rw6i2duzaylwK2sopp1bKE+iBHU7z079nms
-   dhvc6ZH6pYXgVQ3kOyzUzscWaHUapR24I/2SbTDQjmh/JEvY9PCF/PZE/
-   UGcJyNb4vod2mm7pc4vrIs06F1eLTuRjgReiW5Lqlt1Z6s5l+r2L9dlbV
-   d2Te2MkEewSgCdQJG47GyymPdo9yf4CyK+avWNqDeZk3mG7W+yxcYti2s
-   H+AR9/HSDhHC/F+sUyC0d6w7tZAHu0q1ODQA8IuuUkt753ivBcwzVsXy4
-   dGNHRywKROw3FPHShc1sfCMxcmI8eTLsqWqawvkLFVjSO6u1O7ALTgJaC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="414178673"
+  t=1675204471; x=1706740471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D8gJi0ehG5WvTwectwLP//Bmc1IPekTGj1oNIj2Eicc=;
+  b=kYqXdS+tad65k8TxdjpmShBjc/tLDWJZf2mMhbdEfbpZujosdjsU1TI7
+   01RY/89bsWuqdmmltgsFACUkhVx5qDf8Rlnc1qQo9nXghrqGB3btGXVZ4
+   EJgbgXL0eZ8OC/GacOi8Qw/yLuFY9ViCV9t65NStrtVlGFRcepm9DcqNA
+   yEUeHeBYyr5Fvvnwfgv7LPMR6cXGtuf/XirIkNvbSi6abnm6viiGoQ8ip
+   4ap1TDcg0mk+3F4Pw3AxTQzSiLrmP+MCZAUp28WmElqT1vrzN9D8O+2PK
+   oy8gcskVMW15CcieCeTklckrQRSOdOOVsGicfDtiNiZXku9eiYccQzD8b
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="315948020"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="414178673"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 13:43:27 -0800
+   d="scan'208";a="315948020"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 14:34:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="614608311"
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="788619371"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="614608311"
+   d="scan'208";a="788619371"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2023 13:43:26 -0800
+  by orsmga004.jf.intel.com with ESMTP; 31 Jan 2023 14:34:28 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pMyPV-0004j6-2W;
-	Tue, 31 Jan 2023 21:43:25 +0000
-Date: Wed, 1 Feb 2023 05:42:55 +0800
+	id 1pMzCt-0004lK-2T;
+	Tue, 31 Jan 2023 22:34:27 +0000
+Date: Wed, 1 Feb 2023 06:33:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:sched/rt-throttle 2/3] kernel/sched/rt.c:1322:2: error: must
- use 'struct' tag to refer to type 'rt_rq'
-Message-ID: <202302010534.mQzfWMsK-lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Taniya Das <quic_tdas@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 2/2] clk: qcom: gpucc-sdm845: fix clk_dis_wait being
+ programmed for CX GDSC
+Message-ID: <202302010608.GDyw4Xuo-lkp@intel.com>
+References: <20230131092432.122711-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,54 +54,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230131092432.122711-2-dmitry.baryshkov@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git sched/rt-throttle
-head:   43445d190f0aaee241b3ba09ae5f196d54d0f1b5
-commit: c9c5078dcd7dfce0cc79f320335f7dc345570981 [2/3] sched/rt: Track the number of immediate running rt_se
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302010534.mQzfWMsK-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Dmitry,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.2-rc6 next-20230131]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/clk-qcom-gpucc-sdm845-fix-clk_dis_wait-being-programmed-for-CX-GDSC/20230131-172656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230131092432.122711-2-dmitry.baryshkov%40linaro.org
+patch subject: [PATCH 2/2] clk: qcom: gpucc-sdm845: fix clk_dis_wait being programmed for CX GDSC
+config: arm64-randconfig-r016-20230130 (https://download.01.org/0day-ci/archive/20230201/202302010608.GDyw4Xuo-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/commit/?id=c9c5078dcd7dfce0cc79f320335f7dc345570981
-        git remote add jfern https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git
-        git fetch --no-tags jfern sched/rt-throttle
-        git checkout c9c5078dcd7dfce0cc79f320335f7dc345570981
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/8222d81144cbdf9b51ffe1ffc61e16b471456329
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Baryshkov/clk-qcom-gpucc-sdm845-fix-clk_dis_wait-being-programmed-for-CX-GDSC/20230131-172656
+        git checkout 8222d81144cbdf9b51ffe1ffc61e16b471456329
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/build_policy.c:45:
->> kernel/sched/rt.c:1322:2: error: must use 'struct' tag to refer to type 'rt_rq'
-           rt_rq->rt_se_running--;
-           ^
-           struct 
->> kernel/sched/rt.c:1322:7: error: expected identifier or '('
-           rt_rq->rt_se_running--;
-                ^
-   2 errors generated.
+>> drivers/clk/qcom/gpucc-sdm845.c:122:3: error: field designator 'clk_dis_wait' does not refer to any field in type 'struct gdsc'; did you mean 'clk_dis_wait_val'?
+           .clk_dis_wait = 0x8,
+            ^~~~~~~~~~~~
+            clk_dis_wait_val
+   drivers/clk/qcom/gdsc.h:47:17: note: 'clk_dis_wait_val' declared here
+           unsigned int                    clk_dis_wait_val;
+                                           ^
+   1 error generated.
 
 
-vim +1322 kernel/sched/rt.c
+vim +122 drivers/clk/qcom/gpucc-sdm845.c
 
-  1314	
-  1315	static void __delist_rt_entity(struct sched_rt_entity *rt_se, struct rt_prio_array *array)
-  1316	{
-  1317		list_del_init(&rt_se->run_list);
-  1318	
-  1319		if (list_empty(array->queue + rt_se_prio(rt_se)))
-  1320			__clear_bit(rt_se_prio(rt_se), array->bitmap);
-  1321	
-> 1322		rt_rq->rt_se_running--;
-  1323		rt_se->on_list = 0;
-  1324	}
-  1325	
+   118	
+   119	static struct gdsc gpu_cx_gdsc = {
+   120		.gdscr = 0x106c,
+   121		.gds_hw_ctrl = 0x1540,
+ > 122		.clk_dis_wait = 0x8,
+   123		.pd = {
+   124			.name = "gpu_cx_gdsc",
+   125		},
+   126		.pwrsts = PWRSTS_OFF_ON,
+   127		.flags = VOTABLE,
+   128	};
+   129	
 
 -- 
 0-DAY CI Kernel Test Service
