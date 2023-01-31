@@ -1,192 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E93A94F
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 21:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675200703;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ky2z72Dt/O9SZyxrZksY2P492zuFRZn3yZiID5ccNQU=;
-	b=W5v/31yG4VaPQKUBwZtsoz8vuNANYSwmCWF9lD61bdfUdyJy3fYI5qPaBe9uKzCKfTNpEB
-	vGGVPUMTLhkF54o54pzWcWblfcx62lZL5qrnOPfiBWAo/CxzAlrY9/O5HERmKI75Wuc0k+
-	4kF9wN0s6Y/uQs9r1bfp+HoYgcgapQE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-250-d5KK3akeOES0f2AXO2Ogvg-1; Tue, 31 Jan 2023 16:31:41 -0500
-X-MC-Unique: d5KK3akeOES0f2AXO2Ogvg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8D563815F6E
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 21:31:40 +0000 (UTC)
-Received: from [172.64.14.12] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D801440C2064;
-	Tue, 31 Jan 2023 21:31:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc6, mainline.kernel.org-clang, 22b8077d)
-Date: Tue, 31 Jan 2023 21:31:40 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F85AA94F;
+	Tue, 31 Jan 2023 21:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675201410; x=1706737410;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N5pKVjnRbm/AFcF4+8mvc6nK/cwX4hjfN+puOvUUt58=;
+  b=J4fMcKGhhXD0GVNmJNbH3Rw6i2duzaylwK2sopp1bKE+iBHU7z079nms
+   dhvc6ZH6pYXgVQ3kOyzUzscWaHUapR24I/2SbTDQjmh/JEvY9PCF/PZE/
+   UGcJyNb4vod2mm7pc4vrIs06F1eLTuRjgReiW5Lqlt1Z6s5l+r2L9dlbV
+   d2Te2MkEewSgCdQJG47GyymPdo9yf4CyK+avWNqDeZk3mG7W+yxcYti2s
+   H+AR9/HSDhHC/F+sUyC0d6w7tZAHu0q1ODQA8IuuUkt753ivBcwzVsXy4
+   dGNHRywKROw3FPHShc1sfCMxcmI8eTLsqWqawvkLFVjSO6u1O7ALTgJaC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="414178673"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="414178673"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 13:43:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="614608311"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="614608311"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 31 Jan 2023 13:43:26 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pMyPV-0004j6-2W;
+	Tue, 31 Jan 2023 21:43:25 +0000
+Date: Wed, 1 Feb 2023 05:42:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jfern:sched/rt-throttle 2/3] kernel/sched/rt.c:1322:2: error: must
+ use 'struct' tag to refer to type 'rt_rq'
+Message-ID: <202302010534.mQzfWMsK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <75605.123013116314100741@us-mta-250.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git sched/rt-throttle
+head:   43445d190f0aaee241b3ba09ae5f196d54d0f1b5
+commit: c9c5078dcd7dfce0cc79f320335f7dc345570981 [2/3] sched/rt: Track the number of immediate running rt_se
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302010534.mQzfWMsK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/commit/?id=c9c5078dcd7dfce0cc79f320335f7dc345570981
+        git remote add jfern https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git
+        git fetch --no-tags jfern sched/rt-throttle
+        git checkout c9c5078dcd7dfce0cc79f320335f7dc345570981
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'fscache-fixes-20230130' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/dhowells/linux-fs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/67680
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6885282
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+   In file included from kernel/sched/build_policy.c:45:
+>> kernel/sched/rt.c:1322:2: error: must use 'struct' tag to refer to type 'rt_rq'
+           rt_rq->rt_se_running--;
+           ^
+           struct 
+>> kernel/sched/rt.c:1322:7: error: expected identifier or '('
+           rt_rq->rt_se_running--;
+                ^
+   2 errors generated.
 
 
+vim +1322 kernel/sched/rt.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1314	
+  1315	static void __delist_rt_entity(struct sched_rt_entity *rt_se, struct rt_prio_array *array)
+  1316	{
+  1317		list_del_init(&rt_se->run_list);
+  1318	
+  1319		if (list_empty(array->queue + rt_se_prio(rt_se)))
+  1320			__clear_bit(rt_se_prio(rt_se), array->bitmap);
+  1321	
+> 1322		rt_rq->rt_se_running--;
+  1323		rt_se->on_list = 0;
+  1324	}
+  1325	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
