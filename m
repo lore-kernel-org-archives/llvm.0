@@ -1,41 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C03A92D
-	for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 19:33:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01AEC433EF;
-	Tue, 31 Jan 2023 19:33:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675193597;
-	bh=zC/ai8uytmhWNu+O0kLSPbt20Ti3ixHRPXWEFI+STvo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yq2tVrAi0s1sC07GmPdoRbP4sXd/QpLLL8VJxYlGgQXYnpATcIXX/WoIDlrOuYD5c
-	 AlPNDj/hncSPiUf2yabogFogc6vvj5n7T6kqqwDPHop7ymPyJFdFWBUIbwSNylvTN2
-	 hipdGyfOKDFh4A3QoyloqzFZthru0fUJ2n6zzkh4UL9Snuh4+ySbRACL0ID2OeVK18
-	 CuRflFz0VFxkvMaFDLjunlMQcxqXmF9LyiENUZtK/ec1NVSc9m+lyS9tAhSxLt1VBb
-	 1rGNXy0HX6FTdikAAbiA3P/fRfXQy7ZTZDQP/HBe5Pc190smtZyxzx5vCtReZWuVYT
-	 YQAroVfO/eaqQ==
-Date: Tue, 31 Jan 2023 12:33:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Connor OBrien <connoro@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
- <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1213AA92D;
+	Tue, 31 Jan 2023 19:50:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675194625; x=1706730625;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vg19oyt7lt0xXsV2RfNpMhmUOnUvypBgr0BqOLACqFw=;
+  b=Jpbj+13HBmlkNCh/2gpj43wGV4xu13lcsd1RYwkiCCeOTsVp8U6CqWGx
+   YpneQnlHSretG8PFeXY0pOu3k5xZW41qWau1EPY9PYdM6QTg2qCEi6ISQ
+   RqwTgh+0GkmtdKx6xzq07Hyi94yaGIRjEvj00Lp9zcGWq8zgH73/n/9se
+   FhwlmUtKG4hOgcty11wSecCS5+EULGtDXmsAY1XAHRvvWtPDjuUW6iHVI
+   /37UgcRh5vqbEWrlbrL5Rwo4fCzWOrVQ2HW4aUY3HuL5bfW88aN6F8uPM
+   020GF+hSXsdjJe1PJ0tOob0MVy+UrPNKXSdkDyI5yTdp57x/1t2OrunY1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="308283602"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="308283602"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 11:50:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="733249606"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="733249606"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 31 Jan 2023 11:50:23 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pMwe6-0004fO-13;
+	Tue, 31 Jan 2023 19:50:22 +0000
+Date: Wed, 1 Feb 2023 03:50:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:core/softirq 8/8] kernel/rcu/tree_nocb.h:954:18:
+ error: too few arguments to function call, expected 2, have 1
+Message-ID: <202302010309.ecdK08hE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,169 +45,129 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
 
-On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Ian,
-> > >
-> > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> > > > after tools/scripts/Makefile.include is included, meaning flags are
-> > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
-> > > > which may be clang. tools/scripts/Makefile.include is needed for host
-> > > > set up and common macros in objtool's Makefile. Rather than override
-> > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> > > > builds and the linkage step. This means the Makefiles don't see things
-> > > > like CC changing and tool flag determination, and similar, work
-> > > > properly.
-> > > >
-> > > > Also, clear the passed subdir as otherwise an outer build may break by
-> > > > inadvertently passing an inappropriate value.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > >
-> > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > @@ -18,14 +18,11 @@ else
-> > > >  endif
-> > > >
-> > > >  # always use the host compiler
-> > > > -AR       = $(HOSTAR)
-> > > > -CC       = $(HOSTCC)
-> > > > -LD       = $(HOSTLD)
-> > > > -ARCH     = $(HOSTARCH)
-> > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > +
-> > > >  RM      ?= rm
-> > > >  CROSS_COMPILE =
-> > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
-> > > >
-> > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > >
-> > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > >
-> > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > >                   $(abspath $@) install_headers
-> > > >
-> > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
-> > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > >                   $(abspath $@) install_headers
-> > > >
-> > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > >  include $(srctree)/tools/build/Makefile.include
-> > > >
-> > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
-> > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> > > >
-> > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > >       $(call msg,LINK,$@)
-> > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > >
-> > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > --
-> > > > 2.39.0.246.g2a6d74b583-goog
-> > > >
-> > >
-> > > I just bisected a linking failure when building resolve_btfids with
-> > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > >
-> > > It appears to be related to whether or not CROSS_COMPILE is specified,
-> > > which we have to do for certain architectures and configurations still.
-> > > arm64 is not one of those but it helps demonstrate the issue.
-> > >
-> > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-> > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-> > >
-> > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-> > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-> > >   ...
-> > >
-> > > Before your change, with V=1, I see:
-> > >
-> > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > >
-> > > After, I see:
-> > >
-> > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > >
-> > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-> > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > >
-> > > I think this comes from the clang block in
-> > > tools/scripts/Makefile.include, which is included into the
-> > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > >
-> > > I am not super familiar with the tools build system, otherwise I would
-> > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-> > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-> > > did not appear to resolve it for me.
-> > >
-> > > If there is any other information I can provide or patches I can test,
-> > > please let me know.
-> > >
-> > > Cheers,
-> > > Nathan
-> >
-> > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > looking into this.
-> >
-> > Ian
-> 
-> Given the somewhat complicated cross compile I wasn't able to get a
-> reproduction. Could you see if the following addresses the problem:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/softirq
+head:   d0bf4e7eda39329deaa144785a22906dfec65c94
+commit: d0bf4e7eda39329deaa144785a22906dfec65c94 [8/8] softirq,rcu: Use softirq_needs_break()
+config: x86_64-randconfig-a015-20230130 (https://download.01.org/0day-ci/archive/20230201/202302010309.ecdK08hE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=d0bf4e7eda39329deaa144785a22906dfec65c94
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue core/softirq
+        git checkout d0bf4e7eda39329deaa144785a22906dfec65c94
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-As long as you have an LLVM toolchain that targets AArch64 and your
-host, you should be able to reproduce this issue with those commands
-verbatim, as that command should not use any GNU binutils. I am pretty
-sure I tried it in a fresh container before reporting it but it is
-possible that I did not.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> ```
-> diff --git a/tools/bpf/resolve_btfids/Makefile
-> b/tools/bpf/resolve_btfids/Makefile
-> index daed388aa5d7..a06966841df4 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -19,10 +19,9 @@ endif
-> 
-> # always use the host compiler
-> HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
-> ARCH="$(HOSTARCH)" \
-> -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> CROSS_COMPILE=""
-> 
-> RM      ?= rm
-> -CROSS_COMPILE =
-> 
-> OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> ```
-> 
+All errors (new ones prefixed by >>):
 
-Unfortunately, it does not. I still see '--target=' end up in the
-CFLAGS of those files.
+   In file included from kernel/rcu/tree.c:4830:
+>> kernel/rcu/tree_nocb.h:954:18: error: too few arguments to function call, expected 2, have 1
+           rcu_do_batch(rdp);
+           ~~~~~~~~~~~~    ^
+   kernel/rcu/tree.c:2180:13: note: 'rcu_do_batch' declared here
+   static void rcu_do_batch(struct softirq_action *h, struct rcu_data *rdp)
+               ^
+   1 error generated.
 
-Cheers,
-Nathan
+
+vim +954 kernel/rcu/tree_nocb.h
+
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  917  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  918  /*
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  919   * Invoke any ready callbacks from the corresponding no-CBs CPU,
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  920   * then, if there are no more, wait for more to appear.
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  921   */
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  922  static void nocb_cb_wait(struct rcu_data *rdp)
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  923  {
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  924  	struct rcu_segcblist *cblist = &rdp->cblist;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  925  	unsigned long cur_gp_seq;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  926  	unsigned long flags;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  927  	bool needwake_state = false;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  928  	bool needwake_gp = false;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  929  	bool can_sleep = true;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  930  	struct rcu_node *rnp = rdp->mynode;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  931  
+8d970396469734 Frederic Weisbecker 2021-11-23  932  	do {
+8d970396469734 Frederic Weisbecker 2021-11-23  933  		swait_event_interruptible_exclusive(rdp->nocb_cb_wq,
+8d970396469734 Frederic Weisbecker 2021-11-23  934  						    nocb_cb_wait_cond(rdp));
+8d970396469734 Frederic Weisbecker 2021-11-23  935  
+8d970396469734 Frederic Weisbecker 2021-11-23  936  		// VVV Ensure CB invocation follows _sleep test.
+8d970396469734 Frederic Weisbecker 2021-11-23  937  		if (smp_load_acquire(&rdp->nocb_cb_sleep)) { // ^^^
+8d970396469734 Frederic Weisbecker 2021-11-23  938  			WARN_ON(signal_pending(current));
+8d970396469734 Frederic Weisbecker 2021-11-23  939  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("WokeEmpty"));
+8d970396469734 Frederic Weisbecker 2021-11-23  940  		}
+8d970396469734 Frederic Weisbecker 2021-11-23  941  	} while (!nocb_cb_can_run(rdp));
+8d970396469734 Frederic Weisbecker 2021-11-23  942  
+8d970396469734 Frederic Weisbecker 2021-11-23  943  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  944  	local_irq_save(flags);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  945  	rcu_momentary_dyntick_idle();
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  946  	local_irq_restore(flags);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  947  	/*
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  948  	 * Disable BH to provide the expected environment.  Also, when
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  949  	 * transitioning to/from NOCB mode, a self-requeuing callback might
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  950  	 * be invoked from softirq.  A short grace period could cause both
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  951  	 * instances of this callback would execute concurrently.
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  952  	 */
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  953  	local_bh_disable();
+dfcb27540213e8 Frederic Weisbecker 2021-05-19 @954  	rcu_do_batch(rdp);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  955  	local_bh_enable();
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  956  	lockdep_assert_irqs_enabled();
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  957  	rcu_nocb_lock_irqsave(rdp, flags);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  958  	if (rcu_segcblist_nextgp(cblist, &cur_gp_seq) &&
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  959  	    rcu_seq_done(&rnp->gp_seq, cur_gp_seq) &&
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  960  	    raw_spin_trylock_rcu_node(rnp)) { /* irqs already disabled. */
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  961  		needwake_gp = rcu_advance_cbs(rdp->mynode, rdp);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  962  		raw_spin_unlock_rcu_node(rnp); /* irqs remain disabled. */
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  963  	}
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  964  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  965  	if (rcu_segcblist_test_flags(cblist, SEGCBLIST_OFFLOADED)) {
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  966  		if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB)) {
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  967  			rcu_segcblist_set_flags(cblist, SEGCBLIST_KTHREAD_CB);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  968  			if (rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP))
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  969  				needwake_state = true;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  970  		}
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  971  		if (rcu_segcblist_ready_cbs(cblist))
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  972  			can_sleep = false;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  973  	} else {
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  974  		/*
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  975  		 * De-offloading. Clear our flag and notify the de-offload worker.
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  976  		 * We won't touch the callbacks and keep sleeping until we ever
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  977  		 * get re-offloaded.
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  978  		 */
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  979  		WARN_ON_ONCE(!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB));
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  980  		rcu_segcblist_clear_flags(cblist, SEGCBLIST_KTHREAD_CB);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  981  		if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP))
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  982  			needwake_state = true;
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  983  	}
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  984  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  985  	WRITE_ONCE(rdp->nocb_cb_sleep, can_sleep);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  986  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  987  	if (rdp->nocb_cb_sleep)
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  988  		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("CBSleep"));
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  989  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  990  	rcu_nocb_unlock_irqrestore(rdp, flags);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  991  	if (needwake_gp)
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  992  		rcu_gp_kthread_wake();
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  993  
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  994  	if (needwake_state)
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  995  		swake_up_one(&rdp->nocb_state_wq);
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  996  }
+dfcb27540213e8 Frederic Weisbecker 2021-05-19  997  
+
+:::::: The code at line 954 was first introduced by commit
+:::::: dfcb27540213e8061ecffacd4bd8ed54a310a7b0 rcu/nocb: Start moving nocb code to its own plugin file
+
+:::::: TO: Frederic Weisbecker <frederic@kernel.org>
+:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
