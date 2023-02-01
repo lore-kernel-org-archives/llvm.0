@@ -1,163 +1,181 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F8A63B3
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 15:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675265276; x=1706801276;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ex3hFxX1c8AkYmEYbgKLqmS5+BPQS9+ij/h7v8eo9sA=;
-  b=DWRBewfb5uvYu3YMc7c8MItz6f2B7rvkITNNVNE95jMOx7KPgByPTEvR
-   uoj/MmsWSBm5iaHlu0CzEJtQfSRWQQVJVeb5KjbS8hIJyk9fzxxmDMrL5
-   hUyce8PmfLOhAV9n4bv3S8hN8pmfMiMYJgKQOCH8SNqMIKbNWoIEL/co/
-   4G9kbMC3BqqBAhGkEVNamgHcdqKvW+RkijJ8A+IHvXoyoEF7cn0TzwK+d
-   kHwSHDBQ6j1qpCNnmUP6JCWOTRR0URh1ROz0J7TxpFmfbr7R2U4/V3xlt
-   YoaAmxlsucR7ZXif/n4XzGz9urzUCOH1yIKgKCO87c/tezAaV0N0xOGRw
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355505327"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="355505327"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 07:27:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="642462993"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="642462993"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 01 Feb 2023 07:27:55 -0800
-Received: from [10.255.230.85] (kliang2-mobl1.ccr.corp.intel.com [10.255.230.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0091A63B3
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 16:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675267899;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tdxoHv/rEnxTmGX3jhzsk5c9hWpgXzbCFmxZsB2oCEY=;
+	b=JXkA4xHDWdkpE1LdgDCCtCd3/JJgDf2YBfkvXCaWcay4b6o+0t2ru0sxp48PRBmvQnDJ8Q
+	drcs8itv7Tc4kO1hUUZfbYUjJbzQF/wkAL8fynQXzjORa9/Ed9yIk6/5f3w4ZakAU/F75F
+	x/81iB2s9YlunO4rgAMczgxpWHRSCjk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-H9tO0kJdM1yYSUhofNskFw-1; Wed, 01 Feb 2023 11:11:37 -0500
+X-MC-Unique: H9tO0kJdM1yYSUhofNskFw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by linux.intel.com (Postfix) with ESMTPS id 52ADA580514;
-	Wed,  1 Feb 2023 07:27:53 -0800 (PST)
-Message-ID: <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
-Date: Wed, 1 Feb 2023 10:27:51 -0500
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78D96101A521
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 16:11:37 +0000 (UTC)
+Received: from [172.64.13.45] (unknown [10.30.33.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 62324404BEC0;
+	Wed,  1 Feb 2023 16:11:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, 58706f7f)
+Date: Wed, 01 Feb 2023 16:11:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>, sedat.dilek@gmail.com
-Cc: "Xing, Zhengjun" <zhengjun.xing@intel.com>,
- Arnaldo Carvalho de Melo <acme@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev,
- Ben Hutchings <benh@debian.org>, James Clark <james.clark@arm.com>,
- Stephane Eranian <eranian@google.com>
-References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
- <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
- <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
- <c6605d52-b9e1-e8d3-ed29-562146f64eea@arm.com>
- <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
- <CA+icZUWKFCdhQ9XN0wLN6BF5ft3WaNrtXDb9D8ckNOPG9gUf+g@mail.gmail.com>
- <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com>
-From: "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <50901.123020111113703721@us-mta-653.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
+Hi, we tested your kernel and here are the results:
 
-On 2023-01-30 10:55 p.m., Ian Rogers wrote:
->>> There's a question about what we should do in the perf test about
->>> this? I have a few solutions:
->>>
->>> 1) try metric tests again with the --metric-no-group flag and don't
->>> fail the test if this succeeds. This allows kernel bugs to hide, so
->>> I'm not a huge fan.
->>>
->>> 2) add a new metric flag/constraint to say not to group, this way the
->>> metric will automatically apply the "--metric-no-group" flag. It is a
->>> bit of work to wire this up but this kind of failure is common enough
->>> in PMUs that it is probably worthwhile. We also need to add the flag
->>> to metrics and I'm not sure how to get a good list of the metrics that
->>> currently fail and require it. This is okay but error prone.
->>>
->>> 3) fix the kernel bug and let the perf test fail until an adequate
->>> kernel is installed. Probably the best option.
->>>
->> Hi Ian,
->>
->> I can confirm:
->>
->> $ echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
->> /proc/sys/kernel/perf_event_paranoid
->> 0
->>
->> $ ~/bin/perf stat -M tma_l3_bound --metric-no-group -a sleep 1
->>
->> Performance counter stats for 'system wide':
->>
->>         2.058.892      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,5 %
->> tma_l3_bound             (99,30%)
->>       173.254.697      CYCLE_ACTIVITY.STALLS_L2_PENDING
->>                         (99,10%)
->>     2.396.130.501      CPU_CLK_UNHALTED.THREAD
->>                         (99,60%)
->>         1.110.486      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
->>                            (99,53%)
->>
->>       1,001989022 seconds time elapsed
->>
->> $ ~/bin/perf stat -M tma_dram_bound --metric-no-group -a sleep 1
->>
->> Performance counter stats for 'system wide':
->>
->>         1.729.208      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,2 %
->> tma_dram_bound           (99,50%)
->>        50.346.734      CYCLE_ACTIVITY.STALLS_L2_PENDING
->>                         (99,50%)
->>     2.354.963.862      CPU_CLK_UNHALTED.THREAD
->>                         (99,80%)
->>           306.500      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
->>                            (99,61%)
->>
->>       1,001981392 seconds time elapsed
->>
->> Thanks!
-> Thanks, apparently it is an issue with SandyBridge/IvyBridge that some
-> counters on one hyperthread will limit what can be on the other. I
-> believe that's the comment related to EXCL access here:
-> https://github.com/torvalds/linux/blob/master/arch/x86/events/intel/core.c#L124
-> So you may have more success with the metric if you disable
-> hyperthreading, but I imagine that's not a popular option.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Thanks for debugging the issue. Yes, it's caused by the HT workaround
-for SNB/IVB/HSW.
 
-The weak group check in the kernel is in validate_group(). It only does
-a sanity check. It doesn't check all the workarounds and the current
-status of counters (e.g., whether the fixed counter is occupied by NMI
-watchdog.) It's possible that a false positive is returned to the perf
-tool. I once tried to fix the NMI watchdog check in the kernel, but the
-proposal was rejected. So the metric constraint is introduced.
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-For this issue, I think the above option2 should be a better and
-practical choice. The issue is only observed on old machines, which
-usually has a stable kernel running on it. I don't think the user wants
-to update their kernel just to workaround an issue for several metrics.
-But it should be much easier for them to update the perf tool.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/67853
 
-We know that the below events are the problematic events.
-/* MEM_UOPS_RETIRED.* */
-/* MEM_LOAD_UOPS_RETIRED.* */
-/* MEM_LOAD_UOPS_LLC_HIT_RETIRED.* */
-/* MEM_LOAD_UOPS_LLC_MISS_RETIRED.* */
-Can we update the convertor script and apply the "--metric-no-group"
-flag or add a new constraint if the above events are detected in
-SNB/IVB/HSW?
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6902810
 
-Thanks,
-Kan
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
+, expecting 48
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
+            Affected tests:
+                 aarch64 - Storage - targetcli basic
+                 ppc64le - Storage - targetcli basic
+                   s390x - Storage - targetcli basic
+                  x86_64 - Storage - targetcli basic
+                  x86_64 (debug) - Storage - targetcli basic
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1498
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
