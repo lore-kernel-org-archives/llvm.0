@@ -1,401 +1,110 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2957E
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 02:01:03 +0000 (UTC)
-Received: by mail-wm1-f42.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so304222wms.1
-        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 18:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lzwuDm55TnkXMY0IrCGTb3v7BA4F0rw2HerxsUC44+8=;
-        b=Dj4NWFfXK50w29qJ+sudFgiiMv6cTbSqaRqlpgatoca92VzNEhVu9SrEgHLGBJC4i6
-         1isIANv1f8plUxLjjuTs6CMKXoy2yXa5nqydpUgdTB2pHq55f2CoaYGzx4fF0KL8AVXf
-         WXWCtxvwtn2iWhaAoPT4SDJ1cY40BYQdhHkPn5kb1E/EMJ6qMWyaDxtZJamPV9fj3yzS
-         Zycc4OG2q6CFcnUi7jNph/+/qr9iNaOOxBBIfQH7KIGW9pVBf77GY/lmlUksQnIJ9D5R
-         uT+jtTi00iL7ofU6bDP9NFA85A5vWJZoig4bQFp4y3A8NUPTq2yvorffNbmVtpB9dmV1
-         H4Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lzwuDm55TnkXMY0IrCGTb3v7BA4F0rw2HerxsUC44+8=;
-        b=4LKYKESB4G8wBEan7PjiZ1ZAQ9cI9oLBGWtPsFJRRT9GmotALexR7CRxy1v+rdtAgX
-         +m/o6GydbrWYxT0uACmYEZDfauEaAvHJ5+iiI+vmHh5s33mFfci5ZwmuFhUK37SVWOtT
-         gDSoWkurMK7asVTuyn2ulY3oR5Q60+lLJ6gAzd8v2f436MrnxjqiyWhHrZ9/OPvt4qRZ
-         qvRwal2Qsvl6/nt+tJaK0Z4bIth7jiAu+RtzlL9lybfXJL+s0fHzhz3AbFhanPLuEcUc
-         OI3QoHlfyxMz1bS9C9uj1cbx4HKJoOMyi1ZStNdUOj4mGcgvktGt6U99ZWQr6b8asxTL
-         X2rw==
-X-Gm-Message-State: AO0yUKUxazpVfGDHl3HlL+XNGxOl7tXp8a9bklt58bEdaKIdxs+7qn2f
-	i4fWN4oCp78F20sWJbfHKzB5wpr/EdynIKtGIlG7ww==
-X-Google-Smtp-Source: AK7set9xNbcRVhyDatKJHT5jbZY3BKCJXp3H3GxAKsnBe4SbDzWx/5dKfNGmzoEIQWZ8XopevVQHgzxnOb0B2waZtdA=
-X-Received: by 2002:a05:600c:524e:b0:3d0:50c4:432c with SMTP id
- fc14-20020a05600c524e00b003d050c4432cmr21433wmb.67.1675216861640; Tue, 31 Jan
- 2023 18:01:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE5D7E5;
+	Wed,  1 Feb 2023 04:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675224783; x=1706760783;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AzFXkKZspu1LTGX7uHNgR84FKsqjBYy1uQUuqwlv2SM=;
+  b=Bm6vnsy7RbDTaQh8oTxSWWgEVblTT88mg7Dr2q0urZcfu9rUHLOODHZd
+   gk6ZPJumqjKUNB6SOE+Pz+ZElRRDFWl7EHbDBJtltl5aryNxRsGs/vWAl
+   ZZ0i40ZRQu9foBcB2I9TZveqdAB6DTh6emEX2t9+2QZJErRadYmdr4DnY
+   T9KmSg5nPVcSmpGgX72i9v0vRmJwJQs34qI0Aed1iXZ7hGMF0jVe/M75+
+   l+A/wdXc2q3yexa2QSe5LTo2FMd+v76vNgtFQkmDNh90w9ZWNPlyup6SI
+   8iZHL07aOLtcMHzB6/WBMG3ADYyb5QhSqjF0hnsQDpls4vNh5Wa0h4Nsk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="390403785"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="390403785"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 20:11:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="753478700"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="753478700"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 31 Jan 2023 20:11:43 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pN4TG-00052w-2Y;
+	Wed, 01 Feb 2023 04:11:42 +0000
+Date: Wed, 1 Feb 2023 12:10:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v9 10/16] dm-verity: consume root hash digest and
+ signature data via LSM hook
+Message-ID: <202302011153.Xnz2WjMM-lkp@intel.com>
+References: <1675119451-23180-11-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230124064324.672022-1-irogers@google.com> <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X> <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
- <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X> <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
- <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X> <Y9mY5woe+45nTvTM@krava> <CAP-5=fVDE6a+1rxOFhFjheg3ybUMRxE51NPW=kKLc=O98TQHHA@mail.gmail.com>
-In-Reply-To: <CAP-5=fVDE6a+1rxOFhFjheg3ybUMRxE51NPW=kKLc=O98TQHHA@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 31 Jan 2023 18:00:49 -0800
-Message-ID: <CAP-5=fVvB7CO0qzO4rSJiS3EqpmBn2dCcCYE70zmAVnFa_zebA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Connor OBrien <connoro@google.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675119451-23180-11-git-send-email-wufan@linux.microsoft.com>
 
-On Tue, Jan 31, 2023 at 2:50 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Jan 31, 2023 at 2:40 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Tue, Jan 31, 2023 at 02:17:08PM -0700, Nathan Chancellor wrote:
-> > > On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
-> > > > On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
-> > > > >
-> > > > > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> > > > > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com=
-> wrote:
-> > > > > > >
-> > > > > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@ker=
-nel.org> wrote:
-> > > > > > > >
-> > > > > > > > Hi Ian,
-> > > > > > > >
-> > > > > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > > > > > > HOSTCC is always wanted when building. Setting CC to HOST=
-CC happens
-> > > > > > > > > after tools/scripts/Makefile.include is included, meaning=
- flags are
-> > > > > > > > > set assuming say CC is gcc, but then it can be later set =
-to HOSTCC
-> > > > > > > > > which may be clang. tools/scripts/Makefile.include is nee=
-ded for host
-> > > > > > > > > set up and common macros in objtool's Makefile. Rather th=
-an override
-> > > > > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, t=
-he libsubcmd
-> > > > > > > > > builds and the linkage step. This means the Makefiles don=
-'t see things
-> > > > > > > > > like CC changing and tool flag determination, and similar=
-, work
-> > > > > > > > > properly.
-> > > > > > > > >
-> > > > > > > > > Also, clear the passed subdir as otherwise an outer build=
- may break by
-> > > > > > > > > inadvertently passing an inappropriate value.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > > > > > ---
-> > > > > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > > > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bp=
-f/resolve_btfids/Makefile
-> > > > > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > > > > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > > > > > @@ -18,14 +18,11 @@ else
-> > > > > > > > >  endif
-> > > > > > > > >
-> > > > > > > > >  # always use the host compiler
-> > > > > > > > > -AR       =3D $(HOSTAR)
-> > > > > > > > > -CC       =3D $(HOSTCC)
-> > > > > > > > > -LD       =3D $(HOSTLD)
-> > > > > > > > > -ARCH     =3D $(HOSTARCH)
-> > > > > > > > > +HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=
-=3D"$(HOSTLD)" ARCH=3D"$(HOSTARCH)" \
-> > > > > > > > > +               EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HO=
-STCFLAGS)"
-> > > > > > > > > +
-> > > > > > > > >  RM      ?=3D rm
-> > > > > > > > >  CROSS_COMPILE =3D
-> > > > > > > > > -CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
-> > > > > > > > > -LDFLAGS :=3D $(KBUILD_HOSTLDFLAGS)
-> > > > > > > > >
-> > > > > > > > >  OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
-> > > > > > > > >
-> > > > > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBP=
-F_OUT):
-> > > > > > > > >
-> > > > > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > > > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=3D$(SUBCMD_OUT)=
- \
-> > > > > > > > > -                 DESTDIR=3D$(SUBCMD_DESTDIR) prefix=3D \
-> > > > > > > > > +                 DESTDIR=3D$(SUBCMD_DESTDIR) $(HOST_OVER=
-RIDES) prefix=3D subdir=3D \
-> > > > > > > > >                   $(abspath $@) install_headers
-> > > > > > > > >
-> > > > > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)=
-/Makefile) | $(LIBBPF_OUT)
-> > > > > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTP=
-UT=3D$(LIBBPF_OUT)    \
-> > > > > > > > > -                 DESTDIR=3D$(LIBBPF_DESTDIR) prefix=3D E=
-XTRA_CFLAGS=3D"$(CFLAGS)" \
-> > > > > > > > > +                 DESTDIR=3D$(LIBBPF_DESTDIR) $(HOST_OVER=
-RIDES) prefix=3D subdir=3D \
-> > > > > > > > >                   $(abspath $@) install_headers
-> > > > > > > > >
-> > > > > > > > >  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cfl=
-ags 2>/dev/null)
-> > > > > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > > > > > > >  include $(srctree)/tools/build/Makefile.include
-> > > > > > > > >
-> > > > > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > > > > > > -     $(Q)$(MAKE) $(build)=3Dresolve_btfids
-> > > > > > > > > +     $(Q)$(MAKE) $(build)=3Dresolve_btfids $(HOST_OVERRI=
-DES)
-> > > > > > > > >
-> > > > > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > > > > > > >       $(call msg,LINK,$@)
-> > > > > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $=
-(SUBCMDOBJ) $(LIBS)
-> > > > > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o=
- $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > > > >
-> > > > > > > > >  clean_objects :=3D $(wildcard $(OUTPUT)/*.o             =
-   \
-> > > > > > > > >                              $(OUTPUT)/.*.o.cmd          =
- \
-> > > > > > > > > --
-> > > > > > > > > 2.39.0.246.g2a6d74b583-goog
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > I just bisected a linking failure when building resolve_btf=
-ids with
-> > > > > > > > clang to this change as commit 13e07691a16f ("tools/resolve=
-_btfids:
-> > > > > > > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > > > > > > >
-> > > > > > > > It appears to be related to whether or not CROSS_COMPILE is=
- specified,
-> > > > > > > > which we have to do for certain architectures and configura=
-tions still.
-> > > > > > > > arm64 is not one of those but it helps demonstrate the issu=
-e.
-> > > > > > > >
-> > > > > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_D=
-EBUG_INFO_BTF
-> > > > > > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch6=
-4-linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 defconfig menuconfig
-> > > > > > > >
-> > > > > > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch6=
-4-linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 prepare
-> > > > > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resol=
-ve_btfids-in.o is incompatible with elf64-x86-64
-> > > > > > > >   clang-17: error: linker command failed with exit code 1 (=
-use -v to see invocation)
-> > > > > > > >   ...
-> > > > > > > >
-> > > > > > > > Before your change, with V=3D1, I see:
-> > > > > > > >
-> > > > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d=
- -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototy=
-pes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=3Dgnu11 -Wdeclaration=
--after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/u=
-api -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools=
-/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SR=
-C/tools/bpf/resolve_btfids/main.o main.c
-> > > > > > > >
-> > > > > > > > After, I see:
-> > > > > > > >
-> > > > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d=
- -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=3Daarch64-linu=
-x-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINU=
-X_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolv=
-e_btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/bpf=
-/resolve_btfids/main.o main.c
-> > > > > > > >
-> > > > > > > > We seem to have taken on a '--target=3Daarch64-linux-gnu' (=
-changing the
-> > > > > > > > target of resolve_btfids-in.o) and we dropped the warning f=
-lags.
-> > > > > > > >
-> > > > > > > > I think this comes from the clang block in
-> > > > > > > > tools/scripts/Makefile.include, which is included into the
-> > > > > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > > > > > > >
-> > > > > > > > I am not super familiar with the tools build system, otherw=
-ise I would
-> > > > > > > > try to provide a patch. I tried moving CROSS_COMPILE from a=
- recursive to
-> > > > > > > > simple variable ('=3D' -> ':=3D') and moving it to HOST_OVE=
-RRIDES but those
-> > > > > > > > did not appear to resolve it for me.
-> > > > > > > >
-> > > > > > > > If there is any other information I can provide or patches =
-I can test,
-> > > > > > > > please let me know.
-> > > > > > > >
-> > > > > > > > Cheers,
-> > > > > > > > Nathan
-> > > > > > >
-> > > > > > > Thanks Nathan, and thanks for all the details in the bug repo=
-rt. I'm
-> > > > > > > looking into this.
-> > > > > > >
-> > > > > > > Ian
-> > > > > >
-> > > > > > Given the somewhat complicated cross compile I wasn't able to g=
-et a
-> > > > > > reproduction. Could you see if the following addresses the prob=
-lem:
-> > > > >
-> > > > > As long as you have an LLVM toolchain that targets AArch64 and yo=
-ur
-> > > > > host, you should be able to reproduce this issue with those comma=
-nds
-> > > > > verbatim, as that command should not use any GNU binutils. I am p=
-retty
-> > > > > sure I tried it in a fresh container before reporting it but it i=
-s
-> > > > > possible that I did not.
-> > > >
-> > > > Thanks, do you have instructions on setting up the container?
-> > >
-> > > Sure thing, this worked for me in the Linux source you would like to
-> > > build (I marked it readonly to make sure any modifications were done =
-in
-> > > my host environment, remove the ':ro' if you would like to make edits=
- to
-> > > the source within the container). Docker should work as well but I di=
-d
-> > > not test it.
-> > >
-> > > $ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-deve=
-l
-> > > # pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
-> > > ...
-> > >
-> > > # To turn on CONFIG_DEBUG_INFO_BTF
-> > > # make -C /linux -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-=
-linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 O=3D/build defconfig menuc=
-onfig
-> > >
-> > > # make -C /linux -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-=
-linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 O=3D/build prepare
-> > > ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o i=
-s incompatible with elf64-x86-64
-> > > clang-15: error: linker command failed with exit code 1 (use -v to se=
-e invocation)
-> > >
-> > > > > > ```
-> > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile
-> > > > > > b/tools/bpf/resolve_btfids/Makefile
-> > > > > > index daed388aa5d7..a06966841df4 100644
-> > > > > > --- a/tools/bpf/resolv
-> > > >
-> > > > Ian
-> > > > e_btfids/Makefile
-> > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > > @@ -19,10 +19,9 @@ endif
-> > > > > >
-> > > > > > # always use the host compiler
-> > > > > > HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(H=
-OSTLD)"
-> > > > > > ARCH=3D"$(HOSTARCH)" \
-> > > > > > -                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCF=
-LAGS)"
-> > > > > > +                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCF=
-LAGS)"
-> > > > > > CROSS_COMPILE=3D""
-> > > > > >
-> > > > > > RM      ?=3D rm
-> > > > > > -CROSS_COMPILE =3D
-> > > > > >
-> > > > > > OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
-> > > > > > ```
-> > > > > >
-> > > > >
-> > > > > Unfortunately, it does not. I still see '--target=3D' end up in t=
-he
-> > > > > CFLAGS of those files.
-> >
-> > hi,
-> > I can reproduce that and I think the reason is that the patch removes
-> > CFLAGS setup
-> >
-> >   CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
-> >
-> > so now the 'include ../../scripts/Makefile.include' will set CFLAGS
-> > with the  --target=3D... and we fail
-> >
-> > I can compile with the change below.. we could also set CROSS_COMPILE
-> > before including tools/scripts/Makefile.include ... not sure which
-> > on is better
-> >
-> > also I need to check if we should keep LDFLAGS setup as well
-> >
-> > jirka
->
-> Right, but the code shouldn't be doing that - it was the purpose of
-> the patch to remove it. If you include tools/scripts/Makefile.include,
-> which is done on line 2, then a bunch of warnings, cflags, etc. are
-> set based on CC. To then overwrite those values with various HOST
-> values is at best confusing - CC no longer being CC but HOSTCC, but
-> other values may or may not have changed. As we build using submakes,
-> the goal here was to push the problem into the submake which will only
-> ever see CC and other values being passed in.
->
-> So perhaps:
-> HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
-> ARCH=3D"$(HOSTARCH)" \
->   EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)" CROSS_COMPILE=3D""
->
-> should be:
-> HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
-> ARCH=3D"$(HOSTARCH)" \
->   CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)" CROSS_COMPILE=3D""
->
-> I'm still trying to get a reproduction.
->
-> Thanks,
-> Ian
+Hi Fan,
 
-So I got a reproduction from Nathan's steps and I believe:
-https://lore.kernel.org/lkml/20230201015015.359535-1-irogers@google.com/
-Fixes the issue and tidies the Makefile a little. I was a little
-unclear on the target being built, and tested some with -C, etc. I'm
-always quite capable of making more errors though, so please help me
-to check.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on device-mapper-dm/for-next]
+[also build test WARNING on axboe-block/for-next lwn/docs-next linus/master v6.2-rc6 next-20230131]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Apologies again for the problem and hopefully this fixes it. Thanks,
-Ian
+url:    https://github.com/intel-lab-lkp/linux/commits/Fan-Wu/security-add-ipe-lsm/20230131-070059
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+patch link:    https://lore.kernel.org/r/1675119451-23180-11-git-send-email-wufan%40linux.microsoft.com
+patch subject: [RFC PATCH v9 10/16] dm-verity: consume root hash digest and signature data via LSM hook
+config: arm64-randconfig-r025-20230130 (https://download.01.org/0day-ci/archive/20230201/202302011153.Xnz2WjMM-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f782f147bd864b6e3fc14d28daa4780a7aab80e6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Fan-Wu/security-add-ipe-lsm/20230131-070059
+        git checkout f782f147bd864b6e3fc14d28daa4780a7aab80e6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
 
-> >
-> > ---
-> > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfi=
-ds/Makefile
-> > index daed388aa5d7..875e3fcce7cd 100644
-> > --- a/tools/bpf/resolve_btfids/Makefile
-> > +++ b/tools/bpf/resolve_btfids/Makefile
-> > @@ -64,6 +64,7 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_S=
-RC)/Makefile) | $(LIBBPF_OU
-> >  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/nul=
-l)
-> >  LIBELF_LIBS  :=3D $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null =
-|| echo -lelf)
-> >
-> > +CFLAGS :=3D $(KBUILD_HOSTCFLAGS)
-> >  CFLAGS +=3D -g \
-> >            -I$(srctree)/tools/include \
-> >            -I$(srctree)/tools/include/uapi \
-> >
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/md/dm-verity-target.c:19:
+>> drivers/md/dm-verity-verify-sig.h:38:5: warning: no previous prototype for function 'verity_verify_root_hash' [-Wmissing-prototypes]
+   int verity_verify_root_hash(struct block_device *bdev, const void *data,
+       ^
+   drivers/md/dm-verity-verify-sig.h:38:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int verity_verify_root_hash(struct block_device *bdev, const void *data,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/verity_verify_root_hash +38 drivers/md/dm-verity-verify-sig.h
+
+    37	
+  > 38	int verity_verify_root_hash(struct block_device *bdev, const void *data,
+    39				    size_t data_len, const void *sig_data,
+    40				    size_t sig_len)
+    41	{
+    42		return 0;
+    43	}
+    44	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
