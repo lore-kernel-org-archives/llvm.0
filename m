@@ -1,264 +1,242 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209B080F;
-	Wed,  1 Feb 2023 07:28:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675236496; x=1706772496;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NVZy1yN3menuLCDwawETeI1gdhzzBc96J45uZDahNK8=;
-  b=KM3L3HxK5ehvMu8mlp/40Sdv//ldt9o1tHY5ED5GUec9aUTGXxrZRn6O
-   BhZ62c/9GHzpurIsUqi9Mfp2yp6n36zSpPvpjwWuT+AbGhLlVqn5tDxye
-   iVFhhGjGfxJLXD2jryZzLq1JMRZuxZijzdIU5ELO4mekwoqBaisqyoLi5
-   xVqOp0iXEoc0ugS4dU+kUcWzVKF4kf1tVrXcMC3bZPnyul6XoyMKQ16FX
-   Cq/xlT/CJUkBQXlxSuWOS6pLPJFY0h++2pFhByqKEd/rinpm/ta/8ZC42
-   bNgnMQ17LRPwxypGnZzSncFNINPSU8B2movNswJE7COlCmJpEe0UZvYbb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="392650522"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="392650522"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 23:28:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="666822957"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="666822957"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Jan 2023 23:28:13 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pN7XQ-0005D8-1P;
-	Wed, 01 Feb 2023 07:28:12 +0000
-Date: Wed, 1 Feb 2023 15:27:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	linux-trace-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-	mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
-	Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-ID: <202302011530.7vm4O8Ro-lkp@intel.com>
-References: <167518178446.336834.4654027409699647726.stgit@mhiramat.roam.corp.google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDB980F
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 07:36:39 +0000 (UTC)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-50aa54cc7c0so207185977b3.8
+        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 23:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dx1zARWQRp48CZ4kQ2x9yqFjiGpyMZcTuGlBFtRENQ8=;
+        b=BRlZce3Mvkorg1JlE2Wn1RlKnSRnE2Kv+cjMHl7bPVvhXBvI3EsEGNQCBqfTULNHfs
+         OIJaUMb6Lw1Mrjv7rhACXJIw2oT0RUBMdRxVbqhZ38hOC7RnHuFHmiIBfggjs1v7OSZs
+         F1IaLNom6Wq0vQiiSCyhsQFpTNVL2ictpQ3UYV7RfWWHEV4BbLb2NFc9Bl8kA9VFQvpj
+         yYIrvgho2njaNqV43HIQ+d1ZdBvnmUj1O3494UXIkt6Jhy4xtt47j8vwxyNlDfhC7Uvq
+         PJHcTwVdYnDDWTIUX/jtU76HRoMlKspKWbZIDsInfk/ZA4DSSsdkCQeMezIVBj6ji1UJ
+         zTwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dx1zARWQRp48CZ4kQ2x9yqFjiGpyMZcTuGlBFtRENQ8=;
+        b=LvPMVfZh3hw9Oi9y6kt9ZJk5yvBfVZP3Jb1WlDNAXCqV8FBEvmW2iqdkXIdTeXrLIe
+         j81QCqgfOYtB97ei94t5B8yk4awUsS0XS/IUFDA7czklO1hJ6CM95gkbxTjPuPTNorql
+         Ar+dkiY8jPPdn/98uy2XNcLG1noaSNPABDvWagYV7tMexy+8DAG1TDQFmF8ZAEFEmvF5
+         Z3dchsYEIMwBZROOr0iGvkzWd7ykmCymJCXntq40Ovms8r030SUxH3dgr1zMiqzziwgH
+         svliDaQxP+C2Fn4zFRy6QFcyl1f64qC8v7ueraaGDHPxezU/MDVyHxHIDt+Row4DFLIN
+         w3ow==
+X-Gm-Message-State: AO0yUKVIAfFNvYU4nEx4JRQCJCoTiIEynnhk9glTyKOrDx9yGjCSSit3
+	buVSidn1mkxwlPHwvXlOx5O+w3/iOTwN+n9pptPqmA==
+X-Google-Smtp-Source: AK7set9m5+elP4l199y4Ungn8cTJMrhmcu+zMRDCt/0pfgHMmTXjacsBA6C+zGyfsSND4y7wWAZyPtDwbItCigzngy0=
+X-Received: by 2002:a0d:c046:0:b0:517:b161:1f4d with SMTP id
+ b67-20020a0dc046000000b00517b1611f4dmr146538ywd.399.1675236998861; Tue, 31
+ Jan 2023 23:36:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167518178446.336834.4654027409699647726.stgit@mhiramat.roam.corp.google.com>
+References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
+In-Reply-To: <20221101223321.1326815-5-keescook@chromium.org>
+From: Yongqin Liu <yongqin.liu@linaro.org>
+Date: Wed, 1 Feb 2023 15:36:08 +0800
+Message-ID: <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
+To: Kees Cook <keescook@chromium.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rasmus Villemoes <rasmus.villemoes@prevas.dk>, Thomas Gleixner <tglx@linutronix.de>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>, Michael Kelley <mikelley@microsoft.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Won Chung <wonchung@google.com>, 
+	David Gow <davidgow@google.com>, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Sumit Semwal <sumit.semwal@linaro.org>, John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Masami,
+Hi, Kees
 
-Thank you for the patch! Perhaps something to improve:
+This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
+for the android-mainline based hikey960 build, with this commit reverted,
+there is no problem for the build to boot to the homescreen.
+Not sure if you have any idea about it and give some suggestions.
 
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master shuah-kselftest/next shuah-kselftest/fixes linus/master v6.2-rc6]
-[cannot apply to rostedt-trace/for-next rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Here is part of the kernel panic log:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/167518178446.336834.4654027409699647726.stgit%40mhiramat.roam.corp.google.com
-patch subject: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing function entry and exit.
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302011530.7vm4O8Ro-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/90de2b114484f12e2645d2beb964b7d230c9c705
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
-        git checkout 90de2b114484f12e2645d2beb964b7d230c9c705
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+    [    9.479878][  T122] ueventd: Loading module
+/vendor/lib/modules/spi-pl022.ko with args ''
+    [    9.480276][  T115] apexd-bootstrap: Pre-allocated loop device 29
+    [    9.480517][  T123] ueventd: LoadWithAliases was unable to load
+of:Nhi3660_i2sT(null)Chisilicon,hi3660-i2s-1.0
+    [    9.480632][  T121] Unexpected kernel BRK exception at EL1
+    [    9.480637][  T121] Internal error: BRK handler:
+00000000f2000001 [#1] PREEMPT SMP
+    [    9.480644][  T121] Modules linked in: cpufreq_dt(E+)
+hisi_thermal(E+) phy_hi3660_usb3(E) btqca(E) hi6421_pmic_core(E)
+btbcm(E) spi_pl022(E) hi3660_mailbox(E) i2c_designware_platform(E)
+mali_kbase(OE) dw_mmc_k3(E) bluetooth(E) dw_mmc_pltfm(E) dw_mmc(E)
+kirin_drm(E) rfkill(E) kirin_dsi(E) i2c_designware_core(E) k3dma(E)
+drm_dma_helper(E) cma_heap(E) system_heap(E)
+    [    9.480688][  T121] CPU: 4 PID: 121 Comm: ueventd Tainted: G
+       OE      6.2.0-rc6-mainline-14196-g1d9f94ec75b9 #1
+    [    9.480694][  T121] Hardware name: HiKey960 (DT)
+    [    9.480697][  T121] pstate: 20400005 (nzCv daif +PAN -UAO -TCO
+-DIT -SSBS BTYPE=--)
+    [    9.480703][  T121] pc : hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+    [    9.480722][  T121] lr : hi3660_thermal_probe+0x38/0x74 [hisi_thermal]
+    [    9.480733][  T121] sp : ffffffc00aa13700
+    [    9.480735][  T121] x29: ffffffc00aa13700 x28: 0000007ff8ae8531
+x27: 00000000000008c0
+    [    9.480743][  T121] x26: ffffffc00aa2a300 x25: ffffffc00aa2ab40
+x24: 000000000000001d
+    [    9.480749][  T121] x23: ffffffc00a29d000 x22: 0000000000000000
+x21: ffffff8001fa4a80
+    [    9.480755][  T121] x20: 0000000000000001 x19: ffffff8001fa4a80
+x18: ffffffc00a8810b0
+    [    9.480761][  T121] x17: 000000007ab542f2 x16: 000000007ab542f2
+x15: ffffffc00aa01000
+    [    9.480767][  T121] x14: ffffffc00966f250 x13: ffffffc0b58f9000
+x12: ffffffc00a055f10
+    [    9.480771][  T123] ueventd: LoadWithAliases was unable to load
+cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
+    [    9.480773][  T121]
+    [    9.480774][  T121] x11: 0000000000000000 x10: 0000000000000001
+x9 : 0000000100000000
+    [    9.480780][  T123] ueventd:
+    [    9.480780][  T121] x8 : ffffffc0044154cb x7 : 0000000000000000
+x6 : 000000000000003f
+    [    9.480786][  T121] x5 : 0000000000000020 x4 : ffffffc0098db323
+x3 : ffffff801aeb62c0
+    [    9.480792][  T121] x2 : ffffff801aeb62c0 x1 : 0000000000000000
+x0 : ffffff8001fa4c80
+    [    9.480798][  T121] Call trace:
+    [    9.480801][  T121]  hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+    [    9.480813][  T121]  hisi_thermal_probe+0xbc/0x284 [hisi_thermal]
+    [    9.480823][  T121]  platform_probe+0xcc/0xf8
+    [    9.480836][  T121]  really_probe+0x19c/0x390
+    [    9.480842][  T121]  __driver_probe_device+0xc0/0xf0
+    [    9.480848][  T121]  driver_probe_device+0x4c/0x228
+    [    9.480853][  T121]  __driver_attach+0x110/0x1e0
+    [    9.480858][  T121]  bus_for_each_dev+0xa0/0xf4
+    [    9.480864][  T121]  driver_attach+0x2c/0x40
+    [    9.480868][  T121]  bus_add_driver+0x118/0x208
+    [    9.480873][  T121]  driver_register+0x80/0x124
+    [    9.480878][  T121]  __platform_driver_register+0x2c/0x40
+    [    9.480884][  T121]  init_module+0x28/0xfe4 [hisi_thermal]
+    [    9.480895][  T121]  do_one_initcall+0xe4/0x334
+    [    9.480902][  T121]  do_init_module+0x50/0x1f0
+    [    9.480909][  T121]  load_module+0x1034/0x1204
+    [    9.480914][  T121]  __arm64_sys_finit_module+0xc8/0x11c
+    [    9.480919][  T121]  invoke_syscall+0x60/0x130
+    [    9.480926][  T121]  el0_svc_common+0xbc/0x100
+    [    9.480931][  T121]  do_el0_svc+0x38/0xc4
+    [    9.480937][  T121]  el0_svc+0x34/0xc4
+    [    9.480945][  T121]  el0t_64_sync_handler+0x8c/0xfc
+    [    9.480950][  T121]  el0t_64_sync+0x1a4/0x1a8
+    [    9.480957][  T121] Code: 91132d08 b9001814 f9000013 f9000808 (d4200020)
+    [    9.480960][  T121] ---[ end trace 0000000000000000 ]---
+    [    9.482201][   T72] dwmmc_k3 ff37f000.dwmmc1: IDMAC supports
+64-bit address mode.
+    [    9.482225][   T72] dwmmc_k3 ff37f000.dwmmc1: Using internal
+DMA controller.
+    [    9.482232][   T72] dwmmc_k3 ff37f000.dwmmc1: Version ID is 270a
+    [    9.482261][   T72] dwmmc_k3 ff37f000.dwmmc1: DW MMC controller
+at irq 72,32 bit host data width,128 deep fifo
+    [    9.482406][  T117] cpu cpu0: EM: created perf domain
+    [    9.482677][  T118] ueventd: Loaded kernel module
+/vendor/lib/modules/btqca.ko
+    [    9.482745][  T118] ueventd: Loading module
+/vendor/lib/modules/hci_uart.ko with args ''
+    [    9.483117][  T117] cpu cpu4: EM: created perf domain
+    [    9.483767][  T117] ueventd: Loaded kernel module
+/vendor/lib/modules/cpufreq-dt.ko
+    [    9.484265][   T72] dwmmc_k3 ff37f000.dwmmc1: fifo-depth
+property not found, using value of FIFOTH register as default
+    [    9.484326][  T117] ueventd: LoadWithAliases was unable to load
+cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
+    [    9.484335][  T117] ueventd:
+    [    9.486508][   T72] dwmmc_k3 ff37f000.dwmmc1: IDMAC supports
+64-bit address mode.
+    [    9.486564][   T72] dwmmc_k3 ff37f000.dwmmc1: Using internal
+DMA controller.
+    [    9.486572][   T72] dwmmc_k3 ff37f000.dwmmc1: Version ID is 270a
+    [    9.486620][   T72] dwmmc_k3 ff37f000.dwmmc1: DW MMC controller
+at irq 72,32 bit host data width,64 deep fifo
+    [    9.488281][  T121] Kernel panic - not syncing: BRK handler:
+Fatal exception
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+for the full serial console log, please check here:
+    http://ix.io/4mLg
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Yongqin Liu
+On Wed, 2 Nov 2022 at 06:34, Kees Cook <keescook@chromium.org> wrote:
+>
+> Mark the devm_*alloc()-family of allocations with appropriate
+> __alloc_size()/__realloc_size() hints so the compiler can attempt to
+> reason about buffer lengths from allocations.
+>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Nishanth Menon <nm@ti.com>
+> Cc: Michael Kelley <mikelley@microsoft.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Won Chung <wonchung@google.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Link: https://lore.kernel.org/r/20221029074734.gonna.276-kees@kernel.org
+> ---
+> This is already in -next, but I'm including it here again to avoid any
+> confusion about this series landing (or being tested) via another tree.
+> ---
+>  include/linux/device.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 424b55df0272..5e4cd857e74f 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -197,9 +197,9 @@ void devres_remove_group(struct device *dev, void *id);
+>  int devres_release_group(struct device *dev, void *id);
+>
+>  /* managed devm_k.alloc/kfree for device drivers */
+> -void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp) __malloc;
+> +void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp) __alloc_size(2);
+>  void *devm_krealloc(struct device *dev, void *ptr, size_t size,
+> -                   gfp_t gfp) __must_check;
+> +                   gfp_t gfp) __must_check __realloc_size(3);
+>  __printf(3, 0) char *devm_kvasprintf(struct device *dev, gfp_t gfp,
+>                                      const char *fmt, va_list ap) __malloc;
+>  __printf(3, 4) char *devm_kasprintf(struct device *dev, gfp_t gfp,
+> @@ -226,7 +226,8 @@ static inline void *devm_kcalloc(struct device *dev,
+>  void devm_kfree(struct device *dev, const void *p);
+>  char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp) __malloc;
+>  const char *devm_kstrdup_const(struct device *dev, const char *s, gfp_t gfp);
+> -void *devm_kmemdup(struct device *dev, const void *src, size_t len, gfp_t gfp);
+> +void *devm_kmemdup(struct device *dev, const void *src, size_t len, gfp_t gfp)
+> +       __realloc_size(3);
+>
+>  unsigned long devm_get_free_pages(struct device *dev,
+>                                   gfp_t gfp_mask, unsigned int order);
+> --
+> 2.34.1
+>
 
->> kernel/trace/trace_probe.c:394:32: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
-                   if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
-                                                ^  ~~~~~~~~~~~~~~~
-   kernel/trace/trace_probe.c:394:32: note: use '|' for a bitwise operation
-                   if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
-                                                ^~
-                                                |
-   1 warning generated.
-
-
-vim +394 kernel/trace/trace_probe.c
-
-   374	
-   375	/* Recursive argument parser */
-   376	static int
-   377	parse_probe_arg(char *arg, const struct fetch_type *type,
-   378			struct fetch_insn **pcode, struct fetch_insn *end,
-   379			unsigned int flags, int offs)
-   380	{
-   381		struct fetch_insn *code = *pcode;
-   382		unsigned long param;
-   383		int deref = FETCH_OP_DEREF;
-   384		long offset = 0;
-   385		char *tmp;
-   386		int ret = 0;
-   387	
-   388		switch (arg[0]) {
-   389		case '$':
-   390			ret = parse_probe_vars(arg + 1, type, code, flags, offs);
-   391			break;
-   392	
-   393		case '%':	/* named register */
- > 394			if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
-   395				/* eprobe and fprobe do not handle registers */
-   396				trace_probe_log_err(offs, BAD_VAR);
-   397				break;
-   398			}
-   399			ret = regs_query_register_offset(arg + 1);
-   400			if (ret >= 0) {
-   401				code->op = FETCH_OP_REG;
-   402				code->param = (unsigned int)ret;
-   403				ret = 0;
-   404			} else
-   405				trace_probe_log_err(offs, BAD_REG_NAME);
-   406			break;
-   407	
-   408		case '@':	/* memory, file-offset or symbol */
-   409			if (isdigit(arg[1])) {
-   410				ret = kstrtoul(arg + 1, 0, &param);
-   411				if (ret) {
-   412					trace_probe_log_err(offs, BAD_MEM_ADDR);
-   413					break;
-   414				}
-   415				/* load address */
-   416				code->op = FETCH_OP_IMM;
-   417				code->immediate = param;
-   418			} else if (arg[1] == '+') {
-   419				/* kprobes don't support file offsets */
-   420				if (flags & TPARG_FL_KERNEL) {
-   421					trace_probe_log_err(offs, FILE_ON_KPROBE);
-   422					return -EINVAL;
-   423				}
-   424				ret = kstrtol(arg + 2, 0, &offset);
-   425				if (ret) {
-   426					trace_probe_log_err(offs, BAD_FILE_OFFS);
-   427					break;
-   428				}
-   429	
-   430				code->op = FETCH_OP_FOFFS;
-   431				code->immediate = (unsigned long)offset;  // imm64?
-   432			} else {
-   433				/* uprobes don't support symbols */
-   434				if (!(flags & TPARG_FL_KERNEL)) {
-   435					trace_probe_log_err(offs, SYM_ON_UPROBE);
-   436					return -EINVAL;
-   437				}
-   438				/* Preserve symbol for updating */
-   439				code->op = FETCH_NOP_SYMBOL;
-   440				code->data = kstrdup(arg + 1, GFP_KERNEL);
-   441				if (!code->data)
-   442					return -ENOMEM;
-   443				if (++code == end) {
-   444					trace_probe_log_err(offs, TOO_MANY_OPS);
-   445					return -EINVAL;
-   446				}
-   447				code->op = FETCH_OP_IMM;
-   448				code->immediate = 0;
-   449			}
-   450			/* These are fetching from memory */
-   451			if (++code == end) {
-   452				trace_probe_log_err(offs, TOO_MANY_OPS);
-   453				return -EINVAL;
-   454			}
-   455			*pcode = code;
-   456			code->op = FETCH_OP_DEREF;
-   457			code->offset = offset;
-   458			break;
-   459	
-   460		case '+':	/* deref memory */
-   461		case '-':
-   462			if (arg[1] == 'u') {
-   463				deref = FETCH_OP_UDEREF;
-   464				arg[1] = arg[0];
-   465				arg++;
-   466			}
-   467			if (arg[0] == '+')
-   468				arg++;	/* Skip '+', because kstrtol() rejects it. */
-   469			tmp = strchr(arg, '(');
-   470			if (!tmp) {
-   471				trace_probe_log_err(offs, DEREF_NEED_BRACE);
-   472				return -EINVAL;
-   473			}
-   474			*tmp = '\0';
-   475			ret = kstrtol(arg, 0, &offset);
-   476			if (ret) {
-   477				trace_probe_log_err(offs, BAD_DEREF_OFFS);
-   478				break;
-   479			}
-   480			offs += (tmp + 1 - arg) + (arg[0] != '-' ? 1 : 0);
-   481			arg = tmp + 1;
-   482			tmp = strrchr(arg, ')');
-   483			if (!tmp) {
-   484				trace_probe_log_err(offs + strlen(arg),
-   485						    DEREF_OPEN_BRACE);
-   486				return -EINVAL;
-   487			} else {
-   488				const struct fetch_type *t2 = find_fetch_type(NULL, flags);
-   489	
-   490				*tmp = '\0';
-   491				ret = parse_probe_arg(arg, t2, &code, end, flags, offs);
-   492				if (ret)
-   493					break;
-   494				if (code->op == FETCH_OP_COMM ||
-   495				    code->op == FETCH_OP_DATA) {
-   496					trace_probe_log_err(offs, COMM_CANT_DEREF);
-   497					return -EINVAL;
-   498				}
-   499				if (++code == end) {
-   500					trace_probe_log_err(offs, TOO_MANY_OPS);
-   501					return -EINVAL;
-   502				}
-   503				*pcode = code;
-   504	
-   505				code->op = deref;
-   506				code->offset = offset;
-   507			}
-   508			break;
-   509		case '\\':	/* Immediate value */
-   510			if (arg[1] == '"') {	/* Immediate string */
-   511				ret = __parse_imm_string(arg + 2, &tmp, offs + 2);
-   512				if (ret)
-   513					break;
-   514				code->op = FETCH_OP_DATA;
-   515				code->data = tmp;
-   516			} else {
-   517				ret = str_to_immediate(arg + 1, &code->immediate);
-   518				if (ret)
-   519					trace_probe_log_err(offs + 1, BAD_IMM);
-   520				else
-   521					code->op = FETCH_OP_IMM;
-   522			}
-   523			break;
-   524		}
-   525		if (!ret && code->op == FETCH_OP_NOP) {
-   526			/* Parsed, but do not find fetch method */
-   527			trace_probe_log_err(offs, BAD_FETCH_ARG);
-   528			ret = -EINVAL;
-   529		}
-   530		return ret;
-   531	}
-   532	
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best Regards,
+Yongqin Liu
+---------------------------------------------------------------
+#mailing list
+linaro-android@lists.linaro.org
+http://lists.linaro.org/mailman/listinfo/linaro-android
