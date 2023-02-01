@@ -1,109 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2A47F;
-	Wed,  1 Feb 2023 10:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B02C433EF;
-	Wed,  1 Feb 2023 10:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675246837;
-	bh=Xz8lcMxTMqJloRyt4lVJe6Tq1FuFNPBZXm5PKzjNgJE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XhjM5hb6nrPeR/Aq6OxfuWENd6mWEajhaVuSxbafhQl8XRPXAGAgDPJ08nQ77NjKU
-	 c48c+1yX5leXRkvBo6WyusqpM5X/+0WTSmYP4rYI+6zse/4fyiL6AmWBsaH1UtHyWv
-	 33yDauFlJbYRglaVCfLi+jWehv9bIxbXC2fA91PP7oxTAIjGcsAGzKJniperzglD0k
-	 6MexGMnNZGczQBRvp3mevYrx930U9frHtQagUTNbOX7sP8jBKW6EhIDnm1QN1o1yqg
-	 GmaGqciWjcDSV1HRHlyZDeeZ17krCO3rmurd4GFW+Sz8ijnBkEiu9e6ihq4BympQ1n
-	 ii01fzj97Uuuw==
-Date: Wed, 1 Feb 2023 10:20:32 +0000
-From: Lee Jones <lee@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Lee Jones <lee.jones@linaro.org>
-Subject: Re: [lee-mfd:for-mfd-next 36/37] drivers/mmc/host/tmio_mmc.c:141:12:
- error: no member named 'enable' in 'struct mfd_cell'
-Message-ID: <Y9o88BzKOQ2cyPU4@google.com>
-References: <202301312253.oUVq9cys-lkp@intel.com>
- <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
- <Y9lNHyfzwE1+b+Ru@google.com>
- <20230131173326.ynfx32g36hp5hcoi@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A96EDA;
+	Wed,  1 Feb 2023 10:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675248143; x=1706784143;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DDyjh9ni0JcrhKwGHINeoMZe+Iu7ncIw8lJqTLpGyw8=;
+  b=b5Uuj5t/snRB25uCvbwXR8XuFlXQrkIz6DIkHoVWKrNc0WDVjz5Ywz1o
+   jKJYldmTNC2TmopR4eQCcGsAZi5Twndu6wBCiCjq9Vwhfjs/fS27NLWSI
+   yrJJdA1m8+rsTCHxCR3PW96uvcEhl+9o9c9a+lHWyhlVfUTkogbF7QYc8
+   4Dt5k0y46eAx62wZf2zu9GwuoAu+PhIJZftz5J+6w/aGrniTUR/XIflAt
+   WNhWi0DFIwclNdKLzt16AZrls6mTaKB7ouzPa7uNDOzIHGxCp1YoEvXS4
+   PKaapv7T+qmAUELDTD41bcMIxWmJA79WTbnQpC7v/shvthklCoGDbp27P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="392685472"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="392685472"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 02:42:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="664847311"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="664847311"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Feb 2023 02:42:21 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNAZI-0005MU-30;
+	Wed, 01 Feb 2023 10:42:20 +0000
+Date: Wed, 1 Feb 2023 18:42:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-next 35/58] ld.lld: error: undefined symbol:
+ rzv2m_usb3drd_reset
+Message-ID: <202302011806.QrzYCatO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230131173326.ynfx32g36hp5hcoi@pengutronix.de>
 
-On Tue, 31 Jan 2023, Uwe Kleine-König wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+head:   45bf39f8df7f05efb83b302c65ae3b9bc92b7065
+commit: c52c9acc415eb6ff54f658492f8c53da0fc3528a [35/58] xhci: host: Add Renesas RZ/V2M SoC support
+config: arm64-randconfig-r015-20230201 (https://download.01.org/0day-ci/archive/20230201/202302011806.QrzYCatO-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=c52c9acc415eb6ff54f658492f8c53da0fc3528a
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch --no-tags usb usb-next
+        git checkout c52c9acc415eb6ff54f658492f8c53da0fc3528a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> On Tue, Jan 31, 2023 at 05:17:19PM +0000, Lee Jones wrote:
-> > On Tue, 31 Jan 2023, Uwe Kleine-König wrote:
-> > 
-> > > Hello,
-> > > 
-> > > On Tue, Jan 31, 2023 at 10:48:48PM +0800, kernel test robot wrote:
-> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-> > > > head:   a561a980c024193e342b6878f62e02ff9d018285
-> > > > commit: 78e7ccec94380519919267670174cbf1711b7963 [36/37] mfd: Remove .enable() and .disable() callbacks
-> > > > config: hexagon-randconfig-r041-20230130 (https://download.01.org/0day-ci/archive/20230131/202301312253.oUVq9cys-lkp@intel.com/config)
-> > > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> > > > reproduce (this is a W=1 build):
-> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > >         chmod +x ~/bin/make.cross
-> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?id=78e7ccec94380519919267670174cbf1711b7963
-> > > >         git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
-> > > >         git fetch --no-tags lee-mfd for-mfd-next
-> > > >         git checkout 78e7ccec94380519919267670174cbf1711b7963
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/video/fbdev/
-> > > > 
-> > > > If you fix the issue, kindly add following tag where applicable
-> > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > 
-> > > > All errors (new ones prefixed by >>):
-> > > > 
-> > > > [...]
-> > > > >> drivers/mmc/host/tmio_mmc.c:186:12: error: no member named 'disable' in 'struct mfd_cell'
-> > > >            if (cell->disable)
-> > > >                ~~~~  ^
-> > > 
-> > > This driver doesn't exist in next any more (commit ecb92c1f4752). So I'm
-> > > unsure what to do here.
-> > > 
-> > > The obvious (to me) options are:
-> > > 
-> > >  a) ignore the problem
-> > >  b) merge ecb92c1f4752 into mfd before applying "mfd: Remove .enable()
-> > >     and .disable() callbacks"
-> > >  c) drop "mfd: Remove .enable() and .disable() callbacks" for now and
-> > >     reapply when ecb92c1f4752 is in Linus' tree (variant of b))
-> > > 
-> > > Lee, what's your take here?
-> > 
-> > We need to pull your patch for now.
-> 
-> I guess that means c), right?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, for now.
+All errors (new ones prefixed by >>):
 
-Please re-submit once we're in better shape.
+>> ld.lld: error: undefined symbol: rzv2m_usb3drd_reset
+   >>> referenced by xhci-rzv2m.c
+   >>>               drivers/usb/host/xhci-rzv2m.o:(xhci_rzv2m_init_quirk) in archive vmlinux.a
 
-> > See:
-> > 
-> >   drivers/mmc/host/tmio_mmc.c
-> >   drivers/mtd/nand/raw/tmio_nand.c
-> >   drivers/usb/host/ohci-tmio.c
-> >   drivers/video/fbdev/tmiofb.c
-> >   drivers/w1/masters/ds1wm.c
-> 
-> Huh, I only checked the first and wonder how I missed these. I guess I
-> checked next only that already has these all dropped. Sorry.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
+   Depends on [n]: USB_SUPPORT [=y] && USB_GADGET [=n] && (ARCH_R9A09G011 [=n] || COMPILE_TEST [=y])
+   Selected by [y]:
+   - USB_XHCI_RZV2M [=y] && USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && USB_XHCI_PLATFORM [=y] && (ARCH_R9A09G011 [=n] || COMPILE_TEST [=y])
 
 -- 
-Lee Jones [李琼斯]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
