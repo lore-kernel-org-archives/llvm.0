@@ -1,263 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32DA2588;
-	Wed,  1 Feb 2023 12:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55FF2C4339B;
-	Wed,  1 Feb 2023 12:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675255372;
-	bh=0tVxqwP6J5RK2m0oIF5Emx6bU3NkR94XMmYH6CF4uN0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=C7F/d+ZJPppJsPzMmOITBjEUzwMUgB9cMJJO4lTW0ee/+7RJrpWHjrdOvx6RnFdV9
-	 uQE05KT6R48p52Hfp09r3RrRcz9WpLjwBnOShxkfs0HMbnPoUTLdt9/aAmf6mXVcKO
-	 lvXP8NtCOl+eKs8bP8s7dpAwHbZkTG60h8VaRysrzmICBDuOoOjXlfU13ke78lYTl/
-	 +cTIYqAetA8mXHPxY/KCKxGQSPMn2kcHyeRtkyFmFNQM9B8rVkNy3LUB81bxXRJwTl
-	 SHcPWDByb0ZY3vY1HquhPmHyc+H9Zq2pbKXdMuXxlubT07XhlPXj2F5V/lyyirtshA
-	 WvETGWyDf3dQw==
-Date: Wed, 1 Feb 2023 21:42:48 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>, Mark Rutland
- <mark.rutland@arm.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-Id: <20230201214248.c88dbeb75018a57f03650e42@kernel.org>
-In-Reply-To: <202302011530.7vm4O8Ro-lkp@intel.com>
-References: <167518178446.336834.4654027409699647726.stgit@mhiramat.roam.corp.google.com>
-	<202302011530.7vm4O8Ro-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F8A63B3
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 15:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675265276; x=1706801276;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ex3hFxX1c8AkYmEYbgKLqmS5+BPQS9+ij/h7v8eo9sA=;
+  b=DWRBewfb5uvYu3YMc7c8MItz6f2B7rvkITNNVNE95jMOx7KPgByPTEvR
+   uoj/MmsWSBm5iaHlu0CzEJtQfSRWQQVJVeb5KjbS8hIJyk9fzxxmDMrL5
+   hUyce8PmfLOhAV9n4bv3S8hN8pmfMiMYJgKQOCH8SNqMIKbNWoIEL/co/
+   4G9kbMC3BqqBAhGkEVNamgHcdqKvW+RkijJ8A+IHvXoyoEF7cn0TzwK+d
+   kHwSHDBQ6j1qpCNnmUP6JCWOTRR0URh1ROz0J7TxpFmfbr7R2U4/V3xlt
+   YoaAmxlsucR7ZXif/n4XzGz9urzUCOH1yIKgKCO87c/tezAaV0N0xOGRw
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355505327"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="355505327"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 07:27:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="642462993"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="642462993"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 01 Feb 2023 07:27:55 -0800
+Received: from [10.255.230.85] (kliang2-mobl1.ccr.corp.intel.com [10.255.230.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by linux.intel.com (Postfix) with ESMTPS id 52ADA580514;
+	Wed,  1 Feb 2023 07:27:53 -0800 (PST)
+Message-ID: <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
+Date: Wed, 1 Feb 2023 10:27:51 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+Content-Language: en-US
+To: Ian Rogers <irogers@google.com>, sedat.dilek@gmail.com
+Cc: "Xing, Zhengjun" <zhengjun.xing@intel.com>,
+ Arnaldo Carvalho de Melo <acme@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev,
+ Ben Hutchings <benh@debian.org>, James Clark <james.clark@arm.com>,
+ Stephane Eranian <eranian@google.com>
+References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+ <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+ <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
+ <c6605d52-b9e1-e8d3-ed29-562146f64eea@arm.com>
+ <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
+ <CA+icZUWKFCdhQ9XN0wLN6BF5ft3WaNrtXDb9D8ckNOPG9gUf+g@mail.gmail.com>
+ <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com>
+From: "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Wed, 1 Feb 2023 15:27:49 +0800
-kernel test robot <lkp@intel.com> wrote:
+Hi Ian,
 
-> Hi Masami,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on bpf-next/master]
-> [also build test WARNING on bpf/master shuah-kselftest/next shuah-kselftest/fixes linus/master v6.2-rc6]
-> [cannot apply to rostedt-trace/for-next rostedt-trace/for-next-urgent]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/167518178446.336834.4654027409699647726.stgit%40mhiramat.roam.corp.google.com
-> patch subject: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing function entry and exit.
-> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302011530.7vm4O8Ro-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/90de2b114484f12e2645d2beb964b7d230c9c705
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
->         git checkout 90de2b114484f12e2645d2beb964b7d230c9c705
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> kernel/trace/trace_probe.c:394:32: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
->                    if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
->                                                 ^  ~~~~~~~~~~~~~~~
->    kernel/trace/trace_probe.c:394:32: note: use '|' for a bitwise operation
->                    if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
->                                                 ^~
->                                                 |
+On 2023-01-30 10:55 p.m., Ian Rogers wrote:
+>>> There's a question about what we should do in the perf test about
+>>> this? I have a few solutions:
+>>>
+>>> 1) try metric tests again with the --metric-no-group flag and don't
+>>> fail the test if this succeeds. This allows kernel bugs to hide, so
+>>> I'm not a huge fan.
+>>>
+>>> 2) add a new metric flag/constraint to say not to group, this way the
+>>> metric will automatically apply the "--metric-no-group" flag. It is a
+>>> bit of work to wire this up but this kind of failure is common enough
+>>> in PMUs that it is probably worthwhile. We also need to add the flag
+>>> to metrics and I'm not sure how to get a good list of the metrics that
+>>> currently fail and require it. This is okay but error prone.
+>>>
+>>> 3) fix the kernel bug and let the perf test fail until an adequate
+>>> kernel is installed. Probably the best option.
+>>>
+>> Hi Ian,
+>>
+>> I can confirm:
+>>
+>> $ echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+>> /proc/sys/kernel/perf_event_paranoid
+>> 0
+>>
+>> $ ~/bin/perf stat -M tma_l3_bound --metric-no-group -a sleep 1
+>>
+>> Performance counter stats for 'system wide':
+>>
+>>         2.058.892      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,5 %
+>> tma_l3_bound             (99,30%)
+>>       173.254.697      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>>                         (99,10%)
+>>     2.396.130.501      CPU_CLK_UNHALTED.THREAD
+>>                         (99,60%)
+>>         1.110.486      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+>>                            (99,53%)
+>>
+>>       1,001989022 seconds time elapsed
+>>
+>> $ ~/bin/perf stat -M tma_dram_bound --metric-no-group -a sleep 1
+>>
+>> Performance counter stats for 'system wide':
+>>
+>>         1.729.208      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,2 %
+>> tma_dram_bound           (99,50%)
+>>        50.346.734      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>>                         (99,50%)
+>>     2.354.963.862      CPU_CLK_UNHALTED.THREAD
+>>                         (99,80%)
+>>           306.500      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+>>                            (99,61%)
+>>
+>>       1,001981392 seconds time elapsed
+>>
+>> Thanks!
+> Thanks, apparently it is an issue with SandyBridge/IvyBridge that some
+> counters on one hyperthread will limit what can be on the other. I
+> believe that's the comment related to EXCL access here:
+> https://github.com/torvalds/linux/blob/master/arch/x86/events/intel/core.c#L124
+> So you may have more success with the metric if you disable
+> hyperthreading, but I imagine that's not a popular option.
 
-Oops, thanks! this is an actual bug.
+Thanks for debugging the issue. Yes, it's caused by the HT workaround
+for SNB/IVB/HSW.
 
-Let me fix it and update.
+The weak group check in the kernel is in validate_group(). It only does
+a sanity check. It doesn't check all the workarounds and the current
+status of counters (e.g., whether the fixed counter is occupied by NMI
+watchdog.) It's possible that a false positive is returned to the perf
+tool. I once tried to fix the NMI watchdog check in the kernel, but the
+proposal was rejected. So the metric constraint is introduced.
 
-Thanks!
+For this issue, I think the above option2 should be a better and
+practical choice. The issue is only observed on old machines, which
+usually has a stable kernel running on it. I don't think the user wants
+to update their kernel just to workaround an issue for several metrics.
+But it should be much easier for them to update the perf tool.
 
->    1 warning generated.
-> 
-> 
-> vim +394 kernel/trace/trace_probe.c
-> 
->    374	
->    375	/* Recursive argument parser */
->    376	static int
->    377	parse_probe_arg(char *arg, const struct fetch_type *type,
->    378			struct fetch_insn **pcode, struct fetch_insn *end,
->    379			unsigned int flags, int offs)
->    380	{
->    381		struct fetch_insn *code = *pcode;
->    382		unsigned long param;
->    383		int deref = FETCH_OP_DEREF;
->    384		long offset = 0;
->    385		char *tmp;
->    386		int ret = 0;
->    387	
->    388		switch (arg[0]) {
->    389		case '$':
->    390			ret = parse_probe_vars(arg + 1, type, code, flags, offs);
->    391			break;
->    392	
->    393		case '%':	/* named register */
->  > 394			if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
->    395				/* eprobe and fprobe do not handle registers */
->    396				trace_probe_log_err(offs, BAD_VAR);
->    397				break;
->    398			}
->    399			ret = regs_query_register_offset(arg + 1);
->    400			if (ret >= 0) {
->    401				code->op = FETCH_OP_REG;
->    402				code->param = (unsigned int)ret;
->    403				ret = 0;
->    404			} else
->    405				trace_probe_log_err(offs, BAD_REG_NAME);
->    406			break;
->    407	
->    408		case '@':	/* memory, file-offset or symbol */
->    409			if (isdigit(arg[1])) {
->    410				ret = kstrtoul(arg + 1, 0, &param);
->    411				if (ret) {
->    412					trace_probe_log_err(offs, BAD_MEM_ADDR);
->    413					break;
->    414				}
->    415				/* load address */
->    416				code->op = FETCH_OP_IMM;
->    417				code->immediate = param;
->    418			} else if (arg[1] == '+') {
->    419				/* kprobes don't support file offsets */
->    420				if (flags & TPARG_FL_KERNEL) {
->    421					trace_probe_log_err(offs, FILE_ON_KPROBE);
->    422					return -EINVAL;
->    423				}
->    424				ret = kstrtol(arg + 2, 0, &offset);
->    425				if (ret) {
->    426					trace_probe_log_err(offs, BAD_FILE_OFFS);
->    427					break;
->    428				}
->    429	
->    430				code->op = FETCH_OP_FOFFS;
->    431				code->immediate = (unsigned long)offset;  // imm64?
->    432			} else {
->    433				/* uprobes don't support symbols */
->    434				if (!(flags & TPARG_FL_KERNEL)) {
->    435					trace_probe_log_err(offs, SYM_ON_UPROBE);
->    436					return -EINVAL;
->    437				}
->    438				/* Preserve symbol for updating */
->    439				code->op = FETCH_NOP_SYMBOL;
->    440				code->data = kstrdup(arg + 1, GFP_KERNEL);
->    441				if (!code->data)
->    442					return -ENOMEM;
->    443				if (++code == end) {
->    444					trace_probe_log_err(offs, TOO_MANY_OPS);
->    445					return -EINVAL;
->    446				}
->    447				code->op = FETCH_OP_IMM;
->    448				code->immediate = 0;
->    449			}
->    450			/* These are fetching from memory */
->    451			if (++code == end) {
->    452				trace_probe_log_err(offs, TOO_MANY_OPS);
->    453				return -EINVAL;
->    454			}
->    455			*pcode = code;
->    456			code->op = FETCH_OP_DEREF;
->    457			code->offset = offset;
->    458			break;
->    459	
->    460		case '+':	/* deref memory */
->    461		case '-':
->    462			if (arg[1] == 'u') {
->    463				deref = FETCH_OP_UDEREF;
->    464				arg[1] = arg[0];
->    465				arg++;
->    466			}
->    467			if (arg[0] == '+')
->    468				arg++;	/* Skip '+', because kstrtol() rejects it. */
->    469			tmp = strchr(arg, '(');
->    470			if (!tmp) {
->    471				trace_probe_log_err(offs, DEREF_NEED_BRACE);
->    472				return -EINVAL;
->    473			}
->    474			*tmp = '\0';
->    475			ret = kstrtol(arg, 0, &offset);
->    476			if (ret) {
->    477				trace_probe_log_err(offs, BAD_DEREF_OFFS);
->    478				break;
->    479			}
->    480			offs += (tmp + 1 - arg) + (arg[0] != '-' ? 1 : 0);
->    481			arg = tmp + 1;
->    482			tmp = strrchr(arg, ')');
->    483			if (!tmp) {
->    484				trace_probe_log_err(offs + strlen(arg),
->    485						    DEREF_OPEN_BRACE);
->    486				return -EINVAL;
->    487			} else {
->    488				const struct fetch_type *t2 = find_fetch_type(NULL, flags);
->    489	
->    490				*tmp = '\0';
->    491				ret = parse_probe_arg(arg, t2, &code, end, flags, offs);
->    492				if (ret)
->    493					break;
->    494				if (code->op == FETCH_OP_COMM ||
->    495				    code->op == FETCH_OP_DATA) {
->    496					trace_probe_log_err(offs, COMM_CANT_DEREF);
->    497					return -EINVAL;
->    498				}
->    499				if (++code == end) {
->    500					trace_probe_log_err(offs, TOO_MANY_OPS);
->    501					return -EINVAL;
->    502				}
->    503				*pcode = code;
->    504	
->    505				code->op = deref;
->    506				code->offset = offset;
->    507			}
->    508			break;
->    509		case '\\':	/* Immediate value */
->    510			if (arg[1] == '"') {	/* Immediate string */
->    511				ret = __parse_imm_string(arg + 2, &tmp, offs + 2);
->    512				if (ret)
->    513					break;
->    514				code->op = FETCH_OP_DATA;
->    515				code->data = tmp;
->    516			} else {
->    517				ret = str_to_immediate(arg + 1, &code->immediate);
->    518				if (ret)
->    519					trace_probe_log_err(offs + 1, BAD_IMM);
->    520				else
->    521					code->op = FETCH_OP_IMM;
->    522			}
->    523			break;
->    524		}
->    525		if (!ret && code->op == FETCH_OP_NOP) {
->    526			/* Parsed, but do not find fetch method */
->    527			trace_probe_log_err(offs, BAD_FETCH_ARG);
->    528			ret = -EINVAL;
->    529		}
->    530		return ret;
->    531	}
->    532	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+We know that the below events are the problematic events.
+/* MEM_UOPS_RETIRED.* */
+/* MEM_LOAD_UOPS_RETIRED.* */
+/* MEM_LOAD_UOPS_LLC_HIT_RETIRED.* */
+/* MEM_LOAD_UOPS_LLC_MISS_RETIRED.* */
+Can we update the convertor script and apply the "--metric-no-group"
+flag or add a new constraint if the above events are detected in
+SNB/IVB/HSW?
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Kan
