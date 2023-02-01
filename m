@@ -1,109 +1,111 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C3B33FA
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 19:25:20 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id p19-20020a25d813000000b0080b78270db5so20676890ybg.15
-        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 11:25:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ncv2AWcbqOMo4MNaMipLFizY1qd9n4hGfaa8OZXFvS8=;
-        b=m/Mdjwp3dUBf6VTBiurB9nnwzOZ33uzAOOtgQWT1q7NhzRZbEoLo1RBSR3nW3rknZM
-         zY9fMllht/v8RTpIIbi7oqFIcv/J4pZ8rBukmC6I8fiLmiOrgvxZ7BgzSv9wM2j2H+X3
-         dmAOpdl91GMZO7trXBfqh/m+UkQkjVXWG3fmgWw0HAxa+ry70hRn0OCU9/YwPuqDr3VA
-         pqTK0jRxYizC19yumQ2L61GEeshHNcGyMXh0fPqJAuyhjMlR6yffgATHJN9bePTWbWHh
-         Sc81tDSlLkkPa67jv2WCyBrfrj2bIGeBz/l/foGmEf5oFxIDhmz/06BH2fegZ7psB/zz
-         loFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ncv2AWcbqOMo4MNaMipLFizY1qd9n4hGfaa8OZXFvS8=;
-        b=mp49c3dBG8Jq1cSLUEiItldrNVaSujWsjQ7QrduG9RtnrMvlOPhOsqHDc1sPPAgdwU
-         rS5sKEXnA1zJ8IhmG9MKTgWtypj+NcTXzlTY0R+nOTmbzBAeBAPNxfMO4P94qXCobNFX
-         Ij0gMp+fqihOt/eqdkUziInjGvp+54sYTM4EXvu5NhClKCiK5MxE/M5Qf8XRiPPt5koN
-         /X0LHeb8VDeraSYmYIVT1MXOFw2Doo7a53/0OOBX4df/IQlrkVyx51OmZRkKHQRcL77x
-         RVPKfHAw9HFqxwflqMXdUpy5/V4+5AedrTlti0LPpPf0+DpFg7dZBzZOUDYF815bxAkO
-         8jQA==
-X-Gm-Message-State: AO0yUKVzAp0YLgb02pwZJRjhyEztHmSp0mU7JHIj/r5Ww0zxJ+jU8gMv
-	rWw+Ce9Rzf7UTfLJob6zAxIYLTtFPFS6KPV0uVg=
-X-Google-Smtp-Source: AK7set/c1inzpZ7TQCOJc5TB6xx5wuHuM8dE93kXMIu+AFUmDrtZ7hC7fXOzY+3KheWl2FZsdzwQkK/TYBXPBu0hdNA=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:341e:6979:102e:c9d9])
- (user=ndesaulniers job=sendgmr) by 2002:a81:91cf:0:b0:521:db3f:a116 with SMTP
- id i198-20020a8191cf000000b00521db3fa116mr0ywg.0.1675279519542; Wed, 01 Feb
- 2023 11:25:19 -0800 (PST)
-Date: Wed,  1 Feb 2023 11:25:09 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B6333FA;
+	Wed,  1 Feb 2023 19:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675279610; x=1706815610;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b+R9TM/vpJIqxsOgEi13czSzFWw8gYCA5ybDpq8DRJ4=;
+  b=W1ww4e2bKZmYGZ76ueEhX8nAH4xj99zQLCBrYBfb/QFJfbXv6hd2lugB
+   1lomfX4gQTk7Jjau6sS38uvEzpDLoNo9w5+TVDBDOCwxrWEDGShav+yvk
+   9u+M+oEzYgbflb6dZItzwgZK+EtW3P7S4suVneeG3ePQKzaQRcAdXQYgY
+   FrOOiNoYI1FsM0nGwJK7eV9dI/u0qtuYO4pXbuaKhQ1g555dTvf+Wa9lc
+   SHSf+2TDYRvgp37gWMa6o3w1ZUs4WXJMay0NKzVhYo2peBhgHVmVwIcAg
+   NWtrKNvcD2iPkSmjQOw5L8kFq0nW/bet8rBoJ1nnXIFQbXaivBlyS6idj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308591978"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="308591978"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:26:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="614955875"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="614955875"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Feb 2023 11:26:46 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNIko-0005kR-0D;
+	Wed, 01 Feb 2023 19:26:46 +0000
+Date: Thu, 2 Feb 2023 03:26:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ye Bin <yebin@huaweicloud.com>, tytso@mit.edu, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, jack@suse.cz,
+	Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH 2/5] ext4: introudce helper for jounral recover handle
+Message-ID: <202302020346.Oh31U8Zk-lkp@intel.com>
+References: <20230201114651.4090446-3-yebin@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675279509; l=2134;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=6sFm896c1fl0Nm5FPB/sT4t9TM1yBeKr5pt0TQ/7JMg=;
- b=w6Zh7GjRYNUZDcP6eQUWslQfi/JP1bRYJZhHA1IUNgOJ00ldWR8TQhiN6NeXLCxVZxG06cyUE5Fd
- T8g8MOJ7CgazzzkKFG3wSpq7qMFnQXr9/8LXaz2eepLWvwhl6qaN
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230201192509.4124319-1-ndesaulniers@google.com>
-Subject: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta datacenters
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Yonghong Song <yhs@fb.com>, 
-	Daniel Kolesa <q66@chimera-linux.org>, Chris Mason <clm@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201114651.4090446-3-yebin@huaweicloud.com>
 
-Chimera Linux is a Linux distribution from 2021 that builds its kernels
-with Clang.
+Hi Ye,
 
-Google transitioned its data center fleet to run Clang built kernels in
-2021, and Meta did so as well in 2022.  Meta talked about this at LPC
-2022 at a talk titled Kernel Live Patching at Scale.
+Thank you for the patch! Perhaps something to improve:
 
-These were important milestones for building the kernel with Clang.
-Making note of them helps improve confidence in the project.
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.2-rc6 next-20230201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Cc: Daniel Kolesa <q66@chimera-linux.org>
-Cc: Chris Mason <clm@meta.com>
----
- Documentation/kbuild/llvm.rst | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Bin/jbd2-introduce-callback-for-recovery-journal/20230201-192400
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230201114651.4090446-3-yebin%40huaweicloud.com
+patch subject: [PATCH 2/5] ext4: introudce helper for jounral recover handle
+config: i386-randconfig-a013-20230130 (https://download.01.org/0day-ci/archive/20230202/202302020346.Oh31U8Zk-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/316c2a97e3b3629813acbac07b6a03d836a00fa1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ye-Bin/jbd2-introduce-callback-for-recovery-journal/20230201-192400
+        git checkout 316c2a97e3b3629813acbac07b6a03d836a00fa1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/ lib/
 
-diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-index 6b2bac8e9ce0..6a37ab903e45 100644
---- a/Documentation/kbuild/llvm.rst
-+++ b/Documentation/kbuild/llvm.rst
-@@ -15,12 +15,15 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
- <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
- used as viable substitutes. Distributions such as `Android
- <https://www.android.com/>`_, `ChromeOS
--<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
--<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
--collection of toolchain components implemented in terms of C++ objects
--<https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
--supports C and the GNU C extensions required by the kernel, and is pronounced
--"klang," not "see-lang."
-+https://www.chromium.org/chromium-os>`_, `OpenMandriva
-+<https://www.openmandriva.org/>`_, and `Chimera Linux
-+<https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
-+datacenter fleets also run kernels built with Clang.
-+
-+`LLVM is a collection of toolchain components implemented in terms of C++
-+objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
-+that supports C and the GNU C extensions required by the kernel, and is
-+pronounced "klang," not "see-lang."
- 
- Clang
- -----
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ext4/ext4_jbd2.c:399:6: warning: no previous prototype for function 'ext4_replay_end_callback' [-Wmissing-prototypes]
+   void ext4_replay_end_callback(struct journal_s *journal)
+        ^
+   fs/ext4/ext4_jbd2.c:399:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void ext4_replay_end_callback(struct journal_s *journal)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/ext4_replay_end_callback +399 fs/ext4/ext4_jbd2.c
+
+   398	
+ > 399	void ext4_replay_end_callback(struct journal_s *journal)
+   400	{
+   401		kfree(journal->j_replay_private_data);
+   402		journal->j_replay_private_data = NULL;
+   403		journal->j_replay_callback = NULL;
+   404		journal->j_replay_end_callback = NULL;
+   405	}
+   406	
+
 -- 
-2.39.1.456.gfc5497dd1b-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
