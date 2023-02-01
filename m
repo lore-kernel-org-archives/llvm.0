@@ -1,158 +1,199 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from postout2.mail.lrz.de (postout2.mail.lrz.de [129.187.255.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4C5A32
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 08:16:46 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5063029246dso235720587b3.6
-        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 00:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w+WTgqSycW+YwdyyFHzyNDS1ahRVRlExnQu6jqzgcxA=;
-        b=f/bYjzCozcQybMWzR7nGgOr7h+cRs8QusGTOsoqpbNgzYXYAiv2M0lVw1YeFT8QdTA
-         m+ER3t091N1c7bjh3+h3bpSkSYnK0eIi5oW9LEQ9fwN0bDVEtNYBvzqm0RerlxhiBdft
-         mqiZVyQXi8n/8pZ3oUhSD6JqcXvz3zlVOmYovJxfsVPlatsfHFl7kyo3W/eePfzW2/Xl
-         Pkt9/zvqG6uYSjyJOQKU30VHObN2rAc8jQDMDBknpFCkB9/PRoJnhpnpKHu394yYtA8w
-         oiT9cmDWCQVLu7OpJlDjiYUIp2WNYm91VfWxoZY0Skhoi69Nr0w8bVOyB+ext/awmQeu
-         X22w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w+WTgqSycW+YwdyyFHzyNDS1ahRVRlExnQu6jqzgcxA=;
-        b=ZkgCsycdCTqPZke43F1RL/wNYOcZTZGuDjiKHCKaLSL6ucRquc+enkrN8YSdTqlRIn
-         Io48lZSr9E+kQ/ok9cDageAUTZ3NQrvUCkL+fplBenCrBpevqD7mPHwvQ80mzhuI8kDQ
-         JvOeA26qHahnKl2+uoTpBOVC9RyaB/D/RUU16nvsSFRSQ74JOynbcHsWyCSDALdcyZMI
-         MXsyLR4TqbJG+HnM82AvkNtmPTFhvgdsm09d+XlrTXPaa6hQxflEfMmc+CToFa2cjfTl
-         Z1PFTeti1whwY/f3Qppcc/d+9lPyuOpZ2t4qCHHv47fM7TBW11/itUkXAQJCTFAeF94M
-         U5nA==
-X-Gm-Message-State: AO0yUKVK8t1jnA5CNhUuIep4e1OHYhayw4LJzcFWynNfa6pJjz94rXx/
-	U8y3li3VHeyTAsUb4PkU4cn7qqVitTcl8+tbEx7E
-X-Google-Smtp-Source: AK7set+theTnwE00kW19ZCesKtYS1cSJ1m2dS3+7cdOsE0cPll/6nx2B7R4+nCNkvlrk9lzH2qEY6ESPEQ7v7TUserU=
-X-Received: by 2002:a81:e405:0:b0:506:6e0b:7441 with SMTP id
- r5-20020a81e405000000b005066e0b7441mr176361ywl.208.1675239405679; Wed, 01 Feb
- 2023 00:16:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87F87F
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 09:10:14 +0000 (UTC)
+Received: from lxmhs52.srv.lrz.de (localhost [127.0.0.1])
+	by postout2.mail.lrz.de (Postfix) with ESMTP id 4P6GFs3y5ZzyVT;
+	Wed,  1 Feb 2023 10:04:49 +0100 (CET)
+Authentication-Results: postout.lrz.de (amavisd-new); dkim=pass (2048-bit key)
+	reason="pass (just generated, assumed good)" header.d=tum.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tum.de; h=
+	content-type:content-type:mime-version:references:in-reply-to
+	:message-id:x-mailer:date:date:subject:subject:from:from
+	:received:received; s=tu-postout21; t=1675242289; bh=jvilWdNH19P
+	cGhtkD0HTJSTk+P4PDTOwZA4u5wt/Blw=; b=W5mjd0t2iYbWFsqJQ2npccTcXEm
+	FIsc0TF578yRlrf6TEHFEBFg3B7c5LolAmhbrDP0AAuNZ+FnsA/hEN0+A4q3PjE0
+	uVTeCWgjhS8lhfpEJhMxkTNBpUdHsyjIwYRZGK3bGjuUjO0L1DuVXKZoL3M+Mxqc
+	hLtQZfgan9toF6YWyXyOinIkLMDj3raIVvBS6as6ygrkHEysRJLVFhfgMw8iR9kO
+	VPdTKglUr8ZrFpmEeNqibI4a6OSJRJxYT9Tf5ICkuyq4iaTnms7j3J3LvC4ELYi5
+	wXBfPsfByCxdN3LGaSITM0axfcLtWz6BNjgO4SvbgZ+sCbt8xqHkX4nktDg==
+X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs52.srv.lrz.de
+X-Spam-Flag: NO
+X-Spam-Score: -2.874
+X-Spam-Level:
+X-Spam-Status: No, score=-2.874 tagged_above=-999 required=5
+	tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, DMARC_ADKIM_RELAXED=0.001,
+	DMARC_ASPF_RELAXED=0.001, DMARC_POLICY_NONE=0.001,
+	LRZ_DMARC_FAIL=0.001, LRZ_DMARC_FAIL_NONE=0.001,
+	LRZ_DMARC_POLICY=0.001, LRZ_DMARC_TUM_FAIL=0.001,
+	LRZ_DMARC_TUM_REJECT=3.5, LRZ_DMARC_TUM_REJECT_PO=-3.5,
+	LRZ_ENVFROM_FROM_MATCH=0.001, LRZ_ENVFROM_TUM_S=0.001,
+	LRZ_FROM_ENVFROM_ALIGNED_STRICT=0.001, LRZ_FROM_HAS_A=0.001,
+	LRZ_FROM_HAS_AAAA=0.001, LRZ_FROM_HAS_MDOM=0.001,
+	LRZ_FROM_HAS_MX=0.001, LRZ_FROM_HOSTED_DOMAIN=0.001,
+	LRZ_FROM_NAME_IN_ADDR=0.001, LRZ_FROM_PHRASE=0.001,
+	LRZ_FROM_TUM_S=0.001, LRZ_HAS_BND=0.001, LRZ_HAS_CT=0.001,
+	LRZ_HAS_IN_REPLY_TO=0.001, LRZ_HAS_MIME_VERSION=0.001,
+	LRZ_HAS_SPF=0.001, LRZ_MIME_BND_SPAM_184=0.001,
+	LRZ_MSGID_APPLE_MAIL=0.001, LRZ_SUBJ_FW_RE=0.001]
+	autolearn=no autolearn_force=no
+Received: from postout2.mail.lrz.de ([127.0.0.1])
+	by lxmhs52.srv.lrz.de (lxmhs52.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
+	with LMTP id fvTKPvXBuJxo; Wed,  1 Feb 2023 10:04:49 +0100 (CET)
+Received: from [192.168.178.35] (unknown [IPv6:2001:a61:24bf:bb01:2558:6d24:d4e4:8fe4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by postout2.mail.lrz.de (Postfix) with ESMTPSA id 4P6GFq68dJzyR1;
+	Wed,  1 Feb 2023 10:04:47 +0100 (CET)
+From: =?utf-8?q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@tum.de>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>,
+ David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>,
+ Luc Maranget <luc.maranget@inria.fr>, Akira Yokosawa <akiyks@gmail.com>,
+ Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+ Charalampos Mainas <charalampos.mainas@gmail.com>,
+ Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+ Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+ Martin Fink <martin.fink@in.tum.de>, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Date: Wed, 01 Feb 2023 10:04:42 +0100
+X-Mailer: MailMate (1.14r5918)
+Message-ID: <C5955FFB-B2DB-48C7-BA82-B81ACF24F94D@tum.de>
+In-Reply-To: <Y9GTgdMnGu6OxUZC@boqun-archlinux>
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+ <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+ <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+ <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
+ <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+ <Y9GTgdMnGu6OxUZC@boqun-archlinux>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
- <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com> <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
-In-Reply-To: <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
-From: John Stultz <jstultz@google.com>
-Date: Wed, 1 Feb 2023 00:16:34 -0800
-Message-ID: <CANDhNCqHDJyj4-t5iMH1zDw6VKNUu5Fk-AzjvfV=DgqGVrF3KA@mail.gmail.com>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-To: Yongqin Liu <yongqin.liu@linaro.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rasmus Villemoes <rasmus.villemoes@prevas.dk>, 
-	Thomas Gleixner <tglx@linutronix.de>, Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>, 
-	Michael Kelley <mikelley@microsoft.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Won Chung <wonchung@google.com>, David Gow <davidgow@google.com>, 
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Andy Shevchenko <andriy.shevchenko@intel.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed;
+ boundary="=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_="; micalg=sha-256;
+ protocol="application/pkcs7-signature"
 
-On Wed, Feb 1, 2023 at 12:11 AM John Stultz <jstultz@google.com> wrote:
-> On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
-> >
-> > Hi, Kees
-> >
-> > This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
-> > for the android-mainline based hikey960 build, with this commit reverted,
-> > there is no problem for the build to boot to the homescreen.
-> > Not sure if you have any idea about it and give some suggestions.
-> >
-> > Here is part of the kernel panic log:
-> >
-> >     [    9.479878][  T122] ueventd: Loading module
-> > /vendor/lib/modules/spi-pl022.ko with args ''
-> >     [    9.480276][  T115] apexd-bootstrap: Pre-allocated loop device 29
-> >     [    9.480517][  T123] ueventd: LoadWithAliases was unable to load
-> > of:Nhi3660_i2sT(null)Chisilicon,hi3660-i2s-1.0
-> >     [    9.480632][  T121] Unexpected kernel BRK exception at EL1
-> >     [    9.480637][  T121] Internal error: BRK handler:
-> > 00000000f2000001 [#1] PREEMPT SMP
-> >     [    9.480644][  T121] Modules linked in: cpufreq_dt(E+)
-> > hisi_thermal(E+) phy_hi3660_usb3(E) btqca(E) hi6421_pmic_core(E)
-> > btbcm(E) spi_pl022(E) hi3660_mailbox(E) i2c_designware_platform(E)
-> > mali_kbase(OE) dw_mmc_k3(E) bluetooth(E) dw_mmc_pltfm(E) dw_mmc(E)
-> > kirin_drm(E) rfkill(E) kirin_dsi(E) i2c_designware_core(E) k3dma(E)
-> > drm_dma_helper(E) cma_heap(E) system_heap(E)
-> >     [    9.480688][  T121] CPU: 4 PID: 121 Comm: ueventd Tainted: G
-> >        OE      6.2.0-rc6-mainline-14196-g1d9f94ec75b9 #1
-> >     [    9.480694][  T121] Hardware name: HiKey960 (DT)
-> >     [    9.480697][  T121] pstate: 20400005 (nzCv daif +PAN -UAO -TCO
-> > -DIT -SSBS BTYPE=--)
-> >     [    9.480703][  T121] pc : hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
-> >     [    9.480722][  T121] lr : hi3660_thermal_probe+0x38/0x74 [hisi_thermal]
-> >     [    9.480733][  T121] sp : ffffffc00aa13700
-> >     [    9.480735][  T121] x29: ffffffc00aa13700 x28: 0000007ff8ae8531
-> > x27: 00000000000008c0
-> >     [    9.480743][  T121] x26: ffffffc00aa2a300 x25: ffffffc00aa2ab40
-> > x24: 000000000000001d
-> >     [    9.480749][  T121] x23: ffffffc00a29d000 x22: 0000000000000000
-> > x21: ffffff8001fa4a80
-> >     [    9.480755][  T121] x20: 0000000000000001 x19: ffffff8001fa4a80
-> > x18: ffffffc00a8810b0
-> >     [    9.480761][  T121] x17: 000000007ab542f2 x16: 000000007ab542f2
-> > x15: ffffffc00aa01000
-> >     [    9.480767][  T121] x14: ffffffc00966f250 x13: ffffffc0b58f9000
-> > x12: ffffffc00a055f10
-> >     [    9.480771][  T123] ueventd: LoadWithAliases was unable to load
-> > cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
-> >     [    9.480773][  T121]
-> >     [    9.480774][  T121] x11: 0000000000000000 x10: 0000000000000001
-> > x9 : 0000000100000000
-> >     [    9.480780][  T123] ueventd:
-> >     [    9.480780][  T121] x8 : ffffffc0044154cb x7 : 0000000000000000
-> > x6 : 000000000000003f
-> >     [    9.480786][  T121] x5 : 0000000000000020 x4 : ffffffc0098db323
-> > x3 : ffffff801aeb62c0
-> >     [    9.480792][  T121] x2 : ffffff801aeb62c0 x1 : 0000000000000000
-> > x0 : ffffff8001fa4c80
-> >     [    9.480798][  T121] Call trace:
-> >     [    9.480801][  T121]  hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
-> >     [    9.480813][  T121]  hisi_thermal_probe+0xbc/0x284 [hisi_thermal]
->
->
-> Taking a look here, it looks pretty obvious:
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/hisi_thermal.c#n414
->
-> data->nr_sensors = 1;
-> data->sensor = devm_kzalloc(dev, sizeof(*data->sensor) *
->    data->nr_sensors, GFP_KERNEL);
->
-> Here as nr_sensors=1, we allocate only one structure for the array.
-> But then below that, we modify two entries, writing past the valid
-> array, and corrupting data when writing the second sensor values.
->
-> data->sensor[0].id = HI3660_BIG_SENSOR;
-> data->sensor[0].irq_name = "tsensor_a73";
-> data->sensor[0].data = data;
->
-> data->sensor[1].id = HI3660_LITTLE_SENSOR;
-> data->sensor[1].irq_name = "tsensor_a53";
-> data->sensor[1].data = data;
->
-> I suspect nr_sensors needs to be set to 2.
+This is an S/MIME signed message (RFC 5652 and 8551).
 
-Looks like the bug was introduced here:
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7d3a2a2bbadb4bf5856ed394ba09b8fbb7a80460
+--=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=
+Content-Type: text/plain
 
-But that change seems to imply the dual zones weren't fully supported
-at the time. I'm not sure if that's changed in the meantime, so
-removing the second sensor writes may potentially be a better fix.
+Hi Boqun,
 
-thanks
--john
+On 25 Jan 2023, at 21:39, Boqun Feng wrote:
+
+> Hi,
+>
+> [Cc Rust-for-Linux folks]
+>
+> No hurries but is your tool avaiable somewhere so that we can have a
+> try.
+
+Not ready just yet, but very much on it! Hope to be have something to share very
+soon :-)
+
+> Although Rust doesn't support dependencies ordering, but it's good to
+> know which dependency is reserved after optimization.
+
+Sure!
+
+Paul
+
+--=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=
+Content-Description: S/MIME digital signature
+Content-Disposition: attachment; filename=smime.p7s
+Content-Type: application/pkcs7-signature; name=smime.p7s
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDjMw
+ggbmMIIEzqADAgECAhAxAnDUNb6bJJr4VtDh4oVJMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0yMDAyMTgwMDAwMDBaFw0zMzA1MDEyMzU5NTlaMEYxCzAJBgNVBAYT
+Ak5MMRkwFwYDVQQKExBHRUFOVCBWZXJlbmlnaW5nMRwwGgYDVQQDExNHRUFOVCBQZXJzb25hbCBD
+QSA0MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAs0riIl4nW+kEWxQENTIgFK600jFA
+xs1QwB6hRMqvnkphfy2Q3mKbM2otpELKlgE8/3AQPYBo7p7yeORuPMnAuA+oMGRb2wbeSaLcZbpw
+XgfCvnKxmq97/kQkOFX706F9O7/h0yehHhDjUdyMyT0zMs4AMBDRrAFn/b2vR3j0BSYgoQs16oSq
+adM3p+d0vvH/YrRMtOhkvGpLuzL8m+LTAQWvQJ92NwCyKiHspoP4mLPJvVpEpDMnpDbRUQdftSpZ
+zVKTNORvPrGPRLnJ0EEVCHR82LL6oz915WkrgeCY9ImuulBn4uVsd9ZpubCgM/EXvVBlViKqusCh
+SsZEn7juIsGIiDyaIhhLsd3amm8BS3bgK6AxdSMROND6hiHT182Lmf8C+gRHxQG9McvG35uUvRu8
+v7bPZiJRaT7ZC2f50P4lTlnbLvWpXv5yv7hheO8bMXltiyLweLB+VNvg+GnfL6TW3Aq1yF1yrZAZ
+zR4MbpjTWdEdSLKvz8+0wCwscQ81nbDOwDt9vyZ+0eJXbRkWZiqScnwAg5/B1NUD4TrYlrI4n6zF
+p2pyYUOiuzP+as/AZnz63GvjFK69WODR2W/TK4D7VikEMhg18vhuRf4hxnWZOy0vhfDR/g3aJbds
+Gac+diahjEwzyB+UKJOCyzvecG8bZ/u/U8PsEMZg07iIPi8CAwEAAaOCAYswggGHMB8GA1UdIwQY
+MBaAFFN5v1qqK0rPVIDh2JvAnfKyA2bLMB0GA1UdDgQWBBRpAKHHIVj44MUbILAK3adRvxPZ5DAO
+BgNVHQ8BAf8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHSUEFjAUBggrBgEFBQcDAgYI
+KwYBBQUHAwQwOAYDVR0gBDEwLzAtBgRVHSAAMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFAGA1UdHwRJMEcwRaBDoEGGP2h0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9VU0VS
+VHJ1c3RSU0FDZXJ0aWZpY2F0aW9uQXV0aG9yaXR5LmNybDB2BggrBgEFBQcBAQRqMGgwPwYIKwYB
+BQUHMAKGM2h0dHA6Ly9jcnQudXNlcnRydXN0LmNvbS9VU0VSVHJ1c3RSU0FBZGRUcnVzdENBLmNy
+dDAlBggrBgEFBQcwAYYZaHR0cDovL29jc3AudXNlcnRydXN0LmNvbTANBgkqhkiG9w0BAQwFAAOC
+AgEACgVOew2PHxM5AP1v7GLGw+3tF6rjAcx43D9Hl110Q+BABABglkrPkES/VyMZsfuds8fcDGvG
+E3o5UfjSno4sij0xdKut8zMazv8/4VMKPCA3EUS0tDUoL01ugDdqwlyXuYizeXyH2ICAQfXMtS+r
+az7mf741CZvO50OxMUMxqljeRfVPDJQJNHOYi2pxuxgjKDYx4hdZ9G2o+oLlHhu5+anMDkE8g0tf
+fjRKn8I1D1BmrDdWR/IdbBOj6870abYvqys1qYlPotv5N5dm+XxQ8vlrvY7+kfQaAYeO3rP1DM8B
+GdpEqyFVa+I0rpJPhaZkeWW7cImDQFerHW9bKzBrCC815a3WrEhNpxh72ZJZNs1HYJ+29NTB6uu4
+NJjaMxpk+g2puNSm4b9uVjBbPO9V6sFSG+IBqE9ckX/1XjzJtY8Grqoo4SiRb6zcHhp3mxj3oqWi
+8SKNohAOKnUc7RIP6ss1hqIFyv0xXZor4N9tnzD0Fo0JDIURjDPEgo5WTdti/MdGTmKFQNqxyZuT
+9uSI2Xvhz8p+4pCYkiZqpahZlHqMFxdw9XRZQgrP+cgtOkWEaiNkRBbvtvLdp7MCL2OsQhQEdEbU
+vDM9slzZXdI7NjJokVBq3O4pls3VD2z3L/bHVBe0rBERjyM2C/HSIh84rfmAqBgklzIOqXhd+4Rz
+adUwggdFMIIFLaADAgECAhEAk3vdiLswPyIHaa7gbRmgujANBgkqhkiG9w0BAQwFADBGMQswCQYD
+VQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEcMBoGA1UEAxMTR0VBTlQgUGVyc29u
+YWwgQ0EgNDAeFw0yMjExMTAwMDAwMDBaFw0yMzExMTAyMzU5NTlaMIGyMQ4wDAYDVQQREwU4MDMz
+MzEpMCcGA1UEChMgVGVjaG5pc2NoZSBVbml2ZXJzaXRhZXQgTXVlbmNoZW4xGDAWBgNVBAkMD0Fy
+Y2lzc3RyYcOfZSAyMTEPMA0GA1UECBMGQmF5ZXJuMQswCQYDVQQGEwJERTEaMBgGA1UEAxMRUGF1
+bCBIZWlkZWtydWVnZXIxITAfBgkqhkiG9w0BCQEWEmhlaWRla3JwQGluLnR1bS5kZTCCAaIwDQYJ
+KoZIhvcNAQEBBQADggGPADCCAYoCggGBAMa35V6bAKqaFCEcfVMsBMW5hdegZmzIy1qHgdX4SHo0
+2DPMinoi8M//hF5+SQNODMPAwkMGM2JLV6jq51ZvNV5AMmyp1cPuNUyX6ZcZsz9l67Q93D+TkQ8P
+cO9zc1RBdQdRhpQDLe+m+psN/ABjGnp7tmcG/gyQmQOlcoAdtO/FJeHwdewNgi/Lbo3CnoseUYFF
+j1KiVnR4BxzTELFg+VNBbQ71LtbqhG2mO9p6o/1iD5ImKDB/cdNDVEikVpxVIsHYWnzr6a8jc+iK
+H52aVhMXlq3us1ENrRJ4n45an9h6TMgDZHoASo3nXTnj2GSgxOps5utr+Xbxq9OTxr1YocI7sPeg
+mK2/Jl99WXLjGWmjpjq+3wGP6YWvk9DjyhWZinBuqaXhOKEzb62rmWw+K5oiI3DNXB95RhywYVO8
+j7JwU8MrSOLFVgHRD4JfUZr9B7rrEnOW9IbOBFPN7QfNz3j28EnTAS5jcIhxtZV0vySjnhC3XUvH
+MWghCJx8h0h7JQIDAQABo4ICPzCCAjswHwYDVR0jBBgwFoAUaQChxyFY+ODFGyCwCt2nUb8T2eQw
+HQYDVR0OBBYEFEGvRvAmg05NopUV9pH7SMbFiVwTMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8E
+AjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjA/BgNVHSAEODA2MDQGCysGAQQBsjEB
+AgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMEIGA1UdHwQ7MDkwN6A1
+oDOGMWh0dHA6Ly9HRUFOVC5jcmwuc2VjdGlnby5jb20vR0VBTlRQZXJzb25hbENBNC5jcmwweAYI
+KwYBBQUHAQEEbDBqMD0GCCsGAQUFBzAChjFodHRwOi8vR0VBTlQuY3J0LnNlY3RpZ28uY29tL0dF
+QU5UUGVyc29uYWxDQTQuY3J0MCkGCCsGAQUFBzABhh1odHRwOi8vR0VBTlQub2NzcC5zZWN0aWdv
+LmNvbTCBvAYDVR0RBIG0MIGxgRtQYXVsLkhlaWRla3J1ZWdlckBpbi50dW0uZGWBE2hlaWRla3Jw
+QGNpdC50dW0uZGWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNpdC50dW0uZGWBE2hlaWRla3JwQGNzLnR1
+bS5lZHWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNzLnR1bS5lZHWBGHBhdWwuaGVpZGVrcnVlZ2VyQHR1
+bS5kZYESaGVpZGVrcnBAaW4udHVtLmRlMA0GCSqGSIb3DQEBDAUAA4ICAQB0h9s7S7zb3sZpe67K
+Q8Ko0pkM9WbMO6X/6fscdWHZNiQQfn6X+9A7IPT+bGx9mC3vRO1TOR7FfmgAKs8xpqW2PAC4taIz
+EdXhrKCJuIzqzdhqQBMhfoP9giurXsQxaYAWeuEklmw1cIEoG6guVOo7Re+Vqx74rHOf6gDgukUz
+J1uhto0FVhPLZqzjdGBfPNhXc+9W7ow4Fu8w37lKdDi9DRCkFO+Wq+jzApzIEIInT1lhDt7Y81wJ
+UTqcYn2tOLSpwB38Hd798RDkeY5f3EO/+pLNpEhnwXSpAif/cpZCKXf2LrZRSdH3wbxefj/HLu/w
+tuZ+lQsRXKEMJbBeXw8DEKP8771chCGyLl8AHhJRHrcokhX/PPJu/y0t5ArvMNeumFjGtxtczyHU
+ieT3EcE8oG5aMyD0Ly+Lwc0L90DqcXUvU1xbHL9GxMOTPZGz0Qr0qZDBv60oTUbIXIMIyyoY0rsO
+NtncPyZKMkLaRUBwrWXF+BuxM5hfDytIbSKtO/Q6woFihf6xyKHVqAhoyV6y19WAYIEb78ce+zOg
+xyOOYPiVNiKlwP8gJq72mrfUvUggpyPVwjEkhye/+d98NrylwyWokJI6PWM1YsOmdG1s+4fiU7KU
+9+PEIW/YMpUiGYViXzt0RZfuKNixCk1Jh+JtGU44/cuz+Oki3ooAIqaRKTGCAo4wggKKAgEBMFsw
+RjELMAkGA1UEBhMCTkwxGTAXBgNVBAoTEEdFQU5UIFZlcmVuaWdpbmcxHDAaBgNVBAMTE0dFQU5U
+IFBlcnNvbmFsIENBIDQCEQCTe92IuzA/IgdpruBtGaC6MA0GCWCGSAFlAwQCAQUAoIGFMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwLwYJKoZIhvcNAQkEMSIEIDHM3pc9jImPH19F1z1+IUTIzcM2
+G5aes9CDYtDThT97MDgGCSqGSIb3DQEJDzErMCkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4G
+CCqGSIb3DQMCAgIAgDANBgkqhkiG9w0BAQsFAASCAYAMMClDI35QDAcUGrNzHKeLCAUgT8AKnkwa
+9VTLbPhUL0TCc8rDEG5HCPybO3+JP2O5JSG8GTBLsM1rRanfz1qfLj6CAPMgOypYPern9l9UoadE
+GHeIJgnWFcPhgj41VSTNC2edxB0+Nd5iYu/tf7qyGhu9soMpV4SjqR3CVOOunel5/uYLRvBWmjy2
+t/Dk+BEcez1nxsAUu2Z7kR8QLicQUUaUfxUqbnMYjZICJyhg4Lw1wWmRkbP9fKPEh5PY5mVh+UlZ
+ZBUkR85p/kyJRB6Dz5A2z4OZEtyVRZCVNm8tPqa3CNsrLrNkrSW01U2qTqZRGFUQhQzlyTKD+18q
+NRxoNkpBVF2yZKfsV0qS4mllViBZB5+pEI5z7SpKjUaoOndGl0HMLOyPbEA8bHit1ajFbBOc7NXm
+rLXYbnXcruRk8RwfMLYIJdo3cjOPgSqQS4Whb584F9IESmOzcLlq+XmfwQ9c2iysQr0/AYwp5REN
++5JbHdif8ZmdxBzIip6PNBIAAAAAAAA=
+--=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=--
