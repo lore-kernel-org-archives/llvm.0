@@ -1,242 +1,82 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDB980F
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 07:36:39 +0000 (UTC)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-50aa54cc7c0so207185977b3.8
-        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 23:36:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9107A21
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 07:54:31 +0000 (UTC)
+Received: by mail-lf1-f49.google.com with SMTP id cf42so28027542lfb.1
+        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 23:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dx1zARWQRp48CZ4kQ2x9yqFjiGpyMZcTuGlBFtRENQ8=;
-        b=BRlZce3Mvkorg1JlE2Wn1RlKnSRnE2Kv+cjMHl7bPVvhXBvI3EsEGNQCBqfTULNHfs
-         OIJaUMb6Lw1Mrjv7rhACXJIw2oT0RUBMdRxVbqhZ38hOC7RnHuFHmiIBfggjs1v7OSZs
-         F1IaLNom6Wq0vQiiSCyhsQFpTNVL2ictpQ3UYV7RfWWHEV4BbLb2NFc9Bl8kA9VFQvpj
-         yYIrvgho2njaNqV43HIQ+d1ZdBvnmUj1O3494UXIkt6Jhy4xtt47j8vwxyNlDfhC7Uvq
-         PJHcTwVdYnDDWTIUX/jtU76HRoMlKspKWbZIDsInfk/ZA4DSSsdkCQeMezIVBj6ji1UJ
-         zTwA==
+        bh=0diAaeCGuTZlOnZxWXSitLoB/1kBFfQP3ozqLMthdrY=;
+        b=lF1UqyudEA09FkqGGF5NmMuHvah8KKfPO3eWxAubAvEp7iQ9LhiLV+T8p4K8BfqCkI
+         o5XDl4XUegL87wDptfNUHusoDNEWwR3kFLY8uWxHBNe6XtsuzkcfE7wHub8jBpu78zJ3
+         8u1P4xOeiohBEfpUULqu61VPZz9Xew9ZVJI6Yz75XRZe614dAnDNrWbqS7E5xSrbl2U7
+         96TkvetBtlpEr4RcP2JS1DfMs9a6a2wTTGBG1810gECpndWZgdeP3309sd66sbxpUGhw
+         AE378mpGhvx2hHZVLhvgMzMtgL07iSV3ITOMMuFfTEgj1ZCx285Z7z0BsGCManr5FYdf
+         DJBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Dx1zARWQRp48CZ4kQ2x9yqFjiGpyMZcTuGlBFtRENQ8=;
-        b=LvPMVfZh3hw9Oi9y6kt9ZJk5yvBfVZP3Jb1WlDNAXCqV8FBEvmW2iqdkXIdTeXrLIe
-         j81QCqgfOYtB97ei94t5B8yk4awUsS0XS/IUFDA7czklO1hJ6CM95gkbxTjPuPTNorql
-         Ar+dkiY8jPPdn/98uy2XNcLG1noaSNPABDvWagYV7tMexy+8DAG1TDQFmF8ZAEFEmvF5
-         Z3dchsYEIMwBZROOr0iGvkzWd7ykmCymJCXntq40Ovms8r030SUxH3dgr1zMiqzziwgH
-         svliDaQxP+C2Fn4zFRy6QFcyl1f64qC8v7ueraaGDHPxezU/MDVyHxHIDt+Row4DFLIN
-         w3ow==
-X-Gm-Message-State: AO0yUKVIAfFNvYU4nEx4JRQCJCoTiIEynnhk9glTyKOrDx9yGjCSSit3
-	buVSidn1mkxwlPHwvXlOx5O+w3/iOTwN+n9pptPqmA==
-X-Google-Smtp-Source: AK7set9m5+elP4l199y4Ungn8cTJMrhmcu+zMRDCt/0pfgHMmTXjacsBA6C+zGyfsSND4y7wWAZyPtDwbItCigzngy0=
-X-Received: by 2002:a0d:c046:0:b0:517:b161:1f4d with SMTP id
- b67-20020a0dc046000000b00517b1611f4dmr146538ywd.399.1675236998861; Tue, 31
- Jan 2023 23:36:38 -0800 (PST)
+        bh=0diAaeCGuTZlOnZxWXSitLoB/1kBFfQP3ozqLMthdrY=;
+        b=UFnrzm+5EM5QzwcpT25DSQDJNRU/BxCZA4/hIP9NUsf9OaV4G2lOsP+sR5tHwQMszn
+         n7T7bN69q/umksTxzVpUfW0b10PSmdvLqTuAhUzwOLDxFklSgUPL/vFOvqSdD0oJFOwr
+         lzo3nL4/6HIBv4dfXll9YlIwJvr5/JXVZdogGYO2M6KfptY4Tu6GvM12meA0pevWSIC8
+         7k+Tu63OWwruoedx3B0BTKqyDQxDnjF4toV27lAVH55AObk1XLfMaW4gOigufMAxGRpz
+         2US7XTRrCwNNEWjmXFE2gRF/qngHz3IhHkAAGVq2i8UU7lio3nk57Ru4v/cav9ZVg+jW
+         SApg==
+X-Gm-Message-State: AO0yUKXKSeEyEN7yOZhhCEPRp1eKZstmEKouWVqd7Yvq8k8cNd2AevwU
+	kYEFahpMEanVA/vmcQ3F3QNLAFA9udXkwCAiOdRYqw==
+X-Google-Smtp-Source: AK7set/pcUtZ6NpoWDLM7Q0eQN46Pgx8dTWbO5ck5QVBIuUe66c4GmhgfonlDo7ZR0OVUA9vhbz0YNjfIAEBW1Cds4k=
+X-Received: by 2002:a05:6512:b01:b0:4cc:8686:8c87 with SMTP id
+ w1-20020a0565120b0100b004cc86868c87mr152383lfu.188.1675238069550; Tue, 31 Jan
+ 2023 23:54:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
-In-Reply-To: <20221101223321.1326815-5-keescook@chromium.org>
-From: Yongqin Liu <yongqin.liu@linaro.org>
-Date: Wed, 1 Feb 2023 15:36:08 +0800
-Message-ID: <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-To: Kees Cook <keescook@chromium.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rasmus Villemoes <rasmus.villemoes@prevas.dk>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>, Michael Kelley <mikelley@microsoft.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Won Chung <wonchung@google.com>, 
-	David Gow <davidgow@google.com>, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Sumit Semwal <sumit.semwal@linaro.org>, John Stultz <jstultz@google.com>
+References: <0000000000008be6b405f01164f8@google.com> <0000000000005eca3205f391aade@google.com>
+In-Reply-To: <0000000000005eca3205f391aade@google.com>
+From: Dmitry Vyukov <dvyukov@google.com>
+Date: Wed, 1 Feb 2023 08:54:16 +0100
+Message-ID: <CACT4Y+Ym4=mzMO6XNB0fYQJMo_QvUpYwkC1K7cmwr_XwKSdwzA@mail.gmail.com>
+Subject: Re: [syzbot] [ntfs3?] KASAN: out-of-bounds Read in ntfs_set_ea
+To: syzbot <syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com>
+Cc: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hi, Kees
-
-This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
-for the android-mainline based hikey960 build, with this commit reverted,
-there is no problem for the build to boot to the homescreen.
-Not sure if you have any idea about it and give some suggestions.
-
-Here is part of the kernel panic log:
-
-    [    9.479878][  T122] ueventd: Loading module
-/vendor/lib/modules/spi-pl022.ko with args ''
-    [    9.480276][  T115] apexd-bootstrap: Pre-allocated loop device 29
-    [    9.480517][  T123] ueventd: LoadWithAliases was unable to load
-of:Nhi3660_i2sT(null)Chisilicon,hi3660-i2s-1.0
-    [    9.480632][  T121] Unexpected kernel BRK exception at EL1
-    [    9.480637][  T121] Internal error: BRK handler:
-00000000f2000001 [#1] PREEMPT SMP
-    [    9.480644][  T121] Modules linked in: cpufreq_dt(E+)
-hisi_thermal(E+) phy_hi3660_usb3(E) btqca(E) hi6421_pmic_core(E)
-btbcm(E) spi_pl022(E) hi3660_mailbox(E) i2c_designware_platform(E)
-mali_kbase(OE) dw_mmc_k3(E) bluetooth(E) dw_mmc_pltfm(E) dw_mmc(E)
-kirin_drm(E) rfkill(E) kirin_dsi(E) i2c_designware_core(E) k3dma(E)
-drm_dma_helper(E) cma_heap(E) system_heap(E)
-    [    9.480688][  T121] CPU: 4 PID: 121 Comm: ueventd Tainted: G
-       OE      6.2.0-rc6-mainline-14196-g1d9f94ec75b9 #1
-    [    9.480694][  T121] Hardware name: HiKey960 (DT)
-    [    9.480697][  T121] pstate: 20400005 (nzCv daif +PAN -UAO -TCO
--DIT -SSBS BTYPE=--)
-    [    9.480703][  T121] pc : hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
-    [    9.480722][  T121] lr : hi3660_thermal_probe+0x38/0x74 [hisi_thermal]
-    [    9.480733][  T121] sp : ffffffc00aa13700
-    [    9.480735][  T121] x29: ffffffc00aa13700 x28: 0000007ff8ae8531
-x27: 00000000000008c0
-    [    9.480743][  T121] x26: ffffffc00aa2a300 x25: ffffffc00aa2ab40
-x24: 000000000000001d
-    [    9.480749][  T121] x23: ffffffc00a29d000 x22: 0000000000000000
-x21: ffffff8001fa4a80
-    [    9.480755][  T121] x20: 0000000000000001 x19: ffffff8001fa4a80
-x18: ffffffc00a8810b0
-    [    9.480761][  T121] x17: 000000007ab542f2 x16: 000000007ab542f2
-x15: ffffffc00aa01000
-    [    9.480767][  T121] x14: ffffffc00966f250 x13: ffffffc0b58f9000
-x12: ffffffc00a055f10
-    [    9.480771][  T123] ueventd: LoadWithAliases was unable to load
-cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
-    [    9.480773][  T121]
-    [    9.480774][  T121] x11: 0000000000000000 x10: 0000000000000001
-x9 : 0000000100000000
-    [    9.480780][  T123] ueventd:
-    [    9.480780][  T121] x8 : ffffffc0044154cb x7 : 0000000000000000
-x6 : 000000000000003f
-    [    9.480786][  T121] x5 : 0000000000000020 x4 : ffffffc0098db323
-x3 : ffffff801aeb62c0
-    [    9.480792][  T121] x2 : ffffff801aeb62c0 x1 : 0000000000000000
-x0 : ffffff8001fa4c80
-    [    9.480798][  T121] Call trace:
-    [    9.480801][  T121]  hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
-    [    9.480813][  T121]  hisi_thermal_probe+0xbc/0x284 [hisi_thermal]
-    [    9.480823][  T121]  platform_probe+0xcc/0xf8
-    [    9.480836][  T121]  really_probe+0x19c/0x390
-    [    9.480842][  T121]  __driver_probe_device+0xc0/0xf0
-    [    9.480848][  T121]  driver_probe_device+0x4c/0x228
-    [    9.480853][  T121]  __driver_attach+0x110/0x1e0
-    [    9.480858][  T121]  bus_for_each_dev+0xa0/0xf4
-    [    9.480864][  T121]  driver_attach+0x2c/0x40
-    [    9.480868][  T121]  bus_add_driver+0x118/0x208
-    [    9.480873][  T121]  driver_register+0x80/0x124
-    [    9.480878][  T121]  __platform_driver_register+0x2c/0x40
-    [    9.480884][  T121]  init_module+0x28/0xfe4 [hisi_thermal]
-    [    9.480895][  T121]  do_one_initcall+0xe4/0x334
-    [    9.480902][  T121]  do_init_module+0x50/0x1f0
-    [    9.480909][  T121]  load_module+0x1034/0x1204
-    [    9.480914][  T121]  __arm64_sys_finit_module+0xc8/0x11c
-    [    9.480919][  T121]  invoke_syscall+0x60/0x130
-    [    9.480926][  T121]  el0_svc_common+0xbc/0x100
-    [    9.480931][  T121]  do_el0_svc+0x38/0xc4
-    [    9.480937][  T121]  el0_svc+0x34/0xc4
-    [    9.480945][  T121]  el0t_64_sync_handler+0x8c/0xfc
-    [    9.480950][  T121]  el0t_64_sync+0x1a4/0x1a8
-    [    9.480957][  T121] Code: 91132d08 b9001814 f9000013 f9000808 (d4200020)
-    [    9.480960][  T121] ---[ end trace 0000000000000000 ]---
-    [    9.482201][   T72] dwmmc_k3 ff37f000.dwmmc1: IDMAC supports
-64-bit address mode.
-    [    9.482225][   T72] dwmmc_k3 ff37f000.dwmmc1: Using internal
-DMA controller.
-    [    9.482232][   T72] dwmmc_k3 ff37f000.dwmmc1: Version ID is 270a
-    [    9.482261][   T72] dwmmc_k3 ff37f000.dwmmc1: DW MMC controller
-at irq 72,32 bit host data width,128 deep fifo
-    [    9.482406][  T117] cpu cpu0: EM: created perf domain
-    [    9.482677][  T118] ueventd: Loaded kernel module
-/vendor/lib/modules/btqca.ko
-    [    9.482745][  T118] ueventd: Loading module
-/vendor/lib/modules/hci_uart.ko with args ''
-    [    9.483117][  T117] cpu cpu4: EM: created perf domain
-    [    9.483767][  T117] ueventd: Loaded kernel module
-/vendor/lib/modules/cpufreq-dt.ko
-    [    9.484265][   T72] dwmmc_k3 ff37f000.dwmmc1: fifo-depth
-property not found, using value of FIFOTH register as default
-    [    9.484326][  T117] ueventd: LoadWithAliases was unable to load
-cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
-    [    9.484335][  T117] ueventd:
-    [    9.486508][   T72] dwmmc_k3 ff37f000.dwmmc1: IDMAC supports
-64-bit address mode.
-    [    9.486564][   T72] dwmmc_k3 ff37f000.dwmmc1: Using internal
-DMA controller.
-    [    9.486572][   T72] dwmmc_k3 ff37f000.dwmmc1: Version ID is 270a
-    [    9.486620][   T72] dwmmc_k3 ff37f000.dwmmc1: DW MMC controller
-at irq 72,32 bit host data width,64 deep fifo
-    [    9.488281][  T121] Kernel panic - not syncing: BRK handler:
-Fatal exception
-
-for the full serial console log, please check here:
-    http://ix.io/4mLg
-
-Thanks,
-Yongqin Liu
-On Wed, 2 Nov 2022 at 06:34, Kees Cook <keescook@chromium.org> wrote:
+On Tue, 31 Jan 2023 at 17:17, syzbot
+<syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com> wrote:
 >
-> Mark the devm_*alloc()-family of allocations with appropriate
-> __alloc_size()/__realloc_size() hints so the compiler can attempt to
-> reason about buffer lengths from allocations.
+> syzbot suspects this issue was fixed by commit:
 >
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Nishanth Menon <nm@ti.com>
-> Cc: Michael Kelley <mikelley@microsoft.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Won Chung <wonchung@google.com>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Link: https://lore.kernel.org/r/20221029074734.gonna.276-kees@kernel.org
-> ---
-> This is already in -next, but I'm including it here again to avoid any
-> confusion about this series landing (or being tested) via another tree.
-> ---
->  include/linux/device.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
+> Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+> Date:   Mon Oct 10 10:15:33 2022 +0000
 >
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 424b55df0272..5e4cd857e74f 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -197,9 +197,9 @@ void devres_remove_group(struct device *dev, void *id);
->  int devres_release_group(struct device *dev, void *id);
+>     fs/ntfs3: Check fields while reading
 >
->  /* managed devm_k.alloc/kfree for device drivers */
-> -void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp) __malloc;
-> +void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp) __alloc_size(2);
->  void *devm_krealloc(struct device *dev, void *ptr, size_t size,
-> -                   gfp_t gfp) __must_check;
-> +                   gfp_t gfp) __must_check __realloc_size(3);
->  __printf(3, 0) char *devm_kvasprintf(struct device *dev, gfp_t gfp,
->                                      const char *fmt, va_list ap) __malloc;
->  __printf(3, 4) char *devm_kasprintf(struct device *dev, gfp_t gfp,
-> @@ -226,7 +226,8 @@ static inline void *devm_kcalloc(struct device *dev,
->  void devm_kfree(struct device *dev, const void *p);
->  char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp) __malloc;
->  const char *devm_kstrdup_const(struct device *dev, const char *s, gfp_t gfp);
-> -void *devm_kmemdup(struct device *dev, const void *src, size_t len, gfp_t gfp);
-> +void *devm_kmemdup(struct device *dev, const void *src, size_t len, gfp_t gfp)
-> +       __realloc_size(3);
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11d9c385480000
+> start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8778f030156c6cd16d72
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136b8f57880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175ca3a3880000
 >
->  unsigned long devm_get_free_pages(struct device *dev,
->                                   gfp_t gfp_mask, unsigned int order);
-> --
-> 2.34.1
+> If the result looks correct, please mark the issue as fixed by replying with:
 >
+> #syz fix: fs/ntfs3: Check fields while reading
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
+Looks reasonable, let's close the bug report:
 
--- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+#syz fix: fs/ntfs3: Check fields while reading
