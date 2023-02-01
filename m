@@ -1,47 +1,50 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35308882A;
-	Wed,  1 Feb 2023 21:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675287596; x=1706823596;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E349jM/kwjl5HlI8qq0f7Mh0xl5qabzrVNPAGr8GscQ=;
-  b=c+Bef0z95Yc/ubBjjwkD/Sl0rhk6ShTy9TI+l+262bT4l1iBq5LDpX1n
-   jxeggZB3MSVMYoh7wDTk81h6h/O80bJmi+c1lKsgCqhpfRdZLGBNuST0w
-   JqwyOeY3K45Uf5qk637Gv4B4GdfX7DL78jPMERkUUpeYfUyiq6ZVMOAQx
-   ODzXKuAROy7LpIHtmveRX9Q4uWX5CeJ+8WH9b5a+2SgT3pHg8VQEGvrPW
-   txj/X4dljBiWBhlBdRj+j/RcWud2FxgdduI+AYVh3p1Trq01e/3qDhRPx
-   SMw2Y2UBoliu0kymjMfDJ+l5pQD2yPeXI1GB7CCJ7FeLN3Uf3K5xGAqWD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308624047"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="308624047"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:39:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="614998243"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="614998243"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Feb 2023 13:39:51 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNKpa-0005pm-1X;
-	Wed, 01 Feb 2023 21:39:50 +0000
-Date: Thu, 2 Feb 2023 05:39:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: mingzhe.zou@easystack.cn, colyli@suse.de,
-	andrea.tomassetti-opensource@devo.com, bcache@lists.ewheeler.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kent.overstreet@gmail.com, linux-bcache@vger.kernel.org,
-	zoumingzhe@qq.com, Dongsheng Yang <dongsheng.yang@easystack.cn>,
-	mingzhe <mingzhe.zou@easystack.cn>
-Subject: Re: [PATCH 3/3] bcache: support overlay bcache
-Message-ID: <202302020507.y0NPeWHf-lkp@intel.com>
-References: <20230201065202.17610-3-mingzhe.zou@easystack.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773C63201
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 23:14:39 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso4635787pju.0
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 15:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qFIM4C5atXHVLvz2rYvQqRO5oe5CXRLVhG4Y2WIPWCM=;
+        b=RjcmLjC6j4HJmsqqUj3IYFr3gTER/0CfLHzkonLsmQK4mha5W73Ww6XyvbdwrddbB4
+         0LM+zzapKvXidMwOGQyON8IYej0+/VwtcDf1t2JgjGiyrVSBVxTyHZF0iWI0K9Sd8XY7
+         JAT9cTSw2zkl/kjrEs5X3pi0sdx9UrfBP656Ari83qUMZb1TQZHK/UNAZ3a11exUpl4T
+         deGYYilJ87FlhKHPRYqE8d30GWNP0Z4oX7jh82JnA0Q39No64VrL8LKIbgkJrVDWayFV
+         Jo9jg3Gc7SjEzV29RJ56Sqewrz4R9JEFrPdpgDNKihDEsNYtyvojBg8tPHH686h8a5yp
+         sIcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qFIM4C5atXHVLvz2rYvQqRO5oe5CXRLVhG4Y2WIPWCM=;
+        b=hfPvbl+6cJ5wTuwpHOeofoTpBU20wVcTFwDjzI9vdzyG1fzgOAZoXOIR4toG5/Zsui
+         tZjnco4FwpgaYMHQlHwAuJ7Koi7x1H5ZH1U459TqGEk1I2LZX6P/r6C2r0NDyO0PIOMT
+         OQeRU2TUlqo4sibv/xLhQWzaZUU93+9YfP6gtHj0W/3y9lv0ezi0aUoVl7ZCGnpE+9u+
+         glEeY3NdEjYUgk/TF8lNcanFGq1tKPwihYPwhClHs+ExBCTUKvDSq6sukCLEqF7y5Wd7
+         iFsJcM7u2CdYYchheRR4mA5Waqj53SDCbxTHlWQW3Ki3DUXIH4BBFLI7mUTSViIiRQXQ
+         c27w==
+X-Gm-Message-State: AO0yUKVDpKgAtxW/kFLmmonzywK0k6mcIW5lq8wCnZODcCBD9X7VRWbu
+	Imq23Vgm5WqZrKcBCJFdPulVQQ==
+X-Google-Smtp-Source: AK7set8zbrNyAs2bnFB+ImWFnRtySQ0uM3iN4+USnPB9165NQN26ofVDH8bHcqrwTbOU4R3vjWaFUQ==
+X-Received: by 2002:a05:6a21:6d95:b0:bc:8c5e:ed0d with SMTP id wl21-20020a056a216d9500b000bc8c5eed0dmr5900717pzb.40.1675293278613;
+        Wed, 01 Feb 2023 15:14:38 -0800 (PST)
+Received: from google.com ([2620:15c:2d1:203:341e:6979:102e:c9d9])
+        by smtp.gmail.com with ESMTPSA id o16-20020a656150000000b004db367c10b0sm11066399pgv.46.2023.02.01.15.14.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 15:14:38 -0800 (PST)
+Date: Wed, 1 Feb 2023 15:14:33 -0800
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Tom Rix <trix@redhat.com>
+Cc: jack@suse.com, nathan@kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] udf: remove reporting loc in debug output
+Message-ID: <Y9ryWROdCrKYWBzY@google.com>
+References: <20230127162906.872395-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,120 +53,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201065202.17610-3-mingzhe.zou@easystack.cn>
+In-Reply-To: <20230127162906.872395-1-trix@redhat.com>
 
-Hi,
+On Fri, Jan 27, 2023 at 08:29:06AM -0800, Tom Rix wrote:
+> clang build fails with
+> fs/udf/partition.c:86:28: error: variable 'loc' is uninitialized when used here [-Werror,-Wuninitialized]
+>                           sb, block, partition, loc, index);
+>                                                 ^~~
+> 
+> loc is now only know when bh is valid.  So remove reporting loc in debug output.
 
-I love your patch! Yet something to improve:
+typo: s/know/known/
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.2-rc6 next-20230201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> Fixes: 4215db46d538 ("udf: Use udf_bread() in udf_get_pblock_virt15()")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/mingzhe-zou-easystack-cn/bcache-submit-writeback-inflight-dirty-writes-in-batch/20230201-145421
-patch link:    https://lore.kernel.org/r/20230201065202.17610-3-mingzhe.zou%40easystack.cn
-patch subject: [PATCH 3/3] bcache: support overlay bcache
-config: riscv-randconfig-r042-20230130 (https://download.01.org/0day-ci/archive/20230202/202302020507.y0NPeWHf-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/785b6ea709e3008e2df009d5555c80db709e6d5f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review mingzhe-zou-easystack-cn/bcache-submit-writeback-inflight-dirty-writes-in-batch/20230201-145421
-        git checkout 785b6ea709e3008e2df009d5555c80db709e6d5f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Thanks Tom, kernelci has also been reporting this.
+https://lore.kernel.org/linux-next/?q=error%3A+variable+%27loc%27+is+uninitialized+when+used+here
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All errors (new ones prefixed by >>):
-
->> drivers/md/bcache/super.c:1475:34: error: call to undeclared function 'part_to_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-                                           ^
-   drivers/md/bcache/super.c:1475:62: error: member reference type 'int' is not a pointer
-           ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
-   drivers/md/bcache/super.c:1475:52: error: no member named 'bd_part' in 'struct block_device'
-           ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-                                                       ~~~~  ^
-   drivers/md/bcache/super.c:2403:34: error: call to undeclared function 'part_to_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-                                           ^
-   drivers/md/bcache/super.c:2403:62: error: member reference type 'int' is not a pointer
-           ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
-   drivers/md/bcache/super.c:2403:52: error: no member named 'bd_part' in 'struct block_device'
-           ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-                                                       ~~~~  ^
-   6 errors generated.
-
-
-vim +/part_to_dev +1475 drivers/md/bcache/super.c
-
-  1453	
-  1454	static int register_bdev(struct cache_sb *sb, struct cache_sb_disk *sb_disk,
-  1455					 struct block_device *bdev,
-  1456					 struct cached_dev *dc)
-  1457	{
-  1458		const char *err = "cannot allocate memory";
-  1459		struct cache_set *c;
-  1460		int ret = -ENOMEM;
-  1461	
-  1462		memcpy(&dc->sb, sb, sizeof(struct cache_sb));
-  1463		dc->bdev = bdev;
-  1464		dc->bdev->bd_holder = dc;
-  1465		dc->sb_disk = sb_disk;
-  1466	
-  1467		if (cached_dev_init(dc, sb->block_size << 9))
-  1468			goto err;
-  1469	
-  1470		err = "error creating kobject";
-  1471		if (kobject_add(&dc->disk.kobj, bdev_kobj(bdev), "bcache_bdev"))
-  1472			goto err;
-  1473	
-  1474		err = "error creating lagacy sysfs link";
-> 1475		ret = sysfs_create_link_nowarn(&part_to_dev(bdev->bd_part)->kobj,
-  1476					       &dc->disk.kobj, "bcache");
-  1477		if (ret && ret != -EEXIST) {
-  1478			pr_err("Couldn't create lagacy disk sysfs ->bcache");
-  1479			goto err;
-  1480		}
-  1481	
-  1482		if (bch_cache_accounting_add_kobjs(&dc->accounting, &dc->disk.kobj))
-  1483			goto err;
-  1484	
-  1485		pr_info("registered backing device %pg\n", dc->bdev);
-  1486	
-  1487		list_add(&dc->list, &uncached_devices);
-  1488		/* attach to a matched cache set if it exists */
-  1489		list_for_each_entry(c, &bch_cache_sets, list)
-  1490			bch_cached_dev_attach(dc, c, NULL);
-  1491	
-  1492		if (BDEV_STATE(&dc->sb) == BDEV_STATE_NONE ||
-  1493		    BDEV_STATE(&dc->sb) == BDEV_STATE_STALE) {
-  1494			err = "failed to run cached device";
-  1495			ret = bch_cached_dev_run(dc);
-  1496			if (ret)
-  1497				goto err;
-  1498		}
-  1499	
-  1500		return 0;
-  1501	err:
-  1502		pr_notice("error %pg: %s\n", dc->bdev, err);
-  1503		bcache_device_stop(&dc->disk);
-  1504		return ret;
-  1505	}
-  1506	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  fs/udf/partition.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/udf/partition.c b/fs/udf/partition.c
+> index 92765d2f6958..5bcfe78d5cab 100644
+> --- a/fs/udf/partition.c
+> +++ b/fs/udf/partition.c
+> @@ -82,8 +82,8 @@ uint32_t udf_get_pblock_virt15(struct super_block *sb, uint32_t block,
+>  
+>  	bh = udf_bread(sbi->s_vat_inode, newblock, 0, &err);
+>  	if (!bh) {
+> -		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u) VAT: %u[%u]\n",
+> -			  sb, block, partition, loc, index);
+> +		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u)\n",
+> +			  sb, block, partition);
+>  		return 0xFFFFFFFF;
+>  	}
+>  
+> -- 
+> 2.26.3
+> 
+> 
