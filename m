@@ -1,199 +1,109 @@
-Received: from postout2.mail.lrz.de (postout2.mail.lrz.de [129.187.255.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87F87F
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 09:10:14 +0000 (UTC)
-Received: from lxmhs52.srv.lrz.de (localhost [127.0.0.1])
-	by postout2.mail.lrz.de (Postfix) with ESMTP id 4P6GFs3y5ZzyVT;
-	Wed,  1 Feb 2023 10:04:49 +0100 (CET)
-Authentication-Results: postout.lrz.de (amavisd-new); dkim=pass (2048-bit key)
-	reason="pass (just generated, assumed good)" header.d=tum.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tum.de; h=
-	content-type:content-type:mime-version:references:in-reply-to
-	:message-id:x-mailer:date:date:subject:subject:from:from
-	:received:received; s=tu-postout21; t=1675242289; bh=jvilWdNH19P
-	cGhtkD0HTJSTk+P4PDTOwZA4u5wt/Blw=; b=W5mjd0t2iYbWFsqJQ2npccTcXEm
-	FIsc0TF578yRlrf6TEHFEBFg3B7c5LolAmhbrDP0AAuNZ+FnsA/hEN0+A4q3PjE0
-	uVTeCWgjhS8lhfpEJhMxkTNBpUdHsyjIwYRZGK3bGjuUjO0L1DuVXKZoL3M+Mxqc
-	hLtQZfgan9toF6YWyXyOinIkLMDj3raIVvBS6as6ygrkHEysRJLVFhfgMw8iR9kO
-	VPdTKglUr8ZrFpmEeNqibI4a6OSJRJxYT9Tf5ICkuyq4iaTnms7j3J3LvC4ELYi5
-	wXBfPsfByCxdN3LGaSITM0axfcLtWz6BNjgO4SvbgZ+sCbt8xqHkX4nktDg==
-X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs52.srv.lrz.de
-X-Spam-Flag: NO
-X-Spam-Score: -2.874
-X-Spam-Level:
-X-Spam-Status: No, score=-2.874 tagged_above=-999 required=5
-	tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, DMARC_ADKIM_RELAXED=0.001,
-	DMARC_ASPF_RELAXED=0.001, DMARC_POLICY_NONE=0.001,
-	LRZ_DMARC_FAIL=0.001, LRZ_DMARC_FAIL_NONE=0.001,
-	LRZ_DMARC_POLICY=0.001, LRZ_DMARC_TUM_FAIL=0.001,
-	LRZ_DMARC_TUM_REJECT=3.5, LRZ_DMARC_TUM_REJECT_PO=-3.5,
-	LRZ_ENVFROM_FROM_MATCH=0.001, LRZ_ENVFROM_TUM_S=0.001,
-	LRZ_FROM_ENVFROM_ALIGNED_STRICT=0.001, LRZ_FROM_HAS_A=0.001,
-	LRZ_FROM_HAS_AAAA=0.001, LRZ_FROM_HAS_MDOM=0.001,
-	LRZ_FROM_HAS_MX=0.001, LRZ_FROM_HOSTED_DOMAIN=0.001,
-	LRZ_FROM_NAME_IN_ADDR=0.001, LRZ_FROM_PHRASE=0.001,
-	LRZ_FROM_TUM_S=0.001, LRZ_HAS_BND=0.001, LRZ_HAS_CT=0.001,
-	LRZ_HAS_IN_REPLY_TO=0.001, LRZ_HAS_MIME_VERSION=0.001,
-	LRZ_HAS_SPF=0.001, LRZ_MIME_BND_SPAM_184=0.001,
-	LRZ_MSGID_APPLE_MAIL=0.001, LRZ_SUBJ_FW_RE=0.001]
-	autolearn=no autolearn_force=no
-Received: from postout2.mail.lrz.de ([127.0.0.1])
-	by lxmhs52.srv.lrz.de (lxmhs52.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
-	with LMTP id fvTKPvXBuJxo; Wed,  1 Feb 2023 10:04:49 +0100 (CET)
-Received: from [192.168.178.35] (unknown [IPv6:2001:a61:24bf:bb01:2558:6d24:d4e4:8fe4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by postout2.mail.lrz.de (Postfix) with ESMTPSA id 4P6GFq68dJzyR1;
-	Wed,  1 Feb 2023 10:04:47 +0100 (CET)
-From: =?utf-8?q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@tum.de>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>,
- David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>,
- Luc Maranget <luc.maranget@inria.fr>, Akira Yokosawa <akiyks@gmail.com>,
- Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- llvm@lists.linux.dev, Marco Elver <elver@google.com>,
- Charalampos Mainas <charalampos.mainas@gmail.com>,
- Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
- Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
- Martin Fink <martin.fink@in.tum.de>, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Date: Wed, 01 Feb 2023 10:04:42 +0100
-X-Mailer: MailMate (1.14r5918)
-Message-ID: <C5955FFB-B2DB-48C7-BA82-B81ACF24F94D@tum.de>
-In-Reply-To: <Y9GTgdMnGu6OxUZC@boqun-archlinux>
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
- <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
- <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
- <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
- <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
- <Y9GTgdMnGu6OxUZC@boqun-archlinux>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2A47F;
+	Wed,  1 Feb 2023 10:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B02C433EF;
+	Wed,  1 Feb 2023 10:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675246837;
+	bh=Xz8lcMxTMqJloRyt4lVJe6Tq1FuFNPBZXm5PKzjNgJE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XhjM5hb6nrPeR/Aq6OxfuWENd6mWEajhaVuSxbafhQl8XRPXAGAgDPJ08nQ77NjKU
+	 c48c+1yX5leXRkvBo6WyusqpM5X/+0WTSmYP4rYI+6zse/4fyiL6AmWBsaH1UtHyWv
+	 33yDauFlJbYRglaVCfLi+jWehv9bIxbXC2fA91PP7oxTAIjGcsAGzKJniperzglD0k
+	 6MexGMnNZGczQBRvp3mevYrx930U9frHtQagUTNbOX7sP8jBKW6EhIDnm1QN1o1yqg
+	 GmaGqciWjcDSV1HRHlyZDeeZ17krCO3rmurd4GFW+Sz8ijnBkEiu9e6ihq4BympQ1n
+	 ii01fzj97Uuuw==
+Date: Wed, 1 Feb 2023 10:20:32 +0000
+From: Lee Jones <lee@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Lee Jones <lee.jones@linaro.org>
+Subject: Re: [lee-mfd:for-mfd-next 36/37] drivers/mmc/host/tmio_mmc.c:141:12:
+ error: no member named 'enable' in 'struct mfd_cell'
+Message-ID: <Y9o88BzKOQ2cyPU4@google.com>
+References: <202301312253.oUVq9cys-lkp@intel.com>
+ <20230131152005.6wy5vbzzcouiofee@pengutronix.de>
+ <Y9lNHyfzwE1+b+Ru@google.com>
+ <20230131173326.ynfx32g36hp5hcoi@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed;
- boundary="=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_="; micalg=sha-256;
- protocol="application/pkcs7-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230131173326.ynfx32g36hp5hcoi@pengutronix.de>
 
-This is an S/MIME signed message (RFC 5652 and 8551).
+On Tue, 31 Jan 2023, Uwe Kleine-König wrote:
 
---=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=
-Content-Type: text/plain
+> On Tue, Jan 31, 2023 at 05:17:19PM +0000, Lee Jones wrote:
+> > On Tue, 31 Jan 2023, Uwe Kleine-König wrote:
+> > 
+> > > Hello,
+> > > 
+> > > On Tue, Jan 31, 2023 at 10:48:48PM +0800, kernel test robot wrote:
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+> > > > head:   a561a980c024193e342b6878f62e02ff9d018285
+> > > > commit: 78e7ccec94380519919267670174cbf1711b7963 [36/37] mfd: Remove .enable() and .disable() callbacks
+> > > > config: hexagon-randconfig-r041-20230130 (https://download.01.org/0day-ci/archive/20230131/202301312253.oUVq9cys-lkp@intel.com/config)
+> > > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> > > > reproduce (this is a W=1 build):
+> > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > >         chmod +x ~/bin/make.cross
+> > > >         # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?id=78e7ccec94380519919267670174cbf1711b7963
+> > > >         git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
+> > > >         git fetch --no-tags lee-mfd for-mfd-next
+> > > >         git checkout 78e7ccec94380519919267670174cbf1711b7963
+> > > >         # save the config file
+> > > >         mkdir build_dir && cp config build_dir/.config
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mmc/host/ drivers/video/fbdev/
+> > > > 
+> > > > If you fix the issue, kindly add following tag where applicable
+> > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > 
+> > > > All errors (new ones prefixed by >>):
+> > > > 
+> > > > [...]
+> > > > >> drivers/mmc/host/tmio_mmc.c:186:12: error: no member named 'disable' in 'struct mfd_cell'
+> > > >            if (cell->disable)
+> > > >                ~~~~  ^
+> > > 
+> > > This driver doesn't exist in next any more (commit ecb92c1f4752). So I'm
+> > > unsure what to do here.
+> > > 
+> > > The obvious (to me) options are:
+> > > 
+> > >  a) ignore the problem
+> > >  b) merge ecb92c1f4752 into mfd before applying "mfd: Remove .enable()
+> > >     and .disable() callbacks"
+> > >  c) drop "mfd: Remove .enable() and .disable() callbacks" for now and
+> > >     reapply when ecb92c1f4752 is in Linus' tree (variant of b))
+> > > 
+> > > Lee, what's your take here?
+> > 
+> > We need to pull your patch for now.
+> 
+> I guess that means c), right?
 
-Hi Boqun,
+Yes, for now.
 
-On 25 Jan 2023, at 21:39, Boqun Feng wrote:
+Please re-submit once we're in better shape.
 
-> Hi,
->
-> [Cc Rust-for-Linux folks]
->
-> No hurries but is your tool avaiable somewhere so that we can have a
-> try.
+> > See:
+> > 
+> >   drivers/mmc/host/tmio_mmc.c
+> >   drivers/mtd/nand/raw/tmio_nand.c
+> >   drivers/usb/host/ohci-tmio.c
+> >   drivers/video/fbdev/tmiofb.c
+> >   drivers/w1/masters/ds1wm.c
+> 
+> Huh, I only checked the first and wonder how I missed these. I guess I
+> checked next only that already has these all dropped. Sorry.
 
-Not ready just yet, but very much on it! Hope to be have something to share very
-soon :-)
-
-> Although Rust doesn't support dependencies ordering, but it's good to
-> know which dependency is reserved after optimization.
-
-Sure!
-
-Paul
-
---=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=
-Content-Description: S/MIME digital signature
-Content-Disposition: attachment; filename=smime.p7s
-Content-Type: application/pkcs7-signature; name=smime.p7s
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDjMw
-ggbmMIIEzqADAgECAhAxAnDUNb6bJJr4VtDh4oVJMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0yMDAyMTgwMDAwMDBaFw0zMzA1MDEyMzU5NTlaMEYxCzAJBgNVBAYT
-Ak5MMRkwFwYDVQQKExBHRUFOVCBWZXJlbmlnaW5nMRwwGgYDVQQDExNHRUFOVCBQZXJzb25hbCBD
-QSA0MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAs0riIl4nW+kEWxQENTIgFK600jFA
-xs1QwB6hRMqvnkphfy2Q3mKbM2otpELKlgE8/3AQPYBo7p7yeORuPMnAuA+oMGRb2wbeSaLcZbpw
-XgfCvnKxmq97/kQkOFX706F9O7/h0yehHhDjUdyMyT0zMs4AMBDRrAFn/b2vR3j0BSYgoQs16oSq
-adM3p+d0vvH/YrRMtOhkvGpLuzL8m+LTAQWvQJ92NwCyKiHspoP4mLPJvVpEpDMnpDbRUQdftSpZ
-zVKTNORvPrGPRLnJ0EEVCHR82LL6oz915WkrgeCY9ImuulBn4uVsd9ZpubCgM/EXvVBlViKqusCh
-SsZEn7juIsGIiDyaIhhLsd3amm8BS3bgK6AxdSMROND6hiHT182Lmf8C+gRHxQG9McvG35uUvRu8
-v7bPZiJRaT7ZC2f50P4lTlnbLvWpXv5yv7hheO8bMXltiyLweLB+VNvg+GnfL6TW3Aq1yF1yrZAZ
-zR4MbpjTWdEdSLKvz8+0wCwscQ81nbDOwDt9vyZ+0eJXbRkWZiqScnwAg5/B1NUD4TrYlrI4n6zF
-p2pyYUOiuzP+as/AZnz63GvjFK69WODR2W/TK4D7VikEMhg18vhuRf4hxnWZOy0vhfDR/g3aJbds
-Gac+diahjEwzyB+UKJOCyzvecG8bZ/u/U8PsEMZg07iIPi8CAwEAAaOCAYswggGHMB8GA1UdIwQY
-MBaAFFN5v1qqK0rPVIDh2JvAnfKyA2bLMB0GA1UdDgQWBBRpAKHHIVj44MUbILAK3adRvxPZ5DAO
-BgNVHQ8BAf8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHSUEFjAUBggrBgEFBQcDAgYI
-KwYBBQUHAwQwOAYDVR0gBDEwLzAtBgRVHSAAMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFAGA1UdHwRJMEcwRaBDoEGGP2h0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9VU0VS
-VHJ1c3RSU0FDZXJ0aWZpY2F0aW9uQXV0aG9yaXR5LmNybDB2BggrBgEFBQcBAQRqMGgwPwYIKwYB
-BQUHMAKGM2h0dHA6Ly9jcnQudXNlcnRydXN0LmNvbS9VU0VSVHJ1c3RSU0FBZGRUcnVzdENBLmNy
-dDAlBggrBgEFBQcwAYYZaHR0cDovL29jc3AudXNlcnRydXN0LmNvbTANBgkqhkiG9w0BAQwFAAOC
-AgEACgVOew2PHxM5AP1v7GLGw+3tF6rjAcx43D9Hl110Q+BABABglkrPkES/VyMZsfuds8fcDGvG
-E3o5UfjSno4sij0xdKut8zMazv8/4VMKPCA3EUS0tDUoL01ugDdqwlyXuYizeXyH2ICAQfXMtS+r
-az7mf741CZvO50OxMUMxqljeRfVPDJQJNHOYi2pxuxgjKDYx4hdZ9G2o+oLlHhu5+anMDkE8g0tf
-fjRKn8I1D1BmrDdWR/IdbBOj6870abYvqys1qYlPotv5N5dm+XxQ8vlrvY7+kfQaAYeO3rP1DM8B
-GdpEqyFVa+I0rpJPhaZkeWW7cImDQFerHW9bKzBrCC815a3WrEhNpxh72ZJZNs1HYJ+29NTB6uu4
-NJjaMxpk+g2puNSm4b9uVjBbPO9V6sFSG+IBqE9ckX/1XjzJtY8Grqoo4SiRb6zcHhp3mxj3oqWi
-8SKNohAOKnUc7RIP6ss1hqIFyv0xXZor4N9tnzD0Fo0JDIURjDPEgo5WTdti/MdGTmKFQNqxyZuT
-9uSI2Xvhz8p+4pCYkiZqpahZlHqMFxdw9XRZQgrP+cgtOkWEaiNkRBbvtvLdp7MCL2OsQhQEdEbU
-vDM9slzZXdI7NjJokVBq3O4pls3VD2z3L/bHVBe0rBERjyM2C/HSIh84rfmAqBgklzIOqXhd+4Rz
-adUwggdFMIIFLaADAgECAhEAk3vdiLswPyIHaa7gbRmgujANBgkqhkiG9w0BAQwFADBGMQswCQYD
-VQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEcMBoGA1UEAxMTR0VBTlQgUGVyc29u
-YWwgQ0EgNDAeFw0yMjExMTAwMDAwMDBaFw0yMzExMTAyMzU5NTlaMIGyMQ4wDAYDVQQREwU4MDMz
-MzEpMCcGA1UEChMgVGVjaG5pc2NoZSBVbml2ZXJzaXRhZXQgTXVlbmNoZW4xGDAWBgNVBAkMD0Fy
-Y2lzc3RyYcOfZSAyMTEPMA0GA1UECBMGQmF5ZXJuMQswCQYDVQQGEwJERTEaMBgGA1UEAxMRUGF1
-bCBIZWlkZWtydWVnZXIxITAfBgkqhkiG9w0BCQEWEmhlaWRla3JwQGluLnR1bS5kZTCCAaIwDQYJ
-KoZIhvcNAQEBBQADggGPADCCAYoCggGBAMa35V6bAKqaFCEcfVMsBMW5hdegZmzIy1qHgdX4SHo0
-2DPMinoi8M//hF5+SQNODMPAwkMGM2JLV6jq51ZvNV5AMmyp1cPuNUyX6ZcZsz9l67Q93D+TkQ8P
-cO9zc1RBdQdRhpQDLe+m+psN/ABjGnp7tmcG/gyQmQOlcoAdtO/FJeHwdewNgi/Lbo3CnoseUYFF
-j1KiVnR4BxzTELFg+VNBbQ71LtbqhG2mO9p6o/1iD5ImKDB/cdNDVEikVpxVIsHYWnzr6a8jc+iK
-H52aVhMXlq3us1ENrRJ4n45an9h6TMgDZHoASo3nXTnj2GSgxOps5utr+Xbxq9OTxr1YocI7sPeg
-mK2/Jl99WXLjGWmjpjq+3wGP6YWvk9DjyhWZinBuqaXhOKEzb62rmWw+K5oiI3DNXB95RhywYVO8
-j7JwU8MrSOLFVgHRD4JfUZr9B7rrEnOW9IbOBFPN7QfNz3j28EnTAS5jcIhxtZV0vySjnhC3XUvH
-MWghCJx8h0h7JQIDAQABo4ICPzCCAjswHwYDVR0jBBgwFoAUaQChxyFY+ODFGyCwCt2nUb8T2eQw
-HQYDVR0OBBYEFEGvRvAmg05NopUV9pH7SMbFiVwTMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8E
-AjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjA/BgNVHSAEODA2MDQGCysGAQQBsjEB
-AgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMEIGA1UdHwQ7MDkwN6A1
-oDOGMWh0dHA6Ly9HRUFOVC5jcmwuc2VjdGlnby5jb20vR0VBTlRQZXJzb25hbENBNC5jcmwweAYI
-KwYBBQUHAQEEbDBqMD0GCCsGAQUFBzAChjFodHRwOi8vR0VBTlQuY3J0LnNlY3RpZ28uY29tL0dF
-QU5UUGVyc29uYWxDQTQuY3J0MCkGCCsGAQUFBzABhh1odHRwOi8vR0VBTlQub2NzcC5zZWN0aWdv
-LmNvbTCBvAYDVR0RBIG0MIGxgRtQYXVsLkhlaWRla3J1ZWdlckBpbi50dW0uZGWBE2hlaWRla3Jw
-QGNpdC50dW0uZGWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNpdC50dW0uZGWBE2hlaWRla3JwQGNzLnR1
-bS5lZHWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNzLnR1bS5lZHWBGHBhdWwuaGVpZGVrcnVlZ2VyQHR1
-bS5kZYESaGVpZGVrcnBAaW4udHVtLmRlMA0GCSqGSIb3DQEBDAUAA4ICAQB0h9s7S7zb3sZpe67K
-Q8Ko0pkM9WbMO6X/6fscdWHZNiQQfn6X+9A7IPT+bGx9mC3vRO1TOR7FfmgAKs8xpqW2PAC4taIz
-EdXhrKCJuIzqzdhqQBMhfoP9giurXsQxaYAWeuEklmw1cIEoG6guVOo7Re+Vqx74rHOf6gDgukUz
-J1uhto0FVhPLZqzjdGBfPNhXc+9W7ow4Fu8w37lKdDi9DRCkFO+Wq+jzApzIEIInT1lhDt7Y81wJ
-UTqcYn2tOLSpwB38Hd798RDkeY5f3EO/+pLNpEhnwXSpAif/cpZCKXf2LrZRSdH3wbxefj/HLu/w
-tuZ+lQsRXKEMJbBeXw8DEKP8771chCGyLl8AHhJRHrcokhX/PPJu/y0t5ArvMNeumFjGtxtczyHU
-ieT3EcE8oG5aMyD0Ly+Lwc0L90DqcXUvU1xbHL9GxMOTPZGz0Qr0qZDBv60oTUbIXIMIyyoY0rsO
-NtncPyZKMkLaRUBwrWXF+BuxM5hfDytIbSKtO/Q6woFihf6xyKHVqAhoyV6y19WAYIEb78ce+zOg
-xyOOYPiVNiKlwP8gJq72mrfUvUggpyPVwjEkhye/+d98NrylwyWokJI6PWM1YsOmdG1s+4fiU7KU
-9+PEIW/YMpUiGYViXzt0RZfuKNixCk1Jh+JtGU44/cuz+Oki3ooAIqaRKTGCAo4wggKKAgEBMFsw
-RjELMAkGA1UEBhMCTkwxGTAXBgNVBAoTEEdFQU5UIFZlcmVuaWdpbmcxHDAaBgNVBAMTE0dFQU5U
-IFBlcnNvbmFsIENBIDQCEQCTe92IuzA/IgdpruBtGaC6MA0GCWCGSAFlAwQCAQUAoIGFMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwLwYJKoZIhvcNAQkEMSIEIDHM3pc9jImPH19F1z1+IUTIzcM2
-G5aes9CDYtDThT97MDgGCSqGSIb3DQEJDzErMCkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4G
-CCqGSIb3DQMCAgIAgDANBgkqhkiG9w0BAQsFAASCAYAMMClDI35QDAcUGrNzHKeLCAUgT8AKnkwa
-9VTLbPhUL0TCc8rDEG5HCPybO3+JP2O5JSG8GTBLsM1rRanfz1qfLj6CAPMgOypYPern9l9UoadE
-GHeIJgnWFcPhgj41VSTNC2edxB0+Nd5iYu/tf7qyGhu9soMpV4SjqR3CVOOunel5/uYLRvBWmjy2
-t/Dk+BEcez1nxsAUu2Z7kR8QLicQUUaUfxUqbnMYjZICJyhg4Lw1wWmRkbP9fKPEh5PY5mVh+UlZ
-ZBUkR85p/kyJRB6Dz5A2z4OZEtyVRZCVNm8tPqa3CNsrLrNkrSW01U2qTqZRGFUQhQzlyTKD+18q
-NRxoNkpBVF2yZKfsV0qS4mllViBZB5+pEI5z7SpKjUaoOndGl0HMLOyPbEA8bHit1ajFbBOc7NXm
-rLXYbnXcruRk8RwfMLYIJdo3cjOPgSqQS4Whb584F9IESmOzcLlq+XmfwQ9c2iysQr0/AYwp5REN
-+5JbHdif8ZmdxBzIip6PNBIAAAAAAAA=
---=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=--
+-- 
+Lee Jones [李琼斯]
