@@ -1,69 +1,48 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132D980F;
-	Wed,  1 Feb 2023 07:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209B080F;
+	Wed,  1 Feb 2023 07:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675235128; x=1706771128;
+  t=1675236496; x=1706772496;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=z5PhnpmOAJuOc0Bq/L9mnpqUibI5L8+buBwNICS6zF8=;
-  b=f/j+v8erKk1Vk7n8LI3A8cHLDKjbb6hMj9DvRF+84lAqx85od7d57XCz
-   jacJT3l8AJdfa1AhIY+qwPczgYUqk9iX8YcsXg1+AwpS56FmDEXAjAmlN
-   6+vU/fKm3HX7qQl6DIk0nniq2BHIXk5/7Wq1s9kTFWQKItxxNVJ0N9Oxd
-   co5uNJLSxyl4YTy880bU0QXfHIuaouPkyy3vvdYaBtRmXFkLdNABUF3F2
-   lDvMHU7I3ivgzl55+HR1dRvTEDOL57a4HG0EZH54PoyQ6tEBJDQ3xmTf5
-   wu8jzSDDwXuTn2OMACdJHUu3jQkoNJyQ7W+tFz+K5rHjfWXywacAI59Bs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="326724113"
+  bh=NVZy1yN3menuLCDwawETeI1gdhzzBc96J45uZDahNK8=;
+  b=KM3L3HxK5ehvMu8mlp/40Sdv//ldt9o1tHY5ED5GUec9aUTGXxrZRn6O
+   BhZ62c/9GHzpurIsUqi9Mfp2yp6n36zSpPvpjwWuT+AbGhLlVqn5tDxye
+   iVFhhGjGfxJLXD2jryZzLq1JMRZuxZijzdIU5ELO4mekwoqBaisqyoLi5
+   xVqOp0iXEoc0ugS4dU+kUcWzVKF4kf1tVrXcMC3bZPnyul6XoyMKQ16FX
+   Cq/xlT/CJUkBQXlxSuWOS6pLPJFY0h++2pFhByqKEd/rinpm/ta/8ZC42
+   bNgnMQ17LRPwxypGnZzSncFNINPSU8B2movNswJE7COlCmJpEe0UZvYbb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="392650522"
 X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="326724113"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 23:05:23 -0800
+   d="scan'208";a="392650522"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 23:28:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="642303771"
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="666822957"
 X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="642303771"
+   d="scan'208";a="666822957"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Jan 2023 23:05:12 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 31 Jan 2023 23:28:13 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pN7B9-0005CK-2j;
-	Wed, 01 Feb 2023 07:05:11 +0000
-Date: Wed, 1 Feb 2023 15:04:58 +0800
+	id 1pN7XQ-0005D8-1P;
+	Wed, 01 Feb 2023 07:28:12 +0000
+Date: Wed, 1 Feb 2023 15:27:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-	Andrei Vagin <avagin@gmail.com>,
-	Danylo Mocherniuk <mdanylo@google.com>,
-	Paul Gofman <pgofman@codeweavers.com>,
-	Cyrill Gorcunov <gorcunov@gmail.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	linux-trace-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Yang Shi <shy828301@gmail.com>, Vlastimil Babka <vbabka@suse.cz>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Yun Zhou <yun.zhou@windriver.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Alex Sierra <alex.sierra@amd.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <202302011447.7lSFpVO5-lkp@intel.com>
-References: <20230131083257.3302830-3-usama.anjum@collabora.com>
+	linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
+	Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-ID: <202302011530.7vm4O8Ro-lkp@intel.com>
+References: <167518178446.336834.4654027409699647726.stgit@mhiramat.roam.corp.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,112 +51,213 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230131083257.3302830-3-usama.anjum@collabora.com>
+In-Reply-To: <167518178446.336834.4654027409699647726.stgit@mhiramat.roam.corp.google.com>
 
-Hi Muhammad,
+Hi Masami,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on shuah-kselftest/fixes]
-[also build test ERROR on linus/master v6.2-rc6]
-[cannot apply to shuah-kselftest/next]
+[auto build test WARNING on bpf-next/master]
+[also build test WARNING on bpf/master shuah-kselftest/next shuah-kselftest/fixes linus/master v6.2-rc6]
+[cannot apply to rostedt-trace/for-next rostedt-trace/for-next-urgent]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git fixes
-patch link:    https://lore.kernel.org/r/20230131083257.3302830-3-usama.anjum%40collabora.com
-patch subject: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302011447.7lSFpVO5-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/167518178446.336834.4654027409699647726.stgit%40mhiramat.roam.corp.google.com
+patch subject: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing function entry and exit.
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302011530.7vm4O8Ro-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/11677b6b7fda958031115ea40aa219fc32c7dea4
+        # https://github.com/intel-lab-lkp/linux/commit/90de2b114484f12e2645d2beb964b7d230c9c705
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-        git checkout 11677b6b7fda958031115ea40aa219fc32c7dea4
+        git fetch --no-tags linux-review Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
+        git checkout 90de2b114484f12e2645d2beb964b7d230c9c705
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/proc/task_mmu.c:1907:5: error: implicit declaration of function 'uffd_wp_range' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                                   uffd_wp_range(walk->mm, vma, start, HPAGE_SIZE, true);
-                                   ^
-   fs/proc/task_mmu.c:1927:3: error: implicit declaration of function 'uffd_wp_range' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   uffd_wp_range(walk->mm, vma, start, addr - start, true);
-                   ^
-   2 errors generated.
+>> kernel/trace/trace_probe.c:394:32: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
+                   if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
+                                                ^  ~~~~~~~~~~~~~~~
+   kernel/trace/trace_probe.c:394:32: note: use '|' for a bitwise operation
+                   if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
+                                                ^~
+                                                |
+   1 warning generated.
 
 
-vim +/uffd_wp_range +1907 fs/proc/task_mmu.c
+vim +394 kernel/trace/trace_probe.c
 
-  1874	
-  1875	static inline int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-  1876						 unsigned long end, struct mm_walk *walk)
-  1877	{
-  1878		struct pagemap_scan_private *p = walk->private;
-  1879		struct vm_area_struct *vma = walk->vma;
-  1880		unsigned long addr = end;
-  1881		spinlock_t *ptl;
-  1882		int ret = 0;
-  1883		pte_t *pte;
-  1884	
-  1885	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-  1886		ptl = pmd_trans_huge_lock(pmd, vma);
-  1887		if (ptl) {
-  1888			bool pmd_wt;
-  1889	
-  1890			pmd_wt = !is_pmd_uffd_wp(*pmd);
-  1891			/*
-  1892			 * Break huge page into small pages if operation needs to be performed is
-  1893			 * on a portion of the huge page.
-  1894			 */
-  1895			if (pmd_wt && IS_WP_ENGAGE_OP(p) && (end - start < HPAGE_SIZE)) {
-  1896				spin_unlock(ptl);
-  1897				split_huge_pmd(vma, pmd, start);
-  1898				goto process_smaller_pages;
-  1899			}
-  1900			if (IS_GET_OP(p))
-  1901				ret = pagemap_scan_output(pmd_wt, vma->vm_file, pmd_present(*pmd),
-  1902							  is_swap_pmd(*pmd), p, start,
-  1903							  (end - start)/PAGE_SIZE);
-  1904			spin_unlock(ptl);
-  1905			if (!ret) {
-  1906				if (pmd_wt && IS_WP_ENGAGE_OP(p))
-> 1907					uffd_wp_range(walk->mm, vma, start, HPAGE_SIZE, true);
-  1908			}
-  1909			return ret;
-  1910		}
-  1911	process_smaller_pages:
-  1912		if (pmd_trans_unstable(pmd))
-  1913			return 0;
-  1914	#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-  1915	
-  1916		pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
-  1917		if (IS_GET_OP(p)) {
-  1918			for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
-  1919				ret = pagemap_scan_output(!is_pte_uffd_wp(*pte), vma->vm_file,
-  1920							  pte_present(*pte), is_swap_pte(*pte), p, addr, 1);
-  1921				if (ret)
-  1922					break;
-  1923			}
-  1924		}
-  1925		pte_unmap_unlock(pte - 1, ptl);
-  1926		if ((!ret || ret == -ENOSPC) && IS_WP_ENGAGE_OP(p) && (addr - start))
-  1927			uffd_wp_range(walk->mm, vma, start, addr - start, true);
-  1928	
-  1929		cond_resched();
-  1930		return ret;
-  1931	}
-  1932	
+   374	
+   375	/* Recursive argument parser */
+   376	static int
+   377	parse_probe_arg(char *arg, const struct fetch_type *type,
+   378			struct fetch_insn **pcode, struct fetch_insn *end,
+   379			unsigned int flags, int offs)
+   380	{
+   381		struct fetch_insn *code = *pcode;
+   382		unsigned long param;
+   383		int deref = FETCH_OP_DEREF;
+   384		long offset = 0;
+   385		char *tmp;
+   386		int ret = 0;
+   387	
+   388		switch (arg[0]) {
+   389		case '$':
+   390			ret = parse_probe_vars(arg + 1, type, code, flags, offs);
+   391			break;
+   392	
+   393		case '%':	/* named register */
+ > 394			if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
+   395				/* eprobe and fprobe do not handle registers */
+   396				trace_probe_log_err(offs, BAD_VAR);
+   397				break;
+   398			}
+   399			ret = regs_query_register_offset(arg + 1);
+   400			if (ret >= 0) {
+   401				code->op = FETCH_OP_REG;
+   402				code->param = (unsigned int)ret;
+   403				ret = 0;
+   404			} else
+   405				trace_probe_log_err(offs, BAD_REG_NAME);
+   406			break;
+   407	
+   408		case '@':	/* memory, file-offset or symbol */
+   409			if (isdigit(arg[1])) {
+   410				ret = kstrtoul(arg + 1, 0, &param);
+   411				if (ret) {
+   412					trace_probe_log_err(offs, BAD_MEM_ADDR);
+   413					break;
+   414				}
+   415				/* load address */
+   416				code->op = FETCH_OP_IMM;
+   417				code->immediate = param;
+   418			} else if (arg[1] == '+') {
+   419				/* kprobes don't support file offsets */
+   420				if (flags & TPARG_FL_KERNEL) {
+   421					trace_probe_log_err(offs, FILE_ON_KPROBE);
+   422					return -EINVAL;
+   423				}
+   424				ret = kstrtol(arg + 2, 0, &offset);
+   425				if (ret) {
+   426					trace_probe_log_err(offs, BAD_FILE_OFFS);
+   427					break;
+   428				}
+   429	
+   430				code->op = FETCH_OP_FOFFS;
+   431				code->immediate = (unsigned long)offset;  // imm64?
+   432			} else {
+   433				/* uprobes don't support symbols */
+   434				if (!(flags & TPARG_FL_KERNEL)) {
+   435					trace_probe_log_err(offs, SYM_ON_UPROBE);
+   436					return -EINVAL;
+   437				}
+   438				/* Preserve symbol for updating */
+   439				code->op = FETCH_NOP_SYMBOL;
+   440				code->data = kstrdup(arg + 1, GFP_KERNEL);
+   441				if (!code->data)
+   442					return -ENOMEM;
+   443				if (++code == end) {
+   444					trace_probe_log_err(offs, TOO_MANY_OPS);
+   445					return -EINVAL;
+   446				}
+   447				code->op = FETCH_OP_IMM;
+   448				code->immediate = 0;
+   449			}
+   450			/* These are fetching from memory */
+   451			if (++code == end) {
+   452				trace_probe_log_err(offs, TOO_MANY_OPS);
+   453				return -EINVAL;
+   454			}
+   455			*pcode = code;
+   456			code->op = FETCH_OP_DEREF;
+   457			code->offset = offset;
+   458			break;
+   459	
+   460		case '+':	/* deref memory */
+   461		case '-':
+   462			if (arg[1] == 'u') {
+   463				deref = FETCH_OP_UDEREF;
+   464				arg[1] = arg[0];
+   465				arg++;
+   466			}
+   467			if (arg[0] == '+')
+   468				arg++;	/* Skip '+', because kstrtol() rejects it. */
+   469			tmp = strchr(arg, '(');
+   470			if (!tmp) {
+   471				trace_probe_log_err(offs, DEREF_NEED_BRACE);
+   472				return -EINVAL;
+   473			}
+   474			*tmp = '\0';
+   475			ret = kstrtol(arg, 0, &offset);
+   476			if (ret) {
+   477				trace_probe_log_err(offs, BAD_DEREF_OFFS);
+   478				break;
+   479			}
+   480			offs += (tmp + 1 - arg) + (arg[0] != '-' ? 1 : 0);
+   481			arg = tmp + 1;
+   482			tmp = strrchr(arg, ')');
+   483			if (!tmp) {
+   484				trace_probe_log_err(offs + strlen(arg),
+   485						    DEREF_OPEN_BRACE);
+   486				return -EINVAL;
+   487			} else {
+   488				const struct fetch_type *t2 = find_fetch_type(NULL, flags);
+   489	
+   490				*tmp = '\0';
+   491				ret = parse_probe_arg(arg, t2, &code, end, flags, offs);
+   492				if (ret)
+   493					break;
+   494				if (code->op == FETCH_OP_COMM ||
+   495				    code->op == FETCH_OP_DATA) {
+   496					trace_probe_log_err(offs, COMM_CANT_DEREF);
+   497					return -EINVAL;
+   498				}
+   499				if (++code == end) {
+   500					trace_probe_log_err(offs, TOO_MANY_OPS);
+   501					return -EINVAL;
+   502				}
+   503				*pcode = code;
+   504	
+   505				code->op = deref;
+   506				code->offset = offset;
+   507			}
+   508			break;
+   509		case '\\':	/* Immediate value */
+   510			if (arg[1] == '"') {	/* Immediate string */
+   511				ret = __parse_imm_string(arg + 2, &tmp, offs + 2);
+   512				if (ret)
+   513					break;
+   514				code->op = FETCH_OP_DATA;
+   515				code->data = tmp;
+   516			} else {
+   517				ret = str_to_immediate(arg + 1, &code->immediate);
+   518				if (ret)
+   519					trace_probe_log_err(offs + 1, BAD_IMM);
+   520				else
+   521					code->op = FETCH_OP_IMM;
+   522			}
+   523			break;
+   524		}
+   525		if (!ret && code->op == FETCH_OP_NOP) {
+   526			/* Parsed, but do not find fetch method */
+   527			trace_probe_log_err(offs, BAD_FETCH_ARG);
+   528			ret = -EINVAL;
+   529		}
+   530		return ret;
+   531	}
+   532	
 
 -- 
 0-DAY CI Kernel Test Service
