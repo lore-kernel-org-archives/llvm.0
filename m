@@ -1,266 +1,263 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BF523DA;
-	Wed,  1 Feb 2023 12:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675253668; x=1706789668;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=PhO8HoketapjZHuVYZZgWpkb07hhVmPmoqxGzEaHtFs=;
-  b=T9TRcs4UwHeGbXGVOkjlVazi0N+FerFGxsAVANdiHzC75TsKpwVPMgaL
-   016x/p4dLZwckW+1mvH7lqqEUAR3alXTehMwldoFWRWfQroxj/9RVMAYv
-   XX46+scpnzbma8Ln2NCSJEhJii3NT6/lTPsLLj5QxSekVl6QkpsRYVbdX
-   xf1ikHalMqzQ3xOAUx2MHuPEIz77n1ha2djm1in04wxCYYu7LGtNZhGa+
-   w28vcGpxl5PhncVWZvfhrux8KfphmrZV/H2N6xwbnmbf2Fhjy17g0ltFA
-   IwtyzAhU3cu9tz6OoOJ0eDOuWZEoFg7bwzCf50KHVbgNgZMsQbFqEeqWe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="392699586"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="392699586"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 04:14:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="733540535"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="733540535"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 01 Feb 2023 04:14:25 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNC0O-0005Pm-2s;
-	Wed, 01 Feb 2023 12:14:24 +0000
-Date: Wed, 1 Feb 2023 20:14:06 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: error: unknown target CPU 'r4300'
-Message-ID: <202302012018.woyx8cqR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32DA2588;
+	Wed,  1 Feb 2023 12:42:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55FF2C4339B;
+	Wed,  1 Feb 2023 12:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675255372;
+	bh=0tVxqwP6J5RK2m0oIF5Emx6bU3NkR94XMmYH6CF4uN0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=C7F/d+ZJPppJsPzMmOITBjEUzwMUgB9cMJJO4lTW0ee/+7RJrpWHjrdOvx6RnFdV9
+	 uQE05KT6R48p52Hfp09r3RrRcz9WpLjwBnOShxkfs0HMbnPoUTLdt9/aAmf6mXVcKO
+	 lvXP8NtCOl+eKs8bP8s7dpAwHbZkTG60h8VaRysrzmICBDuOoOjXlfU13ke78lYTl/
+	 +cTIYqAetA8mXHPxY/KCKxGQSPMn2kcHyeRtkyFmFNQM9B8rVkNy3LUB81bxXRJwTl
+	 SHcPWDByb0ZY3vY1HquhPmHyc+H9Zq2pbKXdMuXxlubT07XhlPXj2F5V/lyyirtshA
+	 WvETGWyDf3dQw==
+Date: Wed, 1 Feb 2023 21:42:48 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, Steven Rostedt
+ <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>, Mark Rutland
+ <mark.rutland@arm.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing
+ function entry and exit.
+Message-Id: <20230201214248.c88dbeb75018a57f03650e42@kernel.org>
+In-Reply-To: <202302011530.7vm4O8Ro-lkp@intel.com>
+References: <167518178446.336834.4654027409699647726.stgit@mhiramat.roam.corp.google.com>
+	<202302011530.7vm4O8Ro-lkp@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Lauri Kasanen <cand@gmx.com>
-CC: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Wed, 1 Feb 2023 15:27:49 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-Hi Lauri,
+> Hi Masami,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on bpf-next/master]
+> [also build test WARNING on bpf/master shuah-kselftest/next shuah-kselftest/fixes linus/master v6.2-rc6]
+> [cannot apply to rostedt-trace/for-next rostedt-trace/for-next-urgent]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/167518178446.336834.4654027409699647726.stgit%40mhiramat.roam.corp.google.com
+> patch subject: [PATCH v2 09/10] tracing/probes: Add fprobe events for tracing function entry and exit.
+> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302011530.7vm4O8Ro-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/90de2b114484f12e2645d2beb964b7d230c9c705
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Masami-Hiramatsu-Google/fprobe-Pass-entry_data-to-handlers/20230201-001911
+>         git checkout 90de2b114484f12e2645d2beb964b7d230c9c705
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/trace/trace_probe.c:394:32: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
+>                    if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
+>                                                 ^  ~~~~~~~~~~~~~~~
+>    kernel/trace/trace_probe.c:394:32: note: use '|' for a bitwise operation
+>                    if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
+>                                                 ^~
+>                                                 |
 
-FYI, the error/warning still remains.
+Oops, thanks! this is an actual bug.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c0b67534c95c537f7a506a06b98e5e85d72e2b7d
-commit: baec970aa5ba11099ad7a91773350c91fb2113f0 mips: Add N64 machine type
-date:   2 years ago
-config: mips-randconfig-r002-20230201 (https://download.01.org/0day-ci/archive/20230201/202302012018.woyx8cqR-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=baec970aa5ba11099ad7a91773350c91fb2113f0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout baec970aa5ba11099ad7a91773350c91fb2113f0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+Let me fix it and update.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thanks!
 
-All errors (new ones prefixed by >>):
+>    1 warning generated.
+> 
+> 
+> vim +394 kernel/trace/trace_probe.c
+> 
+>    374	
+>    375	/* Recursive argument parser */
+>    376	static int
+>    377	parse_probe_arg(char *arg, const struct fetch_type *type,
+>    378			struct fetch_insn **pcode, struct fetch_insn *end,
+>    379			unsigned int flags, int offs)
+>    380	{
+>    381		struct fetch_insn *code = *pcode;
+>    382		unsigned long param;
+>    383		int deref = FETCH_OP_DEREF;
+>    384		long offset = 0;
+>    385		char *tmp;
+>    386		int ret = 0;
+>    387	
+>    388		switch (arg[0]) {
+>    389		case '$':
+>    390			ret = parse_probe_vars(arg + 1, type, code, flags, offs);
+>    391			break;
+>    392	
+>    393		case '%':	/* named register */
+>  > 394			if (flags & (TPARG_FL_TPOINT || TPARG_FL_FPROBE)) {
+>    395				/* eprobe and fprobe do not handle registers */
+>    396				trace_probe_log_err(offs, BAD_VAR);
+>    397				break;
+>    398			}
+>    399			ret = regs_query_register_offset(arg + 1);
+>    400			if (ret >= 0) {
+>    401				code->op = FETCH_OP_REG;
+>    402				code->param = (unsigned int)ret;
+>    403				ret = 0;
+>    404			} else
+>    405				trace_probe_log_err(offs, BAD_REG_NAME);
+>    406			break;
+>    407	
+>    408		case '@':	/* memory, file-offset or symbol */
+>    409			if (isdigit(arg[1])) {
+>    410				ret = kstrtoul(arg + 1, 0, &param);
+>    411				if (ret) {
+>    412					trace_probe_log_err(offs, BAD_MEM_ADDR);
+>    413					break;
+>    414				}
+>    415				/* load address */
+>    416				code->op = FETCH_OP_IMM;
+>    417				code->immediate = param;
+>    418			} else if (arg[1] == '+') {
+>    419				/* kprobes don't support file offsets */
+>    420				if (flags & TPARG_FL_KERNEL) {
+>    421					trace_probe_log_err(offs, FILE_ON_KPROBE);
+>    422					return -EINVAL;
+>    423				}
+>    424				ret = kstrtol(arg + 2, 0, &offset);
+>    425				if (ret) {
+>    426					trace_probe_log_err(offs, BAD_FILE_OFFS);
+>    427					break;
+>    428				}
+>    429	
+>    430				code->op = FETCH_OP_FOFFS;
+>    431				code->immediate = (unsigned long)offset;  // imm64?
+>    432			} else {
+>    433				/* uprobes don't support symbols */
+>    434				if (!(flags & TPARG_FL_KERNEL)) {
+>    435					trace_probe_log_err(offs, SYM_ON_UPROBE);
+>    436					return -EINVAL;
+>    437				}
+>    438				/* Preserve symbol for updating */
+>    439				code->op = FETCH_NOP_SYMBOL;
+>    440				code->data = kstrdup(arg + 1, GFP_KERNEL);
+>    441				if (!code->data)
+>    442					return -ENOMEM;
+>    443				if (++code == end) {
+>    444					trace_probe_log_err(offs, TOO_MANY_OPS);
+>    445					return -EINVAL;
+>    446				}
+>    447				code->op = FETCH_OP_IMM;
+>    448				code->immediate = 0;
+>    449			}
+>    450			/* These are fetching from memory */
+>    451			if (++code == end) {
+>    452				trace_probe_log_err(offs, TOO_MANY_OPS);
+>    453				return -EINVAL;
+>    454			}
+>    455			*pcode = code;
+>    456			code->op = FETCH_OP_DEREF;
+>    457			code->offset = offset;
+>    458			break;
+>    459	
+>    460		case '+':	/* deref memory */
+>    461		case '-':
+>    462			if (arg[1] == 'u') {
+>    463				deref = FETCH_OP_UDEREF;
+>    464				arg[1] = arg[0];
+>    465				arg++;
+>    466			}
+>    467			if (arg[0] == '+')
+>    468				arg++;	/* Skip '+', because kstrtol() rejects it. */
+>    469			tmp = strchr(arg, '(');
+>    470			if (!tmp) {
+>    471				trace_probe_log_err(offs, DEREF_NEED_BRACE);
+>    472				return -EINVAL;
+>    473			}
+>    474			*tmp = '\0';
+>    475			ret = kstrtol(arg, 0, &offset);
+>    476			if (ret) {
+>    477				trace_probe_log_err(offs, BAD_DEREF_OFFS);
+>    478				break;
+>    479			}
+>    480			offs += (tmp + 1 - arg) + (arg[0] != '-' ? 1 : 0);
+>    481			arg = tmp + 1;
+>    482			tmp = strrchr(arg, ')');
+>    483			if (!tmp) {
+>    484				trace_probe_log_err(offs + strlen(arg),
+>    485						    DEREF_OPEN_BRACE);
+>    486				return -EINVAL;
+>    487			} else {
+>    488				const struct fetch_type *t2 = find_fetch_type(NULL, flags);
+>    489	
+>    490				*tmp = '\0';
+>    491				ret = parse_probe_arg(arg, t2, &code, end, flags, offs);
+>    492				if (ret)
+>    493					break;
+>    494				if (code->op == FETCH_OP_COMM ||
+>    495				    code->op == FETCH_OP_DATA) {
+>    496					trace_probe_log_err(offs, COMM_CANT_DEREF);
+>    497					return -EINVAL;
+>    498				}
+>    499				if (++code == end) {
+>    500					trace_probe_log_err(offs, TOO_MANY_OPS);
+>    501					return -EINVAL;
+>    502				}
+>    503				*pcode = code;
+>    504	
+>    505				code->op = deref;
+>    506				code->offset = offset;
+>    507			}
+>    508			break;
+>    509		case '\\':	/* Immediate value */
+>    510			if (arg[1] == '"') {	/* Immediate string */
+>    511				ret = __parse_imm_string(arg + 2, &tmp, offs + 2);
+>    512				if (ret)
+>    513					break;
+>    514				code->op = FETCH_OP_DATA;
+>    515				code->data = tmp;
+>    516			} else {
+>    517				ret = str_to_immediate(arg + 1, &code->immediate);
+>    518				if (ret)
+>    519					trace_probe_log_err(offs + 1, BAD_IMM);
+>    520				else
+>    521					code->op = FETCH_OP_IMM;
+>    522			}
+>    523			break;
+>    524		}
+>    525		if (!ret && code->op == FETCH_OP_NOP) {
+>    526			/* Parsed, but do not find fetch method */
+>    527			trace_probe_log_err(offs, BAD_FETCH_ARG);
+>    528			ret = -EINVAL;
+>    529		}
+>    530		return ret;
+>    531	}
+>    532	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
 
->> error: unknown target CPU 'r4300'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   scripts/extract-cert.c:46:14: warning: 'ERR_get_error_line' is deprecated [-Wdeprecated-declarations]
-           while ((e = ERR_get_error_line(&file, &line))) {
-                       ^
-   /usr/include/openssl/err.h:422:1: note: 'ERR_get_error_line' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/extract-cert.c:59:9: warning: 'ERR_get_error_line' is deprecated [-Wdeprecated-declarations]
-           while (ERR_get_error_line(&file, &line)) {}
-                  ^
-   /usr/include/openssl/err.h:422:1: note: 'ERR_get_error_line' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines' is deprecated [-Wdeprecated-declarations]
-                   ENGINE_load_builtin_engines();
-                   ^
-   /usr/include/openssl/engine.h:358:1: note: 'ENGINE_load_builtin_engines' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated [-Wdeprecated-declarations]
-                   e = ENGINE_by_id("pkcs11");
-                       ^
-   /usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-                   if (ENGINE_init(e))
-                       ^
-   /usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is deprecated [-Wdeprecated-declarations]
-                           ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0), "Set PKCS#11 PIN");
-                                ^
-   /usr/include/openssl/engine.h:478:1: note: 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is deprecated [-Wdeprecated-declarations]
-                   ENGINE_ctrl_cmd(e, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
-                   ^
-   /usr/include/openssl/engine.h:450:1: note: 'ENGINE_ctrl_cmd' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 int ENGINE_ctrl_cmd(ENGINE *e, const char *cmd_name,
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is deprecated [-Wdeprecated-declarations]
-           while ((e = ERR_get_error_line(&file, &line))) {
-                       ^
-   /usr/include/openssl/err.h:422:1: note: 'ERR_get_error_line' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is deprecated [-Wdeprecated-declarations]
-           while (ERR_get_error_line(&file, &line)) {}
-                  ^
-   /usr/include/openssl/err.h:422:1: note: 'ERR_get_error_line' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines' is deprecated [-Wdeprecated-declarations]
-                   ENGINE_load_builtin_engines();
-                   ^
-   /usr/include/openssl/engine.h:358:1: note: 'ENGINE_load_builtin_engines' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated [-Wdeprecated-declarations]
-                   e = ENGINE_by_id("pkcs11");
-                       ^
-   /usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-                   if (ENGINE_init(e))
-                       ^
-   /usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is deprecated [-Wdeprecated-declarations]
-                           ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
-                                ^
-   /usr/include/openssl/engine.h:478:1: note: 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is deprecated [-Wdeprecated-declarations]
-                   private_key = ENGINE_load_private_key(e, private_key_name,
-                                 ^
-   /usr/include/openssl/engine.h:637:1: note: 'ENGINE_load_private_key' has been explicitly marked deprecated here
-   OSSL_DEPRECATEDIN_3_0
-   ^
-   /usr/include/openssl/macros.h:182:49: note: expanded from macro 'OSSL_DEPRECATEDIN_3_0'
-   #   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-                                                   ^
-   /usr/include/openssl/macros.h:62:52: note: expanded from macro 'OSSL_DEPRECATED'
-   #     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-                                                      ^
-   7 warnings generated.
-   7 warnings generated.
->> error: unknown target CPU 'r4300'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offsets.s] Error 1
->> error: unknown target CPU 'r4300'
-   note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
-   make[2]: *** [scripts/Makefile.build:279: scripts/mod/empty.o] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1205: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:185: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
