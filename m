@@ -1,230 +1,109 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DC233FA
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 19:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675278420; x=1706814420;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BeV+g4xcrdhiBAPU8q3kcX0q9z2wYQxEEkxTU/6a/uA=;
-  b=fgRKPy54Z3Xlf4VZqBWW6OVAHUMNwshmgfnbqWobYPvBXr0iMLg5Arxq
-   UiVqJ60ZsdHYiDZa1UyH/Hm7HvLg0T+5V4Wg6gJaSPQUyPvI7vOEDu3nS
-   2nxPe9w/ojhFC1PkWW+f8HgDBUAVWeRnIU2WuJoEGwFWzMoUpYN5a1eIv
-   ky9BRoxmhob4v7ToHqhk42pqKRC2Doo8qECvKxvxMqBOlHnzN67liiLdq
-   nZC5dFi4LUaf0t69SfR8KTJQK1JzezVEzrix4d+EQIv/LTgGPeJQFiQGf
-   Xt3lBgCvym+B43sVVxHQyOPtTQ3SyhW8oy2LRTldjq24oayplVjIinh5K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311889605"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="311889605"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:06:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="697384825"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="697384825"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 01 Feb 2023 11:06:57 -0800
-Received: from [10.255.230.85] (kliang2-mobl1.ccr.corp.intel.com [10.255.230.85])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by linux.intel.com (Postfix) with ESMTPS id F3647580514;
-	Wed,  1 Feb 2023 11:06:55 -0800 (PST)
-Message-ID: <df8d710c-2543-520e-fe82-dbc8b2a47950@linux.intel.com>
-Date: Wed, 1 Feb 2023 14:06:54 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C3B33FA
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 19:25:20 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id p19-20020a25d813000000b0080b78270db5so20676890ybg.15
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 11:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ncv2AWcbqOMo4MNaMipLFizY1qd9n4hGfaa8OZXFvS8=;
+        b=m/Mdjwp3dUBf6VTBiurB9nnwzOZ33uzAOOtgQWT1q7NhzRZbEoLo1RBSR3nW3rknZM
+         zY9fMllht/v8RTpIIbi7oqFIcv/J4pZ8rBukmC6I8fiLmiOrgvxZ7BgzSv9wM2j2H+X3
+         dmAOpdl91GMZO7trXBfqh/m+UkQkjVXWG3fmgWw0HAxa+ry70hRn0OCU9/YwPuqDr3VA
+         pqTK0jRxYizC19yumQ2L61GEeshHNcGyMXh0fPqJAuyhjMlR6yffgATHJN9bePTWbWHh
+         Sc81tDSlLkkPa67jv2WCyBrfrj2bIGeBz/l/foGmEf5oFxIDhmz/06BH2fegZ7psB/zz
+         loFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ncv2AWcbqOMo4MNaMipLFizY1qd9n4hGfaa8OZXFvS8=;
+        b=mp49c3dBG8Jq1cSLUEiItldrNVaSujWsjQ7QrduG9RtnrMvlOPhOsqHDc1sPPAgdwU
+         rS5sKEXnA1zJ8IhmG9MKTgWtypj+NcTXzlTY0R+nOTmbzBAeBAPNxfMO4P94qXCobNFX
+         Ij0gMp+fqihOt/eqdkUziInjGvp+54sYTM4EXvu5NhClKCiK5MxE/M5Qf8XRiPPt5koN
+         /X0LHeb8VDeraSYmYIVT1MXOFw2Doo7a53/0OOBX4df/IQlrkVyx51OmZRkKHQRcL77x
+         RVPKfHAw9HFqxwflqMXdUpy5/V4+5AedrTlti0LPpPf0+DpFg7dZBzZOUDYF815bxAkO
+         8jQA==
+X-Gm-Message-State: AO0yUKVzAp0YLgb02pwZJRjhyEztHmSp0mU7JHIj/r5Ww0zxJ+jU8gMv
+	rWw+Ce9Rzf7UTfLJob6zAxIYLTtFPFS6KPV0uVg=
+X-Google-Smtp-Source: AK7set/c1inzpZ7TQCOJc5TB6xx5wuHuM8dE93kXMIu+AFUmDrtZ7hC7fXOzY+3KheWl2FZsdzwQkK/TYBXPBu0hdNA=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:341e:6979:102e:c9d9])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:91cf:0:b0:521:db3f:a116 with SMTP
+ id i198-20020a8191cf000000b00521db3fa116mr0ywg.0.1675279519542; Wed, 01 Feb
+ 2023 11:25:19 -0800 (PST)
+Date: Wed,  1 Feb 2023 11:25:09 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>
-Cc: sedat.dilek@gmail.com, "Xing, Zhengjun" <zhengjun.xing@intel.com>,
- Arnaldo Carvalho de Melo <acme@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev,
- Ben Hutchings <benh@debian.org>, James Clark <james.clark@arm.com>,
- Stephane Eranian <eranian@google.com>
-References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
- <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
- <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
- <c6605d52-b9e1-e8d3-ed29-562146f64eea@arm.com>
- <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
- <CA+icZUWKFCdhQ9XN0wLN6BF5ft3WaNrtXDb9D8ckNOPG9gUf+g@mail.gmail.com>
- <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com>
- <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
- <CAP-5=fXHDuB5G+ujVCoe81H+-Y=J8ig6TZ-dGZHknskb7Z53ig@mail.gmail.com>
-From: "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP-5=fXHDuB5G+ujVCoe81H+-Y=J8ig6TZ-dGZHknskb7Z53ig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675279509; l=2134;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=6sFm896c1fl0Nm5FPB/sT4t9TM1yBeKr5pt0TQ/7JMg=;
+ b=w6Zh7GjRYNUZDcP6eQUWslQfi/JP1bRYJZhHA1IUNgOJ00ldWR8TQhiN6NeXLCxVZxG06cyUE5Fd
+ T8g8MOJ7CgazzzkKFG3wSpq7qMFnQXr9/8LXaz2eepLWvwhl6qaN
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230201192509.4124319-1-ndesaulniers@google.com>
+Subject: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta datacenters
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Yonghong Song <yhs@fb.com>, 
+	Daniel Kolesa <q66@chimera-linux.org>, Chris Mason <clm@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 
+Chimera Linux is a Linux distribution from 2021 that builds its kernels
+with Clang.
 
+Google transitioned its data center fleet to run Clang built kernels in
+2021, and Meta did so as well in 2022.  Meta talked about this at LPC
+2022 at a talk titled Kernel Live Patching at Scale.
 
-On 2023-02-01 12:02 p.m., Ian Rogers wrote:
-> On Wed, Feb 1, 2023 at 7:28 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>
->> Hi Ian,
->>
->> On 2023-01-30 10:55 p.m., Ian Rogers wrote:
->>>>> There's a question about what we should do in the perf test about
->>>>> this? I have a few solutions:
->>>>>
->>>>> 1) try metric tests again with the --metric-no-group flag and don't
->>>>> fail the test if this succeeds. This allows kernel bugs to hide, so
->>>>> I'm not a huge fan.
->>>>>
->>>>> 2) add a new metric flag/constraint to say not to group, this way the
->>>>> metric will automatically apply the "--metric-no-group" flag. It is a
->>>>> bit of work to wire this up but this kind of failure is common enough
->>>>> in PMUs that it is probably worthwhile. We also need to add the flag
->>>>> to metrics and I'm not sure how to get a good list of the metrics that
->>>>> currently fail and require it. This is okay but error prone.
->>>>>
->>>>> 3) fix the kernel bug and let the perf test fail until an adequate
->>>>> kernel is installed. Probably the best option.
->>>>>
->>>> Hi Ian,
->>>>
->>>> I can confirm:
->>>>
->>>> $ echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
->>>> /proc/sys/kernel/perf_event_paranoid
->>>> 0
->>>>
->>>> $ ~/bin/perf stat -M tma_l3_bound --metric-no-group -a sleep 1
->>>>
->>>> Performance counter stats for 'system wide':
->>>>
->>>>         2.058.892      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,5 %
->>>> tma_l3_bound             (99,30%)
->>>>       173.254.697      CYCLE_ACTIVITY.STALLS_L2_PENDING
->>>>                         (99,10%)
->>>>     2.396.130.501      CPU_CLK_UNHALTED.THREAD
->>>>                         (99,60%)
->>>>         1.110.486      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
->>>>                            (99,53%)
->>>>
->>>>       1,001989022 seconds time elapsed
->>>>
->>>> $ ~/bin/perf stat -M tma_dram_bound --metric-no-group -a sleep 1
->>>>
->>>> Performance counter stats for 'system wide':
->>>>
->>>>         1.729.208      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,2 %
->>>> tma_dram_bound           (99,50%)
->>>>        50.346.734      CYCLE_ACTIVITY.STALLS_L2_PENDING
->>>>                         (99,50%)
->>>>     2.354.963.862      CPU_CLK_UNHALTED.THREAD
->>>>                         (99,80%)
->>>>           306.500      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
->>>>                            (99,61%)
->>>>
->>>>       1,001981392 seconds time elapsed
->>>>
->>>> Thanks!
->>> Thanks, apparently it is an issue with SandyBridge/IvyBridge that some
->>> counters on one hyperthread will limit what can be on the other. I
->>> believe that's the comment related to EXCL access here:
->>> https://github.com/torvalds/linux/blob/master/arch/x86/events/intel/core.c#L124
->>> So you may have more success with the metric if you disable
->>> hyperthreading, but I imagine that's not a popular option.
->>
->> Thanks for debugging the issue. Yes, it's caused by the HT workaround
->> for SNB/IVB/HSW.
->>
->> The weak group check in the kernel is in validate_group(). It only does
->> a sanity check. It doesn't check all the workarounds and the current
->> status of counters (e.g., whether the fixed counter is occupied by NMI
->> watchdog.) It's possible that a false positive is returned to the perf
->> tool. I once tried to fix the NMI watchdog check in the kernel, but the
->> proposal was rejected. So the metric constraint is introduced.
->>
->> For this issue, I think the above option2 should be a better and
->> practical choice. The issue is only observed on old machines, which
->> usually has a stable kernel running on it. I don't think the user wants
->> to update their kernel just to workaround an issue for several metrics.
->> But it should be much easier for them to update the perf tool.
->>
->> We know that the below events are the problematic events.
->> /* MEM_UOPS_RETIRED.* */
->> /* MEM_LOAD_UOPS_RETIRED.* */
->> /* MEM_LOAD_UOPS_LLC_HIT_RETIRED.* */
->> /* MEM_LOAD_UOPS_LLC_MISS_RETIRED.* */
->> Can we update the convertor script and apply the "--metric-no-group"
->> flag or add a new constraint if the above events are detected in
->> SNB/IVB/HSW?
->>
->> Thanks,
->> Kan
-> 
-> Thanks Kan,
-> 
-> We absolutely can do that! In this case should it be --metric-no-group
-> only when SMT is enabled? I can do some patches but would like to know
-> about whether we need SMT and not SMT versions of --metric-no-group.
+These were important milestones for building the kernel with Clang.
+Making note of them helps improve confidence in the project.
 
-The kernel workaround is disabled when SMT is off. So I think we only
-need SMT version of --metric-no-group.
-https://lore.kernel.org/all/1416251225-17721-13-git-send-email-eranian@google.com/T/#u
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Cc: Daniel Kolesa <q66@chimera-linux.org>
+Cc: Chris Mason <clm@meta.com>
+---
+ Documentation/kbuild/llvm.rst | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-> Also, should we just have a list of metrics that need the flag or try
-> to automate detection? 
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index 6b2bac8e9ce0..6a37ab903e45 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -15,12 +15,15 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
+ <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
+ used as viable substitutes. Distributions such as `Android
+ <https://www.android.com/>`_, `ChromeOS
+-<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
+-<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
+-collection of toolchain components implemented in terms of C++ objects
+-<https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
+-supports C and the GNU C extensions required by the kernel, and is pronounced
+-"klang," not "see-lang."
++https://www.chromium.org/chromium-os>`_, `OpenMandriva
++<https://www.openmandriva.org/>`_, and `Chimera Linux
++<https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
++datacenter fleets also run kernels built with Clang.
++
++`LLVM is a collection of toolchain components implemented in terms of C++
++objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
++that supports C and the GNU C extensions required by the kernel, and is
++pronounced "klang," not "see-lang."
+ 
+ Clang
+ -----
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
-I don't think Intel will update the metrics or events for the old
-SNB/IVB/HSW platforms. Hard code a list of metrics may be simpler than
-automated detection.
-
-> Some warts in detection are the names of the
-> events that vary between Ivybridge and Sandybridge, and how to
-> determine which events conflict. For example, the perfmon event data:
-> 
-> MEM_LOAD_UOPS_RETIRED.LLC_HIT
-> https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L5368
-> MEM_LOAD_UOPS_RETIRED.LLC_MISS
-> https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L5431
-> CYCLE_ACTIVITY.STALLS_L2_PENDING
-> https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L3541
->
-
-The problematic events should have the same name among platforms. If the
-event name doesn't work, the event encoding is exactly the same among
-those platforms.
-
-
-> The events list all counters, there are no errata fields.. Should the
-> event data be updated and then in the converter script handle that? If
-> I get shown an example I can modify the script accordingly.
-
-If it can helps the converter script, I think we can update the errata
-field.
-
-Here are the errata information.
- * SNB: BJ122
- * IVB: BV98
- * HSW: HSD29
-
-Here is the details regarding the issue. (Please search BV98)
-https://www.intel.com/content/www/us/en/content-details/619604/desktop-3rd-generation-intel-core-processor-family-specification-update.html
-> 
-> It is also hard for me to test anything other than SMT on Ivybridge.
-> 
-
-I think it's OK to only test on Ivybridge.
-The original kernel patch indicates the issue is the same among SNB, IVB
-and HSW.
-https://lore.kernel.org/all/1416251225-17721-7-git-send-email-eranian@google.com/T/#u
-
-Thanks,
-Kan
