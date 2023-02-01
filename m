@@ -1,82 +1,152 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9107A21
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 07:54:31 +0000 (UTC)
-Received: by mail-lf1-f49.google.com with SMTP id cf42so28027542lfb.1
-        for <llvm@lists.linux.dev>; Tue, 31 Jan 2023 23:54:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775F080F
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 08:11:54 +0000 (UTC)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-5063029246dso235595697b3.6
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 00:11:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0diAaeCGuTZlOnZxWXSitLoB/1kBFfQP3ozqLMthdrY=;
-        b=lF1UqyudEA09FkqGGF5NmMuHvah8KKfPO3eWxAubAvEp7iQ9LhiLV+T8p4K8BfqCkI
-         o5XDl4XUegL87wDptfNUHusoDNEWwR3kFLY8uWxHBNe6XtsuzkcfE7wHub8jBpu78zJ3
-         8u1P4xOeiohBEfpUULqu61VPZz9Xew9ZVJI6Yz75XRZe614dAnDNrWbqS7E5xSrbl2U7
-         96TkvetBtlpEr4RcP2JS1DfMs9a6a2wTTGBG1810gECpndWZgdeP3309sd66sbxpUGhw
-         AE378mpGhvx2hHZVLhvgMzMtgL07iSV3ITOMMuFfTEgj1ZCx285Z7z0BsGCManr5FYdf
-         DJBg==
+        bh=At9QD5kQjTIN7A9/f4GSWoe10ugai8T63OJMf7OTkzc=;
+        b=KQsIgzHYJD6gFfJcAx1ztrsmZ4fgArEtf11xPKhBZKcaDERprO8I5tBF9CgSoGm7AI
+         9GKM97KU/Asl6pE9xu4I2DVRjU3HusXAL6nKTZc+NWQ3OX/VCFaKNFOluPLrR4YeIfmJ
+         zdnIKmyVSi4cC2PTFiJT+96LUsA9DrAVdvjxMGOuIA0sR76xvtbatRijeITVpWKC5rno
+         KF+r5jppu8Re7XigLmEJHnF/x9O9aGiMNgt1VHbU+n+RTcuAK4GUdTGDkDSv3zRUJj5Y
+         Evc1zhj3yFzv/e03hSz2f7mLZf8nleLwSJhxT6JOVWWfgqv1azVAXJquWGoRehSE+ajo
+         t2Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0diAaeCGuTZlOnZxWXSitLoB/1kBFfQP3ozqLMthdrY=;
-        b=UFnrzm+5EM5QzwcpT25DSQDJNRU/BxCZA4/hIP9NUsf9OaV4G2lOsP+sR5tHwQMszn
-         n7T7bN69q/umksTxzVpUfW0b10PSmdvLqTuAhUzwOLDxFklSgUPL/vFOvqSdD0oJFOwr
-         lzo3nL4/6HIBv4dfXll9YlIwJvr5/JXVZdogGYO2M6KfptY4Tu6GvM12meA0pevWSIC8
-         7k+Tu63OWwruoedx3B0BTKqyDQxDnjF4toV27lAVH55AObk1XLfMaW4gOigufMAxGRpz
-         2US7XTRrCwNNEWjmXFE2gRF/qngHz3IhHkAAGVq2i8UU7lio3nk57Ru4v/cav9ZVg+jW
-         SApg==
-X-Gm-Message-State: AO0yUKXKSeEyEN7yOZhhCEPRp1eKZstmEKouWVqd7Yvq8k8cNd2AevwU
-	kYEFahpMEanVA/vmcQ3F3QNLAFA9udXkwCAiOdRYqw==
-X-Google-Smtp-Source: AK7set/pcUtZ6NpoWDLM7Q0eQN46Pgx8dTWbO5ck5QVBIuUe66c4GmhgfonlDo7ZR0OVUA9vhbz0YNjfIAEBW1Cds4k=
-X-Received: by 2002:a05:6512:b01:b0:4cc:8686:8c87 with SMTP id
- w1-20020a0565120b0100b004cc86868c87mr152383lfu.188.1675238069550; Tue, 31 Jan
- 2023 23:54:29 -0800 (PST)
+        bh=At9QD5kQjTIN7A9/f4GSWoe10ugai8T63OJMf7OTkzc=;
+        b=Hdsv5WcjBJykDvedfbZq1uZhDRyZRwZ7R4qimmXjUMweHYyG4NEuE96Gve6ArrZS2B
+         n2pghpi993ZlnBt7D5dzWfw7LHlfN2zePy+XuKEvw9Av7JKNAD0FaTdfrgf3F4cK+vWk
+         oUCe6xbZIJZNrXmHfEHJ9HRP6F2wVf8FJZaugxFprzJ2fISRTrOfxKnwKdPGgg7gKc82
+         C3zjkK/8UsueeIHz9MzdE3k8tAuFuXEdYOnDcO7L6vY99qz9EPDmQA6BwGhcbkzVo0PU
+         xjydyAEMT8M2mK18kGwdpA0QOuimzBSlUx4+JrLj8tuKKQuE4pos0GBUE+QInFK9Mbjc
+         +wLg==
+X-Gm-Message-State: AO0yUKW2N5zqhdq7WvenPR07+Ju/ap54kj4IFXSWgNrkOLWqfe8oGT9q
+	5qvGBE2yrbNNLqPReJe2TxWZQU/XC91TPBZ7VcYK
+X-Google-Smtp-Source: AK7set/UJ1BPXYvvYXtGMUfSxN51Xg9/xMArbwz1k1EfPttM2o2rxAApsWohbp+P1UaJU6RJPmiF9RFP/icUNo8AxJc=
+X-Received: by 2002:a05:690c:b8d:b0:4ff:6a1e:49cc with SMTP id
+ ck13-20020a05690c0b8d00b004ff6a1e49ccmr161270ywb.464.1675239113306; Wed, 01
+ Feb 2023 00:11:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <0000000000008be6b405f01164f8@google.com> <0000000000005eca3205f391aade@google.com>
-In-Reply-To: <0000000000005eca3205f391aade@google.com>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Wed, 1 Feb 2023 08:54:16 +0100
-Message-ID: <CACT4Y+Ym4=mzMO6XNB0fYQJMo_QvUpYwkC1K7cmwr_XwKSdwzA@mail.gmail.com>
-Subject: Re: [syzbot] [ntfs3?] KASAN: out-of-bounds Read in ntfs_set_ea
-To: syzbot <syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com>
-Cc: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
+ <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+In-Reply-To: <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+From: John Stultz <jstultz@google.com>
+Date: Wed, 1 Feb 2023 00:11:41 -0800
+Message-ID: <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
+To: Yongqin Liu <yongqin.liu@linaro.org>
+Cc: Kees Cook <keescook@chromium.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rasmus Villemoes <rasmus.villemoes@prevas.dk>, 
+	Thomas Gleixner <tglx@linutronix.de>, Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>, 
+	Michael Kelley <mikelley@microsoft.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Won Chung <wonchung@google.com>, David Gow <davidgow@google.com>, 
+	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Andy Shevchenko <andriy.shevchenko@intel.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Sumit Semwal <sumit.semwal@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 31 Jan 2023 at 17:17, syzbot
-<syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com> wrote:
+On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
 >
-> syzbot suspects this issue was fixed by commit:
+> Hi, Kees
 >
-> commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
-> Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-> Date:   Mon Oct 10 10:15:33 2022 +0000
+> This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
+> for the android-mainline based hikey960 build, with this commit reverted,
+> there is no problem for the build to boot to the homescreen.
+> Not sure if you have any idea about it and give some suggestions.
 >
->     fs/ntfs3: Check fields while reading
+> Here is part of the kernel panic log:
 >
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11d9c385480000
-> start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8778f030156c6cd16d72
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136b8f57880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175ca3a3880000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: fs/ntfs3: Check fields while reading
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>     [    9.479878][  T122] ueventd: Loading module
+> /vendor/lib/modules/spi-pl022.ko with args ''
+>     [    9.480276][  T115] apexd-bootstrap: Pre-allocated loop device 29
+>     [    9.480517][  T123] ueventd: LoadWithAliases was unable to load
+> of:Nhi3660_i2sT(null)Chisilicon,hi3660-i2s-1.0
+>     [    9.480632][  T121] Unexpected kernel BRK exception at EL1
+>     [    9.480637][  T121] Internal error: BRK handler:
+> 00000000f2000001 [#1] PREEMPT SMP
+>     [    9.480644][  T121] Modules linked in: cpufreq_dt(E+)
+> hisi_thermal(E+) phy_hi3660_usb3(E) btqca(E) hi6421_pmic_core(E)
+> btbcm(E) spi_pl022(E) hi3660_mailbox(E) i2c_designware_platform(E)
+> mali_kbase(OE) dw_mmc_k3(E) bluetooth(E) dw_mmc_pltfm(E) dw_mmc(E)
+> kirin_drm(E) rfkill(E) kirin_dsi(E) i2c_designware_core(E) k3dma(E)
+> drm_dma_helper(E) cma_heap(E) system_heap(E)
+>     [    9.480688][  T121] CPU: 4 PID: 121 Comm: ueventd Tainted: G
+>        OE      6.2.0-rc6-mainline-14196-g1d9f94ec75b9 #1
+>     [    9.480694][  T121] Hardware name: HiKey960 (DT)
+>     [    9.480697][  T121] pstate: 20400005 (nzCv daif +PAN -UAO -TCO
+> -DIT -SSBS BTYPE=--)
+>     [    9.480703][  T121] pc : hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+>     [    9.480722][  T121] lr : hi3660_thermal_probe+0x38/0x74 [hisi_thermal]
+>     [    9.480733][  T121] sp : ffffffc00aa13700
+>     [    9.480735][  T121] x29: ffffffc00aa13700 x28: 0000007ff8ae8531
+> x27: 00000000000008c0
+>     [    9.480743][  T121] x26: ffffffc00aa2a300 x25: ffffffc00aa2ab40
+> x24: 000000000000001d
+>     [    9.480749][  T121] x23: ffffffc00a29d000 x22: 0000000000000000
+> x21: ffffff8001fa4a80
+>     [    9.480755][  T121] x20: 0000000000000001 x19: ffffff8001fa4a80
+> x18: ffffffc00a8810b0
+>     [    9.480761][  T121] x17: 000000007ab542f2 x16: 000000007ab542f2
+> x15: ffffffc00aa01000
+>     [    9.480767][  T121] x14: ffffffc00966f250 x13: ffffffc0b58f9000
+> x12: ffffffc00a055f10
+>     [    9.480771][  T123] ueventd: LoadWithAliases was unable to load
+> cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
+>     [    9.480773][  T121]
+>     [    9.480774][  T121] x11: 0000000000000000 x10: 0000000000000001
+> x9 : 0000000100000000
+>     [    9.480780][  T123] ueventd:
+>     [    9.480780][  T121] x8 : ffffffc0044154cb x7 : 0000000000000000
+> x6 : 000000000000003f
+>     [    9.480786][  T121] x5 : 0000000000000020 x4 : ffffffc0098db323
+> x3 : ffffff801aeb62c0
+>     [    9.480792][  T121] x2 : ffffff801aeb62c0 x1 : 0000000000000000
+> x0 : ffffff8001fa4c80
+>     [    9.480798][  T121] Call trace:
+>     [    9.480801][  T121]  hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+>     [    9.480813][  T121]  hisi_thermal_probe+0xbc/0x284 [hisi_thermal]
 
-Looks reasonable, let's close the bug report:
 
-#syz fix: fs/ntfs3: Check fields while reading
+Taking a look here, it looks pretty obvious:
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/hisi_thermal.c#n414
+
+data->nr_sensors = 1;
+data->sensor = devm_kzalloc(dev, sizeof(*data->sensor) *
+   data->nr_sensors, GFP_KERNEL);
+
+Here as nr_sensors=1, we allocate only one structure for the array.
+But then below that, we modify two entries, writing past the valid
+array, and corrupting data when writing the second sensor values.
+
+data->sensor[0].id = HI3660_BIG_SENSOR;
+data->sensor[0].irq_name = "tsensor_a73";
+data->sensor[0].data = data;
+
+data->sensor[1].id = HI3660_LITTLE_SENSOR;
+data->sensor[1].irq_name = "tsensor_a53";
+data->sensor[1].data = data;
+
+I suspect nr_sensors needs to be set to 2.
+
+Nice work, Kees!
+
+thanks
+-john
