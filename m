@@ -1,105 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7522F2B;
-	Wed,  1 Feb 2023 16:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092EBC433EF;
-	Wed,  1 Feb 2023 16:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675269654;
-	bh=KSq1dYBd01CzJMTzCKqs3/YS7g3At35mPs1z5Nkv6oc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=pLn5/92olQ9nSSmkCMuwj0xDGN1IQyrCHURuiCr6Yvz7DZZ1xzj0xwncGpVapYgKQ
-	 x4UvvH4nl69IDx71CiE4rchBSe1rgHO7f9apalpCeBREUYDCz5ElsKhCTxmdqgeWZb
-	 HW3kqmUR7ema+E5KwMX9p8Qw1Wt9kTg+3tJ54GAdsVBSliJTPlexPoHFX6Pqs9vHNt
-	 FuWxniMl4FOnxoOb63OEjHbv+Hy4djOvVAgfbC4PE9ZSstEA/uplUO9Uw69qKeOtjv
-	 eD10TIBYkwn0+/8XsYM8lWlorSD3E6DFhdMAVsb1GF5LWCWnkOCnMzd0JPjaGuvswv
-	 cEBdt5pe/n7VA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 01 Feb 2023 09:40:22 -0700
-Subject: [PATCH] f2fs: Fix type of single bit bitfield in f2fs_io_info
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B75D8483
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 17:02:57 +0000 (UTC)
+Received: by mail-wr1-f44.google.com with SMTP id y1so17971195wru.2
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 09:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UP/37JG8zTxRTjZFT60IaD92D0Iz+nNCYIC99KAy+Wk=;
+        b=KuQvGIxIQyO8T8+GBf3DMps+ketXsQdhCCg7Sy0kcPD4hN+zcf3QYuP9AtTWFuqjZD
+         o2UT354rORRsdY6c3wBdmQyZ0zSqJ8HFi/2tG3cMADNFbyPwmYjwq/SiRGCN/H08WJkQ
+         K0Iq4m6LaZKhMpX9uRNI5/cu6k2Ai+kNRzskAVO95DwgVSJItyRivEcZRlXeuxwHJmib
+         3BhgxeV1xUEk6Rd++XkzInXvKWJmkipi53CUuT48MJQvdZBiMcBFBGw4DvQ5POMRbMmw
+         QOQbuFQfsKWPu7kpLbZtbW9xF4EIIl+nZNyw28BhIzZYWjLeI1bVhA3pm0KMj74K12Cf
+         O5AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UP/37JG8zTxRTjZFT60IaD92D0Iz+nNCYIC99KAy+Wk=;
+        b=7hEiXfeQssYbeXNdkMe8/LP9U/ZMqxviJWhg/3NXUR9XeZtWvI6IUWZUgmDDRydpnW
+         De+GQa7kzYh4MLqB7+PDnKOPsOC67IXyvI/KadNLPpT+8E6jCFaGRXUMpFIbvVd9Po7u
+         X2+N0USV3+lXIis9UPXf7UVCA60JnfsJMXJfxJT5h84rNxMCXCFZmI0Q7A/p7zWETL22
+         h/BIiT9HsW3qEGIDhGE0Y48Ft3hvPM1uvEOYhJ+XW/hXGv/BHM1i2lzNp9qMZZRslYis
+         a/b/LI9NSZ35wz1kzeOtkz3QO2Hg7Tp/bqgAhR9NFN+1SlVdpkb+HqqcDd6+pxHeXc3+
+         4grQ==
+X-Gm-Message-State: AO0yUKUp5BkvSNuxwVYL+KuoZOrIOB7s97H1y3xjw0WKt7Riv0Ywholh
+	0veDrZpi9aALkiVNL8rTFhFoflp+MVCTN7hZAagfvw==
+X-Google-Smtp-Source: AK7set+vjE7Aq/wG/dnp7pst6PBIgibIMcGPmch/eqrNmwJvM/QcAKsH7X/onv7xaAZG3AN9E4fLxR6130MpZk0O1gI=
+X-Received: by 2002:a5d:4bce:0:b0:2bd:deb8:353e with SMTP id
+ l14-20020a5d4bce000000b002bddeb8353emr157231wrt.267.1675270975596; Wed, 01
+ Feb 2023 09:02:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230201-f2fs-fix-single-length-bitfields-v1-1-e386f7916b94@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPWV2mMC/x3NywoCMQyF4VcZsjbQqQuLryIueknbQK2SFBkY5
- t3tuPw58J0dlIRJ4b7sIPRl5XefsV4WiNX3QshpNlhjr8aaFbPNipk3VO6lETbqZVQMPDJTS4o
- puxhvjpwzHiYTvBIG8T3WE3p5HSTn8BGazv/78TyOHxPv+SWLAAAA
-To: jaegeuk@kernel.org, chao@kernel.org
-Cc: ndesaulniers@google.com, trix@redhat.com, 
- linux-f2fs-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2740; i=nathan@kernel.org;
- h=from:subject:message-id; bh=KSq1dYBd01CzJMTzCKqs3/YS7g3At35mPs1z5Nkv6oc=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMm3ponK+HZaB8susOx5+HD3Be2z2eVxq2sn7JBWWu25+
- rurt5dkRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI9mWMDPfVpHOfPMr9qxNd
- +XXlDeYXhpfDFJcrCvdG5SS3y3AxcjH8Zu25G351up/Ea2X55u0n3/jZu72XDg3IWCFu69pUIRL
- ADgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+ <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+ <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
+ <c6605d52-b9e1-e8d3-ed29-562146f64eea@arm.com> <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
+ <CA+icZUWKFCdhQ9XN0wLN6BF5ft3WaNrtXDb9D8ckNOPG9gUf+g@mail.gmail.com>
+ <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com> <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
+In-Reply-To: <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 1 Feb 2023 09:02:43 -0800
+Message-ID: <CAP-5=fXHDuB5G+ujVCoe81H+-Y=J8ig6TZ-dGZHknskb7Z53ig@mail.gmail.com>
+Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+To: "Liang, Kan" <kan.liang@linux.intel.com>
+Cc: sedat.dilek@gmail.com, "Xing, Zhengjun" <zhengjun.xing@intel.com>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev, 
+	Ben Hutchings <benh@debian.org>, James Clark <james.clark@arm.com>, 
+	Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Clang warns:
+On Wed, Feb 1, 2023 at 7:28 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>
+> Hi Ian,
+>
+> On 2023-01-30 10:55 p.m., Ian Rogers wrote:
+> >>> There's a question about what we should do in the perf test about
+> >>> this? I have a few solutions:
+> >>>
+> >>> 1) try metric tests again with the --metric-no-group flag and don't
+> >>> fail the test if this succeeds. This allows kernel bugs to hide, so
+> >>> I'm not a huge fan.
+> >>>
+> >>> 2) add a new metric flag/constraint to say not to group, this way the
+> >>> metric will automatically apply the "--metric-no-group" flag. It is a
+> >>> bit of work to wire this up but this kind of failure is common enough
+> >>> in PMUs that it is probably worthwhile. We also need to add the flag
+> >>> to metrics and I'm not sure how to get a good list of the metrics that
+> >>> currently fail and require it. This is okay but error prone.
+> >>>
+> >>> 3) fix the kernel bug and let the perf test fail until an adequate
+> >>> kernel is installed. Probably the best option.
+> >>>
+> >> Hi Ian,
+> >>
+> >> I can confirm:
+> >>
+> >> $ echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> >> /proc/sys/kernel/perf_event_paranoid
+> >> 0
+> >>
+> >> $ ~/bin/perf stat -M tma_l3_bound --metric-no-group -a sleep 1
+> >>
+> >> Performance counter stats for 'system wide':
+> >>
+> >>         2.058.892      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,5 %
+> >> tma_l3_bound             (99,30%)
+> >>       173.254.697      CYCLE_ACTIVITY.STALLS_L2_PENDING
+> >>                         (99,10%)
+> >>     2.396.130.501      CPU_CLK_UNHALTED.THREAD
+> >>                         (99,60%)
+> >>         1.110.486      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+> >>                            (99,53%)
+> >>
+> >>       1,001989022 seconds time elapsed
+> >>
+> >> $ ~/bin/perf stat -M tma_dram_bound --metric-no-group -a sleep 1
+> >>
+> >> Performance counter stats for 'system wide':
+> >>
+> >>         1.729.208      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,2 %
+> >> tma_dram_bound           (99,50%)
+> >>        50.346.734      CYCLE_ACTIVITY.STALLS_L2_PENDING
+> >>                         (99,50%)
+> >>     2.354.963.862      CPU_CLK_UNHALTED.THREAD
+> >>                         (99,80%)
+> >>           306.500      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+> >>                            (99,61%)
+> >>
+> >>       1,001981392 seconds time elapsed
+> >>
+> >> Thanks!
+> > Thanks, apparently it is an issue with SandyBridge/IvyBridge that some
+> > counters on one hyperthread will limit what can be on the other. I
+> > believe that's the comment related to EXCL access here:
+> > https://github.com/torvalds/linux/blob/master/arch/x86/events/intel/core.c#L124
+> > So you may have more success with the metric if you disable
+> > hyperthreading, but I imagine that's not a popular option.
+>
+> Thanks for debugging the issue. Yes, it's caused by the HT workaround
+> for SNB/IVB/HSW.
+>
+> The weak group check in the kernel is in validate_group(). It only does
+> a sanity check. It doesn't check all the workarounds and the current
+> status of counters (e.g., whether the fixed counter is occupied by NMI
+> watchdog.) It's possible that a false positive is returned to the perf
+> tool. I once tried to fix the NMI watchdog check in the kernel, but the
+> proposal was rejected. So the metric constraint is introduced.
+>
+> For this issue, I think the above option2 should be a better and
+> practical choice. The issue is only observed on old machines, which
+> usually has a stable kernel running on it. I don't think the user wants
+> to update their kernel just to workaround an issue for several metrics.
+> But it should be much easier for them to update the perf tool.
+>
+> We know that the below events are the problematic events.
+> /* MEM_UOPS_RETIRED.* */
+> /* MEM_LOAD_UOPS_RETIRED.* */
+> /* MEM_LOAD_UOPS_LLC_HIT_RETIRED.* */
+> /* MEM_LOAD_UOPS_LLC_MISS_RETIRED.* */
+> Can we update the convertor script and apply the "--metric-no-group"
+> flag or add a new constraint if the above events are detected in
+> SNB/IVB/HSW?
+>
+> Thanks,
+> Kan
 
-  ../fs/f2fs/data.c:995:17: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-          fio->submitted = 1;
-                         ^ ~
-  ../fs/f2fs/data.c:1011:15: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                          fio->retry = 1;
-                                     ^ ~
+Thanks Kan,
 
-  ../fs/f2fs/segment.c:3320:16: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  fio->in_list = 1;
-                               ^ ~
+We absolutely can do that! In this case should it be --metric-no-group
+only when SMT is enabled? I can do some patches but would like to know
+about whether we need SMT and not SMT versions of --metric-no-group.
+Also, should we just have a list of metrics that need the flag or try
+to automate detection? Some warts in detection are the names of the
+events that vary between Ivybridge and Sandybridge, and how to
+determine which events conflict. For example, the perfmon event data:
 
-There is not a bug here because the value of these fields is never
-explicitly compared against (just whether it is zero or non-zero) but
-it is easy to silence the warning by using an unsigned type to allow
-an assignment of 0 or 1 without implicit conversion.
+MEM_LOAD_UOPS_RETIRED.LLC_HIT
+https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L5368
+MEM_LOAD_UOPS_RETIRED.LLC_MISS
+https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L5431
+CYCLE_ACTIVITY.STALLS_L2_PENDING
+https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L3541
 
-Fixes: 998863dadd2c ("f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1796
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- fs/f2fs/f2fs.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+The events list all counters, there are no errata fields.. Should the
+event data be updated and then in the converter script handle that? If
+I get shown an example I can modify the script accordingly.
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 08dc64c5050e..89f6fdfeed19 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1213,12 +1213,12 @@ struct f2fs_io_info {
- 	int compr_blocks;	/* # of compressed block addresses */
- 	int need_lock:8;	/* indicate we need to lock cp_rwsem */
- 	int version:8;		/* version of the node */
--	int submitted:1;	/* indicate IO submission */
--	int in_list:1;		/* indicate fio is in io_list */
--	int is_por:1;		/* indicate IO is from recovery or not */
--	int retry:1;		/* need to reallocate block address */
--	int encrypted:1;	/* indicate file is encrypted */
--	int post_read:1;	/* require post read */
-+	unsigned int submitted:1;	/* indicate IO submission */
-+	unsigned int in_list:1;		/* indicate fio is in io_list */
-+	unsigned int is_por:1;		/* indicate IO is from recovery or not */
-+	unsigned int retry:1;		/* need to reallocate block address */
-+	unsigned int encrypted:1;	/* indicate file is encrypted */
-+	unsigned int post_read:1;	/* require post read */
- 	enum iostat_type io_type;	/* io type */
- 	struct writeback_control *io_wbc; /* writeback control */
- 	struct bio **bio;		/* bio for ipu */
+It is also hard for me to test anything other than SMT on Ivybridge.
 
----
-base-commit: de6b3a5e09b29c014bd04044b023896107cfa2ee
-change-id: 20230201-f2fs-fix-single-length-bitfields-df8cc78e880a
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Thanks,
+Ian
