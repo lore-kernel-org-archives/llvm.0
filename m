@@ -1,50 +1,57 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773C63201
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 23:14:39 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso4635787pju.0
-        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 15:14:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71703201
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 23:19:37 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id g9so11647080pfk.13
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 15:19:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFIM4C5atXHVLvz2rYvQqRO5oe5CXRLVhG4Y2WIPWCM=;
-        b=RjcmLjC6j4HJmsqqUj3IYFr3gTER/0CfLHzkonLsmQK4mha5W73Ww6XyvbdwrddbB4
-         0LM+zzapKvXidMwOGQyON8IYej0+/VwtcDf1t2JgjGiyrVSBVxTyHZF0iWI0K9Sd8XY7
-         JAT9cTSw2zkl/kjrEs5X3pi0sdx9UrfBP656Ari83qUMZb1TQZHK/UNAZ3a11exUpl4T
-         deGYYilJ87FlhKHPRYqE8d30GWNP0Z4oX7jh82JnA0Q39No64VrL8LKIbgkJrVDWayFV
-         Jo9jg3Gc7SjEzV29RJ56Sqewrz4R9JEFrPdpgDNKihDEsNYtyvojBg8tPHH686h8a5yp
-         sIcg==
+        bh=UfvfdYoklJloAro8ZE+SRmZ2YsAYATSVu+Qj+tuYXzs=;
+        b=ndoZUIiiXWibJX2FI3qUcRHP9YcXJd3NDudb2WUoXWuvbltA3Ox2R7fcgJIg2rgSWB
+         C4HtH9soZJG4frvEWKXm61nj0xe8Qrz7qBMV9k/DZsQb4go6lyojJhqNYiPj211zca5o
+         BMKNteONR293rcXzYN5HKQPV58Ke4WUud+StdtLyuKqeriV9ZSQQPfCX/3zQKt76Mp6o
+         hvcu5ZrnVpstxJ/h0Ns3wrXJcBP3LKy4EbBYEqWYk1miTpLjyVOXq2fh+XD8Bl58+34U
+         GJ24GI8dk26Dm/DUphHrG3VIDsfVw5u812C/8X/BBX4WD7gtLVFJB8SOYLcF335lMBPc
+         J6rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qFIM4C5atXHVLvz2rYvQqRO5oe5CXRLVhG4Y2WIPWCM=;
-        b=hfPvbl+6cJ5wTuwpHOeofoTpBU20wVcTFwDjzI9vdzyG1fzgOAZoXOIR4toG5/Zsui
-         tZjnco4FwpgaYMHQlHwAuJ7Koi7x1H5ZH1U459TqGEk1I2LZX6P/r6C2r0NDyO0PIOMT
-         OQeRU2TUlqo4sibv/xLhQWzaZUU93+9YfP6gtHj0W/3y9lv0ezi0aUoVl7ZCGnpE+9u+
-         glEeY3NdEjYUgk/TF8lNcanFGq1tKPwihYPwhClHs+ExBCTUKvDSq6sukCLEqF7y5Wd7
-         iFsJcM7u2CdYYchheRR4mA5Waqj53SDCbxTHlWQW3Ki3DUXIH4BBFLI7mUTSViIiRQXQ
-         c27w==
-X-Gm-Message-State: AO0yUKVDpKgAtxW/kFLmmonzywK0k6mcIW5lq8wCnZODcCBD9X7VRWbu
-	Imq23Vgm5WqZrKcBCJFdPulVQQ==
-X-Google-Smtp-Source: AK7set8zbrNyAs2bnFB+ImWFnRtySQ0uM3iN4+USnPB9165NQN26ofVDH8bHcqrwTbOU4R3vjWaFUQ==
-X-Received: by 2002:a05:6a21:6d95:b0:bc:8c5e:ed0d with SMTP id wl21-20020a056a216d9500b000bc8c5eed0dmr5900717pzb.40.1675293278613;
-        Wed, 01 Feb 2023 15:14:38 -0800 (PST)
+        bh=UfvfdYoklJloAro8ZE+SRmZ2YsAYATSVu+Qj+tuYXzs=;
+        b=Qy1acQjP7vqRIe5EDLnG9glo96Q0U4v7Y37RldIRLNlmRC+jm0E5L6WImli5Oj27R2
+         j1cQci/O3+IR52VAboikf35lhIANuvntgXkKA6M30XuTQzBTq7cwB6JElXsH3jU0vkBK
+         J24XdXDqm38svHkESsQZAzuK7r+YehbX+uFsKaf2LcDpL6yip4osbNYWOD6REjoD2lk9
+         vDG7GUsXjiwaNzrMkR9ffHyFYPwjCBGFTNaKAK+4tmTfKghDDrpKp3vVliWK5vIsmx+Z
+         FdRV1X8rx7KO7uSMoY0OrLZkuTbXL3YoKJPf0OdaeLNvEWsmNgJCHsu6NQIXa+yUUedO
+         +cvw==
+X-Gm-Message-State: AO0yUKWp4Zkt8LGs/28/aZUKDU4IcS76eBW7uU73HUWLZXeofWejMcOA
+	y3+CfJlUrrGsY9151ZBkVJBH5Q==
+X-Google-Smtp-Source: AK7set9inbJv/M/vfdju8z207Qoxp12XibCyhHzDRAcGnrVUKe0FvFj3EQzothiblU4uGo1rVlTICQ==
+X-Received: by 2002:a62:b41a:0:b0:593:d7fd:aaf7 with SMTP id h26-20020a62b41a000000b00593d7fdaaf7mr413693pfn.16.1675293576923;
+        Wed, 01 Feb 2023 15:19:36 -0800 (PST)
 Received: from google.com ([2620:15c:2d1:203:341e:6979:102e:c9d9])
-        by smtp.gmail.com with ESMTPSA id o16-20020a656150000000b004db367c10b0sm11066399pgv.46.2023.02.01.15.14.37
+        by smtp.gmail.com with ESMTPSA id t26-20020aa7947a000000b0058bbe1240easm349789pfq.190.2023.02.01.15.19.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 15:14:38 -0800 (PST)
-Date: Wed, 1 Feb 2023 15:14:33 -0800
+        Wed, 01 Feb 2023 15:19:36 -0800 (PST)
+Date: Wed, 1 Feb 2023 15:19:31 -0800
 From: Nick Desaulniers <ndesaulniers@google.com>
-To: Tom Rix <trix@redhat.com>
-Cc: jack@suse.com, nathan@kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] udf: remove reporting loc in debug output
-Message-ID: <Y9ryWROdCrKYWBzY@google.com>
-References: <20230127162906.872395-1-trix@redhat.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	Mikko Perttunen <mperttunen@nvidia.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Robin Murphy <robin.murphy@arm.com>,
+	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
+Message-ID: <Y9rzg9Mizckjf+Fp@google.com>
+References: <20230127221418.2522612-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,48 +60,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127162906.872395-1-trix@redhat.com>
+In-Reply-To: <20230127221418.2522612-1-arnd@kernel.org>
 
-On Fri, Jan 27, 2023 at 08:29:06AM -0800, Tom Rix wrote:
-> clang build fails with
-> fs/udf/partition.c:86:28: error: variable 'loc' is uninitialized when used here [-Werror,-Wuninitialized]
->                           sb, block, partition, loc, index);
->                                                 ^~~
+On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> loc is now only know when bh is valid.  So remove reporting loc in debug output.
-
-typo: s/know/known/
-
+> The error handling for platform_get_irq() failing no longer
+> works after a recent change, clang now points this out with
+> a warning:
 > 
-> Fixes: 4215db46d538 ("udf: Use udf_bread() in udf_get_pblock_virt15()")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+>         if (syncpt_irq < 0)
+>             ^~~~~~~~~~
+> 
+> Fix this by removing the variable and checking the correct
+> error status.
+> 
+> Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks Tom, kernelci has also been reporting this.
-https://lore.kernel.org/linux-next/?q=error%3A+variable+%27loc%27+is+uninitialized+when+used+here
+Thanks Arnd, I saw some reports from kernelci about this, too.
+https://lore.kernel.org/linux-next/?q=warning%3A+variable+%27syncpt_irq%27+is+uninitialized+when+used+here
 
 Reported-by: "kernelci.org bot" <bot@kernelci.org>
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
->  fs/udf/partition.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/host1x/dev.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/fs/udf/partition.c b/fs/udf/partition.c
-> index 92765d2f6958..5bcfe78d5cab 100644
-> --- a/fs/udf/partition.c
-> +++ b/fs/udf/partition.c
-> @@ -82,8 +82,8 @@ uint32_t udf_get_pblock_virt15(struct super_block *sb, uint32_t block,
+> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+> index 4872d183d860..aae2efeef503 100644
+> --- a/drivers/gpu/host1x/dev.c
+> +++ b/drivers/gpu/host1x/dev.c
+> @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
+>  static int host1x_probe(struct platform_device *pdev)
+>  {
+>  	struct host1x *host;
+> -	int syncpt_irq;
+>  	int err;
 >  
->  	bh = udf_bread(sbi->s_vat_inode, newblock, 0, &err);
->  	if (!bh) {
-> -		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u) VAT: %u[%u]\n",
-> -			  sb, block, partition, loc, index);
-> +		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u)\n",
-> +			  sb, block, partition);
->  		return 0xFFFFFFFF;
+>  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+> @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
 >  	}
 >  
+>  	host->syncpt_irq = platform_get_irq(pdev, 0);
+> -	if (syncpt_irq < 0)
+> -		return syncpt_irq;
+> +	if (host->syncpt_irq < 0)
+> +		return host->syncpt_irq;
+>  
+>  	mutex_init(&host->devices_lock);
+>  	INIT_LIST_HEAD(&host->devices);
 > -- 
-> 2.26.3
+> 2.39.0
 > 
 > 
