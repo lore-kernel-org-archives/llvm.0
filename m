@@ -1,181 +1,304 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0091A63B3
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 16:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675267899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tdxoHv/rEnxTmGX3jhzsk5c9hWpgXzbCFmxZsB2oCEY=;
-	b=JXkA4xHDWdkpE1LdgDCCtCd3/JJgDf2YBfkvXCaWcay4b6o+0t2ru0sxp48PRBmvQnDJ8Q
-	drcs8itv7Tc4kO1hUUZfbYUjJbzQF/wkAL8fynQXzjORa9/Ed9yIk6/5f3w4ZakAU/F75F
-	x/81iB2s9YlunO4rgAMczgxpWHRSCjk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-H9tO0kJdM1yYSUhofNskFw-1; Wed, 01 Feb 2023 11:11:37 -0500
-X-MC-Unique: H9tO0kJdM1yYSUhofNskFw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D18E63B3
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 16:25:26 +0000 (UTC)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78D96101A521
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 16:11:37 +0000 (UTC)
-Received: from [172.64.13.45] (unknown [10.30.33.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 62324404BEC0;
-	Wed,  1 Feb 2023 16:11:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc6, mainline.kernel.org-clang, 58706f7f)
-Date: Wed, 01 Feb 2023 16:11:37 -0000
-To: llvm@lists.linux.dev
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8B0F841AE6
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 16:25:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1675268717;
+	bh=OElsN2B6oYe7JjTL/MB6S55CTh27xT/JZrDvUvGw7EU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version;
+	b=CKJq77LSKXOmGI9W/Qoo99edlBB7VlMkHpywlwmsvbNSaj8IyNNdDzfTpKM33Siyr
+	 8H1npz3pjNU+qGHXaunaZoPaFLqVCh/PSGX0N1RnL5xlqJ3X/7/jVNqBer87Gxkb8h
+	 SvDH8DxYeliawX5Xf7810OYQMfkOrH6dfTUZB5pCzx6X1kzgk7CT/uXEmT1ZfHnd0W
+	 b3ZqVcnBmHRuQWi2jqnEddNuo4nha10Hl3vUUFMbQFgzYhCu4F/bDHUwjIpurDAvtF
+	 qEAhO9+6Q5uQhQ4DNs2JHl+CnGaHnO/fDJnBCcNCppLvmr2t3/g9q+y5isBodVaIZa
+	 LOd+fUI7ksWIw==
+Received: by mail-ed1-f70.google.com with SMTP id w16-20020a056402129000b004a1f1a2e79dso11088683edv.23
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 08:25:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OElsN2B6oYe7JjTL/MB6S55CTh27xT/JZrDvUvGw7EU=;
+        b=yCFkjYXMx+7d21qKCXnCfvmg9tsDbU3xCSdaALEs3/IDV5iwx9SIlr5nLDDw/EWe9S
+         Gkx75Uo0u+8TpmuaDt7kZQUmowCxS3ryPTBrGxw9/CT2zXZnfDy8dqp7jCPdDilNeGNH
+         EceXx2ZaCcxjsDcga7SGe6G/B7aLA/qlQgUFSfRDtKLbRnd3YKHOh4oLFmgZfMqoTtuU
+         Q5FzOiNF4A9+zXuTdXDR9gXh30jMws/tpDW92jn31E+tHRhPYDOaUde57BNqZ+1+4SGC
+         RbxYqytgLtitDv1uarkma2i8fzwHX/wlrCrCWiWgkqKTEciYpx5n8kSzpujghUQVvvio
+         stqw==
+X-Gm-Message-State: AO0yUKXW6CYbBX3Slbs3zeQ4vLg1GnpbXDcx4YxBsPBPWXuxMmNyvJxc
+	zlov6nniJrCySVE6IIvk7W9wHwgSI6hMrcvzfqrwPQS5dMXxfVfAqU4s4PcdsuMlXVG1pQ796u8
+	59eSbNate45nBuoGANWrovgIZJ023FhA=
+X-Received: by 2002:aa7:d28d:0:b0:49e:cd82:cc73 with SMTP id w13-20020aa7d28d000000b0049ecd82cc73mr2677513edq.29.1675268710190;
+        Wed, 01 Feb 2023 08:25:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set87e3jGFTwZ5fDhhRd87yEPErdmmzA5DTnB2EXH4B5prJ6a+BvWsg5BinBnDcrK78zstNahYg==
+X-Received: by 2002:aa7:d28d:0:b0:49e:cd82:cc73 with SMTP id w13-20020aa7d28d000000b0049ecd82cc73mr2677490edq.29.1675268709972;
+        Wed, 01 Feb 2023 08:25:09 -0800 (PST)
+Received: from localhost.localdomain ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id n10-20020a056402514a00b0049148f6461dsm8536194edd.65.2023.02.01.08.25.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 08:25:09 -0800 (PST)
+From: Juerg Haefliger <juerg.haefliger@canonical.com>
+To: akpm@linux-foundation.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Juerg Haefliger <juerg.haefliger@canonical.com>,
+	Marco Elver <elver@google.com>,
+	Dan Li <ashimida@linux.alibaba.com>,
+	llvm@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH v3] arch/Kconfig: Fix indentation
+Date: Wed,  1 Feb 2023 17:24:35 +0100
+Message-Id: <20230201162435.218368-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220518054801.364376-1-juergh@canonical.com>
+References: <20220518054801.364376-1-juergh@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <50901.123020111113703721@us-mta-653.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+The convention for indentation seems to be a single tab. Help text is
+further indented by an additional two whitespaces. Fix the lines that
+violate these rules.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 
+---
+v3:
+  - Fix author and SOB email addresses.
+  - Don't add trailing comment to endmenu statement. Not everybody
+    likes that.
+v2:
+  Fix subject prefix: (ARM: Konfig: -> arch/Kconfig:).
+---
+ arch/Kconfig | 128 +++++++++++++++++++++++++--------------------------
+ 1 file changed, 64 insertions(+), 64 deletions(-)
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/67853
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6902810
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Regression in iSCSI login negotiation | rx_data returned -13=
-, expecting 48
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2162738
-            Affected tests:
-                 aarch64 - Storage - targetcli basic
-                 ppc64le - Storage - targetcli basic
-                   s390x - Storage - targetcli basic
-                  x86_64 - Storage - targetcli basic
-                  x86_64 (debug) - Storage - targetcli basic
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - nfsv4.2: SELinux prevents rpc.nfsd
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1498
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 12e3ddabac9d..e3511afbb7f2 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -35,7 +35,7 @@ config HOTPLUG_SMT
+ 	bool
+ 
+ config GENERIC_ENTRY
+-       bool
++	bool
+ 
+ config KPROBES
+ 	bool "Kprobes"
+@@ -55,26 +55,26 @@ config JUMP_LABEL
+ 	depends on HAVE_ARCH_JUMP_LABEL
+ 	select OBJTOOL if HAVE_JUMP_LABEL_HACK
+ 	help
+-	 This option enables a transparent branch optimization that
+-	 makes certain almost-always-true or almost-always-false branch
+-	 conditions even cheaper to execute within the kernel.
++	  This option enables a transparent branch optimization that
++	  makes certain almost-always-true or almost-always-false branch
++	  conditions even cheaper to execute within the kernel.
+ 
+-	 Certain performance-sensitive kernel code, such as trace points,
+-	 scheduler functionality, networking code and KVM have such
+-	 branches and include support for this optimization technique.
++	  Certain performance-sensitive kernel code, such as trace points,
++	  scheduler functionality, networking code and KVM have such
++	  branches and include support for this optimization technique.
+ 
+-	 If it is detected that the compiler has support for "asm goto",
+-	 the kernel will compile such branches with just a nop
+-	 instruction. When the condition flag is toggled to true, the
+-	 nop will be converted to a jump instruction to execute the
+-	 conditional block of instructions.
++	  If it is detected that the compiler has support for "asm goto",
++	  the kernel will compile such branches with just a nop
++	  instruction. When the condition flag is toggled to true, the
++	  nop will be converted to a jump instruction to execute the
++	  conditional block of instructions.
+ 
+-	 This technique lowers overhead and stress on the branch prediction
+-	 of the processor and generally makes the kernel faster. The update
+-	 of the condition is slower, but those are always very rare.
++	  This technique lowers overhead and stress on the branch prediction
++	  of the processor and generally makes the kernel faster. The update
++	  of the condition is slower, but those are always very rare.
+ 
+-	 ( On 32-bit x86, the necessary options added to the compiler
+-	   flags may increase the size of the kernel slightly. )
++	  ( On 32-bit x86, the necessary options added to the compiler
++	    flags may increase the size of the kernel slightly. )
+ 
+ config STATIC_KEYS_SELFTEST
+ 	bool "Static key selftest"
+@@ -98,9 +98,9 @@ config KPROBES_ON_FTRACE
+ 	depends on KPROBES && HAVE_KPROBES_ON_FTRACE
+ 	depends on DYNAMIC_FTRACE_WITH_REGS
+ 	help
+-	 If function tracer is enabled and the arch supports full
+-	 passing of pt_regs to function tracing, then kprobes can
+-	 optimize on top of function tracing.
++	  If function tracer is enabled and the arch supports full
++	  passing of pt_regs to function tracing, then kprobes can
++	  optimize on top of function tracing.
+ 
+ config UPROBES
+ 	def_bool n
+@@ -154,21 +154,21 @@ config HAVE_EFFICIENT_UNALIGNED_ACCESS
+ config ARCH_USE_BUILTIN_BSWAP
+ 	bool
+ 	help
+-	 Modern versions of GCC (since 4.4) have builtin functions
+-	 for handling byte-swapping. Using these, instead of the old
+-	 inline assembler that the architecture code provides in the
+-	 __arch_bswapXX() macros, allows the compiler to see what's
+-	 happening and offers more opportunity for optimisation. In
+-	 particular, the compiler will be able to combine the byteswap
+-	 with a nearby load or store and use load-and-swap or
+-	 store-and-swap instructions if the architecture has them. It
+-	 should almost *never* result in code which is worse than the
+-	 hand-coded assembler in <asm/swab.h>.  But just in case it
+-	 does, the use of the builtins is optional.
++	  Modern versions of GCC (since 4.4) have builtin functions
++	  for handling byte-swapping. Using these, instead of the old
++	  inline assembler that the architecture code provides in the
++	  __arch_bswapXX() macros, allows the compiler to see what's
++	  happening and offers more opportunity for optimisation. In
++	  particular, the compiler will be able to combine the byteswap
++	  with a nearby load or store and use load-and-swap or
++	  store-and-swap instructions if the architecture has them. It
++	  should almost *never* result in code which is worse than the
++	  hand-coded assembler in <asm/swab.h>.  But just in case it
++	  does, the use of the builtins is optional.
+ 
+-	 Any architecture with load-and-swap or store-and-swap
+-	 instructions should set this. And it shouldn't hurt to set it
+-	 on architectures that don't have such instructions.
++	  Any architecture with load-and-swap or store-and-swap
++	  instructions should set this. And it shouldn't hurt to set it
++	  on architectures that don't have such instructions.
+ 
+ config KRETPROBES
+ 	def_bool y
+@@ -720,13 +720,13 @@ config LTO_CLANG_FULL
+ 	depends on !COMPILE_TEST
+ 	select LTO_CLANG
+ 	help
+-          This option enables Clang's full Link Time Optimization (LTO), which
+-          allows the compiler to optimize the kernel globally. If you enable
+-          this option, the compiler generates LLVM bitcode instead of ELF
+-          object files, and the actual compilation from bitcode happens at
+-          the LTO link step, which may take several minutes depending on the
+-          kernel configuration. More information can be found from LLVM's
+-          documentation:
++	  This option enables Clang's full Link Time Optimization (LTO), which
++	  allows the compiler to optimize the kernel globally. If you enable
++	  this option, the compiler generates LLVM bitcode instead of ELF
++	  object files, and the actual compilation from bitcode happens at
++	  the LTO link step, which may take several minutes depending on the
++	  kernel configuration. More information can be found from LLVM's
++	  documentation:
+ 
+ 	    https://llvm.org/docs/LinkTimeOptimization.html
+ 
+@@ -1330,9 +1330,9 @@ config ARCH_HAS_CC_PLATFORM
+ 	bool
+ 
+ config HAVE_SPARSE_SYSCALL_NR
+-       bool
+-       help
+-          An architecture should select this if its syscall numbering is sparse
++	bool
++	help
++	  An architecture should select this if its syscall numbering is sparse
+ 	  to save space. For example, MIPS architecture has a syscall array with
+ 	  entries at 4000, 5000 and 6000 locations. This option turns on syscall
+ 	  related optimizations for a given architecture.
+@@ -1356,35 +1356,35 @@ config HAVE_PREEMPT_DYNAMIC_CALL
+ 	depends on HAVE_STATIC_CALL
+ 	select HAVE_PREEMPT_DYNAMIC
+ 	help
+-	   An architecture should select this if it can handle the preemption
+-	   model being selected at boot time using static calls.
++	  An architecture should select this if it can handle the preemption
++	  model being selected at boot time using static calls.
+ 
+-	   Where an architecture selects HAVE_STATIC_CALL_INLINE, any call to a
+-	   preemption function will be patched directly.
++	  Where an architecture selects HAVE_STATIC_CALL_INLINE, any call to a
++	  preemption function will be patched directly.
+ 
+-	   Where an architecture does not select HAVE_STATIC_CALL_INLINE, any
+-	   call to a preemption function will go through a trampoline, and the
+-	   trampoline will be patched.
++	  Where an architecture does not select HAVE_STATIC_CALL_INLINE, any
++	  call to a preemption function will go through a trampoline, and the
++	  trampoline will be patched.
+ 
+-	   It is strongly advised to support inline static call to avoid any
+-	   overhead.
++	  It is strongly advised to support inline static call to avoid any
++	  overhead.
+ 
+ config HAVE_PREEMPT_DYNAMIC_KEY
+ 	bool
+ 	depends on HAVE_ARCH_JUMP_LABEL
+ 	select HAVE_PREEMPT_DYNAMIC
+ 	help
+-	   An architecture should select this if it can handle the preemption
+-	   model being selected at boot time using static keys.
++	  An architecture should select this if it can handle the preemption
++	  model being selected at boot time using static keys.
+ 
+-	   Each preemption function will be given an early return based on a
+-	   static key. This should have slightly lower overhead than non-inline
+-	   static calls, as this effectively inlines each trampoline into the
+-	   start of its callee. This may avoid redundant work, and may
+-	   integrate better with CFI schemes.
++	  Each preemption function will be given an early return based on a
++	  static key. This should have slightly lower overhead than non-inline
++	  static calls, as this effectively inlines each trampoline into the
++	  start of its callee. This may avoid redundant work, and may
++	  integrate better with CFI schemes.
+ 
+-	   This will have greater overhead than using inline static calls as
+-	   the call to the preemption function cannot be entirely elided.
++	  This will have greater overhead than using inline static calls as
++	  the call to the preemption function cannot be entirely elided.
+ 
+ config ARCH_WANT_LD_ORPHAN_WARN
+ 	bool
+@@ -1407,8 +1407,8 @@ config ARCH_SUPPORTS_PAGE_TABLE_CHECK
+ config ARCH_SPLIT_ARG64
+ 	bool
+ 	help
+-	   If a 32-bit architecture requires 64-bit arguments to be split into
+-	   pairs of 32-bit arguments, select this option.
++	  If a 32-bit architecture requires 64-bit arguments to be split into
++	  pairs of 32-bit arguments, select this option.
+ 
+ config ARCH_HAS_ELFCORE_COMPAT
+ 	bool
+-- 
+2.34.1
 
