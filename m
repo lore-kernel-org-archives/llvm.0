@@ -1,186 +1,137 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B75D8483
-	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 17:02:57 +0000 (UTC)
-Received: by mail-wr1-f44.google.com with SMTP id y1so17971195wru.2
-        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 09:02:57 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4467D8483
+	for <llvm@lists.linux.dev>; Wed,  1 Feb 2023 17:29:58 +0000 (UTC)
+Received: by mail-pg1-f174.google.com with SMTP id z14so2590692pgs.10
+        for <llvm@lists.linux.dev>; Wed, 01 Feb 2023 09:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UP/37JG8zTxRTjZFT60IaD92D0Iz+nNCYIC99KAy+Wk=;
-        b=KuQvGIxIQyO8T8+GBf3DMps+ketXsQdhCCg7Sy0kcPD4hN+zcf3QYuP9AtTWFuqjZD
-         o2UT354rORRsdY6c3wBdmQyZ0zSqJ8HFi/2tG3cMADNFbyPwmYjwq/SiRGCN/H08WJkQ
-         K0Iq4m6LaZKhMpX9uRNI5/cu6k2Ai+kNRzskAVO95DwgVSJItyRivEcZRlXeuxwHJmib
-         3BhgxeV1xUEk6Rd++XkzInXvKWJmkipi53CUuT48MJQvdZBiMcBFBGw4DvQ5POMRbMmw
-         QOQbuFQfsKWPu7kpLbZtbW9xF4EIIl+nZNyw28BhIzZYWjLeI1bVhA3pm0KMj74K12Cf
-         O5AA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UfqqW8xswcE4pCjxXD8PyH0teUj7MSVef6Ler61pLDU=;
+        b=aJBs2ADAoMx6JaXIn+YDuFOty94//q3+Y2zjaQ7nJj7RhfZBucnHFDFtakhHvaDolr
+         O+90olsE/GiHEBbhjULTa2lb7VdmFxqayLHVEXacqIBhBpBw6J4pk6/5L45Kk3AvmFW/
+         L3N4eA/EnqfrqO0+xbn39oR0nv1X6Hk9kO/L6bhexilp0nWDE8oDYmpUHFi32HD5BwEf
+         Lz6ftiDPylrJxzQUYC+lDCBoHdLUvEHQEurvy6xnEZKvgRnDx9a9DpRXhbKfZOwMJClT
+         AqLmpWFtZ91PIoGUj13NL3S/bp/n7gwjVBkF9r0JNJCK/7c1hf0wUfRmrKOhJ9AlVf5g
+         xAkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UP/37JG8zTxRTjZFT60IaD92D0Iz+nNCYIC99KAy+Wk=;
-        b=7hEiXfeQssYbeXNdkMe8/LP9U/ZMqxviJWhg/3NXUR9XeZtWvI6IUWZUgmDDRydpnW
-         De+GQa7kzYh4MLqB7+PDnKOPsOC67IXyvI/KadNLPpT+8E6jCFaGRXUMpFIbvVd9Po7u
-         X2+N0USV3+lXIis9UPXf7UVCA60JnfsJMXJfxJT5h84rNxMCXCFZmI0Q7A/p7zWETL22
-         h/BIiT9HsW3qEGIDhGE0Y48Ft3hvPM1uvEOYhJ+XW/hXGv/BHM1i2lzNp9qMZZRslYis
-         a/b/LI9NSZ35wz1kzeOtkz3QO2Hg7Tp/bqgAhR9NFN+1SlVdpkb+HqqcDd6+pxHeXc3+
-         4grQ==
-X-Gm-Message-State: AO0yUKUp5BkvSNuxwVYL+KuoZOrIOB7s97H1y3xjw0WKt7Riv0Ywholh
-	0veDrZpi9aALkiVNL8rTFhFoflp+MVCTN7hZAagfvw==
-X-Google-Smtp-Source: AK7set+vjE7Aq/wG/dnp7pst6PBIgibIMcGPmch/eqrNmwJvM/QcAKsH7X/onv7xaAZG3AN9E4fLxR6130MpZk0O1gI=
-X-Received: by 2002:a5d:4bce:0:b0:2bd:deb8:353e with SMTP id
- l14-20020a5d4bce000000b002bddeb8353emr157231wrt.267.1675270975596; Wed, 01
- Feb 2023 09:02:55 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UfqqW8xswcE4pCjxXD8PyH0teUj7MSVef6Ler61pLDU=;
+        b=TTPhuRAA5EpYQ9vCcFu4cUF5G6ik5ny08iAbn3ACa9zxE2hfFjhBIkFvlLy4jMjJ5Z
+         sUyUA5jmTXaKapc71PvzdUSYANjuuY1L7olEnP45QuELdB8THVscE6JIMW+arYo73XLp
+         2cFtWTPu1fqGr22QGUr0rakCPg7SwG8BOWomj1YU40WMDAO9AR4T2c7XpiEIuJ8W5IgM
+         xCYOer7JlBtBPCvLm2hWt7rLM4fTTYxXxOklT/cYZ+v7yPWSS+OQvblKcKPvnfv02c+c
+         wVhnX6Kx97VDbY5nljxrXmfBhNFRhhhTEKqBhWh2jqEUr18V1ww5Ib4SqGtRLegBRckI
+         L9fQ==
+X-Gm-Message-State: AO0yUKUSPvwyCqhcjdslt7yxYBaQNxIlQa471XLjubh8n0Sb8xrz+gX7
+	MLAhZKkFkQluf6vuBYKuDX+mIC+FvEHGke8u37mS5g==
+X-Google-Smtp-Source: AK7set9vkRiv0cc/fw6dQATGiIp+75R5GPoTDDv/YcUNxz4gdVqcNUtaoRhHK1Y52n0Qy7Puo6f0stvJAbouaLDshcU=
+X-Received: by 2002:a05:6a00:721:b0:593:bcc4:11ec with SMTP id
+ 1-20020a056a00072100b00593bcc411ecmr742504pfm.6.1675272597296; Wed, 01 Feb
+ 2023 09:29:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
- <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
- <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
- <c6605d52-b9e1-e8d3-ed29-562146f64eea@arm.com> <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
- <CA+icZUWKFCdhQ9XN0wLN6BF5ft3WaNrtXDb9D8ckNOPG9gUf+g@mail.gmail.com>
- <CAP-5=fUSyN5wCn5miG79cT30YruJjkAYMeR58XXgRBQw-6hHkQ@mail.gmail.com> <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
-In-Reply-To: <20b09a5b-99b3-75b8-3ec8-e978965497f2@linux.intel.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 1 Feb 2023 09:02:43 -0800
-Message-ID: <CAP-5=fXHDuB5G+ujVCoe81H+-Y=J8ig6TZ-dGZHknskb7Z53ig@mail.gmail.com>
-Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
-To: "Liang, Kan" <kan.liang@linux.intel.com>
-Cc: sedat.dilek@gmail.com, "Xing, Zhengjun" <zhengjun.xing@intel.com>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nathan Chancellor <natechancellor@gmail.com>, llvm@lists.linux.dev, 
-	Ben Hutchings <benh@debian.org>, James Clark <james.clark@arm.com>, 
-	Stephane Eranian <eranian@google.com>
+References: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
+ <20230201113155.18113-1-naresh.kamboju@linaro.org> <04b55866-aa17-f500-855a-7d4fb4bbaacf@csgroup.eu>
+In-Reply-To: <04b55866-aa17-f500-855a-7d4fb4bbaacf@csgroup.eu>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 1 Feb 2023 09:29:45 -0800
+Message-ID: <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, "mpe@ellerman.id.au" <mpe@ellerman.id.au>, 
+	"npiggin@gmail.com" <npiggin@gmail.com>, "pali@kernel.org" <pali@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>, 
+	"anders.roxell@linaro.org" <anders.roxell@linaro.org>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"nathan@kernel.org" <nathan@kernel.org>, Linux Kernel Functional Testing <lkft@linaro.org>, qiongsiwu@gmail.com, 
+	nemanja.i.ibm@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 1, 2023 at 7:28 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+On Wed, Feb 1, 2023 at 3:41 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
 >
-> Hi Ian,
 >
-> On 2023-01-30 10:55 p.m., Ian Rogers wrote:
-> >>> There's a question about what we should do in the perf test about
-> >>> this? I have a few solutions:
-> >>>
-> >>> 1) try metric tests again with the --metric-no-group flag and don't
-> >>> fail the test if this succeeds. This allows kernel bugs to hide, so
-> >>> I'm not a huge fan.
-> >>>
-> >>> 2) add a new metric flag/constraint to say not to group, this way the
-> >>> metric will automatically apply the "--metric-no-group" flag. It is a
-> >>> bit of work to wire this up but this kind of failure is common enough
-> >>> in PMUs that it is probably worthwhile. We also need to add the flag
-> >>> to metrics and I'm not sure how to get a good list of the metrics that
-> >>> currently fail and require it. This is okay but error prone.
-> >>>
-> >>> 3) fix the kernel bug and let the perf test fail until an adequate
-> >>> kernel is installed. Probably the best option.
-> >>>
-> >> Hi Ian,
-> >>
-> >> I can confirm:
-> >>
-> >> $ echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
-> >> /proc/sys/kernel/perf_event_paranoid
-> >> 0
-> >>
-> >> $ ~/bin/perf stat -M tma_l3_bound --metric-no-group -a sleep 1
-> >>
-> >> Performance counter stats for 'system wide':
-> >>
-> >>         2.058.892      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,5 %
-> >> tma_l3_bound             (99,30%)
-> >>       173.254.697      CYCLE_ACTIVITY.STALLS_L2_PENDING
-> >>                         (99,10%)
-> >>     2.396.130.501      CPU_CLK_UNHALTED.THREAD
-> >>                         (99,60%)
-> >>         1.110.486      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
-> >>                            (99,53%)
-> >>
-> >>       1,001989022 seconds time elapsed
-> >>
-> >> $ ~/bin/perf stat -M tma_dram_bound --metric-no-group -a sleep 1
-> >>
-> >> Performance counter stats for 'system wide':
-> >>
-> >>         1.729.208      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,2 %
-> >> tma_dram_bound           (99,50%)
-> >>        50.346.734      CYCLE_ACTIVITY.STALLS_L2_PENDING
-> >>                         (99,50%)
-> >>     2.354.963.862      CPU_CLK_UNHALTED.THREAD
-> >>                         (99,80%)
-> >>           306.500      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
-> >>                            (99,61%)
-> >>
-> >>       1,001981392 seconds time elapsed
-> >>
-> >> Thanks!
-> > Thanks, apparently it is an issue with SandyBridge/IvyBridge that some
-> > counters on one hyperthread will limit what can be on the other. I
-> > believe that's the comment related to EXCL access here:
-> > https://github.com/torvalds/linux/blob/master/arch/x86/events/intel/core.c#L124
-> > So you may have more success with the metric if you disable
-> > hyperthreading, but I imagine that's not a popular option.
 >
-> Thanks for debugging the issue. Yes, it's caused by the HT workaround
-> for SNB/IVB/HSW.
+> Le 01/02/2023 =C3=A0 12:31, Naresh Kamboju a =C3=A9crit :
+> > Following build regression started from next-20230131.
+> >
+> > Regressions found on powerpc:
+> >
+> >    build/clang-nightly-tqm8xx_defconfig
+> >    build/clang-nightly-ppc64e_defconfig
+> >
+> >
+> > make --silent --keep-going --jobs=3D8 O=3D/home/tuxbuild/.cache/tuxmake=
+/builds/1/build ARCH=3Dpowerpc CROSS_COMPILE=3Dpowerpc64le-linux-gnu- HOSTC=
+C=3Dclang CC=3Dclang LLVM=3D1 LLVM_IAS=3D0 tqm8xx_defconfig
+> > make --silent --keep-going --jobs=3D8 O=3D/home/tuxbuild/.cache/tuxmake=
+/builds/1/build ARCH=3Dpowerpc CROSS_COMPILE=3Dpowerpc64le-linux-gnu- HOSTC=
+C=3Dclang CC=3Dclang LLVM=3D1 LLVM_IAS=3D0
+> >
+> > error: unknown target CPU '860'
+> > note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 60=
+3e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5=
+, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5=
+x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9,=
+ pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, =
+ppc64le, future
+> > make[2]: *** [/builds/linux/scripts/Makefile.build:114: scripts/mod/dev=
+icetable-offsets.s] Error 1
+> > error: unknown target CPU '860'
+> > note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 60=
+3e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5=
+, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5=
+x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9,=
+ pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, =
+ppc64le, future
+> > make[2]: *** [/builds/linux/scripts/Makefile.build:252: scripts/mod/emp=
+ty.o] Error 1
 >
-> The weak group check in the kernel is in validate_group(). It only does
-> a sanity check. It doesn't check all the workarounds and the current
-> status of counters (e.g., whether the fixed counter is occupied by NMI
-> watchdog.) It's possible that a false positive is returned to the perf
-> tool. I once tried to fix the NMI watchdog check in the kernel, but the
-> proposal was rejected. So the metric constraint is introduced.
 >
-> For this issue, I think the above option2 should be a better and
-> practical choice. The issue is only observed on old machines, which
-> usually has a stable kernel running on it. I don't think the user wants
-> to update their kernel just to workaround an issue for several metrics.
-> But it should be much easier for them to update the perf tool.
+> On GCC, the possible values are:
 >
-> We know that the below events are the problematic events.
-> /* MEM_UOPS_RETIRED.* */
-> /* MEM_LOAD_UOPS_RETIRED.* */
-> /* MEM_LOAD_UOPS_LLC_HIT_RETIRED.* */
-> /* MEM_LOAD_UOPS_LLC_MISS_RETIRED.* */
-> Can we update the convertor script and apply the "--metric-no-group"
-> flag or add a new constraint if the above events are detected in
-> SNB/IVB/HSW?
+> ppc-linux-gcc: note : valid arguments to =E2=80=98-mcpu=3D=E2=80=99 are: =
+401 403 405 405fp
+> 440 440fp 464 464fp 476 476fp 505 601 602 603 603e 604 604e 620 630 740
+> 7400 7450 750 801 821 823 8540 8548 860 970 G3 G4 G5 a2 cell e300c2
+> e300c3 e500mc e500mc64 e5500 e6500 ec603e native power3 power4 power5
+> power5+ power6 power6x power7 power8 powerpc powerpc64 powerpc64le rs64
+> titan
 >
-> Thanks,
-> Kan
+> How do you tell CLANG that you are building for powerpc 8xx ?
 
-Thanks Kan,
++ Nemanjai, Qiongsi,
 
-We absolutely can do that! In this case should it be --metric-no-group
-only when SMT is enabled? I can do some patches but would like to know
-about whether we need SMT and not SMT versions of --metric-no-group.
-Also, should we just have a list of metrics that need the flag or try
-to automate detection? Some warts in detection are the names of the
-events that vary between Ivybridge and Sandybridge, and how to
-determine which events conflict. For example, the perfmon event data:
 
-MEM_LOAD_UOPS_RETIRED.LLC_HIT
-https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L5368
-MEM_LOAD_UOPS_RETIRED.LLC_MISS
-https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L5431
-CYCLE_ACTIVITY.STALLS_L2_PENDING
-https://github.com/intel/perfmon/blob/main/IVB/events/ivybridge_core.json#L3541
+>
+> >
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023020=
+1/testrun/14479384/suite/build/test/clang-nightly-tqm8xx_defconfig/history/
+> >
+> > The bisection pointed to this commit,
+> >    45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
 
-The events list all counters, there are no errata fields.. Should the
-event data be updated and then in the converter script handle that? If
-I get shown an example I can modify the script accordingly.
 
-It is also hard for me to test anything other than SMT on Ivybridge.
 
+--=20
 Thanks,
-Ian
+~Nick Desaulniers
