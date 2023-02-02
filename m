@@ -1,101 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F0A8F43;
-	Thu,  2 Feb 2023 17:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E265C433EF;
-	Thu,  2 Feb 2023 17:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675357212;
-	bh=KhsHJGMkk85ln+sCx+d+Nxt6KslFX/d/TmJqhuW9H0g=;
-	h=From:Date:Subject:To:Cc:From;
-	b=WqnME7peHGJ3afmo5qu3mf4FWfKSK1eJpoc39x9Bmt4vBzPiDj7D8D55yHJtL8u/H
-	 jNAnxzrKzMPclXaJ0PoV0IZ9UJ51kkdflUtE3DibWpuhwsogCR6eecyZVCU/zwXVjF
-	 2jBgDq0bIhtjOUghcnxF/Qg3xThRqbhEAzLxhklS2QbQu9lpxqL/bk8F6BFJ+Gvqj2
-	 KnyR4xepcklLlbCIjfuLiap6muprfQ6C85Y4hnzCxckcWZA2jpo+MXD54GdoNqF53c
-	 m19q/CaHtb1ePaIQnhyMeljztdiSGnMrX34vsRb7oT7IMWMxB0FZWEvzhePuqeGHNt
-	 ZfmCU7EyO5awg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 02 Feb 2023 09:58:18 -0700
-Subject: [PATCH] dm flakey: Fix clang -Wparentheses-equality in
- flakey_map()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88518F43
+	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 17:18:03 +0000 (UTC)
+Received: by mail-pj1-f49.google.com with SMTP id ha3-20020a17090af3c300b00230222051a6so2486373pjb.2
+        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 09:18:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GzPZSiuWUI10A7nGN6F8afAigmnE11O3pPivhXt2BI4=;
+        b=dpHYoO5y+OJzvw3hGh02/zVMmdMTJw2GNRwNYUmBR9S5mEwDYnnjfhWj3vcd0NzELc
+         RzqS1lmRY2x7oL8uGlK9ffLCq/6dXY3SHEd0ntFF+KKrHFszfA2H+YGJCAqIAH7kW+Ca
+         JXES2+8RBP6vRmTeDLzU15Dy9G/WIuqlw866Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GzPZSiuWUI10A7nGN6F8afAigmnE11O3pPivhXt2BI4=;
+        b=Olvmo0CdqICqVlZtI8qrXaubxlWGs0llyMJq7zg0IrIFovNA6/FZx4WCkpUW5aqG6p
+         ag4d8yEj785eMtsEEHuWs1A6pBoMKV1+O2CDcXUkHG2NW4MrPjfX1Ufr81PHrTOqlBkE
+         SbRQ0WrapoYYte50vV9rp/WaljGOucOwXzK2EP6Gew6UE0m3DkowQlZnLHv0HjzBeGLI
+         l9InnTsFGEpChDUJ+aVXkKgX4t3xQwlOo+TN8rv9pA9uPa6ZXuA0+gFYmnveL406X+kt
+         MCwU1ED7L+v3ziCr29xoogT6NXGLuEQUE8qMy2vIt027hZWwTBBrYLQxNl1iU0MNEIHe
+         uscA==
+X-Gm-Message-State: AO0yUKXWU2j7FgVQF4aTY71ewj1SKCGkQmECNVz3rV/wjciLdkV+9xeh
+	KBcz/5f89bvQ7+vWyCTHPK05fg==
+X-Google-Smtp-Source: AK7set+NnIMQt6YlrSXhpTD9hAeLNLeG9CybmFZKQfwYo9yvWLqWvFDYemIeU9FbReu1DptcIqIdIg==
+X-Received: by 2002:a05:6a20:9f9b:b0:b8:ca86:d1e8 with SMTP id mm27-20020a056a209f9b00b000b8ca86d1e8mr2663317pzb.14.1675358283121;
+        Thu, 02 Feb 2023 09:18:03 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id o6-20020a637306000000b004d346876d37sm36860pgc.45.2023.02.02.09.18.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 09:18:02 -0800 (PST)
+Message-ID: <63dbf04a.630a0220.2608a.0149@mx.google.com>
+X-Google-Original-Message-ID: <202302021717.@keescook>
+Date: Thu, 2 Feb 2023 17:18:01 +0000
+From: Kees Cook <keescook@chromium.org>
+To: John Stultz <jstultz@google.com>
+Cc: Yongqin Liu <yongqin.liu@linaro.org>, Vlastimil Babka <vbabka@suse.cz>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
+	Michael Kelley <mikelley@microsoft.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Won Chung <wonchung@google.com>, David Gow <davidgow@google.com>,
+	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
+References: <20221101222520.never.109-kees@kernel.org>
+ <20221101223321.1326815-5-keescook@chromium.org>
+ <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+ <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230202-dm-parenthesis-warning-v1-1-ebdee213eeb9@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKnr22MC/x2NywqDUAxEf0WybsBXC/ZXShe5Gr1ZGCWRtiD+e
- 6ObgcPMYXZwNmGHZ7GD8UdcFg2obgX0mXRilCEY6rJuyggcZlzJWLfMLo5fMhWd8FE13dime2w
- ShJzIGZOR9vnUZ/KN7SxW41F+1+PrfRx/R+eoXoEAAAA=
-To: agk@redhat.com, snitzer@kernel.org
-Cc: ndesaulniers@google.com, trix@redhat.com, sweettea-kernel@dorminy.me, 
- mpatocka@redhat.com, dm-devel@redhat.com, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2222; i=nathan@kernel.org;
- h=from:subject:message-id; bh=KhsHJGMkk85ln+sCx+d+Nxt6KslFX/d/TmJqhuW9H0g=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMm338jMyt3ak5ZoWjp1c+GeSq9vPRens7H8jzrROD1P9
- uQ77t3cHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiBQkM/8y6D75Usbo+qfwp
- 271TURstM0onidn9TX6x/ef1UG3GkzGMDKc7vxoLrJXUeSF7yEvw4PyG5Ct+Ex7svLB+5YOr1zn
- KvDkA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
 
-Clang warns:
+On Wed, Feb 01, 2023 at 12:11:41AM -0800, John Stultz wrote:
+> On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
+> >
+> > Hi, Kees
+> >
+> > This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
+> > for the android-mainline based hikey960 build, with this commit reverted,
+> > there is no problem for the build to boot to the homescreen.
+> > Not sure if you have any idea about it and give some suggestions.
+> >
+> > Here is part of the kernel panic log:
+> >
+> >     [    9.479878][  T122] ueventd: Loading module
+> > /vendor/lib/modules/spi-pl022.ko with args ''
+> >     [    9.480276][  T115] apexd-bootstrap: Pre-allocated loop device 29
+> >     [    9.480517][  T123] ueventd: LoadWithAliases was unable to load
+> > of:Nhi3660_i2sT(null)Chisilicon,hi3660-i2s-1.0
+> >     [    9.480632][  T121] Unexpected kernel BRK exception at EL1
+> >     [    9.480637][  T121] Internal error: BRK handler:
+> > 00000000f2000001 [#1] PREEMPT SMP
+> >     [    9.480644][  T121] Modules linked in: cpufreq_dt(E+)
+> > hisi_thermal(E+) phy_hi3660_usb3(E) btqca(E) hi6421_pmic_core(E)
+> > btbcm(E) spi_pl022(E) hi3660_mailbox(E) i2c_designware_platform(E)
+> > mali_kbase(OE) dw_mmc_k3(E) bluetooth(E) dw_mmc_pltfm(E) dw_mmc(E)
+> > kirin_drm(E) rfkill(E) kirin_dsi(E) i2c_designware_core(E) k3dma(E)
+> > drm_dma_helper(E) cma_heap(E) system_heap(E)
+> >     [    9.480688][  T121] CPU: 4 PID: 121 Comm: ueventd Tainted: G
+> >        OE      6.2.0-rc6-mainline-14196-g1d9f94ec75b9 #1
+> >     [    9.480694][  T121] Hardware name: HiKey960 (DT)
+> >     [    9.480697][  T121] pstate: 20400005 (nzCv daif +PAN -UAO -TCO
+> > -DIT -SSBS BTYPE=--)
+> >     [    9.480703][  T121] pc : hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+> >     [    9.480722][  T121] lr : hi3660_thermal_probe+0x38/0x74 [hisi_thermal]
+> >     [    9.480733][  T121] sp : ffffffc00aa13700
+> >     [    9.480735][  T121] x29: ffffffc00aa13700 x28: 0000007ff8ae8531
+> > x27: 00000000000008c0
+> >     [    9.480743][  T121] x26: ffffffc00aa2a300 x25: ffffffc00aa2ab40
+> > x24: 000000000000001d
+> >     [    9.480749][  T121] x23: ffffffc00a29d000 x22: 0000000000000000
+> > x21: ffffff8001fa4a80
+> >     [    9.480755][  T121] x20: 0000000000000001 x19: ffffff8001fa4a80
+> > x18: ffffffc00a8810b0
+> >     [    9.480761][  T121] x17: 000000007ab542f2 x16: 000000007ab542f2
+> > x15: ffffffc00aa01000
+> >     [    9.480767][  T121] x14: ffffffc00966f250 x13: ffffffc0b58f9000
+> > x12: ffffffc00a055f10
+> >     [    9.480771][  T123] ueventd: LoadWithAliases was unable to load
+> > cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
+> >     [    9.480773][  T121]
+> >     [    9.480774][  T121] x11: 0000000000000000 x10: 0000000000000001
+> > x9 : 0000000100000000
+> >     [    9.480780][  T123] ueventd:
+> >     [    9.480780][  T121] x8 : ffffffc0044154cb x7 : 0000000000000000
+> > x6 : 000000000000003f
+> >     [    9.480786][  T121] x5 : 0000000000000020 x4 : ffffffc0098db323
+> > x3 : ffffff801aeb62c0
+> >     [    9.480792][  T121] x2 : ffffff801aeb62c0 x1 : 0000000000000000
+> > x0 : ffffff8001fa4c80
+> >     [    9.480798][  T121] Call trace:
+> >     [    9.480801][  T121]  hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+> >     [    9.480813][  T121]  hisi_thermal_probe+0xbc/0x284 [hisi_thermal]
+> 
+> 
+> Taking a look here, it looks pretty obvious:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/hisi_thermal.c#n414
+> 
+> data->nr_sensors = 1;
+> data->sensor = devm_kzalloc(dev, sizeof(*data->sensor) *
+>    data->nr_sensors, GFP_KERNEL);
+> 
+> Here as nr_sensors=1, we allocate only one structure for the array.
+> But then below that, we modify two entries, writing past the valid
+> array, and corrupting data when writing the second sensor values.
+> 
+> data->sensor[0].id = HI3660_BIG_SENSOR;
+> data->sensor[0].irq_name = "tsensor_a73";
+> data->sensor[0].data = data;
+> 
+> data->sensor[1].id = HI3660_LITTLE_SENSOR;
+> data->sensor[1].irq_name = "tsensor_a53";
+> data->sensor[1].data = data;
+> 
+> I suspect nr_sensors needs to be set to 2.
+> 
+> Nice work, Kees!
 
-  ../drivers/md/dm-flakey.c:369:28: error: equality comparison with extraneous parentheses [-Werror,-Wparentheses-equality]
-                          if ((fc->corrupt_bio_rw == WRITE)) {
-                               ~~~~~~~~~~~~~~~~~~~^~~~~~~~
-  ../drivers/md/dm-flakey.c:369:28: note: remove extraneous parentheses around the comparison to silence this warning
-                          if ((fc->corrupt_bio_rw == WRITE)) {
-                              ~                   ^       ~
-  ../drivers/md/dm-flakey.c:369:28: note: use '=' to turn this equality comparison into an assignment
-                          if ((fc->corrupt_bio_rw == WRITE)) {
-                                                  ^~
-                                                  =
-  1 error generated.
+Yay for compilers! :)
 
-GCC only warns when one set of parentheses are used for assignment
-expressions, whereas clang additionally warns when two sets of
-parentheses are used for equality comparisons. Remove the extra set of
-parentheses to silence the warning as it suggests, as this is obviously
-supposed to be an equality comparison.
+Was a patch sent to fix this driver?
 
-Fixes: 0e766389cedc ("dm flakey: fix logic when corrupting a bio")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1798
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I do not mind this change being squashed with the offending commit, as I
-noticed it was Cc'd for stable, which would minimize the chance for
-breakage.
----
- drivers/md/dm-flakey.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/md/dm-flakey.c b/drivers/md/dm-flakey.c
-index 08f9aa476d97..335684a1aeaa 100644
---- a/drivers/md/dm-flakey.c
-+++ b/drivers/md/dm-flakey.c
-@@ -366,7 +366,7 @@ static int flakey_map(struct dm_target *ti, struct bio *bio)
- 		 * Corrupt matching writes.
- 		 */
- 		if (fc->corrupt_bio_byte) {
--			if ((fc->corrupt_bio_rw == WRITE)) {
-+			if (fc->corrupt_bio_rw == WRITE) {
- 				if (all_corrupt_bio_flags_match(bio, fc))
- 					corrupt_bio_data(bio, fc);
- 			}
-
----
-base-commit: 6f30cc248507ee96c22ff4c3cbc86099ff12b7a9
-change-id: 20230202-dm-parenthesis-warning-6139f4b5020b
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+Kees Cook
