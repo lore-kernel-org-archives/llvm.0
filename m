@@ -1,43 +1,47 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78717E5;
-	Thu,  2 Feb 2023 02:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8642F816;
+	Thu,  2 Feb 2023 02:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675303624; x=1706839624;
+  t=1675304886; x=1706840886;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FKehjncn8yXkXD55skykzjXPCcfnt/Ux2/8e2Tj/HdM=;
-  b=f9g2S6y6Bu+I0ByBCjJ4OwwnWgJGfkcXWSrg5hz086E0TpVRvcFRrt0w
-   syCCRbYjbJSavfGe0Whn7k8n40xDe3/TRtEa8uSynMayJWrw0tpCa4279
-   Z3z6vDps/CatkWBgvA/i7Sfo0BTE/FMbM3PYST6O9tWVu9vi8u6W+u5tV
-   ArtWOMx+l0U9sqkAoTKjapYRLSmCfK01KihL+qaD41H5eVI5PAVXeMm17
-   +m+VKAxWr7F6nmV14GczZ3BrIx/d6eg/jiKBrGwSlpi8VNJXeTMSv6c7v
-   2ecaQlGLx1nq/bNt8Thj+ICjAJlCdXjmNNnSX6ppUVsvrQnpfrn7OTJsX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="326028773"
+  bh=pciZslKejQwptu7vuMcpj/cxlkzNtZEZLuDGQeRwxjM=;
+  b=ODvFal/oBNeBCKFr9fiVU7+vmDrLV0Scqdca4pIrXwuGM/gHU02pgY02
+   TrKoK3K3JaxMgSV++eLLJtijbcY3hEB0Q7LzYXbSeFis6NwOjGcKAkWX/
+   tgxrI7cA+ZFHNAErYNFNbfTvK0DIpysdJoJlZjHWlp2g/Nvsb7vA7Weg1
+   OAfZn1Bk6eIwlNRRCqvFBS18oDFK1VtVonAgGhC2sgVssvdFZe4JmVjV0
+   e45Y53ZB1t5h2dVmXgCRzaxhqKl4yH57TJGi78U18oSTOmuFhUK6HQg/w
+   sppvL/FHBkDtu3b46yb3nz1P7UkD2srK1sz8gBc6wjwUAr2I7XiLTOSg3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="390723567"
 X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="326028773"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 18:07:04 -0800
+   d="scan'208";a="390723567"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 18:28:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="993900137"
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="773680228"
 X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="993900137"
+   d="scan'208";a="773680228"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2023 18:07:03 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 01 Feb 2023 18:28:03 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pNP0A-00061V-1d;
-	Thu, 02 Feb 2023 02:07:02 +0000
-Date: Thu, 2 Feb 2023 10:06:54 +0800
+	id 1pNPKV-00062O-0G;
+	Thu, 02 Feb 2023 02:28:03 +0000
+Date: Thu, 2 Feb 2023 10:27:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3 18/25]
- arch/riscv/mm/physaddr.c:28:15: error: use of undeclared identifier
- '__phys_addr_symbol'
-Message-ID: <202302021035.rerDlVUa-lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Usama Arif <usama.arif@bytedance.com>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/paronl.2023.02.01a 5/9]
+ arch/x86/kernel/smpboot.c:1251:5: warning: no previous prototype for
+ function 'do_cpu_up'
+Message-ID: <202302021018.uy6CiyRh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,82 +51,102 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3
-head:   ac3cfb78163256f2febd47ebd017d9f5b75820dd
-commit: d047dc9f56633d427434d6593fce94cf1190abe8 [18/25] riscv: Make virt_to_pfn() a real function
-config: riscv-randconfig-r042-20230130 (https://download.01.org/0day-ci/archive/20230202/202302021035.rerDlVUa-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/paronl.2023.02.01a
+head:   05792727280c094a8dcd1aa4950a61a2d214ddb8
+commit: 9d418800f17cbc141c9ec5772e4d34c4c7b67936 [5/9] x86/smpboot: Split up native_cpu_up into separate phases and document them
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230202/202302021018.uy6CiyRh-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=d047dc9f56633d427434d6593fce94cf1190abe8
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3
-        git checkout d047dc9f56633d427434d6593fce94cf1190abe8
+        # https://github.com/ammarfaizi2/linux-block/commit/9d418800f17cbc141c9ec5772e4d34c4c7b67936
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/paronl.2023.02.01a
+        git checkout 9d418800f17cbc141c9ec5772e4d34c4c7b67936
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   arch/riscv/mm/physaddr.c:15:13: error: expected identifier or '('
-   phys_addr_t __phys_addr_symbol(unsigned long x)
-               ^
-   arch/riscv/include/asm/page.h:154:31: note: expanded from macro '__phys_addr_symbol'
-   #define __phys_addr_symbol(x)   __va_to_pa_nodebug(x)
-                                   ^
-   arch/riscv/include/asm/page.h:142:32: note: expanded from macro '__va_to_pa_nodebug'
-   #define __va_to_pa_nodebug(x)   ({                                              \
-                                    ^
-   arch/riscv/mm/physaddr.c:15:13: error: expected ')'
-   arch/riscv/include/asm/page.h:154:31: note: expanded from macro '__phys_addr_symbol'
-   #define __phys_addr_symbol(x)   __va_to_pa_nodebug(x)
-                                   ^
-   arch/riscv/include/asm/page.h:142:32: note: expanded from macro '__va_to_pa_nodebug'
-   #define __va_to_pa_nodebug(x)   ({                                              \
-                                    ^
-   arch/riscv/mm/physaddr.c:15:13: note: to match this '('
-   arch/riscv/include/asm/page.h:154:31: note: expanded from macro '__phys_addr_symbol'
-   #define __phys_addr_symbol(x)   __va_to_pa_nodebug(x)
-                                   ^
-   arch/riscv/include/asm/page.h:142:31: note: expanded from macro '__va_to_pa_nodebug'
-   #define __va_to_pa_nodebug(x)   ({                                              \
-                                   ^
->> arch/riscv/mm/physaddr.c:28:15: error: use of undeclared identifier '__phys_addr_symbol'
-   EXPORT_SYMBOL(__phys_addr_symbol);
-                 ^
-   3 errors generated.
+>> arch/x86/kernel/smpboot.c:1251:5: warning: no previous prototype for function 'do_cpu_up' [-Wmissing-prototypes]
+   int do_cpu_up(unsigned int cpu, struct task_struct *tidle)
+       ^
+   arch/x86/kernel/smpboot.c:1251:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int do_cpu_up(unsigned int cpu, struct task_struct *tidle)
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/__phys_addr_symbol +28 arch/riscv/mm/physaddr.c
+vim +/do_cpu_up +1251 arch/x86/kernel/smpboot.c
 
-6435f773d81f021 Zong Li         2020-01-02  14  
-6435f773d81f021 Zong Li         2020-01-02  15  phys_addr_t __phys_addr_symbol(unsigned long x)
-6435f773d81f021 Zong Li         2020-01-02  16  {
-658e2c5125bbbc9 Alexandre Ghiti 2021-06-17  17  	unsigned long kernel_start = kernel_map.virt_addr;
-0c49688174f5347 Samuel Holland  2022-11-26  18  	unsigned long kernel_end = kernel_start + kernel_map.size;
-6435f773d81f021 Zong Li         2020-01-02  19  
-6435f773d81f021 Zong Li         2020-01-02  20  	/*
-6435f773d81f021 Zong Li         2020-01-02  21  	 * Boundary checking aginst the kernel image mapping.
-6435f773d81f021 Zong Li         2020-01-02  22  	 * __pa_symbol should only be used on kernel symbol addresses.
-6435f773d81f021 Zong Li         2020-01-02  23  	 */
-6435f773d81f021 Zong Li         2020-01-02  24  	VIRTUAL_BUG_ON(x < kernel_start || x > kernel_end);
-6435f773d81f021 Zong Li         2020-01-02  25  
-6435f773d81f021 Zong Li         2020-01-02  26  	return __va_to_pa_nodebug(x);
-6435f773d81f021 Zong Li         2020-01-02  27  }
-6435f773d81f021 Zong Li         2020-01-02 @28  EXPORT_SYMBOL(__phys_addr_symbol);
-
-:::::: The code at line 28 was first introduced by commit
-:::::: 6435f773d81f02193228685a7e3fe65c983c5de0 riscv: mm: add support for CONFIG_DEBUG_VIRTUAL
-
-:::::: TO: Zong Li <zong.li@sifive.com>
-:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+  1250	
+> 1251	int do_cpu_up(unsigned int cpu, struct task_struct *tidle)
+  1252	{
+  1253		int apicid = apic->cpu_present_to_apicid(cpu);
+  1254		int cpu0_nmi_registered = 0;
+  1255		int err, ret = 0;
+  1256	
+  1257		lockdep_assert_irqs_enabled();
+  1258	
+  1259		pr_debug("++++++++++++++++++++=_---CPU UP  %u\n", cpu);
+  1260	
+  1261		if (apicid == BAD_APICID ||
+  1262		    !physid_isset(apicid, phys_cpu_present_map) ||
+  1263		    !apic->apic_id_valid(apicid)) {
+  1264			pr_err("%s: bad cpu %d\n", __func__, cpu);
+  1265			return -EINVAL;
+  1266		}
+  1267	
+  1268		/*
+  1269		 * Already booted CPU?
+  1270		 */
+  1271		if (cpumask_test_cpu(cpu, cpu_callin_mask)) {
+  1272			pr_debug("do_boot_cpu %d Already started\n", cpu);
+  1273			return -ENOSYS;
+  1274		}
+  1275	
+  1276		/*
+  1277		 * Save current MTRR state in case it was changed since early boot
+  1278		 * (e.g. by the ACPI SMI) to initialize new CPUs with MTRRs in sync:
+  1279		 */
+  1280		mtrr_save_state();
+  1281	
+  1282		/* x86 CPUs take themselves offline, so delayed offline is OK. */
+  1283		err = cpu_check_up_prepare(cpu);
+  1284		if (err && err != -EBUSY)
+  1285			return err;
+  1286	
+  1287		/* the FPU context is blank, nobody can own it */
+  1288		per_cpu(fpu_fpregs_owner_ctx, cpu) = NULL;
+  1289	
+  1290		err = common_cpu_up(cpu, tidle);
+  1291		if (err)
+  1292			return err;
+  1293	
+  1294		err = do_boot_cpu(apicid, cpu, tidle, &cpu0_nmi_registered);
+  1295		if (err) {
+  1296			pr_err("do_boot_cpu failed(%d) to wakeup CPU#%u\n", err, cpu);
+  1297			ret = -EIO;
+  1298			goto unreg_nmi;
+  1299		}
+  1300	
+  1301	unreg_nmi:
+  1302		/*
+  1303		 * Clean up the nmi handler. Do this after the callin and callout sync
+  1304		 * to avoid impact of possible long unregister time.
+  1305		 */
+  1306		if (cpu0_nmi_registered)
+  1307			unregister_nmi_handler(NMI_LOCAL, "wake_cpu0");
+  1308	
+  1309		return ret;
+  1310	}
+  1311	
 
 -- 
 0-DAY CI Kernel Test Service
