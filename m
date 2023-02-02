@@ -1,176 +1,264 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADD47E
-	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 03:38:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36ABBC433A1;
-	Thu,  2 Feb 2023 03:38:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675309109;
-	bh=q+FdDvjhNstlnFeTmy4laRxc/ZnBwhI+dZWJtjSZSRM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bj1VfFc1j+hElkksF/9w6LutWhVo2oBLFKRb/8IKQApLk0OYGZBUwtt2I0OwwVF6p
-	 gV44yfhYiKp1+wcZWMhpr5FcrCmxlDPJj08C81saF6+S9v3WL0tb4VDgn5joWxOdSq
-	 3+N8fXPpYLQ7UmL0vrZyaSF5VJs6TfaJAQVJ6ol5GxbAE0X+gVQHyDymNlILpl6s/H
-	 8xJzGRjLeh4CsGw0ToHu6yXMx+ZNnpGj3p7XNDs4MmhOd2LVkhRQ2iJmU/M8EEIUEW
-	 /R+5nIvCDmEPrbbD72pfwBRlG9+Winl0Coo7FkX4Sa0wHCn0PO2qBX877Vi+/ssHpo
-	 5Paxf8AGQ2vBQ==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Ben Hutchings <ben@decadent.org.uk>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH v4 2/6] kbuild: deb-pkg: create source package without cleaning
-Date: Thu,  2 Feb 2023 12:37:12 +0900
-Message-Id: <20230202033716.341858-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230202033716.341858-1-masahiroy@kernel.org>
-References: <20230202033716.341858-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C147E;
+	Thu,  2 Feb 2023 04:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675310531; x=1706846531;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q6pt76n3GNc0XQSh5sHwG6/T5JVBFQK0A82aR9qxwdg=;
+  b=RiXIFgaidd7mguTArhHjE4iB/oeChdOuwQlDrfWgXhSN0FH3QhsiTDBv
+   hUwAFmUpDc8EK7zqTEO2RFJUJ2sGt/rH5DNL6Q6eWVKhv3gIruRafeEkx
+   GpJuZIFokTeLO3fQxtijrovIeFN9As/idnYTM8k4WIHL+iFiVVi/3zMWW
+   YWhCAfZQNWlL8h6P7CTMpsAusTqT3Nq6AxBW4Vn7s1q7cxaj/W0p4NGVQ
+   eZHQZ/mPc6EzwJ4bV8DBd0TtM2jPilD8H1FYulPQWESHIIm2uQa+otYYJ
+   xYV0u6aExXvXn9Kvs/w6WskhJncFh7kekVSnC4Ti3R37cLNwGdAyCZVCj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="392926398"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="392926398"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 20:02:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="789139053"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="789139053"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Feb 2023 20:02:08 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNQnX-00067S-2Z;
+	Thu, 02 Feb 2023 04:02:07 +0000
+Date: Thu, 2 Feb 2023 12:01:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 2/4] bpf: treewide: Clean up BPF_ALU and BPF_JMP
+Message-ID: <202302021105.HU4McFMJ-lkp@intel.com>
+References: <1675254998-4951-3-git-send-email-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675254998-4951-3-git-send-email-yangtiezhu@loongson.cn>
 
-If you run 'make deb-pkg', all objects are lost due to 'make clean',
-which makes the incremental builds impossible.
+Hi Tiezhu,
 
-Instead of cleaning, pass the exclude list to tar's --exclude-from
-option.
+Thank you for the patch! Yet something to improve:
 
-Previously, *.diff.gz contained some check-in files such as
-.clang-format, .cocciconfig.
+[auto build test ERROR on bpf-next/master]
 
-With this commit, *.diff.gz will only contain the .config and debian/.
-The other source files will go into the tarball.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tiezhu-Yang/bpf-Add-new-macro-BPF_ALU32-and-BPF_JMP64/20230201-203836
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/1675254998-4951-3-git-send-email-yangtiezhu%40loongson.cn
+patch subject: [PATCH bpf-next 2/4] bpf: treewide: Clean up BPF_ALU and BPF_JMP
+config: i386-randconfig-a016-20230130 (https://download.01.org/0day-ci/archive/20230202/202302021105.HU4McFMJ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9955f957cb218f711161ac710656be1164eaa3a3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tiezhu-Yang/bpf-Add-new-macro-BPF_ALU32-and-BPF_JMP64/20230201-203836
+        git checkout 9955f957cb218f711161ac710656be1164eaa3a3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash samples/
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Changes in v4:
-  - Fix a typo in comment
+All errors (new ones prefixed by >>):
 
-Changes in v3:
-  - Add --extra-pattern='*.rej'
-  - Exclude symlinks at the toplevel
-  - Add --sort=name tar option
+>> samples/seccomp/bpf-fancy.c:38:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_exit, ALLOW),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:39:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_exit_group, ALLOW),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:40:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_write, JUMP(&l, write_fd)),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:40:23: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_write, JUMP(&l, write_fd)),
+                                       ^
+   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:41:3: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_read, JUMP(&l, read)),
+                   ^
+   samples/seccomp/bpf-helper.h:56:11: note: expanded from macro 'SYSCALL'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (nr), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:41:22: error: use of undeclared identifier 'BPF_JMP64'
+                   SYSCALL(__NR_read, JUMP(&l, read)),
+                                      ^
+   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:44:3: error: use of undeclared identifier 'BPF_JMP64'
+                   LABEL(&l, read),
+                   ^
+   samples/seccomp/bpf-helper.h:53:11: note: expanded from macro 'LABEL'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:46:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JNE(STDIN_FILENO, DENY),
+                   ^
+   samples/seccomp/bpf-helper.h:77:20: note: expanded from macro 'JNE'
+   #define JNE(x, jt) JNE32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:154:11: note: expanded from macro 'JNE32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 1, 0), \
+                    ^
+   samples/seccomp/bpf-fancy.c:48:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JNE((unsigned long)buf, DENY),
+                   ^
+   samples/seccomp/bpf-helper.h:77:20: note: expanded from macro 'JNE'
+   #define JNE(x, jt) JNE32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:154:11: note: expanded from macro 'JNE32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 1, 0), \
+                    ^
+   samples/seccomp/bpf-fancy.c:50:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JGE(sizeof(buf), DENY),
+                   ^
+   samples/seccomp/bpf-helper.h:80:20: note: expanded from macro 'JGE'
+   #define JGE(x, jt) JGE32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:162:11: note: expanded from macro 'JGE32'
+           BPF_JUMP(BPF_JMP64+BPF_JGE+BPF_K, (value), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:53:3: error: use of undeclared identifier 'BPF_JMP64'
+                   LABEL(&l, write_fd),
+                   ^
+   samples/seccomp/bpf-helper.h:53:11: note: expanded from macro 'LABEL'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:55:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDOUT_FILENO, JUMP(&l, write_buf)),
+                   ^
+   samples/seccomp/bpf-helper.h:76:20: note: expanded from macro 'JEQ'
+   #define JEQ(x, jt) JEQ32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:150:11: note: expanded from macro 'JEQ32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:55:22: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDOUT_FILENO, JUMP(&l, write_buf)),
+                                      ^
+   samples/seccomp/bpf-helper.h:50:11: note: expanded from macro 'JUMP'
+           BPF_JUMP(BPF_JMP64+BPF_JA, FIND_LABEL((labels), (label)), \
+                    ^
+   samples/seccomp/bpf-fancy.c:56:3: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDERR_FILENO, JUMP(&l, write_buf)),
+                   ^
+   samples/seccomp/bpf-helper.h:76:20: note: expanded from macro 'JEQ'
+   #define JEQ(x, jt) JEQ32(x, EXPAND(jt))
+                      ^
+   samples/seccomp/bpf-helper.h:150:11: note: expanded from macro 'JEQ32'
+           BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, (value), 0, 1), \
+                    ^
+   samples/seccomp/bpf-fancy.c:56:22: error: use of undeclared identifier 'BPF_JMP64'
+                   JEQ(STDERR_FILENO, JUMP(&l, write_buf)),
+--
+>> samples/seccomp/bpf-helper.c:33:23: error: use of undeclared identifier 'BPF_JMP64'
+                   if (instr->code != (BPF_JMP64+BPF_JA))
+                                       ^
+   1 error generated.
+--
+>> samples/seccomp/dropper.c:33:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, arch, 0, 3),
+                            ^
+   samples/seccomp/dropper.c:36:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, nr, 0, 1),
+                            ^
+>> samples/seccomp/dropper.c:42:33: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
+                   .len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
+                                                 ^~~~~~~~
+   3 errors generated.
+--
+>> samples/seccomp/bpf-direct.c:117:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_rt_sigreturn, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:120:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_sigreturn, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:123:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_exit_group, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:125:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_exit, 0, 1),
+                            ^
+   samples/seccomp/bpf-direct.c:127:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_read, 1, 0),
+                            ^
+   samples/seccomp/bpf-direct.c:128:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, __NR_write, 3, 2),
+                            ^
+   samples/seccomp/bpf-direct.c:132:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDIN_FILENO, 4, 0),
+                            ^
+   samples/seccomp/bpf-direct.c:137:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDOUT_FILENO, 1, 0),
+                            ^
+   samples/seccomp/bpf-direct.c:139:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, STDERR_FILENO, 1, 2),
+                            ^
+>> samples/seccomp/bpf-direct.c:146:33: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
+                   .len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
+                                                 ^~~~~~~~
+   10 errors generated.
+--
+>> samples/seccomp/user-trap.c:91:12: error: use of undeclared identifier 'BPF_JMP64'
+                   BPF_JUMP(BPF_JMP64+BPF_JEQ+BPF_K, nr, 0, 1),
+                            ^
+>> samples/seccomp/user-trap.c:97:26: error: invalid application of 'sizeof' to an incomplete type 'struct sock_filter[]'
+                   .len = (unsigned short)ARRAY_SIZE(filter),
+                                          ^~~~~~~~~~~~~~~~~~
+   samples/seccomp/user-trap.c:24:30: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
+                                ^~~
+   2 errors generated.
 
- scripts/Makefile.package | 38 +++++++++++++++++++++++++++++++++-----
- scripts/package/mkdebian | 25 +++++++++++++++++++++++++
- 2 files changed, 58 insertions(+), 5 deletions(-)
 
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index dfbf40454a99..14567043a8af 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -50,6 +50,32 @@ fi ; \
- tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
- 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
- 
-+# Source Tarball
-+# ---------------------------------------------------------------------------
-+
-+PHONY += gen-exclude
-+gen-exclude:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile scripts_exclude
-+
-+# - Commit 1f5d3a6b6532e25a5cdf1f311956b2b03d343a48 removed '*.rej' from
-+#   .gitignore, but it is definitely a generated file.
-+# - The kernel tree has no symlink at the toplevel. If it does, it is a
-+#   generated one.
-+quiet_cmd_exclude_list = GEN     $@
-+      cmd_exclude_list = \
-+	scripts/gen-exclude --extra-pattern='*.rej' --prefix=./ --rootdir=$(srctree) > $@; \
-+	find . -maxdepth 1 -type l >> $@; \
-+	echo "./$@" >> $@
-+
-+.exclude-list: gen-exclude
-+	$(call cmd,exclude_list)
-+
-+quiet_cmd_tar = TAR     $@
-+      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --sort=name --transform 's:^\.:linux:S' .
-+
-+%.tar.gz: .exclude-list
-+	$(call cmd,tar)
-+
- # rpm-pkg
- # ---------------------------------------------------------------------------
- PHONY += rpm-pkg
-@@ -81,12 +107,11 @@ binrpm-pkg:
- 
- PHONY += deb-pkg
- deb-pkg:
--	$(MAKE) clean
- 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
--	$(call cmd,src_tar,$(KDEB_SOURCENAME))
--	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
--		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
-+	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-+		$(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-+	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
-+		--build=source,binary --source-option=-sP -nc -us -uc
- 
- PHONY += bindeb-pkg
- bindeb-pkg:
-@@ -174,4 +199,7 @@ help:
- 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
- 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
- 
-+PHONY += FORCE
-+FORCE:
-+
- .PHONY: $(PHONY)
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index c3bbef7a6754..2f612617cbcf 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -84,6 +84,8 @@ set_debarch() {
- 	fi
- }
- 
-+rm -rf debian
-+
- # Some variables and settings used throughout the script
- version=$KERNELRELEASE
- if [ -n "$KDEB_PKGVERSION" ]; then
-@@ -135,6 +137,29 @@ fi
- mkdir -p debian/source/
- echo "1.0" > debian/source/format
- 
-+# Ugly: ignore anything except .config or debian/
-+# (is there a cleaner way to do this?)
-+cat<<'EOF' > debian/source/local-options
-+diff-ignore
-+
-+extend-diff-ignore = ^[^.d]
-+
-+extend-diff-ignore = ^\.[^c]
-+extend-diff-ignore = ^\.c($|[^o])
-+extend-diff-ignore = ^\.co($|[^n])
-+extend-diff-ignore = ^\.con($|[^f])
-+extend-diff-ignore = ^\.conf($|[^i])
-+extend-diff-ignore = ^\.confi($|[^g])
-+extend-diff-ignore = ^\.config.
-+
-+extend-diff-ignore = ^d($|[^e])
-+extend-diff-ignore = ^de($|[^b])
-+extend-diff-ignore = ^deb($|[^i])
-+extend-diff-ignore = ^debi($|[^a])
-+extend-diff-ignore = ^debia($|[^n])
-+extend-diff-ignore = ^debian[^/]
-+EOF
-+
- echo $debarch > debian/arch
- extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
- extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
+vim +/BPF_JMP64 +38 samples/seccomp/bpf-fancy.c
+
+8ac270d1e29f042 Will Drewry 2012-04-12  26  
+8ac270d1e29f042 Will Drewry 2012-04-12  27  int main(int argc, char **argv)
+8ac270d1e29f042 Will Drewry 2012-04-12  28  {
+3a9af0bd34410a2 Kees Cook   2015-02-17  29  	struct bpf_labels l = {
+3a9af0bd34410a2 Kees Cook   2015-02-17  30  		.count = 0,
+3a9af0bd34410a2 Kees Cook   2015-02-17  31  	};
+8ac270d1e29f042 Will Drewry 2012-04-12  32  	static const char msg1[] = "Please type something: ";
+8ac270d1e29f042 Will Drewry 2012-04-12  33  	static const char msg2[] = "You typed: ";
+8ac270d1e29f042 Will Drewry 2012-04-12  34  	char buf[256];
+8ac270d1e29f042 Will Drewry 2012-04-12  35  	struct sock_filter filter[] = {
+8ac270d1e29f042 Will Drewry 2012-04-12  36  		/* TODO: LOAD_SYSCALL_NR(arch) and enforce an arch */
+8ac270d1e29f042 Will Drewry 2012-04-12  37  		LOAD_SYSCALL_NR,
+8ac270d1e29f042 Will Drewry 2012-04-12 @38  		SYSCALL(__NR_exit, ALLOW),
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
