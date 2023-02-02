@@ -1,79 +1,52 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728DB3201
-	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 20:43:06 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id 5so3140389plo.3
-        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 12:43:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=exzm2wuPBhIQWX3E55joJefmS3F/bF9ALNvYVGgKnnI=;
-        b=ex714A2Q1YLxh1ILPeVSa9eYiOCbWhxGIKP7PVd5qkRydmxQDb1IiAL/v/auB4T8WH
-         TyeBQXWiqC9LriOoRr2NZTDym8anZ1FQnezXoBIo9Y6VXpv452MF2L8mFq87xzXSQ9dv
-         sdjRaapW6CWRp5jOTnk2sxvMGqvNSvq5x4gLQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=exzm2wuPBhIQWX3E55joJefmS3F/bF9ALNvYVGgKnnI=;
-        b=fA1Ww/YLQU6l2mrYKh5tOl9MD+eQ2h80ibKL7QIjvqlDXnxAaSoeScpq6exC+07OhT
-         lWMPd4jgnlbItib33nrczIGGcOBy3oTO43Ce/m+5UZbMdYwJN5wdkipg5ah00m1RtSk+
-         lJpVVNRlpcbkfn9weY0MdgPM2ri5CtfxThOhE6zEeNw5/8OT+2Xxka2EmRVRgdnc5SUu
-         aW7YLLXC5ZWrl/nzHVrZeV9nE8l16wmi3Qg/Mx80KXHUp1cg7aWckTUDYW4n0W3c6NMz
-         TQS4/rALQBcvIOIRQdgqLljin1mI2aDQP+npnEOzvCnES6L0H1JNeCEpMpuE/7/d5ECb
-         BmAg==
-X-Gm-Message-State: AO0yUKV+P2P6Hc3vrw6vZlL8l8SUkXvtg5xLFbPZCAEobkESxhtC+nxG
-	hYmYr0R6yGOA/RWzzkVm73iLaQ==
-X-Google-Smtp-Source: AK7set9GRXX3f8QjzXsIEJ0ialX9IyfrHuixWCo0DhS9txT/cacdMUVfWP6d2N76mb85HrEDMGjjvw==
-X-Received: by 2002:a17:902:f608:b0:198:adc4:22a4 with SMTP id n8-20020a170902f60800b00198adc422a4mr2558868plg.31.1675370585899;
-        Thu, 02 Feb 2023 12:43:05 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0019604f3fc3asm77929pla.265.2023.02.02.12.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 12:43:05 -0800 (PST)
-Message-ID: <63dc2059.170a0220.25fcc.0394@mx.google.com>
-X-Google-Original-Message-ID: <202302022041.@keescook>
-Date: Thu, 2 Feb 2023 20:43:04 +0000
-From: Kees Cook <keescook@chromium.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, John Stultz <jstultz@google.com>,
-	Yongqin Liu <yongqin.liu@linaro.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
-	Michael Kelley <mikelley@microsoft.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Won Chung <wonchung@google.com>, David Gow <davidgow@google.com>,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-References: <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
- <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
- <63dbf04a.630a0220.2608a.0149@mx.google.com>
- <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
- <63dc0a89.170a0220.49507.0091@mx.google.com>
- <CAMj1kXHTwFH-OADZ5nZXfZyuH-x7XJL3DMyiz2Tr_nCuup+xFA@mail.gmail.com>
- <CAKwvOd=cuDb2NNK4uoUTYTLryFig47hvDQ08ta5XhjHsEhAG4A@mail.gmail.com>
- <CABCJKuc+GvTHXu-CVedZs6CvPKJ8ySrVztkP2V3dsWn70xf7hA@mail.gmail.com>
- <63dc14a2.170a0220.beb2a.0275@mx.google.com>
- <CABCJKueSasiWQvO2jZ-8KUF+c-dNgf87pR45sfHHCQMyyTvL0Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283788F7D;
+	Thu,  2 Feb 2023 21:51:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675374717; x=1706910717;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TpaqqMkhZ4cpZKxODCg9/NjjGOHDmYf9F5jCwNIn3Og=;
+  b=HJUXqZ+uQ6LoSEzXgAbBd5cG5mLaElHPJCwoQiOKmLs7xPJmdA6TlECv
+   yuzn8iIGNRFLlo9eaxJd3bq/pEWipWG+uGKjJtHYeKSdmoDKralNBFYnI
+   yM+TmLAdj6JHHqYdntjSI5artKt8lQlxJQZ9GUT9/G33uPdLXd5qRyERq
+   ttJYLByJgoNCQCyktrYtzlJwBurhHYpcWdgsek7jgFJW4HsCdXpSN5RIJ
+   GOnnyCRZhmXRKyp1xr4hj9IjijQSu+bOSySkLAd1LtDtLRoA2UkDN3yU6
+   L/XndmFWb7uGDvdRi+qW/Q3GaDIOEw1WKw6zl/eSd/aafMw3KfkSdEkim
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="316574610"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="316574610"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 13:51:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="729044313"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="729044313"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2023 13:51:52 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNhUl-0006tY-2s;
+	Thu, 02 Feb 2023 21:51:51 +0000
+Date: Fri, 3 Feb 2023 05:51:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+	mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: Re: [PATCH v6 3/5] media: verisilicon: Do not set ctx->bit_depth in
+ hantro_try_ctrl()
+Message-ID: <202302030526.YN9Piae4-lkp@intel.com>
+References: <20230130135802.744743-4-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -82,98 +55,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABCJKueSasiWQvO2jZ-8KUF+c-dNgf87pR45sfHHCQMyyTvL0Q@mail.gmail.com>
+In-Reply-To: <20230130135802.744743-4-benjamin.gaignard@collabora.com>
 
-On Thu, Feb 02, 2023 at 12:11:47PM -0800, Sami Tolvanen wrote:
-> On Thu, Feb 2, 2023 at 11:53 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Thu, Feb 02, 2023 at 11:49:42AM -0800, Sami Tolvanen wrote:
-> > > A quick look at Clang's source code suggests that Intrinsic::ubsantrap
-> > > already accepts the handler ID (from the SanitizerHandler enum) as an
-> > > argument and the arm64 LLVM back-end appears to encode the value as an
-> > > immediate for the brk instruction. I didn't confirm that this actually
-> > > works, but perhaps we just need to teach the kernel about the possible
-> > > values?
-> >
-> > Oh excellent. Yeah, if that's all that's needed here that would be
-> > great. What are the values?
-> 
-> The arm64 brk immediate encoding seems to be "ubsantrap arg | 'U' << 8":
-> 
-> https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/AArch64/AArch64InstrInfo.td#L7571
-> 
-> The argument values come from the SanitizerHandler enum, which is
-> populated from this list:
-> 
-> https://github.com/llvm/llvm-project/blob/main/clang/lib/CodeGen/CodeGenFunction.h#L113
-> 
-> Therefore, according to the tests, for ubsantrap(12) we'll get brk
-> #0x550c, for example:
-> 
-> https://github.com/llvm/llvm-project/blob/main/llvm/test/CodeGen/AArch64/ubsantrap.ll
+Hi Benjamin,
 
-So the absolute minimal handler would look like this:
+I love your patch! Perhaps something to improve:
 
-diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
-index 6e000113e508..3f0f0d03268b 100644
---- a/arch/arm64/include/asm/brk-imm.h
-+++ b/arch/arm64/include/asm/brk-imm.h
-@@ -28,6 +28,8 @@
- #define BUG_BRK_IMM			0x800
- #define KASAN_BRK_IMM			0x900
- #define KASAN_BRK_MASK			0x0ff
-+#define UBSAN_BRK_IMM			0x5500
-+#define UBSAN_BRK_MASK			0x00ff
- 
- #define CFI_BRK_IMM_TARGET		GENMASK(4, 0)
- #define CFI_BRK_IMM_TYPE		GENMASK(9, 5)
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 4c0caa589e12..36b917d8fa5f 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -1074,6 +1074,18 @@ static struct break_hook kasan_break_hook = {
- };
- #endif
- 
-+#ifdef CONFIG_UBSAN_TRAP
-+static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
-+{
-+	die("Oops - UBSAN", regs, esr);
-+}
-+
-+static struct break_hook ubsan_break_hook = {
-+	.fn	= ubsan_handler,
-+	.imm	= UBSAN_BRK_IMM,
-+	.mask	= UBSAN_BRK_MASK,
-+};
-+#endif
- 
- #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
- 
-@@ -1091,6 +1103,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
- #ifdef CONFIG_KASAN_SW_TAGS
- 	if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
- 		return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
-+#endif
-+#ifdef CONFIG_UBSAN_TRAP
-+	if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
-+		return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
- #endif
- 	return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
- }
-@@ -1104,6 +1120,9 @@ void __init trap_init(void)
- 	register_kernel_break_hook(&fault_break_hook);
- #ifdef CONFIG_KASAN_SW_TAGS
- 	register_kernel_break_hook(&kasan_break_hook);
-+#endif
-+#ifdef CONFIG_UBSAN_TRAP
-+	register_kernel_break_hook(&ubsan_break_hook);
- #endif
- 	debug_traps_init();
- }
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on sailus-media-tree/streams linus/master pza/reset/next]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-But we could expand ubsan_handler() to extract the SanitizerHandler enum
-value and report which UBSAN check was hit...
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-verisilicon-Do-not-set-context-src-dst-formats-in-reset-functions/20230130-220204
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230130135802.744743-4-benjamin.gaignard%40collabora.com
+patch subject: [PATCH v6 3/5] media: verisilicon: Do not set ctx->bit_depth in hantro_try_ctrl()
+config: arm64-randconfig-r005-20230202 (https://download.01.org/0day-ci/archive/20230203/202302030526.YN9Piae4-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/aecd2de6feaeb163aa78d82f1172b0020b64b174
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Benjamin-Gaignard/media-verisilicon-Do-not-set-context-src-dst-formats-in-reset-functions/20230130-220204
+        git checkout aecd2de6feaeb163aa78d82f1172b0020b64b174
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/verisilicon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/verisilicon/hantro_drv.c:254:21: warning: variable 'ctx' set but not used [-Wunused-but-set-variable]
+           struct hantro_ctx *ctx;
+                              ^
+   1 warning generated.
+
+
+vim +/ctx +254 drivers/media/platform/verisilicon/hantro_drv.c
+
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia       2018-12-05  251  
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  252  static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  253  {
+4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29 @254  	struct hantro_ctx *ctx;
+4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  255  
+4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  256  	ctx = container_of(ctrl->handler,
+4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  257  			   struct hantro_ctx, ctrl_handler);
+4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  258  
+46a309d2751787 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-11-26  259  	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  260  		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  261  
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  262  		if (sps->chroma_format_idc > 1)
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  263  			/* Only 4:0:0 and 4:2:0 are supported */
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  264  			return -EINVAL;
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  265  		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  266  			/* Luma and chroma bit depth mismatch */
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  267  			return -EINVAL;
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  268  		if (sps->bit_depth_luma_minus8 != 0)
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  269  			/* Only 8-bit is supported */
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  270  			return -EINVAL;
+b92de2f91821ce drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard     2022-07-08  271  	} else if (ctrl->id == V4L2_CID_STATELESS_HEVC_SPS) {
+8968cfc282955c drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard     2021-06-03  272  		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
+8968cfc282955c drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard     2021-06-03  273  
+d040a24b5aaede drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  274  		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
+d040a24b5aaede drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  275  			/* Only 8-bit and 10-bit are supported */
+df9ec2fc8e70e0 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2022-07-18  276  			return -EINVAL;
+e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  277  	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
+e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  278  		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
+e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  279  
+e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  280  		/* We only support profile 0 */
+e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  281  		if (dec_params->profile != 0)
+e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  282  			return -EINVAL;
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  283  	}
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  284  	return 0;
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  285  }
+d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  286  
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
