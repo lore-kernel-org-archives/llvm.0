@@ -1,114 +1,117 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB848F60
-	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 18:56:41 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-501c3a414acso38874257b3.7
-        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 10:56:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BDA8F60
+	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 19:00:49 +0000 (UTC)
+Received: by mail-pg1-f179.google.com with SMTP id s13so385022pgc.10
+        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 11:00:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LtNgvCo2oTHEiKopp90V0O7XCGsFhK/RxZsHKCR63ks=;
-        b=LrK+WfLmKwdRQHt/LiBQdJnHysNiaPCxZlA7JNmEHd4luIwC2Whh9/6MbF7mlsYTPB
-         Jp8rqYjfebQyi24GQKpUvOKei59glITHDUgkAMGHhYhruzxkLCpR45y6fwUBziuJ0VL+
-         maFIYp2sQZ9dPkfrCO8Ht83u3RjyIHVTiakAODC4zhCWY3nB+nOD1OWx5rHUfcP5rFad
-         WZ1Wp4gsFLmUbhkmtu0qb+jDWKNnejZkucuGqlu+yUO5HTHiXKSU/owrE/ENWvD6krcu
-         Yas6UOaq4YmJnkr4sBt9taPWvDWTEeusQezaLsW8Ffld+TLhuSpgczdR0xEit/12dZUx
-         Ywlw==
+        bh=p3ZYbtaIavkAf5aV8P1noUyCGHCi0NGSeVESNHvFnYY=;
+        b=tERd3yuEcFjOGwSs1S4VXGdkVqpN6d4UcJwqaiEYucEdFffjmVwx6IDBVLa7XV4kOY
+         nkeXbAEzLNpaYr3MNTHiUQ8AU6tUR3k35WlLLOUxlKQYXW1vs7nUDrTUnF75dZCDdl3o
+         Vgb3Jmf8Oj2ZVHxRhbmUPbn+Wq6fNVwAlOjMd2lxhqQwYZsk471YYelimQvNaCIsbFtR
+         97gVJnMI13LURT+JSYWHTIWHKmrVE0AkyLru+Y6TE74DiYtQBmSakWGDyIk6aOfMhCTv
+         ZcAes6tsNcN4zMcgAOcWyvVFf1+5DdwWbLSuazZCgEA3RdGPwAcIUl50DbZA5YxsBPnw
+         Jx8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LtNgvCo2oTHEiKopp90V0O7XCGsFhK/RxZsHKCR63ks=;
-        b=52Y48W91GO45yMzZhrqzBHJqXRjaswUEjNLHO2Pd5N/0zCEh+fXxJTCYsrYRAfcQNG
-         57ZQhtGSrRQgf83QNtCXlDXtX6sZzpn2tv5CN64pzYuyON9CEm0BrueVfFUYAggg3wVq
-         hcMfli9H+lkNBjD+rxUAZ3WslA7SZWzHBKU4PlPgQckAeZzsLWGpJFD35phdY76CmLHk
-         fv5pzQGbyWgynntdZXybh29NHv4HuFTXFazXpavZxooM8tHHmp+gZaX2mWvIb7F8/W2z
-         C9z/7lm1AxIpXUElS/KMxXmqvqlsF38sbRlbqNCc7fpnnyDhsFt5UZ3Sw5tUSXmJbI5L
-         f3jw==
-X-Gm-Message-State: AO0yUKVMIrUPYRds/E3s56EN8yoKFX5lBU8EmlBK7QdmfJItS53Tsf5V
-	GuWfmPNRUJAHnv9iywoMgxmsJNyiv5C6gokCDbc8
-X-Google-Smtp-Source: AK7set+OUDqGn8Z+7j+Ty2VVT8mhQmN6lNPvR4vFF+dIe6K2N8c9ihLcTibuzT6TLRDAmatY0gIn7AIA6gKd2v9lV6U=
-X-Received: by 2002:a05:690c:82c:b0:500:81cf:8017 with SMTP id
- by12-20020a05690c082c00b0050081cf8017mr811909ywb.212.1675364200573; Thu, 02
- Feb 2023 10:56:40 -0800 (PST)
+        bh=p3ZYbtaIavkAf5aV8P1noUyCGHCi0NGSeVESNHvFnYY=;
+        b=vPSjaSJnH09+Nd5iIQLrob3VPe5e8LMqw+mj9mNoRAGXbSHitpigDutj9hoDLjXukG
+         aWbudE0vUZpn8d3TDSIYW6BGaw1TdCjCbYQdwTnhrhvJrFl/cRtfEbcdBfblKnYlsP9Z
+         6D6ggANCk0tsDMPR2zBvXv6wWPU9m2jnTo4ruW4KGUBWtT3CsRpFbD36ISEZZHCc4tPF
+         dcL8/IaNZBLdFRr/oQqtCbuoIB52AK+iwtr+CM0r9XPGismvn3yBKYtmcTAWSCjeDv/k
+         aFhygEesmcKM+/RNIBOGk/CwRo8lEV04TTD+fwt8SfsVcDP6E7p9Yd63Wti6EG+P8D9J
+         cN9w==
+X-Gm-Message-State: AO0yUKX9ftBaCV45aGFa2Hg3J+klxFoGdPM87yQUFYE3o3oHGMhBZZn6
+	IVXg9HfKdIUT/LNAADHSWeat7ABsONkubPcaKxex/w==
+X-Google-Smtp-Source: AK7set8NvDoA9gf4AicHigBtu9UpVuZVLhwEfuP2Vzy2j1FjpsC9TsZ1y3DDjZctSawx3/ctiEaprHJ0rsQLVFXvU3g=
+X-Received: by 2002:a63:dd43:0:b0:4da:af6:ed with SMTP id g3-20020a63dd43000000b004da0af600edmr1187478pgj.30.1675364449073;
+ Thu, 02 Feb 2023 11:00:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
- <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
- <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com> <63dbf04a.630a0220.2608a.0149@mx.google.com>
-In-Reply-To: <63dbf04a.630a0220.2608a.0149@mx.google.com>
-From: John Stultz <jstultz@google.com>
-Date: Thu, 2 Feb 2023 10:56:29 -0800
-Message-ID: <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-To: Kees Cook <keescook@chromium.org>
-Cc: Yongqin Liu <yongqin.liu@linaro.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rasmus Villemoes <rasmus.villemoes@prevas.dk>, 
-	Thomas Gleixner <tglx@linutronix.de>, Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>, 
-	Michael Kelley <mikelley@microsoft.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Won Chung <wonchung@google.com>, David Gow <davidgow@google.com>, 
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Andy Shevchenko <andriy.shevchenko@intel.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Sumit Semwal <sumit.semwal@linaro.org>
+References: <20230202-dm-parenthesis-warning-v1-1-ebdee213eeb9@kernel.org>
+In-Reply-To: <20230202-dm-parenthesis-warning-v1-1-ebdee213eeb9@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 2 Feb 2023 11:00:37 -0800
+Message-ID: <CAKwvOdnffHbU4ObT2jDr_iASEC==CUsX2FfqdA-+iLU4y5Ma=g@mail.gmail.com>
+Subject: Re: [PATCH] dm flakey: Fix clang -Wparentheses-equality in flakey_map()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: agk@redhat.com, snitzer@kernel.org, trix@redhat.com, 
+	sweettea-kernel@dorminy.me, mpatocka@redhat.com, dm-devel@redhat.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 2, 2023 at 9:18 AM Kees Cook <keescook@chromium.org> wrote:
-> On Wed, Feb 01, 2023 at 12:11:41AM -0800, John Stultz wrote:
-> > On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
-> > > This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
-> > > for the android-mainline based hikey960 build, with this commit reverted,
-> > > there is no problem for the build to boot to the homescreen.
-> > > Not sure if you have any idea about it and give some suggestions.
-> > >
-> > > Here is part of the kernel panic log:
-...
-> > Here as nr_sensors=1, we allocate only one structure for the array.
-> > But then below that, we modify two entries, writing past the valid
-> > array, and corrupting data when writing the second sensor values.
-> >
-> > data->sensor[0].id = HI3660_BIG_SENSOR;
-> > data->sensor[0].irq_name = "tsensor_a73";
-> > data->sensor[0].data = data;
-> >
-> > data->sensor[1].id = HI3660_LITTLE_SENSOR;
-> > data->sensor[1].irq_name = "tsensor_a53";
-> > data->sensor[1].data = data;
-> >
-> > I suspect nr_sensors needs to be set to 2.
-> >
-> > Nice work, Kees!
+On Thu, Feb 2, 2023 at 9:00 AM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> Yay for compilers! :)
+> Clang warns:
+>
+>   ../drivers/md/dm-flakey.c:369:28: error: equality comparison with extraneous parentheses [-Werror,-Wparentheses-equality]
+>                           if ((fc->corrupt_bio_rw == WRITE)) {
+>                                ~~~~~~~~~~~~~~~~~~~^~~~~~~~
+>   ../drivers/md/dm-flakey.c:369:28: note: remove extraneous parentheses around the comparison to silence this warning
+>                           if ((fc->corrupt_bio_rw == WRITE)) {
+>                               ~                   ^       ~
+>   ../drivers/md/dm-flakey.c:369:28: note: use '=' to turn this equality comparison into an assignment
+>                           if ((fc->corrupt_bio_rw == WRITE)) {
+>                                                   ^~
+>                                                   =
+>   1 error generated.
+>
+> GCC only warns when one set of parentheses are used for assignment
+> expressions, whereas clang additionally warns when two sets of
+> parentheses are used for equality comparisons. Remove the extra set of
+> parentheses to silence the warning as it suggests, as this is obviously
+> supposed to be an equality comparison.
+>
+> Fixes: 0e766389cedc ("dm flakey: fix logic when corrupting a bio")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1798
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Well, I know it's not trivial to make the compilers catch these
-things, so yay for you and others putting in all the effort on this as
-well.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-That said, making sense of the error message isn't completely trivial
-either. I've been seeing a few cases recently of some of the new
-compiler tooling (I pinged you earlier on a CFI one) causing errors
-that developers aren't really sure how to address.  I know sometimes
-it's not easy to surface the errors with context to what was wrong,
-but at the risk of intense bike shedding, is there some way to provide
-something like "Likely array bounds error" instead of just "BRK
-handler: Fatal exception"?
+> ---
+> I do not mind this change being squashed with the offending commit, as I
+> noticed it was Cc'd for stable, which would minimize the chance for
+> breakage.
+> ---
+>  drivers/md/dm-flakey.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/md/dm-flakey.c b/drivers/md/dm-flakey.c
+> index 08f9aa476d97..335684a1aeaa 100644
+> --- a/drivers/md/dm-flakey.c
+> +++ b/drivers/md/dm-flakey.c
+> @@ -366,7 +366,7 @@ static int flakey_map(struct dm_target *ti, struct bio *bio)
+>                  * Corrupt matching writes.
+>                  */
+>                 if (fc->corrupt_bio_byte) {
+> -                       if ((fc->corrupt_bio_rw == WRITE)) {
+> +                       if (fc->corrupt_bio_rw == WRITE) {
+>                                 if (all_corrupt_bio_flags_match(bio, fc))
+>                                         corrupt_bio_data(bio, fc);
+>                         }
+>
+> ---
+> base-commit: 6f30cc248507ee96c22ff4c3cbc86099ff12b7a9
+> change-id: 20230202-dm-parenthesis-warning-6139f4b5020b
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
 
-> Was a patch sent to fix this driver?
 
-I think YongQin is looking into it (either setting the nr_sensors
-value to 2 or dropping the second sensor access).
-
-thanks
--john
+-- 
+Thanks,
+~Nick Desaulniers
