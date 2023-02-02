@@ -1,248 +1,121 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156028F54;
-	Thu,  2 Feb 2023 17:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675359945; x=1706895945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vCb2WhJiRHFwoE1ZChI26/waem1U2x1ctLwJCbwvF8M=;
-  b=ZHBsgSU8pPoXq500hQeR5+vRlfbHDjzaQAt+GgbPiZytyfmw0aQHtH33
-   OiuVhg6ynsLf+qTAy9uB1gTPum7miYCxsoQIdWuWDQCgr2PqLH7NNCVX+
-   gFgQPejbdLPHQeANkcmgXr3/1OpcSheTb0VOtvKo3jzEYPQPGy//Kfpeb
-   35VbpXopz0ip8Cma0cnLcZUbrDke4x2s2reDFagKYZjEXsG1/qLxiMxp3
-   W2CeuGDmeCYr0hNz4Qq+/VKfmpY9CxsG+BYYyIpwABcuYO93ulMcQvZTK
-   boOFag6ryeHo87r5kCzFKxfAO+pSfup0esRZKEwzzgyIC7INekWYiKD8D
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="393104083"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="393104083"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 09:45:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="667360046"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="667360046"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2023 09:45:41 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNdeW-0006gx-1M;
-	Thu, 02 Feb 2023 17:45:40 +0000
-Date: Fri, 3 Feb 2023 01:45:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chen Lin <chen45464546@163.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result
- of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned
- short') is always true
-Message-ID: <202302030154.JHiHm9ZP-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052188F54
+	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 18:05:55 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-4c8e781bc0aso27865037b3.22
+        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 10:05:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pcrdwdxm3GaoayBnAN0D1xU3wF7llh/DmYJIvd7/CSs=;
+        b=mzUE3hQUlTgZW+KoG/RsOuhs2zwW1QN1QpRvovVnEF9IN2laZNI+3boFOK/RoKamBV
+         Ik3TENNNFksJOyFwovOwFRrUJ/C/ArP78Rq3buhwWQByumqUSbokOCoVWrY0yREvU/aP
+         MopjTY6vlzHrnmtXmSaIAJEafRfIbORNX7iTr1GXFRn5wcxE5ehAvfAeEeMSAUdK7tg+
+         sE5VR9pQ5OPdUO4z3B7h/R2lJL7IvOM3BpQSxY9B7CZdJTk8N7+UQFj/AJSinav5Zy81
+         Z4+rtFznfMaTktQ2u/R8sn6a0/9R6HqqTH3psEJKlcyoKRZUgbNU2kkgS/YnC2J9oOd+
+         FBGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pcrdwdxm3GaoayBnAN0D1xU3wF7llh/DmYJIvd7/CSs=;
+        b=o0YY3KiSWgdsFvFO3YMkV5MVfkVzZIsvyk0Iyg6rD5Gs4No9O2FxfmtdrHWfskOx+R
+         ffUSunc6RWnZAkl1txoR2yGkG6ww74qgb2NVDRJR2X/V/ur/pGRHKWAJxvG8GgESEdV2
+         m/4Ckj4mVPtfyiH8wDnlGQHFDFbmPsli21mgalNknO98fzShqh+FoJ6j0ZKnaB/fwflZ
+         xyqiN5LRBwL3NOjGRRAOl1zVLXIstaBLVGuL7DdPytSHJvFY3K/WtQLsNQyDXvByw3yQ
+         zdT9otX/YKJA3R2g6oASLacUHfUfki1OLFNUyqGgPq76SN+hbmLbvHmbAwiM6gOcwZob
+         vsOg==
+X-Gm-Message-State: AO0yUKW6R7Ly+U3OyLeS7p6Cu0jnr1o7ZRWdQ0gvbz2KrLX83B0P2Gkp
+	x48FpGhAsTiRo/eS3qUR4nabG8/DbzW3QdEyT54=
+X-Google-Smtp-Source: AK7set9MnxxlJeWO4CaZjVHGtPtPKCQhta0jpl3+E87wBf9g+u8F6ZpwMKBXdb24b/9R/88Os7Gf6mOLLMdzToqto5Y=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:6989:8074:882f:1b03])
+ (user=ndesaulniers job=sendgmr) by 2002:a05:6902:1801:b0:7c8:3b5:b58d with
+ SMTP id cf1-20020a056902180100b007c803b5b58dmr1053700ybb.494.1675361154937;
+ Thu, 02 Feb 2023 10:05:54 -0800 (PST)
+Date: Thu,  2 Feb 2023 10:05:48 -0800
+In-Reply-To: <202302021759.syE8waoZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <202302021759.syE8waoZ-lkp@intel.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675361148; l=2471;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=1znbSDzr7hZkfxh9QWcbuf6FrYA2adf+h8XbmU+08m8=;
+ b=iFY7n4mMPyovBg+3CK51+G1hMOc0LKIuvX7lW/a+IEZTQWbLGmXirNYWH5oelsG9pgTMvNZI/cL1
+ ZwOw0DmCCxOprJENMrlBxlOfc8QFh7HD/W9cTqGqfACAK2gmfd0L
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230202180548.229213-1-ndesaulniers@google.com>
+Subject: [PATCH v2] Documentation/llvm: add Chimera Linux, Google and Meta datacenters
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	Yonghong Song <yhs@fb.com>, Daniel Kolesa <q66@chimera-linux.org>, Chris Mason <clm@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Chen,
+Chimera Linux is a Linux distribution from 2021 that builds its kernels
+with Clang.
 
-FYI, the error/warning still remains.
+Google transitioned its data center fleet to run Clang built kernels in
+2021, and Meta did so as well in 2022.  Meta talked about this at LPC
+2022 at a talk titled Kernel Live Patching at Scale.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9f266ccaa2f5228bfe67ad58a94ca4e0109b954a
-commit: 2f2c0d2919a14002760f89f4e02960c735a316d2 net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
-date:   8 months ago
-config: arm64-randconfig-r005-20230202 (https://download.01.org/0day-ci/archive/20230203/202302030154.JHiHm9ZP-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f2c0d2919a14002760f89f4e02960c735a316d2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2f2c0d2919a14002760f89f4e02960c735a316d2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/mediatek/
+These were important milestones for building the kernel with Clang.
+Making note of them helps improve confidence in the project.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+Co-developed-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Cc: Daniel Kolesa <q66@chimera-linux.org>
+Cc: Chris Mason <clm@meta.com>
+---
+For Bernd Helmle!
 
-All warnings (new ones prefixed by >>):
+Changes v1 -> v2:
+* pick up RB tags.
+* switch signed-off-by to co-developed-by, as per Nathan.
+* restore `<` I dropped accidentally in v1, as per kernel test robot.
 
->> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
-   2 warnings generated.
+ Documentation/kbuild/llvm.rst | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-
-vim +1481 drivers/net/ethernet/mediatek/mtk_eth_soc.c
-
-  1434	
-  1435	static int mtk_poll_rx(struct napi_struct *napi, int budget,
-  1436			       struct mtk_eth *eth)
-  1437	{
-  1438		struct dim_sample dim_sample = {};
-  1439		struct mtk_rx_ring *ring;
-  1440		int idx;
-  1441		struct sk_buff *skb;
-  1442		u8 *data, *new_data;
-  1443		struct mtk_rx_dma_v2 *rxd, trxd;
-  1444		int done = 0, bytes = 0;
-  1445	
-  1446		while (done < budget) {
-  1447			struct net_device *netdev;
-  1448			unsigned int pktlen;
-  1449			dma_addr_t dma_addr;
-  1450			u32 hash, reason;
-  1451			int mac = 0;
-  1452	
-  1453			ring = mtk_get_rx_ring(eth);
-  1454			if (unlikely(!ring))
-  1455				goto rx_done;
-  1456	
-  1457			idx = NEXT_DESP_IDX(ring->calc_idx, ring->dma_size);
-  1458			rxd = ring->dma + idx * eth->soc->txrx.rxd_size;
-  1459			data = ring->data[idx];
-  1460	
-  1461			if (!mtk_rx_get_desc(eth, &trxd, rxd))
-  1462				break;
-  1463	
-  1464			/* find out which mac the packet come from. values start at 1 */
-  1465			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-  1466				mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
-  1467			else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
-  1468				 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
-  1469				mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
-  1470	
-  1471			if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
-  1472				     !eth->netdev[mac]))
-  1473				goto release_desc;
-  1474	
-  1475			netdev = eth->netdev[mac];
-  1476	
-  1477			if (unlikely(test_bit(MTK_RESETTING, &eth->state)))
-  1478				goto release_desc;
-  1479	
-  1480			/* alloc new buffer */
-> 1481			if (ring->frag_size <= PAGE_SIZE)
-  1482				new_data = napi_alloc_frag(ring->frag_size);
-  1483			else
-  1484				new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
-  1485			if (unlikely(!new_data)) {
-  1486				netdev->stats.rx_dropped++;
-  1487				goto release_desc;
-  1488			}
-  1489			dma_addr = dma_map_single(eth->dma_dev,
-  1490						  new_data + NET_SKB_PAD +
-  1491						  eth->ip_align,
-  1492						  ring->buf_size,
-  1493						  DMA_FROM_DEVICE);
-  1494			if (unlikely(dma_mapping_error(eth->dma_dev, dma_addr))) {
-  1495				skb_free_frag(new_data);
-  1496				netdev->stats.rx_dropped++;
-  1497				goto release_desc;
-  1498			}
-  1499	
-  1500			dma_unmap_single(eth->dma_dev, trxd.rxd1,
-  1501					 ring->buf_size, DMA_FROM_DEVICE);
-  1502	
-  1503			/* receive data */
-  1504			skb = build_skb(data, ring->frag_size);
-  1505			if (unlikely(!skb)) {
-  1506				skb_free_frag(data);
-  1507				netdev->stats.rx_dropped++;
-  1508				goto skip_rx;
-  1509			}
-  1510			skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
-  1511	
-  1512			pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
-  1513			skb->dev = netdev;
-  1514			skb_put(skb, pktlen);
-  1515			if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
-  1516				skb->ip_summed = CHECKSUM_UNNECESSARY;
-  1517			else
-  1518				skb_checksum_none_assert(skb);
-  1519			skb->protocol = eth_type_trans(skb, netdev);
-  1520			bytes += pktlen;
-  1521	
-  1522			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
-  1523			if (hash != MTK_RXD4_FOE_ENTRY) {
-  1524				hash = jhash_1word(hash, 0);
-  1525				skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
-  1526			}
-  1527	
-  1528			reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
-  1529			if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
-  1530				mtk_ppe_check_skb(eth->ppe, skb,
-  1531						  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
-  1532	
-  1533			if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
-  1534				if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-  1535					if (trxd.rxd3 & RX_DMA_VTAG_V2)
-  1536						__vlan_hwaccel_put_tag(skb,
-  1537							htons(RX_DMA_VPID(trxd.rxd4)),
-  1538							RX_DMA_VID(trxd.rxd4));
-  1539				} else if (trxd.rxd2 & RX_DMA_VTAG) {
-  1540					__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
-  1541							       RX_DMA_VID(trxd.rxd3));
-  1542				}
-  1543	
-  1544				/* If the device is attached to a dsa switch, the special
-  1545				 * tag inserted in VLAN field by hw switch can * be offloaded
-  1546				 * by RX HW VLAN offload. Clear vlan info.
-  1547				 */
-  1548				if (netdev_uses_dsa(netdev))
-  1549					__vlan_hwaccel_clear_tag(skb);
-  1550			}
-  1551	
-  1552			skb_record_rx_queue(skb, 0);
-  1553			napi_gro_receive(napi, skb);
-  1554	
-  1555	skip_rx:
-  1556			ring->data[idx] = new_data;
-  1557			rxd->rxd1 = (unsigned int)dma_addr;
-  1558	
-  1559	release_desc:
-  1560			if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
-  1561				rxd->rxd2 = RX_DMA_LSO;
-  1562			else
-  1563				rxd->rxd2 = RX_DMA_PREP_PLEN0(ring->buf_size);
-  1564	
-  1565			ring->calc_idx = idx;
-  1566	
-  1567			done++;
-  1568		}
-  1569	
-  1570	rx_done:
-  1571		if (done) {
-  1572			/* make sure that all changes to the dma ring are flushed before
-  1573			 * we continue
-  1574			 */
-  1575			wmb();
-  1576			mtk_update_rx_cpu_idx(eth);
-  1577		}
-  1578	
-  1579		eth->rx_packets += done;
-  1580		eth->rx_bytes += bytes;
-  1581		dim_update_sample(eth->rx_events, eth->rx_packets, eth->rx_bytes,
-  1582				  &dim_sample);
-  1583		net_dim(&eth->rx_dim, dim_sample);
-  1584	
-  1585		return done;
-  1586	}
-  1587	
-
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index 6b2bac8e9ce0..bfb51685073c 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -15,12 +15,15 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
+ <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
+ used as viable substitutes. Distributions such as `Android
+ <https://www.android.com/>`_, `ChromeOS
+-<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
+-<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
+-collection of toolchain components implemented in terms of C++ objects
+-<https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
+-supports C and the GNU C extensions required by the kernel, and is pronounced
+-"klang," not "see-lang."
++<https://www.chromium.org/chromium-os>`_, `OpenMandriva
++<https://www.openmandriva.org/>`_, and `Chimera Linux
++<https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
++datacenter fleets also run kernels built with Clang.
++
++`LLVM is a collection of toolchain components implemented in terms of C++
++objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
++that supports C and the GNU C extensions required by the kernel, and is
++pronounced "klang," not "see-lang."
+ 
+ Clang
+ -----
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1.519.gcb327c4b5f-goog
+
