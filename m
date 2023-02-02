@@ -1,52 +1,46 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0668110FD;
-	Thu,  2 Feb 2023 09:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6708B3239;
+	Thu,  2 Feb 2023 12:27:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675330413; x=1706866413;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aIiyDgv/qmZGr3jDNkPYzcbCICg4MgEqP2BLjAJlMts=;
-  b=lk6poxTvtTNKQaCFen5csdQbcM+hX0E60hlKQlik3XryDmrrtahDRJRJ
-   mbI3NaqCopAeADTCoIB7K2bsYBNNbs/j/bzjuIbCM2nnfF07Mypd+3Xn4
-   QWrrdayx5kB+SEqqN4h7maSpYPSkWT4CiZsQ2KVMz+0+ZS+ZAEbsVGaRn
-   dPearp/pqnrO794GI+++cj5rhTOu7mOEhH1uFuLP54pRClVilHRtEhlu9
-   Md2/wk5D6Ly8IjGbNURV0/2JY8N701Ra2zgrrueBWqLuywueIYzI53+VE
-   jZNHKZDIJHuL+Lc3z/SSwJNEP4SrAlvEzjgyMd81QclG/qR9vaCBIdgH2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308742900"
+  t=1675340852; x=1706876852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R5GgOIf9gH76s8qzC5dBZpdcHe+ywXzG0g9ZF/UoaZk=;
+  b=NjI+6+NzidMiqUkl0jiUpSZjyyt+LwM6PDxDGPg7D1CwiJ0OCBexdRGC
+   liLdMyldzaFUHGESLlIuboAXcXyTYUFrGOmRzq3An3GsLbDuQnVF0O8JR
+   /852IUF/soDKC4jryzpHEJq6zUzUbC6a7XA/bVX9XBKOdBqrO8VfQpVVF
+   tG18ddt7hlzCUofGKpzss9TmVndCf459aWI9Kn9mxvWhtt2NRMARdNlAg
+   CY9f0TXmyuY1rtyRaw5A07b1KtLvi1k0IDIJJ07Sso/ZPXCusYN5PH6et
+   CMwQI7drUX7lKlrgBiniyUxT6hl+7wM5O08aPPY/FTYSWng/vHI9rZjXH
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328448089"
 X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="308742900"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 01:33:32 -0800
+   d="scan'208";a="328448089"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 04:27:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="697626494"
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="733915994"
 X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="697626494"
+   d="scan'208";a="733915994"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Feb 2023 01:33:27 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 02 Feb 2023 04:27:30 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pNVy6-0006O0-0g;
-	Thu, 02 Feb 2023 09:33:22 +0000
-Date: Thu, 2 Feb 2023 17:32:40 +0800
+	id 1pNYgb-0006Uq-1P;
+	Thu, 02 Feb 2023 12:27:29 +0000
+Date: Thu, 2 Feb 2023 20:26:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-	Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Yonghong Song <yhs@fb.com>, Daniel Kolesa <q66@chimera-linux.org>,
-	Chris Mason <chris.mason@fusionio.com>
-Subject: Re: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta
- datacenters
-Message-ID: <202302021759.syE8waoZ-lkp@intel.com>
-References: <20230201192509.4124319-1-ndesaulniers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/peterz.2023.01.26a 64/68]
+ kernel/trace/trace_preemptirq.c:122:2: error: call to undeclared function
+ 'trace'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202302022036.e3TYkFbH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,51 +49,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201192509.4124319-1-ndesaulniers@google.com>
 
-Hi Nick,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on masahiroy-kbuild/for-next]
-[also build test WARNING on masahiroy-kbuild/fixes linus/master v6.2-rc6 next-20230202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/Documentation-llvm-add-Chimera-Linux-Google-and-Meta-datacenters/20230202-032729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20230201192509.4124319-1-ndesaulniers%40google.com
-patch subject: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta datacenters
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/fb73005aa3c6a4052e30f0f0dc2c608bafd8acce
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nick-Desaulniers/Documentation-llvm-add-Chimera-Linux-Google-and-Meta-datacenters/20230202-032729
-        git checkout fb73005aa3c6a4052e30f0f0dc2c608bafd8acce
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/peterz.2023.01.26a
+head:   f9588508f16615daf50ae4e3e16f40b6be874154
+commit: 29847e5e64b9a99e8e55c70229733f1a30bd4143 [64/68] tracing, preempt: Squash _rcuidle tracing
+config: arm64-randconfig-r016-20230130 (https://download.01.org/0day-ci/archive/20230202/202302022036.e3TYkFbH-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/29847e5e64b9a99e8e55c70229733f1a30bd4143
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/peterz.2023.01.26a
+        git checkout 29847e5e64b9a99e8e55c70229733f1a30bd4143
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/ kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Documentation/kbuild/llvm.rst:13: WARNING: Unknown target name: "chromeos https://www.chromium.org/chromium-os>".
+   kernel/trace/trace_preemptirq.c:88:16: warning: no previous prototype for function 'trace_hardirqs_on_caller' [-Wmissing-prototypes]
+   __visible void trace_hardirqs_on_caller(unsigned long caller_addr)
+                  ^
+   kernel/trace/trace_preemptirq.c:88:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible void trace_hardirqs_on_caller(unsigned long caller_addr)
+             ^
+             static 
+   kernel/trace/trace_preemptirq.c:103:16: warning: no previous prototype for function 'trace_hardirqs_off_caller' [-Wmissing-prototypes]
+   __visible void trace_hardirqs_off_caller(unsigned long caller_addr)
+                  ^
+   kernel/trace/trace_preemptirq.c:103:11: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __visible void trace_hardirqs_off_caller(unsigned long caller_addr)
+             ^
+             static 
+>> kernel/trace/trace_preemptirq.c:122:2: error: call to undeclared function 'trace'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           trace(preempt_enable)(a0, a1);
+           ^
+>> kernel/trace/trace_preemptirq.c:122:8: error: use of undeclared identifier 'preempt_enable'
+           trace(preempt_enable)(a0, a1);
+                 ^
+   kernel/trace/trace_preemptirq.c:128:2: error: call to undeclared function 'trace'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           trace(preempt_disable)(a0, a1);
+           ^
+>> kernel/trace/trace_preemptirq.c:128:8: error: use of undeclared identifier 'preempt_disable'
+           trace(preempt_disable)(a0, a1);
+                 ^
+   2 warnings and 4 errors generated.
 
-vim +13 Documentation/kbuild/llvm.rst
 
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  12  
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26 @13  The Linux kernel has always traditionally been compiled with GNU toolchains
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  14  such as GCC and binutils. Ongoing work has allowed for `Clang
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  15  <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  16  used as viable substitutes. Distributions such as `Android
-fcf1b6a35c16ac5 Nick Desaulniers 2020-02-26  17  <https://www.android.com/>`_, `ChromeOS
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  18  https://www.chromium.org/chromium-os>`_, `OpenMandriva
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  19  <https://www.openmandriva.org/>`_, and `Chimera Linux
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  20  <https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  21  datacenter fleets also run kernels built with Clang.
-fb73005aa3c6a40 Nick Desaulniers 2023-02-01  22  
+vim +/trace +122 kernel/trace/trace_preemptirq.c
+
+   102	
+ > 103	__visible void trace_hardirqs_off_caller(unsigned long caller_addr)
+   104	{
+   105		lockdep_hardirqs_off(caller_addr);
+   106	
+   107		if (!this_cpu_read(tracing_irq_cpu)) {
+   108			this_cpu_write(tracing_irq_cpu, 1);
+   109			tracer_hardirqs_off(CALLER_ADDR0, caller_addr);
+   110			if (!in_nmi())
+   111				trace_irq_disable_rcuidle(CALLER_ADDR0, caller_addr);
+   112		}
+   113	}
+   114	EXPORT_SYMBOL(trace_hardirqs_off_caller);
+   115	NOKPROBE_SYMBOL(trace_hardirqs_off_caller);
+   116	#endif /* CONFIG_TRACE_IRQFLAGS */
+   117	
+   118	#ifdef CONFIG_TRACE_PREEMPT_TOGGLE
+   119	
+   120	void trace_preempt_on(unsigned long a0, unsigned long a1)
+   121	{
+ > 122		trace(preempt_enable)(a0, a1);
+   123		tracer_preempt_on(a0, a1);
+   124	}
+   125	
+   126	void trace_preempt_off(unsigned long a0, unsigned long a1)
+   127	{
+ > 128		trace(preempt_disable)(a0, a1);
 
 -- 
 0-DAY CI Kernel Test Service
