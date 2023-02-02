@@ -1,143 +1,309 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283788F7D;
-	Thu,  2 Feb 2023 21:51:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675374717; x=1706910717;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TpaqqMkhZ4cpZKxODCg9/NjjGOHDmYf9F5jCwNIn3Og=;
-  b=HJUXqZ+uQ6LoSEzXgAbBd5cG5mLaElHPJCwoQiOKmLs7xPJmdA6TlECv
-   yuzn8iIGNRFLlo9eaxJd3bq/pEWipWG+uGKjJtHYeKSdmoDKralNBFYnI
-   yM+TmLAdj6JHHqYdntjSI5artKt8lQlxJQZ9GUT9/G33uPdLXd5qRyERq
-   ttJYLByJgoNCQCyktrYtzlJwBurhHYpcWdgsek7jgFJW4HsCdXpSN5RIJ
-   GOnnyCRZhmXRKyp1xr4hj9IjijQSu+bOSySkLAd1LtDtLRoA2UkDN3yU6
-   L/XndmFWb7uGDvdRi+qW/Q3GaDIOEw1WKw6zl/eSd/aafMw3KfkSdEkim
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="316574610"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="316574610"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 13:51:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="729044313"
-X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
-   d="scan'208";a="729044313"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2023 13:51:52 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNhUl-0006tY-2s;
-	Thu, 02 Feb 2023 21:51:51 +0000
-Date: Fri, 3 Feb 2023 05:51:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-	mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v6 3/5] media: verisilicon: Do not set ctx->bit_depth in
- hantro_try_ctrl()
-Message-ID: <202302030526.YN9Piae4-lkp@intel.com>
-References: <20230130135802.744743-4-benjamin.gaignard@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934117E4
+	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 22:37:02 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so7100639pjq.0
+        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 14:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kk/Ds3iYO+g06J9MUaCKbpwM63c3pdWiJdifunw5dWQ=;
+        b=dCC8xtWdTZPk1FSxAoDo4A1N2P49Lt033efUoRwLNaCoK351wo3tgOj2iqOSGKDzzB
+         Tnwom7S52nd61fXeCiAjvdEophzja9Qp2yLSVPjeYtaoSu9T8HMk8kZkWFxKwjoXWdkP
+         N/mkhBkJegjPQVzfp4FsypiH0CoqgcXls1tww=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Kk/Ds3iYO+g06J9MUaCKbpwM63c3pdWiJdifunw5dWQ=;
+        b=Cll/l2XkrvXV6mofJR6miSFkYBIO7tRnllvY+8OBpK1jV7UZ+s0twDj2Irg44DIj5N
+         DamGH5o2kxNi4cz7Nnydsn5ffr5tO8b3RP1IQGygQxDfhYvH6syACN/qE6Et1xSxWjwL
+         ZB65tGK1dNmaYlkchk8PtsCn1EPozJnagChcIL5e+NBh6h+TFS2+ld7tjqR2F9E/yCU4
+         6jpJRK//TnT2svcOriJKFTV3+gY8W1F2lnEfEOepxNIYw4vBsEsvwKcJ0KNAnFjlDBr8
+         SiOW7lTjGIysj2lnLiVuERbp10MS/QGPnyVx3jt42skGXsJYsOSZyjVrr9uN32eoXDV4
+         P5CA==
+X-Gm-Message-State: AO0yUKUISo93roUiRQJKNpcFE9+J/7n2X2T3VDmKO+NeaTy/vrSfuXTI
+	bOksHEVoKIMS8yRRXMTf0koW5Q==
+X-Google-Smtp-Source: AK7set9JlDQsFrYkTDmC/uB02/oD+EShFPQ3lrUxnvCVhcJ3QTiYgMV1IcQl/5YkPXJkvIj3t8JsNg==
+X-Received: by 2002:a17:902:da82:b0:198:9fc3:c2ce with SMTP id j2-20020a170902da8200b001989fc3c2cemr11522814plx.19.1675377422024;
+        Thu, 02 Feb 2023 14:37:02 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902e98400b00189393ab02csm180192plb.99.2023.02.02.14.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 14:37:01 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	John Stultz <jstultz@google.com>,
+	Yongqin Liu <yongqin.liu@linaro.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Marco Elver <elver@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] arm64: Support Clang UBSAN trap codes for better reporting
+Date: Thu,  2 Feb 2023 22:36:57 +0000
+Message-Id: <20230202223653.never.473-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130135802.744743-4-benjamin.gaignard@collabora.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7316; h=from:subject:message-id; bh=YbqhocLJrgfNPtk/T1ThzmlG3z+EMOKbLsgT1fxlYXg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3DsJUA0fBD2Hch7KojM8hA+ZWcbm3riOZ43gG69B uQXvXyOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY9w7CQAKCRCJcvTf3G3AJoL+EA CF127TwM1aMAmOFNz74XWQ4yu/SwAN6w4ZHfB5/rHfvZk9wipkYZ+Lp/Jli9WwffJG4hZIfTQEGn+K ehHnUG4I/genp+deM4qldZ11xgnGA9O7bG95DAH7ttZ9j1tb7jrluWQiODcA0R1CY91hnsmIMAKBxP yg9MeRBAitq8P0GuVjZ/K9Y0Dr2XfUfcnaC/YFOWrHhTjGornHRWsaHFSLRWsl3ln5fsyH7pe3yKFf L64E1poouR0VJui+gNDD1+ZBi268AraC5pT0VhxJuVlttP2TygERukflloQV8DpP9rziNo4FrNDQpI 9d1UfXNK0ZCcl0JBOKb8GlQzbbd+Fr8/Y4spL9E5LJBFGn4YEA1C8udJoTD1Wfd/xFZjv5VNHm0m14 /pBkHBlrAC9xtYYwA6s/drXtrL34GJr3co0W09zBlGd4z8jeiZPChaw78VA8ehIJoShVhymseOZWiN UIJ2pEXf85Mabxn5B8IMSZdQFVdf3QlkOkBev/SJG5ztCYOG3Vx4DvXpmqpQPTNtgNF78Mmmt69ZvF gC+Nz8KIwpPTp6qXkniUaiwJAd09Yu8wWuceUqqiJf16pf6sQvG8USoBON8jSBxj59s8NhvvkbryQH 5lz/EnaRSUzvy0oNFgIrE7/LpqQc3v5em+KLQqFQaCw3mS8VTNU1yHgHnDcg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Benjamin,
+On arm64, Clang encodes the UBSAN check type in the esr. Extract this
+and actually report UBSAN traps with some specificity when building with
+CONFIG_UBSAN_TRAP. Before:
 
-I love your patch! Perhaps something to improve:
+  Internal error: BRK handler: 00000000f20003e8 [#1] PREEMPT SMP
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on sailus-media-tree/streams linus/master pza/reset/next]
-[cannot apply to pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+After:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/media-verisilicon-Do-not-set-context-src-dst-formats-in-reset-functions/20230130-220204
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230130135802.744743-4-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v6 3/5] media: verisilicon: Do not set ctx->bit_depth in hantro_try_ctrl()
-config: arm64-randconfig-r005-20230202 (https://download.01.org/0day-ci/archive/20230203/202302030526.YN9Piae4-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/aecd2de6feaeb163aa78d82f1172b0020b64b174
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Gaignard/media-verisilicon-Do-not-set-context-src-dst-formats-in-reset-functions/20230130-220204
-        git checkout aecd2de6feaeb163aa78d82f1172b0020b64b174
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/verisilicon/
+  Internal error: UBSAN: shift out of bounds: 00000000f2005514 [#1] PREEMPT SMP
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: John Stultz <jstultz@google.com>
+Cc: Yongqin Liu <yongqin.liu@linaro.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Marco Elver <elver@google.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/arm64/include/asm/brk-imm.h |  2 ++
+ arch/arm64/kernel/traps.c        | 21 +++++++++++++
+ include/linux/ubsan.h            |  9 ++++++
+ lib/Makefile                     |  2 --
+ lib/ubsan.c                      | 54 ++++++++++++++++++++++++++++++++
+ lib/ubsan.h                      | 28 +++++++++++++++++
+ 6 files changed, 114 insertions(+), 2 deletions(-)
+ create mode 100644 include/linux/ubsan.h
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/verisilicon/hantro_drv.c:254:21: warning: variable 'ctx' set but not used [-Wunused-but-set-variable]
-           struct hantro_ctx *ctx;
-                              ^
-   1 warning generated.
-
-
-vim +/ctx +254 drivers/media/platform/verisilicon/hantro_drv.c
-
-775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia       2018-12-05  251  
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  252  static int hantro_try_ctrl(struct v4l2_ctrl *ctrl)
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  253  {
-4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29 @254  	struct hantro_ctx *ctx;
-4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  255  
-4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  256  	ctx = container_of(ctrl->handler,
-4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  257  			   struct hantro_ctx, ctrl_handler);
-4bec03301ecd81 drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  258  
-46a309d2751787 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-11-26  259  	if (ctrl->id == V4L2_CID_STATELESS_H264_SPS) {
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  260  		const struct v4l2_ctrl_h264_sps *sps = ctrl->p_new.p_h264_sps;
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  261  
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  262  		if (sps->chroma_format_idc > 1)
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  263  			/* Only 4:0:0 and 4:2:0 are supported */
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  264  			return -EINVAL;
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  265  		if (sps->bit_depth_luma_minus8 != sps->bit_depth_chroma_minus8)
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  266  			/* Luma and chroma bit depth mismatch */
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  267  			return -EINVAL;
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  268  		if (sps->bit_depth_luma_minus8 != 0)
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  269  			/* Only 8-bit is supported */
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  270  			return -EINVAL;
-b92de2f91821ce drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard     2022-07-08  271  	} else if (ctrl->id == V4L2_CID_STATELESS_HEVC_SPS) {
-8968cfc282955c drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard     2021-06-03  272  		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
-8968cfc282955c drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard     2021-06-03  273  
-d040a24b5aaede drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  274  		if (sps->bit_depth_luma_minus8 != 0 && sps->bit_depth_luma_minus8 != 2)
-d040a24b5aaede drivers/media/platform/verisilicon/hantro_drv.c       Benjamin Gaignard     2022-08-29  275  			/* Only 8-bit and 10-bit are supported */
-df9ec2fc8e70e0 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2022-07-18  276  			return -EINVAL;
-e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  277  	} else if (ctrl->id == V4L2_CID_STATELESS_VP9_FRAME) {
-e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  278  		const struct v4l2_ctrl_vp9_frame *dec_params = ctrl->p_new.p_vp9_frame;
-e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  279  
-e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  280  		/* We only support profile 0 */
-e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  281  		if (dec_params->profile != 0)
-e2da465455ce48 drivers/staging/media/hantro/hantro_drv.c             Andrzej Pietrasiewicz 2021-11-16  282  			return -EINVAL;
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  283  	}
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  284  	return 0;
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  285  }
-d70cca73234420 drivers/staging/media/hantro/hantro_drv.c             Ezequiel Garcia       2020-07-09  286  
-
+diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
+index 6e000113e508..3f0f0d03268b 100644
+--- a/arch/arm64/include/asm/brk-imm.h
++++ b/arch/arm64/include/asm/brk-imm.h
+@@ -28,6 +28,8 @@
+ #define BUG_BRK_IMM			0x800
+ #define KASAN_BRK_IMM			0x900
+ #define KASAN_BRK_MASK			0x0ff
++#define UBSAN_BRK_IMM			0x5500
++#define UBSAN_BRK_MASK			0x00ff
+ 
+ #define CFI_BRK_IMM_TARGET		GENMASK(4, 0)
+ #define CFI_BRK_IMM_TYPE		GENMASK(9, 5)
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 4c0caa589e12..87f42eb1c950 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -26,6 +26,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/mm_types.h>
+ #include <linux/kasan.h>
++#include <linux/ubsan.h>
+ #include <linux/cfi.h>
+ 
+ #include <asm/atomic.h>
+@@ -1074,6 +1075,19 @@ static struct break_hook kasan_break_hook = {
+ };
+ #endif
+ 
++#ifdef CONFIG_UBSAN_TRAP
++static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
++{
++	die(report_ubsan_failure(regs, esr & UBSAN_BRK_MASK), regs, esr);
++	return DBG_HOOK_HANDLED;
++}
++
++static struct break_hook ubsan_break_hook = {
++	.fn	= ubsan_handler,
++	.imm	= UBSAN_BRK_IMM,
++	.mask	= UBSAN_BRK_MASK,
++};
++#endif
+ 
+ #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
+ 
+@@ -1091,6 +1105,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
+ #ifdef CONFIG_KASAN_SW_TAGS
+ 	if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
+ 		return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
++#endif
++#ifdef CONFIG_UBSAN_TRAP
++	if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
++		return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
+ #endif
+ 	return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
+ }
+@@ -1104,6 +1122,9 @@ void __init trap_init(void)
+ 	register_kernel_break_hook(&fault_break_hook);
+ #ifdef CONFIG_KASAN_SW_TAGS
+ 	register_kernel_break_hook(&kasan_break_hook);
++#endif
++#ifdef CONFIG_UBSAN_TRAP
++	register_kernel_break_hook(&ubsan_break_hook);
+ #endif
+ 	debug_traps_init();
+ }
+diff --git a/include/linux/ubsan.h b/include/linux/ubsan.h
+new file mode 100644
+index 000000000000..bff7445498de
+--- /dev/null
++++ b/include/linux/ubsan.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_UBSAN_H
++#define _LINUX_UBSAN_H
++
++#ifdef CONFIG_UBSAN_TRAP
++const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type);
++#endif
++
++#endif
+diff --git a/lib/Makefile b/lib/Makefile
+index 4d9461bfea42..81b988bf9448 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -340,9 +340,7 @@ quiet_cmd_build_OID_registry = GEN     $@
+ clean-files	+= oid_registry_data.c
+ 
+ obj-$(CONFIG_UCS2_STRING) += ucs2_string.o
+-ifneq ($(CONFIG_UBSAN_TRAP),y)
+ obj-$(CONFIG_UBSAN) += ubsan.o
+-endif
+ 
+ UBSAN_SANITIZE_ubsan.o := n
+ KASAN_SANITIZE_ubsan.o := n
+diff --git a/lib/ubsan.c b/lib/ubsan.c
+index 60c7099857a0..98a671ec56e9 100644
+--- a/lib/ubsan.c
++++ b/lib/ubsan.c
+@@ -18,6 +18,58 @@
+ 
+ #include "ubsan.h"
+ 
++#ifdef CONFIG_UBSAN_TRAP
++const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
++{
++	switch (check_type) {
++	case ubsan_add_overflow:
++		return "UBSAN: addition overflow";
++	case ubsan_builtin_unreachable:
++		return "UBSAN: unreachable code";
++	case ubsan_cfi_check_fail:
++		return "UBSAN: CFI failure";
++	case ubsan_divrem_overflow:
++		return "UBSAN: divide/remainder overflow";
++	case ubsan_function_type_mismatch:
++		return "UBSAN: function type mismatch";
++	case ubsan_implicit_conversion:
++		return "UBSAN: implicit conversion";
++	case ubsan_invalid_builtin:
++		return "UBSAN: invalid builtin";
++	case ubsan_invalid_objc_cast:
++		return "UBSAN: invalid object cast";
++	case ubsan_load_invalid_value:
++		return "UBSAN: loading invalid value";
++	case ubsan_missing_return:
++		return "UBSAN: missing return";
++	case ubsan_mul_overflow:
++		return "UBSAN: multiplication overflow";
++	case ubsan_negate_overflow:
++		return "UBSAN: negation overflow";
++	case ubsan_nonnull_arg:
++		return "UBSAN: non-NULL argument";
++	case ubsan_nonnull_return:
++		return "UBSAN: non-NULL return";
++	case ubsan_out_of_bounds:
++		return "UBSAN: array index out of bounds";
++	case ubsan_pointer_overflow:
++		return "UBSAN: pointer overflow";
++	case ubsan_shift_out_of_bounds:
++		return "UBSAN: shift out of bounds";
++	case ubsan_sub_overflow:
++		return "UBSAN: subtraction overflow";
++	case ubsan_type_mismatch:
++		return "UBSAN: type mismatch";
++	case ubsan_alignment_assumption:
++		return "UBSAN: alignment assumption";
++	case ubsan_vla_bound_not_positive:
++		return "UBSAN: VLA bounds not positive";
++	default:
++		return "UBSAN: unknown failure";
++	}
++}
++
++#else
+ static const char * const type_check_kinds[] = {
+ 	"load of",
+ 	"store to",
+@@ -384,3 +436,5 @@ void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+ 	ubsan_epilogue();
+ }
+ EXPORT_SYMBOL(__ubsan_handle_alignment_assumption);
++
++#endif /* !CONFIG_UBSAN_TRAP */
+diff --git a/lib/ubsan.h b/lib/ubsan.h
+index 9a0b71c5ff9f..9c7f00f550f5 100644
+--- a/lib/ubsan.h
++++ b/lib/ubsan.h
+@@ -2,6 +2,34 @@
+ #ifndef _LIB_UBSAN_H
+ #define _LIB_UBSAN_H
+ 
++enum ubsan_checks {
++	ubsan_add_overflow,
++	ubsan_builtin_unreachable,
++	ubsan_cfi_check_fail,
++	ubsan_divrem_overflow,
++	ubsan_dynamic_type_cache_miss,
++	ubsan_float_cast_overflow,
++	ubsan_function_type_mismatch,
++	ubsan_implicit_conversion,
++	ubsan_invalid_builtin,
++	ubsan_invalid_objc_cast,
++	ubsan_load_invalid_value,
++	ubsan_missing_return,
++	ubsan_mul_overflow,
++	ubsan_negate_overflow,
++	ubsan_nullability_arg,
++	ubsan_nullability_return,
++	ubsan_nonnull_arg,
++	ubsan_nonnull_return,
++	ubsan_out_of_bounds,
++	ubsan_pointer_overflow,
++	ubsan_shift_out_of_bounds,
++	ubsan_sub_overflow,
++	ubsan_type_mismatch,
++	ubsan_alignment_assumption,
++	ubsan_vla_bound_not_positive,
++};
++
+ enum {
+ 	type_kind_int = 0,
+ 	type_kind_float = 1,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
