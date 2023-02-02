@@ -1,43 +1,42 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AA47E5;
-	Thu,  2 Feb 2023 01:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3057FF;
+	Thu,  2 Feb 2023 01:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675301103; x=1706837103;
+  t=1675301107; x=1706837107;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wKEH5yBecuHi5CC7HBLTJNx+OpnV8DmsT1BFZsex6+A=;
-  b=YWA+9FUB6EUCZFA4K3w1BGFNeOYfYh6AnRlUIgzatEjblCA+QSTHJytJ
-   PyfrMy5PUijax2r62Y6Froeca31WsKqETUKGY0wlet0C7r8llv+OZehkk
-   OBLQZRwfaw6WBq6dnwKwMWBF1InilfUJDPOs+NlTGySWwfDRLzjsOYBho
-   MG6oKOVsA4ahrUXvTzfRLlxRaKJlMyPbRtbbjvHisowkNglf6t3S/hyIe
-   GH/WJjy666z/+nciX7Y9WNmYZdDrvXbtSXQA9vPSTD/6gplLeexsMYt0f
-   cRRvlwKo1Ai+hr+mSCxl4ucdnRx5+Jq653FezGRmp4ZxeuTEErvHq3aa1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328334742"
+  bh=Y3RSkqrrFO8fpnYnRP5yAD/BYgc0GsnpjuHsgp1sSgc=;
+  b=UU20daUgPKkOx8gbm1cBhRYA6RbM1Xemhc7dT4toCbHspqlUoPq56d3u
+   /h3+wQNuQ8VCS/gYqhJCILsrnKCrVkmAs1m3/a0duX3Xtvb6ODm0CdJL2
+   /gXf3hWE9y48zzWNL2j1gEHUXmLEwaL1np19GgZ9CoAhtSCBIxNuISjE+
+   wD22BmCw17GfpYC4P8uIHN/07GrE7YTnYSz6G7ZzdFxXZmx4QcoJJzCTu
+   wl5h8y2/XdQ7T2U7i3LYcfj7dZs8rZSYQZZQ27ZkGJ5JSaYRc5ckqZ+YH
+   hyEvz+a3NrSGe4AIgG/zsAM5ZzdfpqSYl3DO6+kodnBDJnkMCe4NRke5d
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328334751"
 X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="328334742"
+   d="scan'208";a="328334751"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 17:25:02 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 17:25:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695579188"
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="695579226"
 X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
-   d="scan'208";a="695579188"
+   d="scan'208";a="695579226"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2023 17:25:01 -0800
+  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2023 17:25:05 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pNOLU-0005ym-0X;
+	id 1pNOLU-0005yq-0m;
 	Thu, 02 Feb 2023 01:25:00 +0000
-Date: Thu, 2 Feb 2023 09:24:25 +0800
+Date: Thu, 2 Feb 2023 09:24:30 +0800
 From: kernel test robot <lkp@intel.com>
 To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3 11/25]
- arch/hexagon/include/asm/page.h:139:19: error: invalid operands to binary
- expression ('void *' and 'int')
-Message-ID: <202302020928.xXbCUrMq-lkp@intel.com>
+Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3 18/25]
+ arch/riscv/mm/physaddr.c:15:13: error: expected identifier or '('
+Message-ID: <202302020914.8eHPVPCn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,150 +46,70 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Linus,
+
+First bad commit (maybe != root cause):
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3
 head:   ac3cfb78163256f2febd47ebd017d9f5b75820dd
-commit: 00b68620a99582d03ba1c5430d474963f31b575e [11/25] Hexagon: Make pfn accessors statics inlines
-config: hexagon-randconfig-r041-20230129 (https://download.01.org/0day-ci/archive/20230202/202302020928.xXbCUrMq-lkp@intel.com/config)
+commit: d047dc9f56633d427434d6593fce94cf1190abe8 [18/25] riscv: Make virt_to_pfn() a real function
+config: riscv-randconfig-r042-20230129 (https://download.01.org/0day-ci/archive/20230202/202302020914.8eHPVPCn-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=00b68620a99582d03ba1c5430d474963f31b575e
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=d047dc9f56633d427434d6593fce94cf1190abe8
         git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
         git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3
-        git checkout 00b68620a99582d03ba1c5430d474963f31b575e
+        git checkout d047dc9f56633d427434d6593fce94cf1190abe8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/hexagon/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/hexagon/include/asm/thread_info.h:16:
->> arch/hexagon/include/asm/page.h:139:19: error: invalid operands to binary expression ('void *' and 'int')
-           return __va(pfn) << PAGE_SHIFT;
-                  ~~~~~~~~~ ^  ~~~~~~~~~~
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                        ^      ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
+>> arch/riscv/mm/physaddr.c:15:13: error: expected identifier or '('
+   phys_addr_t __phys_addr_symbol(unsigned long x)
+               ^
+   arch/riscv/include/asm/page.h:154:31: note: expanded from macro '__phys_addr_symbol'
+   #define __phys_addr_symbol(x)   __va_to_pa_nodebug(x)
+                                   ^
+   arch/riscv/include/asm/page.h:142:32: note: expanded from macro '__va_to_pa_nodebug'
+   #define __va_to_pa_nodebug(x)   ({                                              \
+                                    ^
+>> arch/riscv/mm/physaddr.c:15:13: error: expected ')'
+   arch/riscv/include/asm/page.h:154:31: note: expanded from macro '__phys_addr_symbol'
+   #define __phys_addr_symbol(x)   __va_to_pa_nodebug(x)
+                                   ^
+   arch/riscv/include/asm/page.h:142:32: note: expanded from macro '__va_to_pa_nodebug'
+   #define __va_to_pa_nodebug(x)   ({                                              \
+                                    ^
+   arch/riscv/mm/physaddr.c:15:13: note: to match this '('
+   arch/riscv/include/asm/page.h:154:31: note: expanded from macro '__phys_addr_symbol'
+   #define __phys_addr_symbol(x)   __va_to_pa_nodebug(x)
+                                   ^
+   arch/riscv/include/asm/page.h:142:31: note: expanded from macro '__va_to_pa_nodebug'
+   #define __va_to_pa_nodebug(x)   ({                                              \
+                                   ^
+   2 errors generated.
 
 
-vim +139 arch/hexagon/include/asm/page.h
+vim +15 arch/riscv/mm/physaddr.c
 
-   136	
-   137	static inline void * pfn_to_virt(unsigned long pfn)
-   138	{
- > 139		return __va(pfn) << PAGE_SHIFT;
-   140	}
-   141	
+6435f773d81f021 Zong Li 2020-01-02  14  
+6435f773d81f021 Zong Li 2020-01-02 @15  phys_addr_t __phys_addr_symbol(unsigned long x)
+
+:::::: The code at line 15 was first introduced by commit
+:::::: 6435f773d81f02193228685a7e3fe65c983c5de0 riscv: mm: add support for CONFIG_DEBUG_VIRTUAL
+
+:::::: TO: Zong Li <zong.li@sifive.com>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
 
 -- 
 0-DAY CI Kernel Test Service
