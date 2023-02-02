@@ -1,51 +1,37 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD433239;
-	Thu,  2 Feb 2023 12:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675340860; x=1706876860;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w2lVTIW1/udEtdMV6XUbh7yDPvBpVMFqx5/NHCHIrmI=;
-  b=B2XXZvUOUMBS5mIUcNHvnDQnuGA0klvDEKPSzLOg+8v+wQRT9tUYWbRs
-   +zCamsLdnLyWycBrhrUTr7oDxKieIUYUHiNWXr7vEbuzJeULzFMPDh49H
-   buhiWGGFWZxob8QPBc286CaeXr16k76Xhd17aWlpQau2LNRQZb9r/5M/Y
-   szi4gBgoQiRaadD02dLVLrSfYKnPsZ6UG3Xgu7I9OlUxCsGggO2gaNIVs
-   Kcz3sISvs4bqWYd8602n9r26IH3gcBNStAx5HpjBuSITf29hxSSnVuqjN
-   jGSeto4MbX4q35DcXXrwCGoqCB7LJkr1fyi1aQNXN6GRVCPDa0r5vzPKn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328448108"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="328448108"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 04:27:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="733916022"
-X-IronPort-AV: E=Sophos;i="5.97,267,1669104000"; 
-   d="scan'208";a="733916022"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Feb 2023 04:27:35 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNYgb-0006Us-1Y;
-	Thu, 02 Feb 2023 12:27:29 +0000
-Date: Thu, 2 Feb 2023 20:26:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Clark Wang <xiaoning.wang@nxp.com>, peppe.cavallaro@st.com,
-	alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, mcoquelin.stm32@gmail.com, linux@armlinux.org.uk,
-	andrew@lunn.ch, hkallweit1@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-imx@nxp.com
-Subject: Re: [PATCH V2 1/2] net: phylink: add a function to resume phy alone
- to fix resume issue with WoL enabled
-Message-ID: <202302022040.NzeFwwSF-lkp@intel.com>
-References: <20230201103837.3258752-1-xiaoning.wang@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B7763B7
+	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 13:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3600C433D2;
+	Thu,  2 Feb 2023 13:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675343133;
+	bh=KfapbWZaHoGL2lh75PlRq+/iMY1cexe2VdJrOWRjZsk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YK13koIN2gnXc469qf/9k9La3ph+csCibap5vcuqGJE+8Hy2LrBEf4B2yAPV/w7h6
+	 Nuf3QpHGm+Wn16/BIrp/mrc3meqhMvRZO/bPon0zGydLMWw2C6xzOQ2NkUD/+KGmut
+	 QWUIdocqn55FkMzRI5oY6y12uxx497Lkt4a9n1QvhzaWZOVBcg+lQ4tPqYALwL5pfY
+	 AORJMBJsJ1NmStBnwAAS1gaBjc5GwM4QQl2UsdlrS3kYdyy1N9dGEWAxIfEYs3Xu0E
+	 a3vvbscn8VK1P8ciiKCuUhUk54YdUGVOOzPI5TFTCbbiW6D175bmVkvb4nI3BCYHov
+	 AkChSan7JfKqw==
+Date: Thu, 2 Feb 2023 18:35:29 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Eddie Hung <eddie.hung@mediatek.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 1/3] phy: mediatek: remove temporary variable @mask_
+Message-ID: <Y9u1GXaVJ0FKXWnu@matsya>
+References: <20230118084343.26913-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,121 +40,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230201103837.3258752-1-xiaoning.wang@nxp.com>
+In-Reply-To: <20230118084343.26913-1-chunfeng.yun@mediatek.com>
 
-Hi Clark,
+On 18-01-23, 16:43, Chunfeng Yun wrote:
+> Remove the temporary @mask_, this may cause build warning when use clang
+> compiler for powerpc, but can't reproduce it when compile for arm64.
+> the build warning is caused by:
+> 
+> "warning: result of comparison of constant 18446744073709551615 with
+> expression of type (aka 'unsigned long') is always false
+> [-Wtautological-constant-out-of-range-compare]"
+> 
+> More information provided in below lore link.
+> 
+> After removing @mask_, there is a "CHECK:MACRO_ARG_REUSE" when run
+> checkpatch.pl, but due to @mask is constant, no reuse problem will happen.
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-[also build test WARNING on net/master linus/master v6.2-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Clark-Wang/net-stmmac-resume-phy-separately-before-calling-stmmac_hw_setup/20230201-184223
-patch link:    https://lore.kernel.org/r/20230201103837.3258752-1-xiaoning.wang%40nxp.com
-patch subject: [PATCH V2 1/2] net: phylink: add a function to resume phy alone to fix resume issue with WoL enabled
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230202/202302022040.NzeFwwSF-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6df0562fc6133175ff3932188af0d9126858c42c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Clark-Wang/net-stmmac-resume-phy-separately-before-calling-stmmac_hw_setup/20230201-184223
-        git checkout 6df0562fc6133175ff3932188af0d9126858c42c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/ kernel/bpf/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/phy/phylink.c:1952:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
-                   else
-                   ^
-   1 warning generated.
-
-
-vim +1952 drivers/net/phy/phylink.c
-
-  1887	
-  1888	/**
-  1889	 * phylink_start() - start a phylink instance
-  1890	 * @pl: a pointer to a &struct phylink returned from phylink_create()
-  1891	 *
-  1892	 * Start the phylink instance specified by @pl, configuring the MAC for the
-  1893	 * desired link mode(s) and negotiation style. This should be called from the
-  1894	 * network device driver's &struct net_device_ops ndo_open() method.
-  1895	 */
-  1896	void phylink_start(struct phylink *pl)
-  1897	{
-  1898		bool poll = false;
-  1899	
-  1900		ASSERT_RTNL();
-  1901	
-  1902		phylink_info(pl, "configuring for %s/%s link mode\n",
-  1903			     phylink_an_mode_str(pl->cur_link_an_mode),
-  1904			     phy_modes(pl->link_config.interface));
-  1905	
-  1906		/* Always set the carrier off */
-  1907		if (pl->netdev)
-  1908			netif_carrier_off(pl->netdev);
-  1909	
-  1910		/* Apply the link configuration to the MAC when starting. This allows
-  1911		 * a fixed-link to start with the correct parameters, and also
-  1912		 * ensures that we set the appropriate advertisement for Serdes links.
-  1913		 *
-  1914		 * Restart autonegotiation if using 802.3z to ensure that the link
-  1915		 * parameters are properly negotiated.  This is necessary for DSA
-  1916		 * switches using 802.3z negotiation to ensure they see our modes.
-  1917		 */
-  1918		phylink_mac_initial_config(pl, true);
-  1919	
-  1920		phylink_enable_and_run_resolve(pl, PHYLINK_DISABLE_STOPPED);
-  1921	
-  1922		if (pl->cfg_link_an_mode == MLO_AN_FIXED && pl->link_gpio) {
-  1923			int irq = gpiod_to_irq(pl->link_gpio);
-  1924	
-  1925			if (irq > 0) {
-  1926				if (!request_irq(irq, phylink_link_handler,
-  1927						 IRQF_TRIGGER_RISING |
-  1928						 IRQF_TRIGGER_FALLING,
-  1929						 "netdev link", pl))
-  1930					pl->link_irq = irq;
-  1931				else
-  1932					irq = 0;
-  1933			}
-  1934			if (irq <= 0)
-  1935				poll = true;
-  1936		}
-  1937	
-  1938		switch (pl->cfg_link_an_mode) {
-  1939		case MLO_AN_FIXED:
-  1940			poll |= pl->config->poll_fixed_state;
-  1941			break;
-  1942		case MLO_AN_INBAND:
-  1943			if (pl->pcs)
-  1944				poll |= pl->pcs->poll;
-  1945			break;
-  1946		}
-  1947		if (poll)
-  1948			mod_timer(&pl->link_poll, jiffies + HZ);
-  1949		if (pl->phydev)
-  1950			if (!pl->mac_resume_phy_separately)
-  1951				phy_start(pl->phydev);
-> 1952			else
-  1953				pl->mac_resume_phy_separately = false;
-  1954		if (pl->sfp_bus)
-  1955			sfp_upstream_start(pl->sfp_bus);
-  1956	}
-  1957	EXPORT_SYMBOL_GPL(phylink_start);
-  1958	
+Applied, thanks
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+~Vinod
