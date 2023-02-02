@@ -1,107 +1,133 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2838F60
-	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 19:31:14 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id h9so2915773plf.9
-        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 11:31:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBmv2nsbVE0gJmlmNoP7kbXDeT3T6G5d3aWuIere0+E=;
-        b=nCOH74iYkqZBzZRH7PECt51DmW4zg54cN0sJnIhyDdeeLMF5czdkwL6AoLuPYVo0NG
-         f+s3wsoVW7fwmsHiiM1ztoYR1Spy0eqq1VVa9YYxDXBbuH0YeFkotS1IjlQ1yTsLzE5A
-         KUvae7dpP1F6lq+QJv/F1OthgAzuzGufocfj1yB8id/D9DVopcBxgZSGUlZ7mXc6CAkz
-         TvTGxd3EN6rGygQj+Xw5K4bEZB5bwM6ywGXXasyiPZUOQ+EHnPUW2vvCDv7FdqVKnM8X
-         1NRCC3W1iWuXmFdwAghm3GOreXYYV8i0GmLNA+Ac7OPb3zh4zsCztwGAIIM3L3WvU9Cz
-         59iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VBmv2nsbVE0gJmlmNoP7kbXDeT3T6G5d3aWuIere0+E=;
-        b=n4RgsmBTCiGGEhAQHQF26d4EwPDbG6nTYrLfT/NuNy8bljt2hoOtuhWf5whJt9Ta8i
-         VKN4UXqlrj4zTave48/0KJuUaidziW8zYkafiv4xs/Xh+vku5KzxRATTLfEjkpw168E5
-         4voFpzpMOYFE75AMk5PYFcuX2BMAYUIVRPCaorDkiw0aotLAe5eetUNrZ6f1CIgpswCa
-         5rIoPpJLPuLATQ0eyeAx2c2oZ5CXQ4muPPNa9ld0cVxhNkhX3r4hDynEvowHD57YNME/
-         wA7EXMaSqIPC1udqiIdjK74cMssGollEjeDpdTZAbMuHr84dTsge2BCJKHbd3/tFpL6e
-         6jZg==
-X-Gm-Message-State: AO0yUKXj43YsUsHKtdRLVua0nxqoUVVTthvF11GO3BNioU6tOtu65RXc
-	meze65SDBpvb2mGOHRotp2CVCZ//kmtj3aPpCbNEWA==
-X-Google-Smtp-Source: AK7set8GBHiJ3Y1ulPBVw2wOkpjPhGLilq3YAf0r+/FgEFrYJlo2S8fLZaZMb0Qh1OoLbUoUdBBqZUYnIcao1uW1y4g=
-X-Received: by 2002:a17:903:120e:b0:196:44d4:244b with SMTP id
- l14-20020a170903120e00b0019644d4244bmr1807933plh.8.1675366272913; Thu, 02 Feb
- 2023 11:31:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7AB8F60;
+	Thu,  2 Feb 2023 19:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675367329; x=1706903329;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kiDPwFI1i9Pmd7k0PJDVU032KafNcHUft8lNUV3rfww=;
+  b=oCHr44Q+S2bg6BWVK6fQgDi/+7lX9n9b9ODSHVXc1YXVhM3JO120Bkm9
+   1xcZvMc3/OqyTEfPQc7vxYZWkCPXkvnXfEhhljHsDwTL7wjjqBPxwcZEH
+   u7wDX2X7ZYIGuNbT9fDElFlmody+/ZgtSr3LbY7ydsGY/nnh5Ut5MY6N3
+   HiYpRLo0vDmiKU8QjVe+7WJhM9yR+lBSVQ1xjq2xQFPZQ4cDEOzMchkpt
+   EALV1umeg0ZIADIYMq+roAEsH97CaSPXarH48OTsLyuJT7Ml6n3U/MvLZ
+   qps0CfRrNUTUpJdCI02jykxspfRPctVaENHiRrXuIV/FfJx5c/cKnZ0xI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="390945163"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="390945163"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 11:48:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="729003553"
+X-IronPort-AV: E=Sophos;i="5.97,268,1669104000"; 
+   d="scan'208";a="729003553"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2023 11:48:47 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNfZe-0006nE-0e;
+	Thu, 02 Feb 2023 19:48:46 +0000
+Date: Fri, 3 Feb 2023 03:48:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 173/175]
+ drivers/thermal/intel/intel_powerclamp.c:422:6: warning: variable 'update'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202302030328.3iKhirHI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
- <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
- <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
- <63dbf04a.630a0220.2608a.0149@mx.google.com> <CANDhNCoJJs_jSAdr6uved=cK=-6+nzSJq3e_E3HgtiXHZXkVww@mail.gmail.com>
- <63dc0a89.170a0220.49507.0091@mx.google.com> <CAMj1kXHTwFH-OADZ5nZXfZyuH-x7XJL3DMyiz2Tr_nCuup+xFA@mail.gmail.com>
-In-Reply-To: <CAMj1kXHTwFH-OADZ5nZXfZyuH-x7XJL3DMyiz2Tr_nCuup+xFA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 2 Feb 2023 11:31:01 -0800
-Message-ID: <CAKwvOd=cuDb2NNK4uoUTYTLryFig47hvDQ08ta5XhjHsEhAG4A@mail.gmail.com>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>, John Stultz <jstultz@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Yongqin Liu <yongqin.liu@linaro.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rasmus Villemoes <rasmus.villemoes@prevas.dk>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>, Michael Kelley <mikelley@microsoft.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Won Chung <wonchung@google.com>, 
-	David Gow <davidgow@google.com>, Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Feb 2, 2023 at 11:20 AM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 2 Feb 2023 at 20:10, Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Thu, Feb 02, 2023 at 10:56:29AM -0800, John Stultz wrote:
-> > > That said, making sense of the error message isn't completely trivial
-> > > either. I've been seeing a few cases recently of some of the new
-> > > compiler tooling (I pinged you earlier on a CFI one) causing errors
-> > > that developers aren't really sure how to address.  I know sometimes
-> > > it's not easy to surface the errors with context to what was wrong,
-> > > but at the risk of intense bike shedding, is there some way to provide
-> > > something like "Likely array bounds error" instead of just "BRK
-> > > handler: Fatal exception"?
-> >
-> > Yeah, this is a result of the size trade-off that resulted in config
-> > CONFIG_UBSAN_TRAP -- there ends up being no message about what went
-> > wrong. I'd really like to have cleaner handling of this -- perhaps what
-> > was done for KCFI could be applied to UBSAN as well, though this is an
-> > area I don't know well myself. (i.e. encoding "this was a UBSAN trap"
-> > in the trap itself.)
-> >
-> > Sami or Ard, is this something that could be improved for arm64?
-> >
->
-> -ENOCONTEXT, so I am going to assume this is about runtime
-> instrumentation that needs some kind of 'panic' function which it will
-> invoke if some condition is met that should never occur?
->
-> We already use brk with different immediate values in the opcode, so
-> the arch layer already has what we need. Is this a limitation in the
-> compiler, perhaps, where it always emits the same brk opcode?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   f24bb5858fe63bcdab4f0680e7648f907304789c
+commit: da0e3490ff71f89e5d3438ae0b2e412d543eab11 [173/175] thermal: intel: powerclamp: Use powercap idle-inject feature
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230203/202302030328.3iKhirHI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=da0e3490ff71f89e5d3438ae0b2e412d543eab11
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout da0e3490ff71f89e5d3438ae0b2e412d543eab11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/intel/
 
-Yeah, we'd need to update both the compiler to produce the encoding,
-and the kernel to recognize the encoding and do something special.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/intel/intel_powerclamp.c:422:6: warning: variable 'update' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (!(powerclamp_data.count % powerclamp_data.window_size_now)) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/intel/intel_powerclamp.c:430:6: note: uninitialized use occurs here
+           if (update) {
+               ^~~~~~
+   drivers/thermal/intel/intel_powerclamp.c:422:2: note: remove the 'if' if its condition is always true
+           if (!(powerclamp_data.count % powerclamp_data.window_size_now)) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thermal/intel/intel_powerclamp.c:416:13: note: initialize the variable 'update' to silence this warning
+           bool update;
+                      ^
+                       = 0
+   1 warning generated.
+
+
+vim +422 drivers/thermal/intel/intel_powerclamp.c
+
+   408	
+   409	/*
+   410	 * This function is called from idle injection core on timer expiry
+   411	 * for the run duration. This allows powerclamp to readjust or skip
+   412	 * injecting idle for this cycle.
+   413	 */
+   414	static bool idle_inject_update(void)
+   415	{
+   416		bool update;
+   417	
+   418		/* We can't sleep in this callback */
+   419		if (!mutex_trylock(&powerclamp_lock))
+   420			return true;
+   421	
+ > 422		if (!(powerclamp_data.count % powerclamp_data.window_size_now)) {
+   423	
+   424			should_skip = powerclamp_adjust_controls(powerclamp_data.target_ratio,
+   425								 powerclamp_data.guard,
+   426								 powerclamp_data.window_size_now);
+   427			update = true;
+   428		}
+   429	
+   430		if (update) {
+   431			unsigned int runtime = get_run_time();
+   432	
+   433			idle_inject_set_duration(ii_dev, runtime, duration);
+   434		}
+   435	
+   436		powerclamp_data.count++;
+   437	
+   438		mutex_unlock(&powerclamp_lock);
+   439	
+   440		if (should_skip)
+   441			return false;
+   442	
+   443		return true;
+   444	}
+   445	
 
 -- 
-Thanks,
-~Nick Desaulniers
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
