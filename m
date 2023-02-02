@@ -1,76 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8047F;
-	Thu,  2 Feb 2023 07:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852A2C4339B;
-	Thu,  2 Feb 2023 07:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675321882;
-	bh=gfS7S4W2HkaLaI++1EN/mssAKz2M7IN90iHqH4OBoY0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ScMauiOUiUlUWfVref7DNRefq7GQ+/PNaBdNUP99U4EHXTZXqS8L63Oj8pajaNmwh
-	 sl26i+XurUNUo6FbB8QRh8qXE31dwwSppi/mfOd2SRpsc9GgYo3nHcmTyAWN0Pmh8v
-	 Ux7GjQj2QBWr43Wx710NGbIpuupIY0Ucz47guTQAos0U40MJrvcv7m3buostOZE2lC
-	 YJuhmt7HBnvCGf4Pt6KyAOZ2CMtvp+t5dKbRr8ILE46PeMydzRIb+79ZKam2op5HEB
-	 eRvmSqnmTzV/pPRXJq3E1UALzBG4laJd1o6GgDjMO7mEFB+J67H4OYe6ehl/PDB8dZ
-	 CUcppGV414n+A==
-Message-ID: <e4dec7de-40d8-5e66-2e83-17e1540042ff@kernel.org>
-Date: Thu, 2 Feb 2023 15:11:18 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E89A48;
+	Thu,  2 Feb 2023 08:51:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675327883; x=1706863883;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=W4KqnT04csRHOODHIkNzjsIOe512Gf2SC1//vdtMQzw=;
+  b=ZWsod8P8a+06AUHcsB1WkU5FynIrQzQ13Knn/BdoLmILPixfguOK2/9X
+   N2J9m7LN5KmlBhwxUA1mzG0ihfQfwrRllyb2IzNAFGndomle0JM5QA9nY
+   aaAiMLq2ngoT9hQY39N8tSPU4RQiEUkVSrYuspHZ9WBUUmgYYWigwPl3l
+   UzwhqqnO0PZpXSAUC+MJeBciKWOjK04C6fG8yM/sdemFtzf4OR6ea1FHS
+   V0JKbomIO5EVOLdAvY0ExiHe6gY118mTkqDksxQsUAdYx5N2bAn6Ln1kk
+   RuzHgoTTzmvuz8lhR9ay05p5lHp0p4FaX9AcYZ0dc18MI5aUAf59m314Q
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="312041648"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="312041648"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 00:51:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="773788369"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="773788369"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 02 Feb 2023 00:51:20 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNVJQ-0006Lc-11;
+	Thu, 02 Feb 2023 08:51:20 +0000
+Date: Thu, 2 Feb 2023 16:51:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liu Shixin <liushixin2@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Will Deacon <will@kernel.org>
+Subject: [stable:linux-6.1.y 1681/2293]
+ arch/arm64/include/asm/pgtable.h:871:44: error: call to undeclared function
+ 'pud_user_exec'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202302021627.t8gx0AeX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] f2fs: Fix type of single bit bitfield in f2fs_io_info
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: jaegeuk@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- linux-f2fs-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev,
- kernel test robot <lkp@intel.com>
-References: <20230201-f2fs-fix-single-length-bitfields-v1-1-e386f7916b94@kernel.org>
- <64d1f9d3-12d8-cc7a-501e-5c0286b0cfa1@kernel.org>
- <Y9tU+woHY23zHpmv@dev-arch.thelio-3990X>
-From: Chao Yu <chao@kernel.org>
-In-Reply-To: <Y9tU+woHY23zHpmv@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2023/2/2 14:15, Nathan Chancellor wrote:
-> On Thu, Feb 02, 2023 at 02:13:18PM +0800, Chao Yu wrote:
->> On 2023/2/2 0:40, Nathan Chancellor wrote:
->>> Clang warns:
->>>
->>>     ../fs/f2fs/data.c:995:17: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
->>>             fio->submitted = 1;
->>>                            ^ ~
->>>     ../fs/f2fs/data.c:1011:15: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
->>>                             fio->retry = 1;
->>>                                        ^ ~
->>>
->>>     ../fs/f2fs/segment.c:3320:16: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
->>>                     fio->in_list = 1;
->>>                                  ^ ~
->>>
->>> There is not a bug here because the value of these fields is never
->>> explicitly compared against (just whether it is zero or non-zero) but
->>> it is easy to silence the warning by using an unsigned type to allow
->>> an assignment of 0 or 1 without implicit conversion.
->>
->> Nathan, thanks a lot for catching this, do you mind letting I merge this fix
->> into original patch? as the original patch has not been upstreamed yet.
-> 
-> No worries, do whatever you need to! I just care that the problem gets
-> resolved one way or another :)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
+head:   68a95455c153f8adc513e5b688f4b348daa7c1b1
+commit: a006aaffd78ff70efcffa44e325633c0840b2bf2 [1681/2293] arm64/mm: add pud_user_exec() check in pud_user_accessible_page()
+config: arm64-randconfig-r011-20230129 (https://download.01.org/0day-ci/archive/20230202/202302021627.t8gx0AeX-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=a006aaffd78ff70efcffa44e325633c0840b2bf2
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-6.1.y
+        git checkout a006aaffd78ff70efcffa44e325633c0840b2bf2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
 
-Thank you! Updated a v3 patch. :)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
+All errors (new ones prefixed by >>):
 
-> 
-> Cheers,
-> Nathan
+   In file included from arch/arm64/kernel/asm-offsets.c:12:
+   In file included from include/linux/kexec.h:18:
+   In file included from include/linux/crash_core.h:6:
+   In file included from include/linux/elfcore.h:11:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+>> arch/arm64/include/asm/pgtable.h:871:44: error: call to undeclared function 'pud_user_exec'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return pud_leaf(pud) && (pud_user(pud) || pud_user_exec(pud));
+                                                     ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:118: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1270: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:231: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/pud_user_exec +871 arch/arm64/include/asm/pgtable.h
+
+   868	
+   869	static inline bool pud_user_accessible_page(pud_t pud)
+   870	{
+ > 871		return pud_leaf(pud) && (pud_user(pud) || pud_user_exec(pud));
+   872	}
+   873	#endif
+   874	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
