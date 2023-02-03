@@ -1,45 +1,50 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB08E290B;
-	Fri,  3 Feb 2023 22:32:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389C2D51B;
+	Fri,  3 Feb 2023 23:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675463541; x=1706999541;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pIGrupTEDXpoUeI3Xj9bt5x4kPdBAZYQHZVaoC2h++c=;
-  b=BQ5P6gMB8TGdLEDarZ5TT3qqNAI/pUW+VZbuOyvla1iEvsSMYSdxkw0a
-   sspdP+RfRB6K6l21qwaO5FfT+hB49V7TitKz/WFawjMhDI803yEYLo9lX
-   FO6EUVBq1ZXd7e50AdUopjv4hugaI/z62v/qRlVfP2vPLFNh8lfaVGVq5
-   cojuFymkOd68LekNWYHfysmGvXUWtbrLRLP5ZEPmYy/GYadKOEuhKAEOQ
-   DBUB0eVy7QAsodwcfzLbaXvMH+42eXs99fA6gdWAT/AHDGHT4gcFJD1ez
-   BoJpj6TSToB+7lRjmwcjhZsLqHBzv+I7EvGeFW3KPM7/M7mEejfTW6MF8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="327507851"
+  t=1675467871; x=1707003871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uZ0qNhDCqz4L2s+QoHLo0NAhbxb3fK+YiXc/q8MtHUA=;
+  b=G4aWql6NAzhhEtozfewYvinxO9F7kDWeKkQrj37EEonNBoFUwoUfVJE+
+   oGF3m2T42Tvmsf1bOT11+v/zUwg5iKrliTjm4BH4qtlIiDvPDUmj6Gqya
+   P4GwZC2KJ5CQ8+rAxwcvGzLolbAj17rGDUxM08g04GB+KDtHv8OZRAGL2
+   dgSW2MiRxqhY+nzDOc18NP6xUr1cY+4lfy4bMG+cv9bT4nO+yD2WMAEzT
+   cCoSWKpchKYi/kjJ9WmM9kz3YhE81aIWtwwNC5klJkCOI3SIn8E5jJG1G
+   GRqeAPxrSG7g7sLp65ZDERpepMi94fIdQwI8p8XIPATx40+sYAQalfXEA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="331016968"
 X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
-   d="scan'208";a="327507851"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 14:32:21 -0800
+   d="scan'208";a="331016968"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 15:44:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="774476939"
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="698243366"
 X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
-   d="scan'208";a="774476939"
+   d="scan'208";a="698243366"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Feb 2023 14:32:19 -0800
+  by orsmga001.jf.intel.com with ESMTP; 03 Feb 2023 15:44:26 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pO4bT-0000ob-04;
-	Fri, 03 Feb 2023 22:32:19 +0000
-Date: Sat, 4 Feb 2023 06:31:47 +0800
+	id 1pO5jA-0000qp-2x;
+	Fri, 03 Feb 2023 23:44:20 +0000
+Date: Sat, 4 Feb 2023 07:43:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
+To: Krishna Yarlagadda <kyarlagadda@nvidia.com>, robh+dt@kernel.org,
+	broonie@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+	jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [linux-next:master 8959/10357]
- drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for
- function 'pcmcia_collie_init'
-Message-ID: <202302040652.zkUBTjyo-lkp@intel.com>
+	thierry.reding@gmail.com, jonathanh@nvidia.com,
+	skomatineni@nvidia.com, ldewangan@nvidia.com,
+	Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: Re: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
+Message-ID: <202302040739.VbsIprzH-lkp@intel.com>
+References: <20230203130133.32901-3-kyarlagadda@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,64 +53,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230203130133.32901-3-kyarlagadda@nvidia.com>
 
-Hi Nathan,
+Hi Krishna,
 
-First bad commit (maybe != root cause):
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4fafd96910add124586b549ad005dcd179de8a18
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c [8959/10357] ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20230204/202302040652.zkUBTjyo-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus broonie-spi/for-next robh/for-next linus/master v6.2-rc6 next-20230203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-210314
+patch link:    https://lore.kernel.org/r/20230203130133.32901-3-kyarlagadda%40nvidia.com
+patch subject: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
+config: x86_64-randconfig-k001 (https://download.01.org/0day-ci/archive/20230204/202302040739.VbsIprzH-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
+        # https://github.com/intel-lab-lkp/linux/commit/825363f7e8d0d426c45bbba6cb3c5d9b79b7e6aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krishna-Yarlagadda/dt-bindings-tpm-Add-compatible-for-Tegra-TPM/20230203-210314
+        git checkout 825363f7e8d0d426c45bbba6cb3c5d9b79b7e6aa
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/pcmcia/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/char/tpm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for function 'pcmcia_collie_init' [-Wmissing-prototypes]
-   int pcmcia_collie_init(struct device *dev)
+   In file included from drivers/char/tpm/tpm_tis_spi_tegra.c:18:
+   In file included from drivers/char/tpm/tpm_tis_core.h:22:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+>> drivers/char/tpm/tpm_tis_spi_tegra.c:23:5: warning: no previous prototype for function 'tpm_tis_spi_tegra_transfer' [-Wmissing-prototypes]
+   int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
        ^
-   drivers/pcmcia/pxa2xx_sharpsl.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pcmcia_collie_init(struct device *dev)
+   drivers/char/tpm/tpm_tis_spi_tegra.c:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
    ^
    static 
-   1 warning generated.
+   2 warnings generated.
 
 
-vim +/pcmcia_collie_init +206 drivers/pcmcia/pxa2xx_sharpsl.c
+vim +/tpm_tis_spi_tegra_transfer +23 drivers/char/tpm/tpm_tis_spi_tegra.c
 
-a63ae4427c6af6 Richard Purdie 2005-11-08  205  
-34cdf25a126f05 Bill Pemberton 2012-11-19 @206  int pcmcia_collie_init(struct device *dev)
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  207  {
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  208         int ret = -ENODEV;
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  209  
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  210         if (machine_is_collie())
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  211                 ret = sa11xx_drv_pcmcia_probe(dev, &sharpsl_pcmcia_ops, 0, 1);
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  212  
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  213         return ret;
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  214  }
-77bb86a1b9f8b8 Pavel Machek   2005-10-30  215  
-
-:::::: The code at line 206 was first introduced by commit
-:::::: 34cdf25a126f053698d549cc12a9c30e9a8a0bab pcmcia: remove use of __devinit
-
-:::::: TO: Bill Pemberton <wfp5p@virginia.edu>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    22	
+  > 23	int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+    24				       u8 *in, const u8 *out)
+    25	{
+    26		struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+    27		int ret = 0;
+    28		struct spi_message m;
+    29		struct spi_transfer spi_xfer[3];
+    30		u8 transfer_len;
+    31	
+    32		spi_bus_lock(phy->spi_device->master);
+    33	
+    34		while (len) {
+    35			transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+    36	
+    37			spi_message_init(&m);
+    38			phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
+    39			phy->iobuf[1] = 0xd4;
+    40			phy->iobuf[2] = addr >> 8;
+    41			phy->iobuf[3] = addr;
+    42	
+    43			memset(&spi_xfer, 0, sizeof(spi_xfer));
+    44	
+    45			spi_xfer[0].tx_buf = phy->iobuf;
+    46			spi_xfer[0].len = 1;
+    47			spi_message_add_tail(&spi_xfer[0], &m);
+    48	
+    49			spi_xfer[1].tx_buf = phy->iobuf + 1;
+    50			spi_xfer[1].len = 3;
+    51			spi_message_add_tail(&spi_xfer[1], &m);
+    52	
+    53			if (out) {
+    54				spi_xfer[2].tx_buf = &phy->iobuf[4];
+    55				spi_xfer[2].rx_buf = NULL;
+    56				memcpy(&phy->iobuf[4], out, transfer_len);
+    57				out += transfer_len;
+    58			}
+    59			if (in) {
+    60				spi_xfer[2].tx_buf = NULL;
+    61				spi_xfer[2].rx_buf = &phy->iobuf[4];
+    62			}
+    63			spi_xfer[2].len = transfer_len;
+    64			spi_message_add_tail(&spi_xfer[2], &m);
+    65	
+    66			reinit_completion(&phy->ready);
+    67			ret = spi_sync_locked(phy->spi_device, &m);
+    68			if (ret < 0)
+    69				goto exit;
+    70	
+    71			if (in) {
+    72				memcpy(in, &phy->iobuf[4], transfer_len);
+    73				in += transfer_len;
+    74			}
+    75	
+    76			len -= transfer_len;
+    77		}
+    78	
+    79	exit:
+    80		spi_bus_unlock(phy->spi_device->master);
+    81		return ret;
+    82	}
+    83	
 
 -- 
 0-DAY CI Kernel Test Service
