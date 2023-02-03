@@ -1,101 +1,86 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A260257D
-	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 11:47:49 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id EFE205C00CB;
-	Fri,  3 Feb 2023 06:47:48 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 03 Feb 2023 06:47:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1675424868; x=1675511268; bh=K1awbjIRzv
-	mqci9lLxxjkCXo+T8jIOhbxM75qAfp3Oo=; b=AxQJsnL954qhnYWv6O7xiUbGc6
-	PhuIb0eEbHAWXKSlFtJIMJkP4kMrQ9OMJWft+X9WjKWv3nKw7UlfceZ6/Fpq8cFF
-	wqbnKaawreATez4Pd8HJsMNWJC/UHQ4cF/aOhtnGM24CJmI2/xhhQxjzR6RNODJk
-	08lIJuRLS4zRZE/dps/Y7dErkDO67w7CT7viNxq33BN8q2hcx5CPR1uakMhZZEyl
-	BoYgyNZxGuEPscRUmH/dEbc+E0DVUORnqP5FQehOIXSsNdgR9MG/oSwOpDAfGt84
-	+MYwwc+W91nUMuuodzz5w2ly22WEBkp5+u3i30d/XJeAVCoogL6FXtqp/StA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to
-	:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1675424868; x=1675511268; bh=K1awbjIRzvmqci9lLxxjkCXo+T8j
-	IOhbxM75qAfp3Oo=; b=Y4MHf/y4i/sZT7K9T9TYddYqt5bZ+egfsJEud24qsGSG
-	+n5NXZOPWXIuqKSw7AWelH5l1jdHcxTqG1E1c96s0XyTCUCDXEYNu5D6ExbWZjic
-	Vz+ERgLNfeo+GyTd2ou3Qp06Sg3tBiQ/d0KcnWr9+F8c8EFQBybCjRUo+Ih4OiLC
-	zWY8FOR9Zrakxt7gbbNQh5Dtu3tn1KwTBTPYYKsmEwKIRT+Dohn03LOaDNjWlC+g
-	19qcDZpA2Av7o2ogiUY/5lLxSlwd9rgVa+IFy80EYBH2PSejaezbmvI42h4shMoa
-	s9N80bQW38iYKeeqX5JzAQ5EzRmTyNj8Qj/Jvkg5qQ==
-X-ME-Sender: <xms:ZPTcYxAq_kt3Yp_HiGjOwlJ4fehl_Se4_6XDXE73rWNRweZhV7b5aQ>
-    <xme:ZPTcY_hkuKOaf3l6IAu_fIIfSbmhF3BufuaS29q24BQPBuWgzxOdu_1nkvYxwN_Dj
-    iVSq7xN6k2qGeOFswE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegtddgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
-    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeffheeugeetiefhgeethfejgfdtue
-    fggeejleehjeeutefhfeeggefhkedtkeetffenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:ZPTcY8klOnwezQzMpf8zjg2dyDSvYDVvVzTwPao51QoP1MqR-G0cHA>
-    <xmx:ZPTcY7wY5Ir93MxNZuYNpPCuL0r_c4yRclGQYfsdmfXOliRYtH4qew>
-    <xmx:ZPTcY2Q06yJ-DFAOQAil_3_U7dHL9rHC6WQ4IzWXm4DSM3TYcBRy0A>
-    <xmx:ZPTcY_7SUJaJTAYqWiDm3eG8cjSIqtLJ65g8VF1uwJw5W_99Tl6Nmg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id D5431B6044F; Fri,  3 Feb 2023 06:47:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072F44C60;
+	Fri,  3 Feb 2023 12:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675428663; x=1706964663;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZlccfO8aU3nKKqyOaEtsrBm5JQO2RpbyK4ma3DnSP5w=;
+  b=X/hFqy9OxIiaBsb7EwFm7uPmPHs0+z2tHhDbBmLXhO0qY1ZDTNPpQx4U
+   g/12Gkb8rzcETx/8IJku4zzWsv4aYj963EVln1LLLQ+vp2+IMCmjM00VX
+   vkfqh8W6GCPNbDeeKQPhTOGfwt+I1rOSuNfyTUBwjhHy/OmklKUwDtNIq
+   y1Y75R7PAg0bdzcamcWEK3KHS1GXbc9F2SvMIeeUNbrfiMUGHScXvVQlM
+   +yr48I5Sw55NbM+O2+H3al9aHPXVcw05dvcKz2RLgCd+kONQyxLuhbTjr
+   2w+WxHY9UgvzHkFSLk7ibg5Ob4lgIyPE1VIzdRdgXPSUzlUblTYqvntOz
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="414951196"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="414951196"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:51:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="734339791"
+X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
+   d="scan'208";a="734339791"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2023 04:51:00 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pNvWt-0000UT-0u;
+	Fri, 03 Feb 2023 12:50:59 +0000
+Date: Fri, 3 Feb 2023 20:50:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Usama Arif <usama.arif@bytedance.com>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/paronl.2023.02.01a 6/9] ld.lld:
+ error: undefined symbol: __per_cpu_offset
+Message-ID: <202302032015.LdoA9Pkn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <a20db5a2-92e9-4fcc-964a-16c3b7f3b4ce@app.fastmail.com>
-In-Reply-To: <1876530996.8739.1675384465825@jenkins.jenkins>
-References: <1876530996.8739.1675384465825@jenkins.jenkins>
-Date: Fri, 03 Feb 2023 12:47:30 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: ci_notify <ci_notify@linaro.org>
-Cc: llvm@lists.linux.dev, "Arnd Bergmann" <arnd@linaro.org>
-Subject: Re: [TCWG CI] Failure after v6.2-rc2-24-g6437a549ae17: drm/panfrost: fix
- GENERIC_ATOMIC64 dependency
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Feb 3, 2023, at 01:34, ci_notify@linaro.org wrote:
-> Failure after v6.2-rc2-24-g6437a549ae17: drm/panfrost: fix 
-> GENERIC_ATOMIC64 dependency:
->
-> Results changed to
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 23221
-> # First few build errors in logs:
-> # 00:41:02 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: 
-> error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' 
-> [-Werror,-Wframe-larger-than]
-> # 00:41:02 make[6]: *** [scripts/Makefile.build:252: 
-> drivers/net/ethernet/mellanox/mlx5/core/en_main.o] Error 1
-> # 00:46:08 make[5]: *** [scripts/Makefile.build:504: 
-> drivers/net/ethernet/mellanox/mlx5/core] Error 2
-> # 00:46:08 make[4]: *** [scripts/Makefile.build:504: 
-> drivers/net/ethernet/mellanox] Error 2
-> # 00:46:08 make[3]: *** [scripts/Makefile.build:504: 
-> drivers/net/ethernet] Error 2
-> # 00:46:08 make[2]: *** [scripts/Makefile.build:504: drivers/net] Error 
-> 2
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/paronl.2023.02.01a
+head:   05792727280c094a8dcd1aa4950a61a2d214ddb8
+commit: 42e667c0dd66241675acf0e7bda8368b5bc8e384 [6/9] x86/smpboot: Support parallel startup of secondary CPUs
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230203/202302032015.LdoA9Pkn-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/42e667c0dd66241675acf0e7bda8368b5bc8e384
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/paronl.2023.02.01a
+        git checkout 42e667c0dd66241675acf0e7bda8368b5bc8e384
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Why are you emailing me about this bug? It has nothing to do with
-the fix from $subject.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-     Arnd
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __per_cpu_offset
+   >>> referenced by head_64.S:286 (arch/x86/kernel/head_64.S:286)
+   >>>               arch/x86/kernel/head_64.o:(secondary_startup_64) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: idle_threads
+   >>> referenced by head_64.S:298 (arch/x86/kernel/head_64.S:298)
+   >>>               arch/x86/kernel/head_64.o:(secondary_startup_64) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
