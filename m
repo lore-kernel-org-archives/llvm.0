@@ -1,190 +1,344 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2041.outbound.protection.outlook.com [40.107.20.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F0CAD3A
-	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 18:22:11 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nPDz7tcAaSAVNokYL7P8HL76IkEcIZHzBV510+FqzaDpwJfjqTFB5tY8ySgQ++LDvy8Ixe++hK5ghhM7pdiG50Ab2OqVi+WsnyIwTqvH10XROvDV3sXQKOUwbPXIUdxycS3hq/ky5IQry9tk8dmTqJY72HR5dsFEDPe9AbAUUCVpythXje3SxNkPwttoadO7QCuVw+/5AA29+IBHhNfdpXmSSS6VEZW442TolZjYLVgdbMZd9xP8sFHMxDFs5YFm76hAYdHdoMHBEulUoC25PtJkH/QM0f2010Q2Dk6UavEsNAiOv5nTlW5Im65aXtbX3xhRcAISB18belyskTHndw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GhktJ5vup+pLgCvyY7owXYSJYsWJX3LnxQ0WuL9pbrk=;
- b=lOdIlaNazvErwtqK5N088t2oiLUfvT7Ph6PISRfchWJjAXiZ1ae2ntIf7V7Lv0KEpTlIWJNZWRwpvgq8AXRywf/1nXJ1NDbcISObUKev5ZSJvFpJzT3KhVKaYMbs3p40YIBCmfaKLYc2DZ66xDlEdpRHSOH04X5e0XP277OUkNDe9suYQxhVxuFpFOXq/nxFAwonzhDUNgubXzUi3YXM5DUHWyuTOoxI4u9SyxxOqfiluc1lJsbu4d9b2gUU28fL/09YzUp1RAnfhf1ApswEletf0X6zynpvp+MLrTVVap7gBsTWLuZe5bVkAaP88lDdrr4MMVKLKdsBtJfnmselxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GhktJ5vup+pLgCvyY7owXYSJYsWJX3LnxQ0WuL9pbrk=;
- b=iMeMfMQb6tVEjd6C7kpEoK/MPEnhHfURfXiaecuA9B0JiIvi9iBESdrQaHZdT63+EEaGeVH+J+iRlYgaN8FHeoy/k7uJlfrHKH8KXy1G9k9qm9csovaK6+9H3l8w7YKmGo6+Z4QWGXxuhBq5xptPQbHXo3+ut4c/5bMguyaeJ/0tVH5GGufoE1gH3I+WPX3pBlXbJzdWI31YMdQbfXakV84wE+6PrxeM3zrKuZdbbGYwjSrjUoXaX0smJUD+yi/sV7DAZcip0wzuqz9NmjuN8MmAoOXUEaUgNpFb7U31z7ejv+slj6AuXktFmgK1Wy0Jjq0KSJqmPH6dQgp6S94TBA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2983.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d6::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.28; Fri, 3 Feb
- 2023 18:22:08 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097%6]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
- 18:22:08 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>
-CC: Naresh Kamboju <naresh.kamboju@linaro.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linuxppc-dev@lists.ozlabs.org"
-	<linuxppc-dev@lists.ozlabs.org>, "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-	"npiggin@gmail.com" <npiggin@gmail.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"anders.roxell@linaro.org" <anders.roxell@linaro.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "nathan@kernel.org" <nathan@kernel.org>, Linux Kernel
- Functional Testing <lkft@linaro.org>, "qiongsiwu@gmail.com"
-	<qiongsiwu@gmail.com>, "nemanja.i.ibm@gmail.com" <nemanja.i.ibm@gmail.com>
-Subject: Re: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
-Thread-Topic: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
-Thread-Index: AQHZMJAoHnrP29o+IEWPR5CDVAsvZa66AHKAgAAClgCAAGFkgIADLMUAgAAGiAA=
-Date: Fri, 3 Feb 2023 18:22:08 +0000
-Message-ID: <a0805df4-ebc3-0478-b9dd-0bd1f9d23b82@csgroup.eu>
-References:
- <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
- <20230201113155.18113-1-naresh.kamboju@linaro.org>
- <04b55866-aa17-f500-855a-7d4fb4bbaacf@csgroup.eu>
- <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
- <20230203175846.oczctwfr2jq7usze@pali>
-In-Reply-To: <20230203175846.oczctwfr2jq7usze@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2983:EE_
-x-ms-office365-filtering-correlation-id: 27baa751-f833-4b75-5907-08db06138f5d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- BqGwJj9D1xeKBXYqk1SrFl07CIBPdR2OA0Axt8DoYMGJvPYb6I2C0MMyfUXyDqggc9zka6Pckp4G9bY+ZVVGHTNm4K5KWPBIGDGMUPzmjK1i6AjQFHO+RI6ONxLLfji+lbmJT7eSRY3D/neJFphYyd3IBR75neMiwrw/9vFhhrxcw6nNGBQ9JHB447x+AXRXdH/fWhVLGzLcSXm3U+e1kVNNMmcg6SMDZ53oA29XIytcIwxiipDLwl5yzad21xpNIGWBxZBoJPOhKrqCIItZlsuYPTWOsfWFkOL0eo7G6TOBtzUItI/iP26tl/NP+KG8ImGPyor7cZ+RVJUOJ+x04g5CXgxscIjGgj55vR5bHC7wFRnaGfctj5XLcetJAzDu6eXacKoTDmyozWJ/taUbb8wGzmPkzFPP3MCUCtsAk4NCkdDSBxzIjzFnUHP8Ht4XlZQVK4kNeh39rS/c/Eef8ShhEL5+EP33Xfz3e4LCrEUj8XfeSqkLl3sKNTutRaI2s/0EXZzFQb7P+9+vBZ4Zvh9c3XRWT8RghCyqOLgAzqctTYV5ytUshlTPy3kHbGpKDUiw2IblqFAmXcdzVGswzLqy13gkzFiJO9KE/SCR4yUrkwwaCP4jh+DCJGX/cZ5ZsVIWc7TOHrRdQ5GJhUT/aWaQ+Svf0Seou2pn55pBLXFZObiAmQlBTlfnvx3kLF/rqEwKBSEZa7X/bP2rseD9bNlr0ryMFgWrOWNjojvalCNxtdx6U2imkvBLJcBhRcoUuFoo2Yy3gAKgom1fj2iWl6+5oXo2n9sQdgmRMYllXb8=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(39850400004)(376002)(366004)(451199018)(2906002)(5660300002)(44832011)(7416002)(38070700005)(31696002)(2616005)(86362001)(122000001)(38100700002)(71200400001)(53546011)(83380400001)(6506007)(186003)(6512007)(26005)(6486002)(966005)(36756003)(478600001)(76116006)(66946007)(66556008)(66476007)(316002)(41300700001)(31686004)(64756008)(66446008)(91956017)(40140700001)(110136005)(4326008)(54906003)(8676002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?QVoxemFiMDltU2Q4cG1JT0YzNkZ1eERNbGRGOWVMRWptNUFHQmc0SEtKOUlW?=
- =?utf-8?B?OG5Zclk3SGVaanBGR01IM3A5dE01aU5tdCtvcllyRGU1OUxQYTBPZ2FLc3Ny?=
- =?utf-8?B?OVcrVEhhU1g1N3dGam5LbFBLdFJzdWMyZGJ1TEZvdXR2ZXQ3ckgzVDFmSzdV?=
- =?utf-8?B?U3F1K1RYd2VtTzFBWm1jRHBlbjlQN0t1ckFMVmpNQnhMbWRrbW1naGFTUWVI?=
- =?utf-8?B?NkZ1TWNocnJtQnlPa0xySG52QlZIYkhTZ0VHT2ZnT013OHREd0d2RlovQlIv?=
- =?utf-8?B?UUpvRWJsSEVNZlBSQ3p5aVA5RDltb2FRTFZFemFDTlJRRFo4cXhaZHdOMjhP?=
- =?utf-8?B?Z2pEUWpaZzdDVjA2WnZnN0VhNHJGOTd3ekZLWVVTbzB3djJTK3ZtTm8yN2dR?=
- =?utf-8?B?QkVFZUxqOTVaSFBwZTRBVGVUWjhSRXJZNTR1bzZNc1R1eDBreXRZTjdTb3ls?=
- =?utf-8?B?M2dRVXh4bklJSHB6YWdpVG45ZGRWb2RKV2lmeWlnNCs0ajNjd1pMRzRuem9D?=
- =?utf-8?B?M1VTQWpWY0gyTmtZVVAwZHljZ0tUcDh4Y25JekpaREF1T3dOT3J3cEFiRkVL?=
- =?utf-8?B?MUx5QTB2N3g4aXJsL2s2VjBENjNpRzFUYm9PellVTS8wa1hVOEpqeDVRQVNM?=
- =?utf-8?B?Ymk5MVU4YkNBY3UvMnFMbmdPS3NXeG5pSG81N2NtREExY1JNUGtQbWxwSHhY?=
- =?utf-8?B?NmpEV041OFdNeDdUQzZpdFJzZ1ZhdXlSaVFGVGU1eHJrWkdLVzFKOHBuYVBw?=
- =?utf-8?B?VGV3bStkMksreDZYR2xFbnd2VE52WnVtb1ZuOVRwaTFtNjdWOVJpVDN6ZFAv?=
- =?utf-8?B?ZjFuSGxUZndUc1RxMkk4UGw3WTJMaTkxaTMraFlBSTFXRS9mVXg3bzNuWnlp?=
- =?utf-8?B?b1VmdndzcVJ1Z2s3eWdSbFhQT2JhV0ZkOGcvK242OFdiL05FQjF3Uk56NVZR?=
- =?utf-8?B?MHJVZmRPK2xRdDZXNFlSYzNMc2FaTnVOWVN0VWxBQlViOGVZaGk3NlliZSt0?=
- =?utf-8?B?WkM2S3hLQnpRRmFCUXlQYW1Xc0JvN3EyYUE0Njd4YWE2Vk91RHZIT2VzOTcx?=
- =?utf-8?B?d0RZNU01NkZlYXY4aXdrL2VlSTFIZmhKZGZhaERBeXMzejVvV3F2d0VGa2l3?=
- =?utf-8?B?M052c3I3SXljZnJ6SVNtaW9Zc1REeXoyd21nR0hHaXFFQzQ1S2FXbWs3SGZP?=
- =?utf-8?B?ZWtGZDZuWG5MSi9EVkhQUExxczFFQy9ETFMzUVRkemw1YTlkdWpWM0ZMV2lk?=
- =?utf-8?B?ekJLd1dCa1hDN05yVUV4STViV0w5WmtvRWEvN043Y3FEVTgwOW5DdHo2cGpH?=
- =?utf-8?B?M3hVS2JWZWhXdGtnSG1IUnZYSFkraHczaityVlJZZFk1S0ZSKzc1VFgyNWlk?=
- =?utf-8?B?djRCU0dvZ294WFFvQnRMY2xhN3lYZHdoKzB4QXhCR1crM3JyVFluRi9GSWZV?=
- =?utf-8?B?Mk9pSHV4cHpabXcyRkdCSmpFaEV1dnJUdzY3SGZoTzlTU01COG1CbFdEeWhC?=
- =?utf-8?B?QnpTcXowQytJUDNDTEQwc2pWaTBrVUJETVltdFo0emtiaktkWGhNTU1PTS9z?=
- =?utf-8?B?WUdqek5ZeHZxdjF5TWR1aE5Vczgzc1RJNUwzT21ZaCtubzJ2OEt6RDFXTnlO?=
- =?utf-8?B?bFdrVEV3eHhvRmRmWTltVnVYWWhULzFwMHdqc0V3b0xrdXVUbWlIcmF0c2w0?=
- =?utf-8?B?WjNzSFBEcWlZc1J3Vyt1SUtuWER5c0tQdjdSajlWTnh3Y0RUNlVZaG41M2xl?=
- =?utf-8?B?Ri82d0Rxb3RISnpHSFRYVmc4RkIrWUVrbC9FVnV3bFYyejU5TlA0MG9rOE5y?=
- =?utf-8?B?cTZrd01TY3hJOTQwM1N5OVFmb1BTb00waVpuVVBUSi9pcktlQUlpMmFLT1Rw?=
- =?utf-8?B?V1V6WUxUdnIzSFB6Y1JCR1JTbWpOVXpjQjRIb0RTdEFYMDY3TWp4ZG1qYUlw?=
- =?utf-8?B?b0c0SVRnQ1JzVnZYbzZFNytjR3JSY3NjcTNRcGFWalc1bENUYnkrZmxNUTRs?=
- =?utf-8?B?blJ3a0lYZnNNenJZMzBwYVhCYmJIVkl6WmhBbnJiRXlMV1ZvaTJVN3dLT1hi?=
- =?utf-8?B?bnI0aXJpS0ZPQzBhQU5icVNyK0pHRDRNMXhPKzV0WnlwUUtCZVg5S2ROMSs0?=
- =?utf-8?B?bXp4OUtoSGVBcE40NGVad3VkWDdRTW1Wbmh0cFBtb0IwdEZUU3BFbHFwUG44?=
- =?utf-8?B?d3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <42640977A5CAE5439F621C2A8CE25B43@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6233BAD5A
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 19:15:02 +0000 (UTC)
+Received: by mail-pf1-f178.google.com with SMTP id bd15so4427786pfb.8
+        for <llvm@lists.linux.dev>; Fri, 03 Feb 2023 11:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GCsSpYaGKhPjbk4A0vQjSKCG3qz3zy/WsExyWKyZKmA=;
+        b=JKhUeYVBuHCXlMroGMkXpiwxOsTL5Ky0TyKPWUUHkDZu+SdhPWnSXq6dNzjgXMOXMM
+         cSVU+1nSXcxJeELtOM+fY4mLbf2qO0zUthYN0KL8uK9P9xWqjzoKK1iXFQixJiK4w5pH
+         fio9fKnzkECnXKnVPehLPMMr041wgcS2mXPCnmTW3H3MSdY+1BJReIdgpI8/xJ4c5wDn
+         EKJVi8vZ0rDa2cGIuQCMNaEBtpNcVLzvaSfWZxKTvvYfgNnNuUomGHby37JE+2XcGFG3
+         X8MWC3yqq6UO6i188UD+vS2sVH2uwaeUChZvlN+N2BsycmXFQcrgqdvnfnQQeYZ2LsCg
+         HleQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GCsSpYaGKhPjbk4A0vQjSKCG3qz3zy/WsExyWKyZKmA=;
+        b=lPjnkIJ7bLFSo12QqsIk/RiS3Nm9lY1W56CWzNcx1q5stxtFMerbvSx0DLMJ9As529
+         s4xkDs/Qe3IKPcxng4KlHTrUYl5tV0Cnyvs3DsUBM29TJwFuFjhwii0eLgnlWbPbBM2m
+         MTcEiOp+s4x/hQY0mbhSXBA2fIKla2PM/Y5+Y1ZCBfrkfOK9qh8rWfP4oZAm4B9Rca9w
+         yr5FX8QlICpKOGJQ0FeDbNzdH0shKULtli9Dmv3S4YZO24qulooKx6MbrbA28URu/oVZ
+         //nSIgCbMHZ9OMMuQP+bibee6p6cclc7cv7A8JUVw2uxNtLhQpM2281t0+F+s/Mu+kSX
+         Dubg==
+X-Gm-Message-State: AO0yUKUFS4lmHme0kgAsQuB6auPGGzQDZ2USB5D+ngZPnHgfA5tbkyLs
+	8DE0F/wpqFdwJIlHtMemKYO7wPU9orwmnDYYV0DLiA==
+X-Google-Smtp-Source: AK7set8D1/GoK5Fl4fYWNhlGPY7s1qPfwAeWGwTNA2dp3/dqT4Lp4AIx+R6OunUD8NUCzoZnUYmbp3nMfC/+JjD3zGA=
+X-Received: by 2002:aa7:9045:0:b0:593:adfa:8a1e with SMTP id
+ n5-20020aa79045000000b00593adfa8a1emr2481029pfo.8.1675451701299; Fri, 03 Feb
+ 2023 11:15:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27baa751-f833-4b75-5907-08db06138f5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2023 18:22:08.1993
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 385abTx8HtLbClgec6bW1z0rXAqSGTsRl4YHuKOuyqfDv4EWsyz4j4aP7NV4zD4WJoWLJhv/eYm1/l5vbatW9pxJicu9aNpQaPnfVrS7IYg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2983
+References: <20230203173946.gonna.972-kees@kernel.org>
+In-Reply-To: <20230203173946.gonna.972-kees@kernel.org>
+From: Fangrui Song <maskray@google.com>
+Date: Fri, 3 Feb 2023 11:14:49 -0800
+Message-ID: <CAFP8O3LdXO4-w57KeX+E2D2rOAv-bK47ur0=8XLgfEkXgB=5eg@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: Support Clang UBSAN trap codes for better reporting
+To: Kees Cook <keescook@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, John Stultz <jstultz@google.com>, 
+	Yongqin Liu <yongqin.liu@linaro.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Yury Norov <yury.norov@gmail.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Marco Elver <elver@google.com>, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Alexander Potapenko <glider@google.com>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-DQoNCkxlIDAzLzAyLzIwMjMgw6AgMTg6NTgsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IE9u
-IFdlZG5lc2RheSAwMSBGZWJydWFyeSAyMDIzIDA5OjI5OjQ1IE5pY2sgRGVzYXVsbmllcnMgd3Jv
-dGU6DQo+PiBPbiBXZWQsIEZlYiAxLCAyMDIzIGF0IDM6NDEgQU0gQ2hyaXN0b3BoZSBMZXJveQ0K
-Pj4gPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4gd3JvdGU6DQo+Pj4NCj4+Pg0KPj4+DQo+
-Pj4gTGUgMDEvMDIvMjAyMyDDoCAxMjozMSwgTmFyZXNoIEthbWJvanUgYSDDqWNyaXQgOg0KPj4+
-PiBGb2xsb3dpbmcgYnVpbGQgcmVncmVzc2lvbiBzdGFydGVkIGZyb20gbmV4dC0yMDIzMDEzMS4N
-Cj4+Pj4NCj4+Pj4gUmVncmVzc2lvbnMgZm91bmQgb24gcG93ZXJwYzoNCj4+Pj4NCj4+Pj4gICAg
-IGJ1aWxkL2NsYW5nLW5pZ2h0bHktdHFtOHh4X2RlZmNvbmZpZw0KPj4+PiAgICAgYnVpbGQvY2xh
-bmctbmlnaHRseS1wcGM2NGVfZGVmY29uZmlnDQo+Pj4+DQo+Pj4+DQo+Pj4+IG1ha2UgLS1zaWxl
-bnQgLS1rZWVwLWdvaW5nIC0tam9icz04IE89L2hvbWUvdHV4YnVpbGQvLmNhY2hlL3R1eG1ha2Uv
-YnVpbGRzLzEvYnVpbGQgQVJDSD1wb3dlcnBjIENST1NTX0NPTVBJTEU9cG93ZXJwYzY0bGUtbGlu
-dXgtZ251LSBIT1NUQ0M9Y2xhbmcgQ0M9Y2xhbmcgTExWTT0xIExMVk1fSUFTPTAgdHFtOHh4X2Rl
-ZmNvbmZpZw0KPj4+PiBtYWtlIC0tc2lsZW50IC0ta2VlcC1nb2luZyAtLWpvYnM9OCBPPS9ob21l
-L3R1eGJ1aWxkLy5jYWNoZS90dXhtYWtlL2J1aWxkcy8xL2J1aWxkIEFSQ0g9cG93ZXJwYyBDUk9T
-U19DT01QSUxFPXBvd2VycGM2NGxlLWxpbnV4LWdudS0gSE9TVENDPWNsYW5nIENDPWNsYW5nIExM
-Vk09MSBMTFZNX0lBUz0wDQo+Pj4+DQo+Pj4+IGVycm9yOiB1bmtub3duIHRhcmdldCBDUFUgJzg2
-MCcNCj4+Pj4gbm90ZTogdmFsaWQgdGFyZ2V0IENQVSB2YWx1ZXMgYXJlOiBnZW5lcmljLCA0NDAs
-IDQ1MCwgNjAxLCA2MDIsIDYwMywgNjAzZSwgNjAzZXYsIDYwNCwgNjA0ZSwgNjIwLCA2MzAsIGcz
-LCA3NDAwLCBnNCwgNzQ1MCwgZzQrLCA3NTAsIDg1NDgsIDk3MCwgZzUsIGEyLCBlNTAwLCBlNTAw
-bWMsIGU1NTAwLCBwb3dlcjMsIHB3cjMsIHBvd2VyNCwgcHdyNCwgcG93ZXI1LCBwd3I1LCBwb3dl
-cjV4LCBwd3I1eCwgcG93ZXI2LCBwd3I2LCBwb3dlcjZ4LCBwd3I2eCwgcG93ZXI3LCBwd3I3LCBw
-b3dlcjgsIHB3cjgsIHBvd2VyOSwgcHdyOSwgcG93ZXIxMCwgcHdyMTAsIHBvd2VycGMsIHBwYywg
-cHBjMzIsIHBvd2VycGM2NCwgcHBjNjQsIHBvd2VycGM2NGxlLCBwcGM2NGxlLCBmdXR1cmUNCj4+
-Pj4gbWFrZVsyXTogKioqIFsvYnVpbGRzL2xpbnV4L3NjcmlwdHMvTWFrZWZpbGUuYnVpbGQ6MTE0
-OiBzY3JpcHRzL21vZC9kZXZpY2V0YWJsZS1vZmZzZXRzLnNdIEVycm9yIDENCj4+Pj4gZXJyb3I6
-IHVua25vd24gdGFyZ2V0IENQVSAnODYwJw0KPj4+PiBub3RlOiB2YWxpZCB0YXJnZXQgQ1BVIHZh
-bHVlcyBhcmU6IGdlbmVyaWMsIDQ0MCwgNDUwLCA2MDEsIDYwMiwgNjAzLCA2MDNlLCA2MDNldiwg
-NjA0LCA2MDRlLCA2MjAsIDYzMCwgZzMsIDc0MDAsIGc0LCA3NDUwLCBnNCssIDc1MCwgODU0OCwg
-OTcwLCBnNSwgYTIsIGU1MDAsIGU1MDBtYywgZTU1MDAsIHBvd2VyMywgcHdyMywgcG93ZXI0LCBw
-d3I0LCBwb3dlcjUsIHB3cjUsIHBvd2VyNXgsIHB3cjV4LCBwb3dlcjYsIHB3cjYsIHBvd2VyNngs
-IHB3cjZ4LCBwb3dlcjcsIHB3cjcsIHBvd2VyOCwgcHdyOCwgcG93ZXI5LCBwd3I5LCBwb3dlcjEw
-LCBwd3IxMCwgcG93ZXJwYywgcHBjLCBwcGMzMiwgcG93ZXJwYzY0LCBwcGM2NCwgcG93ZXJwYzY0
-bGUsIHBwYzY0bGUsIGZ1dHVyZQ0KPj4+PiBtYWtlWzJdOiAqKiogWy9idWlsZHMvbGludXgvc2Ny
-aXB0cy9NYWtlZmlsZS5idWlsZDoyNTI6IHNjcmlwdHMvbW9kL2VtcHR5Lm9dIEVycm9yIDENCj4+
-Pg0KPj4+DQo+Pj4gT24gR0NDLCB0aGUgcG9zc2libGUgdmFsdWVzIGFyZToNCj4+Pg0KPj4+IHBw
-Yy1saW51eC1nY2M6IG5vdGUgOiB2YWxpZCBhcmd1bWVudHMgdG8g4oCYLW1jcHU94oCZIGFyZTog
-NDAxIDQwMyA0MDUgNDA1ZnANCj4+PiA0NDAgNDQwZnAgNDY0IDQ2NGZwIDQ3NiA0NzZmcCA1MDUg
-NjAxIDYwMiA2MDMgNjAzZSA2MDQgNjA0ZSA2MjAgNjMwIDc0MA0KPj4+IDc0MDAgNzQ1MCA3NTAg
-ODAxIDgyMSA4MjMgODU0MCA4NTQ4IDg2MCA5NzAgRzMgRzQgRzUgYTIgY2VsbCBlMzAwYzINCj4+
-PiBlMzAwYzMgZTUwMG1jIGU1MDBtYzY0IGU1NTAwIGU2NTAwIGVjNjAzZSBuYXRpdmUgcG93ZXIz
-IHBvd2VyNCBwb3dlcjUNCj4+PiBwb3dlcjUrIHBvd2VyNiBwb3dlcjZ4IHBvd2VyNyBwb3dlcjgg
-cG93ZXJwYyBwb3dlcnBjNjQgcG93ZXJwYzY0bGUgcnM2NA0KPj4+IHRpdGFuDQo+Pj4NCj4+PiBI
-b3cgZG8geW91IHRlbGwgQ0xBTkcgdGhhdCB5b3UgYXJlIGJ1aWxkaW5nIGZvciBwb3dlcnBjIDh4
-eCA/DQo+IA0KPiBNYXliZSBsbHZtIGRvZXMgbm90IGhhdmUgc3VwcG9ydCBmb3IgdGhpcyBvbGQg
-Q1BVIGNvcmUgYXQgYWxsPyBCZWNhdXNlDQo+IGZyb20gJ25vdGU6IHZhbGlkIHRhcmdldCBDUFUg
-dmFsdWVzIGFyZTonIG1lc3NhZ2UgaXQgbG9va3MgbGlrZSB0aGF0Lg0KDQpCeSB0aGUgd2F5IEkg
-c3VibWl0dGVkIGEgcGF0Y2ggdG8gb3B0IG91dCBvZiBDTEFORyB1bnRpbCB3ZSBjbGFyaWZ5IHRo
-ZSANCnNpdHVhdGlvbiwgc2VlIA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0
-L2xpbnV4cHBjLWRldi9wYXRjaC9lNjI4OTJlMzJjMTRhN2E1NzM4YzU5N2UzOWUwMDgyY2IwYWJm
-MjFjLjE2NzUzMzU2NTkuZ2l0LmNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldS8NCg0KQ2hyaXN0
-b3BoZQ0KDQo+IA0KPj4gKyBOZW1hbmphaSwgUWlvbmdzaSwNCj4+DQo+Pg0KPj4+DQo+Pj4+DQo+
-Pj4+DQo+Pj4+IFJlcG9ydGVkLWJ5OiBMaW51eCBLZXJuZWwgRnVuY3Rpb25hbCBUZXN0aW5nIDxs
-a2Z0QGxpbmFyby5vcmc+DQo+Pj4+DQo+Pj4+IGh0dHBzOi8vcWEtcmVwb3J0cy5saW5hcm8ub3Jn
-L2xrZnQvbGludXgtbmV4dC1tYXN0ZXIvYnVpbGQvbmV4dC0yMDIzMDIwMS90ZXN0cnVuLzE0NDc5
-Mzg0L3N1aXRlL2J1aWxkL3Rlc3QvY2xhbmctbmlnaHRseS10cW04eHhfZGVmY29uZmlnL2hpc3Rv
-cnkvDQo+Pj4+DQo+Pj4+IFRoZSBiaXNlY3Rpb24gcG9pbnRlZCB0byB0aGlzIGNvbW1pdCwNCj4+
-Pj4gICAgIDQ1ZjcwOTFhYWMzNSAoInBvd2VycGMvNjQ6IFNldCBkZWZhdWx0IENQVSBpbiBLY29u
-ZmlnIikNCj4+Pj4NCj4+Pj4gLS0NCj4+Pj4gTGluYXJvIExLRlQNCj4+Pj4gaHR0cHM6Ly9sa2Z0
-LmxpbmFyby5vcmcNCj4+DQo+Pg0KPj4NCj4+IC0tIA0KPj4gVGhhbmtzLA0KPj4gfk5pY2sgRGVz
-YXVsbmllcnMNCg==
+On Fri, Feb 3, 2023 at 9:39 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> When building with CONFIG_UBSAN_TRAP=y on arm64, Clang encodes the UBSAN
+> check (handler) type in the esr. Extract this and actually report these
+> traps as coming from the specific UBSAN check that tripped.
+>
+> Before:
+>
+>   Internal error: BRK handler: 00000000f20003e8 [#1] PREEMPT SMP
+>
+> After:
+>
+>   Internal error: UBSAN: shift out of bounds: 00000000f2005514 [#1] PREEMPT SMP
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Yongqin Liu <yongqin.liu@linaro.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2: improve commit log, limit report strings to actual configs, document mappings
+> v1: https://lore.kernel.org/lkml/20230202223653.never.473-kees@kernel.org/
+
+Thanks. I'll add the Linux kernel use to
+https://maskray.me/blog/2023-01-29-all-about-undefined-behavior-sanitizer
+when this lands:)
+
+> ---
+>  arch/arm64/include/asm/brk-imm.h |  2 +
+>  arch/arm64/kernel/traps.c        | 21 ++++++++++
+>  include/linux/ubsan.h            |  9 +++++
+>  lib/Makefile                     |  2 -
+>  lib/ubsan.c                      | 67 ++++++++++++++++++++++++++++++++
+>  lib/ubsan.h                      | 32 +++++++++++++++
+>  6 files changed, 131 insertions(+), 2 deletions(-)
+>  create mode 100644 include/linux/ubsan.h
+>
+> diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
+> index 6e000113e508..3f0f0d03268b 100644
+> --- a/arch/arm64/include/asm/brk-imm.h
+> +++ b/arch/arm64/include/asm/brk-imm.h
+> @@ -28,6 +28,8 @@
+>  #define BUG_BRK_IMM                    0x800
+>  #define KASAN_BRK_IMM                  0x900
+>  #define KASAN_BRK_MASK                 0x0ff
+> +#define UBSAN_BRK_IMM                  0x5500
+> +#define UBSAN_BRK_MASK                 0x00ff
+
+Q: How is 0x5500 derived?
+
+>  #define CFI_BRK_IMM_TARGET             GENMASK(4, 0)
+>  #define CFI_BRK_IMM_TYPE               GENMASK(9, 5)
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 4c0caa589e12..87f42eb1c950 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/mm_types.h>
+>  #include <linux/kasan.h>
+> +#include <linux/ubsan.h>
+>  #include <linux/cfi.h>
+>
+>  #include <asm/atomic.h>
+> @@ -1074,6 +1075,19 @@ static struct break_hook kasan_break_hook = {
+>  };
+>  #endif
+>
+> +#ifdef CONFIG_UBSAN_TRAP
+> +static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
+> +{
+> +       die(report_ubsan_failure(regs, esr & UBSAN_BRK_MASK), regs, esr);
+> +       return DBG_HOOK_HANDLED;
+> +}
+> +
+> +static struct break_hook ubsan_break_hook = {
+> +       .fn     = ubsan_handler,
+> +       .imm    = UBSAN_BRK_IMM,
+> +       .mask   = UBSAN_BRK_MASK,
+> +};
+> +#endif
+>
+>  #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
+>
+> @@ -1091,6 +1105,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>         if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
+>                 return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
+> +#endif
+> +#ifdef CONFIG_UBSAN_TRAP
+> +       if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
+> +               return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  #endif
+>         return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  }
+> @@ -1104,6 +1122,9 @@ void __init trap_init(void)
+>         register_kernel_break_hook(&fault_break_hook);
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>         register_kernel_break_hook(&kasan_break_hook);
+> +#endif
+> +#ifdef CONFIG_UBSAN_TRAP
+> +       register_kernel_break_hook(&ubsan_break_hook);
+>  #endif
+
+IIUC, the break hook is a list so CONFIG_KASAN_SW_TAGS
+(kernel-hwaddress) can be used with CONFIG_UBSAN_TRAP.
+
+>         debug_traps_init();
+>  }
+> diff --git a/include/linux/ubsan.h b/include/linux/ubsan.h
+> new file mode 100644
+> index 000000000000..bff7445498de
+> --- /dev/null
+> +++ b/include/linux/ubsan.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_UBSAN_H
+> +#define _LINUX_UBSAN_H
+> +
+> +#ifdef CONFIG_UBSAN_TRAP
+> +const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type);
+> +#endif
+> +
+> +#endif
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 4d9461bfea42..81b988bf9448 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -340,9 +340,7 @@ quiet_cmd_build_OID_registry = GEN     $@
+>  clean-files    += oid_registry_data.c
+>
+>  obj-$(CONFIG_UCS2_STRING) += ucs2_string.o
+> -ifneq ($(CONFIG_UBSAN_TRAP),y)
+>  obj-$(CONFIG_UBSAN) += ubsan.o
+> -endif
+>
+>  UBSAN_SANITIZE_ubsan.o := n
+>  KASAN_SANITIZE_ubsan.o := n
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index 60c7099857a0..f05ae85fc268 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -18,6 +18,71 @@
+>
+>  #include "ubsan.h"
+>
+> +#ifdef CONFIG_UBSAN_TRAP
+> +/*
+> + * Only include matches for UBSAN checks that are actually compiled in.
+> + * The mappings of struct SanitizerKind (the -fsanitize=xxx args) to
+> + * enum SanitizerHandler (the traps) in Clang is in clang/lib/CodeGen/.
+> + */
+> +const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
+> +{
+> +       switch (check_type) {
+> +#ifdef CONFIG_UBSAN_BOUNDS
+> +       /*
+> +        * SanitizerKind::ArrayBounds and SanitizerKind::LocalBounds
+> +        * emit SanitizerHandler::OutOfBounds.
+> +        */
+> +       case ubsan_out_of_bounds:
+> +               return "UBSAN: array index out of bounds";
+> +#endif
+> +#ifdef CONFIG_UBSAN_SHIFT
+> +       /*
+> +        * SanitizerKind::ShiftBase and SanitizerKind::ShiftExponent
+> +        * emit SanitizerHandler::ShiftOutOfBounds.
+> +        */
+> +       case ubsan_shift_out_of_bounds:
+> +               return "UBSAN: shift out of bounds";
+> +#endif
+> +#ifdef CONFIG_UBSAN_DIV_ZERO
+> +       /*
+> +        * SanitizerKind::IntegerDivideByZero emits
+> +        * SanitizerHandler::DivremOverflow.
+> +        */
+> +       case ubsan_divrem_overflow:
+> +               return "UBSAN: divide/remainder overflow";
+> +#endif
+> +#ifdef CONFIG_UBSAN_UNREACHABLE
+> +       /*
+> +        * SanitizerKind::Unreachable emits
+> +        * SanitizerHandler::BuiltinUnreachable.
+> +        */
+> +       case ubsan_builtin_unreachable:
+> +               return "UBSAN: unreachable code";
+> +#endif
+> +#if defined(CONFIG_UBSAN_BOOL) || defined(CONFIG_UBSAN_ENUM)
+> +       /*
+> +        * SanitizerKind::Bool and SanitizerKind::Enum emit
+> +        * SanitizerHandler::LoadInvalidValue.
+> +        */
+> +       case ubsan_load_invalid_value:
+> +               return "UBSAN: loading invalid value";
+> +#endif
+> +#ifdef CONFIG_UBSAN_ALIGNMENT
+> +       /*
+> +        * SanitizerKind::Alignment emits SanitizerHandler::TypeMismatch
+> +        * or SanitizerHandler::AlignmentAssumption.
+> +        */
+> +       case ubsan_alignment_assumption:
+> +               return "UBSAN: alignment assumption";
+> +       case ubsan_type_mismatch:
+> +               return "UBSAN: type mismatch";
+> +#endif
+> +       default:
+> +               return "UBSAN: unrecognized failure code";
+> +       }
+> +}
+
+I wonder whether keeping the dash-prefixed name is better since that
+matches compiler-rt/lib/ubsan.
+People can search for "add-overflow" and get cross references from
+compiler-rt/lib/ubsan, instead of needing to knowing that "addition
+overflow" is another name for "add-overflow".
+
+> +
+> +#else
+>  static const char * const type_check_kinds[] = {
+>         "load of",
+>         "store to",
+> @@ -384,3 +449,5 @@ void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+>         ubsan_epilogue();
+>  }
+>  EXPORT_SYMBOL(__ubsan_handle_alignment_assumption);
+> +
+> +#endif /* !CONFIG_UBSAN_TRAP */
+> diff --git a/lib/ubsan.h b/lib/ubsan.h
+> index 9a0b71c5ff9f..cc5cb94895a6 100644
+> --- a/lib/ubsan.h
+> +++ b/lib/ubsan.h
+> @@ -2,6 +2,38 @@
+>  #ifndef _LIB_UBSAN_H
+>  #define _LIB_UBSAN_H
+>
+> +/*
+> + * ABI defined by Clang's UBSAN enum SanitizerHandler:
+> + * https://github.com/llvm/llvm-project/blob/release/16.x/clang/lib/CodeGen/CodeGenFunction.h#L113
+> + */
+> +enum ubsan_checks {
+> +       ubsan_add_overflow,
+> +       ubsan_builtin_unreachable,
+> +       ubsan_cfi_check_fail,
+> +       ubsan_divrem_overflow,
+> +       ubsan_dynamic_type_cache_miss,
+> +       ubsan_float_cast_overflow,
+> +       ubsan_function_type_mismatch,
+> +       ubsan_implicit_conversion,
+> +       ubsan_invalid_builtin,
+> +       ubsan_invalid_objc_cast,
+> +       ubsan_load_invalid_value,
+> +       ubsan_missing_return,
+> +       ubsan_mul_overflow,
+> +       ubsan_negate_overflow,
+> +       ubsan_nullability_arg,
+> +       ubsan_nullability_return,
+> +       ubsan_nonnull_arg,
+> +       ubsan_nonnull_return,
+> +       ubsan_out_of_bounds,
+> +       ubsan_pointer_overflow,
+> +       ubsan_shift_out_of_bounds,
+> +       ubsan_sub_overflow,
+> +       ubsan_type_mismatch,
+> +       ubsan_alignment_assumption,
+> +       ubsan_vla_bound_not_positive,
+> +};
+> +
+>  enum {
+>         type_kind_int = 0,
+>         type_kind_float = 1,
+> --
+> 2.34.1
+>
+>
+
+Reviewed-by: Fangrui Song <maskray@google.com>
