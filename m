@@ -1,43 +1,31 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39947F;
-	Fri,  3 Feb 2023 08:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675411429; x=1706947429;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WaZgaU2c/CPI/hqPNvAwCvNlyGC1iJ9BWx5/5m8L1kc=;
-  b=Lub0l0R7df31i5QMs55+mtwhpowLDAuTYiaL1JZssZNO4w59eclmq80y
-   EoSvusGqDyTUmdmDEZNsJ8vo/hE1eTwe0W3HHDWupG8rAxwv9jdKiKUkk
-   FQdjH5KocVSTUalij5N0YLreY+bGetpVI3Udn/UpJLWx8N5Uy+6ceUSQN
-   PBVCysLHLYrTTSITBGpZ7zLyrNH7ebOzWqdHf8EZCyAXHEId2aiqfL2ko
-   2TqqUdWmHxVsEIgvA95F/bNFerogBtjEhi8VIEKbkomQkJhKoinpiujBv
-   t0zEFPqAs6YbEZ5zTBaEVUq0qGCjaysMhlVn/34W3LWH4Navsq7H10Jk2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="312345133"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="312345133"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 00:03:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="665619696"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="665619696"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2023 00:03:47 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNr2x-0000I5-00;
-	Fri, 03 Feb 2023 08:03:47 +0000
-Date: Fri, 3 Feb 2023 16:03:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3 6/25]
- arch/arm/include/asm/pgtable-nommu.h:49:9: error: 'ZERO_PAGE' macro
- redefined
-Message-ID: <202302031651.yFFP0HfX-lkp@intel.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACBAE1C29
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 09:58:32 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C195AC14;
+	Fri,  3 Feb 2023 01:59:13 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.90.37])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1A243F8D6;
+	Fri,  3 Feb 2023 01:58:28 -0800 (PST)
+Date: Fri, 3 Feb 2023 09:58:26 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, John Stultz <jstultz@google.com>,
+	Yongqin Liu <yongqin.liu@linaro.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Yury Norov <yury.norov@gmail.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Marco Elver <elver@google.com>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] arm64: Support Clang UBSAN trap codes for better
+ reporting
+Message-ID: <Y9zawkok2AWy/brZ@FVFF77S0Q05N>
+References: <20230202223653.never.473-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,307 +34,260 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230202223653.never.473-kees@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3
-head:   ac3cfb78163256f2febd47ebd017d9f5b75820dd
-commit: 2472f5903b11b4362be6823cdb6e0937b719aa99 [6/25] ARM: mm: Make virt_to_pfn() a static inline
-config: arm-randconfig-r013-20230202 (https://download.01.org/0day-ci/archive/20230203/202302031651.yFFP0HfX-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=2472f5903b11b4362be6823cdb6e0937b719aa99
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3
-        git checkout 2472f5903b11b4362be6823cdb6e0937b719aa99
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/ fs/cifs/ mm/
+On Thu, Feb 02, 2023 at 10:36:57PM +0000, Kees Cook wrote:
+> On arm64, Clang encodes the UBSAN check type in the esr. Extract this
+> and actually report UBSAN traps with some specificity when building with
+> CONFIG_UBSAN_TRAP. Before:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Really minor nit, but could we mention CONFIG_UBSAN_TRAP at the start, e.g.
+change that first sentence to:
 
-All error/warnings (new ones prefixed by >>):
+| When CONFIG_UBSAN_TRAP=y on arm64, Clang encodes the UBSAN check type into a
+| BRK immediate, which is reported in the ESR.
 
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   1 warning generated.
---
-   In file included from mm/filemap.c:15:
-   In file included from include/linux/dax.h:6:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   mm/filemap.c:2202:6: warning: unused function 'folio_more_pages' [-Wunused-function]
-   bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
-        ^
-   2 warnings generated.
---
-   In file included from mm/shmem.c:28:
-   In file included from include/linux/ramfs.h:5:
-   In file included from include/linux/fs_parser.h:11:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:33:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   mm/shmem.c:4159:13: warning: no previous prototype for function 'shmem_init' [-Wmissing-prototypes]
-   void __init shmem_init(void)
-               ^
-   mm/shmem.c:4159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init shmem_init(void)
-   ^
-   static 
-   mm/shmem.c:4167:5: warning: no previous prototype for function 'shmem_unuse' [-Wmissing-prototypes]
-   int shmem_unuse(unsigned int type)
-       ^
-   mm/shmem.c:4167:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_unuse(unsigned int type)
-   ^
-   static 
-   mm/shmem.c:4172:5: warning: no previous prototype for function 'shmem_lock' [-Wmissing-prototypes]
-   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
-       ^
-   mm/shmem.c:4172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
-   ^
-   static 
-   mm/shmem.c:4177:6: warning: no previous prototype for function 'shmem_unlock_mapping' [-Wmissing-prototypes]
-   void shmem_unlock_mapping(struct address_space *mapping)
-        ^
-   mm/shmem.c:4177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void shmem_unlock_mapping(struct address_space *mapping)
-   ^
-   static 
-   mm/shmem.c:4190:6: warning: no previous prototype for function 'shmem_truncate_range' [-Wmissing-prototypes]
-   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
-        ^
-   mm/shmem.c:4190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
-   ^
-   static 
-   mm/shmem.c:4250:14: warning: no previous prototype for function 'shmem_kernel_file_setup' [-Wmissing-prototypes]
-   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
-                ^
-   mm/shmem.c:4250:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
-   ^
-   static 
-   mm/shmem.c:4261:14: warning: no previous prototype for function 'shmem_file_setup' [-Wmissing-prototypes]
-   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
-                ^
-   mm/shmem.c:4261:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
-   ^
-   static 
-   mm/shmem.c:4274:14: warning: no previous prototype for function 'shmem_file_setup_with_mnt' [-Wmissing-prototypes]
-   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
-                ^
-   mm/shmem.c:4274:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
-   ^
-   static 
-   mm/shmem.c:4285:5: warning: no previous prototype for function 'shmem_zero_setup' [-Wmissing-prototypes]
-   int shmem_zero_setup(struct vm_area_struct *vma)
-       ^
-   mm/shmem.c:4285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_zero_setup(struct vm_area_struct *vma)
-   ^
-   static 
-   mm/shmem.c:4323:14: warning: no previous prototype for function 'shmem_read_mapping_page_gfp' [-Wmissing-prototypes]
-   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
-                ^
-   mm/shmem.c:4323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
-   ^
-   static 
-   11 warnings generated.
---
-   In file included from mm/list_lru.c:10:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   mm/list_lru.c:98:20: warning: unused function 'list_lru_memcg_aware' [-Wunused-function]
-   static inline bool list_lru_memcg_aware(struct list_lru *lru)
-                      ^
-   2 warnings generated.
---
-   In file included from mm/sparse.c:5:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   mm/sparse.c:321:27: warning: unused function 'pgdat_to_phys' [-Wunused-function]
-   static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
-                             ^
-   2 warnings generated.
---
-   In file included from mm/page_poison.c:4:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   mm/page_poison.c:102:6: warning: no previous prototype for function '__kernel_map_pages' [-Wmissing-prototypes]
-   void __kernel_map_pages(struct page *page, int numpages, int enable)
-        ^
-   mm/page_poison.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __kernel_map_pages(struct page *page, int numpages, int enable)
-   ^
-   static 
-   2 warnings generated.
---
-   In file included from mm/slub.c:13:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   mm/slub.c:2260:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
-           unsigned int partial_slabs = 0;
-                        ^
-   2 warnings generated.
---
-   In file included from fs/cifs/cifsfs.c:28:
-   In file included from include/linux/xattr.h:18:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   In file included from fs/cifs/cifsfs.c:34:
->> fs/cifs/cifsglob.h:2217:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-                   sg_set_page(sg++, virt_to_page(addr), buflen, off);
-                                                  ^~~~
-   arch/arm/include/asm/memory.h:386:53: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-                                                           ^~~~~
-   include/asm-generic/memory_model.h:40:27: note: expanded from macro '__pfn_to_page'
-   ({      unsigned long __pfn = (pfn);                    \
-                                  ^~~
-   arch/arm/include/asm/memory.h:292:53: note: passing argument to parameter 'p' here
-   static inline unsigned long virt_to_pfn(const void *p)
-                                                       ^
-   1 warning and 1 error generated.
---
-   In file included from fs/cifs/ioctl.c:14:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   In file included from fs/cifs/ioctl.c:17:
->> fs/cifs/cifsglob.h:2217:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-                   sg_set_page(sg++, virt_to_page(addr), buflen, off);
-                                                  ^~~~
-   arch/arm/include/asm/memory.h:386:53: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
-                                                           ^~~~~
-   include/asm-generic/memory_model.h:40:27: note: expanded from macro '__pfn_to_page'
-   ({      unsigned long __pfn = (pfn);                    \
-                                  ^~~
-   arch/arm/include/asm/memory.h:292:53: note: passing argument to parameter 'p' here
-   static inline unsigned long virt_to_pfn(const void *p)
-                                                       ^
-   fs/cifs/ioctl.c:324:10: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
-           __u64   caps;
-                   ^
-   2 warnings and 1 error generated.
---
-   In file included from drivers/gpu/drm/tilcdc/tilcdc_plane.c:7:
-   In file included from include/drm/drm_atomic.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:33:
-   In file included from include/drm/drm_connector.h:32:
-   In file included from include/drm/drm_util.h:36:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: error: 'ZERO_PAGE' macro redefined [-Werror,-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   1 error generated.
---
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
->> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   1 warning generated.
+I was initially confused since I was aware that there are usually direct
+function calls for the reporting.
 
+Other than that, this looks fine to me, and regardless of the above:
 
-vim +/ZERO_PAGE +49 arch/arm/include/asm/pgtable-nommu.h
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-    44	
-    45	/*
-    46	 * ZERO_PAGE is a global shared page that is always zero: used
-    47	 * for zero-mapped memory areas etc..
-    48	 */
-  > 49	#define ZERO_PAGE(vaddr)	(virt_to_page((const void *)0))
-    50	
+Mark.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>   Internal error: BRK handler: 00000000f20003e8 [#1] PREEMPT SMP
+> 
+> After:
+> 
+>   Internal error: UBSAN: shift out of bounds: 00000000f2005514 [#1] PREEMPT SMP
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Yongqin Liu <yongqin.liu@linaro.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/arm64/include/asm/brk-imm.h |  2 ++
+>  arch/arm64/kernel/traps.c        | 21 +++++++++++++
+>  include/linux/ubsan.h            |  9 ++++++
+>  lib/Makefile                     |  2 --
+>  lib/ubsan.c                      | 54 ++++++++++++++++++++++++++++++++
+>  lib/ubsan.h                      | 28 +++++++++++++++++
+>  6 files changed, 114 insertions(+), 2 deletions(-)
+>  create mode 100644 include/linux/ubsan.h
+> 
+> diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
+> index 6e000113e508..3f0f0d03268b 100644
+> --- a/arch/arm64/include/asm/brk-imm.h
+> +++ b/arch/arm64/include/asm/brk-imm.h
+> @@ -28,6 +28,8 @@
+>  #define BUG_BRK_IMM			0x800
+>  #define KASAN_BRK_IMM			0x900
+>  #define KASAN_BRK_MASK			0x0ff
+> +#define UBSAN_BRK_IMM			0x5500
+> +#define UBSAN_BRK_MASK			0x00ff
+>  
+>  #define CFI_BRK_IMM_TARGET		GENMASK(4, 0)
+>  #define CFI_BRK_IMM_TYPE		GENMASK(9, 5)
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 4c0caa589e12..87f42eb1c950 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/mm_types.h>
+>  #include <linux/kasan.h>
+> +#include <linux/ubsan.h>
+>  #include <linux/cfi.h>
+>  
+>  #include <asm/atomic.h>
+> @@ -1074,6 +1075,19 @@ static struct break_hook kasan_break_hook = {
+>  };
+>  #endif
+>  
+> +#ifdef CONFIG_UBSAN_TRAP
+> +static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
+> +{
+> +	die(report_ubsan_failure(regs, esr & UBSAN_BRK_MASK), regs, esr);
+> +	return DBG_HOOK_HANDLED;
+> +}
+> +
+> +static struct break_hook ubsan_break_hook = {
+> +	.fn	= ubsan_handler,
+> +	.imm	= UBSAN_BRK_IMM,
+> +	.mask	= UBSAN_BRK_MASK,
+> +};
+> +#endif
+>  
+>  #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
+>  
+> @@ -1091,6 +1105,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>  	if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
+>  		return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
+> +#endif
+> +#ifdef CONFIG_UBSAN_TRAP
+> +	if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
+> +		return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  #endif
+>  	return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  }
+> @@ -1104,6 +1122,9 @@ void __init trap_init(void)
+>  	register_kernel_break_hook(&fault_break_hook);
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>  	register_kernel_break_hook(&kasan_break_hook);
+> +#endif
+> +#ifdef CONFIG_UBSAN_TRAP
+> +	register_kernel_break_hook(&ubsan_break_hook);
+>  #endif
+>  	debug_traps_init();
+>  }
+> diff --git a/include/linux/ubsan.h b/include/linux/ubsan.h
+> new file mode 100644
+> index 000000000000..bff7445498de
+> --- /dev/null
+> +++ b/include/linux/ubsan.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_UBSAN_H
+> +#define _LINUX_UBSAN_H
+> +
+> +#ifdef CONFIG_UBSAN_TRAP
+> +const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type);
+> +#endif
+> +
+> +#endif
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 4d9461bfea42..81b988bf9448 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -340,9 +340,7 @@ quiet_cmd_build_OID_registry = GEN     $@
+>  clean-files	+= oid_registry_data.c
+>  
+>  obj-$(CONFIG_UCS2_STRING) += ucs2_string.o
+> -ifneq ($(CONFIG_UBSAN_TRAP),y)
+>  obj-$(CONFIG_UBSAN) += ubsan.o
+> -endif
+>  
+>  UBSAN_SANITIZE_ubsan.o := n
+>  KASAN_SANITIZE_ubsan.o := n
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index 60c7099857a0..98a671ec56e9 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -18,6 +18,58 @@
+>  
+>  #include "ubsan.h"
+>  
+> +#ifdef CONFIG_UBSAN_TRAP
+> +const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
+> +{
+> +	switch (check_type) {
+> +	case ubsan_add_overflow:
+> +		return "UBSAN: addition overflow";
+> +	case ubsan_builtin_unreachable:
+> +		return "UBSAN: unreachable code";
+> +	case ubsan_cfi_check_fail:
+> +		return "UBSAN: CFI failure";
+> +	case ubsan_divrem_overflow:
+> +		return "UBSAN: divide/remainder overflow";
+> +	case ubsan_function_type_mismatch:
+> +		return "UBSAN: function type mismatch";
+> +	case ubsan_implicit_conversion:
+> +		return "UBSAN: implicit conversion";
+> +	case ubsan_invalid_builtin:
+> +		return "UBSAN: invalid builtin";
+> +	case ubsan_invalid_objc_cast:
+> +		return "UBSAN: invalid object cast";
+> +	case ubsan_load_invalid_value:
+> +		return "UBSAN: loading invalid value";
+> +	case ubsan_missing_return:
+> +		return "UBSAN: missing return";
+> +	case ubsan_mul_overflow:
+> +		return "UBSAN: multiplication overflow";
+> +	case ubsan_negate_overflow:
+> +		return "UBSAN: negation overflow";
+> +	case ubsan_nonnull_arg:
+> +		return "UBSAN: non-NULL argument";
+> +	case ubsan_nonnull_return:
+> +		return "UBSAN: non-NULL return";
+> +	case ubsan_out_of_bounds:
+> +		return "UBSAN: array index out of bounds";
+> +	case ubsan_pointer_overflow:
+> +		return "UBSAN: pointer overflow";
+> +	case ubsan_shift_out_of_bounds:
+> +		return "UBSAN: shift out of bounds";
+> +	case ubsan_sub_overflow:
+> +		return "UBSAN: subtraction overflow";
+> +	case ubsan_type_mismatch:
+> +		return "UBSAN: type mismatch";
+> +	case ubsan_alignment_assumption:
+> +		return "UBSAN: alignment assumption";
+> +	case ubsan_vla_bound_not_positive:
+> +		return "UBSAN: VLA bounds not positive";
+> +	default:
+> +		return "UBSAN: unknown failure";
+> +	}
+> +}
+> +
+> +#else
+>  static const char * const type_check_kinds[] = {
+>  	"load of",
+>  	"store to",
+> @@ -384,3 +436,5 @@ void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+>  	ubsan_epilogue();
+>  }
+>  EXPORT_SYMBOL(__ubsan_handle_alignment_assumption);
+> +
+> +#endif /* !CONFIG_UBSAN_TRAP */
+> diff --git a/lib/ubsan.h b/lib/ubsan.h
+> index 9a0b71c5ff9f..9c7f00f550f5 100644
+> --- a/lib/ubsan.h
+> +++ b/lib/ubsan.h
+> @@ -2,6 +2,34 @@
+>  #ifndef _LIB_UBSAN_H
+>  #define _LIB_UBSAN_H
+>  
+> +enum ubsan_checks {
+> +	ubsan_add_overflow,
+> +	ubsan_builtin_unreachable,
+> +	ubsan_cfi_check_fail,
+> +	ubsan_divrem_overflow,
+> +	ubsan_dynamic_type_cache_miss,
+> +	ubsan_float_cast_overflow,
+> +	ubsan_function_type_mismatch,
+> +	ubsan_implicit_conversion,
+> +	ubsan_invalid_builtin,
+> +	ubsan_invalid_objc_cast,
+> +	ubsan_load_invalid_value,
+> +	ubsan_missing_return,
+> +	ubsan_mul_overflow,
+> +	ubsan_negate_overflow,
+> +	ubsan_nullability_arg,
+> +	ubsan_nullability_return,
+> +	ubsan_nonnull_arg,
+> +	ubsan_nonnull_return,
+> +	ubsan_out_of_bounds,
+> +	ubsan_pointer_overflow,
+> +	ubsan_shift_out_of_bounds,
+> +	ubsan_sub_overflow,
+> +	ubsan_type_mismatch,
+> +	ubsan_alignment_assumption,
+> +	ubsan_vla_bound_not_positive,
+> +};
+> +
+>  enum {
+>  	type_kind_int = 0,
+>  	type_kind_float = 1,
+> -- 
+> 2.34.1
+> 
