@@ -1,86 +1,200 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072F44C60;
-	Fri,  3 Feb 2023 12:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675428663; x=1706964663;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZlccfO8aU3nKKqyOaEtsrBm5JQO2RpbyK4ma3DnSP5w=;
-  b=X/hFqy9OxIiaBsb7EwFm7uPmPHs0+z2tHhDbBmLXhO0qY1ZDTNPpQx4U
-   g/12Gkb8rzcETx/8IJku4zzWsv4aYj963EVln1LLLQ+vp2+IMCmjM00VX
-   vkfqh8W6GCPNbDeeKQPhTOGfwt+I1rOSuNfyTUBwjhHy/OmklKUwDtNIq
-   y1Y75R7PAg0bdzcamcWEK3KHS1GXbc9F2SvMIeeUNbrfiMUGHScXvVQlM
-   +yr48I5Sw55NbM+O2+H3al9aHPXVcw05dvcKz2RLgCd+kONQyxLuhbTjr
-   2w+WxHY9UgvzHkFSLk7ibg5Ob4lgIyPE1VIzdRdgXPSUzlUblTYqvntOz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="414951196"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="414951196"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 04:51:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="734339791"
-X-IronPort-AV: E=Sophos;i="5.97,270,1669104000"; 
-   d="scan'208";a="734339791"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2023 04:51:00 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pNvWt-0000UT-0u;
-	Fri, 03 Feb 2023 12:50:59 +0000
-Date: Fri, 3 Feb 2023 20:50:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Usama Arif <usama.arif@bytedance.com>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/paronl.2023.02.01a 6/9] ld.lld:
- error: undefined symbol: __per_cpu_offset
-Message-ID: <202302032015.LdoA9Pkn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376BD4C60
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 13:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675430501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2o/ncy1/0d1dNIDbB3nzLSTgR+kjG4ncYDIseQXoGrw=;
+	b=DdpxVx0E41tO904vQZNFm9cRX5k8x5I5wZnqjbfuR5Ng7pYxnK9Tzv3os2rsMN0x5fC/27
+	qLpUBKp63hkJT9ddHOSSWug7uobHX206C7g2I2Qzo0/3crzKdg7a0MLPaYeniZwj0y2NGk
+	faXdNTT2gClDjgb358tKs4qwhViidXI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-652-MRb0piE6MeaAxa7ux34d0Q-1; Fri, 03 Feb 2023 08:21:39 -0500
+X-MC-Unique: MRb0piE6MeaAxa7ux34d0Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8518985A588
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 13:21:39 +0000 (UTC)
+Received: from [172.64.9.58] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 740D4492C14;
+	Fri,  3 Feb 2023 13:21:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, e7368fd3)
+Date: Fri, 03 Feb 2023 13:21:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <09851.123020308213901297@us-mta-652.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/paronl.2023.02.01a
-head:   05792727280c094a8dcd1aa4950a61a2d214ddb8
-commit: 42e667c0dd66241675acf0e7bda8368b5bc8e384 [6/9] x86/smpboot: Support parallel startup of secondary CPUs
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230203/202302032015.LdoA9Pkn-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/42e667c0dd66241675acf0e7bda8368b5bc8e384
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/paronl.2023.02.01a
-        git checkout 42e667c0dd66241675acf0e7bda8368b5bc8e384
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __per_cpu_offset
-   >>> referenced by head_64.S:286 (arch/x86/kernel/head_64.S:286)
-   >>>               arch/x86/kernel/head_64.o:(secondary_startup_64) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: idle_threads
-   >>> referenced by head_64.S:298 (arch/x86/kernel/head_64.S:298)
-   >>>               arch/x86/kernel/head_64.o:(secondary_startup_64) in archive vmlinux.a
+Kernel information:
+    Commit message: Merge tag 'linux-kselftest-kunit-fixes-6.2-rc7' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/68298
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6945640
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
+p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
+om_score_adj=3D1000
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1214
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: SELinux prevents pipefs
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1541
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
+ainted 6.1.0-rc3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1461
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
