@@ -1,331 +1,114 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B801AD3A
-	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 17:39:52 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id n2so4223806pfo.3
-        for <llvm@lists.linux.dev>; Fri, 03 Feb 2023 09:39:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WZL1uAcqK22yknIBHg1TH70wLiFVNlCVoM2e8IdO6s=;
-        b=Ecbp+KXuzyrUV2HboCAjpxOqKlc1ehRwThuleJqmK4Rg5gCJzoYDSyDd8zyWjYMJwb
-         4+ueeh+PKBj/UsDeJakhm2ghqJRq1TgaThyo7eb4WEMbBccGGucMWcNd7N0lgB8+Kn1e
-         IWlYmfb5lsV+BtI3pMMy0cReVsarkpuHwAX28=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2WZL1uAcqK22yknIBHg1TH70wLiFVNlCVoM2e8IdO6s=;
-        b=YynNadyqk8LWEQKhKYIa3kHXg/6Slidh1ZDRNkYKN9fqlrwHCv4q691CXAZOSYJhoQ
-         NaeIOUp7XaZyqVp8rZPVoX38YRNXMc3B0E2v3PQahV46NlTOrZXV+YXJgvb5iJR6WjcJ
-         DEj8zN2AneptGvCRe8Qh6la4IwNzSgP8QJMyQFqXyd/qJquxrd7jale4gUli9CvBOwtI
-         ybxjixD7GvE3TXeYL2PYtsZz+hssSgqqN6PekOMHF19c7cEM5WXcyj3DnkxiS6aWG3ON
-         9jUExvjxABelfyBAsjWHWNhzV2G0G3cPAJjhL6tkmXbWasGu0PAjbJSMQIYi87CkKodu
-         A1Yg==
-X-Gm-Message-State: AO0yUKWTt3VWKW5zvXFHDamMZmS3EIewzq7kEe7dP5dWctaUYOVlFdau
-	xwyMk1KIH+8rUV0PO+zmjcxHYw==
-X-Google-Smtp-Source: AK7set/ILYK/AVwauQAeJLy4eUtsZ9YMt4HTPQCDXUBkX+mTutpn3SPG/Ck17MHzyktHS5kyHhyemA==
-X-Received: by 2002:a05:6a00:a22:b0:593:df5a:1592 with SMTP id p34-20020a056a000a2200b00593df5a1592mr11487947pfh.25.1675445991633;
-        Fri, 03 Feb 2023 09:39:51 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y66-20020a626445000000b005821db4fd84sm2080287pfb.131.2023.02.03.09.39.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 09:39:51 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	John Stultz <jstultz@google.com>,
-	Yongqin Liu <yongqin.liu@linaro.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Marco Elver <elver@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2] arm64: Support Clang UBSAN trap codes for better reporting
-Date: Fri,  3 Feb 2023 17:39:49 +0000
-Message-Id: <20230203173946.gonna.972-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A9EAD3A
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 17:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B326C433D2;
+	Fri,  3 Feb 2023 17:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675447129;
+	bh=h0FX8njn5v6dhV2AUGOJNYLtMQEKPbwS8wqqRVOBFXY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YccVIaj7oaIBJXC0g+3yS+sil13YXsVVAYIp9f2Bd0HIyWQHX8pkeeGpE5yqISmpQ
+	 NWyJWS3MfXIHCRUP7hmOBWXl4yGXJ1XQ3tbtpljGE90J7SeLIH0T+A9gnLj8Dvy7ID
+	 QeOIrs1upGpfj1NDWWvM+SAJdlsTtMmSNb4rEdnVKy9aPjTEvGKwZFOk5zQfpzJcLP
+	 uCZ2RaQ522dlqarGF87ZXl0KEpxyJusSK3SG9DZRRUGCk7Ce/tU6sWdahxYzt+/oAq
+	 z983AnRaVXjiOhOF8Zn2cWO+x/IX6Hum3xScZdy8wtSLqtmb/VsG62YKforEDlbKt5
+	 k91fom1q1q9ew==
+Received: by pali.im (Postfix)
+	id 4F160723; Fri,  3 Feb 2023 18:58:46 +0100 (CET)
+Date: Fri, 3 Feb 2023 18:58:46 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+	"npiggin@gmail.com" <npiggin@gmail.com>,
+	"arnd@arndb.de" <arnd@arndb.de>,
+	"anders.roxell@linaro.org" <anders.roxell@linaro.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	qiongsiwu@gmail.com, nemanja.i.ibm@gmail.com
+Subject: Re: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
+Message-ID: <20230203175846.oczctwfr2jq7usze@pali>
+References: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
+ <20230201113155.18113-1-naresh.kamboju@linaro.org>
+ <04b55866-aa17-f500-855a-7d4fb4bbaacf@csgroup.eu>
+ <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7881; h=from:subject:message-id; bh=Wbj+ROZzkr0HqALXeqBsmNe3SBAa0wKtdW+jf0B3UHA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3Ubl5gpTcIQItZiS4wh1SeVOPr79eIulbKMyIJdz HYVl9/qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY91G5QAKCRCJcvTf3G3AJp6oEA CeSCrebA+oDU4bIvtCx7zDa/L8OePXLAmcx5SUtSpoP4VZoXLZ+EJS6L5MoqZ1k0Y+nclKxuMA2Lar a2DjeKGW36+OmnAk0k94ymtyYsYe2R9fnriEDGjVG1pT9sdM+ZsmYhv0hX2W+4tT0k/IVZDm0mryFj wCerAZ4anWU05BjH6yA/4X75tkzwc+F1d9UoiCpyYA65HcYM6tgGuTm3DCchpTKszGo6viQS/YShiw gtv0GzZfSJkOgIHoI9oErNKSe5L0yrTEmHgmR87+Xupy+nGsKmCGxUbGXRMrrX72xkdJx0TiUCWfzS YH+bCISOR6o+lRzInZSiUbwoegYOrSd6me4Qny+UBg3GJS9bAxP10oyaE6I3UzoOExXh2wtBDqUPqI urzpkZ98p/KlKBXfzNgJvs+mUCtkXg/xWhmM+aMNkiHq1l1BKoP1Wbd0WL19ilGNO8e8binOGhDo6/ 022oIO1EzBedMHyDKC6SB1ShPErNKCKLTc6SKNmg9+HLKa+V/U8T5P9YoN1LCtBRpHz13o5th7rTKS /DI8iceYK1O03avcRzp7Mr2TpnPagtzlzB6DE3qn/gV0f5S4sBMuClBX6f3Ep7KOzna1Jel1Xb8Y4b qSRq66YyDgIHxo3hdoxAjgFZFA/AafrAl6QUYK8EmlvMj3XIhPKpC0O97NHQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdnc_ggT_2FQQwq71PiDE_D1xxXXnB5iSWvvoa3pu7kMdQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 
-When building with CONFIG_UBSAN_TRAP=y on arm64, Clang encodes the UBSAN
-check (handler) type in the esr. Extract this and actually report these
-traps as coming from the specific UBSAN check that tripped.
+On Wednesday 01 February 2023 09:29:45 Nick Desaulniers wrote:
+> On Wed, Feb 1, 2023 at 3:41 AM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+> >
+> >
+> >
+> > Le 01/02/2023 à 12:31, Naresh Kamboju a écrit :
+> > > Following build regression started from next-20230131.
+> > >
+> > > Regressions found on powerpc:
+> > >
+> > >    build/clang-nightly-tqm8xx_defconfig
+> > >    build/clang-nightly-ppc64e_defconfig
+> > >
+> > >
+> > > make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=0 tqm8xx_defconfig
+> > > make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=0
+> > >
+> > > error: unknown target CPU '860'
+> > > note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+> > > make[2]: *** [/builds/linux/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
+> > > error: unknown target CPU '860'
+> > > note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+> > > make[2]: *** [/builds/linux/scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+> >
+> >
+> > On GCC, the possible values are:
+> >
+> > ppc-linux-gcc: note : valid arguments to ‘-mcpu=’ are: 401 403 405 405fp
+> > 440 440fp 464 464fp 476 476fp 505 601 602 603 603e 604 604e 620 630 740
+> > 7400 7450 750 801 821 823 8540 8548 860 970 G3 G4 G5 a2 cell e300c2
+> > e300c3 e500mc e500mc64 e5500 e6500 ec603e native power3 power4 power5
+> > power5+ power6 power6x power7 power8 powerpc powerpc64 powerpc64le rs64
+> > titan
+> >
+> > How do you tell CLANG that you are building for powerpc 8xx ?
 
-Before:
+Maybe llvm does not have support for this old CPU core at all? Because
+from 'note: valid target CPU values are:' message it looks like that.
 
-  Internal error: BRK handler: 00000000f20003e8 [#1] PREEMPT SMP
-
-After:
-
-  Internal error: UBSAN: shift out of bounds: 00000000f2005514 [#1] PREEMPT SMP
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: John Stultz <jstultz@google.com>
-Cc: Yongqin Liu <yongqin.liu@linaro.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Marco Elver <elver@google.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v2: improve commit log, limit report strings to actual configs, document mappings
-v1: https://lore.kernel.org/lkml/20230202223653.never.473-kees@kernel.org/
----
- arch/arm64/include/asm/brk-imm.h |  2 +
- arch/arm64/kernel/traps.c        | 21 ++++++++++
- include/linux/ubsan.h            |  9 +++++
- lib/Makefile                     |  2 -
- lib/ubsan.c                      | 67 ++++++++++++++++++++++++++++++++
- lib/ubsan.h                      | 32 +++++++++++++++
- 6 files changed, 131 insertions(+), 2 deletions(-)
- create mode 100644 include/linux/ubsan.h
-
-diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
-index 6e000113e508..3f0f0d03268b 100644
---- a/arch/arm64/include/asm/brk-imm.h
-+++ b/arch/arm64/include/asm/brk-imm.h
-@@ -28,6 +28,8 @@
- #define BUG_BRK_IMM			0x800
- #define KASAN_BRK_IMM			0x900
- #define KASAN_BRK_MASK			0x0ff
-+#define UBSAN_BRK_IMM			0x5500
-+#define UBSAN_BRK_MASK			0x00ff
- 
- #define CFI_BRK_IMM_TARGET		GENMASK(4, 0)
- #define CFI_BRK_IMM_TYPE		GENMASK(9, 5)
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 4c0caa589e12..87f42eb1c950 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -26,6 +26,7 @@
- #include <linux/syscalls.h>
- #include <linux/mm_types.h>
- #include <linux/kasan.h>
-+#include <linux/ubsan.h>
- #include <linux/cfi.h>
- 
- #include <asm/atomic.h>
-@@ -1074,6 +1075,19 @@ static struct break_hook kasan_break_hook = {
- };
- #endif
- 
-+#ifdef CONFIG_UBSAN_TRAP
-+static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
-+{
-+	die(report_ubsan_failure(regs, esr & UBSAN_BRK_MASK), regs, esr);
-+	return DBG_HOOK_HANDLED;
-+}
-+
-+static struct break_hook ubsan_break_hook = {
-+	.fn	= ubsan_handler,
-+	.imm	= UBSAN_BRK_IMM,
-+	.mask	= UBSAN_BRK_MASK,
-+};
-+#endif
- 
- #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
- 
-@@ -1091,6 +1105,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
- #ifdef CONFIG_KASAN_SW_TAGS
- 	if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
- 		return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
-+#endif
-+#ifdef CONFIG_UBSAN_TRAP
-+	if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
-+		return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
- #endif
- 	return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
- }
-@@ -1104,6 +1122,9 @@ void __init trap_init(void)
- 	register_kernel_break_hook(&fault_break_hook);
- #ifdef CONFIG_KASAN_SW_TAGS
- 	register_kernel_break_hook(&kasan_break_hook);
-+#endif
-+#ifdef CONFIG_UBSAN_TRAP
-+	register_kernel_break_hook(&ubsan_break_hook);
- #endif
- 	debug_traps_init();
- }
-diff --git a/include/linux/ubsan.h b/include/linux/ubsan.h
-new file mode 100644
-index 000000000000..bff7445498de
---- /dev/null
-+++ b/include/linux/ubsan.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_UBSAN_H
-+#define _LINUX_UBSAN_H
-+
-+#ifdef CONFIG_UBSAN_TRAP
-+const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type);
-+#endif
-+
-+#endif
-diff --git a/lib/Makefile b/lib/Makefile
-index 4d9461bfea42..81b988bf9448 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -340,9 +340,7 @@ quiet_cmd_build_OID_registry = GEN     $@
- clean-files	+= oid_registry_data.c
- 
- obj-$(CONFIG_UCS2_STRING) += ucs2_string.o
--ifneq ($(CONFIG_UBSAN_TRAP),y)
- obj-$(CONFIG_UBSAN) += ubsan.o
--endif
- 
- UBSAN_SANITIZE_ubsan.o := n
- KASAN_SANITIZE_ubsan.o := n
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index 60c7099857a0..f05ae85fc268 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -18,6 +18,71 @@
- 
- #include "ubsan.h"
- 
-+#ifdef CONFIG_UBSAN_TRAP
-+/*
-+ * Only include matches for UBSAN checks that are actually compiled in.
-+ * The mappings of struct SanitizerKind (the -fsanitize=xxx args) to
-+ * enum SanitizerHandler (the traps) in Clang is in clang/lib/CodeGen/.
-+ */
-+const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
-+{
-+	switch (check_type) {
-+#ifdef CONFIG_UBSAN_BOUNDS
-+	/*
-+	 * SanitizerKind::ArrayBounds and SanitizerKind::LocalBounds
-+	 * emit SanitizerHandler::OutOfBounds.
-+	 */
-+	case ubsan_out_of_bounds:
-+		return "UBSAN: array index out of bounds";
-+#endif
-+#ifdef CONFIG_UBSAN_SHIFT
-+	/*
-+	 * SanitizerKind::ShiftBase and SanitizerKind::ShiftExponent
-+	 * emit SanitizerHandler::ShiftOutOfBounds.
-+	 */
-+	case ubsan_shift_out_of_bounds:
-+		return "UBSAN: shift out of bounds";
-+#endif
-+#ifdef CONFIG_UBSAN_DIV_ZERO
-+	/*
-+	 * SanitizerKind::IntegerDivideByZero emits
-+	 * SanitizerHandler::DivremOverflow.
-+	 */
-+	case ubsan_divrem_overflow:
-+		return "UBSAN: divide/remainder overflow";
-+#endif
-+#ifdef CONFIG_UBSAN_UNREACHABLE
-+	/*
-+	 * SanitizerKind::Unreachable emits
-+	 * SanitizerHandler::BuiltinUnreachable.
-+	 */
-+	case ubsan_builtin_unreachable:
-+		return "UBSAN: unreachable code";
-+#endif
-+#if defined(CONFIG_UBSAN_BOOL) || defined(CONFIG_UBSAN_ENUM)
-+	/*
-+	 * SanitizerKind::Bool and SanitizerKind::Enum emit
-+	 * SanitizerHandler::LoadInvalidValue.
-+	 */
-+	case ubsan_load_invalid_value:
-+		return "UBSAN: loading invalid value";
-+#endif
-+#ifdef CONFIG_UBSAN_ALIGNMENT
-+	/*
-+	 * SanitizerKind::Alignment emits SanitizerHandler::TypeMismatch
-+	 * or SanitizerHandler::AlignmentAssumption.
-+	 */
-+	case ubsan_alignment_assumption:
-+		return "UBSAN: alignment assumption";
-+	case ubsan_type_mismatch:
-+		return "UBSAN: type mismatch";
-+#endif
-+	default:
-+		return "UBSAN: unrecognized failure code";
-+	}
-+}
-+
-+#else
- static const char * const type_check_kinds[] = {
- 	"load of",
- 	"store to",
-@@ -384,3 +449,5 @@ void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
- 	ubsan_epilogue();
- }
- EXPORT_SYMBOL(__ubsan_handle_alignment_assumption);
-+
-+#endif /* !CONFIG_UBSAN_TRAP */
-diff --git a/lib/ubsan.h b/lib/ubsan.h
-index 9a0b71c5ff9f..cc5cb94895a6 100644
---- a/lib/ubsan.h
-+++ b/lib/ubsan.h
-@@ -2,6 +2,38 @@
- #ifndef _LIB_UBSAN_H
- #define _LIB_UBSAN_H
- 
-+/*
-+ * ABI defined by Clang's UBSAN enum SanitizerHandler:
-+ * https://github.com/llvm/llvm-project/blob/release/16.x/clang/lib/CodeGen/CodeGenFunction.h#L113
-+ */
-+enum ubsan_checks {
-+	ubsan_add_overflow,
-+	ubsan_builtin_unreachable,
-+	ubsan_cfi_check_fail,
-+	ubsan_divrem_overflow,
-+	ubsan_dynamic_type_cache_miss,
-+	ubsan_float_cast_overflow,
-+	ubsan_function_type_mismatch,
-+	ubsan_implicit_conversion,
-+	ubsan_invalid_builtin,
-+	ubsan_invalid_objc_cast,
-+	ubsan_load_invalid_value,
-+	ubsan_missing_return,
-+	ubsan_mul_overflow,
-+	ubsan_negate_overflow,
-+	ubsan_nullability_arg,
-+	ubsan_nullability_return,
-+	ubsan_nonnull_arg,
-+	ubsan_nonnull_return,
-+	ubsan_out_of_bounds,
-+	ubsan_pointer_overflow,
-+	ubsan_shift_out_of_bounds,
-+	ubsan_sub_overflow,
-+	ubsan_type_mismatch,
-+	ubsan_alignment_assumption,
-+	ubsan_vla_bound_not_positive,
-+};
-+
- enum {
- 	type_kind_int = 0,
- 	type_kind_float = 1,
--- 
-2.34.1
-
+> + Nemanjai, Qiongsi,
+> 
+> 
+> >
+> > >
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230201/testrun/14479384/suite/build/test/clang-nightly-tqm8xx_defconfig/history/
+> > >
+> > > The bisection pointed to this commit,
+> > >    45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
+> > >
+> > > --
+> > > Linaro LKFT
+> > > https://lkft.linaro.org
+> 
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
