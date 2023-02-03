@@ -1,48 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E171C7F;
-	Fri,  3 Feb 2023 06:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39947F;
+	Fri,  3 Feb 2023 08:03:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675407178; x=1706943178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YLxRVqzdHX5DYPv0wz35Wx3HFUs0vyQTGtj2YwxzESM=;
-  b=TBvkBiCDb1YTBIsZZieknJJJrRDSxsmgENN6ch9Eysc8vPM5ZcZm8bFX
-   aGDgxNJMr9qh7rGtM3Vt1SzGGL8clPk6IY7vY64++fVf6VM2KBIH3Vpz4
-   wEk4RRG0XG7m/CacWtaKARevXr094RICAjFkcEpOIAx0FllEFqfNwsFHJ
-   nytk2ZU3bg1PXsrIcALWHuWKXHgCQFVuz2/9e9gwYvwQE+UZJVnxjh9OZ
-   9VLdcC2PJCq8uHmmkmQBvQ/Cl8nnqH7l5On1d6y9b8HDuB8lnQk3ryZuY
-   /ZrUvPvWJ7p9Hlmf7im9PQkD4jfb1aUvu3PLKrsJlBEX7vy8XRYcrVBOb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="328691403"
+  t=1675411429; x=1706947429;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WaZgaU2c/CPI/hqPNvAwCvNlyGC1iJ9BWx5/5m8L1kc=;
+  b=Lub0l0R7df31i5QMs55+mtwhpowLDAuTYiaL1JZssZNO4w59eclmq80y
+   EoSvusGqDyTUmdmDEZNsJ8vo/hE1eTwe0W3HHDWupG8rAxwv9jdKiKUkk
+   FQdjH5KocVSTUalij5N0YLreY+bGetpVI3Udn/UpJLWx8N5Uy+6ceUSQN
+   PBVCysLHLYrTTSITBGpZ7zLyrNH7ebOzWqdHf8EZCyAXHEId2aiqfL2ko
+   2TqqUdWmHxVsEIgvA95F/bNFerogBtjEhi8VIEKbkomQkJhKoinpiujBv
+   t0zEFPqAs6YbEZ5zTBaEVUq0qGCjaysMhlVn/34W3LWH4Navsq7H10Jk2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="312345133"
 X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="328691403"
+   d="scan'208";a="312345133"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 22:52:46 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 00:03:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="665605404"
+X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="665619696"
 X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="665605404"
+   d="scan'208";a="665619696"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Feb 2023 22:52:43 -0800
+  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2023 00:03:47 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pNpwA-0000DV-2I;
-	Fri, 03 Feb 2023 06:52:42 +0000
-Date: Fri, 3 Feb 2023 14:52:04 +0800
+	id 1pNr2x-0000I5-00;
+	Fri, 03 Feb 2023 08:03:47 +0000
+Date: Fri, 3 Feb 2023 16:03:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-	davidgow@google.com, dlatypov@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Rae Moar <rmoar@google.com>
-Subject: Re: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized
- tests
-Message-ID: <202302031414.TsTAA8Dr-lkp@intel.com>
-References: <20230131220355.1603527-2-rmoar@google.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3 6/25]
+ arch/arm/include/asm/pgtable-nommu.h:49:9: error: 'ZERO_PAGE' macro
+ redefined
+Message-ID: <202302031651.yFFP0HfX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,72 +46,306 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230131220355.1603527-2-rmoar@google.com>
 
-Hi Rae,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on 766f4f2514d2d18bcbd60a058188fb502dea5ddf]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/kunit-fix-bug-in-debugfs-logs-of-parameterized-tests/20230201-060537
-base:   766f4f2514d2d18bcbd60a058188fb502dea5ddf
-patch link:    https://lore.kernel.org/r/20230131220355.1603527-2-rmoar%40google.com
-patch subject: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized tests
-config: hexagon-randconfig-r045-20230202 (https://download.01.org/0day-ci/archive/20230203/202302031414.TsTAA8Dr-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3
+head:   ac3cfb78163256f2febd47ebd017d9f5b75820dd
+commit: 2472f5903b11b4362be6823cdb6e0937b719aa99 [6/25] ARM: mm: Make virt_to_pfn() a static inline
+config: arm-randconfig-r013-20230202 (https://download.01.org/0day-ci/archive/20230203/202302031651.yFFP0HfX-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c8b669e1d139e1ee08121b184d859e45d7a02940
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rae-Moar/kunit-fix-bug-in-debugfs-logs-of-parameterized-tests/20230201-060537
-        git checkout c8b669e1d139e1ee08121b184d859e45d7a02940
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=2472f5903b11b4362be6823cdb6e0937b719aa99
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3
+        git checkout 2472f5903b11b4362be6823cdb6e0937b719aa99
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/kunit/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/ fs/cifs/ mm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> lib/kunit/test.c:115:6: warning: stack frame size (1536) exceeds limit (1024) in 'kunit_log_append' [-Wframe-larger-than]
-   void kunit_log_append(char *log, const char *fmt, ...)
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   1 warning generated.
+--
+   In file included from mm/filemap.c:15:
+   In file included from include/linux/dax.h:6:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   mm/filemap.c:2202:6: warning: unused function 'folio_more_pages' [-Wunused-function]
+   bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
         ^
-   12/1536 (0.78%) spills, 1524/1536 (99.22%) variables
+   2 warnings generated.
+--
+   In file included from mm/shmem.c:28:
+   In file included from include/linux/ramfs.h:5:
+   In file included from include/linux/fs_parser.h:11:
+   In file included from include/linux/fs_context.h:14:
+   In file included from include/linux/security.h:33:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   mm/shmem.c:4159:13: warning: no previous prototype for function 'shmem_init' [-Wmissing-prototypes]
+   void __init shmem_init(void)
+               ^
+   mm/shmem.c:4159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init shmem_init(void)
+   ^
+   static 
+   mm/shmem.c:4167:5: warning: no previous prototype for function 'shmem_unuse' [-Wmissing-prototypes]
+   int shmem_unuse(unsigned int type)
+       ^
+   mm/shmem.c:4167:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int shmem_unuse(unsigned int type)
+   ^
+   static 
+   mm/shmem.c:4172:5: warning: no previous prototype for function 'shmem_lock' [-Wmissing-prototypes]
+   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
+       ^
+   mm/shmem.c:4172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
+   ^
+   static 
+   mm/shmem.c:4177:6: warning: no previous prototype for function 'shmem_unlock_mapping' [-Wmissing-prototypes]
+   void shmem_unlock_mapping(struct address_space *mapping)
+        ^
+   mm/shmem.c:4177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void shmem_unlock_mapping(struct address_space *mapping)
+   ^
+   static 
+   mm/shmem.c:4190:6: warning: no previous prototype for function 'shmem_truncate_range' [-Wmissing-prototypes]
+   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
+        ^
+   mm/shmem.c:4190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
+   ^
+   static 
+   mm/shmem.c:4250:14: warning: no previous prototype for function 'shmem_kernel_file_setup' [-Wmissing-prototypes]
+   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
+                ^
+   mm/shmem.c:4250:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
+   ^
+   static 
+   mm/shmem.c:4261:14: warning: no previous prototype for function 'shmem_file_setup' [-Wmissing-prototypes]
+   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
+                ^
+   mm/shmem.c:4261:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
+   ^
+   static 
+   mm/shmem.c:4274:14: warning: no previous prototype for function 'shmem_file_setup_with_mnt' [-Wmissing-prototypes]
+   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
+                ^
+   mm/shmem.c:4274:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
+   ^
+   static 
+   mm/shmem.c:4285:5: warning: no previous prototype for function 'shmem_zero_setup' [-Wmissing-prototypes]
+   int shmem_zero_setup(struct vm_area_struct *vma)
+       ^
+   mm/shmem.c:4285:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int shmem_zero_setup(struct vm_area_struct *vma)
+   ^
+   static 
+   mm/shmem.c:4323:14: warning: no previous prototype for function 'shmem_read_mapping_page_gfp' [-Wmissing-prototypes]
+   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
+                ^
+   mm/shmem.c:4323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
+   ^
+   static 
+   11 warnings generated.
+--
+   In file included from mm/list_lru.c:10:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   mm/list_lru.c:98:20: warning: unused function 'list_lru_memcg_aware' [-Wunused-function]
+   static inline bool list_lru_memcg_aware(struct list_lru *lru)
+                      ^
+   2 warnings generated.
+--
+   In file included from mm/sparse.c:5:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   mm/sparse.c:321:27: warning: unused function 'pgdat_to_phys' [-Wunused-function]
+   static inline phys_addr_t pgdat_to_phys(struct pglist_data *pgdat)
+                             ^
+   2 warnings generated.
+--
+   In file included from mm/page_poison.c:4:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   mm/page_poison.c:102:6: warning: no previous prototype for function '__kernel_map_pages' [-Wmissing-prototypes]
+   void __kernel_map_pages(struct page *page, int numpages, int enable)
+        ^
+   mm/page_poison.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __kernel_map_pages(struct page *page, int numpages, int enable)
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from mm/slub.c:13:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   mm/slub.c:2260:15: warning: variable 'partial_slabs' set but not used [-Wunused-but-set-variable]
+           unsigned int partial_slabs = 0;
+                        ^
+   2 warnings generated.
+--
+   In file included from fs/cifs/cifsfs.c:28:
+   In file included from include/linux/xattr.h:18:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   In file included from fs/cifs/cifsfs.c:34:
+>> fs/cifs/cifsglob.h:2217:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+                   sg_set_page(sg++, virt_to_page(addr), buflen, off);
+                                                  ^~~~
+   arch/arm/include/asm/memory.h:386:53: note: expanded from macro 'virt_to_page'
+   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
+                                                           ^~~~~
+   include/asm-generic/memory_model.h:40:27: note: expanded from macro '__pfn_to_page'
+   ({      unsigned long __pfn = (pfn);                    \
+                                  ^~~
+   arch/arm/include/asm/memory.h:292:53: note: passing argument to parameter 'p' here
+   static inline unsigned long virt_to_pfn(const void *p)
+                                                       ^
+   1 warning and 1 error generated.
+--
+   In file included from fs/cifs/ioctl.c:14:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   In file included from fs/cifs/ioctl.c:17:
+>> fs/cifs/cifsglob.h:2217:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+                   sg_set_page(sg++, virt_to_page(addr), buflen, off);
+                                                  ^~~~
+   arch/arm/include/asm/memory.h:386:53: note: expanded from macro 'virt_to_page'
+   #define virt_to_page(kaddr)     pfn_to_page(virt_to_pfn(kaddr))
+                                                           ^~~~~
+   include/asm-generic/memory_model.h:40:27: note: expanded from macro '__pfn_to_page'
+   ({      unsigned long __pfn = (pfn);                    \
+                                  ^~~
+   arch/arm/include/asm/memory.h:292:53: note: passing argument to parameter 'p' here
+   static inline unsigned long virt_to_pfn(const void *p)
+                                                       ^
+   fs/cifs/ioctl.c:324:10: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
+           __u64   caps;
+                   ^
+   2 warnings and 1 error generated.
+--
+   In file included from drivers/gpu/drm/tilcdc/tilcdc_plane.c:7:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: error: 'ZERO_PAGE' macro redefined [-Werror,-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
+   1 error generated.
+--
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:29:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:25:
+>> arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
+   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
+           ^
+   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
+   #define ZERO_PAGE(vaddr)        (empty_zero_page)
+           ^
    1 warning generated.
 
 
-vim +/kunit_log_append +115 lib/kunit/test.c
+vim +/ZERO_PAGE +49 arch/arm/include/asm/pgtable-nommu.h
 
-acd8e8407b8fcc David Gow    2021-08-03  110  
-e2219db280e3fe Alan Maguire 2020-03-26  111  /*
-e2219db280e3fe Alan Maguire 2020-03-26  112   * Append formatted message to log, size of which is limited to
-e2219db280e3fe Alan Maguire 2020-03-26  113   * KUNIT_LOG_SIZE bytes (including null terminating byte).
-e2219db280e3fe Alan Maguire 2020-03-26  114   */
-e2219db280e3fe Alan Maguire 2020-03-26 @115  void kunit_log_append(char *log, const char *fmt, ...)
-e2219db280e3fe Alan Maguire 2020-03-26  116  {
-e2219db280e3fe Alan Maguire 2020-03-26  117  	char line[KUNIT_LOG_SIZE];
-e2219db280e3fe Alan Maguire 2020-03-26  118  	va_list args;
-e2219db280e3fe Alan Maguire 2020-03-26  119  	int len_left;
-e2219db280e3fe Alan Maguire 2020-03-26  120  
-e2219db280e3fe Alan Maguire 2020-03-26  121  	if (!log)
-e2219db280e3fe Alan Maguire 2020-03-26  122  		return;
-e2219db280e3fe Alan Maguire 2020-03-26  123  
-e2219db280e3fe Alan Maguire 2020-03-26  124  	len_left = KUNIT_LOG_SIZE - strlen(log) - 1;
-e2219db280e3fe Alan Maguire 2020-03-26  125  	if (len_left <= 0)
-e2219db280e3fe Alan Maguire 2020-03-26  126  		return;
-e2219db280e3fe Alan Maguire 2020-03-26  127  
-e2219db280e3fe Alan Maguire 2020-03-26  128  	va_start(args, fmt);
-e2219db280e3fe Alan Maguire 2020-03-26  129  	vsnprintf(line, sizeof(line), fmt, args);
-e2219db280e3fe Alan Maguire 2020-03-26  130  	va_end(args);
-e2219db280e3fe Alan Maguire 2020-03-26  131  
-e2219db280e3fe Alan Maguire 2020-03-26  132  	strncat(log, line, len_left);
-e2219db280e3fe Alan Maguire 2020-03-26  133  }
-e2219db280e3fe Alan Maguire 2020-03-26  134  EXPORT_SYMBOL_GPL(kunit_log_append);
-e2219db280e3fe Alan Maguire 2020-03-26  135  
+    44	
+    45	/*
+    46	 * ZERO_PAGE is a global shared page that is always zero: used
+    47	 * for zero-mapped memory areas etc..
+    48	 */
+  > 49	#define ZERO_PAGE(vaddr)	(virt_to_page((const void *)0))
+    50	
 
 -- 
 0-DAY CI Kernel Test Service
