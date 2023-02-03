@@ -1,103 +1,177 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A02AD5A;
-	Fri,  3 Feb 2023 19:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675454326; x=1706990326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EW5HLUVaym+yW2nbWH1WVFDR2aB9Cns0EuLP35Yjpyw=;
-  b=mMOtBYltpPEINMEbNoGLDMuEFBVAnXEOC4s8KlDPaG3gYuhj5NXRKu4z
-   KVVf/ZWkO1G77gNBuGneswFO1KA4aUQdXUI57UAyp4Repd1HSth7wTMNU
-   CKMBjGEoI0/kI77p59IWrqPb1GvhQhsLe5iDIjrWp5K5J40LM+I1/8GEx
-   aBuCtqcsJMo998wl1ewZGJirxAyD/FZwEOTFGol3fvmsmtFN5QpM60GyU
-   9NaDatvBbI7eeGCSVsifVQIgjzrDO3Y441ExLQ7a69397Zv5fl7NEf8hy
-   xsyJWnkSawjN2JhJS1wLqM/2pdXyJR71pHqL93lW2d4k2iJDEJ4PWPWUx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="326536885"
-X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
-   d="scan'208";a="326536885"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 11:58:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="643361761"
-X-IronPort-AV: E=Sophos;i="5.97,271,1669104000"; 
-   d="scan'208";a="643361761"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Feb 2023 11:58:14 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pO2CL-0000jV-1n;
-	Fri, 03 Feb 2023 19:58:13 +0000
-Date: Sat, 4 Feb 2023 03:57:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Victor Hassan <victor@allwinnertech.com>, keescook@chromium.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tony.luck@intel.com, gpiccoli@igalia.com,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pstore/blk: Export a method to implemente panic_write()
-Message-ID: <202302040337.IyKFZgIk-lkp@intel.com>
-References: <20230203113515.93540-1-victor@allwinnertech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDE4A31
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 20:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675456242;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=snhKeG+5HcnDApIXop5qDVjg9zN1mzMKCeilHyAlhug=;
+	b=IqM4ZcpEARvmDeJnQMH2jaIaJSPGJlI0ZkcMPw+YtMWUGg9Pzg268vrcPxv7Wf7Ymtb63/
+	Ufz90/TK8jW5bOojMkGQYvP6PjTePJR90DzULZxvwYmmFIusjOU1HyRerjQi22ohniVJdE
+	lLWgc5+ryhAy57y7pU7O2AculaGwN9o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-247-kmInLUqQNbKYKP7yBBxW1g-1; Fri, 03 Feb 2023 15:30:41 -0500
+X-MC-Unique: kmInLUqQNbKYKP7yBBxW1g-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5F86885620
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 20:30:40 +0000 (UTC)
+Received: from [172.64.9.58] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id AFE7418EC5;
+	Fri,  3 Feb 2023 20:30:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, 66a87fff)
+Date: Fri, 03 Feb 2023 20:30:40 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203113515.93540-1-victor@allwinnertech.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <49881.123020315304101249@us-mta-247.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Victor,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on kees/for-next/kspp linus/master v6.2-rc6 next-20230203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Victor-Hassan/pstore-blk-Export-a-method-to-implemente-panic_write/20230203-193548
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-patch link:    https://lore.kernel.org/r/20230203113515.93540-1-victor%40allwinnertech.com
-patch subject: [PATCH] pstore/blk: Export a method to implemente panic_write()
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230204/202302040337.IyKFZgIk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/368e42ba015da6c7bdd201b8fdb669e936307cbb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Victor-Hassan/pstore-blk-Export-a-method-to-implemente-panic_write/20230203-193548
-        git checkout 368e42ba015da6c7bdd201b8fdb669e936307cbb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/pstore/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/pstore/blk.c:16:
->> include/linux/pstore_blk.h:32:41: error: must use 'enum' tag to refer to type 'pstore_blk_notifier_type'
-   typedef int (*pstore_blk_notifier_fn_t)(pstore_blk_notifier_type type,
-                                           ^
-                                           enum 
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +32 include/linux/pstore_blk.h
+Kernel information:
+    Commit message: Merge tag 'ata-6.2-rc7' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/dlemoal/libata
 
-    31	
-  > 32	typedef	int (*pstore_blk_notifier_fn_t)(pstore_blk_notifier_type type,
-    33			struct pstore_device_info *dev);
-    34	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/68331
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6949178
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
