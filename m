@@ -1,166 +1,331 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE1579D9
-	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 16:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675443098;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XrWqhm/SEcn7VCOPx8vF1SpH+DKC6Oe1gMWBBDPPRgo=;
-	b=HYWTyvBgTX/RQJS+CWV3eZPR8cUlCMhUPxg8BuHYJfIzmh+yTSWyFZPPdgAVZg5a2/No2/
-	qYso4PehxA1LwDnY5KT9ArfXxddfAB2lJgPHCPvQ4usif64/jVM9Svq40B5L2etjiCU9zc
-	1K8qwTiaHFJJgjuJxRAULJRezYQDQ2g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-66-gWzhJVngNnK7AvEDs7TYJg-1; Fri, 03 Feb 2023 11:51:36 -0500
-X-MC-Unique: gWzhJVngNnK7AvEDs7TYJg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22D8C3C10691
-	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 16:51:36 +0000 (UTC)
-Received: from [172.64.9.58] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0E7D32166B34;
-	Fri,  3 Feb 2023 16:51:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc6, mainline.kernel.org-clang, 42c78a5b)
-Date: Fri, 03 Feb 2023 16:51:36 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B801AD3A
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 17:39:52 +0000 (UTC)
+Received: by mail-pf1-f170.google.com with SMTP id n2so4223806pfo.3
+        for <llvm@lists.linux.dev>; Fri, 03 Feb 2023 09:39:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WZL1uAcqK22yknIBHg1TH70wLiFVNlCVoM2e8IdO6s=;
+        b=Ecbp+KXuzyrUV2HboCAjpxOqKlc1ehRwThuleJqmK4Rg5gCJzoYDSyDd8zyWjYMJwb
+         4+ueeh+PKBj/UsDeJakhm2ghqJRq1TgaThyo7eb4WEMbBccGGucMWcNd7N0lgB8+Kn1e
+         IWlYmfb5lsV+BtI3pMMy0cReVsarkpuHwAX28=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2WZL1uAcqK22yknIBHg1TH70wLiFVNlCVoM2e8IdO6s=;
+        b=YynNadyqk8LWEQKhKYIa3kHXg/6Slidh1ZDRNkYKN9fqlrwHCv4q691CXAZOSYJhoQ
+         NaeIOUp7XaZyqVp8rZPVoX38YRNXMc3B0E2v3PQahV46NlTOrZXV+YXJgvb5iJR6WjcJ
+         DEj8zN2AneptGvCRe8Qh6la4IwNzSgP8QJMyQFqXyd/qJquxrd7jale4gUli9CvBOwtI
+         ybxjixD7GvE3TXeYL2PYtsZz+hssSgqqN6PekOMHF19c7cEM5WXcyj3DnkxiS6aWG3ON
+         9jUExvjxABelfyBAsjWHWNhzV2G0G3cPAJjhL6tkmXbWasGu0PAjbJSMQIYi87CkKodu
+         A1Yg==
+X-Gm-Message-State: AO0yUKWTt3VWKW5zvXFHDamMZmS3EIewzq7kEe7dP5dWctaUYOVlFdau
+	xwyMk1KIH+8rUV0PO+zmjcxHYw==
+X-Google-Smtp-Source: AK7set/ILYK/AVwauQAeJLy4eUtsZ9YMt4HTPQCDXUBkX+mTutpn3SPG/Ck17MHzyktHS5kyHhyemA==
+X-Received: by 2002:a05:6a00:a22:b0:593:df5a:1592 with SMTP id p34-20020a056a000a2200b00593df5a1592mr11487947pfh.25.1675445991633;
+        Fri, 03 Feb 2023 09:39:51 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y66-20020a626445000000b005821db4fd84sm2080287pfb.131.2023.02.03.09.39.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 09:39:51 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	John Stultz <jstultz@google.com>,
+	Yongqin Liu <yongqin.liu@linaro.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Marco Elver <elver@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Alexander Potapenko <glider@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2] arm64: Support Clang UBSAN trap codes for better reporting
+Date: Fri,  3 Feb 2023 17:39:49 +0000
+Message-Id: <20230203173946.gonna.972-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <60544.123020311513601221@us-mta-66.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7881; h=from:subject:message-id; bh=Wbj+ROZzkr0HqALXeqBsmNe3SBAa0wKtdW+jf0B3UHA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3Ubl5gpTcIQItZiS4wh1SeVOPr79eIulbKMyIJdz HYVl9/qJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY91G5QAKCRCJcvTf3G3AJp6oEA CeSCrebA+oDU4bIvtCx7zDa/L8OePXLAmcx5SUtSpoP4VZoXLZ+EJS6L5MoqZ1k0Y+nclKxuMA2Lar a2DjeKGW36+OmnAk0k94ymtyYsYe2R9fnriEDGjVG1pT9sdM+ZsmYhv0hX2W+4tT0k/IVZDm0mryFj wCerAZ4anWU05BjH6yA/4X75tkzwc+F1d9UoiCpyYA65HcYM6tgGuTm3DCchpTKszGo6viQS/YShiw gtv0GzZfSJkOgIHoI9oErNKSe5L0yrTEmHgmR87+Xupy+nGsKmCGxUbGXRMrrX72xkdJx0TiUCWfzS YH+bCISOR6o+lRzInZSiUbwoegYOrSd6me4Qny+UBg3GJS9bAxP10oyaE6I3UzoOExXh2wtBDqUPqI urzpkZ98p/KlKBXfzNgJvs+mUCtkXg/xWhmM+aMNkiHq1l1BKoP1Wbd0WL19ilGNO8e8binOGhDo6/ 022oIO1EzBedMHyDKC6SB1ShPErNKCKLTc6SKNmg9+HLKa+V/U8T5P9YoN1LCtBRpHz13o5th7rTKS /DI8iceYK1O03avcRzp7Mr2TpnPagtzlzB6DE3qn/gV0f5S4sBMuClBX6f3Ep7KOzna1Jel1Xb8Y4b qSRq66YyDgIHxo3hdoxAjgFZFA/AafrAl6QUYK8EmlvMj3XIhPKpC0O97NHQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+When building with CONFIG_UBSAN_TRAP=y on arm64, Clang encodes the UBSAN
+check (handler) type in the esr. Extract this and actually report these
+traps as coming from the specific UBSAN check that tripped.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Before:
 
+  Internal error: BRK handler: 00000000f20003e8 [#1] PREEMPT SMP
 
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.2-3' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/soc/soc
+After:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/68286
+  Internal error: UBSAN: shift out of bounds: 00000000f2005514 [#1] PREEMPT SMP
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6943920
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: John Stultz <jstultz@google.com>
+Cc: Yongqin Liu <yongqin.liu@linaro.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Yury Norov <yury.norov@gmail.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Marco Elver <elver@google.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: improve commit log, limit report strings to actual configs, document mappings
+v1: https://lore.kernel.org/lkml/20230202223653.never.473-kees@kernel.org/
+---
+ arch/arm64/include/asm/brk-imm.h |  2 +
+ arch/arm64/kernel/traps.c        | 21 ++++++++++
+ include/linux/ubsan.h            |  9 +++++
+ lib/Makefile                     |  2 -
+ lib/ubsan.c                      | 67 ++++++++++++++++++++++++++++++++
+ lib/ubsan.h                      | 32 +++++++++++++++
+ 6 files changed, 131 insertions(+), 2 deletions(-)
+ create mode 100644 include/linux/ubsan.h
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
+index 6e000113e508..3f0f0d03268b 100644
+--- a/arch/arm64/include/asm/brk-imm.h
++++ b/arch/arm64/include/asm/brk-imm.h
+@@ -28,6 +28,8 @@
+ #define BUG_BRK_IMM			0x800
+ #define KASAN_BRK_IMM			0x900
+ #define KASAN_BRK_MASK			0x0ff
++#define UBSAN_BRK_IMM			0x5500
++#define UBSAN_BRK_MASK			0x00ff
+ 
+ #define CFI_BRK_IMM_TARGET		GENMASK(4, 0)
+ #define CFI_BRK_IMM_TYPE		GENMASK(9, 5)
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 4c0caa589e12..87f42eb1c950 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -26,6 +26,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/mm_types.h>
+ #include <linux/kasan.h>
++#include <linux/ubsan.h>
+ #include <linux/cfi.h>
+ 
+ #include <asm/atomic.h>
+@@ -1074,6 +1075,19 @@ static struct break_hook kasan_break_hook = {
+ };
+ #endif
+ 
++#ifdef CONFIG_UBSAN_TRAP
++static int ubsan_handler(struct pt_regs *regs, unsigned long esr)
++{
++	die(report_ubsan_failure(regs, esr & UBSAN_BRK_MASK), regs, esr);
++	return DBG_HOOK_HANDLED;
++}
++
++static struct break_hook ubsan_break_hook = {
++	.fn	= ubsan_handler,
++	.imm	= UBSAN_BRK_IMM,
++	.mask	= UBSAN_BRK_MASK,
++};
++#endif
+ 
+ #define esr_comment(esr) ((esr) & ESR_ELx_BRK64_ISS_COMMENT_MASK)
+ 
+@@ -1091,6 +1105,10 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
+ #ifdef CONFIG_KASAN_SW_TAGS
+ 	if ((esr_comment(esr) & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
+ 		return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
++#endif
++#ifdef CONFIG_UBSAN_TRAP
++	if ((esr_comment(esr) & ~UBSAN_BRK_MASK) == UBSAN_BRK_IMM)
++		return ubsan_handler(regs, esr) != DBG_HOOK_HANDLED;
+ #endif
+ 	return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
+ }
+@@ -1104,6 +1122,9 @@ void __init trap_init(void)
+ 	register_kernel_break_hook(&fault_break_hook);
+ #ifdef CONFIG_KASAN_SW_TAGS
+ 	register_kernel_break_hook(&kasan_break_hook);
++#endif
++#ifdef CONFIG_UBSAN_TRAP
++	register_kernel_break_hook(&ubsan_break_hook);
+ #endif
+ 	debug_traps_init();
+ }
+diff --git a/include/linux/ubsan.h b/include/linux/ubsan.h
+new file mode 100644
+index 000000000000..bff7445498de
+--- /dev/null
++++ b/include/linux/ubsan.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_UBSAN_H
++#define _LINUX_UBSAN_H
++
++#ifdef CONFIG_UBSAN_TRAP
++const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type);
++#endif
++
++#endif
+diff --git a/lib/Makefile b/lib/Makefile
+index 4d9461bfea42..81b988bf9448 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -340,9 +340,7 @@ quiet_cmd_build_OID_registry = GEN     $@
+ clean-files	+= oid_registry_data.c
+ 
+ obj-$(CONFIG_UCS2_STRING) += ucs2_string.o
+-ifneq ($(CONFIG_UBSAN_TRAP),y)
+ obj-$(CONFIG_UBSAN) += ubsan.o
+-endif
+ 
+ UBSAN_SANITIZE_ubsan.o := n
+ KASAN_SANITIZE_ubsan.o := n
+diff --git a/lib/ubsan.c b/lib/ubsan.c
+index 60c7099857a0..f05ae85fc268 100644
+--- a/lib/ubsan.c
++++ b/lib/ubsan.c
+@@ -18,6 +18,71 @@
+ 
+ #include "ubsan.h"
+ 
++#ifdef CONFIG_UBSAN_TRAP
++/*
++ * Only include matches for UBSAN checks that are actually compiled in.
++ * The mappings of struct SanitizerKind (the -fsanitize=xxx args) to
++ * enum SanitizerHandler (the traps) in Clang is in clang/lib/CodeGen/.
++ */
++const char *report_ubsan_failure(struct pt_regs *regs, u32 check_type)
++{
++	switch (check_type) {
++#ifdef CONFIG_UBSAN_BOUNDS
++	/*
++	 * SanitizerKind::ArrayBounds and SanitizerKind::LocalBounds
++	 * emit SanitizerHandler::OutOfBounds.
++	 */
++	case ubsan_out_of_bounds:
++		return "UBSAN: array index out of bounds";
++#endif
++#ifdef CONFIG_UBSAN_SHIFT
++	/*
++	 * SanitizerKind::ShiftBase and SanitizerKind::ShiftExponent
++	 * emit SanitizerHandler::ShiftOutOfBounds.
++	 */
++	case ubsan_shift_out_of_bounds:
++		return "UBSAN: shift out of bounds";
++#endif
++#ifdef CONFIG_UBSAN_DIV_ZERO
++	/*
++	 * SanitizerKind::IntegerDivideByZero emits
++	 * SanitizerHandler::DivremOverflow.
++	 */
++	case ubsan_divrem_overflow:
++		return "UBSAN: divide/remainder overflow";
++#endif
++#ifdef CONFIG_UBSAN_UNREACHABLE
++	/*
++	 * SanitizerKind::Unreachable emits
++	 * SanitizerHandler::BuiltinUnreachable.
++	 */
++	case ubsan_builtin_unreachable:
++		return "UBSAN: unreachable code";
++#endif
++#if defined(CONFIG_UBSAN_BOOL) || defined(CONFIG_UBSAN_ENUM)
++	/*
++	 * SanitizerKind::Bool and SanitizerKind::Enum emit
++	 * SanitizerHandler::LoadInvalidValue.
++	 */
++	case ubsan_load_invalid_value:
++		return "UBSAN: loading invalid value";
++#endif
++#ifdef CONFIG_UBSAN_ALIGNMENT
++	/*
++	 * SanitizerKind::Alignment emits SanitizerHandler::TypeMismatch
++	 * or SanitizerHandler::AlignmentAssumption.
++	 */
++	case ubsan_alignment_assumption:
++		return "UBSAN: alignment assumption";
++	case ubsan_type_mismatch:
++		return "UBSAN: type mismatch";
++#endif
++	default:
++		return "UBSAN: unrecognized failure code";
++	}
++}
++
++#else
+ static const char * const type_check_kinds[] = {
+ 	"load of",
+ 	"store to",
+@@ -384,3 +449,5 @@ void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
+ 	ubsan_epilogue();
+ }
+ EXPORT_SYMBOL(__ubsan_handle_alignment_assumption);
++
++#endif /* !CONFIG_UBSAN_TRAP */
+diff --git a/lib/ubsan.h b/lib/ubsan.h
+index 9a0b71c5ff9f..cc5cb94895a6 100644
+--- a/lib/ubsan.h
++++ b/lib/ubsan.h
+@@ -2,6 +2,38 @@
+ #ifndef _LIB_UBSAN_H
+ #define _LIB_UBSAN_H
+ 
++/*
++ * ABI defined by Clang's UBSAN enum SanitizerHandler:
++ * https://github.com/llvm/llvm-project/blob/release/16.x/clang/lib/CodeGen/CodeGenFunction.h#L113
++ */
++enum ubsan_checks {
++	ubsan_add_overflow,
++	ubsan_builtin_unreachable,
++	ubsan_cfi_check_fail,
++	ubsan_divrem_overflow,
++	ubsan_dynamic_type_cache_miss,
++	ubsan_float_cast_overflow,
++	ubsan_function_type_mismatch,
++	ubsan_implicit_conversion,
++	ubsan_invalid_builtin,
++	ubsan_invalid_objc_cast,
++	ubsan_load_invalid_value,
++	ubsan_missing_return,
++	ubsan_mul_overflow,
++	ubsan_negate_overflow,
++	ubsan_nullability_arg,
++	ubsan_nullability_return,
++	ubsan_nonnull_arg,
++	ubsan_nonnull_return,
++	ubsan_out_of_bounds,
++	ubsan_pointer_overflow,
++	ubsan_shift_out_of_bounds,
++	ubsan_sub_overflow,
++	ubsan_type_mismatch,
++	ubsan_alignment_assumption,
++	ubsan_vla_bound_not_positive,
++};
++
+ enum {
+ 	type_kind_int = 0,
+ 	type_kind_float = 1,
+-- 
+2.34.1
 
