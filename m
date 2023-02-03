@@ -1,87 +1,166 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A0A79D9
-	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 16:36:05 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id o13so5554212pjg.2
-        for <llvm@lists.linux.dev>; Fri, 03 Feb 2023 08:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZtc3hBezsFJ+JgXERdSrjKYkX6f+8fQELANbScmeYk=;
-        b=mHrlZ7VUo1d79tXgLzaqxxG9hcdPrsDjmdvruc68JlP/BcPGX6egmlSPG7P7It0txU
-         9dSU8O56fxinEmwWStz23VSXfaZYMa0GH4lpLKS7aLvcF5ojWn1K1ZD/aInbbKE8BbJ1
-         hWhhJvJq4ELKM69xRklBE4mzVGrmH5qINRT1M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LZtc3hBezsFJ+JgXERdSrjKYkX6f+8fQELANbScmeYk=;
-        b=im+36fkdSKa8rdW+i94UW1tRSiwxpMvbH+ELsUp/uSA5kgreDu4gAPVrKqmPTxgVvH
-         h/KJGuDCfOcCB0ShN27uT9LYx5kdRauqQvIq4VM9mK6EjSC3dVLSn9vXH+ZbCYwaJBhT
-         xTdIqvEl+4PfhKAN1TPHgqmeBK20NuQF+qkeLrKb26ieBD7eAs1K+/LzcB457BK/YZ31
-         /urRtMm/7w2MzanqnZdwwS2i879RvlCC0s1GAJdSCAg5bNFtyuwomlfyak+SBAGJZVqJ
-         0zvxpmtHIluMrTV06vhTE9167qMWFugYR0ijwRKjoxgKMxusso7i8UhmH7YRzAxXjAdn
-         IqtQ==
-X-Gm-Message-State: AO0yUKXGHFgaM/pXrmV06IGdZZW17zwIlMjSqfxqUfDB9l8xb5/gxsNR
-	DRtW5egWiclgW9hyz4cP/9VryA==
-X-Google-Smtp-Source: AK7set+3gOK3BkJ0vQrBWtI5HAPi2PUYKNh8e6pqdOUt0vJfLvEQUgDgdUfKrw4YniHqw5Fg1TUcIg==
-X-Received: by 2002:a17:90b:38c2:b0:22c:15a4:62a0 with SMTP id nn2-20020a17090b38c200b0022c15a462a0mr10965335pjb.37.1675442165363;
-        Fri, 03 Feb 2023 08:36:05 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id gt21-20020a17090af2d500b0022c25153cf0sm1405689pjb.44.2023.02.03.08.36.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 08:36:04 -0800 (PST)
-Message-ID: <63dd37f4.170a0220.9621b.27b3@mx.google.com>
-X-Google-Original-Message-ID: <202302031632.@keescook>
-Date: Fri, 3 Feb 2023 16:36:04 +0000
-From: Kees Cook <keescook@chromium.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	John Stultz <jstultz@google.com>,
-	Yongqin Liu <yongqin.liu@linaro.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Marco Elver <elver@google.com>,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] arm64: Support Clang UBSAN trap codes for better
- reporting
-References: <20230202223653.never.473-kees@kernel.org>
- <CAMj1kXHa=jD_YNxymjd8zQo2_QHgh104RcmCY3gZs3rp24X_Zg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE1579D9
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 16:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675443098;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XrWqhm/SEcn7VCOPx8vF1SpH+DKC6Oe1gMWBBDPPRgo=;
+	b=HYWTyvBgTX/RQJS+CWV3eZPR8cUlCMhUPxg8BuHYJfIzmh+yTSWyFZPPdgAVZg5a2/No2/
+	qYso4PehxA1LwDnY5KT9ArfXxddfAB2lJgPHCPvQ4usif64/jVM9Svq40B5L2etjiCU9zc
+	1K8qwTiaHFJJgjuJxRAULJRezYQDQ2g=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-66-gWzhJVngNnK7AvEDs7TYJg-1; Fri, 03 Feb 2023 11:51:36 -0500
+X-MC-Unique: gWzhJVngNnK7AvEDs7TYJg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22D8C3C10691
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 16:51:36 +0000 (UTC)
+Received: from [172.64.9.58] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0E7D32166B34;
+	Fri,  3 Feb 2023 16:51:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, 42c78a5b)
+Date: Fri, 03 Feb 2023 16:51:36 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHa=jD_YNxymjd8zQo2_QHgh104RcmCY3gZs3rp24X_Zg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <60544.123020311513601221@us-mta-66.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 03, 2023 at 12:34:38PM +0100, Ard Biesheuvel wrote:
-> [...]
-> > +       switch (check_type) {
-> > +       case ubsan_add_overflow:
-> > +               return "UBSAN: addition overflow";
-> 
-> It would be nice if we could avoid duplicating this UBSAN: prefix 21x times.
+Hi, we tested your kernel and here are the results:
 
-Yeah, agreed. I didn't see a way around it without weirdness or loss of
-details. die() takes a string not a format string, so without really
-odd shenanigans (re-write a single string in memory?) this is the most
-straight forward. One idea, though, is to drop all the strings that'll
-never happen -- i.e. wrap individual case statements in the associated
-CONFIG_UBSAN_foo. I already dropped several strings that were never
-implemented in the kernel's UBSAN. I could be even more picky. I'll try
-this in v2...
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
--- 
-Kees Cook
+
+Kernel information:
+    Commit message: Merge tag 'soc-fixes-6.2-3' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/soc/soc
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/68286
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6943920
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
