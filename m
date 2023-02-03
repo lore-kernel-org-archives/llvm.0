@@ -1,79 +1,187 @@
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43F7AD3A
-	for <llvm@lists.linux.dev>; Thu,  2 Feb 2023 23:06:30 +0000 (UTC)
-Received: by mail-io1-f69.google.com with SMTP id q3-20020a5edb03000000b00725625524e5so2021955iop.2
-        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 15:06:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092307C
+	for <llvm@lists.linux.dev>; Fri,  3 Feb 2023 00:34:27 +0000 (UTC)
+Received: by mail-wm1-f42.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso4983990wms.0
+        for <llvm@lists.linux.dev>; Thu, 02 Feb 2023 16:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=list-id:mime-version:subject:message-id:cc:to:date:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JeCAYQB7ICZ18gbJkhbp8SH0lULxAVXpx8/uVsrZbsE=;
+        b=lnuiAxCdeXNNYe9LgOi7cXwpQL/nRJietMAkuAN+lLT37SEw8xSK/8emJebN7VhLh+
+         lro8CoQEP39nQIvYdfSIVkqJM4umZB8UECtOimkEJRBKMadprUYMLQa5xq2hiAcSSxOr
+         WG5TReiAVtLDKRmD3JgIe6fqcEW7w21iEwBHdcmKmU6TekSY1XMy5yMqwqBlsL4mnzzY
+         tMxByHdszN8kVZhLOTem6oocBwFRMhSCEgOnZJ5RlFk7LVcRmW+6tPg5HVyme8hbwKcq
+         dJiirruH2+H6nCRdEnPmf9Ma7WZGVU1eL7EbxSPaAix6iwd+5rENs0sGvY8fjlqtQ0++
+         pcLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=list-id:mime-version:subject:message-id:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yS69ZluBz1g0tjn3hzPqjYm4xHf7bwIwQjBQ4SRSpG8=;
-        b=S0+X3LLys1xxM/rjGMI0lIYvIBbow1rRK0n+qmLU0kO5NwtQCI7CtApmEqYpiXdSpl
-         Capj0t5Iatovj+T4xHaKvpYZON5TKMv9WwsxNVO26RUisYOGydgSxCWua3K+HVNkh00C
-         tO6I7z95k4PhUGaT5cBuzSDQz39QzQbVscGUvPJxA+mFeNN21KzDZ+HKfMPXMUCDAp0M
-         D0rqhOqldjse/BGXLql7H3NfcBlKN52x3QuoBi5ImqdMw7BrxCyxy7GbgYvBcJKzWBTo
-         ZE+7l8MV1mdpEAX/m1cUCkyLsFcHIw/MX7MOOHUw0gQc6Dj/glBw7vpD1+G8CnHgeYaJ
-         mqoA==
-X-Gm-Message-State: AO0yUKUXuCnJJlBeposgw4kD/cadGEKh/uBGX/Xra9PfMg9LLXJhOcFm
-	WRNa/88neMvrwU1o8Ak4T8zrRN2ZtiMVonyckImZVOD2ljzk
-X-Google-Smtp-Source: AK7set/HcUh7jDIQP0/0+CxSz0TVrJgoNJNITN0WYAXolAanigKsaQ9gbYXZTh75VDzDWKeu3urX9D13aaYGsWIqDI3gZMUp3DGK
+        bh=JeCAYQB7ICZ18gbJkhbp8SH0lULxAVXpx8/uVsrZbsE=;
+        b=nDYErFCf0VS1LzEJhjnptsMYYuf3U+2647Um/VhHKTB87AxYbysvtYj98/17J/m1OZ
+         mxPnAqrD7niJlcrjGnCFK2TXHrzKk/1WgGnMmLEpqU6lOzlWbu80xt57lUdq24nwSPrh
+         tjtHujRFBS8+W91p8ZF3l5WLSak1UrVy1cFNqe8r5MOwJQVDfBBbkS6+NqpcvpNIwTPz
+         rcwT9fcO7qruNbkVaQ3AxHRNuY7yllN1Iiq98KXQSHxnRdSutBxxI8G6M1hOt/985vyG
+         MDqH5rKXB13xcihc6FTtMDGLPFs9+XAaucQO8pgPopt5aQp8ROeEB86RKC0ozGsOV7+G
+         uMmQ==
+X-Gm-Message-State: AO0yUKUhsTYevHyuCfv0CtPC7SkvFJ4oJqnnquucaNQ5fq9T2T9BqSSG
+	Rp0TogceGOBGplyvX4PEQoy5sg==
+X-Google-Smtp-Source: AK7set+3uTQc21QXo4yg7WPRSvXxRJr8d8yvk+7Op/RSNBUseuFOgJfKwVLhUZJ+j3F2ebJ0Dtr1gQ==
+X-Received: by 2002:a05:600c:4e88:b0:3df:db20:b0ae with SMTP id f8-20020a05600c4e8800b003dfdb20b0aemr2720235wmq.17.1675384466260;
+        Thu, 02 Feb 2023 16:34:26 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id x9-20020a5d4449000000b002c3cf230b60sm353430wrr.73.2023.02.02.16.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Feb 2023 16:34:25 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Fri, 3 Feb 2023 00:34:25 +0000 (UTC)
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, arnd@linaro.org
+Message-ID: <1876530996.8739.1675384465825@jenkins.jenkins>
+Subject: [TCWG CI] Failure after v6.2-rc2-24-g6437a549ae17: drm/panfrost:
+ fix GENERIC_ATOMIC64 dependency
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:22cf:b0:704:8263:b926 with SMTP id
- e15-20020a05660222cf00b007048263b926mr1835233ioe.53.1675379189876; Thu, 02
- Feb 2023 15:06:29 -0800 (PST)
-Date: Thu, 02 Feb 2023 15:06:29 -0800
-In-Reply-To: <0000000000009da4c705dcb87735@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007a0f9905f3bf9d9d@google.com>
-Subject: Re: [syzbot] WARNING in check_map_prog_compatibility
-From: syzbot <syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com>
-To: andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
-	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev, 
-	memxor@gmail.com, nathan@kernel.org, ndesaulniers@google.com, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	songliubraving@fb.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_8738_1507034881.1675384465181"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-mainline-allmodconfig
+X-Jenkins-Result: SUCCESS
+List-ID: 
 
-This bug is marked as fixed by commit:
-bpf: Relax the requirement to use preallocated hash maps in
+------=_Part_8738_1507034881.1675384465181
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Failure after v6.2-rc2-24-g6437a549ae17: drm/panfrost: fix GENERIC_ATOMIC64 dependency:
 
-#syz fix: exact-commit-title
+Results changed to
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+23221
+# First few build errors in logs:
+# 00:41:02 drivers/net/ethernet/mellanox/mlx5/core/en_main.c:3597:12: error: stack frame size (1256) exceeds limit (1024) in 'mlx5e_setup_tc' [-Werror,-Wframe-larger-than]
+# 00:41:02 make[6]: *** [scripts/Makefile.build:252: drivers/net/ethernet/mellanox/mlx5/core/en_main.o] Error 1
+# 00:46:08 make[5]: *** [scripts/Makefile.build:504: drivers/net/ethernet/mellanox/mlx5/core] Error 2
+# 00:46:08 make[4]: *** [scripts/Makefile.build:504: drivers/net/ethernet/mellanox] Error 2
+# 00:46:08 make[3]: *** [scripts/Makefile.build:504: drivers/net/ethernet] Error 2
+# 00:46:08 make[2]: *** [scripts/Makefile.build:504: drivers/net] Error 2
+# 00:46:41 make[1]: *** [scripts/Makefile.build:504: drivers] Error 2
+# 00:46:41 make: *** [Makefile:2008: .] Error 2
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+from
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+23232
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=e3f8d4df1e1981a97abb
+THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
 
+For latest status see comments in https://linaro.atlassian.net/browse/LLVM-647 .
+Status of v6.2-rc2-24-g6437a549ae17 commit for tcwg_kernel:
+commit 6437a549ae178a3f5a5c03e983f291ebcdc2bbc7
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Tue Jan 17 17:44:43 2023 +0100
+
+    drm/panfrost: fix GENERIC_ATOMIC64 dependency
+    
+    On ARMv5 and earlier, a randconfig build can still run into
+    
+    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+      Depends on [n]: IOMMU_SUPPORT [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=y]
+      Selected by [y]:
+      - DRM_PANFROST [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y]) && MMU [=y]
+    
+    Rework the dependencies to always require a working cmpxchg64.
+    
+    Fixes: db594ba3fcf9 ("drm/panfrost: depend on !GENERIC_ATOMIC64 when using COMPILE_TEST")
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+    Reviewed-by: Steven Price <steven.price@arm.com>
+    Signed-off-by: Steven Price <steven.price@arm.com>
+    Link: https://patchwork.freedesktop.org/patch/msgid/20230117164456.1591901-1-arnd@kernel.org
+* llvm-master-arm-mainline-allmodconfig
+** Failure after v6.2-rc2-24-g6437a549ae17: drm/panfrost: fix GENERIC_ATOMIC64 dependency:
+** https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-mainline-allmodconfig/541/
+
+Bad  build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-mainline-allmodconfig/541/artifact/artifacts
+Good build: https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-mainline-allmodconfig/540/artifact/artifacts
+
+Reproduce current build:
+<cut>
+mkdir -p investigate-linux-6437a549ae178a3f5a5c03e983f291ebcdc2bbc7
+cd investigate-linux-6437a549ae178a3f5a5c03e983f291ebcdc2bbc7
+
+# Fetch scripts
+git clone https://git.linaro.org/toolchain/jenkins-scripts
+
+# Fetch manifests for bad and good builds
+mkdir -p bad/artifacts good/artifacts
+curl -o bad/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-mainline-allmodconfig/541/artifact/artifacts/manifest.sh --fail
+curl -o good/artifacts/manifest.sh https://ci.linaro.org/job/tcwg_kernel-llvm-build-llvm-master-arm-mainline-allmodconfig/540/artifact/artifacts/manifest.sh --fail
+
+# Reproduce bad build
+(cd bad; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
+# Reproduce good build
+(cd good; ../jenkins-scripts/tcwg_kernel-build.sh ^^ true %%rr[top_artifacts] artifacts)
+</cut>
+
+Full commit (up to 1000 lines):
+<cut>
+commit 6437a549ae178a3f5a5c03e983f291ebcdc2bbc7
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Tue Jan 17 17:44:43 2023 +0100
+
+    drm/panfrost: fix GENERIC_ATOMIC64 dependency
+    
+    On ARMv5 and earlier, a randconfig build can still run into
+    
+    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+      Depends on [n]: IOMMU_SUPPORT [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=y]
+      Selected by [y]:
+      - DRM_PANFROST [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y]) && MMU [=y]
+    
+    Rework the dependencies to always require a working cmpxchg64.
+    
+    Fixes: db594ba3fcf9 ("drm/panfrost: depend on !GENERIC_ATOMIC64 when using COMPILE_TEST")
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+    Reviewed-by: Steven Price <steven.price@arm.com>
+    Signed-off-by: Steven Price <steven.price@arm.com>
+    Link: https://patchwork.freedesktop.org/patch/msgid/20230117164456.1591901-1-arnd@kernel.org
 ---
-[1] I expect the commit to be present in:
+ drivers/gpu/drm/panfrost/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
+diff --git a/drivers/gpu/drm/panfrost/Kconfig b/drivers/gpu/drm/panfrost/Kconfig
+index 079600328be1..e6403a9d66ad 100644
+--- a/drivers/gpu/drm/panfrost/Kconfig
++++ b/drivers/gpu/drm/panfrost/Kconfig
+@@ -3,7 +3,8 @@
+ config DRM_PANFROST
+ 	tristate "Panfrost (DRM support for ARM Mali Midgard/Bifrost GPUs)"
+ 	depends on DRM
+-	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
++	depends on ARM || ARM64 || COMPILE_TEST
++	depends on !GENERIC_ATOMIC64    # for IOMMU_IO_PGTABLE_LPAE
+ 	depends on MMU
+ 	select DRM_SCHED
+ 	select IOMMU_SUPPORT
+</cut>
+------=_Part_8738_1507034881.1675384465181--
