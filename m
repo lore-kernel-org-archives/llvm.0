@@ -1,51 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BA23217;
-	Sat,  4 Feb 2023 19:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1282F3217;
+	Sat,  4 Feb 2023 20:13:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675537859; x=1707073859;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=peFlvY2byFwd8qcwJsPU//FQzIbgC+db/U2+rXUvjcQ=;
-  b=lzoF/Vj9v9ZCl7x5VUz/yDDcP0CsY8iQWsdIoptP14heWmIp4QdzwenC
-   GIhaEzLSBfAfOtR/szmvmq6sVb2eiUlwFaFl7YDCoWcUQCRUfRcdSfF0K
-   kTPGy2XwlatmUBzuunqPniLXjN2X6zPCYXLjljGQDsp2owG/+/Iw9qJcF
-   awiRUsDe/O9Q17yRW7stixE65DIN5HY7xTWX36UXwlQrHCCxCNR2A2ltt
-   B4Jg2YuugNFbPTAiPUtJpOqmpFCdQtMqO17ZvhNoiF3qssWNlniL/edZA
-   8evwYIZHUBb06jibphN7+eE7sBsD8J9F1A3e4DmcsINDzzfoP2O6feW7d
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="312635181"
+  t=1675541595; x=1707077595;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=impB2PY5ZQlafmRLAVSitt88Gdvkw4xHxJZ2JEItRNk=;
+  b=M0WfJTwk0mXW+7MeeJ2TACmSisijTpJjO/5fW8Pd4OPMehvUdJ/+0O36
+   UnCfFieHPtsMCIJrTwL4y8/z2bnMUFDjDPuoIzZJR6lUykgPcqQHbsQjy
+   I5wtcPPOT99FNwuF6Qln09rp8shr4KCg6kDygS3pqK/aT2akzXjza3H87
+   wAXXLFzDm/2AefYtGk/AdDlWvT7W1eXCgYiPeb783sR143CwbxOgBT3z4
+   nn0roE1wOHzLPFkDHvgAMNIcwJGW1VWx0c8bav/6kum4RWkIU8NeDIcHD
+   898z5hAO1m4DQUdnBZ9SZIGpvykrVhBWb87L6YefMcfrW3KBABv+nRIyf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="393580203"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="312635181"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 11:10:58 -0800
+   d="scan'208";a="393580203"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 12:13:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="666078855"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="698434249"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="666078855"
+   d="scan'208";a="698434249"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2023 11:10:54 -0800
+  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2023 12:13:01 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pONw6-0001Ua-02;
-	Sat, 04 Feb 2023 19:10:54 +0000
-Date: Sun, 5 Feb 2023 03:10:35 +0800
+	id 1pOOu7-0001W6-13;
+	Sat, 04 Feb 2023 20:12:55 +0000
+Date: Sun, 5 Feb 2023 04:12:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	David Matlack <dmatlack@google.com>,
-	Vipin Sharma <vipinsh@google.com>,
-	Ricardo Koller <ricarkol@google.com>,
-	Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 11/21] KVM: x86/MMU: Cleanup shrinker interface with
- Shadow MMU
-Message-ID: <202302050303.kLjMucYK-lkp@intel.com>
-References: <20230202182809.1929122-12-bgardon@google.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:virtual_cpu_hotplug/rfc/v1 8/32]
+ arch/x86/kernel/topology.c:147:49: error: no member named 'cpu' in 'struct
+ cpu'
+Message-ID: <202302050422.aKurEcYI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,93 +46,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202182809.1929122-12-bgardon@google.com>
 
-Hi Ben,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ben-Gardon/KVM-x86-mmu-Rename-slot-rmap-walkers-to-add-clarity-and-clean-up-code/20230203-023259
-base:   7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
-patch link:    https://lore.kernel.org/r/20230202182809.1929122-12-bgardon%40google.com
-patch subject: [PATCH 11/21] KVM: x86/MMU: Cleanup shrinker interface with Shadow MMU
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230205/202302050303.kLjMucYK-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git virtual_cpu_hotplug/rfc/v1
+head:   81295db7555df74bd02dab0b7e87b512d3a3de34
+commit: bbbbfae28e723520ab31d000146207547cc62124 [8/32] x86/topology: Switch over to GENERIC_CPU_DEVICES
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230205/202302050422.aKurEcYI-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c1170de906dfe1ee64da0066e7c28d35e716ed18
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ben-Gardon/KVM-x86-mmu-Rename-slot-rmap-walkers-to-add-clarity-and-clean-up-code/20230203-023259
-        git checkout c1170de906dfe1ee64da0066e7c28d35e716ed18
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=bbbbfae28e723520ab31d000146207547cc62124
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse virtual_cpu_hotplug/rfc/v1
+        git checkout bbbbfae28e723520ab31d000146207547cc62124
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/mmu/mmu.c:3148:15: warning: no previous prototype for function 'mmu_shrink_scan' [-Wmissing-prototypes]
-   unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-                 ^
-   arch/x86/kvm/mmu/mmu.c:3148:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-   ^
-   static 
-   1 warning generated.
+   arch/x86/kernel/topology.c:145:19: error: static declaration of 'arch_register_cpu' follows non-static declaration
+   static int __init arch_register_cpu(int num)
+                     ^
+   include/linux/cpu.h:78:12: note: previous declaration is here
+   extern int arch_register_cpu(int cpu);
+              ^
+>> arch/x86/kernel/topology.c:147:49: error: no member named 'cpu' in 'struct cpu'
+           return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   2 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ACPI_HOTPLUG_CPU
+   Depends on [n]: ACPI [=y] && ACPI_PROCESSOR [=y] && HOTPLUG_CPU [=n]
+   Selected by [y]:
+   - X86 [=y] && ACPI [=y]
 
 
-vim +/mmu_shrink_scan +3148 arch/x86/kvm/mmu/mmu.c
+vim +147 arch/x86/kernel/topology.c
 
-  3147	
-> 3148	unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-  3149	{
-  3150		struct kvm *kvm;
-  3151		int nr_to_scan = sc->nr_to_scan;
-  3152		unsigned long freed = 0;
-  3153	
-  3154		mutex_lock(&kvm_lock);
-  3155	
-  3156		list_for_each_entry(kvm, &vm_list, vm_list) {
-  3157			/*
-  3158			 * Never scan more than sc->nr_to_scan VM instances.
-  3159			 * Will not hit this condition practically since we do not try
-  3160			 * to shrink more than one VM and it is very unlikely to see
-  3161			 * !n_used_mmu_pages so many times.
-  3162			 */
-  3163			if (!nr_to_scan--)
-  3164				break;
-  3165	
-  3166			/*
-  3167			 * n_used_mmu_pages is accessed without holding kvm->mmu_lock
-  3168			 * here. We may skip a VM instance errorneosly, but we do not
-  3169			 * want to shrink a VM that only started to populate its MMU
-  3170			 * anyway.
-  3171			 */
-  3172			if (!kvm->arch.n_used_mmu_pages &&
-  3173			    !kvm_shadow_mmu_has_zapped_obsolete_pages(kvm))
-  3174				continue;
-  3175	
-  3176			freed = kvm_shadow_mmu_shrink_scan(kvm, sc->nr_to_scan);
-  3177	
-  3178			/*
-  3179			 * unfair on small ones
-  3180			 * per-vm shrinkers cry out
-  3181			 * sadness comes quickly
-  3182			 */
-  3183			list_move_tail(&kvm->vm_list, &vm_list);
-  3184			break;
-  3185		}
-  3186	
-  3187		mutex_unlock(&kvm_lock);
-  3188		return freed;
-  3189	}
-  3190	
+271eb5c588e5d0a Jaswinder Singh Rajput 2009-03-21  144  
+d987402695f16ae Alexander van Heukelum 2008-02-01  145  static int __init arch_register_cpu(int num)
+3eaf5efae72b33b Sam Ravnborg           2008-01-30  146  {
+3eaf5efae72b33b Sam Ravnborg           2008-01-30 @147  	return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
+
+:::::: The code at line 147 was first introduced by commit
+:::::: 3eaf5efae72b33bc6132e9590e5d4bf11532f8c4 x86: fix section mismatch warning in topology.c
+
+:::::: TO: Sam Ravnborg <sam@ravnborg.org>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
 
 -- 
 0-DAY CI Kernel Test Service
