@@ -1,42 +1,48 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A4BBA2E;
-	Sat,  4 Feb 2023 17:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675530536; x=1707066536;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/qltplcgKHiPugNtCmRJ+PI4oLvv3rpIaa/0/mc4r/8=;
-  b=iTeuY5beahjrKD0AhHc7q3VHeg/hF4Rlbj17ypOsP5mLsM26+riyQRCw
-   jKbwUCd6HZ1un4o1plvBeQ8/LYg6wVg5FYYE0OjZK/HmEMsxacG0qlUqI
-   Q4kYVhXbqEnuFQNiPcxea1pGYwxkQMMc/4rnH0dZoZ5urUlkG7z3qSvM3
-   k5AasZA4G8PdQ4k+qxRddKm2Hy16FXHwDB4y5T5HTJIbLJWvnjBdTcB1M
-   jXb0bN98QD0q9dlrjZKfGuGDgnL35MdPnZSZc++3X4U5RU3j3Fn3rTSLC
-   oeDbF4VudYakE8nj2y7wVeQv4u0f/WqargEfvzaV1I8XZ6WnJVO8aLyW2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="309299683"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="309299683"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 09:08:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="734695247"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="734695247"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2023 09:08:51 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pOM1z-0001Rg-10;
-	Sat, 04 Feb 2023 17:08:51 +0000
-Date: Sun, 5 Feb 2023 01:08:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chen-Yu Tsai <wenst@chromium.org>
-Subject: [wens:mtk-test 20/39] ld.lld: error: undefined symbol: fhctl_parse_dt
-Message-ID: <202302050055.4lYWKspD-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D742A3217
+	for <llvm@lists.linux.dev>; Sat,  4 Feb 2023 19:06:26 +0000 (UTC)
+Received: by mail-pl1-f178.google.com with SMTP id z1so8386621plg.6
+        for <llvm@lists.linux.dev>; Sat, 04 Feb 2023 11:06:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QoMgaRBwpftZsFSUA/NaYhrGZMjYhcRy+dE+lN/6O1E=;
+        b=Z4ADyFnc6fwzORH5e6z1NSAJ1n7Z6ZcIr94Kg/BqcBBkg4VqN5ztstkQB1nwZwQzL3
+         /J0Zy6a8aS2eqJIjiSwguDn064p5fEtP4siewK92viBFPBWgIch+9JPpDgqDQCCDIufP
+         bhxwZyAFguAcg97Bg8W0snjsSEWSW0EuF2k08=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QoMgaRBwpftZsFSUA/NaYhrGZMjYhcRy+dE+lN/6O1E=;
+        b=s5wCbsa2KxxfJio7WRC1M/8n6Tb9Nhuufh4CaS547NxrCjpUMyHWq7+ZnJWC3a8ktR
+         gvnQWEpbDEBao1Mq4tI47GwHAGgUWL2e0hPs1fvVf3goYQPHRX+Zi/ovve8m2RrELHwm
+         RFUgYfA9ZnIt9gjASdn6iPs3d8AnqOmI2K2FufzgxhSZEb9tHCw+1WeDXIvjC34f4471
+         NDFLjiAd4G83iaCOHHx5BF6T3N4MgI0a52K1iiulUVpm9sOi4NFkt/A9Xmaqv095nO7v
+         TRg3KICTXPb9RS6zzTSY9dvGKXiN3vqbxaBuehzr/DLkdq7s1b3rpBZV1EgckV3NhUUf
+         dvKQ==
+X-Gm-Message-State: AO0yUKUiyn/vs0sOM/KSeT8vbYIactb79SwkEfc0JgvtUwDjpxpe6ak4
+	TyK5e4ztk9lx8olSIWCeXfh/+A==
+X-Google-Smtp-Source: AK7set9ig47OFDDy/8XwlY0OJoIGhW13i8inuO00m8K8SWHbrufKyM3+iZqYP60Vh/6VoQcT+qCXJg==
+X-Received: by 2002:a17:902:c792:b0:198:fe02:1f94 with SMTP id w18-20020a170902c79200b00198fe021f94mr898432pla.51.1675537586367;
+        Sat, 04 Feb 2023 11:06:26 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t3-20020a170902d20300b00194c1281ca9sm3769380ply.166.2023.02.04.11.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Feb 2023 11:06:25 -0800 (PST)
+Message-ID: <63deacb1.170a0220.f078.6779@mx.google.com>
+X-Google-Original-Message-ID: <202302041105.@keescook>
+Date: Sat, 4 Feb 2023 11:06:25 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] randstruct: temporarily disable clang support
+References: <20230203194201.92015-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,47 +51,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230203194201.92015-1-ebiggers@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git mtk-test
-head:   14d84237ad57de7b0f267d290ae87e40842965b4
-commit: 5659c6c79983c43b0e4785bd204ed10e2c6705a4 [20/39] clk: mediatek: mt8192: Add support for frequency hopping through FHCTL
-config: hexagon-randconfig-r002-20230204 (https://download.01.org/0day-ci/archive/20230205/202302050055.4lYWKspD-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git/commit/?id=5659c6c79983c43b0e4785bd204ed10e2c6705a4
-        git remote add wens https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git
-        git fetch --no-tags wens mtk-test
-        git checkout 5659c6c79983c43b0e4785bd204ed10e2c6705a4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Fri, Feb 03, 2023 at 11:42:01AM -0800, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Randstruct with clang is currently unsafe to use in any clang release
+> that supports it, due to a clang bug that is causing miscompilations:
+> "-frandomize-layout-seed inconsistently randomizes all-function-pointers
+> structs" (https://github.com/llvm/llvm-project/issues/60349).  Disable
+> it temporarily until the bug is fixed and the fix is released in a clang
+> version that can be checked for.
+> 
+> Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>  security/Kconfig.hardening | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+> index 53baa95cb644..aad16187148c 100644
+> --- a/security/Kconfig.hardening
+> +++ b/security/Kconfig.hardening
+> @@ -280,7 +280,8 @@ config ZERO_CALL_USED_REGS
+>  endmenu
+>  
+>  config CC_HAS_RANDSTRUCT
+> -	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
+> +	# Temporarily disabled due to https://github.com/llvm/llvm-project/issues/60349
+> +	def_bool n
+>  
+>  choice
+>  	prompt "Randomize layout of sensitive kernel structures"
+> 
+> base-commit: 7b753a909f426f2789d9db6f357c3d59180a9354
+> -- 
+> 2.39.1
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: fhctl_parse_dt
-   >>> referenced by clk-mt8192.c:1131 (drivers/clk/mediatek/clk-mt8192.c:1131)
-   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
-   >>> referenced by clk-mt8192.c:1131 (drivers/clk/mediatek/clk-mt8192.c:1131)
-   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: mtk_clk_register_pllfhs
-   >>> referenced by clk-mt8192.c:1133 (drivers/clk/mediatek/clk-mt8192.c:1133)
-   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
-   >>> referenced by clk-mt8192.c:1133 (drivers/clk/mediatek/clk-mt8192.c:1133)
-   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
-   Depends on [n]: PM_DEVFREQ [=n]
-   Selected by [m]:
-   - DRM_MSM [=m] && HAS_IOMEM [=y] && DRM [=m] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
+This should be fixed with greater precision -- i.e. this is nearly fixed
+in Clang now, and is likely to be backported. So I think we'll need
+versioned checks here.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Kees Cook
