@@ -1,49 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF71C27;
-	Sat,  4 Feb 2023 07:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF567F;
+	Sat,  4 Feb 2023 08:35:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675497341; x=1707033341;
+  t=1675499740; x=1707035740;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0EHShsNIiSr8mAoNRKbDMG1uUQdS2+B2WUEPBHFZwmA=;
-  b=FbJjOD/0WXBusRJX5Oc9aXadgA9SMoJ2+7TP1ReMxRN9g4E4dWxSzS3k
-   NGmMoJl4wE01nOoiAF2XyS4WBcVbYgMvKyamhbQT9O9AzW8jfiJH1RGyY
-   Z5YMFraQOC2Eqsq37VZZr30HuLHeMq4ZnpsIpQRhcPzB/Fv9cK6ys0bzD
-   xDEz0+FiSNPYHyaxmmuujQT+acnaGwDYAsfsUdBdGbDG0WH9/W1n7ql2d
-   /cgT5VTB3cW8j3DNTiCWNK/BYqGBYQ8sFt+YBtWJl/RgfLO+UKVs+vOk+
-   iiNw58AF2RZlZHObu/Z8V3D+XDZ+9YHduVYJyXBDFOAXjt0IMs/Pt7PCC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="328942410"
+  bh=4obZi7tn+TOMMWkvH9TbKWAM0A9mKLHWtnKctz0kXcI=;
+  b=eT0zJ8zI+CptDYS7JwPTwmuK5DwSZA7l7XoAkcHT2Re1UUmBzSq+xECa
+   JzlBD4suSpmPiUngWGi5yBsfPzNTlupRcduOKEL/XO+IXQoLZGUNNpyu4
+   VUEJGbafnnZ9O7GSoGdhPRGMbffG6epQxMAESYGzylMPR/bjjaZhL+vio
+   Go86OUuKS9E0SVgISJlkXnrep9a5XmzgSYw326Z/4ZsAbS9S2R5T0tFIs
+   ATgTloMVrn1ne1lLej6blhkDaw+ipbYNkDJXetmuBzi7l0sxnScDREa/J
+   qsluZy1EzDqlIGm/MFAt6PdTD206NoYd3o3mOLlnoETaMlcvdddqq6x6i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="312585274"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="328942410"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 23:55:40 -0800
+   d="scan'208";a="312585274"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 00:35:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="665970771"
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="659356644"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="665970771"
+   d="scan'208";a="659356644"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2023 23:55:37 -0800
+  by orsmga007.jf.intel.com with ESMTP; 04 Feb 2023 00:35:37 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pODOa-00019A-1X;
-	Sat, 04 Feb 2023 07:55:36 +0000
-Date: Sat, 4 Feb 2023 15:54:42 +0800
+	id 1pOE1J-0001AJ-0S;
+	Sat, 04 Feb 2023 08:35:37 +0000
+Date: Sat, 4 Feb 2023 16:35:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, rjw@rjwysocki.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	daniel.lezcano@linaro.org, linux-acpi@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 11/11] thermal/acpi: Use the thermal framework ACPI API
-Message-ID: <202302041525.ZDaLecDd-lkp@intel.com>
-References: <20230203174429.3375691-12-daniel.lezcano@linaro.org>
+To: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH net-next 01/11] net: dsa: microchip: lan937x: add
+ cascade tailtag
+Message-ID: <202302041634.D4xvmQxf-lkp@intel.com>
+References: <20230202125930.271740-2-rakesh.sankaranarayanan@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,220 +47,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203174429.3375691-12-daniel.lezcano@linaro.org>
+In-Reply-To: <20230202125930.271740-2-rakesh.sankaranarayanan@microchip.com>
 
-Hi Daniel,
+Hi Rakesh,
 
-I love your patch! Yet something to improve:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on net-next/master]
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.2-rc6 next-20230203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-acpi-Remove-the-intermediate-acpi_thermal_trip-structure/20230204-015126
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230203174429.3375691-12-daniel.lezcano%40linaro.org
-patch subject: [PATCH v2 11/11] thermal/acpi: Use the thermal framework ACPI API
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230204/202302041525.ZDaLecDd-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rakesh-Sankaranarayanan/net-dsa-microchip-lan937x-add-cascade-tailtag/20230202-210316
+patch link:    https://lore.kernel.org/r/20230202125930.271740-2-rakesh.sankaranarayanan%40microchip.com
+patch subject: [RFC PATCH net-next 01/11] net: dsa: microchip: lan937x: add cascade tailtag
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230204/202302041634.D4xvmQxf-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2c921da06a8ac8f9e047f1a683146e1c5561534a
+        # https://github.com/intel-lab-lkp/linux/commit/d70ada5150dd09e1036c9de8c81198b9489430b3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-acpi-Remove-the-intermediate-acpi_thermal_trip-structure/20230204-015126
-        git checkout 2c921da06a8ac8f9e047f1a683146e1c5561534a
+        git fetch --no-tags linux-review Rakesh-Sankaranarayanan/net-dsa-microchip-lan937x-add-cascade-tailtag/20230202-210316
+        git checkout d70ada5150dd09e1036c9de8c81198b9489430b3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/dsa/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/acpi/thermal.c:274:8: error: implicit declaration of function 'thermal_acpi_critical_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = thermal_acpi_critical_trip_temp(tz->device->handle, &trip.temperature);
-                 ^
->> drivers/acpi/thermal.c:307:8: error: implicit declaration of function 'thermal_acpi_hot_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = thermal_acpi_hot_trip_temp(tz->device->handle, &trip.temperature);
-                 ^
-   drivers/acpi/thermal.c:307:8: note: did you mean 'thermal_zone_get_crit_temp'?
-   include/linux/thermal.h:347:5: note: 'thermal_zone_get_crit_temp' declared here
-   int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
-       ^
->> drivers/acpi/thermal.c:339:8: error: implicit declaration of function 'thermal_acpi_passive_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           ret = thermal_acpi_passive_trip_temp(tz->device->handle, &trip.temperature);
-                 ^
->> drivers/acpi/thermal.c:380:9: error: implicit declaration of function 'thermal_acpi_active_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   ret = thermal_acpi_active_trip_temp(tz->device->handle, i , &trip.temperature);
-                         ^
-   4 errors generated.
+>> net/dsa/tag_ksz.c:488:2: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+           val |= BIT((dp->index + (8 * dp->ds->index)));
+           ^~~
+   net/dsa/tag_ksz.c:481:9: note: initialize the variable 'val' to silence this warning
+           u32 val;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +/thermal_acpi_critical_trip_temp +274 drivers/acpi/thermal.c
+vim +/val +488 net/dsa/tag_ksz.c
 
-   257	
-   258	static struct thermal_trip *acpi_thermal_trips_alloc_critical(struct acpi_thermal *tz,
-   259								      struct thermal_trip *trips,
-   260								      int *num_trips)
-   261	{
-   262		struct thermal_trip trip = {
-   263			.type = THERMAL_TRIP_CRITICAL,
-   264		};
-   265	
-   266		int ret;
-   267	
-   268		/*
-   269		 * Module parameters disable the critical trip point
-   270		 */
-   271		if (crt < 0)
-   272			goto out;
-   273	
- > 274		ret = thermal_acpi_critical_trip_temp(tz->device->handle, &trip.temperature);
-   275		if (ret)
-   276			goto out;
-   277		
-   278		if (trip.temperature <= 0) {
-   279			pr_info(FW_BUG "Invalid critical threshold (%d)\n", trip.temperature);
-   280			goto out;
-   281		}
-   282	
-   283		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
-   284		if (!trips)
-   285			goto out;
-   286	
-   287		trips[*num_trips] = trip; /* structure copy */
-   288	
-   289		if (crt > 0)
-   290			acpi_thermal_trips_override(&trips[*num_trips], crt * MILLI);
-   291		
-   292		(*num_trips)++;
-   293	out:
-   294		return trips;
-   295	}
-   296	
-   297	static struct thermal_trip *acpi_thermal_trips_alloc_hot(struct acpi_thermal *tz,
-   298								 struct thermal_trip *trips,
-   299								 int *num_trips)
-   300	{
-   301		struct thermal_trip trip = {
-   302			.type = THERMAL_TRIP_HOT,
-   303		};
-   304	
-   305		int ret;
-   306	
- > 307		ret = thermal_acpi_hot_trip_temp(tz->device->handle, &trip.temperature);
-   308		if (ret)
-   309			goto out;
-   310	
-   311		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
-   312		if (!trips)
-   313			goto out;
-   314	
-   315		trips[*num_trips] = trip; /* structure copy */
-   316		
-   317		(*num_trips)++;
-   318	out:
-   319		return trips;
-   320	}
-   321	
-   322	static struct thermal_trip *acpi_thermal_trips_alloc_passive(struct acpi_thermal *tz,
-   323								     struct thermal_trip *trips,
-   324								     int *num_trips)
-   325	{
-   326		acpi_status status;
-   327		struct acpi_handle_list devices;
-   328		struct thermal_trip trip = {
-   329			.type = THERMAL_TRIP_PASSIVE
-   330		};
-   331		int ret;
-   332	
-   333		/*
-   334		 * Module parameters disable all passive trip points
-   335		 */
-   336		if (psv < 0)
-   337			goto out;
-   338		
- > 339		ret = thermal_acpi_passive_trip_temp(tz->device->handle, &trip.temperature);
-   340		if (ret)
-   341			goto out;
-   342		
-   343		status = acpi_evaluate_reference(tz->device->handle, "_PSL", NULL, &devices);
-   344		if (ACPI_FAILURE(status)) {
-   345			acpi_handle_debug(tz->device->handle, "No passive device associated\n");
-   346			goto out;
-   347		}
-   348	
-   349		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
-   350		if (!trips)
-   351			goto out;
-   352	
-   353		trips[*num_trips] = trip; /* structure copy */	
-   354		
-   355		(*num_trips)++;
-   356	out:
-   357		return trips;
-   358	}
-   359	
-   360	static struct thermal_trip *acpi_thermal_trips_alloc_active(struct acpi_thermal *tz,
-   361								    struct thermal_trip *trips,
-   362								    int *num_trips)
-   363	{
-   364		acpi_status status;
-   365		struct acpi_handle_list devices;
-   366		int i, ret;
-   367	
-   368		/*
-   369		 * Module parameters disable all active trip points
-   370		 */
-   371		if (act < 0)
-   372			return trips;
-   373	
-   374		for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-   375			struct thermal_trip trip = {
-   376				.type = THERMAL_TRIP_ACTIVE,
-   377			};
-   378			char name[5];
-   379	
- > 380			ret = thermal_acpi_active_trip_temp(tz->device->handle, i , &trip.temperature);
-   381			if (ret)
-   382				break;
-   383	
-   384			sprintf(name, "_AL%d", i);
-   385	
-   386			status = acpi_evaluate_reference(tz->device->handle, name, NULL, &devices);
-   387			if (ACPI_FAILURE(status)) {
-   388				acpi_handle_info(tz->device->handle, "No _AL%d defined for _AC%d\n", i, i);
-   389				break;
-   390			}
-   391			
-   392			trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
-   393			if (!trips)
-   394				break;
-   395	
-   396			trips[*num_trips] = trip; /* structure copy */	
-   397	
-   398			(*num_trips)++;
-   399		}
-   400	
-   401		/*
-   402		 * We found at least one trip point and we have an override option
-   403		 */
-   404		if (i && act) {
-   405			/*
-   406			 * Regarding the ACPI specification AC0 is the highest active
-   407			 * temperature trip point. We will override this one.
-   408			 */
-   409			acpi_thermal_trips_override(&trips[*num_trips], act * MILLI);		
-   410		}
-   411	
-   412		return trips;
-   413	}
-   414	
+   454	
+   455	/* For xmit, 3/7 bytes are added before FCS.
+   456	 * ---------------------------------------------------------------------------
+   457	 * DA(6bytes)|SA(6bytes)|....|Data(nbytes)|ts(4bytes)|tag0(1byte)|tag1(1byte)|
+   458	 * tag2(1byte)|FCS(4bytes)
+   459	 * ---------------------------------------------------------------------------
+   460	 * ts   : time stamp (Present only if PTP is enabled in the Hardware)
+   461	 * tag0 : represents tag override, lookup and valid
+   462	 * tag1 : each bit represents destination port map through switch 2
+   463	 *	  (eg, 0x01=port1, 0x02=port2, 0x80=port8)
+   464	 * tag2 : each bit represents destination port map through switch 1
+   465	 *	  (eg, 0x01=port1, 0x02=port2, 0x80=port8)
+   466	 *
+   467	 * For rcv, 1/5 bytes is added before FCS.
+   468	 * ---------------------------------------------------------------------------
+   469	 * DA(6bytes)|SA(6bytes)|....|Data(nbytes)|ts(4bytes)|tag0(1byte)|FCS(4bytes)
+   470	 * ---------------------------------------------------------------------------
+   471	 * ts   : time stamp (Present only if bit 7 of tag0 is set)
+   472	 * tag0 : zero-based value represents port
+   473	 *	  (eg, 0x00=port1, 0x02=port3, 0x07=port8)
+   474	 */
+   475	static struct sk_buff *lan937x_cascade_xmit(struct sk_buff *skb,
+   476						    struct net_device *dev)
+   477	{
+   478		struct dsa_port *dp = dsa_slave_to_port(dev);
+   479		const struct ethhdr *hdr = eth_hdr(skb);
+   480		__be32 *tag;
+   481		u32 val;
+   482	
+   483		if (skb->ip_summed == CHECKSUM_PARTIAL && skb_checksum_help(skb))
+   484			return NULL;
+   485	
+   486		tag = skb_put(skb, LAN937X_CASCADE_TAG_LEN);
+   487	
+ > 488		val |= BIT((dp->index + (8 * dp->ds->index)));
+   489	
+   490		if (is_link_local_ether_addr(hdr->h_dest))
+   491			val |= (LAN937X_TAIL_TAG_BLOCKING_OVERRIDE << 8);
+   492	
+   493		val |= (LAN937X_TAIL_TAG_VALID << 8);
+   494	
+   495		put_unaligned_be24(val, tag);
+   496	
+   497		return skb;
+   498	}
+   499	
 
 -- 
 0-DAY CI Kernel Test Service
