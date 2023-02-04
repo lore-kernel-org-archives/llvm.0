@@ -1,183 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2D42586
-	for <llvm@lists.linux.dev>; Sat,  4 Feb 2023 15:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675525899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3fOD9MhmIXPEBdX5f46BiRiKrRTQ8oMM/A6XKlAtStI=;
-	b=OqofqvakCaEiW8DtLi+MO+zhN3JPGbjayyDaYzGRoqA/H5ZXpivayE9BfICcRQRlU2YQz5
-	KkZdSNFaVF1uluQWeBl3g8MQu+rv4XBjShe1gk8timeLP7oWVC/206rVq/QyM3M1YOm8lq
-	Au811243pnwXzkK/SxfEZJI2g7obAPY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-295-rk07ZEeTMbiu6QRVgKcmgQ-1; Sat, 04 Feb 2023 10:51:37 -0500
-X-MC-Unique: rk07ZEeTMbiu6QRVgKcmgQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76E06811E6E
-	for <llvm@lists.linux.dev>; Sat,  4 Feb 2023 15:51:37 +0000 (UTC)
-Received: from [172.64.13.38] (unknown [10.30.33.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 62BA0112132C;
-	Sat,  4 Feb 2023 15:51:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc6, mainline.kernel.org-clang, 0136d86b)
-Date: Sat, 04 Feb 2023 15:51:37 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A4BBA2E;
+	Sat,  4 Feb 2023 17:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675530536; x=1707066536;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/qltplcgKHiPugNtCmRJ+PI4oLvv3rpIaa/0/mc4r/8=;
+  b=iTeuY5beahjrKD0AhHc7q3VHeg/hF4Rlbj17ypOsP5mLsM26+riyQRCw
+   jKbwUCd6HZ1un4o1plvBeQ8/LYg6wVg5FYYE0OjZK/HmEMsxacG0qlUqI
+   Q4kYVhXbqEnuFQNiPcxea1pGYwxkQMMc/4rnH0dZoZ5urUlkG7z3qSvM3
+   k5AasZA4G8PdQ4k+qxRddKm2Hy16FXHwDB4y5T5HTJIbLJWvnjBdTcB1M
+   jXb0bN98QD0q9dlrjZKfGuGDgnL35MdPnZSZc++3X4U5RU3j3Fn3rTSLC
+   oeDbF4VudYakE8nj2y7wVeQv4u0f/WqargEfvzaV1I8XZ6WnJVO8aLyW2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="309299683"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="309299683"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 09:08:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="734695247"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="734695247"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2023 09:08:51 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pOM1z-0001Rg-10;
+	Sat, 04 Feb 2023 17:08:51 +0000
+Date: Sun, 5 Feb 2023 01:08:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chen-Yu Tsai <wenst@chromium.org>
+Subject: [wens:mtk-test 20/39] ld.lld: error: undefined symbol: fhctl_parse_dt
+Message-ID: <202302050055.4lYWKspD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <19795.123020410513700465@us-mta-295.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git mtk-test
+head:   14d84237ad57de7b0f267d290ae87e40842965b4
+commit: 5659c6c79983c43b0e4785bd204ed10e2c6705a4 [20/39] clk: mediatek: mt8192: Add support for frequency hopping through FHCTL
+config: hexagon-randconfig-r002-20230204 (https://download.01.org/0day-ci/archive/20230205/202302050055.4lYWKspD-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git/commit/?id=5659c6c79983c43b0e4785bd204ed10e2c6705a4
+        git remote add wens https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git
+        git fetch --no-tags wens mtk-test
+        git checkout 5659c6c79983c43b0e4785bd204ed10e2c6705a4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'block-6.2-2023-02-03' of git://git.kernel.dk=
-/linux
+>> ld.lld: error: undefined symbol: fhctl_parse_dt
+   >>> referenced by clk-mt8192.c:1131 (drivers/clk/mediatek/clk-mt8192.c:1131)
+   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
+   >>> referenced by clk-mt8192.c:1131 (drivers/clk/mediatek/clk-mt8192.c:1131)
+   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mtk_clk_register_pllfhs
+   >>> referenced by clk-mt8192.c:1133 (drivers/clk/mediatek/clk-mt8192.c:1133)
+   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
+   >>> referenced by clk-mt8192.c:1133 (drivers/clk/mediatek/clk-mt8192.c:1133)
+   >>>               drivers/clk/mediatek/clk-mt8192.o:(clk_mt8192_apmixed_probe) in archive vmlinux.a
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/68545
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDEMAND
+   Depends on [n]: PM_DEVFREQ [=n]
+   Selected by [m]:
+   - DRM_MSM [=m] && HAS_IOMEM [=y] && DRM [=m] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6959807
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
-UT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1374
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Networking socket: fuzz: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1449
-            Affected tests:
-                  x86_64 (debug) - Networking socket: fuzz
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
