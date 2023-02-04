@@ -1,179 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C69910EA
-	for <llvm@lists.linux.dev>; Sat,  4 Feb 2023 14:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675521696;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OXF/35Ox5XzQ0Bgjj7jovHMb20l4MWyPONcJGNvNwtU=;
-	b=Prt1izut2hPqAsIT9Z7jL/nKj//Ar01obRzgSsUt+NmSmavZZudn+fxfWwZ6T13qOrOlKw
-	9YllUqFPpdMAdz23YquZVlfxqJE8iKOEIXdco5fEGKJDeCPXSgaLH2agbKmrp5bom1GU/w
-	4tPgOkYWLHtJaqACxIaWgQjL1c/jaBs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-PgBu30MjNqiB-PMBeaCNNw-1; Sat, 04 Feb 2023 09:41:35 -0500
-X-MC-Unique: PgBu30MjNqiB-PMBeaCNNw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA22885A5B1
-	for <llvm@lists.linux.dev>; Sat,  4 Feb 2023 14:41:34 +0000 (UTC)
-Received: from [172.64.13.38] (unknown [10.30.33.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A7E0540C83B6;
-	Sat,  4 Feb 2023 14:41:34 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (52/383 SKIPPED): Test report for master
- (6.2.0-rc6, mainline.kernel.org-clang, 7b753a90)
-Date: Sat, 04 Feb 2023 14:41:34 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A342586;
+	Sat,  4 Feb 2023 15:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675523749; x=1707059749;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kh6pSqNnIdqjLa0S5rNlE4klaFOpWFEoZi6T+dY8kDc=;
+  b=ZhrRFDn5ELhcSbiM0pgs4wQuba9ZQWxwItjaPQ2Y6otjZfXu7FmEiBmU
+   c7cjQdA4liRXt/KJovAVvCoaWQDiAFYUNru5QmXhC4/b3+p+oX8pj/Xmb
+   9hi9HNoe7gplEiUrE05dsMeS85apVcNr7Lj5HBVtmcDkstoRqOr2qmft9
+   eEcNdR9xwZDidkPUh+FxFEJoEGW4nYE1CGHuV52BW1conHZoWiCbR/rIj
+   UHdHC4Eok5cMlRgFttyYkoKWmLG+og/5jLscAZdzEPZB8xXAEtkvykTms
+   hbyF8uuRCPU6RGHDzrYG0GInWOFvLtr3FtA+fzjyao3TNXzNADhEl1kkd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="309287115"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="309287115"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 07:15:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="994813824"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="994813824"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2023 07:15:47 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pOKGY-0001Ng-2c;
+	Sat, 04 Feb 2023 15:15:46 +0000
+Date: Sat, 4 Feb 2023 23:14:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dwmw2:parallel-6.2-rc6 14/15] kernel/cpu.c:1527:37: warning: format
+ specifies type 'long long' but the argument has type 'cycles_t' (aka
+ 'unsigned long')
+Message-ID: <202302042359.ZHnxu0oG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <48779.123020409413500188@us-mta-495.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+tree:   git://git.infradead.org/users/dwmw2/linux parallel-6.2-rc6
+head:   459d1c46dbd121ad460159a0fe313dd07e3951da
+commit: 3e54da50727b59679cce6ca7f99b3f216badee2d [14/15] Print bringup timing
+config: hexagon-randconfig-r045-20230204 (https://download.01.org/0day-ci/archive/20230204/202302042359.ZHnxu0oG-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add dwmw2 git://git.infradead.org/users/dwmw2/linux
+        git fetch --no-tags dwmw2 parallel-6.2-rc6
+        git checkout 3e54da50727b59679cce6ca7f99b3f216badee2d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'ceph-for-6.2-rc7' of https://github.com/ceph=
-/ceph-client
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/68523
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6957427
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
-p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
-om_score_adj=3D1000
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1214
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: SELinux prevents pipefs
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1541
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+   In file included from kernel/cpu.c:13:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/cpu.c:13:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/cpu.c:13:
+   In file included from include/linux/sched/isolation.h:6:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/cpu.c:1527:37: warning: format specifies type 'long long' but the argument has type 'cycles_t' (aka 'unsigned long') [-Wformat]
+                                  cpuhp_hp_states[st].name, t2 - t1);
+                                                            ^~~~~~~
+   include/linux/printk.h:457:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   kernel/cpu.c:1540:49: warning: format specifies type 'long long' but the argument has type 'cycles_t' (aka 'unsigned long') [-Wformat]
+           printk("Brought CPUs online in %lld cycles\n", t2 - t1);
+                                          ~~~~            ^~~~~~~
+                                          %lu
+   include/linux/printk.h:457:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   8 warnings generated.
 
 
+vim +1527 kernel/cpu.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1504	
+  1505	void bringup_nonboot_cpus(unsigned int setup_max_cpus)
+  1506	{
+  1507		unsigned int cpu;
+  1508		int n = setup_max_cpus - num_online_cpus();
+  1509		cycles_t t1, t2;
+  1510	
+  1511		/* ∀ parallel pre-bringup state, bring N CPUs to it */
+  1512		if (n > 0) {
+  1513			enum cpuhp_state st = CPUHP_BP_PARALLEL_DYN;
+  1514	
+  1515			while (st <= CPUHP_BP_PARALLEL_DYN_END &&
+  1516			       cpuhp_hp_states[st].name) {
+  1517				int i = n;
+  1518				t1 = get_cycles();
+  1519				for_each_present_cpu(cpu) {
+  1520					cpu_up(cpu, st);
+  1521					if (!--i)
+  1522						break;
+  1523				}
+  1524				t2 = get_cycles();
+  1525	
+  1526				printk("Brought %d CPUs to %s in %lld cycles\n", n - i,
+> 1527				       cpuhp_hp_states[st].name, t2 - t1);
+  1528				st++;
+  1529			}
+  1530		}
+  1531	
+  1532		t1 = get_cycles();
+  1533		for_each_present_cpu(cpu) {
+  1534			if (num_online_cpus() >= setup_max_cpus)
+  1535				break;
+  1536			if (!cpu_online(cpu))
+  1537				cpu_up(cpu, CPUHP_ONLINE);
+  1538		}
+  1539		t2 = get_cycles();
+  1540		printk("Brought CPUs online in %lld cycles\n", t2 - t1);
+  1541	}
+  1542	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
