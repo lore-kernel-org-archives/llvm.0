@@ -1,249 +1,272 @@
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C8AF1C31
-	for <llvm@lists.linux.dev>; Sat,  4 Feb 2023 07:25:23 +0000 (UTC)
-Received: by mail-ua1-f44.google.com with SMTP id g12so1342579uae.6
-        for <llvm@lists.linux.dev>; Fri, 03 Feb 2023 23:25:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B0GCIL+NITHomZ4ifseBSt0S1EJNccap+I9VoJ92QS0=;
-        b=g+Fgtq8z0NI6rMy/Pzu+M/XN/mafLaNAf90VuMeVOl6uyYXnYhdunxSrLtTCFfc8oB
-         xLZj+rf6f4ctGoeEAJ8aLmi8DEbENtAfPD84PjyNIpdEUzdeppgvtwZblPgTbGYr0yoV
-         rirnhZCIn5aZiQ7hb7ohqOviPvlzSIQWklXMOyGVqXMJcQCDgMXkqgl6CE581H5k3+4X
-         2VrWdqEJYcyzDrAS0qXqy7BysHj1UgLYc4q+pdMqbUUtGX1LGMS12UE5eovM8k6pqsWX
-         PPg8Szg/i91bpAaabOW7TxiR5O4VFcND0sCrjqw27sDcLS6KYfOGrwPFj6r2JYwsmkIg
-         xI5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B0GCIL+NITHomZ4ifseBSt0S1EJNccap+I9VoJ92QS0=;
-        b=UaFPq4pIsaBepGxtVvpgdRdA86bDttiBgbilIdDi4Nrb3/bAogKwt425F+QBYiBOu5
-         ib23IrKmKskL3wmPlW9JPe0wb+sM50vI1PNVYfPNrz+gw9995T+y+Sqxul9ZWWbsMZg5
-         gD9F8uK1WgiGUo0pBvEzJ0rHNsEvWIcPHi3wn1QEFda+zx1WYUJUcRktQ5IM4HtDa8WS
-         nON+wGvk58kpuVFyVT8cDPYkqsCGmXXIrP89fAzriKFCQcjrO4ccTb36nHO+j3D9qamn
-         CvhegE7+BIOSgEluozrk85rWTt9zWsOrh49N4OoJy7GmL1ehgxFpDyDIpovGgx31Tv26
-         390w==
-X-Gm-Message-State: AO0yUKX+xngrCb9nUVw1nIYkoPjOYdCCxb6NvLnQg+6oBUSHqATISBlj
-	vwZTHDVWVQXjfkaHC8xHtUdQ3lQn866wKnNCo6GlFg==
-X-Google-Smtp-Source: AK7set/xSW2zRR2PR4QfeEO1a6Uk7XNZ0F71ScF0aNCpiJogJXU6Cw96aZxq+7OskUCP8G4TWc4dL0dqssZ76wCaf6M=
-X-Received: by 2002:ab0:134c:0:b0:419:5b8b:4cda with SMTP id
- h12-20020ab0134c000000b004195b8b4cdamr2017934uae.8.1675495521822; Fri, 03 Feb
- 2023 23:25:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF71C27;
+	Sat,  4 Feb 2023 07:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675497341; x=1707033341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0EHShsNIiSr8mAoNRKbDMG1uUQdS2+B2WUEPBHFZwmA=;
+  b=FbJjOD/0WXBusRJX5Oc9aXadgA9SMoJ2+7TP1ReMxRN9g4E4dWxSzS3k
+   NGmMoJl4wE01nOoiAF2XyS4WBcVbYgMvKyamhbQT9O9AzW8jfiJH1RGyY
+   Z5YMFraQOC2Eqsq37VZZr30HuLHeMq4ZnpsIpQRhcPzB/Fv9cK6ys0bzD
+   xDEz0+FiSNPYHyaxmmuujQT+acnaGwDYAsfsUdBdGbDG0WH9/W1n7ql2d
+   /cgT5VTB3cW8j3DNTiCWNK/BYqGBYQ8sFt+YBtWJl/RgfLO+UKVs+vOk+
+   iiNw58AF2RZlZHObu/Z8V3D+XDZ+9YHduVYJyXBDFOAXjt0IMs/Pt7PCC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="328942410"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="328942410"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2023 23:55:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10610"; a="665970771"
+X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
+   d="scan'208";a="665970771"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2023 23:55:37 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pODOa-00019A-1X;
+	Sat, 04 Feb 2023 07:55:36 +0000
+Date: Sat, 4 Feb 2023 15:54:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rjw@rjwysocki.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	daniel.lezcano@linaro.org, linux-acpi@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Len Brown <lenb@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] thermal/acpi: Use the thermal framework ACPI API
+Message-ID: <202302041525.ZDaLecDd-lkp@intel.com>
+References: <20230203174429.3375691-12-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230203101009.946745030@linuxfoundation.org>
-In-Reply-To: <20230203101009.946745030@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Sat, 4 Feb 2023 12:55:10 +0530
-Message-ID: <CA+G9fYtsSuw=W0LSpzJRzsXB6qGYS3og1v=FOrvPHSAdRPCDPA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203174429.3375691-12-daniel.lezcano@linaro.org>
 
-On Fri, 3 Feb 2023 at 15:50, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.10 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.10-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Daniel,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v6.2-rc6 next-20230203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-acpi-Remove-the-intermediate-acpi_thermal_trip-structure/20230204-015126
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230203174429.3375691-12-daniel.lezcano%40linaro.org
+patch subject: [PATCH v2 11/11] thermal/acpi: Use the thermal framework ACPI API
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230204/202302041525.ZDaLecDd-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2c921da06a8ac8f9e047f1a683146e1c5561534a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-acpi-Remove-the-intermediate-acpi_thermal_trip-structure/20230204-015126
+        git checkout 2c921da06a8ac8f9e047f1a683146e1c5561534a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/acpi/thermal.c:274:8: error: implicit declaration of function 'thermal_acpi_critical_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = thermal_acpi_critical_trip_temp(tz->device->handle, &trip.temperature);
+                 ^
+>> drivers/acpi/thermal.c:307:8: error: implicit declaration of function 'thermal_acpi_hot_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = thermal_acpi_hot_trip_temp(tz->device->handle, &trip.temperature);
+                 ^
+   drivers/acpi/thermal.c:307:8: note: did you mean 'thermal_zone_get_crit_temp'?
+   include/linux/thermal.h:347:5: note: 'thermal_zone_get_crit_temp' declared here
+   int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
+       ^
+>> drivers/acpi/thermal.c:339:8: error: implicit declaration of function 'thermal_acpi_passive_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = thermal_acpi_passive_trip_temp(tz->device->handle, &trip.temperature);
+                 ^
+>> drivers/acpi/thermal.c:380:9: error: implicit declaration of function 'thermal_acpi_active_trip_temp' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ret = thermal_acpi_active_trip_temp(tz->device->handle, i , &trip.temperature);
+                         ^
+   4 errors generated.
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+vim +/thermal_acpi_critical_trip_temp +274 drivers/acpi/thermal.c
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+   257	
+   258	static struct thermal_trip *acpi_thermal_trips_alloc_critical(struct acpi_thermal *tz,
+   259								      struct thermal_trip *trips,
+   260								      int *num_trips)
+   261	{
+   262		struct thermal_trip trip = {
+   263			.type = THERMAL_TRIP_CRITICAL,
+   264		};
+   265	
+   266		int ret;
+   267	
+   268		/*
+   269		 * Module parameters disable the critical trip point
+   270		 */
+   271		if (crt < 0)
+   272			goto out;
+   273	
+ > 274		ret = thermal_acpi_critical_trip_temp(tz->device->handle, &trip.temperature);
+   275		if (ret)
+   276			goto out;
+   277		
+   278		if (trip.temperature <= 0) {
+   279			pr_info(FW_BUG "Invalid critical threshold (%d)\n", trip.temperature);
+   280			goto out;
+   281		}
+   282	
+   283		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
+   284		if (!trips)
+   285			goto out;
+   286	
+   287		trips[*num_trips] = trip; /* structure copy */
+   288	
+   289		if (crt > 0)
+   290			acpi_thermal_trips_override(&trips[*num_trips], crt * MILLI);
+   291		
+   292		(*num_trips)++;
+   293	out:
+   294		return trips;
+   295	}
+   296	
+   297	static struct thermal_trip *acpi_thermal_trips_alloc_hot(struct acpi_thermal *tz,
+   298								 struct thermal_trip *trips,
+   299								 int *num_trips)
+   300	{
+   301		struct thermal_trip trip = {
+   302			.type = THERMAL_TRIP_HOT,
+   303		};
+   304	
+   305		int ret;
+   306	
+ > 307		ret = thermal_acpi_hot_trip_temp(tz->device->handle, &trip.temperature);
+   308		if (ret)
+   309			goto out;
+   310	
+   311		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
+   312		if (!trips)
+   313			goto out;
+   314	
+   315		trips[*num_trips] = trip; /* structure copy */
+   316		
+   317		(*num_trips)++;
+   318	out:
+   319		return trips;
+   320	}
+   321	
+   322	static struct thermal_trip *acpi_thermal_trips_alloc_passive(struct acpi_thermal *tz,
+   323								     struct thermal_trip *trips,
+   324								     int *num_trips)
+   325	{
+   326		acpi_status status;
+   327		struct acpi_handle_list devices;
+   328		struct thermal_trip trip = {
+   329			.type = THERMAL_TRIP_PASSIVE
+   330		};
+   331		int ret;
+   332	
+   333		/*
+   334		 * Module parameters disable all passive trip points
+   335		 */
+   336		if (psv < 0)
+   337			goto out;
+   338		
+ > 339		ret = thermal_acpi_passive_trip_temp(tz->device->handle, &trip.temperature);
+   340		if (ret)
+   341			goto out;
+   342		
+   343		status = acpi_evaluate_reference(tz->device->handle, "_PSL", NULL, &devices);
+   344		if (ACPI_FAILURE(status)) {
+   345			acpi_handle_debug(tz->device->handle, "No passive device associated\n");
+   346			goto out;
+   347		}
+   348	
+   349		trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
+   350		if (!trips)
+   351			goto out;
+   352	
+   353		trips[*num_trips] = trip; /* structure copy */	
+   354		
+   355		(*num_trips)++;
+   356	out:
+   357		return trips;
+   358	}
+   359	
+   360	static struct thermal_trip *acpi_thermal_trips_alloc_active(struct acpi_thermal *tz,
+   361								    struct thermal_trip *trips,
+   362								    int *num_trips)
+   363	{
+   364		acpi_status status;
+   365		struct acpi_handle_list devices;
+   366		int i, ret;
+   367	
+   368		/*
+   369		 * Module parameters disable all active trip points
+   370		 */
+   371		if (act < 0)
+   372			return trips;
+   373	
+   374		for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
+   375			struct thermal_trip trip = {
+   376				.type = THERMAL_TRIP_ACTIVE,
+   377			};
+   378			char name[5];
+   379	
+ > 380			ret = thermal_acpi_active_trip_temp(tz->device->handle, i , &trip.temperature);
+   381			if (ret)
+   382				break;
+   383	
+   384			sprintf(name, "_AL%d", i);
+   385	
+   386			status = acpi_evaluate_reference(tz->device->handle, name, NULL, &devices);
+   387			if (ACPI_FAILURE(status)) {
+   388				acpi_handle_info(tz->device->handle, "No _AL%d defined for _AC%d\n", i, i);
+   389				break;
+   390			}
+   391			
+   392			trips = krealloc(trips, sizeof(*trips) * (*num_trips + 1), GFP_KERNEL);
+   393			if (!trips)
+   394				break;
+   395	
+   396			trips[*num_trips] = trip; /* structure copy */	
+   397	
+   398			(*num_trips)++;
+   399		}
+   400	
+   401		/*
+   402		 * We found at least one trip point and we have an override option
+   403		 */
+   404		if (i && act) {
+   405			/*
+   406			 * Regarding the ACPI specification AC0 is the highest active
+   407			 * temperature trip point. We will override this one.
+   408			 */
+   409			acpi_thermal_trips_override(&trips[*num_trips], act * MILLI);		
+   410		}
+   411	
+   412		return trips;
+   413	}
+   414	
 
-NOTE:
-
-clang-nightly-allmodconfig - Failed
-
-Build error:
------------
-  include/linux/fortify-string.h:430:4: error: call to '__write_overflow_fi=
-eld'
-   declared with 'warning' attribute: detected write beyond size of field
-   (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-
-This is already reported upstream,
-https://lore.kernel.org/llvm/63d0c141.050a0220.c848b.4e93@mx.google.com/
-
-Test results comparison:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.9=
--29-g52d447db92f6/testrun/14545824/suite/build/test/clang-nightly-allmodcon=
-fig/history/
-
-## Build
-* kernel: 6.1.10-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: 52d447db92f6b22e04e7b12c736bf1700de4bbf7
-* git describe: v6.1.9-29-g52d447db92f6
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.9=
--29-g52d447db92f6
-
-## Test Regressions (compared to v6.1.8-307-gabbe4e7b6342)
-
-## Metric Regressions (compared to v6.1.8-307-gabbe4e7b6342)
-
-## Test Fixes (compared to v6.1.8-307-gabbe4e7b6342)
-
-## Metric Fixes (compared to v6.1.8-307-gabbe4e7b6342)
-
-## Test result summary
-total: 163841, pass: 145266, fail: 4409, skip: 14140, xfail: 26
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 147 passed, 2 failed
-* arm64: 51 total, 49 passed, 2 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 14 passed, 2 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 44 total, 43 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-s
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* ltpa-6124632/0/tests/1_ltp-dio
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
