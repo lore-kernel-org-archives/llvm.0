@@ -1,43 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1282F3217;
-	Sat,  4 Feb 2023 20:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCF123DC;
+	Sat,  4 Feb 2023 21:14:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675541595; x=1707077595;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=impB2PY5ZQlafmRLAVSitt88Gdvkw4xHxJZ2JEItRNk=;
-  b=M0WfJTwk0mXW+7MeeJ2TACmSisijTpJjO/5fW8Pd4OPMehvUdJ/+0O36
-   UnCfFieHPtsMCIJrTwL4y8/z2bnMUFDjDPuoIzZJR6lUykgPcqQHbsQjy
-   I5wtcPPOT99FNwuF6Qln09rp8shr4KCg6kDygS3pqK/aT2akzXjza3H87
-   wAXXLFzDm/2AefYtGk/AdDlWvT7W1eXCgYiPeb783sR143CwbxOgBT3z4
-   nn0roE1wOHzLPFkDHvgAMNIcwJGW1VWx0c8bav/6kum4RWkIU8NeDIcHD
-   898z5hAO1m4DQUdnBZ9SZIGpvykrVhBWb87L6YefMcfrW3KBABv+nRIyf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="393580203"
+  t=1675545298; x=1707081298;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=KF56eQlfhWb/TEBS8QZao481qBRijNqud6XR3uxhIMI=;
+  b=GVCiYlalcrSy/RbJP7DRj0SPuk3/L3Uot6/X3MOFkAlKZac/sFKkKmZB
+   Ql9+C7fKSaM9Cbsl00casMR8IFgk29BQelx1dQEBjR8OFu8vIAWK1cO/o
+   9eHuT5fCpdicYgqAcSaej/9b63KhoHTKmNWq6nsBEzMpsv1JB409JMmWN
+   TXeEZfg7kVXoe+3G7JpX3QXXqaPcE+DksQ6KGZgvchS/njcsjzqN7qfn5
+   /QrCeqRiqqyEVxlrKBXVr/ra1xZ9Si8BGcjW0uzbi5K/nk/m4juAnLicr
+   UgLb8K1LE+6gMfXDMyTsoybQKm5WR1kCCqwp/P9vgNaZLYvTJDSwDNZMa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="391386831"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="393580203"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 12:13:02 -0800
+   d="scan'208";a="391386831"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 13:14:58 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="698434249"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="994871481"
 X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="698434249"
+   d="scan'208";a="994871481"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2023 12:13:01 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2023 13:14:57 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pOOu7-0001W6-13;
-	Sat, 04 Feb 2023 20:12:55 +0000
-Date: Sun, 5 Feb 2023 04:12:11 +0800
+	id 1pOPs8-0001X6-1H;
+	Sat, 04 Feb 2023 21:14:56 +0000
+Date: Sun, 5 Feb 2023 05:14:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:virtual_cpu_hotplug/rfc/v1 8/32]
- arch/x86/kernel/topology.c:147:49: error: no member named 'cpu' in 'struct
- cpu'
-Message-ID: <202302050422.aKurEcYI-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
+ kallsyms_lookup_name: .text+0x7c): relocation R_RISCV_PCREL_HI20 out of
+ range: -524541 is not in [-524288, 524287]; references
+ kallsyms_seqs_of_names
+Message-ID: <202302050507.AGNCqIom-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,58 +47,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git virtual_cpu_hotplug/rfc/v1
-head:   81295db7555df74bd02dab0b7e87b512d3a3de34
-commit: bbbbfae28e723520ab31d000146207547cc62124 [8/32] x86/topology: Switch over to GENERIC_CPU_DEVICES
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230205/202302050422.aKurEcYI-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+CC: linux-kernel@vger.kernel.org
+TO: Zhen Lei <thunder.leizhen@huawei.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>
+
+Hi Zhen,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   db27c22251e7c8f3a9d5bfb55c9c8c701a70bbb3
+commit: 60443c88f3a89fd303a9e8c0e84895910675c316 kallsyms: Improve the performance of kallsyms_lookup_name()
+date:   3 months ago
+config: riscv-randconfig-r004-20230204 (https://download.01.org/0day-ci/archive/20230205/202302050507.AGNCqIom-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=bbbbfae28e723520ab31d000146207547cc62124
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse virtual_cpu_hotplug/rfc/v1
-        git checkout bbbbfae28e723520ab31d000146207547cc62124
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60443c88f3a89fd303a9e8c0e84895910675c316
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 60443c88f3a89fd303a9e8c0e84895910675c316
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   arch/x86/kernel/topology.c:145:19: error: static declaration of 'arch_register_cpu' follows non-static declaration
-   static int __init arch_register_cpu(int num)
-                     ^
-   include/linux/cpu.h:78:12: note: previous declaration is here
-   extern int arch_register_cpu(int cpu);
-              ^
->> arch/x86/kernel/topology.c:147:49: error: no member named 'cpu' in 'struct cpu'
-           return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ACPI_HOTPLUG_CPU
-   Depends on [n]: ACPI [=y] && ACPI_PROCESSOR [=y] && HOTPLUG_CPU [=n]
-   Selected by [y]:
-   - X86 [=y] && ACPI [=y]
-
-
-vim +147 arch/x86/kernel/topology.c
-
-271eb5c588e5d0a Jaswinder Singh Rajput 2009-03-21  144  
-d987402695f16ae Alexander van Heukelum 2008-02-01  145  static int __init arch_register_cpu(int num)
-3eaf5efae72b33b Sam Ravnborg           2008-01-30  146  {
-3eaf5efae72b33b Sam Ravnborg           2008-01-30 @147  	return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
-
-:::::: The code at line 147 was first introduced by commit
-:::::: 3eaf5efae72b33bc6132e9590e5d4bf11532f8c4 x86: fix section mismatch warning in topology.c
-
-:::::: TO: Sam Ravnborg <sam@ravnborg.org>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_name: .text+0x7c): relocation R_RISCV_PCREL_HI20 out of range: -524541 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
 
 -- 
 0-DAY CI Kernel Test Service
