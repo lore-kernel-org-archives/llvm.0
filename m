@@ -1,44 +1,42 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EB82F43;
-	Sun,  5 Feb 2023 13:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783F7B;
+	Sun,  5 Feb 2023 14:34:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675603944; x=1707139944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i8HaGGvuY6H4sopUJT+GVMzHzQckmWd6mcIVw+lCb3c=;
-  b=Cpjq3Js5PY4C9N3u7GQjhcfM8xphUEJaQhioHwCdDczz6VJunnq+GDc+
-   ubFcdi+qA6/ONKOoC5ZC8yCMdg0N3Dt/Ks89Gx99WGtMa+mOOcsHXT7j8
-   EHiZK8M5XO0kud2N/kIyVl68wkV0oAEZuWW1XNCe+oaRXBU4BQxnWtjBn
-   nyiEdrKZR41qth+O9k3r5/G737Brd5L/J6A+79FY5Mo0HEwTfGX4oD2Rj
-   Zkkz5ylwD7WNmNcxpEnJ8e5BhWQxq5Hv3cwsfiyiDqxE79dBtr7Z3n5dl
-   XvI+1/uT7rXxmYf8cPY/qW1phqjbnbByN1e/UGxIuHoQung9rFkEDI6zS
+  t=1675607664; x=1707143664;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=53TN9BnoCBRU9bwx1idlDuaHpEjaKt8yj/T3Vfqy5xs=;
+  b=SlwS8sjZOs4JfJnDN/E7ztdLHATSQgcztPpGvIBjzkpKVLL4QV72Q03F
+   cPDH3yFWiXWLSG/4+LyY75WYx6wantie+9Wy6fUfokvAr0fKdc9QxFInw
+   CN9jzHQDH6UsWmv8aB6+jx1oQ2KmwozpbOEh6VEUnKgUV6s6gol9oOuG0
+   LDoIPBZWzWPjyn0vmrq+BLmLk2hV0h2bmJ3K84IXgjR8n0nTLInqAVFKq
+   gzDB9ZKL40EHaCBZUvfn9LAKWVW8kNPaIypOg0gKXY8Y/mTmq7f9nYGUN
+   RpW4vpejNO7FsFI4VVEu9/btg6OHE4eDrVJRd9nqfkMCsGPd6idw9ICUk
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="309380472"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="308691875"
 X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="309380472"
+   d="scan'208";a="308691875"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 05:32:22 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 06:34:23 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="698598286"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="698607811"
 X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="698598286"
+   d="scan'208";a="698607811"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 05 Feb 2023 05:32:20 -0800
+  by orsmga001.jf.intel.com with ESMTP; 05 Feb 2023 06:34:21 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pOf80-00021s-0a;
-	Sun, 05 Feb 2023 13:32:20 +0000
-Date: Sun, 5 Feb 2023 21:32:01 +0800
+	id 1pOg61-00023Y-14;
+	Sun, 05 Feb 2023 14:34:21 +0000
+Date: Sun, 5 Feb 2023 22:34:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ido Schimmel <idosch@nvidia.com>
+To: Asahi Lina <lina@asahilina.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH net-next 06/13] rtnetlink: bridge: mcast: Move MDB
- handlers out of bridge driver
-Message-ID: <202302052112.2bMZwXRS-lkp@intel.com>
-References: <20230204170801.3897900-7-idosch@nvidia.com>
+Subject: [asahilinux:gpu/rust-for-next 21/24] error[E0425]: cannot find
+ function `drm_gem_object_get` in crate `bindings`
+Message-ID: <202302052253.n0pJjBrj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,36 +45,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230204170801.3897900-7-idosch@nvidia.com>
 
-Hi Ido,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ido-Schimmel/bridge-mcast-Use-correct-define-in-MDB-dump/20230205-011545
-patch link:    https://lore.kernel.org/r/20230204170801.3897900-7-idosch%40nvidia.com
-patch subject: [RFC PATCH net-next 06/13] rtnetlink: bridge: mcast: Move MDB handlers out of bridge driver
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230205/202302052112.2bMZwXRS-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux gpu/rust-for-next
+head:   66a57fa1328927e067e02fa8a64782c4ee5aac1d
+commit: a09519a8f540416972af3a8dbb185744434aa08b [21/24] rust: kernel: drm: gem: Add GEM object abstraction
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230205/202302052253.n0pJjBrj-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dd1f784995f3efdbf26e2b2694a0cd1ca181d35e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ido-Schimmel/bridge-mcast-Use-correct-define-in-MDB-dump/20230205-011545
-        git checkout dd1f784995f3efdbf26e2b2694a0cd1ca181d35e
+        # https://github.com/AsahiLinux/linux/commit/a09519a8f540416972af3a8dbb185744434aa08b
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux gpu/rust-for-next
+        git checkout a09519a8f540416972af3a8dbb185744434aa08b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: call to __compiletime_assert_661 marked "dontcall-error": BUILD_BUG_ON failed: sizeof(*ctx) != sizeof(cb->ctx)
+>> error[E0425]: cannot find function `drm_gem_object_get` in crate `bindings`
+   --> rust/kernel/drm/gem/mod.rs:132:23
+   |
+   132   |             bindings::drm_gem_object_get(self.gem_obj() as *const _ as *mut _);
+   |                       ^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_gem_object_free`
+   |
+   ::: rust/bindings/bindings_generated.rs:48044:5
+   |
+   48044 |     pub fn drm_gem_object_free(kref: *mut kref);
+   |     -------------------------------------------- similarly named function `drm_gem_object_free` defined here
+--
+>> error[E0425]: cannot find function `drm_vma_node_offset_addr` in crate `bindings`
+   --> rust/kernel/drm/gem/mod.rs:182:23
+   |
+   182   |               bindings::drm_vma_node_offset_addr(&self.gem_obj().vma_node as *const _ as *mut _)
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_vma_offset_add`
+   |
+   ::: rust/bindings/bindings_generated.rs:47942:5
+   |
+   47942 | /     pub fn drm_vma_offset_add(
+   47943 | |         mgr: *mut drm_vma_offset_manager,
+   47944 | |         node: *mut drm_vma_offset_node,
+   47945 | |         pages: core::ffi::c_ulong,
+   47946 | |     ) -> core::ffi::c_int;
+   | |__________________________- similarly named function `drm_vma_offset_add` defined here
+--
+>> error[E0425]: cannot find function `drm_gem_object_put` in crate `bindings`
+   --> rust/kernel/drm/gem/mod.rs:298:23
+   |
+   298   |               bindings::drm_gem_object_put((*self.ptr).gem_obj() as *const _ as *mut _);
+   |                         ^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_gem_object_init`
+   |
+   ::: rust/bindings/bindings_generated.rs:48047:5
+   |
+   48047 | /     pub fn drm_gem_object_init(
+   48048 | |         dev: *mut drm_device,
+   48049 | |         obj: *mut drm_gem_object,
+   48050 | |         size: usize,
+   48051 | |     ) -> core::ffi::c_int;
+   | |__________________________- similarly named function `drm_gem_object_init` defined here
+--
+>> error[E0425]: cannot find function `drm_gem_object_put` in crate `bindings`
+   --> rust/kernel/drm/gem/mod.rs:334:23
+   |
+   334   |               bindings::drm_gem_object_put((*self.ptr).gem_obj() as *const _ as *mut _);
+   |                         ^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_gem_object_init`
+   |
+   ::: rust/bindings/bindings_generated.rs:48047:5
+   |
+   48047 | /     pub fn drm_gem_object_init(
+   48048 | |         dev: *mut drm_device,
+   48049 | |         obj: *mut drm_gem_object,
+   48050 | |         size: usize,
+   48051 | |     ) -> core::ffi::c_int;
+   | |__________________________- similarly named function `drm_gem_object_init` defined here
+--
+>> error: aborting due to 4 previous errors
 
 -- 
 0-DAY CI Kernel Test Service
