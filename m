@@ -1,53 +1,44 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B6D15B4;
-	Sun,  5 Feb 2023 01:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE80017D5;
+	Sun,  5 Feb 2023 04:26:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675558809; x=1707094809;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HYzoEAObKmco2oMwJFZ9Ok0gbxNT7DUEeDIgbmPNHJs=;
-  b=K+oQdQbRQ82T1WWVqYcP4AvS6lLolzyxFFmV1fEBb2PKi3rk1eoHaH1O
-   4F+lluxQoK76mNK4FwH4zfea1eTmEmwqY5IjirwipW96uO9BhU7aC5T9N
-   3T3YSfUQ85wAGPwQg3utCFCYuHVL27NwOqJbMWs1/2/v7D+a4BovT5BcO
-   fkj78H+5CIITaj0YuDuaSrl8u49ZJ0Kp79o8M4xq1rRxZ1hxFpcjMrfES
-   wBsOGl/+Uk5EpaWe/VnFbwcCvXpiujzT43sfpuQQs/ke5tEE14qCNz63Q
-   OMsGsgqwkerIuVzfPIJW28NKIcWB+afrUDoeqLr4XyAp8uJd51f0F6P2k
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="331140836"
+  t=1675571171; x=1707107171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g/B3VBkQpVSeGMu2WxWvG5NKj4dZ/KQeSIatv3ONp10=;
+  b=Q/alWMNA2Qmi8kbNVDYx/Ju2toZvip0aZjBB80gQZGAKbfqjzhg5V+dX
+   mGev67bxuRvhRPMXTxLHkc9ZeMXBEyXr9/wEzTkzdaH++35eMf02LBc8m
+   6Q/P7+9O1Z4pg0+cRYBzMvt4wvV9dOyjjkf7ZBt4X3HjrggeX+Y1tp7jW
+   poQF6ugFCZTq5hbSMHY6ZUYHo+DFpq5BAnCxZbrc79DaVgDORe/LzYiik
+   hI1/c6HUHALcwTuSu2xrx7SYKgTB8YmLBNAABIsuRl7j17kKKIH8u06aN
+   5kv6rnlFTpu4gf10mEfqF2efCAfjIWZvP+ITwBIGLbw8rBlpLMMcdjtqZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="330309305"
 X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
-   d="scan'208";a="331140836"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 17:00:07 -0800
+   d="scan'208";a="330309305"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 20:26:09 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="666123637"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="668077272"
 X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
-   d="scan'208";a="666123637"
+   d="scan'208";a="668077272"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2023 17:00:02 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 04 Feb 2023 20:26:08 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pOTNx-0001cK-2s;
-	Sun, 05 Feb 2023 01:00:01 +0000
-Date: Sun, 5 Feb 2023 08:59:57 +0800
+	id 1pOWbP-0001k2-2o;
+	Sun, 05 Feb 2023 04:26:07 +0000
+Date: Sun, 5 Feb 2023 12:25:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-	linux-kernel@vger.kernel.org
+To: Sunil V L <sunilvl@ventanamicro.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-	macro@orcam.me.uk, andriy.shevchenko@linux.intel.com,
-	lukas@wunner.de, cang1@live.co.uk, matthew.gerlach@linux.intel.com,
-	deller@gmx.de, phil.edworthy@renesas.com, geert+renesas@glider.be,
-	marpagan@redhat.com, u.kleine-koenig@pengutronix.de,
-	etremblay@distech-controls.com, wander@redhat.com,
-	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v11 tty-next 1/4] serial: 8250_pci: Add
- serial8250_pci_setup_port definition in 8250_pcilib.c
-Message-ID: <202302050831.9fyXKlIq-lkp@intel.com>
-References: <20230204053138.2520105-2-kumaravel.thiagarajan@microchip.com>
+	Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_sbi_nested_v1 35/76]
+ arch/riscv/include/asm/acpi.h:80:5: warning: no previous prototype for
+ function 'acpi_get_riscv_isa'
+Message-ID: <202302051225.nfhpRrql-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,55 +47,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230204053138.2520105-2-kumaravel.thiagarajan@microchip.com>
 
-Hi Kumaravel,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.2-rc6 next-20230203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kumaravel-Thiagarajan/serial-8250_pci-Add-serial8250_pci_setup_port-definition-in-8250_pcilib-c/20230204-005851
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230204053138.2520105-2-kumaravel.thiagarajan%40microchip.com
-patch subject: [PATCH v11 tty-next 1/4] serial: 8250_pci: Add serial8250_pci_setup_port definition in 8250_pcilib.c
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230205/202302050831.9fyXKlIq-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
+head:   27e6109638389f74b42fe02858caa9c7a381cbbe
+commit: db4952f58ebd70e99ec95af6c8139e52f809a32a [35/76] RISC-V: ACPI: cpufeature: Add ACPI support in riscv_fill_hwcap()
+config: riscv-randconfig-r042-20230205 (https://download.01.org/0day-ci/archive/20230205/202302051225.nfhpRrql-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cd5f521fabae71343d59d524ad57221e2b7524fe
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kumaravel-Thiagarajan/serial-8250_pci-Add-serial8250_pci_setup_port-definition-in-8250_pcilib-c/20230204-005851
-        git checkout cd5f521fabae71343d59d524ad57221e2b7524fe
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/db4952f58ebd70e99ec95af6c8139e52f809a32a
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_sbi_nested_v1
+        git checkout db4952f58ebd70e99ec95af6c8139e52f809a32a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tty/serial/8250/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/tty/serial/8250/8250_pcilib.c:14:5: warning: no previous prototype for function 'serial8250_pci_setup_port' [-Wmissing-prototypes]
-   int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
+   In file included from arch/riscv/kernel/cpufeature.c:16:
+>> arch/riscv/include/asm/acpi.h:80:5: warning: no previous prototype for function 'acpi_get_riscv_isa' [-Wmissing-prototypes]
+   int acpi_get_riscv_isa(struct acpi_table_header *table, unsigned int cpu, const char **isa)
        ^
-   drivers/tty/serial/8250/8250_pcilib.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
+   arch/riscv/include/asm/acpi.h:80:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int acpi_get_riscv_isa(struct acpi_table_header *table, unsigned int cpu, const char **isa)
    ^
    static 
    1 warning generated.
 
 
-vim +/serial8250_pci_setup_port +14 drivers/tty/serial/8250/8250_pcilib.c
+vim +/acpi_get_riscv_isa +80 arch/riscv/include/asm/acpi.h
 
-    13	
-  > 14	int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
+f6ce6a00404b8e Sunil V L 2023-01-30  67  
+d8a08750a4fecf Sunil V L 2023-01-30  68  struct acpi_madt_rintc *acpi_get_madt_rintc(int cpu);
+d8a08750a4fecf Sunil V L 2023-01-30  69  struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+d8a08750a4fecf Sunil V L 2023-01-30  70  static inline u32 get_acpi_id_for_cpu(int cpu)
+d8a08750a4fecf Sunil V L 2023-01-30  71  {
+d8a08750a4fecf Sunil V L 2023-01-30  72  	return	acpi_cpu_get_madt_rintc(cpu)->uid;
+d8a08750a4fecf Sunil V L 2023-01-30  73  }
+04edd69e833b9d Sunil V L 2023-01-30  74  int acpi_get_riscv_isa(struct acpi_table_header *table, unsigned int cpu, const char **isa);
+d8a08750a4fecf Sunil V L 2023-01-30  75  #else
+d8a08750a4fecf Sunil V L 2023-01-30  76  static inline u32 get_acpi_id_for_cpu(int cpu)
+d8a08750a4fecf Sunil V L 2023-01-30  77  {
+d8a08750a4fecf Sunil V L 2023-01-30  78  	return -1;
+d8a08750a4fecf Sunil V L 2023-01-30  79  }
+04edd69e833b9d Sunil V L 2023-01-30 @80  int acpi_get_riscv_isa(struct acpi_table_header *table, unsigned int cpu, const char **isa)
+04edd69e833b9d Sunil V L 2023-01-30  81  {
+04edd69e833b9d Sunil V L 2023-01-30  82  	return -1;
+04edd69e833b9d Sunil V L 2023-01-30  83  }
+d8a08750a4fecf Sunil V L 2023-01-30  84  
+
+:::::: The code at line 80 was first introduced by commit
+:::::: 04edd69e833b9da8cbae5866214e4891626072ae ACPI: RISC-V: drivers/acpi: Add RHCT related code
+
+:::::: TO: Sunil V L <sunilvl@ventanamicro.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
 
 -- 
 0-DAY CI Kernel Test Service
