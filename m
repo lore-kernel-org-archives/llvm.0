@@ -1,114 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6A42F21;
-	Sun,  5 Feb 2023 19:51:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812EDC433EF;
-	Sun,  5 Feb 2023 19:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815482F21;
+	Sun,  5 Feb 2023 20:29:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5E1C433AA;
+	Sun,  5 Feb 2023 20:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675626678;
-	bh=Cfoi1fMvKQ+evElfR1WMirNcIoGAQaH3B+wkU7DqXV4=;
+	s=k20201202; t=1675628964;
+	bh=2XLhCfU33F7h/XYjf0FFaOiiQ5t8CUWt6rrK+wz+RBU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MvcZdFZg/xHLkp7b83g3kjNleHoLKzlz6oRoW47yybJHhOwV+lHds4wSQMBySE+cb
-	 +3tYF/R6oPo4f5IgnmTSjUTrj5XWX61XTdok7Ee8ZvqOoTLRv6BTcEAZJtvmhkU/vw
-	 Dje5Rhfe29c0vmfgLy07RqXvMu26ESVwXtbnoz4DD6EEKAW+PbSIs0WkcyA/7b3PyN
-	 Wc3Gsxa+rB/LtL3QPaAiEAop6fdNzgyqHzUpf6nLBw0UlGjNWpYkm/y8HiaijMPKnp
-	 +znSzrIREnMU1hMenIInjNOLVHQIOaPxvVKH7yGmVTTH7Lc8giryN3xrSG7hLGAwJ2
-	 LFv+nxUUxja5Q==
-Date: Sun, 5 Feb 2023 12:51:15 -0700
+	b=nLmPcLpzrmdEtVW/CaFqMRFuM24LEfD7W6s8U49flwz6pVEK4+Ub7+VrySxh9g54F
+	 EWhhiwxL/Kq8MqSaDQm9dCIKt0qsikBWI7HKCPShW3ZT9OBq7VF02SFaB9Mfxgizem
+	 J7aR7fhxK8G8opR6Fs0hSHqklozeyczCBVGNI6dneJvyUYGiWaxUZ7kWEyANp637j4
+	 3Zo0P9mmW+Z2R220Yz4ovLGz1fvk4Oss+k/uV5VIlDBlig3SVbY+i5HXiMrdtGLLjW
+	 xAJg46aPuOyQkJTqAxOGjBS7JK4oE50zWP0Sg6JYLaEp9HH8+WtowSYg14QsQPA3KB
+	 7zxz3zypnAoyg==
+Date: Sun, 5 Feb 2023 13:29:22 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, llvm@lists.linux.dev
-Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
-Message-ID: <Y+AIsz4/7Ms28aWK@dev-arch.thelio-3990X>
-References: <20230203101009.946745030@linuxfoundation.org>
- <CA+G9fYtsSuw=W0LSpzJRzsXB6qGYS3og1v=FOrvPHSAdRPCDPA@mail.gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [linux-next:master 8959/10357] ld.lld: error: no machine record
+ defined
+Message-ID: <Y+ARoumDpY4+1aj/@dev-arch.thelio-3990X>
+References: <202302051805.Ki6cIpbV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYtsSuw=W0LSpzJRzsXB6qGYS3og1v=FOrvPHSAdRPCDPA@mail.gmail.com>
+In-Reply-To: <202302051805.Ki6cIpbV-lkp@intel.com>
 
-Hi Naresh,
+On Sun, Feb 05, 2023 at 07:07:37PM +0800, kernel test robot wrote:
+> Hi Nathan,
+> 
+> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   4fafd96910add124586b549ad005dcd179de8a18
+> commit: 5eb6e280432ddc9b755193552f3a070da8d7455c [8959/10357] ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+> config: arm-shannon_defconfig (https://download.01.org/0day-ci/archive/20230205/202302051805.Ki6cIpbV-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: no machine record defined
+> >> ld.lld: error: no machine record defined
+> >> ld.lld: error: no machine record defined
 
-On Sat, Feb 04, 2023 at 12:55:10PM +0530, Naresh Kamboju wrote:
-> On Fri, 3 Feb 2023 at 15:50, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.1.10 release.
-> > There are 28 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.10-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> 
-> Results from Linaro’s test farm.
-> No regressions on arm64, arm, x86_64, and i386.
-> 
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> NOTE:
-> 
-> clang-nightly-allmodconfig - Failed
-> 
-> Build error:
-> -----------
->   include/linux/fortify-string.h:430:4: error: call to '__write_overflow_field'
->    declared with 'warning' attribute: detected write beyond size of field
->    (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-> 
-> This is already reported upstream,
-> https://lore.kernel.org/llvm/63d0c141.050a0220.c848b.4e93@mx.google.com/
+I am not sure why my patch would cause this problem, I assume it is
+merely exposing an existing build failure because it is allowing
+configurations to be selected that were previously not selectable.
 
-I think you copied the wrong warning, as the one upstream is a write
-warning, whereas the one I see in your build logs is a read error:
+However, I note that this defconfig is going away so I am guessing this
+is not really worth looking into:
 
-In file included from /builds/linux/drivers/infiniband/core/cma.c:9:
-In file included from /builds/linux/include/linux/completion.h:12:
-In file included from /builds/linux/include/linux/swait.h:7:
-In file included from /builds/linux/include/linux/spinlock.h:56:
-In file included from /builds/linux/include/linux/preempt.h:78:
-In file included from /builds/linux/arch/x86/include/asm/preempt.h:7:
-In file included from /builds/linux/include/linux/thread_info.h:60:
-In file included from /builds/linux/arch/x86/include/asm/thread_info.h:53:
-In file included from /builds/linux/arch/x86/include/asm/cpufeature.h:5:
-In file included from /builds/linux/arch/x86/include/asm/processor.h:22:
-In file included from /builds/linux/arch/x86/include/asm/msr.h:11:
-In file included from /builds/linux/arch/x86/include/asm/cpumask.h:5:
-In file included from /builds/linux/include/linux/cpumask.h:12:
-In file included from /builds/linux/include/linux/bitmap.h:11:
-In file included from /builds/linux/include/linux/string.h:253:
-/builds/linux/include/linux/fortify-string.h:543:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-                        __read_overflow();
-                        ^
-
-Regardless, this is still a clang bug that we are actively investigating, so it
-can still be safely ignored by the kernel folks.
-
-https://github.com/ClangBuiltLinux/linux/issues/1687
+https://git.kernel.org/soc/soc/c/9a9e1be12c6d49e15429311714c4b1cc4ddcfe55
 
 Cheers,
 Nathan
