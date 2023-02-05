@@ -1,42 +1,53 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9737D23DC;
-	Sat,  4 Feb 2023 21:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B6D15B4;
+	Sun,  5 Feb 2023 01:00:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675546501; x=1707082501;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ujb0P9ReMinYlWKi5+KZbSZJH3+VkyqUYBrxS/rxhAo=;
-  b=QWF69Igo9MNXB+uY3y08zv/hFLKErfp7q4/7nUus17VFebSPDR5awPi6
-   q8AH8Jt6tui8aOr1hfPEd/dej6b8HgwhwWqYDCV/QXFP20SmcwtruKRTe
-   gNl0RNbz5lIdOC9i3GITask1c3wISHuNrdsN5yaH63oMKMtambFIzf18f
-   DsScxrGyCUyqcuNm52rZDYQzio5jZfEOP/f5+uV4Ko2chO0eoxQvJsNRm
-   KqxqQSFGdCu4OlCxRmPUX2RhSJUaM9nvvYfaUJX5LL5y8ypaqgI9gEQsV
-   PrPTNOPXojlSEeZgxshOtJigxxT3T2BYaUAmNVFWX+eonWgAkeZu+h0w4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="415205967"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="415205967"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 13:34:58 -0800
+  t=1675558809; x=1707094809;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HYzoEAObKmco2oMwJFZ9Ok0gbxNT7DUEeDIgbmPNHJs=;
+  b=K+oQdQbRQ82T1WWVqYcP4AvS6lLolzyxFFmV1fEBb2PKi3rk1eoHaH1O
+   4F+lluxQoK76mNK4FwH4zfea1eTmEmwqY5IjirwipW96uO9BhU7aC5T9N
+   3T3YSfUQ85wAGPwQg3utCFCYuHVL27NwOqJbMWs1/2/v7D+a4BovT5BcO
+   fkj78H+5CIITaj0YuDuaSrl8u49ZJ0Kp79o8M4xq1rRxZ1hxFpcjMrfES
+   wBsOGl/+Uk5EpaWe/VnFbwcCvXpiujzT43sfpuQQs/ke5tEE14qCNz63Q
+   OMsGsgqwkerIuVzfPIJW28NKIcWB+afrUDoeqLr4XyAp8uJd51f0F6P2k
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="331140836"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="331140836"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2023 17:00:07 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="774728217"
-X-IronPort-AV: E=Sophos;i="5.97,272,1669104000"; 
-   d="scan'208";a="774728217"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="666123637"
+X-IronPort-AV: E=Sophos;i="5.97,274,1669104000"; 
+   d="scan'208";a="666123637"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Feb 2023 13:34:57 -0800
+  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2023 17:00:02 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pOQBU-0001XU-2f;
-	Sat, 04 Feb 2023 21:34:56 +0000
-Date: Sun, 5 Feb 2023 05:34:46 +0800
+	id 1pOTNx-0001cK-2s;
+	Sun, 05 Feb 2023 01:00:01 +0000
+Date: Sun, 5 Feb 2023 08:59:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:virtual_cpu_hotplug/rfc/v1 20/32] drivers/base/cpu.c:504:2:
- error: implicit declaration of function 'unregister_cpu' is invalid in C99
-Message-ID: <202302050505.vWGB6FVR-lkp@intel.com>
+To: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
+	macro@orcam.me.uk, andriy.shevchenko@linux.intel.com,
+	lukas@wunner.de, cang1@live.co.uk, matthew.gerlach@linux.intel.com,
+	deller@gmx.de, phil.edworthy@renesas.com, geert+renesas@glider.be,
+	marpagan@redhat.com, u.kleine-koenig@pengutronix.de,
+	etremblay@distech-controls.com, wander@redhat.com,
+	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Subject: Re: [PATCH v11 tty-next 1/4] serial: 8250_pci: Add
+ serial8250_pci_setup_port definition in 8250_pcilib.c
+Message-ID: <202302050831.9fyXKlIq-lkp@intel.com>
+References: <20230204053138.2520105-2-kumaravel.thiagarajan@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,54 +56,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230204053138.2520105-2-kumaravel.thiagarajan@microchip.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git virtual_cpu_hotplug/rfc/v1
-head:   81295db7555df74bd02dab0b7e87b512d3a3de34
-commit: 9048fbcbea6dd1dfa42a3b9409695ff9199a417d [20/32] drivers: base: Implement weak arch_unregister_cpu()
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230205/202302050505.vWGB6FVR-lkp@intel.com/config)
+Hi Kumaravel,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.2-rc6 next-20230203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kumaravel-Thiagarajan/serial-8250_pci-Add-serial8250_pci_setup_port-definition-in-8250_pcilib-c/20230204-005851
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230204053138.2520105-2-kumaravel.thiagarajan%40microchip.com
+patch subject: [PATCH v11 tty-next 1/4] serial: 8250_pci: Add serial8250_pci_setup_port definition in 8250_pcilib.c
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230205/202302050831.9fyXKlIq-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=9048fbcbea6dd1dfa42a3b9409695ff9199a417d
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse virtual_cpu_hotplug/rfc/v1
-        git checkout 9048fbcbea6dd1dfa42a3b9409695ff9199a417d
+        # https://github.com/intel-lab-lkp/linux/commit/cd5f521fabae71343d59d524ad57221e2b7524fe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kumaravel-Thiagarajan/serial-8250_pci-Add-serial8250_pci_setup_port-definition-in-8250_pcilib-c/20230204-005851
+        git checkout cd5f521fabae71343d59d524ad57221e2b7524fe
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tty/serial/8250/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/base/cpu.c:504:2: error: implicit declaration of function 'unregister_cpu' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           unregister_cpu(&per_cpu(cpu_devices, num));
-           ^
-   drivers/base/cpu.c:504:2: note: did you mean 'register_cpu'?
-   drivers/base/cpu.c:359:5: note: 'register_cpu' declared here
-   int register_cpu(struct cpu *cpu, int num)
+>> drivers/tty/serial/8250/8250_pcilib.c:14:5: warning: no previous prototype for function 'serial8250_pci_setup_port' [-Wmissing-prototypes]
+   int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
        ^
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ACPI_HOTPLUG_PRESENT_CPU
-   Depends on [n]: ACPI [=y] && ACPI_PROCESSOR [=y] && HOTPLUG_CPU [=n]
-   Selected by [y]:
-   - X86 [=y] && ACPI [=y]
+   drivers/tty/serial/8250/8250_pcilib.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/unregister_cpu +504 drivers/base/cpu.c
+vim +/serial8250_pci_setup_port +14 drivers/tty/serial/8250/8250_pcilib.c
 
-   501	
-   502	void __weak arch_unregister_cpu(int num)
-   503	{
- > 504		unregister_cpu(&per_cpu(cpu_devices, num));
-   505	}
-   506	#endif
-   507	
+    13	
+  > 14	int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
 
 -- 
 0-DAY CI Kernel Test Service
