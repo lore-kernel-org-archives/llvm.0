@@ -1,44 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2EA2579;
-	Sun,  5 Feb 2023 11:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EB82F43;
+	Sun,  5 Feb 2023 13:32:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675595305; x=1707131305;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QseAgTNEL854KgQuKX6jiBT3qBIPUL6u0QFjJqeTmvA=;
-  b=l9X9rjBA2bE0k5vruV2ttwlfbbH6jWFYqcbC9Qae5RIit9GLdp5IpBLT
-   FPB4GGqaZAw7lxBb3VZWjHa9wd1Xv+XgLhtNF5pTaagfuZio/Smpe2Vk5
-   vqS49EEqu6qyKkT6/LFMr2qulEREieErZm9LRsggoT5Px2kB/V+Zk+9YF
-   KDRFPqjdrX6HDur0zG6GdGyqYNHRrJzPz4Ffbaxv4f3KqY1YF7b1YbY7I
-   fwg28EPZEm+Wcuqx3o5nmdocO2N/rxDhD4ci0YcIVG8ETnSaivekxiWXV
-   pqZFPZf3Fzcn4VtUu4dx0WiGR9+mUtFg3ZmMrJzupX/j1Z1wMLq+mIDjL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="308677141"
+  t=1675603944; x=1707139944;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i8HaGGvuY6H4sopUJT+GVMzHzQckmWd6mcIVw+lCb3c=;
+  b=Cpjq3Js5PY4C9N3u7GQjhcfM8xphUEJaQhioHwCdDczz6VJunnq+GDc+
+   ubFcdi+qA6/ONKOoC5ZC8yCMdg0N3Dt/Ks89Gx99WGtMa+mOOcsHXT7j8
+   EHiZK8M5XO0kud2N/kIyVl68wkV0oAEZuWW1XNCe+oaRXBU4BQxnWtjBn
+   nyiEdrKZR41qth+O9k3r5/G737Brd5L/J6A+79FY5Mo0HEwTfGX4oD2Rj
+   Zkkz5ylwD7WNmNcxpEnJ8e5BhWQxq5Hv3cwsfiyiDqxE79dBtr7Z3n5dl
+   XvI+1/uT7rXxmYf8cPY/qW1phqjbnbByN1e/UGxIuHoQung9rFkEDI6zS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="309380472"
 X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="308677141"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 03:08:24 -0800
+   d="scan'208";a="309380472"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 05:32:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="911654683"
+X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="698598286"
 X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="911654683"
+   d="scan'208";a="698598286"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Feb 2023 03:08:22 -0800
+  by orsmga001.jf.intel.com with ESMTP; 05 Feb 2023 05:32:20 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pOcsb-0001xK-0J;
-	Sun, 05 Feb 2023 11:08:17 +0000
-Date: Sun, 5 Feb 2023 19:07:37 +0800
+	id 1pOf80-00021s-0a;
+	Sun, 05 Feb 2023 13:32:20 +0000
+Date: Sun, 5 Feb 2023 21:32:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [linux-next:master 8959/10357] ld.lld: error: no machine record
- defined
-Message-ID: <202302051805.Ki6cIpbV-lkp@intel.com>
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH net-next 06/13] rtnetlink: bridge: mcast: Move MDB
+ handlers out of bridge driver
+Message-ID: <202302052112.2bMZwXRS-lkp@intel.com>
+References: <20230204170801.3897900-7-idosch@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,38 +47,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230204170801.3897900-7-idosch@nvidia.com>
 
-Hi Nathan,
+Hi Ido,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on net-next/master]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4fafd96910add124586b549ad005dcd179de8a18
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c [8959/10357] ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-config: arm-shannon_defconfig (https://download.01.org/0day-ci/archive/20230205/202302051805.Ki6cIpbV-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ido-Schimmel/bridge-mcast-Use-correct-define-in-MDB-dump/20230205-011545
+patch link:    https://lore.kernel.org/r/20230204170801.3897900-7-idosch%40nvidia.com
+patch subject: [RFC PATCH net-next 06/13] rtnetlink: bridge: mcast: Move MDB handlers out of bridge driver
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230205/202302052112.2bMZwXRS-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
+        # https://github.com/intel-lab-lkp/linux/commit/dd1f784995f3efdbf26e2b2694a0cd1ca181d35e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ido-Schimmel/bridge-mcast-Use-correct-define-in-MDB-dump/20230205-011545
+        git checkout dd1f784995f3efdbf26e2b2694a0cd1ca181d35e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: no machine record defined
->> ld.lld: error: no machine record defined
->> ld.lld: error: no machine record defined
+>> ld.lld: error: call to __compiletime_assert_661 marked "dontcall-error": BUILD_BUG_ON failed: sizeof(*ctx) != sizeof(cb->ctx)
 
 -- 
 0-DAY CI Kernel Test Service
