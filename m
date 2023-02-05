@@ -1,131 +1,166 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783F7B;
-	Sun,  5 Feb 2023 14:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675607664; x=1707143664;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=53TN9BnoCBRU9bwx1idlDuaHpEjaKt8yj/T3Vfqy5xs=;
-  b=SlwS8sjZOs4JfJnDN/E7ztdLHATSQgcztPpGvIBjzkpKVLL4QV72Q03F
-   cPDH3yFWiXWLSG/4+LyY75WYx6wantie+9Wy6fUfokvAr0fKdc9QxFInw
-   CN9jzHQDH6UsWmv8aB6+jx1oQ2KmwozpbOEh6VEUnKgUV6s6gol9oOuG0
-   LDoIPBZWzWPjyn0vmrq+BLmLk2hV0h2bmJ3K84IXgjR8n0nTLInqAVFKq
-   gzDB9ZKL40EHaCBZUvfn9LAKWVW8kNPaIypOg0gKXY8Y/mTmq7f9nYGUN
-   RpW4vpejNO7FsFI4VVEu9/btg6OHE4eDrVJRd9nqfkMCsGPd6idw9ICUk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="308691875"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="308691875"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 06:34:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10611"; a="698607811"
-X-IronPort-AV: E=Sophos;i="5.97,275,1669104000"; 
-   d="scan'208";a="698607811"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 05 Feb 2023 06:34:21 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pOg61-00023Y-14;
-	Sun, 05 Feb 2023 14:34:21 +0000
-Date: Sun, 5 Feb 2023 22:34:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:gpu/rust-for-next 21/24] error[E0425]: cannot find
- function `drm_gem_object_get` in crate `bindings`
-Message-ID: <202302052253.n0pJjBrj-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6C97B
+	for <llvm@lists.linux.dev>; Sun,  5 Feb 2023 15:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675611696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=shP7PpqmsgKMB1dQNH1Qta9EHaerKadyIPorWQ7qch4=;
+	b=P0UiHPpWUmuzBC844ZxnrzoRkPJThoW3ZLQ9JNBbi3FW8h7kH0zcgn4iVv7JlatUUi95hC
+	xyDCtSvrwPVthF1SMhYCm+OO6p+1c3vQTUZ57DBQo1jzslje/jeDrU7v9rNNzG3ldcytlE
+	zGYCi97oxPMvFKmonSZCprxyUPED2jc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-532-3R4DGhhcMqGkOz2lOyBTtg-1; Sun, 05 Feb 2023 10:41:34 -0500
+X-MC-Unique: 3R4DGhhcMqGkOz2lOyBTtg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FC8285C6F4
+	for <llvm@lists.linux.dev>; Sun,  5 Feb 2023 15:41:34 +0000 (UTC)
+Received: from [172.64.13.38] (unknown [10.30.33.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 789E018EC5;
+	Sun,  5 Feb 2023 15:41:34 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (28/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, 95078069)
+Date: Sun, 05 Feb 2023 15:41:34 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <61876.123020510413400255@us-mta-532.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux gpu/rust-for-next
-head:   66a57fa1328927e067e02fa8a64782c4ee5aac1d
-commit: a09519a8f540416972af3a8dbb185744434aa08b [21/24] rust: kernel: drm: gem: Add GEM object abstraction
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230205/202302052253.n0pJjBrj-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/a09519a8f540416972af3a8dbb185744434aa08b
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux gpu/rust-for-next
-        git checkout a09519a8f540416972af3a8dbb185744434aa08b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-All errors (new ones prefixed by >>):
 
->> error[E0425]: cannot find function `drm_gem_object_get` in crate `bindings`
-   --> rust/kernel/drm/gem/mod.rs:132:23
-   |
-   132   |             bindings::drm_gem_object_get(self.gem_obj() as *const _ as *mut _);
-   |                       ^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_gem_object_free`
-   |
-   ::: rust/bindings/bindings_generated.rs:48044:5
-   |
-   48044 |     pub fn drm_gem_object_free(kref: *mut kref);
-   |     -------------------------------------------- similarly named function `drm_gem_object_free` defined here
---
->> error[E0425]: cannot find function `drm_vma_node_offset_addr` in crate `bindings`
-   --> rust/kernel/drm/gem/mod.rs:182:23
-   |
-   182   |               bindings::drm_vma_node_offset_addr(&self.gem_obj().vma_node as *const _ as *mut _)
-   |                         ^^^^^^^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_vma_offset_add`
-   |
-   ::: rust/bindings/bindings_generated.rs:47942:5
-   |
-   47942 | /     pub fn drm_vma_offset_add(
-   47943 | |         mgr: *mut drm_vma_offset_manager,
-   47944 | |         node: *mut drm_vma_offset_node,
-   47945 | |         pages: core::ffi::c_ulong,
-   47946 | |     ) -> core::ffi::c_int;
-   | |__________________________- similarly named function `drm_vma_offset_add` defined here
---
->> error[E0425]: cannot find function `drm_gem_object_put` in crate `bindings`
-   --> rust/kernel/drm/gem/mod.rs:298:23
-   |
-   298   |               bindings::drm_gem_object_put((*self.ptr).gem_obj() as *const _ as *mut _);
-   |                         ^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_gem_object_init`
-   |
-   ::: rust/bindings/bindings_generated.rs:48047:5
-   |
-   48047 | /     pub fn drm_gem_object_init(
-   48048 | |         dev: *mut drm_device,
-   48049 | |         obj: *mut drm_gem_object,
-   48050 | |         size: usize,
-   48051 | |     ) -> core::ffi::c_int;
-   | |__________________________- similarly named function `drm_gem_object_init` defined here
---
->> error[E0425]: cannot find function `drm_gem_object_put` in crate `bindings`
-   --> rust/kernel/drm/gem/mod.rs:334:23
-   |
-   334   |               bindings::drm_gem_object_put((*self.ptr).gem_obj() as *const _ as *mut _);
-   |                         ^^^^^^^^^^^^^^^^^^ help: a function with a similar name exists: `drm_gem_object_init`
-   |
-   ::: rust/bindings/bindings_generated.rs:48047:5
-   |
-   48047 | /     pub fn drm_gem_object_init(
-   48048 | |         dev: *mut drm_device,
-   48049 | |         obj: *mut drm_gem_object,
-   48050 | |         size: usize,
-   48051 | |     ) -> core::ffi::c_int;
-   | |__________________________- similarly named function `drm_gem_object_init` defined here
---
->> error: aborting due to 4 previous errors
+Kernel information:
+    Commit message: Merge tag 'rtc-6.2-fixes' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/abelloni/linux
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/68752
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6967086
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Networking socket: fuzz: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1449
+            Affected tests:
+                  x86_64 (debug) - Networking socket: fuzz
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
