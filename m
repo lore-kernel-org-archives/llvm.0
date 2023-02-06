@@ -1,28 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BA77B
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 16:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640B3C433EF;
-	Mon,  6 Feb 2023 16:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F627B;
+	Mon,  6 Feb 2023 16:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F0AC433D2;
+	Mon,  6 Feb 2023 16:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675701831;
-	bh=pR/hbXRdH1c79JWfWDYATb/rwLTprJ7HY8h1L/YDg10=;
+	s=k20201202; t=1675702304;
+	bh=0OloNxP9hVllqC85ULVDk1S0qdr5ldTzPUoIOsiVYYE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eOgFjMo5S6FnrCCiRq/du1k7v2MEJjmIx0C175irBA7P635eCxuUnyHUTnwZvTnhx
-	 +n2QYdyecGR4xhKmzyPwu0J4mrBoiYlwsfNQ7tq2zkSzgHfL/BCg1bDbazMO8Jzvv7
-	 xj/RBW0fNiiWhD9CQwu0HfEM5NbxwliIKCInVwxBMTE52Exj/lXNLZdW8tkxGpfHIL
-	 ah3EJvQrrgMvO3M8YAVoCSA+b1/yTIrH6EPXiqyExu6dit0PrT+mc0rMxZrpu+DgaN
-	 UJueo0mqwKbDYc9UW5w8Z24AwXMu+FjLSyHG6lGxWuMxX8FXHiYXNfxZ2mXZtY1qBt
-	 uiF+sjmYiueDQ==
-Date: Mon, 6 Feb 2023 09:43:49 -0700
+	b=uY2RheL5KeuzG8d3c3tMYeP9i4kvj9OlnGtFu/xslryic5y3qVYwSfKziF9FHuFam
+	 7oTp/1eLBokMidTPigGYOJtcU/0PeLUKI6ihvffIh9AiVIDiLP/BpuS59j5yw24bdD
+	 OVktbKqmKy98v9NQowSkgs5Aqkvv/mjz6OO1YBQjKqr8460bB0oEvWbTkfAgUkutq2
+	 q24E9y1NCLPKOiFVYzGXg9Hr6DkbaADvbjolkrxAcvLr0yy241FEQ+oC2Zt+v2B1TT
+	 qa2sM19rjR3bECHPKafSwvwv8EEGHnBYM9QIMF3n3Uma+eP2mh+uXEfn831FQWlgMh
+	 0Wx/ku5CSNjLQ==
+Date: Mon, 6 Feb 2023 09:51:42 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: ci_notify@linaro.org
-Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev, arnd@linaro.org
-Subject: Re: [TCWG CI] Failure after v6.1.8-105-gf5e58b546cbe: drm/panfrost:
- fix GENERIC_ATOMIC64 dependency
-Message-ID: <Y+EuRS3YDD8XbHgo@dev-arch.thelio-3990X>
-References: <1896363883.10092.1675654927497@jenkins.jenkins>
+To: kernel test robot <lkp@intel.com>
+Cc: "Jason A. Donenfeld" <zx2c4@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: arch/x86/crypto/curve25519-x86_64.c:609:3: error: inline
+ assembly requires more registers than available
+Message-ID: <Y+EwHnWsubeQ0qjh@dev-arch.thelio-3990X>
+References: <202302062324.HhzEZCF7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -31,78 +33,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1896363883.10092.1675654927497@jenkins.jenkins>
+In-Reply-To: <202302062324.HhzEZCF7-lkp@intel.com>
 
-Hi,
+On Mon, Feb 06, 2023 at 11:52:01PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   d2d11f342b179f1894a901f143ec7c008caba43e
+> commit: 07b586fe06625b0b610dc3d3a969c51913d143d4 crypto: x86/curve25519 - replace with formally verified implementation
+> date:   3 years ago
+> config: x86_64-buildonly-randconfig-r006-20230206 (https://download.01.org/0day-ci/archive/20230206/202302062324.HhzEZCF7-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=07b586fe06625b0b610dc3d3a969c51913d143d4
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 07b586fe06625b0b610dc3d3a969c51913d143d4
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/crypto/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    arch/x86/crypto/curve25519-x86_64.c:954:6: warning: variable 'carry' set but not used [-Wunused-but-set-variable]
+>            u64 carry;
+>                ^
+>    arch/x86/crypto/curve25519-x86_64.c:951:6: warning: variable 'carry0' set but not used [-Wunused-but-set-variable]
+>            u64 carry0;
+>                ^
+> >> arch/x86/crypto/curve25519-x86_64.c:609:3: error: inline assembly requires more registers than available
+>                    "  movq 0(%1), %%rdx;"                                       /* f[0] */
+>                    ^
+> >> arch/x86/crypto/curve25519-x86_64.c:609:3: error: inline assembly requires more registers than available
+>    2 warnings and 2 errors generated.
 
-On Mon, Feb 06, 2023 at 03:42:06AM +0000, ci_notify@linaro.org wrote:
-> Failure after v6.1.8-105-gf5e58b546cbe: drm/panfrost: fix GENERIC_ATOMIC64 dependency:
-> 
-> Results changed to
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 23010
-> # First few build errors in logs:
-> # 00:31:22 ./include/linux/fortify-string.h:543:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-> # 00:31:23 make[4]: *** [scripts/Makefile.build:250: drivers/infiniband/core/cma.o] Error 1
-> # 00:31:55 make[3]: *** [scripts/Makefile.build:500: drivers/infiniband/core] Error 2
-> # 00:31:55 make[2]: *** [scripts/Makefile.build:500: drivers/infiniband] Error 2
-> # 00:32:29 make[1]: *** [scripts/Makefile.build:500: drivers] Error 2
-> # 00:32:29 make: *** [Makefile:2005: .] Error 2
-> 
-> from
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 23021
-> 
-> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
-> 
-> For latest status see comments in https://linaro.atlassian.net/browse/LLVM-647 .
-> Status of v6.1.8-105-gf5e58b546cbe commit for tcwg_kernel:
-> commit f5e58b546cbe76f049df97570cf0580aaaf3f900
-> Author: Arnd Bergmann <arnd@arndb.de>
-> Date:   Tue Jan 17 17:44:43 2023 +0100
-> 
->     drm/panfrost: fix GENERIC_ATOMIC64 dependency
->     
->     [ Upstream commit 6437a549ae178a3f5a5c03e983f291ebcdc2bbc7 ]
->     
->     On ARMv5 and earlier, a randconfig build can still run into
->     
->     WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->       Depends on [n]: IOMMU_SUPPORT [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=y]
->       Selected by [y]:
->       - DRM_PANFROST [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y]) && MMU [=y]
->     
->     Rework the dependencies to always require a working cmpxchg64.
->     
->     Fixes: db594ba3fcf9 ("drm/panfrost: depend on !GENERIC_ATOMIC64 when using COMPILE_TEST")
->     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->     Reviewed-by: Steven Price <steven.price@arm.com>
->     Signed-off-by: Steven Price <steven.price@arm.com>
->     Link: https://patchwork.freedesktop.org/patch/msgid/20230117164456.1591901-1-arnd@kernel.org
->     Signed-off-by: Sasha Levin <sashal@kernel.org>
+https://github.com/ClangBuiltLinux/linux/issues/1589
 
-Not an issue with this patch, it is a compiler issue:
-
-https://github.com/ClangBuiltLinux/linux/issues/1687
-
-A recent change in LLVM made this failure more likely but it has been
-around for a while in certain configurations. I am guessing the
-bisection landed on this change because it fixes one problem while
-exposing another.
+Intel folks, this can probably just be sent to our list from now on.
 
 Cheers,
 Nathan
