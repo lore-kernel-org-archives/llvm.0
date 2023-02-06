@@ -1,175 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60F07B
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 16:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675701702;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=n1W5VyJ1lrsJIbCAjAQTeD3D5e1R8oADvpc3RZyIA6s=;
-	b=itzxdUkmByy6vRAZAZu8MUlLbBW6AlXZoYqCuX3egLH8Bvkfgq03xratO15y62+7eRdDjY
-	5DF1/Msd3RfUTfxYRoeBSXBh1ugxAQa5EUyTFbdph3rDEqpCWZiz1RQcR3zOho/r8DIFYq
-	rhuilG3s8o1vhIZjqXghgYhd3ZoZePE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-Q5y6ktgXOEaJgoB2WYRIfw-1; Mon, 06 Feb 2023 11:41:41 -0500
-X-MC-Unique: Q5y6ktgXOEaJgoB2WYRIfw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2EDD085A5A3
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 16:41:41 +0000 (UTC)
-Received: from [172.64.3.108] (unknown [10.30.33.103])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 180EE2166B29;
-	Mon,  6 Feb 2023 16:41:41 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (24/383 SKIPPED): Test report for master
- (6.2.0-rc6, mainline.kernel.org-clang, c608f6b5)
-Date: Mon, 06 Feb 2023 16:41:41 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BA77B
+	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 16:43:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640B3C433EF;
+	Mon,  6 Feb 2023 16:43:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675701831;
+	bh=pR/hbXRdH1c79JWfWDYATb/rwLTprJ7HY8h1L/YDg10=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eOgFjMo5S6FnrCCiRq/du1k7v2MEJjmIx0C175irBA7P635eCxuUnyHUTnwZvTnhx
+	 +n2QYdyecGR4xhKmzyPwu0J4mrBoiYlwsfNQ7tq2zkSzgHfL/BCg1bDbazMO8Jzvv7
+	 xj/RBW0fNiiWhD9CQwu0HfEM5NbxwliIKCInVwxBMTE52Exj/lXNLZdW8tkxGpfHIL
+	 ah3EJvQrrgMvO3M8YAVoCSA+b1/yTIrH6EPXiqyExu6dit0PrT+mc0rMxZrpu+DgaN
+	 UJueo0mqwKbDYc9UW5w8Z24AwXMu+FjLSyHG6lGxWuMxX8FXHiYXNfxZ2mXZtY1qBt
+	 uiF+sjmYiueDQ==
+Date: Mon, 6 Feb 2023 09:43:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: ci_notify@linaro.org
+Cc: Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev, arnd@linaro.org
+Subject: Re: [TCWG CI] Failure after v6.1.8-105-gf5e58b546cbe: drm/panfrost:
+ fix GENERIC_ATOMIC64 dependency
+Message-ID: <Y+EuRS3YDD8XbHgo@dev-arch.thelio-3990X>
+References: <1896363883.10092.1675654927497@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <52867.123020611414102371@us-mta-584.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1896363883.10092.1675654927497@jenkins.jenkins>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Mon, Feb 06, 2023 at 03:42:06AM +0000, ci_notify@linaro.org wrote:
+> Failure after v6.1.8-105-gf5e58b546cbe: drm/panfrost: fix GENERIC_ATOMIC64 dependency:
+> 
+> Results changed to
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 23010
+> # First few build errors in logs:
+> # 00:31:22 ./include/linux/fortify-string.h:543:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
+> # 00:31:23 make[4]: *** [scripts/Makefile.build:250: drivers/infiniband/core/cma.o] Error 1
+> # 00:31:55 make[3]: *** [scripts/Makefile.build:500: drivers/infiniband/core] Error 2
+> # 00:31:55 make[2]: *** [scripts/Makefile.build:500: drivers/infiniband] Error 2
+> # 00:32:29 make[1]: *** [scripts/Makefile.build:500: drivers] Error 2
+> # 00:32:29 make: *** [Makefile:2005: .] Error 2
+> 
+> from
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 23021
+> 
+> THIS IS THE END OF INTERESTING STUFF.  BELOW ARE LINKS TO BUILDS, REPRODUCTION INSTRUCTIONS, AND THE RAW COMMIT.
+> 
+> For latest status see comments in https://linaro.atlassian.net/browse/LLVM-647 .
+> Status of v6.1.8-105-gf5e58b546cbe commit for tcwg_kernel:
+> commit f5e58b546cbe76f049df97570cf0580aaaf3f900
+> Author: Arnd Bergmann <arnd@arndb.de>
+> Date:   Tue Jan 17 17:44:43 2023 +0100
+> 
+>     drm/panfrost: fix GENERIC_ATOMIC64 dependency
+>     
+>     [ Upstream commit 6437a549ae178a3f5a5c03e983f291ebcdc2bbc7 ]
+>     
+>     On ARMv5 and earlier, a randconfig build can still run into
+>     
+>     WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+>       Depends on [n]: IOMMU_SUPPORT [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y]) && !GENERIC_ATOMIC64 [=y]
+>       Selected by [y]:
+>       - DRM_PANFROST [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARM [=y] || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y]) && MMU [=y]
+>     
+>     Rework the dependencies to always require a working cmpxchg64.
+>     
+>     Fixes: db594ba3fcf9 ("drm/panfrost: depend on !GENERIC_ATOMIC64 when using COMPILE_TEST")
+>     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>     Reviewed-by: Steven Price <steven.price@arm.com>
+>     Signed-off-by: Steven Price <steven.price@arm.com>
+>     Link: https://patchwork.freedesktop.org/patch/msgid/20230117164456.1591901-1-arnd@kernel.org
+>     Signed-off-by: Sasha Levin <sashal@kernel.org>
 
+Not an issue with this patch, it is a compiler issue:
 
-Kernel information:
-    Commit message: Merge tag 'usb-6.2-rc7' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/gregkh/usb
+https://github.com/ClangBuiltLinux/linux/issues/1687
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/68899
+A recent change in LLVM made this failure more likely but it has been
+around for a while in certain configurations. I am guessing the
+bisection landed on this change because it fixes one problem while
+exposing another.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6971054
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6971173
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
