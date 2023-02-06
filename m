@@ -1,171 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A76D6116
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 21:20:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675718446;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bAy9XfXhVdFroAl3sCjz0mhGoNNNraj9cPFbMg6OnAk=;
-	b=WJjy/wcd637LbXYGBzRnzxSjOgRf7pbVtgf6Pmr8Pv/75nkbJF1/VnrqqRfnxG8hG8lYRk
-	jLe3Sani5JdXb7raDlzb2tThc7ZOuQ6R6ptq7h2d9xyQV7aBF+F4HmKRr689xh/GIX2p5Q
-	m6GMgAWfY1pu38HvqRDfbZkxbGDu2ss=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-348-v8jGonquOHmpMmPBDj2ALw-1; Mon, 06 Feb 2023 16:20:45 -0500
-X-MC-Unique: v8jGonquOHmpMmPBDj2ALw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 903AC811E6E
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 21:20:45 +0000 (UTC)
-Received: from [172.64.3.108] (unknown [10.30.33.103])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7B213440DE;
-	Mon,  6 Feb 2023 21:20:45 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc7, mainline.kernel.org-clang, d2d11f34)
-Date: Mon, 06 Feb 2023 21:20:45 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A56C6FD3;
+	Mon,  6 Feb 2023 23:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675725691; x=1707261691;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3CegStI2OdNPOSLc16MGHcE2ZWQ9IgspkA7bHYrCrqg=;
+  b=KrBKSnzjE/IXLZFv2OxHQTyBleZMlRh2vwzGYDZ/+j8YbipUAcRVyikB
+   bIZn6cStqJT8j2dOSSBqColRr7BexgHcL2zRy/7iXNJhInkH0SvYrsGgm
+   TIPSDXMLyMcX/1gShTe7QbU9j7udcKOGi2BSunDdU3c3sE7WDvuqGnRPR
+   leqMH2un9GVjqaqI8iJdS8kSw6Ea+W9UksD6piYVftG5aLvVNeRZZLY8d
+   C8SaR7VTZ/HAjw+gbNYVCO9o9UjnTTePsEfuHaeHvtqeGH3uacl7uHg9m
+   Q4JNla/+xewprZiZ5IkMMUMYhl4gx3NdEVhkIdLl10mAg+be6oPEnkYoc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="393941089"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="393941089"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 15:21:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="666639643"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="666639643"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Feb 2023 15:21:21 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pPAnY-0002qh-0H;
+	Mon, 06 Feb 2023 23:21:20 +0000
+Date: Tue, 7 Feb 2023 07:21:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:x86/vdso 3/4] arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1:
+ warning: no previous prototype for function '__vdso_getcpu'
+Message-ID: <202302070751.uhpE2V7R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <89017.123020616204501879@us-mta-348.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
+head:   5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
+commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 [3/4] x86/vdso: Provide getcpu for x86-32.
+config: x86_64-randconfig-r031-20230206 (https://download.01.org/0day-ci/archive/20230207/202302070751.uhpE2V7R-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=92d33063c081a82d25dd08a9cce03947c8ed9164
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/vdso
+        git checkout 92d33063c081a82d25dd08a9cce03947c8ed9164
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vdso/
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge branch 'fixes' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/viro/vfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/68933
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6973761
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+   In file included from include/linux/kernel.h:22:
+   In file included from include/linux/bitops.h:68:
+   In file included from arch/x86/include/asm/bitops.h:420:
+   arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
+                            : REG_IN (w));
+                                      ^
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+   In file included from include/linux/kernel.h:25:
+   In file included from include/linux/math.h:6:
+   arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
+           asm ("mulq %2; divq %3" : "=a" (q)
+                                           ^
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+>> arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
+   __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+   ^
+   arch/x86/entry/vdso/vdso32/../vgetcpu.c:12:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   notrace long
+           ^
+           static 
+   1 warning and 2 errors generated.
 
 
+vim +/__vdso_getcpu +13 arch/x86/entry/vdso/vdso32/../vgetcpu.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  11  
+23adec554a7648 arch/x86/vdso/vgetcpu.c       Steven Rostedt 2008-05-12  12  notrace long
+23adec554a7648 arch/x86/vdso/vgetcpu.c       Steven Rostedt 2008-05-12 @13  __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  14  {
+22245bdf0ad805 arch/x86/entry/vdso/vgetcpu.c Ingo Molnar    2018-10-08  15  	vdso_read_cpunode(cpu, node);
+ec3a94188df7d2 arch/x86/entry/vdso/vgetcpu.c Ingo Molnar    2018-10-08  16  
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  17  	return 0;
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  18  }
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  19  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 13 was first introduced by commit
+:::::: 23adec554a7648f99c8acc0caf49c66320cd2b84 x86: add notrace annotations to vsyscall.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Steven Rostedt <srostedt@redhat.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
