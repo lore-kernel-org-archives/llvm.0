@@ -1,226 +1,171 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAD46116;
-	Mon,  6 Feb 2023 21:20:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675718418; x=1707254418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=383fGobxKNSFmxYP5/QXybLIpX9L6oHqdyQRfEBUQgQ=;
-  b=JCZ8Hd4ZONWalclOcJDqm0LsRNdJK95aVsFhragRl/ywJLoPBMml9FTZ
-   5LBvJN8fpn6pRv0I5PozNtJD9LE+MqrxlO4clKrkWHdWTzcq1qP96ZapU
-   tltGkoEx++CeAFKtP/osZ/hHKgYkScSsU8lZGCD2Nm1ojCSdjOMFCmn5U
-   AfI8NosreKIJ/tDR2CFTDAnjBW+xZ956riQ0rDt+r2QK6kXtRiOzdt4Ya
-   bYGyKXVoxvt8uOvQT7TTfkB+j9VkTdbjQ3YiLQxE7JpKYRMQIVvmmDIYb
-   pCsvsgpNhpoWDKPSkSnpnn7B+go0DlOenCcTsWtHBqmcgALOgpyFMJSoV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309651867"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="309651867"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 13:20:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668537133"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="668537133"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 13:20:14 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pP8uL-0002nY-1B;
-	Mon, 06 Feb 2023 21:20:13 +0000
-Date: Tue, 7 Feb 2023 05:19:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	akpm@linux-foundation.org, hughd@google.com,
-	markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-	shakeelb@google.com, mhocko@suse.com, vbabka@suse.cz,
-	quic_pkondeti@quicinc.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: Re: [PATCH 2/2] shmem: Add shmem_read_folio() and
- shmem_read_folio_gfp()
-Message-ID: <202302070525.Ho0cFITJ-lkp@intel.com>
-References: <20230206162520.4029022-2-willy@infradead.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A76D6116
+	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 21:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675718446;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bAy9XfXhVdFroAl3sCjz0mhGoNNNraj9cPFbMg6OnAk=;
+	b=WJjy/wcd637LbXYGBzRnzxSjOgRf7pbVtgf6Pmr8Pv/75nkbJF1/VnrqqRfnxG8hG8lYRk
+	jLe3Sani5JdXb7raDlzb2tThc7ZOuQ6R6ptq7h2d9xyQV7aBF+F4HmKRr689xh/GIX2p5Q
+	m6GMgAWfY1pu38HvqRDfbZkxbGDu2ss=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-348-v8jGonquOHmpMmPBDj2ALw-1; Mon, 06 Feb 2023 16:20:45 -0500
+X-MC-Unique: v8jGonquOHmpMmPBDj2ALw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 903AC811E6E
+	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 21:20:45 +0000 (UTC)
+Received: from [172.64.3.108] (unknown [10.30.33.103])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7B213440DE;
+	Mon,  6 Feb 2023 21:20:45 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
+ (6.2.0-rc7, mainline.kernel.org-clang, d2d11f34)
+Date: Mon, 06 Feb 2023 21:20:45 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206162520.4029022-2-willy@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <89017.123020616204501879@us-mta-348.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matthew,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.2-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/shmem-Add-shmem_read_folio-and-shmem_read_folio_gfp/20230207-002746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230206162520.4029022-2-willy%40infradead.org
-patch subject: [PATCH 2/2] shmem: Add shmem_read_folio() and shmem_read_folio_gfp()
-config: riscv-randconfig-r023-20230205 (https://download.01.org/0day-ci/archive/20230207/202302070525.Ho0cFITJ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ceb56c1ceea709ec0b10ed07e327bb4ae566bba5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/shmem-Add-shmem_read_folio-and-shmem_read_folio_gfp/20230207-002746
-        git checkout ceb56c1ceea709ec0b10ed07e327bb4ae566bba5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   mm/shmem.c:4164:13: warning: no previous prototype for function 'shmem_init' [-Wmissing-prototypes]
-   void __init shmem_init(void)
-               ^
-   mm/shmem.c:4164:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init shmem_init(void)
-   ^
-   static 
-   mm/shmem.c:4172:5: warning: no previous prototype for function 'shmem_unuse' [-Wmissing-prototypes]
-   int shmem_unuse(unsigned int type)
-       ^
-   mm/shmem.c:4172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_unuse(unsigned int type)
-   ^
-   static 
-   mm/shmem.c:4177:5: warning: no previous prototype for function 'shmem_lock' [-Wmissing-prototypes]
-   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
-       ^
-   mm/shmem.c:4177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
-   ^
-   static 
-   mm/shmem.c:4182:6: warning: no previous prototype for function 'shmem_unlock_mapping' [-Wmissing-prototypes]
-   void shmem_unlock_mapping(struct address_space *mapping)
-        ^
-   mm/shmem.c:4182:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void shmem_unlock_mapping(struct address_space *mapping)
-   ^
-   static 
-   mm/shmem.c:4187:15: warning: no previous prototype for function 'shmem_get_unmapped_area' [-Wmissing-prototypes]
-   unsigned long shmem_get_unmapped_area(struct file *file,
-                 ^
-   mm/shmem.c:4187:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long shmem_get_unmapped_area(struct file *file,
-   ^
-   static 
-   mm/shmem.c:4195:6: warning: no previous prototype for function 'shmem_truncate_range' [-Wmissing-prototypes]
-   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
-        ^
-   mm/shmem.c:4195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
-   ^
-   static 
-   mm/shmem.c:4255:14: warning: no previous prototype for function 'shmem_kernel_file_setup' [-Wmissing-prototypes]
-   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
-                ^
-   mm/shmem.c:4255:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
-   ^
-   static 
-   mm/shmem.c:4266:14: warning: no previous prototype for function 'shmem_file_setup' [-Wmissing-prototypes]
-   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
-                ^
-   mm/shmem.c:4266:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
-   ^
-   static 
-   mm/shmem.c:4279:14: warning: no previous prototype for function 'shmem_file_setup_with_mnt' [-Wmissing-prototypes]
-   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
-                ^
-   mm/shmem.c:4279:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
-   ^
-   static 
-   mm/shmem.c:4290:5: warning: no previous prototype for function 'shmem_zero_setup' [-Wmissing-prototypes]
-   int shmem_zero_setup(struct vm_area_struct *vma)
-       ^
-   mm/shmem.c:4290:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_zero_setup(struct vm_area_struct *vma)
-   ^
-   static 
->> mm/shmem.c:4328:15: warning: no previous prototype for function 'shmem_read_folio_gfp' [-Wmissing-prototypes]
-   struct folio *shmem_read_folio_gfp(struct address_space *mapping,
-                 ^
-   mm/shmem.c:4328:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct folio *shmem_read_folio_gfp(struct address_space *mapping,
-   ^
-   static 
-   mm/shmem.c:4353:14: warning: no previous prototype for function 'shmem_read_mapping_page_gfp' [-Wmissing-prototypes]
-   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
-                ^
-   mm/shmem.c:4353:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
-   ^
-   static 
-   12 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/shmem_read_folio_gfp +4328 mm/shmem.c
+Kernel information:
+    Commit message: Merge branch 'fixes' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/viro/vfs
 
-  4312	
-  4313	/**
-  4314	 * shmem_read_folio_gfp - read into page cache, using specified page allocation flags.
-  4315	 * @mapping:	the folio's address_space
-  4316	 * @index:	the folio index
-  4317	 * @gfp:	the page allocator flags to use if allocating
-  4318	 *
-  4319	 * This behaves as a tmpfs "read_cache_page_gfp(mapping, index, gfp)",
-  4320	 * with any new page allocations done using the specified allocation flags.
-  4321	 * But read_cache_page_gfp() uses the ->read_folio() method: which does not
-  4322	 * suit tmpfs, since it may have pages in swapcache, and needs to find those
-  4323	 * for itself; although drivers/gpu/drm i915 and ttm rely upon this support.
-  4324	 *
-  4325	 * i915_gem_object_get_pages_gtt() mixes __GFP_NORETRY | __GFP_NOWARN in
-  4326	 * with the mapping_gfp_mask(), to avoid OOMing the machine unnecessarily.
-  4327	 */
-> 4328	struct folio *shmem_read_folio_gfp(struct address_space *mapping,
-  4329			pgoff_t index, gfp_t gfp)
-  4330	{
-  4331	#ifdef CONFIG_SHMEM
-  4332		struct inode *inode = mapping->host;
-  4333		struct folio *folio;
-  4334		int error;
-  4335	
-  4336		BUG_ON(!shmem_mapping(mapping));
-  4337		error = shmem_get_folio_gfp(inode, index, &folio, SGP_CACHE,
-  4338					  gfp, NULL, NULL, NULL);
-  4339		if (error)
-  4340			return ERR_PTR(error);
-  4341	
-  4342		folio_unlock(folio);
-  4343		return folio;
-  4344	#else
-  4345		/*
-  4346		 * The tiny !SHMEM case uses ramfs without swap
-  4347		 */
-  4348		return mapping_read_folio_gfp(mapping, index, gfp);
-  4349	#endif
-  4350	}
-  4351	EXPORT_SYMBOL_GPL(shmem_read_folio_gfp);
-  4352	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/68933
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+6973761
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
