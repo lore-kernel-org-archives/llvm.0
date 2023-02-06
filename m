@@ -1,166 +1,68 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11F27B
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 17:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675702916;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J5YwulHqcARptuHpnG9mb3Ti5FXi7lOdFUgfK0Stdew=;
-	b=Gd4jmMWzNu5Y2qrHyOmDI1rwvlycTAKawNzEmonMQ9F+9ZYReocWdDQMoe0WIDrVAmlZl8
-	NprCvBtOWYbJwR6RiSe2R58DgvKIs2g5U68xx2PETYMjzUX4ipqUodqzUWrWcjCf+5B5K7
-	efvqp1Cw1n5le8p8YbPn5GvJ2jM5+wo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-76-_8kvBErHO-2yiA7zspL_KQ-1; Mon, 06 Feb 2023 12:01:55 -0500
-X-MC-Unique: _8kvBErHO-2yiA7zspL_KQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2441B882821
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 17:01:55 +0000 (UTC)
-Received: from [172.64.3.108] (unknown [10.30.33.103])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 819A1492C3C;
-	Mon,  6 Feb 2023 17:01:45 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (25/383 SKIPPED): Test report for master
- (6.2.0-rc7, mainline.kernel.org-clang, 4ec5183e)
-Date: Mon, 06 Feb 2023 17:01:45 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4916192
+	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 20:31:18 +0000 (UTC)
+Received: by mail-il1-f199.google.com with SMTP id i23-20020a056e021d1700b003111192e89aso8866735ila.10
+        for <llvm@lists.linux.dev>; Mon, 06 Feb 2023 12:31:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lcUfKfT8kk091mUeNDNyNXV+W/bZwlZUrmiavyzWKVE=;
+        b=qQRoeITELaQfQB7UKxj9AsHTMlCOPA8pmHWdgEKN7LFk8gfLJUKs0HOGXiOwgDmorm
+         gwKOuphLp8C89vzVe+/BwKKo/N4aaMZTvvm3D0pb5W6wZN/jV5xoHReTkmPNZEK9L/tW
+         HyHadIVWxFwl0xsriTScHQXYc1hf0GsiNRpXixb+qao53BJ8QRn34BcK6NdP5/yIa7qG
+         BUXamvkYoK5KAOKQ3uW8QoaNu1Ut2idGGxaAWh3aSi9oxnyxGwmbI7FYrG/L2IeOLQHm
+         cpR6y3PqSQ5aUVxO65arTReHnGLbepl/N+DPOJPm+HnkUj4O5vpyN43aLhZcgHCJvG8f
+         Uy7w==
+X-Gm-Message-State: AO0yUKWBeg/tVuRcxe4tM5QPgRmc7WZbYZhWblpY35jb/L+7Q+9jsWHK
+	zAhz4u3r7dfYRh65jj0eynf1THCyTtRwMOy6Hng2fm7lycsp
+X-Google-Smtp-Source: AK7set/lIX/2jgf1OGRtFFrJw0DWyiffr52+TS2tT4qR8HmxfNuUDQY4i9GdUbMVWehVVSEfF9bkQInUujE4DKrS6Qceu8NmbEmm
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <71329.123020612015501569@us-mta-76.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a02:cccb:0:b0:3b1:acaf:d5b2 with SMTP id
+ k11-20020a02cccb000000b003b1acafd5b2mr168551jaq.98.1675715477927; Mon, 06 Feb
+ 2023 12:31:17 -0800 (PST)
+Date: Mon, 06 Feb 2023 12:31:17 -0800
+In-Reply-To: <000000000000269f9a05f02be9d8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ce7ebf05f40de992@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in copy_verifier_state
+From: syzbot <syzbot+59af7bf76d795311da8c@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
+	john.fastabend@gmail.com, jolsa@kernel.org, keescook@chromium.org, 
+	kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	v4bel@theori.io, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+syzbot suspects this issue was fixed by commit:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+commit 45435d8da71f9f3e6860e6e6ea9667b6ec17ec64
+Author: Kees Cook <keescook@chromium.org>
+Date:   Fri Dec 23 18:28:44 2022 +0000
 
+    bpf: Always use maximal size for copy_array()
 
-Kernel information:
-    Commit message: Linux 6.2-rc7
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14c62f23480000
+start commit:   041fae9c105a Merge tag 'f2fs-for-6.2-rc1' of git://git.ker..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2f3d9d232a3cac5
+dashboard link: https://syzkaller.appspot.com/bug?extid=59af7bf76d795311da8c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1650d477880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1305f993880000
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/68906
+If the result looks correct, please mark the issue as fixed by replying with:
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-6971905
+#syz fix: bpf: Always use maximal size for copy_array()
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
-=80=98uintptr_t=E2=80=99 was not declared in this scope
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1538
-            Affected tests:
-                 aarch64 - Storage - blktests - nvmeof-mp
-                   s390x - Storage - blktests - blk
-                   s390x - Storage - blktests - nvme-tcp
-                   s390x - Storage - blktests - nvmeof-mp
-                  x86_64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - nvme-tcp
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                  x86_64 - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
-ed-arguments=E2=80=99
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/513
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
