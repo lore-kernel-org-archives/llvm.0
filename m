@@ -1,198 +1,126 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34C2746B
-	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 17:53:55 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id ay1so11325863pfb.7
-        for <llvm@lists.linux.dev>; Tue, 07 Feb 2023 09:53:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899597468
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 18:01:33 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so15822035pjb.5
+        for <llvm@lists.linux.dev>; Tue, 07 Feb 2023 10:01:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xdYE59jhPLW5Gb7FO8je7hhIrAWkaxoGJtFNcprqnSQ=;
-        b=XnCnEs57gV6IP+bsQDPe4v/3TMTZd2doPEhxGIGrFEuzInPWIlRGemVLO9RrzetJI/
-         EqlXgqoRiutdWtZqH++xWuYA4v2zlwn5cOsLgezYp72ltsq2K9K0fx/ykuqAvl7z+rd9
-         0cId9EamcZ96gv4O/AxeXVoMicV7svnpyy67qPujKf+wn3IIVyt5QEP0eCa0yNvfwxc3
-         EYknggtxmnMdkDUgc7rZBRTh0aEv4Q7o3eopGMsOnNsGFCmi///o5FsSPnFOEs5o+QHW
-         c7cU+BFjexuUt1XNDXYrPHtFwvvmdILSekEGhL105o6B+P02cJ6Q1HS7TVk5518mYgDa
-         D3UA==
+        bh=PZduzSQedcfK0VkSdKK8LkGwE1Lav/aAuVJtPsAz85U=;
+        b=OBxGFk75lDiGUlUvrFhIHJPcRAslCw/EEvSQNDBB5YCIzMHVA4EnksKV25d5GBa8T9
+         dFS19YdvdlPngB22IpK6355pvCbZS88YSXZJn0ypE20zzdLdc3hFS7GLG9O2Oi6SBDZr
+         iX8gB/ssqdae0nsogt7pu+1nXVASgEzoB3iba34bqufCITrZzBbSUG72BPS1U/xt4PMm
+         ZvdfoPHZ8gwvGgVZ8ryLTePkyRraoiOf8yX2ucJpoHts2vqjlVXcdjCZI1HRRTIdUqEJ
+         I07rC4JoFiNgx1KV8OsL+j5niabSt3T/7hR+ulfJikexep4XdQnX2OIPRZ7KcZnGiE4h
+         yBbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xdYE59jhPLW5Gb7FO8je7hhIrAWkaxoGJtFNcprqnSQ=;
-        b=5/NGdyZd1iBpVYJ3rmRfPE/OsOdvJkuqWpa7k1gwku5t4QuzPbww41/ZB7w2SnNHHa
-         4zkvman6oJxxS+cIUghycsKEAJAejuHZXPpOmfDQ7OacNlrN7VNIxVWg5sAbNCDh3UG8
-         tPTVe+4IBq7zuV1nKJ/LgTd2yLZ0OWapnRRd23Zy2hXk1eSOLslshumYVBlM78nTxqpH
-         x0lgtN6XC3uPBntzc1hacumLa8DD176Z7UBZwEXks16Kr4trScuqzI2soWdguSPhC3XK
-         DWE+FQM5Po6/+xs8VMrX13CXNk1v20IxX/EVTkRrBJ6ahjiUvNgloZKxFuoi+egz2tY/
-         1vAg==
-X-Gm-Message-State: AO0yUKX60YopJckASwg2KVBP+WUHZfjwS1LmVy4chgNDpIA40TUvFSS0
-	rbOfO++N1XJkPvFJAsgt4Bq3fmlx/wD7S2B++FtyYA==
-X-Google-Smtp-Source: AK7set/qKH/bwZI3A1l24hMrTzSX/mf325pQPJNjwqBzOqXunbdFkTlUHvFoGmrlWKgmJTn+CxLRGm0IHL3JGtQo2U0=
-X-Received: by 2002:aa7:9472:0:b0:5a7:6ee6:6710 with SMTP id
- t18-20020aa79472000000b005a76ee66710mr774606pfq.29.1675792434988; Tue, 07 Feb
- 2023 09:53:54 -0800 (PST)
+        bh=PZduzSQedcfK0VkSdKK8LkGwE1Lav/aAuVJtPsAz85U=;
+        b=IGeHgEMLSCOBH+HLqaUeYdxbDeicEY5ovi+adxTjLe6blgf5BzUJQLz1lwnmsXv3o3
+         9sZgFiqJhzLsVDKjQg9hVBriPo0bJmKOjYBUNgWLaadE/ziCItj7ieww1ikAnSbLMOrm
+         qH91SMvOPq7SRJYSUDkjYat+1NgN5mVKFbSyGaBRTr8ek/wvmQw4nwHXxqII1jK96aRr
+         eC4kuN66+JhNjXNZZnuIYwlvYnEf6OWq9yP9uJUSvvxr+5ZKrFrmh0ZP31WZDOJQPaBH
+         WTGjtd6EHzoh/05Pbf9c0gaY1Qlfm2lIrjpN5IWLTBWDQMYxKd2nYaO8QcnrXWRE0cfj
+         FMTQ==
+X-Gm-Message-State: AO0yUKUZ6/v5zYqHYiV5k0onjOlWrfur7CK7ZnuqZkLjoiytnLCZ+t0D
+	vy45VxtFxcglWuAIOB5GNbzOHoUD4x1sDNYvCFaJ1Q==
+X-Google-Smtp-Source: AK7set/5/7deqTUQyO/sBNCbUgkmz7QmmOIK18S7lNp32mxnhOYV8HOSgp8+KUAArWSXjr58XkSfzZwy3swzWUzfUDI=
+X-Received: by 2002:a17:903:555:b0:196:14ea:d3c6 with SMTP id
+ jo21-20020a170903055500b0019614ead3c6mr923273plb.20.1675792892586; Tue, 07
+ Feb 2023 10:01:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <63e1f7e0.170a0220.7142.de7c@mx.google.com> <Y+IRiiRtXvUzXOGp@gmail.com>
- <c3cd3489-ca32-bdf5-4538-d95532bf9430@collabora.com> <Y+JU07y+lvYAtZQT@sirena.org.uk>
- <85031c0c-d981-031e-8a50-bc4fad2ddcd8@collabora.com>
-In-Reply-To: <85031c0c-d981-031e-8a50-bc4fad2ddcd8@collabora.com>
+References: <20230203194201.92015-1-ebiggers@kernel.org> <63deacb1.170a0220.f078.6779@mx.google.com>
+ <CAFP8O3Kwa2V7GvJPEbr87o6hMi8i2JquWniFOaiFR3nv9pGc_g@mail.gmail.com>
+In-Reply-To: <CAFP8O3Kwa2V7GvJPEbr87o6hMi8i2JquWniFOaiFR3nv9pGc_g@mail.gmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Feb 2023 09:53:43 -0800
-Message-ID: <CAKwvOdmKYM21sb0dryEqeWTXh8gsN50KeCtnKW2dzqMLkyjcEQ@mail.gmail.com>
-Subject: Re: tip/master build: 205 builds: 5 failed, 200 passed, 9 errors, 22
- warnings (v6.2-rc7-273-gd67c17ddc899)
-To: Guillaume Tucker <guillaume.tucker@collabora.com>, mingo@kernel.org
-Cc: Mark Brown <broonie@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, x86@kernel.org, 
-	"kernelci@lists.linux.dev" <kernelci@lists.linux.dev>, 
-	"kernelci-results@groups.io" <kernelci-results@groups.io>, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 7 Feb 2023 10:01:21 -0800
+Message-ID: <CAKwvOdm8F_VcdegPGw3vPu+-H1Gyh0rqQWpf=+Yh9YAowVuWSA@mail.gmail.com>
+Subject: Re: [PATCH] randstruct: temporarily disable clang support
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Bill Wendling <morbo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 7, 2023 at 6:18 AM Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
+On Mon, Feb 6, 2023 at 3:41 PM Fangrui Song <maskray@google.com> wrote:
 >
-> +Thomas Bogendoerfer +linux-mips
->
-> On 07/02/2023 14:40, Mark Brown wrote:
-> > On Tue, Feb 07, 2023 at 10:56:04AM +0100, Guillaume Tucker wrote:
-> >> On 07/02/2023 09:53, Ingo Molnar wrote:
+> On Sat, Feb 4, 2023 at 11:06 AM Kees Cook <keescook@chromium.org> wrote:
 > >
-> >>>>     4    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used w=
-ith =E2=80=98-mhard-float=E2=80=99
-> >>>
-> >>> ... but this exact same error was 'reported' a year ago on January 22=
-:
-> >>>
-> >>>>    2    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used wi=
-th =E2=80=98-mhard-float=E2=80=99
+> > On Fri, Feb 03, 2023 at 11:42:01AM -0800, Eric Biggers wrote:
+> > > From: Eric Biggers <ebiggers@google.com>
+> > >
+> > > Randstruct with clang is currently unsafe to use in any clang release
+> > > that supports it, due to a clang bug that is causing miscompilations:
+> > > "-frandomize-layout-seed inconsistently randomizes all-function-point=
+ers
+> > > structs" (https://github.com/llvm/llvm-project/issues/60349).  Disabl=
+e
+> > > it temporarily until the bug is fixed and the fix is released in a cl=
+ang
+> > > version that can be checked for.
+> > >
+> > > Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> > > ---
+> > >  security/Kconfig.hardening | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+> > > index 53baa95cb644..aad16187148c 100644
+> > > --- a/security/Kconfig.hardening
+> > > +++ b/security/Kconfig.hardening
+> > > @@ -280,7 +280,8 @@ config ZERO_CALL_USED_REGS
+> > >  endmenu
+> > >
+> > >  config CC_HAS_RANDSTRUCT
+> > > -     def_bool $(cc-option,-frandomize-layout-seed-file=3D/dev/null)
+> > > +     # Temporarily disabled due to https://github.com/llvm/llvm-proj=
+ect/issues/60349
+> > > +     def_bool n
+> > >
+> > >  choice
+> > >       prompt "Randomize layout of sensitive kernel structures"
+> > >
+> > > base-commit: 7b753a909f426f2789d9db6f357c3d59180a9354
+> > > --
+> > > 2.39.1
 > >
-> >>> So these regression reports are useless in this form and they clutter
-> >>> people's inboxes. Is any person reading them and acting on them to ma=
-ke
-> >>> sure these emails are sensible?
-
-FWIW, I read these reports daily. I only address the issues that look
-specific to clang though.
-
+> > This should be fixed with greater precision -- i.e. this is nearly fixe=
+d
+> > in Clang now, and is likely to be backported. So I think we'll need
+> > versioned checks here.
 > >
-> >> About the actual kernel build error, I guess it's a shame nobody
-> >> has fixed this yet.  I'll take a look what the root cause might
-> >> be.  If it's a KernelCI build configuration issue e.g. using
-> >> wrong compiler flags then we can fix that, otherwise it's
-> >> probably something to report more directly to some MIPS
-> >> maintainers.
+> > --
+> > Kees Cook
 > >
-> > Honestly at this point I think we should just drop the affected MIPS
-> > configurations at this point, as Ingo says they've been failing for
-> > so long with nobody caring.
 >
-> Maybe the MIPS people just haven't seen this.  I've added Thomas
-> and the linux-mips list to confirm.
+> Bill has requested cherry-pick the llvm-project fix into the
+> release/16.x branch [1].
+> https://github.com/llvm/llvm-project-release-prs/pull/276
+> It may take one day to land.
 >
-> After some investigation, it turns out the error happens when
-> doing "make modules_install".  Here's the issue:
+> [1]: https://github.com/llvm/llvm-project/tree/release/16.x
 >
-> * modules_install is listed in "no-compiler-targets" in the
-> top-level Makefile
->
-> * as a result, scripts/Makefile.compiler is not included
->
-> * arch/mips/loongson64/Platform requires the "cc-option" function
->   to add -mnon-loongson-mmi
->
-> * since "cc-option" is not defined when just doing "make
->   modules_install", the flag is not added and the error mentioned
->   above occurs
-
-+ Masahiro
-
->
-> GitHub issue: https://github.com/kernelci/kernelci-project/issues/176
->
-> Here's a hack to prove this point, need-compiler is defined in
-> the top-level Makefile so it shouldn't be used here but
-> this "fixes" the problem:
->
->
->
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index 490dea07d4e0..024f62dbef76 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -317,10 +317,12 @@ KBUILD_CFLAGS +=3D -fno-asynchronous-unwind-tables
->  KBUILD_LDFLAGS         +=3D -m $(ld-emul)
->
->  ifdef CONFIG_MIPS
-> +ifdef need-compiler
->  CHECKFLAGS +=3D $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
->         grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
->         sed -e "s/^\#define /-D'/" -e "s/ /'=3D'/" -e "s/$$/'/" -e 's/\$$=
-/&&/g')
->  endif
-> +endif
->
->  OBJCOPYFLAGS           +=3D --remove-section=3D.reginfo
->
->
->
-> I guess another way would be to unconditionally add the options
-> to the cflags, in fact there are other places where this appears
-> to be done.  I'm not sure which GCC or Clang versions support it
-> or not, so that may not work in practice.
->
->
->
-> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platfor=
-m
-> index 473404cae1c4..b7b2db13f1a2 100644
-> --- a/arch/mips/loongson64/Platform
-> +++ b/arch/mips/loongson64/Platform
-> @@ -12,7 +12,7 @@ endif
->
->  # Some -march=3D flags enable MMI instructions, and GCC complains about =
-that
->  # support being enabled alongside -msoft-float. Thus explicitly disable =
-MMI.
-> -cflags-y +=3D $(call cc-option,-mno-loongson-mmi)
-> +cflags-y +=3D -mno-loongson-mmi
-
-Nack. Clang doesn't support this flag. See also
-commit 0e96ea5c3eb5 ("MIPS: Loongson64: Clean up use of cc-ifversion")
-
-
->
->  #
->  # Loongson Machines' Support
->
->
->
-> This was reproduced using GCC 10 with the latest
-> kernelci/gcc-10:mips-kselftest-kernelci Docker image running as
-> root.
->
->
-> Is this something someone familiar with MIPS would like to fix
-> properly? If not then please confirm that we should just drop
-> the loongson2k_defconfig builds from KernelCI.  Is this kernel
-> config actually still maintained in mainline?
->
-> Thanks,
-> Guillaume
->
+> --
+> =E5=AE=8B=E6=96=B9=E7=9D=BF
 >
 
-
+All landed; the version check should be for 16+. (And the link to the
+issue report would be nice to retain).
 --=20
 Thanks,
 ~Nick Desaulniers
