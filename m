@@ -1,189 +1,178 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C661BD2B
-	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 09:52:26 +0000 (UTC)
-X-UUID: 01118d72a6cb11eda06fc9ecc4dadd91-20230207
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=UXklP6hvH81dLp4vjHEjJRE+LeaTeSNVLCBwDLz9l/c=;
-	b=TE7ZuIXWh+2B9V76+RFJ0bJOCuvov3iuSytyQ/YiZRwrc4dGQ7vy9PNUAfgLbOKxRgvd/e4A+HDfRG7HIl7o5Q9LbwVN1G2KzWZCXQbMfkRus1Z5WqitnsXJib3Ls+i4DHN/WwqlOgTx8+IHJmZc6N/Le/vXgAm3RcNKjQj6RVk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:787e961b-2d29-4b31-bfbb-cd21fba55307,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:885ddb2,CLOUDID:fbaf8d56-dd49-462e-a4be-2143a3ddc739,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: 01118d72a6cb11eda06fc9ecc4dadd91-20230207
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-	(envelope-from <chunfeng.yun@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1169950387; Tue, 07 Feb 2023 17:37:14 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 7 Feb 2023 17:37:13 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Tue, 7 Feb 2023 17:37:10 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RCMr2kNQTkXMV1ythWQc32nmnx/KPCopidn3nGmGZMEoldFFn4wrazDN7QP0EJcQWIqPwYKpjkLPGN3pztB/V4ku7OmYoQPcgSM05NerXiO7x+Xb1PwqzGReCjImWqDSyxlMwMS5USeOA5Bog/9Xc8m2EjcA8JqdKyJGZxDxbj0fJlvxjFyJcT8xMRJVZbXZiVTy99H6QPMaVb1+xzmgggRJjDSJHdD0Sg9BDvnKtrrjCH1UQRCu4EE0zS90Y6ryJ9+f3OaVdpAUuXzA7QrE2elMyiieg4WexmboHtNE4X7/tre0RKjELDNUiqIbSMG+hk4Q0sMH60rW+juPICyuoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UXklP6hvH81dLp4vjHEjJRE+LeaTeSNVLCBwDLz9l/c=;
- b=Ut3b/awtE9rfu7eBsEu1mRv0uREfSEAOjOtDnItnikFKxlAyuNjtvHG9O5u0s8hmWs9c76lB0Bio/EhdlS9VZsBH98WtLFpwi+BWJdtjm4V+mWsv+C6jKTR7hkt1rEFakp7iWARrI3+N4S/zaZ979c/Q5VQRH5Me0Z0gw2lBm0/DSbxdGwnX8ydNZETsLx7X+7kgFxQhZ/3DKmkXBt41JQEsyLgjDaiQKc4abCWlDsdc2QznC8MrwoqLp0wCszwpLrRJp7izjbNVcF6MvFfBvDS0XkqFlWhLmgjIH5cFFrEgQEHDGlDqYWhK42YQFuBaoQ7RNm2QwM7CuqJSnBDPow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UXklP6hvH81dLp4vjHEjJRE+LeaTeSNVLCBwDLz9l/c=;
- b=ZtOdtalE6HI4cB6pwHZ8o8tj+jp6wo4nsLR71MJcafvRQdW5lK255UBtLmPr+9mVEcHR8H06Azs1iMlET3Brr4Bvps63TzKIvyHx3GMJqET6Rs5vUX8r8PQ0D1UsR4QLkukFl3Q3dfTNn8CySePKxX6k2iSZs+Cr7gg9ZKRwTvw=
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com (2603:1096:820:1a::22)
- by SI2PR03MB6784.apcprd03.prod.outlook.com (2603:1096:4:1ed::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Tue, 7 Feb
- 2023 09:37:08 +0000
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::5e9b:f4cf:8d7f:60d1]) by KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::5e9b:f4cf:8d7f:60d1%3]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 09:37:08 +0000
-From: =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>
-To: "vkoul@kernel.org" <vkoul@kernel.org>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"nathan@kernel.org" <nathan@kernel.org>, "kishon@kernel.org"
-	<kishon@kernel.org>, =?utf-8?B?RWRkaWUgSHVuZyAo5rSq5q2j6ZGrKQ==?=
-	<Eddie.Hung@mediatek.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "matthias.bgg@gmail.com"
-	<matthias.bgg@gmail.com>, "linux-phy@lists.infradead.org"
-	<linux-phy@lists.infradead.org>, "trix@redhat.com" <trix@redhat.com>,
-	"angelogioacchino.delregno@collabora.com"
-	<angelogioacchino.delregno@collabora.com>, "ndesaulniers@google.com"
-	<ndesaulniers@google.com>
-Subject: Re: [PATCH v7 2/3] phy: core: add debugfs root
-Thread-Topic: [PATCH v7 2/3] phy: core: add debugfs root
-Thread-Index: AQHZKxj7fxkP5kQWUUCaWx8rB9jLMa67uaiAgAefooA=
-Date: Tue, 7 Feb 2023 09:37:08 +0000
-Message-ID: <f63868b6510eb2ec9c99925062dd0ab1c669f555.camel@mediatek.com>
-References: <20230118084343.26913-1-chunfeng.yun@mediatek.com>
-	 <20230118084343.26913-2-chunfeng.yun@mediatek.com>
-	 <Y9u2nTgCcb/Et60d@matsya>
-In-Reply-To: <Y9u2nTgCcb/Et60d@matsya>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR03MB5062:EE_|SI2PR03MB6784:EE_
-x-ms-office365-filtering-correlation-id: e42b9cf9-58e5-41ec-1fcc-08db08eee1bf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: e6MZZwuCx1xOq5TsUEdhr1wZqa0UklKtXB9R8yJ6xg9vGzWpPD4zXtlGpYZsFfnffmT1vNilDIAkBAinsJxmyl5n1sQLWR66WtkRYW4Xe1MUOhJUw1t04T8UzVkd5zAhB5EiWS5zwT2uIcasysbk4B5hGClxYbnd2R631P3E6xjnfE9hCbbzdGh3VXt+vCWAh6vvSIq8fJK2gLubrPbbG7IDIpXPHAOg7kQe0li9f5COPTmZDTA8jn5MvMNE4oZt8G8zqqVhPXpFIRnWYbymxfdV05MRyT95ZV6pibk5QOlv6tgzGWYAh1oEv6UH0oxipCOF3QFV0X+Ir3yOj03L0YrjsmTu4Yw5ulh3ntj7f5qF7R68RuAFGiJNTPv98g1lxADpcxTClYUegkcRlLa1VAKBafnSDeteQH3wX6Z5xA3XrG0p9u2DHGuNIuy/RjiaMWxQ40C051DSD8Se9ffz1lyTtkpOzxsS+Sq4+dhgDoBCtQEflQMjpuCB6gfFSgEtjg03AxRrc3mci0XNBlGNa0BLWanW1tt7k+Cy7uPDhLnDTsDRCnMJ6cHZH7UgFApA4BHiNz+AcHZyHTgB6gwHEPA9ZIDUXYxMe/X7VdFTZlLQav4LxJU7tDYgXE03w41XgYDKZ1rsDvgtwOYqVt/wFAtoS9yNOQBHLcVOnuePXpfXEcHDfwApdMW/UAaXKv6OzsjgVKbGpWNus5QwegrPRYNmflxmZ5NqY5aTtqXFqj04hqRnoA+vXlkqwj+msacSGL3DpzkBOLRwjYQgdaff/g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199018)(2906002)(86362001)(36756003)(85182001)(478600001)(7416002)(26005)(186003)(6506007)(6512007)(8936002)(91956017)(71200400001)(6486002)(2616005)(38070700005)(53546011)(41300700001)(5660300002)(66556008)(66946007)(316002)(76116006)(4326008)(64756008)(83380400001)(122000001)(6916009)(8676002)(66476007)(54906003)(38100700002)(66446008)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d0tHZVkyQTVOVWpFVXZWNnpYaDNKUnptaElTUGVFVUk3dEpTNGdlNS9CaTJH?=
- =?utf-8?B?blFFeWhLM2FIWnUvMGc1N3NCaE9IdysyK1VWUFpNaDNwM0t5REZ0bHhmTVk4?=
- =?utf-8?B?MkpxakoxTWluNko0anlaaWNBNTZieHNXOFVKaHpzU2t4dHRhTTlzdWZHU2dE?=
- =?utf-8?B?SE5wd3dDSGh6K0l1blM5OXhHTmZPMlorZTRXYk5OKy9aTEhGaUhCak9LTTlm?=
- =?utf-8?B?Znl2ZzdnaXJ5OWd6VmhMUHRlLzg5Y2VlakNkYWRDWlYxam1hWVlCWGhIcHY1?=
- =?utf-8?B?T3hqSHV1UEFMbVBwTnhhQzVGS0lDNm5sRVhQTkFXSGM0VGdZaW9LenlLQ3JJ?=
- =?utf-8?B?c0VGUDhnenlGYW9Xbko5RHMydlNTcXAvbU5JRlQvUjdxUnZFaUYxbnBiLzhI?=
- =?utf-8?B?OUd6QW53NmRGRjRTc01uVTlNb3BZUmJXUTdLbWRDR2hRQzFFTGplZC8rVlZx?=
- =?utf-8?B?c2I4RHlSRXk4ZzNyUHlFa3FlN1doZHpZaXhFZkJhQVdOSSs4OU5iRVZKZFBx?=
- =?utf-8?B?MjVDUldoSUt4ZzFPTzRXZFkyUk5mMmxTL2FDWDJLYVlZMnNubXo1MUpFZE02?=
- =?utf-8?B?RC9IYzIycS9LdWZkQ0lwNGMyOVE3NTV0MytBMHAwMGQrL09IOGgxUWlFMG5x?=
- =?utf-8?B?VmtleDd3MjZZSjRUZ3dhOUw2eGFFRWlQcWdYZzIvV2hNS0RZdFVVNE9CdUlz?=
- =?utf-8?B?MFlBODVDb3oxdzZPdzBYVlpFcUxPTjNPcmw2U3ZITGlyVUZPbXdDWllaOEdQ?=
- =?utf-8?B?SlFJNUZJY2piM0VhdXB0T1AxaWUvUVFFUDZiU0FLTTdxN3MyTXN5anhrTVNZ?=
- =?utf-8?B?NVdtL0UrZm5NcVREYzB2ZWlVZ1NOSHArYktMWnB1aGpjWlRFNE5BV3VRMGtI?=
- =?utf-8?B?NkUvSS92OXprQTRCekJHMlpyU2NiUlJHY2hJbnZ4M25JdTdRZ0dJQ2JLUDFS?=
- =?utf-8?B?NVBndFBaZWRFczRIeldPelBNWStWK21Ldnl4TzRQNzdGQjlHZ2VxdjVMM0Ix?=
- =?utf-8?B?bEtUbEZvSXpiQkx5Ry9vQWtDMjdBOTlkRTV2cU1McGlsNFF4Mk9xdmtLZzBP?=
- =?utf-8?B?UTZKZ0RUMWlMVTBKWGFYQXFvOUJUakl3cjdRTE94cThuYVBsSGlZUXlvdlo0?=
- =?utf-8?B?RXUrYUNRYVhPdnE4UEJYN3NFUGFlMDhnT1M4a3lQMHJXWHZlVXhsYkhocVhU?=
- =?utf-8?B?ei9waXlxVGl1bTk3L2dra0VLVm9KUkRYOG44OVhmelFJbk8zT2IrY2JGU2ty?=
- =?utf-8?B?Z3Z1ZUFSejZnNEZqamF5NGVEdXU0Tk82dGd6M2phaDY2UGdhcS9Oa2x4bFFr?=
- =?utf-8?B?R3VjbHMydkZ4WkllWmFQSlpwbGVzOStzcklDUDdIRWtnb1A5VEJCZ1RpOGhE?=
- =?utf-8?B?eWRRWmV3ZlRuOFpuTHNhbzhtNEZmNmc1bFlUYXlPN1Myb0Q2RldrN2s5bUpG?=
- =?utf-8?B?SU5FbWxYUGJ6enN4UkQxK0ZVV1UrQWRKeHNEd1o1aGJCWmY1L2NPcWlhdnA4?=
- =?utf-8?B?V1I5VURsV0ZCNDRQbG11Z3JhVlpaUURsVlVkb1Y3ZGFwd0RWQVhzbitSR3JK?=
- =?utf-8?B?aSs1TlFKcFNHTTZRWXJ1QW1jSUtQbFdKVXNVeDF4R1hFbGwwWTlnZGk1SmhN?=
- =?utf-8?B?L1JlWWNLdkVrN3YvS2VBSHo5dklUaDlYcllwZ1FCVFExUFNjL0l1UVBGSGV6?=
- =?utf-8?B?YVpldUNCbVBNdXNVV2U4OUtPcmp3UUlhZG9aUTNGY3FQT2NBaXk3VU5RVFBZ?=
- =?utf-8?B?MG1lM1Z1M2xkTzhlUmxjOEJER1l6QzlpdXBMV0pWT3lLcGRCUmtKTzdqdzRj?=
- =?utf-8?B?MGszUGkrUnlIRThsNDdnNjVWVEpka2kveHVpaEJBS1Z0a0dFcVIyMWx4TUVk?=
- =?utf-8?B?OWNrNXFmajJjWEl5UGptUmFaSkdTRkpiVHY2d1F4WVNvdld2VU5rV3FENDNE?=
- =?utf-8?B?QmE0eUxDSjhSZUs2RUxIWkJCb21jK3ZUZHdZdkNsdCt5N2ttS0Rqc1Vta29R?=
- =?utf-8?B?a3F4ZGd0ZDNrcXdpWWZZVGFOR0MrY1lTam0raWVKNHBFZmtZUklMd3NuT1Rr?=
- =?utf-8?B?bitHclR4VUhMNG12aUF1aEx4c3k3R2tkby9uNkR0eDFpL1dOV1dRZUIrOUM0?=
- =?utf-8?B?RktnQStFRnZQMWZrRU53b09WYWY3ako1UE9XK2twOTdzVnRkQ2J4YURPQURk?=
- =?utf-8?B?REE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2671CB407A4477499D424E0C575038E7@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9377220E8
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 10:25:46 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 823AB5C00FE;
+	Tue,  7 Feb 2023 05:25:45 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Feb 2023 05:25:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:date:date:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1675765545; x=1675851945; bh=fERpdh5ZhQaS6mH1UtMYu3Lm9o59WOgioSw
+	nRN0u4Hk=; b=JGrjHmlNZ91P1xJrMN9z5O0gizSxiRC54v5Gh2Rz4sVIf7gUuv9
+	PDxWB+kB2Y/6Lc1Q1wskyNnu8HoV4XXSuDsGOcCb5z3BvUO8JX5LD4ZWl6nXxMs4
+	FhrNIPi+OXSEmcbLbYsA1NvJ6MzZ+uhUstj9vbW7yw3vXmnsL4mvFDGRoyr1Q5QT
+	VpqGmLx7FIeP/S8p6dtimaxk/qZTBpikz5uaPI9+1Wow/nCmkdIgoNuktsAMBv/P
+	+V6WXF3AwceNxhIZU31/ljF56kszGvbg0BwEwPVvGTPyya7VWNRGXIsQ4v98ElBi
+	074Y1nxcHt+AXWNsXjZYzQcWzLEw4AbJcJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:mime-version
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1675765545; x=
+	1675851945; bh=fERpdh5ZhQaS6mH1UtMYu3Lm9o59WOgioSwnRN0u4Hk=; b=A
+	NmXbvky/vf67WaW3iWd+Tronn/KJdYhzdFKeMTZ43w7mfwyGzwAhYZD3U9P0ToqK
+	bNVZxPDgA2MYac8qkK2iqnRL5qdsfPqlzuBRnHzTOpcYka+UrMTIMgmTJ28/lNie
+	F+mOwb0kTkK4vtqwVWM9GBywsVFyXrjMEUrkTZ+rjB4linvUZDM2SsIahVGezGX3
+	hozfPCUn3It7qbRFgF4rDqjszz9G6esVMQJVxdM2HyODKHwZECuACCZKcBPTTc+L
+	zpjchdCJRU52PkENkUe86RHxunhjH+iZWJ6vPi+7MXzfKUk+CgyDznD9zsTUgstg
+	xYwWYczwqQw1U+O5MQChg==
+X-ME-Sender: <xms:KSfiY9HsuBWmRrksmkY_ukUFEo4BURPantiYy5BssC-F6iGYxCgXoQ>
+    <xme:KSfiYyW3IjuHji58zC4EwGt7j-fNxWOLDuOO3Uvz91j7Q1j66hcwIAyWHYra2MkTS
+    vA-U9IZu79k8e8YW8I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegkedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepuefhffffvdekhfeivdfhtdfhueevtdffhfehjeeifeekgeeguedugeefhedufffg
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:KSfiY_KQz0GLXuNk0FhetcKoCrUUAe0ZMompvW6JzKc7RvWDVRc1fQ>
+    <xmx:KSfiYzGPlUH6SdfLjibmtngkaJj0v4kFgOh9milqKgj5yPFooOeDTQ>
+    <xmx:KSfiYzXCwwbsaGKpHf_BVUko-N8q-RytU3C5F2tMpt-A0DTsIUhMUA>
+    <xmx:KSfiY6fvopT4E62l8tOPMj_YrHw1I-63cFSIV2Zc7QFwtgBgUjYO4w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 3B5D7B60086; Tue,  7 Feb 2023 05:25:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5062.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e42b9cf9-58e5-41ec-1fcc-08db08eee1bf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 09:37:08.5382
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aIcNV0mEdobW8S1f0S4KJfOcWGLEk+IE0KbsTcjbkZXwTbR5iebLOYnHEA2KHD/+/Ex/P/WPet7NWYNbRCfiRdLb9us1kBUCGHCfCbgE3dk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB6784
-X-MTK: N
+Mime-Version: 1.0
+Message-Id: <9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com>
+Date: Tue, 07 Feb 2023 11:25:27 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: current objtool warnings from randconfig builds
+Content-Type: text/plain
 
-T24gVGh1LCAyMDIzLTAyLTAyIGF0IDE4OjQxICswNTMwLCBWaW5vZCBLb3VsIHdyb3RlOg0KPiBP
-biAxOC0wMS0yMywgMTY6NDMsIENodW5mZW5nIFl1biB3cm90ZToNCj4gPiBBZGQgYSBkZWJ1Z2Zz
-IHJvb3QgZm9yIHBoeSBjbGFzcywgdGhlbiBwaHkgZHJpdmVycyBjYW4gYWRkIGRlYnVnZnMNCj4g
-PiBmaWxlcw0KPiA+IHVuZGVyIHRoaXMgZm9sZGVyLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6
-IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiB2
-Mn52Nzogbm8gY2hhbmdlcw0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3BoeS9waHktY29yZS5jICB8
-IDYgKysrKysrDQo+ID4gIGluY2x1ZGUvbGludXgvcGh5L3BoeS5oIHwgMiArKw0KPiA+ICAyIGZp
-bGVzIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL3BoeS9waHktY29yZS5jIGIvZHJpdmVycy9waHkvcGh5LWNvcmUuYw0KPiA+IGluZGV4IGQ5
-M2RkZjEyNjJjNS4uMmY5ZjY5MTkwNTE5IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvcGh5L3Bo
-eS1jb3JlLmMNCj4gPiArKysgYi9kcml2ZXJzL3BoeS9waHktY29yZS5jDQo+ID4gQEAgLTExLDYg
-KzExLDcgQEANCj4gPiAgI2luY2x1ZGUgPGxpbnV4L2V4cG9ydC5oPg0KPiA+ICAjaW5jbHVkZSA8
-bGludXgvbW9kdWxlLmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9lcnIuaD4NCj4gPiArI2luY2x1
-ZGUgPGxpbnV4L2RlYnVnZnMuaD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L2RldmljZS5oPg0KPiA+
-ICAjaW5jbHVkZSA8bGludXgvc2xhYi5oPg0KPiA+ICAjaW5jbHVkZSA8bGludXgvb2YuaD4NCj4g
-PiBAQCAtMTIwNCw2ICsxMjA1LDkgQEAgdm9pZCBkZXZtX29mX3BoeV9wcm92aWRlcl91bnJlZ2lz
-dGVyKHN0cnVjdA0KPiA+IGRldmljZSAqZGV2LA0KPiA+ICB9DQo+ID4gIEVYUE9SVF9TWU1CT0xf
-R1BMKGRldm1fb2ZfcGh5X3Byb3ZpZGVyX3VucmVnaXN0ZXIpOw0KPiA+ICANCj4gPiArc3RydWN0
-IGRlbnRyeSAqcGh5X2RlYnVnX3Jvb3Q7DQo+ID4gK0VYUE9SVF9TWU1CT0xfR1BMKHBoeV9kZWJ1
-Z19yb290KTsNCj4gDQo+IFBsZWFzZSBtYWtlIHRoaXMgYSBtZW1iZXIgb2Ygc3RydWN0IHBoeSwg
-dGhhdCB3YXkgYWxsIHBoeSBkcml2ZXJzDQo+IGhhdmUgYWNjZXNzDQo+IHRvIHRoaXMgYW5kIHdl
-IHdvbnQgbmVlZCB0byBleHBvcnQgdGhpcyENCk9rLCBJJ2xsIG1vZGlmeSBpdCwgdGhhbmtzDQoN
-Cj4gDQo+ID4gKw0KPiA+ICAvKioNCj4gPiAgICogcGh5X3JlbGVhc2UoKSAtIHJlbGVhc2UgdGhl
-IHBoeQ0KPiA+ICAgKiBAZGV2OiB0aGUgZGV2IG1lbWJlciB3aXRoaW4gcGh5DQo+ID4gQEAgLTEy
-MzMsNiArMTIzNyw4IEBAIHN0YXRpYyBpbnQgX19pbml0IHBoeV9jb3JlX2luaXQodm9pZCkNCj4g
-PiAgDQo+ID4gIAlwaHlfY2xhc3MtPmRldl9yZWxlYXNlID0gcGh5X3JlbGVhc2U7DQo+ID4gIA0K
-PiA+ICsJcGh5X2RlYnVnX3Jvb3QgPSBkZWJ1Z2ZzX2NyZWF0ZV9kaXIoInBoeSIsIE5VTEwpOw0K
-PiA+ICsNCj4gPiAgCXJldHVybiAwOw0KPiA+ICB9DQo+ID4gIGRldmljZV9pbml0Y2FsbChwaHlf
-Y29yZV9pbml0KTsNCj4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9waHkvcGh5LmggYi9p
-bmNsdWRlL2xpbnV4L3BoeS9waHkuaA0KPiA+IGluZGV4IGIxNDEzNzU3ZmNjMy4uYzM5ODc0OWQ0
-OWI5IDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1ZGUvbGludXgvcGh5L3BoeS5oDQo+ID4gKysrIGIv
-aW5jbHVkZS9saW51eC9waHkvcGh5LmgNCj4gPiBAQCAtMjA1LDYgKzIwNSw4IEBAIHN0cnVjdCBw
-aHlfbG9va3VwIHsNCj4gPiAgI2RlZmluZSBkZXZtX29mX3BoeV9wcm92aWRlcl9yZWdpc3Rlcl9m
-dWxsKGRldiwgY2hpbGRyZW4sIHhsYXRlKSBcDQo+ID4gIAlfX2Rldm1fb2ZfcGh5X3Byb3ZpZGVy
-X3JlZ2lzdGVyKGRldiwgY2hpbGRyZW4sIFRISVNfTU9EVUxFLA0KPiA+IHhsYXRlKQ0KPiA+ICAN
-Cj4gPiArZXh0ZXJuIHN0cnVjdCBkZW50cnkgKnBoeV9kZWJ1Z19yb290Ow0KPiA+ICsNCj4gPiAg
-c3RhdGljIGlubGluZSB2b2lkIHBoeV9zZXRfZHJ2ZGF0YShzdHJ1Y3QgcGh5ICpwaHksIHZvaWQg
-KmRhdGEpDQo+ID4gIHsNCj4gPiAgCWRldl9zZXRfZHJ2ZGF0YSgmcGh5LT5kZXYsIGRhdGEpOw0K
-PiA+IC0tIA0KPiA+IDIuMTguMA0KPiANCj4gDQo=
+Hi Josh and Peter,
+
+I've updated my randconfig test setup to use gcc-13 and clang-16, and
+have sent fixes for all normal WERROR=y build warnings, but there are a
+lot of objtool warnings that remain. I've reported some of them in
+the past, some others are new. It would be nice to at least reduce
+the number of warnings either through code changes or workarounds
+in objtool for any false positives.
+
+Out of 1500 builds, about a third had any warnings, this is the full
+list sorted by frequency. Let me know if there are any that you haven't
+seen before, I can provide the corresponding object and config files
+for reproducing.
+
+    Arnd
+
+8<---
+205 mm/kasan/shadow.o: warning: objtool: __asan_memset+0x2e: call to __memset() with UACCESS enabled
+205 mm/kasan/shadow.o: warning: objtool: __asan_memmove+0x48: call to __memmove() with UACCESS enabled
+205 mm/kasan/shadow.o: warning: objtool: __asan_memcpy+0x48: call to __memcpy() with UACCESS enabled
+80 vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from callable instruction with modified stack frame
+49 vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0x100: relocation to !ENDBR: native_write_cr4+0x4
+29 mm/kasan/generic.o: warning: objtool: kasan_check_range+0x1e: call to addr_has_metadata() with UACCESS enabled
+29 mm/kasan/generic.o: warning: objtool: __asan_load2+0x11: call to addr_has_metadata() with UACCESS enabled
+29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_out+0x15e: return with modified stack frame
+29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_out+0x11d: stack state mismatch: cfa1=5+16 cfa2=4+8
+29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_in+0x150: return with modified stack frame
+29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_in+0x13d: stack state mismatch: cfa1=5+16 cfa2=4+8
+29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_out+0xe2: return with modified stack frame
+29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_out+0xd1: stack state mismatch: cfa1=5+16 cfa2=4+8
+29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_in+0xea: return with modified stack frame
+29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_in+0xcc: stack state mismatch: cfa1=5+16 cfa2=4+8
+28 mm/kasan/generic.o: warning: objtool: __asan_store16+0x11: call to addr_has_metadata() with UACCESS enabled
+28 mm/kasan/generic.o: warning: objtool: __asan_load16+0x11: call to addr_has_metadata() with UACCESS enabled
+23 fs/reiserfs/do_balan.o: warning: objtool: balance_leaf+0x100ac: stack state mismatch: cfa1=4+464 cfa2=4+456
+22 mm/kasan/generic.o: warning: objtool: __asan_load4+0x11: call to addr_has_metadata() with UACCESS enabled
+21 mm/kasan/generic.o: warning: objtool: __asan_store4+0x11: call to addr_has_metadata() with UACCESS enabled
+21 mm/kasan/generic.o: warning: objtool: __asan_store1+0x11: call to addr_has_metadata() with UACCESS enabled
+21 mm/kasan/generic.o: warning: objtool: __asan_load8+0x11: call to addr_has_metadata() with UACCESS enabled
+21 mm/kasan/generic.o: warning: objtool: __asan_load1+0x11: call to addr_has_metadata() with UACCESS enabled
+18 fs/reiserfs/reiserfs.o: warning: objtool: balance_internal+0x1238: stack state mismatch: cfa1=4+248 cfa2=4+256
+18 fs/reiserfs/ibalance.o: warning: objtool: balance_internal+0x10a2: stack state mismatch: cfa1=4+232 cfa2=4+256
+17 arch/x86/coco/tdx/tdcall.o: warning: objtool: __tdx_hypercall+0xb0: return with modified stack frame
+15 vmlinux.o: warning: objtool: ftrace_likely_update+0xd2: call to __stack_chk_fail() with UACCESS enabled
+15 kernel/trace/trace_branch.o: warning: objtool: ftrace_likely_update+0x201: call to __stack_chk_fail() with UACCESS enabled
+14 mm/kasan/generic.o: warning: objtool: __asan_store2+0x11: call to addr_has_metadata() with UACCESS enabled
+14 arch/x86/kvm/kvm.o: warning: objtool: .text+0x0: unreachable instruction
+13 mm/kasan/generic.o: warning: objtool: __asan_store8+0x11: call to addr_has_metadata() with UACCESS enabled
+11 vmlinux.o: warning: objtool: replace_key+0x1b2: stack state mismatch: cfa1=4+72 cfa2=4+88
+8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x49: relocation to !ENDBR: kgdb_ll_trap+0x6a
+8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !ENDBR: kgdb_arch_late+0x193
+8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: kexec_mark_range+0x13
+8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: kexec_mark_crashkres+0x53
+8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: .text+0x4b314
+8 drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: csiphy_lanes_enable() falls through to next function __cfi_csiphy_hw_version_read()
+8 drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.o: warning: objtool: csiphy_lanes_enable() falls through to next function __cfi_csiphy_get_lane_mask()
+7 vmlinux.o: warning: objtool: internal_move_pointers_items+0x3fa: stack state mismatch: cfa1=4+144 cfa2=4+136
+7 fs/jffs2/jffs2.o: warning: objtool: jffs2_erase_pending_blocks() falls through to next function jffs2_free_jeb_node_refs()
+7 fs/jffs2/erase.o: warning: objtool: jffs2_erase_pending_blocks() falls through to next function __cfi_jffs2_free_jeb_node_refs()
+7 drivers/hwmon/pmbus/adm1275.o: warning: objtool: adm1275_probe+0x574: unreachable instruction
+5 vmlinux.o: warning: objtool: exynos3250_cmu_isp_probe+0x17: unreachable instruction
+5 arch/x86/mm/fault.o: warning: objtool: do_user_addr_fault+0x2c0: unreachable instruction
+5 arch/x86/kvm/kvm-amd.o: warning: objtool: __svm_vcpu_run+0x141: BP used as a scratch register
+5 arch/x86/kvm/kvm-amd.o: warning: objtool: __svm_sev_es_vcpu_run+0x36: BP used as a scratch register
+4 vmlinux.o: warning: objtool: resume_play_dead+0xe: unreachable instruction
+4 vmlinux.o: warning: objtool: hyperv_init+0x55c: unreachable instruction
+4 vmlinux.o: warning: objtool: do_idle+0x15e: unreachable instruction
+4 drivers/media/i2c/m5mols/m5mols_core.o: warning: objtool: m5mols_set_fmt() falls through to next function __cfi_m5mols_get_frame_desc()
+3 vmlinux.o: warning: objtool: nmi_panic+0x2d: unreachable instruction
+3 vmlinux.o: warning: objtool: mptscsih_abort+0x319: unreachable instruction
+3 vmlinux.o: warning: objtool: internal_delete_pointers_items+0x392: stack state mismatch: cfa1=4+136 cfa2=4+144
+3 vmlinux.o: warning: objtool: emulate_vsyscall+0x1ff: unreachable instruction
+3 vmlinux.o: warning: objtool: do_arch_prctl_64+0x1ac: unreachable instruction
+3 fs/xfs/libxfs/xfs_da_btree.o: warning: objtool: xfs_da_grow_inode_int+0x397: stack state mismatch: reg1[12]=-2-48 reg2[12]=-1+0
+3 drivers/spi/spi-amd.o: warning: objtool: amd_spi_master_transfer() falls through to next function __cfi_amd_spi_max_transfer_size()
+3 drivers/pwm/pwm-mediatek.o: warning: objtool: .text: unexpected end of section
+3 drivers/gpu/drm/i915/gt/intel_timeline.o: warning: objtool: live_hwsp_read+0x318: stack state mismatch: cfa1=4+240 cfa2=5+48
+3 arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0xba7: unreachable instruction
+2 vmlinux.o: warning: objtool: xenpv_exc_double_fault+0x9: unreachable instruction
+2 vmlinux.o: warning: objtool: pwm_mediatek_apply() falls through to next function mtk_disp_pwm_probe()
+2 vmlinux.o: warning: objtool: force_ibs_eilvt_setup+0xad: unreachable instruction
+2 vmlinux.o: warning: objtool: exynos7885_cmu_probe+0x1b: unreachable instruction
+2 vmlinux.o: warning: objtool: do_one_initcall+0x1f6: unreachable instruction
+2 mm/kmsan/report.o: warning: objtool: kmsan_report+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_warning+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_poison_alloca+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_n+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_8+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_4+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_2+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_1+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_n+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_8+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_4+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_2+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_1+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_instrument_asm_store+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_get_context_state+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/instrumentation.o: warning: objtool: __msan_chain_origin+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/hooks.o: warning: objtool: kmsan_unpoison_memory+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/hooks.o: warning: objtool: kmsan_unpoison_entry_regs+0x0: call to __fentry__() with UACCESS enabled
+2 mm/kmsan/hooks.o: warning: objtool: kmsan_copy_to_user+0x0: call to __fentry__() with UACCESS enabled
+2 fs/reiserfs/lbalance.o: warning: objtool: leaf_move_items+0x7ab: stack state mismatch: cfa1=4+160 cfa2=4+152
+2 drivers/video/fbdev/omap2/omapfb/dss/omapdss.o: warning: objtool: hdmi_power_on_full.isra.0+0x5e: unreachable instruction
+2 drivers/net/wwan/iosm/iosm.o: warning: objtool: ipc_imem_run_state_worker() falls through to next function ipc_imem_startup_timer_cb()
+2 drivers/iio/imu/bmi160/bmi160_core.o: warning: objtool: bmi160_setup_irq() falls through to next function bmi160_data_rdy_trigger_set_state()
+1 vmlinux.o: warning: objtool: trace_initcall_finish+0xee: unreachable instruction
+1 vmlinux.o: warning: objtool: native_sched_clock_from_tsc+0x60: unreachable instruction
+1 vmlinux.o: warning: objtool: lpass_cdc_dma_daiops_trigger() falls through to next function lpass_hdmi_daiops_hw_params()
+1 drivers/crypto/keembay/keembay-ocs-hcu.o: warning: objtool: ocs_hcu_hmac+0x153: stack state mismatch: cfa1=4+136 cfa2=5+48
+1 arch/x86/kvm/kvm-amd.o: warning: objtool: .altinstr_replacement+0x108: call without frame pointer save/setup
