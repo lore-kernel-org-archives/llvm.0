@@ -1,102 +1,155 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC71BD0F;
-	Tue,  7 Feb 2023 03:27:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675740452; x=1707276452;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=JEKCFnLgvSAN9iV9DoSXCNUV/dPTWdUZqEnDNGRNB9Q=;
-  b=cmYaJerFIPqQ8zUC5rwYhya0Y5tLmEvIlHGmejxNIDv7IRmwk6TVAWRi
-   fAT7Lx9F0z8g5grRv71uHyRdKdPhuHugUtkD02AMw6/5qntb9AiPoumRJ
-   SumYeoAXwNAg1bUhRpTPFdnPI9oYxCP3RAE8DR+DOxTvgiDt7lqxzNbsz
-   MtAIawAi64optWLerrajqGccrplfI7R/Xa0n+1C1LENgNM1iq+QSuXncm
-   8IcOudMEs9RvyJu1nITakKJM18Bx+S2TIvI6bPdqug3Uf1EqBgq0z9nfL
-   eQXaWwgUaYeG3dg3hDQ/lNosFAfTACQOcdNqpIymIYITXfMQX07TTpMlY
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="356758228"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="356758228"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 19:27:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697100176"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="697100176"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 06 Feb 2023 19:27:30 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pPEdl-00030Q-2j;
-	Tue, 07 Feb 2023 03:27:29 +0000
-Date: Tue, 7 Feb 2023 11:26:46 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [krzk-github:pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
- 98/110] ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function
- xfs_filestream_lookup_ag: .text+0x21c): relocation R_RISCV_HI20 out of
- range: 534791 is not in [-524288, 524287]; references .L.str.3
-Message-ID: <202302071109.EpPGhZwK-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBF6BD12
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 04:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675743113;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3t0svCjk17TdksNiw/tB2uJTzV9OB5eY7r9wnNwS00I=;
+	b=CuOj3Bi4uoj1KE2ks9yI7q2+TYOw9pzFI8o5UMCyGjnYMNvOW82HTCGn35E0X+C5Wunoqz
+	QFbkwGhrpSi4aHTT0tkfrIQRtWVW3yLVtAEvF3uWdbcmkz6/DDl44IGPkUaMz8Y9M73SQP
+	ovcox9QrH1v65DG5jt3WRHt2MsdOk24=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-369-jj1WbzlQOXKhhQRYzFxihQ-1; Mon, 06 Feb 2023 23:11:51 -0500
+X-MC-Unique: jj1WbzlQOXKhhQRYzFxihQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52D0885CBEB
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 04:11:40 +0000 (UTC)
+Received: from [172.64.3.108] (unknown [10.30.33.103])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3D0F52026D37;
+	Tue,  7 Feb 2023 04:11:40 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (52/383 SKIPPED): Test report for master
+ (6.2.0-rc6, mainline.kernel.org-clang, db27c222)
+Date: Tue, 07 Feb 2023 04:11:40 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <70861.123020623115100794@us-mta-369.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-TO: Krzysztof Kozlowski <krzk@kernel.org>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://github.com/krzk/linux pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
-head:   22dbb33daf6ec003524bc455253a81ccf7043849
-commit: 5ff134dc19f1ab5f93b334b24978c1246019ccd0 [98/110] ASoC: dt-bindings: Drop broken irondevice,sma1303 binding
-config: riscv-randconfig-r003-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071109.EpPGhZwK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/krzk/linux/commit/5ff134dc19f1ab5f93b334b24978c1246019ccd0
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
-        git checkout 5ff134dc19f1ab5f93b334b24978c1246019ccd0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: CKI Project <cki-project@redhat.com>
 
-All errors (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'kbuild-fixes-v6.2-4' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
 
->> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x21c): relocation R_RISCV_HI20 out of range: 534791 is not in [-524288, 524287]; references .L.str.3
-   >>> referenced by xfs_filestream.c:0 (fs/xfs/xfs_filestream.c:0)
-   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
---
->> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x23a): relocation R_RISCV_HI20 out of range: 534681 is not in [-524288, 524287]; references .L.str
-   >>> referenced by xfs_filestream.c:0 (fs/xfs/xfs_filestream.c:0)
-   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
---
->> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_pick_ag: .text+0x3b6): relocation R_RISCV_HI20 out of range: 535501 is not in [-524288, 524287]; references __sancov_gen_cov_switch_values
-   >>> referenced by xfs_filestream.c:283 (fs/xfs/xfs_filestream.c:283)
-   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
---
->> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0xbc): relocation R_RISCV_HI20 out of range: 536723 is not in [-524288, 524287]; references __tracepoint_xfs_filestream_lookup
-   >>> referenced by xfs_filestream.c:49 (fs/xfs/xfs_filestream.c:49)
-   >>> defined in vmlinux.a(fs/xfs/xfs_trace.o)
---
->> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x156): relocation R_RISCV_HI20 out of range: 535501 is not in [-524288, 524287]; references xfs_params
-   >>> referenced by xfs_filestream.c:274 (fs/xfs/xfs_filestream.c:274)
-   >>> defined in vmlinux.a(fs/xfs/xfs_globals.o)
---
->> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x1e8): relocation R_RISCV_HI20 out of range: 536715 is not in [-524288, 524287]; references trace_xfs_filestream_lookup.__warned
-   >>> referenced by xfs_filestream.c:275 (fs/xfs/xfs_filestream.c:275)
-   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/68736
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: [upstream] blktests: discontiguous-io.cpp:92:24: error: =E2=
+=80=98uintptr_t=E2=80=99 was not declared in this scope
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1538
+            Affected tests:
+                 aarch64 - Storage - blktests - nvmeof-mp
+                   s390x - Storage - blktests - blk
+                   s390x - Storage - blktests - nvme-tcp
+                   s390x - Storage - blktests - nvmeof-mp
+                  x86_64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - nvme-tcp
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                  x86_64 - stress: stress-ng - memory
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: gcc: error: unrecognized command-line option =E2=80=98-Qunus=
+ed-arguments=E2=80=99
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/513
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
