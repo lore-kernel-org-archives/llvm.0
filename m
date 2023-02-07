@@ -1,113 +1,102 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A356FD3
-	for <llvm@lists.linux.dev>; Mon,  6 Feb 2023 23:41:17 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id e19so5981902plc.9
-        for <llvm@lists.linux.dev>; Mon, 06 Feb 2023 15:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cu0OFN8qZCYWAqVWMqFlj99/Zkr5M5+Eb6c07HRobgk=;
-        b=X6O8KDVvbqMZvTq/dBZU/owDSJ8rL1va66hKecrnPQWO7NbZM9JZH8Ff/Kgp+8XR0h
-         PYt06fY/twQ70b2B5OciSQ8Ux5zQk8addCp1zwAR7cPUZ6SWWHzhljSi58TNzatHnfol
-         Nw0cL+/FeO5Zk1/pmkV2h5fDPZdIjoE9S3+kx/dy5qduoM1n6rDy2H4yiCv5UYABLcXL
-         Qw1LbBH5z9Dv1M/TyXGJpC3wEbIASbTpvdDww3AN/Mp0Ls5TE0f+r5rWFT0hA8ZMtu38
-         61NC8HORindS8z+Ya0AVJtBOUm6nbeuWTrtKUzw3Ahn2yR6TUWreNfWA1cLUKG9Qs6nY
-         THCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cu0OFN8qZCYWAqVWMqFlj99/Zkr5M5+Eb6c07HRobgk=;
-        b=FFB81VcobObUhOB12e2KO8OFAbezoeN7AGz/f32VpbwaM62eBX7jlDfWeCQy9VNGu+
-         siRMnlIH8XsuR5LpFCJwYeVwbxcG347tJvouKuBwzSxaMaljRyOByy6piSp/Lj2ls9jX
-         rHc2tNqewzGjyXCT8weH0zDi+wqkc20ac9M6HXglSb8pp8LeChKq2ZNrwXSDcVtQ3qUE
-         +Ut3ATGy+UfO7iMWL2VoNaCK1d6gKIRYnWEnJxsvUcIqurH1UEKow/u2AViJuF5/lIcr
-         xNCpDCLtD9/EIp6N6g4JmM/4/5hvwU5x7MO3z1uq2HOq9wrxnMTtlN7t0WLthjaa5pz8
-         QYSw==
-X-Gm-Message-State: AO0yUKUAQJKW38+8Ydf/RcyIZdc813stuHcf2ZeEIMfLGZq6F00b+Pbm
-	UHeKTXP/P4h5JLFltla1CudEU/eJ9TtNYCNxlTgWyg==
-X-Google-Smtp-Source: AK7set9uOOMShrxA48+C1j7fFNaTfn5dhIRadvFGX40qhOjytovXu9agQpf1EsZBGE57vO7ZYGhygwi7iKDB+HEsXBo=
-X-Received: by 2002:a17:902:b7c9:b0:196:7127:2240 with SMTP id
- v9-20020a170902b7c900b0019671272240mr173745plz.11.1675726877236; Mon, 06 Feb
- 2023 15:41:17 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC71BD0F;
+	Tue,  7 Feb 2023 03:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675740452; x=1707276452;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=JEKCFnLgvSAN9iV9DoSXCNUV/dPTWdUZqEnDNGRNB9Q=;
+  b=cmYaJerFIPqQ8zUC5rwYhya0Y5tLmEvIlHGmejxNIDv7IRmwk6TVAWRi
+   fAT7Lx9F0z8g5grRv71uHyRdKdPhuHugUtkD02AMw6/5qntb9AiPoumRJ
+   SumYeoAXwNAg1bUhRpTPFdnPI9oYxCP3RAE8DR+DOxTvgiDt7lqxzNbsz
+   MtAIawAi64optWLerrajqGccrplfI7R/Xa0n+1C1LENgNM1iq+QSuXncm
+   8IcOudMEs9RvyJu1nITakKJM18Bx+S2TIvI6bPdqug3Uf1EqBgq0z9nfL
+   eQXaWwgUaYeG3dg3hDQ/lNosFAfTACQOcdNqpIymIYITXfMQX07TTpMlY
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="356758228"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="356758228"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 19:27:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697100176"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="697100176"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Feb 2023 19:27:30 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pPEdl-00030Q-2j;
+	Tue, 07 Feb 2023 03:27:29 +0000
+Date: Tue, 7 Feb 2023 11:26:46 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [krzk-github:pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
+ 98/110] ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function
+ xfs_filestream_lookup_ag: .text+0x21c): relocation R_RISCV_HI20 out of
+ range: 534791 is not in [-524288, 524287]; references .L.str.3
+Message-ID: <202302071109.EpPGhZwK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230203194201.92015-1-ebiggers@kernel.org> <63deacb1.170a0220.f078.6779@mx.google.com>
-In-Reply-To: <63deacb1.170a0220.f078.6779@mx.google.com>
-From: Fangrui Song <maskray@google.com>
-Date: Mon, 6 Feb 2023 15:41:05 -0800
-Message-ID: <CAFP8O3Kwa2V7GvJPEbr87o6hMi8i2JquWniFOaiFR3nv9pGc_g@mail.gmail.com>
-Subject: Re: [PATCH] randstruct: temporarily disable clang support
-To: Kees Cook <keescook@chromium.org>
-Cc: Eric Biggers <ebiggers@kernel.org>, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Feb 4, 2023 at 11:06 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Feb 03, 2023 at 11:42:01AM -0800, Eric Biggers wrote:
-> > From: Eric Biggers <ebiggers@google.com>
-> >
-> > Randstruct with clang is currently unsafe to use in any clang release
-> > that supports it, due to a clang bug that is causing miscompilations:
-> > "-frandomize-layout-seed inconsistently randomizes all-function-pointer=
-s
-> > structs" (https://github.com/llvm/llvm-project/issues/60349).  Disable
-> > it temporarily until the bug is fixed and the fix is released in a clan=
-g
-> > version that can be checked for.
-> >
-> > Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Eric Biggers <ebiggers@google.com>
-> > ---
-> >  security/Kconfig.hardening | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> > index 53baa95cb644..aad16187148c 100644
-> > --- a/security/Kconfig.hardening
-> > +++ b/security/Kconfig.hardening
-> > @@ -280,7 +280,8 @@ config ZERO_CALL_USED_REGS
-> >  endmenu
-> >
-> >  config CC_HAS_RANDSTRUCT
-> > -     def_bool $(cc-option,-frandomize-layout-seed-file=3D/dev/null)
-> > +     # Temporarily disabled due to https://github.com/llvm/llvm-projec=
-t/issues/60349
-> > +     def_bool n
-> >
-> >  choice
-> >       prompt "Randomize layout of sensitive kernel structures"
-> >
-> > base-commit: 7b753a909f426f2789d9db6f357c3d59180a9354
-> > --
-> > 2.39.1
->
-> This should be fixed with greater precision -- i.e. this is nearly fixed
-> in Clang now, and is likely to be backported. So I think we'll need
-> versioned checks here.
->
-> --
-> Kees Cook
->
+TO: Krzysztof Kozlowski <krzk@kernel.org>
 
-Bill has requested cherry-pick the llvm-project fix into the
-release/16.x branch [1].
-https://github.com/llvm/llvm-project-release-prs/pull/276
-It may take one day to land.
+tree:   https://github.com/krzk/linux pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
+head:   22dbb33daf6ec003524bc455253a81ccf7043849
+commit: 5ff134dc19f1ab5f93b334b24978c1246019ccd0 [98/110] ASoC: dt-bindings: Drop broken irondevice,sma1303 binding
+config: riscv-randconfig-r003-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071109.EpPGhZwK-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/krzk/linux/commit/5ff134dc19f1ab5f93b334b24978c1246019ccd0
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
+        git checkout 5ff134dc19f1ab5f93b334b24978c1246019ccd0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-[1]: https://github.com/llvm/llvm-project/tree/release/16.x
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x21c): relocation R_RISCV_HI20 out of range: 534791 is not in [-524288, 524287]; references .L.str.3
+   >>> referenced by xfs_filestream.c:0 (fs/xfs/xfs_filestream.c:0)
+   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
+--
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x23a): relocation R_RISCV_HI20 out of range: 534681 is not in [-524288, 524287]; references .L.str
+   >>> referenced by xfs_filestream.c:0 (fs/xfs/xfs_filestream.c:0)
+   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
+--
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_pick_ag: .text+0x3b6): relocation R_RISCV_HI20 out of range: 535501 is not in [-524288, 524287]; references __sancov_gen_cov_switch_values
+   >>> referenced by xfs_filestream.c:283 (fs/xfs/xfs_filestream.c:283)
+   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
+--
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0xbc): relocation R_RISCV_HI20 out of range: 536723 is not in [-524288, 524287]; references __tracepoint_xfs_filestream_lookup
+   >>> referenced by xfs_filestream.c:49 (fs/xfs/xfs_filestream.c:49)
+   >>> defined in vmlinux.a(fs/xfs/xfs_trace.o)
+--
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x156): relocation R_RISCV_HI20 out of range: 535501 is not in [-524288, 524287]; references xfs_params
+   >>> referenced by xfs_filestream.c:274 (fs/xfs/xfs_filestream.c:274)
+   >>> defined in vmlinux.a(fs/xfs/xfs_globals.o)
+--
+>> ld.lld: error: vmlinux.a(fs/xfs/xfs_filestream.o):(function xfs_filestream_lookup_ag: .text+0x1e8): relocation R_RISCV_HI20 out of range: 536715 is not in [-524288, 524287]; references trace_xfs_filestream_lookup.__warned
+   >>> referenced by xfs_filestream.c:275 (fs/xfs/xfs_filestream.c:275)
+   >>> defined in vmlinux.a(fs/xfs/xfs_filestream.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
