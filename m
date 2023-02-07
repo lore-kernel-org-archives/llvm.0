@@ -1,100 +1,132 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01617211C;
-	Tue,  7 Feb 2023 12:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675772343; x=1707308343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=65Zile9WdO0Mi8LCaNFiWxLs0lzNOXy7iShOpkhjyz8=;
-  b=VAokhZCKuCZrIaQ2alPfszB+DgnSKrw9ih6a/BWbv/nf9jx3KuQyxzXy
-   H5jHmbt26AXoECEwRNgQrIjSOBP6hP4k+AbDq0+6/T4fDubtW3b94OjQW
-   1+u7lVAhycr8P9QEKxmnYNqwmakYTjWmibRp76MwmlDuAiAqoFrLdwT/d
-   C38yPvusOLWOzx3hq8wWFVwqhp+3NfJpUVfvYiHFWuTecvl2VsVdrEPyn
-   b2+0M9wtoJYjN9aiQgWqgiCZQ95rQu4Q7IlFs+EOvtt1GpX/Cy2px/r8P
-   ZiNMkcfZdxDI6ve2ePjjdRxu+LH8qt3hIutKFpNOCnesBs+sAwEBD2HXS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415709735"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415709735"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 04:19:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="912309570"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="912309570"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Feb 2023 04:19:00 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pPMw8-0003XG-0j;
-	Tue, 07 Feb 2023 12:19:00 +0000
-Date: Tue, 7 Feb 2023 20:18:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Scally <dan.scally@ideasonboard.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-testing 34/39] drivers/usb/gadget/configfs.c:824:6:
- warning: variable 'ret' set but not used
-Message-ID: <202302072028.rI3pAivq-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C7C53A5
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 16:13:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49F3C433D2;
+	Tue,  7 Feb 2023 16:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675786433;
+	bh=DQ1CJxcjsi3b+zqgaRiU3Jl5v/BM3ICCZKlhKghFh0M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DE3g6e+J+twxY5iQXeiCiS+916bB/3gIK508QO16HKNA9TOuv0k/FRrTm7HPd0ktF
+	 r70sg7p3xeFPTV15xJDQPZDPq+HHpmLHcCxRq/9gb9IMRf8oGiUWG/G0O4px2hTJqW
+	 J6aQjfA6tsc2SlQkawRpi9+vdao8xyLmKUP7+v44ztj7clMM4hw+1f6QsD/LzPE5MH
+	 6Eibdp9yNk/kfLNMzfefvhpoO4qoaO2h6HQKwCUVFCB/lB03RH8JUmSKvegtZtUVcl
+	 MltwtVrcGh/Rvth5lCojNAf0jARdFgRjn1kuBDV5CfPK5Ds/Y5xMqd06HrPQr4uDfE
+	 sxffkOhc8VIuw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] x86: vdso: sanitize asm helpers for vgetcpu.c
+Date: Tue,  7 Feb 2023 17:13:41 +0100
+Message-Id: <20230207161349.309901-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-head:   cf13d6e4a9aa6639c173fd630d82d586a2322ff9
-commit: 15a7cf8caabee4613764abe7814dd3162cb64137 [34/39] usb: gadget: configfs: Support arbitrary string descriptors
-config: i386-randconfig-a004-20230206 (https://download.01.org/0day-ci/archive/20230207/202302072028.rI3pAivq-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=15a7cf8caabee4613764abe7814dd3162cb64137
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch --no-tags usb usb-testing
-        git checkout 15a7cf8caabee4613764abe7814dd3162cb64137
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/gadget/
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+The x86 vdso implementation includes a few include/linux/*.h kernel
+headers outside of the include/vdso/*.h space.  This causes a new
+warning when building with clang, after the vgetcpu code is added
+to the vdso32 support on 64-bit kernels:
 
-All warnings (new ones prefixed by >>):
+In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+In file included from include/linux/kernel.h:22:
+In file included from include/linux/bitops.h:68:
+In file included from arch/x86/include/asm/bitops.h:420:
+arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
+                         : REG_IN (w));
+                                   ^
+In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+In file included from include/linux/kernel.h:25:
+In file included from include/linux/math.h:6:
+arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
+        asm ("mulq %2; divq %3" : "=a" (q)
+                                        ^
 
->> drivers/usb/gadget/configfs.c:824:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int ret;
-               ^
-   1 warning generated.
+Unlike gcc, clang checks inline asm constraints before dead code
+elimination, which breaks both __arch_hweight64() and mul_u64_u64_div_u64()
+when these are included with CONFIG_64BIT set but compiled with clang -m32,
+even when there are no callers.
 
+Change both affected headers to the check for 32-bit vs 64-bit is done
+correctly for vdso32. It would be nice to also limit the included headers
+further, to avoid subtle differences in the header contents, but that
+requires a larger cleanup.
 
-vim +/ret +824 drivers/usb/gadget/configfs.c
+Fixes: 92d33063c081 ("x86/vdso: Provide getcpu for x86-32.")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/x86/entry/vdso/vdso32/vgetcpu.c | 2 ++
+ arch/x86/include/asm/arch_hweight.h  | 4 ++--
+ arch/x86/include/asm/div64.h         | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-   818	
-   819	static ssize_t gadget_string_s_store(struct config_item *item, const char *page,
-   820					     size_t len)
-   821	{
-   822		struct gadget_string *string = to_gadget_string(item);
-   823		int size = min(sizeof(string->string), len + 1);
- > 824		int ret;
-   825	
-   826		if (len > USB_MAX_STRING_LEN)
-   827			return -EINVAL;
-   828	
-   829		ret = strscpy(string->string, page, size);
-   830		return len;
-   831	}
-   832	CONFIGFS_ATTR(gadget_string_, s);
-   833	
-
+diff --git a/arch/x86/entry/vdso/vdso32/vgetcpu.c b/arch/x86/entry/vdso/vdso32/vgetcpu.c
+index b777f84ffae9..9f8cf77c7077 100644
+--- a/arch/x86/entry/vdso/vdso32/vgetcpu.c
++++ b/arch/x86/entry/vdso/vdso32/vgetcpu.c
+@@ -1,2 +1,4 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define BUILD_VDSO32
++
+ #include "../vgetcpu.c"
+diff --git a/arch/x86/include/asm/arch_hweight.h b/arch/x86/include/asm/arch_hweight.h
+index ba88edd0d58b..cca0941673e0 100644
+--- a/arch/x86/include/asm/arch_hweight.h
++++ b/arch/x86/include/asm/arch_hweight.h
+@@ -4,7 +4,7 @@
+ 
+ #include <asm/cpufeatures.h>
+ 
+-#ifdef CONFIG_64BIT
++#if defined(CONFIG_64BIT) && !defined(BUILD_VDSO32)
+ #define REG_IN "D"
+ #define REG_OUT "a"
+ #else
+@@ -33,7 +33,7 @@ static inline unsigned int __arch_hweight8(unsigned int w)
+ 	return __arch_hweight32(w & 0xff);
+ }
+ 
+-#ifdef CONFIG_X86_32
++#if defined(CONFIG_X86_32) || defined(BUILD_VDSO32)
+ static inline unsigned long __arch_hweight64(__u64 w)
+ {
+ 	return  __arch_hweight32((u32)w) +
+diff --git a/arch/x86/include/asm/div64.h b/arch/x86/include/asm/div64.h
+index b8f1dc0761e4..97bd076db0b2 100644
+--- a/arch/x86/include/asm/div64.h
++++ b/arch/x86/include/asm/div64.h
+@@ -2,7 +2,7 @@
+ #ifndef _ASM_X86_DIV64_H
+ #define _ASM_X86_DIV64_H
+ 
+-#ifdef CONFIG_X86_32
++#if defined(CONFIG_X86_32) || defined(BUILD_VDSO32)
+ 
+ #include <linux/types.h>
+ #include <linux/log2.h>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
