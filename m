@@ -1,37 +1,24 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D337566E
-	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 16:46:06 +0000 (UTC)
-Received: by mail-wm1-f49.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so13605265wmb.4
-        for <llvm@lists.linux.dev>; Tue, 07 Feb 2023 08:46:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=organization:user-agent:in-reply-to:content-disposition
-         :mime-version:references:mail-followup-to:reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MFe7KbGPSeSiCrhFu3zhIymixh3OVejotXYjmmT4LpA=;
-        b=s7x8TXi4V4ID51dl/frB6dThlYp2OkJNdKjp0SS8/yJGQp1QWomdHFF8hnOfGHQ9yx
-         pz+7DB2ax0LCexrMS8v97pbJmJzjve/M11LE4drusejwBYljk1tNda4112BisX04p5Ly
-         RqG7IbAnG6Yvd/4Mj/xGqLrE5viVtfyrcXoLDiznaSylmEa+bdYXsbUNpaIe1SyAr4LU
-         J/nNvP/XsNwTOX+ZkHs567QSf24VIn0Z0I7xdBnAlH+aWxKTQpj664otf7MfYy0YMe10
-         62+Sg3ymSLYCfYKxm797irw2OvMbvoF2taUyir9U1za+w/L0X6+qJLWF+r9+O8Ee+DoQ
-         tbLw==
-X-Gm-Message-State: AO0yUKVo8Ma+vO0qsv44wyT4k70np5/dEQL0lg2KR/VYNREAcsXKj72W
-	OBcB9qZ7XJUyYxTyx5w/DfOpMQ==
-X-Google-Smtp-Source: AK7set8IQRTQ5/BGaLtaTu+sYMcnNDZr8Z6VT4BBBa0DxPnIF8+SzZ7cxDlQ5DGsPVF0zKnkYP9LnQ==
-X-Received: by 2002:a05:600c:4b1b:b0:3d9:f836:3728 with SMTP id i27-20020a05600c4b1b00b003d9f8363728mr3707950wmp.11.1675788364490;
-        Tue, 07 Feb 2023 08:46:04 -0800 (PST)
-Received: from fedora (p549440c4.dip0.t-ipconnect.de. [84.148.64.196])
-        by smtp.gmail.com with ESMTPSA id t8-20020a05600c198800b003dff870ce0esm9043123wmq.2.2023.02.07.08.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 08:46:04 -0800 (PST)
-Date: Tue, 7 Feb 2023 17:45:59 +0100
-From: Damian Tometzki <dtometzki@fedoraproject.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9150C566F;
+	Tue,  7 Feb 2023 16:53:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B818C4339B;
+	Tue,  7 Feb 2023 16:53:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675788831;
+	bh=XuTCGHDp71Maj5LPFP6Q/D0zLoJ9M2HqT+7H2wIqnvM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pGclJ/DqVAGjovIJ9hLph5/0eo+QXyrPNtMVOmmyhU/iTM76j4MTHDjAGJIiJRCr6
+	 2LbXUulAGSEj4UZhd1wq9FliysnhQxkImn+y6Xi9CjXIf7U9gvkKTn/5MMwxsONTD7
+	 I2jdy/HEwpKybpSEWLVBkt2zzgv7LHUA2QTum0n3YgEuxD4KwyzrrFPPcyqLH0A3nA
+	 nTT+CDj8l61w+cpEjedO/m475M40gmWccgXpJlKakNMprEfbes8voZ5EF+lxRCvH+S
+	 BqtuatyfKafip2JI+S9Zpk9JKIbYUIBrWR/XcajcT6XUTDhInIn70quYCmmZEoXTq7
+	 a1DmDU1hK+G0g==
+Date: Tue, 7 Feb 2023 09:53:48 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
 	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -42,19 +29,7 @@ Cc: kernel test robot <lkp@intel.com>,
 	"H. Peter Anvin" <hpa@zytor.com>
 Subject: Re: [PATCH] x86/vdso: Fake 32bit VDSO build on 64bit compile for
  vgetcpu.
-Message-ID: <Y+KAR/Jxz4U30qST@fedora>
-Reply-To: Damian Tometzki <dtometzki@fedoraproject.org>
-Mail-Followup-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <Y+KCHOkrumS1I/Th@dev-arch.thelio-3990X>
 References: <202302071338.m7nBGR5i-lkp@intel.com>
  <Y+IsCWQdXEr8d9Vy@linutronix.de>
 Precedence: bulk
@@ -66,17 +41,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <Y+IsCWQdXEr8d9Vy@linutronix.de>
-User-Agent: Mutt
-Organization: Familie Tometzki
 
-Hello Sebastian,
-Linux Kernel build 6.2.0rc7 was successfully with clang-17.
-
-Many Thanks
-Damian Tometzki
-
-
-On Tue, 07. Feb 11:46, Sebastian Andrzej Siewior wrote:
+On Tue, Feb 07, 2023 at 11:46:33AM +0100, Sebastian Andrzej Siewior wrote:
 > The 64bit register constrains in __arch_hweight64() can not be
 > fulfilled in a 32bit build. The function is only declared, not used
 > within vclock_gettime.c and gcc does not care. LLVM complains and
@@ -88,6 +54,16 @@ On Tue, 07. Feb 11:46, Sebastian Andrzej Siewior wrote:
 > Fixes: 92d33063c081a ("x86/vdso: Provide getcpu for x86-32.")
 > Reported-by: kernel test robot <lkp@intel.com>
 > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+Thank you so much for the fix! Boris inquired why this happens with
+clang and I wrote a little blurb here if that is helpful at all:
+
+https://lore.kernel.org/Y+J+UQ1vAKr6RHuH@dev-arch.thelio-3990X/
+
+Regardless, this works for me.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
 >  arch/x86/entry/vdso/vdso32/fake_32bit_build.h | 25 +++++++++++++++++
 >  arch/x86/entry/vdso/vdso32/vclock_gettime.c   | 27 +------------------
