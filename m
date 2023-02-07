@@ -1,44 +1,44 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8582CBD14;
-	Tue,  7 Feb 2023 04:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275A717F7;
+	Tue,  7 Feb 2023 05:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675743455; x=1707279455;
+  t=1675748381; x=1707284381;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l/hW9W9VG9B5eYsz9SDZNPiyr2Q0yhO2RZk0wdJgkSw=;
-  b=PNzVUdr45PzAeSD6rhpw19p1ntjYCfQK3b2/6RO/FMor7OZRrRRVzb1F
-   RciW8GKp40z56Q6o3MquvtWO2thkz05jNo9INPeqHAMy3XYNX+EQRDPF2
-   oe2FqlNivM6LeHlsjmVDSvNBXojXCIQv9jF1E0Mcfdb7rQzCskJOo37bL
-   I+KGCe5YAT1we3zfrpK3C9t+SDGcIvvCArTvPQpLr6MeN7BgZ0xnuJ9M7
-   ojtZ7QlbHUnx4lMa6lONuiAstTMimKF7ePoP5hjLqs7ocpCqjQ7V6136W
-   zyiUzQ48jYwg43NNHYkvPQTEdhA7sd6K5saWNg1UIUiVkOYftCxYvhvnJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="330690189"
+  bh=vA9Mmni/6NPac6Y0H9GUnP6jaS0rdTr3cyE3IuB+Rso=;
+  b=kjjHy26q3KJxRkHZK3EmIdrjURGww3orcsZHcLd5+KY0E08Lh2+u0mxG
+   ucV+MoyKWAxHDdLjti6Y8++e7UoTHFJqDnr70KOYZGx4QEjeEIXIss8wS
+   DIH7t8L8Bw2minY/+RSvPsiajjtnWL0To8R+m8XYNKcAX6ZvHXJMeeSSl
+   UwiZVjReLvqhMLH5y2lP3/OtBz7cIIUEJGgIZ77coPxV+8elQRKMRHZ1/
+   O0Sm6xWIIreFJEQq5Kja4+ksrqxtOt+uDK8IqplP9nAQ1/0D4NWVzFgbm
+   GhRMuaXcTkt/OIWkcsOeaeyyBucanSHhsqHt5Shq04uk1YSQLmzeDnniY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309745853"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="330690189"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 20:17:34 -0800
+   d="scan'208";a="309745853"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:39:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668645444"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="699114117"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668645444"
+   d="scan'208";a="699114117"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 20:17:33 -0800
+  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2023 21:39:38 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pPFQC-00033q-3A;
-	Tue, 07 Feb 2023 04:17:32 +0000
-Date: Tue, 7 Feb 2023 12:17:28 +0800
+	id 1pPGhd-00038A-19;
+	Tue, 07 Feb 2023 05:39:37 +0000
+Date: Tue, 7 Feb 2023 13:39:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andi Kleen <ak@linux.intel.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [intel-tdx:guest-filter-upstream 23/31]
- arch/x86/coco/tdx/filter.c:21:13: warning: unused variable
- 'filter_overridden'
-Message-ID: <202302071239.MJSQ1SNL-lkp@intel.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:x86/vdso 3/4] arch/x86/include/asm/arch_hweight.h:49:15: error:
+ invalid input size for constraint 'D'
+Message-ID: <202302071338.m7nBGR5i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,40 +48,82 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/intel/tdx.git guest-filter-upstream
-head:   fd61f2d2a82f5c0c284fa3f074bae5016c39e7bc
-commit: 4f14697c74172d5614c9ee8f1d5a6c55dd9fdbbf [23/31] x86/tdx: Add a command line option to add new ACPI tables to the filter
-config: x86_64-randconfig-a001-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071239.MJSQ1SNL-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
+head:   5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
+commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 [3/4] x86/vdso: Provide getcpu for x86-32.
+config: x86_64-randconfig-r031-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071338.m7nBGR5i-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/4f14697c74172d5614c9ee8f1d5a6c55dd9fdbbf
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-filter-upstream
-        git checkout 4f14697c74172d5614c9ee8f1d5a6c55dd9fdbbf
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=92d33063c081a82d25dd08a9cce03947c8ed9164
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/vdso
+        git checkout 92d33063c081a82d25dd08a9cce03947c8ed9164
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/coco/tdx/filter.c:21:13: warning: unused variable 'filter_overridden' [-Wunused-variable]
-   static bool filter_overridden;
-               ^
-   1 warning generated.
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+   In file included from include/linux/kernel.h:22:
+   In file included from include/linux/bitops.h:68:
+   In file included from arch/x86/include/asm/bitops.h:420:
+>> arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
+                            : REG_IN (w));
+                                      ^
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+   In file included from include/linux/kernel.h:25:
+   In file included from include/linux/math.h:6:
+>> arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
+           asm ("mulq %2; divq %3" : "=a" (q)
+                                           ^
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
+   __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+   ^
+   arch/x86/entry/vdso/vdso32/../vgetcpu.c:12:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   notrace long
+           ^
+           static 
+   1 warning and 2 errors generated.
 
 
-vim +/filter_overridden +21 arch/x86/coco/tdx/filter.c
+vim +/D +49 arch/x86/include/asm/arch_hweight.h
 
-    19	
-    20	/* Set true if authorize_allow_devs is used */
-  > 21	static bool filter_overridden;
-    22	
+d61931d89be506 Borislav Petkov 2010-03-05  35  
+d14edb1648221e Denys Vlasenko  2015-08-04  36  #ifdef CONFIG_X86_32
+d61931d89be506 Borislav Petkov 2010-03-05  37  static inline unsigned long __arch_hweight64(__u64 w)
+d61931d89be506 Borislav Petkov 2010-03-05  38  {
+d61931d89be506 Borislav Petkov 2010-03-05  39  	return  __arch_hweight32((u32)w) +
+d61931d89be506 Borislav Petkov 2010-03-05  40  		__arch_hweight32((u32)(w >> 32));
+d14edb1648221e Denys Vlasenko  2015-08-04  41  }
+d61931d89be506 Borislav Petkov 2010-03-05  42  #else
+d14edb1648221e Denys Vlasenko  2015-08-04  43  static __always_inline unsigned long __arch_hweight64(__u64 w)
+d14edb1648221e Denys Vlasenko  2015-08-04  44  {
+f5967101e9de12 Borislav Petkov 2016-05-30  45  	unsigned long res;
+d14edb1648221e Denys Vlasenko  2015-08-04  46  
+566b62a3676cae Uros Bizjak     2018-10-14  47  	asm (ALTERNATIVE("call __sw_hweight64", "popcntq %1, %0", X86_FEATURE_POPCNT)
+d61931d89be506 Borislav Petkov 2010-03-05  48  			 : "="REG_OUT (res)
+d61931d89be506 Borislav Petkov 2010-03-05 @49  			 : REG_IN (w));
+d61931d89be506 Borislav Petkov 2010-03-05  50  
+d61931d89be506 Borislav Petkov 2010-03-05  51  	return res;
+d61931d89be506 Borislav Petkov 2010-03-05  52  }
+d14edb1648221e Denys Vlasenko  2015-08-04  53  #endif /* CONFIG_X86_32 */
+d61931d89be506 Borislav Petkov 2010-03-05  54  
+
+:::::: The code at line 49 was first introduced by commit
+:::::: d61931d89be506372d01a90d1755f6d0a9fafe2d x86: Add optimized popcnt variants
+
+:::::: TO: Borislav Petkov <borislav.petkov@amd.com>
+:::::: CC: H. Peter Anvin <hpa@zytor.com>
 
 -- 
 0-DAY CI Kernel Test Service
