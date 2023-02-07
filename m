@@ -1,47 +1,50 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F36220FC;
-	Tue,  7 Feb 2023 10:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675766820; x=1707302820;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3o/IO5jmL5OOKn1iWyLWVWGS5mU414VnroKUj8HrQAI=;
-  b=G5HB9edPTIwhnqkuZ0s5uNoMNAvVtzWwaBCCdCPnVJl3gsxOcsn8JxH6
-   S/Q5o7L2uOhP+M5IBwDLrUyqqyAFh9zoS5ucdbrUAi9Ya+xCLiI0NC9ro
-   iwe1URuHq2o+UBdUJWOQBWomYmNLBhVMprys+qGbtRtx+AYeMcUuM5LUC
-   inaF3bZI1FTfIMgTZF1alSRRAaT4SkT+uteat9UOb0cpPtDV9Dux6tDp6
-   4IZDe07PAT7KaVQ5gI1IirRUufVG+7XjKJn2wv3jQI4yhtH+Exg8MQFx4
-   z+36LuBz8cjOhgLEe8/vKhq7oigiJ1q2Iw5ZJZJc1qljfS1tIBLF85Ndi
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="329493249"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="329493249"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 02:46:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668741431"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668741431"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Feb 2023 02:46:57 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pPLV2-0003T2-10;
-	Tue, 07 Feb 2023 10:46:56 +0000
-Date: Tue, 7 Feb 2023 18:45:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Elson Roy Serrao <quic_eserrao@quicinc.com>, gregkh@linuxfoundation.org,
-	Thinh.Nguyen@synopsys.com, balbi@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-	Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: Re: [PATCH v3 2/5] usb: dwc3: Add remote wakeup handling
-Message-ID: <202302071850.VZRjtYXx-lkp@intel.com>
-References: <1675710806-9735-3-git-send-email-quic_eserrao@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D1020FC
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 11:01:32 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 487C31FD81;
+	Tue,  7 Feb 2023 11:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1675767685; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MzqtHwylccrOKyTIhDhNG1l3BMPIMI3DFTMpbVf3iL4=;
+	b=VPAT3VNKfiJKDuAF3HJNQ6lpfApFPOQzwDvPHVHHB4C8+eELlws3QCYpCjIUi8HXIkfKfQ
+	B1Tgfs/UIE5xxCtO1SyGclMMDpT92z/B26rnuluZyuejlxvIdw+bmK6Z+vZ8FNnkyTcD75
+	OV2e88ZxwZDRR5VMjY/zPaldMEPegMI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1675767685;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MzqtHwylccrOKyTIhDhNG1l3BMPIMI3DFTMpbVf3iL4=;
+	b=WSi6PKwJ5mcZ5fVBc2EC0QGceztefltIxpxJxNXUxgYryfFMFbgbJOIm3+q4faeOqkHl0t
+	cKQFqR4OuiIYpiAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D42C13467;
+	Tue,  7 Feb 2023 11:01:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id BDXoDoUv4mMSMgAAMHmgww
+	(envelope-from <jack@suse.cz>); Tue, 07 Feb 2023 11:01:25 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id B42B7A06D5; Tue,  7 Feb 2023 12:01:24 +0100 (CET)
+Date: Tue, 7 Feb 2023 12:01:24 +0100
+From: Jan Kara <jack@suse.cz>
+To: Tom Rix <trix@redhat.com>
+Cc: jack@suse.com, nathan@kernel.org, ndesaulniers@google.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] udf: remove reporting loc in debug output
+Message-ID: <20230207110124.xbme2i2y6yasofci@quack3>
+References: <20230127162906.872395-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,135 +53,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1675710806-9735-3-git-send-email-quic_eserrao@quicinc.com>
+In-Reply-To: <20230127162906.872395-1-trix@redhat.com>
 
-Hi Elson,
+On Fri 27-01-23 08:29:06, Tom Rix wrote:
+> clang build fails with
+> fs/udf/partition.c:86:28: error: variable 'loc' is uninitialized when used here [-Werror,-Wuninitialized]
+>                           sb, block, partition, loc, index);
+>                                                 ^~~
+> 
+> loc is now only know when bh is valid.  So remove reporting loc in debug output.
+> 
+> Fixes: 4215db46d538 ("udf: Use udf_bread() in udf_get_pblock_virt15()")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thank you for the patch! Perhaps something to improve:
+Thanks! Patch applied!
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.2-rc7 next-20230207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+								Honza
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-gadget-Properly-configure-the-device-for-remote-wakeup/20230207-031528
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1675710806-9735-3-git-send-email-quic_eserrao%40quicinc.com
-patch subject: [PATCH v3 2/5] usb: dwc3: Add remote wakeup handling
-config: i386-randconfig-a002-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071850.VZRjtYXx-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e0d9f3f5f168e36cdb599617634010326a1412af
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Elson-Roy-Serrao/usb-gadget-Properly-configure-the-device-for-remote-wakeup/20230207-031528
-        git checkout e0d9f3f5f168e36cdb599617634010326a1412af
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/dwc3/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/dwc3/gadget.c:2318:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           case DWC3_LINK_STATE_RESET:
-           ^
-   drivers/usb/dwc3/gadget.c:2318:2: note: insert 'break;' to avoid fall-through
-           case DWC3_LINK_STATE_RESET:
-           ^
-           break; 
-   1 warning generated.
-
-
-vim +2318 drivers/usb/dwc3/gadget.c
-
-72246da40f3719af Felipe Balbi           2011-08-19  2291  
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2292  static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async)
-72246da40f3719af Felipe Balbi           2011-08-19  2293  {
-d6011f6fc21b4d4a Nicolas Saenz Julienne 2016-08-16  2294  	int			retries;
-72246da40f3719af Felipe Balbi           2011-08-19  2295  
-218ef7b647e3367c Felipe Balbi           2016-04-04  2296  	int			ret;
-72246da40f3719af Felipe Balbi           2011-08-19  2297  	u32			reg;
-72246da40f3719af Felipe Balbi           2011-08-19  2298  
-72246da40f3719af Felipe Balbi           2011-08-19  2299  	u8			link_state;
-72246da40f3719af Felipe Balbi           2011-08-19  2300  
-72246da40f3719af Felipe Balbi           2011-08-19  2301  	/*
-72246da40f3719af Felipe Balbi           2011-08-19  2302  	 * According to the Databook Remote wakeup request should
-72246da40f3719af Felipe Balbi           2011-08-19  2303  	 * be issued only when the device is in early suspend state.
-72246da40f3719af Felipe Balbi           2011-08-19  2304  	 *
-72246da40f3719af Felipe Balbi           2011-08-19  2305  	 * We can check that via USB Link State bits in DSTS register.
-72246da40f3719af Felipe Balbi           2011-08-19  2306  	 */
-72246da40f3719af Felipe Balbi           2011-08-19  2307  	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-72246da40f3719af Felipe Balbi           2011-08-19  2308  
-72246da40f3719af Felipe Balbi           2011-08-19  2309  	link_state = DWC3_DSTS_USBLNKST(reg);
-72246da40f3719af Felipe Balbi           2011-08-19  2310  
-72246da40f3719af Felipe Balbi           2011-08-19  2311  	switch (link_state) {
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2312  	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2313  		if (!dwc->rw_configured) {
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2314  			dev_err(dwc->dev,
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2315  				"device not configured for remote wakeup\n");
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2316  			return -EINVAL;
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2317  		}
-d0550cd20e52558e Thinh Nguyen           2020-01-31 @2318  	case DWC3_LINK_STATE_RESET:
-72246da40f3719af Felipe Balbi           2011-08-19  2319  	case DWC3_LINK_STATE_RX_DET:	/* in HS, means Early Suspend */
-c560e76319a94a3b Thinh Nguyen           2021-04-19  2320  	case DWC3_LINK_STATE_U2:	/* in HS, means Sleep (L1) */
-c560e76319a94a3b Thinh Nguyen           2021-04-19  2321  	case DWC3_LINK_STATE_U1:
-d0550cd20e52558e Thinh Nguyen           2020-01-31  2322  	case DWC3_LINK_STATE_RESUME:
-72246da40f3719af Felipe Balbi           2011-08-19  2323  		break;
-72246da40f3719af Felipe Balbi           2011-08-19  2324  	default:
-218ef7b647e3367c Felipe Balbi           2016-04-04  2325  		return -EINVAL;
-72246da40f3719af Felipe Balbi           2011-08-19  2326  	}
-72246da40f3719af Felipe Balbi           2011-08-19  2327  
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2328  	if (async)
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2329  		dwc3_gadget_enable_linksts_evts(dwc, true);
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2330  
-8598bde7fa125e85 Felipe Balbi           2012-01-02  2331  	ret = dwc3_gadget_set_link_state(dwc, DWC3_LINK_STATE_RECOV);
-8598bde7fa125e85 Felipe Balbi           2012-01-02  2332  	if (ret < 0) {
-8598bde7fa125e85 Felipe Balbi           2012-01-02  2333  		dev_err(dwc->dev, "failed to put link in Recovery\n");
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2334  		dwc3_gadget_enable_linksts_evts(dwc, false);
-218ef7b647e3367c Felipe Balbi           2016-04-04  2335  		return ret;
-8598bde7fa125e85 Felipe Balbi           2012-01-02  2336  	}
-72246da40f3719af Felipe Balbi           2011-08-19  2337  
-802fde983e8a3391 Paul Zimmerman         2012-04-27  2338  	/* Recent versions do this automatically */
-9af21dd6faeba593 Thinh Nguyen           2020-04-11  2339  	if (DWC3_VER_IS_PRIOR(DWC3, 194A)) {
-72246da40f3719af Felipe Balbi           2011-08-19  2340  		/* write zeroes to Link Change Request */
-fcc023c726b5879d Felipe Balbi           2012-05-24  2341  		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
-72246da40f3719af Felipe Balbi           2011-08-19  2342  		reg &= ~DWC3_DCTL_ULSTCHNGREQ_MASK;
-72246da40f3719af Felipe Balbi           2011-08-19  2343  		dwc3_writel(dwc->regs, DWC3_DCTL, reg);
-802fde983e8a3391 Paul Zimmerman         2012-04-27  2344  	}
-72246da40f3719af Felipe Balbi           2011-08-19  2345  
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2346  	/*
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2347  	 * Since link status change events are enabled we will receive
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2348  	 * an U0 event when wakeup is successful. So bail out.
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2349  	 */
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2350  	if (async)
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2351  		return 0;
-e0d9f3f5f168e36c Elson Roy Serrao       2023-02-06  2352  
-1d046793958f128d Paul Zimmerman         2012-02-15  2353  	/* poll until Link State changes to ON */
-d6011f6fc21b4d4a Nicolas Saenz Julienne 2016-08-16  2354  	retries = 20000;
-72246da40f3719af Felipe Balbi           2011-08-19  2355  
-d6011f6fc21b4d4a Nicolas Saenz Julienne 2016-08-16  2356  	while (retries--) {
-72246da40f3719af Felipe Balbi           2011-08-19  2357  		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-72246da40f3719af Felipe Balbi           2011-08-19  2358  
-72246da40f3719af Felipe Balbi           2011-08-19  2359  		/* in HS, means ON */
-72246da40f3719af Felipe Balbi           2011-08-19  2360  		if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U0)
-72246da40f3719af Felipe Balbi           2011-08-19  2361  			break;
-72246da40f3719af Felipe Balbi           2011-08-19  2362  	}
-72246da40f3719af Felipe Balbi           2011-08-19  2363  
-72246da40f3719af Felipe Balbi           2011-08-19  2364  	if (DWC3_DSTS_USBLNKST(reg) != DWC3_LINK_STATE_U0) {
-72246da40f3719af Felipe Balbi           2011-08-19  2365  		dev_err(dwc->dev, "failed to send remote wakeup\n");
-218ef7b647e3367c Felipe Balbi           2016-04-04  2366  		return -EINVAL;
-72246da40f3719af Felipe Balbi           2011-08-19  2367  	}
-72246da40f3719af Felipe Balbi           2011-08-19  2368  
-218ef7b647e3367c Felipe Balbi           2016-04-04  2369  	return 0;
-218ef7b647e3367c Felipe Balbi           2016-04-04  2370  }
-218ef7b647e3367c Felipe Balbi           2016-04-04  2371  
-
+> ---
+>  fs/udf/partition.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/udf/partition.c b/fs/udf/partition.c
+> index 92765d2f6958..5bcfe78d5cab 100644
+> --- a/fs/udf/partition.c
+> +++ b/fs/udf/partition.c
+> @@ -82,8 +82,8 @@ uint32_t udf_get_pblock_virt15(struct super_block *sb, uint32_t block,
+>  
+>  	bh = udf_bread(sbi->s_vat_inode, newblock, 0, &err);
+>  	if (!bh) {
+> -		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u) VAT: %u[%u]\n",
+> -			  sb, block, partition, loc, index);
+> +		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u)\n",
+> +			  sb, block, partition);
+>  		return 0xFFFFFFFF;
+>  	}
+>  
+> -- 
+> 2.26.3
+> 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
