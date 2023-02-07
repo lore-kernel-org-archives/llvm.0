@@ -1,93 +1,145 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E280220E8
-	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 10:27:56 +0000 (UTC)
-Received: by mail-wm1-f52.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12807502wmb.2
-        for <llvm@lists.linux.dev>; Tue, 07 Feb 2023 02:27:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K/a/KL0bMWPgC9CXdCThMrZjlb8QhLXnYKCv4iWo4eY=;
-        b=fiugTAuV3sCHtZpCy7nobQTJAl15kavC6CnHqVNMjy3NLSv2d3Osq+HM3sPpS9jrhh
-         O9wBFiy0GIXgh/YkxT1WIB+UuNT1bPFDjI7WuBs1AeHcybSL+bkg/k/hAL5B3ABTu0Wr
-         4/LxKU6DtyrHfUIrKTKMFRExFla0p8cchTpwd+F/WfwIZJ7TfL6Wi9G7ZEaZjKZOrRzk
-         nCSE4zQVh/rMPLGB7Jst8Bi9bLOmnUQvjCOHXfdGN0yG79C0/B84SJdiWdgiHk7Nnj9F
-         lo7hXrw/4Z9WDX6nC6qdq1KlsBIgXmP6nxkpvEyY0eOl9dU39dY6v7acuJNF2wzoPgYH
-         smoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K/a/KL0bMWPgC9CXdCThMrZjlb8QhLXnYKCv4iWo4eY=;
-        b=7aRqSUM2zfoIqOLOWU4gDHXwTSIzjJaXUbyAYTdoptE+p+J2nRTacrwCqQWTlS28Oz
-         wtRz/4uHihd/chsjGYbWXZlYRYEijaSA6Nf8UBAyfqIZCCVUy1Z7VYzZSWjgYr5ODW0O
-         KCCeCuEV0ypZ7g384SYmlnVK99xZXh7fDStqgshedDN3R8leZwoQ96skovltOyEEIle8
-         km+IkGcvK+U6KhhUdlbjDRr5WZpnAjO1gzHSeeEttYaNMdtvFaYpT0Yr0DuQrSK2p+NZ
-         eOrYfOb1Vsx3UT/vTxBLSHOWpw97gXJtx860uhXce9K6gcg6US/yQhQ15YnnGSMZelxb
-         Z+tw==
-X-Gm-Message-State: AO0yUKWLlGHqs509venAVIKuEBxgKBYZG8Bwe+cnlaD+phSLtXk1Jkhw
-	EEfKNNeZ/yXxtk/6M4B6MjVkK31kUtvSV/HdewOmCg==
-X-Google-Smtp-Source: AK7set8uundn64WctW8w+1nCqgFhNuk8A7jJVnmPWQzU+hczWhZe0Z5JvnFwg5y6ifGJr6fu528b/lyBCyyZJ+4KtRA=
-X-Received: by 2002:a05:600c:a0c:b0:3da:27f7:b3da with SMTP id
- z12-20020a05600c0a0c00b003da27f7b3damr977923wmp.176.1675765675152; Tue, 07
- Feb 2023 02:27:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FC920FC;
+	Tue,  7 Feb 2023 10:46:37 +0000 (UTC)
+Date: Tue, 7 Feb 2023 11:46:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1675766795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d4OfPHVZxvLVQJiLGkEzwDcFDOPDdLvwh5U9K8Vc7IA=;
+	b=W/z9JUomEvP15zgVYP3y53fhmlDRhZDjuaPO5RFTivUu2xbGCL2FQalemJn/KCF6M3Qr3E
+	jI5O4z/RU0N2ulLHBo+vQjP9LUyzgGSEXnVHSj9bF3ZIZoqT5Qq/o0QF6w3HR53Kfw0cYR
+	2IQ44/46QuKBefIR3HW3xqMPcRM6gDvCLlfqIjQ/mObFFqahOqm9a7YJdpGX6ElBXkJhXL
+	UFxNIfgPGA69/xXKklRBN6J0T1x+0cPstvxVe2rDKmtesfmIVhLJ4jE2RZtPETpXu+XeCn
+	eQp1Mb6k1Kid41cjHfgl8FMiyZezT13qNvUaqeC6KORLnOi2ZBcgzQpzTQhSMQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1675766795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d4OfPHVZxvLVQJiLGkEzwDcFDOPDdLvwh5U9K8Vc7IA=;
+	b=S1CWbPQkKU7cyRM3kKxQ2x4gi+2UDGFv8hOGfC8VMpMVVZeEH5t7Z3gTZJ+pEv6FPV7Aqz
+	xrU/HYqeK+4aQ8DQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: kernel test robot <lkp@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/vdso: Fake 32bit VDSO build on 64bit compile for vgetcpu.
+Message-ID: <Y+IsCWQdXEr8d9Vy@linutronix.de>
+References: <202302071338.m7nBGR5i-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000269f9a05f02be9d8@google.com> <000000000000ce7ebf05f40de992@google.com>
-In-Reply-To: <000000000000ce7ebf05f40de992@google.com>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Tue, 7 Feb 2023 11:27:43 +0100
-Message-ID: <CANp29Y5SaORjhSL2X2gHw57532G=ZiecZm4XXKTOQv+dZh+EXA@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in copy_verifier_state
-To: syzbot <syzbot+59af7bf76d795311da8c@syzkaller.appspotmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com, hawk@kernel.org, 
-	john.fastabend@gmail.com, jolsa@kernel.org, keescook@chromium.org, 
-	kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com, 
-	song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	v4bel@theori.io, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202302071338.m7nBGR5i-lkp@intel.com>
 
-On Mon, Feb 6, 2023 at 9:31 PM syzbot
-<syzbot+59af7bf76d795311da8c@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 45435d8da71f9f3e6860e6e6ea9667b6ec17ec64
-> Author: Kees Cook <keescook@chromium.org>
-> Date:   Fri Dec 23 18:28:44 2022 +0000
->
->     bpf: Always use maximal size for copy_array()
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14c62f23480000
-> start commit:   041fae9c105a Merge tag 'f2fs-for-6.2-rc1' of git://git.ker..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e2f3d9d232a3cac5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=59af7bf76d795311da8c
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1650d477880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1305f993880000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: bpf: Always use maximal size for copy_array()
+The 64bit register constrains in __arch_hweight64() can not be
+fulfilled in a 32bit build. The function is only declared, not used
+within vclock_gettime.c and gcc does not care. LLVM complains and
+aborts.
 
-Seems reasonable to me.
+Move the "fake a 32 bit kernel configuration" bits from vclock_gettime.c
+into a common header file. Use this from vclock_gettime.c and vgetcpu.c.
 
-#syz fix: bpf: Always use maximal size for copy_array()
+Fixes: 92d33063c081a ("x86/vdso: Provide getcpu for x86-32.")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ arch/x86/entry/vdso/vdso32/fake_32bit_build.h | 25 +++++++++++++++++
+ arch/x86/entry/vdso/vdso32/vclock_gettime.c   | 27 +------------------
+ arch/x86/entry/vdso/vdso32/vgetcpu.c          |  1 +
+ 3 files changed, 27 insertions(+), 26 deletions(-)
+ create mode 100644 arch/x86/entry/vdso/vdso32/fake_32bit_build.h
 
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000ce7ebf05f40de992%40google.com.
+diff --git a/arch/x86/entry/vdso/vdso32/fake_32bit_build.h b/arch/x86/entry/vdso/vdso32/fake_32bit_build.h
+new file mode 100644
+index 0000000000000..db1b15f686e32
+--- /dev/null
++++ b/arch/x86/entry/vdso/vdso32/fake_32bit_build.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifdef CONFIG_X86_64
++
++/*
++ * in case of a 32 bit VDSO for a 64 bit kernel fake a 32 bit kernel
++ * configuration
++ */
++#undef CONFIG_64BIT
++#undef CONFIG_X86_64
++#undef CONFIG_COMPAT
++#undef CONFIG_PGTABLE_LEVELS
++#undef CONFIG_ILLEGAL_POINTER_VALUE
++#undef CONFIG_SPARSEMEM_VMEMMAP
++#undef CONFIG_NR_CPUS
++#undef CONFIG_PARAVIRT_XXL
++
++#define CONFIG_X86_32 1
++#define CONFIG_PGTABLE_LEVELS 2
++#define CONFIG_PAGE_OFFSET 0
++#define CONFIG_ILLEGAL_POINTER_VALUE 0
++#define CONFIG_NR_CPUS 1
++
++#define BUILD_VDSO32_64
++
++#endif
+diff --git a/arch/x86/entry/vdso/vdso32/vclock_gettime.c b/arch/x86/entry/vdso/vdso32/vclock_gettime.c
+index 283ed9d004267..86981decfea83 100644
+--- a/arch/x86/entry/vdso/vdso32/vclock_gettime.c
++++ b/arch/x86/entry/vdso/vdso32/vclock_gettime.c
+@@ -1,29 +1,4 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #define BUILD_VDSO32
+-
+-#ifdef CONFIG_X86_64
+-
+-/*
+- * in case of a 32 bit VDSO for a 64 bit kernel fake a 32 bit kernel
+- * configuration
+- */
+-#undef CONFIG_64BIT
+-#undef CONFIG_X86_64
+-#undef CONFIG_COMPAT
+-#undef CONFIG_PGTABLE_LEVELS
+-#undef CONFIG_ILLEGAL_POINTER_VALUE
+-#undef CONFIG_SPARSEMEM_VMEMMAP
+-#undef CONFIG_NR_CPUS
+-#undef CONFIG_PARAVIRT_XXL
+-
+-#define CONFIG_X86_32 1
+-#define CONFIG_PGTABLE_LEVELS 2
+-#define CONFIG_PAGE_OFFSET 0
+-#define CONFIG_ILLEGAL_POINTER_VALUE 0
+-#define CONFIG_NR_CPUS 1
+-
+-#define BUILD_VDSO32_64
+-
+-#endif
+-
++#include "fake_32bit_build.h"
+ #include "../vclock_gettime.c"
+diff --git a/arch/x86/entry/vdso/vdso32/vgetcpu.c b/arch/x86/entry/vdso/vdso32/vgetcpu.c
+index b777f84ffae9b..3a9791f5e9989 100644
+--- a/arch/x86/entry/vdso/vdso32/vgetcpu.c
++++ b/arch/x86/entry/vdso/vdso32/vgetcpu.c
+@@ -1,2 +1,3 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include "fake_32bit_build.h"
+ #include "../vgetcpu.c"
+-- 
+2.39.1
+
