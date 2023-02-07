@@ -1,61 +1,81 @@
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879BD566B
-	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 16:18:11 +0000 (UTC)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 343D81EC068B;
-	Tue,  7 Feb 2023 17:18:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-	t=1675786689;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-	bh=VNy8Woq4Jn8BVfHCwBWvG4CoPXvMEy3JphpIhqqNLUc=;
-	b=iGao97844DWXkB0gIVhh/LJ2AL9svQiYVZHAzBR7W+T55AOWJpqM4vT0tG9X5r671dGVDP
-	fIE/YUn3UvIZHUf1OQz+SXjOii1rxug00MjKHbYtSPvcM4wiftA7gJMxjzGaGZz0hGde8j
-	Je0iPXS5LhIf3HvQ+8nvV7z2bQi2IKU=
-Date: Tue, 7 Feb 2023 17:18:08 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] x86: vdso: sanitize asm helpers for vgetcpu.c
-Message-ID: <Y+J5wLxzFR0S2Bx/@zn.tnic>
-References: <20230207161349.309901-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80DC566B
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 16:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3BA9C433EF;
+	Tue,  7 Feb 2023 16:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675787340;
+	bh=dDevxFmx4nPr6l+g/cb4GQD7A8atVYaQ4UfrYU36L5o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jSHVPFMxSejPzpwEk9GYVVQQ5dNWOxcu/ii2+QHh4kwQGnMZeAqCJchqgWuZ1j6bD
+	 y72jJzamDDkZZLD0fN5FLKQ8vzCC2Pzpv+vDjkEIABlVUBjNTqjIz69weiNCK8MZ6Y
+	 PKMlKmnr6RKLPJw29OX1HhFa7eBX/srI9Dn554k1lBrKlnFoe6lRsPTCDZXicAgARy
+	 X8qIlTK7huyf8no2jar4LDbV4cH1gPB+KCRnhbFjhhhCiyXr14kUMiE9JLzrsABNA9
+	 2RLnh8LeF8PVUrbWoz4QGYMwkXK5fP/tdOViD9JoE2XX+HPkePOEiteMSXoA1JBZWP
+	 5vcJ7oD467maw==
+Date: Tue, 7 Feb 2023 09:28:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>,
+	Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	lkft-triage@lists.linaro.org, borislav.petkov@amd.com,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: x86/include/asm/arch_hweight.h:49:15: error: invalid input size
+ for constraint 'D'
+Message-ID: <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
+References: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207161349.309901-1-arnd@kernel.org>
+In-Reply-To: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
 
-On Tue, Feb 07, 2023 at 05:13:41PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+Hi Naresh,
+
+On Tue, Feb 07, 2023 at 01:27:05PM +0530, Naresh Kamboju wrote:
+> Following Build regressions warnings / errors noticed on Linux next-20230207.
 > 
-> The x86 vdso implementation includes a few include/linux/*.h kernel
-> headers outside of the include/vdso/*.h space.  This causes a new
-> warning when building with clang, after the vgetcpu code is added
-> to the vdso32 support on 64-bit kernels:
+> Regressions found on x86_64:
+> 
+>     - build/clang-15-lkftconfig-compat
+>     - build/clang-nightly-lkftconfig
+>     - build/clang-15-lkftconfig
+>     - build/clang-15-lkftconfig-kcsan
+>     - build/clang-lkftconfig
+> 
+> In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+> In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+> In file included from include/linux/kernel.h:22:
+> In file included from include/linux/bitops.h:68:
+> In file included from arch/x86/include/asm/bitops.h:420:
+> arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size
+> for constraint 'D'
+>                          : REG_IN (w));
+>                                    ^
+> In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+> In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+> In file included from include/linux/kernel.h:25:
+> In file included from include/linux/math.h:6:
+> arch/x86/include/asm/div64.h:85:34: error: invalid output size for
+> constraint '=a'
+>         asm ("mulq %2; divq %3" : "=a" (q)
+>                                         ^
+> 2 errors generated.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-...
+Thanks a lot for the report as always! Looks like there is a fix pending
+on the list:
 
-https://lore.kernel.org/r/Y%2BIsCWQdXEr8d9Vy@linutronix.de
+https://lore.kernel.org/Y+IsCWQdXEr8d9Vy@linutronix.de/
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Cheers,
+Nathan
