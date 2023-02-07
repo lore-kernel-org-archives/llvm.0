@@ -1,150 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9150C566F;
-	Tue,  7 Feb 2023 16:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B818C4339B;
-	Tue,  7 Feb 2023 16:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE2B5685
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 17:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC57C4339C;
+	Tue,  7 Feb 2023 17:42:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675788831;
-	bh=XuTCGHDp71Maj5LPFP6Q/D0zLoJ9M2HqT+7H2wIqnvM=;
+	s=k20201202; t=1675791749;
+	bh=8LsW8Vk/wm80CoNsekTrZ9hm5TsT/R2+QAciIureH9k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pGclJ/DqVAGjovIJ9hLph5/0eo+QXyrPNtMVOmmyhU/iTM76j4MTHDjAGJIiJRCr6
-	 2LbXUulAGSEj4UZhd1wq9FliysnhQxkImn+y6Xi9CjXIf7U9gvkKTn/5MMwxsONTD7
-	 I2jdy/HEwpKybpSEWLVBkt2zzgv7LHUA2QTum0n3YgEuxD4KwyzrrFPPcyqLH0A3nA
-	 nTT+CDj8l61w+cpEjedO/m475M40gmWccgXpJlKakNMprEfbes8voZ5EF+lxRCvH+S
-	 BqtuatyfKafip2JI+S9Zpk9JKIbYUIBrWR/XcajcT6XUTDhInIn70quYCmmZEoXTq7
-	 a1DmDU1hK+G0g==
-Date: Tue, 7 Feb 2023 09:53:48 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: kernel test robot <lkp@intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/vdso: Fake 32bit VDSO build on 64bit compile for
- vgetcpu.
-Message-ID: <Y+KCHOkrumS1I/Th@dev-arch.thelio-3990X>
-References: <202302071338.m7nBGR5i-lkp@intel.com>
- <Y+IsCWQdXEr8d9Vy@linutronix.de>
+	b=PP1OV2Qs8Yjkk+UHV1P+TnLJrohipluZS/y1GKpCMpROSkfXvy2QhllqHCI/QlhnE
+	 9xzsnAPi/STSrY4JKnklZhwaapmjxy4x9e50vr5k11A6yKqknI9z/2J+LROjwcoT6J
+	 ILeWI1e8STm0L1nGu3k3WmNFXy5bspGchnHYnI6Ek7oaBsVb49LrSUNgmQ2cOYJ8wc
+	 U4lPU+4zL7di0gsVWEjxQGLuH6zJuE8Wju6yFsh4m6JHWyv8DrbffNzs7JOvIlxm/i
+	 72izjBr/pTZD9SOu6MQTbhTX1TvHkMIRjltd5IdxIWS1g2M480BIXL3WycWTTU8RVV
+	 uOETDfNPTk1lw==
+Date: Tue, 7 Feb 2023 09:42:27 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: current objtool warnings from randconfig builds
+Message-ID: <20230207174227.rimpkz3b3y7m4fch@treble>
+References: <9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com>
+ <Y+J5ev/R/Sz6nwBF@hirez.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+IsCWQdXEr8d9Vy@linutronix.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+J5ev/R/Sz6nwBF@hirez.programming.kicks-ass.net>
 
-On Tue, Feb 07, 2023 at 11:46:33AM +0100, Sebastian Andrzej Siewior wrote:
-> The 64bit register constrains in __arch_hweight64() can not be
-> fulfilled in a 32bit build. The function is only declared, not used
-> within vclock_gettime.c and gcc does not care. LLVM complains and
-> aborts.
+On Tue, Feb 07, 2023 at 05:16:58PM +0100, Peter Zijlstra wrote:
+> On Tue, Feb 07, 2023 at 11:25:27AM +0100, Arnd Bergmann wrote:
+> > Hi Josh and Peter,
+> > 
+> > I've updated my randconfig test setup to use gcc-13 and clang-16, and
+> > have sent fixes for all normal WERROR=y build warnings, but there are a
+> > lot of objtool warnings that remain. I've reported some of them in
+> > the past, some others are new. It would be nice to at least reduce
+> > the number of warnings either through code changes or workarounds
+> > in objtool for any false positives.
+> > 
+> > Out of 1500 builds, about a third had any warnings, this is the full
+> > list sorted by frequency. Let me know if there are any that you haven't
+> > seen before, I can provide the corresponding object and config files
+> > for reproducing.
+> > 
+> >     Arnd
+> > 
+> > 8<---
+> > 205 mm/kasan/shadow.o: warning: objtool: __asan_memset+0x2e: call to __memset() with UACCESS enabled
+> > 205 mm/kasan/shadow.o: warning: objtool: __asan_memmove+0x48: call to __memmove() with UACCESS enabled
+> > 205 mm/kasan/shadow.o: warning: objtool: __asan_memcpy+0x48: call to __memcpy() with UACCESS enabled
 > 
-> Move the "fake a 32 bit kernel configuration" bits from vclock_gettime.c
-> into a common header file. Use this from vclock_gettime.c and vgetcpu.c.
+> Patch pending here:
 > 
-> Fixes: 92d33063c081a ("x86/vdso: Provide getcpu for x86-32.")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-
-Thank you so much for the fix! Boris inquired why this happens with
-clang and I wrote a little blurb here if that is helpful at all:
-
-https://lore.kernel.org/Y+J+UQ1vAKr6RHuH@dev-arch.thelio-3990X/
-
-Regardless, this works for me.
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  arch/x86/entry/vdso/vdso32/fake_32bit_build.h | 25 +++++++++++++++++
->  arch/x86/entry/vdso/vdso32/vclock_gettime.c   | 27 +------------------
->  arch/x86/entry/vdso/vdso32/vgetcpu.c          |  1 +
->  3 files changed, 27 insertions(+), 26 deletions(-)
->  create mode 100644 arch/x86/entry/vdso/vdso32/fake_32bit_build.h
+>   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=sched/core-robot&id=79cdfdacd5b8d1ac77e24ccbc178bba0294d0d78
+> ￼
 > 
-> diff --git a/arch/x86/entry/vdso/vdso32/fake_32bit_build.h b/arch/x86/entry/vdso/vdso32/fake_32bit_build.h
-> new file mode 100644
-> index 0000000000000..db1b15f686e32
-> --- /dev/null
-> +++ b/arch/x86/entry/vdso/vdso32/fake_32bit_build.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifdef CONFIG_X86_64
-> +
-> +/*
-> + * in case of a 32 bit VDSO for a 64 bit kernel fake a 32 bit kernel
-> + * configuration
-> + */
-> +#undef CONFIG_64BIT
-> +#undef CONFIG_X86_64
-> +#undef CONFIG_COMPAT
-> +#undef CONFIG_PGTABLE_LEVELS
-> +#undef CONFIG_ILLEGAL_POINTER_VALUE
-> +#undef CONFIG_SPARSEMEM_VMEMMAP
-> +#undef CONFIG_NR_CPUS
-> +#undef CONFIG_PARAVIRT_XXL
-> +
-> +#define CONFIG_X86_32 1
-> +#define CONFIG_PGTABLE_LEVELS 2
-> +#define CONFIG_PAGE_OFFSET 0
-> +#define CONFIG_ILLEGAL_POINTER_VALUE 0
-> +#define CONFIG_NR_CPUS 1
-> +
-> +#define BUILD_VDSO32_64
-> +
-> +#endif
-> diff --git a/arch/x86/entry/vdso/vdso32/vclock_gettime.c b/arch/x86/entry/vdso/vdso32/vclock_gettime.c
-> index 283ed9d004267..86981decfea83 100644
-> --- a/arch/x86/entry/vdso/vdso32/vclock_gettime.c
-> +++ b/arch/x86/entry/vdso/vdso32/vclock_gettime.c
-> @@ -1,29 +1,4 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #define BUILD_VDSO32
-> -
-> -#ifdef CONFIG_X86_64
-> -
-> -/*
-> - * in case of a 32 bit VDSO for a 64 bit kernel fake a 32 bit kernel
-> - * configuration
-> - */
-> -#undef CONFIG_64BIT
-> -#undef CONFIG_X86_64
-> -#undef CONFIG_COMPAT
-> -#undef CONFIG_PGTABLE_LEVELS
-> -#undef CONFIG_ILLEGAL_POINTER_VALUE
-> -#undef CONFIG_SPARSEMEM_VMEMMAP
-> -#undef CONFIG_NR_CPUS
-> -#undef CONFIG_PARAVIRT_XXL
-> -
-> -#define CONFIG_X86_32 1
-> -#define CONFIG_PGTABLE_LEVELS 2
-> -#define CONFIG_PAGE_OFFSET 0
-> -#define CONFIG_ILLEGAL_POINTER_VALUE 0
-> -#define CONFIG_NR_CPUS 1
-> -
-> -#define BUILD_VDSO32_64
-> -
-> -#endif
-> -
-> +#include "fake_32bit_build.h"
->  #include "../vclock_gettime.c"
-> diff --git a/arch/x86/entry/vdso/vdso32/vgetcpu.c b/arch/x86/entry/vdso/vdso32/vgetcpu.c
-> index b777f84ffae9b..3a9791f5e9989 100644
-> --- a/arch/x86/entry/vdso/vdso32/vgetcpu.c
-> +++ b/arch/x86/entry/vdso/vdso32/vgetcpu.c
-> @@ -1,2 +1,3 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#include "fake_32bit_build.h"
->  #include "../vgetcpu.c"
-> -- 
-> 2.39.1
+> > 80 vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from callable instruction with modified stack frame
 > 
+> Can you provide details on how to reproduce this?
+
+Arnd, thanks for rounding these up and posting them.
+
+I agree we need to get these all cleaned up, but before we go too far
+down the rabbit hole, is there some better way to track these?
+
+Not that I would suggest using an external tracker, but maybe at least
+put each set of related warnings (e.g., those having the same frequency)
+in its own subthread with the config/compiler info included.
+
+-- 
+Josh
