@@ -1,81 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80DC566B
-	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 16:29:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3BA9C433EF;
-	Tue,  7 Feb 2023 16:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675787340;
-	bh=dDevxFmx4nPr6l+g/cb4GQD7A8atVYaQ4UfrYU36L5o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jSHVPFMxSejPzpwEk9GYVVQQ5dNWOxcu/ii2+QHh4kwQGnMZeAqCJchqgWuZ1j6bD
-	 y72jJzamDDkZZLD0fN5FLKQ8vzCC2Pzpv+vDjkEIABlVUBjNTqjIz69weiNCK8MZ6Y
-	 PKMlKmnr6RKLPJw29OX1HhFa7eBX/srI9Dn554k1lBrKlnFoe6lRsPTCDZXicAgARy
-	 X8qIlTK7huyf8no2jar4LDbV4cH1gPB+KCRnhbFjhhhCiyXr14kUMiE9JLzrsABNA9
-	 2RLnh8LeF8PVUrbWoz4QGYMwkXK5fP/tdOViD9JoE2XX+HPkePOEiteMSXoA1JBZWP
-	 5vcJ7oD467maw==
-Date: Tue, 7 Feb 2023 09:28:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9B2566E
+	for <llvm@lists.linux.dev>; Tue,  7 Feb 2023 16:30:45 +0000 (UTC)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 997171EC01E0;
+	Tue,  7 Feb 2023 17:30:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1675787443;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=k7lbXAoNmIgA34q7uf5Rrx5EbmJefw8z97r3hM5YyxY=;
+	b=PGAirc20vXYdDpS+IbMHLx0xJvfBL/VD4QXbhYBBK5tVbOeRD3Z9Efv4MQUKm6tZcYSvjr
+	7usAOERy+8NzTMh5dAcrZcbaD56EJBUQhaFhynoOKUeDyuPD0+JaUJmBBrTGxIKsA8rxvK
+	ZnbsuLB0dNTNLhna/zQ6q4ygyCg9Y6A=
+Date: Tue, 7 Feb 2023 17:30:38 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev,
+	open list <linux-kernel@vger.kernel.org>,
 	Linux-Next Mailing List <linux-next@vger.kernel.org>,
-	lkft-triage@lists.linaro.org, borislav.petkov@amd.com,
-	"H. Peter Anvin" <hpa@zytor.com>,
+	lkft-triage@lists.linaro.org, "H. Peter Anvin" <hpa@zytor.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Subject: Re: x86/include/asm/arch_hweight.h:49:15: error: invalid input size
  for constraint 'D'
-Message-ID: <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
+Message-ID: <Y+J8rtEBlSTsCBLa@zn.tnic>
 References: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
+ <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
+In-Reply-To: <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
 
-Hi Naresh,
-
-On Tue, Feb 07, 2023 at 01:27:05PM +0530, Naresh Kamboju wrote:
-> Following Build regressions warnings / errors noticed on Linux next-20230207.
+On Tue, Feb 07, 2023 at 09:28:58AM -0700, Nathan Chancellor wrote:
+> Thanks a lot for the report as always! Looks like there is a fix pending
+> on the list:
 > 
-> Regressions found on x86_64:
-> 
->     - build/clang-15-lkftconfig-compat
->     - build/clang-nightly-lkftconfig
->     - build/clang-15-lkftconfig
->     - build/clang-15-lkftconfig-kcsan
->     - build/clang-lkftconfig
-> 
-> In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-> In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-> In file included from include/linux/kernel.h:22:
-> In file included from include/linux/bitops.h:68:
-> In file included from arch/x86/include/asm/bitops.h:420:
-> arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size
-> for constraint 'D'
->                          : REG_IN (w));
->                                    ^
-> In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-> In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-> In file included from include/linux/kernel.h:25:
-> In file included from include/linux/math.h:6:
-> arch/x86/include/asm/div64.h:85:34: error: invalid output size for
-> constraint '=a'
->         asm ("mulq %2; divq %3" : "=a" (q)
->                                         ^
-> 2 errors generated.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> https://lore.kernel.org/Y+IsCWQdXEr8d9Vy@linutronix.de/
 
-Thanks a lot for the report as always! Looks like there is a fix pending
-on the list:
+Btw, while I have you, do you know why clang isn't DCOing this chunk
+like gcc does?
 
-https://lore.kernel.org/Y+IsCWQdXEr8d9Vy@linutronix.de/
+Thx.
 
-Cheers,
-Nathan
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
