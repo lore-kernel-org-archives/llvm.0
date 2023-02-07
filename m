@@ -1,36 +1,36 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275A717F7;
-	Tue,  7 Feb 2023 05:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D1317F7;
+	Tue,  7 Feb 2023 05:51:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675748381; x=1707284381;
+  t=1675749064; x=1707285064;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vA9Mmni/6NPac6Y0H9GUnP6jaS0rdTr3cyE3IuB+Rso=;
-  b=kjjHy26q3KJxRkHZK3EmIdrjURGww3orcsZHcLd5+KY0E08Lh2+u0mxG
-   ucV+MoyKWAxHDdLjti6Y8++e7UoTHFJqDnr70KOYZGx4QEjeEIXIss8wS
-   DIH7t8L8Bw2minY/+RSvPsiajjtnWL0To8R+m8XYNKcAX6ZvHXJMeeSSl
-   UwiZVjReLvqhMLH5y2lP3/OtBz7cIIUEJGgIZ77coPxV+8elQRKMRHZ1/
-   O0Sm6xWIIreFJEQq5Kja4+ksrqxtOt+uDK8IqplP9nAQ1/0D4NWVzFgbm
-   GhRMuaXcTkt/OIWkcsOeaeyyBucanSHhsqHt5Shq04uk1YSQLmzeDnniY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309745853"
+  bh=3b3aWcL1l7U/L1LS+KV371zL/qzf8gpKCQsHXNrtd54=;
+  b=g9Vr+pP6f7bQ7lOWNV91haqW0zUuOFY9X7gqrOuPxIYXc6UmmsXsjEGI
+   KLBGWMfjF5LGCqHPqi15fvfcqyrsbjWbvt2tXXGb0A1XH5ltkoXy7P9ST
+   NB3qn66XW5a1vvceRH4JjaQaVDfsoKapEc9uKGQfh1M1g57Pb+jUt0hlq
+   9gvNXdn3Q6pA26ibUtH5nwF9Yif6uPSFJ3mmt/hqNpQntdSpo8AOw0IYY
+   uuxzwxtF0CVE5LkKHVl23eigl1HAmrF/29YWfDV5DBNWlSE/FYgQnPvVw
+   EGKKzt02irM4eOtaIgYJ2WBIG85PjWOdTclpG8INNq7eQ/xh/zX+RwJga
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415633704"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="309745853"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:39:40 -0800
+   d="scan'208";a="415633704"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:50:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="699114117"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775409282"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="699114117"
+   d="scan'208";a="775409282"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2023 21:39:38 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2023 21:50:39 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pPGhd-00038A-19;
-	Tue, 07 Feb 2023 05:39:37 +0000
-Date: Tue, 7 Feb 2023 13:39:30 +0800
+	id 1pPGsI-00038v-1M;
+	Tue, 07 Feb 2023 05:50:38 +0000
+Date: Tue, 7 Feb 2023 13:50:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -38,7 +38,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Thomas Gleixner <tglx@linutronix.de>
 Subject: [tip:x86/vdso 3/4] arch/x86/include/asm/arch_hweight.h:49:15: error:
  invalid input size for constraint 'D'
-Message-ID: <202302071338.m7nBGR5i-lkp@intel.com>
+Message-ID: <202302071322.KTuOfRSa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,7 +51,7 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
 head:   5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
 commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 [3/4] x86/vdso: Provide getcpu for x86-32.
-config: x86_64-randconfig-r031-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071338.m7nBGR5i-lkp@intel.com/config)
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230207/202302071322.KTuOfRSa-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
