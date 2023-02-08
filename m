@@ -1,107 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F99D33FF
-	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 15:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1675871714;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7sUnVzlMx2m7Rm8oB22gZPkorcr5iVWMwlElG24lMuQ=;
-	b=bXuMHlRaFmTVlv2qmyqju4Df1ueMDMXlSI+GaHjqDkkr7E9QAVSQ+g6XlXHcP9WNjpCFuS
-	P9X/g94zgTOoQVr1BxOku4zd8i5m+Elk3p5OyT+dBHEaJmwemRX6r4PEt1YBJa4eteFFcF
-	bdc35KyxOOZKTaakat2AIXoN2yxzdUk=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-213-9Wx6d9vNPomJkng1NPXLug-1; Wed, 08 Feb 2023 10:55:05 -0500
-X-MC-Unique: 9Wx6d9vNPomJkng1NPXLug-1
-Received: by mail-qt1-f198.google.com with SMTP id x16-20020ac87ed0000000b003b82d873b38so11033475qtj.13
-        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 07:55:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7sUnVzlMx2m7Rm8oB22gZPkorcr5iVWMwlElG24lMuQ=;
-        b=G35lhucVDwCTenutJXDbf+4LBTlfsfwqPUpMqEhpPFi58+DrnZi1pxZq6eWHFy0OKp
-         5CsF10SO4J78o2il7+hzHXpgcBHxdo7AVz3EMpVi5tY+kJkrAbw5QorlsIR+X4XZ31WB
-         Ms0YryqGwYIJbjbzkisiC5UxOY4JcoTk/jVYi16gzrutWyBYVhuu+X2Lz98a+IMsAS1R
-         ofTE4+U7M6dSJ3AkwiQiRofjG+J2bvp44w/PN1BK0XmRA7PH9FfP1UxzwPu6o0dRaQJ7
-         g4EVrAVDw8e4xXvvrx5PoFgqk7ydMSh4kIuwfuRizYv4lOb7Df+aoBhtGZjnGChVSIPr
-         sKDw==
-X-Gm-Message-State: AO0yUKUusDUhlqNpfRtLrBvbv4tPihj0qRM0y29DzR1nQNM4/dTFpLQE
-	5lGJU9g08bqRBPWBFT7YqskZ+JRmkbWs5Tdj++9PNZ0Vtk9C4vddz/tRjuA/mbT+CoOIwQtmTHp
-	HJXV1i9QLpi+/Bw==
-X-Received: by 2002:a05:622a:5ca:b0:3b9:c08f:219c with SMTP id d10-20020a05622a05ca00b003b9c08f219cmr13508072qtb.29.1675871704836;
-        Wed, 08 Feb 2023 07:55:04 -0800 (PST)
-X-Google-Smtp-Source: AK7set862iDAv82HIBQc08b5kthNBVKLMTR0KXzZsKi+mk6XsGXu9KCp2Z6GeLeI1VsYZYW5IjQWMQ==
-X-Received: by 2002:a05:622a:5ca:b0:3b9:c08f:219c with SMTP id d10-20020a05622a05ca00b003b9c08f219cmr13508050qtb.29.1675871704525;
-        Wed, 08 Feb 2023 07:55:04 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05620a0bc900b0071aacb2c76asm11841896qki.132.2023.02.08.07.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 07:55:04 -0800 (PST)
-From: Tom Rix <trix@redhat.com>
-To: ogabbay@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	kelbaz@habana.ai
-Cc: dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] habanalabs: change unused extern decl of hdev to forward decl of hl_device
-Date: Wed,  8 Feb 2023 07:54:50 -0800
-Message-Id: <20230208155450.1941608-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74F033FF;
+	Wed,  8 Feb 2023 16:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675872613; x=1707408613;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IqRFmG/tE88LZNICwrizQVUfzUCcslDbxcwFXRlTgBI=;
+  b=Zr/0pbKtU37d/ThGqC7nJMptN8q6TWYMN2vYYqEGdaF45bibAWlKc5fC
+   l4UM4q0mY0kodWoUUp2xqW2pZ4o+32XO3oyCS+MA0lmNLr3Vygny6TYyo
+   dgXNu5hzKwzmYGsLMK6U/R32NG/MoO1+b62e/5mqcjFPthPDyKqACbUBG
+   XIExX7vy/TksrED6zGNnvRvpzXRdwxxl+oZoAVPr/PCsDoXKZgfFKKf1g
+   D50VWMSBk9vRJ/qZsGUk2kvdUBh85EiGidLD0bxxK+7/3FI3ZroS47z55
+   mRrfWqtgn/+NxIEPkP70ky8vgqxFxqkTgZRPXghS8cPLBBunfPVLoLzmp
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="416063532"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="416063532"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 08:09:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="644909391"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="644909391"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Feb 2023 08:09:13 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pPn0N-0004Wd-1q;
+	Wed, 08 Feb 2023 16:09:07 +0000
+Date: Thu, 9 Feb 2023 00:08:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split 29/31]
+ kernel/sys.c:1288:1: warning: stack frame size (1040) exceeds limit (1024)
+ in '__se_sys_newuname'
+Message-ID: <202302090016.DRnD1KVw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Building with clang W=2 has several similar warnings
-drivers/accel/habanalabs/common/decoder.c:46:51: error: declaration shadows a variable in the global scope [-Werror,-Wshadow]
-static void dec_error_intr_work(struct hl_device *hdev, u32 base_addr, u32 core_id)
-                                                  ^
-drivers/accel/habanalabs/common/security.h:13:26: note: previous declaration is here
-extern struct hl_device *hdev;
-                         ^
+Hi Linus,
 
-There is no global definition of hdev, so the extern is not needed.
-Searched with
-grep -r '^struct' . | grep hl_dev
+First bad commit (maybe != root cause):
 
-Change to an forward decl to resolve these issues
-drivers/accel/habanalabs/common/mmu/../security.h:133:40: error: ‘struct hl_device’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-  133 |         bool (*skip_block_hook)(struct hl_device *hdev,
-      |                                        ^~~~~~~~~
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split
+head:   e6fc25ec2770c9db62486fb1f291b99531f86533
+commit: 0facdc348172563db9b913d75c9aab1bf68550f8 [29/31] hack passing kernel_init()
+config: arm-randconfig-r046-20230206 (https://download.01.org/0day-ci/archive/20230209/202302090016.DRnD1KVw-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=0facdc348172563db9b913d75c9aab1bf68550f8
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split
+        git checkout 0facdc348172563db9b913d75c9aab1bf68550f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/media/dvb-core/ drivers/tty/vt/ kernel/
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/accel/habanalabs/common/security.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/accel/habanalabs/common/security.h b/drivers/accel/habanalabs/common/security.h
-index 234b4a6ed8bc..d7a3b3e82ea4 100644
---- a/drivers/accel/habanalabs/common/security.h
-+++ b/drivers/accel/habanalabs/common/security.h
-@@ -10,7 +10,7 @@
- 
- #include <linux/io-64-nonatomic-lo-hi.h>
- 
--extern struct hl_device *hdev;
-+struct hl_device;
- 
- /* special blocks */
- #define HL_MAX_NUM_OF_GLBL_ERR_CAUSE		10
+All warnings (new ones prefixed by >>):
+
+>> kernel/sys.c:1288:1: warning: stack frame size (1040) exceeds limit (1024) in '__se_sys_newuname' [-Wframe-larger-than]
+   SYSCALL_DEFINE1(newuname, struct new_utsname __user *, name)
+   ^
+   include/linux/syscalls.h:217:36: note: expanded from macro 'SYSCALL_DEFINE1'
+   #define SYSCALL_DEFINE1(name, ...) SYSCALL_DEFINEx(1, _##name, __VA_ARGS__)
+                                      ^
+   include/linux/syscalls.h:228:2: note: expanded from macro 'SYSCALL_DEFINEx'
+           __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+           ^
+   include/linux/syscalls.h:247:18: note: expanded from macro '__SYSCALL_DEFINEx'
+           asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
+                           ^
+   <scratch space>:124:1: note: expanded from here
+   __se_sys_newuname
+   ^
+   40/1040 (3.85%) spills, 1000/1040 (96.15%) variables
+   1 warning generated.
+--
+>> drivers/media/dvb-core/dvb_frontend.c:2424:12: warning: stack frame size (1072) exceeds limit (1024) in 'dvb_frontend_handle_ioctl' [-Wframe-larger-than]
+   static int dvb_frontend_handle_ioctl(struct file *file,
+              ^
+   66/1072 (6.16%) spills, 1006/1072 (93.84%) variables
+   1 warning generated.
+--
+>> drivers/tty/vt/consolemap.c:402:5: warning: stack frame size (1064) exceeds limit (1024) in 'con_get_trans_new' [-Wframe-larger-than]
+   int con_get_trans_new(ushort __user * arg)
+       ^
+   24/1064 (2.26%) spills, 1040/1064 (97.74%) variables
+   1 warning generated.
+
+
+vim +/__se_sys_newuname +1288 kernel/sys.c
+
+be27425dcc516f Andi Kleen        2011-08-19  1287  
+e48fbb699f82ef Heiko Carstens    2009-01-14 @1288  SYSCALL_DEFINE1(newuname, struct new_utsname __user *, name)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  1289  {
+42a0cc3478584d Jann Horn         2018-06-25  1290  	struct new_utsname tmp;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  1291  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  1292  	down_read(&uts_sem);
+42a0cc3478584d Jann Horn         2018-06-25  1293  	memcpy(&tmp, utsname(), sizeof(tmp));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  1294  	up_read(&uts_sem);
+42a0cc3478584d Jann Horn         2018-06-25  1295  	if (copy_to_user(name, &tmp, sizeof(tmp)))
+42a0cc3478584d Jann Horn         2018-06-25  1296  		return -EFAULT;
+e28cbf22933d0c Christoph Hellwig 2010-03-10  1297  
+42a0cc3478584d Jann Horn         2018-06-25  1298  	if (override_release(name->release, sizeof(name->release)))
+42a0cc3478584d Jann Horn         2018-06-25  1299  		return -EFAULT;
+42a0cc3478584d Jann Horn         2018-06-25  1300  	if (override_architecture(name))
+42a0cc3478584d Jann Horn         2018-06-25  1301  		return -EFAULT;
+42a0cc3478584d Jann Horn         2018-06-25  1302  	return 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  1303  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  1304  
+
+:::::: The code at line 1288 was first introduced by commit
+:::::: e48fbb699f82ef1e80bd7126046394d2dc9ca7e6 [CVE-2009-0029] System call wrappers part 24
+
+:::::: TO: Heiko Carstens <heiko.carstens@de.ibm.com>
+:::::: CC: Heiko Carstens <heiko.carstens@de.ibm.com>
+
 -- 
-2.26.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
