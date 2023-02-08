@@ -1,303 +1,86 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E2179D0
-	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 20:54:36 +0000 (UTC)
-Received: by mail-pg1-f201.google.com with SMTP id p27-20020a631e5b000000b004f3880f6673so66806pgm.14
-        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 12:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=15FiKcaU7Ahr0kQcj4HYZoBjaRHQdfsVpR1F+LgCEnA=;
-        b=rtJpDnUZXOsfk9URRCxUeUD5K3dxQbHH7IuYCLY5vldCxlhunEGOjsIfeNMu69uXdi
-         EP8/3oma2EDJ6YmBrr1QBLee+ZhVtpXTPNTLixDdwoB76sPC8O4lvhczZOIUXguL9Hm8
-         to1cCgTBkzDHFQoOJeFi0Mxd/ANDiZCvLVJlvWnoVHesTWYbEsX4IqpZrvPCczkosEQd
-         kbrcL/KICzTWE5yFIB4hDCD9ippMjF7gdDA4ZuD15nzVn8/lwD+vjU/4Y11lnKow6tFg
-         7RpGcanpvdfcO854cyQ3EOIk/qvfG3YGgkmJzBe1lHsPHq8Q022rGWLKL9NpsMuP/Mvx
-         kcJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=15FiKcaU7Ahr0kQcj4HYZoBjaRHQdfsVpR1F+LgCEnA=;
-        b=o4gMf2fgl5IijJpcWX3FP+kL0SFeih9T+7Fwao4O2895iLhVB3c2FgGzEjPLiWVdRf
-         u+Pe73EhCXkPsOPTrzcA5NG/4QH9rMfkyPeknHXGCGcx+3GUgjHV9KAljTF3VFeJ7uc2
-         DtGa96l3Xe9TmCy1nC9K8IxAxRQtGlZ34917oAdVYRTZCO7/WKeXvwnFXwkI04ojTJ+x
-         Avo7PcO4rPov5nC0K/qYDEYhl3LQrJ6N9LPRcnHeXBCpgWUrJPrzuLEIo/4HS0CTydW8
-         cliZCRa2ejK435gOApFRBkfflZGKg/USZXOazEAJeaOS9Gkf+3XzDmhEB2+aNWC/LN0/
-         znhQ==
-X-Gm-Message-State: AO0yUKUHViHx0Yge/qv2yqOioSV6D/niUYdjPdSzS7j2GeMh3r9n+NRO
-	0vvI4JoeZEt1CjkiT2v9NBY5oWnM8PU=
-X-Google-Smtp-Source: AK7set8VgAf8bYv+jS0e4RWZcvGNUGRkCep+NAgSd9ZVHsbVeVT/eXL+UvuHvRDg6/xuISavfKuWaIoGXjo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:962e:0:b0:5a8:4cad:5a72 with SMTP id
- r14-20020aa7962e000000b005a84cad5a72mr424077pfg.24.1675889675591; Wed, 08 Feb
- 2023 12:54:35 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Wed,  8 Feb 2023 20:54:30 +0000
-In-Reply-To: <20230208205430.1424667-1-seanjc@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C2C160
+	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 22:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72CAC433D2;
+	Wed,  8 Feb 2023 22:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675895811;
+	bh=kEidWQMWqf0uZA9KGuB36zUTXV7NSr0yKEb0HLUwNN0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YqNI5SEXZC6Ho3CyCJa3yOiaQ/K+YMwGerP9K5RyBMtxoyXXS9rULREAuQvd+krcX
+	 nSJcFA0qWFKlIGw21Rje3kcDXFs0zJKS8U9E8CKIzEIUrWSXhlN9WDgLNTNLahVQ43
+	 wNRb7CL4KlZPu13Mfc/zAP2RxBdJ40qvnJJwkE8tn2W3OxgTi+Ct3xres+B6iWXToo
+	 rFXaWqoWLUD/kfFUMSrJnaR7fqh8gon65cBiTuBam5BHK/zsD1JwrdxhY/LAFvKQ2R
+	 ywpz3mfJEuWZgoOQH84n43ViyYXRJUUQyImMsh+wJ1JmMnuVYh/MpdWPBQCJHk9d0L
+	 EzH2rRZetEdoA==
+Date: Wed, 8 Feb 2023 15:36:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>
+Cc: tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, jpoimboe@kernel.org,
+	jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
+	linux-kernel@vger.kernel.org, erhard_f@mailbox.org,
+	ndesaulniers@google.com, mhiramat@kernel.org, sandipan.das@amd.com,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/3] static_call/x86: Handle clang's conditional tail
+ calls
+Message-ID: <Y+QkAXfhWfGevWz7@dev-arch.thelio-3990X>
+References: <20230123205915.751729592@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230208205430.1424667-1-seanjc@google.com>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230208205430.1424667-3-seanjc@google.com>
-Subject: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for CONFIG_HYPERV=n
-From: Sean Christopherson <seanjc@google.com>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tom Rix <trix@redhat.com>, kvm@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230123205915.751729592@infradead.org>
 
-Wrap enable_evmcs in a helper and stub it out when CONFIG_HYPERV=n in
-order to eliminate the static branch nop placeholders.  clang-14 is clever
-enough to elide the nop, but gcc-12 is not.  Stubbing out the key reduces
-the size of kvm-intel.ko by ~7.5% (200KiB) when compiled with gcc-12
-(there are a _lot_ of VMCS accesses throughout KVM).
+Hi Peter and Ingo,
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/hyperv.c  |  4 ++--
- arch/x86/kvm/vmx/hyperv.h  | 10 ++++++++--
- arch/x86/kvm/vmx/vmx.c     | 15 +++++++--------
- arch/x86/kvm/vmx/vmx_ops.h | 22 +++++++++++-----------
- 4 files changed, 28 insertions(+), 23 deletions(-)
+On Mon, Jan 23, 2023 at 09:59:15PM +0100, Peter Zijlstra wrote:
+> Erhard reported boot fails on this AMD machine when using clang and bisected it
+> to a commit introducing a few static_call()s. Turns out that when using clang
+> with -Os it it very likely to generate conditional tail calls like:
+> 
+>   0000000000000350 <amd_pmu_add_event>:
+>   350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
+>   355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
+>   35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
+>   363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
+> 
+> And our inline static_call() patching code can't deal with those and BUG
+> happens -- really early.
+> 
+> These patches borrow the kprobe Jcc emulation to implement text_poke_bp() Jcc
+> support, which is then used to teach inline static_call() about this form.
+> 
+> ---
+>  arch/x86/include/asm/text-patching.h | 31 ++++++++++++++++++
+>  arch/x86/kernel/alternative.c        | 62 +++++++++++++++++++++++++++---------
+>  arch/x86/kernel/kprobes/core.c       | 38 +++++-----------------
+>  arch/x86/kernel/static_call.c        | 50 +++++++++++++++++++++++++++--
+>  4 files changed, 133 insertions(+), 48 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/hyperv.c b/arch/x86/kvm/vmx/hyperv.c
-index b6748055c586..274fbd38c64e 100644
---- a/arch/x86/kvm/vmx/hyperv.c
-+++ b/arch/x86/kvm/vmx/hyperv.c
-@@ -118,8 +118,6 @@
- 
- #define EVMCS1_SUPPORTED_VMFUNC (0)
- 
--DEFINE_STATIC_KEY_FALSE(enable_evmcs);
--
- #define EVMCS1_OFFSET(x) offsetof(struct hv_enlightened_vmcs, x)
- #define EVMCS1_FIELD(number, name, clean_field)[ROL16(number, 6)] = \
- 		{EVMCS1_OFFSET(name), clean_field}
-@@ -611,6 +609,8 @@ int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
- }
- 
- #if IS_ENABLED(CONFIG_HYPERV)
-+DEFINE_STATIC_KEY_FALSE(enable_evmcs);
-+
- /*
-  * KVM on Hyper-V always uses the latest known eVMCSv1 revision, the assumption
-  * is: in case a feature has corresponding fields in eVMCS described and it was
-diff --git a/arch/x86/kvm/vmx/hyperv.h b/arch/x86/kvm/vmx/hyperv.h
-index 1299143d00df..a0b6d05dba5d 100644
---- a/arch/x86/kvm/vmx/hyperv.h
-+++ b/arch/x86/kvm/vmx/hyperv.h
-@@ -16,8 +16,6 @@
- 
- struct vmcs_config;
- 
--DECLARE_STATIC_KEY_FALSE(enable_evmcs);
--
- #define current_evmcs ((struct hv_enlightened_vmcs *)this_cpu_read(current_vmcs))
- 
- #define KVM_EVMCS_VERSION 1
-@@ -69,6 +67,13 @@ static inline u64 evmcs_read_any(struct hv_enlightened_vmcs *evmcs,
- 
- #if IS_ENABLED(CONFIG_HYPERV)
- 
-+DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-+
-+static __always_inline bool is_evmcs_enabled(void)
-+{
-+	return static_branch_unlikely(&enable_evmcs);
-+}
-+
- static __always_inline int get_evmcs_offset(unsigned long field,
- 					    u16 *clean_field)
- {
-@@ -158,6 +163,7 @@ static inline void evmcs_load(u64 phys_addr)
- 
- void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf);
- #else /* !IS_ENABLED(CONFIG_HYPERV) */
-+static __always_inline bool is_evmcs_enabled(void) { return false; }
- static __always_inline void evmcs_write64(unsigned long field, u64 value) {}
- static __always_inline void evmcs_write32(unsigned long field, u32 value) {}
- static __always_inline void evmcs_write16(unsigned long field, u16 value) {}
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 33614ee2cd67..9f0098c9ad64 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -595,7 +595,7 @@ static void hv_reset_evmcs(void)
- {
- 	struct hv_vp_assist_page *vp_ap;
- 
--	if (!static_branch_unlikely(&enable_evmcs))
-+	if (!is_evmcs_enabled())
- 		return;
- 
- 	/*
-@@ -2818,8 +2818,7 @@ static int vmx_hardware_enable(void)
- 	 * This can happen if we hot-added a CPU but failed to allocate
- 	 * VP assist page for it.
- 	 */
--	if (static_branch_unlikely(&enable_evmcs) &&
--	    !hv_get_vp_assist_page(cpu))
-+	if (is_evmcs_enabled() && !hv_get_vp_assist_page(cpu))
- 		return -EFAULT;
- 
- 	intel_pt_handle_vmx(1);
-@@ -2871,7 +2870,7 @@ struct vmcs *alloc_vmcs_cpu(bool shadow, int cpu, gfp_t flags)
- 	memset(vmcs, 0, vmcs_config.size);
- 
- 	/* KVM supports Enlightened VMCS v1 only */
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		vmcs->hdr.revision_id = KVM_EVMCS_VERSION;
- 	else
- 		vmcs->hdr.revision_id = vmcs_config.revision_id;
-@@ -2966,7 +2965,7 @@ static __init int alloc_kvm_area(void)
- 		 * still be marked with revision_id reported by
- 		 * physical CPU.
- 		 */
--		if (static_branch_unlikely(&enable_evmcs))
-+		if (is_evmcs_enabled())
- 			vmcs->hdr.revision_id = vmcs_config.revision_id;
- 
- 		per_cpu(vmxarea, cpu) = vmcs;
-@@ -3936,7 +3935,7 @@ static void vmx_msr_bitmap_l01_changed(struct vcpu_vmx *vmx)
- 	 * 'Enlightened MSR Bitmap' feature L0 needs to know that MSR
- 	 * bitmap has changed.
- 	 */
--	if (IS_ENABLED(CONFIG_HYPERV) && static_branch_unlikely(&enable_evmcs)) {
-+	if (is_evmcs_enabled()) {
- 		struct hv_enlightened_vmcs *evmcs = (void *)vmx->vmcs01.vmcs;
- 
- 		if (evmcs->hv_enlightenments_control.msr_bitmap)
-@@ -7313,7 +7312,7 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
- 	vmx_vcpu_enter_exit(vcpu, __vmx_vcpu_run_flags(vmx));
- 
- 	/* All fields are clean at this point */
--	if (static_branch_unlikely(&enable_evmcs)) {
-+	if (is_evmcs_enabled()) {
- 		current_evmcs->hv_clean_fields |=
- 			HV_VMX_ENLIGHTENED_CLEAN_FIELD_ALL;
- 
-@@ -7443,7 +7442,7 @@ static int vmx_vcpu_create(struct kvm_vcpu *vcpu)
- 	 * feature only for vmcs01, KVM currently isn't equipped to realize any
- 	 * performance benefits from enabling it for vmcs02.
- 	 */
--	if (IS_ENABLED(CONFIG_HYPERV) && static_branch_unlikely(&enable_evmcs) &&
-+	if (is_evmcs_enabled() &&
- 	    (ms_hyperv.nested_features & HV_X64_NESTED_MSR_BITMAP)) {
- 		struct hv_enlightened_vmcs *evmcs = (void *)vmx->vmcs01.vmcs;
- 
-diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
-index db95bde52998..6b072db47fdc 100644
---- a/arch/x86/kvm/vmx/vmx_ops.h
-+++ b/arch/x86/kvm/vmx/vmx_ops.h
-@@ -147,7 +147,7 @@ static __always_inline unsigned long __vmcs_readl(unsigned long field)
- static __always_inline u16 vmcs_read16(unsigned long field)
- {
- 	vmcs_check16(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_read16(field);
- 	return __vmcs_readl(field);
- }
-@@ -155,7 +155,7 @@ static __always_inline u16 vmcs_read16(unsigned long field)
- static __always_inline u32 vmcs_read32(unsigned long field)
- {
- 	vmcs_check32(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_read32(field);
- 	return __vmcs_readl(field);
- }
-@@ -163,7 +163,7 @@ static __always_inline u32 vmcs_read32(unsigned long field)
- static __always_inline u64 vmcs_read64(unsigned long field)
- {
- 	vmcs_check64(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_read64(field);
- #ifdef CONFIG_X86_64
- 	return __vmcs_readl(field);
-@@ -175,7 +175,7 @@ static __always_inline u64 vmcs_read64(unsigned long field)
- static __always_inline unsigned long vmcs_readl(unsigned long field)
- {
- 	vmcs_checkl(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_read64(field);
- 	return __vmcs_readl(field);
- }
-@@ -222,7 +222,7 @@ static __always_inline void __vmcs_writel(unsigned long field, unsigned long val
- static __always_inline void vmcs_write16(unsigned long field, u16 value)
- {
- 	vmcs_check16(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_write16(field, value);
- 
- 	__vmcs_writel(field, value);
-@@ -231,7 +231,7 @@ static __always_inline void vmcs_write16(unsigned long field, u16 value)
- static __always_inline void vmcs_write32(unsigned long field, u32 value)
- {
- 	vmcs_check32(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_write32(field, value);
- 
- 	__vmcs_writel(field, value);
-@@ -240,7 +240,7 @@ static __always_inline void vmcs_write32(unsigned long field, u32 value)
- static __always_inline void vmcs_write64(unsigned long field, u64 value)
- {
- 	vmcs_check64(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_write64(field, value);
- 
- 	__vmcs_writel(field, value);
-@@ -252,7 +252,7 @@ static __always_inline void vmcs_write64(unsigned long field, u64 value)
- static __always_inline void vmcs_writel(unsigned long field, unsigned long value)
- {
- 	vmcs_checkl(field);
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_write64(field, value);
- 
- 	__vmcs_writel(field, value);
-@@ -262,7 +262,7 @@ static __always_inline void vmcs_clear_bits(unsigned long field, u32 mask)
- {
- 	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && ((field) & 0x6000) == 0x2000,
- 			 "vmcs_clear_bits does not support 64-bit fields");
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_write32(field, evmcs_read32(field) & ~mask);
- 
- 	__vmcs_writel(field, __vmcs_readl(field) & ~mask);
-@@ -272,7 +272,7 @@ static __always_inline void vmcs_set_bits(unsigned long field, u32 mask)
- {
- 	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && ((field) & 0x6000) == 0x2000,
- 			 "vmcs_set_bits does not support 64-bit fields");
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_write32(field, evmcs_read32(field) | mask);
- 
- 	__vmcs_writel(field, __vmcs_readl(field) | mask);
-@@ -289,7 +289,7 @@ static inline void vmcs_load(struct vmcs *vmcs)
- {
- 	u64 phys_addr = __pa(vmcs);
- 
--	if (static_branch_unlikely(&enable_evmcs))
-+	if (is_evmcs_enabled())
- 		return evmcs_load(phys_addr);
- 
- 	vmx_asm1(vmptrld, "m"(phys_addr), vmcs, phys_addr);
--- 
-2.39.1.519.gcb327c4b5f-goog
+I noticed this series was applied to x86/alternatives versus
+x86/urgent, even though this appears to be a regression since 6.1, as
+Erhard hit this issue in that tree.
 
+Additionally, a new change in LLVM main [1] causes conditional tail
+calls to be emitted even at -O2, so this breakage will become more
+noticeable over time. Is it possible to expedite this to mainline so
+that it can be backported to 6.1? If not, no worries, but I figured I
+would ask :)
+
+I have a backport of this series to 6.1 prepared already [2], where it
+appears to work for me but I will get wider testing before sending it
+after this is in Linus' tree (regardless of when that is). I figured it
+would not hurt to have other eyes on it ahead of time though.
+
+[1]: https://github.com/llvm/llvm-project/commit/ee5585ed09aff2e54cb540fad4c33f0c93626b1b
+[2]: https://git.kernel.org/nathan/l/cbl-1800-1774-6.1
+
+Cheers,
+Nathan
