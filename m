@@ -1,81 +1,32 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85007481
-	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 19:35:38 +0000 (UTC)
-Received: by mail-pl1-f173.google.com with SMTP id f6so1731316pln.12
-        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 11:35:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=fAJlaNEf9h29bd8ZkCwxz0tgZ1g6+/vtKmnhDMYhw14=;
-        b=Z+ropjWaZw/qeE6gBW6+idTTpgNFbXec1UuKtNv+KwRvRqvYww0Qyw82gl8VdUjD1B
-         ACJF5dPWNYsUa7aR3pW85ooqgpccPNH1Dp+kQZnlxlvvSNCHRIPzJc8csModV1rzyDMD
-         0ekiiqa5qwsESerHQbxFrAQkqMUH4COBTL4XE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fAJlaNEf9h29bd8ZkCwxz0tgZ1g6+/vtKmnhDMYhw14=;
-        b=dFSYxqxVNL5xRp+iRDtt0kN8sn65sl/Gq0BUStU6dyzNAobjK0IM2XdqvFLbWyv5/4
-         hYFCyXXb2K1j6QyNk4sZ9anyGKHH61omE+xHoufBwa6Xq0tSNDO6Nsr53Q9mw/FPOG62
-         UAGaUGZJtM3u4i2lgI9LJHfJU6Znapzy7fs7iC6B/bf1p3zVX0lmLBXE4g+n2C5E3V3L
-         5XOYnfybEi+Z2NajcZFj0gKfWtHmvlDQR1C92RrF/mqFrQzl+5PcnclLEDnZ9KRbYldQ
-         dY8lu+kXp+t4dkyQa8hpPNPQ3hjKRv+WbyWf4U42332/noIEHLqqCueLNzh4Tm1jdAwE
-         supw==
-X-Gm-Message-State: AO0yUKVa8YY8BwVNhi8MPC/WGfpz9mHoiRy6QTSghSai076VIHEdnB5k
-	zpDgiA8ymYFiEDz2xuQC4KhqEw==
-X-Google-Smtp-Source: AK7set8GfKiDufztTpkuEDYL1b8u28pgvoPHLFhPAmA2kCMFZHHpGOh1C22kzQkvkpANzp/CQdvA0w==
-X-Received: by 2002:a17:902:ced2:b0:199:fc6:9a9b with SMTP id d18-20020a170902ced200b001990fc69a9bmr10210092plg.17.1675884938273;
-        Wed, 08 Feb 2023 11:35:38 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001990e1aeae4sm7268564plb.47.2023.02.08.11.35.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 11:35:37 -0800 (PST)
-Message-ID: <63e3f989.170a0220.60c91.c5ce@mx.google.com>
-X-Google-Original-Message-ID: <202302081133.@keescook>
-Date: Wed, 8 Feb 2023 11:35:37 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Dan Li <ashimida.1990@gmail.com>
-Cc: concord@gentoo.org, linux-hardening@vger.kernel.org,
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49275748A;
+	Wed,  8 Feb 2023 20:06:48 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0D471477;
+	Wed,  8 Feb 2023 12:07:29 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.30.155])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 397CB3F703;
+	Wed,  8 Feb 2023 12:06:45 -0800 (PST)
+Date: Wed, 8 Feb 2023 20:06:42 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Will Deacon <will@kernel.org>, kernel test robot <lkp@intel.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+	James Clark <james.clark@arm.com>, Rob Herring <robh@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Suzuki Poulose <suzuki.poulose@arm.com>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Qing Zhao <qing.zhao@oracle.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Marco Elver <elver@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Song Liu <song@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Yuntao Wang <ytcoode@gmail.com>,
-	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
- <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
- <202301061929.6881F6CD40@keescook>
- <20230107154213.ocyghxd2k66gbvv6@ubuntu>
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V8 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
+Message-ID: <Y+QA0tRk2VVJ4gwu@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230123125956.1350336-6-anshuman.khandual@arm.com>
+ <202301310047.b5iv9hM8-lkp@intel.com>
+ <20230203113153.GA5927@willie-the-truck>
+ <143549b7-6f16-209f-b1be-c8202fd55d05@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,52 +35,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230107154213.ocyghxd2k66gbvv6@ubuntu>
+In-Reply-To: <143549b7-6f16-209f-b1be-c8202fd55d05@arm.com>
 
-On Sat, Jan 07, 2023 at 07:42:13AM -0800, Dan Li wrote:
-> Hi Kees,
+On Mon, Feb 06, 2023 at 09:46:25AM +0530, Anshuman Khandual wrote:
+> On 2/3/23 17:01, Will Deacon wrote:
+> > On Tue, Jan 31, 2023 at 12:28:17AM +0800, kernel test robot wrote:
+
+[...]
+
+> > This looks like it should be fixed. I'd also like to see Mark's ack on the
 > 
-> On 01/06, Kees Cook wrote:
-> > On Mon, Dec 19, 2022 at 05:32:04AM -0800, Dan Li wrote:
-> > > Hi Peter,
-> > Hi!
-> > 
-> > First of all, thank you thank you for working on this in GCC. This will
-> > make a big difference for folks that don't have the option to build with
-> > Clang to gain CFI coverage.
-> > 
-> > As for the implementation details, the core issue is really that this
-> > type of CFI is specifically designed for the Linux kernel, and it took a
-> > rather long time to figure out all the specifics needed (down to the
-> > byte counts and instruction layouts). GCC's version will ultimately need
-> > to exactly match the Clang output, or Linux is unlikely to support it.
-> > 
-> > We're already on our second CFI -- the original Clang CFI was just too
-> > clunky for long-term use in Linux, so unless we're going to improve on
-> > the latest Clang KCFI implementation in some way, it's better to stick
-> > to exactly byte-for-byte identical results. The KCFI support in Linux
-> > depends on the arm64 and x86_64 runtimes for catching the traps, and the
-> > post-processing done (on x86_64) with objtool that prepares the kernel
-> > for IBT use, and converts to the optional FineIBT CFI mechanism. With
-> > all those moving parts, there needs to be a very compelling reason to
-> > have GCC KCFI implementation differ from Clang's.
-> > 
-> > Hopefully that context helps a little. I'm excited to try out future
-> > versions!
-> 
-> Thanks for the context, it makes sense and helped me a lot. :)
-> 
-> In the next version I'll make the gcc implementation consistent with clang.
+> This build warning is triggered when CONFIG_PERF_EVENTS is not enabled, when
+> all the fallback stubs in there try to use has_branch_stack() which does not
+> get defined. The following change, fixes the problem.
 
-Hi!
+I expect that you'll post a v9 with that folded in, and I've just made some
+comments on v7 which I expect will require some changes, so I'm going to wait
+for v9 for further review to keep this manageable.
 
-Just checking in on this, since there are a lot of interested folks. :)
-What's the status on the next version (and has anyone been found to
-tackle the x86 backend part)? Is there anything we can help with?
-
-Thanks!
-
--Kees
-
--- 
-Kees Cook
+Thanks,
+Mark.
