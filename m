@@ -1,29 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDEA9474
-	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 14:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD27C433D2;
-	Wed,  8 Feb 2023 14:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69E99474;
+	Wed,  8 Feb 2023 14:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E0AC433EF;
+	Wed,  8 Feb 2023 14:39:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1675866765;
-	bh=xPqvZOaH1bqyFJ6lHg9Nw6MLEn4KVAU/Z1wBQ/IoYgM=;
+	s=k20201202; t=1675867161;
+	bh=JbqZpU27yOcLHEwpGp6fv33iNCb+DQaQiTJ1X82Qbmw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f+JUpn8VuyxZraPwFzd+DVm0SuU3fNXfhY+REvh7ZkYVBbUScqfqfwv/QbS6F8jod
-	 eaAB0uSUqD7UcJUaGj3yh1C6MArspv9GETy+KIlIHItVFo7XCNVEZx4VnnSyDb3KBV
-	 XDgH4fGFIRNhWtWmF/KNgN3txDLolO5Tm42qqd41izYn7GdSF4tW9O120HYDK7CAXG
-	 o/KWS6EASNXC5xxJCs8Arf905ZNvGr564orV8ARcZAZENgwv17QI4OYworKrxYyBR8
-	 ejc9Mk+U4utix95W0b/S8rKTgdQcz4dUpkerum0wDllsJRuUueDgkE43Y9jgfhWMIl
-	 +uAgTgmxwofAw==
-Date: Wed, 8 Feb 2023 07:32:43 -0700
+	b=kPNbuKtUJFMMlfuXdjq+EPrr1zHnytdlhDoURKxFoe3usu/H33TaJHVYuP+bzDT2W
+	 IFI7gndkhhJoBy3R17pruPbOJqwLcHUltoUAi9Ivz8cPr3MI8j4S8Y6qPKcebvoReQ
+	 nzCq6LbupdWsWIIQxVVFVx0GOPH8LH/bcwtZaMt+25Xnd/2ATiAb78TdgcXOiC3Irn
+	 UrSeWFsLr5neFZExoZ1MF5lx6vQ0G65LfeH8eeizvHhh8lFGPKTJc2G8k59FyL9xa7
+	 CSLDmcwoItgkq6vMHNapTCjfQGpByXKMbTN6Uc54x4lDLnWWFmbBYC4GYmeDpN+RRM
+	 pv/ty4pbn/EOg==
+Date: Wed, 8 Feb 2023 07:39:18 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Bill Wendling <morbo@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] randstruct: disable Clang 15 support
-Message-ID: <Y+Oyi1eZqKtqbL40@dev-arch.thelio-3990X>
-References: <20230208065133.220589-1-ebiggers@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: kernel test robot <lkp@intel.com>,
+	Saurabh Sengar <ssengar@linux.microsoft.com>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	daniel.lezcano@linaro.org, tglx@linutronix.de,
+	virtualization@lists.linux-foundation.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+	ssengar@microsoft.com, dphadke@linux.microsoft.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
+Message-ID: <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
+References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
+ <202302081621.odizDzHG-lkp@intel.com>
+ <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,44 +41,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208065133.220589-1-ebiggers@kernel.org>
+In-Reply-To: <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
 
-On Tue, Feb 07, 2023 at 10:51:33PM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Wed, Feb 08, 2023 at 11:25:57AM +0100, Krzysztof Kozlowski wrote:
+> On 08/02/2023 09:22, kernel test robot wrote:
+> > Hi Saurabh,
+> > 
+> > Thank you for the patch! Perhaps something to improve:
+> > 
+> > [auto build test WARNING on next-20230207]
+> > [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
 > 
-> The randstruct support released in Clang 15 is unsafe to use due to a
-> bug that can cause miscompilations: "-frandomize-layout-seed
-> inconsistently randomizes all-function-pointers structs"
-> (https://github.com/llvm/llvm-project/issues/60349).  It has been fixed
-> on the Clang 16 release branch, so add a Clang version check.
-> 
-> Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> All of your recent patches have build errors. Can you at least build
+> test them before sending? It's a unnecessary noise in our mailboxes to
+> get non-buildable patches, just to trigger compilation which you can
+> easily do by your own. GCC is a free software...
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+For what it's worth, GCC does not have a warning like this, it just
+accepts the incorrect location of the attribute, which has gotten others
+in trouble before:
 
-> ---
->  security/Kconfig.hardening | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index 53baa95cb644f..0f295961e7736 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -281,6 +281,9 @@ endmenu
->  
->  config CC_HAS_RANDSTRUCT
->  	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
-> +	# Randstruct was first added in Clang 15, but it isn't safe to use until
-> +	# Clang 16 due to https://github.com/llvm/llvm-project/issues/60349
-> +	depends on !CC_IS_CLANG || CLANG_VERSION >= 160000
->  
->  choice
->  	prompt "Randomize layout of sensitive kernel structures"
-> 
-> base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
-> -- 
-> 2.39.1
-> 
-> 
+https://lore.kernel.org/CAHk-=wgf+kHeSZbpkZumWcTXUD7ordqTMvPRNL6aQVG1DSBDnQ@mail.gmail.com/
+
+So the patch probably did build clean with GCC but that is one of the
+reasons that there is no longer a compiler monopoly for the kernel ;)
+
+Cheers,
+Nathan
