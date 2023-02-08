@@ -1,178 +1,104 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1E233EE;
-	Wed,  8 Feb 2023 15:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675868890; x=1707404890;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xcR4IxQzOrtlOfHxtnzpSWH5XmEl84XgLOuRQWiDKpo=;
-  b=cRpcIgwnJuJfgHXKfMvDKtL7xb5F7jGcECqgLga3Bi1HcwBJYNQpZ1tl
-   89hNAdlC/++6yzofdFDc/uz1a3COzWbVQNr/pAUKMflD6+tjhIb09MvJg
-   1j6NjAAziD9qbd90XnRYQ9LAUEujvoOaj4rpKD2KN8TpgNECn0mrEVa0C
-   UgJegcHsxnDNgS0g6Raj5PuUCM1IZ2bZ7jyRLsFONfSHpZ1GrJ9FMBncZ
-   j5wbeppH5w5j15d167+iepwvqQ+/08gWstLGr/UPwThHYrH9cS7H9Ydog
-   xvfxqjAZPeu45/07BiDgGWHOlGZCFvLTzCYdz9jhNlV/ShogeEbH72czG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309468611"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="309468611"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:08:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="644884648"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="644884648"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Feb 2023 07:08:07 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pPm3L-0004Vk-06;
-	Wed, 08 Feb 2023 15:08:07 +0000
-Date: Wed, 8 Feb 2023 23:07:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split 30/31]
- fs/binfmt_elf.c:1397:47: error: no member named 'name' in 'struct file'
-Message-ID: <202302082259.0BQXsMro-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11642C80
+	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 15:36:21 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso1783167wms.3
+        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 07:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FKePDO+31IJoF0FsJfvZs9DXqYakl2KGMty92CUWxZs=;
+        b=lDp/yheLhCJ14mwi5JBbSR5uvR8nLzGG2T2sjS6t2m0ytjQq9ZGUFLYlagTEssKD6T
+         MGqhy+s3OC3RZUi8kOaE+kVadJ4FwdA58rbaDYPOEZor3ALf/C5ZzArNJ9mBtorSCuWL
+         QYL+GvvCNqQXt4IVlpy7027J045UU/qqB8tyKYG1RU5Kr533K/dWShfQzdV89wWEUll8
+         oGb0Cysx+ENxAvIJPI7ByaLXC3JFA8K6I9Pu0dLT5CNJrgW8hc1oU5XNnPxnhf+GGT9O
+         OLWtJFCAWlzLVkfMltuQq3V8rD5PePxe2RG7hBwCXbIf90WRJzdIoqbisb4hKzjP8iH1
+         uEkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKePDO+31IJoF0FsJfvZs9DXqYakl2KGMty92CUWxZs=;
+        b=m1N57BH0nsMfHqAPmHqW+5cyu8dukcqUnVxRWklUroM0KnxLvKU3NwOGDytv+Nipcs
+         YALiLBDrSdcv4WoSbSMRdQSw+ioMo4TgPEKob5m2cldGb9PTvumVE3qpWEAKhf0F8uBZ
+         l1NB7WAhQg0TO8HYTBkPeuUqMJJu1xDIDJK1WtmW9Ox0/4mg29Fw2nVonbcLFGewNihH
+         w1MjQAHhB479jmhdpxOgWrM+q2YmqL4Gs5EsZ20NhRmwh3ureqDB1xO+VaEKb81Hf2ry
+         hJJ/qlPX6u8/kK3iqAgalp4QeYL2zyv8MTIPVZt4tdYNCZSSZsjG/QtD+rDdaG3JyTjR
+         FsCw==
+X-Gm-Message-State: AO0yUKVxTFktqR6NxOACiFiwXcwe4572APwN96LgFtgu4/o4Pcj6gJFe
+	2eEMpphNhg6CnKX9xUd9grsc0w==
+X-Google-Smtp-Source: AK7set/jWb3OUhPaWjMNeoBplH44S4cuJjQOgCubl22jNIytV6Ym7ExQyw2dq1UJvSvr5xZQTqqhTw==
+X-Received: by 2002:a05:600c:4d09:b0:3df:e549:bd27 with SMTP id u9-20020a05600c4d0900b003dfe549bd27mr7766617wmp.6.1675870580177;
+        Wed, 08 Feb 2023 07:36:20 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l16-20020a05600c2cd000b003daffc2ecdesm2459945wmc.13.2023.02.08.07.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 07:36:19 -0800 (PST)
+Message-ID: <2b45b511-33d5-c6b0-ad4d-78e8c15392d0@linaro.org>
+Date: Wed, 8 Feb 2023 16:36:17 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
+Content-Language: en-US
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>,
+ Saurabh Sengar <ssengar@linux.microsoft.com>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+ haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+ daniel.lezcano@linaro.org, tglx@linutronix.de,
+ virtualization@lists.linux-foundation.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ mikelley@microsoft.com, ssengar@microsoft.com, dphadke@linux.microsoft.com,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
+ <202302081621.odizDzHG-lkp@intel.com>
+ <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
+ <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split
-head:   e6fc25ec2770c9db62486fb1f291b99531f86533
-commit: 269949ccfda3ce7d938f14116dbd903b0216c98b [30/31] debug prints
-config: i386-randconfig-a004-20230206 (https://download.01.org/0day-ci/archive/20230208/202302082259.0BQXsMro-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=269949ccfda3ce7d938f14116dbd903b0216c98b
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split
-        git checkout 269949ccfda3ce7d938f14116dbd903b0216c98b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On 08/02/2023 15:39, Nathan Chancellor wrote:
+> On Wed, Feb 08, 2023 at 11:25:57AM +0100, Krzysztof Kozlowski wrote:
+>> On 08/02/2023 09:22, kernel test robot wrote:
+>>> Hi Saurabh,
+>>>
+>>> Thank you for the patch! Perhaps something to improve:
+>>>
+>>> [auto build test WARNING on next-20230207]
+>>> [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
+>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>> And when submitting patch, we suggest to use '--base' as documented in
+>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
+>>
+>> All of your recent patches have build errors. Can you at least build
+>> test them before sending? It's a unnecessary noise in our mailboxes to
+>> get non-buildable patches, just to trigger compilation which you can
+>> easily do by your own. GCC is a free software...
+> 
+> For what it's worth, GCC does not have a warning like this, it just
+> accepts the incorrect location of the attribute, which has gotten others
+> in trouble before:
+> 
+> https://lore.kernel.org/CAHk-=wgf+kHeSZbpkZumWcTXUD7ordqTMvPRNL6aQVG1DSBDnQ@mail.gmail.com/
+> 
+> So the patch probably did build clean with GCC but that is one of the
+> reasons that there is no longer a compiler monopoly for the kernel ;)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+OK then the patchset is reasonable/built enough.
 
-All errors (new ones prefixed by >>):
+Best regards,
+Krzysztof
 
->> fs/binfmt_elf.c:1397:47: error: no member named 'name' in 'struct file'
-           pr_info("trying %s on %s\n", __func__, file->name);
-                                                  ~~~~  ^
-   include/linux/printk.h:530:34: note: expanded from macro 'pr_info'
-           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-                                           ^~~~~~~~~~~
-   include/linux/printk.h:457:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   1 error generated.
-
-
-vim +1397 fs/binfmt_elf.c
-
-  1385	
-  1386	#ifdef CONFIG_USELIB
-  1387	/* This is really simpleminded and specialized - we are loading an
-  1388	   a.out library that is given an ELF header. */
-  1389	static int load_elf_library(struct file *file)
-  1390	{
-  1391		struct elf_phdr *elf_phdata;
-  1392		struct elf_phdr *eppnt;
-  1393		unsigned long elf_bss, bss, len;
-  1394		int retval, error, i, j;
-  1395		struct elfhdr elf_ex;
-  1396	
-> 1397		pr_info("trying %s on %s\n", __func__, file->name);
-  1398		error = -ENOEXEC;
-  1399		retval = elf_read(file, &elf_ex, sizeof(elf_ex), 0);
-  1400		if (retval < 0)
-  1401			goto out;
-  1402	
-  1403		if (memcmp(elf_ex.e_ident, ELFMAG, SELFMAG) != 0)
-  1404			goto out;
-  1405	
-  1406		/* First of all, some simple consistency checks */
-  1407		if (elf_ex.e_type != ET_EXEC || elf_ex.e_phnum > 2 ||
-  1408		    !elf_check_arch(&elf_ex) || !file->f_op->mmap)
-  1409			goto out;
-  1410		if (elf_check_fdpic(&elf_ex))
-  1411			goto out;
-  1412	
-  1413		/* Now read in all of the header information */
-  1414	
-  1415		j = sizeof(struct elf_phdr) * elf_ex.e_phnum;
-  1416		/* j < ELF_MIN_ALIGN because elf_ex.e_phnum <= 2 */
-  1417	
-  1418		error = -ENOMEM;
-  1419		elf_phdata = kmalloc(j, GFP_KERNEL);
-  1420		if (!elf_phdata)
-  1421			goto out;
-  1422	
-  1423		eppnt = elf_phdata;
-  1424		error = -ENOEXEC;
-  1425		retval = elf_read(file, eppnt, j, elf_ex.e_phoff);
-  1426		if (retval < 0)
-  1427			goto out_free_ph;
-  1428	
-  1429		for (j = 0, i = 0; i<elf_ex.e_phnum; i++)
-  1430			if ((eppnt + i)->p_type == PT_LOAD)
-  1431				j++;
-  1432		if (j != 1)
-  1433			goto out_free_ph;
-  1434	
-  1435		while (eppnt->p_type != PT_LOAD)
-  1436			eppnt++;
-  1437	
-  1438		/* Now use mmap to map the library into memory. */
-  1439		error = vm_mmap(file,
-  1440				ELF_PAGESTART(eppnt->p_vaddr),
-  1441				(eppnt->p_filesz +
-  1442				 ELF_PAGEOFFSET(eppnt->p_vaddr)),
-  1443				PROT_READ | PROT_WRITE | PROT_EXEC,
-  1444				MAP_FIXED_NOREPLACE | MAP_PRIVATE,
-  1445				(eppnt->p_offset -
-  1446				 ELF_PAGEOFFSET(eppnt->p_vaddr)));
-  1447		if (error != ELF_PAGESTART(eppnt->p_vaddr))
-  1448			goto out_free_ph;
-  1449	
-  1450		elf_bss = eppnt->p_vaddr + eppnt->p_filesz;
-  1451		if (padzero(elf_bss)) {
-  1452			error = -EFAULT;
-  1453			goto out_free_ph;
-  1454		}
-  1455	
-  1456		len = ELF_PAGEALIGN(eppnt->p_filesz + eppnt->p_vaddr);
-  1457		bss = ELF_PAGEALIGN(eppnt->p_memsz + eppnt->p_vaddr);
-  1458		if (bss > len) {
-  1459			error = vm_brk(len, bss - len);
-  1460			if (error)
-  1461				goto out_free_ph;
-  1462		}
-  1463		error = 0;
-  1464	
-  1465	out_free_ph:
-  1466		kfree(elf_phdata);
-  1467	out:
-  1468		return error;
-  1469	}
-  1470	#endif /* #ifdef CONFIG_USELIB */
-  1471	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
