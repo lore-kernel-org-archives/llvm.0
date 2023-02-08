@@ -1,45 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8859477;
-	Wed,  8 Feb 2023 12:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36B49477;
+	Wed,  8 Feb 2023 13:32:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675859887; x=1707395887;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rtfe/oTEQJ45Jl4F2AZoj2YmMjYRdTWtPVHW/GN0dfw=;
-  b=dGRbu1iKZYjCwBZAqWTwWdkwggL4eYyid8rIP3TfpW8KA/qEQ9n3tie/
-   NLMeZ2D2YPQ6WI32ubqaNwB0NAnbKQIt1RKFGEbDoPIbxLlb8uS8f+qgz
-   wtnasgPTEDXbRZ56DPpPZYlp/Z2uE8FvBTSIjfnTDdzSXWeQJQPfEBvjK
-   alYDODmg0/6E70Nfqs4kXZdd20zmLESVTtch8+2aGLA34V5/cYuc8QPqh
-   zSYdez8RukXQoOgIJEjDFdtc17m4KbYR+fKec0hVpFNcXHxPEHKyiqyPX
-   8Lt2GP3zKRQPdEucj+LykiXosPPAKRNNpcF2NUoaYwufVD4BDx3T4V88Z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="313425675"
+  t=1675863138; x=1707399138;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YkIAO95tN/JFvxInfSM0+Cu8OpwLOBaDYGk1JZaxy4A=;
+  b=W0RfxBGwbOSDupTA6pdNMKbBPPkMzZtCq+AC6orJUPqG9waqn9y7FR3P
+   dxaw/gMU0RwOIYWlFyn7YBApndiXO8w7+Dg33HQGN7sL8HwnrDZxDRYQX
+   xLuEJwQ5XOIkf21owHwMWkbvh3sq03dP4jTRldl5jVkcF4NepY92+gbMu
+   uVZPfEzTco9TVa8ALTTK6+a0dFzzD8O4YdO/7Aj2+e8UzXLRVZIv/ETP0
+   r6yln4SqwUgr3xRGJx/Em0ePNAKfjCQyA0kjXm7Lrz1ePIi+G/092yGEE
+   UyWQ3qyA++MwKBzCi4S6on1dY7+SDgzpkpUmsvx3oXa4Vl0wgDzmhINRz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310150531"
 X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="313425675"
+   d="scan'208";a="310150531"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 04:38:05 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 05:32:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809929264"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="809939769"
 X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="809929264"
+   d="scan'208";a="809939769"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2023 04:38:04 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2023 05:32:05 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pPji7-0004Rb-1O;
-	Wed, 08 Feb 2023 12:38:03 +0000
-Date: Wed, 8 Feb 2023 20:37:19 +0800
+	id 1pPkYO-0004Sk-12;
+	Wed, 08 Feb 2023 13:32:04 +0000
+Date: Wed, 8 Feb 2023 21:31:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>, intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jani.nikula@intel.com
-Subject: Re: [Intel-gfx] [PATCH 04/10] drm/i915/wm: add .get_hw_state to
- watermark funcs
-Message-ID: <202302082058.02NjQHJ5-lkp@intel.com>
-References: <6fc335ec79f163b7a612af012ce07be6d98f2ef9.1675849634.git.jani.nikula@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:virt-to-pfn-v6.2-rc3 17/20] ld.lld: error:
+ arch/powerpc/kernel/vdso/vdso32.lds:243: unknown directive: static
+Message-ID: <202302082107.Hd2JXdjO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,83 +45,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6fc335ec79f163b7a612af012ce07be6d98f2ef9.1675849634.git.jani.nikula@intel.com>
 
-Hi Jani,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-i915-move-memory-frequency-detection-to-intel_dram-c/20230208-175057
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/6fc335ec79f163b7a612af012ce07be6d98f2ef9.1675849634.git.jani.nikula%40intel.com
-patch subject: [Intel-gfx] [PATCH 04/10] drm/i915/wm: add .get_hw_state to watermark funcs
-config: x86_64-randconfig-a002-20230206 (https://download.01.org/0day-ci/archive/20230208/202302082058.02NjQHJ5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.2-rc3
+head:   e7b124e682b6f0adf09d2bb405e70bee2024175f
+commit: eed10e13220117531be06db71efbf2fcef9bbdba [17/20] powerpc: Make virt_to_pfn() a static inline
+config: powerpc-buildonly-randconfig-r004-20230205 (https://download.01.org/0day-ci/archive/20230208/202302082107.Hd2JXdjO-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3be1dad7406a8c767260601b10af82797025aae3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jani-Nikula/drm-i915-move-memory-frequency-detection-to-intel_dram-c/20230208-175057
-        git checkout 3be1dad7406a8c767260601b10af82797025aae3
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=eed10e13220117531be06db71efbf2fcef9bbdba
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator virt-to-pfn-v6.2-rc3
+        git checkout eed10e13220117531be06db71efbf2fcef9bbdba
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/i9xx_wm.c:3824:6: warning: no previous prototype for function 'ilk_wm_get_hw_state' [-Wmissing-prototypes]
-   void ilk_wm_get_hw_state(struct drm_i915_private *dev_priv)
-        ^
-   drivers/gpu/drm/i915/display/i9xx_wm.c:3824:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ilk_wm_get_hw_state(struct drm_i915_private *dev_priv)
+   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:229:1: note: expanded from here
+   __do_insl
    ^
-   static 
-   1 warning generated.
-
-
-vim +/ilk_wm_get_hw_state +3824 drivers/gpu/drm/i915/display/i9xx_wm.c
-
-f21b5d6fc26440 Jani Nikula 2023-02-08  3823  
-f21b5d6fc26440 Jani Nikula 2023-02-08 @3824  void ilk_wm_get_hw_state(struct drm_i915_private *dev_priv)
-f21b5d6fc26440 Jani Nikula 2023-02-08  3825  {
-f21b5d6fc26440 Jani Nikula 2023-02-08  3826  	struct ilk_wm_values *hw = &dev_priv->display.wm.hw;
-f21b5d6fc26440 Jani Nikula 2023-02-08  3827  	struct intel_crtc *crtc;
-f21b5d6fc26440 Jani Nikula 2023-02-08  3828  
-f21b5d6fc26440 Jani Nikula 2023-02-08  3829  	ilk_init_lp_watermarks(dev_priv);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3830  
-f21b5d6fc26440 Jani Nikula 2023-02-08  3831  	for_each_intel_crtc(&dev_priv->drm, crtc)
-f21b5d6fc26440 Jani Nikula 2023-02-08  3832  		ilk_pipe_wm_get_hw_state(crtc);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3833  
-f21b5d6fc26440 Jani Nikula 2023-02-08  3834  	hw->wm_lp[0] = intel_uncore_read(&dev_priv->uncore, WM1_LP_ILK);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3835  	hw->wm_lp[1] = intel_uncore_read(&dev_priv->uncore, WM2_LP_ILK);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3836  	hw->wm_lp[2] = intel_uncore_read(&dev_priv->uncore, WM3_LP_ILK);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3837  
-f21b5d6fc26440 Jani Nikula 2023-02-08  3838  	hw->wm_lp_spr[0] = intel_uncore_read(&dev_priv->uncore, WM1S_LP_ILK);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3839  	if (DISPLAY_VER(dev_priv) >= 7) {
-f21b5d6fc26440 Jani Nikula 2023-02-08  3840  		hw->wm_lp_spr[1] = intel_uncore_read(&dev_priv->uncore, WM2S_LP_IVB);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3841  		hw->wm_lp_spr[2] = intel_uncore_read(&dev_priv->uncore, WM3S_LP_IVB);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3842  	}
-f21b5d6fc26440 Jani Nikula 2023-02-08  3843  
-f21b5d6fc26440 Jani Nikula 2023-02-08  3844  	if (IS_HASWELL(dev_priv) || IS_BROADWELL(dev_priv))
-f21b5d6fc26440 Jani Nikula 2023-02-08  3845  		hw->partitioning = (intel_uncore_read(&dev_priv->uncore, WM_MISC) &
-f21b5d6fc26440 Jani Nikula 2023-02-08  3846  				    WM_MISC_DATA_PARTITION_5_6) ?
-f21b5d6fc26440 Jani Nikula 2023-02-08  3847  			INTEL_DDB_PART_5_6 : INTEL_DDB_PART_1_2;
-f21b5d6fc26440 Jani Nikula 2023-02-08  3848  	else if (IS_IVYBRIDGE(dev_priv))
-f21b5d6fc26440 Jani Nikula 2023-02-08  3849  		hw->partitioning = (intel_uncore_read(&dev_priv->uncore, DISP_ARB_CTL2) &
-f21b5d6fc26440 Jani Nikula 2023-02-08  3850  				    DISP_DATA_PARTITION_5_6) ?
-f21b5d6fc26440 Jani Nikula 2023-02-08  3851  			INTEL_DDB_PART_5_6 : INTEL_DDB_PART_1_2;
-f21b5d6fc26440 Jani Nikula 2023-02-08  3852  
-f21b5d6fc26440 Jani Nikula 2023-02-08  3853  	hw->enable_fbc_wm =
-f21b5d6fc26440 Jani Nikula 2023-02-08  3854  		!(intel_uncore_read(&dev_priv->uncore, DISP_ARB_CTL) & DISP_FBC_WM_DIS);
-f21b5d6fc26440 Jani Nikula 2023-02-08  3855  }
-f21b5d6fc26440 Jani Nikula 2023-02-08  3856  
+   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:231:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:233:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:640:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:235:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   6 warnings generated.
+>> ld.lld: error: arch/powerpc/kernel/vdso/vdso32.lds:243: unknown directive: static
+   >>> static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+   >>> ^
+   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:66: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:386: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:242: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
