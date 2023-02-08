@@ -1,57 +1,158 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49275748A;
-	Wed,  8 Feb 2023 20:06:48 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0D471477;
-	Wed,  8 Feb 2023 12:07:29 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.30.155])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 397CB3F703;
-	Wed,  8 Feb 2023 12:06:45 -0800 (PST)
-Date: Wed, 8 Feb 2023 20:06:42 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Will Deacon <will@kernel.org>, kernel test robot <lkp@intel.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	catalin.marinas@arm.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
-	James Clark <james.clark@arm.com>, Rob Herring <robh@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Suzuki Poulose <suzuki.poulose@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V8 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
-Message-ID: <Y+QA0tRk2VVJ4gwu@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230123125956.1350336-6-anshuman.khandual@arm.com>
- <202301310047.b5iv9hM8-lkp@intel.com>
- <20230203113153.GA5927@willie-the-truck>
- <143549b7-6f16-209f-b1be-c8202fd55d05@arm.com>
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C40748A
+	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 20:19:56 +0000 (UTC)
+Received: by mail-io1-f69.google.com with SMTP id x12-20020a5d990c000000b00707d2f838acso11903269iol.21
+        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 12:19:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=boyPZOAY3X383WTfH+FoTPjeMXz4TtxflAWHGTjO3uA=;
+        b=E4+plVlgyFlI3AZx63/Pv6aNf0VHlIAI55KLMtIQiFQAE3su7oXFfxPDffOjT3Rswp
+         VcKxFTP2zIUyac2pj14dUto24nnJNi24rnEOQ6NHWG+FroJJfiZc4UNZ4f0Gj7RDHRR6
+         dys3ocIlKGdvXXFNqVXZrN0mZuYgWLeAAFkAcJdPKFiMfJv9AvXd4oIwhvMDMAvEWLAK
+         UQAa5ZS1S1WueqyHoVc0SwlJ8StRcF7TcsokJ1inae2igpWb7FusCHdyHtI0FIv/TP6a
+         fkCbbpRMpxrqpsKzSNue0FW5GXDVhhmAK3+BPkLNohLY1yYwezR4V/pMnuuQZpHoWLNp
+         WPHw==
+X-Gm-Message-State: AO0yUKUWdnHClC9demV0AfY0dl2A6Q571Meaog3r0IrZ1Ibgq6Lk7jiX
+	RqvVpGSFupYs/sG8cl6M8X6qXTpXdUJMQlAzVcY4FM/BOO7i
+X-Google-Smtp-Source: AK7set8HYAF5nFRgeMXQys2wWST+vnCsVc2VRHahIaPre0bJD5v2smb7lJcTLDbPs50DhSTMEy1OfLkPggppcyjOJpylfvd+gWZc
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <143549b7-6f16-209f-b1be-c8202fd55d05@arm.com>
+X-Received: by 2002:a05:6e02:100f:b0:311:be1:d35c with SMTP id
+ n15-20020a056e02100f00b003110be1d35cmr4576653ilj.116.1675887595282; Wed, 08
+ Feb 2023 12:19:55 -0800 (PST)
+Date: Wed, 08 Feb 2023 12:19:55 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cce8cd05f435fc77@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in folio_flags
+From: syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
+	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 06, 2023 at 09:46:25AM +0530, Anshuman Khandual wrote:
-> On 2/3/23 17:01, Will Deacon wrote:
-> > On Tue, Jan 31, 2023 at 12:28:17AM +0800, kernel test robot wrote:
+Hello,
 
-[...]
+syzbot found the following issue on:
 
-> > This looks like it should be fixed. I'd also like to see Mark's ack on the
-> 
-> This build warning is triggered when CONFIG_PERF_EVENTS is not enabled, when
-> all the fallback stubs in there try to use has_branch_stack() which does not
-> get defined. The following change, fixes the problem.
+HEAD commit:    38d2b86a665b Add linux-next specific files for 20230208
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=147599df480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
+dashboard link: https://syzkaller.appspot.com/bug?extid=d632e24db18585d7b3c6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I expect that you'll post a v9 with that folded in, and I've just made some
-comments on v7 which I expect will require some changes, so I'm going to wait
-for v9 for further review to keep this manageable.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Thanks,
-Mark.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0a9d60e90514/disk-38d2b86a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/71311be5f1a1/vmlinux-38d2b86a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a242870cc8eb/bzImage-38d2b86a.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com
+
+BUG: unable to handle page fault for address: ffffffffffffffed
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD c570067 P4D c570067 PUD c572067 PMD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5544 Comm: syz-executor.2 Not tainted 6.2.0-rc7-next-20230208-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
+RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
+Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
+RSP: 0018:ffffc9000675fc08 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: ffffc9000cd62000
+RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
+RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
+R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
+FS:  00007f6f37eb3700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffed CR3: 00000000217a0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ folio_test_head include/linux/page-flags.h:781 [inline]
+ folio_test_large include/linux/page-flags.h:802 [inline]
+ PageHeadHuge+0x18/0xc0 mm/hugetlb.c:2060
+ folio_test_hugetlb include/linux/page-flags.h:830 [inline]
+ folio_file_page include/linux/pagemap.h:702 [inline]
+ shmem_read_mapping_page_gfp+0x34/0x100 mm/shmem.c:4366
+ shmem_read_mapping_page include/linux/shmem_fs.h:124 [inline]
+ udmabuf_create+0x93b/0x1440 drivers/dma-buf/udmabuf.c:286
+ udmabuf_ioctl_create drivers/dma-buf/udmabuf.c:346 [inline]
+ udmabuf_ioctl+0x156/0x2c0 drivers/dma-buf/udmabuf.c:377
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6f3708c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6f37eb3168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f6f371abf80 RCX: 00007f6f3708c0f9
+RDX: 0000000020000080 RSI: 0000000040187542 RDI: 0000000000000005
+RBP: 00007f6f370e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffec3da43f R14: 00007f6f37eb3300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+CR2: ffffffffffffffed
+---[ end trace 0000000000000000 ]---
+RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
+RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
+Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
+RSP: 0018:ffffc9000675fc08 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: ffffc9000cd62000
+RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
+RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
+R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
+FS:  00007f6f37eb3700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffed CR3: 00000000217a0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	49 89 fc             	mov    %rdi,%r12
+   3:	55                   	push   %rbp
+   4:	53                   	push   %rbx
+   5:	e8 84 4e b7 ff       	callq  0xffb74e8e
+   a:	49 8d 7c 24 08       	lea    0x8(%r12),%rdi
+   f:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  16:	fc ff df
+  19:	48 89 fa             	mov    %rdi,%rdx
+  1c:	48 c1 ea 03          	shr    $0x3,%rdx
+  20:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+  24:	0f 85 f8 00 00 00    	jne    0x122
+* 2a:	49 8b 5c 24 08       	mov    0x8(%r12),%rbx <-- trapping instruction
+  2f:	31 ff                	xor    %edi,%edi
+  31:	83 e3 01             	and    $0x1,%ebx
+  34:	48 89 de             	mov    %rbx,%rsi
+  37:	e8 c2 4a b7 ff       	callq  0xffb74afe
+  3c:	48 85 db             	test   %rbx,%rbx
+  3f:	0f                   	.byte 0xf
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
