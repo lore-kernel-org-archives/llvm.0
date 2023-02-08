@@ -1,195 +1,88 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5B89451;
-	Wed,  8 Feb 2023 08:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675846255; x=1707382255;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=GTQa8f3kuB+gTITyuOID96hrEXZh6z3Bf6RC8iwpRJI=;
-  b=OGpE6Ud8zr1XM1h7SKhkY7dk9Mr1/TcE/pYIsl6yt6yTJ/WgmUCHPk4A
-   xUNVFZC+ewp7q5u2HUc894nLcYcxZNGY7draJlPVTGmta5O/LIFWrqgn9
-   jRGQ/l2TesmdnoWkGNz7nSr+4Dx2rjdCgmIV2iMAsrS7Y8lH2mPkgM3Er
-   U/qG55t8OXc71ceEKzNbBT2zx//FTM5KWfJs6h7cZn8++hE8FuVdPCIrX
-   zImUORvmFE6ijIqcEBQa9iwFT1e6CJT59ZslteTJ0Cgs5rhbAN17pS0WC
-   6jVdRFwz0dguyQZMTTImHf/TKXP4zKwA3fs/fiwppAYbs/H1MJIePKH+c
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="357135416"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="357135416"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 00:50:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809871423"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="809871423"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2023 00:50:54 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 00:50:54 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 00:50:54 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.46) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 8 Feb 2023 00:50:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BnRhi5aSqdfFgEOieIb8ltSkE0BiSMIA2muSlUtN3Q927PFrgThqpG8qFZivgCLnFKPv4Fe3+QQ7ft+pDlS8be0ZT05U56lbktV5beFlAK2iMxp7GN5ACJN9BghEVHxhCDUoGp5jCC12TjdKsXxE9MQOJ0hGEKQMMt98Y7Y2NiXDpP+lCT3csY78eY3cSY1QRvwy0HbBMGXrO6uMEB+IJnNloA4ZV/CKmcTSG1+gDzINKqI9fYm/JHniT3v/rnQ97xBGWOiQI8shu+qMM8AoaaUJ8FlIVXM0ohVwKnwI2qJqUDHnHCidsPKDMoRTy1T5H9zs7/hlZADj7087zETLcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cuo/zr60mpb8hiWbmFIj9d7rKEv1ssDS684emp85MLw=;
- b=joX32u/UghjfE1wEszrUVIPyUUVL6AM40qcJ86ZyZdkNlr8VKeSqGdcRJ3zGrN3p04NoJPJv7pFxgNTpCryplHE+VwPvCQs/cDAO7Q3DyynQk9+r6b8Kj/y3pE4uWJ4mTKAOqLhYjaXwfbTBsOoro+Z8ClANFUw6e2+hGYERT1/cD2PIORvJEvl6v427pOf1rVnH0D5IiRPmTY2zTjZAYKxj0Pl6Heg6dgPdJcZfhNyzKen/3oYUd7S4frjX0eL48bKKv+AZagH+QUIkK6JMOSWaK6Es8cV764MwqIdjSVwQovRZF8BMZ9jcZahbSPdXnSTs3dFEDeGUJ+zJ5LTbYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by MN0PR11MB6181.namprd11.prod.outlook.com (2603:10b6:208:3c7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Wed, 8 Feb
- 2023 08:50:50 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::30e3:a7ab:35ba:93bb]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::30e3:a7ab:35ba:93bb%8]) with mapi id 15.20.6086.017; Wed, 8 Feb 2023
- 08:50:49 +0000
-Date: Wed, 8 Feb 2023 16:48:16 +0800
-From: Yujie Liu <yujie.liu@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-CC: kernel test robot <lkp@intel.com>, Patrisious Haddad <phaddad@nvidia.com>,
-	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, Leon Romanovsky <leon@kernel.org>, Mark Zhang
-	<markzhang@nvidia.com>
-Subject: Re: include/linux/fortify-string.h:414:4: error: call to
- '__read_overflow' declared with 'error' attribute: detected read beyond size
- of object (1st parameter)
-Message-ID: <Y+Nh0JNxnn3ZNQFv@yujie-X299>
-References: <202302080231.ZqOmpanX-lkp@intel.com>
- <Y+KgMv3Coc4gnV2p@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y+KgMv3Coc4gnV2p@dev-arch.thelio-3990X>
-X-ClientProxiedBy: SG2PR06CA0215.apcprd06.prod.outlook.com
- (2603:1096:4:68::23) To CY5PR11MB6392.namprd11.prod.outlook.com
- (2603:10b6:930:37::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719299461
+	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 10:26:01 +0000 (UTC)
+Received: by mail-wr1-f51.google.com with SMTP id bu23so380617wrb.8
+        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 02:26:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2vBRxdK4AYNAIN8xzgOiscHELLsk42uD/uHH62t4p4=;
+        b=vOROfMvBVQUgrGeyXGyUeffueIr97W6RjcIkK+MYIbMJ6JNOyOnqkGZfVGO8gZ6aoz
+         9k5Fu8LGDq6RW+AtqbYXNg5+6lqk7fblSpB9wc7XHUkXz1GYroi2LuM9s/a1HxFhHJke
+         UrIOQr8QaTC5R1WUi+m3z6P1ioebAlVweRv/MPYQ3Crx7lodeQWX7MQjgJermHKGFjfV
+         Bwwdmi5OCYApcfovBDqHj8oR5tHRSe4iMz4xgV9g7EA3YwFvswcpAiBSVZqkZ8dihNG1
+         8O2i+V/b1+AG00gmvX/2+vFjy7I3ic5y0X/icVlzGWuCM85kAmziqPJasnvDj8k9uGjb
+         1kmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2vBRxdK4AYNAIN8xzgOiscHELLsk42uD/uHH62t4p4=;
+        b=vK8+qaU5VFOouV1FLqLBV0ONP7kT6UWjeK82dhiyIvJiARwONXtL7t+Jy6r5NEI1va
+         1DSCIjDzXVKYFDb2rtCirtbjPHbJasV0rFkvi6boM39SLzrYMhd6WMz8SmKdx4lLrvDe
+         iiEqXjZsbClnmH4p+3cjBUObikmmUlReJBYDrzMwsprO52P8/xpTXIYy8SlNPll4ztQx
+         yjTkRbmRPg4wqiBOqQWAidnt9THjL93JOD1KujoguNUnAdra2/cKv6OmbuLPdHL7QKTs
+         Xpowx61V8HI7bX22Gjh9A7+8qZmYR9xnjVyT+vnqzgc4shC4ApDAd10kdwFOky+twbWX
+         xnbA==
+X-Gm-Message-State: AO0yUKXRuOih/vDqMM7Pfru9xqCfJnhcUytMfRY6I3xW9XGElJsHYLh6
+	1CVU5qLpGgkSzTUNI2aHJNRfIw==
+X-Google-Smtp-Source: AK7set+rGmjIfvS3baxKVbA0bxotZKgIUCw5HvLE3AnsK14SnALoXFJXe76PRDqzgumVmQzFWq+1CA==
+X-Received: by 2002:a05:6000:110e:b0:2bf:95fb:e5b3 with SMTP id z14-20020a056000110e00b002bf95fbe5b3mr5948875wrw.33.1675851959784;
+        Wed, 08 Feb 2023 02:25:59 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h1-20020a5d4301000000b002c3b2afae00sm13064383wrq.41.2023.02.08.02.25.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 02:25:59 -0800 (PST)
+Message-ID: <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
+Date: Wed, 8 Feb 2023 11:25:57 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|MN0PR11MB6181:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4abc2f31-f688-4643-1a28-08db09b193ac
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QbqKjSe9G9iDloAfg1rkxEeqZzdO7Jl5FCwJRc7cEySZK11//4WXxnjQDQkbmqZ/LSXx2a+p9fhgNHVTf3USnyUOGnagyWwyHlTHJJtdS16hnqlbuwuqxbIlMBP7RE19etSNnMxjez/isJWT03ywzSGgPU3hePMrrvVnaRMEfnFTFCc2E1vZqle3XY63Q3Q9AFJdImA1YsWglwBj/K9wzxs95nidakHGcRTIBBGEVupmV/V79AgztScdHeD1WCuqUgqUVYnZfS4t3lAIZZbzm1/6MOHlImL0G8jOPVWXsHvJQjWkTsN7jmump4rUmQbqWDXRWo+7JS9Jo2DBIu5vC1nxbAR1O5C/KU0hYzkTxjKKTpVGq3XpFZW7ngZ+0hS7ficHZjqIPDixy4VHBMZawlJslPYV7gOahFAarsYO2NyUJfpYEN/oeq5ekmj7nw2Hv8TWDSBNkNghhJCO11HOKMQVdEWF+vkGoWwwB65LpIHJiEphPWbZhLynxTuPmuE49gHwKikh5WTmo6WG78BNg3jrVo874aKKEN5RVRDsSVbmDRFjBG4erMt1LDfu4EXJgaVmkYGiNtqwjnxr47pSoF22POJdXYtoYJcCHxYrLYsOILPDDWrrIOYCrtkQqoXyKgv0+3lPEgkJV7GWWEgDJ44lRnBWcgkBI61T3BuFRmNQSpb9npnAQ4GRUkdTsxklfj+q27UdBE+am9IP8q7nZmQETGi4lQpTe120sl0AuuB+aZu7uI8mOXHlEmEouYo1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(39860400002)(396003)(346002)(136003)(376002)(366004)(451199018)(86362001)(6506007)(5660300002)(9686003)(26005)(6512007)(44832011)(186003)(8936002)(6666004)(2906002)(82960400001)(66946007)(6916009)(66556008)(66476007)(4326008)(8676002)(38100700002)(41300700001)(966005)(316002)(478600001)(6486002)(54906003)(33716001)(83380400001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?c11qGCQ/VqUyx4YWfnSnoa55kBxWM6v7w8IlKI16BKYqpLx1xmTQhHRsWReo?=
- =?us-ascii?Q?iGID4qHI/KWDSENYWO+7bakKLrcNArPgZXpYt5wwcFzHVyj7z1hZQYWsVzW+?=
- =?us-ascii?Q?fP+MWCZFqIlbAAs0gpUJaoeqSb1zNFGcbgVRdNuP9yZS6tku2htaaPOJldwU?=
- =?us-ascii?Q?0Knh9hS+HSuj3ghP87BLIwX1DNiKvWGxTe1NJ6qdTgJigyIkO8UiqIplFaOt?=
- =?us-ascii?Q?2qAoE+jkld9g+nBUoiAgZjZsMcNSNnLrd5/u6thvzzlao/dPjS+1/zeceYD8?=
- =?us-ascii?Q?/GutqBJW4zFAfNxYTHu5jSQkK+PT8g88iBi1A97s9YA6blzEAjv7AqPLs/aN?=
- =?us-ascii?Q?y2zNi9/1kxHdLQe0Z997aaK5B0hr51UrgtdzAQDYhJPnaV1KZyvjoB3tYE0/?=
- =?us-ascii?Q?lkhJv2MYCK4O1zd1SwcBSQTQvSQgNDOJNbf9PaPJRvZdS7WOCr1vr0eZHnI4?=
- =?us-ascii?Q?ERujsvKIwf+If60TPmusSALjGytyLAUCwm913LZjvkkPtOFH46e1qo9H5tAS?=
- =?us-ascii?Q?/61PdEh5LnF4WoaNubXib+6iGgqwOXIrrSazCfJ3cCVNn++q2jcYCngdppCX?=
- =?us-ascii?Q?9wwHR9eEPUmCiNiJ7isNgi1aDVg9jWU3VqnFtZ54kMzwLAihl2eB7aQR3EtQ?=
- =?us-ascii?Q?Sw0K8tv1CwcQS/K9/IX5c+D2VyPhV/yw0XCzBpVAQZvlGYnJUeFnLV/ThZR1?=
- =?us-ascii?Q?qdl+xId7OjsXrKuclMPyLwOmibSqVZwFM/qsd4XLbCeJ5VHdG75QiFqrrCW3?=
- =?us-ascii?Q?nwDKeyFtRrCwffTdWKlEJ43gafGhhG4tjCoByM9H6KlaAVZ6lDwxVGrV9IsW?=
- =?us-ascii?Q?u4k/AeUWZmTvNQUzL+WrjgROPqC+f66fcIdOA+ymFD2cesd0fvhgp7jUL+lf?=
- =?us-ascii?Q?05k5K4buQ4tK9ldB96n5uxXZBJwxpNPiMawokmZDbhYBKJoAvv+oFPAfZAyi?=
- =?us-ascii?Q?TnIV36sWFO5oJyeWTAty4lW0KjcdwemwfD3Zm++7BDqAZwHVC6CLqPXofZ77?=
- =?us-ascii?Q?D7j3gUY1uD1PeY/GMbnVM8kBRSc17zfRMlHI5D1Hx8gKm9sPMz+OF32MaHBo?=
- =?us-ascii?Q?JHUi7ivwzUNOLOrkMQ3d2zrS10KmW4Pbz+QDsWpCNfwLlyHsisuHchVSmNSA?=
- =?us-ascii?Q?4DeVL91Rcdokjmp7VkZGfR6DcHsaPqnlT0IsG720CCy9SOo1RYPtoDMky2f2?=
- =?us-ascii?Q?mNLGmTKBf3feci7nz9Abz9U5wIC9G4ZvtcvIb5LFm6x2bazYcp62byu9nFm7?=
- =?us-ascii?Q?FcFKX2Ts8rgJvK4b67ZHtlmyc+RcNLQbfY+VBrcNhN3jfQHPuPV6NvJizPCE?=
- =?us-ascii?Q?CDQ5rgkjfRNO0ApX/gFGNHWqMOupOMSUIVYSWYQxa5pWpdCti6K1VWnleAiL?=
- =?us-ascii?Q?LLSrsmJbdSu9qQFgHbVqvUnopG3xyTlNE4HpZZfk/HqfV75lni7TpbiquTTI?=
- =?us-ascii?Q?2nEpg8bh3bIk2WHUZ1bSDgBYovgxqYWmkNVR/G6XEF23usf8qZMKrJN59j8r?=
- =?us-ascii?Q?1bKkW0UiWd3N8WMY7GnpwGxvUr1FHD4MlNnwg7bBR/W+31CE/Y9enGWDposY?=
- =?us-ascii?Q?XzT8Ypj2GKpU9I1Yry2BtoDiLZcmIheR048Sh3ZP?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4abc2f31-f688-4643-1a28-08db09b193ac
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 08:50:49.6166
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m7djOoU8fguOt3TZWcQTPkK0LUr/ckP76CVNn9Z0f6l5lw6tZQ+d3U9f2HkC8MpCQpmrJXj+z548vt6I76gUjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6181
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>,
+ Saurabh Sengar <ssengar@linux.microsoft.com>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+ haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+ daniel.lezcano@linaro.org, tglx@linutronix.de,
+ virtualization@lists.linux-foundation.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ mikelley@microsoft.com, ssengar@microsoft.com, dphadke@linux.microsoft.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
+ <202302081621.odizDzHG-lkp@intel.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <202302081621.odizDzHG-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 07, 2023 at 12:02:10PM -0700, Nathan Chancellor wrote:
-> On Wed, Feb 08, 2023 at 02:59:05AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
-> > commit: 925d046e7e52c71c3531199ce137e141807ef740 RDMA/core: Add a netevent notifier to cma
-> > date:   8 months ago
-> > config: mips-buildonly-randconfig-r006-20230207 (https://download.01.org/0day-ci/archive/20230208/202302080231.ZqOmpanX-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install mips cross compiling tool for clang build
-> >         # apt-get install binutils-mips-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=925d046e7e52c71c3531199ce137e141807ef740
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 925d046e7e52c71c3531199ce137e141807ef740
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/infiniband/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    In file included from drivers/infiniband/core/cma.c:9:
-> >    In file included from include/linux/completion.h:12:
-> >    In file included from include/linux/swait.h:7:
-> >    In file included from include/linux/spinlock.h:55:
-> >    In file included from include/linux/preempt.h:78:
-> >    In file included from ./arch/mips/include/generated/asm/preempt.h:1:
-> >    In file included from include/asm-generic/preempt.h:5:
-> >    In file included from include/linux/thread_info.h:60:
-> >    In file included from arch/mips/include/asm/thread_info.h:16:
-> >    In file included from arch/mips/include/asm/processor.h:15:
-> >    In file included from include/linux/cpumask.h:12:
-> >    In file included from include/linux/bitmap.h:11:
-> >    In file included from include/linux/string.h:253:
-> > >> include/linux/fortify-string.h:414:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-> >                            __read_overflow();
-> >                            ^
-> >    1 error generated.
+On 08/02/2023 09:22, kernel test robot wrote:
+> Hi Saurabh,
 > 
-> This is tentatively a bug in clang, although I do not see KASAN enabled:
+> Thank you for the patch! Perhaps something to improve:
 > 
-> https://github.com/ClangBuiltLinux/linux/issues/1687
+> [auto build test WARNING on next-20230207]
+> [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> I do see CONFIG_UBSAN_BOOL=y though, so this could be a generic
-> sanitizer problem.
-> 
-> Cheers,
-> Nathan
 
-New rule added to the bot and will send similar reports to llvm list only.
+All of your recent patches have build errors. Can you at least build
+test them before sending? It's a unnecessary noise in our mailboxes to
+get non-buildable patches, just to trigger compilation which you can
+easily do by your own. GCC is a free software...
 
-Thanks,
-Yujie
+Best regards,
+Krzysztof
+
