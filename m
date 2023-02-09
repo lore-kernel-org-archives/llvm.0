@@ -1,166 +1,82 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7D263A;
-	Thu,  9 Feb 2023 05:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675919684; x=1707455684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tXlCsiS4ItKh3KiHiSPxfC0oS0H4trHUJSCkYJAmxPI=;
-  b=LDvSPEnkhph714rE0mkV/1eploT2M/+39+hikXLLHv+894WvYI2ZyrGe
-   6xgcRcGzfZWlHwiXx1w6QO3gsUhMrxz8QSGc5sEup382yydghlpS7xNGw
-   2bq4P2AbaWRaPuECqmTu7cbebL84tW9OnR48pjLtNDhvxrNd9BsejeWyz
-   B0vMrrUFoW8JiNdKy39K0cFXkUIe241bK+1vSdahFfLSphcAC9Z4633BR
-   xMAqHb1s3g0er1k7Hr21I+laFHNL57UWiXFif+y3hDvGy8T4SzO1ndP3r
-   6kliUls5RJveC6xUqbpkkPpxaihXa6+sn3DpDWdxxK/wYTip1S4nhv447
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="313650355"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="313650355"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 21:14:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669457609"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669457609"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 21:14:24 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pPzGJ-0004qE-1m;
-	Thu, 09 Feb 2023 05:14:23 +0000
-Date: Thu, 9 Feb 2023 13:14:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pawel Chmielewski <pawel.chmielewski@intel.com>, yury.norov@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-	baohua@kernel.org, bristot@redhat.com, bsegall@google.com,
-	davem@davemloft.net, dietmar.eggemann@arm.com, gal@nvidia.com,
-	gregkh@linuxfoundation.org, hca@linux.ibm.com,
-	jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
-	jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
-	leonro@nvidia.com, linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
-	netdev@vger.kernel.org, peter@n8pjl.ca, peterz@infradead.org,
-	rostedt@goodmis.org, saeedm@nvidia.com, tariqt@nvidia.com,
-	tony.luck@intel.com
-Subject: Re: [PATCH 1/1] ice: Change assigning method of the CPU affinity
- masks
-Message-ID: <202302091302.PaJoE0gU-lkp@intel.com>
-References: <20230208153905.109912-1-pawel.chmielewski@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC57863A
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 05:32:18 +0000 (UTC)
+Received: by mail-wr1-f41.google.com with SMTP id j23so673442wra.0
+        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 21:32:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6z3lxwnln7Ypie34pRxdCgfXQDUlJU7iUw2s4xeNCQ=;
+        b=hbv+iUmy8sb7UTevXZXSzxz4aaIUDG/plNczLQrgAbId4wPVrQ+MkUcq3aY+CY5S+3
+         rjawt/atll9AOMzPTfCwmorE8mJ0IW4ExC+pOffnmttwon2NgCXsQXAHNH70+CqH4Yet
+         b6oLh+gnKxDrXWJ+sVkEhlEAuMsgo82g7kQbD0bRtom8ONxlwBf6CsHrI8kEQQPSr8cE
+         02FslNpxxsQJnKXlRV77g9pOv1nepBqVy0+lQY1q5jHCyV3MZ1/poYrNBSof/aw2ifvB
+         XBsmv3sQsOevFgU/eI4a8Lch+EluHrUqqffry2uORieqI42qXv+KNAZGRuXumHYaK8Mh
+         FeiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w6z3lxwnln7Ypie34pRxdCgfXQDUlJU7iUw2s4xeNCQ=;
+        b=SMdmsfoX5sb3bAzyiq913Z/zCFv58Qe1WVn9m5dOISrWY16lscjMg/y4Mo95d3MGKC
+         HCuTOyac5/K0C20eR3vmufyRqoefmqsmtE0B7suFPkMtziboO2wVwmj/T4xapj3CC2Od
+         w/Wte7FDl54yMPN/5MhQdZeeeOu29vpIVPwTs7RiyXq11hzALVKlcWO9Ui92jfWhtGME
+         YcfrSV6ccy5lUTxI5E4Zt6pry5Uu4xP7FbtlWXLSxNoDiEw3A1K98HQZt/P/rBIV84Ky
+         HpdESCnQo+VHDr1fejs4+K+JRmgEXJQU5vmMQvIq88uaFPWmc/t7WIEhJIA5k991E+LD
+         oZ6g==
+X-Gm-Message-State: AO0yUKVDWMSfYY2+zFo46ChPlde12gEMzdBvD5AIQV44cOiSDYcPbEyX
+	LUpmyNkHQzLflMdXv0/ZZN+LLVkAkBg0YryafjgUTA==
+X-Google-Smtp-Source: AK7set9YGa7NCNq2wHzwRqe7rRW1StB4rmp4kgxLGJELsL8k4ez/VaGVQujKbNDfKlqQkG5awGCGVr1ELO1GQ8rpFMA=
+X-Received: by 2002:a5d:4247:0:b0:2bf:b264:6bf7 with SMTP id
+ s7-20020a5d4247000000b002bfb2646bf7mr251486wrr.427.1675920736829; Wed, 08 Feb
+ 2023 21:32:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208153905.109912-1-pawel.chmielewski@intel.com>
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
+In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
+From: Peter Collingbourne <pcc@google.com>
+Date: Wed, 8 Feb 2023 21:32:03 -0800
+Message-ID: <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
+Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
+To: Dan Li <ashimida.1990@gmail.com>
+Cc: gcc-patches@gcc.gnu.org, Richard Sandiford <richard.sandiford@arm.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, "Eric W. Biederman" <ebiederm@xmission.com>, 
+	Marco Elver <elver@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Song Liu <song@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Juergen Gross <jgross@suse.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Aaron Tomlin <atomlin@redhat.com>, 
+	Kalesh Singh <kaleshsingh@google.com>, Yuntao Wang <ytcoode@gmail.com>, 
+	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Pawel,
+On Sun, Dec 18, 2022 at 10:06 PM Dan Li <ashimida.1990@gmail.com> wrote:
+>
+> This series of patches is mainly used to support the control flow
+> integrity protection of the linux kernel [1], which is similar to
+> -fsanitize=kcfi in clang 16.0 [2,3].
+>
+> I hope that this feature will also support user-mode CFI in the
+> future (at least for developers who can recompile the runtime),
+> so I use -fsanitize=cfi as a compilation option here.
 
-Thank you for the patch! Yet something to improve:
+Please don't. The various CFI-related build flags are confusing enough
+without also having this inconsistency between Clang and GCC.
 
-[auto build test ERROR on tnguy-next-queue/dev-queue]
-[also build test ERROR on linus/master v6.2-rc7 next-20230208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Chmielewski/ice-Change-assigning-method-of-the-CPU-affinity-masks/20230208-234144
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20230208153905.109912-1-pawel.chmielewski%40intel.com
-patch subject: [PATCH 1/1] ice: Change assigning method of the CPU affinity masks
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230209/202302091302.PaJoE0gU-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/33971c3245ae75900dbc4cc9aa2b76ff9cdb534c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Pawel-Chmielewski/ice-Change-assigning-method-of-the-CPU-affinity-masks/20230208-234144
-        git checkout 33971c3245ae75900dbc4cc9aa2b76ff9cdb534c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/ice/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091302.PaJoE0gU-lkp@intel.com
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/ice/ice_base.c:662:23: error: no member named 'numa_node' in 'struct device'
-           int numa_node = dev->numa_node;
-                           ~~~  ^
->> drivers/net/ethernet/intel/ice/ice_base.c:678:2: error: implicit declaration of function 'for_each_numa_hop_mask' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           for_each_numa_hop_mask(aff_mask, numa_node) {
-           ^
->> drivers/net/ethernet/intel/ice/ice_base.c:678:45: error: expected ';' after expression
-           for_each_numa_hop_mask(aff_mask, numa_node) {
-                                                      ^
-                                                      ;
-   3 errors generated.
-
-
-vim +662 drivers/net/ethernet/intel/ice/ice_base.c
-
-   650	
-   651	/**
-   652	 * ice_vsi_alloc_q_vectors - Allocate memory for interrupt vectors
-   653	 * @vsi: the VSI being configured
-   654	 *
-   655	 * We allocate one q_vector per queue interrupt. If allocation fails we
-   656	 * return -ENOMEM.
-   657	 */
-   658	int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
-   659	{
-   660		cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
-   661		struct device *dev = ice_pf_to_dev(vsi->back);
- > 662		int numa_node = dev->numa_node;
-   663		u16 v_idx, cpu = 0;
-   664		int err;
-   665	
-   666		if (vsi->q_vectors[0]) {
-   667			dev_dbg(dev, "VSI %d has existing q_vectors\n", vsi->vsi_num);
-   668			return -EEXIST;
-   669		}
-   670	
-   671		for (v_idx = 0; v_idx < vsi->num_q_vectors; v_idx++) {
-   672			err = ice_vsi_alloc_q_vector(vsi, v_idx);
-   673			if (err)
-   674				goto err_out;
-   675		}
-   676	
-   677		v_idx = 0;
- > 678		for_each_numa_hop_mask(aff_mask, numa_node) {
-   679			for_each_cpu_andnot(cpu, aff_mask, last_aff_mask)
-   680				if (v_idx < vsi->num_q_vectors) {
-   681					if (cpu_online(cpu))
-   682						cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
-   683					v_idx++;
-   684				}
-   685			last_aff_mask = aff_mask;
-   686		}
-   687	
-   688		return 0;
-   689	
-   690	err_out:
-   691		while (v_idx--)
-   692			ice_free_q_vector(vsi, v_idx);
-   693	
-   694		dev_err(dev, "Failed to allocate %d q_vector for VSI %d, ret=%d\n",
-   695			vsi->num_q_vectors, vsi->vsi_num, err);
-   696		vsi->num_q_vectors = 0;
-   697		return err;
-   698	}
-   699	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Peter
