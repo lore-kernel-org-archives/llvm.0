@@ -1,134 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53041627
-	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 04:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F6EC433EF;
-	Thu,  9 Feb 2023 04:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1675915709;
-	bh=pHJypjgeDSW+11z03k8Qy0ZiPxB15zj8h5OsUvUjIdM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fJmx7LmC3VIWvSWeCitVOw2zg8kbhehG3WbBeiLxT76ErH2PV7xjYLPH73d/cMjKS
-	 IC6YYIWWKtqeZQ2G96J6GDd2i4dFLrw03Nsg/mDL8Mz2a26nH3jpR/aplnRZ38avrN
-	 S1mZqAknZagGKwPw5s4Ip1c5Wnpt9X9PonuFX1Es=
-Date: Wed, 8 Feb 2023 20:08:27 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- mike.kravetz@oracle.com, muchun.song@linux.dev, nathan@kernel.org,
- ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
- folio_flags
-Message-Id: <20230208200827.9b461dc5955770535aa2ec78@linux-foundation.org>
-In-Reply-To: <000000000000a6b67d05f43a9854@google.com>
-References: <000000000000cce8cd05f435fc77@google.com>
-	<000000000000a6b67d05f43a9854@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1B9627;
+	Thu,  9 Feb 2023 04:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675916007; x=1707452007;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1qxftDUuR4Z4M+K0ibVCn0KYirP/c/PVNRzQtTRRLqM=;
+  b=L+zb9HDcuO0GaTsQqUOPA/N94K3YFYb1/TRwDwTWqBLzWYbspBx2I1yX
+   CAFQwACC5P5sVkgB4+HOwvTAxu08Z92g1QrU+7bNOokvwMKsJ+Scgg4FE
+   rWUkpbG6bhooNqpU1g6rR+0MiRREcaBAR7RTm8IA3J2Mn47nJy9b547AD
+   RwDnXTEcYbysRHpLZImZSFdmA4Sq+q5UCUceKCuCHM5ueIMXF8fyXW931
+   v3ddqgbyyB5RLHCpTWOWxNo7IUT7DuGP9dtU2P6ieRF22qvyPQRo+BQqL
+   vp8XCwotG1Wr8l/djVepUnHN6VKAOsycusPO7sj45ahymqkMXrgstnCzj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394600001"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="394600001"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:13:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791449413"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="791449413"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Feb 2023 20:13:23 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pPyJG-0004og-26;
+	Thu, 09 Feb 2023 04:13:22 +0000
+Date: Thu, 9 Feb 2023 12:13:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/verisilicon/hantro_drv.c:618:34: warning:
+ unused variable 'of_hantro_match'
+Message-ID: <202302091243.rvRjqigX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 08 Feb 2023 17:49:49 -0800 syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com> wrote:
+Hi Ezequiel,
 
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    38d2b86a665b Add linux-next specific files for 20230208
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=15f5e3a7480000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
-> dashboard link: https://syzkaller.appspot.com/bug?extid=d632e24db18585d7b3c6
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1454ddf3480000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a8431f480000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/0a9d60e90514/disk-38d2b86a.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/71311be5f1a1/vmlinux-38d2b86a.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/a242870cc8eb/bzImage-38d2b86a.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com
-> 
-> memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=5080 'syz-executor561'
-> BUG: unable to handle page fault for address: ffffffffffffffed
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD c570067 P4D c570067 PUD c572067 PMD 0 
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 5080 Comm: syz-executor561 Not tainted 6.2.0-rc7-next-20230208-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-> RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
-> RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
-> Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
-> RSP: 0018:ffffc90003cbfc08 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: 0000000000000000
-> RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
-> RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
-> R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
-> R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
-> FS:  0000555556e84300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffed CR3: 000000002bb37000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  folio_test_head include/linux/page-flags.h:781 [inline]
->  folio_test_large include/linux/page-flags.h:802 [inline]
->  PageHeadHuge+0x18/0xc0 mm/hugetlb.c:2060
->  folio_test_hugetlb include/linux/page-flags.h:830 [inline]
->  folio_file_page include/linux/pagemap.h:702 [inline]
->  shmem_read_mapping_page_gfp+0x34/0x100 mm/shmem.c:4366
->  shmem_read_mapping_page include/linux/shmem_fs.h:124 [inline]
->  udmabuf_create+0x93b/0x1440 drivers/dma-buf/udmabuf.c:286
->  udmabuf_ioctl_create drivers/dma-buf/udmabuf.c:346 [inline]
->  udmabuf_ioctl+0x156/0x2c0 drivers/dma-buf/udmabuf.c:377
+First bad commit (maybe != root cause):
 
-Thanks, I expect Matthew just fixed this.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: fbb6c848dd89786fe24856ee6b5e773910ded29c media: destage Hantro VPU driver
+date:   5 months ago
+config: s390-randconfig-r014-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091243.rvRjqigX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbb6c848dd89786fe24856ee6b5e773910ded29c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fbb6c848dd89786fe24856ee6b5e773910ded29c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/verisilicon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302091243.rvRjqigX-lkp@intel.com
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/verisilicon/hantro_drv.c:618:34: warning: unused variable 'of_hantro_match' [-Wunused-const-variable]
+   static const struct of_device_id of_hantro_match[] = {
+                                    ^
+   13 warnings generated.
 
 
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: shmem-add-shmem_read_folio-and-shmem_read_folio_gfp-fix
-Date: Wed Feb  8 07:54:45 PM PST 2023
+vim +/of_hantro_match +618 drivers/media/platform/verisilicon/hantro_drv.c
 
-fix shmem_read_mapping_page_gfp(), per Matthew
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  617  
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12 @618  static const struct of_device_id of_hantro_match[] = {
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  619  #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
+fb7cb344b96938 drivers/staging/media/hantro/hantro_drv.c             Paul Kocialkowski  2021-07-19  620  	{ .compatible = "rockchip,px30-vpu",   .data = &px30_vpu_variant, },
+4f34591568e7a1 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  621  	{ .compatible = "rockchip,rk3036-vpu", .data = &rk3036_vpu_variant, },
+78bb1ae5472cab drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  622  	{ .compatible = "rockchip,rk3066-vpu", .data = &rk3066_vpu_variant, },
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  623  	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+4b898fedeb26c4 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  624  	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+4b898fedeb26c4 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  625  	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+6f1ae821a6c4aa drivers/staging/media/hantro/hantro_drv.c             Nicolas Frattaroli 2022-06-12  626  	{ .compatible = "rockchip,rk3568-vepu", .data = &rk3568_vepu_variant, },
+5f6bfab6da6531 drivers/staging/media/hantro/hantro_drv.c             Piotr Oniszczuk    2022-02-14  627  	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  628  #endif
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  629  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+cf1abc501a5c76 drivers/staging/media/hantro/hantro_drv.c             Adam Ford          2022-01-25  630  	{ .compatible = "nxp,imx8mm-vpu-g1", .data = &imx8mm_vpu_g1_variant, },
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  631  	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+6971efb70ac3e4 drivers/staging/media/hantro/hantro_drv.c             Adam Ford          2022-01-25  632  	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
+45040f67504195 drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard  2021-06-03  633  	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  634  #endif
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  635  #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  636  	{ .compatible = "microchip,sama5d4-vdec", .data = &sama5d4_vdec_variant, },
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  637  #endif
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  638  #ifdef CONFIG_VIDEO_HANTRO_SUNXI
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  639  	{ .compatible = "allwinner,sun50i-h6-vpu-g2", .data = &sunxi_vpu_variant, },
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  640  #endif
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  641  	{ /* sentinel */ }
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  642  };
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  643  MODULE_DEVICE_TABLE(of, of_hantro_match);
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  644  
 
-Link: https://lkml.kernel.org/r/Y+QdJTuzxeBYejw2@casper.infradead.org
-Cc: Charan Teja Kalla <quic_charante@quicinc.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Mark Hemment <markhemm@googlemail.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
+:::::: The code at line 618 was first introduced by commit
+:::::: a29add8c9bb29dfa8dc47c71b2702e9cc4f332a6 media: rockchip/vpu: rename from rockchip to hantro
 
+:::::: TO: Philipp Zabel <p.zabel@pengutronix.de>
+:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
---- a/mm/shmem.c~shmem-add-shmem_read_folio-and-shmem_read_folio_gfp-fix
-+++ a/mm/shmem.c
-@@ -4354,8 +4354,12 @@ struct page *shmem_read_mapping_page_gfp
- 					 pgoff_t index, gfp_t gfp)
- {
- 	struct folio *folio = shmem_read_folio_gfp(mapping, index, gfp);
--	struct page *page = folio_file_page(folio, index);
-+	struct page *page;
- 
-+	if (IS_ERR(folio))
-+		return &folio->page;
-+
-+	page = folio_file_page(folio, index);
- 	if (PageHWPoison(page)) {
- 		folio_put(folio);
- 		return ERR_PTR(-EIO);
-_
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
