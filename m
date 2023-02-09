@@ -1,43 +1,56 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F269263A;
-	Thu,  9 Feb 2023 04:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7D263A;
+	Thu,  9 Feb 2023 05:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675917266; x=1707453266;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OTIJ4/JbDHSiaWz3de3PNwSFXGGlh4n8IJQjcB35lmM=;
-  b=T0RGaUxLLSD37VTE7BAyakS9SdqiWWrBEyJnhg97IBek7E5GW5c1m0sK
-   DZ4IHJhIFh7iNwIMI0+FNS88TPSoMgV0i3LX9Z8tTpKcp8b2+bc3oAou8
-   stB6neh5A/Jw2vkNaPXNs8ssiSfMxS04mBLsID9XuOTntxPHEyZzmAhEe
-   KFk96ty2KDBLBcnRYTSSVttxiFo8qLumn+p61xtr9jyY8EF4cCoUDrIF2
-   08N8WoRvGRR6NY/OMCEHhDAQBlRbIVHjzgoJQd2QVnrmPeQZLqS3hED/W
-   5pln4ZVL0qRDp3epTv4QJ9V5By1j0COCmvZWLcwqBx6R/z0HsKB5LY0ag
+  t=1675919684; x=1707455684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tXlCsiS4ItKh3KiHiSPxfC0oS0H4trHUJSCkYJAmxPI=;
+  b=LDvSPEnkhph714rE0mkV/1eploT2M/+39+hikXLLHv+894WvYI2ZyrGe
+   6xgcRcGzfZWlHwiXx1w6QO3gsUhMrxz8QSGc5sEup382yydghlpS7xNGw
+   2bq4P2AbaWRaPuECqmTu7cbebL84tW9OnR48pjLtNDhvxrNd9BsejeWyz
+   B0vMrrUFoW8JiNdKy39K0cFXkUIe241bK+1vSdahFfLSphcAC9Z4633BR
+   xMAqHb1s3g0er1k7Hr21I+laFHNL57UWiXFif+y3hDvGy8T4SzO1ndP3r
+   6kliUls5RJveC6xUqbpkkPpxaihXa6+sn3DpDWdxxK/wYTip1S4nhv447
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="327702977"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="313650355"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="327702977"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:34:25 -0800
+   d="scan'208";a="313650355"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 21:14:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="841453892"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669457609"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="841453892"
+   d="scan'208";a="669457609"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2023 20:34:23 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 21:14:24 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pPyda-0004ow-2f;
-	Thu, 09 Feb 2023 04:34:22 +0000
-Date: Thu, 9 Feb 2023 12:33:38 +0800
+	id 1pPzGJ-0004qE-1m;
+	Thu, 09 Feb 2023 05:14:23 +0000
+Date: Thu, 9 Feb 2023 13:14:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To: Pawel Chmielewski <pawel.chmielewski@intel.com>, yury.norov@gmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: fs/ntfs/aops.c:378:12: warning: stack frame size (2208) exceeds
- limit (1024) in 'ntfs_read_folio'
-Message-ID: <202302091252.YaMb7MJe-lkp@intel.com>
+	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
+	baohua@kernel.org, bristot@redhat.com, bsegall@google.com,
+	davem@davemloft.net, dietmar.eggemann@arm.com, gal@nvidia.com,
+	gregkh@linuxfoundation.org, hca@linux.ibm.com,
+	jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
+	jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
+	leonro@nvidia.com, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
+	netdev@vger.kernel.org, peter@n8pjl.ca, peterz@infradead.org,
+	rostedt@goodmis.org, saeedm@nvidia.com, tariqt@nvidia.com,
+	tony.luck@intel.com
+Subject: Re: [PATCH 1/1] ice: Change assigning method of the CPU affinity
+ masks
+Message-ID: <202302091302.PaJoE0gU-lkp@intel.com>
+References: <20230208153905.109912-1-pawel.chmielewski@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,192 +59,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230208153905.109912-1-pawel.chmielewski@intel.com>
 
-Hi Matthew,
+Hi Pawel,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: 933906f8e8e4110c56db9bddd1281e4e4983a2bb ntfs: Convert ntfs to read_folio
-date:   9 months ago
-config: hexagon-buildonly-randconfig-r003-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091252.YaMb7MJe-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+[auto build test ERROR on tnguy-next-queue/dev-queue]
+[also build test ERROR on linus/master v6.2-rc7 next-20230208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Chmielewski/ice-Change-assigning-method-of-the-CPU-affinity-masks/20230208-234144
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+patch link:    https://lore.kernel.org/r/20230208153905.109912-1-pawel.chmielewski%40intel.com
+patch subject: [PATCH 1/1] ice: Change assigning method of the CPU affinity masks
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230209/202302091302.PaJoE0gU-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=933906f8e8e4110c56db9bddd1281e4e4983a2bb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 933906f8e8e4110c56db9bddd1281e4e4983a2bb
+        # https://github.com/intel-lab-lkp/linux/commit/33971c3245ae75900dbc4cc9aa2b76ff9cdb534c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pawel-Chmielewski/ice-Change-assigning-method-of-the-CPU-affinity-masks/20230208-234144
+        git checkout 33971c3245ae75900dbc4cc9aa2b76ff9cdb534c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ntfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/ice/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091252.YaMb7MJe-lkp@intel.com
+| Link: https://lore.kernel.org/oe-kbuild-all/202302091302.PaJoE0gU-lkp@intel.com
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/ntfs/aops.c:378:12: warning: stack frame size (2208) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
-   static int ntfs_read_folio(struct file *file, struct folio *folio)
-              ^
-   119/2208 (5.39%) spills, 2089/2208 (94.61%) variables
-   1 warning generated.
+>> drivers/net/ethernet/intel/ice/ice_base.c:662:23: error: no member named 'numa_node' in 'struct device'
+           int numa_node = dev->numa_node;
+                           ~~~  ^
+>> drivers/net/ethernet/intel/ice/ice_base.c:678:2: error: implicit declaration of function 'for_each_numa_hop_mask' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           for_each_numa_hop_mask(aff_mask, numa_node) {
+           ^
+>> drivers/net/ethernet/intel/ice/ice_base.c:678:45: error: expected ';' after expression
+           for_each_numa_hop_mask(aff_mask, numa_node) {
+                                                      ^
+                                                      ;
+   3 errors generated.
 
 
-vim +/ntfs_read_folio +378 fs/ntfs/aops.c
+vim +662 drivers/net/ethernet/intel/ice/ice_base.c
 
-   359	
-   360	/**
-   361	 * ntfs_read_folio - fill a @folio of a @file with data from the device
-   362	 * @file:	open file to which the folio @folio belongs or NULL
-   363	 * @folio:	page cache folio to fill with data
-   364	 *
-   365	 * For non-resident attributes, ntfs_read_folio() fills the @folio of the open
-   366	 * file @file by calling the ntfs version of the generic block_read_full_folio()
-   367	 * function, ntfs_read_block(), which in turn creates and reads in the buffers
-   368	 * associated with the folio asynchronously.
-   369	 *
-   370	 * For resident attributes, OTOH, ntfs_read_folio() fills @folio by copying the
-   371	 * data from the mft record (which at this stage is most likely in memory) and
-   372	 * fills the remainder with zeroes. Thus, in this case, I/O is synchronous, as
-   373	 * even if the mft record is not cached at this point in time, we need to wait
-   374	 * for it to be read in before we can do the copy.
-   375	 *
-   376	 * Return 0 on success and -errno on error.
-   377	 */
- > 378	static int ntfs_read_folio(struct file *file, struct folio *folio)
-   379	{
-   380		struct page *page = &folio->page;
-   381		loff_t i_size;
-   382		struct inode *vi;
-   383		ntfs_inode *ni, *base_ni;
-   384		u8 *addr;
-   385		ntfs_attr_search_ctx *ctx;
-   386		MFT_RECORD *mrec;
-   387		unsigned long flags;
-   388		u32 attr_len;
-   389		int err = 0;
-   390	
-   391	retry_readpage:
-   392		BUG_ON(!PageLocked(page));
-   393		vi = page->mapping->host;
-   394		i_size = i_size_read(vi);
-   395		/* Is the page fully outside i_size? (truncate in progress) */
-   396		if (unlikely(page->index >= (i_size + PAGE_SIZE - 1) >>
-   397				PAGE_SHIFT)) {
-   398			zero_user(page, 0, PAGE_SIZE);
-   399			ntfs_debug("Read outside i_size - truncated?");
-   400			goto done;
-   401		}
-   402		/*
-   403		 * This can potentially happen because we clear PageUptodate() during
-   404		 * ntfs_writepage() of MstProtected() attributes.
-   405		 */
-   406		if (PageUptodate(page)) {
-   407			unlock_page(page);
-   408			return 0;
-   409		}
-   410		ni = NTFS_I(vi);
-   411		/*
-   412		 * Only $DATA attributes can be encrypted and only unnamed $DATA
-   413		 * attributes can be compressed.  Index root can have the flags set but
-   414		 * this means to create compressed/encrypted files, not that the
-   415		 * attribute is compressed/encrypted.  Note we need to check for
-   416		 * AT_INDEX_ALLOCATION since this is the type of both directory and
-   417		 * index inodes.
-   418		 */
-   419		if (ni->type != AT_INDEX_ALLOCATION) {
-   420			/* If attribute is encrypted, deny access, just like NT4. */
-   421			if (NInoEncrypted(ni)) {
-   422				BUG_ON(ni->type != AT_DATA);
-   423				err = -EACCES;
-   424				goto err_out;
-   425			}
-   426			/* Compressed data streams are handled in compress.c. */
-   427			if (NInoNonResident(ni) && NInoCompressed(ni)) {
-   428				BUG_ON(ni->type != AT_DATA);
-   429				BUG_ON(ni->name_len);
-   430				return ntfs_read_compressed_block(page);
-   431			}
-   432		}
-   433		/* NInoNonResident() == NInoIndexAllocPresent() */
-   434		if (NInoNonResident(ni)) {
-   435			/* Normal, non-resident data stream. */
-   436			return ntfs_read_block(page);
-   437		}
-   438		/*
-   439		 * Attribute is resident, implying it is not compressed or encrypted.
-   440		 * This also means the attribute is smaller than an mft record and
-   441		 * hence smaller than a page, so can simply zero out any pages with
-   442		 * index above 0.  Note the attribute can actually be marked compressed
-   443		 * but if it is resident the actual data is not compressed so we are
-   444		 * ok to ignore the compressed flag here.
-   445		 */
-   446		if (unlikely(page->index > 0)) {
-   447			zero_user(page, 0, PAGE_SIZE);
-   448			goto done;
-   449		}
-   450		if (!NInoAttr(ni))
-   451			base_ni = ni;
-   452		else
-   453			base_ni = ni->ext.base_ntfs_ino;
-   454		/* Map, pin, and lock the mft record. */
-   455		mrec = map_mft_record(base_ni);
-   456		if (IS_ERR(mrec)) {
-   457			err = PTR_ERR(mrec);
-   458			goto err_out;
-   459		}
-   460		/*
-   461		 * If a parallel write made the attribute non-resident, drop the mft
-   462		 * record and retry the read_folio.
-   463		 */
-   464		if (unlikely(NInoNonResident(ni))) {
-   465			unmap_mft_record(base_ni);
-   466			goto retry_readpage;
-   467		}
-   468		ctx = ntfs_attr_get_search_ctx(base_ni, mrec);
-   469		if (unlikely(!ctx)) {
-   470			err = -ENOMEM;
-   471			goto unm_err_out;
-   472		}
-   473		err = ntfs_attr_lookup(ni->type, ni->name, ni->name_len,
-   474				CASE_SENSITIVE, 0, NULL, 0, ctx);
-   475		if (unlikely(err))
-   476			goto put_unm_err_out;
-   477		attr_len = le32_to_cpu(ctx->attr->data.resident.value_length);
-   478		read_lock_irqsave(&ni->size_lock, flags);
-   479		if (unlikely(attr_len > ni->initialized_size))
-   480			attr_len = ni->initialized_size;
-   481		i_size = i_size_read(vi);
-   482		read_unlock_irqrestore(&ni->size_lock, flags);
-   483		if (unlikely(attr_len > i_size)) {
-   484			/* Race with shrinking truncate. */
-   485			attr_len = i_size;
-   486		}
-   487		addr = kmap_atomic(page);
-   488		/* Copy the data to the page. */
-   489		memcpy(addr, (u8*)ctx->attr +
-   490				le16_to_cpu(ctx->attr->data.resident.value_offset),
-   491				attr_len);
-   492		/* Zero the remainder of the page. */
-   493		memset(addr + attr_len, 0, PAGE_SIZE - attr_len);
-   494		flush_dcache_page(page);
-   495		kunmap_atomic(addr);
-   496	put_unm_err_out:
-   497		ntfs_attr_put_search_ctx(ctx);
-   498	unm_err_out:
-   499		unmap_mft_record(base_ni);
-   500	done:
-   501		SetPageUptodate(page);
-   502	err_out:
-   503		unlock_page(page);
-   504		return err;
-   505	}
-   506	
+   650	
+   651	/**
+   652	 * ice_vsi_alloc_q_vectors - Allocate memory for interrupt vectors
+   653	 * @vsi: the VSI being configured
+   654	 *
+   655	 * We allocate one q_vector per queue interrupt. If allocation fails we
+   656	 * return -ENOMEM.
+   657	 */
+   658	int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
+   659	{
+   660		cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
+   661		struct device *dev = ice_pf_to_dev(vsi->back);
+ > 662		int numa_node = dev->numa_node;
+   663		u16 v_idx, cpu = 0;
+   664		int err;
+   665	
+   666		if (vsi->q_vectors[0]) {
+   667			dev_dbg(dev, "VSI %d has existing q_vectors\n", vsi->vsi_num);
+   668			return -EEXIST;
+   669		}
+   670	
+   671		for (v_idx = 0; v_idx < vsi->num_q_vectors; v_idx++) {
+   672			err = ice_vsi_alloc_q_vector(vsi, v_idx);
+   673			if (err)
+   674				goto err_out;
+   675		}
+   676	
+   677		v_idx = 0;
+ > 678		for_each_numa_hop_mask(aff_mask, numa_node) {
+   679			for_each_cpu_andnot(cpu, aff_mask, last_aff_mask)
+   680				if (v_idx < vsi->num_q_vectors) {
+   681					if (cpu_online(cpu))
+   682						cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
+   683					v_idx++;
+   684				}
+   685			last_aff_mask = aff_mask;
+   686		}
+   687	
+   688		return 0;
+   689	
+   690	err_out:
+   691		while (v_idx--)
+   692			ice_free_q_vector(vsi, v_idx);
+   693	
+   694		dev_err(dev, "Failed to allocate %d q_vector for VSI %d, ret=%d\n",
+   695			vsi->num_q_vectors, vsi->vsi_num, err);
+   696		vsi->num_q_vectors = 0;
+   697		return err;
+   698	}
+   699	
 
 -- 
 0-DAY CI Kernel Test Service
