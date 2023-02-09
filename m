@@ -1,114 +1,95 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E6EA94B
-	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 22:01:28 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id gr7so10756679ejb.5
-        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 14:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=12EmLmXNPxVlBwqhOstyYyPyvkcnUa7HgYnHDTPPtNE=;
-        b=VlJ35ScMfjK5cUQAGBmGVcnTAuHtfwb/ke2H1l8NFfViNicrUGiQh7hbu/EqVgOJ/5
-         VLgvb9npmAszqdK3H8E4DdfhEQNHVxHGbCdUO+63RdFECF3TBh7o/6pOOvhxj8EjoQkC
-         6zZwCQgwSB9LMqPOgywPSKeefXjNV2A6bwgojpyZ/3k9gBRL870oaTNprn/WE0dwkxKv
-         539yOjP8uezXZe8sTutqBHz2ASYxJzRVQ70Ma53irQRAjyW9oS3U3u8orouGlgHFORSi
-         iZhfr5++lvrlYhacDuhkF/oVvFyZbilzrTFJGx/SeSvRJUvdh9sdEbv0msMn5/gUsOtP
-         IPyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=12EmLmXNPxVlBwqhOstyYyPyvkcnUa7HgYnHDTPPtNE=;
-        b=YBl34N3u2ctsBjEQKUl4AU1U+2JxneeGqTTAZGnCZhR4KYKgWwf7YTt7ZGIG2SOZPZ
-         rCzXg5O0MaNciJ37qE3RyjQMUoh2Mt790fMNCEwbkICr3oaP38Scnnkck/i0so91PHOB
-         54B9cUvHTJYXXP6OpxvMdx1P96ZYD96znamGH7zCHiIglD+KPNlvFwaNy/uliigijlne
-         pzfBhiCQa6kCWZCxEduqApu70RcLTkhKYjGxu0jRfunJED98JCsR8c6surSLg+VxgYHL
-         2Qx8bEz/LUVUI1oFCdPiCNsA1RHvu+IRFOgjDKAsrfLYwFpenOTHq+y0PSnqRHCi50PS
-         Ne8Q==
-X-Gm-Message-State: AO0yUKWTQINvTzHZAwQ/p27yLMUotYjxj/ngYIPCSWJFLpZa5rhf3e+N
-	P333zwEMGM7pwZP5QOEnhe98Vw6SbCOxQUh1gpU=
-X-Google-Smtp-Source: AK7set+ng9pmkzKqIxaS7qA6X4EwNgcgxsLiahOVc2y/+PRfgUFnkEXjaeRFkczOkKCB8xLLHVP05GF+ZrJsP4YTQ1o=
-X-Received: by 2002:a17:906:eb8f:b0:878:786e:8c39 with SMTP id
- mh15-20020a170906eb8f00b00878786e8c39mr2945087ejb.105.1675980086713; Thu, 09
- Feb 2023 14:01:26 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9327D27733;
+	Thu,  9 Feb 2023 23:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675986977; x=1707522977;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CeXNWFB90goiNYzN4ujmRtSAdv4/UDZJQfguE+ses44=;
+  b=EPwnaX6+6phL2iT+cf0K++ppj3uuoYjzF3VykgtnT0P9JLwn+nC89eXZ
+   DW/4CrMoXsgHJB97+0zh9d347Isi3+6ebpx3MASdVmYyvdxs1Z62aQ3+2
+   CRk5M6DzZANcUnfWHme2GCt21LEMEpRg/8GHvHVCusr9431Gvco6/9fU7
+   1dU9KHasCcVatveCPb7k0yj+b4+cIKNZ0xM/Il5C5o4DmKacFok6b7sCx
+   x1aUqzipqdsTCzHMZUzpYbmy4axJAo1ZFhUwWorwiNy2Nz+417X9OeeSd
+   yAVL9qKNaQytw8tLzkEGU92CcblUNd+Nv6ZNgcch0dyk2PrXW0IAHNEw6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="332422891"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="332422891"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 15:56:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="810576103"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="810576103"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2023 15:56:12 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pQGlv-0005Nm-1b;
+	Thu, 09 Feb 2023 23:56:11 +0000
+Date: Fri, 10 Feb 2023 07:55:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [linux-next:master 5911/11577]
+ drivers/soc/renesas/pwc-rzv2m.c:124:34: warning: unused variable
+ 'rzv2m_pwc_of_match'
+Message-ID: <202302100744.d1zZxXFn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230209192337.never.690-kees@kernel.org> <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
- <63e5521a.170a0220.297d7.3a80@mx.google.com> <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com>
- <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
-In-Reply-To: <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 9 Feb 2023 14:01:15 -0800
-Message-ID: <CAADnVQJed84rqugpNDY2u1r89QEOyAMMKZHLHefX=GRWZ3haoQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-To: Kees Cook <keescook@chromium.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Feb 9, 2023 at 1:12 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Feb 09, 2023 at 12:50:28PM -0800, Alexei Starovoitov wrote:
-> > On Thu, Feb 9, 2023 at 12:05 PM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
-> > > > Do we need to add a new type to UAPI at all here? We can make this new
-> > > > struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
-> > > > point out that it should match the layout of struct bpf_lpm_trie_key.
-> > > > User-space can decide whether to use bpf_lpm_trie_key as-is, or if
-> > > > just to ensure their custom struct has the same layout (I see some
-> > > > internal users at Meta do just this, just make sure that they have
-> > > > __u32 prefixlen as first member).
-> > >
-> > > The uses outside the kernel seemed numerous enough to justify a new UAPI
-> > > struct (samples, selftests, etc). It also paves a single way forward
-> > > when the userspace projects start using modern compiler options (e.g.
-> > > systemd is usually pretty quick to adopt new features).
-> >
-> > I don't understand how the new uapi struct bpf_lpm_trie_key_u8 helps.
-> > cilium progs and progs/map_ptr_kern.c
-> > cannot do s/bpf_lpm_trie_key/bpf_lpm_trie_key_u8/.
-> > They will fail to build, so they're stuck with bpf_lpm_trie_key.
->
-> Right -- I'm proposing not changing bpf_lpm_trie_key. I'm proposing
-> _adding_ bpf_lpm_trie_key_u8 for new users who will be using modern
-> compiler options (i.e. where "data[0]" is nonsense).
->
-> > Can we do just
-> > struct bpf_lpm_trie_key_kern {
-> >   __u32   prefixlen;
-> >   __u8    data[];
-> > };
-> > and use it in the kernel?
->
-> Yeah, I can do that if that's preferred, but it leaves userspace hanging
-> when they eventually trip over this in their code when they enable
-> -fstrict-flex-arrays=3 too.
->
-> > What is the disadvantage?
->
-> It seemed better to give a working example of how to migrate this code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   20f513df926fac0594a3b65f79d856bd64251861
+commit: 0c56f949f626e59ef7c5b18e2706fed2a6afc4a2 [5911/11577] soc: renesas: Add PWC support for RZ/V2M
+config: mips-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230210/202302100744.d1zZxXFn-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=0c56f949f626e59ef7c5b18e2706fed2a6afc4a2
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 0c56f949f626e59ef7c5b18e2706fed2a6afc4a2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/soc/renesas/
 
-I understand and agree with intent, but I'm still missing
-how you're going to achieve this migration.
-bpf_lpm_trie_key_u8 doesn't provide a migration path to cilium progs
-and pretty much all bpf progs that use LPM map.
-Sure, one can change the user space part, like you did in test_lpm_map.c,
-but it doesn't address the full scope.
-imo half way is worse than not doing it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302100744.d1zZxXFn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/soc/renesas/pwc-rzv2m.c:124:34: warning: unused variable 'rzv2m_pwc_of_match' [-Wunused-const-variable]
+   static const struct of_device_id rzv2m_pwc_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/rzv2m_pwc_of_match +124 drivers/soc/renesas/pwc-rzv2m.c
+
+   123	
+ > 124	static const struct of_device_id rzv2m_pwc_of_match[] = {
+   125		{ .compatible = "renesas,rzv2m-pwc" },
+   126		{ /* sentinel */ }
+   127	};
+   128	MODULE_DEVICE_TABLE(of, rzv2m_pwc_of_match);
+   129	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
