@@ -1,43 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D1E748E;
-	Thu,  9 Feb 2023 11:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41DF748E;
+	Thu,  9 Feb 2023 12:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675942661; x=1707478661;
+  t=1675944462; x=1707480462;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4pU4FfIxdtoMnl8HQQxkTr9AsU1rPuyIHBiJngdV5oM=;
-  b=NSgC7VaAv6PXRMBc2UwvVBKaMEgGTWhBP8Lzc56TqnLnFAxkYODFQY8T
-   9F6Dx35XiLAcutjbu1+P2sGJSaFq2R7AsegKO0nIQRoDH/NgwqnhLR4eB
-   FJ7lffeKywTXf2iB+k8BMBZivk6jhVqFCy7NldNeDzG+jHgTvvRs1kv22
-   9XZwAigKS4PC2fMBsMUU4mUXtGl8wQCVq/o7T29TBnyLXTnV1/RVOUouL
-   +Tf69rIv3ETQ7KsribkB4LY1Gh1vF4x/lqGiIAmU6vtD78zj77A8PY6EQ
-   pMIEXmf03BGl4fdsGtFyun3LWZZELqDoWBV6F+H6e25jkMvFvAqiIbiHd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310437364"
+  bh=DgCLLbd2OgAmMyk1BGiXGFxAIxijBM0hplnfm2Nw+Fo=;
+  b=LBYhzMIBYjRo0EdSWZPiSjHZ6g8EERT3aGFghUk59jVW56p3TbRUdtJV
+   2449jscxWA8ijadOZHcjg3Uu6J4wcD82s+Kfqapc0UNWqFD+LosH4tNYZ
+   eXCgk41CtXpCCeCs++NEW6auk8pcxS6j9dZ56c6TGhwK3MnUYMgfb6S9A
+   3YumA8uckMtH8ljVmjfTXHogUOydVFLEJ1ASWYGQAejooHbGT1NydOsnu
+   klAB5x4dfFlhrLzn6e7TPDXTaVj32EoPFPyHpI657WTeKCQa7h1OhvZIV
+   iEjxQcnRZE9zCKlPFqLJKLnK/Qa0fodp+oeFUBIHVySRrnDC4Bo/iwfBo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="332206008"
 X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="310437364"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 03:37:40 -0800
+   d="scan'208";a="332206008"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 04:07:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="913095856"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="841568158"
 X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="913095856"
+   d="scan'208";a="841568158"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Feb 2023 03:37:39 -0800
+  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2023 04:07:40 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pQ5FC-000526-1L;
-	Thu, 09 Feb 2023 11:37:38 +0000
-Date: Thu, 9 Feb 2023 19:36:54 +0800
+	id 1pQ5iF-00052g-0A;
+	Thu, 09 Feb 2023 12:07:39 +0000
+Date: Thu, 9 Feb 2023 20:07:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Woodhouse <dwmw@amazon.co.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dwmw2:parallel-6.2-rc7 13/14] kernel/cpu.c:1531:37: warning: format
- specifies type 'long long' but the argument has type 'cycles_t' (aka
- 'unsigned int')
-Message-ID: <202302091914.6NZ47xeR-lkp@intel.com>
+To: kyrie wu <kyrie.wu@mediatek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+	irui wang <irui.wang@mediatek.com>
+Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1859:38:
+ warning: unused variable 'mtk8195_jpegdec_drvdata'
+Message-ID: <202302092008.IgpNeNCW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,97 +48,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://git.infradead.org/users/dwmw2/linux parallel-6.2-rc7
-head:   8fec7c1c6a8c6419aafdfc7dbe6c928d326a87eb
-commit: 1ad0d91052e766a0a304552b81738864855b2669 [13/14] Print bringup timing
-config: mips-buildonly-randconfig-r004-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091914.6NZ47xeR-lkp@intel.com/config)
+Hi kyrie,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: dedc21500334b97b80d4ca37ab683cde214fcb03 media: mtk-jpegdec: add jpeg decode worker interface
+date:   4 months ago
+config: mips-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230209/202302092008.IgpNeNCW-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        git remote add dwmw2 git://git.infradead.org/users/dwmw2/linux
-        git fetch --no-tags dwmw2 parallel-6.2-rc7
-        git checkout 1ad0d91052e766a0a304552b81738864855b2669
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dedc21500334b97b80d4ca37ab683cde214fcb03
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dedc21500334b97b80d4ca37ab683cde214fcb03
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/soc/renesas/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091914.6NZ47xeR-lkp@intel.com
+| Link: https://lore.kernel.org/oe-kbuild-all/202302092008.IgpNeNCW-lkp@intel.com
 
 All warnings (new ones prefixed by >>):
 
->> kernel/cpu.c:1531:37: warning: format specifies type 'long long' but the argument has type 'cycles_t' (aka 'unsigned int') [-Wformat]
-                                  cpuhp_hp_states[st].name, t2 - t1);
-                                                            ^~~~~~~
-   include/linux/printk.h:457:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   kernel/cpu.c:1544:49: warning: format specifies type 'long long' but the argument has type 'cycles_t' (aka 'unsigned int') [-Wformat]
-           printk("Brought CPUs online in %lld cycles\n", t2 - t1);
-                                          ~~~~            ^~~~~~~
-                                          %u
-   include/linux/printk.h:457:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1818:38: warning: unused variable 'mt8173_jpeg_drvdata' [-Wunused-const-variable]
+   static const struct mtk_jpeg_variant mt8173_jpeg_drvdata = {
+                                        ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1833:38: warning: unused variable 'mtk_jpeg_drvdata' [-Wunused-const-variable]
+   static const struct mtk_jpeg_variant mtk_jpeg_drvdata = {
+                                        ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1848:32: warning: unused variable 'mtk8195_jpegenc_drvdata' [-Wunused-variable]
+   static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
+                                  ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1859:38: warning: unused variable 'mtk8195_jpegdec_drvdata' [-Wunused-const-variable]
+   static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+                                        ^
+   4 warnings generated.
 
 
-vim +1531 kernel/cpu.c
+vim +/mtk8195_jpegdec_drvdata +1859 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
 
-  1504	
-  1505	void bringup_nonboot_cpus(unsigned int setup_max_cpus)
-  1506	{
-  1507		unsigned int n = setup_max_cpus - num_online_cpus();
-  1508		unsigned int cpu;
-  1509		cycles_t t1, t2;
-  1510	
-  1511		/*
-  1512		 * An architecture may have regustered parallel pre-bringup states to
-  1513		 * which each CPU may be brought in parallel. For each such state,
-  1514		 * bring N CPUs to it in turn before the final round of bringing them
-  1515		 * online.
-  1516		 */
-  1517		if (n > 0) {
-  1518			enum cpuhp_state st = CPUHP_BP_PARALLEL_DYN;
-  1519	
-  1520			while (st <= CPUHP_BP_PARALLEL_DYN_END && cpuhp_hp_states[st].name) {
-  1521				int i = n;
-  1522				t1 = get_cycles();
-  1523				for_each_present_cpu(cpu) {
-  1524					cpu_up(cpu, st);
-  1525					if (!--i)
-  1526						break;
-  1527				}
-  1528				t2 = get_cycles();
-  1529	
-  1530				printk("Brought %d CPUs to %s in %lld cycles\n", n - i,
-> 1531				       cpuhp_hp_states[st].name, t2 - t1);
-  1532				st++;
-  1533			}
-  1534		}
-  1535	
-  1536		t1 = get_cycles();
-  1537		for_each_present_cpu(cpu) {
-  1538			if (num_online_cpus() >= setup_max_cpus)
-  1539				break;
-  1540			if (!cpu_online(cpu))
-  1541				cpu_up(cpu, CPUHP_ONLINE);
-  1542		}
-  1543		t2 = get_cycles();
-  1544		printk("Brought CPUs online in %lld cycles\n", t2 - t1);
-  1545	}
-  1546	
+  1858	
+> 1859	static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+  1860		.formats = mtk_jpeg_dec_formats,
+  1861		.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
+  1862		.qops = &mtk_jpeg_dec_qops,
+  1863		.m2m_ops = &mtk_jpeg_multicore_dec_m2m_ops,
+  1864		.dev_name = "mtk-jpeg-dec",
+  1865		.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
+  1866		.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+  1867		.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
+  1868	};
+  1869	
 
 -- 
 0-DAY CI Kernel Test Service
