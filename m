@@ -1,143 +1,150 @@
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D823E36C
-	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 01:48:22 +0000 (UTC)
-Received: by mail-yb1-f172.google.com with SMTP id 184so672191ybw.5
-        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 17:48:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e2eEmhxMNjlImDmkNZfpy/YG5w92teD17wTvTpUhJoc=;
-        b=XVSf2KxO2RZMtpqZ+Fbgl5+UHBCknVjkMtVbqo5RShM937ET4i8uLOiaDVZFGmjJ83
-         Pj32CIQTsp5lNhIe8HBTqjxTBbgyAB0NHZA4/TELSdLIwaBdDqXJCuG4D+ZSDC7XmLV4
-         9qF5QnRG8R1ZtOEybUT7csn2K2wRof4byWwku3LPc+65dukSjQQjPxRpv6IeqcfNzRHH
-         n2NdH3O3Z+yo9CB+/avBdSu/NeFnmyA1O1IW2fsav+ULtYU8uwUlKoMfb0ZjbLhBEiS6
-         KGYMPAC9Rk/DDCOaj3eTKrkSBveQWn4uvIsHQBt5OL0Yu7kvHNrZDd6bHbaTiRBsEKo7
-         791Q==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FC636C
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 01:49:50 +0000 (UTC)
+Received: by mail-io1-f71.google.com with SMTP id d8-20020a6b6e08000000b00722d8d9c432so284099ioh.19
+        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 17:49:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e2eEmhxMNjlImDmkNZfpy/YG5w92teD17wTvTpUhJoc=;
-        b=N+1GurLb2E6f33Opcf1phsJFb7qh5faNGaI5n1sPsz/ZHpqlsB+jP3WbnMFU1OPR38
-         G9inl7MAf+h5d/TnrvN/5GPMXnBQlM2XdpVSABzXQBI+zi1CUQ1Am8xH4uOSWGe0lYts
-         5fKXimkz+iy5nhgolKwOWUs+BO5vdT9OnLlM4egZTsuVrBBIl6U+afrGN7OVhlDsVlEx
-         Hv8xiFY/8sb/ZR3QiRWUSjBPxgLy1075jt1UvMoTGGZC9SALYfzR280O4cPTwRm8/s+S
-         yjOT8TMDXelnunsadPAnrGAvgrP/kvDcBfYOwetk1Lo+gjIyu3OB7OnReXkqf+u05d33
-         BGuA==
-X-Gm-Message-State: AO0yUKWw4stEdu4KLW7JAPhpYpmE5wTqXt9wlWzv3Q+w/4gQPx9pRrFv
-	DmuPNo0gNN+vwielZr1YCwbTbqmsNN+l8AMPoZ0=
-X-Google-Smtp-Source: AK7set813S9mEMX5T44S/my3EAhl4gzA5Te5YzzmyG4mXLBmGz5PMf0sutArgv1QJ/PHfjLbtl9vpDKxtZx4VXxsLsc=
-X-Received: by 2002:a25:9347:0:b0:855:d2c4:2119 with SMTP id
- g7-20020a259347000000b00855d2c42119mr1204689ybo.107.1675907301738; Wed, 08
- Feb 2023 17:48:21 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WCjm3XDqMJ/rIukhzP8LuyX3GsAuuGdYjwTc+fA8jAA=;
+        b=QCOD/lx7Ftxz9BA8NP+iEWeM++e7n2t256/dxOFaL2qM+KslX9H2E/FTwr1FvUoFgg
+         ZzeB6ydRKgTbRyWNyrVFyF99ewHqZVH/MqJrR9xVJjjzFlXJ8J+JbdT1wNY/UQCeBltE
+         vVwaeqK1jHw24puh8IifB3Q1fj9cdq/l/Sxun1HtmIki+AX6FSAwp0KernAp5y/v/tn+
+         rC/Zq55UIVehOF9uPXqE/BBy2gbS5KGmcQQ0OUJ7YE8tNNPd6R6+XSYqunvEK1w3JiVm
+         YB6Xo9Gb9swYV9zWLGcxrKlVYE9LT3S1Wr9eZWIbSDZb1F4LbvO/nk7Iasd4JHqPbFS3
+         6URA==
+X-Gm-Message-State: AO0yUKXxBrmol6C+/QHBAr4dq+NMYILhNu9/7LDFZDgS3zF6nwyBXOdM
+	K9/j8nJyIh9eP4Oy0viyDA8iVSyRB2hpFWSOhbTcGHTIWYJi
+X-Google-Smtp-Source: AK7set+vbB2Jkvd3XjuPT7n7AUfCgB4H7e4HpOqvZqdJnyGMjBpvp4Rxpr2DiKpm//VxAnGpHzFo+c8b/rQS7CjJ7iCrakb5Slzi
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
-In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
-From: Hongtao Liu <crazylht@gmail.com>
-Date: Thu, 9 Feb 2023 09:48:10 +0800
-Message-ID: <CAMZc-bzmACcpSePKxuuA=ug2+yik+Zo3-mfqr2OyZ-n_nT=OnQ@mail.gmail.com>
-Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
-To: Dan Li <ashimida.1990@gmail.com>
-Cc: gcc-patches@gcc.gnu.org, Richard Sandiford <richard.sandiford@arm.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, "Eric W. Biederman" <ebiederm@xmission.com>, 
-	Marco Elver <elver@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Song Liu <song@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Juergen Gross <jgross@suse.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Aaron Tomlin <atomlin@redhat.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, Yuntao Wang <ytcoode@gmail.com>, 
-	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+X-Received: by 2002:a02:cc64:0:b0:3c2:c93f:e40 with SMTP id
+ j4-20020a02cc64000000b003c2c93f0e40mr1986705jaq.126.1675907389894; Wed, 08
+ Feb 2023 17:49:49 -0800 (PST)
+Date: Wed, 08 Feb 2023 17:49:49 -0800
+In-Reply-To: <000000000000cce8cd05f435fc77@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a6b67d05f43a9854@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in folio_flags
+From: syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
+	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Dec 19, 2022 at 3:59 PM Dan Li via Gcc-patches
-<gcc-patches@gcc.gnu.org> wrote:
->
-> This series of patches is mainly used to support the control flow
-> integrity protection of the linux kernel [1], which is similar to
-> -fsanitize=kcfi in clang 16.0 [2,3].
->
-> I hope that this feature will also support user-mode CFI in the
-> future (at least for developers who can recompile the runtime),
-> so I use -fsanitize=cfi as a compilation option here.
->
-> Any suggestion please let me know :).
-Do you have this series as a branch somewhere that we could also try for x86?
+syzbot has found a reproducer for the following issue on:
 
->
-> Thanks, Dan.
->
-> [1] https://lore.kernel.org/all/20220908215504.3686827-1-samitolvanen@google.com/
-> [2] https://clang.llvm.org/docs/ControlFlowIntegrity.html
-> [3] https://reviews.llvm.org/D119296
->
-> Dan Li (3):
->   [PR102768] flag-types.h (enum sanitize_code): Extend sanitize_code to
->     64 bits to support more features
->   [PR102768] Support CFI: Add new pass for Control Flow Integrity
->   [PR102768] aarch64: Add support for Control Flow Integrity
->
-> Signed-off-by: Dan Li <ashimida.1990@gmail.com>
->
-> ---
->  gcc/Makefile.in                               |   1 +
->  gcc/asan.h                                    |   4 +-
->  gcc/c-family/c-attribs.cc                     |  10 +-
->  gcc/c-family/c-common.h                       |   2 +-
->  gcc/c/c-parser.cc                             |   4 +-
->  gcc/cgraphunit.cc                             |  34 +++
->  gcc/common.opt                                |   4 +-
->  gcc/config/aarch64/aarch64.cc                 | 106 ++++++++
->  gcc/cp/typeck.cc                              |   2 +-
->  gcc/doc/invoke.texi                           |  35 +++
->  gcc/doc/passes.texi                           |  10 +
->  gcc/doc/tm.texi                               |  27 +++
->  gcc/doc/tm.texi.in                            |   8 +
->  gcc/dwarf2asm.cc                              |   2 +-
->  gcc/flag-types.h                              |  67 ++---
->  gcc/opt-suggestions.cc                        |   2 +-
->  gcc/opts.cc                                   |  26 +-
->  gcc/opts.h                                    |   8 +-
->  gcc/output.h                                  |   3 +
->  gcc/passes.def                                |   1 +
->  gcc/target.def                                |  39 +++
->  .../aarch64/control_flow_integrity_1.c        |  14 ++
->  .../aarch64/control_flow_integrity_2.c        |  25 ++
->  .../aarch64/control_flow_integrity_3.c        |  23 ++
->  gcc/toplev.cc                                 |   4 +
->  gcc/tree-cfg.cc                               |   2 +-
->  gcc/tree-cfi.cc                               | 229 ++++++++++++++++++
->  gcc/tree-pass.h                               |   1 +
->  gcc/tree.cc                                   | 144 +++++++++++
->  gcc/tree.h                                    |   1 +
->  gcc/varasm.cc                                 |  29 +++
->  31 files changed, 803 insertions(+), 64 deletions(-)
->  create mode 100644 gcc/testsuite/gcc.target/aarch64/control_flow_integrity_1.c
->  create mode 100644 gcc/testsuite/gcc.target/aarch64/control_flow_integrity_2.c
->  create mode 100644 gcc/testsuite/gcc.target/aarch64/control_flow_integrity_3.c
->  create mode 100644 gcc/tree-cfi.cc
->
-> --
-> 2.17.1
->
+HEAD commit:    38d2b86a665b Add linux-next specific files for 20230208
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15f5e3a7480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
+dashboard link: https://syzkaller.appspot.com/bug?extid=d632e24db18585d7b3c6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1454ddf3480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a8431f480000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0a9d60e90514/disk-38d2b86a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/71311be5f1a1/vmlinux-38d2b86a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a242870cc8eb/bzImage-38d2b86a.xz
 
---
-BR,
-Hongtao
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com
+
+memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=5080 'syz-executor561'
+BUG: unable to handle page fault for address: ffffffffffffffed
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD c570067 P4D c570067 PUD c572067 PMD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 5080 Comm: syz-executor561 Not tainted 6.2.0-rc7-next-20230208-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
+RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
+Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
+RSP: 0018:ffffc90003cbfc08 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: 0000000000000000
+RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
+RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
+R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
+FS:  0000555556e84300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffed CR3: 000000002bb37000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ folio_test_head include/linux/page-flags.h:781 [inline]
+ folio_test_large include/linux/page-flags.h:802 [inline]
+ PageHeadHuge+0x18/0xc0 mm/hugetlb.c:2060
+ folio_test_hugetlb include/linux/page-flags.h:830 [inline]
+ folio_file_page include/linux/pagemap.h:702 [inline]
+ shmem_read_mapping_page_gfp+0x34/0x100 mm/shmem.c:4366
+ shmem_read_mapping_page include/linux/shmem_fs.h:124 [inline]
+ udmabuf_create+0x93b/0x1440 drivers/dma-buf/udmabuf.c:286
+ udmabuf_ioctl_create drivers/dma-buf/udmabuf.c:346 [inline]
+ udmabuf_ioctl+0x156/0x2c0 drivers/dma-buf/udmabuf.c:377
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb0a3f40bb9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd5ab9a6e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb0a3f40bb9
+RDX: 0000000020000080 RSI: 0000000040187542 RDI: 0000000000000005
+RBP: 00007fb0a3f04d60 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb0a3f04df0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+CR2: ffffffffffffffed
+---[ end trace 0000000000000000 ]---
+RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
+RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
+Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
+RSP: 0018:ffffc90003cbfc08 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: 0000000000000000
+RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
+RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
+R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
+FS:  0000555556e84300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffed CR3: 000000002bb37000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	49 89 fc             	mov    %rdi,%r12
+   3:	55                   	push   %rbp
+   4:	53                   	push   %rbx
+   5:	e8 84 4e b7 ff       	callq  0xffb74e8e
+   a:	49 8d 7c 24 08       	lea    0x8(%r12),%rdi
+   f:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  16:	fc ff df
+  19:	48 89 fa             	mov    %rdi,%rdx
+  1c:	48 c1 ea 03          	shr    $0x3,%rdx
+  20:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+  24:	0f 85 f8 00 00 00    	jne    0x122
+* 2a:	49 8b 5c 24 08       	mov    0x8(%r12),%rbx <-- trapping instruction
+  2f:	31 ff                	xor    %edi,%edi
+  31:	83 e3 01             	and    $0x1,%ebx
+  34:	48 89 de             	mov    %rbx,%rsi
+  37:	e8 c2 4a b7 ff       	callq  0xffb74afe
+  3c:	48 85 db             	test   %rbx,%rbx
+  3f:	0f                   	.byte 0xf
+
