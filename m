@@ -1,111 +1,114 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC5AA94B;
-	Thu,  9 Feb 2023 21:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675979412; x=1707515412;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xw6P4dhbw/eg0R01zuxXSVHd4C/wEUkKoWJ/gJY9Xf8=;
-  b=OvJSUcRlO3VnxEsMxgRF38ezwBjhObnd2ckpbbqrI1q0Z16qzkWhcFRX
-   uTTctlvMe4EHxvKOA79tQsHZuOMK71QetrVFD6BhyKwNqPPog94UDdgpj
-   4zF8Vhk1A2rnNCHHtL8zjo5HRYY5eDzSI6Ybbwv+0Z5KdvUDFnTsUVriQ
-   VIb0LnMNO4kR2iVRHYuxltKmFK/JcwC75qlCWxqT4k5GwxubfysTEy2RZ
-   SYNngMM5g8uKaH0/bCsvtz7I9SiYoUoZWvnMrxNJhypv0G8mjQIhzV3n7
-   XCuCKnaYvoMR0OqvxTI/IoFrOLJMROz+qSxvcIW7o85+JQrCtr3y9BtYs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="313900825"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="313900825"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 13:50:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="617683182"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="617683182"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Feb 2023 13:50:09 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pQEnw-0005KI-2Q;
-	Thu, 09 Feb 2023 21:50:08 +0000
-Date: Fri, 10 Feb 2023 05:49:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/usama.2023.02.09a 84/93]
- arch/powerpc/kernel/smp.c:1768:1: error: function declared 'noreturn' should
- not return
-Message-ID: <202302100556.sUYjKgbk-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E6EA94B
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 22:01:28 +0000 (UTC)
+Received: by mail-ej1-f47.google.com with SMTP id gr7so10756679ejb.5
+        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 14:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=12EmLmXNPxVlBwqhOstyYyPyvkcnUa7HgYnHDTPPtNE=;
+        b=VlJ35ScMfjK5cUQAGBmGVcnTAuHtfwb/ke2H1l8NFfViNicrUGiQh7hbu/EqVgOJ/5
+         VLgvb9npmAszqdK3H8E4DdfhEQNHVxHGbCdUO+63RdFECF3TBh7o/6pOOvhxj8EjoQkC
+         6zZwCQgwSB9LMqPOgywPSKeefXjNV2A6bwgojpyZ/3k9gBRL870oaTNprn/WE0dwkxKv
+         539yOjP8uezXZe8sTutqBHz2ASYxJzRVQ70Ma53irQRAjyW9oS3U3u8orouGlgHFORSi
+         iZhfr5++lvrlYhacDuhkF/oVvFyZbilzrTFJGx/SeSvRJUvdh9sdEbv0msMn5/gUsOtP
+         IPyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=12EmLmXNPxVlBwqhOstyYyPyvkcnUa7HgYnHDTPPtNE=;
+        b=YBl34N3u2ctsBjEQKUl4AU1U+2JxneeGqTTAZGnCZhR4KYKgWwf7YTt7ZGIG2SOZPZ
+         rCzXg5O0MaNciJ37qE3RyjQMUoh2Mt790fMNCEwbkICr3oaP38Scnnkck/i0so91PHOB
+         54B9cUvHTJYXXP6OpxvMdx1P96ZYD96znamGH7zCHiIglD+KPNlvFwaNy/uliigijlne
+         pzfBhiCQa6kCWZCxEduqApu70RcLTkhKYjGxu0jRfunJED98JCsR8c6surSLg+VxgYHL
+         2Qx8bEz/LUVUI1oFCdPiCNsA1RHvu+IRFOgjDKAsrfLYwFpenOTHq+y0PSnqRHCi50PS
+         Ne8Q==
+X-Gm-Message-State: AO0yUKWTQINvTzHZAwQ/p27yLMUotYjxj/ngYIPCSWJFLpZa5rhf3e+N
+	P333zwEMGM7pwZP5QOEnhe98Vw6SbCOxQUh1gpU=
+X-Google-Smtp-Source: AK7set+ng9pmkzKqIxaS7qA6X4EwNgcgxsLiahOVc2y/+PRfgUFnkEXjaeRFkczOkKCB8xLLHVP05GF+ZrJsP4YTQ1o=
+X-Received: by 2002:a17:906:eb8f:b0:878:786e:8c39 with SMTP id
+ mh15-20020a170906eb8f00b00878786e8c39mr2945087ejb.105.1675980086713; Thu, 09
+ Feb 2023 14:01:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230209192337.never.690-kees@kernel.org> <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
+ <63e5521a.170a0220.297d7.3a80@mx.google.com> <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com>
+ <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
+In-Reply-To: <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 9 Feb 2023 14:01:15 -0800
+Message-ID: <CAADnVQJed84rqugpNDY2u1r89QEOyAMMKZHLHefX=GRWZ3haoQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
+To: Kees Cook <keescook@chromium.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/usama.2023.02.09a
-head:   d0fd6cf85f2b25e89444a52b75edbf3e96f99cdb
-commit: d3a257df7de269122dd9c179cbb9be39fb83920e [84/93] objtool: Fix for unreachable instruction warning
-config: powerpc-buildonly-randconfig-r003-20230209 (https://download.01.org/0day-ci/archive/20230210/202302100556.sUYjKgbk-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/d3a257df7de269122dd9c179cbb9be39fb83920e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/usama.2023.02.09a
-        git checkout d3a257df7de269122dd9c179cbb9be39fb83920e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+On Thu, Feb 9, 2023 at 1:12 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Feb 09, 2023 at 12:50:28PM -0800, Alexei Starovoitov wrote:
+> > On Thu, Feb 9, 2023 at 12:05 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
+> > > > Do we need to add a new type to UAPI at all here? We can make this new
+> > > > struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
+> > > > point out that it should match the layout of struct bpf_lpm_trie_key.
+> > > > User-space can decide whether to use bpf_lpm_trie_key as-is, or if
+> > > > just to ensure their custom struct has the same layout (I see some
+> > > > internal users at Meta do just this, just make sure that they have
+> > > > __u32 prefixlen as first member).
+> > >
+> > > The uses outside the kernel seemed numerous enough to justify a new UAPI
+> > > struct (samples, selftests, etc). It also paves a single way forward
+> > > when the userspace projects start using modern compiler options (e.g.
+> > > systemd is usually pretty quick to adopt new features).
+> >
+> > I don't understand how the new uapi struct bpf_lpm_trie_key_u8 helps.
+> > cilium progs and progs/map_ptr_kern.c
+> > cannot do s/bpf_lpm_trie_key/bpf_lpm_trie_key_u8/.
+> > They will fail to build, so they're stuck with bpf_lpm_trie_key.
+>
+> Right -- I'm proposing not changing bpf_lpm_trie_key. I'm proposing
+> _adding_ bpf_lpm_trie_key_u8 for new users who will be using modern
+> compiler options (i.e. where "data[0]" is nonsense).
+>
+> > Can we do just
+> > struct bpf_lpm_trie_key_kern {
+> >   __u32   prefixlen;
+> >   __u8    data[];
+> > };
+> > and use it in the kernel?
+>
+> Yeah, I can do that if that's preferred, but it leaves userspace hanging
+> when they eventually trip over this in their code when they enable
+> -fstrict-flex-arrays=3 too.
+>
+> > What is the disadvantage?
+>
+> It seemed better to give a working example of how to migrate this code.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302100556.sUYjKgbk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/kernel/smp.c:1768:1: error: function declared 'noreturn' should not return [-Werror,-Winvalid-noreturn]
-   }
-   ^
-   1 error generated.
-
-
-vim +/noreturn +1768 arch/powerpc/kernel/smp.c
-
-d0174c721900ff Nathan Fontenot        2010-01-14  1754  
-1ea21ba231f248 Michael Ellerman       2020-08-19  1755  void arch_cpu_idle_dead(void)
-1ea21ba231f248 Michael Ellerman       2020-08-19  1756  {
-424ef0160f439f Naveen N. Rao          2018-04-19  1757  	/*
-424ef0160f439f Naveen N. Rao          2018-04-19  1758  	 * Disable on the down path. This will be re-enabled by
-424ef0160f439f Naveen N. Rao          2018-04-19  1759  	 * start_secondary() via start_secondary_resume() below
-424ef0160f439f Naveen N. Rao          2018-04-19  1760  	 */
-424ef0160f439f Naveen N. Rao          2018-04-19  1761  	this_cpu_disable_ftrace();
-424ef0160f439f Naveen N. Rao          2018-04-19  1762  
-39f87561454dc3 Michael Ellerman       2020-08-19  1763  	if (smp_ops->cpu_offline_self)
-39f87561454dc3 Michael Ellerman       2020-08-19  1764  		smp_ops->cpu_offline_self();
-fa3f82c8bb7acb Benjamin Herrenschmidt 2011-02-10  1765  
-fa3f82c8bb7acb Benjamin Herrenschmidt 2011-02-10  1766  	/* If we return, we re-enter start_secondary */
-fa3f82c8bb7acb Benjamin Herrenschmidt 2011-02-10  1767  	start_secondary_resume();
-abb17f9c3a92c5 Milton Miller          2010-05-19 @1768  }
-fa3f82c8bb7acb Benjamin Herrenschmidt 2011-02-10  1769  
-
-:::::: The code at line 1768 was first introduced by commit
-:::::: abb17f9c3a92c5acf30e749efdf0419b7f50a5b8 powerpc: Use common cpu_die (fixes SMP+SUSPEND build)
-
-:::::: TO: Milton Miller <miltonm@bga.com>
-:::::: CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I understand and agree with intent, but I'm still missing
+how you're going to achieve this migration.
+bpf_lpm_trie_key_u8 doesn't provide a migration path to cilium progs
+and pretty much all bpf progs that use LPM map.
+Sure, one can change the user space part, like you did in test_lpm_map.c,
+but it doesn't address the full scope.
+imo half way is worse than not doing it.
