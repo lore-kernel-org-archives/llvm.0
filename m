@@ -1,366 +1,282 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D02A931
-	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 19:23:43 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id v3so2255017pgh.4
-        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 11:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=95HxeBvzenu+ijIXFcOlNVKQdoWMdAneLWKscet2sE4=;
-        b=BDAO7jx7KdqPedFQPrdTWfuyEDJC1PN9Bysq2Xo5zyh/C+lhvMzeTx6RtclgYDrV3v
-         qSZgwQuXU+LzV2FHx/p3VYZ4Tvo+o1L6f/65gvupTIAsxwrBCt80sfQCf8tdZj7ipt6Z
-         e+3xQGYtck+pjDbwAKDRrzWTGUOg0rlRr8seo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=95HxeBvzenu+ijIXFcOlNVKQdoWMdAneLWKscet2sE4=;
-        b=iDF+ijMx0PbgfUS5/j5FEi/QWKfSk6PC6PSg3BAEEL4B192g0RQYe4ahCxxD8the1v
-         zxFzhrvE1VSbIDa+EKMWIBbbcoJRE6zWdzmDb0i4v5DZ+YrlYkOCoANt7g6TDX55/WMl
-         312TWLzNNMEW8GU5N/qAJi3bXznjMpA445sEbN/dvFRJqL0VMlFt83KFZFS49uFVlro1
-         OeGQvMG3JxsKQWAtVEYE5pHpskQR0O3k2gtC+Hnlw3/PB7fuZ/mtctslA/R65qgBGUGS
-         HIONxe7NoVprBDMFFI0CWg38kwDP0tfiwOrjcmgxGO2zc4HsMPyKzWzB7ycCk123TRJi
-         ey3g==
-X-Gm-Message-State: AO0yUKUcyGhjsXtGWCc6XWcsSWAINtN6thldetnqRdnr9x6aJdPA6MSW
-	QB7T3KulWkiO4n4BNKpbQ8u3aQ==
-X-Google-Smtp-Source: AK7set/iKISfX4STDLBfTHgHasnaPFpDw/LhXElJRde7iIlzGSeOTIdimXbThAWtEzOwyjZEGwydtQ==
-X-Received: by 2002:a05:6a00:1d0a:b0:5a8:473e:2fdc with SMTP id a10-20020a056a001d0a00b005a8473e2fdcmr4503466pfx.12.1675970623175;
-        Thu, 09 Feb 2023 11:23:43 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y19-20020a62b513000000b00589a7824703sm1784567pfe.194.2023.02.09.11.23.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 11:23:42 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Haowen Bai <baihaowen@meizu.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-Date: Thu,  9 Feb 2023 11:23:41 -0800
-Message-Id: <20230209192337.never.690-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6FCA931;
+	Thu,  9 Feb 2023 19:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675971959; x=1707507959;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=l6YKJxbw0G+8eGc6j9LnLVIQZRNh8NechLTDj9YBPus=;
+  b=c+Ak4xdtsf2ESOUXNV1B9nsWvH5xvGHi7dwRvhpSyv+KmOU+g/LVgMj+
+   9AYKWNUc0z4pr9elV0ht635MP1lgB+qYcNPuRwxvVU5hvyCBLe6BN1ROR
+   cyqAsWNw2GHjt0oAwIK8MpPgBPQyux8gwXdfvOwpIJwbrEotD+bW50rMN
+   LF+21bLYPCuWucRCbcjbo7NGv049wazEbbKPJsyEkh0u33daIO5BymWsV
+   WK6wzXNAGF65yS7Rz8KF6uyNkBiCRijo7Lfxlg4g3CHmQ7h78sPizBMhT
+   SFXkKxrwsP5lR39HEoyPtWKvg2SjdjgbJehRlkBg8xr6qnAUPwV2Nk+FY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="328861620"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="328861620"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 11:45:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="669725965"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="669725965"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Feb 2023 11:45:58 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pQCrl-0005H9-17;
+	Thu, 09 Feb 2023 19:45:57 +0000
+Date: Fri, 10 Feb 2023 03:45:54 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: net/mac80211/he.c:158:33: warning: taking address of packed member
+ 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value
+Message-ID: <202302100354.XRSFb57c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12186; h=from:subject:message-id; bh=9CDGuuBIAFANWICcv8yRx8EyXbGptyp5vGwRbdTQpPU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj5Ug8X1KSIuD8fW/lSvneIGxbcZoZyQmf+3nRXvx3 xxj+pEGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY+VIPAAKCRCJcvTf3G3AJisCD/ oCjOJhcBmsEVwaEpp16vu0DTw3/9s26uvI/Ri4f37vZngY3Zbn5VwWed6ssOsXO3jnrBgPtWIO9uQa dN9FG7bECnVjRB2qUgvBbymFmpujN1SORfuIcRd8qUw/1iDSYE8oYDvY7aV+uI2sKIJphLnf9tLJdE AEoUaatVMuWqbAU1MgLYL3eSG2WiwudQ5cp9XC+6kLlwg3wUpuwUUgiPmwjk/pNqUJiUWoj3SBx5Dr 9AFbSVQgZUSRpN+4zhQoUp+1dbvJ8e8wAvttA0KAo87k8O92WiMIy6do0dAF02Ls5W3wnf3XgO5ICR wpZnqKtLOyy+CU13ShKoINTKLF4zE+tE/kf3nP5wHBDZY0GkWg0OhEspuAFR9Y/yXLTn2s0nr5Wt+X BYoh6rKN6OVjZ+iYW17FriuRLlKTBaJU45x6u0CT3EwWYO4lPfSCLgI4qULx8ByMbG9aytWrrwefo8 PaOYexquNLddZ+q7agEpbv4CSd1N2J5R0JkzarKExfwGC/dsBXz4R0UsVsSP6xNo7zjFDyZi+5FyOL 5UBeKokzuk5nn3LRvKMXiQtd70ravZpUrHd8rYFQYONnu764gxTG1xKonwrSduO9RehS+1ZUdiXtTd Ru0DBoTuUBIAVfnUwxK8m5poKfJMZbYIcA5QogC+VPWrdrEtHzZ1QWNZOxuA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+net/mac80211/he.c: 158:33: warning: taking address of packed member
+ 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 160:12: warning: taking address of packed member
+ 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 169:34: warning: taking address of packed member
+ 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 171:13: warning: taking address of packed member
+ 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 186:34: warning: taking address of packed member
+ 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
+ in an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 188:13: warning: taking address of packed member
+ 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
+ in an unaligned pointer value [-Waddress-of-packed-member]
 
-The kernel is globally removing the ambiguous 0-length and 1-element
-arrays in favor of flexible arrays, so that we can gain both compile-time
-and run-time array bounds checking[1]. Most cases of these changes are
-trivial, but this case in BPF is not. It faces some difficulties:
+TO: Wen Gong <wgong@codeaurora.org>
+CC: Johannes Berg <johannes.berg@intel.com>
 
-1) struct bpf_lpm_trie_key is part of UAPI so changes can be fragile in
-   the sense that projects external to Linux may be impacted.
+Hi Wen,
 
-2) The struct is intended to be used as a header, which means it may
-   be within another structure, resulting in the "data" array member
-   overlapping with the surrounding structure's following members. When
-   converting from [0]-style to []-style, this overlap elicits warnings
-   under Clang, and GCC considers it a deprecated extension (and similarly
-   warns under -pedantic): https://godbolt.org/z/vWzqs41h6
+FYI, the error/warning still remains.
 
-3) Both the kernel and userspace access the existing "data" member
-   for more than just static initializers and offsetof() calculations.
-   For example:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux-rolling-lts
+head:   8e8a6864e8bef6f8268dfe646c710df14663064f
+commit: 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6 mac80211: reduce peer HE MCS/NSS to own capabilities
+date:   2 years, 1 month ago
+config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20230210/202302100354.XRSFb57c-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus stable/linux-rolling-lts
+        git checkout 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/ net/ipv6/ net/mac80211/
 
-      cilium:
-        struct egress_gw_policy_key in_key = {
-                .lpm_key = { 32 + 24, {} },
-                .saddr   = CLIENT_IP,
-                .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
-        };
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302100354.XRSFb57c-lkp@intel.com/
 
-      systemd:
-        ipv6_map_fd = bpf_map_new(
-                        BPF_MAP_TYPE_LPM_TRIE,
-                        offsetof(struct bpf_lpm_trie_key, data) + sizeof(uint32_t)*4,
-                        sizeof(uint64_t), ...);
-	...
-        struct bpf_lpm_trie_key *key_ipv4, *key_ipv6;
-	...
-	memcpy(key_ipv4->data, &a->address, sizeof(uint32_t));
+All warnings (new ones prefixed by >>):
 
-   Searching for other uses in Debian Code Search seem to be just copies
-   of UAPI headers:
-   https://codesearch.debian.net/search?q=struct+bpf_lpm_trie_key&literal=1&perpkg=1
+   In file included from net/mac80211/he.c:9:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/net/checksum.h:22:
+   arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
+           : "0" ((__force unsigned long)daddr),
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/mac80211/he.c:9:
+   In file included from net/mac80211/ieee80211_i.h:30:
+   In file included from include/net/mac80211.h:22:
+   In file included from include/net/codel.h:48:
+   In file included from include/net/inet_ecn.h:9:
+   In file included from include/net/inet_sock.h:22:
+   In file included from include/net/sock.h:61:
+   include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
+                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+                                           ^~~~~~~~~
+   include/linux/poll.h:140:32: note: expanded from macro 'M'
+   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
+           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+                                                            ^ ~~~~~~~~~
+   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
+                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+                                                       ^~~~~~~~~
+   include/linux/poll.h:140:32: note: expanded from macro 'M'
+   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
+           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+                                                            ^ ~~~~~~~~~
+>> net/mac80211/he.c:158:33: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:159:12: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &he_cap->he_mcs_nss_supp.rx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:160:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:161:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &he_cap->he_mcs_nss_supp.tx_mcs_80);
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:169:34: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:170:13: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.rx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:171:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:172:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.tx_mcs_160);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:174:29: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:175:29: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:186:34: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:187:13: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:188:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:189:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:191:29: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:192:29: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   18 warnings and 1 error generated.
 
-Introduce struct bpf_lpm_trie_key_u8 for the kernel (and future userspace)
-to use for walking the individual bytes following the header, and leave
-the "data" member of struct bpf_lpm_trie_key as-is (i.e. a [0]-style
-array). This will allow existing userspace code to continue to use "data"
-as a fake flexible array. The kernel (and future userspace code) building
-with -fstrict-flex-arrays=3 will see struct bpf_lpm_trie_key::data has
-having 0 bytes so there will be no overlap warnings, and can instead
-use struct bpf_lpm_trie_key_u8::data for accessing the actual byte
-array contents. The definition of struct bpf_lpm_trie_key_u8 uses a
-union with struct bpf_lpm_trie_key so that things like container_of()
-can be used instead of doing explicit casting, all while leaving the
-member names un-namespaced (i.e. key->prefixlen == key_u8->prefixlen,
-key->data == key_u8->data), allowing for trivial drop-in replacement
-without collateral member renaming.
 
-This will avoid structure overlap warnings and array bounds warnings
-while enabling run-time array bounds checking under CONFIG_UBSAN_BOUNDS=y
-and -fstrict-flex-arrays=3.
+vim +158 net/mac80211/he.c
 
-For reference, the current warning under GCC 13 with -fstrict-flex-arrays=3
-and -Warray-bounds is:
+   105	
+   106	void
+   107	ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+   108					  struct ieee80211_supported_band *sband,
+   109					  const u8 *he_cap_ie, u8 he_cap_len,
+   110					  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
+   111					  struct sta_info *sta)
+   112	{
+   113		struct ieee80211_sta_he_cap *he_cap = &sta->sta.he_cap;
+   114		struct ieee80211_sta_he_cap own_he_cap = sband->iftype_data->he_cap;
+   115		struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
+   116		u8 he_ppe_size;
+   117		u8 mcs_nss_size;
+   118		u8 he_total_size;
+   119		bool own_160, peer_160, own_80p80, peer_80p80;
+   120	
+   121		memset(he_cap, 0, sizeof(*he_cap));
+   122	
+   123		if (!he_cap_ie || !ieee80211_get_he_sta_cap(sband))
+   124			return;
+   125	
+   126		/* Make sure size is OK */
+   127		mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem);
+   128		he_ppe_size =
+   129			ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
+   130							mcs_nss_size],
+   131					      he_cap_ie_elem->phy_cap_info);
+   132		he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
+   133				he_ppe_size;
+   134		if (he_cap_len < he_total_size)
+   135			return;
+   136	
+   137		memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
+   138	
+   139		/* HE Tx/Rx HE MCS NSS Support Field */
+   140		memcpy(&he_cap->he_mcs_nss_supp,
+   141		       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
+   142	
+   143		/* Check if there are (optional) PPE Thresholds */
+   144		if (he_cap->he_cap_elem.phy_cap_info[6] &
+   145		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
+   146			memcpy(he_cap->ppe_thres,
+   147			       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
+   148			       he_ppe_size);
+   149	
+   150		he_cap->has_he = true;
+   151	
+   152		sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(sta);
+   153		sta->sta.bandwidth = ieee80211_sta_cur_vht_bw(sta);
+   154	
+   155		if (sband->band == NL80211_BAND_6GHZ && he_6ghz_capa)
+   156			ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, sta);
+   157	
+ > 158		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+ > 159					      &he_cap->he_mcs_nss_supp.rx_mcs_80,
+ > 160					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+ > 161					      &he_cap->he_mcs_nss_supp.tx_mcs_80);
+   162	
+   163		own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+   164			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   165		peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
+   166			   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   167	
+   168		if (peer_160 && own_160) {
+ > 169			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+   170						      &he_cap->he_mcs_nss_supp.rx_mcs_160,
+ > 171						      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+ > 172						      &he_cap->he_mcs_nss_supp.tx_mcs_160);
+   173		} else if (peer_160 && !own_160) {
+   174			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+ > 175			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+   176			he_cap->he_cap_elem.phy_cap_info[0] &=
+   177				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   178		}
+   179	
+   180		own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+   181			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   182		peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
+   183			     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   184	
+   185		if (peer_80p80 && own_80p80) {
+ > 186			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+   187						      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+ > 188						      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+   189						      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+   190		} else if (peer_80p80 && !own_80p80) {
+   191			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+   192			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+   193			he_cap->he_cap_elem.phy_cap_info[0] &=
+   194				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   195		}
+   196	}
+   197	
 
-../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-  207 |                                        *(__be16 *)&key->data[i]);
-      |                                                   ^~~~~~~~~~~~~
-../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-      |                                                      ^
-../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-   97 | #define be16_to_cpu __be16_to_cpu
-      |                     ^~~~~~~~~~~~~
-../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-^
-      |                            ^~~~~~~~~~~
-In file included from ../include/linux/bpf.h:7:
-../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-   82 |         __u8    data[0];        /* Arbitrary size */
-      |                 ^~~~
-
-Additionally update the samples and selftests to use the new structure,
-for demonstrating best practices.
-
-[1] For lots of details, see both:
-    https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
-    https://people.kernel.org/kees/bounded-flexible-arrays-in-c
-
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/bpf.h                   | 15 +++++++++++++--
- kernel/bpf/lpm_trie.c                      | 16 +++++++++-------
- samples/bpf/map_perf_test_user.c           |  2 +-
- samples/bpf/xdp_router_ipv4_user.c         |  2 +-
- tools/testing/selftests/bpf/test_lpm_map.c | 14 +++++++-------
- 5 files changed, 31 insertions(+), 18 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ba0f0cfb5e42..f843a7582456 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -76,10 +76,21 @@ struct bpf_insn {
- 	__s32	imm;		/* signed immediate constant */
- };
- 
--/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+/* Header for a key of a BPF_MAP_TYPE_LPM_TRIE entry */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
--	__u8	data[0];	/* Arbitrary size */
-+	__u8	data[0];	/* Deprecated field: use struct bpf_lpm_trie_key_u8 */
-+};
-+
-+/* Raw (u8 byte array) key of a BPF_MAP_TYPE_LPM_TRIE entry */
-+struct bpf_lpm_trie_key_u8 {
-+	union {
-+		struct bpf_lpm_trie_key hdr;
-+		struct {
-+			__u32	prefixlen;
-+			__u8	data[];
-+		};
-+	};
- };
- 
- struct bpf_cgroup_storage_key {
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index d833496e9e42..3a93ace62c87 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -164,13 +164,15 @@ static inline int extract_bit(const u8 *data, size_t index)
-  */
- static size_t longest_prefix_match(const struct lpm_trie *trie,
- 				   const struct lpm_trie_node *node,
--				   const struct bpf_lpm_trie_key *key)
-+				   const struct bpf_lpm_trie_key_u8 *key)
- {
- 	u32 limit = min(node->prefixlen, key->prefixlen);
- 	u32 prefixlen = 0, i = 0;
- 
--	BUILD_BUG_ON(offsetof(struct lpm_trie_node, data) % sizeof(u32));
--	BUILD_BUG_ON(offsetof(struct bpf_lpm_trie_key, data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(typeof(*node), data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(typeof(*key), data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(typeof(*key), data) !=
-+		     offsetof(typeof(key->hdr), data));
- 
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && defined(CONFIG_64BIT)
- 
-@@ -229,7 +231,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- {
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	struct lpm_trie_node *node, *found = NULL;
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 
- 	/* Start walking the trie from the root node ... */
- 
-@@ -306,7 +308,7 @@ static int trie_update_elem(struct bpf_map *map,
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;
- 	struct lpm_trie_node __rcu **slot;
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 	unsigned long irq_flags;
- 	unsigned int next_bit;
- 	size_t matchlen = 0;
-@@ -434,7 +436,7 @@ static int trie_update_elem(struct bpf_map *map,
- static int trie_delete_elem(struct bpf_map *map, void *_key)
- {
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 	struct lpm_trie_node __rcu **trim, **trim2;
- 	struct lpm_trie_node *node, *parent;
- 	unsigned long irq_flags;
-@@ -616,7 +618,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- {
- 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
--	struct bpf_lpm_trie_key *key = _key, *next_key = _next_key;
-+	struct bpf_lpm_trie_key_u8 *key = _key, *next_key = _next_key;
- 	struct lpm_trie_node **node_stack = NULL;
- 	int err = 0, stack_ptr = -1;
- 	unsigned int next_bit;
-diff --git a/samples/bpf/map_perf_test_user.c b/samples/bpf/map_perf_test_user.c
-index d2fbcf963cdf..07ff471ed6ae 100644
---- a/samples/bpf/map_perf_test_user.c
-+++ b/samples/bpf/map_perf_test_user.c
-@@ -370,7 +370,7 @@ static void run_perf_test(int tasks)
- 
- static void fill_lpm_trie(void)
- {
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	unsigned long value = 0;
- 	unsigned int i;
- 	int r;
-diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
-index 9d41db09c480..266fdd0b025d 100644
---- a/samples/bpf/xdp_router_ipv4_user.c
-+++ b/samples/bpf/xdp_router_ipv4_user.c
-@@ -91,7 +91,7 @@ static int recv_msg(struct sockaddr_nl sock_addr, int sock)
- static void read_route(struct nlmsghdr *nh, int nll)
- {
- 	char dsts[24], gws[24], ifs[16], dsts_len[24], metrics[24];
--	struct bpf_lpm_trie_key *prefix_key;
-+	struct bpf_lpm_trie_key_u8 *prefix_key;
- 	struct rtattr *rt_attr;
- 	struct rtmsg *rt_msg;
- 	int rtm_family;
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index c028d621c744..e2e822759e13 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -211,7 +211,7 @@ static void test_lpm_map(int keysize)
- 	volatile size_t n_matches, n_matches_after_delete;
- 	size_t i, j, n_nodes, n_lookups;
- 	struct tlpm_node *t, *list = NULL;
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	uint8_t *data, *value;
- 	int r, map;
- 
-@@ -331,8 +331,8 @@ static void test_lpm_map(int keysize)
- static void test_lpm_ipaddr(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key_ipv4;
--	struct bpf_lpm_trie_key *key_ipv6;
-+	struct bpf_lpm_trie_key_u8 *key_ipv4;
-+	struct bpf_lpm_trie_key_u8 *key_ipv6;
- 	size_t key_size_ipv4;
- 	size_t key_size_ipv6;
- 	int map_fd_ipv4;
-@@ -423,7 +423,7 @@ static void test_lpm_ipaddr(void)
- static void test_lpm_delete(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	size_t key_size;
- 	int map_fd;
- 	__u64 value;
-@@ -532,7 +532,7 @@ static void test_lpm_delete(void)
- static void test_lpm_get_next_key(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key_p, *next_key_p;
-+	struct bpf_lpm_trie_key_u8 *key_p, *next_key_p;
- 	size_t key_size;
- 	__u32 value = 0;
- 	int map_fd;
-@@ -693,7 +693,7 @@ static void *lpm_test_command(void *arg)
- {
- 	int i, j, ret, iter, key_size;
- 	struct lpm_mt_test_info *info = arg;
--	struct bpf_lpm_trie_key *key_p;
-+	struct bpf_lpm_trie_key_u8 *key_p;
- 
- 	key_size = sizeof(struct bpf_lpm_trie_key) + sizeof(__u32);
- 	key_p = alloca(key_size);
-@@ -717,7 +717,7 @@ static void *lpm_test_command(void *arg)
- 				ret = bpf_map_lookup_elem(info->map_fd, key_p, &value);
- 				assert(ret == 0 || errno == ENOENT);
- 			} else {
--				struct bpf_lpm_trie_key *next_key_p = alloca(key_size);
-+				struct bpf_lpm_trie_key_u8 *next_key_p = alloca(key_size);
- 				ret = bpf_map_get_next_key(info->map_fd, key_p, next_key_p);
- 				assert(ret == 0 || errno == ENOENT || errno == ENOMEM);
- 			}
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
