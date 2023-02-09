@@ -1,43 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A3263A;
-	Thu,  9 Feb 2023 05:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560B62107;
+	Thu,  9 Feb 2023 06:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675922329; x=1707458329;
+  t=1675925979; x=1707461979;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3fCr1VU7POYvnA/HzyrwicWTSQxecZYLaOfcwmcSfEI=;
-  b=e/7HzRs87J8W2DZVc/RwraQAUSTsyHeE7R0eQL9PT49I+UQqN6SCpng9
-   ZcK2fIfsLARw9Wqkza1DgiBUGn0IEKXDjn+6dqiakIGOk4o1210Kmsrca
-   csXX8/CTVtd3SYwXCfDZNjNjnsb0aQzDjYUANIgp2Jp3BdP2KufNr9eLl
-   FGiYj/BKf6/gMpEycjlIQxSgcSXevNuNloZEXaY4wfTYYCg6djO8AM3Fs
-   TLOtxmoiVFHEvSEWM197JwG/nndBSgDmOsJv8Mhs15hcMw3jeMG/si4JE
-   +cm+6P2dUseviGKnoCoOU/Ch6/G5CaLJ3wE45cfTEXhBfrEUcjn42K9ti
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="327716874"
+  bh=QdrHO+VSYfV2Ou3gjnq+xVe6aB7VpeMzT15JHrXiYLs=;
+  b=KTF20IiAsHCBMlDxwDQ63nH53wUqmoxQRPM8fgwh2XkU3iqyvDgjSbW6
+   3m1UF1C0oWOephNLtycyNu0tWCmUVNjhmaRO3DcL8/E9YlR0QCWFsRfRN
+   2xTyRBHL0UeEuRyvHbfxcM7t/G5jueQTOLUYkwh7QURj6kdh45XcVlA3B
+   zCVCuDrgyqf2BP+3bzrdjuUuJfGe/10vm72/Nhh+P7Mfto1KDWNoaDEpd
+   yGC7d/HcOqFWjaUY2WnRQYsbFrXMEY2mmmlFLKSjqb4Nl54b9akI5NAf+
+   ZdSXqzs9dhPh4+BDYQCamq0RKXVRHjtAdJtE2KmO5WzTPp9EetOQNmp7Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394625703"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="327716874"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 21:56:27 -0800
+   d="scan'208";a="394625703"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 22:59:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776346201"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="697920746"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="776346201"
+   d="scan'208";a="697920746"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 21:56:25 -0800
+  by orsmga008.jf.intel.com with ESMTP; 08 Feb 2023 22:59:28 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pPzuy-0004rS-1D;
-	Thu, 09 Feb 2023 05:56:24 +0000
-Date: Thu, 9 Feb 2023 13:55:42 +0800
+	id 1pQ0tz-0004tS-1k;
+	Thu, 09 Feb 2023 06:59:27 +0000
+Date: Thu, 9 Feb 2023 14:59:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
+To: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/net/wireless/ath/ath11k/wow.c:661:5: warning: stack frame
- size (1072) exceeds limit (1024) in 'ath11k_wow_op_suspend'
-Message-ID: <202302091310.Yd4BGcOf-lkp@intel.com>
+	Ashok Raj <ashok.raj@intel.com>
+Subject: [daveh-devel:ucode-for-ashok 11/16]
+ arch/x86/kernel/cpu/microcode/core.c:414:25: warning: unused variable 'uci'
+Message-ID: <202302091405.orY3hwat-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,146 +47,108 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
-date:   5 months ago
-config: powerpc-buildonly-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091310.Yd4BGcOf-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git ucode-for-ashok
+head:   01bd4486138ec018e1bb204d93e4e52190dfde21
+commit: d6cbfdc3fc6f3adb5b24706444bdd6d83618faa9 [11/16] x86/microcode: Do not call apply_microcode() on sibling threads
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230209/202302091405.orY3hwat-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
+        # https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/commit/?id=d6cbfdc3fc6f3adb5b24706444bdd6d83618faa9
+        git remote add daveh-devel https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git
+        git fetch --no-tags daveh-devel ucode-for-ashok
+        git checkout d6cbfdc3fc6f3adb5b24706444bdd6d83618faa9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/microcode/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091310.Yd4BGcOf-lkp@intel.com
+| Link: https://lore.kernel.org/oe-kbuild-all/202302091405.orY3hwat-lkp@intel.com
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/ath/ath11k/wow.c:661:5: warning: stack frame size (1072) exceeds limit (1024) in 'ath11k_wow_op_suspend' [-Wframe-larger-than]
-   int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
-       ^
-   364/1072 (33.96%) spills, 708/1072 (66.04%) variables
-   1 warning generated.
+   arch/x86/kernel/cpu/microcode/core.c:383:50: error: too few arguments to function call, expected 1, have 0
+           u32 rev = microcode_ops->get_microcode_revision();
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   arch/x86/kernel/cpu/microcode/core.c:395:18: warning: no previous prototype for function 'apply_microcode' [-Wmissing-prototypes]
+   enum ucode_state apply_microcode(int cpu)
+                    ^
+   arch/x86/kernel/cpu/microcode/core.c:395:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   enum ucode_state apply_microcode(int cpu)
+   ^
+   static 
+>> arch/x86/kernel/cpu/microcode/core.c:414:25: warning: unused variable 'uci' [-Wunused-variable]
+           struct ucode_cpu_info *uci;
+                                  ^
+   arch/x86/kernel/cpu/microcode/core.c:588:17: error: no member named 'collect_cpu_info' in 'struct microcode_ops'
+           microcode_ops->collect_cpu_info(cpu, &uci->cpu_sig);
+           ~~~~~~~~~~~~~  ^
+   2 warnings and 2 errors generated.
 
 
-vim +/ath11k_wow_op_suspend +661 drivers/net/wireless/ath/ath11k/wow.c
+vim +/uci +414 arch/x86/kernel/cpu/microcode/core.c
 
-0f84a156aa3b9c Baochen Qiang 2022-05-09  660  
-ba9177fcef21fa Carl Huang    2022-03-14 @661  int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
-ba9177fcef21fa Carl Huang    2022-03-14  662  			  struct cfg80211_wowlan *wowlan)
-ba9177fcef21fa Carl Huang    2022-03-14  663  {
-ba9177fcef21fa Carl Huang    2022-03-14  664  	struct ath11k *ar = hw->priv;
-ba9177fcef21fa Carl Huang    2022-03-14  665  	int ret;
-ba9177fcef21fa Carl Huang    2022-03-14  666  
-ba9177fcef21fa Carl Huang    2022-03-14  667  	mutex_lock(&ar->conf_mutex);
-ba9177fcef21fa Carl Huang    2022-03-14  668  
-90bf5c8d0f7ecd Carl Huang    2022-03-14  669  	ret = ath11k_dp_rx_pktlog_stop(ar->ab, true);
-90bf5c8d0f7ecd Carl Huang    2022-03-14  670  	if (ret) {
-90bf5c8d0f7ecd Carl Huang    2022-03-14  671  		ath11k_warn(ar->ab,
-90bf5c8d0f7ecd Carl Huang    2022-03-14  672  			    "failed to stop dp rx (and timer) pktlog during wow suspend: %d\n",
-90bf5c8d0f7ecd Carl Huang    2022-03-14  673  			    ret);
-90bf5c8d0f7ecd Carl Huang    2022-03-14  674  		goto exit;
-90bf5c8d0f7ecd Carl Huang    2022-03-14  675  	}
-90bf5c8d0f7ecd Carl Huang    2022-03-14  676  
-ba9177fcef21fa Carl Huang    2022-03-14  677  	ret =  ath11k_wow_cleanup(ar);
-ba9177fcef21fa Carl Huang    2022-03-14  678  	if (ret) {
-ba9177fcef21fa Carl Huang    2022-03-14  679  		ath11k_warn(ar->ab, "failed to clear wow wakeup events: %d\n",
-ba9177fcef21fa Carl Huang    2022-03-14  680  			    ret);
-ba9177fcef21fa Carl Huang    2022-03-14  681  		goto exit;
-ba9177fcef21fa Carl Huang    2022-03-14  682  	}
-ba9177fcef21fa Carl Huang    2022-03-14  683  
-ba9177fcef21fa Carl Huang    2022-03-14  684  	ret = ath11k_wow_set_wakeups(ar, wowlan);
-ba9177fcef21fa Carl Huang    2022-03-14  685  	if (ret) {
-ba9177fcef21fa Carl Huang    2022-03-14  686  		ath11k_warn(ar->ab, "failed to set wow wakeup events: %d\n",
-ba9177fcef21fa Carl Huang    2022-03-14  687  			    ret);
-ba9177fcef21fa Carl Huang    2022-03-14  688  		goto cleanup;
-ba9177fcef21fa Carl Huang    2022-03-14  689  	}
-ba9177fcef21fa Carl Huang    2022-03-14  690  
-c3c36bfe998b3a Carl Huang    2022-03-14  691  	ret = ath11k_wow_protocol_offload(ar, true);
-c3c36bfe998b3a Carl Huang    2022-03-14  692  	if (ret) {
-c3c36bfe998b3a Carl Huang    2022-03-14  693  		ath11k_warn(ar->ab, "failed to set wow protocol offload events: %d\n",
-c3c36bfe998b3a Carl Huang    2022-03-14  694  			    ret);
-c3c36bfe998b3a Carl Huang    2022-03-14  695  		goto cleanup;
-c3c36bfe998b3a Carl Huang    2022-03-14  696  	}
-c3c36bfe998b3a Carl Huang    2022-03-14  697  
-c3c36bfe998b3a Carl Huang    2022-03-14  698  	ath11k_mac_drain_tx(ar);
-ba9177fcef21fa Carl Huang    2022-03-14  699  	ret = ath11k_mac_wait_tx_complete(ar);
-ba9177fcef21fa Carl Huang    2022-03-14  700  	if (ret) {
-ba9177fcef21fa Carl Huang    2022-03-14  701  		ath11k_warn(ar->ab, "failed to wait tx complete: %d\n", ret);
-ba9177fcef21fa Carl Huang    2022-03-14  702  		goto cleanup;
-ba9177fcef21fa Carl Huang    2022-03-14  703  	}
-ba9177fcef21fa Carl Huang    2022-03-14  704  
-c417b247ba0421 Carl Huang    2022-03-14  705  	ret = ath11k_wow_set_hw_filter(ar);
-c417b247ba0421 Carl Huang    2022-03-14  706  	if (ret) {
-c417b247ba0421 Carl Huang    2022-03-14  707  		ath11k_warn(ar->ab, "failed to set hw filter: %d\n",
-c417b247ba0421 Carl Huang    2022-03-14  708  			    ret);
-c417b247ba0421 Carl Huang    2022-03-14  709  		goto cleanup;
-c417b247ba0421 Carl Huang    2022-03-14  710  	}
-c417b247ba0421 Carl Huang    2022-03-14  711  
-0f84a156aa3b9c Baochen Qiang 2022-05-09  712  	ret = ath11k_wow_set_keepalive(ar,
-0f84a156aa3b9c Baochen Qiang 2022-05-09  713  				       WMI_STA_KEEPALIVE_METHOD_NULL_FRAME,
-0f84a156aa3b9c Baochen Qiang 2022-05-09  714  				       WMI_STA_KEEPALIVE_INTERVAL_DEFAULT);
-0f84a156aa3b9c Baochen Qiang 2022-05-09  715  	if (ret) {
-0f84a156aa3b9c Baochen Qiang 2022-05-09  716  		ath11k_warn(ar->ab, "failed to enable wow keepalive: %d\n", ret);
-0f84a156aa3b9c Baochen Qiang 2022-05-09  717  		goto cleanup;
-0f84a156aa3b9c Baochen Qiang 2022-05-09  718  	}
-0f84a156aa3b9c Baochen Qiang 2022-05-09  719  
-ba9177fcef21fa Carl Huang    2022-03-14  720  	ret = ath11k_wow_enable(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  721  	if (ret) {
-ba9177fcef21fa Carl Huang    2022-03-14  722  		ath11k_warn(ar->ab, "failed to start wow: %d\n", ret);
-ba9177fcef21fa Carl Huang    2022-03-14  723  		goto cleanup;
-ba9177fcef21fa Carl Huang    2022-03-14  724  	}
-ba9177fcef21fa Carl Huang    2022-03-14  725  
-90bf5c8d0f7ecd Carl Huang    2022-03-14  726  	ret = ath11k_dp_rx_pktlog_stop(ar->ab, false);
-90bf5c8d0f7ecd Carl Huang    2022-03-14  727  	if (ret) {
-90bf5c8d0f7ecd Carl Huang    2022-03-14  728  		ath11k_warn(ar->ab,
-90bf5c8d0f7ecd Carl Huang    2022-03-14  729  			    "failed to stop dp rx pktlog during wow suspend: %d\n",
-90bf5c8d0f7ecd Carl Huang    2022-03-14  730  			    ret);
-90bf5c8d0f7ecd Carl Huang    2022-03-14  731  		goto cleanup;
-90bf5c8d0f7ecd Carl Huang    2022-03-14  732  	}
-90bf5c8d0f7ecd Carl Huang    2022-03-14  733  
-ba9177fcef21fa Carl Huang    2022-03-14  734  	ath11k_ce_stop_shadow_timers(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  735  	ath11k_dp_stop_shadow_timers(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  736  
-ba9177fcef21fa Carl Huang    2022-03-14  737  	ath11k_hif_irq_disable(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  738  	ath11k_hif_ce_irq_disable(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  739  
-ba9177fcef21fa Carl Huang    2022-03-14  740  	ret = ath11k_hif_suspend(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  741  	if (ret) {
-ba9177fcef21fa Carl Huang    2022-03-14  742  		ath11k_warn(ar->ab, "failed to suspend hif: %d\n", ret);
-ba9177fcef21fa Carl Huang    2022-03-14  743  		goto wakeup;
-ba9177fcef21fa Carl Huang    2022-03-14  744  	}
-ba9177fcef21fa Carl Huang    2022-03-14  745  
-ba9177fcef21fa Carl Huang    2022-03-14  746  	goto exit;
-ba9177fcef21fa Carl Huang    2022-03-14  747  
-ba9177fcef21fa Carl Huang    2022-03-14  748  wakeup:
-ba9177fcef21fa Carl Huang    2022-03-14  749  	ath11k_wow_wakeup(ar->ab);
-ba9177fcef21fa Carl Huang    2022-03-14  750  
-ba9177fcef21fa Carl Huang    2022-03-14  751  cleanup:
-ba9177fcef21fa Carl Huang    2022-03-14  752  	ath11k_wow_cleanup(ar);
-ba9177fcef21fa Carl Huang    2022-03-14  753  
-ba9177fcef21fa Carl Huang    2022-03-14  754  exit:
-ba9177fcef21fa Carl Huang    2022-03-14  755  	mutex_unlock(&ar->conf_mutex);
-ba9177fcef21fa Carl Huang    2022-03-14  756  	return ret ? 1 : 0;
-ba9177fcef21fa Carl Huang    2022-03-14  757  }
-ba9177fcef21fa Carl Huang    2022-03-14  758  
-
-:::::: The code at line 661 was first introduced by commit
-:::::: ba9177fcef21fa98406e73c472b5ac2eb4ec5f31 ath11k: Add basic WoW functionalities
-
-:::::: TO: Carl Huang <quic_cjhuang@quicinc.com>
-:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+   405	
+   406	/*
+   407	 * Returns:
+   408	 * < 0 - on error
+   409	 *   0 - success (no update done or microcode was updated)
+   410	 */
+   411	static int __reload_late(void *info)
+   412	{
+   413		int cpu = smp_processor_id();
+ > 414		struct ucode_cpu_info *uci;
+   415		enum ucode_state err;
+   416		bool lead_thread;
+   417		int ret = 0;
+   418	
+   419		/*
+   420		 * Wait for all CPUs to arrive. A load will not be attempted unless all
+   421		 * CPUs show up.
+   422		 * */
+   423		if (__wait_for_cpus(&late_cpus_in, NSEC_PER_SEC))
+   424			return -1;
+   425	
+   426		/*
+   427		 * On an SMT system, it suffices to load the microcode on one sibling of
+   428		 * the core because the microcode engine is shared between the threads.
+   429		 * Synchronization still needs to take place so that no concurrent
+   430		 * loading attempts happen on multiple threads of an SMT core. See
+   431		 * below.
+   432		 */
+   433		if (cpumask_first(topology_sibling_cpumask(cpu)) == cpu) {
+   434			lead_thread = true;
+   435			err = apply_microcode(cpu);
+   436		} else {
+   437			lead_thread = false;
+   438			goto wait_for_siblings;
+   439		}
+   440	
+   441		if (err >= UCODE_NFOUND) {
+   442			if (err == UCODE_ERROR)
+   443				pr_warn("Error reloading microcode on CPU %d\n", cpu);
+   444	
+   445			ret = -1;
+   446		}
+   447	
+   448	wait_for_siblings:
+   449		if (__wait_for_cpus(&late_cpus_out, NSEC_PER_SEC))
+   450			panic("Timeout during microcode update!\n");
+   451	
+   452		/*
+   453		 * For non-lead threads where microcode was not applied, unconditionally
+   454		 * update the per-cpu metadata.  This can tolerate the lead thread
+   455		 * either succeeding or failing the update.
+   456		 */
+   457		if (!lead_thread)
+   458			update_microcode_version_cache(cpu);
+   459	
+   460		return ret;
+   461	}
+   462	
 
 -- 
 0-DAY CI Kernel Test Service
