@@ -1,209 +1,143 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE96387;
-	Thu,  9 Feb 2023 01:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675906223; x=1707442223;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yBJ52FUGL78dzZOqChYA7Idv2yLAxA4Cx/vsei37ZYs=;
-  b=V+Hxmi1Bms6nRkFMcE7AY2YSDmnMJXu/tWOiv5CK+TjalWi/0m884jXs
-   Vfp4eJTZqjbZ8Vw6TokD1lW7QFPMEAUwafEXhkVb3FmxnieZaFJ1zrNTX
-   DW7BKZaLTquFSLSiFa3ylrGfvYt0zn93pVXd6LATB/XoeiWDZMAx+KsG6
-   cHqq7zk8s46TZB5IBXFYIzf5sOfmcGAP9kMQnSj/o2Kop4Q3FnODHu2DR
-   02TFLQyiWGMbyZTjYhGjpAgg2VQoilDRDBrgCtJ9p4eYoVC3CXA5nNSxS
-   s3UXbFwukb/FQ/9BstYee4gzrTy5QIxl3HB/K9MbNd7ZHFw2BOGhvxvJs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309629370"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="309629370"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:30:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="660840478"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="660840478"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Feb 2023 17:30:20 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pPvlT-0004k6-1m;
-	Thu, 09 Feb 2023 01:30:19 +0000
-Date: Thu, 9 Feb 2023 09:30:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
- 'ipmmu_of_ids'
-Message-ID: <202302090916.LwXEX2k8-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D823E36C
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 01:48:22 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id 184so672191ybw.5
+        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 17:48:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2eEmhxMNjlImDmkNZfpy/YG5w92teD17wTvTpUhJoc=;
+        b=XVSf2KxO2RZMtpqZ+Fbgl5+UHBCknVjkMtVbqo5RShM937ET4i8uLOiaDVZFGmjJ83
+         Pj32CIQTsp5lNhIe8HBTqjxTBbgyAB0NHZA4/TELSdLIwaBdDqXJCuG4D+ZSDC7XmLV4
+         9qF5QnRG8R1ZtOEybUT7csn2K2wRof4byWwku3LPc+65dukSjQQjPxRpv6IeqcfNzRHH
+         n2NdH3O3Z+yo9CB+/avBdSu/NeFnmyA1O1IW2fsav+ULtYU8uwUlKoMfb0ZjbLhBEiS6
+         KGYMPAC9Rk/DDCOaj3eTKrkSBveQWn4uvIsHQBt5OL0Yu7kvHNrZDd6bHbaTiRBsEKo7
+         791Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e2eEmhxMNjlImDmkNZfpy/YG5w92teD17wTvTpUhJoc=;
+        b=N+1GurLb2E6f33Opcf1phsJFb7qh5faNGaI5n1sPsz/ZHpqlsB+jP3WbnMFU1OPR38
+         G9inl7MAf+h5d/TnrvN/5GPMXnBQlM2XdpVSABzXQBI+zi1CUQ1Am8xH4uOSWGe0lYts
+         5fKXimkz+iy5nhgolKwOWUs+BO5vdT9OnLlM4egZTsuVrBBIl6U+afrGN7OVhlDsVlEx
+         Hv8xiFY/8sb/ZR3QiRWUSjBPxgLy1075jt1UvMoTGGZC9SALYfzR280O4cPTwRm8/s+S
+         yjOT8TMDXelnunsadPAnrGAvgrP/kvDcBfYOwetk1Lo+gjIyu3OB7OnReXkqf+u05d33
+         BGuA==
+X-Gm-Message-State: AO0yUKWw4stEdu4KLW7JAPhpYpmE5wTqXt9wlWzv3Q+w/4gQPx9pRrFv
+	DmuPNo0gNN+vwielZr1YCwbTbqmsNN+l8AMPoZ0=
+X-Google-Smtp-Source: AK7set813S9mEMX5T44S/my3EAhl4gzA5Te5YzzmyG4mXLBmGz5PMf0sutArgv1QJ/PHfjLbtl9vpDKxtZx4VXxsLsc=
+X-Received: by 2002:a25:9347:0:b0:855:d2c4:2119 with SMTP id
+ g7-20020a259347000000b00855d2c42119mr1204689ybo.107.1675907301738; Wed, 08
+ Feb 2023 17:48:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
+In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
+From: Hongtao Liu <crazylht@gmail.com>
+Date: Thu, 9 Feb 2023 09:48:10 +0800
+Message-ID: <CAMZc-bzmACcpSePKxuuA=ug2+yik+Zo3-mfqr2OyZ-n_nT=OnQ@mail.gmail.com>
+Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
+To: Dan Li <ashimida.1990@gmail.com>
+Cc: gcc-patches@gcc.gnu.org, Richard Sandiford <richard.sandiford@arm.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Frederic Weisbecker <frederic@kernel.org>, "Eric W. Biederman" <ebiederm@xmission.com>, 
+	Marco Elver <elver@google.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Song Liu <song@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Juergen Gross <jgross@suse.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Aaron Tomlin <atomlin@redhat.com>, 
+	Kalesh Singh <kaleshsingh@google.com>, Yuntao Wang <ytcoode@gmail.com>, 
+	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Robin,
+On Mon, Dec 19, 2022 at 3:59 PM Dan Li via Gcc-patches
+<gcc-patches@gcc.gnu.org> wrote:
+>
+> This series of patches is mainly used to support the control flow
+> integrity protection of the linux kernel [1], which is similar to
+> -fsanitize=kcfi in clang 16.0 [2,3].
+>
+> I hope that this feature will also support user-mode CFI in the
+> future (at least for developers who can recompile the runtime),
+> so I use -fsanitize=cfi as a compilation option here.
+>
+> Any suggestion please let me know :).
+Do you have this series as a branch somewhere that we could also try for x86?
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
-date:   5 months ago
-config: s390-randconfig-r012-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090916.LwXEX2k8-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302090916.LwXEX2k8-lkp@intel.com
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
-   static const struct of_device_id ipmmu_of_ids[] = {
-                                    ^
-   13 warnings generated.
+>
+> Thanks, Dan.
+>
+> [1] https://lore.kernel.org/all/20220908215504.3686827-1-samitolvanen@google.com/
+> [2] https://clang.llvm.org/docs/ControlFlowIntegrity.html
+> [3] https://reviews.llvm.org/D119296
+>
+> Dan Li (3):
+>   [PR102768] flag-types.h (enum sanitize_code): Extend sanitize_code to
+>     64 bits to support more features
+>   [PR102768] Support CFI: Add new pass for Control Flow Integrity
+>   [PR102768] aarch64: Add support for Control Flow Integrity
+>
+> Signed-off-by: Dan Li <ashimida.1990@gmail.com>
+>
+> ---
+>  gcc/Makefile.in                               |   1 +
+>  gcc/asan.h                                    |   4 +-
+>  gcc/c-family/c-attribs.cc                     |  10 +-
+>  gcc/c-family/c-common.h                       |   2 +-
+>  gcc/c/c-parser.cc                             |   4 +-
+>  gcc/cgraphunit.cc                             |  34 +++
+>  gcc/common.opt                                |   4 +-
+>  gcc/config/aarch64/aarch64.cc                 | 106 ++++++++
+>  gcc/cp/typeck.cc                              |   2 +-
+>  gcc/doc/invoke.texi                           |  35 +++
+>  gcc/doc/passes.texi                           |  10 +
+>  gcc/doc/tm.texi                               |  27 +++
+>  gcc/doc/tm.texi.in                            |   8 +
+>  gcc/dwarf2asm.cc                              |   2 +-
+>  gcc/flag-types.h                              |  67 ++---
+>  gcc/opt-suggestions.cc                        |   2 +-
+>  gcc/opts.cc                                   |  26 +-
+>  gcc/opts.h                                    |   8 +-
+>  gcc/output.h                                  |   3 +
+>  gcc/passes.def                                |   1 +
+>  gcc/target.def                                |  39 +++
+>  .../aarch64/control_flow_integrity_1.c        |  14 ++
+>  .../aarch64/control_flow_integrity_2.c        |  25 ++
+>  .../aarch64/control_flow_integrity_3.c        |  23 ++
+>  gcc/toplev.cc                                 |   4 +
+>  gcc/tree-cfg.cc                               |   2 +-
+>  gcc/tree-cfi.cc                               | 229 ++++++++++++++++++
+>  gcc/tree-pass.h                               |   1 +
+>  gcc/tree.cc                                   | 144 +++++++++++
+>  gcc/tree.h                                    |   1 +
+>  gcc/varasm.cc                                 |  29 +++
+>  31 files changed, 803 insertions(+), 64 deletions(-)
+>  create mode 100644 gcc/testsuite/gcc.target/aarch64/control_flow_integrity_1.c
+>  create mode 100644 gcc/testsuite/gcc.target/aarch64/control_flow_integrity_2.c
+>  create mode 100644 gcc/testsuite/gcc.target/aarch64/control_flow_integrity_3.c
+>  create mode 100644 gcc/tree-cfi.cc
+>
+> --
+> 2.17.1
+>
 
 
-vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
-
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
-33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
-33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
-33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
-33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
-60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
-60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
-60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
-757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
-757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
-757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
-b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
-b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
-b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
-58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
-58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
-0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
-0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
-0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
-0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
-98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
-98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
-98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
-3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
-b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
-b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
-b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
-3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
-9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
-33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
-33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
-33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
-33f3ac9b511612 Magnus Damm             2017-10-16  995  };
-33f3ac9b511612 Magnus Damm             2017-10-16  996  
-
-:::::: The code at line 946 was first introduced by commit
-:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
-
-:::::: TO: Magnus Damm <damm+renesas@opensource.se>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+BR,
+Hongtao
