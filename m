@@ -1,107 +1,101 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077C9321E;
-	Thu,  9 Feb 2023 06:59:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675925982; x=1707461982;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QP3sphyhKZ++uLX1gEjWhEO0Q7JTq76YEL6G5FR4nqs=;
-  b=KCRGsStMrGGsdwUp/nhCTPe2tWY53LAuc/Yzz+iC4ExTLWB2AsAvMYiT
-   15Z16endJMJ+jVadGlTvxNNe4Lpjb+sSW0R23TVzn6MbdbpimX/aZ/A7L
-   pIBYqW1T8NXZCOq4zpa74ZucRdoUec2loC1sQqx+QAlYAccyUumuvaFMw
-   loRhlzVUJOFMohbbew531HRG/jNzS9QAw10biHRgYInGkhBaG4kpSEOVn
-   oxBNpIyIytOcAqU+wRuefNwsWNN2d8709gjVCEfjKlqML6VOX50SnH9BJ
-   A8wASTSEe2i5WfWh6rRTa8o4cO8tt4IoQoqsc8Kv8hTS417UmzwHgZCKG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394625704"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="394625704"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 22:59:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="697920740"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="697920740"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Feb 2023 22:59:28 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pQ0tz-0004tU-1q;
-	Thu, 09 Feb 2023 06:59:27 +0000
-Date: Thu, 9 Feb 2023 14:59:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kalesh Singh <kaleshsingh@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-	Fuad Tabba <tabba@google.com>
-Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:6: warning: no previous
- prototype for function 'kvm_nvhe_prepare_backtrace'
-Message-ID: <202302091437.1vnXBd7s-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D139C371;
+	Thu,  9 Feb 2023 09:53:58 +0000 (UTC)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EF8CB1EC06BD;
+	Thu,  9 Feb 2023 10:53:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1675936431;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=4LXgg6eGQ1qH1srtU+U2fOYiBbnpfa32IaXXFfMKKgI=;
+	b=WzVRQzzokNidD+nWlWipMdvljGa9V5i9uJOvMmjVVUSBWh4jSmnuwP3o/YefOtSXiXrKDt
+	jYAYv5U6TP2I2GgV8Gmc6lUSLlcNVp+WlkSMz2s0C7To7OOV809gs2695SRNcLThthjfLF
+	t+NePYOESA7Iqn3LbXqX4RJFnNY46oo=
+Date: Thu, 9 Feb 2023 10:53:47 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Philip Li <philip.li@intel.com>
+Cc: kernel test robot <lkp@intel.com>, Babu Moger <babu.moger@amd.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [tip:x86/cache 9/13]
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
+ not used
+Message-ID: <Y+TCq4k+0AhfjZkL@zn.tnic>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
+ <Y8/XoT23HVXHSY73@zn.tnic>
+ <Y+RjOpXP1Bbv268n@rli9-mobl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <Y+RjOpXP1Bbv268n@rli9-mobl>
 
-Hi Kalesh,
+On Thu, Feb 09, 2023 at 11:06:34AM +0800, Philip Li wrote:
+> Thanks a lot for the suggestions, we will think of this to continuously optimize the
+> service. Right now, we try to build-test the patches that we can find a suitable base
+> to apply the patches successfully, some of effort could fail. Then we only test them
+> when they appears on repo. We will keep monitoring the patch testing status to see
+> anything we can fix as well.
 
-FYI, the error/warning still remains.
+Cool, thanks.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: 879e5ac7b2e4db05799a905b5a07fc9e5dedf651 KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
-date:   7 months ago
-config: arm64-randconfig-r022-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091437.1vnXBd7s-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=879e5ac7b2e4db05799a905b5a07fc9e5dedf651
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 879e5ac7b2e4db05799a905b5a07fc9e5dedf651
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+I see you've started doing silly tests like subdirectory builds for W=
+warnings, picking one such report at random from lkml:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091437.1vnXBd7s-lkp@intel.com
+https://lore.kernel.org/r/202302091432.VgittDjI-lkp@intel.com
 
-All warnings (new ones prefixed by >>):
+COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
 
->> arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:6: warning: no previous prototype for function 'kvm_nvhe_prepare_backtrace' [-Wmissing-prototypes]
-   void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
-        ^
-   arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
-   ^
-   static 
-   1 warning generated.
+and then it says
 
+drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
 
-vim +/kvm_nvhe_prepare_backtrace +46 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+Yes, this is all fine and dandy but such tests should be the lowest prio
+eva! If you have a way to schedule by prio, those should wait until all
+the other build tests have happened.
 
-    36	
-    37	/*
-    38	 * kvm_nvhe_prepare_backtrace - prepare to dump the nVHE backtrace
-    39	 *
-    40	 * @fp : frame pointer at which to start the unwinding.
-    41	 * @pc : program counter at which to start the unwinding.
-    42	 *
-    43	 * Saves the information needed by the host to dump the nVHE hypervisor
-    44	 * backtrace.
-    45	 */
-  > 46	void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
+I don't know how your resources are spread out and whether you even can
+do as many so I'm only reporting from my experience, in case you were
+wondering what you could improve:
+
+People push branches to their trees and wait for the robot to test them.
+And they wait and wait. But instead, such silly warnings come.
+
+So it would be a lot better if you could expedite such pushed branches'
+build tests first and then the rest.
+
+And then if there are no branches, submitted patchsets on the ML.
+
+If you're trying to figure out what base to use, you can put a doc
+somewhere telling people how to specify the base for you and they will
+start doing it, you will parse the 0th message for that info and use the
+base.
+
+And the long-standing feature request we have: a simple web page
+somewhere which says how far is it with testing. So that people can go
+and look at it and know whether to wait for test results before sending.
+
+The web page doesn't have to be anything special - just a table of
+branches being tested at the moment.
+
+Anyway, I thought I should give you some suggestions if you were looking
+for some. :-)
+
+Thanks for the testing work - it is appreciated!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
